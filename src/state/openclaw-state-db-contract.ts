@@ -10,8 +10,13 @@ export const OPENCLAW_STATE_STRICT_SCHEMA_VERSION = 3;
 export const FIRST_USE_STATE_TABLES = [
   "execution_identity_contexts",
   "operator_approval_execution_identities",
+  "execution_decision_facts",
 ] as const;
-export const FIRST_USE_STATE_INDEXES = ["execution_identity_contexts_run_created_idx"] as const;
+export const FIRST_USE_STATE_INDEXES = [
+  "execution_identity_contexts_run_created_idx",
+  "execution_decision_facts_context_occurred_idx",
+  "execution_decision_facts_run_occurred_idx",
+] as const;
 // Added after v6 shipped. These tables stay optional until their feature-local
 // lazy ensures run; fold them into the next natural schema-version bump.
 export const LAZY_ADDITIVE_STATE_TABLES = [
