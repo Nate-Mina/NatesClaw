@@ -198,7 +198,6 @@ export function peekDiagnosticSessionState(ref: SessionRef): SessionState | unde
   );
 }
 
-/** Returns the current state count for pruning tests. */
 /** Clears all process-local diagnostic session state for tests. */
 export function resetDiagnosticSessionStateForTest(): void {
   diagnosticSessionStates.clear();
