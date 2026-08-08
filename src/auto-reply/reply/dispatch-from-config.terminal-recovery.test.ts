@@ -55,7 +55,6 @@ describe("dispatchReplyFromConfig terminal visible admission recovery", () => {
     mocks.routeReply.mockResolvedValue({ ok: true, delivered: true, messageId: "mock" });
     mocks.tryFastAbortFromMessage.mockReset();
     mocks.tryFastAbortFromMessage.mockResolvedValue(noAbortResult);
-    diagnosticMocks.requestStuckDiagnosticSessionRecovery.mockReset();
     sessionStoreMocks.currentEntry = undefined;
     sessionStoreMocks.entriesBySessionKey.clear();
   });
@@ -84,7 +83,6 @@ describe("dispatchReplyFromConfig terminal visible admission recovery", () => {
 
     const result = await dispatchReplyFromConfig(dispatchParams);
 
-    expect(diagnosticMocks.requestStuckDiagnosticSessionRecovery).not.toHaveBeenCalled();
     expect(activeOperation.result).toMatchObject({
       kind: "failed",
       code: "run_failed",

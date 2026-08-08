@@ -29,11 +29,8 @@ import {
   testing as recoveryTesting,
   recoverStuckDiagnosticSession,
 } from "./diagnostic-stuck-session-recovery.runtime.js";
-import {
-  logSessionStateChange,
-  resetDiagnosticStateForTest,
-  startDiagnosticHeartbeat,
-} from "./diagnostic.js";
+import { logSessionStateChange, startDiagnosticHeartbeat } from "./diagnostic.js";
+import { resetDiagnosticStateForTest } from "./diagnostic.test-support.js";
 
 async function expectPendingAfterEventLoopTurn(promise: Promise<unknown>): Promise<void> {
   let settled = false;
