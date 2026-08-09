@@ -88,6 +88,10 @@ export async function prepareGatewayLifecycle(params: {
     startupState,
     readinessEventLoopHealth,
     browserAuthRateLimiter,
+    pluginGatewayContext,
+    wss,
+    httpServer,
+    httpServers,
     chatRunState,
     chatAbortControllers,
     chatQueuedTurns,
@@ -101,7 +105,6 @@ export async function prepareGatewayLifecycle(params: {
     defaultWorkspaceDir,
     activeTaskCount,
     residentRegistry,
-    systemAgentApprovalManager,
   } = runtime;
   const completeControlUiDeviceAuthMigrationForEffectiveOperator = (
     device: EffectiveOperatorDeviceIdentity,
@@ -545,7 +548,7 @@ export async function prepareGatewayLifecycle(params: {
         disposeSystemAgentSessions(
           runtime.systemAgentSessions,
           runtime.wizardSessions,
-          systemAgentApprovalManager,
+          pluginGatewayContext.current?.systemAgentApprovalManager,
         ),
       chatRunState,
       chatAbortControllers,
