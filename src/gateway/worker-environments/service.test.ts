@@ -2320,8 +2320,8 @@ describe("worker environment service", () => {
         runId: "run-stale-recovery",
         owner: {
           kind: "worker",
-          environmentId: active.environmentId,
-          ownerEpoch: active.activeOwnerEpoch,
+          environmentId,
+          ownerEpoch: attached.ownerEpoch,
         },
       });
       placements.markWorkspaceResultPending(claim);
@@ -2335,7 +2335,7 @@ describe("worker environment service", () => {
         turnClaim: { claimId: claim.claimId, runId: claim.runId },
       });
       expect(placements.listPendingWorkspaceResults()).toHaveLength(1);
-      expect(workerService.get(active.environmentId)).toMatchObject({
+      expect(workerService.get(environmentId)).toMatchObject({
         state: "attached",
         destroyRequestedAtMs: null,
       });
