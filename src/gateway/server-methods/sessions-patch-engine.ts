@@ -361,8 +361,8 @@ async function executeSessionPatchMutations(params: {
                               target.fullPatch.expectedLifecycleRevision);
                         const lifecycleEntryRemoved =
                           target.initialEntry !== undefined && existingEntry === undefined;
-                        const archiveTargetChanged =
-                          target.fullPatch.archived === true &&
+                        const lifecycleTargetChanged =
+                          typeof target.fullPatch.archived === "boolean" &&
                           (target.initialEntry === undefined
                             ? existingEntry !== undefined
                             : existingEntry !== undefined &&
@@ -372,7 +372,7 @@ async function executeSessionPatchMutations(params: {
                         if (
                           expectedSessionChanged ||
                           lifecycleEntryRemoved ||
-                          archiveTargetChanged
+                          lifecycleTargetChanged
                         ) {
                           projectedOutcomes.push({
                             ok: false,

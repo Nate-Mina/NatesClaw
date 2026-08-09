@@ -359,6 +359,51 @@ describe("gateway sessions patch", () => {
     });
   });
 
+  test.each(
+    [
+      { action: "archive", archived: true },
+      { action: "restore", archived: false },
+    ].flatMap(({ action, archived }) => [
+      { action, archived, identity: "missing", existingEntry: undefined },
+      {
+        action,
+        archived,
+        identity: "a placeholder without a session id",
+        existingEntry: { updatedAt: 1 } as SessionEntry,
+      },
+      {
+        action,
+        archived,
+        identity: "a placeholder with an empty session id",
+        existingEntry: { sessionId: "", updatedAt: 1 } as SessionEntry,
+      },
+    ]),
+  )(
+    "rejects $action for $identity without materializing a session",
+    async ({ archived, existingEntry }) => {
+      const key = "agent:main:missing-lifecycle-target";
+      const store: Record<string, SessionEntry> = existingEntry ? { [key]: existingEntry } : {};
+
+      expectPatchError(
+        await runPatch({ store, storeKey: key, patch: { key, archived } }),
+        `session not found: ${key}`,
+      );
+      expect(store[key]).toBe(existingEntry);
+    },
+  );
+
+  test("still creates a missing session for metadata-only patches", async () => {
+    const key = "agent:main:new-metadata-session";
+    const store: Record<string, SessionEntry> = {};
+
+    const entry = expectPatchOk(
+      await runPatch({ store, storeKey: key, patch: { key, label: "New session" } }),
+    );
+
+    expect(entry).toMatchObject({ label: "New session", sessionId: expect.any(String) });
+    expect(store[key]).toEqual(entry);
+  });
+
   test("attributes the archive transition and clears attribution on restore", async () => {
     const archivedBy = { type: "human" as const, id: "profile-ada", label: "Ada" };
     const archived = expectPatchOk(

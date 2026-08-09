@@ -5,6 +5,7 @@ import {
   selectCopilotPanelState,
 } from "./copilot-background-shared.js";
 import { createCopilotController } from "./copilot-background.js";
+import { GatewayProtocolRequestError } from "./copilot-runtime.js";
 import { deriveCopilotSessionLabel } from "./panel-core.js";
 
 function eventHook() {
@@ -704,6 +705,115 @@ describe("browser copilot background", () => {
       ["sessions.abort", { key: "session-7" }],
       ["sessions.patch", { key: "session-7", archived: true }],
     ]);
+  });
+
+  it("clears deleted-session archive custody and restores the tab debugger", async () => {
+    const gatewayScope = "ws://127.0.0.1:18789/";
+    const sessionKey = "session-deleted";
+    const request = vi.fn(async (method: string) => {
+      if (method === "sessions.patch") {
+        throw new GatewayProtocolRequestError({
+          code: "INVALID_REQUEST",
+          message: `session not found: agent:main:${sessionKey}`,
+        });
+      }
+      return { ok: true };
+    });
+    const restoreDebugger = vi.fn(async () => undefined);
+    const gateway = {
+      ready: true,
+      onEvent: vi.fn(),
+      onStatus: vi.fn(),
+      request,
+      start: vi.fn(),
+      stop: vi.fn(),
+    };
+    const controller = createCopilotController({
+      chromeApi: {
+        runtime: { onConnect: eventHook() },
+        tabs: { query: vi.fn(async () => [{ id: 12 }]) },
+        storage: { local: storageArea(), session: storageArea() },
+      } as never,
+      getConfig: vi.fn(async () => ({
+        relayUrl: "ws://127.0.0.1:18792/browser/extension",
+        gatewayUrl: gatewayScope,
+      })),
+      isTabAccessible: vi.fn(),
+      grantTabAccess: vi.fn(),
+      attachDebugger: vi.fn(),
+      detachDebugger: vi.fn(),
+      revokeDebugger: vi.fn(),
+      restoreDebugger,
+      scheduleTabsSync: vi.fn(),
+      gateway: gateway as never,
+    });
+    await controller.initialize();
+    await controller.registry.put(12, { gatewayScope, sessionKey, sessionId: "deleted-session" });
+    await controller.registry.closeTab(12);
+    expect(controller.registry.pendingArchives(gatewayScope)).toHaveLength(1);
+
+    await controller.drainArchives(gatewayScope);
+
+    expect(controller.registry.pendingArchives(gatewayScope)).toEqual([]);
+    expect(restoreDebugger).toHaveBeenCalledWith(12);
+    expect(request).toHaveBeenLastCalledWith("sessions.patch", {
+      key: sessionKey,
+      archived: true,
+    });
+  });
+
+  it.each([
+    {
+      reason: "an active session",
+      error: new GatewayProtocolRequestError({
+        code: "UNAVAILABLE",
+        message: "Session session-retry is still active; retry the archive.",
+      }),
+    },
+    {
+      reason: "an unrelated definitive rejection",
+      error: new GatewayProtocolRequestError({
+        code: "INVALID_REQUEST",
+        message: "Cannot archive an agent's main session.",
+      }),
+    },
+    {
+      reason: "an ambiguous transport failure",
+      error: new Error("session not found: session-retry"),
+    },
+  ])("preserves archive retries for $reason", async ({ error }) => {
+    const request = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true })
+      .mockResolvedValueOnce({ ok: true })
+      .mockRejectedValueOnce(error);
+
+    await expect(
+      archiveCopilotSession({ request } as never, { sessionKey: "session-retry" } as never),
+    ).rejects.toBe(error);
+  });
+
+  it("retains ambiguous creation cleanup when the adopted session disappears", async () => {
+    const sessionKey =
+      "agent:main:main:thread:browser-copilot-22222222-2222-4222-8222-222222222222";
+    const missing = new GatewayProtocolRequestError({
+      code: "INVALID_REQUEST",
+      message: `session not found: ${sessionKey}`,
+    });
+    const request = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true })
+      .mockResolvedValueOnce({ ok: true })
+      .mockResolvedValueOnce({ ok: true })
+      .mockRejectedValueOnce(missing);
+
+    await expect(
+      archiveCopilotSession({ request } as never, { sessionKey, ensureCreated: true } as never),
+    ).rejects.toBe(missing);
+    expect(request).toHaveBeenNthCalledWith(1, "sessions.create", {
+      key: sessionKey,
+      label: deriveCopilotSessionLabel(sessionKey),
+    });
   });
 
   it("still attempts the authoritative archive when unsubscribe and abort fail", async () => {

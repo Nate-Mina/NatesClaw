@@ -787,6 +787,30 @@ describe("EmbeddedTuiBackend", () => {
     );
   });
 
+  it.each([
+    { action: "archive", archived: true },
+    { action: "restore", archived: false },
+  ])("rejects a missing local session during $action", async ({ archived }) => {
+    const sessionKey = "agent:main:missing-local-lifecycle-target";
+    const message = `session not found: ${sessionKey}`;
+    projectSessionsPatchEntryMock.mockResolvedValueOnce({
+      ok: false,
+      error: { code: "INVALID_REQUEST", message },
+    });
+    const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
+    const backend = new EmbeddedTuiBackend();
+
+    await expect(backend.patchSession({ key: sessionKey, archived })).rejects.toThrow(message);
+
+    expect(projectSessionsPatchEntryMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        existingEntry: undefined,
+        patch: { key: sessionKey, archived },
+        storeKey: sessionKey,
+      }),
+    );
+  });
+
   it("allows local patches to an existing harness-owned session", async () => {
     const sessionKey = "agent:main:harness:codex:supervision:existing-patch";
     const existingEntry = {

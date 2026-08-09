@@ -1,3 +1,4 @@
+import { GatewayProtocolRequestError } from "./copilot-runtime.js";
 import { deriveCopilotSessionLabel } from "./panel-core.js";
 
 const PANEL_PATH = "sidepanel.html";
@@ -69,7 +70,19 @@ export async function archiveCopilotSession(gateway, entry) {
   } catch {
     // Archive is authoritative; it will reject while a run is still active and retry later.
   }
-  await gateway.request("sessions.patch", { key: entry.sessionKey, archived: true });
+  try {
+    await gateway.request("sessions.patch", { key: entry.sessionKey, archived: true });
+  } catch (error) {
+    // Deleted sessions already satisfy cleanup. Gateway errors report canonical
+    // keys, which can differ from the durable alias awaiting debugger release.
+    if (
+      entry.ensureCreated ||
+      !(error instanceof GatewayProtocolRequestError) ||
+      !error.message.startsWith("session not found: ")
+    ) {
+      throw error;
+    }
+  }
 }
 
 export function selectCopilotPanelState({ paired, accessible, abortPending, gatewayState }) {
