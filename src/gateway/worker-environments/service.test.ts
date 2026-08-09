@@ -21,6 +21,7 @@ import type { WorkerInstallationArtifact } from "./bundle.js";
 import type { WorkerConnectionIdentity } from "./connection-identity.js";
 import { hashWorkerCredential } from "./credential.js";
 import { createWorkerInferenceStore } from "./inference-store.js";
+import { seedActivePlacement } from "./placement-dispatch-test-fixtures.js";
 import { createWorkerPlacementDispatchService } from "./placement-dispatch.js";
 import { createWorkerSessionPlacementStore } from "./placement-store.js";
 import { createWorkerEnvironmentService, type WorkerEnvironmentService } from "./service.js";
@@ -992,7 +993,10 @@ describe("worker environment service", () => {
         ownerEpoch: 1,
         sessionId: "session-1",
       }),
-    ).rejects.toThrow("must bootstrap the current build");
+    ).rejects.toMatchObject({
+      code: "invalid_state",
+      message: "Worker must bootstrap the current build before continuing",
+    } satisfies Partial<WorkerEnvironmentServiceError>);
     expect(store.get(staleId)).toMatchObject({ state: "ready", attachedSessionIds: [] });
   });
 
@@ -2222,6 +2226,122 @@ describe("worker environment service", () => {
       tunnelStatus: "stopped",
     });
   });
+
+  it.each([
+    ["stale receipt", { ...BOOTSTRAP_RECEIPT, bundleHash: "c".repeat(64) }, undefined],
+    ["unavailable current bundle", BOOTSTRAP_RECEIPT, new Error("bundle unavailable")],
+  ] as const)("rejects tunnel startup with %s", async (_name, receipt, prepareError) => {
+    const environmentId = "worker-tunnel-current-bundle";
+    const bootstrapping = seedBootstrapping(environmentId, undefined, true);
+    store.transition({
+      environmentId,
+      from: bootstrapping.state,
+      to: "ready",
+      patch: readyPatch(environmentId, receipt),
+    });
+    if (prepareError) {
+      prepareInstallation = vi.fn(async () => {
+        throw prepareError;
+      });
+    }
+    const tunnelManager = {
+      status: () => "stopped" as const,
+      start: vi.fn(),
+      stop: vi.fn(async () => {}),
+      stopAll: vi.fn(async () => {}),
+    } as unknown as WorkerTunnelManager;
+    const workerService = createService(createProvider(), { tunnelManager });
+
+    await expect(workerService.startTunnel({ environmentId, ownerEpoch: 1 })).rejects.toMatchObject(
+      {
+        code: "invalid_state",
+        message: prepareError
+          ? "Current worker build identity is unavailable"
+          : "Worker must bootstrap the current build before continuing",
+      } satisfies Partial<WorkerEnvironmentServiceError>,
+    );
+    expect(tunnelManager.start).not.toHaveBeenCalled();
+  });
+
+  it.each(["bundle", "provider"] as const)(
+    "keeps stale pending recovery fenced when %s recovery is unavailable",
+    async (failure) => {
+      let currentBundle = BUNDLE_ARTIFACT;
+      const recoveryState = { started: false };
+      prepareInstallation = vi.fn(async (install) => {
+        if (install === "bundle" && recoveryState.started && failure === "bundle") {
+          throw new Error("bundle unavailable");
+        }
+        return install === "bundle" ? currentBundle : NPM_ARTIFACT;
+      });
+      const tunnelManager = {
+        status: () => "stopped" as const,
+        start: vi.fn(),
+        stop: vi.fn(async () => {}),
+        stopAll: vi.fn(async () => {}),
+      } as unknown as WorkerTunnelManager;
+      const provider = createProvider({
+        inspect: async () => {
+          if (recoveryState.started && failure === "provider") {
+            throw new Error("provider unavailable");
+          }
+          return { status: "active" };
+        },
+      });
+      const workerService = createService(provider, { tunnelManager });
+      const placements = createWorkerSessionPlacementStore({ database, now: () => nowMs });
+      const recovery = createWorkerPlacementDispatchService({
+        placements,
+        environments: workerService,
+        workspaceOperations: createWorkerWorkspaceOperationCoordinator(),
+        runLocalBarrier: async ({ startDispatch }) => startDispatch(),
+        runActivationBarrier: async ({ activate }) => activate(),
+        runReclaimBarrier: async ({ reclaim }) => await reclaim("/gateway/workspace"),
+        resolveWorkspacePath: async () => "/gateway/workspace",
+        reportWorkspaceResultConflict: async () => {},
+        resolveWorkspaceResultConflict: async () => undefined,
+      });
+      const environmentId = "worker-stale-recovery";
+      seedReady(environmentId);
+      const attached = await workerService.attachSession({
+        environmentId,
+        ownerEpoch: 1,
+        sessionId: "session-1",
+      });
+      const active = seedActivePlacement(placements, {
+        environmentId,
+        ownerEpoch: attached.ownerEpoch,
+      });
+      const claim = placements.claimTurn({
+        sessionId: active.sessionId,
+        sessionKey: active.sessionKey,
+        agentId: active.agentId,
+        claimId: "claim-stale-recovery",
+        runId: "run-stale-recovery",
+        owner: {
+          kind: "worker",
+          environmentId: active.environmentId,
+          ownerEpoch: active.activeOwnerEpoch,
+        },
+      });
+      placements.markWorkspaceResultPending(claim);
+      placements.handoffWorkspaceResultRecovery(claim);
+      currentBundle = { ...BUNDLE_ARTIFACT, bundleHash: "c".repeat(64) };
+      recoveryState.started = true;
+      await recovery.reconcile();
+
+      expect(placements.get(active.sessionId)).toMatchObject({
+        state: "active",
+        turnClaim: { claimId: claim.claimId, runId: claim.runId },
+      });
+      expect(placements.listPendingWorkspaceResults()).toHaveLength(1);
+      expect(workerService.get(active.environmentId)).toMatchObject({
+        state: "attached",
+        destroyRequestedAtMs: null,
+      });
+      expect(tunnelManager.start).not.toHaveBeenCalled();
+    },
+  );
 
   it("reconciles shared-host isolation for a persisted lease before tunnel startup", async () => {
     seedReady("worker-legacy-shared");

@@ -450,6 +450,26 @@ export function createWorkerEnvironmentService(options: WorkerEnvironmentService
   const prepareInstallation = (record: WorkerEnvironmentRecord) =>
     options.prepareInstallation(installFor(record));
 
+  // Attach and tunnel registration must admit the current process bundle; otherwise stale
+  // persisted receipts can open ownership on an obsolete worker.
+  const requireCurrentWorkerBundle = async (
+    receipt: WorkerAdmissionHandshake | null,
+  ): Promise<WorkerInstallationArtifact> => {
+    let currentBuild: WorkerInstallationArtifact;
+    try {
+      currentBuild = await options.prepareInstallation("bundle");
+    } catch {
+      throw serviceError("invalid_state", "Current worker build identity is unavailable");
+    }
+    if (!receipt || !verifyWorkerAdmissionHandshake(receipt, currentBuild)) {
+      throw serviceError(
+        "invalid_state",
+        "Worker must bootstrap the current build before continuing",
+      );
+    }
+    return currentBuild;
+  };
+
   const credentialExpiry = () => {
     const ttlMs = options.workerCredentialTtlMs ?? WORKER_CREDENTIAL_TTL_MS;
     if (!Number.isSafeInteger(ttlMs) || ttlMs < 1) {
@@ -1009,21 +1029,7 @@ export function createWorkerEnvironmentService(options: WorkerEnvironmentService
       if (current.state !== "ready" && current.state !== "idle") {
         throw serviceError("invalid_state", `Cannot attach worker in state: ${current.state}`);
       }
-      let currentBuild: WorkerInstallationArtifact;
-      try {
-        currentBuild = await options.prepareInstallation("bundle");
-      } catch {
-        throw serviceError("invalid_state", "Current worker build identity is unavailable");
-      }
-      if (
-        !current.bootstrapReceipt ||
-        !verifyWorkerAdmissionHandshake(current.bootstrapReceipt, currentBuild)
-      ) {
-        throw serviceError(
-          "invalid_state",
-          "Worker must bootstrap the current build before attach",
-        );
-      }
+      await requireCurrentWorkerBundle(current.bootstrapReceipt);
       const material = credentialMaterial();
       let attached: WorkerEnvironmentRecord;
       try {
@@ -1124,11 +1130,12 @@ export function createWorkerEnvironmentService(options: WorkerEnvironmentService
         throw serviceError("invalid_state", "Worker gateway ingress is unavailable");
       }
       const provider = providerFor(record.providerId);
+      const verifiedBundle = await requireCurrentWorkerBundle(record.bootstrapReceipt);
       // Tunnel ownership is registered synchronously by the manager. Release the durable-state
       // lock while SSH connects so drain/destroy can fence an indefinitely reconnecting start.
       startup = tunnels.start({
         ...request,
-        bundleHash: record.bootstrapReceipt.bundleHash,
+        bundleHash: verifiedBundle.bundleHash,
         gateway,
         ssh: record.sshEndpoint,
         sharedHost: record.sharedHost,
