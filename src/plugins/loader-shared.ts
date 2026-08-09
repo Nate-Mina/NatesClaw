@@ -156,6 +156,7 @@ export function createPluginCandidatesFromManifestRegistry(
 ): PluginCandidate[] {
   return manifestRegistry.plugins.map((record) => ({
     idHint: record.id,
+    effectivePluginId: record.id,
     rootDir: record.rootDir,
     source: record.source,
     ...(record.setupSource !== undefined ? { setupSource: record.setupSource } : {}),

@@ -509,6 +509,7 @@ function toPluginCandidate(
   const packageMetadata = resolveInstalledPackageMetadata(record, realpathCache);
   return {
     idHint: record.pluginId,
+    effectivePluginId: record.pluginId,
     source: record.source ?? resolveFallbackPluginSource(record),
     ...(record.setupSource ? { setupSource: record.setupSource } : {}),
     rootDir,

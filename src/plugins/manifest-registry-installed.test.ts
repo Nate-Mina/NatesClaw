@@ -7,11 +7,13 @@ import {
   readPersistedInstalledPluginIndex,
   writePersistedInstalledPluginIndex,
 } from "./installed-plugin-index-store.js";
-import type { InstalledPluginIndex } from "./installed-plugin-index.js";
+import { loadInstalledPluginIndex, type InstalledPluginIndex } from "./installed-plugin-index.js";
+import { createPluginCandidatesFromManifestRegistry } from "./loader-shared.js";
 import {
   loadPluginManifestRegistryForInstalledIndex,
   resolveInstalledManifestRegistryIndexFingerprint,
 } from "./manifest-registry-installed.js";
+import { loadPluginManifestRegistry } from "./manifest-registry.js";
 import { clearPluginMetadataLifecycleCaches } from "./plugin-metadata-lifecycle.js";
 import { cleanupTrackedTempDirs, makeTrackedTempDir } from "./test-helpers/fs-fixtures.js";
 
@@ -373,6 +375,106 @@ describe("loadPluginManifestRegistryForInstalledIndex", () => {
     expect(registry.plugins[0]?.modelSupport).toEqual({
       modelPrefixes: ["installed-"],
     });
+  });
+
+  it("preserves package entry identities and enablement through persisted registry reload", async () => {
+    const stateDir = makeTempDir();
+    const packageDir = path.join(stateDir, "extensions", "pack");
+    fs.mkdirSync(packageDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(packageDir, "package.json"),
+      JSON.stringify({
+        name: "pack",
+        version: "1.0.0",
+        openclaw: { extensions: ["./one.cjs", "./two.cjs"] },
+      }),
+      "utf8",
+    );
+    fs.writeFileSync(
+      path.join(packageDir, "openclaw.plugin.json"),
+      JSON.stringify({ id: "pack", configSchema: { type: "object" } }),
+      "utf8",
+    );
+    for (const entry of ["one", "two"]) {
+      fs.writeFileSync(
+        path.join(packageDir, `${entry}.cjs`),
+        `module.exports = { id: "pack/${entry}", register() {} };\n`,
+        "utf8",
+      );
+    }
+    const config = {
+      plugins: {
+        entries: {
+          "pack/one": { enabled: true },
+          "pack/two": { enabled: false },
+        },
+      },
+    };
+    const env = {
+      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      OPENCLAW_STATE_DIR: stateDir,
+      OPENCLAW_VERSION: "2026.4.25",
+      VITEST: "true",
+    };
+    const installRecords = {
+      pack: {
+        source: "path" as const,
+        sourcePath: packageDir,
+        installPath: packageDir,
+      },
+    };
+    const index = loadInstalledPluginIndex({ config, env, installRecords, stateDir });
+
+    expect(index.plugins.map(({ pluginId, enabled }) => ({ pluginId, enabled }))).toEqual([
+      { pluginId: "pack/one", enabled: true },
+      { pluginId: "pack/two", enabled: false },
+    ]);
+    expect(index.installRecords).toEqual(installRecords);
+
+    await writePersistedInstalledPluginIndex(index, { stateDir });
+    clearPluginMetadataLifecycleCaches();
+    const persisted = await readPersistedInstalledPluginIndex({ stateDir });
+    if (!persisted) {
+      throw new Error("expected persisted package plugin index");
+    }
+    expect(persisted.installRecords).toEqual(installRecords);
+
+    const allEntries = loadPluginManifestRegistryForInstalledIndex({
+      index: persisted,
+      config,
+      env,
+      includeDisabled: true,
+    });
+    expect(
+      allEntries.plugins.map(({ id, source }) => ({ id, source: path.basename(source) })),
+    ).toEqual([
+      { id: "pack/one", source: "one.cjs" },
+      { id: "pack/two", source: "two.cjs" },
+    ]);
+
+    const enabledEntries = loadPluginManifestRegistryForInstalledIndex({
+      index: persisted,
+      config,
+      env,
+    });
+    expect(enabledEntries.plugins.map(({ id }) => id)).toEqual(["pack/one"]);
+
+    const disabledEntry = loadPluginManifestRegistryForInstalledIndex({
+      index: persisted,
+      config,
+      env,
+      includeDisabled: true,
+      pluginIds: ["pack/two"],
+    });
+    expect(disabledEntry.plugins.map(({ id }) => id)).toEqual(["pack/two"]);
+
+    const rehydratedEntries = loadPluginManifestRegistry({
+      candidates: createPluginCandidatesFromManifestRegistry(allEntries),
+      config,
+      env,
+      installRecords,
+    });
+    expect(rehydratedEntries.plugins.map(({ id }) => id)).toEqual(["pack/one", "pack/two"]);
   });
 
   it("reuses a prepared manifest graph without reopening plugin manifests", () => {
