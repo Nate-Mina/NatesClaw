@@ -10,6 +10,7 @@ import { emitAgentItemEvent } from "../infra/agent-activity-events.js";
 import { emitAgentEvent } from "../infra/agent-events.js";
 import { REQUIRED_PARAM_GROUPS, type RequiredParamGroup } from "./agent-tools.params.js";
 import { sanitizeForConsole } from "./console-sanitize.js";
+import { extractMessagingToolSend } from "./embedded-agent-messaging-extraction.js";
 import {
   isMessagingTool,
   isMessagingToolSendAction,
@@ -24,11 +25,8 @@ import type {
   ToolCallSummary,
   ToolHandlerContext,
 } from "./embedded-agent-subscribe.handlers.types.js";
-import {
-  collectMessagingMediaUrlsFromRecord,
-  extractMessagingToolSend,
-  sanitizeToolArgs,
-} from "./embedded-agent-subscribe.tools.js";
+import { collectMessagingMediaUrlsFromRecord } from "./embedded-agent-tool-media.js";
+import { sanitizeToolArgs } from "./embedded-agent-tool-results.js";
 import { buildAgentHarnessQuestionPromptPayload } from "./harness/user-input-bridge.js";
 import type { AgentEvent } from "./runtime/index.js";
 import { inferToolMetaFromArgsCore, isCommandBearingToolCall } from "./tool-display.js";
