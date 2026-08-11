@@ -49,6 +49,7 @@ export type SystemAgentChatEngineOptions = {
   runAgentTurn?: SystemAgentTurnRunner;
   classifyApproval?: SystemAgentApprovalClassifier;
   surface?: "cli" | "gateway";
+  supportsQrCode?: boolean;
   readonly verifiedInference: SystemAgentVerifiedInferenceBinding;
   operatorApprovalOnly?: boolean;
 };
@@ -70,6 +71,10 @@ export class SystemAgentChatEngine {
   private readonly router: ChatTurnRouter;
   private verifiedInference: SystemAgentVerifiedInferenceBinding;
   private turnQueue: Promise<unknown> = Promise.resolve();
+  private disposed = false;
+  private disposal: Promise<void> | null = null;
+  private persistentApplySettlement: Promise<void> | null = null;
+  private retainedQrTerminalReply: { stepId: string; reply: SystemAgentChatReply } | null = null;
 
   constructor(
     private readonly options: SystemAgentChatEngineOptions,
@@ -83,6 +88,11 @@ export class SystemAgentChatEngine {
     this.agentSession = createSystemAgentSession(binding);
     this.wizard = new ChatWizardHost({
       surface: options.surface,
+      supportsQrCode: options.supportsQrCode,
+      assertActive: () => this.assertActive(),
+      onStart: () => {
+        this.retainedQrTerminalReply = null;
+      },
       beforePersistentApply: async (runtime) => {
         await this.requirePersistentApplyInference(runtime);
       },
@@ -114,6 +124,14 @@ export class SystemAgentChatEngine {
     return this.router.hasPendingProposal();
   }
 
+  hasPendingQrCode(): boolean {
+    return this.wizard.hasPendingQrCode();
+  }
+
+  getPersistentApplySettlement(): Promise<void> | null {
+    return this.persistentApplySettlement;
+  }
+
   getPendingOperatorProposal(): { operation: SystemAgentOperation; hash: string } | null {
     return this.router.getPendingOperatorProposal();
   }
@@ -122,8 +140,11 @@ export class SystemAgentChatEngine {
     decision: "allow-once" | "allow-always" | "deny" | null,
     proposalHash: string,
   ): Promise<SystemAgentChatReply | null> {
+    this.assertActive();
     const turn = this.turnQueue.then(async () => {
+      this.assertActive();
       const reply = await this.router.resolveOperatorApproval(decision, proposalHash);
+      this.assertActive();
       if (reply?.text) {
         this.history.push({ role: "assistant", text: reply.text });
       }
@@ -150,15 +171,28 @@ export class SystemAgentChatEngine {
   }
 
   async dispose(): Promise<void> {
-    this.wizard.dispose();
-    await cleanupSystemAgentSession(this.agentSession);
+    const wizardSettlement = this.wizard.whenSettled();
+    if (!this.disposed) {
+      this.disposed = true;
+      this.router.clearForInferenceLoss();
+      void this.wizard.dispose();
+    }
+    this.disposal ??= (async () => {
+      await this.turnQueue;
+      await wizardSettlement;
+      await cleanupSystemAgentSession(this.agentSession);
+    })();
+    await this.disposal;
   }
 
   async handle(text: string, options?: SystemAgentChatTurnOptions): Promise<SystemAgentChatReply> {
+    this.assertActive();
     const turn = this.turnQueue.then(async () => {
+      this.assertActive();
       await this.requireVerifiedInference();
       const sensitiveTurn = this.wizard.sensitiveInputPending;
       const reply = await this.router.resolveTurn(text, options);
+      this.assertActive();
       return this.completeTurn(
         reply,
         sensitiveTurn ? "<redacted secret>" : redactSensitiveCommandText(text),
@@ -169,18 +203,37 @@ export class SystemAgentChatEngine {
   }
 
   async answerWizard(answer: WizardAnswer): Promise<SystemAgentChatReply> {
+    this.assertActive();
     const turn = this.turnQueue.then(async () => {
+      this.assertActive();
       await this.requireVerifiedInference();
+      if (this.retainedQrTerminalReply?.stepId === answer.stepId) {
+        return { ...this.retainedQrTerminalReply.reply };
+      }
       const result = await this.router.answerWizard(this.wizard.answer(answer));
-      return this.completeTurn({ text: result.text, action: "none" }, result.userHistoryText);
+      this.assertActive();
+      const completed = this.completeTurn(
+        { text: result.text, action: "none" },
+        result.userHistoryText,
+      );
+      if (result.retainQrStepId) {
+        this.retainedQrTerminalReply = {
+          stepId: result.retainQrStepId,
+          reply: { ...completed },
+        };
+      }
+      return completed;
     });
     this.turnQueue = turn.catch(() => undefined);
     return await turn;
   }
 
   async cancelWizard(cancel: SystemAgentWizardCancel): Promise<SystemAgentChatReply> {
+    this.assertActive();
     const turn = this.turnQueue.then(async () => {
+      this.assertActive();
       const result = await this.router.answerWizard(this.wizard.cancel(cancel));
+      this.assertActive();
       return this.completeTurn({ text: result.text, action: "none" }, result.userHistoryText);
     });
     this.turnQueue = turn.catch(() => undefined);
@@ -226,6 +279,7 @@ export class SystemAgentChatEngine {
   }
 
   private async requireVerifiedInference() {
+    this.assertActive();
     const binding = this.verifiedInference;
     if (this.agentSession.verifiedInference !== binding) {
       return this.throwInferenceUnavailable();
@@ -233,6 +287,7 @@ export class SystemAgentChatEngine {
     try {
       const route = await resolveSystemAgentVerifiedInferenceRoute(binding, this.options.deps);
       if (route) {
+        this.assertActive();
         return route;
       }
     } catch (error) {
@@ -242,6 +297,7 @@ export class SystemAgentChatEngine {
   }
 
   private async requirePersistentApplyInference(runtime: RuntimeEnv) {
+    this.assertActive();
     const binding = this.verifiedInference;
     if (this.agentSession.verifiedInference !== binding) {
       return this.throwInferenceUnavailable();
@@ -254,6 +310,15 @@ export class SystemAgentChatEngine {
         deps: this.options.deps,
       });
       if (route) {
+        this.assertActive();
+        const settlement = (this.wizard.whenSettled() ?? this.turnQueue).then(() => undefined);
+        this.persistentApplySettlement = settlement;
+        const clearSettlement = () => {
+          if (this.persistentApplySettlement === settlement) {
+            this.persistentApplySettlement = null;
+          }
+        };
+        void settlement.then(clearSettlement, clearSettlement);
         return route;
       }
     } catch (error) {
@@ -278,10 +343,16 @@ export class SystemAgentChatEngine {
     this.router.clearForInferenceLoss();
     delete this.agentSession.cliSession;
     if (cancelWizard) {
-      this.wizard.dispose();
+      void this.wizard.dispose();
     }
     this.history.splice(0);
     throw new SystemAgentInferenceUnavailableError("conversation", failures);
+  }
+
+  private assertActive(): void {
+    if (this.disposed) {
+      throw new Error("System-agent chat engine has been disposed.");
+    }
   }
 
   private async verifyConfigAfterWrite(): Promise<string | null> {
