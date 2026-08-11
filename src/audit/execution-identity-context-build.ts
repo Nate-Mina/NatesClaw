@@ -4,6 +4,7 @@ import type { ExecutionIdentityContextV1 } from "../../packages/gateway-protocol
 import { validateExecutionIdentityContextV1 } from "../../packages/gateway-protocol/src/index.js";
 import { pseudonymizeExecutionIdentityRef } from "./audit-identity.js";
 import type { ExecutionIdentityAdmissionEnvelope } from "./execution-identity-admission.js";
+import { executionIdentitySpawnAdmission } from "./execution-identity-spawn-admission.js";
 
 const EXECUTION_IDENTITY_CONTEXT_MAX_BYTES = 16 * 1024;
 
@@ -104,8 +105,51 @@ export function buildExecutionIdentityContext(
     })),
     (grant) => `${grant.grantRef}\0${grant.state}`,
   );
-  const missingEvidence = envelope.invoker ? [] : ["invoker.principal"];
-  const context: ExecutionIdentityContextV1 = {
+  const serializedSpawnFacts = executionIdentitySpawnAdmission({
+    operation: "read",
+    value: envelope,
+  }) as string | undefined;
+  const [lineageFacts, spawnMissingEvidence] = (
+    serializedSpawnFacts
+      ? executionIdentitySpawnAdmission({ operation: "parse", value: serializedSpawnFacts })
+      : [undefined, []]
+  ) as readonly [Record<string, unknown> | undefined, string[]];
+  const lineage = lineageFacts
+    ? {
+        ...(typeof lineageFacts.parentContextId === "string"
+          ? { parentContextId: lineageFacts.parentContextId }
+          : {}),
+        ...(typeof lineageFacts.parentExecutionId === "string"
+          ? { parentExecutionId: lineageFacts.parentExecutionId }
+          : {}),
+        ...(typeof lineageFacts.parentRunId === "string"
+          ? { parentRunId: lineageFacts.parentRunId }
+          : {}),
+        parentAgentPrincipal: {
+          kind: "agent" as const,
+          domainRef,
+          principalRef: lineageFacts.parentAgentId as string,
+        },
+        delegationRef: hmacRef(
+          db,
+          "grant",
+          `${domainRef}:delegation`,
+          JSON.stringify([
+            lineageFacts.relation,
+            lineageFacts.rawRequesterRef,
+            lineageFacts.rawControllerRef,
+            lineageFacts.localPolicyRefs,
+            lineageFacts.targetPolicyRefs,
+          ]),
+        ),
+        depth: lineageFacts.depth as number,
+      }
+    : undefined;
+  const missingEvidence = uniqueSorted(
+    [...(envelope.invoker ? [] : ["invoker.principal"]), ...spawnMissingEvidence],
+    (item) => item,
+  );
+  const context: Record<string, unknown> = {
     schemaVersion: 1,
     contextId,
     executionId,
@@ -133,7 +177,12 @@ export function buildExecutionIdentityContext(
     runtimeInstance: { runtimeRef, kind: envelope.runtime.kind, state: "present" },
     applicableGrants,
     assurance,
-    coverageState: envelope.invoker ? "attribution-only" : "unattributed",
+    ...(lineage ? { lineage } : {}),
+    coverageState: lineage
+      ? "attribution-only"
+      : envelope.invoker
+        ? "attribution-only"
+        : "unattributed",
     missingEvidence,
   };
   if (!validateExecutionIdentityContextV1(context)) {

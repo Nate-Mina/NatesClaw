@@ -388,6 +388,18 @@ describe("audit run explanation", () => {
               strength: "boundary-verified",
             },
           ],
+          lineage: {
+            parentContextId: "parent-context",
+            parentExecutionId: "parent-execution",
+            parentRunId: "parent-run",
+            parentAgentPrincipal: {
+              kind: "agent",
+              domainRef: hmacRef,
+              principalRef: "parent-agent",
+            },
+            delegationRef: hmacRef,
+            depth: 2,
+          },
           coverageState: "unattributed",
           missingEvidence: ["invoker.principal"],
         },
@@ -447,7 +459,12 @@ describe("audit run explanation", () => {
       "Sponsor [absent]",
       "Applicable grants [absent]",
       "Assurance [present]",
-      "Parent [absent]",
+      "Parent context [present]",
+      "Parent execution [present]",
+      "Parent run [present]",
+      "Parent agent [present]",
+      "Delegation [present]",
+      "Depth [present]",
     ]) {
       expect(output).toContain(label);
     }

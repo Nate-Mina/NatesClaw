@@ -19,6 +19,10 @@ import { ensureExecApprovalsSnapshot, loadExecApprovalsAsync } from "../infra/ex
 import { normalizeOptionalAccountId } from "../routing/account-id.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { safeEqualSecret } from "../security/secret-equal.js";
+import {
+  type AgentRuntimeExecutionLineage,
+  withAgentRuntimeExecutionLineage,
+} from "./agent-runtime-execution-lineage.js";
 import type { CronCreatorAuthorityGrant } from "./cron-creator-authority-grant.js";
 import type { AgentRuntimeMessageActionContext } from "./message-action-turn-capability.js";
 import type { WorkerSessionTurnClaim } from "./worker-environments/placement-record.js";
@@ -165,6 +169,56 @@ function decodeStringList(value: unknown): string[] | undefined {
   return value.map((entry) => entry.trim()).filter(Boolean);
 }
 
+function decodeBoundedRefList(value: unknown): string[] | undefined {
+  if (
+    !Array.isArray(value) ||
+    value.length > 16 ||
+    value.some((entry) => typeof entry !== "string" || entry.length > 4_096)
+  ) {
+    return undefined;
+  }
+  return value.map((entry) => entry.trim()).filter(Boolean);
+}
+
+function decodeExecutionLineage(value: unknown): AgentRuntimeExecutionLineage | undefined {
+  if (!isRecord(value) || value.relation !== "sessions_spawn") {
+    return undefined;
+  }
+  const requesterRef = normalizeOptionalString(value.requesterRef);
+  const controllerRef = normalizeOptionalString(value.controllerRef);
+  const applicableGrantRefs = decodeBoundedRefList(value.applicableGrantRefs);
+  const localPolicyRefs = decodeBoundedRefList(value.localPolicyRefs);
+  const runtimeAssuranceRefs = decodeBoundedRefList(value.runtimeAssuranceRefs);
+  const targetPolicyRefs = decodeBoundedRefList(value.targetPolicyRefs);
+  if (
+    !requesterRef ||
+    !controllerRef ||
+    requesterRef.length > 4_096 ||
+    controllerRef.length > 4_096 ||
+    !Number.isSafeInteger(value.depth) ||
+    (value.depth as number) < 1 ||
+    (value.depth as number) > 64 ||
+    !applicableGrantRefs ||
+    !localPolicyRefs ||
+    !runtimeAssuranceRefs ||
+    !targetPolicyRefs ||
+    (value.externalNativeActions !== "observable" && value.externalNativeActions !== "unsupported")
+  ) {
+    return undefined;
+  }
+  return {
+    relation: "sessions_spawn",
+    requesterRef,
+    controllerRef,
+    depth: value.depth as number,
+    applicableGrantRefs,
+    localPolicyRefs,
+    runtimeAssuranceRefs,
+    targetPolicyRefs,
+    externalNativeActions: value.externalNativeActions,
+  };
+}
+
 function decodeSessionSpawnContext(value: unknown): AgentRuntimeSessionSpawnContext | undefined {
   if (!isRecord(value) || !isRecord(value.inheritedToolPolicy)) {
     return undefined;
@@ -179,10 +233,18 @@ function decodeSessionSpawnContext(value: unknown): AgentRuntimeSessionSpawnCont
   if (value.completionOwnerSessionKey !== undefined && !completionOwnerSessionKey) {
     return undefined;
   }
-  return {
+  const executionLineage =
+    value.executionLineage === undefined
+      ? undefined
+      : decodeExecutionLineage(value.executionLineage);
+  if (value.executionLineage !== undefined && !executionLineage) {
+    return undefined;
+  }
+  const context = {
     ...(completionOwnerSessionKey ? { completionOwnerSessionKey } : {}),
-    inheritedToolPolicy: { version: 1, allow, deny },
+    inheritedToolPolicy: { version: 1 as const, allow, deny },
   };
+  return executionLineage ? withAgentRuntimeExecutionLineage(context, executionLineage) : context;
 }
 
 function decodeCronCreatorAuthorityGrant(value: unknown): CronCreatorAuthorityGrant | undefined {
@@ -497,6 +559,12 @@ function prepareAgentRuntimeIdentityTokenPayload(params: AgentRuntimeIdentityTok
   if (!operationalInstanceId || !operationalRunId) {
     throw new Error("agent runtime identity requires an operational run instance");
   }
+  const sessionSpawnContext = params.sessionSpawnContext
+    ? decodeSessionSpawnContext(params.sessionSpawnContext)
+    : undefined;
+  if (params.sessionSpawnContext && !sessionSpawnContext) {
+    throw new Error("agent runtime session spawn context violates its bounded contract");
+  }
   const activeAuthority = getActiveAgentRunDelegatedAuthority({
     instanceId: operationalInstanceId,
     runId: operationalRunId,
@@ -575,7 +643,7 @@ function prepareAgentRuntimeIdentityTokenPayload(params: AgentRuntimeIdentityTok
     ...(params.cronCreatorAuthorityGrant
       ? { cronCreatorAuthorityGrant: params.cronCreatorAuthorityGrant }
       : {}),
-    ...(params.sessionSpawnContext ? { sessionSpawnContext: params.sessionSpawnContext } : {}),
+    ...(sessionSpawnContext ? { sessionSpawnContext } : {}),
     ...(params.executionIdentityToken?.runId === operationalRunId
       ? { executionIdentity: params.executionIdentityToken }
       : {}),

@@ -5,6 +5,7 @@ import { type Static, Type } from "typebox";
 import { Value } from "typebox/value";
 import { redactSensitiveText } from "../logging/redact.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
+import { executionIdentitySpawnAdmission } from "./execution-identity-spawn-admission.js";
 
 const EXECUTION_IDENTITY_ADMISSION_MAX_BYTES = 16 * 1024;
 const EXECUTION_IDENTITY_ADMISSION_MAX_ITEMS = 16;
@@ -161,10 +162,16 @@ function freezeEnvelope<T>(value: T, seen = new WeakSet<object>()): T {
   return Object.freeze(value);
 }
 
-function validateEnvelope(value: unknown): asserts value is ExecutionIdentityAdmissionEnvelope {
+function validateEnvelope(
+  value: unknown,
+): asserts value is ExecutionIdentityAdmissionEnvelope & Record<string, unknown> {
+  const baseEnvelope = executionIdentitySpawnAdmission({
+    operation: "base-envelope",
+    value,
+  }) as ExecutionIdentityAdmissionEnvelope;
   if (
-    !Value.Check(ExecutionIdentityAdmissionEnvelopeSchema, value) ||
-    !Number.isSafeInteger(value.createdAt)
+    !Value.Check(ExecutionIdentityAdmissionEnvelopeSchema, baseEnvelope) ||
+    !Number.isSafeInteger(baseEnvelope.createdAt)
   ) {
     throw new Error("execution identity admission envelope violates its bounded contract");
   }
@@ -245,7 +252,11 @@ function captureExecutionIdentityAdmissionEnvelope(
       strength: "boundary-verified" as const,
     },
   ];
-  const envelope = {
+  const serializedSpawnFacts = executionIdentitySpawnAdmission({
+    operation: "read",
+    value: facts,
+  }) as string | undefined;
+  const baseEnvelope = {
     envelopeVersion: 1 as const,
     contextId: token.contextId,
     executionId: token.executionId,
@@ -278,6 +289,11 @@ function captureExecutionIdentityAdmissionEnvelope(
       strength: item.strength,
     })),
   };
+  const envelope = executionIdentitySpawnAdmission({
+    operation: "extend-envelope",
+    value: baseEnvelope,
+    extra: serializedSpawnFacts,
+  }) as ExecutionIdentityAdmissionEnvelope & Record<string, unknown>;
   validateEnvelope(envelope);
   return freezeEnvelope(envelope);
 }
@@ -287,14 +303,27 @@ export function parseExecutionIdentityAdmissionEnvelope(
   value: unknown,
 ): ExecutionIdentityAdmissionEnvelope {
   validateEnvelope(value);
-  const parsed = captureExecutionIdentityAdmissionEnvelope(value, {
-    token: createExecutionIdentityAdmissionToken(value.runId, {
-      contextId: value.contextId,
-      executionId: value.executionId,
-      now: value.createdAt,
-    }),
-    runtimeInstanceId: value.runtimeInstanceId,
-  });
+  const spawnFacts = executionIdentitySpawnAdmission({ operation: "read", value }) as
+    | string
+    | undefined;
+  if (!spawnFacts) {
+    throw new Error("execution identity admission envelope is missing spawn evidence state");
+  }
+  const parsed = captureExecutionIdentityAdmissionEnvelope(
+    executionIdentitySpawnAdmission({
+      operation: "attach",
+      value,
+      extra: spawnFacts,
+    }) as ExecutionIdentityAdmissionFacts,
+    {
+      token: createExecutionIdentityAdmissionToken(value.runId, {
+        contextId: value.contextId,
+        executionId: value.executionId,
+        now: value.createdAt,
+      }),
+      runtimeInstanceId: value.runtimeInstanceId,
+    },
+  );
   if (JSON.stringify(parsed) !== JSON.stringify(value)) {
     throw new Error("execution identity admission envelope is not canonical");
   }

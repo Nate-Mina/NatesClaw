@@ -1,4 +1,5 @@
 import { ErrorCodes, errorShape } from "../../../packages/gateway-protocol/src/index.js";
+import { withAgentCommandExecutionIdentitySpawnFacts } from "../../agents/agent-command-execution-identity-spawn.js";
 import {
   buildAgentRunTerminalOutcome,
   classifyAgentRunTerminalOutcome,
@@ -28,6 +29,7 @@ import {
 import type { GatewayCronCreatorAuthorityAdmission } from "../server-methods/cron-creator-authority-admission.js";
 import { formatForLog } from "../ws-log.js";
 import { setGatewayDedupeEntries } from "./agent-dedupe.js";
+import { readAgentRunDispatchExecutionIdentity } from "./agent-run-dispatch-execution-identity.js";
 import type { AgentTurnContext, AgentTurnIo } from "./types.js";
 
 function resolveResolvedAgentTimeoutStopReason(
@@ -174,11 +176,15 @@ export function dispatchAgentRunFromGateway(params: {
   const cronCreatorAuthorityCapability = params.cronCreatorAuthority
     ? createCronCreatorAuthorityCapability(params.cronCreatorAuthority.runId)
     : undefined;
+  const ingressOptsWithSpawnFacts = withAgentCommandExecutionIdentitySpawnFacts(
+    params.ingressOpts,
+    readAgentRunDispatchExecutionIdentity(params),
+  );
   const runAgent = () =>
     agentCommandFromGatewayIngress(
       cronCreatorAuthorityCapability
-        ? { ...params.ingressOpts, cronCreatorAuthorityCapability }
-        : params.ingressOpts,
+        ? { ...ingressOptsWithSpawnFacts, cronCreatorAuthorityCapability }
+        : ingressOptsWithSpawnFacts,
       defaultRuntime,
       params.context.deps,
       {

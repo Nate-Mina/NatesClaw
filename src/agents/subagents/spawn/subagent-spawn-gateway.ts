@@ -1,7 +1,15 @@
+import type { AgentRuntimeIdentity } from "../../../gateway/agent-runtime-identity-token.js";
+import { withInProcessAgentRuntimeIdentity } from "../../../gateway/in-process-agent-runtime-identity.js";
+import { getActiveAgentRunDelegatedAuthority } from "../../../infra/agent-run-registry.js";
+import { getGatewayToolCallerIdentity } from "../../tools/gateway-caller-context.js";
+import { runWithGatewaySessionSpawnContext } from "../../tools/gateway-session-spawn-context.js";
+import { runWithGatewaySessionSpawnParentExecutionIdentity } from "../../tools/gateway-session-spawn-execution-identity.js";
+import { callGatewayTool } from "../../tools/gateway.js";
 import { resolveSubagentRunTimerDelayMs } from "../registry/subagent-run-timeout.js";
 import type { SubagentLaunchAuthorization } from "./subagent-launch-authorization.js";
 import { applySubagentLaunchAuthorization } from "./subagent-launch-authorization.js";
 import { getSubagentSpawnDeps } from "./subagent-spawn-deps.js";
+import { readSubagentGatewayExecutionIdentity } from "./subagent-spawn-execution-identity.js";
 import {
   ADMIN_SCOPE,
   callGateway,
@@ -15,6 +23,8 @@ export async function callSubagentGateway(
   params: Parameters<typeof callGateway>[0],
   authorization?: SubagentLaunchAuthorization,
 ): Promise<Awaited<ReturnType<typeof callGateway>>> {
+  const { sessionSpawnContext, parentExecutionIdentityToken } =
+    readSubagentGatewayExecutionIdentity(params) ?? {};
   // Subagent lifecycle requires methods spanning multiple scope tiers
   // (sessions.delete → admin, agent → write). When each call
   // independently negotiates least-privilege scopes the first connection pairs
@@ -58,19 +68,57 @@ export async function callSubagentGateway(
     // Agent launches are host-owned even when the parent request came from CLI/HTTP.
     // Reusing that external identity makes collector preflight treat the launch as spoofed.
     const forceSyntheticClient = request.method === "agent" || scopes != null;
+    const caller = getGatewayToolCallerIdentity();
+    const activeAuthority = caller?.operationalRunInstance
+      ? getActiveAgentRunDelegatedAuthority(caller.operationalRunInstance)
+      : undefined;
+    const agentRuntimeIdentity: AgentRuntimeIdentity | undefined =
+      sessionSpawnContext && caller?.operationalRunInstance && activeAuthority
+        ? {
+            kind: "agentRuntime",
+            agentId: caller.agentId,
+            sessionKey: caller.sessionKey,
+            operationalRunInstance: caller.operationalRunInstance,
+            delegatedAuthority: { kind: "local", ...activeAuthority },
+            ...(parentExecutionIdentityToken
+              ? { executionIdentity: parentExecutionIdentityToken }
+              : {}),
+            sessionSpawnContext,
+          }
+        : undefined;
     return await deps.dispatchGatewayMethodInProcess(
       request.method,
       request.params as Record<string, unknown>,
-      {
-        expectFinal: request.expectFinal,
-        ...(allowModelOverride ? { allowSyntheticModelOverride: true } : {}),
-        ...(forceSyntheticClient ? { forceSyntheticClient: true } : {}),
-        ...(typeof request.timeoutMs === "number" ? { timeoutMs: request.timeoutMs } : {}),
-        ...(scopes != null ? { syntheticScopes: scopes } : {}),
-      },
+      withInProcessAgentRuntimeIdentity(
+        {
+          expectFinal: request.expectFinal,
+          ...(allowModelOverride ? { allowSyntheticModelOverride: true } : {}),
+          ...(forceSyntheticClient ? { forceSyntheticClient: true } : {}),
+          ...(typeof request.timeoutMs === "number" ? { timeoutMs: request.timeoutMs } : {}),
+          ...(scopes != null ? { syntheticScopes: scopes } : {}),
+        },
+        agentRuntimeIdentity,
+      ),
     );
   }
-  return await deps.callGateway(request);
+  return sessionSpawnContext
+    ? await runWithGatewaySessionSpawnContext(sessionSpawnContext, () =>
+        runWithGatewaySessionSpawnParentExecutionIdentity(parentExecutionIdentityToken, () =>
+          callGatewayTool(
+            request.method,
+            {
+              ...(typeof request.timeoutMs === "number" ? { timeoutMs: request.timeoutMs } : {}),
+            },
+            request.params,
+            {
+              expectFinal: request.expectFinal,
+              scopes,
+              requireAgentRuntimeIdentity: true,
+            },
+          ),
+        ),
+      )
+    : await deps.callGateway(request);
 }
 
 export function readGatewayRunId(
