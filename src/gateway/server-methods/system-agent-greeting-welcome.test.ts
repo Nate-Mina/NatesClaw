@@ -184,6 +184,12 @@ describe("openclaw.chat caretaker welcome", () => {
         role: "assistant",
         text: "I'm healthy. An update is ready, and I noticed a manual config edit.",
       }),
+      {
+        session: {
+          sessionId: "caretaker-welcome",
+          incarnationId: expect.any(String),
+        },
+      },
     );
     expect(greetingMocks.acknowledgeSystemAgentGreetingDelivery).toHaveBeenCalledWith({
       auditSequence: 42,

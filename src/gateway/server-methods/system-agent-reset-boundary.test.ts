@@ -154,27 +154,33 @@ describe("openclaw.chat reset boundary", () => {
       );
       appendTranscriptReset({ session: recoveredSession });
       const fixture = await createSystemAgentVerifiedInferenceTestFixture(verifiedConfig);
-      const engine = new SystemAgentChatEngine({
-        surface: "gateway",
-        verifiedInference: fixture.binding,
-        deps: {
-          ...fixture.deps,
-          readConfigFileSnapshot: async () =>
-            ({
-              exists: true,
-              valid: true,
-              path: "/tmp/openclaw.json",
-              hash: "verified-config",
-              config: verifiedConfig,
-              runtimeConfig: verifiedConfig,
-              sourceConfig: verifiedConfig,
-              issues: [],
-            }) as never,
+      const engine = new SystemAgentChatEngine(
+        {
+          surface: "gateway",
+          verifiedInference: fixture.binding,
+          deps: {
+            ...fixture.deps,
+            readConfigFileSnapshot: async () =>
+              ({
+                exists: true,
+                valid: true,
+                path: "/tmp/openclaw.json",
+                hash: "verified-config",
+                config: verifiedConfig,
+                runtimeConfig: verifiedConfig,
+                sourceConfig: verifiedConfig,
+                issues: [],
+              }) as never,
+          },
         },
-        runChannelSetupWizard: async (_channel, prompter) => {
-          await prompter.text({ message: "Bot token" });
+        {
+          wizardDependencies: {
+            runChannelSetupWizard: async (_channel, prompter) => {
+              await prompter.text({ message: "Bot token" });
+            },
+          },
         },
-      });
+      );
       const sessions = new Map<string, SystemAgentChatSession>([
         [
           "recover-session",
