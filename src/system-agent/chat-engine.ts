@@ -173,7 +173,10 @@ export class SystemAgentChatEngine {
     const turn = this.turnQueue.then(async () => {
       await this.requireVerifiedInference();
       const result = await this.router.answerWizard(this.wizard.answer(answer));
-      return this.completeTurn({ text: result.text, action: "none" }, result.userHistoryText);
+      return this.completeTurn(
+        { text: result.text, action: "none", wizardActionAccepted: result.accepted },
+        result.userHistoryText,
+      );
     });
     this.turnQueue = turn.catch(() => undefined);
     return await turn;
@@ -182,7 +185,10 @@ export class SystemAgentChatEngine {
   async cancelWizard(cancel: SystemAgentWizardCancel): Promise<SystemAgentChatReply> {
     const turn = this.turnQueue.then(async () => {
       const result = await this.router.answerWizard(this.wizard.cancel(cancel));
-      return this.completeTurn({ text: result.text, action: "none" }, result.userHistoryText);
+      return this.completeTurn(
+        { text: result.text, action: "none", wizardActionAccepted: result.accepted },
+        result.userHistoryText,
+      );
     });
     this.turnQueue = turn.catch(() => undefined);
     return await turn;

@@ -672,6 +672,7 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
           sessionId,
           incarnationId: session.transcriptIncarnationId,
           wizardAction,
+          wizardActionAccepted: reply.wizardActionAccepted,
         });
         const delegation = params.delegation;
         let proposalId: string | undefined;

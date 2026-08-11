@@ -30,6 +30,8 @@ export type SystemAgentChatReply = {
   agentDraft?: "hatch";
   sensitive?: boolean;
   wizardInputPending?: boolean;
+  /** The submitted typed wizard action passed or failed owner-side validation. */
+  wizardActionAccepted?: boolean;
   handoff?: SystemAgentOperation;
   question?: SystemAgentChatQuestion;
   step?: WizardStep;
@@ -42,6 +44,7 @@ export type ChatWizardResult = {
 };
 
 export type ChatWizardAnswerResult = ChatWizardResult & {
+  accepted: boolean;
   userHistoryText: string;
 };
 
@@ -311,6 +314,7 @@ export class ChatWizardHost {
       : await this.pump();
     return {
       ...result,
+      accepted: validationError === undefined,
       userHistoryText: formatStructuredWizardAnswerForHistory(step, answer.value),
     };
   }
@@ -327,7 +331,7 @@ export class ChatWizardHost {
     if (!bridge.session.cancel()) {
       throw new SystemAgentWizardAnswerError("The hosted wizard cannot be cancelled right now.");
     }
-    return { ...(await this.pump()), userHistoryText: "Cancel" };
+    return { ...(await this.pump()), accepted: true, userHistoryText: "Cancel" };
   }
 
   async resolveReply(text: string): Promise<ChatWizardResult> {
