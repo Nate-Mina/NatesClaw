@@ -369,6 +369,7 @@ public struct OpenClawChatInputProvenance: Codable, Hashable, Sendable {
     public let sourceChannel: String?
     public let sourceTool: String?
 
+    // periphery:ignore - package tests construct provenance fixtures; app consumers decode this payload.
     public init(
         kind: String,
         originSessionId: String? = nil,

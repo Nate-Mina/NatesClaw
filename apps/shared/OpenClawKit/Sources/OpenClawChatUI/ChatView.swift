@@ -705,13 +705,6 @@ public struct OpenClawChatView: View {
         }
     }
 
-    private var visibleMessages: [OpenClawChatMessage] {
-        self.transcriptRows.compactMap { row in
-            guard case let .message(message) = row else { return nil }
-            return message
-        }
-    }
-
     private var latestVisibleTurnStartID: UUID? {
         self.visibleTurnStartIDs.last
     }
