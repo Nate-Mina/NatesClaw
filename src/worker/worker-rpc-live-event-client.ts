@@ -33,6 +33,9 @@ type BufferedLiveEvent = {
   runId: string;
   event: WorkerLiveEvent;
   blockedAck?: number;
+  // Claim the old send high-water once so the Gateway clears speculative
+  // preview gaps before an authoritative terminal retry is renumbered.
+  resyncFromSeq?: number;
   resolve: (result: WorkerLiveEventResult) => void;
   reject: (error: Error) => void;
 };
@@ -155,7 +158,7 @@ export class WorkerLiveEventClient {
       await this.connection.waitForReady();
       const response = await this.connection.requestLiveEvent({
         runEpoch: this.options.runEpoch,
-        lastAckedSeq: this.ackedSeqValue,
+        lastAckedSeq: entry.resyncFromSeq ?? this.ackedSeqValue,
         seq: sentSeq,
         runId: entry.runId,
         event: entry.event,
@@ -197,11 +200,20 @@ export class WorkerLiveEventClient {
       throw new WorkerLiveEventError(response.error);
     } catch (error) {
       if (
-        !(error instanceof WorkerConnectionInterruptedError) ||
-        isTerminalConnection(this.connection)
+        error instanceof WorkerConnectionInterruptedError &&
+        !isTerminalConnection(this.connection)
       ) {
-        this.rejectAll(error instanceof Error ? error : new Error(String(error)));
+        return;
       }
+      const failure = error instanceof Error ? error : new Error(String(error));
+      if (
+        !isTerminalEvent(entry.event) &&
+        !isTerminalConnection(this.connection) &&
+        this.recoverTerminalAfterPreviewFailure(failure)
+      ) {
+        return;
+      }
+      this.rejectAll(failure);
     } finally {
       this.inFlight.delete(entry);
       this.pump();
@@ -235,10 +247,31 @@ export class WorkerLiveEventClient {
     for (const entry of this.buffered) {
       entry.seq = seq;
       delete entry.blockedAck;
+      delete entry.resyncFromSeq;
       seq += 1;
     }
     this.nextSeqValue = seq;
     this.maxSentSeqValue = ackedSeq;
+  }
+
+  private recoverTerminalAfterPreviewFailure(error: Error): boolean {
+    if (!this.buffered.some((entry) => isTerminalEvent(entry.event))) {
+      return false;
+    }
+    this.replayGeneration += 1;
+    this.lastResync = undefined;
+    const resyncFromSeq = this.maxSentSeqValue;
+    const buffered = this.buffered.splice(0);
+    for (const entry of buffered) {
+      if (isTerminalEvent(entry.event)) {
+        delete entry.blockedAck;
+        entry.resyncFromSeq = resyncFromSeq;
+        this.buffered.push(entry);
+      } else {
+        entry.reject(error);
+      }
+    }
+    return true;
   }
 
   private rejectAll(error: Error): void {

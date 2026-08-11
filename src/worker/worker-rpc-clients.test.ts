@@ -401,6 +401,70 @@ describe("worker live-event client", () => {
     client.dispose();
   });
 
+  it("recovers finishing after a concurrent preview rejection wins the response race", async () => {
+    const harness = connectionHarness();
+    const previewResponse =
+      createDeferred<Awaited<ReturnType<WorkerConnection["requestLiveEvent"]>>>();
+    const firstTerminalResponse =
+      createDeferred<Awaited<ReturnType<WorkerConnection["requestLiveEvent"]>>>();
+    harness.requestLiveEvent
+      .mockImplementationOnce(async () => await previewResponse.promise)
+      .mockImplementationOnce(async () => await firstTerminalResponse.promise)
+      .mockResolvedValueOnce({
+        type: "res",
+        id: "live-response-resync",
+        ok: false,
+        error: {
+          code: "INVALID_REQUEST",
+          message: "Replay required",
+          details: { reason: "resync-required", ackedSeq: 0, expectedSeq: 1 },
+        },
+      })
+      .mockResolvedValueOnce({
+        type: "res",
+        id: "live-response-finishing",
+        ok: true,
+        payload: { ackedSeq: 1 },
+      });
+    const client = new WorkerLiveEventClient(harness.connection, { runEpoch: 3 });
+
+    const preview = client.emit("run-1", LIVE_EVENT);
+    const finishing = client.emit("run-1", {
+      kind: "lifecycle",
+      payload: { phase: "finishing", startedAt: 1, endedAt: 2 },
+    });
+    await vi.waitFor(() => expect(harness.requestLiveEvent).toHaveBeenCalledTimes(2));
+    previewResponse.resolve({
+      type: "res",
+      id: "live-response-preview",
+      ok: false,
+      error: {
+        code: "INVALID_REQUEST",
+        message: "Preview rejected",
+        details: { reason: "invalid-event" },
+      },
+    });
+    await expect(preview).rejects.toMatchObject({
+      name: "WorkerLiveEventError",
+      reason: "invalid-event",
+    });
+    firstTerminalResponse.resolve({
+      type: "res",
+      id: "live-response-stale-finishing",
+      ok: true,
+      payload: { ackedSeq: 0 },
+    });
+
+    await expect(finishing).resolves.toEqual({ ackedSeq: 1 });
+    expect(harness.requestLiveEvent.mock.calls.map((call) => call[0])).toEqual([
+      expect.objectContaining({ seq: 1, lastAckedSeq: 0, event: LIVE_EVENT }),
+      expect.objectContaining({ seq: 2, lastAckedSeq: 0 }),
+      expect.objectContaining({ seq: 2, lastAckedSeq: 2 }),
+      expect.objectContaining({ seq: 1, lastAckedSeq: 0 }),
+    ]);
+    client.dispose();
+  });
+
   it("replays immutable sequence and payload after a resync response", async () => {
     const harness = connectionHarness();
     harness.requestLiveEvent
