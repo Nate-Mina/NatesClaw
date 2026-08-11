@@ -157,7 +157,11 @@ describe("audit event worker", () => {
             rawSourceRef: "raw-ingress-secret",
           },
           runtime: { kind: "embedded" },
-          invoker: { kind: "local-account", rawPrincipalRef: "raw-principal-secret" },
+          invoker: {
+            state: "present",
+            kind: "local-account",
+            rawPrincipalRef: "raw-principal-secret",
+          },
         },
         {
           enabled: true,
@@ -210,6 +214,58 @@ describe("audit event worker", () => {
       expect(persisted.context_json).not.toContain(raw);
       expect(JSON.stringify(errors)).not.toContain(raw);
     }
+  });
+
+  it("preserves explicit unknown invoker evidence through the worker clone boundary", async () => {
+    const stateDir = tempDirs.make("openclaw-audit-writer-");
+    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const errors: string[] = [];
+    const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
+    const clearSink = configureExecutionIdentityAdmissionSink(writer.recordExecutionIdentity);
+    const admittedAt = Date.now();
+
+    expect(
+      enqueueExecutionIdentityContextAtAdmission(
+        {
+          runId: "unknown-invoker-run",
+          agentId: "main",
+          ingress: { kind: "local-cli", boundary: "agent-command.local", state: "present" },
+          runtime: { kind: "embedded" },
+          invoker: { state: "unknown" },
+        },
+        {
+          enabled: true,
+          contextId: "unknown-invoker-context",
+          executionId: "unknown-invoker-execution",
+          now: admittedAt,
+          runtimeInstanceId: "private-runtime-reference",
+        },
+      ),
+    ).toEqual({
+      candidateContextId: "unknown-invoker-context",
+      candidateExecutionId: "unknown-invoker-execution",
+      accepted: true,
+    });
+    clearSink();
+    await writer.stop();
+
+    const inspected = inspectExecutionIdentityRun(
+      { executionId: "unknown-invoker-execution" },
+      { ...database, now: admittedAt },
+    );
+    expect(errors).toEqual([]);
+    expect(inspected).toMatchObject({
+      identity: {
+        state: "present",
+        context: {
+          invoker: { state: "unknown" },
+          coverageState: "unknown",
+          missingEvidence: ["invoker.principal"],
+        },
+      },
+      coverage: { state: "unknown", missingEvidence: ["invoker.principal"] },
+    });
+    expect(JSON.stringify(inspected)).not.toContain("private-runtime-reference");
   });
 
   it("prunes expired identity contexts at startup without a new run", async () => {
@@ -306,7 +362,11 @@ describe("audit event worker", () => {
           rawSourceRef: "raw-conflict-source",
         },
         runtime: { kind: "embedded" },
-        invoker: { kind: "local-account", rawPrincipalRef: "raw-conflict-principal" },
+        invoker: {
+          state: "present",
+          kind: "local-account",
+          rawPrincipalRef: "raw-conflict-principal",
+        },
       },
       {
         contextId: "ordered-context",
@@ -504,6 +564,21 @@ describe("audit event worker", () => {
       onError: (error) => malformedErrors.push(error),
     });
     expect(malformedWriter.recordExecutionIdentity({ rawSecret } as never)).toBe(true);
+    const invalidUnknown = {
+      ...captureExecutionIdentityAdmissionEnvelope(
+        {
+          runId: "invalid-unknown-run",
+          agentId: "main",
+          ingress: { kind: "local-cli", boundary: "agent-command.local" },
+          runtime: { kind: "embedded" },
+        },
+        { runtimeInstanceId: "runtime-1" },
+      ),
+      invoker: { state: "unknown", rawPrincipalRef: rawSecret },
+    };
+    expect(malformedWriter.recordExecutionIdentity(captureWork(invalidUnknown as never))).toBe(
+      true,
+    );
     await malformedWriter.stop();
     expect(malformedErrors).toContain("audit execution identity envelope rejected");
     expect(JSON.stringify(malformedErrors)).not.toContain(rawSecret);
