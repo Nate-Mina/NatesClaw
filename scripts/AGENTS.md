@@ -11,6 +11,12 @@ This directory owns local tooling, script wrappers, and generated-artifact helpe
 - For changed-file verification, prefer `scripts/check-changed.mjs` and keep lane classification in `scripts/changed-lanes.mjs`. Use `node scripts/check-changed.mjs --dry-run [--staged|-- <files...>]` to inspect the plan before running anything expensive. Do not copy path-scope rules into new hooks or ad hoc CI snippets.
 - For one/few lint files, prefer direct `node scripts/run-oxlint.mjs --tsconfig <matching config> <files...>` over sharded `pnpm lint`; `check-changed.mjs` owns this targeting for core, extension, and script diffs.
 
+## TypeScript Script Ownership
+
+- Keep repository-owned scripts in TypeScript when Node can execute their erasable syntax directly.
+- Executable `.mts` scripts use `#!/usr/bin/env node`; callers invoke the executable path instead of adding a shell or `tsx` trampoline.
+- Use an explicit Node invocation only on platforms that do not honor POSIX shebangs.
+
 ## Local Heavy-Check Lock
 
 - Respect the local heavy-check lock behavior in `scripts/lib/local-heavy-check-runtime.mts`.
