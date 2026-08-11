@@ -223,6 +223,163 @@ describe("SystemAgentChatEngine wizard", () => {
     expect(cancelled.text).toContain("setup cancelled");
   });
 
+  it("polls a QR step until its owner reports and retains the terminal result", async () => {
+    let settleOwner!: () => void;
+    const owner = new Promise<void>((resolve) => {
+      settleOwner = resolve;
+    });
+    const engine = createQrEngine(async (_channel, prompter) => {
+      await prompter.qrCode?.({
+        title: "Link a device",
+        message: "Scan this QR code, then continue.",
+        text: QR_TEXT,
+        dismissed: owner,
+        expiresAtMs: Date.now() + 60_000,
+      });
+    });
+
+    const prompt = await engine.handle("connect telegram");
+    const stepId = expectDefined(prompt.step, "QR step").id;
+    await expect(engine.pollStep(stepId)).resolves.toMatchObject({
+      step: { id: stepId, type: "qr" },
+      wizardInputPending: true,
+    });
+
+    settleOwner();
+    await vi.waitFor(() => expect(engine.hasPendingQrCode()).toBe(false));
+    const completed = await engine.pollStep(stepId);
+    expect(completed.text).toContain("telegram is configured");
+    expect(completed.step).toBeUndefined();
+    await expect(engine.pollStep(stepId)).resolves.toEqual(completed);
+    await expect(engine.answerWizard({ stepId })).resolves.toEqual(completed);
+  });
+
+  it("finalizes and persists an owner-completed QR without another client request", async () => {
+    let settleOwner!: () => void;
+    const owner = new Promise<void>((resolve) => {
+      settleOwner = resolve;
+    });
+    const appendAuditEntry = vi.fn(async () => "state/openclaw.sqlite");
+    const persistBackgroundHistory = vi.fn();
+    const engine = new SystemAgentChatEngine({
+      runAgentTurn: async () => null,
+      planWithAssistant: async () => null,
+      deps: { loadOverview: fakeOverviewLoader() },
+      supportsQrCode: true,
+      appendAuditEntry,
+      persistBackgroundHistory,
+      runChannelSetupWizard: async (_channel, prompter) => {
+        await prompter.qrCode?.({
+          title: "Link a device",
+          message: "Scan this QR code, then continue.",
+          text: QR_TEXT,
+          dismissed: owner,
+          expiresAtMs: Date.now() + 60_000,
+        });
+      },
+    });
+
+    const prompt = await engine.handle("connect telegram");
+    const stepId = expectDefined(prompt.step, "QR step").id;
+    const historyLength = engine.historyLength();
+    settleOwner();
+
+    await vi.waitFor(() => expect(persistBackgroundHistory).toHaveBeenCalledOnce());
+    expect(appendAuditEntry).toHaveBeenCalledOnce();
+    expect(engine.historySince(historyLength)).toEqual([
+      { role: "assistant", text: expect.stringContaining("telegram is configured") },
+    ]);
+    expect(persistBackgroundHistory).toHaveBeenCalledWith([
+      { role: "assistant", text: expect.stringContaining("telegram is configured") },
+    ]);
+
+    const completed = await engine.pollStep(stepId);
+    await expect(engine.answerWizard({ stepId })).resolves.toEqual(completed);
+    expect(engine.historySince(historyLength)).toHaveLength(1);
+  });
+
+  it("accepts a late QR acknowledgement without letting cancellation consume a newer step", async () => {
+    let settleOwner!: () => void;
+    const owner = new Promise<void>((resolve) => {
+      settleOwner = resolve;
+    });
+    const engine = createQrEngine(async (_channel, prompter) => {
+      await prompter.qrCode?.({
+        title: "Link a device",
+        message: "Scan this QR code, then continue.",
+        text: QR_TEXT,
+        dismissed: owner,
+        expiresAtMs: Date.now() + 60_000,
+      });
+      await prompter.text({ message: "Device label" });
+    });
+
+    const prompt = await engine.handle("connect telegram");
+    const qrStepId = expectDefined(prompt.step, "QR step").id;
+    settleOwner();
+    await vi.waitFor(() => expect(engine.hasPendingQrCode()).toBe(false));
+
+    const next = await engine.pollStep(qrStepId);
+    const nextStepId = expectDefined(next.step, "text step").id;
+    expect(next.step).toMatchObject({ type: "text", message: "Device label" });
+    await expect(engine.answerWizard({ stepId: qrStepId, value: false })).rejects.toThrow(
+      "The hosted wizard answer targets a stale step.",
+    );
+    const acknowledged = await engine.answerWizard({ stepId: qrStepId, value: true });
+    expect(acknowledged.step).toMatchObject({ id: nextStepId, type: "text" });
+
+    const completed = await engine.answerWizard({ stepId: nextStepId, value: "Work laptop" });
+    expect(completed.text).toContain("telegram is configured");
+  });
+
+  it("keeps timed-out QR cancellation fenced until runner cleanup finishes", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(1_800_000_000_000);
+    let settleOwner!: () => void;
+    const owner = new Promise<void>((resolve) => {
+      settleOwner = resolve;
+    });
+    let cleanupStarted = false;
+    let releaseCleanup!: () => void;
+    const cleanup = new Promise<void>((resolve) => {
+      releaseCleanup = resolve;
+    });
+    let runnerCount = 0;
+    const engine = createQrEngine(async (_channel, prompter) => {
+      runnerCount += 1;
+      await prompter.qrCode?.({
+        title: "Link a device",
+        message: "Scan this QR code, then continue.",
+        text: QR_TEXT,
+        dismissed: owner,
+        expiresAtMs: Date.now() + 60_000,
+      });
+      await owner;
+      cleanupStarted = true;
+      await cleanup;
+    });
+    const prompt = await engine.handle("connect telegram");
+    const stepId = expectDefined(prompt.step, "QR step").id;
+    await engine.answerWizard({ stepId });
+    settleOwner();
+    await vi.waitFor(() => expect(cleanupStarted).toBe(true));
+
+    vi.advanceTimersByTime(25 * 60_000);
+
+    await expect(engine.pollStep(stepId)).resolves.toMatchObject({
+      text: "Setup is still finishing the QR attempt.",
+      wizardSettling: true,
+    });
+    expect(engine.hasPendingQrCode()).toBe(true);
+    expect(runnerCount).toBe(1);
+
+    releaseCleanup();
+    await vi.waitFor(() => expect(engine.hasPendingQrCode()).toBe(false));
+    await expect(engine.pollStep(stepId)).resolves.toMatchObject({
+      text: expect.stringContaining("setup cancelled"),
+    });
+  });
+
   it("accepts the retained QR acknowledgement after owner completion", async () => {
     let settleOwner!: () => void;
     const owner = new Promise<void>((resolve) => {

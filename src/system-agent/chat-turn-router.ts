@@ -169,7 +169,11 @@ export class ChatTurnRouter {
 
   async answerWizard(result: Promise<ChatWizardAnswerResult>): Promise<ChatWizardAnswerResult> {
     const answer = await result;
-    return { ...answer, text: await this.finishWizardText(answer) };
+    return { ...answer, ...(await this.completeWizard(answer)) };
+  }
+
+  async completeWizard(result: ChatWizardResult): Promise<ChatWizardResult> {
+    return { ...result, text: await this.finishWizardText(result) };
   }
 
   async resolveTurn(

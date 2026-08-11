@@ -3,6 +3,8 @@ import type {
   SystemAgentWizardCancel,
   WizardAnswer,
 } from "../../packages/gateway-protocol/src/index.js";
+import { formatErrorMessage } from "../infra/errors.js";
+import { createSubsystemLogger } from "../logging/subsystem.js";
 import type { RuntimeEnv } from "../runtime.js";
 import {
   cleanupSystemAgentSession,
@@ -48,6 +50,7 @@ export type SystemAgentChatEngineOptions = {
   planGreeting?: SystemAgentGreetingPlanner;
   runAgentTurn?: SystemAgentTurnRunner;
   classifyApproval?: SystemAgentApprovalClassifier;
+  persistBackgroundHistory?: (turns: readonly SystemAgentAssistantTurn[]) => void | Promise<void>;
   surface?: "cli" | "gateway";
   supportsQrCode?: boolean;
   readonly verifiedInference: SystemAgentVerifiedInferenceBinding;
@@ -58,6 +61,8 @@ type SystemAgentChatEngineInternals = {
   wizardDependencies?: ChatWizardHostDependencies;
   executeOperation?: typeof import("./operations.js").executeSystemAgentOperation;
 };
+
+const log = createSubsystemLogger("system-agent/chat-engine");
 
 /**
  * One conversation with OpenClaw, independent of transport. The facade owns
@@ -93,6 +98,8 @@ export class SystemAgentChatEngine {
       onStart: () => {
         this.retainedQrTerminalReply = null;
       },
+      onQrRunnerSettled: (stepId) => this.enqueueSettledWizardFinalization(stepId),
+      retainSettlement: (settlement) => this.retainPersistentApplySettlement(settlement),
       beforePersistentApply: async (runtime) => {
         await this.requirePersistentApplyInference(runtime);
       },
@@ -130,6 +137,16 @@ export class SystemAgentChatEngine {
 
   getPersistentApplySettlement(): Promise<void> | null {
     return this.persistentApplySettlement;
+  }
+
+  private retainPersistentApplySettlement(settlement: Promise<void>): void {
+    this.persistentApplySettlement = settlement;
+    const clearSettlement = () => {
+      if (this.persistentApplySettlement === settlement) {
+        this.persistentApplySettlement = null;
+      }
+    };
+    void settlement.then(clearSettlement, clearSettlement);
   }
 
   getPendingOperatorProposal(): { operation: SystemAgentOperation; hash: string } | null {
@@ -212,6 +229,9 @@ export class SystemAgentChatEngine {
       }
       const result = await this.router.answerWizard(this.wizard.answer(answer));
       this.assertActive();
+      if (result.skipHistory) {
+        return this.wizard.decorateReply({ text: result.text, action: "none" });
+      }
       const completed = this.completeTurn(
         { text: result.text, action: "none" },
         result.userHistoryText,
@@ -238,6 +258,66 @@ export class SystemAgentChatEngine {
     });
     this.turnQueue = turn.catch(() => undefined);
     return await turn;
+  }
+
+  /** Observe one active wizard step without acknowledging it. */
+  async pollStep(stepId: string): Promise<SystemAgentChatReply> {
+    this.assertActive();
+    const poll = this.turnQueue.then(async () => {
+      this.assertActive();
+      if (this.retainedQrTerminalReply?.stepId === stepId) {
+        return { ...this.retainedQrTerminalReply.reply };
+      }
+      const raw = await this.wizard.poll(stepId);
+      const result = await this.router.completeWizard(raw);
+      this.assertActive();
+      const reply = this.wizard.decorateReply({ text: result.text, action: "none" });
+      if (!raw.observedOnly && reply.text) {
+        this.history.push({ role: "assistant", text: reply.text });
+      }
+      if (
+        raw.retainQrStepId &&
+        reply.wizardInputPending !== true &&
+        reply.wizardSettling !== true
+      ) {
+        this.retainedQrTerminalReply = { stepId: raw.retainQrStepId, reply: { ...reply } };
+      }
+      return reply;
+    });
+    this.turnQueue = poll.catch(() => undefined);
+    return await poll;
+  }
+
+  private enqueueSettledWizardFinalization(stepId: string): void {
+    const finalization = this.turnQueue.then(async () => {
+      if (this.disposed) {
+        return;
+      }
+      const raw = await this.wizard.finalizeSettledQr(stepId);
+      if (!raw) {
+        return;
+      }
+      const result = await this.router.completeWizard(raw);
+      this.assertActive();
+      const reply = this.wizard.decorateReply({ text: result.text, action: "none" });
+      if (reply.wizardInputPending === true || reply.wizardSettling === true) {
+        return;
+      }
+      const turns: SystemAgentAssistantTurn[] = reply.text
+        ? [{ role: "assistant", text: reply.text }]
+        : [];
+      this.history.push(...turns);
+      this.retainedQrTerminalReply = { stepId, reply: { ...reply } };
+      if (turns.length > 0) {
+        try {
+          await this.options.persistBackgroundHistory?.(turns);
+        } catch (error) {
+          log.warn(`Could not persist background wizard completion: ${formatErrorMessage(error)}`);
+        }
+      }
+    });
+    this.retainPersistentApplySettlement(finalization);
+    this.turnQueue = finalization.catch(() => undefined);
   }
 
   private completeTurn(reply: SystemAgentChatReply, userHistoryText: string): SystemAgentChatReply {
@@ -312,13 +392,7 @@ export class SystemAgentChatEngine {
       if (route) {
         this.assertActive();
         const settlement = (this.wizard.whenSettled() ?? this.turnQueue).then(() => undefined);
-        this.persistentApplySettlement = settlement;
-        const clearSettlement = () => {
-          if (this.persistentApplySettlement === settlement) {
-            this.persistentApplySettlement = null;
-          }
-        };
-        void settlement.then(clearSettlement, clearSettlement);
+        this.retainPersistentApplySettlement(settlement);
         return route;
       }
     } catch (error) {
