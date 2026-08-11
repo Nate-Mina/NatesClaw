@@ -8,6 +8,7 @@ import {
   REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ,
   type RealtimeVoiceCloseReason,
 } from "../talk/provider-types.js";
+import { matchRealtimeOutputIdentity } from "../talk/realtime-output-identity.js";
 import { createRealtimeVoiceEventCapturingSessionHarness } from "../talk/realtime-session-harness.js";
 import type { TalkEvent, TalkEventInput } from "../talk/talk-session-controller.js";
 import { VOICE_TRANSCRIPT_QUEUE_POLICY } from "../talk/voice-transcript.js";
@@ -43,6 +44,7 @@ import {
   adoptRelayProviderToolCallId,
   broadcastRelayTurnStarted,
   broadcastToOwner,
+  clearTalkRealtimeRelayOutputGeneration,
   ensureRelayTurn,
   relaySessions,
   type CreateTalkRealtimeRelaySessionParams,
@@ -224,13 +226,27 @@ export function createTalkRealtimeRelaySession(
         const recorded = relay.harness.recordOutputAudio(audio);
         broadcastRelayTurnStarted(relay, recorded.turn.event);
         if (recorded.outputAudioStarted) {
-          broadcastEvent({ relaySessionId, type: "audioStarted" }, recorded.outputAudioStarted);
+          relay.outputGeneration += 1;
+          relay.activeOutputOwner = {
+            outputGeneration: relay.outputGeneration,
+            ...(currentOutputItemId ? { itemId: currentOutputItemId } : {}),
+            ...(currentOutputResponseId ? { responseId: currentOutputResponseId } : {}),
+          };
+          broadcastEvent(
+            {
+              relaySessionId,
+              type: "audioStarted",
+              outputGeneration: relay.outputGeneration,
+            },
+            recorded.outputAudioStarted,
+          );
         }
         broadcastEvent(
           {
             relaySessionId,
             type: "audio",
             audioBase64: audio.toString("base64"),
+            outputGeneration: relay.outputGeneration,
             ...(currentOutputItemId ? { itemId: currentOutputItemId } : {}),
             ...(currentOutputResponseId ? { responseId: currentOutputResponseId } : {}),
           },
@@ -242,10 +258,12 @@ export function createTalkRealtimeRelaySession(
         if (!relay) {
           return;
         }
-        broadcastEvent(
-          { relaySessionId, type: "clear", ...(reason ? { reason } : {}) },
-          relay.harness.finishOutputAudio(reason ?? "clear"),
-        );
+        clearTalkRealtimeRelayOutputGeneration({
+          session: relay,
+          generation: relay.outputGeneration,
+          reason: reason ?? "clear",
+          providerReason: reason,
+        });
       },
       sendMark: (markName) => {
         const relay = getActiveRelay();
@@ -271,6 +289,7 @@ export function createTalkRealtimeRelaySession(
         ready = false;
         currentOutputItemId = undefined;
         currentOutputResponseId = undefined;
+        relay.activeOutputOwner = undefined;
         const talkEvent = resetTalkRealtimeRelayContinuity(relay, event.type);
         if (!getActiveRelay()) {
           return;
@@ -316,21 +335,26 @@ export function createTalkRealtimeRelaySession(
         event.type === "response.done" ||
         event.type === "response.cancelled"
       ) {
+        const owner = relay.activeOutputOwner;
+        if (!owner || matchRealtimeOutputIdentity(owner, event) !== "same") {
+          return;
+        }
+        const outputGeneration = owner.outputGeneration;
+        const itemId = event.itemId ?? owner.itemId;
+        const responseId = event.responseId ?? owner.responseId;
+        relay.activeOutputOwner = undefined;
+        currentOutputItemId = undefined;
+        currentOutputResponseId = undefined;
         broadcastEvent(
           {
             relaySessionId,
             type: "audioDone",
-            ...((event.itemId ?? currentOutputItemId)
-              ? { itemId: event.itemId ?? currentOutputItemId }
-              : {}),
-            ...((event.responseId ?? currentOutputResponseId)
-              ? { responseId: event.responseId ?? currentOutputResponseId }
-              : {}),
+            outputGeneration,
+            ...(itemId ? { itemId } : {}),
+            ...(responseId ? { responseId } : {}),
           },
           relay.harness.finishOutputAudio(event.type),
         );
-        currentOutputItemId = undefined;
-        currentOutputResponseId = undefined;
       }
     },
     onTranscript: (role, text, final) => {
@@ -471,6 +495,7 @@ export function createTalkRealtimeRelaySession(
         return;
       }
       active.harness.close();
+      active.activeOutputOwner = undefined;
       relaySessions.delete(relaySessionId);
       forgetUnifiedTalkSession(relaySessionId);
       clearTimeout(active.cleanupTimer);
@@ -569,6 +594,7 @@ export function createTalkRealtimeRelaySession(
     pendingWorkingToolResults: new Map(),
     forcedTerminalProviderResults: new Map(),
     toolResultEpoch: 0,
+    outputGeneration: 0,
     ...(params.cfg ? { voiceConfig: params.cfg } : {}),
     voiceSessionCreated: false,
     voiceTranscriptSeq: 0,
