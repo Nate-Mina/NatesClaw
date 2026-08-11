@@ -2029,7 +2029,7 @@
     "@openclaw/fs-safe": "0.5.4",
     "@openclaw/proxyline": "0.3.4",
     "@silvia-odwyer/photon-node": "0.3.4",
-    "@trycua/cua-driver": "0.14.1",
+    "@trycua/cua-driver": "0.19.3",
     "acorn": "8.17.0",
     "chalk": "6.0.0",
     "chokidar": "5.0.0",
