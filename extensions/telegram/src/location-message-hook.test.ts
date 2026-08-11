@@ -18,10 +18,11 @@ describe("Telegram location message hooks", () => {
   beforeEach(() => {
     hookRunner.hasHooks.mockClear();
     hookRunner.runInboundClaim.mockClear();
-    hookRunner.runMessageReceived.mockClear();
+    hookRunner.runMessageReceived.mockReset();
+    hookRunner.runMessageReceived.mockResolvedValue(undefined);
   });
 
-  it("ignores non-location edits", async () => {
+  it("ignores non-location edits", () => {
     const msg = {
       chat: { id: 1234, type: "private" },
       message_id: 456,
@@ -31,7 +32,7 @@ describe("Telegram location message hooks", () => {
       text: "edited text",
     } as Message;
 
-    await emitTelegramLiveLocationMessageHook({
+    emitTelegramLiveLocationMessageHook({
       accountId: "main",
       msg,
       updateId: 9002,
@@ -42,7 +43,7 @@ describe("Telegram location message hooks", () => {
     expect(hookRunner.runMessageReceived).not.toHaveBeenCalled();
   });
 
-  it("emits edited live locations through the global message-received contract", async () => {
+  it("emits edited live locations through the global message-received contract", () => {
     const msg = {
       chat: { id: 1234, type: "private" },
       message_id: 456,
@@ -57,7 +58,7 @@ describe("Telegram location message hooks", () => {
       },
     } as Message;
 
-    await emitTelegramLiveLocationMessageHook({
+    emitTelegramLiveLocationMessageHook({
       accountId: "main",
       msg,
       updateId: 9002,
@@ -98,7 +99,7 @@ describe("Telegram location message hooks", () => {
     expect(hookRunner.runInboundClaim).not.toHaveBeenCalled();
   });
 
-  it("emits the terminal edit when live-location sharing stops", async () => {
+  it("emits the terminal edit when live-location sharing stops", () => {
     const msg = {
       chat: { id: 1234, type: "private" },
       message_id: 456,
@@ -108,7 +109,7 @@ describe("Telegram location message hooks", () => {
       location: { latitude: 43.8376, longitude: 18.4534 },
     } as Message;
 
-    await emitTelegramLiveLocationMessageHook({
+    emitTelegramLiveLocationMessageHook({
       accountId: "main",
       msg,
       updateId: 9003,
@@ -124,5 +125,57 @@ describe("Telegram location message hooks", () => {
       expect.any(Object),
     );
     expect(hookRunner.runInboundClaim).not.toHaveBeenCalled();
+  });
+
+  it("emits edited channel-post live locations with their provider update kind", () => {
+    const msg = {
+      chat: { id: -1001234, type: "supergroup", title: "Travel updates" },
+      message_id: 456,
+      date: 1_786_094_460,
+      edit_date: 1_786_094_580,
+      from: { id: 789, is_bot: true, first_name: "Travel updates" },
+      location: { latitude: 43.8376, longitude: 18.4534, live_period: 900 },
+    } as Message;
+
+    emitTelegramLiveLocationMessageHook({
+      accountId: "main",
+      msg,
+      updateId: 9004,
+      updateKind: "edited_channel_post",
+      isForum: false,
+    });
+
+    expect(hookRunner.runMessageReceived).toHaveBeenCalledWith(
+      expect.objectContaining({
+        providerUpdate: expect.objectContaining({
+          id: "9004",
+          kind: "edited_channel_post",
+        }),
+      }),
+      expect.any(Object),
+    );
+  });
+
+  it("does not wait for plugin observers on the Telegram inbound path", () => {
+    hookRunner.runMessageReceived.mockReturnValueOnce(new Promise(() => {}));
+    const msg = {
+      chat: { id: 1234, type: "private" },
+      message_id: 456,
+      date: 1_786_094_460,
+      edit_date: 1_786_094_520,
+      from: { id: 789, is_bot: false, first_name: "Pat" },
+      location: { latitude: 43.8376, longitude: 18.4534, live_period: 900 },
+    } as Message;
+
+    expect(
+      emitTelegramLiveLocationMessageHook({
+        accountId: "main",
+        msg,
+        updateId: 9005,
+        updateKind: "edited_message",
+        isForum: false,
+      }),
+    ).toBeUndefined();
+    expect(hookRunner.runMessageReceived).toHaveBeenCalledTimes(1);
   });
 });

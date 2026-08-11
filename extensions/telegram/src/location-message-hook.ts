@@ -3,6 +3,7 @@ import type { Message } from "grammy/types";
 import { formatLocationText } from "openclaw/plugin-sdk/channel-inbound";
 import {
   deriveInboundMessageHookContext,
+  fireAndForgetHook,
   toPluginMessageContext,
   toPluginMessageReceivedEvent,
 } from "openclaw/plugin-sdk/hook-runtime";
@@ -77,13 +78,16 @@ function buildTelegramLocationMessageHook(params: {
   };
 }
 
-export async function emitTelegramLiveLocationMessageHook(
+export function emitTelegramLiveLocationMessageHook(
   params: Parameters<typeof buildTelegramLocationMessageHook>[0],
-) {
+): void {
   const pair = buildTelegramLocationMessageHook(params);
   const runner = getGlobalHookRunner();
   if (!pair || !runner?.hasHooks("message_received", pair.context)) {
     return;
   }
-  await runner.runMessageReceived(pair.event, pair.context);
+  fireAndForgetHook(
+    runner.runMessageReceived(pair.event, pair.context),
+    "message_received plugin hook failed",
+  );
 }

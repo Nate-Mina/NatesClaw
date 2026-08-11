@@ -129,7 +129,7 @@ function createTelegramInboundHandlers(
     msg: Message;
     requireConfiguredGroup: boolean;
     botUserId: number;
-    providerUpdate?: { id: number; kind: "edited_message" };
+    providerUpdate?: { id: number; kind: "edited_message" | "edited_channel_post" };
   }) => {
     if (shouldSkipUpdate(params.ctxForDedupe)) {
       return;
@@ -160,7 +160,7 @@ function createTelegramInboundHandlers(
     }
     await recordMessageForReplyChain(normalizedMsg, gate.context.threadSpec, params.botUserId);
     if (params.providerUpdate) {
-      await emitTelegramLiveLocationMessageHook({
+      emitTelegramLiveLocationMessageHook({
         accountId,
         msg: normalizedMsg,
         updateId: params.providerUpdate.id,
@@ -379,6 +379,10 @@ function createTelegramInboundHandlers(
       msg: normalizeChannelPostMessage(post),
       requireConfiguredGroup: true,
       botUserId: resolveBotUserId(ctx),
+      providerUpdate:
+        typeof ctx.update?.update_id === "number"
+          ? { id: ctx.update.update_id, kind: "edited_channel_post" }
+          : undefined,
     });
     return { kind: "recorded" };
   };
