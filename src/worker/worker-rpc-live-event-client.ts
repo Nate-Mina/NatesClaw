@@ -62,6 +62,9 @@ export class WorkerLiveEventClient {
   private maxSentSeqValue: number;
   private replayGeneration = 0;
   private lastResync: { ackedSeq: number; expectedSeq: number } | undefined;
+  // A preview may fail before finishing is enqueued; retain its send high-water
+  // so that later terminal delivery still clears the resulting sequence gap.
+  private terminalResyncFromSeq: number | undefined;
   private disposed = false;
 
   constructor(
@@ -96,10 +99,15 @@ export class WorkerLiveEventClient {
       return Promise.reject(new Error("worker live-event buffer capacity exceeded"));
     }
     return new Promise((resolve, reject) => {
+      const terminalResyncFromSeq = isTerminalEvent(event) ? this.terminalResyncFromSeq : undefined;
+      if (terminalResyncFromSeq !== undefined) {
+        this.terminalResyncFromSeq = undefined;
+      }
       this.buffered.push({
         seq: this.nextSeqValue,
         runId,
         event: structuredClone(event),
+        ...(terminalResyncFromSeq === undefined ? {} : { resyncFromSeq: terminalResyncFromSeq }),
         resolve,
         reject,
       });
@@ -206,11 +214,8 @@ export class WorkerLiveEventClient {
         return;
       }
       const failure = error instanceof Error ? error : new Error(String(error));
-      if (
-        !isTerminalEvent(entry.event) &&
-        !isTerminalConnection(this.connection) &&
-        this.recoverTerminalAfterPreviewFailure(failure)
-      ) {
+      if (!isTerminalEvent(entry.event) && !isTerminalConnection(this.connection)) {
+        this.recoverTerminalAfterPreviewFailure(failure);
         return;
       }
       this.rejectAll(failure);
@@ -254,24 +259,23 @@ export class WorkerLiveEventClient {
     this.maxSentSeqValue = ackedSeq;
   }
 
-  private recoverTerminalAfterPreviewFailure(error: Error): boolean {
-    if (!this.buffered.some((entry) => isTerminalEvent(entry.event))) {
-      return false;
-    }
+  private recoverTerminalAfterPreviewFailure(error: Error): void {
     this.replayGeneration += 1;
     this.lastResync = undefined;
-    const resyncFromSeq = this.maxSentSeqValue;
+    const resyncFromSeq = Math.max(this.terminalResyncFromSeq ?? 0, this.maxSentSeqValue);
     const buffered = this.buffered.splice(0);
+    let terminalRetained = false;
     for (const entry of buffered) {
       if (isTerminalEvent(entry.event)) {
         delete entry.blockedAck;
         entry.resyncFromSeq = resyncFromSeq;
         this.buffered.push(entry);
+        terminalRetained = true;
       } else {
         entry.reject(error);
       }
     }
-    return true;
+    this.terminalResyncFromSeq = terminalRetained ? undefined : resyncFromSeq;
   }
 
   private rejectAll(error: Error): void {
