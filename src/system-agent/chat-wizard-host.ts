@@ -85,6 +85,7 @@ type ActiveWizardBridge = {
   session: WizardSession;
   step: WizardStep | null;
   cancellationSettlement: Promise<void> | null;
+  cancellationRejected: boolean;
   expiryTimer: ReturnType<typeof setTimeout> | undefined;
   expiryKind: "presentation" | "cancellation" | undefined;
   qrExpiresAtMs: number | undefined;
@@ -364,7 +365,13 @@ export class ChatWizardHost {
       throw new SystemAgentWizardAnswerError("The hosted wizard answer targets a stale step.");
     }
     if ((step?.type === "qr" && answer.value === false) || dismissedQrCancellation) {
-      bridge.session.cancel();
+      if (!bridge.session.cancel()) {
+        this.retainCancellationSettlement(bridge, answer.stepId, true);
+        return {
+          ...this.renderPendingQrOwner(bridge)!,
+          userHistoryText: "Cancel",
+        };
+      }
       await bridge.session.whenSettled();
       const result = {
         ...(await this.pump()),
@@ -480,7 +487,10 @@ export class ChatWizardHost {
       return { text: "", configWritten: false };
     }
     if (/^(cancel|abort|stop|quit|exit)$/i.test(text.trim())) {
-      bridge.session.cancel();
+      if (!bridge.session.cancel()) {
+        this.retainCancellationSettlement(bridge, bridge.dismissedQrStepId, true);
+        return this.renderPendingQrOwner(bridge)!;
+      }
       await bridge.session.whenSettled();
       return await this.pump();
     }
@@ -659,6 +669,7 @@ export class ChatWizardHost {
       session,
       step: null,
       cancellationSettlement: null,
+      cancellationRejected: false,
       expiryTimer: undefined,
       expiryKind: undefined,
       qrExpiresAtMs: undefined,
@@ -787,17 +798,7 @@ export class ChatWizardHost {
     if (stepId) {
       bridge.dismissedQrStepId = stepId;
     }
-    const cancellationSettlement = bridge.session.whenSettled();
-    bridge.cancellationSettlement = cancellationSettlement;
-    this.options.retainSettlement?.(cancellationSettlement);
-    void cancellationSettlement.then(() => {
-      if (this.bridge === bridge && bridge.cancellationSettlement === cancellationSettlement) {
-        bridge.cancellationSettlement = null;
-        if (stepId) {
-          this.options.onQrRunnerSettled?.(stepId);
-        }
-      }
-    });
+    this.retainCancellationSettlement(bridge, stepId, false);
     // Keep a scrubbed marker until the next queued turn observes expiry so a
     // late Continue cannot escape into ordinary chat as unrelated input.
     bridge.qrExpired = true;
@@ -824,12 +825,35 @@ export class ChatWizardHost {
     this.bridge = null;
   }
 
+  private retainCancellationSettlement(
+    bridge: ActiveWizardBridge,
+    stepId: string | undefined,
+    cancellationRejected: boolean,
+  ): void {
+    const settlement = bridge.session.whenSettled();
+    bridge.cancellationSettlement = settlement;
+    bridge.cancellationRejected = cancellationRejected;
+    this.options.retainSettlement?.(settlement);
+    void settlement.then(() => {
+      if (this.bridge !== bridge || bridge.cancellationSettlement !== settlement) {
+        return;
+      }
+      bridge.cancellationSettlement = null;
+      bridge.cancellationRejected = false;
+      if (stepId) {
+        this.options.onQrRunnerSettled?.(stepId);
+      }
+    });
+  }
+
   private renderPendingQrOwner(bridge: ActiveWizardBridge): ChatWizardResult | null {
     if (!bridge.session.hasExternalQrPresentationOwner() && !bridge.cancellationSettlement) {
       return null;
     }
     return {
-      text: "QR acknowledged. Setup is still finishing this link attempt. Say `cancel` to stop it.",
+      text: bridge.cancellationRejected
+        ? "Setup has started applying durable changes and can no longer be cancelled. It is still finishing."
+        : "QR acknowledged. Setup is still finishing this link attempt. Say `cancel` to stop it.",
       configWritten: false,
     };
   }
@@ -840,7 +864,9 @@ export class ChatWizardHost {
       return { text: "", configWritten: false };
     }
     if (bridge.cancellationSettlement) {
-      return { text: "Setup is still finishing the QR attempt.", configWritten: false };
+      return bridge.cancellationRejected
+        ? this.renderPendingQrOwner(bridge)!
+        : { text: "Setup is still finishing the QR attempt.", configWritten: false };
     }
     const result = await bridge.session.next();
     if (result.done) {

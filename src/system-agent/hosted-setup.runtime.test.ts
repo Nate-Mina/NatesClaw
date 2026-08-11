@@ -182,6 +182,17 @@ describe("SystemAgentChatEngine runtime", () => {
     settleOwner();
     await writeStarted;
 
+    const typedCancel = await engine.answerWizard({ stepId, value: false });
+    expect(typedCancel).toMatchObject({
+      text: expect.stringContaining("can no longer be cancelled"),
+      wizardSettling: true,
+    });
+    const textCancel = await engine.handle("cancel");
+    expect(textCancel).toMatchObject({
+      text: expect.stringContaining("can no longer be cancelled"),
+      wizardSettling: true,
+    });
+
     vi.advanceTimersByTime(25 * 60_000);
     await expect(engine.pollStep(stepId)).resolves.toMatchObject({
       text: "Setup is still finishing the QR attempt.",
