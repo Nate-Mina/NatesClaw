@@ -295,6 +295,7 @@ describe("telegram inbound media", () => {
 
     const cases = [
       {
+        updateId: 7005,
         message: {
           chat: { id: 42, type: "private" as const },
           message_id: 5,
@@ -313,9 +314,13 @@ describe("telegram inbound media", () => {
           expect(payload.LocationLon).toBe(2.294351);
           expect(payload.LocationSource).toBe("pin");
           expect(payload.LocationIsLive).toBe(false);
+          expect(payload.ProviderUpdateId).toBe("7005");
+          expect(payload.ProviderUpdateKind).toBe("message");
+          expect(payload.ProviderMessageTimestamp).toBe(1736380800000);
         },
       },
       {
+        updateId: 7006,
         message: {
           chat: { id: 42, type: "private" as const },
           message_id: 6,
@@ -333,11 +338,36 @@ describe("telegram inbound media", () => {
           expect(payload.LocationSource).toBe("place");
         },
       },
+      {
+        updateId: 7007,
+        message: {
+          chat: { id: 42, type: "private" as const },
+          message_id: 7,
+          date: 1736380800,
+          location: {
+            latitude: 43.8376,
+            longitude: 18.4534,
+            horizontal_accuracy: 8,
+            live_period: 900,
+          },
+        },
+        assert: (payload: Record<string, unknown>) => {
+          expect(payload.LocationLat).toBe(43.8376);
+          expect(payload.LocationLon).toBe(18.4534);
+          expect(payload.LocationAccuracy).toBe(8);
+          expect(payload.LocationIsLive).toBe(true);
+          expect(payload.LocationLivePeriodSeconds).toBe(900);
+          expect(payload.ProviderUpdateId).toBe("7007");
+          expect(payload.ProviderUpdateKind).toBe("message");
+          expect(payload.ProviderMessageTimestamp).toBe(1736380800000);
+        },
+      },
     ] as const;
 
     for (const testCase of cases) {
       replySpy.mockClear();
       await handler({
+        update: { update_id: testCase.updateId, message: testCase.message },
         message: testCase.message,
         me: { username: "openclaw_bot" },
         getFile: async () => ({ file_path: "unused" }),
