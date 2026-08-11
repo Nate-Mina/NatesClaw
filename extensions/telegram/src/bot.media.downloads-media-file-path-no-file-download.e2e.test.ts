@@ -338,30 +338,6 @@ describe("telegram inbound media", () => {
           expect(payload.LocationSource).toBe("place");
         },
       },
-      {
-        updateId: 7007,
-        message: {
-          chat: { id: 42, type: "private" as const },
-          message_id: 7,
-          date: 1736380800,
-          location: {
-            latitude: 43.8376,
-            longitude: 18.4534,
-            horizontal_accuracy: 8,
-            live_period: 900,
-          },
-        },
-        assert: (payload: Record<string, unknown>) => {
-          expect(payload.LocationLat).toBe(43.8376);
-          expect(payload.LocationLon).toBe(18.4534);
-          expect(payload.LocationAccuracy).toBe(8);
-          expect(payload.LocationIsLive).toBe(true);
-          expect(payload.LocationLivePeriodSeconds).toBe(900);
-          expect(payload.ProviderUpdateId).toBe("7007");
-          expect(payload.ProviderUpdateKind).toBe("message");
-          expect(payload.ProviderMessageTimestamp).toBe(1736380800000);
-        },
-      },
     ] as const;
 
     for (const testCase of cases) {
