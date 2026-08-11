@@ -199,11 +199,18 @@ export function readTranscriptTail(
             turn.incarnationId === opts.session.incarnationId)),
     )
     .slice(-limit)
-    .map(({ role, text, at, sessionId, wizardAction }) => ({
-      role,
-      text,
-      at,
-      ...(sessionId ? { sessionId } : {}),
-      ...(wizardAction ? { wizardAction } : {}),
-    }));
+    .map((turn): SystemAgentTranscriptTurn => {
+      const result: SystemAgentTranscriptTurn = {
+        role: turn.role,
+        text: turn.text,
+        at: turn.at,
+      };
+      if (turn.sessionId) {
+        result.sessionId = turn.sessionId;
+      }
+      if (turn.wizardAction) {
+        result.wizardAction = turn.wizardAction;
+      }
+      return result;
+    });
 }
