@@ -42,7 +42,7 @@ import {
   consumePendingToolMediaIntoReply,
   hasAssistantVisibleReply,
   readPendingToolMediaReply,
-} from "./embedded-agent-subscribe.handlers.messages.js";
+} from "./embedded-agent-subscribe.handlers.messages.replies.js";
 import {
   cleanupRunToolStartData,
   handleToolExecutionEnd,
