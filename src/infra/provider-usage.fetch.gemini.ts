@@ -1,7 +1,7 @@
-import { expectDefined } from "@openclaw/normalization-core";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 // Fetches Gemini provider usage windows.
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { cancelUnreadResponseBody } from "./http-body.js";
 import {
   buildUsageHttpErrorSnapshot,

@@ -8,13 +8,13 @@ import {
 import type { AuthProfileStore } from "../../agents/auth-profiles.js";
 import type { ModelCatalogEntry } from "../../agents/model-catalog.types.js";
 import type { PreparedModelRuntimeSnapshot } from "../../agents/prepared-model-runtime.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
+import { withNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import { createGatewayChatMetadataRuntime } from "./chat-metadata-runtime.js";
 import type { GatewayRequestContext } from "./types.js";
 
 function createOwner(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   id: string,
   credentials: AgentCredentialMap = {},
   provider = "test",
@@ -44,7 +44,7 @@ function createOwner(
 }
 
 function createHarness(
-  initialConfig: OpenClawConfig = { agents: { list: [{ id: "main", default: true }] } },
+  initialConfig: NatesclawConfig = { agents: { list: [{ id: "main", default: true }] } },
   runtimeOptions: {
     beforeRefresh?: () => Promise<void>;
     refreshOnRead?: boolean;
@@ -122,7 +122,7 @@ function createHarness(
     getPreparedOwner,
     getSkillsVersion,
     runtime,
-    setConfig(next: OpenClawConfig) {
+    setConfig(next: NatesclawConfig) {
       config = next;
     },
     setAuthStore(next: AuthProfileStore | undefined) {
@@ -346,7 +346,7 @@ describe("gateway chat metadata runtime", () => {
   });
 
   test("keeps disk-only roster rows without projecting them", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
         scenario: "minimal",
@@ -461,7 +461,7 @@ describe("gateway chat metadata runtime", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const harness = createHarness(config, { useDefaultProjection: true });
     const credentials: AgentCredentialMap = {
       openai: {

@@ -3,13 +3,13 @@ import {
   getRuntimeConfigSnapshot,
   getRuntimeConfigSourceSnapshot,
 } from "../config/runtime-snapshot.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 /** Resolves the source config used for plugin activation policy decisions. */
 export function resolvePluginActivationSourceConfig(params: {
-  config?: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
-}): OpenClawConfig {
+  config?: NatesclawConfig;
+  activationSourceConfig?: NatesclawConfig;
+}): NatesclawConfig {
   if (params.activationSourceConfig !== undefined) {
     return params.activationSourceConfig;
   }

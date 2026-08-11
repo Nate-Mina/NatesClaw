@@ -2,7 +2,7 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import { expectNoReaddirSyncDuring } from "../test-utils/fs-scan-assertions.js";
 import { listGitTrackedFiles, toRepoRelativePath } from "../test-utils/repo-files.js";
@@ -11,9 +11,9 @@ type PluginManifestShape = {
   id?: unknown;
 };
 
-type OpenClawPackageShape = {
+type NatesclawPackageShape = {
   name?: unknown;
-  openclaw?: {
+  natesclaw?: {
     install?: {
       npmSpec?: unknown;
     };
@@ -74,7 +74,7 @@ function listExternalBundledPluginDirs(): string[] | null {
 
   const metadataByDir = new Map<string, Set<string>>();
   for (const file of files) {
-    const match = /^extensions\/([^/]+)\/(openclaw\.plugin\.json|package\.json)$/u.exec(file);
+    const match = /^extensions\/([^/]+)\/(natesclaw\.plugin\.json|package\.json)$/u.exec(file);
     if (!match) {
       continue;
     }
@@ -88,7 +88,7 @@ function listExternalBundledPluginDirs(): string[] | null {
   return [...metadataByDir.entries()]
     .filter(
       ([, metadataFiles]) =>
-        metadataFiles.has("package.json") && metadataFiles.has("openclaw.plugin.json"),
+        metadataFiles.has("package.json") && metadataFiles.has("natesclaw.plugin.json"),
     )
     .map(([dirName]) => dirName)
     .toSorted();
@@ -96,7 +96,7 @@ function listExternalBundledPluginDirs(): string[] | null {
 
 function listGitPluginMetadataFiles(): string[] | null {
   return listGitTrackedFiles({
-    pathspecs: ["extensions/*/package.json", "extensions/*/openclaw.plugin.json"],
+    pathspecs: ["extensions/*/package.json", "extensions/*/natesclaw.plugin.json"],
   });
 }
 
@@ -114,7 +114,7 @@ function listFindPluginMetadataFiles(): string[] | null {
       "package.json",
       "-o",
       "-name",
-      "openclaw.plugin.json",
+      "natesclaw.plugin.json",
       ")",
     ],
     {
@@ -139,13 +139,13 @@ function readBundledPluginRecords(): BundledPluginRecord[] {
   return listBundledPluginDirs().flatMap((dirName) => {
     const rootDir = path.join(EXTENSIONS_ROOT, dirName);
     const packagePath = path.join(rootDir, "package.json");
-    const manifestPath = path.join(rootDir, "openclaw.plugin.json");
+    const manifestPath = path.join(rootDir, "natesclaw.plugin.json");
     if (!fs.existsSync(packagePath) || !fs.existsSync(manifestPath)) {
       return [];
     }
 
     const manifest = readJsonFile(manifestPath) as PluginManifestShape;
-    const pkg = readJsonFile(packagePath) as OpenClawPackageShape;
+    const pkg = readJsonFile(packagePath) as NatesclawPackageShape;
     const manifestId = normalizeText(manifest.id);
     const packageName = normalizeText(pkg.name);
     if (!manifestId || !packageName) {
@@ -157,15 +157,15 @@ function readBundledPluginRecords(): BundledPluginRecord[] {
         dirName,
         packageName,
         manifestId,
-        installNpmSpec: normalizeText(pkg.openclaw?.install?.npmSpec),
-        channelId: normalizeText(pkg.openclaw?.channel?.id),
+        installNpmSpec: normalizeText(pkg.natesclaw?.install?.npmSpec),
+        channelId: normalizeText(pkg.natesclaw?.channel?.id),
       },
     ];
   });
 }
 
 function resolveAllowedPackageNamesForId(pluginId: string): string[] {
-  return ALLOWED_PACKAGE_SUFFIXES.map((suffix) => `@openclaw/${pluginId}${suffix}`);
+  return ALLOWED_PACKAGE_SUFFIXES.map((suffix) => `@natesclaw/${pluginId}${suffix}`);
 }
 
 function resolveBundledPluginMismatches(
@@ -198,7 +198,7 @@ describe("bundled plugin naming guardrails", () => {
   it.each([
     {
       name: "keeps bundled workspace package names anchored to the plugin id",
-      message: `Bundled extension package names must stay anchored to the manifest id via @openclaw/<id> or an approved suffix (${ALLOWED_PACKAGE_SUFFIXES.join(", ")}). Update the plugin naming docs and this invariant before adding a new naming form.`,
+      message: `Bundled extension package names must stay anchored to the manifest id via @natesclaw/<id> or an approved suffix (${ALLOWED_PACKAGE_SUFFIXES.join(", ")}). Update the plugin naming docs and this invariant before adding a new naming form.`,
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -213,7 +213,7 @@ describe("bundled plugin naming guardrails", () => {
     {
       name: "keeps bundled workspace directories aligned with the plugin id unless explicitly allowlisted",
       message:
-        "Bundled extension directory names should match openclaw.plugin.json:id. If a legacy exception is unavoidable, add it to DIR_ID_EXCEPTIONS with a comment.",
+        "Bundled extension directory names should match natesclaw.plugin.json:id. If a legacy exception is unavoidable, add it to DIR_ID_EXCEPTIONS with a comment.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -222,9 +222,9 @@ describe("bundled plugin naming guardrails", () => {
           .map(({ dirName, manifestId }) => `${dirName} -> ${manifestId}`),
     },
     {
-      name: "keeps bundled openclaw.install.npmSpec aligned with the package name",
+      name: "keeps bundled natesclaw.install.npmSpec aligned with the package name",
       message:
-        "Bundled openclaw.install.npmSpec values must match the package name so install/update paths stay deterministic.",
+        "Bundled natesclaw.install.npmSpec values must match the package name so install/update paths stay deterministic.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -239,7 +239,7 @@ describe("bundled plugin naming guardrails", () => {
     {
       name: "keeps non-packaged bundled plugins from advertising npm installs",
       message:
-        "Non-packaged bundled plugins are source-only/private and must not advertise openclaw.install.npmSpec.",
+        "Non-packaged bundled plugins are source-only/private and must not advertise natesclaw.install.npmSpec.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -251,7 +251,7 @@ describe("bundled plugin naming guardrails", () => {
     {
       name: "keeps bundled channel ids aligned with the canonical plugin id",
       message:
-        "Bundled openclaw.channel.id values must match openclaw.plugin.json:id for the owning plugin.",
+        "Bundled natesclaw.channel.id values must match natesclaw.plugin.json:id for the owning plugin.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(

@@ -1,25 +1,25 @@
-export const DEFAULT_SERVICE_NAME = "openclaw";
+export const DEFAULT_SERVICE_NAME = "natesclaw";
 export const DROPPED_OTEL_ATTRIBUTE_KEYS = new Set([
-  "openclaw.callId",
-  "openclaw.call_id",
-  "openclaw.chatId",
-  "openclaw.chat_id",
-  "openclaw.messageId",
-  "openclaw.message_id",
-  "openclaw.parentSpanId",
-  "openclaw.parent_span_id",
-  "openclaw.runId",
-  "openclaw.run_id",
-  "openclaw.sessionId",
-  "openclaw.session_id",
-  "openclaw.sessionKey",
-  "openclaw.session_key",
-  "openclaw.spanId",
-  "openclaw.span_id",
-  "openclaw.toolCallId",
-  "openclaw.tool_call_id",
-  "openclaw.traceId",
-  "openclaw.trace_id",
+  "natesclaw.callId",
+  "natesclaw.call_id",
+  "natesclaw.chatId",
+  "natesclaw.chat_id",
+  "natesclaw.messageId",
+  "natesclaw.message_id",
+  "natesclaw.parentSpanId",
+  "natesclaw.parent_span_id",
+  "natesclaw.runId",
+  "natesclaw.run_id",
+  "natesclaw.sessionId",
+  "natesclaw.session_id",
+  "natesclaw.sessionKey",
+  "natesclaw.session_key",
+  "natesclaw.spanId",
+  "natesclaw.span_id",
+  "natesclaw.toolCallId",
+  "natesclaw.tool_call_id",
+  "natesclaw.traceId",
+  "natesclaw.trace_id",
 ]);
 export const SECURITY_TARGET_NAME_VALUE_RE = /^[A-Za-z0-9@/_.:-]{1,256}$/u;
 export const MAX_OTEL_LOG_BODY_CHARS = 4 * 1024;
@@ -71,7 +71,7 @@ export const AGENT_DURATION_MS_BUCKETS = [
   1_800_000,
   3_600_000,
 ];
-// openclaw.context.tokens records context window limit/used token counts, which
+// natesclaw.context.tokens records context window limit/used token counts, which
 // range from a few thousand to >1M for large-context models. Keep the prior
 // layout and add common context-window sizes above it.
 export const CONTEXT_TOKENS_BUCKETS = [

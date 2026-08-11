@@ -1,26 +1,26 @@
 // Stores and resolves the last TUI session per workspace.
 import { createHash } from "node:crypto";
 import fs from "node:fs";
-import { normalizeLowercaseStringOrEmpty as normalizeMarker } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty as normalizeMarker } from "@natesclaw/normalization-core/string-coerce";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
-import { withOpenClawStateDatabaseReadOnly } from "../state/openclaw-state-db-readonly.js";
-import { tableExists } from "../state/openclaw-state-db-schema-helpers.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
-import { runOpenClawStateWriteTransaction } from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+import { withNatesclawStateDatabaseReadOnly } from "../state/natesclaw-state-db-readonly.js";
+import { tableExists } from "../state/natesclaw-state-db-schema-helpers.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
+import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import type { TuiSessionList } from "./tui-backend.js";
 import type { SessionScope } from "./tui-types.js";
 
-type TuiLastSessionDatabase = Pick<OpenClawStateKyselyDatabase, "tui_last_sessions">;
+type TuiLastSessionDatabase = Pick<NatesclawStateKyselyDatabase, "tui_last_sessions">;
 
 function stateDatabaseOptions(stateDir?: string) {
   return stateDir
-    ? { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } }
+    ? { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } }
     : { env: process.env };
 }
 
@@ -65,11 +65,11 @@ export async function readTuiLastSessionKey(params: {
   stateDir?: string;
 }): Promise<string | null> {
   const options = stateDatabaseOptions(params.stateDir);
-  if (!fs.existsSync(resolveOpenClawStateSqlitePath(options.env))) {
+  if (!fs.existsSync(resolveNatesclawStateSqlitePath(options.env))) {
     return null;
   }
   // CLI reads must not join the Gateway's writable SQLite lifecycle (#101290).
-  return withOpenClawStateDatabaseReadOnly(({ db }) => {
+  return withNatesclawStateDatabaseReadOnly(({ db }) => {
     if (!tableExists(db, "tui_last_sessions")) {
       return null;
     }
@@ -96,7 +96,7 @@ export async function writeTuiLastSessionKey(params: {
     return;
   }
   const updatedAt = Date.now();
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const tuiDb = getNodeSqliteKysely<TuiLastSessionDatabase>(db);
     executeSqliteQuerySync(
       db,
@@ -125,7 +125,7 @@ export function clearTuiLastSessionPointers(params: {
   if (params.sessionKeys.size === 0) {
     return 0;
   }
-  return runOpenClawStateWriteTransaction(({ db }) => {
+  return runNatesclawStateWriteTransaction(({ db }) => {
     const result = executeSqliteQuerySync(
       db,
       getNodeSqliteKysely<TuiLastSessionDatabase>(db)

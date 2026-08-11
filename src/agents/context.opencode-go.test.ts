@@ -1,14 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { resolveMemoryFlushContextWindowTokens } from "../auto-reply/reply/memory-flush.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { refreshContextWindowCache, resetContextWindowCacheForTest } from "./context.js";
 
 describe("OpenCode Go context metadata", () => {
   let contextWindowTokens: number | undefined;
-  let configuredModels: OpenClawConfig["models"];
+  let configuredModels: NatesclawConfig["models"];
 
   beforeAll(async () => {
-    const cfg: OpenClawConfig = { plugins: { allow: ["opencode-go"] } };
+    const cfg: NatesclawConfig = { plugins: { allow: ["opencode-go"] } };
 
     await refreshContextWindowCache(cfg);
     contextWindowTokens = resolveMemoryFlushContextWindowTokens({

@@ -5,7 +5,7 @@ import {
   normalizeMainKey,
   resolveAgentIdFromSessionKey,
 } from "../../routing/session-key.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import { resolveCanonicalMainSessionKey } from "./main-session-key.js";
 import type { SessionScope } from "./types.js";
 
@@ -18,7 +18,7 @@ function buildMainSessionKey(agentId: string, mainKey?: string): string {
 }
 
 /** Resolves the configured main session key, honoring global session scope. */
-export function resolveMainSessionKey(cfg: OpenClawConfig): string {
+export function resolveMainSessionKey(cfg: NatesclawConfig): string {
   return resolveCanonicalMainSessionKey({
     agentId: resolveDefaultAgentId(cfg),
     mainKey: cfg.session?.mainKey,
@@ -27,7 +27,7 @@ export function resolveMainSessionKey(cfg: OpenClawConfig): string {
 }
 
 /** Stable fingerprint for the config values that canonicalize chat session keys. */
-export function resolveSessionRoutingContract(cfg: OpenClawConfig): string {
+export function resolveSessionRoutingContract(cfg: NatesclawConfig): string {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   const scope = cfg?.session?.scope ?? "per-sender";
   return [scope, normalizeMainKey(cfg?.session?.mainKey), normalizeAgentId(defaultAgentId)].join(

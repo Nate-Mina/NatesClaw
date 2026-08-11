@@ -13,7 +13,7 @@ import {
 } from "../../config/sessions/session-accessor.js";
 import { resolveSessionStorePathForScope } from "../../config/sessions/session-store-path.js";
 import { projectCanonicalSessionEntryShape } from "../../config/sessions/store-entry-shape.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   forgetActiveSessionForShutdown,
   noteActiveSessionForShutdown,
@@ -76,7 +76,7 @@ async function persistSessionEntryUpdate(params: {
 
 function emitCompactionSessionLifecycleHooks(params: {
   agentId?: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   storePath?: string;
   previousEntry: SessionEntry;
@@ -170,7 +170,7 @@ export async function ensureSkillSnapshot(params: {
   sessionId?: string;
   isFirstTurnInSession: boolean;
   workspaceDir: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   execOverrides?: ExecPolicyOverrides;
   /** If provided, only load skills with these names (for per-channel skill filtering) */
   skillFilter?: string[];
@@ -318,7 +318,7 @@ export async function incrementCompactionCount(params: {
   sessionStore?: Record<string, SessionEntry>;
   sessionKey?: string;
   storePath?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   now?: number;
   amount?: number;
   /** Token count after compaction - if provided, updates session token counts */

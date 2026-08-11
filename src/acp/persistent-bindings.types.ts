@@ -1,16 +1,16 @@
 /** Types and normalization helpers for configured channel-to-ACP persistent bindings. */
-import type { AcpRuntimeSessionMode } from "@openclaw/acp-core/runtime/types";
+import type { AcpRuntimeSessionMode } from "@natesclaw/acp-core/runtime/types";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString as normalizeText,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import type { ChannelId } from "../channels/plugins/types.public.js";
 import { sha256HexPrefixCore } from "../infra/crypto-digest.js";
 import type { SessionBindingRecord } from "../infra/outbound/session-binding-service.js";
 import { normalizeAccountId, resolveAgentIdFromSessionKey } from "../routing/session-key.js";
 import { sanitizeAgentId } from "../routing/session-key.js";
 
-export { normalizeOptionalString as normalizeText } from "@openclaw/normalization-core/string-coerce";
+export { normalizeOptionalString as normalizeText } from "@natesclaw/normalization-core/string-coerce";
 
 export type ConfiguredAcpBindingChannel = ChannelId;
 
@@ -20,7 +20,7 @@ export type ConfiguredAcpBindingSpec = {
   accountId: string;
   conversationId: string;
   parentConversationId?: string;
-  /** Owning OpenClaw agent id (used for session identity/storage). */
+  /** Owning Natesclaw agent id (used for session identity/storage). */
   agentId: string;
   /** ACP harness agent id override (falls back to agentId when omitted). */
   acpAgentId?: string;

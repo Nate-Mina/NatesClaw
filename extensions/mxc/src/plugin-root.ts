@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 function isMxcPluginRoot(dir: string): boolean {
   return (
-    fs.existsSync(path.join(dir, "openclaw.plugin.json")) &&
+    fs.existsSync(path.join(dir, "natesclaw.plugin.json")) &&
     fs.existsSync(path.join(dir, "package.json"))
   );
 }

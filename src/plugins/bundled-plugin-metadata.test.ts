@@ -2,7 +2,7 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { toErrorObject as toLintErrorObject } from "@openclaw/normalization-core/error-coercion";
+import { toErrorObject as toLintErrorObject } from "@natesclaw/normalization-core/error-coercion";
 import { beforeAll, describe, expect, it } from "vitest";
 import { expectNoReaddirSyncDuring } from "../test-utils/fs-scan-assertions.js";
 import { listGitTrackedFiles, toRepoRelativePath } from "../test-utils/repo-files.js";
@@ -184,14 +184,14 @@ function listExternalRepoBundledPluginManifestDirs(): string[] | null {
   }
   return manifestFiles
     .flatMap((file) => {
-      const match = /^extensions\/([^/]+)\/openclaw\.plugin\.json$/u.exec(file);
+      const match = /^extensions\/([^/]+)\/natesclaw\.plugin\.json$/u.exec(file);
       return match?.[1] ? [match[1]] : [];
     })
     .toSorted();
 }
 
 function listGitRepoBundledPluginManifestFiles(): string[] | null {
-  return listGitTrackedFiles({ repoRoot, pathspecs: "extensions/*/openclaw.plugin.json" });
+  return listGitTrackedFiles({ repoRoot, pathspecs: "extensions/*/natesclaw.plugin.json" });
 }
 
 function listFindRepoBundledPluginManifestFiles(): string[] | null {
@@ -204,7 +204,7 @@ function listFindRepoBundledPluginManifestFiles(): string[] | null {
       "-type",
       "f",
       "-name",
-      "openclaw.plugin.json",
+      "natesclaw.plugin.json",
     ],
     {
       cwd: repoRoot,
@@ -248,7 +248,7 @@ function createRepoBundledManifestRegistry(): PluginManifestRegistry {
       origin: "bundled",
       rootDir: path.join(repoRoot, "extensions", dirName),
       source: path.join(repoRoot, "extensions", dirName, "index.ts"),
-      manifestPath: path.join(repoRoot, "extensions", dirName, "openclaw.plugin.json"),
+      manifestPath: path.join(repoRoot, "extensions", dirName, "natesclaw.plugin.json"),
       activation: manifest.activation,
       setup: manifest.setup,
       hooks: [],
@@ -657,7 +657,7 @@ describe("bundled plugin metadata", () => {
   });
 
   it("prefers built generated paths when present and falls back to source paths", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-metadata-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-metadata-");
     const pluginRoot = path.join(tempRoot, "extensions", "plugin");
     const distPluginRoot = path.join(tempRoot, "dist", "extensions", "plugin");
 
@@ -671,7 +671,7 @@ describe("bundled plugin metadata", () => {
   });
 
   it("uses dist-runtime generated paths before source fallback when packaged dist is absent", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-runtime-metadata-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-runtime-metadata-");
     const pluginRoot = path.join(tempRoot, "extensions", "plugin");
     const runtimePluginRoot = path.join(tempRoot, "dist-runtime", "extensions", "plugin");
 
@@ -687,7 +687,7 @@ describe("bundled plugin metadata", () => {
   });
 
   it("resolves plugin-local generated entry paths when the plugin dir is provided", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-metadata-local-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-metadata-local-");
     const pluginRoot = path.join(tempRoot, "extensions", "alpha");
     const distPluginRoot = path.join(tempRoot, "dist", "extensions", "alpha");
 
@@ -709,7 +709,7 @@ describe("bundled plugin metadata", () => {
   });
 
   it("keeps generated entry path resolution inside bundled plugin roots", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-path-contained-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-path-contained-");
     const sourcePluginRoot = path.join(tempRoot, "extensions", "alpha");
     const distPluginRoot = path.join(tempRoot, "dist", "extensions", "alpha");
     const absoluteEscape = path.join(tempRoot, "absolute.js");
@@ -759,18 +759,18 @@ describe("bundled plugin metadata", () => {
   });
 
   it("scans direct plugin-tree overrides and resolves generated paths from that scan dir", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-direct-tree-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-direct-tree-");
     const pluginsDir = path.join(tempRoot, "bundled-plugins");
     const pluginRoot = path.join(pluginsDir, "alpha");
 
     writeJson(path.join(pluginRoot, "package.json"), {
-      name: "@openclaw/alpha",
+      name: "@natesclaw/alpha",
       version: "0.0.1",
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
       },
     });
-    writeJson(path.join(pluginRoot, "openclaw.plugin.json"), {
+    writeJson(path.join(pluginRoot, "natesclaw.plugin.json"), {
       id: "alpha",
       channels: ["alpha"],
       configSchema: { type: "object" },
@@ -796,18 +796,18 @@ describe("bundled plugin metadata", () => {
   });
 
   it("reflects bundled manifest edits on the next metadata read", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-fresh-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-fresh-");
     const pluginRoot = path.join(tempRoot, "extensions", "alpha");
 
     writeJson(path.join(pluginRoot, "package.json"), {
-      name: "@openclaw/alpha",
+      name: "@natesclaw/alpha",
       version: "0.0.1",
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
       },
     });
     fs.writeFileSync(path.join(pluginRoot, "index.ts"), "export const source = true;\n", "utf8");
-    writeJson(path.join(pluginRoot, "openclaw.plugin.json"), {
+    writeJson(path.join(pluginRoot, "natesclaw.plugin.json"), {
       id: "alpha",
       name: "Before",
       configSchema: { type: "object" },
@@ -815,7 +815,7 @@ describe("bundled plugin metadata", () => {
 
     expect(listBundledPluginMetadata({ rootDir: tempRoot })[0]?.manifest.name).toBe("Before");
 
-    writeJson(path.join(pluginRoot, "openclaw.plugin.json"), {
+    writeJson(path.join(pluginRoot, "natesclaw.plugin.json"), {
       id: "alpha",
       name: "After",
       configSchema: { type: "object" },
@@ -825,7 +825,7 @@ describe("bundled plugin metadata", () => {
   });
 
   it("prefers direct scan-dir overrides over nested dist artifacts within the same override root", () => {
-    const pluginsDir = createGeneratedPluginTempRoot("openclaw-bundled-plugin-direct-priority-");
+    const pluginsDir = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-direct-priority-");
     const pluginRoot = path.join(pluginsDir, "alpha");
     const nestedDistPluginRoot = path.join(pluginsDir, "dist", "extensions", "alpha");
 
@@ -852,12 +852,12 @@ describe("bundled plugin metadata", () => {
   });
 
   it("merges runtime channel schema metadata with manifest-owned channel config fields", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-channel-configs-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-channel-configs-");
 
     writeJson(path.join(tempRoot, "extensions", "alpha", "package.json"), {
-      name: "@openclaw/alpha",
+      name: "@natesclaw/alpha",
       version: "0.0.1",
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         channel: {
           id: "alpha",
@@ -867,7 +867,7 @@ describe("bundled plugin metadata", () => {
         },
       },
     });
-    writeJson(path.join(tempRoot, "extensions", "alpha", "openclaw.plugin.json"), {
+    writeJson(path.join(tempRoot, "extensions", "alpha", "natesclaw.plugin.json"), {
       id: "alpha",
       channels: ["alpha"],
       configSchema: { type: "object" },
@@ -927,17 +927,17 @@ describe("bundled plugin metadata", () => {
   });
 
   it("captures top-level public surface artifacts without duplicating the primary entrypoints", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-public-artifacts-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-public-artifacts-");
 
     writeJson(path.join(tempRoot, "extensions", "alpha", "package.json"), {
-      name: "@openclaw/alpha",
+      name: "@natesclaw/alpha",
       version: "0.0.1",
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         setupEntry: "./setup-entry.ts",
       },
     });
-    writeJson(path.join(tempRoot, "extensions", "alpha", "openclaw.plugin.json"), {
+    writeJson(path.join(tempRoot, "extensions", "alpha", "natesclaw.plugin.json"), {
       id: "alpha",
       configSchema: { type: "object" },
     });
@@ -969,13 +969,13 @@ describe("bundled plugin metadata", () => {
   });
 
   it("loads channel config metadata from built public surfaces in dist-only roots", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-dist-config-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-dist-config-");
     const distRoot = path.join(tempRoot, "dist");
 
     writeJson(path.join(distRoot, "extensions", "alpha", "package.json"), {
-      name: "@openclaw/alpha",
+      name: "@natesclaw/alpha",
       version: "0.0.1",
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         channel: {
           id: "alpha",
@@ -984,7 +984,7 @@ describe("bundled plugin metadata", () => {
         },
       },
     });
-    writeJson(path.join(distRoot, "extensions", "alpha", "openclaw.plugin.json"), {
+    writeJson(path.join(distRoot, "extensions", "alpha", "natesclaw.plugin.json"), {
       id: "alpha",
       configSchema: {
         type: "object",
@@ -1044,14 +1044,14 @@ describe("bundled plugin metadata", () => {
   });
 
   it("does not probe broad runtime public surfaces for channel config metadata", () => {
-    const tempRoot = createGeneratedPluginTempRoot("openclaw-bundled-plugin-dist-config-runtime-");
+    const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-dist-config-runtime-");
     const distRoot = path.join(tempRoot, "dist");
     const markerPath = path.join(tempRoot, "runtime-api-loaded");
 
     writeJson(path.join(distRoot, "extensions", "alpha", "package.json"), {
-      name: "@openclaw/alpha",
+      name: "@natesclaw/alpha",
       version: "0.0.1",
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         channel: {
           id: "alpha",
@@ -1060,7 +1060,7 @@ describe("bundled plugin metadata", () => {
         },
       },
     });
-    writeJson(path.join(distRoot, "extensions", "alpha", "openclaw.plugin.json"), {
+    writeJson(path.join(distRoot, "extensions", "alpha", "natesclaw.plugin.json"), {
       id: "alpha",
       configSchema: {
         type: "object",

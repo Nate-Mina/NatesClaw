@@ -1,11 +1,11 @@
-import type { ApprovalResolveResult } from "openclaw/plugin-sdk/approval-gateway-runtime";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+import type { ApprovalResolveResult } from "natesclaw/plugin-sdk/approval-gateway-runtime";
+import { createLazyRuntimeNamedExport } from "natesclaw/plugin-sdk/lazy-runtime";
 import {
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/secret-input";
+import { resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import {
   registerPlatformAdapter,
   registerPlatformAdapterFactory,
@@ -40,7 +40,7 @@ import type { FetchMediaOptions, FetchMediaResult } from "../engine/adapter/type
 import { getBridgeLogger } from "./logger.js";
 
 const loadReadRemoteMediaBuffer = createLazyRuntimeNamedExport(
-  () => import("openclaw/plugin-sdk/media-runtime"),
+  () => import("natesclaw/plugin-sdk/media-runtime"),
   "readRemoteMediaBuffer",
 );
 
@@ -86,7 +86,7 @@ function createBuiltinAdapter(): PlatformAdapter {
     },
 
     getTempDir(): string {
-      return resolvePreferredOpenClawTmpDir();
+      return resolvePreferredNatesclawTmpDir();
     },
 
     hasConfiguredSecret(value: unknown): boolean {
@@ -103,9 +103,9 @@ function createBuiltinAdapter(): PlatformAdapter {
 
     async resolveApproval(params): Promise<ApprovalResolveResult> {
       try {
-        const { getRuntimeConfig } = await import("openclaw/plugin-sdk/runtime-config-snapshot");
+        const { getRuntimeConfig } = await import("natesclaw/plugin-sdk/runtime-config-snapshot");
         const { resolveApprovalOverGateway } =
-          await import("openclaw/plugin-sdk/approval-gateway-runtime");
+          await import("natesclaw/plugin-sdk/approval-gateway-runtime");
         const cfg = getRuntimeConfig();
         return await resolveApprovalOverGateway({
           cfg,

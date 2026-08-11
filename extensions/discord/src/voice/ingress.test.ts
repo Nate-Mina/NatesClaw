@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
   })),
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/agent-runtime", () => ({
   agentCommandFromIngress: mocks.agentCommandFromIngress,
 }));
 

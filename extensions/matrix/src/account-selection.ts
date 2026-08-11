@@ -4,15 +4,15 @@ import {
   listConfiguredAccountIds,
   resolveListedDefaultAccountId,
   resolveNormalizedAccountEntry,
-} from "openclaw/plugin-sdk/account-core";
+} from "natesclaw/plugin-sdk/account-core";
 import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   normalizeOptionalAccountId,
-} from "openclaw/plugin-sdk/account-id";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { hasConfiguredSecretInput } from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/account-id";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { hasConfiguredSecretInput } from "natesclaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveMatrixAccountStringValues,
   type MatrixResolvedStringField,
@@ -137,12 +137,12 @@ function hasConfiguredDefaultMatrixAccountSource(params: {
   });
 }
 
-export function resolveMatrixChannelConfig(cfg: OpenClawConfig): Record<string, unknown> | null {
+export function resolveMatrixChannelConfig(cfg: NatesclawConfig): Record<string, unknown> | null {
   return isRecord(cfg.channels?.matrix) ? cfg.channels.matrix : null;
 }
 
 export function findMatrixAccountEntry(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   accountId: string,
 ): Record<string, unknown> | null {
   const channel = resolveMatrixChannelConfig(cfg);
@@ -159,7 +159,7 @@ export function findMatrixAccountEntry(
 }
 
 export function resolveConfiguredMatrixAccountIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string[] {
   const channel = resolveMatrixChannelConfig(cfg);
@@ -183,7 +183,7 @@ export function resolveConfiguredMatrixAccountIds(
 }
 
 export function resolveMatrixDefaultOrOnlyAccountId(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string {
   const channel = resolveMatrixChannelConfig(cfg);
@@ -203,7 +203,7 @@ export function resolveMatrixDefaultOrOnlyAccountId(
 }
 
 export function requiresExplicitMatrixDefaultAccount(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   const channel = resolveMatrixChannelConfig(cfg);

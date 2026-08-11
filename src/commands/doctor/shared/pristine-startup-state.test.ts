@@ -11,10 +11,10 @@ import {
 const roots: string[] = [];
 
 function createFixture(config: Record<string, unknown>, stateEntries: string[] = []) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-pristine-startup-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-pristine-startup-"));
   roots.push(root);
   const stateDir = path.join(root, "state");
-  const configPath = path.join(root, "openclaw.json");
+  const configPath = path.join(root, "natesclaw.json");
   fs.writeFileSync(configPath, `${JSON.stringify(config)}\n`);
   fs.mkdirSync(stateDir, { recursive: true });
   for (const entry of stateEntries) {
@@ -22,8 +22,8 @@ function createFixture(config: Record<string, unknown>, stateEntries: string[] =
   }
   return {
     HOME: root,
-    OPENCLAW_CONFIG_PATH: configPath,
-    OPENCLAW_STATE_DIR: stateDir,
+    NATESCLAW_CONFIG_PATH: configPath,
+    NATESCLAW_STATE_DIR: stateDir,
   };
 }
 
@@ -36,7 +36,7 @@ function addBundledPlugin(
   const pluginDir = path.join(bundledPluginsDir, pluginId);
   fs.mkdirSync(pluginDir, { recursive: true });
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "natesclaw.plugin.json"),
     `${JSON.stringify({ id: pluginId })}\n`,
   );
   if (options.doctorContract) {
@@ -45,8 +45,8 @@ function addBundledPlugin(
   return {
     ...env,
     VITEST: "true",
-    OPENCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
-    OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+    NATESCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
+    NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
   };
 }
 
@@ -63,7 +63,7 @@ function addConfiguredPlugin(
   const pluginDir = path.join(pluginsDir, pluginId);
   fs.mkdirSync(pluginDir, { recursive: true });
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "natesclaw.plugin.json"),
     `${JSON.stringify({ id: pluginId, configSchema: { type: "object" } })}\n`,
   );
   fs.writeFileSync(
@@ -76,7 +76,7 @@ function addConfiguredPlugin(
       `${JSON.stringify({
         name: `fixture-${pluginId}`,
         version: "1.0.0",
-        openclaw: {
+        natesclaw: {
           extensions: ["./index.cjs"],
           install: { minHostVersion: options.minHostVersion },
         },
@@ -87,7 +87,7 @@ function addConfiguredPlugin(
     fs.writeFileSync(path.join(pluginDir, "doctor-contract-api.js"), "export {};\n");
   }
 
-  const config = JSON.parse(fs.readFileSync(env.OPENCLAW_CONFIG_PATH, "utf8")) as {
+  const config = JSON.parse(fs.readFileSync(env.NATESCLAW_CONFIG_PATH, "utf8")) as {
     plugins?: Record<string, unknown>;
   };
   config.plugins = {
@@ -95,7 +95,7 @@ function addConfiguredPlugin(
     allow: [pluginId],
     load: { paths: [pluginsDir, ...(options.additionalLoadPaths ?? [])] },
   };
-  fs.writeFileSync(env.OPENCLAW_CONFIG_PATH, `${JSON.stringify(config)}\n`);
+  fs.writeFileSync(env.NATESCLAW_CONFIG_PATH, `${JSON.stringify(config)}\n`);
   return env;
 }
 
@@ -134,7 +134,7 @@ describe("pristine startup state", () => {
         agents: {
           defaults: {
             model: { primary: "openai/gpt-5.6" },
-            models: { "openai/gpt-5.6": { agentRuntime: { id: "openclaw" } } },
+            models: { "openai/gpt-5.6": { agentRuntime: { id: "natesclaw" } } },
             workspace: "/tmp/workspace",
           },
           list: [{ id: "main", workspace: "/tmp/workspace" }],
@@ -156,7 +156,7 @@ describe("pristine startup state", () => {
           entries: {
             "session-memory": {
               enabled: true,
-              env: { OPENCLAW_HOOK_TEST: "enabled" },
+              env: { NATESCLAW_HOOK_TEST: "enabled" },
               customOption: "value",
             },
           },

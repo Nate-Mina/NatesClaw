@@ -1,5 +1,5 @@
 import { SpanStatusCode } from "@opentelemetry/api";
-import { normalizeDiagnosticValue } from "openclaw/plugin-sdk/diagnostic-runtime";
+import { normalizeDiagnosticValue } from "natesclaw/plugin-sdk/diagnostic-runtime";
 import { redactSensitiveText } from "../api.js";
 import type { DiagnosticEventMetadata, DiagnosticEventPayload } from "../api.js";
 import {
@@ -37,11 +37,11 @@ export function createModelRecorders(runtime: DiagnosticsRecorderRuntime) {
   } = runtime;
 
   const modelCallMetricAttrs = (evt: ModelCallLifecycleDiagnosticEvent) => ({
-    "openclaw.provider": evt.provider,
-    "openclaw.model": evt.model,
-    "openclaw.api": normalizeDiagnosticValue(evt.api),
-    "openclaw.transport": normalizeDiagnosticValue(evt.transport),
-    "openclaw.model_call.observation_unit": modelCallObservationUnit(evt),
+    "natesclaw.provider": evt.provider,
+    "natesclaw.model": evt.model,
+    "natesclaw.api": normalizeDiagnosticValue(evt.api),
+    "natesclaw.transport": normalizeDiagnosticValue(evt.transport),
+    "natesclaw.model_call.observation_unit": modelCallObservationUnit(evt),
   });
   const genAiModelCallMetricAttrs = (
     evt: ModelCallLifecycleDiagnosticEvent,
@@ -91,15 +91,15 @@ export function createModelRecorders(runtime: DiagnosticsRecorderRuntime) {
       return trackedSpan.spanContext();
     }
     const spanAttrs: Record<string, string | number | boolean> = {
-      "openclaw.provider": evt.provider,
-      "openclaw.model": evt.model,
+      "natesclaw.provider": evt.provider,
+      "natesclaw.model": evt.model,
     };
     assignGenAiModelCallAttrs(spanAttrs, evt);
     if (evt.api) {
-      spanAttrs["openclaw.api"] = evt.api;
+      spanAttrs["natesclaw.api"] = evt.api;
     }
     if (evt.transport) {
-      spanAttrs["openclaw.transport"] = evt.transport;
+      spanAttrs["natesclaw.transport"] = evt.transport;
     }
     assignModelCallPromptStatsAttrs(spanAttrs, evt);
     return trackTrustedSpan(
@@ -126,15 +126,15 @@ export function createModelRecorders(runtime: DiagnosticsRecorderRuntime) {
       return;
     }
     const spanAttrs: Record<string, string | number | boolean> = {
-      "openclaw.provider": evt.provider,
-      "openclaw.model": evt.model,
+      "natesclaw.provider": evt.provider,
+      "natesclaw.model": evt.model,
     };
     assignGenAiModelCallAttrs(spanAttrs, evt);
     if (evt.api) {
-      spanAttrs["openclaw.api"] = evt.api;
+      spanAttrs["natesclaw.api"] = evt.api;
     }
     if (evt.transport) {
-      spanAttrs["openclaw.transport"] = evt.transport;
+      spanAttrs["natesclaw.transport"] = evt.transport;
     }
     assignModelCallSizeTimingAttrs(spanAttrs, evt);
     assignModelCallPromptStatsAttrs(spanAttrs, evt);
@@ -160,9 +160,9 @@ export function createModelRecorders(runtime: DiagnosticsRecorderRuntime) {
     const errorType = normalizeDiagnosticValue(evt.errorCategory, "other");
     const metricAttrs = {
       ...modelCallMetricAttrs(evt),
-      "openclaw.errorCategory": errorType,
+      "natesclaw.errorCategory": errorType,
       ...(evt.failureKind
-        ? { "openclaw.failureKind": normalizeDiagnosticValue(evt.failureKind, "other") }
+        ? { "natesclaw.failureKind": normalizeDiagnosticValue(evt.failureKind, "other") }
         : {}),
     };
     modelCallDurationHistogram.record(evt.durationMs, metricAttrs);
@@ -172,20 +172,20 @@ export function createModelRecorders(runtime: DiagnosticsRecorderRuntime) {
       return;
     }
     const spanAttrs: Record<string, string | number | boolean> = {
-      "openclaw.provider": evt.provider,
-      "openclaw.model": evt.model,
-      "openclaw.errorCategory": errorType,
+      "natesclaw.provider": evt.provider,
+      "natesclaw.model": evt.model,
+      "natesclaw.errorCategory": errorType,
       "error.type": errorType,
     };
     if (evt.failureKind) {
-      spanAttrs["openclaw.failureKind"] = normalizeDiagnosticValue(evt.failureKind, "other");
+      spanAttrs["natesclaw.failureKind"] = normalizeDiagnosticValue(evt.failureKind, "other");
     }
     assignGenAiModelCallAttrs(spanAttrs, evt);
     if (evt.api) {
-      spanAttrs["openclaw.api"] = evt.api;
+      spanAttrs["natesclaw.api"] = evt.api;
     }
     if (evt.transport) {
-      spanAttrs["openclaw.transport"] = evt.transport;
+      spanAttrs["natesclaw.transport"] = evt.transport;
     }
     assignModelCallSizeTimingAttrs(spanAttrs, evt);
     assignModelCallPromptStatsAttrs(spanAttrs, evt);

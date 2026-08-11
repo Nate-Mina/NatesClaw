@@ -1,12 +1,12 @@
-# OpenClaw Baseten Provider
+# Natesclaw Baseten Provider
 
-Official OpenClaw provider plugin for Baseten Model APIs, including Thinking Machines Lab's Inkling.
+Official Natesclaw provider plugin for Baseten Model APIs, including Thinking Machines Lab's Inkling.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/baseten-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/baseten-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/baseten> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/baseten> for setup and configuration.

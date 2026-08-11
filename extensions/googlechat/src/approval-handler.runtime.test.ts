@@ -1,9 +1,9 @@
 import type {
   ExecApprovalPendingView,
   ResolvedApprovalView,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
+} from "natesclaw/plugin-sdk/approval-handler-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import {
@@ -41,7 +41,7 @@ const account = {
   },
 } as ResolvedGoogleChatAccount;
 
-const cfg: OpenClawConfig = {
+const cfg: NatesclawConfig = {
   channels: {
     googlechat: {
       serviceAccount: {
@@ -443,7 +443,7 @@ describe("googleChatApprovalNativeRuntime", () => {
       view,
     });
 
-    expect(JSON.stringify(pendingPayload.cardsV2)).toContain("openclaw.approval");
+    expect(JSON.stringify(pendingPayload.cardsV2)).toContain("natesclaw.approval");
     expect(JSON.stringify(pendingPayload.cardsV2)).not.toContain(
       "https://chat-app.example.test/googlechat",
     );

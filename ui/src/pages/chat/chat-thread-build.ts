@@ -1,4 +1,4 @@
-import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   isToolCallContentType,
   isToolResultContentType,
@@ -227,7 +227,7 @@ export function buildChatItems(props: BuildChatItemsProps): Array<ChatItem | Mes
       continue;
     }
     const raw = asRecord(msg) ?? {};
-    const marker = raw["__openclaw"] as Record<string, unknown> | undefined;
+    const marker = raw["__natesclaw"] as Record<string, unknown> | undefined;
     if (marker && marker.kind === "compaction") {
       items.push(buildCompactionDividerItem(marker, normalized.timestamp ?? Date.now(), i));
       continue;

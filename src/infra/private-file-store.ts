@@ -5,7 +5,7 @@ import {
   fileStoreSync,
   type FileStore,
   type FileStoreSync,
-} from "@openclaw/fs-safe/store";
+} from "@natesclaw/fs-safe/store";
 
 /** Create an async private file store rooted at `rootDir`. */
 export function privateFileStore(rootDir: string): FileStore {

@@ -1,16 +1,16 @@
 import { unsetConfiguredMcpServer } from "../agents/mcp-config-mutation.js";
 import { normalizeConfiguredMcpServers } from "../config/mcp-config-normalize.js";
 import { listConfiguredMcpServers } from "../config/mcp-config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import { ClawRemoveError } from "./lifecycle-delete-support.js";
 import type { RemovedMcpServer } from "./lifecycle-remove-contract.js";
 import type { ClawStatusRecord } from "./lifecycle-status.js";
 import { deleteClawMcpServerRef, digestClawMcpServer, planClawMcpServerRemoval } from "./mcp.js";
 import type { ClawReferencedCleanup } from "./package-remove.js";
 
-type RemoveMcpServerOptions = OpenClawStateDatabaseOptions & {
-  config?: OpenClawConfig;
+type RemoveMcpServerOptions = NatesclawStateDatabaseOptions & {
+  config?: NatesclawConfig;
   sourceMcpServers?: Record<string, Record<string, unknown>>;
   listMcpServers?: typeof listConfiguredMcpServers;
   referencedCleanup?: ClawReferencedCleanup;

@@ -1,5 +1,5 @@
 // Route-first machine-readable Gateway health command.
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { type RuntimeEnv, writeRuntimeJson } from "../../runtime.js";
 
 type GatewayHealthRpcOpts = Parameters<
@@ -13,7 +13,7 @@ type GatewayHealthJsonRouteArgs = {
 
 type GatewayHealthRouteDependencies = {
   callGateway?: typeof import("../gateway-rpc.js").callGatewayFromCliWithTransport;
-  readBestEffortConfig?: () => Promise<OpenClawConfig>;
+  readBestEffortConfig?: () => Promise<NatesclawConfig>;
   emitReachableGatewayAuthDiagnostic?: typeof import("../../commands/health.js").emitReachableGatewayAuthDiagnostic;
   formatGatewayAuthErrorJson?: typeof import("../../gateway/call.js").formatGatewayAuthErrorJson;
   formatGatewayClientRequestErrorJson?: typeof import("../../gateway/call.js").formatGatewayClientRequestErrorJson;

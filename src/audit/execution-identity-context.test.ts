@@ -2,10 +2,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { openNodeSqliteDatabase } from "../infra/node-sqlite.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabase,
+} from "../state/natesclaw-state-db.js";
 import { recordAuditEvent } from "./audit-event-store.js";
 import {
   configureExecutionIdentityAdmissionSink,
@@ -23,16 +23,16 @@ import {
 const RETENTION_MS = 30 * 24 * 60 * 60_000;
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 function databaseOptions() {
-  return { env: { OPENCLAW_STATE_DIR: tempDirs.make("openclaw-identity-") } };
+  return { env: { NATESCLAW_STATE_DIR: tempDirs.make("natesclaw-identity-") } };
 }
 
-function openIndependentStateDatabase(path: string): OpenClawStateDatabase {
+function openIndependentStateDatabase(path: string): NatesclawStateDatabase {
   return {
     db: openNodeSqliteDatabase(path),
     path,
@@ -97,7 +97,7 @@ function persistExecutionIdentityAdmissionEnvelope(
 function prepareExecutionIdentityContextAtAdmission(
   admissionFacts: ExecutionIdentityAdmissionFacts,
   options: {
-    database?: OpenClawStateDatabase;
+    database?: NatesclawStateDatabase;
     env?: NodeJS.ProcessEnv;
     now?: number;
     contextId?: string;
@@ -131,7 +131,7 @@ describe("execution identity context storage", () => {
     });
     const first = persistExecutionIdentityAdmissionEnvelope(envelope, { ...database, now: 100 });
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     const second = persistExecutionIdentityAdmissionEnvelope(structuredClone(envelope), {
       ...database,
       now: 999,
@@ -144,7 +144,7 @@ describe("execution identity context storage", () => {
     expect(Object.isFrozen(first.runtimeInstance)).toBe(true);
     expect(JSON.stringify(first)).not.toContain("runtime-secret-1");
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     const afterRestart = inspectExecutionIdentityRun(
       { executionId: "execution-1" },
       {
@@ -191,7 +191,7 @@ describe("execution identity context storage", () => {
         ...database,
         now: 100,
       });
-      const originalRow = openOpenClawStateDatabase(database)
+      const originalRow = openNatesclawStateDatabase(database)
         .db.prepare("SELECT context_json FROM execution_identity_contexts WHERE execution_id = ?")
         .get("execution-original");
 
@@ -199,7 +199,7 @@ describe("execution identity context storage", () => {
         persistExecutionIdentityAdmissionEnvelope(mutate(envelope), { ...database, now: 101 }),
       ).toThrow("execution identity context conflict");
       expect(
-        openOpenClawStateDatabase(database)
+        openNatesclawStateDatabase(database)
           .db.prepare("SELECT context_json FROM execution_identity_contexts WHERE execution_id = ?")
           .get("execution-original"),
       ).toEqual(originalRow);
@@ -296,7 +296,7 @@ describe("execution identity context storage", () => {
       executionId: "execution-recovery",
     });
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     expect(
       processExecutionIdentityAdmissionWork({ kind: "retry-reference", token }, database),
     ).toEqual(original);
@@ -340,7 +340,7 @@ describe("execution identity context storage", () => {
 
   it("keeps inspection read-only and lets persistence create the additive table", () => {
     const database = databaseOptions();
-    const reopened = openOpenClawStateDatabase(database);
+    const reopened = openNatesclawStateDatabase(database);
     expect(
       reopened.db
         .prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name = ?")
@@ -371,7 +371,7 @@ describe("execution identity context storage", () => {
 
   it("keeps maintenance read-only until the first identity capture", () => {
     const database = databaseOptions();
-    const opened = openOpenClawStateDatabase(database);
+    const opened = openNatesclawStateDatabase(database);
     expect(
       opened.db
         .prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name = ?")
@@ -433,8 +433,8 @@ describe("execution identity context storage", () => {
   it("declines recording instead of rotating a missing HMAC key with retained contexts", () => {
     const database = databaseOptions();
     prepareExecutionIdentityContextAtAdmission(facts("run-before-key-loss"), database);
-    openOpenClawStateDatabase(database).db.exec("DELETE FROM audit_identity_keys;");
-    closeOpenClawStateDatabaseForTest();
+    openNatesclawStateDatabase(database).db.exec("DELETE FROM audit_identity_keys;");
+    closeNatesclawStateDatabaseForTest();
 
     expect(() =>
       prepareExecutionIdentityContextAtAdmission(facts("run-after-key-loss"), database),
@@ -449,7 +449,7 @@ describe("execution identity context storage", () => {
     ).toBeUndefined();
 
     expect(
-      openOpenClawStateDatabase(database)
+      openNatesclawStateDatabase(database)
         .db.prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name = ?")
         .get("execution_identity_contexts"),
     ).toBeUndefined();
@@ -468,7 +468,7 @@ describe("execution identity context storage", () => {
 
     expect(pruneExpiredExecutionIdentityContexts({ database, now: RETENTION_MS + 1 })).toBe(1);
     expect(
-      openOpenClawStateDatabase(database)
+      openNatesclawStateDatabase(database)
         .db.prepare("SELECT COUNT(*) AS count FROM execution_identity_contexts")
         .get(),
     ).toEqual({ count: 0 });
@@ -498,7 +498,7 @@ describe("execution identity context storage", () => {
       now: 0,
       runtimeInstanceId: "runtime-1",
     });
-    openOpenClawStateDatabase(database).db.exec(`
+    openNatesclawStateDatabase(database).db.exec(`
       CREATE TRIGGER reject_identity_cleanup
       BEFORE DELETE ON execution_identity_contexts
       BEGIN
@@ -576,7 +576,7 @@ describe("execution identity context storage", () => {
     expect(JSON.stringify(exactAfter)).not.toContain("expired-context-secret");
     expect(JSON.stringify(exactAfter)).not.toContain("expired-runtime-secret");
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     expect(
       inspectExecutionIdentityRun(
         { runId: "run-retention" },
@@ -615,7 +615,7 @@ describe("execution identity context storage", () => {
       now: 1,
       runtimeInstanceId: "runtime-1",
     });
-    const { db } = openOpenClawStateDatabase(database);
+    const { db } = openNatesclawStateDatabase(database);
     db.exec("DELETE FROM execution_identity_contexts;");
     db.prepare(
       `WITH RECURSIVE rows(n) AS (
@@ -656,7 +656,7 @@ describe("execution identity context storage", () => {
       runtimeInstanceId: "runtime-1",
       limits: { maxRows: 1, pruneBatchRows: 1 },
     });
-    const retainedAfterOneBatch = openOpenClawStateDatabase(retentionDatabase)
+    const retainedAfterOneBatch = openNatesclawStateDatabase(retentionDatabase)
       .db.prepare("SELECT COUNT(*) AS count FROM execution_identity_contexts")
       .get() as { count: number };
     expect(retainedAfterOneBatch.count).toBe(3);
@@ -671,7 +671,7 @@ describe("execution identity context storage", () => {
         limits: { maxRows: 2, pruneBatchRows: 1 },
       });
     }
-    const capped = openOpenClawStateDatabase(capDatabase)
+    const capped = openNatesclawStateDatabase(capDatabase)
       .db.prepare("SELECT run_id FROM execution_identity_contexts ORDER BY context_id")
       .all() as Array<{ run_id: string }>;
     expect(capped).toHaveLength(2);
@@ -680,8 +680,8 @@ describe("execution identity context storage", () => {
 
   it("enforces the row cap across independent database connections", () => {
     const database = databaseOptions();
-    const path = openOpenClawStateDatabase(database).path;
-    closeOpenClawStateDatabaseForTest();
+    const path = openNatesclawStateDatabase(database).path;
+    closeNatesclawStateDatabaseForTest();
     const first = openIndependentStateDatabase(path);
     const second = openIndependentStateDatabase(path);
     try {
@@ -715,8 +715,8 @@ describe("execution identity context storage", () => {
       executionId: "execution-held-lock-inspection",
       runtimeInstanceId: "runtime-1",
     });
-    const path = openOpenClawStateDatabase(database).path;
-    closeOpenClawStateDatabaseForTest();
+    const path = openNatesclawStateDatabase(database).path;
+    closeNatesclawStateDatabaseForTest();
     const lockDatabase = openNodeSqliteDatabase(path);
     lockDatabase.exec("BEGIN IMMEDIATE");
     try {
@@ -749,7 +749,7 @@ describe("execution identity context storage", () => {
       ...corruptDatabase,
       runtimeInstanceId: "runtime-1",
     });
-    openOpenClawStateDatabase(corruptDatabase)
+    openNatesclawStateDatabase(corruptDatabase)
       .db.prepare("UPDATE execution_identity_contexts SET context_json = ? WHERE run_id = ?")
       .run("{", "run-corrupt");
     expect(inspectExecutionIdentityRun({ runId: "run-corrupt" }, corruptDatabase)).toMatchObject({

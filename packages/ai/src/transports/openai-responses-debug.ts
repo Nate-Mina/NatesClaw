@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import type { Api, Model } from "@openclaw/llm-core";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import type { Api, Model } from "@natesclaw/llm-core";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import type { ResponseCreateParamsStreaming } from "openai/resources/responses/responses.js";
 import { resolveModelPayloadDebugMode } from "./model-transport-debug.js";
 import { RESPONSE_FAILED_NO_DETAILS_MESSAGE } from "./openai-responses-contracts.js";

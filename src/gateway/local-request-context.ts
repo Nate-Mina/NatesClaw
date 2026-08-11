@@ -7,7 +7,7 @@ import {
   loadResolvedPublishedModelCatalogOwner,
 } from "../agents/prepared-model-catalog.js";
 import type { CliDeps } from "../cli/deps.types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { CronService } from "../cron/service.js";
 import { resolveCronJobsStorePath } from "../cron/store.js";
 import { getChildLogger } from "../logging/logger.js";
@@ -28,7 +28,7 @@ import type { GatewayRequestContext } from "./server-methods/types.js";
 // so local command paths do not silently enqueue cron/channel work.
 type LocalGatewayRequestContextParams = {
   deps: CliDeps;
-  getRuntimeConfig: () => OpenClawConfig;
+  getRuntimeConfig: () => NatesclawConfig;
 };
 
 function cronUnavailable(): never {

@@ -38,7 +38,7 @@ type AppSection = {
 
 const docsCta = (path: string): AppCardCta => ({
   kind: "external",
-  href: `https://docs.openclaw.ai${path}`,
+  href: `https://docs.natesclaw.ai${path}`,
   label: () => t("appsPage.ctaDocs"),
 });
 
@@ -56,7 +56,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://apps.apple.com/app/openclaw-ai-that-does-things/id6780396132",
+            href: "https://apps.apple.com/app/natesclaw-ai-that-does-things/id6780396132",
             label: () => t("appsPage.ctaAppStore"),
           },
           docsCta("/platforms/ios"),
@@ -71,7 +71,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://play.google.com/store/apps/details?id=ai.openclaw.app",
+            href: "https://play.google.com/store/apps/details?id=ai.natesclaw.app",
             label: () => t("appsPage.ctaPlayStore"),
           },
           docsCta("/platforms/android"),
@@ -116,7 +116,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://github.com/openclaw/openclaw/releases",
+            href: "https://github.com/natesclaw/natesclaw/releases",
             label: () => t("appsPage.ctaDownload"),
           },
           docsCta("/platforms/macos"),
@@ -131,7 +131,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://github.com/openclaw/openclaw-windows-node/releases/latest",
+            href: "https://github.com/natesclaw/natesclaw-windows-node/releases/latest",
             label: () => t("appsPage.ctaDownload"),
           },
           docsCta("/platforms/windows"),
@@ -146,7 +146,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://github.com/openclaw/openclaw/releases",
+            href: "https://github.com/natesclaw/natesclaw/releases",
             label: () => t("appsPage.ctaDownload"),
           },
           docsCta("/platforms/linux"),
@@ -171,12 +171,12 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://docs.openclaw.ai/tools/chrome-extension",
+            href: "https://docs.natesclaw.ai/tools/chrome-extension",
             label: () => t("appsPage.ctaSetupGuide"),
           },
           {
             kind: "external",
-            href: "https://chromewebstore.google.com/detail/openclaw/kcdjddhmeafeomebliikmbpblkmkfoig",
+            href: "https://chromewebstore.google.com/detail/natesclaw/kcdjddhmeafeomebliikmbpblkmkfoig",
             label: () => t("appsPage.ctaChromeWebStore"),
           },
         ],
@@ -207,7 +207,7 @@ const COMMUNITY_LINKS: ReadonlyArray<{ href: string; icon: TemplateResult; label
       icon: brandIcons.discord,
       label: () => t("appsPage.linkDiscord"),
     },
-    { href: "https://docs.openclaw.ai", icon: icons.book, label: () => t("appsPage.linkDocs") },
+    { href: "https://docs.natesclaw.ai", icon: icons.book, label: () => t("appsPage.linkDocs") },
   ];
 
 function renderCta(cta: AppCardCta, index: number, props: AppsProps) {

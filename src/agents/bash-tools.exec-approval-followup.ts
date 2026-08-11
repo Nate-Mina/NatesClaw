@@ -6,8 +6,8 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+} from "@natesclaw/normalization-core/string-coerce";
+import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { resolveSessionStorePathCore } from "../config/sessions/paths.js";
 import { loadSessionEntryReadOnly } from "../config/sessions/session-accessor.js";
 import { getGatewayRecoveryRuntime } from "../gateway/server-recovery-runtime-context.js";

@@ -25,10 +25,10 @@ function git(root: string, ...args: string[]) {
 }
 
 function createFixture(): Fixture {
-  const root = tempDirs.make("openclaw-pr-worktree-containment-");
+  const root = tempDirs.make("natesclaw-pr-worktree-containment-");
   git(root, "init", "--initial-branch=main");
-  git(root, "config", "user.name", "OpenClaw Test");
-  git(root, "config", "user.email", "test@openclaw.invalid");
+  git(root, "config", "user.name", "Natesclaw Test");
+  git(root, "config", "user.email", "test@natesclaw.invalid");
   writeFileSync(join(root, "fixture.txt"), "main\n");
   git(root, "add", "fixture.txt");
   git(root, "commit", "-m", "main fixture");

@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { selectPreferredLocalModelId } from "openclaw/plugin-sdk/provider-model-shared";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { selectPreferredLocalModelId } from "natesclaw/plugin-sdk/provider-model-shared";
 import { OLLAMA_CLOUD_DEFAULT_MODELS } from "./defaults.js";
 import {
   buildDefaultOllamaCloudModelDefinition,

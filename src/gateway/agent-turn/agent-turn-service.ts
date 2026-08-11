@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -10,7 +10,7 @@ import {
   type MainSessionRecoveryOwnerLease,
 } from "../../agents/main-session-recovery/main-session-recovery-store.js";
 import { mergeSessionEntry, type SessionEntry } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { getAgentEventLifecycleGeneration } from "../../infra/agent-events.js";
 import { normalizeDeliveryContext } from "../../utils/delivery-context.shared.js";
 import { createCronContinuationController } from "../server-methods/agent-cron-continuation.js";
@@ -246,7 +246,7 @@ export function createAgentTurnService({
         | undefined;
       let sessionPersistedBeforeGatewayAdmission = false;
       let bestEffortDeliver = requestedBestEffortDeliver ?? false;
-      let cfgForAgent: OpenClawConfig | undefined;
+      let cfgForAgent: NatesclawConfig | undefined;
       let resolvedSessionKey = requestedSessionKey;
       let resolvedSessionAgentId: string | undefined;
       let isNewSession = false;

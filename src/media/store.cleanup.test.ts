@@ -8,7 +8,7 @@ import {
   MANAGED_OUTGOING_ORIGINALS_SUBDIR,
   readManagedImageRecord,
 } from "../gateway/managed-image-record-store.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { createTempHomeEnv, type TempHomeEnv } from "../test-utils/temp-home.js";
 
 describe("cleanOldMedia managed-subtree retention", () => {
@@ -16,17 +16,17 @@ describe("cleanOldMedia managed-subtree retention", () => {
   let tempHome: TempHomeEnv;
 
   beforeAll(async () => {
-    tempHome = await createTempHomeEnv("openclaw-test-home-");
+    tempHome = await createTempHomeEnv("natesclaw-test-home-");
     store = await import("./store.js");
   });
 
   afterAll(async () => {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await tempHome.restore();
   });
 
   it("cannot delete managed history media or lift the legacy migration barrier", async () => {
-    const stateDir = path.join(tempHome.home, ".openclaw");
+    const stateDir = path.join(tempHome.home, ".natesclaw");
     const mediaDir = await store.ensureMediaDir();
     const inbound = await store.saveMediaBuffer(Buffer.from("inbound"), "image/png");
     const historyOriginal = await store.saveMediaBuffer(

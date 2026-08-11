@@ -1,16 +1,16 @@
 /** Verifies plugin loader behavior for native module loading and resolver hooks. */
 import fs from "node:fs";
 import path from "node:path";
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createTempDirTracker } from "../../test/helpers/temp-dir.js";
 
 const tempDirs = createTempDirTracker();
 
 function writeBundledPluginFixture(id: string) {
-  const pluginRoot = tempDirs.make("openclaw-plugin-loader-");
+  const pluginRoot = tempDirs.make("natesclaw-plugin-loader-");
   fs.writeFileSync(
-    path.join(pluginRoot, "openclaw.plugin.json"),
+    path.join(pluginRoot, "natesclaw.plugin.json"),
     JSON.stringify(
       {
         id,
@@ -34,14 +34,14 @@ function writeBundledPluginFixture(id: string) {
 }
 
 function writePackagedPluginFixture(id: string) {
-  const pluginRoot = tempDirs.make("openclaw-plugin-loader-");
+  const pluginRoot = tempDirs.make("natesclaw-plugin-loader-");
   fs.writeFileSync(
     path.join(pluginRoot, "package.json"),
     JSON.stringify(
       {
         name: id,
         type: "commonjs",
-        openclaw: {
+        natesclaw: {
           extensions: ["./index.cjs"],
         },
       },
@@ -51,7 +51,7 @@ function writePackagedPluginFixture(id: string) {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginRoot, "openclaw.plugin.json"),
+    path.join(pluginRoot, "natesclaw.plugin.json"),
     JSON.stringify(
       {
         id,
@@ -77,7 +77,7 @@ function writePackagedPluginFixture(id: string) {
 afterEach(() => {
   vi.resetModules();
   vi.doUnmock("./plugin-module-loader-cache.js");
-  delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+  delete process.env.NATESCLAW_BUNDLED_PLUGINS_DIR;
   tempDirs.cleanup();
 });
 
@@ -108,15 +108,15 @@ describe("createPluginModuleLoader", () => {
   it("loads bundled JavaScript without creating a module loader", async () => {
     const sourceLoaderCalls = mockSourceLoaderCalls();
 
-    const { loadOpenClawPlugins } = await importFreshModule<typeof import("./loader.js")>(
+    const { loadNatesclawPlugins } = await importFreshModule<typeof import("./loader.js")>(
       import.meta.url,
       "./loader.js?scope=native-module-loader",
     );
 
     const pluginRoot = writeBundledPluginFixture("demo");
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = pluginRoot;
+    process.env.NATESCLAW_BUNDLED_PLUGINS_DIR = pluginRoot;
 
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       cache: false,
       installRecords: {},
       workspaceDir: pluginRoot,
@@ -138,15 +138,15 @@ describe("createPluginModuleLoader", () => {
   it("loads packaged JavaScript without creating a module loader", async () => {
     const sourceLoaderCalls = mockSourceLoaderCalls();
 
-    const { loadOpenClawPlugins } = await importFreshModule<typeof import("./loader.js")>(
+    const { loadNatesclawPlugins } = await importFreshModule<typeof import("./loader.js")>(
       import.meta.url,
       "./loader.js?scope=packaged-native-module-loader",
     );
 
     const pluginRoot = writePackagedPluginFixture("npm-demo");
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tempDirs.make("openclaw-plugin-loader-");
+    process.env.NATESCLAW_BUNDLED_PLUGINS_DIR = tempDirs.make("natesclaw-plugin-loader-");
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       installRecords: {},
       onlyPluginIds: ["npm-demo"],

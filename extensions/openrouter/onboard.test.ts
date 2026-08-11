@@ -2,7 +2,7 @@
 import {
   expectProviderOnboardAllowlistAlias,
   expectProviderOnboardPrimaryAndFallbacks,
-} from "openclaw/plugin-sdk/provider-test-contracts";
+} from "natesclaw/plugin-sdk/provider-test-contracts";
 import { describe, it } from "vitest";
 import {
   applyOpenrouterConfig,

@@ -1,7 +1,7 @@
 import {
   createChannelPartialDeliveryError,
   isChannelPartialDeliveryError,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 import { expect, it } from "vitest";
 import {
   appendAssistantMirrorMessageByIdentity,
@@ -779,7 +779,7 @@ describeTelegramDispatch("dispatchTelegramMessage progress-updates", () => {
         await dispatcherOptions.deliver(
           {
             text: "Fast mode enabled",
-            channelData: { openclawProgressKind: "fast-mode-auto" },
+            channelData: { natesclawProgressKind: "fast-mode-auto" },
           },
           { kind: "tool" },
         );

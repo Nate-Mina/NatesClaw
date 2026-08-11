@@ -7,12 +7,12 @@ import {
   SessionDeliveryDeadLetteredError,
   SessionDeliveryDeferredError,
 } from "../../../infra/session-delivery-queue-storage.js";
-import { resolvePreferredOpenClawTmpDir } from "../../../infra/tmp-openclaw-dir.js";
+import { resolvePreferredNatesclawTmpDir } from "../../../infra/tmp-natesclaw-dir.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabase,
-} from "../../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabase,
+} from "../../../state/natesclaw-state-db.js";
 import { ensureTaskRegistryReady, getTaskById } from "../../../tasks/runtime-internal.js";
 import { publishTaskRecordAfterAtomicStore } from "../../../tasks/task-registry.js";
 import type { TaskRecord } from "../../../tasks/task-registry.types.js";
@@ -42,17 +42,17 @@ vi.mock("../registry/subagent-registry.js", () => ({ resumeSubagentRun }));
 
 describe("atomic subagent completion admission store", () => {
   let tempDir: string;
-  let database: OpenClawStateDatabase;
+  let database: NatesclawStateDatabase;
 
   beforeEach(() => {
-    tempDir = tempDirs.make("openclaw-subagent-admission-", resolvePreferredOpenClawTmpDir());
-    database = openOpenClawStateDatabase({ path: path.join(tempDir, "state.sqlite") });
+    tempDir = tempDirs.make("natesclaw-subagent-admission-", resolvePreferredNatesclawTmpDir());
+    database = openNatesclawStateDatabase({ path: path.join(tempDir, "state.sqlite") });
   });
 
   afterEach(() => {
     subagentRuns.clear();
     resetTaskRegistryForTests({ persist: false });
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
   });
 
   function records() {
@@ -241,9 +241,9 @@ describe("atomic subagent completion admission store", () => {
   });
 
   it("reloads a blocked text completion from SQLite before canonical owner redrive", async () => {
-    await withEnvAsync({ OPENCLAW_STATE_DIR: tempDir }, async () => {
-      closeOpenClawStateDatabaseForTest();
-      database = openOpenClawStateDatabase();
+    await withEnvAsync({ NATESCLAW_STATE_DIR: tempDir }, async () => {
+      closeNatesclawStateDatabaseForTest();
+      database = openNatesclawStateDatabase();
       const input = records();
       const now = Date.now();
       input.subagent.delivery = {
@@ -300,8 +300,8 @@ describe("atomic subagent completion admission store", () => {
 
       resetTaskRegistryForTests({ persist: false });
       subagentRuns.clear();
-      closeOpenClawStateDatabaseForTest();
-      database = openOpenClawStateDatabase();
+      closeNatesclawStateDatabaseForTest();
+      database = openNatesclawStateDatabase();
       for (const [runId, entry] of loadSubagentRegistryFromSqlite()) {
         subagentRuns.set(runId, entry);
       }

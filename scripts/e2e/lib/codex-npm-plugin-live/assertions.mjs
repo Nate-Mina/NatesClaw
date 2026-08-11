@@ -18,33 +18,33 @@ import {
 
 const command = process.argv[2];
 const allowBetaCompatDiagnostics =
-  process.env.OPENCLAW_CODEX_NPM_PLUGIN_ALLOW_BETA_COMPAT_DIAGNOSTICS === "1";
+  process.env.NATESCLAW_CODEX_NPM_PLUGIN_ALLOW_BETA_COMPAT_DIAGNOSTICS === "1";
 const sessionStoreContract =
-  process.env.OPENCLAW_CODEX_NPM_PLUGIN_SESSION_STORE_CONTRACT || "sqlite";
+  process.env.NATESCLAW_CODEX_NPM_PLUGIN_SESSION_STORE_CONTRACT || "sqlite";
 const bindingStoreContract =
-  process.env.OPENCLAW_CODEX_NPM_PLUGIN_BINDING_STORE_CONTRACT || "plugin-kv";
+  process.env.NATESCLAW_CODEX_NPM_PLUGIN_BINDING_STORE_CONTRACT || "plugin-kv";
 const MAX_TEXT_FILE_BYTES = readPositiveIntEnv(
-  "OPENCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TEXT_FILE_BYTES",
+  "NATESCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TEXT_FILE_BYTES",
   1024 * 1024,
 );
 const MAX_ERROR_TAIL_BYTES = readPositiveIntEnv(
-  "OPENCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_ERROR_TAIL_BYTES",
+  "NATESCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_ERROR_TAIL_BYTES",
   64 * 1024,
 );
 const MAX_TRANSCRIPT_FILES = readPositiveIntEnv(
-  "OPENCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TRANSCRIPT_FILES",
+  "NATESCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TRANSCRIPT_FILES",
   64,
 );
 const MAX_TRANSCRIPT_WALK_ENTRIES = readPositiveIntEnv(
-  "OPENCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TRANSCRIPT_WALK_ENTRIES",
+  "NATESCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TRANSCRIPT_WALK_ENTRIES",
   4096,
 );
 const MAX_TRANSCRIPT_SCAN_BYTES = readPositiveIntEnv(
-  "OPENCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TRANSCRIPT_SCAN_BYTES",
+  "NATESCLAW_CODEX_NPM_PLUGIN_ASSERT_MAX_TRANSCRIPT_SCAN_BYTES",
   2 * 1024 * 1024,
 );
 const AGENT_TURN_TIMEOUT_SECONDS = readPositiveIntEnv(
-  "OPENCLAW_CODEX_NPM_PLUGIN_AGENT_TIMEOUT_SECONDS",
+  "NATESCLAW_CODEX_NPM_PLUGIN_AGENT_TIMEOUT_SECONDS",
   420,
 );
 const CODEX_BINDING_NAMESPACE = "app-server-thread-bindings";
@@ -102,13 +102,13 @@ function readCodexBinding(sessionId, sessionKey, entry) {
   }
   if (bindingStoreContract !== "plugin-kv") {
     throw new Error(
-      `OPENCLAW_CODEX_NPM_PLUGIN_BINDING_STORE_CONTRACT must be plugin-kv or legacy-sidecar; got ${bindingStoreContract}`,
+      `NATESCLAW_CODEX_NPM_PLUGIN_BINDING_STORE_CONTRACT must be plugin-kv or legacy-sidecar; got ${bindingStoreContract}`,
     );
   }
 
-  const dbPath = path.join(stateDir(), "state", "openclaw.sqlite");
+  const dbPath = path.join(stateDir(), "state", "natesclaw.sqlite");
   if (!fs.existsSync(dbPath)) {
-    throw new Error(`missing OpenClaw state database: ${dbPath}`);
+    throw new Error(`missing Natesclaw state database: ${dbPath}`);
   }
   const db = new DatabaseSync(dbPath, { readOnly: true });
   try {
@@ -153,25 +153,25 @@ function readLegacySessionEntry(sessionId) {
   }
   const [sessionKey, entry] = sessionMatch;
   if (typeof entry.sessionFile !== "string" || !fs.existsSync(entry.sessionFile)) {
-    throw new Error(`missing OpenClaw session file: ${entry.sessionFile}`);
+    throw new Error(`missing Natesclaw session file: ${entry.sessionFile}`);
   }
   const transcriptLines = readTextFileBounded(
     entry.sessionFile,
-    "OpenClaw legacy session transcript",
+    "Natesclaw legacy session transcript",
     Math.min(MAX_TEXT_FILE_BYTES, MAX_TRANSCRIPT_SCAN_BYTES),
   )
     .split("\n")
     .filter((line) => line.trim());
   if (transcriptLines.length > MAX_TRANSCRIPT_WALK_ENTRIES) {
     throw new Error(
-      `OpenClaw transcript exceeded ${MAX_TRANSCRIPT_WALK_ENTRIES} events for ${sessionId}`,
+      `Natesclaw transcript exceeded ${MAX_TRANSCRIPT_WALK_ENTRIES} events for ${sessionId}`,
     );
   }
   const transcriptEvents = transcriptLines.map((line, index) => {
     try {
       return JSON.parse(line);
     } catch {
-      throw new Error(`invalid OpenClaw legacy transcript event ${index + 1} for ${sessionId}`);
+      throw new Error(`invalid Natesclaw legacy transcript event ${index + 1} for ${sessionId}`);
     }
   });
   return {
@@ -188,10 +188,10 @@ function readSessionEntry(sessionId) {
   }
   if (sessionStoreContract !== "sqlite") {
     throw new Error(
-      `OPENCLAW_CODEX_NPM_PLUGIN_SESSION_STORE_CONTRACT must be sqlite or legacy-json; got ${sessionStoreContract}`,
+      `NATESCLAW_CODEX_NPM_PLUGIN_SESSION_STORE_CONTRACT must be sqlite or legacy-json; got ${sessionStoreContract}`,
     );
   }
-  const dbPath = path.join(stateDir(), "agents", "main", "agent", "openclaw-agent.sqlite");
+  const dbPath = path.join(stateDir(), "agents", "main", "agent", "natesclaw-agent.sqlite");
   if (!fs.existsSync(dbPath)) {
     throw new Error(`missing agent session database: ${dbPath}`);
   }
@@ -227,16 +227,16 @@ function readSessionEntry(sessionId) {
         !Number.isSafeInteger(transcriptSummary.event_count) ||
         !Number.isSafeInteger(transcriptSummary.transcript_bytes)
       ) {
-        throw new Error(`invalid OpenClaw transcript summary for ${sessionId}`);
+        throw new Error(`invalid Natesclaw transcript summary for ${sessionId}`);
       }
       if (transcriptSummary.event_count > MAX_TRANSCRIPT_WALK_ENTRIES) {
         throw new Error(
-          `OpenClaw transcript exceeded ${MAX_TRANSCRIPT_WALK_ENTRIES} events for ${sessionId}`,
+          `Natesclaw transcript exceeded ${MAX_TRANSCRIPT_WALK_ENTRIES} events for ${sessionId}`,
         );
       }
       if (transcriptSummary.transcript_bytes > MAX_TRANSCRIPT_SCAN_BYTES) {
         throw new Error(
-          `OpenClaw transcript exceeded ${MAX_TRANSCRIPT_SCAN_BYTES} bytes for ${sessionId}`,
+          `Natesclaw transcript exceeded ${MAX_TRANSCRIPT_SCAN_BYTES} bytes for ${sessionId}`,
         );
       }
       const transcriptRows = db
@@ -250,12 +250,12 @@ function readSessionEntry(sessionId) {
       let transcriptBytes = 0;
       const transcriptEvents = transcriptRows.map((transcriptRow) => {
         if (typeof transcriptRow.event_json !== "string") {
-          throw new Error(`invalid OpenClaw transcript event for ${sessionId}`);
+          throw new Error(`invalid Natesclaw transcript event for ${sessionId}`);
         }
         transcriptBytes += Buffer.byteLength(transcriptRow.event_json);
         if (transcriptBytes > MAX_TRANSCRIPT_SCAN_BYTES) {
           throw new Error(
-            `OpenClaw transcript exceeded ${MAX_TRANSCRIPT_SCAN_BYTES} bytes for ${sessionId}`,
+            `Natesclaw transcript exceeded ${MAX_TRANSCRIPT_SCAN_BYTES} bytes for ${sessionId}`,
           );
         }
         return JSON.parse(transcriptRow.event_json);
@@ -363,9 +363,9 @@ function normalizePluginSpec(spec) {
 }
 
 function assertPlugin() {
-  const spec = process.argv[3] || "npm:@openclaw/codex";
-  const list = readJson("/tmp/openclaw-codex-plugins-list.json");
-  const inspect = readJson("/tmp/openclaw-codex-plugin-inspect.json");
+  const spec = process.argv[3] || "npm:@natesclaw/codex";
+  const list = readJson("/tmp/natesclaw-codex-plugins-list.json");
+  const inspect = readJson("/tmp/natesclaw-codex-plugin-inspect.json");
   const plugin = (list.plugins || []).find((entry) => entry.id === "codex");
   if (!plugin) {
     throw new Error("codex plugin not found in plugins list --json output");
@@ -439,7 +439,7 @@ function codexInstallPath() {
 }
 
 function codexNpmProjectRoot() {
-  return npmProjectRootForInstalledPackage(codexInstallPath(), "@openclaw/codex");
+  return npmProjectRootForInstalledPackage(codexInstallPath(), "@natesclaw/codex");
 }
 
 function findCodexPackageJson(packageName) {
@@ -452,19 +452,19 @@ function assertNpmDeps() {
   const installPath = codexInstallPath();
   const pluginPackageJson = path.join(installPath, "package.json");
   if (!fs.existsSync(pluginPackageJson)) {
-    throw new Error(`missing npm-installed @openclaw/codex package.json: ${pluginPackageJson}`);
+    throw new Error(`missing npm-installed @natesclaw/codex package.json: ${pluginPackageJson}`);
   }
   assertPathInside(npmRoot, installPath, "codex plugin install path");
   assertPathInside(npmRoot, pluginPackageJson, "codex plugin package");
 
   const pluginPackage = readJson(pluginPackageJson);
-  if (pluginPackage.name !== "@openclaw/codex") {
+  if (pluginPackage.name !== "@natesclaw/codex") {
     throw new Error(`unexpected codex package name: ${pluginPackage.name}`);
   }
 
   const openAiCodexPackageJson = findCodexPackageJson("@openai/codex");
   if (!openAiCodexPackageJson) {
-    throw new Error("missing @openai/codex dependency under .openclaw/npm");
+    throw new Error("missing @openai/codex dependency under .natesclaw/npm");
   }
   assertPathInside(npmRoot, openAiCodexPackageJson, "@openai/codex dependency");
 
@@ -511,7 +511,7 @@ function printCodexBin() {
 
 function assertPreflight() {
   const marker = process.argv[3];
-  const output = readTextFileBounded("/tmp/openclaw-codex-preflight.log", "Codex preflight log");
+  const output = readTextFileBounded("/tmp/natesclaw-codex-preflight.log", "Codex preflight log");
   if (!output.includes(marker)) {
     throw new Error(`Codex CLI preflight did not contain ${marker}:\n${output}`);
   }
@@ -580,7 +580,7 @@ function assertNativeCodexSessionEvidence(params) {
   return matchingEvidence;
 }
 
-function extractOpenClawToolTimeline(transcriptEvents) {
+function extractNatesclawToolTimeline(transcriptEvents) {
   const timeline = [];
   for (const event of transcriptEvents) {
     const message = event?.type === "message" ? event.message : undefined;
@@ -640,7 +640,7 @@ function findToolResult(timeline, call, beforeIndex = Number.POSITIVE_INFINITY) 
 }
 
 function assertFollowthroughTranscript({ transcriptEvents, progressMarker, completeMarker }) {
-  const timeline = extractOpenClawToolTimeline(transcriptEvents);
+  const timeline = extractNatesclawToolTimeline(transcriptEvents);
   const markerCalls = timeline.flatMap((entry) => {
     if (entry.type !== "call" || entry.name !== "message") {
       return [];
@@ -744,13 +744,13 @@ function assertFollowthroughTranscript({ transcriptEvents, progressMarker, compl
 }
 
 function assertAgentTurnEvidence({ marker, sessionId, modelRef, stdoutPath, stderrPath }) {
-  const stdout = readTextFileBounded(stdoutPath, "OpenClaw agent JSON");
-  const stderr = readTextFileTail(stderrPath, "OpenClaw agent stderr");
+  const stdout = readTextFileBounded(stdoutPath, "Natesclaw agent JSON");
+  const stderr = readTextFileTail(stderrPath, "Natesclaw agent stderr");
   const response = JSON.parse(stdout);
   const text = extractAgentReplyTexts(JSON.stringify(response)).join("\n");
   if (!text.includes(marker)) {
     throw new Error(
-      `OpenClaw agent reply did not contain ${marker}:\nstdout=${stdout}\nstderr=${stderr}`,
+      `Natesclaw agent reply did not contain ${marker}:\nstdout=${stdout}\nstderr=${stderr}`,
     );
   }
   const expectedProvider = modelRef.split("/")[0] || "codex";
@@ -769,7 +769,7 @@ function assertAgentTurnEvidence({ marker, sessionId, modelRef, stdoutPath, stde
     throw new Error(`unexpected session model override: ${entry.modelOverride}`);
   }
   if (!Number.isSafeInteger(transcriptEventCount) || transcriptEventCount < 1) {
-    throw new Error(`missing OpenClaw transcript events for ${sessionId}`);
+    throw new Error(`missing Natesclaw transcript events for ${sessionId}`);
   }
 
   const binding = readCodexBinding(sessionId, sessionKey, entry);
@@ -809,8 +809,8 @@ function assertAgentTurn() {
     marker: process.argv[3],
     sessionId: process.argv[4],
     modelRef: process.argv[5],
-    stdoutPath: "/tmp/openclaw-codex-agent.json",
-    stderrPath: "/tmp/openclaw-codex-agent.err",
+    stdoutPath: "/tmp/natesclaw-codex-agent.json",
+    stderrPath: "/tmp/natesclaw-codex-agent.err",
   });
 }
 
@@ -825,9 +825,9 @@ function assertFollowthrough() {
     throw new Error(`expected three follow-through input paths, got ${inputPaths.length}`);
   }
 
-  const stdoutPath = "/tmp/openclaw-codex-followthrough.json";
-  const stderrPath = "/tmp/openclaw-codex-followthrough.err";
-  const response = JSON.parse(readTextFileBounded(stdoutPath, "OpenClaw follow-through JSON"));
+  const stdoutPath = "/tmp/natesclaw-codex-followthrough.json";
+  const stderrPath = "/tmp/natesclaw-codex-followthrough.err";
+  const response = JSON.parse(readTextFileBounded(stdoutPath, "Natesclaw follow-through JSON"));
   const replyTexts = (response.payloads || [])
     .map((payload) => (payload && typeof payload.text === "string" ? payload.text.trim() : ""))
     .filter(Boolean);
@@ -871,7 +871,7 @@ function assertUninstalled() {
       `codex install record still exists after uninstall: ${JSON.stringify(records.codex)}`,
     );
   }
-  const list = readJson("/tmp/openclaw-codex-plugins-list-after-uninstall.json");
+  const list = readJson("/tmp/natesclaw-codex-plugins-list-after-uninstall.json");
   const plugin = (list.plugins || []).find((entry) => entry.id === "codex");
   if (plugin?.status === "loaded" || plugin?.enabled === true) {
     throw new Error(`codex plugin still loaded/enabled after uninstall: ${JSON.stringify(plugin)}`);
@@ -889,18 +889,18 @@ function assertAgentError() {
   const status = Number(process.argv[3]);
   if (!Number.isInteger(status) || status === 0) {
     throw new Error(
-      `expected OpenClaw agent to fail after Codex uninstall, got status ${process.argv[3]}`,
+      `expected Natesclaw agent to fail after Codex uninstall, got status ${process.argv[3]}`,
     );
   }
-  const stdout = fs.existsSync("/tmp/openclaw-codex-agent-after-uninstall.json")
+  const stdout = fs.existsSync("/tmp/natesclaw-codex-agent-after-uninstall.json")
     ? readTextFileTail(
-        "/tmp/openclaw-codex-agent-after-uninstall.json",
+        "/tmp/natesclaw-codex-agent-after-uninstall.json",
         "post-uninstall agent stdout",
       )
     : "";
-  const stderr = fs.existsSync("/tmp/openclaw-codex-agent-after-uninstall.err")
+  const stderr = fs.existsSync("/tmp/natesclaw-codex-agent-after-uninstall.err")
     ? readTextFileTail(
-        "/tmp/openclaw-codex-agent-after-uninstall.err",
+        "/tmp/natesclaw-codex-agent-after-uninstall.err",
         "post-uninstall agent stderr",
       )
     : "";

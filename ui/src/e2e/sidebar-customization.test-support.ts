@@ -16,12 +16,12 @@ export function createSidebarCustomizationSuite(name: string) {
     name,
     trackBrowserContexts: true,
     unavailableMessage: (executablePath) =>
-      `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+      `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
   });
 }
 
 export async function captureSidebarUiProof(page: Page, fileName: string): Promise<void> {
-  if (process.env.OPENCLAW_CAPTURE_UI_PROOF !== "1") {
+  if (process.env.NATESCLAW_CAPTURE_UI_PROOF !== "1") {
     return;
   }
   await mkdir(sidebarProofArtifactDir, { recursive: true });
@@ -36,7 +36,7 @@ export async function captureSettingsSidebarUiProof(
   sidebar: Locator,
   fileName: string,
 ): Promise<void> {
-  if (process.env.OPENCLAW_CAPTURE_UI_PROOF !== "1") {
+  if (process.env.NATESCLAW_CAPTURE_UI_PROOF !== "1") {
     return;
   }
   await mkdir(sidebarProofArtifactDir, { recursive: true });
@@ -57,6 +57,6 @@ export async function openSidebarCustomizationPage(
   const page = await context.newPage();
   await installMockGateway(page);
   await page.goto(`${suite.server.baseUrl}chat`);
-  await page.waitForFunction(() => Boolean(customElements.get("openclaw-lobster-pet")));
+  await page.waitForFunction(() => Boolean(customElements.get("natesclaw-lobster-pet")));
   return { context, page };
 }

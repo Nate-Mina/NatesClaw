@@ -1,7 +1,7 @@
 // Pure plugin config cleanup shared by doctor repair and full uninstall flows.
 import { realpathSync } from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resetPluginSlotsToDefaults } from "./slots.js";
 
 export type PluginConfigUninstallActions = {
@@ -76,10 +76,10 @@ function loadPathMatchesInstallPath(loadPath: string, installPath: string): bool
 
 /** Remove plugin references from config without loading uninstall process/runtime dependencies. */
 export function removePluginFromConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   pluginId: string,
   opts?: { channelIds?: string[] },
-): { config: OpenClawConfig; actions: PluginConfigUninstallActions } {
+): { config: NatesclawConfig; actions: PluginConfigUninstallActions } {
   const actions = createEmptyConfigUninstallActions();
   const pluginsConfig = cfg.plugins ?? {};
 
@@ -185,7 +185,7 @@ export function removePluginFromConfig(
     config: {
       ...cfg,
       plugins: Object.keys(cleanedPlugins).length > 0 ? cleanedPlugins : undefined,
-      channels: channels as OpenClawConfig["channels"],
+      channels: channels as NatesclawConfig["channels"],
     },
     actions,
   };

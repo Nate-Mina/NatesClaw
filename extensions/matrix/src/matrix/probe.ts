@@ -1,9 +1,9 @@
 // Matrix plugin module implements probe behavior.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { PinnedDispatcherPolicy } from "openclaw/plugin-sdk/ssrf-dispatcher";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { runChannelProbe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { PinnedDispatcherPolicy } from "natesclaw/plugin-sdk/ssrf-dispatcher";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { runChannelProbe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { SsrFPolicy } from "../runtime-api.js";
 import type { BaseProbeResult } from "../runtime-api.js";
 import { isBunRuntime } from "./client/runtime.js";

@@ -5,7 +5,7 @@ import {
   startQaBusServer,
   startQaGatewayChild,
 } from "../../../../extensions/qa-lab/api.js";
-import type { OpenClawConfig } from "../../../../src/config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../../src/config/types.natesclaw.js";
 import { createQaScriptEvidenceWriter } from "./script-evidence.js";
 
 const SOURCE_PATH = "test/e2e/qa-lab/runtime/gateway-rpc-account-health.ts";
@@ -37,7 +37,7 @@ function sleep(ms: number) {
   });
 }
 
-export function withSiblingAccount(config: OpenClawConfig, baseUrl?: string): OpenClawConfig {
+export function withSiblingAccount(config: NatesclawConfig, baseUrl?: string): NatesclawConfig {
   const channel = config.channels?.[CHANNEL_ID] as Record<string, unknown> | undefined;
   return {
     ...config,
@@ -48,8 +48,8 @@ export function withSiblingAccount(config: OpenClawConfig, baseUrl?: string): Op
         ...(baseUrl && {
           enabled: true,
           baseUrl,
-          botUserId: "openclaw",
-          botDisplayName: "OpenClaw QA",
+          botUserId: "natesclaw",
+          botDisplayName: "Natesclaw QA",
           allowFrom: ["*"],
           pollTimeoutMs: 250,
         }),

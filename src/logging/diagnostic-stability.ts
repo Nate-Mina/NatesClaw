@@ -183,10 +183,10 @@ function createState(capacity = DEFAULT_DIAGNOSTIC_STABILITY_CAPACITY): Diagnost
 
 function getDiagnosticStabilityState(): DiagnosticStabilityState {
   const globalStore = globalThis as typeof globalThis & {
-    __openclawDiagnosticStabilityState?: DiagnosticStabilityState;
+    __natesclawDiagnosticStabilityState?: DiagnosticStabilityState;
   };
-  globalStore["__openclawDiagnosticStabilityState"] ??= createState();
-  return globalStore["__openclawDiagnosticStabilityState"];
+  globalStore["__natesclawDiagnosticStabilityState"] ??= createState();
+  return globalStore["__natesclawDiagnosticStabilityState"];
 }
 
 function copyMemory(memory: DiagnosticMemoryUsage): DiagnosticMemoryUsage {
@@ -924,8 +924,8 @@ export function resetDiagnosticStabilityRecorderForTest(): void {
   state.unsubscribe?.();
   const next = createState(state.capacity);
   const globalStore = globalThis as typeof globalThis & {
-    __openclawDiagnosticStabilityState?: DiagnosticStabilityState;
+    __natesclawDiagnosticStabilityState?: DiagnosticStabilityState;
   };
-  globalStore["__openclawDiagnosticStabilityState"] = next;
+  globalStore["__natesclawDiagnosticStabilityState"] = next;
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

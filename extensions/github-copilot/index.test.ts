@@ -2,22 +2,22 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   clearRuntimeAuthProfileStoreSnapshots,
   ensureAuthProfileStore,
   saveAuthProfileStore,
-} from "openclaw/plugin-sdk/agent-runtime";
-import { MAX_DATE_TIMESTAMP_MS, MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/agent-runtime";
+import { MAX_DATE_TIMESTAMP_MS, MAX_TIMER_TIMEOUT_MS } from "natesclaw/plugin-sdk/number-runtime";
 import type {
-  OpenClawConfig,
-  OpenClawPluginApi,
+  NatesclawConfig,
+  NatesclawPluginApi,
   ProviderAuthResult,
   ProviderCatalogResult,
   UnifiedModelCatalogEntry,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import type { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
+import type { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { runGitHubCopilotDeviceFlow } from "./login.js";
 
@@ -35,9 +35,9 @@ function requireAuthMethod<T>(methods: readonly T[], index: number): T {
   return expectDefined(methods[index], `GitHub Copilot auth method ${index}`);
 }
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/ssrf-runtime")>(
-    "openclaw/plugin-sdk/ssrf-runtime",
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/ssrf-runtime")>(
+    "natesclaw/plugin-sdk/ssrf-runtime",
   );
   return {
     ...actual,
@@ -56,13 +56,13 @@ import plugin from "./index.js";
 
 const tempDirs: string[] = [];
 type RegisteredMemoryEmbeddingProvider = Parameters<
-  OpenClawPluginApi["registerMemoryEmbeddingProvider"]
+  NatesclawPluginApi["registerMemoryEmbeddingProvider"]
 >[0];
-type RegisteredProvider = Parameters<OpenClawPluginApi["registerProvider"]>[0];
+type RegisteredProvider = Parameters<NatesclawPluginApi["registerProvider"]>[0];
 type GithubCopilotTestProvider = RegisteredProvider & {
   auth: Array<{
     run: (ctx: unknown) => Promise<ProviderAuthResult | null>;
-    runNonInteractive: (ctx: unknown) => Promise<OpenClawConfig | null>;
+    runNonInteractive: (ctx: unknown) => Promise<NatesclawConfig | null>;
   }>;
   catalog: {
     run: (ctx: unknown) => Promise<ProviderCatalogResult>;
@@ -95,7 +95,7 @@ afterAll(() => {
 });
 
 async function createAgentDir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-github-copilot-test-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-github-copilot-test-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -138,9 +138,9 @@ function requireFirstMockArg<T>(
 }
 
 function registerProviderAndCatalogWithPluginConfig(pluginConfig: Record<string, unknown>) {
-  const registerProviderMock = vi.fn<OpenClawPluginApi["registerProvider"]>();
+  const registerProviderMock = vi.fn<NatesclawPluginApi["registerProvider"]>();
   const registerModelCatalogProviderMock =
-    vi.fn<OpenClawPluginApi["registerModelCatalogProvider"]>();
+    vi.fn<NatesclawPluginApi["registerModelCatalogProvider"]>();
 
   plugin.register(
     createTestPluginApi({
@@ -369,7 +369,7 @@ describe("github-copilot plugin", () => {
 
   it("registers embedding provider", () => {
     const registerMemoryEmbeddingProviderMock =
-      vi.fn<OpenClawPluginApi["registerMemoryEmbeddingProvider"]>();
+      vi.fn<NatesclawPluginApi["registerMemoryEmbeddingProvider"]>();
 
     plugin.register(
       createTestPluginApi({
@@ -896,7 +896,7 @@ describe("github-copilot plugin", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       const profileContext = {
         config,
         agentDir,

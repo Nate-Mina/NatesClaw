@@ -1,10 +1,10 @@
 // Ollama setup runtime handles plugin onboarding behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
 import type {
-  OpenClawConfig,
+  NatesclawConfig,
   SecretInput,
   SecretInputMode,
-} from "openclaw/plugin-sdk/provider-auth";
+} from "natesclaw/plugin-sdk/provider-auth";
 import {
   ensureApiKeyFromOptionEnvOrPrompt,
   isNonSecretApiKeyMarker,
@@ -12,12 +12,12 @@ import {
   normalizeOptionalSecretInput,
   upsertAuthProfileWithLock,
   validateApiKeyInput,
-} from "openclaw/plugin-sdk/provider-auth";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
-import { applyAgentDefaultModelPrimary } from "openclaw/plugin-sdk/provider-onboard";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import { WizardCancelledError, type WizardPrompter } from "openclaw/plugin-sdk/setup";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/provider-auth";
+import { readProviderJsonResponse } from "natesclaw/plugin-sdk/provider-http";
+import { applyAgentDefaultModelPrimary } from "natesclaw/plugin-sdk/provider-onboard";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+import { WizardCancelledError, type WizardPrompter } from "natesclaw/plugin-sdk/setup";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   OLLAMA_CLOUD_BASE_URL,
   OLLAMA_CLOUD_DEFAULT_MODELS,
@@ -65,7 +65,7 @@ type OllamaSetupOptions = {
 };
 
 type OllamaSetupResult = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   credential: SecretInput;
   credentialMode?: SecretInputMode;
   defaultModel?: string;
@@ -93,7 +93,7 @@ function buildOllamaUnreachableLines(baseUrl: string, retry: boolean): string[] 
     `Ollama could not be reached at ${baseUrl}.`,
     "Start or restart the Ollama server for this address.",
     "If Ollama is not installed on that machine, download it at https://ollama.com/download",
-    ...(retry ? ["", "Continue when it is running. OpenClaw will retry this address."] : []),
+    ...(retry ? ["", "Continue when it is running. Natesclaw will retry this address."] : []),
   ];
 }
 
@@ -145,7 +145,7 @@ export async function checkOllamaCloudAuth(
 }
 
 async function promptForOllamaCloudCredential(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   opts?: Record<string, unknown>;
   prompter: WizardPrompter;
@@ -198,13 +198,13 @@ async function promptForOllamaCloudCredential(params: {
 }
 
 function applyOllamaProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   baseUrl: string,
   modelNames: string[],
   discoveredModelsByName?: Map<string, OllamaModelWithContext>,
   apiKey: SecretInput = "OLLAMA_API_KEY",
   defaultModels: readonly OllamaCloudDefaultModel[] = [],
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     ...cfg,
     models: {
@@ -271,7 +271,7 @@ async function resolveHostBackedSuggestedModelNames(params: {
 }
 
 async function promptAndConfigureHostBackedOllama(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   mode: HostBackedOllamaInteractiveMode;
   prompter: WizardPrompter;
   env?: NodeJS.ProcessEnv;
@@ -396,7 +396,7 @@ async function promptAndConfigureHostBackedOllama(params: {
 }
 
 export async function promptAndConfigureOllama(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   opts?: Record<string, unknown>;
   prompter: WizardPrompter;
@@ -459,11 +459,11 @@ export async function promptAndConfigureOllama(params: {
 }
 
 export async function configureOllamaNonInteractive(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   opts: OllamaSetupOptions;
   runtime: RuntimeEnv;
   agentDir?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   const baseUrl = resolveOllamaApiBase(
     (params.opts.customBaseUrl?.trim() || resolveOllamaSetupDefaultBaseUrl()).replace(/\/+$/, ""),
   );
@@ -568,7 +568,7 @@ export async function configureOllamaNonInteractive(params: {
 }
 
 export async function ensureOllamaModelPulled(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   model: string;
   prompter: WizardPrompter;
 }): Promise<void> {

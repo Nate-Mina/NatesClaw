@@ -107,13 +107,13 @@ suite.define(() => {
       const main = page.getByRole("main");
       const openModelSelect = async () => {
         const trigger = main.locator(
-          'openclaw-chat-pane[aria-hidden="false"] [data-chat-model-select="true"]',
+          'natesclaw-chat-pane[aria-hidden="false"] [data-chat-model-select="true"]',
         );
         await trigger.waitFor({ state: "visible", timeout: 10_000 });
         return trigger;
       };
       const selectModel = async (value: string) => {
-        const activePane = main.locator('openclaw-chat-pane[aria-hidden="false"]');
+        const activePane = main.locator('natesclaw-chat-pane[aria-hidden="false"]');
         await activePane.locator('[data-chat-model-select="true"]').click();
         const option = activePane.locator(`[data-chat-model-option="${value}"]`);
         await option.waitFor({ state: "visible", timeout: 10_000 });
@@ -269,7 +269,7 @@ suite.define(() => {
   });
 
   it("shows one canonical default model with matching inherited reasoning", async () => {
-    const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+    const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
     const context = await suite.newBrowserContext({
       locale: "en-US",
       serviceWorkers: "block",
@@ -348,7 +348,7 @@ suite.define(() => {
     try {
       await page.goto(`${suite.server.baseUrl}chat`);
       const main = page.getByRole("main");
-      const activePane = main.locator('openclaw-chat-pane[aria-hidden="false"]');
+      const activePane = main.locator('natesclaw-chat-pane[aria-hidden="false"]');
       const modelSelect = activePane.locator('[data-chat-model-select="true"]');
       const effortSelect = activePane.locator('[data-chat-thinking-select="true"]');
       const thinkingSlider = activePane.locator('[data-chat-thinking-slider="true"]');
@@ -661,7 +661,7 @@ suite.define(() => {
       });
       await expect.poll(() => page.getByText(/not supported for/u).count()).toBe(0);
 
-      const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+      const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
       if (artifactDir) {
         await page.screenshot({
           path: `${artifactDir}/model-thinking-sync.png`,

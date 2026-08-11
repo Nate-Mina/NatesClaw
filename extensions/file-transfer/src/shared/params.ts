@@ -1,8 +1,8 @@
 // Shared param-validation helpers used by all four agent tools.
 // Goal: identical validation behavior + identical error shapes everywhere.
 
-import { formatByteSize } from "openclaw/plugin-sdk/number-runtime";
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
+import { formatByteSize } from "natesclaw/plugin-sdk/number-runtime";
+import { readPositiveIntegerParam } from "natesclaw/plugin-sdk/param-readers";
 
 type GatewayCallOptions = {
   gatewayUrl?: string;

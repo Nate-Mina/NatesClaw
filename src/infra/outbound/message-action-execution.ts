@@ -1,5 +1,5 @@
-import { asOptionalRecord as asResultRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asOptionalRecord as asResultRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { ErrorCodes } from "../../../packages/gateway-protocol/src/schema/error-codes.js";
 import { stripPlainTextToolCallBlocks } from "../../../packages/tool-call-repair/src/index.js";
 import {
@@ -15,7 +15,7 @@ import type {
   ChannelPlugin,
   ChannelThreadingToolContext,
 } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { normalizeMessagePresentation } from "../../interactive/payload.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { readBooleanParam } from "../../plugin-sdk/boolean-param.js";
@@ -60,7 +60,7 @@ const loadMessageActionGatewayRuntime = createLazyRuntimeModule(
 export function annotateSourceDelivery<T extends MessageActionResult>(
   result: T,
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     actionParams: Record<string, unknown>;
     channel: ChannelId;
     accountId?: string | null;
@@ -250,7 +250,7 @@ function applyCrossContextMessageDecoration({
 }
 
 export async function applyMessageCrossContextMarker(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: ChannelId;
   action: ChannelMessageActionName;
   target: string;
@@ -284,7 +284,7 @@ export async function applyMessageCrossContextMarker(params: {
 }
 
 export async function executeGatewayAction(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   params: Record<string, unknown>;
   channel: ChannelId;
   channelPlugin?: ChannelPlugin;

@@ -1,5 +1,5 @@
-import { asOptionalRecord as readRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asOptionalRecord as readRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   createAccountCronScheduledToolPolicy,
   normalizeCronScheduledToolPolicy,

@@ -1,17 +1,17 @@
 // Inworld provider module implements model/runtime integration.
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderOverrides,
   SpeechProviderPlugin,
-} from "openclaw/plugin-sdk/speech-core";
+} from "natesclaw/plugin-sdk/speech-core";
 import {
   parseSpeechDirectiveNumberOverride,
   resolveSpeechProviderApiKey,
   trimToUndefined,
-} from "openclaw/plugin-sdk/speech-core";
-import { asFiniteNumberInRange, asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/speech-core";
+import { asFiniteNumberInRange, asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   DEFAULT_INWORLD_MODEL_ID,
   DEFAULT_INWORLD_VOICE_ID,

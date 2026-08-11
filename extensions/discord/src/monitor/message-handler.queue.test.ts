@@ -1,7 +1,7 @@
 // Discord tests cover message handler.queue plugin behavior.
 import { getEventListeners } from "node:events";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DiscordIngressLifecycle } from "./ingress.js";
 import { createDiscordMessageHandler as createDurableDiscordMessageHandler } from "./message-handler.js";
@@ -78,7 +78,7 @@ function createPreflightContext(channelId = "ch-1") {
     token: "test-token",
     groupPolicy: "allowlist" as const,
   };
-  const cfg: OpenClawConfig = {
+  const cfg: NatesclawConfig = {
     channels: {
       discord: discordConfig,
     },

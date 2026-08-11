@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import {
   WORKER_PROTOCOL_MAX_INFERENCE_PAYLOAD_BYTES,
   type WorkerInferenceCancelParams,
@@ -15,7 +15,7 @@ import {
   validateWorkerInferenceTerminalFrame,
   validateWorkerInferenceTerminalOutcome,
 } from "../../../packages/gateway-protocol/src/schema/worker-inference.js";
-import type { OpenClawConfig } from "../../config/types.js";
+import type { NatesclawConfig } from "../../config/types.js";
 import { withTimeout } from "../../infra/fs-safe.js";
 import { boundedJsonUtf8Bytes } from "../../infra/json-utf8-bytes.js";
 import { runWithGatewayIndependentRootWorkContinuation } from "../../process/gateway-work-admission.js";
@@ -48,7 +48,7 @@ export type WorkerInferenceExecutor = (params: {
   signal: AbortSignal;
   emit: (event: WorkerInferenceEventParams["event"]) => void;
   isCurrent(): boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
 }) => Promise<WorkerInferenceTerminalOutcome>;
 
 type RevalidateInference = () => WorkerInferenceFenceReason | null;
@@ -217,7 +217,7 @@ function sameTurn(
 export function createWorkerInferenceManager(options: {
   execute: WorkerInferenceExecutor;
   store?: WorkerInferenceStore;
-  getConfig?: () => OpenClawConfig;
+  getConfig?: () => NatesclawConfig;
   requestMaxBytes?: number;
   streamMaxBytes?: number;
   stopDrainMs?: number;

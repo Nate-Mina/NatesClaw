@@ -4,11 +4,11 @@ import { resolveAgentSessionDirsFromAgentsDirSync } from "../agents/session-dirs
 import { resolveStateDir } from "../config/paths.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import {
-  createOpenClawAgentDatabasePathMatcher,
-  isPersistentOpenClawAgentDatabasePath,
-  listOpenClawRegisteredAgentDatabases,
-  unregisterOpenClawAgentDatabase,
-} from "../state/openclaw-agent-db-registry.js";
+  createNatesclawAgentDatabasePathMatcher,
+  isPersistentNatesclawAgentDatabasePath,
+  listNatesclawRegisteredAgentDatabases,
+  unregisterNatesclawAgentDatabase,
+} from "../state/natesclaw-agent-db-registry.js";
 import { isPathInside } from "./path-guards.js";
 
 type AgentDatabaseMediaMigrationTarget = {
@@ -30,7 +30,7 @@ function listDefaultAgentDatabaseTargets(
       const agentDir = path.dirname(sessionsDir);
       return {
         agentId: normalizeAgentId(path.basename(agentDir)),
-        path: path.join(agentDir, "agent", "openclaw-agent.sqlite"),
+        path: path.join(agentDir, "agent", "natesclaw-agent.sqlite"),
         source: "disk" as const,
       };
     });
@@ -46,9 +46,9 @@ export function resolveAgentDatabaseMediaMigrationTargets(params: {
   env: NodeJS.ProcessEnv;
   warnings: string[];
 }): AgentDatabaseMediaMigrationTarget[] {
-  let registered: ReturnType<typeof listOpenClawRegisteredAgentDatabases> = [];
+  let registered: ReturnType<typeof listNatesclawRegisteredAgentDatabases> = [];
   try {
-    registered = listOpenClawRegisteredAgentDatabases({
+    registered = listNatesclawRegisteredAgentDatabases({
       env: params.env,
       includeIncompatibleSchemaVersions: true,
     });
@@ -83,16 +83,16 @@ export function resolveAgentDatabaseMediaMigrationTargets(params: {
       );
     }
   }
-  const configuredPathMatcher = createOpenClawAgentDatabasePathMatcher();
+  const configuredPathMatcher = createNatesclawAgentDatabasePathMatcher();
   const targets: AgentDatabaseMediaMigrationTarget[] = [];
   const seenRealPaths = new Set<string>();
   for (const candidate of candidates) {
     // Preserve the original locator: lexical normalization of `link/../file`
     // can select a different file than filesystem symlink traversal does.
     const pathname = candidate.path;
-    if (!isPersistentOpenClawAgentDatabasePath(pathname, params.env)) {
+    if (!isPersistentNatesclawAgentDatabasePath(pathname, params.env)) {
       if (candidate.source === "registry") {
-        unregisterOpenClawAgentDatabase({
+        unregisterNatesclawAgentDatabase({
           agentId: candidate.agentId,
           env: params.env,
           path: candidate.path,
@@ -128,7 +128,7 @@ export function resolveAgentDatabaseMediaMigrationTargets(params: {
     );
     if (realPath && !isInsideActiveStateDir && !isConfiguredPath) {
       if (candidate.source === "registry") {
-        unregisterOpenClawAgentDatabase({
+        unregisterNatesclawAgentDatabase({
           agentId: candidate.agentId,
           env: params.env,
           path: candidate.path,
@@ -152,7 +152,7 @@ export function resolveAgentDatabaseMediaMigrationTargets(params: {
     }
     if (!stat?.isFile()) {
       if (candidate.source === "registry") {
-        unregisterOpenClawAgentDatabase({
+        unregisterNatesclawAgentDatabase({
           agentId: candidate.agentId,
           env: params.env,
           path: candidate.path,
@@ -164,7 +164,7 @@ export function resolveAgentDatabaseMediaMigrationTargets(params: {
     }
     if (!realPath) {
       if (candidate.source === "registry") {
-        unregisterOpenClawAgentDatabase({
+        unregisterNatesclawAgentDatabase({
           agentId: candidate.agentId,
           env: params.env,
           path: candidate.path,

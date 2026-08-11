@@ -1,4 +1,4 @@
-// Applies OpenClaw's conversational setup: config, workspace files, gateway.
+// Applies Natesclaw's conversational setup: config, workspace files, gateway.
 import { isDeepStrictEqual } from "node:util";
 import { listAgentEntries, toAgentEntriesRecord } from "../agents/agent-scope-config.js";
 import { resolveOnboardingAgentTarget } from "../commands/onboard-agent-target.js";
@@ -12,7 +12,7 @@ import {
 } from "../config/config.js";
 import { applyMergePatch } from "../config/merge-patch.js";
 import type { AgentModelEntryConfig } from "../config/types.agent-defaults.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.openclaw.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { formatExternalSupervisorActionRequired } from "../infra/gateway-supervision.js";
 import { enablePluginInConfig } from "../plugins/enable.js";
@@ -56,13 +56,13 @@ export type SystemAgentSetupApplyParams = {
   /** Provider-auth config produced in the isolated manual-key flow. */
   configPatch?: unknown;
   /** Success-gated final normalization against the config held by the write lock. */
-  finalizeConfig?: (config: OpenClawConfig, sourceConfig: OpenClawConfig) => OpenClawConfig;
+  finalizeConfig?: (config: NatesclawConfig, sourceConfig: NatesclawConfig) => NatesclawConfig;
   /** Plugin whose enablement belongs to the successful setup transaction. */
   enablePluginId?: string;
   /** Refresh an installed plugin after its success-gated enablement commits. */
   refreshPluginRegistry?: boolean;
   /** Synchronous cross-store guard receives authored config under the final write lock. */
-  assertCommitPreconditions?: (sourceConfig: OpenClawConfig) => void;
+  assertCommitPreconditions?: (sourceConfig: NatesclawConfig) => void;
   /** Resume an interrupted local installation without restarting a running Gateway. */
   resume?: boolean;
   surface: "cli" | "gateway";
@@ -87,7 +87,7 @@ type SystemAgentSetupApplyHooks = {
 /** Prompter for quickstart-only flows: notes go to the log, prompts fail loud. */
 export function createQuickstartNotePrompter(runtime: RuntimeEnv): WizardPrompter {
   const unexpected = (kind: string) => {
-    throw new Error(`openclaw setup hit an interactive ${kind} prompt; quickstart must not ask`);
+    throw new Error(`natesclaw setup hit an interactive ${kind} prompt; quickstart must not ask`);
   };
   return {
     intro: async () => {},
@@ -120,7 +120,7 @@ export function createQuickstartNotePrompter(runtime: RuntimeEnv): WizardPrompte
   };
 }
 
-function applySecurityAcknowledgement(config: OpenClawConfig): OpenClawConfig {
+function applySecurityAcknowledgement(config: NatesclawConfig): NatesclawConfig {
   if (config.wizard?.securityAcknowledgedAt) {
     return config;
   }
@@ -133,7 +133,7 @@ function applySecurityAcknowledgement(config: OpenClawConfig): OpenClawConfig {
 }
 
 type SystemAgentModelSelectionParams = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   model: string;
   /** Write the model onto this configured agent instead of the default route. */
   targetAgentId?: string;
@@ -151,7 +151,7 @@ type SystemAgentModelSelectionModules = {
 function applySystemAgentModelSelectionWithModules(
   params: SystemAgentModelSelectionParams,
   modules: SystemAgentModelSelectionModules,
-): OpenClawConfig {
+): NatesclawConfig {
   const { agentScope, modelConfig, runtimePolicy } = modules;
   const nextConfig = structuredClone(params.config);
   const targetAgentId = params.targetAgentId ? normalizeAgentId(params.targetAgentId) : undefined;
@@ -248,7 +248,7 @@ function applySystemAgentModelSelectionWithModules(
 
 export async function createSystemAgentModelSelectionUpdater(
   params: Omit<SystemAgentModelSelectionParams, "config">,
-): Promise<(config: OpenClawConfig) => OpenClawConfig> {
+): Promise<(config: NatesclawConfig) => NatesclawConfig> {
   const [agentScope, modelConfig, runtimePolicy] = await Promise.all([
     import("../agents/agent-scope.js"),
     import("../commands/models/shared.js"),
@@ -260,7 +260,7 @@ export async function createSystemAgentModelSelectionUpdater(
 
 export async function applySystemAgentModelSelection(
   params: SystemAgentModelSelectionParams,
-): Promise<OpenClawConfig> {
+): Promise<NatesclawConfig> {
   const update = await createSystemAgentModelSelectionUpdater(params);
   return update(params.config);
 }
@@ -306,7 +306,7 @@ export async function applySystemAgentSetup(
   const snapshotConfig = requireValidSystemAgentSetupSnapshot(snapshot);
 
   if (hasExpectedConfigHash && resolveConfigSnapshotHash(snapshot) !== expectedConfigHash) {
-    throw new Error("OpenClaw config changed while AI access was being tested. Try setup again.");
+    throw new Error("Natesclaw config changed while AI access was being tested. Try setup again.");
   }
 
   const guardModules =
@@ -316,7 +316,7 @@ export async function applySystemAgentSetup(
           import("../agents/model-selection.js"),
         ] as const)
       : undefined;
-  const assertExpectedTarget = (config: OpenClawConfig): void => {
+  const assertExpectedTarget = (config: NatesclawConfig): void => {
     if (!guardModules) {
       return;
     }
@@ -376,8 +376,8 @@ export async function applySystemAgentSetup(
     if (!currentRoute || !sameDefaultInferenceRoute(currentRoute, expectedRoute)) {
       throw new Error(
         phase === "before"
-          ? "The default-agent inference route changed before setup could start, so no workspace or Gateway settings were changed. Retry setup from the current OpenClaw session."
-          : "The default-agent inference route changed after the config write, so no further setup effects were applied. Retry setup from the current OpenClaw session.",
+          ? "The default-agent inference route changed before setup could start, so no workspace or Gateway settings were changed. Retry setup from the current Natesclaw session."
+          : "The default-agent inference route changed after the config write, so no further setup effects were applied. Retry setup from the current Natesclaw session.",
       );
     }
   };
@@ -386,7 +386,7 @@ export async function applySystemAgentSetup(
   const prompter = createQuickstartNotePrompter(runtime);
   const { configureGatewayForSetup } = await import("../wizard/setup.gateway-config.js");
   const buildSetupCandidate = async (
-    currentBaseConfig: OpenClawConfig,
+    currentBaseConfig: NatesclawConfig,
     hasAuthoredRosterEntries: boolean,
   ) => {
     const roster = listAgentEntries(currentBaseConfig);
@@ -408,7 +408,7 @@ export async function applySystemAgentSetup(
       setupBaseConfig = enabled.config;
     }
     if (configPatch !== undefined) {
-      setupBaseConfig = applyMergePatch(setupBaseConfig, configPatch) as OpenClawConfig;
+      setupBaseConfig = applyMergePatch(setupBaseConfig, configPatch) as NatesclawConfig;
     }
     if (currentHasRoster) {
       const { list: _legacyList, ...agents } = setupBaseConfig.agents ?? {};
@@ -475,7 +475,7 @@ export async function applySystemAgentSetup(
           const currentSnapshot = requireValidSystemAgentSetupSnapshot(context.snapshot);
           if (hasExpectedConfigHash && context.previousHash !== expectedConfigHash) {
             throw new Error(
-              "OpenClaw config changed while AI access was being tested. Try setup again.",
+              "Natesclaw config changed while AI access was being tested. Try setup again.",
             );
           }
           await assertVerifiedRoute(context.snapshot);
@@ -501,7 +501,7 @@ export async function applySystemAgentSetup(
               !isDeepStrictEqual(expectedSourceRoute.route, params.expectedInferenceRoute.route))
           ) {
             throw new Error(
-              "The setup candidate no longer preserves the exact verified inference route, so it was not saved. Retry setup from the current OpenClaw session.",
+              "The setup candidate no longer preserves the exact verified inference route, so it was not saved. Retry setup from the current Natesclaw session.",
             );
           }
           // This is the auth/config operation's linearization point. Never hold
@@ -530,7 +530,7 @@ export async function applySystemAgentSetup(
   const setupResult = committed.result;
   const settings = setupResult?.settings;
   if (!settings) {
-    throw new Error("OpenClaw setup committed without resolved Gateway settings.");
+    throw new Error("Natesclaw setup committed without resolved Gateway settings.");
   }
   const onboardingTarget = resolveOnboardingAgentTarget(nextConfig);
   const effectiveWorkspace = onboardingTarget.workspaceDir;
@@ -546,7 +546,7 @@ export async function applySystemAgentSetup(
       const issue = expectedRuntime.issues[0];
       const detail = issue ? ` (${issue.path ? `${issue.path}: ` : ""}${issue.message})` : "";
       throw new Error(
-        `OpenClaw could not validate the setup route after its config write${detail}. No further setup effects were applied. Retry setup from the current OpenClaw session.`,
+        `Natesclaw could not validate the setup route after its config write${detail}. No further setup effects were applied. Retry setup from the current Natesclaw session.`,
       );
     }
     const expectedPersistedRoute = await projectDefaultInferenceRoute(expectedRuntime.config);
@@ -555,7 +555,7 @@ export async function applySystemAgentSetup(
     // metadata change that would make the committed config run differently.
     if (!isDeepStrictEqual(expectedPersistedRoute.route, params.expectedInferenceRoute.route)) {
       throw new Error(
-        "The materialized inference route no longer matches the exact verified route, so no further setup effects were applied. Retry setup from the current OpenClaw session.",
+        "The materialized inference route no longer matches the exact verified route, so no further setup effects were applied. Retry setup from the current Natesclaw session.",
       );
     }
   }
@@ -599,27 +599,27 @@ export async function applySystemAgentSetup(
     (error) => lines.push(`Workspace files: ${formatErrorMessage(error)}`),
   );
 
-  // Setup approval includes consent for OpenClaw's local model harnesses.
+  // Setup approval includes consent for Natesclaw's local model harnesses.
   // Keep the grant agent-scoped; regular agents retain interactive approvals.
   await runCommittedFollowUp(
     async () => {
       const { updateExecApprovals } = await import("../infra/exec-approvals.js");
       await updateExecApprovals({
         update: (approvals) =>
-          approvals.agents?.openclaw
+          approvals.agents?.natesclaw
             ? null
             : {
                 ...approvals,
                 agents: {
                   ...approvals.agents,
-                  openclaw: { security: "full", ask: "off" },
+                  natesclaw: { security: "full", ask: "off" },
                 },
               },
       });
     },
     (error) =>
       lines.push(
-        `OpenClaw exec approval: ${formatErrorMessage(error)}; local model harnesses may ask again.`,
+        `Natesclaw exec approval: ${formatErrorMessage(error)}; local model harnesses may ask again.`,
       ),
   );
 
@@ -632,7 +632,7 @@ export async function applySystemAgentSetup(
           config: nextConfig,
           reason: "source-changed",
           workspaceDir: onboardingTarget.workspaceDir,
-          traceCommand: "openclaw-setup",
+          traceCommand: "natesclaw-setup",
           logger: {
             warn: (message) => lines.push(message),
           },

@@ -2,8 +2,8 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { replaceTranscriptEvents } from "../config/sessions/session-accessor.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { captureEnv, setTestEnvValue } from "../test-utils/env.js";
 import { readSessionMessagesAroundIdWithStatsAsync } from "./session-transcript-anchor-reader.js";
 import {
@@ -23,15 +23,15 @@ describe("session transcript reader marker projection", () => {
   let envSnapshot: ReturnType<typeof captureEnv>;
 
   beforeEach(() => {
-    envSnapshot = captureEnv(["OPENCLAW_STATE_DIR"]);
-    tempDir = tempDirs.make("openclaw-transcript-markers-");
+    envSnapshot = captureEnv(["NATESCLAW_STATE_DIR"]);
+    tempDir = tempDirs.make("natesclaw-transcript-markers-");
     storePath = path.join(tempDir, "sessions.json");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
   });
 
   afterEach(() => {
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     envSnapshot.restore();
   });
 
@@ -129,8 +129,8 @@ describe("session transcript reader marker projection", () => {
     const scope = await writeTranscript(fixture.sessionId, fixture.events(fixture.sessionId));
     const summarize = (messages: unknown[]) =>
       messages.map((message) => {
-        const record = message as { content?: unknown; __openclaw?: { kind?: string } };
-        return record["__openclaw"]?.kind ?? record.content;
+        const record = message as { content?: unknown; __natesclaw?: { kind?: string } };
+        return record["__natesclaw"]?.kind ?? record.content;
       });
 
     const full = await readSessionMessagesAsync(scope, {
@@ -165,7 +165,7 @@ describe("session transcript reader marker projection", () => {
         role: "system",
         content: [{ type: "text", text: fixture.markerText }],
         timestamp: Date.parse("2026-08-11T18:00:00.000Z"),
-        __openclaw: {
+        __natesclaw: {
           kind: fixture.markerKind,
           id: fixture.markerId,
           seq: markerIndex + 1,

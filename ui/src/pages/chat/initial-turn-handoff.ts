@@ -71,7 +71,7 @@ export function prepareInitialUserMessageHandoff(
       renderInlineImageDataUrls: true,
     }),
     timestamp: item.createdAt,
-    __openclaw: {
+    __natesclaw: {
       idempotencyKey: `${runId}:user`,
       ...(messageSequence === undefined ? {} : { seq: messageSequence }),
     },

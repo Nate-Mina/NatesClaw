@@ -1,5 +1,5 @@
 // Runs security checks over plugin install candidates before activation.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type {
   InstallPolicyOrigin,
   InstallPolicyRequestKind,
@@ -48,7 +48,7 @@ async function loadInstallSecurityScanRuntime() {
 /** Scans an unpacked bundle source before plugin install/update. */
 export async function scanBundleInstallSource(
   params: InstallSafetyOverrides & {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     logger: InstallScanLogger;
     pluginId: string;
     sourceDir: string;
@@ -66,7 +66,7 @@ export async function scanBundleInstallSource(
 /** Scans a package source directory and executable metadata before install/update. */
 export async function scanPackageInstallSource(
   params: InstallSafetyOverrides & {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     extensions: string[];
     logger: InstallScanLogger;
     packageDir: string;
@@ -89,7 +89,7 @@ export async function scanPackageInstallSource(
 export async function scanInstalledPackageDependencyTree(params: {
   additionalPackageDirs?: string[];
   allowManagedNpmRootPackagePeerSymlinks?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   dependencyScanRootDir?: string;
   logger: InstallScanLogger;
   mode?: "install" | "update";
@@ -110,7 +110,7 @@ export async function scanInstalledPackageDependencyTree(params: {
  */
 export async function scanFileInstallSource(
   params: InstallSafetyOverrides & {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     filePath: string;
     logger: InstallScanLogger;
     mode?: "install" | "update";
@@ -125,7 +125,7 @@ export async function scanFileInstallSource(
 
 /** Runs npm install policy checks before package install side effects. */
 export async function preflightPluginNpmInstallPolicy(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   logger: InstallScanLogger;
   mode?: "install" | "update";
   packageName: string;
@@ -141,7 +141,7 @@ export async function preflightPluginNpmInstallPolicy(params: {
 
 /** Runs git install policy checks before plugin install side effects. */
 export async function preflightPluginGitInstallPolicy(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   logger: InstallScanLogger;
   mode?: "install" | "update";
   pluginId: string;
@@ -155,7 +155,7 @@ export async function preflightPluginGitInstallPolicy(params: {
 
 /** Evaluates shared install policy for skill-managed dependency installs. */
 export async function evaluateSkillInstallPolicy(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   installId: string;
   installSpec?: SkillInstallSpecMetadata;
   logger: InstallScanLogger;

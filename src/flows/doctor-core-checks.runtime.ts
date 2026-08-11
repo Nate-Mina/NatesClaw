@@ -1,5 +1,5 @@
 // Doctor runtime checks inspect tool names, browser residue, and runtime state.
-import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
+import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
 import { TOOL_NAME_SEPARATOR } from "../agents/agent-bundle-mcp-names.js";
 import {
   type McpToolCatalogDiagnostic,
@@ -12,7 +12,7 @@ import {
   resolveAgentWorkspaceDir,
   resolveDefaultAgentId,
 } from "../agents/agent-scope.js";
-import { createOpenClawCodingTools } from "../agents/agent-tools.js";
+import { createNatesclawCodingTools } from "../agents/agent-tools.js";
 import { resolveEffectiveToolPolicy } from "../agents/agent-tools.policy.js";
 import { resolveConversationCapabilityProfile } from "../agents/conversation-capability-profile.js";
 import { DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
@@ -36,7 +36,7 @@ import {
   gatewayProbeResultSawGateway,
   gatewayProbeResultWasRateLimited,
 } from "../commands/gateway-health-auth-diagnostic.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   getSystemdCgroupHygieneSummary,
   type GatewayServiceRuntime,
@@ -64,7 +64,7 @@ function formatGatewayHealthTarget(url: string): string {
   return redactSensitiveUrlLikeString(url);
 }
 
-export function detectUnavailableSkills(cfg: OpenClawConfig): SkillStatusEntry[] {
+export function detectUnavailableSkills(cfg: NatesclawConfig): SkillStatusEntry[] {
   const agentId = resolveDefaultAgentId(cfg);
   const workspaceDir = resolveAgentWorkspaceDir(cfg, agentId);
   const report = buildWorkspaceSkillStatus(workspaceDir, {
@@ -123,7 +123,7 @@ export async function collectGatewayHealthFindings(
         message: `Gateway health probe could not be prepared: ${formatErrorMessage(error)}`,
         path: ctx.cfg.gateway?.mode === "remote" ? "gateway.remote.url" : "gateway",
         fixHint:
-          "Fix Gateway connection configuration, then rerun `openclaw doctor --lint --only core/doctor/gateway-health`.",
+          "Fix Gateway connection configuration, then rerun `natesclaw doctor --lint --only core/doctor/gateway-health`.",
       },
     ];
   }
@@ -162,7 +162,7 @@ export async function collectGatewayHealthFindings(
       fixHint:
         mode === "remote"
           ? "Verify the remote Gateway URL, network path, TLS settings, and credentials."
-          : "Start the Gateway service or run `openclaw doctor --fix` for service repair prompts.",
+          : "Start the Gateway service or run `natesclaw doctor --fix` for service repair prompts.",
     },
   ];
 }
@@ -187,7 +187,7 @@ export async function collectGatewayDaemonFindings(
       message: "Gateway service is not installed.",
       path: "gateway.mode",
       target: service.label,
-      fixHint: "Run `openclaw doctor --fix` or `openclaw gateway install` to install it.",
+      fixHint: "Run `natesclaw doctor --fix` or `natesclaw gateway install` to install it.",
     });
     return findings;
   }
@@ -198,7 +198,7 @@ export async function collectGatewayDaemonFindings(
       message: "Gateway service is installed but not loaded.",
       path: state.command?.sourcePath,
       target: service.label,
-      fixHint: "Run `openclaw doctor --fix` or `openclaw gateway start` to load it.",
+      fixHint: "Run `natesclaw doctor --fix` or `natesclaw gateway start` to load it.",
     });
   }
   const status = gatewayRuntimeStatus(state.runtime);
@@ -211,7 +211,7 @@ export async function collectGatewayDaemonFindings(
         : "Gateway service is loaded but runtime status could not confirm it is running.",
       path: state.command?.sourcePath,
       target: service.label,
-      fixHint: "Run `openclaw gateway status --deep` or `openclaw doctor --fix` for repair hints.",
+      fixHint: "Run `natesclaw gateway status --deep` or `natesclaw doctor --fix` for repair hints.",
     });
   }
   if (state.runtime?.missingGuiSession) {
@@ -617,7 +617,7 @@ function groupProviderCatalogsForDoctor(providers: readonly ProviderPlugin[]): {
 }
 
 export async function collectProviderCatalogProjectionFindings(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): Promise<readonly HealthFinding[]> {
   const { runProviderStaticCatalog } = await import("../plugins/provider-discovery.js");
   const { resolvePluginProvidersCore } = await import("../plugins/providers.runtime.js");
@@ -781,7 +781,7 @@ function collectToolSchemaFindings(params: {
 function collectNormalizedToolSchemaFindings(params: {
   agentId: string;
   tools: AnyAgentTool[];
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   workspaceDir: string;
   modelRef: { provider: string; model: string };
   model: ProviderRuntimeModel;
@@ -827,7 +827,7 @@ function collectNormalizedToolSchemaFindings(params: {
 
 function collectBundleMcpRuntimeToolSchemaFindings(params: {
   bundleRuntime: BundleMcpToolRuntime;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   workspaceDir: string;
   modelRef: { provider: string; model: string };
@@ -887,7 +887,7 @@ function agentRuntimeToolNormalizationFailureFinding(params: {
 }
 
 function collectAgentRuntimeToolSchemaFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   workspaceDir: string;
   modelRef: { provider: string; model: string };
@@ -895,7 +895,7 @@ function collectAgentRuntimeToolSchemaFindings(params: {
 }): readonly HealthFinding[] {
   let tools: AnyAgentTool[];
   try {
-    tools = createOpenClawCodingTools({
+    tools = createNatesclawCodingTools({
       agentId: params.agentId,
       workspaceDir: params.workspaceDir,
       config: params.cfg,
@@ -997,7 +997,7 @@ function synthesizeBundleMcpAllowlistSentinelName(params: {
 }
 
 function collectBundleMcpDiagnosticSentinels(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   modelRef: { provider: string; model: string };
   diagnostic: McpToolCatalogDiagnostic;
@@ -1040,7 +1040,7 @@ function collectBundleMcpDiagnosticSentinels(params: {
 }
 
 function shouldReportBundleMcpRuntimeDiagnostic(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   modelRef: { provider: string; model: string };
   diagnostic: McpToolCatalogDiagnostic;
@@ -1063,7 +1063,7 @@ function shouldReportBundleMcpRuntimeDiagnostic(params: {
 
 function filterPolicyActiveBundleMcpDiagnostics(params: {
   diagnostics: readonly McpToolCatalogDiagnostic[];
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   modelRef: { provider: string; model: string };
 }): readonly McpToolCatalogDiagnostic[] {
@@ -1077,7 +1077,7 @@ function filterPolicyActiveBundleMcpDiagnostics(params: {
   );
 }
 
-function isAcpRuntimeAgent(cfg: OpenClawConfig, agentId: string): boolean {
+function isAcpRuntimeAgent(cfg: NatesclawConfig, agentId: string): boolean {
   const entry = listAgentEntries(cfg).find(
     (candidate) => normalizeAgentId(candidate.id) === agentId,
   );
@@ -1085,7 +1085,7 @@ function isAcpRuntimeAgent(cfg: OpenClawConfig, agentId: string): boolean {
 }
 
 export async function collectRuntimeToolSchemaFindings(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options?: { runWithPluginMetadataSnapshot?: PluginMetadataSnapshotScopeRunner },
 ): Promise<readonly HealthFinding[]> {
   const findings: HealthFinding[] = [];

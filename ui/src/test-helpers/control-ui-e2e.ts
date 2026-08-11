@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import { createServer as createNetServer } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildControlUiSessionPath } from "@openclaw/session-url-contract";
+import { buildControlUiSessionPath } from "@natesclaw/session-url-contract";
 import type { Locator, Page } from "playwright";
 import type { InlineConfig, Plugin, PreviewServer, ViteDevServer } from "vite";
 import { PROTOCOL_VERSION } from "../../../packages/gateway-protocol/src/version.js";
@@ -35,7 +35,7 @@ export function controlUiSessionUrl(baseUrl: string, sessionKey: string): string
 
 export async function navigateToControlUiSession(page: Page, sessionKey: string): Promise<void> {
   await page.evaluate((pathname) => {
-    const app = document.querySelector("openclaw-app") as HTMLElement & {
+    const app = document.querySelector("natesclaw-app") as HTMLElement & {
       runtime?: {
         context: {
           navigate: (routeId: string, options: { pathname: string }) => void;
@@ -43,14 +43,14 @@ export async function navigateToControlUiSession(page: Page, sessionKey: string)
       };
     };
     if (!app.runtime) {
-      throw new Error("OpenClaw application runtime is unavailable");
+      throw new Error("Natesclaw application runtime is unavailable");
     }
     app.runtime.context.navigate("chat", { pathname });
   }, controlUiSessionPath(sessionKey));
   await page.waitForURL((url) => url.pathname === controlUiSessionPath(sessionKey));
   await page.waitForFunction(
     (targetSessionKey) =>
-      [...document.querySelectorAll<HTMLElement>("openclaw-chat-pane")].some(
+      [...document.querySelectorAll<HTMLElement>("natesclaw-chat-pane")].some(
         (pane) =>
           pane.classList.contains("chat-pane-cache__pane--visible") &&
           (pane as HTMLElement & { sessionKey?: string }).sessionKey === targetSessionKey,
@@ -66,7 +66,7 @@ export function controlUiBundledGatewayUrl(baseUrl: string): string {
 }
 
 export function controlUiBundledSettingsStorageKey(baseUrl: string): string {
-  return `openclaw.control.settings.v1:${controlUiBundledGatewayUrl(baseUrl)}`;
+  return `natesclaw.control.settings.v1:${controlUiBundledGatewayUrl(baseUrl)}`;
 }
 
 type ControlUiRouteTarget = {
@@ -89,7 +89,7 @@ export async function waitForControlUiRoute(page: Page, target: ControlUiRouteTa
   try {
     const handle = await page.waitForFunction(
       (expected) => {
-        const app = document.querySelector("openclaw-app") as HTMLElement & {
+        const app = document.querySelector("natesclaw-app") as HTMLElement & {
           runtime?: {
             router: {
               getState: () => {
@@ -120,7 +120,7 @@ export async function waitForControlUiRoute(page: Page, target: ControlUiRouteTa
     await handle.dispose();
   } catch (error) {
     const state = await page.evaluate(() => {
-      const app = document.querySelector("openclaw-app") as HTMLElement & {
+      const app = document.querySelector("natesclaw-app") as HTMLElement & {
         runtime?: {
           router: {
             getState: () => unknown;
@@ -148,13 +148,13 @@ export async function waitForControlUiRoute(page: Page, target: ControlUiRouteTa
  */
 export async function waitForConfirmModal(page: Page): Promise<Locator> {
   await page.waitForFunction(() => {
-    const modal = [...document.querySelectorAll("openclaw-modal-dialog")].at(-1);
+    const modal = [...document.querySelectorAll("natesclaw-modal-dialog")].at(-1);
     const dialog = modal?.shadowRoot
       ?.querySelector("wa-dialog")
       ?.shadowRoot?.querySelector("dialog");
     return Boolean(dialog) && getComputedStyle(dialog as Element).opacity === "1";
   });
-  return page.locator("openclaw-modal-dialog").last();
+  return page.locator("natesclaw-modal-dialog").last();
 }
 
 export async function waitForControlUiSettingsTakeover(
@@ -162,7 +162,7 @@ export async function waitForControlUiSettingsTakeover(
   pathname = "/settings/appearance",
 ): Promise<{ search: Locator; sidebar: Locator }> {
   await waitForControlUiRoute(page, { pathname, routeId: "appearance" });
-  const appSidebar = page.locator("openclaw-app-sidebar");
+  const appSidebar = page.locator("natesclaw-app-sidebar");
   const sidebar = page.locator(".settings-sidebar");
   const search = sidebar.getByRole("searchbox", { name: "Search settings" });
   await appSidebar.waitFor({ state: "detached" });
@@ -450,7 +450,7 @@ export async function startControlUiE2eServer(
     clearScreen: false,
     configFile: false,
     define: {
-      "globalThis.OPENCLAW_CONTROL_UI_BUILD_INFO": JSON.stringify(resolvedBuildInfo),
+      "globalThis.NATESCLAW_CONTROL_UI_BUILD_INFO": JSON.stringify(resolvedBuildInfo),
     },
     logLevel: "error",
     optimizeDeps: {
@@ -515,7 +515,7 @@ function createBundledControlUiE2eConfig(
     configFile: false,
     define: {
       ...config.define,
-      "globalThis.OPENCLAW_CONTROL_UI_BUILD_INFO": JSON.stringify(
+      "globalThis.NATESCLAW_CONTROL_UI_BUILD_INFO": JSON.stringify(
         DEFAULT_CONTROL_UI_E2E_BUILD_INFO,
       ),
     },
@@ -532,7 +532,7 @@ export async function buildProductionControlUiE2e(outDir: string, buildId: strin
   const env: NodeJS.ProcessEnv = {
     ...process.env,
     NODE_ENV: "production",
-    OPENCLAW_CONTROL_UI_BUILD_ID: buildId,
+    NATESCLAW_CONTROL_UI_BUILD_ID: buildId,
   };
   for (const key of Object.keys(env)) {
     if (key.startsWith("VITEST")) {
@@ -661,7 +661,7 @@ function normalizeScenario(
     agentModel:
       scenario.agentModel === undefined ? "openai/gpt-5.5" : scenario.agentModel?.trim() || null,
     assistantAgentId: scenario.assistantAgentId?.trim() || defaultAgentId,
-    assistantName: scenario.assistantName?.trim() || "OpenClaw",
+    assistantName: scenario.assistantName?.trim() || "Natesclaw",
     basePath,
     controlUiTabs: scenario.controlUiTabs ?? [],
     controlUiWidgetKinds: scenario.controlUiWidgetKinds ?? [],
@@ -792,14 +792,14 @@ function installControlUiMockGateway(
     socketUrls: () => string[];
   };
   type WindowWithGateway = Window & {
-    __OPENCLAW_CONTROL_UI_BASE_PATH__?: string;
-    openclawControlUiE2eGateway?: ExposedGateway;
+    __NATESCLAW_CONTROL_UI_BASE_PATH__?: string;
+    natesclawControlUiE2eGateway?: ExposedGateway;
   };
 
   const scenario: BrowserScenario = input.scenario;
-  (window as unknown as WindowWithGateway)["__OPENCLAW_CONTROL_UI_BASE_PATH__"] = scenario.basePath;
+  (window as unknown as WindowWithGateway)["__NATESCLAW_CONTROL_UI_BASE_PATH__"] = scenario.basePath;
   const protocolVersion = input.protocolVersion;
-  const methodResponseOverridesStorageKey = "openclaw.control-ui-e2e.method-responses.v1";
+  const methodResponseOverridesStorageKey = "natesclaw.control-ui-e2e.method-responses.v1";
   const methodResponseOverrides: Record<string, unknown> = {};
   try {
     const storedOverrides = window.sessionStorage.getItem(methodResponseOverridesStorageKey);
@@ -823,12 +823,12 @@ function installControlUiMockGateway(
   let deviceAuthMigrationDeviceId = "";
   let sessionMessageEventIndex = 0;
   let sessionMessageEventTimer: number | null = null;
-  const offlineStateKey = "openclaw.control-ui-e2e.gatewayOffline";
+  const offlineStateKey = "natesclaw.control-ui-e2e.gatewayOffline";
   // Gateway-owned custom group catalog (sessions.groups.*). Persisted in
   // sessionStorage so a page reload keeps the catalog the way the real
   // gateway's SQLite store does; renames replay onto static sessions.list
   // fixtures because the real gateway rewrites member categories server-side.
-  const groupsStateKey = "openclaw.control-ui-e2e.sessionGroups";
+  const groupsStateKey = "natesclaw.control-ui-e2e.sessionGroups";
   let groupsState: {
     names: string[];
     sectionOrder: string[];
@@ -858,7 +858,7 @@ function installControlUiMockGateway(
   // and advance the hash so autosave -> reload flows round-trip edits the way
   // the real gateway does. Active only when the scenario ships a config.get
   // fixture with a raw string; persisted in sessionStorage like groupsState.
-  const configStateKey = "openclaw.control-ui-e2e.configState";
+  const configStateKey = "natesclaw.control-ui-e2e.configState";
   const baseConfigResponse: Record<string, unknown> | null = (() => {
     const configured = scenario.methodResponses["config.get"];
     return isRecord(configured) && typeof configured.raw === "string" ? configured : null;
@@ -1955,7 +1955,7 @@ function installControlUiMockGateway(
     },
   };
 
-  (window as unknown as WindowWithGateway).openclawControlUiE2eGateway = exposed;
+  (window as unknown as WindowWithGateway).natesclawControlUiE2eGateway = exposed;
   window.WebSocket = MockWebSocket as unknown as typeof WebSocket;
   window.addEventListener("pagehide", () => {
     sessionMessageSubscriptions.clear();
@@ -1985,11 +1985,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       ({ eventName, eventPayload }) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            natesclawControlUiE2eGateway?: {
               emit: (event: string, payload?: unknown) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).natesclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -2003,11 +2003,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
     await page.evaluate((payload) => {
       const gateway = (
         window as Window & {
-          openclawControlUiE2eGateway?: {
+          natesclawControlUiE2eGateway?: {
             deliverLatest: (frame: unknown) => void;
           };
         }
-      ).openclawControlUiE2eGateway;
+      ).natesclawControlUiE2eGateway;
       if (!gateway) {
         throw new Error("Mock Gateway is not installed");
       }
@@ -2019,11 +2019,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
     page.evaluate((targetMethod) => {
       const gateway = (
         window as Window & {
-          openclawControlUiE2eGateway?: {
+          natesclawControlUiE2eGateway?: {
             findRequests: (method?: string) => MockGatewayRequest[];
           };
         }
-      ).openclawControlUiE2eGateway;
+      ).natesclawControlUiE2eGateway;
       return gateway?.findRequests(targetMethod) ?? [];
     }, method);
 
@@ -2033,11 +2033,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ closeCode, closeReason }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              natesclawControlUiE2eGateway?: {
                 closeLatest: (code?: number, reason?: string) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).natesclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -2052,11 +2052,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ targetMethod, requestMatch }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              natesclawControlUiE2eGateway?: {
                 deferNext: (method: string, match?: Record<string, unknown>) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).natesclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -2083,11 +2083,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       return await page.evaluate(() => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            natesclawControlUiE2eGateway?: {
               socketCount: () => number;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).natesclawControlUiE2eGateway;
         return gateway?.socketCount() ?? 0;
       });
     },
@@ -2095,11 +2095,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       return await page.evaluate(() => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            natesclawControlUiE2eGateway?: {
               socketUrls: () => string[];
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).natesclawControlUiE2eGateway;
         return gateway?.socketUrls() ?? [];
       });
     },
@@ -2108,7 +2108,7 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ targetMethod, responseError }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              natesclawControlUiE2eGateway?: {
                 rejectDeferred: (
                   method: string,
                   error?: {
@@ -2120,7 +2120,7 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
                 ) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).natesclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -2134,11 +2134,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ targetMethod, responsePayload }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              natesclawControlUiE2eGateway?: {
                 resolveDeferred: (method: string, payload?: unknown) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).natesclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -2151,11 +2151,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       await page.evaluate((nextOnline) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            natesclawControlUiE2eGateway?: {
               setOnline: (online: boolean) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).natesclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -2166,11 +2166,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       await page.evaluate((nextScopes) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            natesclawControlUiE2eGateway?: {
               setOperatorScopes: (scopes: string[]) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).natesclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -2181,11 +2181,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       await page.evaluate((nextMessages) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            natesclawControlUiE2eGateway?: {
               setHistoryMessages: (messages: unknown[]) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).natesclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -2197,11 +2197,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ targetMethod, responsePayload }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              natesclawControlUiE2eGateway?: {
                 setMethodResponse: (method: string, payload: unknown) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).natesclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -2214,11 +2214,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       await page.evaluate((nextPolicy) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            natesclawControlUiE2eGateway?: {
               setSessionSharingPolicy: (policy: typeof nextPolicy) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).natesclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -2230,11 +2230,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         (targetMethod) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              natesclawControlUiE2eGateway?: {
                 requests: MockGatewayRequest[];
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).natesclawControlUiE2eGateway;
           return Boolean(gateway?.requests.some((request) => request.method === targetMethod));
         },
         method,

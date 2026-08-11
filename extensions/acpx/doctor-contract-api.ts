@@ -1,12 +1,12 @@
 // ACPX doctor contract repairs shipped config and migrates plugin-owned runtime state.
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   archiveLegacyStateSource,
   asObjectRecord,
   type PluginDoctorStateMigration,
-} from "openclaw/plugin-sdk/runtime-doctor-migrations";
+} from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 import {
   normalizeAcpxProcessLease,
   normalizeAcpxProcessLeaseFile,
@@ -26,15 +26,15 @@ import {
 const ACPX_CONFIG_PATH = ["plugins", "entries", "acpx", "config"] as const;
 const RETIRED_ACPX_CONFIG_KEYS = ["strictWindowsCmdWrapper", "queueOwnerTtlSeconds"] as const;
 
-/** Retired ACPX config that `openclaw doctor --fix` removes before strict validation. */
+/** Retired ACPX config that `natesclaw doctor --fix` removes before strict validation. */
 export const legacyConfigRules = RETIRED_ACPX_CONFIG_KEYS.map((key) => ({
   path: [...ACPX_CONFIG_PATH, key],
-  message: `${[...ACPX_CONFIG_PATH, key].join(".")} is retired and ignored by the embedded ACPX runtime. Run "openclaw doctor --fix".`,
+  message: `${[...ACPX_CONFIG_PATH, key].join(".")} is retired and ignored by the embedded ACPX runtime. Run "natesclaw doctor --fix".`,
 }));
 
 /** Removes retired plugin-owned config without keeping runtime compatibility keys. */
-export function normalizeCompatibilityConfig({ cfg }: { cfg: OpenClawConfig }): {
-  config: OpenClawConfig;
+export function normalizeCompatibilityConfig({ cfg }: { cfg: NatesclawConfig }): {
+  config: NatesclawConfig;
   changes: string[];
 } {
   const entry = asObjectRecord(cfg.plugins?.entries?.acpx);

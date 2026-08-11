@@ -6,23 +6,23 @@ import { i18n } from "../../i18n/index.ts";
 import { renderApps } from "./view.ts";
 
 const EXPECTED_EXTERNAL_HREFS = [
-  "https://apps.apple.com/app/openclaw-ai-that-does-things/id6780396132",
-  "https://docs.openclaw.ai/platforms/ios",
-  "https://play.google.com/store/apps/details?id=ai.openclaw.app",
-  "https://docs.openclaw.ai/platforms/android",
-  "https://docs.openclaw.ai/platforms/ios",
-  "https://docs.openclaw.ai/platforms/android",
-  "https://github.com/openclaw/openclaw/releases",
-  "https://docs.openclaw.ai/platforms/macos",
-  "https://github.com/openclaw/openclaw-windows-node/releases/latest",
-  "https://docs.openclaw.ai/platforms/windows",
-  "https://github.com/openclaw/openclaw/releases",
-  "https://docs.openclaw.ai/platforms/linux",
-  "https://docs.openclaw.ai/tools/chrome-extension",
-  "https://chromewebstore.google.com/detail/openclaw/kcdjddhmeafeomebliikmbpblkmkfoig",
+  "https://apps.apple.com/app/natesclaw-ai-that-does-things/id6780396132",
+  "https://docs.natesclaw.ai/platforms/ios",
+  "https://play.google.com/store/apps/details?id=ai.natesclaw.app",
+  "https://docs.natesclaw.ai/platforms/android",
+  "https://docs.natesclaw.ai/platforms/ios",
+  "https://docs.natesclaw.ai/platforms/android",
+  "https://github.com/natesclaw/natesclaw/releases",
+  "https://docs.natesclaw.ai/platforms/macos",
+  "https://github.com/natesclaw/natesclaw-windows-node/releases/latest",
+  "https://docs.natesclaw.ai/platforms/windows",
+  "https://github.com/natesclaw/natesclaw/releases",
+  "https://docs.natesclaw.ai/platforms/linux",
+  "https://docs.natesclaw.ai/tools/chrome-extension",
+  "https://chromewebstore.google.com/detail/natesclaw/kcdjddhmeafeomebliikmbpblkmkfoig",
   "https://clawhub.ai",
   "https://discord.gg/clawd",
-  "https://docs.openclaw.ai",
+  "https://docs.natesclaw.ai",
 ];
 
 describe("renderApps", () => {
@@ -40,7 +40,7 @@ describe("renderApps", () => {
   it("renders the hero and one heading per section", () => {
     const container = renderIntoContainer();
     expect(container.querySelector(".apps-hero__title")?.textContent).toBe(
-      "Take OpenClaw everywhere",
+      "Take Natesclaw everywhere",
     );
     expect(container.querySelector(".apps-hero__tagline")?.textContent).toContain(
       "Companion apps for your phone",

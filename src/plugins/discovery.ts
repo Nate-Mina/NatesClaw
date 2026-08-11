@@ -4,8 +4,8 @@ import path from "node:path";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
+} from "@natesclaw/normalization-core/string-coerce";
+import { sortUniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { readRootJsonObjectSync } from "../infra/json-files.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
@@ -27,7 +27,7 @@ import {
   loadPluginManifest,
   type PluginManifest,
   resolvePackageExtensionEntries,
-  type OpenClawPackageManifest,
+  type NatesclawPackageManifest,
   type PackageExtensionResolution,
   type PackageManifest,
 } from "./manifest.js";
@@ -89,7 +89,7 @@ export type PluginCandidate = {
   packageVersion?: string;
   packageDescription?: string;
   packageDir?: string;
-  packageManifest?: OpenClawPackageManifest;
+  packageManifest?: NatesclawPackageManifest;
   packageDependencies?: PluginDependencySpecMap;
   packageOptionalDependencies?: PluginDependencySpecMap;
   bundledManifestId?: string;
@@ -707,7 +707,7 @@ function pushInvalidPackageExtensionDiagnostic(params: {
     params.diagnostics.push({
       level: "error",
       source: params.source,
-      message: "package.json openclaw.extensions is empty",
+      message: "package.json natesclaw.extensions is empty",
       ...(params.pluginId ? { pluginId: params.pluginId } : {}),
     });
     return true;
@@ -792,7 +792,7 @@ function addCandidate(params: {
     setupSource: params.setupSource,
     rootDir: resolvedRoot,
     origin: params.origin,
-    format: params.format ?? "openclaw",
+    format: params.format ?? "natesclaw",
     bundleFormat: params.bundleFormat,
     workspaceDir: params.workspaceDir,
     packageName: normalizeOptionalString(manifest?.name),
@@ -885,14 +885,14 @@ function addLegacyNpmDeclarationDiagnostic(params: {
     level: "warn",
     pluginId: declaration.pluginId,
     source: declaration.source,
-    message: `legacy npm plugin declaration ignored for "${declaration.pluginId}"; run "openclaw doctor --fix" to install ${declaration.npmSpec} into the managed plugin root`,
+    message: `legacy npm plugin declaration ignored for "${declaration.pluginId}"; run "natesclaw doctor --fix" to install ${declaration.npmSpec} into the managed plugin root`,
   });
   return true;
 }
 
 function shouldSkipIncompatiblePackagePluginApi(params: {
   origin: PluginOrigin;
-  packageManifest: OpenClawPackageManifest | undefined;
+  packageManifest: NatesclawPackageManifest | undefined;
   pluginId: string;
   packageDir: string;
   env: NodeJS.ProcessEnv;
@@ -906,7 +906,7 @@ function shouldSkipIncompatiblePackagePluginApi(params: {
     params.diagnostics.push({
       level: "warn",
       source: path.join(params.packageDir, "package.json"),
-      message: `invalid package plugin API metadata: ${packagePluginApiRangeCheck.error}; skipping discovery (check package.json openclaw.compat.pluginApi)`,
+      message: `invalid package plugin API metadata: ${packagePluginApiRangeCheck.error}; skipping discovery (check package.json natesclaw.compat.pluginApi)`,
       pluginId: params.pluginId,
     });
     return true;
@@ -922,7 +922,7 @@ function shouldSkipIncompatiblePackagePluginApi(params: {
   params.diagnostics.push({
     level: "warn",
     source: path.join(params.packageDir, "package.json"),
-    message: `plugin requires plugin API ${packagePluginApiRange}, but this host is ${compatibilityHostVersion}; skipping discovery (check "openclaw --version", OPENCLAW_COMPATIBILITY_HOST_VERSION, or run "openclaw doctor")`,
+    message: `plugin requires plugin API ${packagePluginApiRange}, but this host is ${compatibilityHostVersion}; skipping discovery (check "natesclaw --version", NATESCLAW_COMPATIBILITY_HOST_VERSION, or run "natesclaw doctor")`,
     pluginId: params.pluginId,
   });
   return true;
@@ -1417,7 +1417,7 @@ export function discoverConfiguredPluginLoadPaths(params: {
   return result;
 }
 
-export function discoverOpenClawPlugins(params: {
+export function discoverNatesclawPlugins(params: {
   workspaceDir?: string;
   extraPaths?: string[];
   installRecords?: Record<string, PluginInstallRecord>;
@@ -1456,7 +1456,7 @@ export function discoverOpenClawPlugins(params: {
               realpathCache,
             );
             if (roots.workspace && workspaceRoot && !workspaceMatchesBundledRoot) {
-              // Keep workspace auto-discovery constrained to the OpenClaw extensions root.
+              // Keep workspace auto-discovery constrained to the Natesclaw extensions root.
               // Recursively scanning the full workspace treats arbitrary project folders as
               // plugin candidates and causes noisy "plugin manifest not found" validation failures.
               discoverInDirectory({

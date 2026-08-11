@@ -1,6 +1,6 @@
 /** Classifies terminal assistant visibility and provider retry eligibility. */
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { isSilentReplyPayloadText, SILENT_REPLY_TOKEN } from "../../../auto-reply/tokens.js";
 import {
   isStrictAgenticSupportedProviderModel,
@@ -86,9 +86,9 @@ const RETRY_GUARD_MODEL_APIS = new Set([
   "openai-responses",
   "openai-chatgpt-responses",
   "azure-openai-responses",
-  "openclaw-openai-responses-transport",
-  "openclaw-openai-chatgpt-responses-transport",
-  "openclaw-azure-openai-responses-transport",
+  "natesclaw-openai-responses-transport",
+  "natesclaw-openai-chatgpt-responses-transport",
+  "natesclaw-azure-openai-responses-transport",
 ]);
 export function joinAssistantTexts(assistantTexts?: readonly string[]): string {
   return (assistantTexts ?? []).join("\n\n").trim();

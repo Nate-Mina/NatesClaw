@@ -1,7 +1,7 @@
 ---
-summary: "Run the OpenClaw Gateway on ChromeOS inside a Crostini Linux container"
+summary: "Run the Natesclaw Gateway on ChromeOS inside a Crostini Linux container"
 read_when:
-  - Installing OpenClaw on a Chromebook or ChromeOS device
+  - Installing Natesclaw on a Chromebook or ChromeOS device
   - Debugging missing provider keys or a Gateway that is gone after a reboot
 title: "ChromeOS"
 ---
@@ -12,9 +12,9 @@ inside that container exactly like any other Linux install, so the [Linux
 guide](/platforms/linux) applies in full. This page covers the ChromeOS
 specific setup and the gotchas that differ from a plain Linux host.
 
-OpenClaw requires Node because its canonical state store uses `node:sqlite`.
+Natesclaw requires Node because its canonical state store uses `node:sqlite`.
 Bun can install dependencies or run package scripts, but it cannot run the
-OpenClaw CLI or Gateway.
+Natesclaw CLI or Gateway.
 
 ## Enable the Linux container
 
@@ -32,19 +32,19 @@ Run every command below inside that Terminal.
 1. Install via the installer script (it installs a supported Node for you):
 
    ```bash
-   curl -fsSL https://openclaw.ai/install.sh | bash
+   curl -fsSL https://natesclaw.ai/install.sh | bash
    ```
 
 2. Onboard and install the service:
 
    ```bash
-   openclaw onboard --install-daemon
+   natesclaw onboard --install-daemon
    ```
 
 3. Confirm the Gateway is running:
 
    ```bash
-   openclaw gateway status
+   natesclaw gateway status
    ```
 
 Full server guidance lives in the [Linux guide](/platforms/linux) and the
@@ -53,7 +53,7 @@ Full server guidance lives in the [Linux guide](/platforms/linux) and the
 ## Prefer the native install over Docker
 
 On a single user Chromebook, use the native npm install (the installer script,
-or a global `npm i -g openclaw@latest`) rather than [Docker](/install/docker).
+or a global `npm i -g natesclaw@latest`) rather than [Docker](/install/docker).
 
 Docker works inside Crostini, but Docker in Crostini adds friction: if you use
 the Claude Code CLI as your model runtime, it has to be installed and logged in
@@ -63,13 +63,13 @@ filesystem directly, so a Docker image rebuild cannot wipe it.
 
 ## Node version
 
-The Node version available in a Crostini container may be below OpenClaw's
-minimum. OpenClaw requires Node 22.22.3+, Node 24.15+, or Node 25.9+; Node 26
+The Node version available in a Crostini container may be below Natesclaw's
+minimum. Natesclaw requires Node 22.22.3+, Node 24.15+, or Node 25.9+; Node 26
 is the recommended default. The installer script detects a missing or
 unsupported Node version and provisions a supported release automatically.
 
-If you installed Node yourself before OpenClaw, upgrade it **before** installing
-OpenClaw:
+If you installed Node yourself before Natesclaw, upgrade it **before** installing
+Natesclaw:
 
 ```bash
 node -v
@@ -82,7 +82,7 @@ See [Node install guidance](/install/node) for the supported versions.
 The Gateway runs as a **systemd user service**, so an `export VAR=...` in an
 interactive Terminal is not inherited by the already-installed service.
 
-Put provider keys in `~/.openclaw/.env` instead, one per line:
+Put provider keys in `~/.natesclaw/.env` instead, one per line:
 
 ```bash
 DEEPSEEK_API_KEY=your-key-here
@@ -91,7 +91,7 @@ DEEPSEEK_API_KEY=your-key-here
 Then restart so the service picks them up:
 
 ```bash
-openclaw gateway restart
+natesclaw gateway restart
 ```
 
 See [Environment variables](/help/environment) for the full precedence and
@@ -105,7 +105,7 @@ Do not treat Crostini as an always-on host. After a ChromeOS reboot, open the
 Then verify the service:
 
 ```bash
-openclaw gateway status
+natesclaw gateway status
 ```
 
 ## Related

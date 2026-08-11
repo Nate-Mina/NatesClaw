@@ -1,15 +1,15 @@
-// Persists managed task-flow records through the OpenClaw SQLite state database.
+// Persists managed task-flow records through the Natesclaw SQLite state database.
 import type { DatabaseSync } from "node:sqlite";
-import { safeParseJson } from "@openclaw/normalization-core";
+import { safeParseJson } from "@natesclaw/normalization-core";
 import type { Insertable, Selectable } from "kysely";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
 import { normalizeSqliteNumber } from "../infra/sqlite-number.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabase,
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  closeNatesclawStateDatabase,
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import type { TaskFlowRegistryStoreSnapshot } from "./task-flow-registry.store.types.js";
 import {
   parseOptionalTaskFlowSyncMode,
@@ -21,8 +21,8 @@ import {
 import { parseDeliveryContextJson } from "./task-registry.sqlite.shared.js";
 import { parseTaskNotifyPolicy } from "./task-registry.types.js";
 
-type FlowRunsTable = OpenClawStateKyselyDatabase["flow_runs"];
-type FlowRegistryStoreDatabase = Pick<OpenClawStateKyselyDatabase, "flow_runs">;
+type FlowRunsTable = NatesclawStateKyselyDatabase["flow_runs"];
+type FlowRegistryStoreDatabase = Pick<NatesclawStateKyselyDatabase, "flow_runs">;
 
 type FlowRegistryRow = Selectable<FlowRunsTable> & {
   sync_mode: string | null;
@@ -35,7 +35,7 @@ type FlowRegistryDatabase = {
   path: string;
 };
 
-// SQLite-backed task-flow store mirrors the in-process registry into openclaw-state.db.
+// SQLite-backed task-flow store mirrors the in-process registry into natesclaw-state.db.
 let cachedDatabase: FlowRegistryDatabase | null = null;
 
 function serializeJson(value: unknown): string | null {
@@ -115,7 +115,7 @@ function getFlowRegistryKysely(db: DatabaseSync) {
 }
 
 function pruneFlowsNotInSnapshot(params: { db: DatabaseSync; ids: readonly string[] }) {
-  const tempTableName = "openclaw_live_flow_ids";
+  const tempTableName = "natesclaw_live_flow_ids";
   params.db.exec(`CREATE TEMP TABLE IF NOT EXISTS ${tempTableName} (id TEXT PRIMARY KEY)`);
   params.db.exec(`DELETE FROM ${tempTableName}`);
   const insert = params.db.prepare(`INSERT OR IGNORE INTO ${tempTableName} (id) VALUES (?)`);
@@ -192,7 +192,7 @@ function upsertFlowRow(db: DatabaseSync, row: Insertable<FlowRunsTable>): void {
 }
 
 function openFlowRegistryDatabase(): FlowRegistryDatabase {
-  const database = openOpenClawStateDatabase();
+  const database = openNatesclawStateDatabase();
   const pathname = database.path;
   if (cachedDatabase && cachedDatabase.path === pathname && cachedDatabase.db.isOpen) {
     return cachedDatabase;
@@ -209,7 +209,7 @@ function openFlowRegistryDatabase(): FlowRegistryDatabase {
 
 function withWriteTransaction(write: (database: FlowRegistryDatabase) => void) {
   const database = openFlowRegistryDatabase();
-  runOpenClawStateWriteTransaction(() => {
+  runNatesclawStateWriteTransaction(() => {
     write(database);
   });
 }
@@ -254,5 +254,5 @@ export function deleteTaskFlowRegistryRecordFromSqlite(flowId: string) {
 
 export function closeTaskFlowRegistryDatabase() {
   cachedDatabase = null;
-  closeOpenClawStateDatabase();
+  closeNatesclawStateDatabase();
 }

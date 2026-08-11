@@ -3,12 +3,12 @@ import type {
   SessionCatalogSession,
   SessionCatalogTranscriptItem,
   SessionsCatalogReadResult,
-} from "openclaw/plugin-sdk/session-catalog";
+} from "natesclaw/plugin-sdk/session-catalog";
 import {
   isRecord,
   normalizeBoundedOptionalString as optionalPiString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { listPiSummaryPage, readPiSessionById } from "./pi-session-store.js";
 import { parsePiSessionTimestampMs } from "./pi-session-timestamp.js";
 

@@ -29,7 +29,7 @@ type TestApi = {
 
 function getTestApi(): TestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.doctorSessionSnapshotsTestApi")
+    Symbol.for("natesclaw.doctorSessionSnapshotsTestApi")
   ] as TestApi;
 }
 

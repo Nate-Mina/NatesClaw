@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import { preflightPluginInstall } from "../plugins/plugin-install-preflight.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import {
   digestClawPackageRef,
   replaceClawPackageRefExpected,
@@ -46,7 +46,7 @@ export async function applyClawPackageUpdate(
   updatePlan: ClawUpdatePlan,
   _targetManifest: ClawManifest,
   targetAddPlan: ClawAddPlan,
-  options: OpenClawStateDatabaseOptions & {
+  options: NatesclawStateDatabaseOptions & {
     installPackages?: typeof installClawPackages;
     readRefs?: typeof readClawPackageRefs;
     replaceExpected?: typeof replaceClawPackageRefExpected;

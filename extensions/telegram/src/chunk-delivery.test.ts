@@ -1,4 +1,4 @@
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import { describe, expect, it, vi } from "vitest";
 import { createTelegramChunkDeliveryTracker } from "./chunk-delivery.js";
 

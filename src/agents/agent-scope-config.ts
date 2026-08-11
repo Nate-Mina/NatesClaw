@@ -1,20 +1,20 @@
 /** Resolves configured agent ids, directories, workspaces, and merged agent defaults. */
 import path from "node:path";
-import { readStringValue } from "@openclaw/normalization-core/string-coerce";
+import { readStringValue } from "@natesclaw/normalization-core/string-coerce";
 import { hasExplicitModelPolicyAllow } from "../config/model-policy-allowlist-migration.js";
 import { resolveStateDir } from "../config/paths.js";
 import type {
   AgentContextLimitsConfig,
   AgentDefaultsConfig,
 } from "../config/types.agent-defaults.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NatesclawConfig } from "../config/types.js";
 import { LEGACY_IMPLICIT_AGENT_ID, normalizeAgentId } from "../routing/session-key.js";
 import { resolveUserPath } from "../utils.js";
 import { registerResolvedAgentDir } from "./agent-dir-registry.js";
 import { resolveDefaultAgentWorkspaceDir } from "./workspace-default.js";
 
-type AgentEntry = NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>[number];
-type AgentEntriesConfig = NonNullable<NonNullable<OpenClawConfig["agents"]>["entries"]>;
+type AgentEntry = NonNullable<NonNullable<NatesclawConfig["agents"]>["list"]>[number];
+type AgentEntriesConfig = NonNullable<NonNullable<NatesclawConfig["agents"]>["entries"]>;
 type AgentRosterProperty = { kind: "entries" | "list"; value: unknown };
 export type ListedAgentEntry = {
   entry: AgentEntry;
@@ -63,7 +63,7 @@ function stripNullBytes(s: string): string {
 }
 
 /** Lists valid configured agent entries from config. */
-export function listAgentEntriesWithSource(cfg: OpenClawConfig): ListedAgentEntry[] {
+export function listAgentEntriesWithSource(cfg: NatesclawConfig): ListedAgentEntry[] {
   const roster = readAgentRosterProperty(cfg);
   if (roster?.kind === "entries" && roster.value && typeof roster.value === "object") {
     return Object.entries(roster.value).map(([id, entry]) => ({
@@ -82,7 +82,7 @@ export function listAgentEntriesWithSource(cfg: OpenClawConfig): ListedAgentEntr
 }
 
 /** Lists valid configured agent entries from either supported representation. */
-export function listAgentEntries(cfg: OpenClawConfig): AgentEntry[] {
+export function listAgentEntries(cfg: NatesclawConfig): AgentEntry[] {
   return listAgentEntriesWithSource(cfg).map(({ entry }) => entry);
 }
 
@@ -122,7 +122,7 @@ export function hasAgentRosterProperty(raw: unknown): boolean {
 }
 
 /** Lists unique configured agent ids. */
-export function listAgentIds(cfg: OpenClawConfig): string[] {
+export function listAgentIds(cfg: NatesclawConfig): string[] {
   const agents = listAgentEntries(cfg);
   if (agents.length === 0 && !hasAgentRosterProperty(cfg)) {
     // Match resolveDefaultAgentId's Plugin SDK compatibility for raw pre-roster configs.
@@ -142,7 +142,7 @@ export function listAgentIds(cfg: OpenClawConfig): string[] {
 }
 
 /** Resolves the configured default while preserving the shipped Plugin SDK legacy shape. */
-export function resolveDefaultAgentId(cfg: OpenClawConfig): string {
+export function resolveDefaultAgentId(cfg: NatesclawConfig): string {
   const agents = listAgentEntries(cfg);
   if (agents.length === 0) {
     // Runtime config loading materializes this entry. Keep the roster-property-absent
@@ -150,7 +150,7 @@ export function resolveDefaultAgentId(cfg: OpenClawConfig): string {
     if (!hasAgentRosterProperty(cfg)) {
       return LEGACY_IMPLICIT_AGENT_ID;
     }
-    throw new Error("No agents configured. Run `openclaw onboard` or `openclaw agents add` first.");
+    throw new Error("No agents configured. Run `natesclaw onboard` or `natesclaw agents add` first.");
   }
   // Runtime config loading canonicalizes zero/multiple markers before this helper is called.
   // External SDK callers may still pass the shipped list shape, which chose the first candidate.
@@ -158,7 +158,7 @@ export function resolveDefaultAgentId(cfg: OpenClawConfig): string {
 }
 
 /** Returns the configured default when diagnostics must tolerate an invalid raw roster. */
-export function tryResolveDefaultAgentId(cfg: OpenClawConfig): string | undefined {
+export function tryResolveDefaultAgentId(cfg: NatesclawConfig): string | undefined {
   const agents = listAgentEntries(cfg);
   const defaults = agents.filter((agent) => agent?.default === true);
   if (defaults.length !== 1) {
@@ -167,14 +167,14 @@ export function tryResolveDefaultAgentId(cfg: OpenClawConfig): string | undefine
   return normalizeAgentId(defaults[0]!.id);
 }
 
-export function resolveAgentEntry(cfg: OpenClawConfig, agentId: string): AgentEntry | undefined {
+export function resolveAgentEntry(cfg: NatesclawConfig, agentId: string): AgentEntry | undefined {
   const id = normalizeAgentId(agentId);
   return listAgentEntries(cfg).find((entry) => normalizeAgentId(entry.id) === id);
 }
 
 /** Resolves the authored entry object for in-place canonical config mutations. */
 export function resolveMutableAgentEntry(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
 ): Pick<AgentEntry, "model"> | undefined {
   const id = normalizeAgentId(agentId);
@@ -192,7 +192,7 @@ export function resolveMutableAgentEntry(
 
 /** Resolves merged config for one agent id. */
 export function resolveAgentConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
 ): ResolvedAgentConfig | undefined {
   const id = normalizeAgentId(agentId);
@@ -252,7 +252,7 @@ export function resolveAgentConfig(
 }
 
 export function resolveAgentContextLimits(
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
   agentId?: string | null,
 ): AgentContextLimitsConfig | undefined {
   const defaults = cfg?.agents?.defaults?.contextLimits;
@@ -263,7 +263,7 @@ export function resolveAgentContextLimits(
 }
 
 export function resolveAgentWorkspaceDir(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   env: NodeJS.ProcessEnv = process.env,
 ) {
@@ -288,7 +288,7 @@ export function resolveAgentWorkspaceDir(
 }
 
 export function resolveAgentDir(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   env: NodeJS.ProcessEnv = process.env,
 ) {
@@ -306,7 +306,7 @@ export function resolveAgentDir(
 }
 
 export function resolveDefaultAgentDir(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string {
   return resolveAgentDir(cfg, resolveDefaultAgentId(cfg), env);

@@ -1,5 +1,5 @@
-import type { RouteLocation } from "@openclaw/uirouter";
-import { definePage } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -66,6 +66,6 @@ export const page = definePage({
     import("./sessions-page.ts").then(() => ({
       header: true,
       render: (data: SessionsRouteData | undefined) =>
-        html`<openclaw-sessions-page .routeData=${data}></openclaw-sessions-page>`,
+        html`<natesclaw-sessions-page .routeData=${data}></natesclaw-sessions-page>`,
     })),
 });

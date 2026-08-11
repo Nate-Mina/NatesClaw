@@ -2,13 +2,13 @@
 export type {
   DiagnosticEventMetadata,
   DiagnosticEventPayload,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
-export { isInternalDiagnosticEventMetadata } from "openclaw/plugin-sdk/diagnostic-runtime";
+} from "natesclaw/plugin-sdk/diagnostic-runtime";
+export { isInternalDiagnosticEventMetadata } from "natesclaw/plugin-sdk/diagnostic-runtime";
 export {
   emptyPluginConfigSchema,
-  type OpenClawPluginApi,
-  type OpenClawPluginHttpRouteHandler,
-  type OpenClawPluginService,
-  type OpenClawPluginServiceContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-export { redactSensitiveText } from "openclaw/plugin-sdk/security-runtime";
+  type NatesclawPluginApi,
+  type NatesclawPluginHttpRouteHandler,
+  type NatesclawPluginService,
+  type NatesclawPluginServiceContext,
+} from "natesclaw/plugin-sdk/plugin-entry";
+export { redactSensitiveText } from "natesclaw/plugin-sdk/security-runtime";

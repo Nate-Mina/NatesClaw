@@ -6,9 +6,9 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { bindModelLlmRuntime } from "../../llm/model-runtime-binding.js";
 import { complete } from "../../llm/stream.js";
 import type { Context } from "../../llm/types.js";
@@ -89,7 +89,7 @@ const PdfToolSchema = Type.Object({
   maxBytesMb: optionalFiniteNumberSchema({ exclusiveMinimum: 0 }),
 });
 
-function hasExplicitPdfToolModelConfig(config?: OpenClawConfig): boolean {
+function hasExplicitPdfToolModelConfig(config?: NatesclawConfig): boolean {
   return (
     hasToolModelConfig(coercePdfModelConfig(config)) ||
     hasToolModelConfig(coerceImageModelConfig(config))
@@ -145,7 +145,7 @@ type PdfSandboxConfig = {
 };
 
 async function runPdfPrompt(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   agentId?: string;
   agentDir: string;
   workspaceDir?: string;
@@ -369,7 +369,7 @@ async function runPdfPrompt(params: {
 // ---------------------------------------------------------------------------
 
 export function createPdfTool(options?: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   agentDir?: string;
   authProfileStore?: AuthProfileStore;

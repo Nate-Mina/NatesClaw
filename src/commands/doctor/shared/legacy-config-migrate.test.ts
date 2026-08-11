@@ -1,16 +1,16 @@
 // Legacy config migration tests cover generic doctor repair of old config layouts.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import { findLegacyConfigIssues } from "../../../config/legacy.js";
 import type { LegacyConfigMigrationContext } from "../../../config/legacy.shared.js";
-import type { OpenClawConfig } from "../../../config/types.js";
+import type { NatesclawConfig } from "../../../config/types.js";
 import { legacyCodexProviderIdentityKey } from "./codex-route-model-ref.js";
 import { pruneBindingsForMissingAgents } from "./legacy-config-binding-repair.js";
 import { LEGACY_CONFIG_MIGRATIONS } from "./legacy-config-migrations.js";
 import { collectBlockedLegacyOpenAICodexProviderPlan } from "./legacy-config-migrations.runtime.models.js";
 
-function repairBindingsForTest(config: OpenClawConfig) {
+function repairBindingsForTest(config: NatesclawConfig) {
   const changes: string[] = [];
   return { config: pruneBindingsForMissingAgents(config, changes), changes };
 }
@@ -19,7 +19,7 @@ function migrateLegacyConfigForTest(
   raw: unknown,
   context?: LegacyConfigMigrationContext,
 ): {
-  config: OpenClawConfig | null;
+  config: NatesclawConfig | null;
   changes: string[];
 } {
   if (!raw || typeof raw !== "object") {
@@ -44,7 +44,7 @@ function migrateLegacyConfigForTest(
   }
   return visibleChanges.length === 0
     ? { config: null, changes: visibleChanges }
-    : { config: next as OpenClawConfig, changes: visibleChanges };
+    : { config: next as NatesclawConfig, changes: visibleChanges };
 }
 
 function expectMigrationChangesToIncludeFragments(changes: string[], fragments: string[]): void {
@@ -87,7 +87,7 @@ describe("compatibility binding repair migrate", () => {
         { agentId: "alpha", match: { channel: "discord" } },
         { agentId: "ghost", match: { channel: "discord" } },
       ],
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(res.config.bindings).toEqual([{ agentId: "alpha", match: { channel: "discord" } }]);
     expect(res.changes).toContain("Removed 1 binding that referenced missing agents.list ids.");
@@ -103,7 +103,7 @@ describe("compatibility binding repair migrate", () => {
         { agentId: "MAIN", match: { channel: "discord" } },
         { agentId: "ghost", match: { channel: "discord" } },
       ],
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(res.config.bindings).toEqual([{ agentId: "main", match: { channel: "discord" } }]);
     expect(res.changes).toContain("Removed 2 bindings that referenced missing agents.list ids.");
@@ -118,7 +118,7 @@ describe("compatibility binding repair migrate", () => {
         { agentId: "MAIN", match: { channel: "discord" } },
         { agentId: "ghost", match: { channel: "discord" } },
       ],
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(res.config.bindings).toEqual([{ agentId: "MAIN", match: { channel: "discord" } }]);
     expect(res.changes).toContain("Removed 1 binding that referenced missing agents.list ids.");
@@ -133,7 +133,7 @@ describe("compatibility binding repair migrate", () => {
         { agentId: "ghost", match: { channel: "discord" } },
         { agentId: "alpha", match: { channel: "discord" } },
       ],
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     const res = repairBindingsForTest(cfg);
 
@@ -257,7 +257,7 @@ describe("legacy memory search config migrate", () => {
       memorySearch: {
         provider: "openai",
         store: {
-          path: "/tmp/openclaw-memory-{agentId}.sqlite",
+          path: "/tmp/natesclaw-memory-{agentId}.sqlite",
           vector: { enabled: false },
         },
       },
@@ -377,7 +377,7 @@ describe("legacy memory search config migrate", () => {
             models: [
               { id: "gpt-missing" },
               { id: "gpt-auto", agentRuntime: { id: "auto" } },
-              { id: "gpt-openclaw", agentRuntime: { id: "openclaw" } },
+              { id: "gpt-natesclaw", agentRuntime: { id: "natesclaw" } },
             ],
           },
         },
@@ -387,7 +387,7 @@ describe("legacy memory search config migrate", () => {
     expect(res.config?.models?.providers?.openai?.models).toEqual([
       { id: "gpt-missing", agentRuntime: { id: "codex" } },
       { id: "gpt-auto", agentRuntime: { id: "codex" } },
-      { id: "gpt-openclaw", agentRuntime: { id: "openclaw" } },
+      { id: "gpt-natesclaw", agentRuntime: { id: "natesclaw" } },
     ]);
     expect(res.config?.models?.providers).not.toHaveProperty("codex");
   });
@@ -400,7 +400,7 @@ describe("legacy memory search config migrate", () => {
           codex: {
             models: [
               { id: "gpt-auto", agentRuntime: { id: "auto" } },
-              { id: "gpt-openclaw", agentRuntime: { id: "openclaw" } },
+              { id: "gpt-natesclaw", agentRuntime: { id: "natesclaw" } },
             ],
           },
         },
@@ -410,7 +410,7 @@ describe("legacy memory search config migrate", () => {
     expect(res.config?.models?.providers?.openai?.models).toEqual([
       { id: "text-embedding-3-small" },
       { id: "gpt-auto", agentRuntime: { id: "codex" } },
-      { id: "gpt-openclaw", agentRuntime: { id: "openclaw" } },
+      { id: "gpt-natesclaw", agentRuntime: { id: "natesclaw" } },
     ]);
     expect(res.config?.models?.providers).not.toHaveProperty("codex");
   });
@@ -2159,7 +2159,7 @@ describe("legacy migrate mention routing", () => {
         groupChat: {
           requireMention: false,
           historyLimit: 12,
-          mentionPatterns: ["@openclaw"],
+          mentionPatterns: ["@natesclaw"],
         },
       },
       channels: {
@@ -2187,7 +2187,7 @@ describe("legacy migrate mention routing", () => {
     });
     expect(res.config?.messages?.groupChat).toEqual({
       historyLimit: 12,
-      mentionPatterns: ["@openclaw"],
+      mentionPatterns: ["@natesclaw"],
     });
     expect(res.changes).toStrictEqual([
       "Moved routing.allowFrom → channels.whatsapp.allowFrom.",
@@ -2268,7 +2268,7 @@ describe("legacy migrate sandbox scope aliases", () => {
         list: [
           {
             id: "reviewer",
-            agentRuntime: { fallback: "openclaw" },
+            agentRuntime: { fallback: "natesclaw" },
             embeddedHarness: {
               runtime: "codex",
               fallback: "none",
@@ -2358,7 +2358,7 @@ describe("legacy migrate sandbox scope aliases", () => {
           agentRuntime: { id: "claude-cli" },
           model: "anthropic/claude-opus-4-7",
           models: {
-            "anthropic/claude-opus-4-7": { agentRuntime: { id: "openclaw" } },
+            "anthropic/claude-opus-4-7": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
@@ -2371,7 +2371,7 @@ describe("legacy migrate sandbox scope aliases", () => {
     expect(res.config?.agents?.defaults).toEqual({
       model: "anthropic/claude-opus-4-7",
       models: {
-        "anthropic/claude-opus-4-7": { agentRuntime: { id: "openclaw" } },
+        "anthropic/claude-opus-4-7": { agentRuntime: { id: "natesclaw" } },
       },
       modelPolicy: { allow: ["anthropic/claude-opus-4-7"] },
     });
@@ -2465,7 +2465,7 @@ describe("legacy migrate sandbox scope aliases", () => {
       agents: {
         list: [
           {
-            id: "openclaw",
+            id: "natesclaw",
             sandbox: {
               perSession: false,
             },
@@ -2576,11 +2576,11 @@ describe("legacy migrate sandbox scope aliases", () => {
       'Disabled agents.entries.inherited.sandbox.browser because it inherited unsupported browser network "none".',
       "Set agents.entries.isolated.sandbox.browser.enabled to true to preserve its explicit supported network while disabling the unsupported default browser network.",
       "Set agents.entries.blankInherited.sandbox.browser.enabled to true to preserve its explicit supported network while disabling the unsupported default browser network.",
-      'Disabled agents.defaults.sandbox.browser and moved its unsupported network "none" → "openclaw-sandbox-browser".',
+      'Disabled agents.defaults.sandbox.browser and moved its unsupported network "none" → "natesclaw-sandbox-browser".',
     ]);
     expect(res.config?.agents?.defaults?.sandbox?.browser).toEqual({
       enabled: false,
-      network: "openclaw-sandbox-browser",
+      network: "natesclaw-sandbox-browser",
       autoStart: false,
     });
     expect(res.config?.agents?.entries?.inherited?.sandbox?.browser).toEqual({
@@ -2624,11 +2624,11 @@ describe("legacy migrate sandbox scope aliases", () => {
     const res = migrateLegacyConfigForTest(raw);
 
     expect(res.changes).toStrictEqual([
-      'Disabled agents.entries.main.sandbox.browser and moved its unsupported network "none" → "openclaw-sandbox-browser".',
+      'Disabled agents.entries.main.sandbox.browser and moved its unsupported network "none" → "natesclaw-sandbox-browser".',
     ]);
     expect(res.config?.agents?.entries?.main?.sandbox?.browser).toEqual({
       enabled: false,
-      network: "openclaw-sandbox-browser",
+      network: "natesclaw-sandbox-browser",
       headless: true,
     });
     expect(migrateLegacyConfigForTest(res.config)).toEqual({ config: null, changes: [] });
@@ -2659,11 +2659,11 @@ describe("legacy migrate sandbox scope aliases", () => {
     const res = migrateLegacyConfigForTest(raw);
 
     expect(res.changes).toStrictEqual([
-      'Disabled agents.list.0.sandbox.browser and moved its unsupported network "none" → "openclaw-sandbox-browser".',
+      'Disabled agents.list.0.sandbox.browser and moved its unsupported network "none" → "natesclaw-sandbox-browser".',
     ]);
     expect(res.config?.agents?.entries?.legacy?.sandbox?.browser).toEqual({
       enabled: false,
-      network: "openclaw-sandbox-browser",
+      network: "natesclaw-sandbox-browser",
       autoStart: false,
     });
     expect(migrateLegacyConfigForTest(res.config)).toEqual({ config: null, changes: [] });
@@ -2678,7 +2678,7 @@ describe("legacy migrate sandbox scope aliases", () => {
             sandbox: {
               browser: {
                 enabled: true,
-                network: "openclaw-sandbox-browser",
+                network: "natesclaw-sandbox-browser",
               },
             },
           },
@@ -2692,7 +2692,7 @@ describe("legacy migrate sandbox scope aliases", () => {
 });
 
 describe("legacy migrate MCP server type aliases", () => {
-  it("moves CLI-native http type to OpenClaw streamable HTTP transport", () => {
+  it("moves CLI-native http type to Natesclaw streamable HTTP transport", () => {
     const res = migrateLegacyConfigForTest({
       mcp: {
         servers: {
@@ -3680,7 +3680,7 @@ describe("legacy model compat migrate", () => {
           models: {
             [legacy]: {
               alias: "GPT",
-              agentRuntime: { id: "openclaw" },
+              agentRuntime: { id: "natesclaw" },
               params: { temperature: 0.2, nested: { fromAlias: true } },
             },
             [canonical]: {
@@ -3712,7 +3712,7 @@ describe("legacy model compat migrate", () => {
       models: {
         [canonical]: {
           alias: "GPT",
-          agentRuntime: { id: "openclaw" },
+          agentRuntime: { id: "natesclaw" },
           params: {
             serviceTier: "priority",
             temperature: 0.2,

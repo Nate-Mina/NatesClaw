@@ -1,4 +1,4 @@
-import { parseBrowserHttpUrl } from "openclaw/plugin-sdk/browser-config";
+import { parseBrowserHttpUrl } from "natesclaw/plugin-sdk/browser-config";
 /**
  * Browser profile allocation helpers.
  *

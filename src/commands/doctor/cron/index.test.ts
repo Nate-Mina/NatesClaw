@@ -3,9 +3,9 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 // Doctor cron index tests cover cron doctor checks and repair entrypoints.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { NatesclawConfig } from "../../../config/config.js";
 import {
   loadCronJobsStoreWithConfigJobs,
   loadCronQuarantinedJobs,
@@ -15,8 +15,8 @@ import {
 } from "../../../cron/store.js";
 import { cronStoreKey } from "../../../cron/store/key.js";
 import { readCronTaskRunHistoryPage } from "../../../cron/task-run-history.js";
-import { runOpenClawStateWriteTransaction } from "../../../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../../../state/openclaw-state-db.paths.js";
+import { runNatesclawStateWriteTransaction } from "../../../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../../../state/natesclaw-state-db.paths.js";
 import { withRestoredMocks } from "../../../test-utils/vitest-spies.js";
 import {
   collectLegacyCronStoreHealthFindings,
@@ -36,7 +36,7 @@ vi.mock("../../../../packages/terminal-core/src/note.js", () => ({
 let tempRoot: string | null = null;
 
 async function makeTempStorePath() {
-  tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-doctor-cron-"));
+  tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-doctor-cron-"));
   return path.join(tempRoot, "cron", "jobs.json");
 }
 
@@ -62,13 +62,13 @@ function makePrompter(confirmResult = true) {
 function createCronConfig(
   storePath: string,
   webhook = "https://example.invalid/cron-finished",
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     cron: {
       store: storePath,
       webhook,
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as NatesclawConfig;
 }
 
 function createLegacyCronJob(overrides: Record<string, unknown> = {}) {
@@ -137,7 +137,7 @@ function insertEarlySQLiteCronRow(
 ) {
   const schedule = requireRecord(job.schedule, "cron schedule");
   const payload = requireRecord(job.payload, "cron payload");
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     db.prepare(
       `INSERT INTO cron_jobs (
         store_key, job_id, name, enabled, created_at_ms, updated_at,
@@ -247,7 +247,7 @@ describe("collectLegacyCronStoreHealthFindings", () => {
         expect.objectContaining({
           checkId: "core/doctor/legacy-cron-store",
           severity: "warning",
-          path: resolveOpenClawStateSqlitePath(),
+          path: resolveNatesclawStateSqlitePath(),
           requirement: "legacy-notify-fallback",
         }),
       ]),
@@ -279,7 +279,7 @@ describe("collectLegacyCronStoreHealthFindings", () => {
     expect(findings).toEqual([
       expect.objectContaining({
         checkId: "core/doctor/legacy-cron-store",
-        path: resolveOpenClawStateSqlitePath(),
+        path: resolveNatesclawStateSqlitePath(),
         requirement: "quarantined-cron-rows",
       }),
     ]);
@@ -288,14 +288,14 @@ describe("collectLegacyCronStoreHealthFindings", () => {
 
   it("attributes SQLite-only cron findings to the canonical state database", async () => {
     const storePath = await makeTempStorePath();
-    vi.stubEnv("OPENCLAW_STATE_DIR", path.dirname(path.dirname(storePath)));
+    vi.stubEnv("NATESCLAW_STATE_DIR", path.dirname(path.dirname(storePath)));
     await writeCurrentCronStore(storePath, [createCurrentCronJob({ notify: true })]);
 
     const findings = await collectLegacyCronStoreHealthFindings({ cfg: {} });
 
     expect(findings).toEqual([
       expect.objectContaining({
-        path: resolveOpenClawStateSqlitePath(),
+        path: resolveNatesclawStateSqlitePath(),
         requirement: "legacy-notify-fallback",
       }),
     ]);
@@ -312,7 +312,7 @@ describe("collectLegacyCronStoreHealthFindings", () => {
 
   it("reports a legacy quarantine sidecar without creating or modifying a SQLite database", async () => {
     const storePath = await makeTempStorePath();
-    vi.stubEnv("OPENCLAW_STATE_DIR", path.dirname(path.dirname(storePath)));
+    vi.stubEnv("NATESCLAW_STATE_DIR", path.dirname(path.dirname(storePath)));
     const quarantinePath = resolveLegacyCronQuarantinePath(storePath);
     await fs.mkdir(path.dirname(quarantinePath), { recursive: true });
     const historicalBytes = JSON.stringify({
@@ -332,7 +332,7 @@ describe("collectLegacyCronStoreHealthFindings", () => {
       }),
     ]);
     await expect(fs.readFile(quarantinePath, "utf-8")).resolves.toBe(historicalBytes);
-    await expect(fs.stat(resolveOpenClawStateSqlitePath())).rejects.toMatchObject({
+    await expect(fs.stat(resolveNatesclawStateSqlitePath())).rejects.toMatchObject({
       code: "ENOENT",
     });
   });
@@ -383,7 +383,7 @@ describe("maybeRepairLegacyCronStore", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     await maybeRepairLegacyCronStore({
       cfg,
@@ -561,7 +561,7 @@ describe("maybeRepairLegacyCronStore", () => {
             model: { primary: "openai/gpt-5.5", fallbacks: [] },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       options: {},
       prompter,
     });
@@ -639,7 +639,7 @@ describe("maybeRepairLegacyCronStore", () => {
             model: { primary: "test:opus", fallbacks: [] },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       options: {},
       prompter: makePrompter(true),
     });
@@ -669,7 +669,7 @@ describe("maybeRepairLegacyCronStore", () => {
       expectNoteContaining("1 automation is still marked in-flight", "Cron");
       expectNoteContaining("shows it as `running`", "Cron");
       expectNoteContaining("marks such runs interrupted the next time it starts", "Cron");
-      expectNoteContaining("openclaw automations show <id>", "Cron");
+      expectNoteContaining("natesclaw automations show <id>", "Cron");
 
       // Observer-only: no repair prompt and the running marker is left untouched.
       expect(prompter.confirm).not.toHaveBeenCalled();
@@ -731,7 +731,7 @@ describe("maybeRepairLegacyCronStore", () => {
       expectNoteContaining("re-fires it on error backoff", "Cron");
       expectNoteContaining("resets on the next successful run", "Cron");
       expectNoteContaining("interrupted by a gateway restart", "Cron");
-      expectNoteContaining("openclaw automations show <id>", "Cron");
+      expectNoteContaining("natesclaw automations show <id>", "Cron");
 
       // Observer-only: no repair prompt and the failure counters stay untouched.
       expect(prompter.confirm).not.toHaveBeenCalled();
@@ -836,10 +836,10 @@ describe("maybeRepairLegacyCronStore", () => {
       expectNoteContaining("2 automations are auto-disabled", "Cron");
       expectNoteContaining("Run failure job (run-failure-job)", "Cron");
       expectNoteContaining("recorded reason `consecutive-failures` after 10", "Cron");
-      expectNoteContaining("openclaw automations enable run-failure-job", "Cron");
+      expectNoteContaining("natesclaw automations enable run-failure-job", "Cron");
       expectNoteContaining("Schedule error job (schedule-error-job)", "Cron");
       expectNoteContaining("recorded reason `schedule-errors` after 3", "Cron");
-      expectNoteContaining("openclaw automations enable schedule-error-job", "Cron");
+      expectNoteContaining("natesclaw automations enable schedule-error-job", "Cron");
       expectNoNoteContaining("disabled-one-shot", "Cron");
     });
   });
@@ -1680,7 +1680,7 @@ describe("maybeRepairLegacyCronStore", () => {
     expectNoteContaining("Shell prompt job 1", "Cron");
     expectNoteContaining("Shell prompt job 2", "Cron");
     expectNoteContaining("Shell prompt job 3", "Cron");
-    expectNoNoteContaining("openclaw doctor --fix", "Cron");
+    expectNoNoteContaining("natesclaw doctor --fix", "Cron");
     expectNoNoteContaining("jobs.json", "Cron");
     expect(prompter.confirm).not.toHaveBeenCalled();
 
@@ -1723,7 +1723,7 @@ describe("maybeRepairLegacyCronStore", () => {
         message: [
           "Command to run:",
           "- command: python3 scripts/check_mail.py",
-          "- workdir: /home/openclaw/.razor/clawd",
+          "- workdir: /home/natesclaw/.razor/clawd",
         ].join("\n"),
         toolsAllow: ["read", "message"],
       },
@@ -1747,7 +1747,7 @@ describe("maybeRepairLegacyCronStore", () => {
     expectNoteContaining("Recreate it as a command automation", "Cron");
     expectNoNoteContaining("informational only", "Cron");
     expectNoNoteContaining("keep running as-is", "Cron");
-    expectNoNoteContaining("openclaw doctor --fix", "Cron");
+    expectNoNoteContaining("natesclaw doctor --fix", "Cron");
     expect(prompter.confirm).not.toHaveBeenCalled();
 
     const job = requirePersistedJob(await readPersistedJobs(storePath), 0);
@@ -2032,7 +2032,7 @@ describe("maybeRepairLegacyCronStore", () => {
       }),
     ]);
 
-    const cfg = { cron: { store: storePath } } as unknown as OpenClawConfig;
+    const cfg = { cron: { store: storePath } } as unknown as NatesclawConfig;
     await maybeRepairLegacyCronStore({
       cfg,
       options: {},
@@ -2070,7 +2070,7 @@ describe("maybeRepairLegacyCronStore", () => {
       }),
     ]);
 
-    const cfg = { cron: { store: storePath } } as unknown as OpenClawConfig;
+    const cfg = { cron: { store: storePath } } as unknown as NatesclawConfig;
     await maybeRepairLegacyCronStore({
       cfg,
       options: {},
@@ -2165,7 +2165,7 @@ describe("maybeRepairLegacyCronStore", () => {
         wakeMode: "now",
         payload: {
           kind: "systemEvent",
-          text: "__openclaw_memory_core_short_term_promotion_dream__",
+          text: "__natesclaw_memory_core_short_term_promotion_dream__",
         },
         state: {},
       },
@@ -2182,7 +2182,7 @@ describe("maybeRepairLegacyCronStore", () => {
     expect(job.sessionTarget).toBe("isolated");
     const payload = requireRecord(job.payload, "cron payload");
     expect(payload.kind).toBe("agentTurn");
-    expect(payload.message).toBe("__openclaw_memory_core_short_term_promotion_dream__");
+    expect(payload.message).toBe("__natesclaw_memory_core_short_term_promotion_dream__");
     expect(payload.lightContext).toBe(true);
     const delivery = requireRecord(job.delivery, "cron delivery");
     expect(delivery.mode).toBe("none");
@@ -2202,7 +2202,7 @@ describe("maybeRepairLegacyCronStore", () => {
 
     await expect(
       maybeRepairLegacyCronStore({
-        cfg: { cron: { store: storePath } } as unknown as OpenClawConfig,
+        cfg: { cron: { store: storePath } } as unknown as NatesclawConfig,
         options: {},
         prompter,
       }),
@@ -2221,7 +2221,7 @@ describe("legacy WhatsApp crontab health check", () => {
       readCrontab: async () => ({
         stdout: [
           "# keep comments ignored",
-          "*/5 * * * * ~/.openclaw/bin/ensure-whatsapp.sh >> ~/.openclaw/logs/whatsapp-health.log 2>&1",
+          "*/5 * * * * ~/.natesclaw/bin/ensure-whatsapp.sh >> ~/.natesclaw/logs/whatsapp-health.log 2>&1",
           "0 9 * * * /usr/bin/true",
           "",
         ].join("\n"),
@@ -2239,7 +2239,7 @@ describe("legacy WhatsApp crontab health check", () => {
       readCrontab: async () => ({
         stdout: [
           "# keep comments ignored",
-          "*/5 * * * * ~/.openclaw/bin/ensure-whatsapp.sh >> ~/.openclaw/logs/whatsapp-health.log 2>&1",
+          "*/5 * * * * ~/.natesclaw/bin/ensure-whatsapp.sh >> ~/.natesclaw/logs/whatsapp-health.log 2>&1",
           "0 9 * * * /usr/bin/true",
           "",
         ].join("\n"),
@@ -2289,7 +2289,7 @@ describe("legacy WhatsApp crontab health check", () => {
       noteLegacyWhatsAppCrontabHealthCheck({
         platform: "linux",
         readCrontab: async () => ({
-          stdout: { lines: ["*/5 * * * * ~/.openclaw/bin/ensure-whatsapp.sh"] },
+          stdout: { lines: ["*/5 * * * * ~/.natesclaw/bin/ensure-whatsapp.sh"] },
         }),
       }),
     ).resolves.toBeUndefined();

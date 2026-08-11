@@ -1,4 +1,4 @@
-import type { AgentMessage } from "@openclaw/agent-core";
+import type { AgentMessage } from "@natesclaw/agent-core";
 /**
  * Transcript repair helpers for tool-call replay.
  *
@@ -8,7 +8,7 @@ import {
   hasNonEmptyString as hasNonEmptyStringField,
   normalizeLowercaseStringOrEmpty,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   classifyToolUseResultPairing,
   makeMissingToolResult as makePairingMissingToolResult,

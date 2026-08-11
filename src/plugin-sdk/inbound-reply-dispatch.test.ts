@@ -7,7 +7,7 @@ import type {
   ChannelTurnResult,
   PreparedChannelTurn,
 } from "../channels/turn/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   dispatchChannelInboundReply,
   dispatchChannelInboundTurn,
@@ -112,7 +112,7 @@ describe("inbound reply dispatch compatibility", () => {
     } as FinalizedMsgContext;
 
     await dispatchInboundReplyWithBase({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       channel: "test",
       accountId: "default",
       route: { agentId: "main", sessionKey: "agent:main:test:peer" },

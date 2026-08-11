@@ -44,10 +44,10 @@ import {
 import { getCommandLaneSnapshot, setCommandLaneConcurrency } from "../../process/command-queue.js";
 import { runCommandWithTimeout, type SpawnResult } from "../../process/exec.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import {
   parseWorkerLaunchDescriptor,
   type WorkerLaunchDescriptor,
@@ -135,7 +135,7 @@ describe("worker turn launcher", () => {
   });
 
   let root: string;
-  let database: OpenClawStateDatabase;
+  let database: NatesclawStateDatabase;
   let placements: WorkerSessionPlacementStore;
   let sessionFile: string;
   let sessionTarget: {
@@ -146,8 +146,8 @@ describe("worker turn launcher", () => {
   };
 
   beforeEach(async () => {
-    root = await fs.mkdtemp(path.join(await fs.realpath(os.tmpdir()), "openclaw-worker-turn-"));
-    database = openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: root } });
+    root = await fs.mkdtemp(path.join(await fs.realpath(os.tmpdir()), "natesclaw-worker-turn-"));
+    database = openNatesclawStateDatabase({ env: { NATESCLAW_STATE_DIR: root } });
     placements = createWorkerSessionPlacementStore({ database });
     sessionTarget = {
       agentId: "main",
@@ -166,7 +166,7 @@ describe("worker turn launcher", () => {
   afterEach(async () => {
     cleanupAdmissionSink?.();
     cleanupAdmissionSink = undefined;
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     resetAgentEventsForTest();
     await fs.rm(root, { recursive: true, force: true });
   });
@@ -280,7 +280,7 @@ describe("worker turn launcher", () => {
       sharedHost: false,
       bootstrapReceipt: {
         bundleHash: BUNDLE_HASH,
-        openclawVersion: "2026.7.2",
+        natesclawVersion: "2026.7.2",
         protocolFeatures: [WORKER_EXECUTION_CONTEXT_PROTOCOL_FEATURE],
       },
       ownerEpoch: OWNER_EPOCH,
@@ -317,7 +317,7 @@ describe("worker turn launcher", () => {
         apps: [
           {
             id: "browser",
-            executablePath: "/usr/local/bin/openclaw-worker-browser",
+            executablePath: "/usr/local/bin/natesclaw-worker-browser",
             cdpPort: 9222,
           },
         ],
@@ -370,7 +370,7 @@ describe("worker turn launcher", () => {
       agents: {
         defaults: {
           models: {
-            "openai/gpt-test": { agentRuntime: { id: "openclaw" } },
+            "openai/gpt-test": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
@@ -634,7 +634,7 @@ describe("worker turn launcher", () => {
           },
           runLocal,
         ),
-      ).rejects.toThrow(`Cloud worker turns require the OpenClaw runtime, not ${runtimeId}`);
+      ).rejects.toThrow(`Cloud worker turns require the Natesclaw runtime, not ${runtimeId}`);
 
       expect(runLocal).not.toHaveBeenCalled();
       expect(getEnvironment).not.toHaveBeenCalled();
@@ -773,8 +773,8 @@ describe("worker turn launcher", () => {
         expect(command.argv).toEqual([
           "sh",
           "-c",
-          'exec node "$HOME/.openclaw-worker/$1/openclaw.mjs" worker',
-          "openclaw-worker",
+          'exec node "$HOME/.natesclaw-worker/$1/natesclaw.mjs" worker',
+          "natesclaw-worker",
           BUNDLE_HASH,
         ]);
         expect(command.argv.join(" ")).not.toContain(credential().credential);
@@ -858,14 +858,14 @@ describe("worker turn launcher", () => {
     });
     expect(reconcileWorkspace).toHaveBeenCalledWith(expect.objectContaining({ localPath: root }));
     const conflictSummary =
-      "Cloud result applied with 1 conflict(s); kept local versions: src/local.ts. Cloud versions staged at refs/openclaw/worker-results/";
+      "Cloud result applied with 1 conflict(s); kept local versions: src/local.ts. Cloud versions staged at refs/natesclaw/worker-results/";
     expect(result.payloads).toEqual([
       { text: expect.stringContaining(`Worker reply\n\n${conflictSummary}`) },
     ]);
     expect(placements.get(SESSION_ID)?.turnClaim).toBeNull();
     expect(placements.get(SESSION_ID)?.workspaceResultConflict).toMatchObject({
       paths: ["src/local.ts"],
-      stagedResultRef: expect.stringMatching(/^refs\/openclaw\/worker-results\//u),
+      stagedResultRef: expect.stringMatching(/^refs\/natesclaw\/worker-results\//u),
     });
     expect(onAgentEvent).toHaveBeenCalledWith({
       stream: "assistant",
@@ -915,7 +915,7 @@ describe("worker turn launcher", () => {
     expect(descriptor?.assignment.toolAuthority.allowedToolNames).toEqual(["browser"]);
     expect(descriptor?.assignment.browser).toEqual({
       cdpUrl: "http://127.0.0.1:9222",
-      launcherPath: "/usr/local/bin/openclaw-worker-browser",
+      launcherPath: "/usr/local/bin/natesclaw-worker-browser",
     });
     expect(descriptor?.assignment.initialMessages).toEqual([
       {

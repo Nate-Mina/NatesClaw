@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { HistoryEntry } from "../../auto-reply/reply/history.types.js";
 import type { DispatchReplyWithBufferedBlockDispatcher } from "../../auto-reply/reply/provider-dispatcher.types.js";
 import type { FinalizedMsgContext } from "../../auto-reply/templating.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resetDiagnosticEventsForTest } from "../../infra/diagnostic-events.js";
 import { resetLogger, setLoggerOverride } from "../../logging/logger.js";
 import { outboundMessageIdentities } from "../message/outbound-echo-state.js";
@@ -84,7 +84,7 @@ vi.mock("../../config/sessions/transcript.js", () => ({
   readRecentUserAssistantTextForSession,
 }));
 
-const cfg = {} as OpenClawConfig;
+const cfg = {} as NatesclawConfig;
 
 function createCtx(overrides: Partial<FinalizedMsgContext> = {}): FinalizedMsgContext {
   return {

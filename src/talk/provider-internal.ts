@@ -5,7 +5,7 @@
  * public Plugin SDK. External providers continue to implement only the stable
  * RealtimeVoiceProviderPlugin contract.
  */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { RealtimeVoiceProviderPlugin } from "../plugins/types.js";
 import type {
   RealtimeVoiceBrowserSession,
@@ -14,7 +14,7 @@ import type {
   RealtimeVoiceProviderConfig,
 } from "./provider-types.js";
 
-const INTERNAL_REALTIME_VOICE_PROVIDER = Symbol.for("openclaw.internal.realtime-voice-provider.v1");
+const INTERNAL_REALTIME_VOICE_PROVIDER = Symbol.for("natesclaw.internal.realtime-voice-provider.v1");
 
 export type InternalRealtimeVoiceProviderCapabilities = RealtimeVoiceProviderCapabilities & {
   /** The provider owns agent delegation instead of exposing client-side function tools. */
@@ -36,28 +36,28 @@ export type InternalRealtimeVoiceBrowserSessionCreateRequest =
 
 type InternalRealtimeVoiceProviderApi = {
   isBrowserSessionConfigured: (ctx: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     providerConfig: RealtimeVoiceProviderConfig;
     agentId?: string;
   }) => boolean;
   resolveBrowserSessionCapabilities?: (ctx: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     providerConfig: RealtimeVoiceProviderConfig;
     /** Effective per-session model after request overrides. */
     model?: string;
   }) => InternalRealtimeVoiceProviderCapabilities;
   isGatewayRelayConfigured?: (ctx: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     providerConfig: RealtimeVoiceProviderConfig;
     agentId?: string;
   }) => boolean | undefined;
   resolveGatewayRelayCapabilities?: (ctx: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     providerConfig: RealtimeVoiceProviderConfig;
     model?: string;
   }) => InternalRealtimeVoiceProviderCapabilities;
   validateGatewayRelayLaunch?: (ctx: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     providerConfig: RealtimeVoiceProviderConfig;
     model?: string;
     autoRespondToAudio?: boolean;
@@ -83,7 +83,7 @@ function readInternalRealtimeVoiceProviderApi(
 
 export function isInternalRealtimeVoiceBrowserSessionConfigured(params: {
   provider: RealtimeVoiceProviderPlugin;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   agentId?: string;
 }): boolean | undefined {
@@ -96,7 +96,7 @@ export function isInternalRealtimeVoiceBrowserSessionConfigured(params: {
 
 export function resolveInternalRealtimeVoiceBrowserSessionCapabilities(params: {
   provider: RealtimeVoiceProviderPlugin;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   model?: string;
 }): InternalRealtimeVoiceProviderCapabilities | undefined {
@@ -111,7 +111,7 @@ export function resolveInternalRealtimeVoiceBrowserSessionCapabilities(params: {
 
 export function isInternalRealtimeVoiceGatewayRelayConfigured(params: {
   provider: RealtimeVoiceProviderPlugin;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   agentId?: string;
 }): boolean | undefined {
@@ -124,7 +124,7 @@ export function isInternalRealtimeVoiceGatewayRelayConfigured(params: {
 
 export function resolveInternalRealtimeVoiceGatewayRelayCapabilities(params: {
   provider: RealtimeVoiceProviderPlugin;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   model?: string;
 }): InternalRealtimeVoiceProviderCapabilities | undefined {
@@ -137,7 +137,7 @@ export function resolveInternalRealtimeVoiceGatewayRelayCapabilities(params: {
 
 export function resolveInternalRealtimeVoiceGatewayRelayLaunchError(params: {
   provider: RealtimeVoiceProviderPlugin;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   model?: string;
   autoRespondToAudio?: boolean;

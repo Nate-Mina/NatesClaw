@@ -1,14 +1,14 @@
-import { isWssUrl } from "@openclaw/net-policy/url-protocol";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isWssUrl } from "@natesclaw/net-policy/url-protocol";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { GatewayTlsConfig } from "../config/types.gateway.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { GatewayTlsRuntime } from "../infra/tls/gateway.js";
 
 type GatewayTlsRuntimeLoader = (config: GatewayTlsConfig | undefined) => Promise<GatewayTlsRuntime>;
 
 /** Resolve the certificate pin for one already-selected Gateway target. */
 export async function resolveGatewayConnectionTlsFingerprint(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   url: string;
   urlSource: string;
   explicitTlsFingerprint?: string;
@@ -24,7 +24,7 @@ export async function resolveGatewayConnectionTlsFingerprint(params: {
   const remoteTlsFingerprint =
     params.config.gateway?.mode === "remote" &&
     (params.urlSource === "config gateway.remote.url" ||
-      params.urlSource === "env OPENCLAW_GATEWAY_URL")
+      params.urlSource === "env NATESCLAW_GATEWAY_URL")
       ? normalizeOptionalString(params.config.gateway.remote?.tlsFingerprint)
       : undefined;
   if (remoteTlsFingerprint) {

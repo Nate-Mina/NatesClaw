@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import {
   withPluginMetadataSnapshotScope,
   type PluginMetadataSnapshotScopeRunner,
@@ -22,7 +22,7 @@ type DoctorPluginMetadataSnapshotScope = {
 /** Promotes validation-scoped metadata to a complete immutable Doctor snapshot. */
 export function completeDoctorPluginMetadataSnapshot(params: {
   snapshot?: PluginMetadataSnapshot;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): PluginMetadataSnapshot | undefined {
   return completePluginMetadataSnapshot(params);
@@ -51,7 +51,7 @@ export function createDoctorPluginMetadataSnapshotScope(params: {
     }
   };
 
-  const resolveSnapshot = (config: OpenClawConfig, workspaceDir: string | undefined) => {
+  const resolveSnapshot = (config: NatesclawConfig, workspaceDir: string | undefined) => {
     refreshBaseSnapshot();
     const current = snapshotsByWorkspace.get(workspaceDir);
     if (

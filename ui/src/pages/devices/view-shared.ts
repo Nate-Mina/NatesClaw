@@ -1,5 +1,5 @@
 // Devices page owns these pure view helpers.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { html, type TemplateResult } from "lit";
 import {
   GATEWAY_CLIENT_IDS,

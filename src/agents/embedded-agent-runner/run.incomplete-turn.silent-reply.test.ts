@@ -1,6 +1,6 @@
 // Focused incomplete-turn behavior coverage.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import {
   REASONING_ONLY_RETRY_INSTRUCTION,
   EMPTY_RESPONSE_RETRY_INSTRUCTION,
@@ -387,13 +387,13 @@ describe("runEmbeddedAgent incomplete-turn safety", () => {
     const result = await runEmbeddedAgent(
       makeRunParams("run-visible-prose-no-classifier", {
         prompt:
-          "made a bunch of improvements to the student's source code (openclaw) this weekend, along with a few other maintainers. hopefully he will be more proactive now",
+          "made a bunch of improvements to the student's source code (natesclaw) this weekend, along with a few other maintainers. hopefully he will be more proactive now",
         model: "gpt-5.4",
         config: {
           agents: {
             list: [{ id: "main" }],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
       }),
     );
 

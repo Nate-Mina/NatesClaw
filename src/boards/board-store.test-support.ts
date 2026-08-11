@@ -5,22 +5,22 @@ import { onTestFinished } from "vitest";
 import { replaceSessionEntrySync } from "../config/sessions/session-accessor.entry.js";
 import { parseAgentSessionKey } from "../routing/session-key.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { SqliteBoardStore } from "./sqlite-board-store.js";
 
 export function createTestBoardStore(options: { stateDir?: string } = {}): SqliteBoardStore {
   const ownsStateDir = options.stateDir === undefined;
-  const stateDir = options.stateDir ?? mkdtempSync(path.join(tmpdir(), "openclaw-board-store-"));
-  const env = { OPENCLAW_STATE_DIR: stateDir };
+  const stateDir = options.stateDir ?? mkdtempSync(path.join(tmpdir(), "natesclaw-board-store-"));
+  const env = { NATESCLAW_STATE_DIR: stateDir };
   const seededSessions = new Set<string>();
 
   if (ownsStateDir) {
     onTestFinished(() => {
-      closeOpenClawAgentDatabasesForTest();
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawAgentDatabasesForTest();
+      closeNatesclawStateDatabaseForTest();
       rmSync(stateDir, { recursive: true, force: true });
     });
   }
@@ -33,7 +33,7 @@ export function createTestBoardStore(options: { stateDir?: string } = {}): Sqlit
       const canonicalSessionKey = parsed ? sessionKey : `agent:${agentId}:${sessionKey}`;
       const identity = `${agentId}\0${canonicalSessionKey}`;
       if (!seededSessions.has(identity)) {
-        const database = openOpenClawAgentDatabase({ agentId, env });
+        const database = openNatesclawAgentDatabase({ agentId, env });
         replaceSessionEntrySync(
           { agentId, sessionKey: canonicalSessionKey, storePath: database.path },
           { sessionId: `board-test-${seededSessions.size}`, updatedAt: Date.now() },

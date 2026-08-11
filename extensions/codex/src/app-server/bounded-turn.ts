@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { AuthProfileStore } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { readStringField as readString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredOpenClawTmpDir, withTempWorkspace } from "openclaw/plugin-sdk/temp-path";
+import type { AuthProfileStore } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
+import { readStringField as readString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredNatesclawTmpDir, withTempWorkspace } from "natesclaw/plugin-sdk/temp-path";
 import {
   CODEX_APP_SERVER_INTERRUPT_TIMEOUT_MS,
   interruptCodexTurnAndWaitBestEffort,
@@ -49,7 +49,7 @@ import {
   readCodexInheritedMcpServerNames,
 } from "./thread-requests.js";
 
-const CODEX_APP_SERVER_ARGS_ENV_KEY = "OPENCLAW_CODEX_APP_SERVER_ARGS";
+const CODEX_APP_SERVER_ARGS_ENV_KEY = "NATESCLAW_CODEX_APP_SERVER_ARGS";
 const CODEX_BOUNDED_THREAD_CONFIG: JsonObject = {
   "agents.enabled": false,
   "features.multi_agent": false,
@@ -93,7 +93,7 @@ class CodexBoundedTurnTimeoutError extends Error {
 }
 
 type CodexBoundedTurnParams = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   model: CodexBoundedTurnModelSelection;
   profile?: string;
   timeoutMs: number;
@@ -130,7 +130,7 @@ export async function runBoundedCodexAppServerTurn(
   }
   return await withTempWorkspace(
     {
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "codex-bounded-turn-",
     },
     async (workspace) => {
@@ -248,7 +248,7 @@ async function runBoundedCodexAppServerTurnInWorkspace(
           cwd: workspace.cwd,
           approvalPolicy: "on-request",
           sandbox: "read-only",
-          serviceName: "OpenClaw",
+          serviceName: "Natesclaw",
           ...(params.requireNoExternalCapabilities ? { baseInstructions: "" } : {}),
           developerInstructions: params.developerInstructions,
           config: threadConfig,
@@ -373,7 +373,7 @@ function resolveBoundedThreadConfig(
       privateConfig,
       CODEX_SETTLED_FINALIZER_THREAD_CONFIG,
       buildCodexRingZeroThreadConfigPatch(
-        { toolsAllow: ["openclaw"] },
+        { toolsAllow: ["natesclaw"] },
         true,
         inheritedMcpServerNames,
       ),
@@ -426,7 +426,7 @@ function createCodexBoundedApprovalHandler(taskLabel: string) {
     ) {
       return {
         decision: "decline",
-        reason: `OpenClaw Codex ${taskLabel} does not grant tool or file approvals.`,
+        reason: `Natesclaw Codex ${taskLabel} does not grant tool or file approvals.`,
       };
     }
     if (request.method === "item/permissions/requestApproval") {
@@ -435,7 +435,7 @@ function createCodexBoundedApprovalHandler(taskLabel: string) {
     if (request.method.includes("requestApproval")) {
       return {
         decision: "decline",
-        reason: `OpenClaw Codex ${taskLabel} does not grant native approvals.`,
+        reason: `Natesclaw Codex ${taskLabel} does not grant native approvals.`,
       };
     }
     if (request.method === "mcpServer/elicitation/request") {

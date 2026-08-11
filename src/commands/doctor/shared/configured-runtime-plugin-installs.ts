@@ -1,10 +1,10 @@
 // Doctor helpers for installing plugins required by configured agent runtimes.
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   collectConfiguredAgentHarnessRuntimes,
   type ConfiguredAgentHarnessRuntimeOptions,
 } from "../../../agents/harness-runtimes.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import type { PluginPackageInstall } from "../../../plugins/manifest.js";
 
 type ConfiguredRuntimePluginInstallCandidate = {
@@ -20,8 +20,8 @@ type ConfiguredRuntimePluginInstallCandidate = {
   trustedSourceLinkedOfficialInstall?: boolean;
   /** Default installer choice when multiple official sources are available. */
   defaultChoice?: PluginPackageInstall["defaultChoice"];
-  /** Keep this official runtime package on the same release cohort as OpenClaw. */
-  versionBoundToOpenClaw?: boolean;
+  /** Keep this official runtime package on the same release cohort as Natesclaw. */
+  versionBoundToNatesclaw?: boolean;
 };
 
 export const CONFIGURED_RUNTIME_PLUGIN_INSTALL_CANDIDATES: readonly ConfiguredRuntimePluginInstallCandidate[] =
@@ -29,22 +29,22 @@ export const CONFIGURED_RUNTIME_PLUGIN_INSTALL_CANDIDATES: readonly ConfiguredRu
     {
       pluginId: "acpx",
       label: "ACPX Runtime",
-      npmSpec: "@openclaw/acpx",
+      npmSpec: "@natesclaw/acpx",
       trustedSourceLinkedOfficialInstall: true,
     },
     // Runtime-only configs do not have a provider/channel integration catalog entry.
     {
       pluginId: "codex",
       label: "Codex",
-      npmSpec: "@openclaw/codex",
+      npmSpec: "@natesclaw/codex",
       trustedSourceLinkedOfficialInstall: true,
-      versionBoundToOpenClaw: true,
+      versionBoundToNatesclaw: true,
     },
   ];
 
 export const VERSION_BOUND_RUNTIME_PLUGIN_IDS: ReadonlySet<string> = new Set(
   CONFIGURED_RUNTIME_PLUGIN_INSTALL_CANDIDATES.filter(
-    (candidate) => candidate.versionBoundToOpenClaw,
+    (candidate) => candidate.versionBoundToNatesclaw,
   ).map((candidate) => candidate.pluginId),
 );
 
@@ -63,7 +63,7 @@ export function resolveConfiguredRuntimePluginInstallCandidate(
   );
 }
 
-function acpxRuntimeIsConfigured(cfg: OpenClawConfig): boolean {
+function acpxRuntimeIsConfigured(cfg: NatesclawConfig): boolean {
   const acp = asOptionalRecord(cfg.acp);
   const backend = typeof acp?.backend === "string" ? acp.backend.trim().toLowerCase() : "";
   return (
@@ -76,7 +76,7 @@ function acpxRuntimeIsConfigured(cfg: OpenClawConfig): boolean {
 
 /** Collect runtime plugin ids implied by configured harness runtimes and ACPX settings. */
 export function collectConfiguredRuntimePluginIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options?: ConfiguredAgentHarnessRuntimeOptions,
 ): string[] {
   const ids = new Set(collectConfiguredAgentHarnessRuntimes(cfg, options));

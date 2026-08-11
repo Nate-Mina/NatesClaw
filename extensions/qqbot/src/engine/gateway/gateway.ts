@@ -1,6 +1,6 @@
 // Qqbot plugin module implements gateway behavior.
 import path from "node:path";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { isQQBotTokenAuthenticationFailure } from "../api/auth-errors.js";
 import {
   classifyCoreCommandForGroup,

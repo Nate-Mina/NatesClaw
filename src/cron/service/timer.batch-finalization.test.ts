@@ -1,5 +1,5 @@
 // Completed cron work must become durable before unrelated batch work drains.
-import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createDueIsolatedJob,
@@ -393,7 +393,7 @@ describe("cron batch outcome finalization", () => {
       expect(order).toEqual(["persist", "notify", "heartbeat"]);
       expect(enqueueSystemEvent).toHaveBeenCalledOnce();
       expect(enqueueSystemEvent).toHaveBeenCalledWith(
-        expect.stringContaining(`openclaw automations enable ${job.id}`),
+        expect.stringContaining(`natesclaw automations enable ${job.id}`),
         {
           agentId: "main",
           sessionKey: undefined,

@@ -20,57 +20,57 @@ function writeRepoFile(repoRoot: string, relativePath: string, value: string): v
 }
 
 function makeEnvMutationFixture(): string {
-  const repoRoot = createTempDir("openclaw-test-env-mutations-");
+  const repoRoot = createTempDir("natesclaw-test-env-mutations-");
   writeRepoFile(
     repoRoot,
     "src/runtime.ts",
     `
-process.env.OPENCLAW_STATE_DIR = "ignored because this is not a test file";
+process.env.NATESCLAW_STATE_DIR = "ignored because this is not a test file";
 `,
   );
   writeRepoFile(
     repoRoot,
     "src/example.test.ts",
     `
-process.env.OPENCLAW_STATE_DIR = "state";
-delete process.env["OPENCLAW_CONFIG_PATH"];
+process.env.NATESCLAW_STATE_DIR = "state";
+delete process.env["NATESCLAW_CONFIG_PATH"];
 vi.stubEnv("HOME", "home");
-vi.stubEnv("OPENCLAW_WORKSPACE_DIR", "workspace");
-process.env = { ...process.env, OPENCLAW_HOME: "home", OTHER_KEY: "ignored" };
-const dynamicEnvKey = "OPENCLAW_STATE_DIR";
+vi.stubEnv("NATESCLAW_WORKSPACE_DIR", "workspace");
+process.env = { ...process.env, NATESCLAW_HOME: "home", OTHER_KEY: "ignored" };
+const dynamicEnvKey = "NATESCLAW_STATE_DIR";
 process.env[dynamicEnvKey] = "dynamic";
 delete process.env[dynamicEnvKey];
-const fixture = 'process.env.OPENCLAW_HOME = "not code"';
-process.env.NOT_OPENCLAW = "ignored";
+const fixture = 'process.env.NATESCLAW_HOME = "not code"';
+process.env.NOT_NATESCLAW = "ignored";
 `,
   );
   writeRepoFile(
     repoRoot,
     "scripts/mcp-code-mode-gateway-e2e.ts",
     `
-process.env.OPENCLAW_CONFIG_PATH = "script-harness";
+process.env.NATESCLAW_CONFIG_PATH = "script-harness";
 `,
   );
   writeRepoFile(
     repoRoot,
     "src/agents/auth-profiles/oauth-test-utils.ts",
     `
-process.env.OPENCLAW_AGENT_DIR = "agent";
+process.env.NATESCLAW_AGENT_DIR = "agent";
 `,
   );
   writeRepoFile(
     repoRoot,
-    "src/test-utils/openclaw-test-state.ts",
+    "src/test-utils/natesclaw-test-state.ts",
     `
 process.env.HOME = "allowed";
-delete process.env.OPENCLAW_STATE_DIR;
+delete process.env.NATESCLAW_STATE_DIR;
 `,
   );
   return repoRoot;
 }
 
 describe("collectTestEnvMutationReport", () => {
-  it("reports active OpenClaw env mutations while ignoring strings and non-test files", () => {
+  it("reports active Natesclaw env mutations while ignoring strings and non-test files", () => {
     const report = collectTestEnvMutationReport({ repoRoot: makeEnvMutationFixture() });
 
     expect(
@@ -82,19 +82,19 @@ describe("collectTestEnvMutationReport", () => {
     ).toEqual([
       {
         file: "scripts/mcp-code-mode-gateway-e2e.ts",
-        key: "OPENCLAW_CONFIG_PATH",
+        key: "NATESCLAW_CONFIG_PATH",
         operation: "assign",
       },
       {
         file: "src/agents/auth-profiles/oauth-test-utils.ts",
-        key: "OPENCLAW_AGENT_DIR",
+        key: "NATESCLAW_AGENT_DIR",
         operation: "assign",
       },
-      { file: "src/example.test.ts", key: "OPENCLAW_STATE_DIR", operation: "assign" },
-      { file: "src/example.test.ts", key: "OPENCLAW_CONFIG_PATH", operation: "delete" },
+      { file: "src/example.test.ts", key: "NATESCLAW_STATE_DIR", operation: "assign" },
+      { file: "src/example.test.ts", key: "NATESCLAW_CONFIG_PATH", operation: "delete" },
       { file: "src/example.test.ts", key: "HOME", operation: "stubEnv" },
-      { file: "src/example.test.ts", key: "OPENCLAW_WORKSPACE_DIR", operation: "stubEnv" },
-      { file: "src/example.test.ts", key: "OPENCLAW_HOME", operation: "replace" },
+      { file: "src/example.test.ts", key: "NATESCLAW_WORKSPACE_DIR", operation: "stubEnv" },
+      { file: "src/example.test.ts", key: "NATESCLAW_HOME", operation: "replace" },
       { file: "src/example.test.ts", key: "<dynamic>", operation: "assign" },
       { file: "src/example.test.ts", key: "<dynamic>", operation: "delete" },
     ]);
@@ -112,10 +112,10 @@ describe("collectTestEnvMutationReport", () => {
 
     const rendered = renderTestEnvMutationReport(report, { includeAllowed: true });
 
-    expect(rendered).toContain("OpenClaw test env mutation report");
+    expect(rendered).toContain("Natesclaw test env mutation report");
     expect(rendered).toContain("Findings: 9 active in 3 file(s), 2 allowed in 1 file(s)");
     expect(rendered).toContain("- src/example.test.ts (7)");
-    expect(rendered).toContain("L2 OPENCLAW_STATE_DIR assign process.env");
+    expect(rendered).toContain("L2 NATESCLAW_STATE_DIR assign process.env");
     expect(rendered).toContain("Allowed harness findings:");
   });
 
@@ -195,7 +195,7 @@ describe("collectTestEnvMutationReport", () => {
           "--limit",
           limit,
           "--repo-root",
-          createTempDir("openclaw-env-limit-"),
+          createTempDir("natesclaw-env-limit-"),
         ]),
       ).toThrow("--limit expects a non-negative integer");
     }

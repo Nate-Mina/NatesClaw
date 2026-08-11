@@ -1,4 +1,4 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorCodes } from "../../../packages/gateway-protocol/src/index.js";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
@@ -16,8 +16,8 @@ import {
   getCommandLaneSnapshot,
   setCommandLaneConcurrency,
 } from "../../process/command-queue.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import type { GatewayRequestContext, RespondFn } from "./types.js";
 
 const mocks = vi.hoisted(() => ({
@@ -67,7 +67,7 @@ beforeEach(async () => {
     };
   });
   setActivePluginRegistry(createEmptyPluginRegistry());
-  vi.stubEnv("OPENCLAW_STATE_DIR", tempDirs.make("openclaw-rewind-handler-"));
+  vi.stubEnv("NATESCLAW_STATE_DIR", tempDirs.make("natesclaw-rewind-handler-"));
   await upsertSessionEntryCore(
     { agentId: "main", sessionKey },
     {
@@ -87,7 +87,7 @@ beforeEach(async () => {
           { type: "text", text: "edit me" },
           { type: "image", data: "aW1hZ2U=", mimeType: "image/png" },
         ],
-        __openclaw: {
+        __natesclaw: {
           media: [
             { path: storedImagePath, contentType: "image/png" },
             // Duplicate ref proves dedupe: the response must carry this image once.
@@ -135,8 +135,8 @@ afterEach(async () => {
   await Promise.all(queuedCommandSettlements);
   queuedCommandSettlements.clear();
   resetPluginRuntimeStateForTest();
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
   vi.unstubAllEnvs();
 });
 

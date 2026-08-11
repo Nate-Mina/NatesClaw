@@ -76,8 +76,8 @@ describe("status.command-sections", () => {
     expect(lines).toContain("    critical detail");
     expect(lines).toContain("    muted(Fix: fix it)");
     expect(lines).toContain("muted(… +1 more)");
-    expect(lines.at(-2)).toBe("muted(Full report: cmd:openclaw security audit)");
-    expect(lines.at(-1)).toBe("muted(Deep probe: cmd:openclaw security audit --deep)");
+    expect(lines.at(-2)).toBe("muted(Full report: cmd:natesclaw security audit)");
+    expect(lines.at(-1)).toBe("muted(Deep probe: cmd:natesclaw security audit --deep)");
   });
 
   it("builds verbose sessions rows and returns no rows for empty sessions", () => {
@@ -106,7 +106,7 @@ describe("status.command-sections", () => {
           updatedAt: 2,
           age: 7_000,
           model: "gpt-5.5",
-          runtime: "OpenClaw Default",
+          runtime: "Natesclaw Default",
           totalTokens: null,
           totalTokensFresh: false,
           remainingTokens: null,
@@ -141,7 +141,7 @@ describe("status.command-sections", () => {
         Kind: "cron",
         Age: "7000ms",
         Model: "gpt-5.5",
-        Runtime: "OpenClaw Default",
+        Runtime: "Natesclaw Default",
         Tokens: "12k",
         Cache: "cache ok",
       },
@@ -172,7 +172,7 @@ describe("status.command-sections", () => {
           configuredModel: "zhipu/glm-4.5-air",
           selectedModel: "deepseek/deepseek-v4-flash",
           modelSelectionReason: "session override",
-          runtime: "OpenClaw Default",
+          runtime: "Natesclaw Default",
           totalTokens: null,
           totalTokensFresh: false,
           remainingTokens: null,
@@ -192,7 +192,7 @@ describe("status.command-sections", () => {
       "  Session selected: deepseek/deepseek-v4-flash",
       "  Reason: session override",
       "  Clear with: /model default",
-      "  Docs: https://docs.openclaw.ai/concepts/models#selection-source-and-fallback-behavior",
+      "  Docs: https://docs.natesclaw.ai/concepts/models#selection-source-and-fallback-behavior",
     ]);
   });
 
@@ -208,7 +208,7 @@ describe("status.command-sections", () => {
           configuredModel: "minimax/MiniMax-M3",
           selectedModel: "ollama/qwen3.6-blue:35b-a3b",
           modelSelectionReason: "fallback selected",
-          runtime: "OpenClaw Default",
+          runtime: "Natesclaw Default",
           totalTokens: null,
           totalTokensFresh: false,
           remainingTokens: null,
@@ -228,7 +228,7 @@ describe("status.command-sections", () => {
       "  Session selected: ollama/qwen3.6-blue:35b-a3b",
       "  Reason: fallback selected",
       "  Action: check provider availability or retry with /model",
-      "  Docs: https://docs.openclaw.ai/concepts/models#selection-source-and-fallback-behavior",
+      "  Docs: https://docs.natesclaw.ai/concepts/models#selection-source-and-fallback-behavior",
     ]);
   });
 
@@ -299,14 +299,14 @@ describe("status.command-sections", () => {
         gatewayReachable: false,
       }),
     ).toEqual([
-      "FAQ: https://docs.openclaw.ai/faq",
-      "Troubleshooting: https://docs.openclaw.ai/troubleshooting",
+      "FAQ: https://docs.natesclaw.ai/faq",
+      "Troubleshooting: https://docs.natesclaw.ai/troubleshooting",
       "",
       "warn(upgrade ready)",
       "Next steps:",
-      "  Need to share?      cmd:openclaw status --all",
-      "  Need to debug live? cmd:openclaw logs --follow",
-      "  Fix reachability first: cmd:openclaw gateway probe",
+      "  Need to share?      cmd:natesclaw status --all",
+      "  Need to debug live? cmd:natesclaw logs --follow",
+      "  Fix reachability first: cmd:natesclaw gateway probe",
     ]);
   });
 
@@ -340,9 +340,9 @@ describe("status.command-sections", () => {
       "warn(Gateway scope upgrade approval required.)",
       "muted(Reason: device is asking for more scopes than currently approved.)",
       "muted(Hint: Review the requested scopes, then approve the pending upgrade.)",
-      "muted(Recovery: cmd:openclaw devices approve req-123)",
-      "muted(Fallback: cmd:openclaw devices approve --latest)",
-      "muted(Inspect: cmd:openclaw devices list)",
+      "muted(Recovery: cmd:natesclaw devices approve req-123)",
+      "muted(Fallback: cmd:natesclaw devices approve --latest)",
+      "muted(Inspect: cmd:natesclaw devices list)",
     ]);
   });
 

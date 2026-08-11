@@ -2,7 +2,7 @@
 // Apple Watch cannot use generic WebSockets on-device, so node events use bounded HTTPS polls.
 import { randomBytes, randomUUID } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { isRecord as isStringRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord as isStringRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   GATEWAY_CLIENT_IDS,
   GATEWAY_CLIENT_MODES,
@@ -13,7 +13,7 @@ import {
   validateConnectParams,
   type ConnectParams,
 } from "../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   getBoundDeviceBootstrapProfile,
   redeemDeviceBootstrapTokenProfile,
@@ -122,7 +122,7 @@ type WatchNodeSession = {
 
 type WatchNodeHttpRuntimeOptions = {
   nodeRegistry: NodeRegistry;
-  getConfig: () => OpenClawConfig;
+  getConfig: () => NatesclawConfig;
   broadcast: GatewayBroadcastFn;
   rateLimiter?: AuthRateLimiter;
   nodeReapprovalCoordinator?: NodeReapprovalCoordinator;
@@ -155,7 +155,7 @@ function readBearerToken(req: IncomingMessage): string | null {
 
 function resolveWatchClientAddress(
   req: IncomingMessage,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): { clientIp?: string; rateLimitKey: string } {
   const trustedProxies = config.gateway?.trustedProxies ?? [];
   const clientIp = resolveRequestClientIp(

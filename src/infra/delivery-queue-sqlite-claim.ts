@@ -1,4 +1,4 @@
-import { openOpenClawStateDatabase } from "../state/openclaw-state-db.js";
+import { openNatesclawStateDatabase } from "../state/natesclaw-state-db.js";
 import {
   loadDeliveryQueueEntry,
   upsertDeliveryQueueEntry,
@@ -40,8 +40,8 @@ export function transitionOwnedDeliveryQueueEntry(
   },
   transition: (entry: DeliveryQueueEntryState) => void,
 ): boolean {
-  const database = openOpenClawStateDatabase({
-    env: params.stateDir ? { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } : process.env,
+  const database = openNatesclawStateDatabase({
+    env: params.stateDir ? { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } : process.env,
   });
   return runSqliteImmediateTransactionSync(
     database.db,
@@ -62,7 +62,7 @@ export function transitionOwnedDeliveryQueueEntry(
       return true;
     },
     {
-      databaseLabel: "openclaw-state",
+      databaseLabel: "natesclaw-state",
       operationLabel: `mutate owned ${params.queueName} delivery platform send`,
     },
   );
@@ -75,8 +75,8 @@ function transitionUnsentDeliveryQueueEntry(
 ): boolean {
   // State-database opens reuse the canonical path-owned connection, so both
   // existing queue primitives execute inside this same IMMEDIATE transaction.
-  const database = openOpenClawStateDatabase({
-    env: params.stateDir ? { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } : process.env,
+  const database = openNatesclawStateDatabase({
+    env: params.stateDir ? { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } : process.env,
   });
   return runSqliteImmediateTransactionSync(
     database.db,
@@ -103,7 +103,7 @@ function transitionUnsentDeliveryQueueEntry(
         : false;
     },
     {
-      databaseLabel: "openclaw-state",
+      databaseLabel: "natesclaw-state",
       operationLabel: `${operation} ${params.queueName} delivery platform send`,
     },
   );
@@ -150,8 +150,8 @@ export function renewDeliveryQueueEntryPlatformSendLease(
     claimId: string;
   },
 ): number | undefined {
-  const database = openOpenClawStateDatabase({
-    env: params.stateDir ? { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } : process.env,
+  const database = openNatesclawStateDatabase({
+    env: params.stateDir ? { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } : process.env,
   });
   return runSqliteImmediateTransactionSync(
     database.db,
@@ -184,7 +184,7 @@ export function renewDeliveryQueueEntryPlatformSendLease(
         : undefined;
     },
     {
-      databaseLabel: "openclaw-state",
+      databaseLabel: "natesclaw-state",
       operationLabel: `renew ${params.queueName} delivery platform send`,
     },
   );

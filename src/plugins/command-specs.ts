@@ -1,21 +1,21 @@
 // Normalizes plugin command specs for CLI and slash command surfaces.
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 import { getLoadedChannelPlugin } from "../channels/plugins/index.js";
 import { resolveReadOnlyChannelCommandDefaults } from "../channels/plugins/read-only-command-defaults.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { pluginCommands } from "./command-registry-state.js";
 import {
   pluginCommandSupportsChannel,
   projectPluginCommandNativeMetadata,
 } from "./plugin-command-metadata.js";
 import type { PluginCommandRegistration } from "./registry-types.js";
-import type { OpenClawPluginCommandDefinition } from "./types.js";
+import type { NatesclawPluginCommandDefinition } from "./types.js";
 
 type PluginCommandSpecOptions = {
   env?: NodeJS.ProcessEnv;
   stateDir?: string;
   workspaceDir?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
 };
 
 type PluginCommandEntrySpec = {
@@ -25,7 +25,7 @@ type PluginCommandEntrySpec = {
   nativeName?: string;
 };
 
-function resolvePluginTextName(command: OpenClawPluginCommandDefinition): string {
+function resolvePluginTextName(command: NatesclawPluginCommandDefinition): string {
   const name = command.name.trim();
   return name || command.name;
 }
@@ -103,7 +103,7 @@ export function listProviderPluginCommandSpecs(provider?: string): Array<{
 }
 
 function serializePluginCommandSpec(
-  cmd: OpenClawPluginCommandDefinition,
+  cmd: NatesclawPluginCommandDefinition,
   provider?: string,
 ): {
   name: string;
@@ -129,7 +129,7 @@ function serializePluginCommandSpec(
 }
 
 function serializePluginCommandEntrySpec(
-  cmd: OpenClawPluginCommandDefinition,
+  cmd: NatesclawPluginCommandDefinition,
   provider: string | undefined,
   nativeCommandsEnabled: boolean,
 ): PluginCommandEntrySpec | null {

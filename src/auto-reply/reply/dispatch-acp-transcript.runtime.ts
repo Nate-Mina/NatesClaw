@@ -1,14 +1,14 @@
-// Bridges ACP transcript events into persisted OpenClaw session transcripts.
-import { resolveAcpSessionCwd } from "@openclaw/acp-core/runtime/session-identifiers";
+// Bridges ACP transcript events into persisted Natesclaw session transcripts.
+import { resolveAcpSessionCwd } from "@natesclaw/acp-core/runtime/session-identifiers";
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
 import { persistAcpTurnTranscript } from "../../agents/command/attempt-execution.js";
 import { resolveSessionStorePathCore } from "../../config/sessions.js";
 import { loadSessionEntryReadOnly } from "../../config/sessions/session-accessor.js";
 import type { SessionAcpMeta } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 
 export async function persistAcpDispatchTranscript(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   promptText: string;
   finalText: string;

@@ -17,7 +17,7 @@ import {
 } from "./new-session-page.test-support.ts";
 
 const suite = createNewSessionPageE2eSuite();
-const captureCliAgentsProof = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
+const captureCliAgentsProof = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
 const cliAgentsProofDir = path.join(
   process.cwd(),
   ".artifacts",
@@ -230,11 +230,11 @@ suite.define(() => {
     await page.addInitScript(() => {
       const proofWindow = window as typeof window & { terminalToggleProof?: unknown[] };
       proofWindow.terminalToggleProof = [];
-      window.addEventListener("openclaw:terminal-toggle", (event) => {
+      window.addEventListener("natesclaw:terminal-toggle", (event) => {
         proofWindow.terminalToggleProof?.push((event as CustomEvent).detail);
       });
     });
-    const worktreePath = "/home/peter/.openclaw/worktrees/terminal-e2e";
+    const worktreePath = "/home/peter/.natesclaw/worktrees/terminal-e2e";
     const gateway = await installMockGateway(page, {
       cliAgentsEnabled: true,
       terminalEnabled: true,
@@ -275,7 +275,7 @@ suite.define(() => {
           repoFingerprint: "0123456789abcdef",
           repoRoot: WORKSPACE,
           path: worktreePath,
-          branch: "openclaw/terminal-task",
+          branch: "natesclaw/terminal-task",
           baseRef: "main",
           ownerKind: "manual",
           createdAt: 1,
@@ -902,7 +902,7 @@ suite.define(() => {
       await page.goto(`${suite.server.baseUrl}new`);
       await page.getByRole("heading", { name: "Main" }).waitFor();
       await gateway.waitForRequest("worktrees.branches");
-      const agentPicker = page.locator(".new-session-page__select--agent openclaw-agent-select");
+      const agentPicker = page.locator(".new-session-page__select--agent natesclaw-agent-select");
       await agentPicker.locator(".agent-select__trigger").click();
       await agentPicker
         .locator("wa-dropdown-item[data-agent-option]")

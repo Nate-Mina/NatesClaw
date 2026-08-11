@@ -1,8 +1,8 @@
 /**
- * Thin Codex app-server timeout adapter around OpenClaw's shared security
+ * Thin Codex app-server timeout adapter around Natesclaw's shared security
  * runtime timeout helper.
  */
-import { withTimeout as withSharedTimeout } from "openclaw/plugin-sdk/security-runtime";
+import { withTimeout as withSharedTimeout } from "natesclaw/plugin-sdk/security-runtime";
 
 function resolveAbortError(signal: AbortSignal): Error {
   return signal.reason instanceof Error

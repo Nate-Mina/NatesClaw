@@ -1,6 +1,6 @@
 // Memory Core provider module implements model/runtime integration.
-import type { MemoryPluginRuntime } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import { resolveMemoryBackendConfig } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+import type { MemoryPluginRuntime } from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
+import { resolveMemoryBackendConfig } from "natesclaw/plugin-sdk/memory-core-host-runtime-files";
 import { configureMemoryCoreDreamingState } from "./dreaming-state.js";
 import {
   closeAllMemorySearchManagers,

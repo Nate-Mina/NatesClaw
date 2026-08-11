@@ -2,13 +2,13 @@
  * Shared A2UI/Canvas host paths and live-reload injection helpers.
  */
 /** Hosted path prefix for bundled A2UI assets. */
-export const A2UI_PATH = "/__openclaw__/a2ui";
+export const A2UI_PATH = "/__natesclaw__/a2ui";
 
 /** Hosted path prefix for Canvas document/static assets. */
-export const CANVAS_HOST_PATH = "/__openclaw__/canvas";
+export const CANVAS_HOST_PATH = "/__natesclaw__/canvas";
 
 /** Hosted WebSocket path for Canvas live reload. */
-export const CANVAS_WS_PATH = "/__openclaw__/ws";
+export const CANVAS_WS_PATH = "/__natesclaw__/ws";
 
 /** Returns whether a URL path targets the hosted A2UI asset surface. */
 export function isA2uiPath(pathname: string): boolean {
@@ -107,12 +107,12 @@ export function injectCanvasRuntime(html: string, options: { liveReload?: boolea
     liveReloadErrorReported = true;
     try {
       // WebSocket error objects may expose the capability-bearing URL.
-      console.error("OpenClaw canvas live reload unavailable");
+      console.error("Natesclaw canvas live reload unavailable");
     } catch {}
   }
 
   try {
-    const capMatch = String(location.pathname || "").match(/\\/__openclaw__\\/cap\\/([^/]+)(?:\\/|$)/);
+    const capMatch = String(location.pathname || "").match(/\\/__natesclaw__\\/cap\\/([^/]+)(?:\\/|$)/);
     let pathCapability = "";
     try {
       pathCapability = capMatch?.[1] ? decodeURIComponent(capMatch[1]) : "";
@@ -140,9 +140,9 @@ export function injectCanvasRuntime(html: string, options: { liveReload?: boolea
 (() => {
   // Cross-platform action bridge helper.
   // Works on:
-  // - iOS: window.webkit.messageHandlers.openclawCanvasA2UIAction.postMessage(...)
-  // - Android: window.openclawCanvasA2UIAction.postMessage(...)
-  const handlerNames = ["openclawCanvasA2UIAction"];
+  // - iOS: window.webkit.messageHandlers.natesclawCanvasA2UIAction.postMessage(...)
+  // - Android: window.natesclawCanvasA2UIAction.postMessage(...)
+  const handlerNames = ["natesclawCanvasA2UIAction"];
   function createActionId() {
     const crypto = globalThis.crypto;
     if (typeof crypto?.randomUUID === "function") return crypto.randomUUID();
@@ -177,11 +177,11 @@ export function injectCanvasRuntime(html: string, options: { liveReload?: boolea
     const action = id ? { ...baseAction, id } : { ...baseAction };
     return postToNode({ userAction: action });
   }
-  globalThis.OpenClaw = globalThis.OpenClaw ?? {};
-  globalThis.OpenClaw.postMessage = postToNode;
-  globalThis.OpenClaw.sendUserAction = sendUserAction;
-  globalThis.openclawPostMessage = postToNode;
-  globalThis.openclawSendUserAction = sendUserAction;
+  globalThis.Natesclaw = globalThis.Natesclaw ?? {};
+  globalThis.Natesclaw.postMessage = postToNode;
+  globalThis.Natesclaw.sendUserAction = sendUserAction;
+  globalThis.natesclawPostMessage = postToNode;
+  globalThis.natesclawSendUserAction = sendUserAction;
 ${liveReloadSnippet}
 })();
 </script>

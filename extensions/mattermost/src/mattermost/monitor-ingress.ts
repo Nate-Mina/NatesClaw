@@ -4,10 +4,10 @@ import {
   createChannelIngressMonitor,
   type ChannelIngressQueue,
   type ChannelIngressMonitorDeliveryResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { isRecord } from "openclaw/plugin-sdk/channel-secret-basic-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { isRecord } from "natesclaw/plugin-sdk/channel-secret-basic-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { getMattermostRuntime } from "../runtime.js";
 import type { MattermostPost } from "./client.js";
 import {

@@ -123,8 +123,8 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
   beforeAll(() => {
     envSnapshot = captureEnv([
       "SHARED_GATEWAY_TOKEN",
-      "OPENCLAW_GATEWAY_TOKEN",
-      "OPENCLAW_GATEWAY_PASSWORD",
+      "NATESCLAW_GATEWAY_TOKEN",
+      "NATESCLAW_GATEWAY_PASSWORD",
     ]);
   });
 
@@ -137,8 +137,8 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
       recovered: false,
     });
     runtimeExit.mockImplementation(() => {});
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+    delete process.env.NATESCLAW_GATEWAY_TOKEN;
+    delete process.env.NATESCLAW_GATEWAY_PASSWORD;
     delete process.env.SHARED_GATEWAY_TOKEN;
   });
 
@@ -147,7 +147,7 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     process.env.SHARED_GATEWAY_TOKEN = "shared-token-123";
     loadConfigMock.mockReturnValue(fixture);
     readConfigFileSnapshotMock.mockResolvedValue({
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       exists: true,
       valid: true,
       issues: [],
@@ -171,7 +171,7 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     expect(joined).toContain("Dashboard URL: http://127.0.0.1:18789/");
     expect(joined).not.toContain("#token=");
     expect(joined).toContain("One-time pairing URL not delivered");
-    expect(joined).toContain("openclaw dashboard --json");
+    expect(joined).toContain("natesclaw dashboard --json");
     expect(joined).toContain("browserUrl");
     expect(joined).not.toContain("Token auto-auth is disabled");
     expect(joined).not.toContain("Token auto-auth unavailable");
@@ -182,7 +182,7 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     const fixture = createGatewayTokenRefFixture();
     loadConfigMock.mockReturnValue(fixture);
     readConfigFileSnapshotMock.mockResolvedValue({
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       exists: true,
       valid: true,
       issues: [],
@@ -200,10 +200,10 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     expect(joined).toContain("Dashboard URL: http://127.0.0.1:18789/");
     expect(joined).not.toContain("#token=");
     expect(joined).toContain("One-time pairing URL not delivered");
-    expect(joined).toContain("openclaw dashboard --json");
+    expect(joined).toContain("natesclaw dashboard --json");
     expect(joined).toContain("browserUrl");
     expect(joined).not.toContain("Token auto-auth unavailable");
-    expect(joined).not.toContain("Set OPENCLAW_GATEWAY_TOKEN");
+    expect(joined).not.toContain("Set NATESCLAW_GATEWAY_TOKEN");
     expect(runtimeErrors).toStrictEqual([]);
   });
 

@@ -1,7 +1,7 @@
 // Defines external auth contracts for provider plugins.
 import type { AuthProfileStore, OAuthCredential } from "../agents/auth-profiles/types.js";
 import type { ModelProviderAuthMode, ModelProviderConfig } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { SecretInputMode } from "./provider-auth-types.js";
 
 export type ProviderAuthOptionBag = {
@@ -13,7 +13,7 @@ export type ProviderAuthOptionBag = {
 
 /** Context for resolving synthetic provider credentials from config. */
 export type ProviderResolveSyntheticAuthContext = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   provider: string;
   providerConfig?: ModelProviderConfig;
 };
@@ -28,7 +28,7 @@ export type ProviderSyntheticAuthResult = {
 
 /** Context for resolving external provider auth profiles. */
 export type ProviderResolveExternalAuthProfilesContext = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentDir?: string;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;

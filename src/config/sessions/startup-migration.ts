@@ -2,12 +2,12 @@ import { resolveAgentSessionDirs } from "../../agents/session-dirs.js";
 import { migrateOrphanedSessionKeys } from "../../infra/state-migrations.session-store.js";
 import type { PreparedLegacySessionSurfaces } from "../../plugins/legacy-session-surfaces.types.js";
 import {
-  closeOpenClawAgentDatabaseByPath,
-  isOpenClawAgentDatabaseOpen,
-  openOpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabaseByPath,
+  isNatesclawAgentDatabaseOpen,
+  openNatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import { resolveStateDir } from "../paths.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import { setCanonicalSqliteSessionMainKey } from "./session-canonical-key.js";
 import { resolveSqliteTargetFromSessionStorePath } from "./session-sqlite-target.js";
 import { sweepOrphanSessionStoreTemps } from "./store-temp-cleanup.js";
@@ -16,13 +16,13 @@ import { resolveAllAgentSessionStoreTargetsSync } from "./targets.js";
 export type SessionStartupMigrationLogger = Record<"info" | "warn", (message: string) => void>;
 
 type PrepareLegacySessionSurfaces = (params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }) => PreparedLegacySessionSurfaces;
 
 /** Runs best-effort session migration and orphan-temp cleanup before runtime reads. */
 export async function runSessionStartupMigration(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   log: SessionStartupMigrationLogger;
   deps?: {
@@ -86,11 +86,11 @@ export async function runSessionStartupMigration(params: {
         agentId: target.agentId,
         env: params.env,
       }).path;
-      const alreadyOpen = isOpenClawAgentDatabaseOpen(path);
-      const database = openOpenClawAgentDatabase({ agentId: target.agentId, path });
+      const alreadyOpen = isNatesclawAgentDatabaseOpen(path);
+      const database = openNatesclawAgentDatabase({ agentId: target.agentId, path });
       setCanonicalSqliteSessionMainKey(database, params.cfg.session?.mainKey);
       if (!alreadyOpen) {
-        closeOpenClawAgentDatabaseByPath(path);
+        closeNatesclawAgentDatabaseByPath(path);
       }
       removedFiles += await sweepTemps({ storePath: target.storePath });
     }

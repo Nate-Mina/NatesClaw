@@ -1,6 +1,6 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { Model } from "openclaw/plugin-sdk/llm";
-import { createAssistantMessageEventStream } from "openclaw/plugin-sdk/llm";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import type { Model } from "natesclaw/plugin-sdk/llm";
+import { createAssistantMessageEventStream } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import { createOpenAIAnthropicToolPayloadCompatibilityWrapper } from "./anthropic-family-tool-payload-compat.js";
 

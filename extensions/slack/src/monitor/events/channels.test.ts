@@ -11,13 +11,13 @@ let registerSlackChannelEvents: typeof import("./channels.js").registerSlackChan
 let registerSlackChannelIdChangedEvent: typeof import("./channels.js").registerSlackChannelIdChangedEvent;
 let createSlackSystemEventTestHarness: typeof import("./system-event-test-harness.js").createSlackSystemEventTestHarness;
 
-vi.mock("openclaw/plugin-sdk/system-event-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/system-event-runtime", () => ({
   enqueueSystemEvent: (...args: unknown[]) => enqueueSystemEventMock(...args),
 }));
-vi.mock("openclaw/plugin-sdk/channel-config-writes", () => ({
+vi.mock("natesclaw/plugin-sdk/channel-config-writes", () => ({
   resolveChannelConfigWrites: () => true,
 }));
-vi.mock("openclaw/plugin-sdk/config-mutation", () => ({
+vi.mock("natesclaw/plugin-sdk/config-mutation", () => ({
   mutateConfigFile: (...args: unknown[]) => mutateConfigFileMock(...args),
   readConfigFileSnapshotForWrite: (...args: unknown[]) => readConfigSnapshotMock(...args),
 }));
@@ -232,7 +232,7 @@ describe("registerSlackChannelEvents", () => {
         new_channel_id: newChannelId,
       },
       body: {},
-      context: { openclawIngressLifecycle: turnAdoptionLifecycle },
+      context: { natesclawIngressLifecycle: turnAdoptionLifecycle },
     };
 
     await expect(handler(args)).rejects.toBe(persistenceError);

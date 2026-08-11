@@ -1,36 +1,36 @@
 // Private runtime barrel for the bundled Microsoft Teams extension.
 // Keep this barrel thin and aligned with the local extension surface.
 
-export { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-export type { AllowlistMatch } from "openclaw/plugin-sdk/allow-from";
+export { DEFAULT_ACCOUNT_ID } from "natesclaw/plugin-sdk/account-id";
+export type { AllowlistMatch } from "natesclaw/plugin-sdk/allow-from";
 export {
   mergeAllowlist,
   resolveAllowlistMatchSimple,
   summarizeMapping,
-} from "openclaw/plugin-sdk/allow-from";
+} from "natesclaw/plugin-sdk/allow-from";
 export type {
   BaseProbeResult,
   ChannelDirectoryEntry,
   ChannelGroupContext,
   ChannelMessageActionName,
   ChannelOutboundAdapter,
-} from "openclaw/plugin-sdk/channel-contract";
-export type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-export { logTypingFailure } from "openclaw/plugin-sdk/channel-outbound";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-export { resolveToolsBySender } from "openclaw/plugin-sdk/channel-policy";
-export { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-contract";
+export type { ChannelPlugin } from "natesclaw/plugin-sdk/channel-core";
+export { logTypingFailure } from "natesclaw/plugin-sdk/channel-outbound";
+export { createChannelPairingController } from "natesclaw/plugin-sdk/channel-pairing";
+export { resolveToolsBySender } from "natesclaw/plugin-sdk/channel-policy";
+export { createChannelMessageReplyPipeline } from "natesclaw/plugin-sdk/channel-outbound";
 export {
   PAIRING_APPROVED_MESSAGE,
   buildProbeChannelStatusSummary,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/channel-status";
+} from "natesclaw/plugin-sdk/channel-status";
 export {
   buildChannelKeyCandidates,
   normalizeChannelSlug,
   resolveChannelEntryMatchWithFallback,
   resolveNestedAllowlistDecision,
-} from "openclaw/plugin-sdk/channel-targets";
+} from "natesclaw/plugin-sdk/channel-targets";
 export type {
   GroupPolicy,
   GroupToolPolicyConfig,
@@ -40,29 +40,29 @@ export type {
   MSTeamsReplyStyle,
   MSTeamsTeamConfig,
   MarkdownTableMode,
-  OpenClawConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-export { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-export { resolveDefaultGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
-export { withFileLock } from "openclaw/plugin-sdk/file-lock";
-export { keepHttpServerTaskAlive } from "openclaw/plugin-sdk/channel-outbound";
+  NatesclawConfig,
+} from "natesclaw/plugin-sdk/config-contracts";
+export { isDangerousNameMatchingEnabled } from "natesclaw/plugin-sdk/dangerous-name-runtime";
+export { resolveDefaultGroupPolicy } from "natesclaw/plugin-sdk/runtime-group-policy";
+export { withFileLock } from "natesclaw/plugin-sdk/file-lock";
+export { keepHttpServerTaskAlive } from "natesclaw/plugin-sdk/channel-outbound";
 export {
   detectMime,
   extensionForMime,
   extractOriginalFilename,
   getFileExtension,
   resolveChannelMediaMaxBytes,
-} from "openclaw/plugin-sdk/media-runtime";
-export { loadOutboundMediaFromUrl } from "openclaw/plugin-sdk/outbound-media";
+} from "natesclaw/plugin-sdk/media-runtime";
+export { loadOutboundMediaFromUrl } from "natesclaw/plugin-sdk/outbound-media";
 // Deprecated media-legacy-projection surface; the re-export stays until the
 // compat record's removeAfter window expires (deleted in retirement PR 4).
-export { buildMediaPayload } from "openclaw/plugin-sdk/reply-payload";
-export type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
-export type { PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export type { SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
-export { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-export { normalizeStringEntries } from "openclaw/plugin-sdk/string-normalization-runtime";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
-export { DEFAULT_WEBHOOK_MAX_BODY_BYTES } from "openclaw/plugin-sdk/webhook-ingress";
+export { buildMediaPayload } from "natesclaw/plugin-sdk/reply-payload";
+export type { ReplyPayload } from "natesclaw/plugin-sdk/reply-payload";
+export type { PluginRuntime } from "natesclaw/plugin-sdk/runtime-store";
+export type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+export type { SsrFPolicy } from "natesclaw/plugin-sdk/ssrf-runtime";
+export { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
+export { normalizeStringEntries } from "natesclaw/plugin-sdk/string-normalization-runtime";
+export { chunkTextForOutbound } from "natesclaw/plugin-sdk/text-chunking";
+export { DEFAULT_WEBHOOK_MAX_BODY_BYTES } from "natesclaw/plugin-sdk/webhook-ingress";
 export { setMSTeamsRuntime } from "./src/runtime.js";

@@ -5,20 +5,20 @@ import {
   onAgentEvent,
   resolveActiveEmbeddedRunSessionId,
   type AgentEventPayload,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { openFileBackedSessionManagerForTest } from "openclaw/plugin-sdk/agent-runtime-test-contracts";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { openFileBackedSessionManagerForTest } from "natesclaw/plugin-sdk/agent-runtime-test-contracts";
 import {
   onInternalDiagnosticEvent,
   waitForDiagnosticEventsDrained,
   type DiagnosticEventPayload,
   type DiagnosticEventPrivateData,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
-import { initializeGlobalHookRunner } from "openclaw/plugin-sdk/hook-runtime";
+} from "natesclaw/plugin-sdk/diagnostic-runtime";
+import { initializeGlobalHookRunner } from "natesclaw/plugin-sdk/hook-runtime";
 import {
   createMockPluginRegistry,
   onTrustedInternalDiagnosticEvent,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import { GPT5_BEHAVIOR_CONTRACT as CODEX_GPT5_BEHAVIOR_CONTRACT } from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
+import { GPT5_BEHAVIOR_CONTRACT as CODEX_GPT5_BEHAVIOR_CONTRACT } from "natesclaw/plugin-sdk/provider-model-shared";
 import { describe, expect, it, vi } from "vitest";
 import { readAttemptTerminal } from "./attempt-terminal.test-helper.js";
 import {
@@ -152,7 +152,7 @@ describe("runCodexAppServerAttempt hooks and model diagnostics", () => {
     expect(llmInputPayload.imagesCount).toBe(0);
     expect(llmInputPayload.historyMessages).toEqual([]);
     expect(llmInputPayload.systemPrompt).toContain(
-      "You are a personal agent running inside OpenClaw.",
+      "You are a personal agent running inside Natesclaw.",
     );
     expect(llmInputPayload.systemPrompt).not.toContain(CODEX_GPT5_BEHAVIOR_CONTRACT);
     expect(llmInputContext.runId).toBe("run-1");

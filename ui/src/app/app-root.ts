@@ -6,11 +6,11 @@ import type { RouteId } from "../app-routes.ts";
 import "../components/gateway-url-confirmation.ts";
 import "../components/github-link-hovercard-registration.ts";
 import "../components/login-gate.ts";
-import "../components/openclaw-mascot.ts";
+import "../components/natesclaw-mascot.ts";
 import "../components/tooltip.ts";
 import { t } from "../i18n/index.ts";
 import { isTerminalAvailable } from "../lib/terminal-availability.ts";
-import { OpenClawLightDomElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../lit/subscriptions-controller.ts";
 import { bootstrapApplication, type ApplicationRuntime } from "./bootstrap.ts";
 import { resolveControlUiBasePath } from "./browser.ts";
@@ -32,7 +32,7 @@ export function resolveTerminalThemeMode(): "dark" | "light" {
 function renderConnectingSplash() {
   return html`
     <main class="connect-splash" role="status" aria-live="polite" aria-label=${t("common.loading")}>
-      <openclaw-mascot mood="thinking" .size=${120}></openclaw-mascot>
+      <natesclaw-mascot mood="thinking" .size=${120}></natesclaw-mascot>
     </main>
   `;
 }
@@ -43,7 +43,7 @@ function renderApprovalDocument(runtime: ApplicationRuntime) {
     return nothing;
   }
   return html`
-    <openclaw-approval-page .approvalId=${documentMode.approvalId ?? ""}>
+    <natesclaw-approval-page .approvalId=${documentMode.approvalId ?? ""}>
       <main class="approval-page approval-page--booting" role="status" aria-live="polite">
         <img
           class="connect-splash__logo"
@@ -52,11 +52,11 @@ function renderApprovalDocument(runtime: ApplicationRuntime) {
         />
         <span>${t("common.loading")}</span>
       </main>
-    </openclaw-approval-page>
+    </natesclaw-approval-page>
   `;
 }
 
-export class OpenClawApp extends OpenClawLightDomElement {
+export class NatesclawApp extends NatesclawLightDomElement {
   // Pinned while a connect submitted from the visible login gate is in
   // flight, so a failed manual attempt cannot flash the shell in between.
   @state() private loginGatePinned = false;
@@ -119,7 +119,7 @@ export class OpenClawApp extends OpenClawLightDomElement {
     // their lazy source getters bind on both the initial mount and reconnect.
     this.requestUpdate();
     void this.runtime.start().catch((error: unknown) => {
-      console.error("[openclaw] application start failed", error);
+      console.error("[natesclaw] application start failed", error);
     });
   }
 
@@ -181,7 +181,7 @@ export class OpenClawApp extends OpenClawLightDomElement {
     const gatewayConnected = gatewaySnapshot.phase === "connected";
     const gatewayUrlConfirmation = this.pendingGatewayUrl
       ? html`
-          <openclaw-gateway-url-confirmation
+          <natesclaw-gateway-url-confirmation
             .props=${{
               pendingGatewayUrl: this.pendingGatewayUrl,
               onConfirm: () => {
@@ -193,7 +193,7 @@ export class OpenClawApp extends OpenClawLightDomElement {
                 this.pendingGatewayUrl = null;
               },
             }}
-          ></openclaw-gateway-url-confirmation>
+          ></natesclaw-gateway-url-confirmation>
         `
       : nothing;
     // Full-screen terminals own the whole document. Keep the generic login gate
@@ -205,12 +205,12 @@ export class OpenClawApp extends OpenClawLightDomElement {
       );
       // Embedded clients query this host immediately; keep it stable while the chunk loads.
       return html`
-        <openclaw-terminal-panel
+        <natesclaw-terminal-panel
           .client=${gatewayConnected ? gatewaySnapshot.client : null}
           .available=${terminalAvailable}
           .themeMode=${resolveTerminalThemeMode()}
           fullscreen
-        ></openclaw-terminal-panel>
+        ></natesclaw-terminal-panel>
         ${!isOptionalElementDefined(TERMINAL_PANEL_ELEMENT) && terminalAvailable
           ? renderConnectingSplash()
           : nothing}
@@ -230,17 +230,17 @@ export class OpenClawApp extends OpenClawLightDomElement {
       gatewaySnapshot.lastError === null;
     if (initialConnectPending) {
       return html`
-        <openclaw-tooltip-provider>
+        <natesclaw-tooltip-provider>
           ${renderConnectingSplash()} ${gatewayUrlConfirmation}
-        </openclaw-tooltip-provider>
+        </natesclaw-tooltip-provider>
       `;
     }
     const showLoginGate =
       !gatewayConnected && (this.loginGatePinned || gatewaySnapshot.phase !== "reconnecting");
     if (showLoginGate) {
       return html`
-        <openclaw-tooltip-provider>
-          <openclaw-login-gate
+        <natesclaw-tooltip-provider>
+          <natesclaw-login-gate
             .props=${{
               basePath: context.basePath,
               connected: gatewayConnected,
@@ -277,28 +277,28 @@ export class OpenClawApp extends OpenClawLightDomElement {
                 });
               },
             }}
-          ></openclaw-login-gate>
+          ></natesclaw-login-gate>
           ${gatewayUrlConfirmation}
-        </openclaw-tooltip-provider>
+        </natesclaw-tooltip-provider>
       `;
     }
     if (runtime.documentMode?.kind === "approval") {
       return html`
-        <openclaw-tooltip-provider>
+        <natesclaw-tooltip-provider>
           ${gatewayUrlConfirmation} ${renderApprovalDocument(runtime)}
-        </openclaw-tooltip-provider>
+        </natesclaw-tooltip-provider>
       `;
     }
     return html`
-      <openclaw-tooltip-provider>
-        <openclaw-github-link-hovercard-provider .client=${gatewaySnapshot.client}>
+      <natesclaw-tooltip-provider>
+        <natesclaw-github-link-hovercard-provider .client=${gatewaySnapshot.client}>
           ${gatewayUrlConfirmation}
-          <openclaw-app-shell
+          <natesclaw-app-shell
             .runtime=${runtime}
             .onboarding=${this.onboarding}
-          ></openclaw-app-shell>
-        </openclaw-github-link-hovercard-provider>
-      </openclaw-tooltip-provider>
+          ></natesclaw-app-shell>
+        </natesclaw-github-link-hovercard-provider>
+      </natesclaw-tooltip-provider>
     `;
   }
 }

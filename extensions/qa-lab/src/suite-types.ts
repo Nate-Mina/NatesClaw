@@ -1,5 +1,5 @@
-import type { OpenClawCrablineChannelDriverSelection } from "@openclaw/crabline";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type { QaEvidenceTiming, QaEvidenceSummaryJson } from "./evidence-summary.js";
 import type { QaCliBackendAuthMode, QaGatewayChildCommand } from "./gateway-child.js";
 import type { QaLabServerHandle, QaLabServerStartParams } from "./lab-server.types.js";
@@ -39,13 +39,13 @@ export type QaSuiteRunParams = {
   channelId?: string;
   evidenceMode?: QaScorecardEvidenceMode;
   repoRoot?: string;
-  sutOpenClawCommand?: QaGatewayChildCommand;
-  mutateConfig?: (cfg: OpenClawConfig) => OpenClawConfig;
+  sutNatesclawCommand?: QaGatewayChildCommand;
+  mutateConfig?: (cfg: NatesclawConfig) => NatesclawConfig;
   outputDir?: string;
   providerMode?: QaProviderMode;
   transportId?: QaTransportId;
   channelDriver?: QaScorecardChannelDriver;
-  channelDriverSelection?: OpenClawCrablineChannelDriverSelection | null;
+  channelDriverSelection?: NatesclawCrablineChannelDriverSelection | null;
   primaryModel?: string;
   alternateModel?: string;
   fastMode?: boolean;

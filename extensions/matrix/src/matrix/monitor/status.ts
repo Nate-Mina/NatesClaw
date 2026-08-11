@@ -1,12 +1,12 @@
 // Matrix plugin module implements status behavior.
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/channel-contract";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { ChannelAccountSnapshot } from "natesclaw/plugin-sdk/channel-contract";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   channelBlockedPatch,
   channelReadyPatch,
   channelStoppedPatch,
   createTransportActivityStatusPatch,
-} from "openclaw/plugin-sdk/gateway-runtime";
+} from "natesclaw/plugin-sdk/gateway-runtime";
 import { isMatrixAccessTokenInvalidatedError } from "../sdk/client-support.js";
 import {
   isMatrixDisconnectedSyncState,

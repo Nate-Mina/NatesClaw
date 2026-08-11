@@ -21,7 +21,7 @@ export function renderChatTerminalButton(
   }
   const label = catalogKey ? t("chat.catalog.openInTerminal") : t("terminal.toggle");
   return html`
-    <openclaw-tooltip .content=${label}>
+    <natesclaw-tooltip .content=${label}>
       <button
         class="btn btn--ghost btn--icon chat-icon-btn"
         type="button"
@@ -31,6 +31,6 @@ export function renderChatTerminalButton(
       >
         ${icons.terminal}
       </button>
-    </openclaw-tooltip>
+    </natesclaw-tooltip>
   `;
 }

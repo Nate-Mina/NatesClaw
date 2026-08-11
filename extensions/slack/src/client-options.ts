@@ -5,8 +5,8 @@ import {
   addActiveManagedProxyTlsOptions,
   resolveFetch,
   resolveEnvHttpProxyAgentOptions,
-} from "openclaw/plugin-sdk/fetch-runtime";
-import { isDebugProxyGlobalFetchPatchInstalled } from "openclaw/plugin-sdk/proxy-capture";
+} from "natesclaw/plugin-sdk/fetch-runtime";
+import { isDebugProxyGlobalFetchPatchInstalled } from "natesclaw/plugin-sdk/proxy-capture";
 import type { EnvHttpProxyAgent } from "undici";
 
 type SlackUndiciRuntime = Pick<typeof import("undici"), "EnvHttpProxyAgent" | "fetch">;

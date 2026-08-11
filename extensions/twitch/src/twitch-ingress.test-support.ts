@@ -2,10 +2,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-  closeOpenClawStateDatabaseForTest,
+  closeNatesclawStateDatabaseForTest,
   createChannelIngressQueueForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
+import { resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import { expect, vi } from "vitest";
 import { createTwitchIngress } from "./twitch-ingress.js";
 import type { TwitchChatMessage } from "./types.js";
@@ -36,11 +36,11 @@ export async function withTwitchIngressTestQueue<T>(
   fn: (queue: TwitchIngressTestQueue) => Promise<T>,
 ): Promise<T> {
   const createdDir = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-twitch-ingress-"),
+    path.join(resolvePreferredNatesclawTmpDir(), "natesclaw-twitch-ingress-"),
   );
   const stateDir = await fs.realpath(createdDir);
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = stateDir;
+  const previousStateDir = process.env.NATESCLAW_STATE_DIR;
+  process.env.NATESCLAW_STATE_DIR = stateDir;
   const queue = createChannelIngressQueueForTests<TwitchIngressTestPayload>({
     channelId: "twitch",
     accountId: "default",
@@ -50,11 +50,11 @@ export async function withTwitchIngressTestQueue<T>(
     return await fn(queue);
   } finally {
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.NATESCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.NATESCLAW_STATE_DIR = previousStateDir;
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }

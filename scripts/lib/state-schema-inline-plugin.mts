@@ -1,18 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const STATE_SCHEMA_INLINE_PLUGIN_NAME = "openclaw:inline-state-schemas";
+export const STATE_SCHEMA_INLINE_PLUGIN_NAME = "natesclaw:inline-state-schemas";
 
 const STATE_SCHEMA_MODULES = [
   {
-    modulePath: "src/state/openclaw-state-schema.ts",
-    schemaPath: "src/state/openclaw-state-schema.sql",
-    exportName: "OPENCLAW_STATE_SCHEMA_SQL",
+    modulePath: "src/state/natesclaw-state-schema.ts",
+    schemaPath: "src/state/natesclaw-state-schema.sql",
+    exportName: "NATESCLAW_STATE_SCHEMA_SQL",
   },
   {
-    modulePath: "src/state/openclaw-agent-schema.ts",
-    schemaPath: "src/state/openclaw-agent-schema.sql",
-    exportName: "OPENCLAW_AGENT_SCHEMA_SQL",
+    modulePath: "src/state/natesclaw-agent-schema.ts",
+    schemaPath: "src/state/natesclaw-agent-schema.sql",
+    exportName: "NATESCLAW_AGENT_SCHEMA_SQL",
   },
 ] as const;
 

@@ -1,5 +1,5 @@
 // ACPX tests cover register plugin behavior.
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const { runtimeRegistry } = vi.hoisted(() => ({
@@ -53,7 +53,7 @@ const { realRuntime, realServiceStartMock, realServiceStopMock, createRealServic
     };
   });
 
-vi.mock("openclaw/plugin-sdk/acp-runtime-backend", () => ({
+vi.mock("natesclaw/plugin-sdk/acp-runtime-backend", () => ({
   getAcpRuntimeBackend: (id: string) => runtimeRegistry.get(id),
   registerAcpRuntimeBackend: (entry: { id: string; runtime: unknown }) => {
     runtimeRegistry.set(entry.id, entry);
@@ -69,20 +69,20 @@ vi.mock("./src/service.js", () => ({
 
 import { createAcpxRuntimeService } from "./register.runtime.js";
 
-const previousSkipRuntime = process.env.OPENCLAW_SKIP_ACPX_RUNTIME;
+const previousSkipRuntime = process.env.NATESCLAW_SKIP_ACPX_RUNTIME;
 
 function restoreEnv(): void {
   if (previousSkipRuntime === undefined) {
-    delete process.env.OPENCLAW_SKIP_ACPX_RUNTIME;
+    delete process.env.NATESCLAW_SKIP_ACPX_RUNTIME;
   } else {
-    process.env.OPENCLAW_SKIP_ACPX_RUNTIME = previousSkipRuntime;
+    process.env.NATESCLAW_SKIP_ACPX_RUNTIME = previousSkipRuntime;
   }
 }
 
 function createServiceContext() {
   return {
-    workspaceDir: "/tmp/openclaw-acpx-register-test",
-    stateDir: "/tmp/openclaw-acpx-register-test/state",
+    workspaceDir: "/tmp/natesclaw-acpx-register-test",
+    stateDir: "/tmp/natesclaw-acpx-register-test/state",
     config: {},
     logger: {
       info: vi.fn(),
@@ -103,7 +103,7 @@ describe("acpx register runtime service", () => {
   });
 
   it("registers the acpx backend at startup and starts the real service on first use", async () => {
-    delete process.env.OPENCLAW_SKIP_ACPX_RUNTIME;
+    delete process.env.NATESCLAW_SKIP_ACPX_RUNTIME;
     const ctx = createServiceContext();
     const service = createAcpxRuntimeService({
       pluginConfig: { timeoutSeconds: 10 },
@@ -177,7 +177,7 @@ describe("acpx register runtime service", () => {
   });
 
   it("rejects stale publication after stop invalidates the deferred backend", async () => {
-    delete process.env.OPENCLAW_SKIP_ACPX_RUNTIME;
+    delete process.env.NATESCLAW_SKIP_ACPX_RUNTIME;
     const startEntered = createDeferred<void>();
     const releasePublication = createDeferred<void>();
     realServiceStartMock.mockImplementationOnce(async (_ctx, backendLifecycle) => {
@@ -228,7 +228,7 @@ describe("acpx register runtime service", () => {
   });
 
   it("keeps a successor generation registered when old cleanup finishes late", async () => {
-    delete process.env.OPENCLAW_SKIP_ACPX_RUNTIME;
+    delete process.env.NATESCLAW_SKIP_ACPX_RUNTIME;
     const published = createDeferred<void>();
     const releaseProbe = createDeferred<void>();
     realServiceStartMock.mockImplementationOnce(async (_ctx, backendLifecycle) => {
@@ -314,7 +314,7 @@ describe("acpx register runtime service", () => {
   });
 
   it("keeps the explicit runtime skip env as the only outer startup skip", async () => {
-    process.env.OPENCLAW_SKIP_ACPX_RUNTIME = "1";
+    process.env.NATESCLAW_SKIP_ACPX_RUNTIME = "1";
     const ctx = createServiceContext();
     const service = createAcpxRuntimeService();
 
@@ -323,7 +323,7 @@ describe("acpx register runtime service", () => {
     expect(createRealServiceMock).not.toHaveBeenCalled();
     expect(runtimeRegistry.get("acpx")).toBeUndefined();
     expect(ctx.logger.info).toHaveBeenCalledWith(
-      "skipping embedded acpx runtime backend (OPENCLAW_SKIP_ACPX_RUNTIME=1)",
+      "skipping embedded acpx runtime backend (NATESCLAW_SKIP_ACPX_RUNTIME=1)",
     );
   });
 });

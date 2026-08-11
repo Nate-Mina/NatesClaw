@@ -14,9 +14,9 @@ describe("resolveDaemonInstallRuntimeInputs", () => {
     const originalArgv = process.argv;
     try {
       for (const [entrypoint, expected] of [
-        ["/Users/me/openclaw/src/cli/index.ts", true],
-        ["C:\\Users\\me\\openclaw\\src\\cli\\index.ts", true],
-        ["/Users/me/openclaw/dist/cli/index.js", false],
+        ["/Users/me/natesclaw/src/cli/index.ts", true],
+        ["C:\\Users\\me\\natesclaw\\src\\cli\\index.ts", true],
+        ["/Users/me/natesclaw/dist/cli/index.js", false],
       ] as const) {
         process.argv = ["node", entrypoint];
         await expect(
@@ -57,11 +57,11 @@ describe("resolveDaemonNodeBinDir", () => {
   });
 });
 
-describe("resolveDaemonServicePathDirs openclaw discovery", () => {
-  it("uses the active openclaw command directory", () => {
+describe("resolveDaemonServicePathDirs natesclaw discovery", () => {
+  it("uses the active natesclaw command directory", () => {
     expect(
       resolveDaemonServicePathDirs({
-        argv: ["node", "/Users/testuser/.npm-global/bin/openclaw", "gateway", "install"],
+        argv: ["node", "/Users/testuser/.npm-global/bin/natesclaw", "gateway", "install"],
         env: { PATH: "" },
         platform: "darwin",
       }),
@@ -71,15 +71,15 @@ describe("resolveDaemonServicePathDirs openclaw discovery", () => {
   it.skipIf(process.platform === "win32")(
     "finds the PATH shim that resolves to the active package entrypoint",
     () => {
-      const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-daemon-path-"));
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-daemon-path-"));
       try {
         const binDir = path.join(root, "bin");
-        const packageDir = path.join(root, "lib", "node_modules", "openclaw");
-        const entrypoint = path.join(packageDir, "openclaw.mjs");
+        const packageDir = path.join(root, "lib", "node_modules", "natesclaw");
+        const entrypoint = path.join(packageDir, "natesclaw.mjs");
         fs.mkdirSync(binDir, { recursive: true });
         fs.mkdirSync(packageDir, { recursive: true });
         fs.writeFileSync(entrypoint, "");
-        fs.symlinkSync(entrypoint, path.join(binDir, "openclaw"));
+        fs.symlinkSync(entrypoint, path.join(binDir, "natesclaw"));
 
         expect(
           resolveDaemonServicePathDirs({
@@ -95,19 +95,19 @@ describe("resolveDaemonServicePathDirs openclaw discovery", () => {
   );
 
   it.skipIf(process.platform === "win32")(
-    "ignores unrelated openclaw commands elsewhere on PATH",
+    "ignores unrelated natesclaw commands elsewhere on PATH",
     () => {
-      const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-daemon-path-"));
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-daemon-path-"));
       try {
         const binDir = path.join(root, "bin");
-        const activeEntrypoint = path.join(root, "active", "openclaw.mjs");
-        const otherEntrypoint = path.join(root, "other", "openclaw.mjs");
+        const activeEntrypoint = path.join(root, "active", "natesclaw.mjs");
+        const otherEntrypoint = path.join(root, "other", "natesclaw.mjs");
         fs.mkdirSync(binDir, { recursive: true });
         fs.mkdirSync(path.dirname(activeEntrypoint), { recursive: true });
         fs.mkdirSync(path.dirname(otherEntrypoint), { recursive: true });
         fs.writeFileSync(activeEntrypoint, "");
         fs.writeFileSync(otherEntrypoint, "");
-        fs.symlinkSync(otherEntrypoint, path.join(binDir, "openclaw"));
+        fs.symlinkSync(otherEntrypoint, path.join(binDir, "natesclaw"));
 
         expect(
           resolveDaemonServicePathDirs({
@@ -124,11 +124,11 @@ describe("resolveDaemonServicePathDirs openclaw discovery", () => {
 });
 
 describe("resolveDaemonServicePathDirs", () => {
-  it("combines node and active openclaw command directories", () => {
+  it("combines node and active natesclaw command directories", () => {
     expect(
       resolveDaemonServicePathDirs({
         nodePath: "/opt/homebrew/opt/node/bin/node",
-        argv: ["node", "/Users/testuser/.npm-global/bin/openclaw", "gateway", "install"],
+        argv: ["node", "/Users/testuser/.npm-global/bin/natesclaw", "gateway", "install"],
         env: { PATH: "" },
         platform: "darwin",
       }),

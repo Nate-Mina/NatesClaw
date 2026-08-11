@@ -1,5 +1,5 @@
 // Thinking/reasoning level catalog helpers for auto-reply model controls.
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
 import { resolveClaudeThinkingProfile } from "../plugins/provider-claude-thinking.js";
 import {
   BASE_THINKING_LEVELS,
@@ -32,7 +32,7 @@ export type {
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveEffectiveThinkingProfile } from "../plugins/provider-thinking.js";
 import type { ProviderThinkingProfile } from "../plugins/provider-thinking.types.js";
 
@@ -170,8 +170,8 @@ function appendCatalogAdvancedThinkingLevels(
     }
   }
   const runtime = normalizeOptionalLowercaseString(agentRuntime);
-  if (supportsMax && (runtime === "openclaw" || runtime === "auto")) {
-    // Ultra is OpenClaw's orchestration tier; provider requests use Max.
+  if (supportsMax && (runtime === "natesclaw" || runtime === "auto")) {
+    // Ultra is Natesclaw's orchestration tier; provider requests use Max.
     appendProfileLevel(profile, "ultra");
   }
 }

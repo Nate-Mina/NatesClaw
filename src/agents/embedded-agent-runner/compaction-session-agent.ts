@@ -1,6 +1,6 @@
-import type { LlmRuntime } from "@openclaw/ai";
+import type { LlmRuntime } from "@natesclaw/ai";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";
 import { resolveProviderTextTransforms } from "../../plugins/provider-runtime.js";
 import { wrapStreamFnTextTransforms } from "../plugin-text-transforms.js";
@@ -22,7 +22,7 @@ export async function prepareCompactionSessionAgent(params: {
   effectiveModel: ProviderRuntimeModel;
   resolvedApiKey?: string;
   authStorage: unknown;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   provider: string;
   modelId: string;
   thinkLevel: ThinkLevel;

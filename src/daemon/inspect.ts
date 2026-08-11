@@ -1,7 +1,7 @@
-/** Inspects installed platform services for extra OpenClaw or legacy gateway jobs. */
+/** Inspects installed platform services for extra Natesclaw or legacy gateway jobs. */
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import {
   GATEWAY_SERVICE_KIND,
   GATEWAY_SERVICE_MARKER,
@@ -21,7 +21,7 @@ export type ExtraGatewayService = {
   label: string;
   detail: string;
   scope: "user" | "system";
-  marker?: "openclaw" | "clawdbot";
+  marker?: "natesclaw" | "clawdbot";
   legacy?: boolean;
 };
 
@@ -29,7 +29,7 @@ export type FindExtraGatewayServicesOptions = {
   deep?: boolean;
 };
 
-const EXTRA_MARKERS = ["openclaw", "clawdbot"] as const;
+const EXTRA_MARKERS = ["natesclaw", "clawdbot"] as const;
 const SYSTEMD_REFERENCE_ONLY_KEYS = new Set([
   "after",
   "before",
@@ -150,8 +150,8 @@ export function detectMarkerLineWithGateway(contents: string): Marker | null {
 
 function hasGatewayServiceMarker(content: string): boolean {
   const lower = normalizeLowercaseStringOrEmpty(content);
-  const markerKeys = ["openclaw_service_marker"];
-  const kindKeys = ["openclaw_service_kind"];
+  const markerKeys = ["natesclaw_service_marker"];
+  const kindKeys = ["natesclaw_service_kind"];
   const markerValues = [normalizeLowercaseStringOrEmpty(GATEWAY_SERVICE_MARKER)];
   const hasMarkerKey = markerKeys.some((key) => lower.includes(key));
   const hasKindKey = kindKeys.some((key) => lower.includes(key));
@@ -214,38 +214,38 @@ function detectLaunchdGatewayExecutionMarker(contents: string): Marker | null {
   return null;
 }
 
-function isOpenClawGatewayLaunchdService(label: string, contents: string): boolean {
+function isNatesclawGatewayLaunchdService(label: string, contents: string): boolean {
   if (hasGatewayServiceMarker(contents)) {
     return true;
   }
-  if (detectLaunchdGatewayExecutionMarker(contents) !== "openclaw") {
+  if (detectLaunchdGatewayExecutionMarker(contents) !== "natesclaw") {
     return false;
   }
-  return label.startsWith("ai.openclaw.");
+  return label.startsWith("ai.natesclaw.");
 }
 
-function isOpenClawGatewaySystemdService(name: string, contents: string): boolean {
+function isNatesclawGatewaySystemdService(name: string, contents: string): boolean {
   if (hasGatewayServiceMarker(contents)) {
     return true;
   }
-  if (!name.startsWith("openclaw-gateway")) {
+  if (!name.startsWith("natesclaw-gateway")) {
     return false;
   }
   return normalizeLowercaseStringOrEmpty(contents).includes("gateway");
 }
 
-function isOpenClawGatewayTaskName(name: string): boolean {
+function isNatesclawGatewayTaskName(name: string): boolean {
   const normalized = normalizeLowercaseStringOrEmpty(name);
   if (!normalized) {
     return false;
   }
   // Windows schtasks /Query returns task names prefixed with \ (e.g.
-  // \OpenClaw Gateway for root-folder tasks). Strip the leading
+  // \Natesclaw Gateway for root-folder tasks). Strip the leading
   // backslash so the configured name matches correctly and the live
   // gateway task is not misidentified as an extra gateway service.
   const stripped = normalized.replace(/^\\+/, "");
   const defaultName = normalizeLowercaseStringOrEmpty(resolveGatewayWindowsTaskName());
-  return stripped === defaultName || /^openclaw gateway \(.+\)$/.test(stripped);
+  return stripped === defaultName || /^natesclaw gateway \(.+\)$/.test(stripped);
 }
 
 function isIgnoredLaunchdLabel(label: string): boolean {
@@ -312,18 +312,18 @@ async function collectServiceFiles(params: {
 async function scanLaunchdDir(params: {
   dir: string;
   scope: "user" | "system";
-  includeManagedOpenClaw?: boolean;
+  includeManagedNatesclaw?: boolean;
   managedLabel?: string;
 }): Promise<ExtraGatewayService[]> {
   const results: ExtraGatewayService[] = [];
   const candidates = await collectServiceFiles({
     dir: params.dir,
     extension: ".plist",
-    isIgnoredName: params.includeManagedOpenClaw ? () => false : isIgnoredLaunchdLabel,
+    isIgnoredName: params.includeManagedNatesclaw ? () => false : isIgnoredLaunchdLabel,
   });
 
   for (const { name: labelFromName, fullPath, contents } of candidates) {
-    const nativeLabel = params.includeManagedOpenClaw
+    const nativeLabel = params.includeManagedNatesclaw
       ? await readLaunchDaemonPlistLabel(fullPath)
       : null;
     const label =
@@ -335,8 +335,8 @@ async function scanLaunchdDir(params: {
     const marker =
       label === params.managedLabel ||
       hasGatewayServiceMarker(contents) ||
-      executionMarker === "openclaw"
-        ? "openclaw"
+      executionMarker === "natesclaw"
+        ? "natesclaw"
         : executionMarker === "clawdbot" || legacyLabel
           ? "clawdbot"
           : null;
@@ -345,13 +345,13 @@ async function scanLaunchdDir(params: {
     }
     // Managed current services are expected; this scan reports extra jobs that
     // can compete for ports or survive old installs.
-    if (!params.includeManagedOpenClaw && isIgnoredLaunchdLabel(label)) {
+    if (!params.includeManagedNatesclaw && isIgnoredLaunchdLabel(label)) {
       continue;
     }
     if (
-      !params.includeManagedOpenClaw &&
-      marker === "openclaw" &&
-      isOpenClawGatewayLaunchdService(label, contents)
+      !params.includeManagedNatesclaw &&
+      marker === "natesclaw" &&
+      isNatesclawGatewayLaunchdService(label, contents)
     ) {
       continue;
     }
@@ -361,7 +361,7 @@ async function scanLaunchdDir(params: {
       detail: `plist: ${fullPath}`,
       scope: params.scope,
       marker,
-      legacy: marker !== "openclaw" || isLegacyLabel(label),
+      legacy: marker !== "natesclaw" || isLegacyLabel(label),
     });
   }
 
@@ -371,26 +371,26 @@ async function scanLaunchdDir(params: {
 async function scanSystemdDir(params: {
   dir: string;
   scope: "user" | "system";
-  includeManagedOpenClaw?: boolean;
+  includeManagedNatesclaw?: boolean;
 }): Promise<ExtraGatewayService[]> {
   const results: ExtraGatewayService[] = [];
   const candidates = await collectServiceFiles({
     dir: params.dir,
     extension: ".service",
-    isIgnoredName: params.includeManagedOpenClaw ? () => false : isIgnoredSystemdName,
+    isIgnoredName: params.includeManagedNatesclaw ? () => false : isIgnoredSystemdName,
   });
 
   for (const { entry, name, fullPath, contents } of candidates) {
     const marker = hasGatewayServiceMarker(contents)
-      ? "openclaw"
+      ? "natesclaw"
       : detectMarkerLineWithGateway(contents);
     if (!marker) {
       continue;
     }
     if (
-      !params.includeManagedOpenClaw &&
-      marker === "openclaw" &&
-      isOpenClawGatewaySystemdService(name, contents)
+      !params.includeManagedNatesclaw &&
+      marker === "natesclaw" &&
+      isNatesclawGatewaySystemdService(name, contents)
     ) {
       continue;
     }
@@ -400,7 +400,7 @@ async function scanSystemdDir(params: {
       detail: `unit: ${fullPath}`,
       scope: params.scope,
       marker,
-      legacy: marker !== "openclaw",
+      legacy: marker !== "natesclaw",
     });
   }
 
@@ -419,7 +419,7 @@ export async function findSystemGatewayServices(): Promise<ExtraGatewayService[]
         ...(await scanSystemdDir({
           dir,
           scope: "system",
-          includeManagedOpenClaw: true,
+          includeManagedNatesclaw: true,
         })),
       );
     }
@@ -513,7 +513,7 @@ export async function findExtraGatewayServices(
         for (const svc of await scanLaunchdDir({
           dir: path.join(path.sep, "Library", "LaunchDaemons"),
           scope: "system",
-          includeManagedOpenClaw: true,
+          includeManagedNatesclaw: true,
           managedLabel: resolveLaunchAgentLabel(env),
         })) {
           push(svc);
@@ -569,7 +569,7 @@ export async function findExtraGatewayServices(
       if (!name) {
         continue;
       }
-      if (isOpenClawGatewayTaskName(name)) {
+      if (isNatesclawGatewayTaskName(name)) {
         continue;
       }
       const lowerName = normalizeLowercaseStringOrEmpty(name);
@@ -590,7 +590,7 @@ export async function findExtraGatewayServices(
         detail: task.taskToRun ? `task: ${name}, run: ${task.taskToRun}` : name,
         scope: "system",
         marker,
-        legacy: marker !== "openclaw",
+        legacy: marker !== "natesclaw",
       });
     }
     return results;

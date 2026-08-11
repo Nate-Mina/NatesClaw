@@ -1,10 +1,10 @@
 // Memory Core API module exposes the plugin public contract.
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+export type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 export type {
   MemoryEmbeddingProbeResult,
   MemoryProviderStatus,
   MemorySyncProgressUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
 export {
   dedupeDreamDiaryEntries,
   removeBackfillDiaryEntries,

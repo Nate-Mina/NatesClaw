@@ -258,7 +258,7 @@ async function expectNextRunUsesTargetSession(
   );
 
   expect(params.runEmbeddedAgentMock).toHaveBeenCalledOnce();
-  const runParams = firstMockCallArg(params.runEmbeddedAgentMock, "embedded OpenClaw agent");
+  const runParams = firstMockCallArg(params.runEmbeddedAgentMock, "embedded Natesclaw agent");
   for (const [key, value] of Object.entries(expected)) {
     expect(runParams[key]).toEqual(value);
   }
@@ -409,7 +409,7 @@ describe("trigger handling", () => {
 
   it("acknowledges bare /new without invoking the model or loading startup memory", async () => {
     await withTempHome(async (home) => {
-      const workspaceDir = join(home, "openclaw");
+      const workspaceDir = join(home, "natesclaw");
       const nowMs = Date.now();
       const todayStamp = formatDateStampForZone(nowMs, TEST_TIME_ZONE);
       const yesterdayStamp = formatDateStampForZone(nowMs - 24 * 60 * 60 * 1000, TEST_TIME_ZONE);
@@ -431,7 +431,7 @@ describe("trigger handling", () => {
 
   it("acknowledges normalized bare /RESET without invoking the model", async () => {
     await withTempHome(async (home) => {
-      const workspaceDir = join(home, "openclaw");
+      const workspaceDir = join(home, "natesclaw");
       const nowMs = Date.now();
       const todayStamp = formatDateStampForZone(nowMs, TEST_TIME_ZONE);
       await writeDailyMemoryNotes(workspaceDir, [
@@ -491,7 +491,7 @@ describe("trigger handling", () => {
         expect(runEmbeddedAgentMock, testCase.label).toHaveBeenCalledOnce();
         if (testCase.assertPrompt) {
           const prompt =
-            firstMockCallArg(runEmbeddedAgentMock, "embedded OpenClaw agent").prompt ?? "";
+            firstMockCallArg(runEmbeddedAgentMock, "embedded Natesclaw agent").prompt ?? "";
           expect(prompt).toContain("Give me the status");
           expect(prompt).not.toContain("/thinking high");
           expect(prompt).not.toContain("/think high");
@@ -533,7 +533,7 @@ describe("trigger handling", () => {
         testCase.setup(cfg);
         await getReplyFromConfig(BASE_MESSAGE, { isHeartbeat: true }, cfg);
 
-        const call = firstMockCallArg(runEmbeddedAgentMock, "embedded OpenClaw agent");
+        const call = firstMockCallArg(runEmbeddedAgentMock, "embedded Natesclaw agent");
         expect(call?.provider).toBe(testCase.expected.provider);
         expect(call?.model).toBe(testCase.expected.model);
       }
@@ -592,7 +592,7 @@ describe("trigger handling", () => {
       expect(getCompactEmbeddedAgentSessionMock()).toHaveBeenCalledOnce();
       const call = firstMockCallArg(
         getCompactEmbeddedAgentSessionMock(),
-        "embedded OpenClaw compaction",
+        "embedded Natesclaw compaction",
       );
       expect(call.sessionTarget).toMatchObject({
         agentId: "worker1",
@@ -774,7 +774,7 @@ describe("trigger handling", () => {
       const runEmbeddedAgentMock = getRunEmbeddedAgentMock();
       runEmbeddedAgentMock.mockReset();
       const storePath = requireSessionStorePath(cfg);
-      const authDir = join(home, ".openclaw", "agents", "main", "agent");
+      const authDir = join(home, ".natesclaw", "agents", "main", "agent");
       saveAuthProfileStore(
         {
           version: 1,

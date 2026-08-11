@@ -8,9 +8,9 @@
 import path from "node:path";
 import type { ThinkLevel } from "../auto-reply/thinking.js";
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { withTempWorkspace } from "../infra/private-temp-workspace.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredNatesclawTmpDir } from "../infra/tmp-natesclaw-dir.js";
 import type { AssistantMessage } from "../llm/types.js";
 import { withPluginRuntimeRegistryScope } from "../plugins/runtime/gateway-request-scope.js";
 import { prepareSystemAgentRunAdmission } from "./admitted-run-context.js";
@@ -35,7 +35,7 @@ import { resolveEffectiveAgentRuntime } from "./thinking-runtime.js";
 import type { UsageLike } from "./usage.js";
 
 type RunIsolatedCompletionParams = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   provider: string;
   model: string;
   /** Explicit credential owner. CLI and harness paths must not replace it with another profile. */
@@ -146,7 +146,7 @@ async function runCliIsolatedCompletion(params: {
   workspaceDir: string;
 }): Promise<{ model: string; text: string; usage?: UsageLike }> {
   return await withTempWorkspace(
-    { rootDir: resolvePreferredOpenClawTmpDir(), prefix: "openclaw-isolated-completion-" },
+    { rootDir: resolvePreferredNatesclawTmpDir(), prefix: "natesclaw-isolated-completion-" },
     async ({ dir }) => {
       const { runCliAgent } = await import("./cli-runner.runtime.js");
       const sessionId = `isolated-completion-${Date.now()}`;
@@ -181,7 +181,7 @@ async function runCliIsolatedCompletion(params: {
           streamParams: params.request.streamParams,
           abortSignal: params.request.abortSignal,
           executionMode: "side-question",
-          cliToolAvailability: { native: [], openClaw: [] },
+          cliToolAvailability: { native: [], Natesclaw: [] },
           disableTools: true,
           disableCliLiveSession: true,
           cleanupCliLiveSessionOnRunEnd: true,
@@ -287,9 +287,9 @@ function resolveCliOwner(params: {
 }
 
 async function resolveHarness(runtime: string): Promise<AgentHarness> {
-  if (runtime === "openclaw") {
-    const { createOpenClawAgentHarness } = await import("./harness/builtin-openclaw.js");
-    return createOpenClawAgentHarness();
+  if (runtime === "natesclaw") {
+    const { createNatesclawAgentHarness } = await import("./harness/builtin-natesclaw.js");
+    return createNatesclawAgentHarness();
   }
   const harness = getRegisteredAgentHarness(runtime)?.harness;
   if (!harness) {
@@ -305,7 +305,7 @@ function prepareIsolatedHarnessParams(
   harness: AgentHarness,
   params: AgentHarnessIsolatedCompletionParams,
 ): AgentHarnessIsolatedCompletionParams {
-  if (harness.id === "openclaw") {
+  if (harness.id === "natesclaw") {
     return params;
   }
   // External harnesses are the provider egress boundary. Keep credentials

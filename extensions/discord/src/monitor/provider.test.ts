@@ -1,12 +1,12 @@
 // Discord tests cover provider plugin behavior.
 import { EventEmitter } from "node:events";
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
-import { createPluginRuntimeMock } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { ChannelRuntimeSurface } from "natesclaw/plugin-sdk/channel-contract";
+import { createPluginRuntimeMock } from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   createEmptyPluginRegistry,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { RateLimitError } from "../internal/discord.js";
 import {
@@ -100,7 +100,7 @@ function createRateLimitError(
   return new RateLimitErrorCtor(response, body, fallbackRequest);
 }
 
-function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {}): OpenClawConfig {
+function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {}): NatesclawConfig {
   return {
     channels: {
       discord: {
@@ -112,7 +112,7 @@ function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {})
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 type MockCallReader = { mock: { calls: unknown[][] } };
@@ -161,7 +161,7 @@ vi.mock("../voice/manager.runtime.js", () => {
 });
 describe("monitorDiscordProvider", () => {
   type ReconcileHealthProbeParams = {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     sessionKey: string;
     binding: unknown;
@@ -169,7 +169,7 @@ describe("monitorDiscordProvider", () => {
   };
 
   type ReconcileStartupParams = {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     healthProbe?: (
       params: ReconcileHealthProbeParams,
     ) => Promise<{ status: string; reason?: string }>;
@@ -795,7 +795,7 @@ describe("monitorDiscordProvider", () => {
     expect(drained[0]?.message).toContain("4014");
   });
 
-  it("passes OpenClaw event queue defaults to the Discord client", async () => {
+  it("passes Natesclaw event queue defaults to the Discord client", async () => {
     await monitorDiscordProvider({
       config: baseConfig(),
       runtime: baseRuntime(),

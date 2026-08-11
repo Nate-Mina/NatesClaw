@@ -1,13 +1,13 @@
-# Moonshot OpenClaw provider
+# Moonshot Natesclaw provider
 
-Official OpenClaw provider plugin for Moonshot.
+Official Natesclaw provider plugin for Moonshot.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/moonshot-provider
+natesclaw plugins install @natesclaw/moonshot-provider
 ```
 
 ## Docs
 
-See `docs/providers/moonshot.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/providers/moonshot`.
+See `docs/providers/moonshot.md` in the Natesclaw repository, or the published docs at `https://docs.natesclaw.ai/providers/moonshot`.

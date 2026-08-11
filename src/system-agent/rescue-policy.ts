@@ -1,10 +1,10 @@
 import { resolveAgentEntry } from "../agents/agent-scope-config.js";
-// OpenClaw rescue policy gates remote writes by owner, DM, sandbox, and YOLO posture.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+// Natesclaw rescue policy gates remote writes by owner, DM, sandbox, and YOLO posture.
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveExecModePolicy } from "../infra/exec-approvals.js";
 
 /**
- * Policy checks for remote OpenClaw rescue commands.
+ * Policy checks for remote Natesclaw rescue commands.
  *
  * Rescue intentionally opens only for owner-controlled, non-sandboxed YOLO host
  * posture because remote commands can write local state.
@@ -30,18 +30,18 @@ type SystemAgentRescueDecision =
     };
 
 type SystemAgentRescuePolicyInput = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
   senderIsOwner: boolean;
   isDirectMessage: boolean;
 };
 
-function resolveScopedExecConfig(cfg: OpenClawConfig, agentId?: string) {
+function resolveScopedExecConfig(cfg: NatesclawConfig, agentId?: string) {
   return agentId ? resolveAgentEntry(cfg, agentId)?.tools?.exec : undefined;
 }
 
 function resolveScopedSandboxMode(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId?: string,
 ): "off" | "non-main" | "all" {
   return (
@@ -51,7 +51,7 @@ function resolveScopedSandboxMode(
   );
 }
 
-function isYoloHostPosture(cfg: OpenClawConfig, agentId?: string): boolean {
+function isYoloHostPosture(cfg: NatesclawConfig, agentId?: string): boolean {
   const scopedExec = resolveScopedExecConfig(cfg, agentId);
   const globalExec = cfg.tools?.exec;
   const inherited = resolveExecModePolicy({
@@ -88,7 +88,7 @@ export function resolveSystemAgentRescuePolicy(
       sandboxActive,
       reason: "sandbox-active",
       message:
-        "OpenClaw rescue is blocked because OpenClaw sandboxing is active. Fix the install locally or disable sandboxing before using remote rescue.",
+        "Natesclaw rescue is blocked because Natesclaw sandboxing is active. Fix the install locally or disable sandboxing before using remote rescue.",
     };
   }
   if (!enabled) {
@@ -100,7 +100,7 @@ export function resolveSystemAgentRescuePolicy(
       yolo,
       sandboxActive,
       reason: "disabled",
-      message: "OpenClaw rescue requires YOLO host posture with sandboxing off.",
+      message: "Natesclaw rescue requires YOLO host posture with sandboxing off.",
     };
   }
   if (!input.senderIsOwner) {
@@ -112,7 +112,7 @@ export function resolveSystemAgentRescuePolicy(
       yolo,
       sandboxActive,
       reason: "not-owner",
-      message: "OpenClaw rescue only accepts commands from an OpenClaw owner.",
+      message: "Natesclaw rescue only accepts commands from an Natesclaw owner.",
     };
   }
   if (ownerDmOnly && !input.isDirectMessage) {
@@ -124,7 +124,7 @@ export function resolveSystemAgentRescuePolicy(
       yolo,
       sandboxActive,
       reason: "not-direct-message",
-      message: "OpenClaw rescue is restricted to owner DMs by default.",
+      message: "Natesclaw rescue is restricted to owner DMs by default.",
     };
   }
   return {

@@ -2,21 +2,21 @@ import {
   buildChannelInboundEventContext,
   resolveChannelInboundRouteEnvelope,
   toInboundMediaFactsWithMetadata,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 // Qa Channel plugin module implements inbound behavior.
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { resolveNativeCommandSessionTargets } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { resolveStableChannelMessageIngress } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { resolveNativeCommandSessionTargets } from "natesclaw/plugin-sdk/command-auth-native";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   getAgentScopedMediaLocalRoots,
   saveMediaBuffer,
   saveMediaSource,
-} from "openclaw/plugin-sdk/media-runtime";
+} from "natesclaw/plugin-sdk/media-runtime";
 import {
   sanitizeQaBusToolCallArguments,
   type QaBusToolCall,
-} from "openclaw/plugin-sdk/qa-channel-protocol";
+} from "natesclaw/plugin-sdk/qa-channel-protocol";
 import {
   buildQaTarget,
   deleteQaBusMessage,
@@ -284,7 +284,7 @@ export async function handleQaInbound(params: {
     toolCalls,
   });
   const { route, buildEnvelope } = resolveChannelInboundRouteEnvelope({
-    cfg: params.config as OpenClawConfig,
+    cfg: params.config as NatesclawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     peer: {
@@ -302,7 +302,7 @@ export async function handleQaInbound(params: {
     ? runtime.channel.mentions.matchesMentionPatterns(
         inbound.text,
         runtime.channel.mentions.buildMentionRegexes(
-          params.config as OpenClawConfig,
+          params.config as NatesclawConfig,
           route.agentId,
         ),
       )
@@ -418,7 +418,7 @@ export async function handleQaInbound(params: {
   });
 
   await runtime.channel.inbound.dispatch({
-    cfg: params.config as OpenClawConfig,
+    cfg: params.config as NatesclawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     route: { agentId: route.agentId, dmScope: route.dmScope, sessionKey: route.sessionKey },
@@ -460,7 +460,7 @@ export async function handleQaInbound(params: {
             isError: reply?.isError,
             mediaUrls,
             mediaLocalRoots: getAgentScopedMediaLocalRoots(
-              params.config as OpenClawConfig,
+              params.config as NatesclawConfig,
               route.agentId,
             ),
             threadId: inbound.threadId,

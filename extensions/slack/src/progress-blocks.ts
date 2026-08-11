@@ -6,7 +6,7 @@ import {
   type AgentPlanStep,
   type ChannelProgressDraftLine,
   formatPlanChecklistLines,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import { SLACK_MAX_BLOCKS } from "./blocks-input.js";
 import { normalizeSlackOutboundText } from "./format.js";
 import { escapeSlackMrkdwn } from "./monitor/mrkdwn.js";

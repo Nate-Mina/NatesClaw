@@ -1,7 +1,7 @@
 // Registers plugin-related CLI commands.
 import type { Command } from "commander";
 import { getRuntimeConfigSnapshot, readConfigFileSnapshot } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   createPluginCliLogger,
   loadPluginCliDescriptors,
@@ -9,7 +9,7 @@ import {
   type PluginCliLoaderOptions,
 } from "./cli-registry-loader.js";
 import { registerPluginCliCommandGroups } from "./register-plugin-cli-command-groups.js";
-import type { OpenClawPluginCliRootCommandDescriptor, PluginLogger } from "./types.js";
+import type { NatesclawPluginCliRootCommandDescriptor, PluginLogger } from "./types.js";
 
 type PluginCliRegistrationMode = "eager" | "lazy";
 
@@ -23,7 +23,7 @@ type PluginCliRegistrationEntries = Awaited<
   ReturnType<typeof loadPluginCliRegistrationEntriesWithDefaults>
 >;
 
-const PLUGIN_CLI_ENTRIES_CACHE_KEY = Symbol.for("openclaw.plugin-cli-registration-entries-cache");
+const PLUGIN_CLI_ENTRIES_CACHE_KEY = Symbol.for("natesclaw.plugin-cli-registration-entries-cache");
 
 interface ProgramWithEntriesCache {
   [PLUGIN_CLI_ENTRIES_CACHE_KEY]?: {
@@ -78,7 +78,7 @@ function loaderOptionsKey(loaderOptions: PluginCliLoaderOptions | undefined): st
 
 export const loadValidatedConfigForPluginRegistration = async (options?: {
   skipPluginValidation?: boolean;
-}): Promise<OpenClawConfig | null> => {
+}): Promise<NatesclawConfig | null> => {
   const snapshot = await readConfigFileSnapshot({
     skipPluginValidation: options?.skipPluginValidation,
   });
@@ -89,16 +89,16 @@ export const loadValidatedConfigForPluginRegistration = async (options?: {
 };
 
 export async function getPluginCliCommandDescriptors(
-  cfg?: OpenClawConfig,
+  cfg?: NatesclawConfig,
   env?: NodeJS.ProcessEnv,
   loaderOptions?: PluginCliLoaderOptions,
-): Promise<OpenClawPluginCliRootCommandDescriptor[]> {
+): Promise<NatesclawPluginCliRootCommandDescriptor[]> {
   return loadPluginCliDescriptors({ cfg, env, loaderOptions, logger: quietDescriptorLogger });
 }
 
 export async function registerPluginCliCommands(
   program: Command,
-  cfg?: OpenClawConfig,
+  cfg?: NatesclawConfig,
   env?: NodeJS.ProcessEnv,
   loaderOptions?: PluginCliLoaderOptions,
   options?: RegisterPluginCliOptions,
@@ -139,7 +139,7 @@ export async function registerPluginCliCommandsFromValidatedConfig(
   env?: NodeJS.ProcessEnv,
   loaderOptions?: PluginCliLoaderOptions,
   options?: RegisterPluginCliOptions,
-): Promise<OpenClawConfig | null> {
+): Promise<NatesclawConfig | null> {
   const config = await loadValidatedConfigForPluginRegistration({
     skipPluginValidation: options?.skipPluginValidation,
   });

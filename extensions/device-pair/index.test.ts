@@ -3,12 +3,12 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type {
-  OpenClawPluginCommandDefinition,
+  NatesclawPluginCommandDefinition,
   PluginCommandContext,
-} from "openclaw/plugin-sdk/core";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+} from "natesclaw/plugin-sdk/core";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawPluginApi } from "./api.js";
+import type { NatesclawPluginApi } from "./api.js";
 
 const pluginApiMocks = vi.hoisted(() => ({
   clearDeviceBootstrapTokens: vi.fn(async () => ({ removed: 2 })),
@@ -20,7 +20,7 @@ const pluginApiMocks = vi.hoisted(() => ({
   renderQrPngDataUrl: vi.fn(async () => "data:image/png;base64,ZmFrZXBuZw=="),
   resolveGatewayPort: vi.fn(() => 18789),
   resolveTailscaleServeGatewayUrlsWithRunner: vi.fn(async () => []),
-  resolvePreferredOpenClawTmpDir: vi.fn(() => path.join(os.tmpdir(), "openclaw-device-pair-tests")),
+  resolvePreferredNatesclawTmpDir: vi.fn(() => path.join(os.tmpdir(), "natesclaw-device-pair-tests")),
   writeQrPngTempFile: vi.fn(async (dataValue: string, opts: { tmpRoot: string }) => {
     const dirPath = await fs.mkdtemp(path.join(opts.tmpRoot, "device-pair-qr-"));
     const filePath = path.join(dirPath, "pair-qr.png");
@@ -41,7 +41,7 @@ vi.mock("./api.js", () => ({
   listDevicePairing: vi.fn(async () => ({ pending: [] })),
   renderQrPngDataUrl: pluginApiMocks.renderQrPngDataUrl,
   revokeDeviceBootstrapToken: pluginApiMocks.revokeDeviceBootstrapToken,
-  resolvePreferredOpenClawTmpDir: pluginApiMocks.resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir: pluginApiMocks.resolvePreferredNatesclawTmpDir,
   resolveAdvertisedLanHost: vi.fn(async () => null),
   resolveGatewayBindUrl: vi.fn(),
   resolveGatewayPort: pluginApiMocks.resolveGatewayPort,
@@ -75,8 +75,8 @@ type ApprovedPairingResult = Extract<
   { status: "approved" }
 >;
 type RegisterPairOptions = {
-  config?: OpenClawPluginApi["config"];
-  runtime?: OpenClawPluginApi["runtime"];
+  config?: NatesclawPluginApi["config"];
+  runtime?: NatesclawPluginApi["runtime"];
   pluginConfig?: Record<string, unknown>;
 };
 
@@ -110,9 +110,9 @@ const exactTestTitle = (title: string) => () => title;
 
 function createApi(
   params: RegisterPairOptions & {
-    registerCommand?: (command: OpenClawPluginCommandDefinition) => void;
+    registerCommand?: (command: NatesclawPluginCommandDefinition) => void;
   } = {},
-): OpenClawPluginApi {
+): NatesclawPluginApi {
   return createTestPluginApi({
     id: "device-pair",
     name: "device-pair",
@@ -124,13 +124,13 @@ function createApi(
       publicUrl: "wss://gateway.example.test",
       ...params.pluginConfig,
     },
-    runtime: (params.runtime ?? {}) as OpenClawPluginApi["runtime"],
+    runtime: (params.runtime ?? {}) as NatesclawPluginApi["runtime"],
     registerCommand: params.registerCommand,
   });
 }
 
-function registerPairCommand(params: RegisterPairOptions = {}): OpenClawPluginCommandDefinition {
-  let command: OpenClawPluginCommandDefinition | undefined;
+function registerPairCommand(params: RegisterPairOptions = {}): NatesclawPluginCommandDefinition {
+  let command: NatesclawPluginCommandDefinition | undefined;
   registerDevicePair.register(
     createApi({
       ...params,
@@ -231,7 +231,7 @@ async function expectRejectedCommand(params: {
 function createChannelRuntime(
   channel: string,
   sendMessage: (...args: unknown[]) => Promise<unknown>,
-): OpenClawPluginApi["runtime"] {
+): NatesclawPluginApi["runtime"] {
   return {
     channel: {
       outbound: {
@@ -246,7 +246,7 @@ function createChannelRuntime(
             : undefined,
       },
     },
-  } as unknown as OpenClawPluginApi["runtime"];
+  } as unknown as NatesclawPluginApi["runtime"];
 }
 
 function makePendingPairingRequest(): ListedPendingPairingRequest {
@@ -296,11 +296,11 @@ beforeEach(async () => {
     token: "boot-token",
     expiresAtMs: Date.now() + 10 * 60_000,
   });
-  await fs.mkdir(pluginApiMocks.resolvePreferredOpenClawTmpDir(), { recursive: true });
+  await fs.mkdir(pluginApiMocks.resolvePreferredNatesclawTmpDir(), { recursive: true });
 });
 
 afterEach(async () => {
-  await fs.rm(pluginApiMocks.resolvePreferredOpenClawTmpDir(), { recursive: true, force: true });
+  await fs.rm(pluginApiMocks.resolvePreferredNatesclawTmpDir(), { recursive: true, force: true });
 });
 
 afterAll(() => {
@@ -326,9 +326,9 @@ describe("device-pair /pair qr", () => {
 
     expect(pluginApiMocks.renderQrPngDataUrl).toHaveBeenCalledTimes(1);
     expect(pluginApiMocks.issueDeviceBootstrapToken).toHaveBeenCalledWith(FULL_SETUP_REQUEST);
-    expect(text).toContain("Scan this QR code with the OpenClaw iOS app:");
+    expect(text).toContain("Scan this QR code with the Natesclaw iOS app:");
     expect(payload.mediaUrl).toBeUndefined();
-    expect(payload.channelData?.openclawPairingQr).toEqual({
+    expect(payload.channelData?.natesclawPairingQr).toEqual({
       setupCode: expect.any(String),
       expiresAtMs: expect.any(Number),
     });
@@ -336,7 +336,7 @@ describe("device-pair /pair qr", () => {
     expect(text).toContain("- Security: single-use bootstrap token");
     expect(text).toContain("**Important:** Run `/pair cleanup` after pairing finishes.");
     expect(text).toContain("If this QR code leaks, run `/pair cleanup` immediately.");
-    expect(text).not.toContain("![OpenClaw pairing QR]");
+    expect(text).not.toContain("![Natesclaw pairing QR]");
   });
 
   it.each`
@@ -403,7 +403,7 @@ describe("device-pair /pair qr", () => {
       >,
     ];
     expect(actualTarget).toBe(target);
-    expect(caption).toContain("Scan this QR code with the OpenClaw iOS app:");
+    expect(caption).toContain("Scan this QR code with the Natesclaw iOS app:");
     expect(caption).toContain("IMPORTANT: After pairing finishes, run /pair cleanup.");
     expect(caption).toContain("If this QR code leaks, run /pair cleanup immediately.");
     const mediaUrl = requireMediaUrl(sendOpts);
@@ -472,7 +472,7 @@ describe("device-pair /pair qr", () => {
           {
             runtime: {
               channel: { outbound: { loadAdapter } },
-            } as unknown as OpenClawPluginApi["runtime"],
+            } as unknown as NatesclawPluginApi["runtime"],
           },
         ),
       );
@@ -540,7 +540,7 @@ describe("device-pair /pair default setup code", () => {
     toString                                                                                    | options                                                                                                                                                                  | context                                        | expectedText
     ${exactTestTitle("normalizes secure bare publicUrl host ports before issuing setup codes")} | ${{ config: { gateway: { tls: { enabled: true }, auth: { mode: "token", token: "gateway-token" } } }, pluginConfig: { publicUrl: "gateway.example.test:18789/setup" } }} | ${{ gatewayClientScopes: ["operator.admin"] }} | ${"Gateway: wss://gateway.example.test:18789"}
     ${exactTestTitle("allows loopback cleartext setup urls")}                                   | ${{ pluginConfig: { publicUrl: "ws://127.0.0.1:18789" } }}                                                                                                               | ${undefined}                                   | ${"Gateway: ws://127.0.0.1:18789"}
-    ${exactTestTitle("allows mdns cleartext setup urls")}                                       | ${{ pluginConfig: { publicUrl: "ws://openclaw.local:18789" } }}                                                                                                          | ${undefined}                                   | ${"Gateway: ws://openclaw.local:18789"}
+    ${exactTestTitle("allows mdns cleartext setup urls")}                                       | ${{ pluginConfig: { publicUrl: "ws://natesclaw.local:18789" } }}                                                                                                          | ${undefined}                                   | ${"Gateway: ws://natesclaw.local:18789"}
   `("%s", async ({ options, context, expectedText }) => {
     const text = requireText(await runDefaultSetup(options, context));
     expect(pluginApiMocks.issueDeviceBootstrapToken).toHaveBeenCalledTimes(1);

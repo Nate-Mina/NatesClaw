@@ -2,19 +2,19 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { migratePersistedImplicitMainRoster } from "../config/legacy.roster.js";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { deleteTestEnvValue, setTestEnvValue } from "../test-utils/env.js";
 import { resolveModelRuntimePolicy as resolveModelRuntimePolicyBase } from "./model-runtime-policy.js";
 
-const ORIGINAL_BUILD_PRIVATE_QA = process.env.OPENCLAW_BUILD_PRIVATE_QA;
-const ORIGINAL_QA_FORCE_RUNTIME = process.env.OPENCLAW_QA_FORCE_RUNTIME;
+const ORIGINAL_BUILD_PRIVATE_QA = process.env.NATESCLAW_BUILD_PRIVATE_QA;
+const ORIGINAL_QA_FORCE_RUNTIME = process.env.NATESCLAW_QA_FORCE_RUNTIME;
 
 function resolveModelRuntimePolicy(
   params: Parameters<typeof resolveModelRuntimePolicyBase>[0],
 ): ReturnType<typeof resolveModelRuntimePolicyBase> {
   return resolveModelRuntimePolicyBase({
     ...params,
-    config: migratePersistedImplicitMainRoster(params.config).config as OpenClawConfig,
+    config: migratePersistedImplicitMainRoster(params.config).config as NatesclawConfig,
   });
 }
 
@@ -38,7 +38,7 @@ const createModelConfig = (
 });
 
 function restoreEnv(
-  name: "OPENCLAW_BUILD_PRIVATE_QA" | "OPENCLAW_QA_FORCE_RUNTIME",
+  name: "NATESCLAW_BUILD_PRIVATE_QA" | "NATESCLAW_QA_FORCE_RUNTIME",
   value: string | undefined,
 ): void {
   // Tests mutate private QA env gates; restore exact process state after each.
@@ -49,7 +49,7 @@ function restoreEnv(
   setTestEnvValue(name, value);
 }
 
-function makeProviderRuntimeConfig(runtime: string): OpenClawConfig {
+function makeProviderRuntimeConfig(runtime: string): NatesclawConfig {
   return {
     models: {
       providers: {
@@ -60,18 +60,18 @@ function makeProviderRuntimeConfig(runtime: string): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 afterEach(() => {
-  restoreEnv("OPENCLAW_BUILD_PRIVATE_QA", ORIGINAL_BUILD_PRIVATE_QA);
-  restoreEnv("OPENCLAW_QA_FORCE_RUNTIME", ORIGINAL_QA_FORCE_RUNTIME);
+  restoreEnv("NATESCLAW_BUILD_PRIVATE_QA", ORIGINAL_BUILD_PRIVATE_QA);
+  restoreEnv("NATESCLAW_QA_FORCE_RUNTIME", ORIGINAL_QA_FORCE_RUNTIME);
 });
 
 describe("resolveModelRuntimePolicy", () => {
   it("ignores the QA force-runtime override when the private QA gate is unset", () => {
-    deleteTestEnvValue("OPENCLAW_BUILD_PRIVATE_QA");
-    setTestEnvValue("OPENCLAW_QA_FORCE_RUNTIME", "openclaw");
+    deleteTestEnvValue("NATESCLAW_BUILD_PRIVATE_QA");
+    setTestEnvValue("NATESCLAW_QA_FORCE_RUNTIME", "natesclaw");
 
     expect(
       resolveModelRuntimePolicy({
@@ -88,8 +88,8 @@ describe("resolveModelRuntimePolicy", () => {
   it("respects the QA force-runtime override when the private QA gate is set", () => {
     // The force-runtime override is intentionally gated to private QA builds so
     // normal users cannot accidentally change model runtime selection via env.
-    setTestEnvValue("OPENCLAW_BUILD_PRIVATE_QA", "1");
-    setTestEnvValue("OPENCLAW_QA_FORCE_RUNTIME", "openclaw");
+    setTestEnvValue("NATESCLAW_BUILD_PRIVATE_QA", "1");
+    setTestEnvValue("NATESCLAW_QA_FORCE_RUNTIME", "natesclaw");
 
     expect(
       resolveModelRuntimePolicy({
@@ -98,14 +98,14 @@ describe("resolveModelRuntimePolicy", () => {
         modelId: "gpt-5.5",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "natesclaw" },
       source: "model",
     });
   });
 
   it("ignores invalid QA force-runtime values even when the private QA gate is set", () => {
-    setTestEnvValue("OPENCLAW_BUILD_PRIVATE_QA", "1");
-    setTestEnvValue("OPENCLAW_QA_FORCE_RUNTIME", "bogus");
+    setTestEnvValue("NATESCLAW_BUILD_PRIVATE_QA", "1");
+    setTestEnvValue("NATESCLAW_QA_FORCE_RUNTIME", "bogus");
 
     expect(
       resolveModelRuntimePolicy({
@@ -124,11 +124,11 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -137,7 +137,7 @@ describe("resolveModelRuntimePolicy", () => {
         modelId: "qwen-local",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "natesclaw" },
       source: "model",
       matchedProvider: "vllm",
     });
@@ -148,11 +148,11 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -160,7 +160,7 @@ describe("resolveModelRuntimePolicy", () => {
         provider: "vllm",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "natesclaw" },
       source: "model",
       matchedProvider: "vllm",
     });
@@ -173,12 +173,12 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "natesclaw" } },
             "vllm/qwen-local": { agentRuntime: { id: "codex" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -198,7 +198,7 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
@@ -210,7 +210,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -239,7 +239,7 @@ describe("resolveModelRuntimePolicy", () => {
         defaults: {
           models: {
             "openrouter/anthropic/claude-opus-4.6": {
-              agentRuntime: { id: "openclaw" },
+              agentRuntime: { id: "natesclaw" },
             },
             "anthropic/claude-opus-4.6": {
               agentRuntime: { id: "claude-cli" },
@@ -256,7 +256,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -265,7 +265,7 @@ describe("resolveModelRuntimePolicy", () => {
         modelId,
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "natesclaw" },
       source: "model",
       matchedProvider: "openrouter",
     });
@@ -299,14 +299,14 @@ describe("resolveModelRuntimePolicy", () => {
             openrouter: {
               baseUrl: "https://openrouter.ai/api/v1",
               agentRuntime: { id: "codex" },
-              models: [createModelConfig("openclaw", "anthropic/claude-opus-4.6")],
+              models: [createModelConfig("natesclaw", "anthropic/claude-opus-4.6")],
             },
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       expect(resolveModelRuntimePolicy({ config, provider, modelId })).toEqual({
-        policy: { id: "openclaw" },
+        policy: { id: "natesclaw" },
         source: "model",
         ...(matchedProvider ? { matchedProvider } : {}),
       });
@@ -323,7 +323,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -349,7 +349,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -369,12 +369,12 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "claude-opus-4-7": { agentRuntime: { id: "openclaw" } },
+            "claude-opus-4-7": { agentRuntime: { id: "natesclaw" } },
             "anthropic/claude-opus-4-7": { agentRuntime: { id: "claude-cli" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -394,7 +394,7 @@ describe("resolveModelRuntimePolicy", () => {
       agents: {
         defaults: {
           models: {
-            "vllm/*": { agentRuntime: { id: "openclaw" } },
+            "vllm/*": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
@@ -407,7 +407,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -416,7 +416,7 @@ describe("resolveModelRuntimePolicy", () => {
         modelId: "qwen-local",
       }),
     ).toEqual({
-      policy: { id: "openclaw" },
+      policy: { id: "natesclaw" },
       source: "model",
       matchedProvider: "vllm",
     });
@@ -431,7 +431,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -455,7 +455,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -475,7 +475,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -507,7 +507,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({
@@ -534,7 +534,7 @@ describe("resolveModelRuntimePolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveModelRuntimePolicy({

@@ -8,8 +8,8 @@ import path from "node:path";
 import { DatabaseSync, type SQLInputValue } from "node:sqlite";
 import type { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
-import { expectDefined } from "@openclaw/normalization-core";
-import { asOptionalRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { asOptionalRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   readSessionArchiveContentSync,
   stripSessionArchiveCompressionSuffix,
@@ -36,11 +36,11 @@ import {
   readSessionTranscriptEvents,
   resolveSessionTranscriptIdentity,
 } from "../../src/plugin-sdk/session-transcript-runtime.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../src/state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../src/state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../../src/state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../src/state/natesclaw-state-db.js";
 import { sleep } from "../../src/utils.js";
 import { normalizeSessionDeliveryState } from "../../src/utils/delivery-context.shared.js";
-import { createOpenClawTestInstance } from "./openclaw-test-instance.js";
+import { createNatesclawTestInstance } from "./natesclaw-test-instance.js";
 
 type DoctorMode = "import" | "inspect" | "validate" | "restore";
 type ProofChildProcess = ChildProcessByStdio<null, Readable, Readable>;
@@ -62,7 +62,7 @@ type RollbackRestoreEvidence = Awaited<ReturnType<typeof runRollbackRestoreProof
 
 type ProofContext = ReturnType<typeof buildProofContext>;
 type GatewayClient = Awaited<ReturnType<typeof connectGatewayClient>>;
-type OpenClawTestInstance = Awaited<ReturnType<typeof createOpenClawTestInstance>>;
+type NatesclawTestInstance = Awaited<ReturnType<typeof createNatesclawTestInstance>>;
 
 type RunOptions = {
   print?: boolean;
@@ -80,7 +80,7 @@ const CONCURRENT_DELETE_TEXT = "sqlite concurrent delete while send is active";
 const CLEANUP_PRUNE_SESSION_ID = "sqlite-cleanup-prune";
 const CLEANUP_PRUNE_SESSION_KEY = "agent:main:dashboard:sqlite-cleanup-prune";
 const CLEANUP_PRUNE_TEXT = "sqlite cleanup prune me";
-const FULL_TURN_ASSISTANT_TEXT = "OPENCLAW_E2E_OK_12";
+const FULL_TURN_ASSISTANT_TEXT = "NATESCLAW_E2E_OK_12";
 const FULL_TURN_SESSION_KEY = "agent:main:sqlite-full-turn";
 const MANUAL_COMPACTION_SESSION_KEY = "agent:main:dashboard:sqlite-manual-compact";
 const PLUGIN_SDK_APPEND_TEXT = "sqlite sdk consumer appended by identity";
@@ -112,7 +112,7 @@ const OLD_STATE_SESSION_KEYS = [
 export async function runSqliteSessionsTranscriptsFlipProof(options: RunOptions = {}) {
   const print = options.print ?? false;
   const mockOpenAiPort = await getFreeTcpPort();
-  const inst = await createOpenClawTestInstance({
+  const inst = await createNatesclawTestInstance({
     name: `sqlite-sessions-transcripts-flip-${randomUUID()}`,
     config: buildMockOpenAiConfig(mockOpenAiPort),
     env: {
@@ -120,9 +120,9 @@ export async function runSqliteSessionsTranscriptsFlipProof(options: RunOptions 
       HTTP_PROXY: undefined,
       HTTPS_PROXY: undefined,
       NO_PROXY: "127.0.0.1,localhost",
-      OPENAI_API_KEY: "sk-openclaw-e2e-mock",
-      OPENCLAW_TEST_MINIMAL_GATEWAY: undefined,
-      OPENCLAW_SKIP_PROVIDERS: undefined,
+      OPENAI_API_KEY: "sk-natesclaw-e2e-mock",
+      NATESCLAW_TEST_MINIMAL_GATEWAY: undefined,
+      NATESCLAW_SKIP_PROVIDERS: undefined,
       no_proxy: "127.0.0.1,localhost",
     },
     startTimeoutMs: 90_000,
@@ -348,8 +348,8 @@ export async function runSqliteSessionsTranscriptsFlipProof(options: RunOptions 
   } finally {
     await stopChildProcess(mockOpenAi);
     await inst.stopGateway();
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     await inst.cleanup();
   }
 
@@ -399,7 +399,7 @@ function buildProofContext(stateDir: string) {
   const legacySessionsDir = path.join(stateDir, "sessions");
   return {
     activeSessionsDir,
-    agentDbPath: path.join(agentDir, "agent", "openclaw-agent.sqlite"),
+    agentDbPath: path.join(agentDir, "agent", "natesclaw-agent.sqlite"),
     agentId: AGENT_ID,
     archiveRoots: [path.join(agentDir, "session-sqlite-import-archive"), activeSessionsDir],
     cleanupPruneSessionKey: CLEANUP_PRUNE_SESSION_KEY,
@@ -449,7 +449,7 @@ function buildMockOpenAiConfig(mockPort: number): Record<string, unknown> {
         model: { primary: modelRef },
         models: {
           [modelRef]: {
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "natesclaw" },
             params: { openaiWsWarmup: false, transport: "sse" },
           },
         },
@@ -460,13 +460,13 @@ function buildMockOpenAiConfig(mockPort: number): Record<string, unknown> {
       mode: "merge",
       providers: {
         openai: {
-          agentRuntime: { id: "openclaw" },
+          agentRuntime: { id: "natesclaw" },
           api: "openai-responses",
           apiKey: { source: "env", provider: "default", id: "OPENAI_API_KEY" },
           baseUrl: `http://127.0.0.1:${mockPort}/v1`,
           models: [
             {
-              agentRuntime: { id: "openclaw" },
+              agentRuntime: { id: "natesclaw" },
               api: "openai-responses",
               contextTokens: 96_000,
               contextWindow: 128_000,
@@ -504,7 +504,7 @@ async function getFreeTcpPort(): Promise<number> {
 }
 
 async function connectProofClient(
-  inst: OpenClawTestInstance,
+  inst: NatesclawTestInstance,
   clientDisplayName: string,
 ): Promise<GatewayClient> {
   return await connectGatewayClient({
@@ -765,7 +765,7 @@ async function importProofSession(
   });
 }
 
-async function runDoctor(inst: OpenClawTestInstance, mode: DoctorMode, storePath: string) {
+async function runDoctor(inst: NatesclawTestInstance, mode: DoctorMode, storePath: string) {
   const result = await inst.cli(
     ["doctor", "--session-sqlite", mode, "--session-sqlite-store", storePath, "--json"],
     { timeoutMs: 60_000 },
@@ -823,13 +823,13 @@ function parseDoctorRestore(parsed: Record<string, unknown>) {
   };
 }
 
-async function runRollbackRestoreProof(inst: OpenClawTestInstance, context: ProofContext) {
+async function runRollbackRestoreProof(inst: NatesclawTestInstance, context: ProofContext) {
   const drillDir = path.join(context.stateDir, "rollback-drill");
   const storePath = path.join(drillDir, "sessions.json");
   const sessionId = "sqlite-rollback-restore";
   const sessionKey = "agent:main:rollback-restore";
   const sourcePath = path.join(drillDir, `${sessionId}.jsonl`);
-  const sqlitePath = path.join(drillDir, "openclaw-agent.sqlite");
+  const sqlitePath = path.join(drillDir, "natesclaw-agent.sqlite");
   await fs.mkdir(drillDir, { recursive: true });
   await writeJsonFile(storePath, { [sessionKey]: legacyEntry(sessionId, Date.now()) }, 2);
   await writeMessageTranscript(
@@ -1229,7 +1229,7 @@ async function runGatewayCleanupPruningProof(
 }
 
 async function runDoctorIdempotenceProof(
-  inst: OpenClawTestInstance,
+  inst: NatesclawTestInstance,
   context: ProofContext,
 ): Promise<DoctorCommandEvidence> {
   const before = readSqliteEvidence(context.agentDbPath, context.trackedSessionKeys);
@@ -1281,7 +1281,7 @@ function requireScaleMigrationProof(context: ProofContext, startupImportElapsedM
   };
 }
 
-async function runDowngradeReupgradeProof(inst: OpenClawTestInstance, context: ProofContext) {
+async function runDowngradeReupgradeProof(inst: NatesclawTestInstance, context: ProofContext) {
   await fs.mkdir(context.activeSessionsDir, { recursive: true });
   await writeJsonFile(
     context.storePath,
@@ -1306,7 +1306,7 @@ async function runDowngradeReupgradeProof(inst: OpenClawTestInstance, context: P
     sessionId: DOWNGRADE_REUPGRADE_SESSION_ID,
   });
   await writeJsonFile(trajectoryPointerPath, {
-    traceSchema: "openclaw-trajectory-pointer",
+    traceSchema: "natesclaw-trajectory-pointer",
     schemaVersion: 1,
     sessionId: DOWNGRADE_REUPGRADE_SESSION_ID,
     runtimeFile: trajectoryPath,
@@ -1379,22 +1379,22 @@ async function runSqliteBusyContentionProof(context: ProofContext) {
       `
         import fs from "node:fs";
         import { DatabaseSync } from "node:sqlite";
-        const db = new DatabaseSync(process.env.OPENCLAW_E2E_BUSY_DB_PATH);
+        const db = new DatabaseSync(process.env.NATESCLAW_E2E_BUSY_DB_PATH);
         db.exec("PRAGMA busy_timeout = 30000; BEGIN IMMEDIATE;");
-        fs.writeFileSync(process.env.OPENCLAW_E2E_BUSY_READY_PATH, "ready");
+        fs.writeFileSync(process.env.NATESCLAW_E2E_BUSY_READY_PATH, "ready");
         setTimeout(() => {
           db.exec("COMMIT");
           db.close();
-        }, Number(process.env.OPENCLAW_E2E_BUSY_HOLD_MS));
+        }, Number(process.env.NATESCLAW_E2E_BUSY_HOLD_MS));
       `,
     ],
     {
       cwd: process.cwd(),
       env: {
         ...process.env,
-        OPENCLAW_E2E_BUSY_DB_PATH: context.agentDbPath,
-        OPENCLAW_E2E_BUSY_HOLD_MS: String(holdMs),
-        OPENCLAW_E2E_BUSY_READY_PATH: readyPath,
+        NATESCLAW_E2E_BUSY_DB_PATH: context.agentDbPath,
+        NATESCLAW_E2E_BUSY_HOLD_MS: String(holdMs),
+        NATESCLAW_E2E_BUSY_READY_PATH: readyPath,
       },
       stdio: ["ignore", "pipe", "pipe"],
     },
@@ -1473,7 +1473,7 @@ async function runSecondStartupAfterResetProof(
 }
 
 async function runConcurrentMultiClientLifecycle(
-  inst: OpenClawTestInstance,
+  inst: NatesclawTestInstance,
   context: ProofContext,
   primaryClient: GatewayClient,
 ): Promise<void> {

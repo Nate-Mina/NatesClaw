@@ -7,8 +7,8 @@ import * as crypto from "node:crypto";
 import {
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationSeconds,
-} from "openclaw/plugin-sdk/number-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { ChatScope } from "../types.js";
 import { debugLog } from "./log.js";
 

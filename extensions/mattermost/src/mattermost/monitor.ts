@@ -1,11 +1,11 @@
 // Mattermost plugin module orchestrates monitor setup, ingress, and teardown.
-import { fanInChannelIngressLifecycles } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { isLoopbackHost } from "openclaw/plugin-sdk/gateway-runtime";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+import { fanInChannelIngressLifecycles } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { isLoopbackHost } from "natesclaw/plugin-sdk/gateway-runtime";
+import { isPrivateNetworkOptInEnabled } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeOptionalString,
   normalizeTrimmedStringList,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { getMattermostRuntime } from "../runtime.js";
 import { resolveMattermostAccount } from "./accounts.js";
 import {
@@ -38,7 +38,7 @@ import {
   type MattermostWebSocketFactory,
 } from "./monitor-websocket.js";
 import { runWithReconnect } from "./reconnect.js";
-import type { ChannelAccountSnapshot, OpenClawConfig, RuntimeEnv } from "./runtime-api.js";
+import type { ChannelAccountSnapshot, NatesclawConfig, RuntimeEnv } from "./runtime-api.js";
 import {
   createChannelPairingController,
   resolveAllowlistProviderRuntimeGroupPolicy,
@@ -53,7 +53,7 @@ type MonitorMattermostOpts = {
   botToken?: string;
   baseUrl?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   statusSink?: (patch: Partial<ChannelAccountSnapshot>) => void;
@@ -82,7 +82,7 @@ export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}
         throw new Error(`exit ${code}`);
       },
     } satisfies RuntimeEnv);
-  const cfg = (opts.config ?? core.config.current()) as OpenClawConfig;
+  const cfg = (opts.config ?? core.config.current()) as NatesclawConfig;
   const account = resolveMattermostAccount({ cfg, accountId: opts.accountId });
   const pairing = createChannelPairingController({
     core,

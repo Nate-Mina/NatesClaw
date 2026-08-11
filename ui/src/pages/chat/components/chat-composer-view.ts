@@ -1,4 +1,4 @@
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { html, nothing, type TemplateResult } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { ref } from "lit/directives/ref.js";
@@ -159,9 +159,9 @@ export function renderChatComposerView(context: ChatComposerViewContext) {
       ${questionPanelProps
         ? html`
             <div class="agent-chat__question-dock">
-              <openclaw-chat-question-panel
+              <natesclaw-chat-question-panel
                 .props=${questionPanelProps}
-              ></openclaw-chat-question-panel>
+              ></natesclaw-chat-question-panel>
             </div>
           `
         : nothing}
@@ -283,7 +283,7 @@ export function renderChatComposerView(context: ChatComposerViewContext) {
                     props.realtimeTalkCameraDevices.length >= 2 &&
                     props.onSwitchRealtimeCamera
                       ? html`
-                          <openclaw-tooltip
+                          <natesclaw-tooltip
                             class="agent-chat__video-preview-switch-tooltip"
                             .content=${t("chat.composer.switchCamera")}
                           >
@@ -296,7 +296,7 @@ export function renderChatComposerView(context: ChatComposerViewContext) {
                             >
                               ${icons.switchCamera}
                             </button>
-                          </openclaw-tooltip>
+                          </natesclaw-tooltip>
                         `
                       : nothing}
                   </div>
@@ -443,7 +443,7 @@ export function renderChatComposerView(context: ChatComposerViewContext) {
                         : nothing}
                       ${overrideCount > 0 && props.capabilityMenu
                         ? html`
-                            <openclaw-tooltip .content=${overrideTooltip}>
+                            <natesclaw-tooltip .content=${overrideTooltip}>
                               <span class="agent-chat__session-overrides-pill">
                                 <button
                                   type="button"
@@ -477,7 +477,7 @@ export function renderChatComposerView(context: ChatComposerViewContext) {
                                   ${icons.x}
                                 </button>
                               </span>
-                            </openclaw-tooltip>
+                            </natesclaw-tooltip>
                           `
                         : nothing}
                       ${composerControls}

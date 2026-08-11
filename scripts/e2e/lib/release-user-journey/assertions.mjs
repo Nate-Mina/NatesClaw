@@ -24,17 +24,17 @@ import { readTextFileTail } from "../text-file-utils.mjs";
 
 function clickClackHttpTimeoutMs() {
   return readPositiveInt(
-    process.env.OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS,
+    process.env.NATESCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS,
     5000,
-    "OPENCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS",
+    "NATESCLAW_RELEASE_USER_JOURNEY_HTTP_TIMEOUT_MS",
   );
 }
 
 function clickClackHttpBodyMaxBytes() {
   return readPositiveInt(
-    process.env.OPENCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES,
+    process.env.NATESCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES,
     1024 * 1024,
-    "OPENCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES",
+    "NATESCLAW_RELEASE_USER_JOURNEY_HTTP_BODY_MAX_BYTES",
   );
 }
 
@@ -121,8 +121,8 @@ function pathsEqual(left, right) {
 
 function configPath() {
   return (
-    process.env.OPENCLAW_CONFIG_PATH ??
-    path.join(process.env.HOME ?? "", ".openclaw", "openclaw.json")
+    process.env.NATESCLAW_CONFIG_PATH ??
+    path.join(process.env.HOME ?? "", ".natesclaw", "natesclaw.json")
   );
 }
 
@@ -142,14 +142,14 @@ function installRecords() {
 
 function assertOnboard() {
   const home = process.argv[3];
-  const stateDir = path.join(home, ".openclaw");
+  const stateDir = path.join(home, ".natesclaw");
   const authPath = path.join(stateDir, "agents", "main", "agent", "auth-profiles.json");
-  assert(fs.existsSync(configPath()), "onboard did not write openclaw.json");
+  assert(fs.existsSync(configPath()), "onboard did not write natesclaw.json");
   const stateRaw =
     fs.readFileSync(configPath(), "utf8") +
     (fs.existsSync(authPath) ? fs.readFileSync(authPath, "utf8") : "");
   assert(
-    !stateRaw.includes("sk-openclaw-release-user-journey"),
+    !stateRaw.includes("sk-natesclaw-release-user-journey"),
     "onboard persisted raw OpenAI key",
   );
 }

@@ -3,7 +3,7 @@
 import fsSync from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { DEFAULT_SECRET_FILE_MAX_BYTES, tryReadSecretFileSync } from "@openclaw/fs-safe/secret";
+import { DEFAULT_SECRET_FILE_MAX_BYTES, tryReadSecretFileSync } from "@natesclaw/fs-safe/secret";
 import { execa } from "execa";
 import { resolveTrustedOnePasswordCli } from "./onepassword-op-path.js";
 import { resolveOnePasswordSecretReference } from "./onepassword-secret-id.js";
@@ -86,8 +86,8 @@ function resolveOsHome() {
   return path.resolve(home);
 }
 
-function resolveOpenClawHome() {
-  const explicit = process.env.OPENCLAW_HOME?.trim();
+function resolveNatesclawHome() {
+  const explicit = process.env.NATESCLAW_HOME?.trim();
   if (!explicit) {
     return resolveOsHome();
   }
@@ -98,23 +98,23 @@ function resolveOpenClawHome() {
 }
 
 function resolveStateDir() {
-  const override = process.env.OPENCLAW_STATE_DIR?.trim();
+  const override = process.env.NATESCLAW_STATE_DIR?.trim();
   if (override) {
     if (override === "~" || override.startsWith("~/") || override.startsWith("~\\")) {
-      return path.resolve(override.replace(/^~(?=$|[\\/])/u, resolveOpenClawHome()));
+      return path.resolve(override.replace(/^~(?=$|[\\/])/u, resolveNatesclawHome()));
     }
     return path.resolve(override);
   }
-  const home = resolveOpenClawHome();
-  const profile = process.env.OPENCLAW_PROFILE?.trim();
+  const home = resolveNatesclawHome();
+  const profile = process.env.NATESCLAW_PROFILE?.trim();
   if (profile && profile.toLowerCase() !== "default") {
     // Keep the static resolver aligned with the root CLI profile contract without importing core.
     if (!/^[A-Za-z0-9_-]+$/u.test(profile)) {
-      throw new Error("invalid OpenClaw profile name");
+      throw new Error("invalid Natesclaw profile name");
     }
-    return path.join(home, `.openclaw-${profile}`);
+    return path.join(home, `.natesclaw-${profile}`);
   }
-  const current = path.join(home, ".openclaw");
+  const current = path.join(home, ".natesclaw");
   const legacy = path.join(home, ".clawdbot");
   return fsSync.existsSync(current) || !fsSync.existsSync(legacy) ? current : legacy;
 }

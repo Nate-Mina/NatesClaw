@@ -1,14 +1,14 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
 } from "../../infra/kysely-sync.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import { getSessionKysely } from "./session-accessor.sqlite-scope.js";
 import { normalizeStoreSessionKey } from "./store-entry.js";
 
 export function clearSessionCollaborationForKey(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKey: string,
   options: { clearSuggestions?: boolean } = {},
 ): void {
@@ -29,7 +29,7 @@ export function clearSessionCollaborationForKey(
 }
 
 export function rehomeLegacySessionNodeArtifacts(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   legacyKey: string,
   canonicalKey: string,
   options: { rehomeMembers?: boolean },
@@ -176,8 +176,8 @@ export function rehomeLegacySessionNodeArtifacts(
 
 /** Copy logical-session artifacts while doctor moves a node between agent databases. */
 export function copySessionNodeArtifactsForRepair(
-  source: OpenClawAgentDatabase,
-  destination: OpenClawAgentDatabase,
+  source: NatesclawAgentDatabase,
+  destination: NatesclawAgentDatabase,
   sourceKeys: readonly string[],
   canonicalKey: string,
   options: { includeMembers?: boolean } = {},
@@ -331,7 +331,7 @@ export function copySessionNodeArtifactsForRepair(
 
 /** Membership is authorization state; canonical repair replaces it from the selected winner. */
 export function deleteSessionMembersForRepair(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKey: string,
 ): void {
   if (!readSessionNodeArtifactTables(database).has("session_members")) {
@@ -345,7 +345,7 @@ export function deleteSessionMembersForRepair(
 }
 
 export function deleteSessionDeliveryArtifacts(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKey: string,
   additionalKeys: readonly string[] = [],
 ): void {
@@ -375,7 +375,7 @@ export function deleteSessionDeliveryArtifacts(
 }
 
 export function deleteSessionNodeArtifacts(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKey: string,
 ): void {
   const db = getSessionKysely(database.db);
@@ -399,7 +399,7 @@ export function deleteSessionNodeArtifacts(
   clearSessionCollaborationForKey(database, sessionKey);
 }
 
-function readSessionNodeArtifactTables(database: OpenClawAgentDatabase): Set<string> {
+function readSessionNodeArtifactTables(database: NatesclawAgentDatabase): Set<string> {
   const db = getSessionKysely(database.db);
   return new Set(
     executeSqliteQuerySync(

@@ -1,6 +1,6 @@
 // Shared owner-qualified ClawHub security verdict resolution.
-import { asOptionalRecord as readObject } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asOptionalRecord as readObject } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import pLimit from "p-limit";
 import {
   fetchClawHubSkillSecurityVerdicts,

@@ -1,11 +1,11 @@
-// Deepseek plugin entrypoint registers its OpenClaw integration.
-import { readConfiguredProviderCatalogEntries } from "openclaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
-import { buildProviderReplayFamilyHooks } from "openclaw/plugin-sdk/provider-model-shared";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
-import { fetchDeepSeekUsage } from "openclaw/plugin-sdk/provider-usage";
+// Deepseek plugin entrypoint registers its Natesclaw integration.
+import { readConfiguredProviderCatalogEntries } from "natesclaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
+import { buildProviderReplayFamilyHooks } from "natesclaw/plugin-sdk/provider-model-shared";
+import { buildProviderToolCompatFamilyHooks } from "natesclaw/plugin-sdk/provider-tools";
+import { fetchDeepSeekUsage } from "natesclaw/plugin-sdk/provider-usage";
 import { applyDeepSeekConfig } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import { buildDeepSeekProvider } from "./provider-catalog.js";
 import { createDeepSeekV4ThinkingWrapper } from "./stream.js";
 import { resolveDeepSeekV4ThinkingProfile } from "./thinking.js";

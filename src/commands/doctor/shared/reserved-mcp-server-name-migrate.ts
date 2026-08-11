@@ -1,5 +1,5 @@
 // Removes MCP server entries whose names are reserved by config validation.
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { isRecord, type JsonRecord } from "./legacy-config-record-shared.js";
 
 const RESERVED_MCP_SERVER_NAME = "__proto__";
@@ -18,10 +18,10 @@ function resolveMcpServers(raw: unknown, nodeHost: boolean): JsonRecord | undefi
 
 /** Drop reserved MCP server names before canonical config validation runs. */
 export function migrateReservedMcpServerNames(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   sourceRaw: unknown = cfg,
 ): {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   changes: string[];
 } {
   const locations = [

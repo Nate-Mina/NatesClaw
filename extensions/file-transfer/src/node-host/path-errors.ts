@@ -1,7 +1,7 @@
 // File Transfer plugin module implements path errors behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { FsSafeError, resolveAbsolutePathForRead } from "openclaw/plugin-sdk/security-runtime";
+import { FsSafeError, resolveAbsolutePathForRead } from "natesclaw/plugin-sdk/security-runtime";
 
 type InvalidPathResult = {
   ok: false;

@@ -8,7 +8,7 @@ function workSession(): SidebarRecentSession {
     hasActiveRun: false,
     label: "Backing session",
     status: "done",
-    subtitle: "~/Projects/openclaw",
+    subtitle: "~/Projects/natesclaw",
     workSession: true,
   } as unknown as SidebarRecentSession;
 }
@@ -35,7 +35,7 @@ describe("resolveSidebarSessionSubtitle", () => {
         sidebarLiveActivity: true,
         narrationLine: "Still running",
       }),
-    ).toEqual({ subtitle: "~/Projects/openclaw", narration: undefined });
+    ).toEqual({ subtitle: "~/Projects/natesclaw", narration: undefined });
   });
 
   it("uses attention, agent status, observer, narration, then work subtitle precedence", () => {
@@ -139,7 +139,7 @@ describe("resolveSidebarSessionSubtitle", () => {
       });
 
     expect(resolve(1_999).subtitle).toBe("Finished with warnings");
-    expect(resolve(2_000).subtitle).toBe("~/Projects/openclaw");
+    expect(resolve(2_000).subtitle).toBe("~/Projects/natesclaw");
   });
 
   it("prefers the durable final reply over a stale idle digest and backing path", () => {

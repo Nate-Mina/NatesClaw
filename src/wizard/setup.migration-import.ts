@@ -1,6 +1,6 @@
 import type { OnboardOptions } from "../commands/onboard-types.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import {
   listAvailableManifestContractPlugins,
@@ -64,7 +64,7 @@ const loadMigrationContextModule = createLazyRuntimeModule(
 const loadConfigPathsModule = createLazyRuntimeModule(() => import("../config/paths.js"));
 
 export async function detectSetupMigrationSources(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   runtime: RuntimeEnv;
 }): Promise<SetupMigrationDetection[]> {
   const [
@@ -139,7 +139,7 @@ function resolveManifestMigrationProviderLabel(params: {
 }
 
 function resolveManifestSetupMigrationProviders(
-  baseConfig: OpenClawConfig,
+  baseConfig: NatesclawConfig,
 ): ManifestSetupMigrationProvider[] {
   const snapshot = loadManifestContractSnapshot({ config: baseConfig });
   return listAvailableManifestContractPlugins({
@@ -161,7 +161,7 @@ function resolveManifestSetupMigrationProviders(
 }
 
 export async function listSetupMigrationOptions(params: {
-  baseConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
   detections: readonly SetupMigrationDetection[];
 }): Promise<SetupMigrationOption[]> {
   const { resolvePluginMigrationProviders } = await loadMigrationProviderRuntimeModule();
@@ -205,7 +205,7 @@ export async function listSetupMigrationOptions(params: {
 
 async function selectSetupMigrationProvider(params: {
   opts: OnboardOptions;
-  baseConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
   detections: readonly SetupMigrationDetection[];
   prompter: WizardPrompter;
 }): Promise<string> {
@@ -243,8 +243,8 @@ async function selectSetupMigrationProvider(params: {
 
 async function resolveSetupMigrationProvider(params: {
   providerId: string;
-  baseConfig: OpenClawConfig;
-}): Promise<{ provider: MigrationProviderPlugin; baseConfig: OpenClawConfig }> {
+  baseConfig: NatesclawConfig;
+}): Promise<{ provider: MigrationProviderPlugin; baseConfig: NatesclawConfig }> {
   const { ensureStandaloneMigrationProviderRegistryLoaded, resolvePluginMigrationProvider } =
     await loadMigrationProviderRuntimeModule();
   ensureStandaloneMigrationProviderRegistryLoaded({
@@ -293,15 +293,15 @@ async function createSetupMigrationPlan(params: {
 
 export async function runSetupMigrationImport(params: {
   opts: OnboardOptions;
-  baseConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
   detections: readonly SetupMigrationDetection[];
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
-  readConfigFile: () => Promise<OpenClawConfig>;
+  readConfigFile: () => Promise<NatesclawConfig>;
   commitConfigFile: (
-    config: OpenClawConfig,
-    expectedConfig: OpenClawConfig,
-  ) => Promise<OpenClawConfig>;
+    config: NatesclawConfig,
+    expectedConfig: NatesclawConfig,
+  ) => Promise<NatesclawConfig>;
   continueOnboarding?: boolean;
 }): Promise<Awaited<ReturnType<typeof finalizeSetupMigrationPromotion>>> {
   const [

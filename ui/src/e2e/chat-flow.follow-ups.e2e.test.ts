@@ -23,7 +23,7 @@ suite.define(() => {
 
     try {
       await page.goto(`${suite.server.baseUrl}chat`);
-      const newSessionButton = page.locator("openclaw-app-sidebar .sidebar-brand__new-thread");
+      const newSessionButton = page.locator("natesclaw-app-sidebar .sidebar-brand__new-thread");
       await newSessionButton.waitFor({ state: "visible", timeout: 10_000 });
       await newSessionButton.click();
 
@@ -248,7 +248,7 @@ suite.define(() => {
       await expect
         .poll(() =>
           page
-            .locator("openclaw-chat-pane")
+            .locator("natesclaw-chat-pane")
             .evaluate(
               (pane) =>
                 (pane as HTMLElement & { taskSuggestions?: unknown[] }).taskSuggestions?.length ??
@@ -366,7 +366,7 @@ suite.define(() => {
             {
               id: "ops",
               model: { primary: "openai/startup-model" },
-              name: "OpenClaw",
+              name: "Natesclaw",
             },
           ],
           defaultId: "ops",
@@ -454,7 +454,7 @@ suite.define(() => {
   });
 
   it("steers ordinary follow-ups when the server default is steer", async () => {
-    const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+    const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
     const context = await suite.newBrowserContext({
       locale: "en-US",
       serviceWorkers: "block",
@@ -515,7 +515,7 @@ suite.define(() => {
   });
 
   it("preserves a non-steer server default for active-run follow-ups", async () => {
-    const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+    const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
     const context = await suite.newBrowserContext({
       locale: "en-US",
       serviceWorkers: "block",

@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
+import { resolveStateDir } from "natesclaw/plugin-sdk/state-paths";
 import {
   assertOwnedPath,
   chromeProductRoots,
@@ -19,11 +19,11 @@ import {
 } from "./extension-install-layout.js";
 import { BROWSER_NATIVE_HOST_NAME } from "./extension-native-host.js";
 
-const OWNED_LAUNCHER_MARKER = "# OpenClaw native messaging bootstrap v1";
+const OWNED_LAUNCHER_MARKER = "# Natesclaw native messaging bootstrap v1";
 const BROWSER_EXTENSION_INSTALL_WAIT_DEFAULT_MS = 30_000;
 const BROWSER_EXTENSION_INSTALL_WAIT_MIN_MS = 1_000;
 const BROWSER_EXTENSION_INSTALL_WAIT_MAX_MS = 120_000;
-const NATIVE_HOST_DESCRIPTION = "OpenClaw browser extension bootstrap";
+const NATIVE_HOST_DESCRIPTION = "Natesclaw browser extension bootstrap";
 
 type NativeHostRegistrationStatus = {
   product: ChromeProduct;
@@ -56,8 +56,8 @@ function resolveInstallStateDir(deps: ExtensionInstallDeps): string {
 
 function resolveInstallConfigPath(deps: ExtensionInstallDeps): string | undefined {
   const env = deps.env ?? process.env;
-  const explicit = env.OPENCLAW_CONFIG_PATH?.trim();
-  return explicit ? resolveStateDir({ ...env, OPENCLAW_STATE_DIR: explicit }) : undefined;
+  const explicit = env.NATESCLAW_CONFIG_PATH?.trim();
+  return explicit ? resolveStateDir({ ...env, NATESCLAW_STATE_DIR: explicit }) : undefined;
 }
 
 function shellQuote(value: string): string {
@@ -127,8 +127,8 @@ async function resolveLauncherInstall(params: {
     content: [
       "#!/bin/sh",
       OWNED_LAUNCHER_MARKER,
-      `export OPENCLAW_STATE_DIR=${shellQuote(resolveInstallStateDir(params.deps))}`,
-      ...(configPath ? [`export OPENCLAW_CONFIG_PATH=${shellQuote(configPath)}`] : []),
+      `export NATESCLAW_STATE_DIR=${shellQuote(resolveInstallStateDir(params.deps))}`,
+      ...(configPath ? [`export NATESCLAW_CONFIG_PATH=${shellQuote(configPath)}`] : []),
       `exec ${command.map(shellQuote).join(" ")} "$@"`,
       "",
     ].join("\n"),
@@ -366,7 +366,7 @@ export async function installChromeExtensionBootstrap(params: {
   let announcedWait = false;
   while (discovery.discovered.length === 0 && now() < deadline) {
     if (!announcedWait) {
-      params.onProgress?.("Waiting for Chrome to verify the unpacked OpenClaw extension…");
+      params.onProgress?.("Waiting for Chrome to verify the unpacked Natesclaw extension…");
       announcedWait = true;
     }
     await sleep(Math.min(500, Math.max(1, deadline - now())));
@@ -438,7 +438,7 @@ export async function browserExtensionStatus(params: {
       missingRegistration,
     issues: [
       ...(installedCopy.present && !installedCopy.owned
-        ? [`Chrome extension copy is not OpenClaw-owned: ${installedPath}`]
+        ? [`Chrome extension copy is not Natesclaw-owned: ${installedPath}`]
         : []),
       ...discovery.issues,
       ...registrations.flatMap((entry) =>
@@ -448,7 +448,7 @@ export async function browserExtensionStatus(params: {
   };
 }
 
-/** Remove only registrations and launchers that carry OpenClaw ownership. */
+/** Remove only registrations and launchers that carry Natesclaw ownership. */
 export async function uninstallChromeExtensionNativeHosts(
   params: { deps?: ExtensionInstallDeps } = {},
 ): Promise<{ removed: string[]; refused: string[]; manualRequired: boolean }> {
@@ -561,7 +561,7 @@ export async function repairOwnedChromeExtensionNativeHosts(params: {
         pluginRoot: params.pluginRoot,
         deps,
       });
-      changes.push(`Repaired ${root.label} OpenClaw native messaging registration.`);
+      changes.push(`Repaired ${root.label} Natesclaw native messaging registration.`);
     } catch (error) {
       warnings.push(`${root.label} native host repair failed: ${String(error)}`);
     }

@@ -7,8 +7,8 @@ import {
   type SessionMessageEnvelope,
   type SessionProjectionScope,
   type SessionProjectionState,
-} from "@openclaw/gateway-client/browser";
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+} from "@natesclaw/gateway-client/browser";
+import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { ApplicationInitialUserMessageHandoff } from "../../app/initial-user-message-handoff.ts";
 
 const chatSessionProjections = new WeakMap<object, SessionProjectionState>();
@@ -112,7 +112,7 @@ function adoptInitialUserMessage(
   handoff: InitialUserMessageHandoffEntry,
 ): unknown {
   const identity = readSessionMessageIdentity(message, envelope);
-  const handoffSequence = handoff.message["__openclaw"]?.seq ?? null;
+  const handoffSequence = handoff.message["__natesclaw"]?.seq ?? null;
   if (
     identity?.role !== "user" ||
     identity.isImported ||
@@ -123,13 +123,13 @@ function adoptInitialUserMessage(
   }
   const authoritative = asNullableRecord(message) ?? {};
   const { media: _media, ...authoritativeMetadata } =
-    asNullableRecord(authoritative["__openclaw"]) ?? {};
+    asNullableRecord(authoritative["__natesclaw"]) ?? {};
   return {
     ...handoff.message,
     ...authoritative,
     content: handoff.message.content,
-    __openclaw: {
-      ...handoff.message["__openclaw"],
+    __natesclaw: {
+      ...handoff.message["__natesclaw"],
       ...authoritativeMetadata,
     },
   };

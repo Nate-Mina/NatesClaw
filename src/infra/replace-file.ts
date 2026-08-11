@@ -1,12 +1,12 @@
-// Wraps fs-safe atomic replacement and move helpers for OpenClaw install flows.
+// Wraps fs-safe atomic replacement and move helpers for Natesclaw install flows.
 import "./fs-safe-defaults.js";
-import { replaceFileAtomic as replaceFileAtomicBase } from "@openclaw/fs-safe/atomic";
+import { replaceFileAtomic as replaceFileAtomicBase } from "@natesclaw/fs-safe/atomic";
 
 export {
   movePathWithCopyFallback,
   replaceDirectoryAtomic,
   replaceFileAtomicSync,
-} from "@openclaw/fs-safe/atomic";
+} from "@natesclaw/fs-safe/atomic";
 
 /** Atomic file replacement primitive re-exported through the fs-safe defaults shim. */
 export const replaceFileAtomic = replaceFileAtomicBase;

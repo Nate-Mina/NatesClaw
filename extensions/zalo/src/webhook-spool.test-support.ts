@@ -2,10 +2,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-  closeOpenClawStateDatabaseForTest,
+  closeNatesclawStateDatabaseForTest,
   createChannelIngressQueueForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
+import { resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import { expect, vi } from "vitest";
 import type { zaloWebhookIngressRuntime } from "./webhook-spool.js";
 
@@ -37,11 +37,11 @@ export async function withZaloWebhookTestQueue<T>(
   fn: (queue: ZaloWebhookTestQueue) => Promise<T>,
 ): Promise<T> {
   const createdDir = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-zalo-ingress-"),
+    path.join(resolvePreferredNatesclawTmpDir(), "natesclaw-zalo-ingress-"),
   );
   const stateDir = await fs.realpath(createdDir);
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = stateDir;
+  const previousStateDir = process.env.NATESCLAW_STATE_DIR;
+  process.env.NATESCLAW_STATE_DIR = stateDir;
   const queue = createChannelIngressQueueForTests<ZaloWebhookTestPayload>({
     channelId: "zalo",
     accountId: "default",
@@ -51,11 +51,11 @@ export async function withZaloWebhookTestQueue<T>(
     return await fn(queue);
   } finally {
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.NATESCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.NATESCLAW_STATE_DIR = previousStateDir;
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }

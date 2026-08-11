@@ -165,11 +165,11 @@ describeLaunchdIntegration("launchd integration", () => {
 
   beforeAll(async () => {
     const testId = randomUUID().slice(0, 8);
-    homeDir = await fs.mkdtemp(path.join(os.tmpdir(), `openclaw-launchd-int-${testId}-`));
+    homeDir = await fs.mkdtemp(path.join(os.tmpdir(), `natesclaw-launchd-int-${testId}-`));
     env = {
       HOME: homeDir,
-      OPENCLAW_LAUNCHD_LABEL: `ai.openclaw.launchd-int-${testId}`,
-      OPENCLAW_LOG_PREFIX: `gateway-launchd-int-${testId}`,
+      NATESCLAW_LAUNCHD_LABEL: `ai.natesclaw.launchd-int-${testId}`,
+      NATESCLAW_LOG_PREFIX: `gateway-launchd-int-${testId}`,
     };
   });
 
@@ -198,15 +198,15 @@ describeLaunchdIntegration("launchd integration", () => {
     const testId = randomUUID().slice(0, 8);
     const profile = `launchd-int-${testId}`;
     const accountHome = os.userInfo().homedir;
-    const stateDir = path.join(accountHome, `.openclaw-${profile}`);
+    const stateDir = path.join(accountHome, `.natesclaw-${profile}`);
     const profileEnv: GatewayServiceEnv = {
       HOME: accountHome,
-      OPENCLAW_HOME: undefined,
-      OPENCLAW_PROFILE: profile,
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_CONFIG_PATH: path.join(stateDir, "openclaw.json"),
-      OPENCLAW_LAUNCHD_LABEL: undefined,
-      OPENCLAW_SUPERVISOR_MODE: undefined,
+      NATESCLAW_HOME: undefined,
+      NATESCLAW_PROFILE: profile,
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_CONFIG_PATH: path.join(stateDir, "natesclaw.json"),
+      NATESCLAW_LAUNCHD_LABEL: undefined,
+      NATESCLAW_SUPERVISOR_MODE: undefined,
     };
 
     await withEnvAsync(profileEnv, async () => {
@@ -241,15 +241,15 @@ describeLaunchdIntegration("launchd integration", () => {
     });
   }, 60_000);
 
-  it("refuses a relocated OPENCLAW_HOME before launchd mutation", async () => {
+  it("refuses a relocated NATESCLAW_HOME before launchd mutation", async () => {
     const testId = randomUUID().slice(0, 8);
     const relocatedHome = await fs.mkdtemp(
-      path.join(os.tmpdir(), `openclaw-relocated-home-${testId}-`),
+      path.join(os.tmpdir(), `natesclaw-relocated-home-${testId}-`),
     );
     const relocatedEnv: GatewayServiceEnv = {
       HOME: os.userInfo().homedir,
-      OPENCLAW_HOME: relocatedHome,
-      OPENCLAW_PROFILE: `launchd-int-${testId}`,
+      NATESCLAW_HOME: relocatedHome,
+      NATESCLAW_PROFILE: `launchd-int-${testId}`,
     };
 
     try {

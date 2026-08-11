@@ -1,6 +1,6 @@
 import type { AgentHarness } from "../agents/harness/types.js";
 import type { AnyAgentTool } from "../agents/tools/common.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { OperatorScope } from "../gateway/operator-scopes.js";
 import type { GatewayRequestHandler } from "../gateway/server-methods/types.js";
 import type { InternalHookHandler } from "../hooks/internal-hook-types.js";
@@ -57,19 +57,19 @@ import type {
   PluginConfigMigration,
   PluginSetupAutoEnableProbe,
 } from "./migration-provider.types.js";
-import type { OpenClawPluginCommandDefinition } from "./plugin-command.types.js";
+import type { NatesclawPluginCommandDefinition } from "./plugin-command.types.js";
 import type {
-  OpenClawPluginChannelRegistration,
-  OpenClawPluginCliRegistrationOptions,
-  OpenClawPluginCliRegistrar,
-  OpenClawGatewayDiscoveryService,
-  OpenClawPluginHostedMediaResolver,
-  OpenClawPluginHttpRouteParams,
-  OpenClawPluginNodeCliFeatureOptions,
-  OpenClawPluginNodeInvokePolicy,
-  OpenClawPluginReloadRegistration,
-  OpenClawPluginSecurityAuditCollector,
-  OpenClawPluginService,
+  NatesclawPluginChannelRegistration,
+  NatesclawPluginCliRegistrationOptions,
+  NatesclawPluginCliRegistrar,
+  NatesclawGatewayDiscoveryService,
+  NatesclawPluginHostedMediaResolver,
+  NatesclawPluginHttpRouteParams,
+  NatesclawPluginNodeCliFeatureOptions,
+  NatesclawPluginNodeInvokePolicy,
+  NatesclawPluginReloadRegistration,
+  NatesclawPluginSecurityAuditCollector,
+  NatesclawPluginService,
   PluginInteractiveHandlerRegistration,
   PluginRegistrationMode,
 } from "./plugin-registration.types.js";
@@ -86,23 +86,23 @@ import type {
 import type { PluginRuntime } from "./runtime/types.js";
 import type { SessionCatalogProvider } from "./session-catalog.js";
 import type {
-  OpenClawPluginHookOptions,
-  OpenClawPluginToolFactory,
-  OpenClawPluginToolOptions,
+  NatesclawPluginHookOptions,
+  NatesclawPluginToolFactory,
+  NatesclawPluginToolOptions,
 } from "./tool-types.js";
-import type { OpenClawPluginNodeHostCommand } from "./types.node-host.js";
+import type { NatesclawPluginNodeHostCommand } from "./types.node-host.js";
 import type { WebFetchProviderPlugin, WebSearchProviderPlugin } from "./web-provider-types.js";
 
 type ChannelPlugin = import("../channels/plugins/types.plugin.js").ChannelPlugin;
 
 export type PluginTextTransformRegistration = PluginTextTransforms;
 
-type OpenClawPluginSessionStateApi = {
+type NatesclawPluginSessionStateApi = {
   /** Register plugin-owned session state projected into Gateway session rows. */
   registerSessionExtension: (extension: PluginSessionExtensionRegistration) => void;
 };
 
-type OpenClawPluginSessionWorkflowApi = {
+type NatesclawPluginSessionWorkflowApi = {
   /** Queue one plugin-owned context injection for the next agent turn in a session. */
   enqueueNextTurnInjection: (
     injection: PluginNextTurnInjection,
@@ -132,31 +132,31 @@ type OpenClawPluginSessionWorkflowApi = {
   ) => Promise<PluginSessionTurnUnscheduleByTagResult>;
 };
 
-type OpenClawPluginSessionControlsApi = {
+type NatesclawPluginSessionControlsApi = {
   /** Register a typed session action that clients can dispatch through the Gateway. */
   registerSessionAction: (action: PluginSessionActionRegistration) => void;
   /** Register a generic Control UI contribution descriptor. */
   registerControlUiDescriptor: (descriptor: PluginControlUiDescriptor) => void;
 };
 
-type OpenClawPluginSessionApi = {
-  state: OpenClawPluginSessionStateApi;
-  workflow: OpenClawPluginSessionWorkflowApi;
-  controls: OpenClawPluginSessionControlsApi;
+type NatesclawPluginSessionApi = {
+  state: NatesclawPluginSessionStateApi;
+  workflow: NatesclawPluginSessionWorkflowApi;
+  controls: NatesclawPluginSessionControlsApi;
 };
 
-type OpenClawPluginAgentEventsApi = {
+type NatesclawPluginAgentEventsApi = {
   /** Subscribe to sanitized agent events through the host-owned plugin lifecycle. */
   registerAgentEventSubscription: (subscription: PluginAgentEventSubscriptionRegistration) => void;
   /** Emit a host-routed, plugin-attributed event for workflow/UI subscribers. */
   emitAgentEvent: (params: PluginAgentEventEmitParams) => PluginAgentEventEmitResult;
 };
 
-type OpenClawPluginAgentApi = {
-  events: OpenClawPluginAgentEventsApi;
+type NatesclawPluginAgentApi = {
+  events: NatesclawPluginAgentEventsApi;
 };
 
-type OpenClawPluginRunContextApi = {
+type NatesclawPluginRunContextApi = {
   /** Store namespaced, JSON-compatible data for the active run. Cleared on run end/error. */
   setRunContext: (patch: PluginRunContextPatch) => boolean;
   /** Read namespaced plugin data for a run. */
@@ -165,13 +165,13 @@ type OpenClawPluginRunContextApi = {
   clearRunContext: (params: { runId: string; namespace?: string }) => void;
 };
 
-type OpenClawPluginLifecycleApi = {
+type NatesclawPluginLifecycleApi = {
   /** Register cleanup hooks for plugin-owned host state and background work. */
   registerRuntimeLifecycle: (lifecycle: PluginRuntimeLifecycleRegistration) => void;
 };
 
 /** Main registration API injected into native plugin entry files. */
-export type OpenClawPluginApi = {
+export type NatesclawPluginApi = {
   id: string;
   name: string;
   version?: string;
@@ -179,7 +179,7 @@ export type OpenClawPluginApi = {
   source: string;
   rootDir?: string;
   registrationMode: PluginRegistrationMode;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginConfig?: Record<string, unknown>;
   /**
    * In-process runtime helpers for trusted native plugins.
@@ -193,30 +193,30 @@ export type OpenClawPluginApi = {
    * Grouped facade over the existing flat session-related plugin API.
    * Flat methods remain supported for compatibility.
    */
-  session: OpenClawPluginSessionApi;
+  session: NatesclawPluginSessionApi;
   /** Grouped facade for agent-event workflow seams. */
-  agent: OpenClawPluginAgentApi;
+  agent: NatesclawPluginAgentApi;
   /** Grouped facade for run-scoped plugin scratch state. */
-  runContext: OpenClawPluginRunContextApi;
+  runContext: NatesclawPluginRunContextApi;
   /** Grouped facade for plugin-owned lifecycle cleanup hooks. */
-  lifecycle: OpenClawPluginLifecycleApi;
+  lifecycle: NatesclawPluginLifecycleApi;
   registerTool: (
-    tool: AnyAgentTool | OpenClawPluginToolFactory,
-    opts?: OpenClawPluginToolOptions,
+    tool: AnyAgentTool | NatesclawPluginToolFactory,
+    opts?: NatesclawPluginToolOptions,
   ) => void;
   registerHook: (
     events: string | string[],
     handler: InternalHookHandler,
-    opts?: OpenClawPluginHookOptions,
+    opts?: NatesclawPluginHookOptions,
   ) => void;
-  registerHttpRoute: (params: OpenClawPluginHttpRouteParams) => void;
+  registerHttpRoute: (params: NatesclawPluginHttpRouteParams) => void;
   /** Register a plugin-owned resolver for browser-style hosted media URLs. */
-  registerHostedMediaResolver: (resolver: OpenClawPluginHostedMediaResolver) => void;
+  registerHostedMediaResolver: (resolver: NatesclawPluginHostedMediaResolver) => void;
   /** Bind a declared MCP server's transport to the trusted message requester. */ registerMcpServerConnectionResolver: (
-    resolver: import("./types.mcp-connection.js").OpenClawPluginMcpServerConnectionResolver,
+    resolver: import("./types.mcp-connection.js").NatesclawPluginMcpServerConnectionResolver,
   ) => void;
   /** Register a native messaging channel plugin (channel capability). */
-  registerChannel: (registration: OpenClawPluginChannelRegistration | ChannelPlugin) => void;
+  registerChannel: (registration: NatesclawPluginChannelRegistration | ChannelPlugin) => void;
   /**
    * Register a gateway RPC method for this plugin.
    *
@@ -232,33 +232,33 @@ export type OpenClawPluginApi = {
   /** Register a read-only external-session catalog with optional native adoption actions. */
   registerSessionCatalog: (provider: SessionCatalogProvider) => void;
   registerCli: (
-    registrar: OpenClawPluginCliRegistrar,
-    opts?: OpenClawPluginCliRegistrationOptions,
+    registrar: NatesclawPluginCliRegistrar,
+    opts?: NatesclawPluginCliRegistrationOptions,
   ) => void;
   /**
-   * Register a plugin-owned node feature command group under `openclaw nodes`.
+   * Register a plugin-owned node feature command group under `natesclaw nodes`.
    *
    * This is equivalent to `registerCli(registrar, { parentPath: ["nodes"], ... })`
    * and is intended for paired-node capabilities such as camera, screen, or Canvas.
    */
   registerNodeCliFeature: (
-    registrar: OpenClawPluginCliRegistrar,
-    opts?: OpenClawPluginNodeCliFeatureOptions,
+    registrar: NatesclawPluginCliRegistrar,
+    opts?: NatesclawPluginNodeCliFeatureOptions,
   ) => void;
-  registerReload: (registration: OpenClawPluginReloadRegistration) => void;
-  registerNodeHostCommand: (command: OpenClawPluginNodeHostCommand) => void;
-  registerNodeInvokePolicy: (policy: OpenClawPluginNodeInvokePolicy) => void;
-  registerSecurityAuditCollector: (collector: OpenClawPluginSecurityAuditCollector) => void;
-  registerService: (service: OpenClawPluginService) => void;
+  registerReload: (registration: NatesclawPluginReloadRegistration) => void;
+  registerNodeHostCommand: (command: NatesclawPluginNodeHostCommand) => void;
+  registerNodeInvokePolicy: (policy: NatesclawPluginNodeInvokePolicy) => void;
+  registerSecurityAuditCollector: (collector: NatesclawPluginSecurityAuditCollector) => void;
+  registerService: (service: NatesclawPluginService) => void;
   /** Register a local gateway discovery advertiser such as mDNS/Bonjour. */
-  registerGatewayDiscoveryService: (service: OpenClawGatewayDiscoveryService) => void;
+  registerGatewayDiscoveryService: (service: NatesclawGatewayDiscoveryService) => void;
   /** Register a text-only CLI backend used by the local CLI runner. */
   registerCliBackend: (backend: CliBackendPlugin) => void;
   /** Register plugin-owned prompt/message compatibility text transforms. */
   registerTextTransforms: (transforms: PluginTextTransformRegistration) => void;
   /** Register a lightweight config migration that can run before plugin runtime loads. */
   registerConfigMigration: (migrate: PluginConfigMigration) => void;
-  /** Register an importer for `openclaw migrate` (migration capability). */
+  /** Register an importer for `natesclaw migrate` (migration capability). */
   registerMigrationProvider: (provider: MigrationProviderPlugin) => void;
   /** Register a lightweight config probe that can auto-enable this plugin generically. */
   registerAutoEnableProbe: (probe: PluginSetupAutoEnableProbe) => void;
@@ -301,7 +301,7 @@ export type OpenClawPluginApi = {
    * Plugin commands are processed before built-in commands and before agent invocation.
    * Use this for simple state-toggling or status commands that don't need AI reasoning.
    */
-  registerCommand: (command: OpenClawPluginCommandDefinition) => void;
+  registerCommand: (command: NatesclawPluginCommandDefinition) => void;
   /** Register a context engine implementation (exclusive slot - only one active at a time). */
   registerContextEngine: (id: string, factory: ContextEngineFactory) => void;
   /** Register a compaction provider (pluggable summarization backend). */

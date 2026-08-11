@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 const mocks = vi.hoisted(() => ({
-  cfg: {} as OpenClawConfig,
+  cfg: {} as NatesclawConfig,
   info: vi.fn(),
   isNixMode: false,
   mutateConfigFileWithRetry: vi.fn(),
@@ -50,7 +50,7 @@ describe("persistStickyModelSelection", () => {
           },
           list: [{ id: "main", default: true }],
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
       target: "defaults" as const,
     },
     {
@@ -70,7 +70,7 @@ describe("persistStickyModelSelection", () => {
             },
           ],
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
       target: "agent" as const,
     },
   ])("writes the $name", async ({ agentId, cfg, target }) => {
@@ -141,7 +141,7 @@ describe("persistStickyModelSelection", () => {
     expect(mocks.mutateConfigFileWithRetry).not.toHaveBeenCalled();
     expect(mocks.warn).toHaveBeenCalledOnce();
     expect(mocks.warn).toHaveBeenCalledWith(
-      "skipped sticky model persistence agentId=main model=openai/gpt-5.6-sol reason=config is immutable in OPENCLAW_NIX_MODE",
+      "skipped sticky model persistence agentId=main model=openai/gpt-5.6-sol reason=config is immutable in NATESCLAW_NIX_MODE",
     );
   });
 });

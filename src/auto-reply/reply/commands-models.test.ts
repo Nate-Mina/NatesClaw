@@ -1,9 +1,9 @@
 // Tests model command output, catalog loading, and provider auth status rendering.
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { testing as cliBackendsTesting } from "../../agents/cli-backends.test-support.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   createChannelTestPluginBase,
@@ -202,7 +202,7 @@ beforeAll(async () => {
   ]);
   await buildModelsProviderData({
     agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } },
-  } as OpenClawConfig);
+  } as NatesclawConfig);
 });
 
 beforeEach(() => {
@@ -264,7 +264,7 @@ afterEach(() => {
 
 function buildParams(
   commandBodyNormalized: string,
-  cfgOverrides: Partial<OpenClawConfig> = {},
+  cfgOverrides: Partial<NatesclawConfig> = {},
 ): HandleCommandsParams {
   return {
     cfg: {
@@ -277,7 +277,7 @@ function buildParams(
         text: true,
       },
       ...cfgOverrides,
-    } as OpenClawConfig,
+    } as NatesclawConfig,
     ctx: {
       Surface: "discord",
     },
@@ -402,7 +402,7 @@ describe("handleModelsCommand", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     await buildModelsProviderData(cfg, "worker");
 
@@ -446,7 +446,7 @@ describe("handleModelsCommand", () => {
 
     const data = await buildModelsProviderData({
       agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.byProvider.has("openai")).toBe(false);
     const checker = modelProviderAuthMocks.createProviderAuthChecker.mock.results.at(-1)?.value;
@@ -491,7 +491,7 @@ describe("handleModelsCommand", () => {
     const data = await buildModelsProviderData(
       {
         agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       undefined,
       { view: "all" },
     );
@@ -524,7 +524,7 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.byProvider.get("custom-provider")).toEqual(new Set(["custom-modern-model"]));
     expect(data.modelNames.get("custom-provider/custom-modern-model")).toBe("Custom Modern");
@@ -618,7 +618,7 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect([...(data.byProvider.get("claude-cli") ?? [])].toSorted()).toEqual([
       "claude-haiku-4-5",
@@ -669,7 +669,7 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.byProvider.has("acme-cli")).toBe(false);
   });
@@ -698,7 +698,7 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     expect([...(minimaxData.byProvider.get("minimax") ?? [])]).toEqual(["abab-7"]);
   });
 
@@ -752,7 +752,7 @@ describe("handleModelsCommand", () => {
           model: { primary: "openai/gpt-5.5" },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.runtimeChoicesByProvider?.get("openai")?.[0]).toEqual({
       id: "codex",
@@ -760,13 +760,13 @@ describe("handleModelsCommand", () => {
       description: "Use the OpenAI Codex runtime selected by the effective harness policy.",
     });
     expect(data.runtimeChoicesByProvider?.get("openai")?.[1]).toEqual({
-      id: "openclaw",
-      label: "OpenClaw Default",
-      description: "Use the built-in OpenClaw runtime.",
+      id: "natesclaw",
+      label: "Natesclaw Default",
+      description: "Use the built-in Natesclaw runtime.",
     });
   });
 
-  it("keeps custom OpenAI-compatible providers on the OpenClaw default runtime choice", async () => {
+  it("keeps custom OpenAI-compatible providers on the Natesclaw default runtime choice", async () => {
     const data = await buildModelsProviderData({
       models: {
         providers: {
@@ -781,12 +781,12 @@ describe("handleModelsCommand", () => {
           model: { primary: "openai/gpt-5.5" },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.runtimeChoicesByProvider?.get("openai")?.[0]).toEqual({
-      id: "openclaw",
-      label: "OpenClaw Default",
-      description: "Use the built-in OpenClaw runtime.",
+      id: "natesclaw",
+      label: "Natesclaw Default",
+      description: "Use the built-in Natesclaw runtime.",
     });
   });
 
@@ -796,7 +796,7 @@ describe("handleModelsCommand", () => {
         providers: {
           openai: {
             baseUrl: "https://api.openai.com/v1",
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "natesclaw" },
             models: [],
           },
         },
@@ -809,7 +809,7 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.runtimeChoicesByProvider?.get("openai")?.[0]).toEqual({
       id: "codex",
@@ -817,9 +817,9 @@ describe("handleModelsCommand", () => {
       description: "Use the OpenAI Codex runtime selected by the effective harness policy.",
     });
     expect(data.runtimeChoicesByProvider?.get("openai")?.[1]).toEqual({
-      id: "openclaw",
-      label: "OpenClaw Default",
-      description: "Use the built-in OpenClaw runtime.",
+      id: "natesclaw",
+      label: "Natesclaw Default",
+      description: "Use the built-in Natesclaw runtime.",
     });
   });
 
@@ -839,12 +839,12 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.runtimeChoicesByProvider?.get("anthropic")?.[0]).toEqual({
-      id: "openclaw",
-      label: "OpenClaw Default",
-      description: "Use the built-in OpenClaw runtime.",
+      id: "natesclaw",
+      label: "Natesclaw Default",
+      description: "Use the built-in Natesclaw runtime.",
     });
   });
 
@@ -864,7 +864,7 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.runtimeChoicesByProvider?.get("anthropic")?.[0]).toEqual({
       id: "claude-cli",
@@ -872,9 +872,9 @@ describe("handleModelsCommand", () => {
       description: "Use the Claude CLI runtime selected by the effective harness policy.",
     });
     expect(data.runtimeChoicesByProvider?.get("anthropic")?.[1]).toEqual({
-      id: "openclaw",
-      label: "OpenClaw Default",
-      description: "Use the built-in OpenClaw runtime.",
+      id: "natesclaw",
+      label: "Natesclaw Default",
+      description: "Use the built-in Natesclaw runtime.",
     });
   });
 
@@ -888,7 +888,7 @@ describe("handleModelsCommand", () => {
 
     const data = await buildModelsProviderData({
       agents: { defaults: { modelPolicy: { allow: ["clawrouter/anthropic/*"] } } },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(data.providers).toEqual(["clawrouter"]);
     expect([...expectDefined(data.byProvider.get("clawrouter"), "clawrouter models")]).toEqual([
@@ -1004,9 +1004,9 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } satisfies Partial<OpenClawConfig>;
+    } satisfies Partial<NatesclawConfig>;
 
-    const data = await buildModelsProviderData(cfg as OpenClawConfig);
+    const data = await buildModelsProviderData(cfg as NatesclawConfig);
 
     expect([...(data.byProvider.get("openai") ?? [])]).toEqual(["gpt-5.4"]);
     expect([...(data.byProvider.get("deepseek") ?? [])].toSorted()).toEqual([

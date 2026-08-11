@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.openclaw.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "../config/types.natesclaw.js";
 
 const mocks = vi.hoisted(() => ({
   appliedConfigHash: "applied-1" as string | null,
@@ -34,9 +34,9 @@ const { invalidateConfigGetResponseCache, readConfigGetResponse } =
 const activeWatcher = () => "active" as const;
 const disabledWatcher = () => "disabled" as const;
 
-function configSnapshot(sourceConfig: OpenClawConfig): ConfigFileSnapshot {
+function configSnapshot(sourceConfig: NatesclawConfig): ConfigFileSnapshot {
   return {
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     exists: true,
     raw: JSON.stringify(sourceConfig),
     parsed: sourceConfig,

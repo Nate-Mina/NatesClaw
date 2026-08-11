@@ -62,7 +62,7 @@ function createCaptureRuntime(): CaptureRuntime {
     log: (...args) => lines.push(args.join(" ")),
     error: (...args) => lines.push(args.join(" ")),
     exit: (code) => {
-      throw new Error(`OpenClaw operation exited with code ${String(code)}`);
+      throw new Error(`Natesclaw operation exited with code ${String(code)}`);
     },
     read: () => lines.join("\n").trim(),
   };
@@ -84,7 +84,7 @@ export function redactSensitiveCommandText(text: string): string {
 function formatPendingOperationForAssistant(operation: SystemAgentOperation): string {
   const description = describeSystemAgentPersistentOperation(operation);
   return operation.kind === "setup"
-    ? `${description}. Exact setup JSON: ${JSON.stringify(operation)}. Keep the verified model unless the user explicitly asks to leave OpenClaw and reconfigure inference.`
+    ? `${description}. Exact setup JSON: ${JSON.stringify(operation)}. Keep the verified model unless the user explicitly asks to leave Natesclaw and reconfigure inference.`
     : description;
 }
 
@@ -188,7 +188,7 @@ export class ChatTurnRouter {
       };
     }
     if (/^(quit|exit)$/i.test(trimmed)) {
-      return { text: "OpenClaw retracts into shell. Bye.", action: "exit" };
+      return { text: "Natesclaw retracts into shell. Bye.", action: "exit" };
     }
     if (this.awaitingSetupChannel) {
       if (/^(cancel|abort|stop)$/i.test(trimmed)) {
@@ -208,7 +208,7 @@ export class ChatTurnRouter {
       );
     }
     if (this.options.operatorApprovalOnly && this.getPendingOperatorProposal()) {
-      return { text: "Approval pending. Human must decide in OpenClaw UI.", action: "none" };
+      return { text: "Approval pending. Human must decide in Natesclaw UI.", action: "none" };
     }
     const typed = parseSystemAgentOperation(text);
     if (typed.kind === "config-set" && isSensitiveConfigPath(typed.path)) {
@@ -300,7 +300,7 @@ export class ChatTurnRouter {
     operation: SystemAgentOperation,
   ): Promise<SystemAgentChatReply> {
     if (!isPersistentSystemAgentOperation(operation)) {
-      throw new Error("OpenClaw host received a non-persistent approved operation.");
+      throw new Error("Natesclaw host received a non-persistent approved operation.");
     }
     const capture = createCaptureRuntime();
     const result = await this.executeOperation(operation, capture, true);
@@ -318,7 +318,7 @@ export class ChatTurnRouter {
       return {
         text: [
           baseText,
-          "Your agent is hatching — handing you over now. You can always find me in Settings → Ask OpenClaw.",
+          "Your agent is hatching — handing you over now. You can always find me in Settings → Ask Natesclaw.",
         ].join("\n\n"),
         action: "open-tui",
         agentDraft: "hatch",
@@ -348,7 +348,7 @@ export class ChatTurnRouter {
       : "";
     const loopInput = `${resolutionMarker}${uiContextMarker}${
       this.pending
-        ? `[pending-proposal] Awaiting the user's approval: ${formatPendingOperationForAssistant(this.pending)}. It is already host-seeded; if they want it (or a variant), drive it through the openclaw tool yourself.\n${text}`
+        ? `[pending-proposal] Awaiting the user's approval: ${formatPendingOperationForAssistant(this.pending)}. It is already host-seeded; if they want it (or a variant), drive it through the natesclaw tool yourself.\n${text}`
         : text
     }`;
     let agentFailure: unknown;
@@ -483,7 +483,7 @@ export class ChatTurnRouter {
       kind === "open-setup" ||
       kind === "open-tui"
     ) {
-      return "Channel, model, and setup flows need a human operator in the OpenClaw app; they cannot run from a delegated agent request.";
+      return "Channel, model, and setup flows need a human operator in the Natesclaw app; they cannot run from a delegated agent request.";
     }
     return undefined;
   }
@@ -496,7 +496,7 @@ export class ChatTurnRouter {
     if (operation.kind === "open-tui") {
       this.clearPendingProposals();
       return {
-        text: "Opening your normal agent TUI. Use /openclaw there to come back.",
+        text: "Opening your normal agent TUI. Use /natesclaw there to come back.",
         action: "open-tui",
         handoff: operation,
       };
@@ -505,13 +505,13 @@ export class ChatTurnRouter {
       this.clearPendingProposals();
       if (this.options.surface === "gateway") {
         return {
-          text: "Open Settings to change your model or connect a channel. To change providers from a shell, run `openclaw onboard` on the machine running OpenClaw.",
+          text: "Open Settings to change your model or connect a channel. To change providers from a shell, run `natesclaw onboard` on the machine running Natesclaw.",
           action: "none",
         };
       }
       if (!["channels", "search", "gateway"].includes(operation.target)) {
         return {
-          text: "Setup can replace the inference route powering this session. Exit OpenClaw and run `openclaw onboard`; it saves only a route that passes a live test. Then start OpenClaw again.",
+          text: "Setup can replace the inference route powering this session. Exit Natesclaw and run `natesclaw onboard`; it saves only a route that passes a live test. Then start Natesclaw again.",
           action: "none",
         };
       }
@@ -637,7 +637,7 @@ export class ChatTurnRouter {
     return {
       text: [
         "Changing provider credentials would replace the inference route powering this session.",
-        "Stop the OpenClaw host through whatever started it. Run `openclaw onboard` on the machine running OpenClaw: it stages credentials, live-tests the new route, and saves only a passing setup. Then restart the host and return to OpenClaw.",
+        "Stop the Natesclaw host through whatever started it. Run `natesclaw onboard` on the machine running Natesclaw: it stages credentials, live-tests the new route, and saves only a passing setup. Then restart the host and return to Natesclaw.",
       ].join("\n"),
       action: "none",
     };
@@ -662,8 +662,8 @@ export class ChatTurnRouter {
   private armFollowUp(operation: SystemAgentOperation | undefined): string | null {
     return operation?.kind === "model-setup"
       ? [
-          "No usable inference route is configured, so OpenClaw cannot continue.",
-          "Run `openclaw onboard` on the machine running OpenClaw; it saves only a route that passes a live test.",
+          "No usable inference route is configured, so Natesclaw cannot continue.",
+          "Run `natesclaw onboard` on the machine running Natesclaw; it saves only a route that passes a live test.",
         ].join("\n")
       : null;
   }

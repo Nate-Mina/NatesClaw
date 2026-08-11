@@ -1,8 +1,8 @@
-// Google Meet plugin entrypoint registers its OpenClaw integration.
-import type { GatewayRequestHandlerOptions } from "openclaw/plugin-sdk/gateway-runtime";
-import { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { jsonResult as json } from "openclaw/plugin-sdk/tool-results";
+// Google Meet plugin entrypoint registers its Natesclaw integration.
+import type { GatewayRequestHandlerOptions } from "natesclaw/plugin-sdk/gateway-runtime";
+import { definePluginEntry, type NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { jsonResult as json } from "natesclaw/plugin-sdk/tool-results";
 import { GOOGLE_MEET_CLI_DESCRIPTOR } from "./src/cli-output-mode.js";
 import {
   asParamRecord,
@@ -35,7 +35,7 @@ export default definePluginEntry({
   name: "Google Meet",
   description: "Join Google Meet calls through Chrome or Twilio transports",
   configSchema: googleMeetConfigSchema,
-  register(api: OpenClawPluginApi) {
+  register(api: NatesclawPluginApi) {
     const config = googleMeetConfigSchema.parse(api.pluginConfig);
     const ensureRuntime = createGoogleMeetRuntimeAccessor({ api, config });
     const registerGatewayMethod = (
@@ -248,7 +248,7 @@ export default definePluginEntry({
     registerGatewayMethod("googlemeet.testListen", async ({ params, client, respond }) => {
       const trustedParams = keepTrustedToolAgentId(asParamRecord(params), client);
       const runtime = await ensureRuntime();
-      const { readPositiveIntegerParam } = await import("openclaw/plugin-sdk/param-readers");
+      const { readPositiveIntegerParam } = await import("natesclaw/plugin-sdk/param-readers");
       respond(
         true,
         await runtime.testListen({
@@ -273,7 +273,7 @@ export default definePluginEntry({
           const requesterSessionKey = normalizeOptionalString(toolContext.sessionKey);
           try {
             const { normalizeAgentId, parseAgentSessionKey } =
-              await import("openclaw/plugin-sdk/routing");
+              await import("natesclaw/plugin-sdk/routing");
             // Agent ownership comes from trusted tool context, never model-supplied params.
             // Some harnesses omit agentId but still provide its canonical session key.
             const contextAgentId =

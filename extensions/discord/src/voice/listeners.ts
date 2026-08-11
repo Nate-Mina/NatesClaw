@@ -1,6 +1,6 @@
 // Discord plugin module wires Gateway lifecycle events into the voice manager.
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   type APIVoiceState,
   type Client,

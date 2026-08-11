@@ -1,28 +1,28 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../../infra/kysely-sync.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../../state/openclaw-agent-db.generated.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../../state/natesclaw-agent-db.generated.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  runOpenClawAgentWriteTransaction,
-} from "../../../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  runNatesclawAgentWriteTransaction,
+} from "../../../state/natesclaw-agent-db.js";
 import { withTestDir } from "../../../test-helpers/temp-dir.js";
 import { recordAcpParentStreamEvents } from "./acp-parent-stream-store.sqlite.js";
 import { listAcpParentStreamEventsForTest } from "./acp-parent-stream-store.sqlite.test-support.js";
 
 describe("ACP parent stream SQLite store", () => {
   afterEach(() => {
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
   });
 
   it("orders run events and removes them with the child session", async () => {
-    await withTestDir({ prefix: "openclaw-acp-parent-stream-" }, async (stateDir) => {
+    await withTestDir({ prefix: "natesclaw-acp-parent-stream-" }, async (stateDir) => {
       const options = {
         agentId: "codex",
-        env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+        env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
       };
-      runOpenClawAgentWriteTransaction((database) => {
+      runNatesclawAgentWriteTransaction((database) => {
         const db = getNodeSqliteKysely<
-          Pick<OpenClawAgentKyselyDatabase, "session_nodes" | "session_windows">
+          Pick<NatesclawAgentKyselyDatabase, "session_nodes" | "session_windows">
         >(database.db);
         executeSqliteQuerySync(
           database.db,
@@ -62,8 +62,8 @@ describe("ACP parent stream SQLite store", () => {
         { kind: "lifecycle", phase: "end" },
       ]);
 
-      runOpenClawAgentWriteTransaction((database) => {
-        const db = getNodeSqliteKysely<Pick<OpenClawAgentKyselyDatabase, "session_windows">>(
+      runNatesclawAgentWriteTransaction((database) => {
+        const db = getNodeSqliteKysely<Pick<NatesclawAgentKyselyDatabase, "session_windows">>(
           database.db,
         );
         executeSqliteQuerySync(
@@ -78,14 +78,14 @@ describe("ACP parent stream SQLite store", () => {
   });
 
   it("drops unserializable events without blocking later diagnostics", async () => {
-    await withTestDir({ prefix: "openclaw-acp-parent-stream-invalid-" }, async (stateDir) => {
+    await withTestDir({ prefix: "natesclaw-acp-parent-stream-invalid-" }, async (stateDir) => {
       const options = {
         agentId: "codex",
-        env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+        env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
       };
-      runOpenClawAgentWriteTransaction((database) => {
+      runNatesclawAgentWriteTransaction((database) => {
         const db = getNodeSqliteKysely<
-          Pick<OpenClawAgentKyselyDatabase, "session_nodes" | "session_windows">
+          Pick<NatesclawAgentKyselyDatabase, "session_nodes" | "session_windows">
         >(database.db);
         executeSqliteQuerySync(
           database.db,

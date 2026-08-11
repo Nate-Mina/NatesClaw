@@ -1,7 +1,7 @@
 // Provider stream shared helpers implement reusable stream wrappers and payload policies.
-import { resolveOpenAIReasoningEffortForModel } from "@openclaw/ai/internal/openai";
-import { resolveOpenAIReasoningEffortMap } from "@openclaw/ai/transports";
-import { asOptionalObjectRecord } from "@openclaw/normalization-core/record-coerce";
+import { resolveOpenAIReasoningEffortForModel } from "@natesclaw/ai/internal/openai";
+import { resolveOpenAIReasoningEffortMap } from "@natesclaw/ai/transports";
+import { asOptionalObjectRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   createPromotedPlainTextToolCallBlock,
   createPromotedPlainTextToolCallEvents,
@@ -23,9 +23,9 @@ import { streamWithPayloadPatch } from "../llm/providers/stream-wrappers/stream-
 import { streamSimple } from "../llm/stream.js";
 import { createAssistantMessageEventStream } from "../llm/utils/event-stream.js";
 import { findCodeRegions } from "../shared/text/code-regions.js";
-export { applyAnthropicRefusal } from "@openclaw/ai/internal/anthropic";
-export { createDeferredEventBuffer } from "@openclaw/ai/internal/runtime";
-export { notifyLlmRequestActivity, onLlmRequestActivity } from "@openclaw/ai/internal/runtime";
+export { applyAnthropicRefusal } from "@natesclaw/ai/internal/anthropic";
+export { createDeferredEventBuffer } from "@natesclaw/ai/internal/runtime";
+export { notifyLlmRequestActivity, onLlmRequestActivity } from "@natesclaw/ai/internal/runtime";
 
 type ProviderWrapStreamFnContext = import("../plugins/types.js").ProviderWrapStreamFnContext;
 
@@ -696,7 +696,7 @@ export function createGoogleThinkingStreamWrapper(
 export {
   applyAnthropicPayloadPolicyToParams,
   resolveAnthropicPayloadPolicy,
-} from "@openclaw/ai/transports";
+} from "@natesclaw/ai/transports";
 export { applyAnthropicEphemeralCacheControlMarkers } from "../llm/providers/stream-wrappers/anthropic-cache-control-payload.js";
 export {
   createMoonshotThinkingWrapper,

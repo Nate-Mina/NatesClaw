@@ -8,9 +8,9 @@ import {
   MeetingPlatformAdapter,
   type MeetingSetupCheck,
   type MeetingSetupStatus,
-} from "openclaw/plugin-sdk/meeting-runtime";
-import { isBlockedHostnameOrIp } from "openclaw/plugin-sdk/ssrf-runtime";
-import { asRecord, normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/meeting-runtime";
+import { isBlockedHostnameOrIp } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { asRecord, normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { GoogleMeetConfig, GoogleMeetMode, GoogleMeetTransport } from "./config.js";
 
 type SetupCheck = MeetingSetupCheck;
@@ -143,8 +143,8 @@ export function getGoogleMeetSetupStatus(
     id: "chrome-profile",
     ok: true,
     message: config.chrome.browserProfile
-      ? "Local Chrome uses the OpenClaw browser profile; chrome.browserProfile is passed to chrome-node hosts"
-      : "Local Chrome uses the OpenClaw browser profile; configure browser.defaultProfile to choose another profile",
+      ? "Local Chrome uses the Natesclaw browser profile; chrome.browserProfile is passed to chrome-node hosts"
+      : "Local Chrome uses the Natesclaw browser profile; configure browser.defaultProfile to choose another profile",
   });
 
   if (needsChromeRealtimeAudio) {

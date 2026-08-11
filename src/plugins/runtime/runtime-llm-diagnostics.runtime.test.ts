@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   onTrustedInternalDiagnosticEvent,
   resetDiagnosticEventsForTest,
@@ -26,13 +26,13 @@ const cfg = {
       model: "openai/gpt-5.5",
     },
   },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 const preparedModel = {
   selection: {
     provider: "openai",
     modelId: "gpt-5.5",
-    agentDir: "/tmp/openclaw-agent",
+    agentDir: "/tmp/natesclaw-agent",
   },
   model: {
     provider: "openai",

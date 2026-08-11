@@ -40,4 +40,4 @@ export function formatDiscordUserTag(user: User) {
 export function resolveTimestampMs(timestamp?: string | null) {
   return parseDateStringTimestampMs(timestamp);
 }
-import { parseDateStringTimestampMs } from "openclaw/plugin-sdk/number-runtime";
+import { parseDateStringTimestampMs } from "natesclaw/plugin-sdk/number-runtime";

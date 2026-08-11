@@ -1,8 +1,8 @@
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
-import { toErrorObject } from "@openclaw/normalization-core/error-coercion";
-import type { DB as OpenClawStateKyselyDatabase } from "../src/state/openclaw-state-db.generated.js";
+import { toErrorObject } from "@natesclaw/normalization-core/error-coercion";
+import type { DB as NatesclawStateKyselyDatabase } from "../src/state/natesclaw-state-db.generated.js";
 import {
   WORKER_RESULT_SENTINEL,
   type MemorySample,
@@ -29,7 +29,7 @@ type TimingSample = {
 };
 
 type BenchmarkStateDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "task_delivery_state" | "task_runs"
 >;
 
@@ -172,11 +172,11 @@ function assertSnapshot(
 async function createCountReader() {
   const [{ executeSqliteQuerySync, getNodeSqliteKysely }, stateDb, state] = await Promise.all([
     import("../src/infra/kysely-sync.js"),
-    import("../src/state/openclaw-state-db.js"),
+    import("../src/state/natesclaw-state-db.js"),
     import("../src/tasks/task-registry-state.js"),
   ]);
   return (): RegistrySnapshot => {
-    const database = stateDb.openOpenClawStateDatabase();
+    const database = stateDb.openNatesclawStateDatabase();
     const db = getNodeSqliteKysely<BenchmarkStateDatabase>(database.db);
     const taskRows = executeSqliteQuerySync(
       database.db,
@@ -333,10 +333,10 @@ async function runCycle(
 async function resetRuntime(persist: boolean): Promise<void> {
   const [tasks, stateDb] = await Promise.all([
     import("../src/tasks/task-runtime.test-helpers.js"),
-    import("../src/state/openclaw-state-db.js"),
+    import("../src/state/natesclaw-state-db.js"),
   ]);
   tasks.resetTaskRegistryForTests({ persist });
-  stateDb.closeOpenClawStateDatabaseForTest();
+  stateDb.closeNatesclawStateDatabaseForTest();
 }
 
 async function runBenchmark(options: WorkerOptions): Promise<WorkerResult> {
@@ -414,11 +414,11 @@ async function runBenchmark(options: WorkerOptions): Promise<WorkerResult> {
 
 async function main(): Promise<void> {
   const options = parseOptions(process.argv.slice(2));
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+  const previousStateDir = process.env.NATESCLAW_STATE_DIR;
   const previousNodeEnv = process.env.NODE_ENV;
   let result: WorkerResult | undefined;
   let failure: unknown;
-  process.env.OPENCLAW_STATE_DIR = options.stateDir;
+  process.env.NATESCLAW_STATE_DIR = options.stateDir;
   process.env.NODE_ENV = "test";
   try {
     const { pinRuntimePaths } = await import("../src/config/paths.js");
@@ -433,9 +433,9 @@ async function main(): Promise<void> {
       failure ??= error;
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.NATESCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.NATESCLAW_STATE_DIR = previousStateDir;
       }
       if (previousNodeEnv === undefined) {
         delete process.env.NODE_ENV;

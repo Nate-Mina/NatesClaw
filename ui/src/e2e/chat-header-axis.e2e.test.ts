@@ -20,7 +20,7 @@ suite.define(() => {
       });
       const page = await context.newPage();
       const favicon = await readFile(path.resolve(process.cwd(), "ui/public/favicon.svg"));
-      await page.route("**/__openclaw__/workspace-icon/**", async (route) => {
+      await page.route("**/__natesclaw__/workspace-icon/**", async (route) => {
         await route.fulfill({ body: favicon, contentType: "image/svg+xml", status: 200 });
       });
       await installMockGateway(page, {
@@ -30,7 +30,7 @@ suite.define(() => {
               key: "agent:main:session-a",
               kind: "direct",
               label: "Session A",
-              spawnedCwd: "/repo/openclaw",
+              spawnedCwd: "/repo/natesclaw",
               updatedAt: 2,
             },
           ]),

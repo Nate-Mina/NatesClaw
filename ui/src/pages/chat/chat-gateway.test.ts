@@ -1,7 +1,7 @@
-import { reduceSessionProjection } from "@openclaw/gateway-client/browser";
+import { reduceSessionProjection } from "@natesclaw/gateway-client/browser";
 // @vitest-environment node
 // Control UI tests cover chat behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../../test/helpers/promise.js";
 import { GatewayRequestError } from "../../api/gateway.ts";
@@ -169,7 +169,7 @@ function createTextChatMessage(
   return {
     role,
     content: [{ type: "text" as const, text }],
-    ...(metadata ? { __openclaw: metadata } : {}),
+    ...(metadata ? { __natesclaw: metadata } : {}),
     ...(timestamp === undefined ? {} : { timestamp }),
   };
 }
@@ -778,7 +778,7 @@ describe("handleChatGatewayEvent", () => {
       message: {
         text: "Delivered answer",
         timestamp: 42,
-        __openclaw: { id: "legacy-final", seq: 2 },
+        __natesclaw: { id: "legacy-final", seq: 2 },
       },
     },
   ])("canonicalizes and deduplicates replayed $name text-only finals", ({ message }) => {
@@ -842,7 +842,7 @@ describe("handleChatGatewayEvent", () => {
       role: "assistant",
       content: [{ type: "text", text: "Looking into it." }],
       timestamp: 2,
-      openclawStreamFallback: {
+      natesclawStreamFallback: {
         itemId: "preamble-1",
         replacementText: "Looking into it.",
         source: "segment",
@@ -930,7 +930,7 @@ describe("handleChatGatewayEvent", () => {
           role: "assistant",
           content: [{ type: "text", text: "Looking into it." }],
           timestamp: 2,
-          openclawStreamFallback: {
+          natesclawStreamFallback: {
             itemId: "preamble-1",
             replacementText: "Looking into it.",
             source: "segment",
@@ -1525,7 +1525,7 @@ describe("handleChatGatewayEvent", () => {
       role: "assistant",
       content: [
         { type: "text", text: "OK" },
-        { type: "canvas", url: "/__openclaw__/canvas/documents/repeat/index.html" },
+        { type: "canvas", url: "/__natesclaw__/canvas/documents/repeat/index.html" },
       ],
       timestamp: 3,
     };
@@ -2376,7 +2376,7 @@ describe("authoritative terminal history identity", () => {
       collision: {
         role: "user",
         content: [{ type: "text", text: "Different native user" }],
-        __openclaw: { id: "native-terminal" },
+        __natesclaw: { id: "native-terminal" },
       },
     },
     {
@@ -2384,7 +2384,7 @@ describe("authoritative terminal history identity", () => {
       collision: {
         role: "assistant",
         content: [{ type: "text", text: "Different imported assistant" }],
-        __openclaw: {
+        __natesclaw: {
           id: "native-terminal",
           importedFrom: "claude-cli",
           cliSessionId: "external-session",
@@ -2397,7 +2397,7 @@ describe("authoritative terminal history identity", () => {
     const nativeTerminal = {
       role: "assistant",
       content: [{ type: "text", text: "Native terminal" }],
-      __openclaw: { id: "native-terminal" },
+      __natesclaw: { id: "native-terminal" },
     };
     const liveTerminal = rememberLiveTerminalRun(
       { role: "assistant", content: [{ type: "text", text: "Native terminal" }] },
@@ -2486,7 +2486,7 @@ describe("loadChatHistory filtering", () => {
         content: [
           {
             type: "text",
-            text: "[openclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
+            text: "[natesclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
           },
         ],
       },
@@ -2509,13 +2509,13 @@ describe("loadChatHistory filtering", () => {
       {
         role: "user",
         content: "",
-        __openclaw: { media: [{ path: "/tmp/openclaw/user-upload.png" }] },
+        __natesclaw: { media: [{ path: "/tmp/natesclaw/user-upload.png" }] },
       },
       {
         role: "user",
         content: "",
-        __openclaw: {
-          media: [{ path: "/tmp/openclaw/first.png" }, { path: "/tmp/openclaw/second.jpg" }],
+        __natesclaw: {
+          media: [{ path: "/tmp/natesclaw/first.png" }, { path: "/tmp/natesclaw/second.jpg" }],
         },
       },
       { role: "user", content: "" },
@@ -2531,7 +2531,7 @@ describe("loadChatHistory filtering", () => {
     const messages = [
       createTextChatMessage(
         "user",
-        "[openclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
+        "[natesclaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
       ),
     ];
     const { state } = createResolvedHistoryState({ messages });
@@ -2943,9 +2943,9 @@ describe("loadChatHistory retry handling", () => {
       createTextChatMessage(
         "user",
         [
-          "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+          "<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>",
           "subagent completion payload",
-          "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+          "<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         ].join("\n"),
       ),
       { role: "assistant", content: [{ type: "text", text: "visible answer" }] },
@@ -3107,7 +3107,7 @@ describe("loadChatHistory retry handling", () => {
     toolName: "shell",
     content: [{ type: "text", text }],
     timestamp,
-    __openclaw: { seq },
+    __natesclaw: { seq },
   });
 
   it.each([
@@ -3263,7 +3263,7 @@ describe("loadChatHistory retry handling", () => {
       toolCallId: "call_old",
       toolName: "shell",
       content: [{ type: "text", text: "old tool output" }],
-      __openclaw: { seq: 2 },
+      __natesclaw: { seq: 2 },
     };
     const latestUser = createTextChatMessage("user", "latest ask", { seq: 3 });
     const liveToolMessage = {
@@ -3309,7 +3309,7 @@ describe("loadChatHistory retry handling", () => {
         },
       ],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __natesclaw: { seq: 2 },
     };
     const state = createLiveToolHistoryState(
       [persistedUser, persistedToolCall],
@@ -3354,7 +3354,7 @@ describe("loadChatHistory retry handling", () => {
       toolName: "shell",
       content: [{ type: "text", text: "tool output" }],
       timestamp: 2,
-      __openclaw: { seq: 2 },
+      __natesclaw: { seq: 2 },
     };
     const state = createLiveToolHistoryState(
       [persistedUser, persistedToolResult],
@@ -3423,7 +3423,7 @@ describe("loadChatHistory retry handling", () => {
       toolCallId: "call_1",
       toolName: "shell",
       content: [{ type: "text", text: "tool output" }],
-      __openclaw: { seq: 2 },
+      __natesclaw: { seq: 2 },
     };
     const state = createLiveToolHistoryState(
       [persistedUser, persistedToolResult],

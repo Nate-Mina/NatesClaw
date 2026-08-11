@@ -1,24 +1,24 @@
 // Telegram helper module supports helpers behavior.
 import type { Chat, Message } from "grammy/types";
-import { formatLocationText } from "openclaw/plugin-sdk/channel-inbound";
+import { formatLocationText } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   resolveCommandAuthorization,
   type CommandAuthorization,
-} from "openclaw/plugin-sdk/command-auth-native";
+} from "natesclaw/plugin-sdk/command-auth-native";
 import type {
-  OpenClawConfig,
+  NatesclawConfig,
   DmPolicy,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/conversation-runtime";
+} from "natesclaw/plugin-sdk/config-contracts";
+import { readChannelAllowFromStore } from "natesclaw/plugin-sdk/conversation-runtime";
 import {
   asDateTimestampMs,
   parseStrictPositiveInteger,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { normalizeAccountId } from "natesclaw/plugin-sdk/routing";
 import { expandTelegramAllowFromWithAccessGroups } from "../access-groups.js";
 import {
   firstDefined,
@@ -211,7 +211,7 @@ export function withResolvedTelegramForumFlag<T extends { chat: object }>(
 }
 
 export async function resolveTelegramGroupAllowFromContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   chatId: string | number;
   accountId?: string;
   dmPolicy?: DmPolicy;
@@ -230,7 +230,7 @@ export async function resolveTelegramGroupAllowFromContext(params: {
   resolveTelegramGroupConfig: (
     chatId: string | number,
     messageThreadId: number | undefined,
-    cfg: OpenClawConfig,
+    cfg: NatesclawConfig,
   ) => {
     groupConfig?: TelegramGroupConfig | TelegramDirectConfig;
     topicConfig?: TelegramTopicConfig;
@@ -306,7 +306,7 @@ export async function resolveTelegramGroupAllowFromContext(params: {
 }
 
 async function isTelegramDmAllowedByConfiguredAllowFrom(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   allowFrom?: Array<string | number>;
   groupAllowOverride?: Array<string | number>;
   accountId: string;
@@ -343,7 +343,7 @@ export class TelegramPairingStoreReadError extends Error {
 
 // Could add bounded retries to absorb short FD-pressure spikes; deferred. See #85555.
 async function loadTelegramPairingStoreIfNeeded(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   allowFrom?: Array<string | number>;
   groupAllowOverride?: Array<string | number>;
   accountId: string;
@@ -549,7 +549,7 @@ export function buildTelegramGroupFrom(chatId: number | string, messageThreadId?
   return `telegram:group:${buildTelegramGroupPeerId(chatId, messageThreadId)}`;
 }
 
-export function isTelegramCommandsAllowFromConfigured(cfg: OpenClawConfig): boolean {
+export function isTelegramCommandsAllowFromConfigured(cfg: NatesclawConfig): boolean {
   const commandsAllowFrom = cfg.commands?.allowFrom;
   return (
     commandsAllowFrom != null &&
@@ -559,7 +559,7 @@ export function isTelegramCommandsAllowFromConfigured(cfg: OpenClawConfig): bool
 }
 
 export function resolveTelegramCommandAuthorization(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   chatId: number;
   isGroup: boolean;

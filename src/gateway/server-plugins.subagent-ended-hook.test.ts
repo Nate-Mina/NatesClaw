@@ -2,7 +2,7 @@
  * Tests plugin hook delivery when subagent sessions end.
  */
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginRuntimeGatewayRequestScope } from "../plugins/runtime/gateway-request-scope.test-fixtures.js";
 import type { GatewayRequestContext, GatewayRequestOptions } from "./server-methods/types.js";
 
@@ -39,13 +39,13 @@ type GatewayRequestScopeModule = typeof import("../plugins/runtime/gateway-reque
 type SubagentRequesterContextModule =
   typeof import("../plugins/runtime/subagent-requester-context.js");
 
-function createTestCfg(): OpenClawConfig {
+function createTestCfg(): NatesclawConfig {
   return {
     session: { mainKey: "agent:main:main", scope: "per-sender" },
-  } as unknown as OpenClawConfig;
+  } as unknown as NatesclawConfig;
 }
 
-function createTestContext(label: string, cfg: OpenClawConfig): GatewayRequestContext {
+function createTestContext(label: string, cfg: NatesclawConfig): GatewayRequestContext {
   return {
     label,
     getRuntimeConfig: () => cfg,

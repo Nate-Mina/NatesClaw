@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type NatesclawConfig,
 } from "../../config/config.js";
 import * as skillsLoaderModule from "../loading/workspace-skill-loader.js";
 import type { SkillSnapshot } from "../types.js";
@@ -19,7 +19,7 @@ describe("resolveEmbeddedRunSkillEntries", () => {
   });
 
   it("loads skill entries with config when no resolved snapshot skills exist", () => {
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       plugins: {
         entries: {
           diffs: { enabled: true },
@@ -69,7 +69,7 @@ describe("resolveEmbeddedRunSkillEntries", () => {
     };
 
     resolveEmbeddedRunSkillEntries({
-      workspaceDir: "/tmp/workspace/.openclaw/sandbox-skills",
+      workspaceDir: "/tmp/workspace/.natesclaw/sandbox-skills",
       config: {},
       eligibility,
       skillsSnapshot: {
@@ -79,7 +79,7 @@ describe("resolveEmbeddedRunSkillEntries", () => {
       workspaceOnly: true,
     });
 
-    expect(loadWorkspaceSkillsSpy).toHaveBeenCalledWith("/tmp/workspace/.openclaw/sandbox-skills", {
+    expect(loadWorkspaceSkillsSpy).toHaveBeenCalledWith("/tmp/workspace/.natesclaw/sandbox-skills", {
       config: {},
       eligibility,
       workspaceOnly: true,
@@ -87,7 +87,7 @@ describe("resolveEmbeddedRunSkillEntries", () => {
   });
 
   it("prefers the active runtime snapshot when caller config still contains SecretRefs", () => {
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: NatesclawConfig = {
       skills: {
         entries: {
           diffs: {
@@ -100,7 +100,7 @@ describe("resolveEmbeddedRunSkillEntries", () => {
         },
       },
     };
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: NatesclawConfig = {
       skills: {
         entries: {
           diffs: {
@@ -126,7 +126,7 @@ describe("resolveEmbeddedRunSkillEntries", () => {
   });
 
   it("prefers caller config when the active runtime snapshot still contains raw skill SecretRefs", () => {
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: NatesclawConfig = {
       skills: {
         entries: {
           diffs: {
@@ -139,8 +139,8 @@ describe("resolveEmbeddedRunSkillEntries", () => {
         },
       },
     };
-    const runtimeConfig: OpenClawConfig = structuredClone(sourceConfig);
-    const callerConfig: OpenClawConfig = {
+    const runtimeConfig: NatesclawConfig = structuredClone(sourceConfig);
+    const callerConfig: NatesclawConfig = {
       skills: {
         entries: {
           diffs: {

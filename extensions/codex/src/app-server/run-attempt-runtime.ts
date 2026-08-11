@@ -5,8 +5,8 @@ import {
   loadCodexBundleMcpThreadConfig,
   supportsModelTools,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveCodexMcpToolOverridesForAgent } from "openclaw/plugin-sdk/codex-mcp-projection";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { resolveCodexMcpToolOverridesForAgent } from "natesclaw/plugin-sdk/codex-mcp-projection";
 import { prepareCodexAppServerAuthBinding } from "./auth-binding.js";
 import {
   resolveCodexAppServerAuthAccountCacheKey,

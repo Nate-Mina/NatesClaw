@@ -4,22 +4,22 @@ import {
   resolveInlineImageJsonResponseMaxBytes,
   type GeneratedImageAsset,
   type ImageGenerationProvider,
-} from "openclaw/plugin-sdk/image-generation";
-import { resolveGeneratedMediaMaxBytes } from "openclaw/plugin-sdk/media-generation-runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "natesclaw/plugin-sdk/image-generation";
+import { resolveGeneratedMediaMaxBytes } from "natesclaw/plugin-sdk/media-generation-runtime";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { isProviderApiKeyConfigured } from "natesclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "natesclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   readProviderJsonResponse,
   sanitizeConfiguredModelProviderRequest,
-} from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-http";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { normalizeGoogleModelId, resolveGoogleGenerativeAiHttpRequestConfig } from "./api.js";
 import { toStandardGoogleProviderBase64 } from "./base64.js";
 

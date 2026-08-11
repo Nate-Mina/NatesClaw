@@ -22,7 +22,7 @@ export function resolveDeviceIdentityCoordinatorPaths(params: {
   temporaryDirectory: string;
   uid: number | undefined;
 }): string[] {
-  const suffix = params.uid === undefined ? "openclaw" : `openclaw-${params.uid}`;
+  const suffix = params.uid === undefined ? "natesclaw" : `natesclaw-${params.uid}`;
   const filename = resolveDeviceIdentityCoordinatorFilename(params.databasePath);
   const canonicalStateDir = resolvePathViaExistingAncestorSync(params.stateDir);
   const orderedPaths = [

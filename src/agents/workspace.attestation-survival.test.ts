@@ -4,11 +4,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { resetLegacyWorkspaceStateCheckForTest } from "./workspace-legacy-state.test-support.js";
 import {
   readWorkspaceStateSnapshot,
@@ -22,25 +22,25 @@ import {
 } from "./workspace.js";
 
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
-let testState: OpenClawTestState | undefined;
+let testState: NatesclawTestState | undefined;
 
 beforeEach(async () => {
   resetLegacyWorkspaceStateCheckForTest();
-  testState = await createOpenClawTestState({
+  testState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-workspace-attestation-survival-",
+    prefix: "natesclaw-workspace-attestation-survival-",
   });
 });
 
 afterEach(async () => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   resetLegacyWorkspaceStateCheckForTest();
   await testState?.cleanup();
   testState = undefined;
 });
 
 async function makeWorkspace(): Promise<string> {
-  return fs.realpath(tempDirs.make("openclaw-workspace-attestation-survival-"));
+  return fs.realpath(tempDirs.make("natesclaw-workspace-attestation-survival-"));
 }
 
 async function expectWorkspaceVanished(action: Promise<unknown>): Promise<void> {

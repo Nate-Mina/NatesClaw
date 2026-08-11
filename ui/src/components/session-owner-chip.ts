@@ -4,7 +4,7 @@ import type { SessionCreatedActor as ProtocolSessionCreatedActor } from "../../.
 import { t } from "../i18n/index.ts";
 import { takeGraphemes } from "../lib/graphemes.ts";
 import { resolveAvatar } from "../lib/identity-avatar.ts";
-import { OpenClawLightDomElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../lit/natesclaw-element.ts";
 import "./viewer-facepile.ts";
 
 export type SessionCreatedActor = ProtocolSessionCreatedActor;
@@ -50,11 +50,11 @@ export function renderSessionOwnerChip(
   attribution: "created" | "archived" = "created",
 ) {
   return createdActor?.id
-    ? html`<openclaw-session-owner-chip
+    ? html`<natesclaw-session-owner-chip
         .createdActor=${createdActor}
         size=${size}
         attribution=${attribution}
-      ></openclaw-session-owner-chip>`
+      ></natesclaw-session-owner-chip>`
     : nothing;
 }
 
@@ -92,7 +92,7 @@ function ownerHue(id: string): number {
  * record. Actors without that source keep stable initials because provenance
  * outlives live connection presence.
  */
-class SessionOwnerChip extends OpenClawLightDomElement {
+class SessionOwnerChip extends NatesclawLightDomElement {
   @property({ attribute: false }) createdActor: SessionCreatedActor | null = null;
   @property({ type: String }) size: "row" | "header" = "row";
   @property({ type: String }) attribution: "created" | "archived" = "created";
@@ -126,7 +126,7 @@ class SessionOwnerChip extends OpenClawLightDomElement {
         aria-label=${accessibleLabel}
         title=${accessibleLabel}
         >${avatar?.kind === "profile"
-          ? html`<openclaw-viewer-avatar
+          ? html`<natesclaw-viewer-avatar
               .user=${{
                 id: createdActor.id,
                 name: createdActor.label,
@@ -135,19 +135,19 @@ class SessionOwnerChip extends OpenClawLightDomElement {
               }}
               variant="session"
               aria-hidden="true"
-            ></openclaw-viewer-avatar>`
+            ></natesclaw-viewer-avatar>`
           : initials}</span
       >
     `;
   }
 }
 
-if (!customElements.get("openclaw-session-owner-chip")) {
-  customElements.define("openclaw-session-owner-chip", SessionOwnerChip);
+if (!customElements.get("natesclaw-session-owner-chip")) {
+  customElements.define("natesclaw-session-owner-chip", SessionOwnerChip);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-session-owner-chip": SessionOwnerChip;
+    "natesclaw-session-owner-chip": SessionOwnerChip;
   }
 }

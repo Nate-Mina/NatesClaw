@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { listAgentEntries, resolveAgentDir } from "../agents/agent-scope-config.js";
 import { readAuthProfileStoreForTest } from "../agents/auth-profiles/oauth-test-utils.js";
@@ -16,7 +16,7 @@ import {
 import { ensureSelectedAgentHarnessPlugin } from "../agents/harness/runtime-plugin.js";
 import { detectInferenceBackends } from "../commands/onboard-inference.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { withoutPluginInstallRecords } from "../plugins/installed-plugin-index-records.js";
 import { hasRetainedManagedNpmInstallMarker } from "../plugins/managed-npm-retention.js";
@@ -37,9 +37,9 @@ import {
 import { ensurePluginRegistryLoaded } from "../plugins/runtime/runtime-registry-loader.js";
 import type { ProviderPlugin } from "../plugins/types.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  disposeOpenClawAgentDatabaseByPath,
-} from "../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  disposeNatesclawAgentDatabaseByPath,
+} from "../state/natesclaw-agent-db.js";
 import { createSuiteTempRootTracker } from "../test-helpers/temp-dir.js";
 import { cleanupSystemAgentSession, createSystemAgentSession } from "./agent-turn.js";
 import { runSystemAgentTurnWithDeps } from "./agent-turn.test-support.js";
@@ -94,7 +94,7 @@ vi.mock("../config/config.js", async (importOriginal) => {
     readConfigFileSnapshot: vi.fn(async () => ({
       exists: false,
       valid: false,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       issues: [],
       config: {},
       sourceConfig: {},
@@ -127,7 +127,7 @@ vi.mock("../commands/onboard-inference.js", async (importActual) => {
 });
 
 const runtime = { log: () => {}, error: () => {}, exit: () => {} } as never;
-const materializedMainRuntimeConfig: OpenClawConfig = {
+const materializedMainRuntimeConfig: NatesclawConfig = {
   agents: { entries: { main: { default: true } } },
 };
 const testCliRuntimeArtifactFingerprint = "test-cli-runtime-artifact";
@@ -174,7 +174,7 @@ beforeAll(async () => {
 afterAll(async () => {
   try {
     try {
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
     } finally {
       await suiteTempRootTracker.cleanup();
     }
@@ -194,12 +194,12 @@ async function createMainAgentFixture() {
   const agentDir = path.join(stateDir, "agent");
   const initialConfig = {
     agents: { list: [{ id: "main", default: true, agentDir }] },
-  } satisfies OpenClawConfig;
+  } satisfies NatesclawConfig;
   return { stateDir, agentDir, initialConfig };
 }
 
 function mockConfigSnapshot(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   options: {
     exists?: boolean;
     valid?: boolean;
@@ -207,15 +207,15 @@ function mockConfigSnapshot(
     path?: string;
     hash?: string;
     issues?: Array<{ path: string; message: string }>;
-    sourceConfig?: OpenClawConfig;
-    runtimeConfig?: OpenClawConfig;
+    sourceConfig?: NatesclawConfig;
+    runtimeConfig?: NatesclawConfig;
   } = {},
 ) {
   const { includeMetadata, ...snapshot } = options;
   return vi.fn(async () => ({
     exists: true,
     valid: true,
-    ...(includeMetadata ? { path: "/tmp/openclaw.json", issues: [] } : {}),
+    ...(includeMetadata ? { path: "/tmp/natesclaw.json", issues: [] } : {}),
     config,
     ...snapshot,
   })) as never;
@@ -223,7 +223,7 @@ function mockConfigSnapshot(
 
 const deferSuiteTempDirCleanup = async () => {};
 
-function canonicalizeAgentEntriesForTest(config: OpenClawConfig): OpenClawConfig {
+function canonicalizeAgentEntriesForTest(config: NatesclawConfig): NatesclawConfig {
   const next = structuredClone(config);
   const list = next.agents?.list;
   if (!list) {
@@ -237,7 +237,7 @@ function canonicalizeAgentEntriesForTest(config: OpenClawConfig): OpenClawConfig
   return next;
 }
 
-function materializeRuntimeAgentListForTest(config: OpenClawConfig): OpenClawConfig {
+function materializeRuntimeAgentListForTest(config: NatesclawConfig): NatesclawConfig {
   const next = canonicalizeAgentEntriesForTest(config);
   if (!next.agents?.entries) {
     return next;
@@ -445,14 +445,14 @@ type SuccessfulRunParams = {
   onSuccessfulAuthBinding?: (binding: AgentExecutionAuthBinding) => void;
   authProfileId?: string;
   agentHarnessRuntimeOverride?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   reportedModel?: string;
 };
 
 function successfulAgentHarnessBinding(params?: SuccessfulRunParams): AgentExecutionAuthBinding {
   const requestedHarnessId = params?.agentHarnessRuntimeOverride?.trim();
   const agentHarnessId =
-    !requestedHarnessId || requestedHarnessId === "auto" ? "openclaw" : requestedHarnessId;
+    !requestedHarnessId || requestedHarnessId === "auto" ? "natesclaw" : requestedHarnessId;
   return {
     agentHarnessId,
     ...(agentHarnessId === "codex"
@@ -514,7 +514,7 @@ function openAiOAuthCredential(token: string, lifetimeMs = 3_600_000) {
 }
 
 function mockCodexRuntimeInstall(installRecord?: PluginInstallRecord) {
-  return vi.fn(async ({ cfg }: { cfg: OpenClawConfig }) => ({
+  return vi.fn(async ({ cfg }: { cfg: NatesclawConfig }) => ({
     cfg: installRecord
       ? {
           ...cfg,
@@ -545,25 +545,25 @@ function activateCodexSetup(params: Omit<TestSetupInferenceActivationParams, "ki
 
 type TestConfigTransformInput = {
   transform: (
-    config: OpenClawConfig,
+    config: NatesclawConfig,
     context: {
       snapshot: {
         exists: true;
         valid: true;
         path: string;
-        config: OpenClawConfig;
-        sourceConfig: OpenClawConfig;
-        runtimeConfig: OpenClawConfig;
+        config: NatesclawConfig;
+        sourceConfig: NatesclawConfig;
+        runtimeConfig: NatesclawConfig;
       };
       previousHash: string | null;
       attempt: number;
     },
-  ) => Promise<{ nextConfig: OpenClawConfig }> | { nextConfig: OpenClawConfig };
+  ) => Promise<{ nextConfig: NatesclawConfig }> | { nextConfig: NatesclawConfig };
 };
 
 function createConfigTransformHarness(
-  sourceConfig: OpenClawConfig = {},
-  runtimeConfig: OpenClawConfig = sourceConfig,
+  sourceConfig: NatesclawConfig = {},
+  runtimeConfig: NatesclawConfig = sourceConfig,
 ) {
   const state = {
     sourceConfig: canonicalizeAgentEntriesForTest(sourceConfig),
@@ -574,7 +574,7 @@ function createConfigTransformHarness(
       snapshot: {
         exists: true,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         config: state.runtimeConfig,
         sourceConfig: state.sourceConfig,
         runtimeConfig: state.runtimeConfig,
@@ -617,12 +617,12 @@ describe("applySystemAgentModelSelection", () => {
           ops: {
             default: true,
             models: {
-              "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+              "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
             },
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const result = await applySystemAgentModelSelection({
       config,
@@ -635,7 +635,7 @@ describe("applySystemAgentModelSelection", () => {
       models: { "openai/gpt-5.5": { agentRuntime: { id: "codex" } } },
     });
     expect(config.agents.entries.ops?.models?.["openai/gpt-5.5"]?.agentRuntime?.id).toBe(
-      "openclaw",
+      "natesclaw",
     );
   });
 });
@@ -656,7 +656,7 @@ describe("detectSetupInference", () => {
     ]);
     const detection = await detectSetupInference({
       resolveManifestProviderAuthChoices,
-      enablePluginInConfig: ((config: OpenClawConfig) => ({ enabled: true, config })) as never,
+      enablePluginInConfig: ((config: NatesclawConfig) => ({ enabled: true, config })) as never,
       probeLocalCommand: vi.fn(async (command) => ({ command, found: false })),
     });
     expect(detection.candidates).toHaveLength(2);
@@ -744,7 +744,7 @@ describe("detectSetupInference", () => {
           website: "https://local.example.com/download",
         },
       ],
-      enablePluginInConfig: ((config: OpenClawConfig) => ({ enabled: true, config })) as never,
+      enablePluginInConfig: ((config: NatesclawConfig) => ({ enabled: true, config })) as never,
       resolvePluginProviders: () => [provider],
     });
 
@@ -783,13 +783,13 @@ describe("detectSetupInference", () => {
     vi.mocked(readConfigFileSnapshot).mockResolvedValueOnce({
       exists: true,
       valid: false,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       issues: [{ path: "agents.defaults.model", message: "Expected a model reference" }],
       config: {},
     } as never);
 
     await expect(detectSetupInference()).rejects.toThrow(
-      "OpenClaw config /tmp/openclaw.json is invalid (agents.defaults.model: Expected a model reference)",
+      "Natesclaw config /tmp/natesclaw.json is invalid (agents.defaults.model: Expected a model reference)",
     );
   });
 
@@ -1056,7 +1056,7 @@ describe("detectSetupInference", () => {
 
   it("does not re-offer the configured Codex route as a setup candidate", async () => {
     const { readConfigFileSnapshot } = await import("../config/config.js");
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       agents: {
         defaults: { model: "openai/gpt-5.6-sol" },
         entries: {
@@ -1072,7 +1072,7 @@ describe("detectSetupInference", () => {
     vi.mocked(readConfigFileSnapshot).mockResolvedValueOnce({
       exists: true,
       valid: true,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       issues: [],
       config,
       sourceConfig: config,
@@ -1115,7 +1115,7 @@ describe("detectSetupInference", () => {
 
   it("keeps a Codex candidate when it would switch the configured model", async () => {
     const { readConfigFileSnapshot } = await import("../config/config.js");
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       agents: {
         defaults: { model: "openai/gpt-5.5" },
         entries: {
@@ -1131,7 +1131,7 @@ describe("detectSetupInference", () => {
     vi.mocked(readConfigFileSnapshot).mockResolvedValueOnce({
       exists: true,
       valid: true,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       issues: [],
       config,
       sourceConfig: config,
@@ -1235,7 +1235,7 @@ describe("detectSetupInference", () => {
         modelRef: "claude-cli/claude-opus-5",
         label: "Claude Code",
         detail:
-          "logged in; Claude Code 2.1.206 is the first published build known to advertise msg_lifecycle_v1; found 2.1.205. OpenClaw verifies this capability at runtime.",
+          "logged in; Claude Code 2.1.206 is the first published build known to advertise msg_lifecycle_v1; found 2.1.205. Natesclaw verifies this capability at runtime.",
         credentials: true,
       },
     ]);
@@ -1250,7 +1250,7 @@ describe("detectSetupInference", () => {
         brandId: "claude",
         credentials: true,
         detail:
-          "logged in; Claude Code 2.1.206 is the first published build known to advertise msg_lifecycle_v1; found 2.1.205. OpenClaw verifies this capability at runtime.",
+          "logged in; Claude Code 2.1.206 is the first published build known to advertise msg_lifecycle_v1; found 2.1.205. Natesclaw verifies this capability at runtime.",
         kind: "claude-cli",
         label: "Claude Code",
         modelRef: "claude-cli/claude-opus-5",
@@ -1262,10 +1262,10 @@ describe("detectSetupInference", () => {
 });
 
 async function runCodexSetupWithFinalConfig(params: {
-  initialConfig?: OpenClawConfig;
-  currentConfig: OpenClawConfig;
-  currentRuntimeConfig?: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  initialConfig?: NatesclawConfig;
+  currentConfig: NatesclawConfig;
+  currentRuntimeConfig?: NatesclawConfig;
+  sourceConfig: NatesclawConfig;
 }) {
   const initialConfig = params.initialConfig ?? params.sourceConfig;
   let persistedConfig = structuredClone(params.currentConfig);
@@ -1277,7 +1277,7 @@ async function runCodexSetupWithFinalConfig(params: {
       snapshot: {
         exists: true,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         config: runtimeConfig,
         sourceConfig: persistedConfig,
         runtimeConfig,
@@ -1295,7 +1295,7 @@ async function runCodexSetupWithFinalConfig(params: {
     return {
       exists: true,
       valid: true,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       hash: committed ? "after-setup" : "before-setup",
       issues: [],
       config: runtimeConfig,
@@ -1304,7 +1304,7 @@ async function runCodexSetupWithFinalConfig(params: {
     };
   });
   const result = await activateCodexSetup({
-    workspace: "/tmp/openclaw-workspace",
+    workspace: "/tmp/natesclaw-workspace",
     deps: {
       readConfigFileSnapshot: readConfigFileSnapshot as never,
       transformConfigWithPendingPluginInstalls: transformConfig as never,
@@ -1317,7 +1317,7 @@ async function runCodexSetupWithFinalConfig(params: {
 describe("activateSetupInference", () => {
   it("omits the token cap when harness selection is automatic", () => {
     expect(resolveSetupInferenceProbeStreamParams("auto")).toEqual({});
-    expect(resolveSetupInferenceProbeStreamParams("openclaw")).toEqual({
+    expect(resolveSetupInferenceProbeStreamParams("natesclaw")).toEqual({
       streamParams: { maxTokens: 32 },
     });
   });
@@ -1334,7 +1334,7 @@ describe("activateSetupInference", () => {
     vi.restoreAllMocks();
   });
 
-  function createGroqSetupProvider(configPatch?: Partial<OpenClawConfig>): ProviderPlugin {
+  function createGroqSetupProvider(configPatch?: Partial<NatesclawConfig>): ProviderPlugin {
     return {
       id: "groq",
       label: "Groq",
@@ -1403,7 +1403,7 @@ describe("activateSetupInference", () => {
             {},
             {
               valid: false,
-              path: "/tmp/openclaw.json",
+              path: "/tmp/natesclaw.json",
               issues: [{ path: "gateway.port", message: "Expected a number" }],
             },
           ),
@@ -1412,7 +1412,7 @@ describe("activateSetupInference", () => {
         },
       }),
     ).rejects.toThrow(
-      "OpenClaw config /tmp/openclaw.json is invalid (gateway.port: Expected a number). Fix it before running setup.",
+      "Natesclaw config /tmp/natesclaw.json is invalid (gateway.port: Expected a number). Fix it before running setup.",
     );
     expect(runEmbeddedAgent).not.toHaveBeenCalled();
     expect(transformConfig).not.toHaveBeenCalled();
@@ -1430,7 +1430,7 @@ describe("activateSetupInference", () => {
         readConfigFileSnapshot: mockConfigSnapshot(
           {},
           {
-            path: "/tmp/openclaw.json",
+            path: "/tmp/natesclaw.json",
             hash: "setup-config-hash",
             runtimeConfig: materializedMainRuntimeConfig,
           },
@@ -1444,11 +1444,11 @@ describe("activateSetupInference", () => {
       ok: true,
       lines: [
         "Inference verified: claude-cli/claude-opus-5",
-        "Inference setup completed, but OpenClaw could not record its audit entry: audit directory is read-only",
+        "Inference setup completed, but Natesclaw could not record its audit entry: audit directory is read-only",
       ],
     });
     expect(error).toHaveBeenCalledWith(
-      "Inference setup completed, but OpenClaw could not record its audit entry: audit directory is read-only",
+      "Inference setup completed, but Natesclaw could not record its audit entry: audit directory is read-only",
     );
   });
 
@@ -1478,18 +1478,18 @@ describe("activateSetupInference", () => {
           {
             id: "ops",
             default: true,
-            agentDir: "/tmp/openclaw-ops-agent",
+            agentDir: "/tmp/natesclaw-ops-agent",
             params: { temperature: 0.2 },
             tools: { allow: ["read"], deny: ["exec"] },
           },
           {
-            id: "openclaw",
+            id: "natesclaw",
             params: { temperature: 1.7 },
             tools: { allow: ["exec"] },
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const configHarness = createConfigTransformHarness(initialConfig);
     const runCliAgent = vi.fn(successfulRunner("claude-cli", "claude-opus-5"));
     const resolveRouteMetadata = vi.fn(resolvePluginMetadataSnapshot);
@@ -1511,19 +1511,19 @@ describe("activateSetupInference", () => {
     expect(runCliAgent).toHaveBeenCalledWith(
       expect.objectContaining({
         agentId: "ops",
-        agentDir: "/tmp/openclaw-ops-agent",
+        agentDir: "/tmp/natesclaw-ops-agent",
         executionMode: "side-question",
         disableTools: true,
         cleanupCliLiveSessionOnRunEnd: true,
       }),
     );
     const probeConfig = runCliAgent.mock.calls[0]?.[0].config;
-    expect(listAgentEntries(probeConfig ?? {}).find((agent) => agent.id === "openclaw")).toEqual({
-      id: "openclaw",
+    expect(listAgentEntries(probeConfig ?? {}).find((agent) => agent.id === "natesclaw")).toEqual({
+      id: "natesclaw",
       params: { temperature: 0.2 },
       tools: { allow: ["read"], deny: ["exec"] },
     });
-    expect(configHarness.current().agents?.entries?.openclaw).toEqual({
+    expect(configHarness.current().agents?.entries?.natesclaw).toEqual({
       params: { temperature: 1.7 },
       tools: { allow: ["exec"] },
     });
@@ -1550,10 +1550,10 @@ describe("activateSetupInference", () => {
     expect(configHarness.current()).toEqual({});
   });
 
-  it("rejects an unattested existing route before handing off to OpenClaw", async () => {
+  it("rejects an unattested existing route before handing off to Natesclaw", async () => {
     const config = {
       agents: { defaults: { model: "openai/gpt-5.5" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const configHarness = createPreRosterConfigTransformHarness();
     const result = await activateSetupInference({
       kind: "existing-model",
@@ -1581,7 +1581,7 @@ describe("activateSetupInference", () => {
       deps: {
         runCliAgent: vi.fn(successfulRunner("claude-cli", "claude-opus-5")) as never,
         transformConfigWithPendingPluginInstalls: configHarness.transform as never,
-        createTempDir: async () => "/tmp/openclaw-setup-cleanup-fixture",
+        createTempDir: async () => "/tmp/natesclaw-setup-cleanup-fixture",
         removeTempDir: async () => {
           throw new Error("simulated cleanup failure");
         },
@@ -1594,11 +1594,11 @@ describe("activateSetupInference", () => {
 
   it("disposes the temporary auth database before Windows-style removal", async () => {
     const tempDir = await suiteTempRootTracker.make("case");
-    const databasePath = path.join(tempDir, "agent", "openclaw-agent.sqlite");
+    const databasePath = path.join(tempDir, "agent", "natesclaw-agent.sqlite");
     let disposed = false;
     const disposeDatabase = vi.fn((pathname: string) => {
       expect(pathname).toBe(databasePath);
-      disposed = disposeOpenClawAgentDatabaseByPath(pathname);
+      disposed = disposeNatesclawAgentDatabaseByPath(pathname);
       return disposed;
     });
     const removeTempDir = vi.fn(async (dir: string) => {
@@ -1617,7 +1617,7 @@ describe("activateSetupInference", () => {
         runEmbeddedAgent: vi.fn(async () => {
           throw new Error("401 invalid_api_key");
         }) as never,
-        disposeOpenClawAgentDatabaseByPath: disposeDatabase,
+        disposeNatesclawAgentDatabaseByPath: disposeDatabase,
         createTempDir: async () => tempDir,
         removeTempDir,
       },
@@ -1630,7 +1630,7 @@ describe("activateSetupInference", () => {
   });
 
   it("reconciles a config write that committed before its writer threw", async () => {
-    let committedConfig: OpenClawConfig | undefined;
+    let committedConfig: NatesclawConfig | undefined;
     const readConfigFileSnapshot = vi.fn(async () => {
       const sourceConfig = committedConfig ?? {};
       return {
@@ -1647,9 +1647,9 @@ describe("activateSetupInference", () => {
     const transformConfig = vi.fn(
       async (params: {
         transform: (
-          config: OpenClawConfig,
-          context: { snapshot: { config: OpenClawConfig; runtimeConfig: OpenClawConfig } },
-        ) => Promise<{ nextConfig: OpenClawConfig }>;
+          config: NatesclawConfig,
+          context: { snapshot: { config: NatesclawConfig; runtimeConfig: NatesclawConfig } },
+        ) => Promise<{ nextConfig: NatesclawConfig }>;
       }) => {
         committedConfig = (
           await params.transform(
@@ -1679,7 +1679,7 @@ describe("activateSetupInference", () => {
     expect(committedConfig?.agents?.defaults?.model).toBe("claude-cli/claude-opus-5");
   });
 
-  it("persists only the verified model before OpenClaw configures the rest", async () => {
+  it("persists only the verified model before Natesclaw configures the rest", async () => {
     const configHarness = createPreRosterConfigTransformHarness();
 
     const result = await activateSetupInference({
@@ -1704,14 +1704,14 @@ describe("activateSetupInference", () => {
   });
 
   it("exposes the locked authored config before committing the verified model", async () => {
-    const probedConfig: OpenClawConfig = {
+    const probedConfig: NatesclawConfig = {
       wizard: { securityAcknowledgedAt: "2026-08-02T00:00:00.000Z" },
     };
-    const lockedConfig: OpenClawConfig = {
+    const lockedConfig: NatesclawConfig = {
       wizard: { securityAcknowledgedAt: "2026-08-03T00:00:00.000Z" },
     };
     const configHarness = createConfigTransformHarness(lockedConfig);
-    const onCommitStarted = vi.fn((sourceConfig: OpenClawConfig) => {
+    const onCommitStarted = vi.fn((sourceConfig: NatesclawConfig) => {
       expect(sourceConfig.wizard?.securityAcknowledgedAt).toBe("2026-08-03T00:00:00.000Z");
       expect(configHarness.current().agents?.defaults?.model).toBeUndefined();
     });
@@ -1736,7 +1736,7 @@ describe("activateSetupInference", () => {
   });
 
   it("uses the materialized runtime roster when activating from a missing config file", async () => {
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: NatesclawConfig = {
       agents: { entries: { main: { default: true } } },
     };
     const configHarness = createConfigTransformHarness(runtimeConfig, runtimeConfig);
@@ -1747,7 +1747,7 @@ describe("activateSetupInference", () => {
       deps: {
         readConfigFileSnapshot: mockConfigSnapshot(runtimeConfig, {
           exists: false,
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
         }),
         runCliAgent: vi.fn(successfulRunner("claude-cli", "claude-opus-5")) as never,
         transformConfigWithPendingPluginInstalls: configHarness.transform as never,
@@ -1766,7 +1766,7 @@ describe("activateSetupInference", () => {
   it.each([
     {
       name: "auto-enables the lean surface for a verified local model",
-      initialConfig: {} satisfies OpenClawConfig,
+      initialConfig: {} satisfies NatesclawConfig,
       expectedLean: true,
       expectedAnnouncement: true,
     },
@@ -1774,7 +1774,7 @@ describe("activateSetupInference", () => {
       name: "preserves an explicit localModelLean=false",
       initialConfig: {
         agents: { defaults: { experimental: { localModelLean: false } } },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
       expectedLean: false,
       expectedAnnouncement: false,
     },
@@ -1875,10 +1875,10 @@ describe("activateSetupInference", () => {
   });
 
   it("rebases model persistence on concurrent default-agent edits", async () => {
-    const probedConfig: OpenClawConfig = {
+    const probedConfig: NatesclawConfig = {
       agents: { list: [{ id: "work", default: true, model: "openai/broken" }] },
     };
-    const concurrentConfig: OpenClawConfig = {
+    const concurrentConfig: NatesclawConfig = {
       agents: {
         list: [
           { id: "work", default: true, model: "openai/broken", name: "edited during probe" },
@@ -1926,7 +1926,7 @@ describe("activateSetupInference", () => {
             { id: "other", agentDir: "/tmp/other", model: "openai/broken" },
           ],
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
     },
     {
       name: "default agent",
@@ -1937,7 +1937,7 @@ describe("activateSetupInference", () => {
             { id: "other", default: true, agentDir: "/tmp/other", model: "openai/broken" },
           ],
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
     },
     {
       name: "default agent directory",
@@ -1952,7 +1952,7 @@ describe("activateSetupInference", () => {
             },
           ],
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
     },
     {
       name: "default agent execution settings",
@@ -1970,7 +1970,7 @@ describe("activateSetupInference", () => {
             { id: "other", agentDir: "/tmp/other", model: "openai/broken" },
           ],
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
     },
   ])("rejects a changed $name after the live probe", async ({ concurrent }) => {
     const probedConfig = {
@@ -1980,7 +1980,7 @@ describe("activateSetupInference", () => {
           { id: "other", agentDir: "/tmp/other", model: "openai/broken" },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const configHarness = createConfigTransformHarness(concurrent);
 
     await expect(
@@ -2004,11 +2004,11 @@ describe("activateSetupInference", () => {
         defaults: {
           model: "openai/gpt-5.4",
           models: {
-            "anthropic/claude-opus-5": { agentRuntime: { id: "openclaw" } },
+            "anthropic/claude-opus-5": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const concurrentConfig = structuredClone(initialConfig);
     concurrentConfig.agents!.defaults!.models!["anthropic/claude-opus-5"] = {
       agentRuntime: { id: "codex" },
@@ -2056,8 +2056,8 @@ describe("activateSetupInference", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
-    const runtimeConfig: OpenClawConfig = structuredClone(sourceConfig);
+    } satisfies NatesclawConfig;
+    const runtimeConfig: NatesclawConfig = structuredClone(sourceConfig);
     runtimeConfig.models!.providers!.openai!.models = [
       {
         id: "gpt-5.6",
@@ -2096,10 +2096,10 @@ describe("activateSetupInference", () => {
   it("rejects an existing route that changes after its live probe", async () => {
     const initialConfig = {
       agents: { defaults: { model: "openai/gpt-5.5" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const changedConfig = {
       agents: { defaults: { model: "anthropic/claude-opus-5" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const readConfigFileSnapshot = vi
       .fn()
       .mockResolvedValueOnce({ exists: true, valid: true, config: initialConfig })
@@ -2173,7 +2173,7 @@ describe("activateSetupInference", () => {
           model: "claude-cli/claude-opus-5",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const result = await activateSetupInference({
       kind: "existing-model",
       deps: {
@@ -2237,7 +2237,7 @@ describe("activateSetupInference", () => {
   });
 
   it("does not configure Codex while selecting Claude as the primary backend", async () => {
-    const sourceConfig = {} satisfies OpenClawConfig;
+    const sourceConfig = {} satisfies NatesclawConfig;
     const configHarness = createConfigTransformHarness(sourceConfig);
     const ensureCodexRuntimePlugin = vi.fn();
     const runCliAgent = vi.fn(async (params: SuccessfulRunParams) => {
@@ -2273,7 +2273,7 @@ describe("activateSetupInference", () => {
   it.each([
     [
       "an explicitly disabled Codex plugin",
-      { plugins: { entries: { codex: { enabled: false } } } } satisfies OpenClawConfig,
+      { plugins: { entries: { codex: { enabled: false } } } } satisfies NatesclawConfig,
     ],
     [
       "an explicit supervision opt-out",
@@ -2281,9 +2281,9 @@ describe("activateSetupInference", () => {
         plugins: {
           entries: { codex: { config: { supervision: { enabled: false } } } },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
     ],
-    ["plugin policy", { plugins: { deny: ["codex"] } } satisfies OpenClawConfig],
+    ["plugin policy", { plugins: { deny: ["codex"] } } satisfies NatesclawConfig],
   ])("preserves %s while selecting another backend", async (_label, config) => {
     const ensureCodexRuntimePlugin = vi.fn();
     const configHarness = createConfigTransformHarness(config);
@@ -2502,7 +2502,7 @@ describe("activateSetupInference", () => {
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const runEmbeddedAgent = vi.fn(successfulRunner("anthropic", "claude-opus-5"));
     const configHarness = createConfigTransformHarness(initialConfig);
 
@@ -2521,7 +2521,7 @@ describe("activateSetupInference", () => {
         agentId: "ops",
         provider: "anthropic",
         model: "claude-opus-5",
-        agentHarnessRuntimeOverride: "openclaw",
+        agentHarnessRuntimeOverride: "natesclaw",
         config: expect.objectContaining({
           agents: expect.objectContaining({
             entries: expect.objectContaining({
@@ -2529,7 +2529,7 @@ describe("activateSetupInference", () => {
                 model: { primary: "anthropic/claude-opus-5" },
                 models: {
                   "anthropic/claude-opus-5": {
-                    agentRuntime: { id: "openclaw" },
+                    agentRuntime: { id: "natesclaw" },
                   },
                 },
               }),
@@ -2561,7 +2561,7 @@ describe("activateSetupInference", () => {
         ...initialConfig.agents,
         defaults: { models: { "openai/gpt-5.4": {} } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     resolveAgentDir(initialConfig, "main");
     const runAuth = vi.fn(async () => ({
       profiles: [
@@ -2598,7 +2598,7 @@ describe("activateSetupInference", () => {
         kind: "provider-auth",
         authChoice: "openai",
         useRealAuthProfileStore: true,
-        workspace: "/tmp/openclaw-workspace",
+        workspace: "/tmp/natesclaw-workspace",
         prompter: { note: vi.fn(async () => {}) } as never,
         deps: {
           readConfigFileSnapshot: mockConfigSnapshot(initialConfig, {
@@ -2709,7 +2709,7 @@ describe("activateSetupInference", () => {
       const result = await activateSetupInference({
         kind: "provider-auth",
         authChoice: "ollama",
-        workspace: "/tmp/openclaw-workspace",
+        workspace: "/tmp/natesclaw-workspace",
         prompter: { note: vi.fn(async () => {}) } as never,
         deps: {
           readConfigFileSnapshot: mockConfigSnapshot(initialConfig, {
@@ -2802,7 +2802,7 @@ describe("activateSetupInference", () => {
             "groq:legacy": { provider: "groq", mode: credentialType },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies NatesclawConfig;
       // Custom agent directories must be bound to their configured owner before
       // the shared per-agent database is created.
       resolveAgentDir(initialConfig, "main");
@@ -2844,7 +2844,7 @@ describe("activateSetupInference", () => {
         ],
       };
       const resolvePluginProviders = vi.fn(() => [provider]);
-      const enablePluginInConfig = vi.fn((config: OpenClawConfig, pluginId: string) => ({
+      const enablePluginInConfig = vi.fn((config: NatesclawConfig, pluginId: string) => ({
         config: {
           ...config,
           plugins: { entries: { [pluginId]: { enabled: true } } },
@@ -2860,7 +2860,7 @@ describe("activateSetupInference", () => {
       try {
         const result = await activateGroqSetup({
           apiKey: "test-groq-key",
-          workspace: "/tmp/openclaw-workspace",
+          workspace: "/tmp/natesclaw-workspace",
           deps: {
             readConfigFileSnapshot: mockConfigSnapshot(initialConfig, { includeMetadata: true }),
             resolvePluginProviders,
@@ -2877,7 +2877,7 @@ describe("activateSetupInference", () => {
               plugins: { entries: { groq: { enabled: true } } },
             }),
             onlyPluginIds: ["groq"],
-            workspaceDir: "/tmp/openclaw-workspace",
+            workspaceDir: "/tmp/natesclaw-workspace",
           }),
         );
         expect(runAuth).toHaveBeenCalledWith(
@@ -2993,7 +2993,7 @@ describe("activateSetupInference", () => {
       plugins: {
         entries: { operator: { enabled: true, config: { revision: "initial" } } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const concurrentConfig = structuredClone(initialConfig);
     concurrentConfig.gateway = { port: 19_000 };
     concurrentConfig.agents!.defaults!.workspace = "/operator/concurrent";
@@ -3062,7 +3062,7 @@ describe("activateSetupInference", () => {
         },
       ],
     };
-    const enablePluginInConfig = (config: OpenClawConfig, pluginId: string) => ({
+    const enablePluginInConfig = (config: NatesclawConfig, pluginId: string) => ({
       enabled: true as const,
       config: {
         ...config,
@@ -3076,7 +3076,7 @@ describe("activateSetupInference", () => {
       },
     });
     const runEmbeddedAgent = vi.fn(
-      async (params: SuccessfulRunParams & { config: OpenClawConfig }) =>
+      async (params: SuccessfulRunParams & { config: NatesclawConfig }) =>
         successfulRun("groq", "llama-3.3-70b-versatile", params),
     );
     const configHarness = createConfigTransformHarness(concurrentConfig);
@@ -3108,7 +3108,7 @@ describe("activateSetupInference", () => {
         },
       });
       expect(probeConfig.agents?.entries?.main?.models).toMatchObject({
-        "groq/llama-3.3-70b-versatile": { agentRuntime: { id: "openclaw" } },
+        "groq/llama-3.3-70b-versatile": { agentRuntime: { id: "natesclaw" } },
       });
       expect(probeConfig.plugins?.entries?.groq).toEqual({
         enabled: true,
@@ -3222,7 +3222,7 @@ describe("activateSetupInference", () => {
     const initialConfig = {
       agents: { list: [{ id: "main", default: true, agentDir }] },
       auth: { profiles: { "groq:default": { provider: "groq", mode: "api_key" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     resolveAgentDir(initialConfig, "main");
     seedInMemoryAuthProfileStore(agentDir, {
       version: 1,
@@ -3336,7 +3336,7 @@ describe("activateSetupInference", () => {
         ...initialConfig.agents,
         defaults: { model: "openai/gpt-5.5" },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     resolveAgentDir(initialConfig, "main");
     const readConfigFileSnapshot = vi
       .fn()
@@ -3365,7 +3365,7 @@ describe("activateSetupInference", () => {
       await expect(
         activateGroqSetup({
           apiKey: "candidate-key",
-          workspace: "/tmp/openclaw-workspace",
+          workspace: "/tmp/natesclaw-workspace",
           deps: {
             readConfigFileSnapshot: readConfigFileSnapshot as never,
             transformConfigWithPendingPluginInstalls: transformConfig as never,
@@ -3387,7 +3387,7 @@ describe("activateSetupInference", () => {
   it("retains a credential when a post-write concurrent edit still references it", async () => {
     const { stateDir, agentDir, initialConfig } = await createMainAgentFixture();
     resolveAgentDir(initialConfig, "main");
-    let currentConfig: OpenClawConfig = initialConfig;
+    let currentConfig: NatesclawConfig = initialConfig;
     const readConfigFileSnapshot = vi.fn(async () => ({
       exists: true,
       valid: true,
@@ -3488,7 +3488,7 @@ describe("activateSetupInference", () => {
         ...initialConfig.agents,
         defaults: { model: "openai/gpt-5.5" },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     let realStoreWrites = 0;
     const updateAuthProfileStore = vi.fn(async (params) => {
       if (params.agentDir === agentDir) {
@@ -3518,7 +3518,7 @@ describe("activateSetupInference", () => {
     try {
       const error = await activateGroqSetup({
         apiKey: "candidate-key",
-        workspace: "/tmp/openclaw-workspace",
+        workspace: "/tmp/natesclaw-workspace",
         deps: {
           readConfigFileSnapshot: mockConfigSnapshot(initialConfig),
           transformConfigWithPendingPluginInstalls: transformConfig as never,
@@ -3561,7 +3561,7 @@ describe("activateSetupInference", () => {
       const activate = () =>
         activateGroqSetup({
           apiKey: "candidate-key",
-          workspace: "/tmp/openclaw-workspace",
+          workspace: "/tmp/natesclaw-workspace",
           deps: {
             readConfigFileSnapshot: mockConfigSnapshot(initialConfig),
             transformConfigWithPendingPluginInstalls: transformConfig as never,
@@ -3605,8 +3605,8 @@ describe("activateSetupInference", () => {
     const initialConfig = {
       agents: { list: [{ id: "main", default: true, agentDir }] },
       models: { providers: { aux: auxProvider } },
-    } satisfies OpenClawConfig;
-    const concurrentConfig: OpenClawConfig = {
+    } satisfies NatesclawConfig;
+    const concurrentConfig: NatesclawConfig = {
       ...initialConfig,
       models: {
         providers: {
@@ -3719,7 +3719,7 @@ describe("activateSetupInference", () => {
       async (ctx: {
         agentDir?: string;
         opts: { githubCopilotToken?: unknown };
-        config: OpenClawConfig;
+        config: NatesclawConfig;
       }) => {
         const token =
           typeof ctx.opts.githubCopilotToken === "string" ? ctx.opts.githubCopilotToken : "";
@@ -3739,7 +3739,7 @@ describe("activateSetupInference", () => {
               },
             },
           },
-        } satisfies OpenClawConfig;
+        } satisfies NatesclawConfig;
       },
     );
     const provider: ProviderPlugin = {
@@ -3767,14 +3767,14 @@ describe("activateSetupInference", () => {
         defaults: { model: { primary: existingModel } },
         list: [{ id: "main", default: true, agentDir }],
       },
-    } satisfies OpenClawConfig;
-    const concurrentConfig: OpenClawConfig = {
+    } satisfies NatesclawConfig;
+    const concurrentConfig: NatesclawConfig = {
       gateway: { port: 19000 },
       agents: {
         defaults: { model: { primary: existingModel } },
         list: [{ id: "main", default: true, agentDir }],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const configHarness = createConfigTransformHarness(concurrentConfig);
 
     try {
@@ -3782,7 +3782,7 @@ describe("activateSetupInference", () => {
         kind: "api-key",
         authChoice: "github-copilot",
         apiKey: "github-token",
-        workspace: "/tmp/openclaw-workspace",
+        workspace: "/tmp/natesclaw-workspace",
         deps: {
           readConfigFileSnapshot: mockConfigSnapshot(initialConfig, { includeMetadata: true }),
           resolvePluginProviders: () => [provider],
@@ -3851,7 +3851,7 @@ describe("activateSetupInference", () => {
     try {
       const result = await activateGroqSetup({
         apiKey: "bad-groq-key",
-        workspace: "/tmp/openclaw-workspace",
+        workspace: "/tmp/natesclaw-workspace",
         deps: {
           readConfigFileSnapshot: mockConfigSnapshot(initialConfig),
           runEmbeddedAgent: vi.fn(async () => {
@@ -3989,7 +3989,7 @@ describe("activateSetupInference", () => {
               fallbacks: ["google/gemini-3.1-pro-preview"],
             },
             models: {
-              "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+              "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
             },
           },
         ],
@@ -4009,8 +4009,8 @@ describe("activateSetupInference", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
-    const ensureCodex = vi.fn(async (params: { cfg: OpenClawConfig }) => {
+    } satisfies NatesclawConfig;
+    const ensureCodex = vi.fn(async (params: { cfg: NatesclawConfig }) => {
       events.push("install-plugin");
       return {
         cfg: {
@@ -4028,7 +4028,7 @@ describe("activateSetupInference", () => {
               ...params.cfg.plugins?.installs,
               codex: {
                 source: "npm" as const,
-                spec: "@openclaw/codex",
+                spec: "@natesclaw/codex",
                 installPath: "/tmp/plugins/codex",
               },
             },
@@ -4043,7 +4043,7 @@ describe("activateSetupInference", () => {
       events.push("live-test");
       return successfulRun("openai", "gpt-5.6-sol", params);
     });
-    let persistedConfig: OpenClawConfig = {
+    let persistedConfig: NatesclawConfig = {
       ...initialConfig,
       gateway: { port: 19000 },
     };
@@ -4052,15 +4052,15 @@ describe("activateSetupInference", () => {
     const transformConfig = vi.fn(
       async (params: {
         transform: (
-          config: OpenClawConfig,
+          config: NatesclawConfig,
           context: {
             snapshot: {
-              config: OpenClawConfig;
-              sourceConfig: OpenClawConfig;
-              runtimeConfig: OpenClawConfig;
+              config: NatesclawConfig;
+              sourceConfig: NatesclawConfig;
+              runtimeConfig: NatesclawConfig;
             };
           },
-        ) => Promise<{ nextConfig: OpenClawConfig }> | { nextConfig: OpenClawConfig };
+        ) => Promise<{ nextConfig: NatesclawConfig }> | { nextConfig: NatesclawConfig };
       }) => {
         const transformed = (
           await params.transform(persistedConfig, {
@@ -4101,7 +4101,7 @@ describe("activateSetupInference", () => {
       },
     );
     const result = await activateCodexSetup({
-      workspace: "/tmp/openclaw-workspace",
+      workspace: "/tmp/natesclaw-workspace",
       runtime: { log: runtimeLog, error: () => {}, exit: () => {} } as never,
       deps: {
         readConfigFileSnapshot: vi.fn(async () => {
@@ -4109,7 +4109,7 @@ describe("activateSetupInference", () => {
           return {
             exists: true,
             valid: true,
-            path: "/tmp/openclaw.json",
+            path: "/tmp/natesclaw.json",
             issues: [],
             config,
             sourceConfig: config,
@@ -4140,7 +4140,7 @@ describe("activateSetupInference", () => {
                   fallbacks: ["google/gemini-3.1-pro-preview"],
                 },
                 models: {
-                  "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+                  "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
                   "openai/gpt-5.6-sol": { agentRuntime: { id: "codex" } },
                 },
               }),
@@ -4171,8 +4171,8 @@ describe("activateSetupInference", () => {
       expect.objectContaining({
         reason: "source-changed",
         policyPluginIds: ["codex"],
-        traceCommand: "openclaw-setup-probe",
-        workspaceDir: "/tmp/openclaw-workspace",
+        traceCommand: "natesclaw-setup-probe",
+        workspaceDir: "/tmp/natesclaw-workspace",
       }),
     );
     expect(refreshPluginRegistry).toHaveBeenCalledTimes(2);
@@ -4198,7 +4198,7 @@ describe("activateSetupInference", () => {
     expect(refreshPluginRegistry).toHaveBeenCalledWith({
       config: persistedConfig,
       reason: "source-changed",
-      workspaceDir: "/tmp/openclaw-workspace",
+      workspaceDir: "/tmp/natesclaw-workspace",
       logger: expect.objectContaining({ warn: expect.any(Function) }),
     });
     expect(ensureRegistryLoaded).toHaveBeenCalledWith(
@@ -4212,7 +4212,7 @@ describe("activateSetupInference", () => {
           agents: expect.objectContaining({ entries: persistedConfig.agents?.entries }),
           gateway: { port: 19_000 },
         }),
-        workspaceDir: "/tmp/openclaw-workspace",
+        workspaceDir: "/tmp/natesclaw-workspace",
       }),
     );
     // Harness selection: codex tests run embedded with the codex harness.
@@ -4233,7 +4233,7 @@ describe("activateSetupInference", () => {
                 fallbacks: ["google/gemini-3.1-pro-preview"],
               },
               models: {
-                "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+                "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
                 "openai/gpt-5.6-sol": { agentRuntime: { id: "codex" } },
               },
             }),
@@ -4279,7 +4279,7 @@ describe("activateSetupInference", () => {
               fallbacks: ["google/gemini-3.1-pro-preview"],
             },
             models: {
-              "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+              "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
               "openai/gpt-5.6-sol": { agentRuntime: { id: "codex" } },
             },
           }),
@@ -4304,16 +4304,16 @@ describe("activateSetupInference", () => {
     expect(persistedConfig.plugins?.installs).toBeUndefined();
     expect(pendingCodexInstalls[0]).toMatchObject({
       source: "npm",
-      spec: "@openclaw/codex",
+      spec: "@natesclaw/codex",
       installPath: "/tmp/plugins/codex",
     });
     expect(pendingCodexInstalls).toHaveLength(1);
   });
 
   it("probes and persists an exact non-default model through the Codex route", async () => {
-    const initialConfig: OpenClawConfig = {};
+    const initialConfig: NatesclawConfig = {};
     const configHarness = createConfigTransformHarness(initialConfig);
-    const ensureCodex = vi.fn(async ({ cfg }: { cfg: OpenClawConfig }) => ({
+    const ensureCodex = vi.fn(async ({ cfg }: { cfg: NatesclawConfig }) => ({
       cfg: {
         ...cfg,
         plugins: {
@@ -4363,7 +4363,7 @@ describe("activateSetupInference", () => {
       expect.objectContaining({
         reason: "source-changed",
         policyPluginIds: ["codex"],
-        traceCommand: "openclaw-setup-probe",
+        traceCommand: "natesclaw-setup-probe",
         workspaceDir: "/tmp/work",
       }),
     );
@@ -4482,39 +4482,39 @@ describe("activateSetupInference", () => {
     const staleAuthoredRecords = {
       codex: {
         source: "npm" as const,
-        spec: "@openclaw/codex@1.0.0",
+        spec: "@natesclaw/codex@1.0.0",
         installPath: "/tmp/plugins/codex-v1",
       },
       unrelated: {
         source: "npm" as const,
-        spec: "@openclaw/unrelated@1.0.0",
+        spec: "@natesclaw/unrelated@1.0.0",
         installPath: "/tmp/plugins/unrelated-v1",
       },
     };
     const canonicalRecords = {
       codex: {
         source: "npm" as const,
-        spec: "@openclaw/codex@2.0.0",
+        spec: "@natesclaw/codex@2.0.0",
         installPath: "/tmp/plugins/codex-v2",
       },
       unrelated: {
         source: "npm" as const,
-        spec: "@openclaw/unrelated@2.0.0",
+        spec: "@natesclaw/unrelated@2.0.0",
         installPath: "/tmp/plugins/unrelated-v2",
       },
     };
     const refreshedCodexRecord = {
       source: "npm" as const,
-      spec: "@openclaw/codex@3.0.0",
+      spec: "@natesclaw/codex@3.0.0",
       installPath: "/tmp/plugins/codex-v3",
     };
     const sourceConfig = {
       plugins: { installs: staleAuthoredRecords },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const runtimeConfig = {
       plugins: { installs: canonicalRecords },
-    } satisfies OpenClawConfig;
-    const ensureCodex = vi.fn(async (params: { cfg: OpenClawConfig }) => ({
+    } satisfies NatesclawConfig;
+    const ensureCodex = vi.fn(async (params: { cfg: NatesclawConfig }) => ({
       cfg: {
         ...params.cfg,
         plugins: {
@@ -4526,21 +4526,21 @@ describe("activateSetupInference", () => {
       installed: true,
       status: "installed" as const,
     }));
-    let persistedConfig: OpenClawConfig = sourceConfig;
+    let persistedConfig: NatesclawConfig = sourceConfig;
     let installIndex: Record<string, PluginInstallRecord> = structuredClone(canonicalRecords);
     const pendingInstallRecords: unknown[] = [];
     const transformConfig = vi.fn(
       async (params: {
         transform: (
-          config: OpenClawConfig,
+          config: NatesclawConfig,
           context: {
             snapshot: {
-              config: OpenClawConfig;
-              sourceConfig: OpenClawConfig;
-              runtimeConfig: OpenClawConfig;
+              config: NatesclawConfig;
+              sourceConfig: NatesclawConfig;
+              runtimeConfig: NatesclawConfig;
             };
           },
-        ) => Promise<{ nextConfig: OpenClawConfig }> | { nextConfig: OpenClawConfig };
+        ) => Promise<{ nextConfig: NatesclawConfig }> | { nextConfig: NatesclawConfig };
       }) => {
         const transformed = (
           await params.transform(persistedConfig, {
@@ -4556,7 +4556,7 @@ describe("activateSetupInference", () => {
     );
 
     const result = await activateCodexSetup({
-      workspace: "/tmp/openclaw-workspace",
+      workspace: "/tmp/natesclaw-workspace",
       deps: {
         readConfigFileSnapshot: mockConfigSnapshot(sourceConfig, {
           includeMetadata: true,
@@ -4611,7 +4611,7 @@ describe("activateSetupInference", () => {
   it("fails closed before inference when the staged Codex package cannot be retained", async () => {
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@openclaw/codex",
+      spec: "@natesclaw/codex",
       installPath: "/tmp/plugins/codex-unretained",
     };
     const runEmbeddedAgent = vi.fn();
@@ -4622,7 +4622,7 @@ describe("activateSetupInference", () => {
     const clearDiscovery = vi.fn(async () => {});
     const refreshPluginRegistry = vi.fn(async () => {});
     const result = await activateCodexSetup({
-      workspace: "/tmp/openclaw-workspace",
+      workspace: "/tmp/natesclaw-workspace",
       deps: {
         readConfigFileSnapshot: mockConfigSnapshot({}, { includeMetadata: true }),
         ensureCodexRuntimePlugin: mockCodexRuntimeInstall(installRecord),
@@ -4650,7 +4650,7 @@ describe("activateSetupInference", () => {
     expect(refreshPluginRegistry).toHaveBeenCalledWith({
       config: {},
       reason: "source-changed",
-      workspaceDir: "/tmp/openclaw-workspace",
+      workspaceDir: "/tmp/natesclaw-workspace",
       logger: expect.objectContaining({ warn: expect.any(Function) }),
     });
   });
@@ -4658,14 +4658,14 @@ describe("activateSetupInference", () => {
   it("reports an indeterminate activation when final Codex retention fails", async () => {
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@openclaw/codex",
+      spec: "@natesclaw/codex",
       installPath: "/tmp/plugins/codex-final-retention-failure",
     };
     const markRetainedInstall = vi.fn().mockResolvedValueOnce(true).mockResolvedValueOnce(false);
     const refreshPluginRegistry = vi.fn(async () => {});
     let tempDir: string | undefined;
     const activation = activateCodexSetup({
-      workspace: "/tmp/openclaw-workspace",
+      workspace: "/tmp/natesclaw-workspace",
       deps: {
         readConfigFileSnapshot: mockConfigSnapshot({}, { includeMetadata: true }),
         ensureCodexRuntimePlugin: mockCodexRuntimeInstall(installRecord),
@@ -4698,10 +4698,10 @@ describe("activateSetupInference", () => {
     resetPluginRuntimeStateForTest();
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@openclaw/codex",
+      spec: "@natesclaw/codex",
       installPath: "/tmp/plugins/codex-staged-registry",
     };
-    const persistedConfig = { plugins: { enabled: false } } satisfies OpenClawConfig;
+    const persistedConfig = { plugins: { enabled: false } } satisfies NatesclawConfig;
     const stagedRegistry = createEmptyPluginRegistry();
     stagedRegistry.plugins.push({
       id: "codex",
@@ -4718,14 +4718,14 @@ describe("activateSetupInference", () => {
 
     try {
       const result = await activateCodexSetup({
-        workspace: "/tmp/openclaw-workspace",
+        workspace: "/tmp/natesclaw-workspace",
         deps: {
           readConfigFileSnapshot: vi.fn(async () => {
             const config = snapshotRead++ === 0 ? {} : persistedConfig;
             return {
               exists: true,
               valid: true,
-              path: "/tmp/openclaw.json",
+              path: "/tmp/natesclaw.json",
               issues: [],
               config,
               sourceConfig: config,
@@ -4756,14 +4756,14 @@ describe("activateSetupInference", () => {
         scope: "all",
         config: persistedConfig,
         activationSourceConfig: persistedConfig,
-        workspaceDir: "/tmp/openclaw-workspace",
+        workspaceDir: "/tmp/natesclaw-workspace",
       });
       expect(getActivePluginRegistry()).not.toBe(stagedRegistry);
       expect(getActivePluginRegistry()?.plugins.some((plugin) => plugin.id === "codex")).toBe(
         false,
       );
       expect(getActivePluginRegistryKey()).not.toBe("staged-codex-registry");
-      expect(getActivePluginRegistryWorkspaceDir()).toBe("/tmp/openclaw-workspace");
+      expect(getActivePluginRegistryWorkspaceDir()).toBe("/tmp/natesclaw-workspace");
     } finally {
       resetPluginRuntimeStateForTest();
     }
@@ -4774,7 +4774,7 @@ describe("activateSetupInference", () => {
     const runEmbeddedAgent = vi.fn();
     const transformConfig = vi.fn();
     const refreshPluginRegistry = vi.fn();
-    const blockedConfig: OpenClawConfig = { plugins: { allow: ["other"] } };
+    const blockedConfig: NatesclawConfig = { plugins: { allow: ["other"] } };
     const result = await activateCodexSetup({
       deps: {
         readConfigFileSnapshot: mockConfigSnapshot(blockedConfig, { includeMetadata: true }),
@@ -4798,7 +4798,7 @@ describe("activateSetupInference", () => {
 
   it("marks an unowned Codex package generation retained when the live test fails", async () => {
     const installProjectDir = await suiteTempRootTracker.make("case");
-    const packageDir = path.join(installProjectDir, "node_modules", "@openclaw", "codex");
+    const packageDir = path.join(installProjectDir, "node_modules", "@natesclaw", "codex");
     await fs.mkdir(packageDir, { recursive: true });
     const transformConfig = vi.fn();
     const refreshPluginRegistry = vi.fn();
@@ -4810,7 +4810,7 @@ describe("activateSetupInference", () => {
         deps: {
           ensureCodexRuntimePlugin: mockCodexRuntimeInstall({
             source: "npm",
-            spec: "@openclaw/codex",
+            spec: "@natesclaw/codex",
             installPath: packageDir,
           }),
           runEmbeddedAgent: runEmbeddedAgent as never,
@@ -4845,12 +4845,12 @@ describe("activateSetupInference", () => {
     const installRecords = [
       {
         source: "npm" as const,
-        spec: "@openclaw/codex@generation-1",
+        spec: "@natesclaw/codex@generation-1",
         installPath: "/tmp/plugins/codex-generation-1",
       },
       {
         source: "npm" as const,
-        spec: "@openclaw/codex@generation-2",
+        spec: "@natesclaw/codex@generation-2",
         installPath: "/tmp/plugins/codex-generation-2",
       },
     ];
@@ -4858,7 +4858,7 @@ describe("activateSetupInference", () => {
     let installedRecordCache: PluginInstallRecord | undefined;
     let metadataCache: PluginInstallRecord | undefined;
     let discoveryCache: PluginInstallRecord | undefined;
-    const ensureCodex = vi.fn(async ({ cfg }: { cfg: OpenClawConfig }) => {
+    const ensureCodex = vi.fn(async ({ cfg }: { cfg: NatesclawConfig }) => {
       const cachedRecord = installedRecordCache ?? metadataCache ?? discoveryCache;
       if (cachedRecord) {
         return {
@@ -4907,9 +4907,9 @@ describe("activateSetupInference", () => {
     const transformConfig = vi.fn(
       async (params: {
         transform: (
-          config: OpenClawConfig,
-          context: { snapshot: { config: OpenClawConfig; runtimeConfig: OpenClawConfig } },
-        ) => Promise<{ nextConfig: OpenClawConfig }>;
+          config: NatesclawConfig,
+          context: { snapshot: { config: NatesclawConfig; runtimeConfig: NatesclawConfig } },
+        ) => Promise<{ nextConfig: NatesclawConfig }>;
       }) => {
         const transformed = await params.transform(
           {},
@@ -4952,17 +4952,17 @@ describe("activateSetupInference", () => {
     expect(markRetained).toHaveBeenNthCalledWith(1, {
       packageDir: expectDefined(installRecords[0], "installRecords[0] test invariant").installPath,
       pluginId: "codex",
-      reason: "openclaw-inference-activation-not-committed",
+      reason: "natesclaw-inference-activation-not-committed",
     });
     expect(markRetained).toHaveBeenNthCalledWith(2, {
       packageDir: expectDefined(installRecords[0], "installRecords[0] test invariant").installPath,
       pluginId: "codex",
-      reason: "openclaw-inference-activation-not-committed",
+      reason: "natesclaw-inference-activation-not-committed",
     });
     expect(markRetained).toHaveBeenNthCalledWith(3, {
       packageDir: expectDefined(installRecords[1], "installRecords[1] test invariant").installPath,
       pluginId: "codex",
-      reason: "openclaw-inference-activation-not-committed",
+      reason: "natesclaw-inference-activation-not-committed",
     });
     expect(clearInstallRecords).toHaveBeenCalledTimes(3);
     expect(clearMetadata).toHaveBeenCalledTimes(3);
@@ -4978,7 +4978,7 @@ describe("activateSetupInference", () => {
       installRecords: {
         codex: {
           source: "npm" as const,
-          spec: "@openclaw/codex@other",
+          spec: "@natesclaw/codex@other",
           installPath: "/tmp/plugins/codex-other",
         },
       },
@@ -4992,11 +4992,11 @@ describe("activateSetupInference", () => {
   ])("reconciles a post-write Codex error only with an $name install record", async (testCase) => {
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@openclaw/codex",
+      spec: "@natesclaw/codex",
       installPath: "/tmp/plugins/codex",
     };
     const installRecords = testCase.installRecords ?? { codex: installRecord };
-    let committedConfig: OpenClawConfig | undefined;
+    let committedConfig: NatesclawConfig | undefined;
     const readConfigFileSnapshot = vi.fn(async () => {
       const sourceConfig = committedConfig ?? {};
       return {
@@ -5010,9 +5010,9 @@ describe("activateSetupInference", () => {
     const transformConfig = vi.fn(
       async (params: {
         transform: (
-          config: OpenClawConfig,
-          context: { snapshot: { config: OpenClawConfig; runtimeConfig: OpenClawConfig } },
-        ) => Promise<{ nextConfig: OpenClawConfig }>;
+          config: NatesclawConfig,
+          context: { snapshot: { config: NatesclawConfig; runtimeConfig: NatesclawConfig } },
+        ) => Promise<{ nextConfig: NatesclawConfig }>;
       }) => {
         const transformed = await params.transform(
           {},
@@ -5058,7 +5058,7 @@ describe("resolvePersistentApplyInference", () => {
       modelLabel: "openai/gpt-5.5",
       provider: "openai",
       model: "gpt-5.5",
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       agentId: "main",
       agentHarnessRuntimeOverride: "codex",
     };
@@ -5169,7 +5169,7 @@ describe("resolvePersistentApplyInference", () => {
     if (changedBinding.execution.runner !== "embedded") {
       throw new Error("expected embedded fixture");
     }
-    changedBinding.execution.agentHarnessRuntimeOverride = "openclaw";
+    changedBinding.execution.agentHarnessRuntimeOverride = "natesclaw";
     const resolveVerifiedInferenceRoute = vi.fn(async () => binding.execution);
 
     await expect(
@@ -5222,7 +5222,7 @@ describe("activateSetupInference Codex configuration", () => {
   it.each([
     {
       name: "omitted",
-      config: {} satisfies OpenClawConfig,
+      config: {} satisfies NatesclawConfig,
       expectedSupervision: undefined,
     },
     {
@@ -5231,7 +5231,7 @@ describe("activateSetupInference Codex configuration", () => {
         plugins: {
           entries: { codex: { config: { supervision: {} } } },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
       expectedSupervision: {},
     },
   ])("does not add Codex supervision when it is $name", async (testCase) => {
@@ -5266,7 +5266,7 @@ describe("activateSetupInference Codex configuration", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const { result, persistedConfig } = await runCodexSetupWithFinalConfig({
       currentConfig: config,
@@ -5297,7 +5297,7 @@ describe("activateSetupInference Codex configuration", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const { result, persistedConfig } = await runCodexSetupWithFinalConfig({
       currentConfig: config,
@@ -5324,7 +5324,7 @@ describe("activateSetupInference Codex configuration", () => {
           codex: { config: { supervision: { enabled: false } } },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const { result, persistedConfig } = await runCodexSetupWithFinalConfig({
       initialConfig: resolvedSource,
@@ -5341,7 +5341,7 @@ describe("activateSetupInference Codex configuration", () => {
   });
 
   it("fails closed when effective plugin policy changes before the success commit", async () => {
-    const denied = { plugins: { deny: ["codex"] } } satisfies OpenClawConfig;
+    const denied = { plugins: { deny: ["codex"] } } satisfies NatesclawConfig;
     const { result, refreshPluginRegistry, transformConfig } = await runCodexSetupWithFinalConfig({
       initialConfig: {},
       currentConfig: denied,
@@ -5400,7 +5400,7 @@ describe("verifySetupInference", () => {
           {},
           {
             valid: false,
-            path: "/tmp/openclaw.json",
+            path: "/tmp/natesclaw.json",
             issues: [{ path: "agents.defaults.model", message: "Expected a model reference" }],
           },
         ),
@@ -5429,12 +5429,12 @@ describe("verifySetupInference", () => {
     expect(result).toMatchObject({ ok: true, modelRef: "openai/gpt-5.5" });
   });
 
-  it("locks the exact winning profile into a bound OpenClaw session", async () => {
+  it("locks the exact winning profile into a bound Natesclaw session", async () => {
     const config = {
       agents: {
         defaults: {
           model: { primary: "openai/gpt-5.5" },
-          models: { "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } } },
+          models: { "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } } },
         },
       },
       auth: {
@@ -5443,7 +5443,7 @@ describe("verifySetupInference", () => {
           "openai:p2": { provider: "openai", mode: "api_key" },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const profiles = {
       "openai:p1": { type: "api_key" as const, provider: "openai", key: "key-1" },
       "openai:p2": { type: "api_key" as const, provider: "openai", key: "key-2" },
@@ -5472,7 +5472,7 @@ describe("verifySetupInference", () => {
       }) => {
         params.onSuccessfulAuthBinding?.({
           authProfileId: "openai:p2",
-          agentHarnessId: "openclaw",
+          agentHarnessId: "natesclaw",
           authFingerprint: verifiedAuthFingerprint,
           modelId: "gpt-5.5",
           modelApi: "openai-responses",
@@ -5521,7 +5521,7 @@ describe("verifySetupInference", () => {
     const config = {
       agents: { defaults: { model: `openai/gpt-5.5@${profileId}` } },
       auth: { profiles: { [profileId]: { provider: "openai", mode: "api_key" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const captureSystemAgentOwnerPluginArtifacts = vi.fn(() => ({
       ownerPluginIds: ["openai"],
       ownerPluginArtifacts: [{ pluginId: "openai", fingerprint: "openai-runtime-v1" }],
@@ -5574,9 +5574,9 @@ describe("verifySetupInference", () => {
     expect(createChangedVerifiedInferenceBinding).toHaveBeenCalledOnce();
   });
 
-  it("binds a runtime-only Codex profile after activation and runs the first OpenClaw turn", async () => {
+  it("binds a runtime-only Codex profile after activation and runs the first Natesclaw turn", async () => {
     const stateDir = await suiteTempRootTracker.make("case");
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
     const profileId = "openai:default";
     const credential = {
       type: "oauth" as const,
@@ -5601,7 +5601,7 @@ describe("verifySetupInference", () => {
         },
       },
       plugins: { entries: { codex: { enabled: true } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const externalStore = vi.fn(
       (_agentDir?: string, options?: { externalCliProviderIds?: Iterable<string> }) => {
         const exposeCodexProfile = Array.from(options?.externalCliProviderIds ?? []).includes(
@@ -5699,12 +5699,12 @@ describe("verifySetupInference", () => {
         authProfileId: profileId,
         authProfileIdSource: "user",
         agentHarnessRuntimeOverride: "codex",
-        agentId: "openclaw",
-        toolsAllow: ["openclaw"],
+        agentId: "natesclaw",
+        toolsAllow: ["natesclaw"],
       });
       const systemAgentTurnParams = runEmbeddedAgent.mock.calls[2]?.[0];
       expect(systemAgentTurnParams).toBeDefined();
-      expect((systemAgentTurnParams as { config?: OpenClawConfig }).config).toBe(
+      expect((systemAgentTurnParams as { config?: NatesclawConfig }).config).toBe(
         verification.binding.execution.runConfig,
       );
       expect(validateAgentHarnessRuntimeArtifact).toHaveBeenCalledWith({
@@ -5735,7 +5735,7 @@ describe("verifySetupInference", () => {
           "openai:p2": { provider: "openai", mode: "api_key" },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const profiles = {
       "openai:p1": { type: "api_key" as const, provider: "openai", key: "key-1" },
       "openai:p2": { type: "api_key" as const, provider: "openai", key: "key-2" },
@@ -5951,10 +5951,10 @@ describe("verifySetupInference", () => {
   it("rejects a configured route that changes during its live check", async () => {
     const initialConfig = {
       agents: { defaults: { model: { primary: "openai/gpt-5.5" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const changedConfig = {
       agents: { defaults: { model: { primary: "anthropic/claude-opus-5" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const readConfigFileSnapshot = vi
       .fn()
       .mockResolvedValueOnce({ exists: true, valid: true, config: initialConfig })
@@ -6153,7 +6153,7 @@ describe("verifySetupInference", () => {
       successfulRun("google-gemini-cli", "gemini-3.1-pro-preview"),
     );
     const modelRef = "google/gemini-3.1-pro-preview";
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       auth: {
         order: { [testCase.profileProvider]: [testCase.profileId] },
       },

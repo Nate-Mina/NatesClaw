@@ -19,7 +19,7 @@ describe("setup migration import freshness", () => {
   const tempRoots = useAutoCleanupTempDirTracker(afterEach);
 
   it("allows empty config and empty target directories", async () => {
-    const root = tempRoots.make("openclaw-setup-migration-");
+    const root = tempRoots.make("natesclaw-setup-migration-");
     const result = await inspectSetupMigrationFreshness({
       baseConfig: {},
       stateDir: path.join(root, "state"),
@@ -30,7 +30,7 @@ describe("setup migration import freshness", () => {
   });
 
   it("allows the first-launch security acknowledgement before import", async () => {
-    const root = tempRoots.make("openclaw-setup-migration-");
+    const root = tempRoots.make("natesclaw-setup-migration-");
     const result = await inspectSetupMigrationFreshness({
       baseConfig: {
         wizard: { securityAcknowledgedAt: "2026-06-30T00:00:00.000Z" },
@@ -52,7 +52,7 @@ describe("setup migration import freshness", () => {
   });
 
   it("rejects other wizard config during import freshness checks", async () => {
-    const root = tempRoots.make("openclaw-setup-migration-");
+    const root = tempRoots.make("natesclaw-setup-migration-");
     const result = await inspectSetupMigrationFreshness({
       baseConfig: {
         wizard: {
@@ -69,7 +69,7 @@ describe("setup migration import freshness", () => {
   });
 
   it("rejects existing config, workspace files, and state", async () => {
-    const root = tempRoots.make("openclaw-setup-migration-");
+    const root = tempRoots.make("natesclaw-setup-migration-");
     const stateDir = path.join(root, "state");
     const workspaceDir = path.join(root, "workspace");
     await writeFile(path.join(workspaceDir, "MEMORY.md"), "existing memory\n");
@@ -88,7 +88,7 @@ describe("setup migration import freshness", () => {
       "state agents/ exists",
     ]);
     expect(() => assertFreshSetupMigrationTarget(result)).toThrow(
-      "Migration import during onboarding requires a fresh OpenClaw setup.",
+      "Migration import during onboarding requires a fresh Natesclaw setup.",
     );
   });
 });
@@ -114,8 +114,8 @@ describe("setup migration import options", () => {
   });
 
   it("does not offer install-only providers during a transactional import", async () => {
-    const previousDisableBundled = process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
-    process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    const previousDisableBundled = process.env.NATESCLAW_DISABLE_BUNDLED_PLUGINS;
+    process.env.NATESCLAW_DISABLE_BUNDLED_PLUGINS = "1";
     try {
       const options = await listSetupMigrationOptions({
         baseConfig: {},
@@ -127,9 +127,9 @@ describe("setup migration import options", () => {
       );
     } finally {
       if (previousDisableBundled === undefined) {
-        delete process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
+        delete process.env.NATESCLAW_DISABLE_BUNDLED_PLUGINS;
       } else {
-        process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = previousDisableBundled;
+        process.env.NATESCLAW_DISABLE_BUNDLED_PLUGINS = previousDisableBundled;
       }
     }
   });

@@ -6,29 +6,29 @@ import { withEnv } from "../test-utils/env.js";
 import { resolveDefaultAgentWorkspaceDir } from "./workspace.js";
 
 describe("DEFAULT_AGENT_WORKSPACE_DIR", () => {
-  it("uses OPENCLAW_HOME when resolving the default workspace dir", () => {
-    const home = path.join(path.sep, "srv", "openclaw-home");
+  it("uses NATESCLAW_HOME when resolving the default workspace dir", () => {
+    const home = path.join(path.sep, "srv", "natesclaw-home");
 
     const resolved = withEnv(
       {
-        OPENCLAW_WORKSPACE_DIR: undefined,
-        OPENCLAW_PROFILE: undefined,
-        OPENCLAW_HOME: home,
+        NATESCLAW_WORKSPACE_DIR: undefined,
+        NATESCLAW_PROFILE: undefined,
+        NATESCLAW_HOME: home,
         HOME: path.join(path.sep, "home", "other"),
       },
       () => resolveDefaultAgentWorkspaceDir(),
     );
 
-    expect(resolved).toBe(path.join(path.resolve(home), ".openclaw", "workspace"));
+    expect(resolved).toBe(path.join(path.resolve(home), ".natesclaw", "workspace"));
   });
 
-  it("uses OPENCLAW_WORKSPACE_DIR before OPENCLAW_HOME", () => {
-    const workspaceDir = path.join(path.sep, "srv", "openclaw-workspace");
+  it("uses NATESCLAW_WORKSPACE_DIR before NATESCLAW_HOME", () => {
+    const workspaceDir = path.join(path.sep, "srv", "natesclaw-workspace");
 
     const resolved = withEnv(
       {
-        OPENCLAW_WORKSPACE_DIR: workspaceDir,
-        OPENCLAW_HOME: path.join(path.sep, "srv", "openclaw-home"),
+        NATESCLAW_WORKSPACE_DIR: workspaceDir,
+        NATESCLAW_HOME: path.join(path.sep, "srv", "natesclaw-home"),
       },
       () => resolveDefaultAgentWorkspaceDir(),
     );

@@ -2,11 +2,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { OpenClawCrablineChannelDriverSelection } from "@openclaw/crabline";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import type { QaEvidenceTiming, QaEvidenceSummaryJson } from "./evidence-summary.js";
 import type { QaCliBackendAuthMode, QaGatewayChildCommand } from "./gateway-child.js";
 import { startQaGatewayChild } from "./gateway-child.js";
@@ -88,7 +88,7 @@ export async function createQaSuiteTransportAdapter(params: {
   adapterFactories?: readonly QaTransportAdapterFactory[];
   channelDriver?: QaScorecardChannelDriver | null;
   channelId?: string;
-  channelDriverSelection?: OpenClawCrablineChannelDriverSelection | null;
+  channelDriverSelection?: NatesclawCrablineChannelDriverSelection | null;
   cleanupOnFailure?: () => Promise<void>;
   outputDir: string;
   transportPolicy?: NonNullable<QaSuiteRunParams["adapterOptions"]>["transportPolicy"];
@@ -135,13 +135,13 @@ export type QaSuiteRunParams = {
   channelId?: string;
   evidenceMode?: QaScorecardEvidenceMode;
   repoRoot?: string;
-  sutOpenClawCommand?: QaGatewayChildCommand;
-  mutateConfig?: (cfg: OpenClawConfig) => OpenClawConfig;
+  sutNatesclawCommand?: QaGatewayChildCommand;
+  mutateConfig?: (cfg: NatesclawConfig) => NatesclawConfig;
   outputDir?: string;
   providerMode?: QaProviderMode;
   transportId?: QaTransportId;
   channelDriver?: QaScorecardChannelDriver;
-  channelDriverSelection?: OpenClawCrablineChannelDriverSelection | null;
+  channelDriverSelection?: NatesclawCrablineChannelDriverSelection | null;
   primaryModel?: string;
   alternateModel?: string;
   fastMode?: boolean;
@@ -169,7 +169,7 @@ export type QaSuiteRunParams = {
 };
 
 export function shouldLogQaSuiteProgress(env: NodeJS.ProcessEnv = process.env) {
-  const override = parseQaSuiteBooleanEnv(env.OPENCLAW_QA_SUITE_PROGRESS);
+  const override = parseQaSuiteBooleanEnv(env.NATESCLAW_QA_SUITE_PROGRESS);
   if (override !== undefined) {
     return override;
   }
@@ -187,7 +187,7 @@ export function resolveQaSuiteTransportReadyTimeoutMs(
   ) {
     return Math.floor(explicitTimeoutMs);
   }
-  const raw = env.OPENCLAW_QA_TRANSPORT_READY_TIMEOUT_MS;
+  const raw = env.NATESCLAW_QA_TRANSPORT_READY_TIMEOUT_MS;
   if (!raw) {
     return 120_000;
   }
@@ -220,7 +220,7 @@ export function formatQaSuiteRunStartProgress(params: {
   concurrency: number;
   transportId: QaTransportId;
   channelDriver?: QaScorecardChannelDriver | null;
-  channelDriverSelection?: OpenClawCrablineChannelDriverSelection | null;
+  channelDriverSelection?: NatesclawCrablineChannelDriverSelection | null;
 }) {
   const channelDriver = params.channelDriver ?? params.channelDriverSelection?.channelDriver;
   const channel = params.channelDriverSelection?.channel;

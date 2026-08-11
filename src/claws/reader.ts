@@ -6,7 +6,7 @@ import { isScalar, parseDocument, visit } from "yaml";
 import { MAX_WORKSPACE_BOOTSTRAP_FILE_BYTES } from "../agents/workspace-bootstrap-read.js";
 import { assertNoSymlinkParents } from "../infra/fs-safe-advanced.js";
 import { FsSafeError, root as fsSafeRoot, type OpenResult } from "../infra/fs-safe.js";
-import { readClawOpenClawProfile } from "./openclaw-profile.js";
+import { readClawNatesclawProfile } from "./natesclaw-profile.js";
 import { isCanonicalClawHubPackageName, isExactSemVer } from "./schema-portability.js";
 import { clawManifestWorkspaceConflictsWithPath, parseClawManifest } from "./schema.js";
 import {
@@ -25,7 +25,7 @@ import type {
 type PackageJson = {
   name: string;
   version: string;
-  openclaw: { claw: string };
+  natesclaw: { claw: string };
 };
 
 type ResolvedClawSource = Omit<ClawSourceIdentity, "integrity" | "integrityKind" | "byteLength"> & {
@@ -95,14 +95,14 @@ async function buildDevelopmentSnapshot(params: {
   source: ResolvedClawSource;
   manifest: ClawManifest;
   manifestRaw: Buffer;
-  openClawProfile?: { path: string; raw: Buffer };
+  NatesclawProfile?: { path: string; raw: Buffer };
 }): Promise<
   | {
       ok: true;
       integrity: string;
       byteLength: number;
       manifest: { byteLength: number; digest: string };
-      openClawProfile?: { sourcePath: string; byteLength: number; digest: string };
+      NatesclawProfile?: { sourcePath: string; byteLength: number; digest: string };
       workspaceSources: ClawWorkspaceSourceSnapshot[];
       packageBootstrap?: ClawWorkspaceSourceSnapshot;
     }
@@ -119,16 +119,16 @@ async function buildDevelopmentSnapshot(params: {
     digest: `sha256:${createHash("sha256").update(bytes).digest("hex")}`,
   });
   const manifest = snapshotFile(params.manifestRaw);
-  const openClawProfile = params.openClawProfile
+  const NatesclawProfile = params.NatesclawProfile
     ? {
-        sourcePath: params.openClawProfile.path.replaceAll("\\", "/"),
-        ...snapshotFile(params.openClawProfile.raw),
+        sourcePath: params.NatesclawProfile.path.replaceAll("\\", "/"),
+        ...snapshotFile(params.NatesclawProfile.raw),
       }
     : undefined;
   add("canonical-source", Buffer.from(params.source.manifestPath, "utf8"));
   add("manifest", params.manifestRaw);
-  if (params.openClawProfile) {
-    add(`profile:${params.openClawProfile.path.replaceAll("\\", "/")}`, params.openClawProfile.raw);
+  if (params.NatesclawProfile) {
+    add(`profile:${params.NatesclawProfile.path.replaceAll("\\", "/")}`, params.NatesclawProfile.raw);
   }
 
   if (params.source.kind === "package") {
@@ -286,7 +286,7 @@ async function buildDevelopmentSnapshot(params: {
     integrity: `sha256:${hash.digest("hex")}`,
     byteLength,
     manifest,
-    ...(openClawProfile ? { openClawProfile } : {}),
+    ...(NatesclawProfile ? { NatesclawProfile } : {}),
     workspaceSources,
     ...(packageBootstrap ? { packageBootstrap } : {}),
   };
@@ -297,11 +297,11 @@ function parsePackageJson(value: unknown): PackageJson | undefined {
     return undefined;
   }
   const record = value as Record<string, unknown>;
-  const openclaw = record.openclaw;
-  if (!openclaw || typeof openclaw !== "object" || Array.isArray(openclaw)) {
+  const natesclaw = record.natesclaw;
+  if (!natesclaw || typeof natesclaw !== "object" || Array.isArray(natesclaw)) {
     return undefined;
   }
-  const claw = (openclaw as Record<string, unknown>).claw;
+  const claw = (natesclaw as Record<string, unknown>).claw;
   if (
     typeof record.name !== "string" ||
     !isCanonicalClawHubPackageName(record.name) ||
@@ -312,7 +312,7 @@ function parsePackageJson(value: unknown): PackageJson | undefined {
   ) {
     return undefined;
   }
-  return { name: record.name, version: record.version, openclaw: { claw } };
+  return { name: record.name, version: record.version, natesclaw: { claw } };
 }
 
 async function readJson(
@@ -517,20 +517,20 @@ async function resolvePackageSource(
       diagnostics: [
         fileDiagnostic(
           "invalid_package_metadata",
-          "package.json must declare non-empty name, version, and openclaw.claw fields.",
+          "package.json must declare non-empty name, version, and natesclaw.claw fields.",
         ),
       ],
     };
   }
-  if (isAbsolute(packageJson.openclaw.claw)) {
+  if (isAbsolute(packageJson.natesclaw.claw)) {
     return {
       ok: false,
       diagnostics: [
-        fileDiagnostic("manifest_escapes_package", "openclaw.claw must be package-relative."),
+        fileDiagnostic("manifest_escapes_package", "natesclaw.claw must be package-relative."),
       ],
     };
   }
-  const declaredManifestPath = resolve(packageRootReal, packageJson.openclaw.claw);
+  const declaredManifestPath = resolve(packageRootReal, packageJson.natesclaw.claw);
   const manifestPath = await realpath(declaredManifestPath).catch(() => undefined);
   if (!manifestPath || !isContained(packageRootReal, manifestPath)) {
     return {
@@ -628,7 +628,7 @@ export async function readClawManifestFile(path: string): Promise<ClawReadResult
       ],
     };
   }
-  const profile = await readClawOpenClawProfile({
+  const profile = await readClawNatesclawProfile({
     packageRoot: sourceResult.source.packageRoot,
     metadata: parsed.manifest.metadata,
   });
@@ -640,7 +640,7 @@ export async function readClawManifestFile(path: string): Promise<ClawReadResult
     manifest: parsed.manifest,
     manifestRaw: manifestResult.raw,
     ...(profile.raw && profile.path
-      ? { openClawProfile: { path: profile.path, raw: profile.raw } }
+      ? { NatesclawProfile: { path: profile.path, raw: profile.raw } }
       : {}),
   });
   if (!snapshot.ok) {
@@ -662,11 +662,11 @@ export async function readClawManifestFile(path: string): Promise<ClawReadResult
     manifest: parsed.manifest,
     ...(hasMarkdownBody ? { clawMarkdownBody: manifestResult.body } : {}),
     ...(snapshot.packageBootstrap ? { packageBootstrap: snapshot.packageBootstrap } : {}),
-    ...(profile.profile ? { openClawProfile: profile.profile } : {}),
+    ...(profile.profile ? { NatesclawProfile: profile.profile } : {}),
     source,
     snapshot: {
       manifest: snapshot.manifest,
-      ...(snapshot.openClawProfile ? { openClawProfile: snapshot.openClawProfile } : {}),
+      ...(snapshot.NatesclawProfile ? { NatesclawProfile: snapshot.NatesclawProfile } : {}),
       workspaceSources: snapshot.workspaceSources,
       ...(snapshot.packageBootstrap ? { packageBootstrap: snapshot.packageBootstrap } : {}),
     },

@@ -1,5 +1,5 @@
 // Fetches and normalizes DeepSeek provider usage records.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { cancelUnreadResponseBody } from "./http-body.js";
 import {
   buildUsageHttpErrorSnapshot,

@@ -1,7 +1,7 @@
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/channel-actions";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { readPositiveIntegerParam } from "natesclaw/plugin-sdk/channel-actions";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildGoogleMeetCalendarDayWindow,
   findGoogleMeetCalendarEvent,
@@ -20,7 +20,7 @@ const loadGoogleMeetCreateModule = createLazyRuntimeModule(() => import("./creat
 
 export async function createMeetFromParams(params: {
   config: GoogleMeetConfig;
-  runtime: OpenClawPluginApi["runtime"];
+  runtime: NatesclawPluginApi["runtime"];
   raw: Record<string, unknown>;
 }) {
   const create = await loadGoogleMeetCreateModule();
@@ -29,7 +29,7 @@ export async function createMeetFromParams(params: {
 
 export async function createAndJoinMeetFromParams(params: {
   config: GoogleMeetConfig;
-  runtime: OpenClawPluginApi["runtime"];
+  runtime: NatesclawPluginApi["runtime"];
   raw: Record<string, unknown>;
   ensureRuntime: () => Promise<GoogleMeetRuntime>;
 }) {

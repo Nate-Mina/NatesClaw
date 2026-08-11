@@ -4,21 +4,21 @@ import path from "node:path";
 import {
   createSubsystemLogger,
   onInternalSessionTranscriptUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   listSessionTranscriptCorpusEntriesForAgent,
   sessionPathForFile,
   sessionPathForSessionIdentity,
   statSessionEntrySync,
   type SessionTranscriptCorpusEntry,
-} from "openclaw/plugin-sdk/memory-core-host-engine-sessions";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-sessions";
 import {
   isFileMissingError,
   runWithConcurrency,
   type MemorySessionSyncTarget,
   type MemorySyncParams,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
+import { normalizeAgentId } from "natesclaw/plugin-sdk/routing";
 import { shouldSyncSessionsForReindex } from "./manager-session-reindex.js";
 import {
   resolveMemorySessionStartupState,

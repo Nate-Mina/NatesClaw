@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
 // Discord plugin module implements manager behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { resolveAgentRoute } from "natesclaw/plugin-sdk/routing";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   type APIVoiceState,
   type Client,
@@ -205,11 +205,11 @@ function isFatalAutoJoinFailure(message: string): boolean {
 }
 
 function resolveVoiceConnectionGroup(accountId: string): string {
-  return `openclaw:${accountId}`;
+  return `natesclaw:${accountId}`;
 }
 
 function resolveDiscordVoiceAgentRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   guildId: string;
   sessionChannelId: string;
@@ -286,7 +286,7 @@ export class DiscordVoiceManager {
   constructor(
     private params: {
       client: Client;
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       discordConfig: DiscordAccountConfig;
       accountId: string;
       runtime: RuntimeEnv;

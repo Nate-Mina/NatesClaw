@@ -1,7 +1,7 @@
-import { resolveGlobalSingleton } from "openclaw/plugin-sdk/global-singleton";
+import { resolveGlobalSingleton } from "natesclaw/plugin-sdk/global-singleton";
 
-const COORDINATOR_KEY = Symbol.for("openclaw.llamaCppInferenceRuntimeCoordinator");
-const TEST_API_KEY = Symbol.for("openclaw.llamaCppInferenceTestApi");
+const COORDINATOR_KEY = Symbol.for("natesclaw.llamaCppInferenceRuntimeCoordinator");
+const TEST_API_KEY = Symbol.for("natesclaw.llamaCppInferenceTestApi");
 const RESTART_REQUIRED_CODE = "LLAMA_CPP_INFERENCE_RESTART_REQUIRED";
 
 type Completion = {

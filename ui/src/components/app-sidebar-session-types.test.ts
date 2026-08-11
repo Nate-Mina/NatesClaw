@@ -45,7 +45,7 @@ afterEach(() => {
 describe("sidebar session status preference", () => {
   it("defaults unknown stored values to active", () => {
     expect(loadStoredSidebarSessionStatusFilter()).toBe("active");
-    localStorage.setItem("openclaw:sidebar:sessions:status-filter", "unexpected");
+    localStorage.setItem("natesclaw:sidebar:sessions:status-filter", "unexpected");
     expect(loadStoredSidebarSessionStatusFilter()).toBe("active");
   });
 
@@ -70,7 +70,7 @@ describe("hidden session catalog preference", () => {
   it.each(["not-json", JSON.stringify({ catalog: "codex" })])(
     "treats malformed storage as empty: %s",
     (stored) => {
-      localStorage.setItem("openclaw:sidebar:sessions:hidden-catalogs", stored);
+      localStorage.setItem("natesclaw:sidebar:sessions:hidden-catalogs", stored);
       expect(loadStoredHiddenSessionCatalogIds().size).toBe(0);
     },
   );

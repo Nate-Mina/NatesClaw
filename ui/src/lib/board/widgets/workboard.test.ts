@@ -122,9 +122,9 @@ describe("Workboard plugin widgets", () => {
       }
       throw new Error(`Unexpected method: ${method}`);
     });
-    const mini = document.createElement("openclaw-workboard-mini-widget");
+    const mini = document.createElement("natesclaw-workboard-mini-widget");
     mini.widget = pluginWidget("workboard:mini", { boardId: "ops" });
-    const card = document.createElement("openclaw-workboard-card-widget");
+    const card = document.createElement("natesclaw-workboard-card-widget");
     card.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     const context = createContext(request);
     const unsubscribeEvents = vi.fn();
@@ -161,9 +161,9 @@ describe("Workboard plugin widgets", () => {
       }
       throw new Error(`Unexpected method: ${method}`);
     });
-    const first = document.createElement("openclaw-workboard-card-widget");
+    const first = document.createElement("natesclaw-workboard-card-widget");
     first.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
-    const second = document.createElement("openclaw-workboard-card-widget");
+    const second = document.createElement("natesclaw-workboard-card-widget");
     second.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     const provider = createApplicationContextProvider(createContext(request));
     provider.append(first, second);
@@ -211,9 +211,9 @@ describe("Workboard plugin widgets", () => {
     const events: {
       listener?: Parameters<ApplicationContext["gateway"]["subscribeEvents"]>[0];
     } = {};
-    const mini = document.createElement("openclaw-workboard-mini-widget");
+    const mini = document.createElement("natesclaw-workboard-mini-widget");
     mini.widget = pluginWidget("workboard:mini", { boardId: "ops" });
-    const card = document.createElement("openclaw-workboard-card-widget");
+    const card = document.createElement("natesclaw-workboard-card-widget");
     card.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     const provider = createApplicationContextProvider(createContext(request, events));
     provider.append(mini, card);
@@ -250,7 +250,7 @@ describe("Workboard plugin widgets", () => {
       }
       throw new Error(`Unexpected method: ${method}`);
     });
-    const element = document.createElement("openclaw-workboard-card-widget");
+    const element = document.createElement("natesclaw-workboard-card-widget");
     element.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     element.sessionKey = "agent:main:test";
     await mount(element, createContext(request), request);
@@ -314,7 +314,7 @@ describe("Workboard plugin widgets", () => {
       }
       throw new Error(`Unexpected method: ${method}`);
     });
-    const element = document.createElement("openclaw-workboard-card-widget");
+    const element = document.createElement("natesclaw-workboard-card-widget");
     element.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     element.sessionKey = "agent:main:test";
 
@@ -342,7 +342,7 @@ describe("Workboard plugin widgets", () => {
       }
       throw new Error(`Unexpected method: ${method}`);
     });
-    const element = document.createElement("openclaw-workboard-card-widget");
+    const element = document.createElement("natesclaw-workboard-card-widget");
     element.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     element.sessionKey = "agent:main:test";
     Reflect.set(element, "canMutate", false);
@@ -380,7 +380,7 @@ describe("Workboard plugin widgets", () => {
       }
       throw new Error(`Unexpected method: ${method}`);
     });
-    const element = document.createElement("openclaw-workboard-card-widget");
+    const element = document.createElement("natesclaw-workboard-card-widget");
     element.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     element.sessionKey = "agent:main:test";
     const provider = createApplicationContextProvider(createContext(staleRequest));
@@ -443,7 +443,7 @@ describe("Workboard plugin widgets", () => {
       cards: [archivedCard],
       statuses: ["ready", "running", "done"],
     }));
-    const element = document.createElement("openclaw-workboard-card-widget");
+    const element = document.createElement("natesclaw-workboard-card-widget");
     element.widget = pluginWidget("workboard:card", { cardId: archivedCard.id });
     element.sessionKey = "agent:main:test";
 
@@ -457,7 +457,7 @@ describe("Workboard plugin widgets", () => {
 
   it("renders per-status board counts and the top ready/running cards", async () => {
     const request = vi.fn(async () => ({ cards, statuses: ["ready", "running", "done"] }));
-    const element = document.createElement("openclaw-workboard-mini-widget");
+    const element = document.createElement("natesclaw-workboard-mini-widget");
     element.widget = pluginWidget("workboard:mini", { boardId: "ops", limit: 2 });
     element.sessionKey = "agent:main:test";
     await mount(element, createContext(request), request);
@@ -484,7 +484,7 @@ describe("Workboard plugin widgets", () => {
       cards: [...cards, archivedCard],
       statuses: ["ready", "running", "done"],
     }));
-    const element = document.createElement("openclaw-workboard-mini-widget");
+    const element = document.createElement("natesclaw-workboard-mini-widget");
     element.widget = pluginWidget("workboard:mini", { boardId: "ops", limit: 5 });
     element.sessionKey = "agent:main:test";
 
@@ -518,7 +518,7 @@ describe("Workboard plugin widgets", () => {
       cards: mixedCards,
       statuses: ["ready", "running", "done"],
     }));
-    const element = document.createElement("openclaw-workboard-mini-widget");
+    const element = document.createElement("natesclaw-workboard-mini-widget");
     element.widget = pluginWidget("workboard:mini", {});
     element.sessionKey = "agent:main:test";
     await mount(element, createContext(request), request);
@@ -537,7 +537,7 @@ describe("Workboard plugin widgets", () => {
       .fn()
       .mockRejectedValueOnce(new Error("temporary failure"))
       .mockResolvedValueOnce({ cards, statuses: ["ready", "running", "done"] });
-    const element = document.createElement("openclaw-workboard-mini-widget");
+    const element = document.createElement("natesclaw-workboard-mini-widget");
     element.widget = pluginWidget("workboard:mini", { boardId: "ops" });
     element.sessionKey = "agent:main:test";
     await mount(element, createContext(request), request);
@@ -571,11 +571,11 @@ describe("Workboard plugin widgets", () => {
       listener?: Parameters<ApplicationContext["gateway"]["subscribeEvents"]>[0];
     } = {};
     const hostRequestUpdate = vi.fn();
-    const element = document.createElement("openclaw-workboard-card-widget");
+    const element = document.createElement("natesclaw-workboard-card-widget");
     element.widget = pluginWidget("workboard:card", { cardId: "card-ready" });
     element.hostRequestUpdate = hostRequestUpdate;
     await mount(element, createContext(request, events), request);
-    const retained = document.querySelector("openclaw-workboard-card-widget");
+    const retained = document.querySelector("natesclaw-workboard-card-widget");
     expect(retained).toBe(element);
 
     element.active = false;
@@ -609,7 +609,7 @@ describe("Workboard plugin widgets", () => {
     );
     await vi.waitFor(() => expect(element.textContent).toContain("Reactivated ready card"));
 
-    expect(document.querySelector("openclaw-workboard-card-widget")).toBe(retained);
+    expect(document.querySelector("natesclaw-workboard-card-widget")).toBe(retained);
     expect(element.isConnected).toBe(true);
     expect(hostRequestUpdate).toHaveBeenCalled();
     expect(request.mock.calls.filter(([method]) => method === "workboard.cards.list")).toHaveLength(
@@ -630,7 +630,7 @@ describe("Workboard plugin widgets", () => {
     const events: {
       listener?: Parameters<ApplicationContext["gateway"]["subscribeEvents"]>[0];
     } = {};
-    const element = document.createElement("openclaw-workboard-mini-widget");
+    const element = document.createElement("natesclaw-workboard-mini-widget");
     element.widget = pluginWidget("workboard:mini", { boardId: "ops" });
     const provider = createApplicationContextProvider(createContext(request, events));
     provider.append(element);
@@ -657,7 +657,7 @@ describe("Workboard plugin widgets", () => {
         ? await firstList.promise
         : { cards, statuses: ["ready", "running", "done"] };
     });
-    const element = document.createElement("openclaw-workboard-mini-widget");
+    const element = document.createElement("natesclaw-workboard-mini-widget");
     element.widget = pluginWidget("workboard:mini", { boardId: "ops" });
     const provider = createApplicationContextProvider(createContext(request));
     provider.append(element);
@@ -687,7 +687,7 @@ describe("Workboard plugin widgets", () => {
     const currentEvents: {
       listener?: Parameters<ApplicationContext["gateway"]["subscribeEvents"]>[0];
     } = {};
-    const element = document.createElement("openclaw-workboard-mini-widget");
+    const element = document.createElement("natesclaw-workboard-mini-widget");
     element.widget = pluginWidget("workboard:mini", { boardId: "ops" });
     const provider = createApplicationContextProvider(createContext(staleRequest));
     provider.append(element);

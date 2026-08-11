@@ -1,10 +1,10 @@
-import { createScopedChannelConfigAdapter } from "openclaw/plugin-sdk/channel-config-helpers";
-import { defineChannelSetupContract } from "openclaw/plugin-sdk/channel-setup";
+import { createScopedChannelConfigAdapter } from "natesclaw/plugin-sdk/channel-config-helpers";
+import { defineChannelSetupContract } from "natesclaw/plugin-sdk/channel-setup";
 // Qqbot helper module supports config shared behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { applyAccountNameToChannelSection } from "openclaw/plugin-sdk/core";
-import type { ChannelSetupInput } from "openclaw/plugin-sdk/setup";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { applyAccountNameToChannelSection } from "natesclaw/plugin-sdk/core";
+import type { ChannelSetupInput } from "natesclaw/plugin-sdk/setup";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   describeAccount as engineDescribeAccount,
   formatAllowFrom as engineFormatAllowFrom,
@@ -39,15 +39,15 @@ function validateQQBotSetupInput(params: {
 }
 
 function applyQQBotSetupAccountConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   input: ChannelSetupInput;
-}): OpenClawConfig {
+}): NatesclawConfig {
   return engineApplySetupAccountConfig(
     params.cfg as unknown as Record<string, unknown>,
     params.accountId,
     params.input,
-  ) as OpenClawConfig;
+  ) as NatesclawConfig;
 }
 
 function isQQBotConfigured(account: ResolvedQQBotAccount | undefined): boolean {
@@ -74,14 +74,14 @@ export const qqbotConfigAdapter = {
 };
 
 const qqbotSetupAdapterShared = {
-  resolveAccountId: ({ cfg, accountId }: { cfg: OpenClawConfig; accountId?: string | null }) =>
+  resolveAccountId: ({ cfg, accountId }: { cfg: NatesclawConfig; accountId?: string | null }) =>
     normalizeLowercaseStringOrEmpty(accountId) || resolveDefaultQQBotAccountId(cfg),
   applyAccountName: ({
     cfg,
     accountId,
     name,
   }: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     name?: string;
   }) =>
@@ -98,7 +98,7 @@ const qqbotSetupAdapterShared = {
     accountId,
     input,
   }: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: ChannelSetupInput;
   }) => applyQQBotSetupAccountConfig({ cfg, accountId, input }),

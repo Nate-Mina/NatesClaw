@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-// OpenClaw gateway methods host the setup/repair conversation for clients.
+// Natesclaw gateway methods host the setup/repair conversation for clients.
 import {
   buildSystemAgentInferenceUnavailableErrorDetails,
   buildSystemAgentSessionInvalidatedErrorDetails,
@@ -67,8 +67,8 @@ import type { RespondFn } from "./types.js";
 import { assertValidParams } from "./validation.js";
 
 /**
- * `openclaw.chat` lets clients (macOS app onboarding, future UIs) run the
- * same conversational setup as `openclaw setup`. Structured setup owns
+ * `natesclaw.chat` lets clients (macOS app onboarding, future UIs) run the
+ * same conversational setup as `natesclaw setup`. Structured setup owns
  * the pre-inference phase; a new chat session starts only after a live model
  * turn succeeds.
  *
@@ -113,12 +113,12 @@ function acknowledgeDeliveredSystemAgentWelcome(session: SystemAgentChatSession)
 
 async function runSystemAgentGatewayTask<T>(task: () => Promise<T>): Promise<T> {
   // Track every accepted RPC as active, never queued: restart draining snapshots
-  // active ids, so a queued OpenClaw request could otherwise outlive its socket.
+  // active ids, so a queued Natesclaw request could otherwise outlive its socket.
   setCommandLaneConcurrency(CommandLane.SystemAgent, Number.MAX_SAFE_INTEGER);
   return await enqueueCommandInLane(CommandLane.SystemAgent, () =>
     // Bound expensive detection, activation, and agent turns without hiding
     // accepted work from restart draining. This also makes session eviction and
-    // setup writes atomic with respect to other OpenClaw gateway requests.
+    // setup writes atomic with respect to other Natesclaw gateway requests.
     systemAgentGatewayExecutionQueue.enqueue(SYSTEM_AGENT_GATEWAY_EXECUTION_KEY, task),
   );
 }
@@ -197,11 +197,11 @@ function queueDelegatedApproval(params: {
   }
   const manager = params.context.systemAgentApprovalManager;
   if (!manager) {
-    throw new Error("OpenClaw approval registry unavailable");
+    throw new Error("Natesclaw approval registry unavailable");
   }
   const description = describeSystemAgentPersistentOperation(params.proposal.operation);
   const request: SystemAgentApprovalRequestPayload = {
-    title: "OpenClaw change",
+    title: "Natesclaw change",
     description,
     command: description,
     proposalHash: params.proposal.hash,
@@ -226,7 +226,7 @@ function queueDelegatedApproval(params: {
     decisionPromise,
     respond: () => undefined,
     context: params.context,
-    requestEventName: "openclaw.approval.requested",
+    requestEventName: "natesclaw.approval.requested",
     requestEvent,
     twoPhase: true,
     deliverRequest: () => false,
@@ -245,7 +245,7 @@ function queueDelegatedApproval(params: {
           await params.session.engine.resolveOperatorApproval(decision, params.proposal.hash);
         }),
       ),
-    afterDecisionErrorLabel: "OpenClaw approval apply failed",
+    afterDecisionErrorLabel: "Natesclaw approval apply failed",
   });
   return record.id;
 }
@@ -255,7 +255,7 @@ function respondRetryableSetupUnavailable(respond: RespondFn, message: string): 
 }
 
 export const systemAgentHandlers: GatewayRequestHandlers = {
-  "openclaw.approval.list": async ({ respond, client, context }) => {
+  "natesclaw.approval.list": async ({ respond, client, context }) => {
     const manager = context.systemAgentApprovalManager;
     respond(
       true,
@@ -263,12 +263,12 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
       undefined,
     );
   },
-  "openclaw.chat.history": ({ params, respond }) => {
+  "natesclaw.chat.history": ({ params, respond }) => {
     if (
       !assertValidParams(
         params,
         validateSystemAgentChatHistoryParams,
-        "openclaw.chat.history",
+        "natesclaw.chat.history",
         respond,
       )
     ) {
@@ -281,12 +281,12 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
     );
   },
   /** Structured onboarding: list reusable AI access on this host. */
-  "openclaw.setup.detect": async ({ params, respond }) => {
+  "natesclaw.setup.detect": async ({ params, respond }) => {
     if (
       !assertValidParams(
         params,
         validateSystemAgentSetupDetectParams,
-        "openclaw.setup.detect",
+        "natesclaw.setup.detect",
         respond,
       )
     ) {
@@ -299,12 +299,12 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
     respond(true, await detectSetupInferenceIsolated(), undefined);
   },
   /** Re-run the exact current default-agent inference route without mutating setup. */
-  "openclaw.setup.verify": async ({ params, respond }) => {
+  "natesclaw.setup.verify": async ({ params, respond }) => {
     if (
       !assertValidParams(
         params,
         validateSystemAgentSetupVerifyParams,
-        "openclaw.setup.verify",
+        "natesclaw.setup.verify",
         respond,
       )
     ) {
@@ -316,12 +316,12 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
     });
   },
   /** Start one provider-owned OAuth/device-code login over the shared wizard transport. */
-  "openclaw.setup.auth.start": async ({ params, respond, context }) => {
+  "natesclaw.setup.auth.start": async ({ params, respond, context }) => {
     if (
       !assertValidParams(
         params,
         validateSystemAgentSetupAuthStartParams,
-        "openclaw.setup.auth.start",
+        "natesclaw.setup.auth.start",
         respond,
       )
     ) {
@@ -368,12 +368,12 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
     respond(true, { sessionId, done: false, status: "running" }, undefined);
   },
   /** Run one provider-owned prepare flow over the shared wizard transport. */
-  "openclaw.setup.prepare.start": async ({ params, respond, context }) => {
+  "natesclaw.setup.prepare.start": async ({ params, respond, context }) => {
     if (
       !assertValidParams(
         params,
         validateSystemAgentSetupAuthStartParams,
-        "openclaw.setup.prepare.start",
+        "natesclaw.setup.prepare.start",
         respond,
       )
     ) {
@@ -392,11 +392,11 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
               const snapshot = await setupShared.readSetupConfigFileSnapshot();
               if (!snapshot.valid) {
                 throw new Error(
-                  "Config is invalid. Run `openclaw doctor` before preparing a model.",
+                  "Config is invalid. Run `natesclaw doctor` before preparing a model.",
                 );
               }
               // Match the classic wizard: mutate the authored shape, not runtimeConfig,
-              // so setup never writes resolved runtime defaults into openclaw.json.
+              // so setup never writes resolved runtime defaults into natesclaw.json.
               const baseConfig = snapshot.exists ? snapshot.sourceConfig : {};
               const workspaceDir = params.workspace?.trim()
                 ? resolveUserPath(params.workspace.trim())
@@ -453,12 +453,12 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
    * queueing work that could outlive their RPC timeout. A failed attempt never
    * commits a broken model, managed plugin install, or setup state.
    */
-  "openclaw.setup.activate": async ({ params, respond }) => {
+  "natesclaw.setup.activate": async ({ params, respond }) => {
     if (
       !assertValidParams(
         params,
         validateSystemAgentSetupActivateParams,
-        "openclaw.setup.activate",
+        "natesclaw.setup.activate",
         respond,
       )
     ) {
@@ -495,9 +495,9 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
       respondRetryableSetupUnavailable(respond, error.message);
     }
   },
-  "openclaw.chat": async ({ params: rawParams, respond, client, context }) => {
+  "natesclaw.chat": async ({ params: rawParams, respond, client, context }) => {
     const params = sanitizeSystemAgentChatParams(rawParams);
-    if (!assertValidParams(params, validateSystemAgentChatParams, "openclaw.chat", respond)) {
+    if (!assertValidParams(params, validateSystemAgentChatParams, "natesclaw.chat", respond)) {
       return;
     }
     const inputError = getSystemAgentChatInputError(params);
@@ -520,7 +520,7 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
           respond(
             false,
             undefined,
-            errorShape(ErrorCodes.INVALID_REQUEST, "OpenClaw caller identity unavailable."),
+            errorShape(ErrorCodes.INVALID_REQUEST, "Natesclaw caller identity unavailable."),
           );
           return;
         }
@@ -529,7 +529,7 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
           respond(
             false,
             undefined,
-            errorShape(ErrorCodes.INVALID_REQUEST, "OpenClaw session belongs to another caller."),
+            errorShape(ErrorCodes.INVALID_REQUEST, "Natesclaw session belongs to another caller."),
           );
           return;
         }
@@ -554,8 +554,8 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
             errorShape(
               ErrorCodes.INVALID_REQUEST,
               params.wizardCancel !== undefined
-                ? "No active OpenClaw chat session is awaiting that wizard cancel."
-                : "No active OpenClaw chat session is awaiting that wizard answer.",
+                ? "No active Natesclaw chat session is awaiting that wizard cancel."
+                : "No active Natesclaw chat session is awaiting that wizard answer.",
               { details: buildSystemAgentSessionInvalidatedErrorDetails() },
             ),
           );
@@ -579,7 +579,7 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
               undefined,
               errorShape(
                 ErrorCodes.UNAVAILABLE,
-                `OpenClaw requires working inference: ${inference.error}`,
+                `Natesclaw requires working inference: ${inference.error}`,
                 {
                   details: buildSystemAgentInferenceUnavailableErrorDetails(),
                 },
@@ -695,7 +695,7 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
             respond(
               false,
               undefined,
-              errorShape(ErrorCodes.INVALID_REQUEST, "OpenClaw chat input is missing."),
+              errorShape(ErrorCodes.INVALID_REQUEST, "Natesclaw chat input is missing."),
             );
             return;
           }

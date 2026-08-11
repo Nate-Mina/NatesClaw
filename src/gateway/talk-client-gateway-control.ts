@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { normalizeTalkSection } from "../config/talk.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createPluginRuntime } from "../plugins/runtime/index.js";
 import { BoundedSerialQueue } from "../shared/bounded-serial-queue.js";
 import { createLazyRuntimeModule } from "../shared/lazy-runtime.js";
@@ -72,7 +72,7 @@ function createRealtimeControlQueue(): BoundedSerialQueue {
 }
 
 function createTalkClientAgentRuntime(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId: string;
   rawSourceRef?: string;
 }) {
@@ -206,7 +206,7 @@ export function boundTalkClientRealtimeInitialItems(
 }
 
 export function createTalkClientAgentConsultRunner(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   context: Pick<GatewayRequestContext, "chatAbortControllers" | "logGateway">;
   agentId: string;
   sessionKey: string;

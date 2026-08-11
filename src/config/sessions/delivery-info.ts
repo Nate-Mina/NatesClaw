@@ -1,5 +1,5 @@
 // Delivery lookup recovers routable channel context from persisted session stores.
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import {
   resolveSessionStoreAgentId,
   resolveSessionStoreKey,
@@ -7,7 +7,7 @@ import {
 import { requiresFoldedSessionKeyAliasProof } from "../../sessions/session-key-utils.js";
 import { deliveryContextFromSession } from "../../utils/delivery-context.shared.js";
 import { getRuntimeConfig } from "../io.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import { resolveSessionStorePathCore } from "./paths.js";
 import { openSessionEntryReadView, type SessionEntryReadView } from "./session-accessor.js";
 import {
@@ -42,7 +42,7 @@ function hasRoutableDeliveryContext(context?: {
  */
 export function extractDeliveryInfo(
   sessionKey: string | undefined,
-  options?: { cfg?: OpenClawConfig },
+  options?: { cfg?: NatesclawConfig },
 ): {
   deliveryContext:
     | { channel?: string; to?: string; accountId?: string; threadId?: string | number }
@@ -80,7 +80,7 @@ export function extractDeliveryInfo(
   return { deliveryContext, threadId };
 }
 
-function resolveDeliveryStorePaths(cfg: OpenClawConfig, agentId: string): string[] {
+function resolveDeliveryStorePaths(cfg: NatesclawConfig, agentId: string): string[] {
   const paths = new Set<string>();
   paths.add(resolveSessionStorePathCore(cfg.session?.store, { agentId }));
   // Delivery can be restored from any resolved agent target; store order keeps the configured
@@ -210,7 +210,7 @@ function buildFreshestSessionEntryIndex(store: SessionEntryReadView): Map<string
 }
 
 function loadDeliverySessionEntry(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   baseSessionKey: string;
 }) {

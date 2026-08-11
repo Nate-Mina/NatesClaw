@@ -42,7 +42,7 @@ scenario:
     - src/gateway/server-restart-sentinel.ts
   execution:
     kind: flow
-    runtime: openclaw
+    runtime: natesclaw
     timeoutMs: 420000
     retryCount: 0
     summary: Restart while replay-safe Code Mode wait is executing, then verify automatic reconstruction and delivery.
@@ -163,7 +163,7 @@ flow:
             message:
               expr: "`expected exactly one scoped restart recovery provider request before delivery, got ${restartRecoveryRequestsBeforeOutbound.length}; total post-cursor requests=${recoveryRequestsBeforeOutbound.length}`"
         - assert:
-            expr: "!String(restartRecoveryRequestsBeforeOutbound[0].prompt ?? '').includes('[OpenClaw heartbeat poll]')"
+            expr: "!String(restartRecoveryRequestsBeforeOutbound[0].prompt ?? '').includes('[Natesclaw heartbeat poll]')"
             message: restart recovery provider request was replaced by a heartbeat poll
         - call: waitForOutboundMessage
           saveAs: outbound

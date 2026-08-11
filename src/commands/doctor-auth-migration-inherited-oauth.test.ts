@@ -6,16 +6,16 @@ import { loadPersistedAuthProfileStore } from "../agents/auth-profiles/persisted
 import { clearRuntimeAuthProfileStoreSnapshots } from "../agents/auth-profiles/runtime-snapshots.js";
 import { saveAuthProfileStore } from "../agents/auth-profiles/store.js";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { maybeMigrateAuthProfileJsonStoresToSqlite } from "./doctor-auth-flat-profiles.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
-const states: OpenClawTestState[] = [];
+const states: NatesclawTestState[] = [];
 
 function makePrompter(): DoctorPrompter {
   return {
@@ -30,16 +30,16 @@ function makePrompter(): DoctorPrompter {
   } as unknown as DoctorPrompter;
 }
 
-async function makeTestState(): Promise<OpenClawTestState> {
-  const state = await createOpenClawTestState();
+async function makeTestState(): Promise<NatesclawTestState> {
+  const state = await createNatesclawTestState();
   states.push(state);
   return state;
 }
 
 afterEach(async () => {
   clearRuntimeAuthProfileStoreSnapshots();
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
   while (states.length > 0) {
     await states.pop()?.cleanup();
   }

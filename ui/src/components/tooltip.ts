@@ -1,10 +1,10 @@
-// Control UI adapter for Web Awesome tooltips. OpenClaw keeps its terse
+// Control UI adapter for Web Awesome tooltips. Natesclaw keeps its terse
 // wrapper API; Web Awesome owns popup positioning, rendering, and dismissal.
 import "@awesome.me/webawesome/dist/components/tooltip/tooltip.js";
 import type WaTooltip from "@awesome.me/webawesome/dist/components/tooltip/tooltip.js";
 import { css, html } from "lit";
 import { property, query } from "lit/decorators.js";
-import { OpenClawLitElement } from "../lit/openclaw-element.ts";
+import { NatesclawLitElement } from "../lit/natesclaw-element.ts";
 
 const HOVER_DELAY = 150;
 const TOUCH_DELAY = 450;
@@ -17,14 +17,14 @@ let nextTooltipId = 0;
 
 function createTooltipId() {
   nextTooltipId += 1;
-  return `openclaw-tooltip-${nextTooltipId}`;
+  return `natesclaw-tooltip-${nextTooltipId}`;
 }
 
 function normalizeTooltipText(text: string) {
   return text.replace(/\s+/gu, " ").trim();
 }
 
-class TooltipProvider extends OpenClawLitElement {
+class TooltipProvider extends NatesclawLitElement {
   @property({ type: Number }) delay = HOVER_DELAY;
   @property({ type: Number }) skipDelay = SKIP_DELAY;
   @property({ type: Number }) touchDelay = TOUCH_DELAY;
@@ -88,7 +88,7 @@ class TooltipProvider extends OpenClawLitElement {
   }
 }
 
-class Tooltip extends OpenClawLitElement {
+class Tooltip extends NatesclawLitElement {
   @property() content = "";
 
   /** Let a reveal-only trigger open on click instead of dismissing. */
@@ -119,7 +119,7 @@ class Tooltip extends OpenClawLitElement {
     }
 
     wa-tooltip {
-      --max-width: var(--openclaw-tooltip-max-width, min(260px, calc(100vw - 16px)));
+      --max-width: var(--natesclaw-tooltip-max-width, min(260px, calc(100vw - 16px)));
       --wa-tooltip-arrow-size: 6px;
       --wa-tooltip-background-color: color-mix(in srgb, var(--card) 94%, black 6%);
       --wa-tooltip-border-color: color-mix(in srgb, var(--border-strong) 84%, transparent);
@@ -154,7 +154,7 @@ class Tooltip extends OpenClawLitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-    this.tooltipProvider = this.closest<TooltipProvider>("openclaw-tooltip-provider");
+    this.tooltipProvider = this.closest<TooltipProvider>("natesclaw-tooltip-provider");
     this.style.display = "contents";
   }
 
@@ -176,7 +176,7 @@ class Tooltip extends OpenClawLitElement {
   }
 
   private get provider() {
-    return this.tooltipProvider ?? this.closest<TooltipProvider>("openclaw-tooltip-provider");
+    return this.tooltipProvider ?? this.closest<TooltipProvider>("natesclaw-tooltip-provider");
   }
 
   private get hoverDelay() {
@@ -566,17 +566,17 @@ class Tooltip extends OpenClawLitElement {
   }
 }
 
-if (!customElements.get("openclaw-tooltip-provider")) {
-  customElements.define("openclaw-tooltip-provider", TooltipProvider);
+if (!customElements.get("natesclaw-tooltip-provider")) {
+  customElements.define("natesclaw-tooltip-provider", TooltipProvider);
 }
 
-if (!customElements.get("openclaw-tooltip")) {
-  customElements.define("openclaw-tooltip", Tooltip);
+if (!customElements.get("natesclaw-tooltip")) {
+  customElements.define("natesclaw-tooltip", Tooltip);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-tooltip-provider": TooltipProvider;
-    "openclaw-tooltip": Tooltip;
+    "natesclaw-tooltip-provider": TooltipProvider;
+    "natesclaw-tooltip": Tooltip;
   }
 }

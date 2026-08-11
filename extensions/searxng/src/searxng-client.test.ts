@@ -1,6 +1,6 @@
 // Searxng tests cover searxng client plugin behavior.
-import { expectDefined } from "@openclaw/normalization-core";
-import type { LookupFn } from "openclaw/plugin-sdk/ssrf-runtime";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { LookupFn } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const endpointMockState = vi.hoisted(() => ({
@@ -13,8 +13,8 @@ const endpointMockState = vi.hoisted(() => ({
   responses: [] as Response[],
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-web-search", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/provider-web-search")>();
+vi.mock("natesclaw/plugin-sdk/provider-web-search", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/provider-web-search")>();
   const runEndpoint = async (
     params: { url: string; timeoutSeconds: number; init: RequestInit; signal?: AbortSignal },
     run: (response: Response) => Promise<unknown>,
@@ -55,12 +55,12 @@ describe("searxng client", () => {
     expect(
       testing.buildSearxngSearchUrl({
         baseUrl: "https://search.example.com/searxng",
-        query: "openclaw",
+        query: "natesclaw",
         categories: "general,news",
         language: "en",
       }),
     ).toBe(
-      "https://search.example.com/searxng/search?q=openclaw&format=json&categories=general%2Cnews&language=en",
+      "https://search.example.com/searxng/search?q=natesclaw&format=json&categories=general%2Cnews&language=en",
     );
   });
 
@@ -68,15 +68,15 @@ describe("searxng client", () => {
     expect(
       testing.buildSearxngSearchUrl({
         baseUrl: "https://search.example.com/search",
-        query: "openclaw",
+        query: "natesclaw",
       }),
-    ).toBe("https://search.example.com/search?q=openclaw&format=json");
+    ).toBe("https://search.example.com/search?q=natesclaw&format=json");
     expect(
       testing.buildSearxngSearchUrl({
         baseUrl: "https://search.example.com/search/",
-        query: "openclaw",
+        query: "natesclaw",
       }),
-    ).toBe("https://search.example.com/search?q=openclaw&format=json");
+    ).toBe("https://search.example.com/search?q=natesclaw&format=json");
   });
 
   it("parses SearXNG JSON results and applies the requested count cap", () => {
@@ -151,7 +151,7 @@ describe("searxng client", () => {
 
     const result = await runSearxngSearch({
       baseUrl: "http://127.0.0.1:8888",
-      query: "openclaw",
+      query: "natesclaw",
       categories: "general",
       count: 5,
     });
@@ -160,7 +160,7 @@ describe("searxng client", () => {
     const { tookMs, ...stableResult } = result;
     expect(typeof tookMs).toBe("number");
     expect(stableResult).toEqual({
-      query: "openclaw",
+      query: "natesclaw",
       provider: "searxng",
       count: 0,
       externalContent: {
@@ -181,7 +181,7 @@ describe("searxng client", () => {
 
     await runSearxngSearch({
       baseUrl: "http://127.0.0.1:8888",
-      query: "openclaw",
+      query: "natesclaw",
       categories: "general",
       signal: controller.signal,
     });
@@ -208,7 +208,7 @@ describe("searxng client", () => {
     await expect(
       runSearxngSearch({
         baseUrl: "http://127.0.0.1:8888",
-        query: "openclaw",
+        query: "natesclaw",
         categories: "general",
       }),
     ).rejects.toThrow("SearXNG response incomplete after 7 bytes.");

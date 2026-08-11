@@ -1,5 +1,5 @@
-// Exa plugin entrypoint registers its OpenClaw integration.
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+// Exa plugin entrypoint registers its Natesclaw integration.
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 import { createExaWebSearchProvider } from "./src/exa-web-search-provider.js";
 
 export default definePluginEntry({

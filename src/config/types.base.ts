@@ -56,7 +56,7 @@ export type BlockStreamingChunkConfig = {
 export type ChannelStreamingProgressConfig = {
   /** Initial progress title. "auto" picks from labels; false hides the title. Default: "auto". */
   label?: string | false;
-  /** Candidate labels for label="auto". Defaults to OpenClaw's built-in progress labels. */
+  /** Candidate labels for label="auto". Defaults to Natesclaw's built-in progress labels. */
   labels?: string[];
   /** Maximum number of progress lines to keep below the label. Default: 8. */
   maxLines?: number;
@@ -295,7 +295,7 @@ export type DiagnosticsOtelConfig = {
   protocol?: "http/protobuf";
   headers?: Record<string, string>;
   serviceName?: string;
-  /** Replacement prefix for OpenClaw-owned metric names. Empty removes the prefix; defaults to "openclaw.". */
+  /** Replacement prefix for Natesclaw-owned metric names. Empty removes the prefix; defaults to "natesclaw.". */
   metricNamePrefix?: string;
   traces?: boolean;
   metrics?: boolean;

@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../../test/helpers/promise.js";
@@ -942,7 +942,7 @@ describe("cloud workspace conflict notice", () => {
       "src/path-5.ts",
       "src/path-6.ts",
     ],
-    stagedResultRef: "refs/openclaw/worker-results/claim-123",
+    stagedResultRef: "refs/natesclaw/worker-results/claim-123",
     totalCount: 9,
   };
 
@@ -971,8 +971,8 @@ describe("cloud workspace conflict notice", () => {
       (element) => element.textContent,
     );
     expect(commands).toEqual([
-      "git show 'refs/openclaw/worker-results/claim-123:src/[path]-1.ts'",
-      "git checkout 'refs/openclaw/worker-results/claim-123' -- ':(top,literal)src/[path]-1.ts'",
+      "git show 'refs/natesclaw/worker-results/claim-123:src/[path]-1.ts'",
+      "git checkout 'refs/natesclaw/worker-results/claim-123' -- ':(top,literal)src/[path]-1.ts'",
     ]);
     expect(
       notice.querySelector<HTMLButtonElement>('[aria-label="Copy cloud inspect command"]'),
@@ -1005,7 +1005,7 @@ describe("cloud workspace conflict notice", () => {
         customType: "cloud-workspace-conflict",
         details: {
           paths: [entryPath],
-          stagedResultRef: "refs/openclaw/worker-results/claim-unsafe",
+          stagedResultRef: "refs/natesclaw/worker-results/claim-unsafe",
         },
       });
       expect(normalizedConflict).toBeDefined();
@@ -1024,7 +1024,7 @@ describe("cloud workspace conflict notice", () => {
       customType: "cloud-workspace-conflict",
       details: {
         paths: ["src/unsafe\nname.ts", "src/safe.ts"],
-        stagedResultRef: "refs/openclaw/worker-results/claim-mixed",
+        stagedResultRef: "refs/natesclaw/worker-results/claim-mixed",
       },
     });
     const container = renderChatView({ workspaceConflict: normalizedConflict });
@@ -1032,8 +1032,8 @@ describe("cloud workspace conflict notice", () => {
       (element) => element.textContent,
     );
     expect(commands).toEqual([
-      "git show 'refs/openclaw/worker-results/claim-mixed:src/safe.ts'",
-      "git checkout 'refs/openclaw/worker-results/claim-mixed' -- ':(top,literal)src/safe.ts'",
+      "git show 'refs/natesclaw/worker-results/claim-mixed:src/safe.ts'",
+      "git checkout 'refs/natesclaw/worker-results/claim-mixed' -- ':(top,literal)src/safe.ts'",
     ]);
   });
 });
@@ -1245,7 +1245,7 @@ describe("chat code-block copy", () => {
     { name: "keeps legacy raw data-code payloads copyable", payload: "legacy text" },
     {
       name: "does not decode unmarked raw data-code payloads that start with the block-art prefix",
-      payload: 'openclaw:block-art-code:"literal"',
+      payload: 'natesclaw:block-art-code:"literal"',
     },
   ])("$name", async ({ payload }) => {
     const writeText = vi.fn().mockResolvedValue(undefined);
@@ -1889,7 +1889,7 @@ afterEach(() => {
 describe("session rail pane commands", () => {
   it("does not replay the pane's retained generation after an A-B-A round trip", async () => {
     vi.stubGlobal("localStorage", createStorageMock());
-    localStorage.setItem("openclaw.chat.observerHud.display", "pill");
+    localStorage.setItem("natesclaw.chat.observerHud.display", "pill");
     const container = document.createElement("div");
     document.body.append(container);
     let consumedGeneration = 0;
@@ -1920,7 +1920,7 @@ describe("session rail pane commands", () => {
         container,
       );
       const rail = container.querySelector(
-        "openclaw-chat-session-rail",
+        "natesclaw-chat-session-rail",
       ) as ChatSessionRailElement | null;
       expect(rail).not.toBeNull();
       await rail?.updateComplete;
@@ -1943,7 +1943,7 @@ describe("session rail pane commands", () => {
       expect(rail?.querySelector(".chat-session-rail--expanded")).not.toBeNull();
       expect(onSessionRailCommandConsumed).toHaveBeenCalledTimes(2);
       expect(onObserverVisibilityChange).toHaveBeenCalledTimes(2);
-      expect(localStorage.getItem("openclaw.chat.observerHud.display")).toBe("pill");
+      expect(localStorage.getItem("natesclaw.chat.observerHud.display")).toBe("pill");
     } finally {
       container.remove();
     }
@@ -1951,7 +1951,7 @@ describe("session rail pane commands", () => {
 
   it("does not replay a consumed generation after the rail unmounts and remounts", async () => {
     vi.stubGlobal("localStorage", createStorageMock());
-    localStorage.setItem("openclaw.chat.observerHud.display", "pill");
+    localStorage.setItem("natesclaw.chat.observerHud.display", "pill");
     const container = document.createElement("div");
     document.body.append(container);
     let consumedGeneration = 0;
@@ -1981,7 +1981,7 @@ describe("session rail pane commands", () => {
         container,
       );
       const rail = container.querySelector(
-        "openclaw-chat-session-rail",
+        "natesclaw-chat-session-rail",
       ) as ChatSessionRailElement | null;
       await rail?.updateComplete;
       return rail;
@@ -2004,7 +2004,7 @@ describe("session rail pane commands", () => {
       expect(rail?.querySelector(".chat-session-rail--expanded")).not.toBeNull();
       expect(onSessionRailCommandConsumed).toHaveBeenCalledTimes(2);
       expect(onObserverVisibilityChange).toHaveBeenCalledTimes(2);
-      expect(localStorage.getItem("openclaw.chat.observerHud.display")).toBe("pill");
+      expect(localStorage.getItem("natesclaw.chat.observerHud.display")).toBe("pill");
     } finally {
       container.remove();
     }
@@ -2991,7 +2991,7 @@ describe("chat voice controls", () => {
   it.each([
     ["connecting", "Connecting voice input..."],
     ["listening", "Listening..."],
-    ["thinking", "Asking OpenClaw..."],
+    ["thinking", "Asking Natesclaw..."],
   ] as const)("renders %s voice activity without visible status copy", (status, label) => {
     const inputLevel = new RealtimeTalkLevelSignal();
     inputLevel.set(0.64);
@@ -3089,7 +3089,7 @@ describe("chat voice controls", () => {
     );
     const tooltip = talkButton.parentElement as (HTMLElement & { content?: string }) | null;
     expect(talkButton.getAttribute("title")).toBeNull();
-    expect(tooltip?.localName).toBe("openclaw-tooltip");
+    expect(tooltip?.localName).toBe("natesclaw-tooltip");
     expect(tooltip?.content).toBe(startTalkLabel);
     expect(talkButton.textContent?.trim()).toBe(startTalkLabel);
     requireElement(
@@ -4002,8 +4002,8 @@ describe("chat slash menu accessibility", () => {
         category: "session",
       },
       {
-        key: "openclaw",
-        name: "openclaw",
+        key: "natesclaw",
+        name: "natesclaw",
         description: "Run the setup and repair helper.",
         tier: "essential",
         category: "tools",
@@ -4016,7 +4016,7 @@ describe("chat slash menu accessibility", () => {
       Array.from(container.querySelectorAll<HTMLElement>(".slash-menu [role='option']")).map(
         (option) => option.querySelector(".slash-menu-name")?.textContent?.trim(),
       ),
-    ).toEqual(["/pair", "/pair-device", "/openclaw"]);
+    ).toEqual(["/pair", "/pair-device", "/natesclaw"]);
     expect(
       Array.from(container.querySelectorAll(".slash-menu-group__label")).map((label) =>
         label.textContent?.trim(),
@@ -4334,7 +4334,7 @@ describe("chat attachment picker", () => {
     chat.dispatchEvent(createDragEvent("dragleave"));
     expect(chat.hasAttribute("data-attachment-drop-active")).toBe(false);
 
-    chat.dispatchEvent(createDragEvent("dragenter", ["application/x-openclaw-session"]));
+    chat.dispatchEvent(createDragEvent("dragenter", ["application/x-natesclaw-session"]));
     expect(chat.hasAttribute("data-attachment-drop-active")).toBe(false);
   });
 
@@ -5013,7 +5013,7 @@ describe("chat welcome", () => {
 
     const clawd = container.querySelector(".agent-chat__welcome-clawd");
     expect(clawd).not.toBeNull();
-    expect(clawd?.querySelector("openclaw-mascot")?.getAttribute("mood")).toBe("idle");
+    expect(clawd?.querySelector("natesclaw-mascot")?.getAttribute("mood")).toBe("idle");
     expect(container.querySelector(".agent-chat__badge")).toBeNull();
   });
 
@@ -5037,7 +5037,7 @@ describe("chat welcome", () => {
       canSend: false,
       disabledBanner: {
         kind: "composer-replacement",
-        text: "We couldn't find a provider and model configured for this agent. Choose a supported connection; OpenClaw will test it before enabling chat.",
+        text: "We couldn't find a provider and model configured for this agent. Choose a supported connection; Natesclaw will test it before enabling chat.",
         actionLabel: "Connect an AI provider",
         onAction: () => undefined,
       },
@@ -5053,7 +5053,7 @@ describe("chat welcome", () => {
     const welcome = requireElement(container, ".agent-chat__welcome", "welcome screen");
     const mascot = requireElement(
       container,
-      ".agent-chat__welcome-clawd openclaw-mascot",
+      ".agent-chat__welcome-clawd natesclaw-mascot",
       "welcome mascot",
     ) as HTMLElement & { tease: boolean; catchOnce: () => void };
     const catchOnce = vi.spyOn(mascot, "catchOnce");
@@ -5315,7 +5315,7 @@ describe("chat model controls", () => {
     },
     {
       name: "uses a neutral model label for non-Codex locked sessions",
-      runtimeId: "openclaw",
+      runtimeId: "natesclaw",
       expected: "Session model",
       omitSession: false,
     },
@@ -5342,7 +5342,7 @@ describe("chat model controls", () => {
     expect(container.querySelector(".chat-controls__inline-select-label")?.textContent).toContain(
       expected,
     );
-    if (runtimeId === "openclaw") {
+    if (runtimeId === "natesclaw") {
       expect(container.textContent).not.toContain("Codex-controlled model");
     }
   });
@@ -5531,7 +5531,7 @@ describe("chat model controls", () => {
     expect(
       getChatModelSelect(container).querySelector(".chat-controls__trigger-meta")?.textContent,
     ).toBe("1M");
-    expect(modelOption?.closest("openclaw-tooltip")).toBeNull();
+    expect(modelOption?.closest("natesclaw-tooltip")).toBeNull();
   });
 
   it("distinguishes model rows that use different agent runtimes", () => {
@@ -5544,7 +5544,7 @@ describe("chat model controls", () => {
           name: "GPT-5.6",
           provider: "openai",
           contextWindow: 1_000_000,
-          agentRuntime: { id: "openclaw", source: "model" },
+          agentRuntime: { id: "natesclaw", source: "model" },
         },
         {
           id: "gpt-5.6-sol",
@@ -5572,7 +5572,7 @@ describe("chat model controls", () => {
           name: "GPT-5.6 Terra",
           provider: "openai",
           contextWindow: 1_000_000,
-          agentRuntime: { id: "openclaw", source: "implicit" },
+          agentRuntime: { id: "natesclaw", source: "implicit" },
         },
       ],
     });
@@ -5582,7 +5582,7 @@ describe("chat model controls", () => {
         `[data-chat-model-option="${value}"] .chat-controls__model-option-meta`,
       )?.textContent;
 
-    expect(metaFor("openai/gpt-5.6")).toBe("1M · OpenClaw");
+    expect(metaFor("openai/gpt-5.6")).toBe("1M · Natesclaw");
     expect(metaFor("openai/gpt-5.6")).not.toContain("Codex");
     expect(metaFor("openai/gpt-5.6-sol")).toBe("1M · Codex");
     // Known CLI runtime ids map to their product labels, not capitalized ids.
@@ -6566,7 +6566,7 @@ describe("right-click Reply", () => {
     const confirmationTrigger = document.createElement("button");
     confirmationOwner.appendChild(confirmationTrigger);
     section.appendChild(confirmationOwner);
-    window.localStorage.removeItem("openclaw:skip-rewind-confirm");
+    window.localStorage.removeItem("natesclaw:skip-rewind-confirm");
     chatMessage.openChatRewindConfirmation(confirmationTrigger, vi.fn());
     const confirmation = document.querySelector<HTMLElement>(".chat-confirm-popover");
     const { bubble } = appendChatBubble(container, { text: "open message actions" });
@@ -6601,7 +6601,7 @@ describe("right-click Reply", () => {
     expect(
       document
         .querySelector<HTMLElement>('[aria-label="Rewind to here"]')
-        ?.closest("openclaw-tooltip")?.content,
+        ?.closest("natesclaw-tooltip")?.content,
     ).toBe("Rewind is unavailable while the agent is working");
   });
 

@@ -102,7 +102,7 @@ export abstract class AgentSessionPrompting extends AgentSessionBase {
     return imageFactIndexes
       ? ({
           ...message,
-          __openclaw: { mediaImageBlockFactIndexes: imageFactIndexes },
+          __natesclaw: { mediaImageBlockFactIndexes: imageFactIndexes },
         } as unknown as PersistedUserTurnMessage)
       : message;
   }

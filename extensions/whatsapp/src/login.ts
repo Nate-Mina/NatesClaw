@@ -1,9 +1,9 @@
 // Whatsapp plugin module implements login behavior.
-import { formatCliCommand } from "openclaw/plugin-sdk/cli-runtime";
-import { logInfo } from "openclaw/plugin-sdk/logging-core";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, success } from "openclaw/plugin-sdk/runtime-env";
-import { defaultRuntime, type RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import { formatCliCommand } from "natesclaw/plugin-sdk/cli-runtime";
+import { logInfo } from "natesclaw/plugin-sdk/logging-core";
+import { getRuntimeConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
+import { danger, success } from "natesclaw/plugin-sdk/runtime-env";
+import { defaultRuntime, type RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { resolveWhatsAppAccount } from "./accounts.js";
 import { restoreCredsFromBackupIfNeeded } from "./auth-store.js";
 import { closeWaSocketSoon, waitForWhatsAppLoginResult } from "./connection-controller.js";
@@ -143,7 +143,7 @@ export async function loginWeb(
     if (result.outcome === "logged-out") {
       runtime.error(
         danger(
-          `WhatsApp reported the session is logged out. Cleared cached web session; please rerun ${formatCliCommand("openclaw channels login")} and scan the QR again.`,
+          `WhatsApp reported the session is logged out. Cleared cached web session; please rerun ${formatCliCommand("natesclaw channels login")} and scan the QR again.`,
         ),
       );
       throw new Error("Session logged out; cache cleared. Re-run login.", {

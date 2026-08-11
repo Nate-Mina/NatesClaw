@@ -1,9 +1,9 @@
 // Codex plugin module implements conversation turn collector behavior.
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
 import {
   asOptionalRecord as readRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isAssistantCommentaryCompletionNotification } from "./app-server/attempt-notifications.js";
 import { isCodexNotificationForTurn } from "./app-server/notification-correlation.js";
 import {

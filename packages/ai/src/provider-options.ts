@@ -59,8 +59,8 @@ export type BaseOpenAIStreamOptions = StreamOptions & {
   authProfileId?: string;
   firstEventTimeoutMs?: number;
   onFirstEventTimeout?: (reason: Error) => void;
-  openclawCodeModeToolSurface?: boolean;
-  openclawCodeModeAllowedHostedToolTypes?: Set<string>;
+  natesclawCodeModeToolSurface?: boolean;
+  natesclawCodeModeAllowedHostedToolTypes?: Set<string>;
   frequencyPenalty?: number;
   presencePenalty?: number;
   seed?: number;

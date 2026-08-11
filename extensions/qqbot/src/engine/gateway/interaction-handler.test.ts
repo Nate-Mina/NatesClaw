@@ -1,6 +1,6 @@
 // Qqbot tests cover interaction handler plugin behavior.
-import type { ApprovalResolveResult } from "openclaw/plugin-sdk/approval-gateway-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { ApprovalResolveResult } from "natesclaw/plugin-sdk/approval-gateway-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createSdkAccessAdapter } from "../../bridge/sdk-adapter.js";
 import { registerPlatformAdapter, type PlatformAdapter } from "../adapter/index.js";
@@ -69,7 +69,7 @@ const account = makeAccount();
 
 const runtime = {} as GatewayPluginRuntime;
 
-function makeRestrictedCfg(approvers: string[]): OpenClawConfig {
+function makeRestrictedCfg(approvers: string[]): NatesclawConfig {
   return {
     channels: {
       qqbot: {
@@ -81,10 +81,10 @@ function makeRestrictedCfg(approvers: string[]): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function makeCommandAuthorizedFallbackCfg(): OpenClawConfig {
+function makeCommandAuthorizedFallbackCfg(): NatesclawConfig {
   return {
     channels: {
       qqbot: {
@@ -93,7 +93,7 @@ function makeCommandAuthorizedFallbackCfg(): OpenClawConfig {
         allowFrom: ["ATTACKER_OPENID"],
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function makeApprovalEvent(overrides: Partial<InteractionEvent> = {}): InteractionEvent {
@@ -387,7 +387,7 @@ describe("createInteractionHandler approval buttons", () => {
         channels: {
           qqbot: createQQBotConfig(),
         },
-      } as unknown as OpenClawConfig;
+      } as unknown as NatesclawConfig;
       const handler = createInteractionHandler(namedAccount, runtime, undefined, {
         getActiveCfg: () => cfg,
       });
@@ -417,7 +417,7 @@ describe("createInteractionHandler approval buttons", () => {
               },
             },
           },
-        }) as OpenClawConfig,
+        }) as NatesclawConfig,
     });
 
     handler(makeApprovalEvent());
@@ -450,7 +450,7 @@ describe("createInteractionHandler approval buttons", () => {
               allowFrom: ["accessGroup:operators"],
             },
           },
-        }) as OpenClawConfig,
+        }) as NatesclawConfig,
       resolveCommandAuthorized: (params) => access.resolveSlashCommandAuthorization(params),
     });
 
@@ -476,7 +476,7 @@ describe("createInteractionHandler approval buttons", () => {
               },
             },
           },
-        }) as OpenClawConfig,
+        }) as NatesclawConfig,
     });
 
     handler(makeApprovalEvent());
@@ -497,7 +497,7 @@ describe("createInteractionHandler approval buttons", () => {
               allowFrom: ["OWNER_OPENID"],
             },
           },
-        }) as OpenClawConfig,
+        }) as NatesclawConfig,
     });
 
     handler(makeApprovalEvent());
@@ -537,7 +537,7 @@ describe("createInteractionHandler approval buttons", () => {
         },
       },
     ],
-  ] satisfies Array<[string, OpenClawConfig]>)(
+  ] satisfies Array<[string, NatesclawConfig]>)(
     "rejects fallback approval buttons when %s does not grant command auth",
     async (_name, cfg) => {
       const handler = createInteractionHandler(account, runtime, undefined, {

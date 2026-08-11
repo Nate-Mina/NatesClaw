@@ -1,6 +1,6 @@
 // Gateway RPC helpers for node CLI commands, including lazy runtime loading and option parsing.
 import { randomUUID } from "node:crypto";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import type { Command } from "commander";
 import {
   GATEWAY_CLIENT_MODES,

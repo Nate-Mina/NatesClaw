@@ -14,9 +14,9 @@ export type {
   ChannelResolveKind,
   ChannelResolveResult,
   ChannelStatusAdapter,
-} from "openclaw/plugin-sdk/channel-contract";
-export type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-export type { OutboundDeliveryResult } from "openclaw/plugin-sdk/channel-send-result";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export type { WizardPrompter } from "openclaw/plugin-sdk/setup";
+} from "natesclaw/plugin-sdk/channel-contract";
+export type { ChannelPlugin } from "natesclaw/plugin-sdk/channel-core";
+export type { OutboundDeliveryResult } from "natesclaw/plugin-sdk/channel-send-result";
+export type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+export type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+export type { WizardPrompter } from "natesclaw/plugin-sdk/setup";

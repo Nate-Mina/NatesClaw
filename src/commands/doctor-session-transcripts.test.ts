@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { openFileBackedSessionManagerForTest } from "../../test/helpers/session-manager-file-fixture.js";
 
@@ -125,7 +125,7 @@ describe("doctor session transcript repair", () => {
     withDoctorSqliteMaintenanceLock
       .mockReset()
       .mockImplementation(async (params: { run: () => unknown }) => await params.run());
-    root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-doctor-transcripts-"));
+    root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-doctor-transcripts-"));
   });
 
   afterEach(async () => {
@@ -158,9 +158,9 @@ describe("doctor session transcript repair", () => {
           content: [
             "visible ask",
             "",
-            "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>",
             "secret",
-            "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
           ].join("\n"),
         },
       },
@@ -214,7 +214,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -232,7 +232,7 @@ describe("doctor session transcript repair", () => {
     const [message, title] = requireFirstMockCall(note, "doctor note") as [string, string];
     expect(title).toBe("Session transcripts");
     expect(message).toContain("legacy state");
-    expect(message).toContain('Run "openclaw doctor --fix"');
+    expect(message).toContain('Run "natesclaw doctor --fix"');
     expect(countNonEmptyLines(await fs.readFile(filePath, "utf-8"))).toBe(3);
   });
 
@@ -263,7 +263,7 @@ describe("doctor session transcript repair", () => {
       checkId: "core/doctor/session-transcripts",
       severity: "info",
       path: filePath,
-      fixHint: expect.stringContaining("openclaw doctor --fix"),
+      fixHint: expect.stringContaining("natesclaw doctor --fix"),
     });
     expect(sessionTranscriptIssueToRepairEffect(issue)).toEqual({
       kind: "file",
@@ -289,7 +289,7 @@ describe("doctor session transcript repair", () => {
         validatedTranscriptEvents: 0,
       },
     });
-    const env = { ...process.env, OPENCLAW_STATE_DIR: root };
+    const env = { ...process.env, NATESCLAW_STATE_DIR: root };
     const cfg = {};
 
     await noteSessionTranscriptHealth({
@@ -345,7 +345,7 @@ describe("doctor session transcript repair", () => {
         validatedTranscriptEvents: 0,
       },
     });
-    const env = { ...process.env, OPENCLAW_STATE_DIR: root };
+    const env = { ...process.env, NATESCLAW_STATE_DIR: root };
     const cfg = {};
 
     await noteSessionTranscriptHealth({
@@ -366,7 +366,7 @@ describe("doctor session transcript repair", () => {
   });
 
   it("skips session SQLite import when the Gateway owns the state lock", async () => {
-    const env = { ...process.env, OPENCLAW_STATE_DIR: root };
+    const env = { ...process.env, NATESCLAW_STATE_DIR: root };
     withDoctorSqliteMaintenanceLock.mockRejectedValueOnce(
       new DoctorSqliteMaintenanceLockUnavailableError(
         "session SQLite import",
@@ -391,7 +391,7 @@ describe("doctor session transcript repair", () => {
       "Session SQLite",
     );
     expect(note).toHaveBeenCalledWith(
-      expect.stringContaining('run "openclaw doctor --fix" for session-store maintenance'),
+      expect.stringContaining('run "natesclaw doctor --fix" for session-store maintenance'),
       "Session SQLite",
     );
   });
@@ -402,7 +402,7 @@ describe("doctor session transcript repair", () => {
     await expect(
       noteSessionTranscriptHealth({
         cfg: {},
-        env: { ...process.env, OPENCLAW_STATE_DIR: root },
+        env: { ...process.env, NATESCLAW_STATE_DIR: root },
         sessionSqlite: true,
         shouldRepair: true,
       }),
@@ -419,7 +419,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -456,7 +456,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -554,7 +554,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -612,7 +612,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {

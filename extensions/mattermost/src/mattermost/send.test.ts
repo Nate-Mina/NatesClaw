@@ -1,7 +1,7 @@
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 // Mattermost tests cover send plugin behavior.
-import { expectProvidedCfgSkipsRuntimeLoad } from "openclaw/plugin-sdk/channel-test-helpers";
-import { convertMarkdownTables } from "openclaw/plugin-sdk/text-chunking";
+import { expectProvidedCfgSkipsRuntimeLoad } from "natesclaw/plugin-sdk/channel-test-helpers";
+import { convertMarkdownTables } from "natesclaw/plugin-sdk/text-chunking";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 let sendMessageMattermost: typeof import("./send.js").sendMessageMattermost;
@@ -146,7 +146,7 @@ vi.mock("./runtime-api.js", () => ({
   loadOutboundMediaFromUrl: mockState.loadOutboundMediaFromUrl,
 }));
 
-vi.mock("openclaw/plugin-sdk/plugin-config-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/plugin-config-runtime", () => ({
   requireRuntimeConfig: (cfg: unknown) => {
     if (cfg) {
       return cfg;
@@ -155,11 +155,11 @@ vi.mock("openclaw/plugin-sdk/plugin-config-runtime", () => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/markdown-table-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/markdown-table-runtime", () => ({
   resolveMarkdownTableMode: mockState.resolveMarkdownTableMode,
 }));
 
-vi.mock("openclaw/plugin-sdk/string-coerce-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/string-coerce-runtime", () => ({
   normalizeLowercaseStringOrEmpty: vi.fn((value: string | null | undefined) => {
     if (typeof value !== "string") {
       return "";

@@ -1,6 +1,6 @@
 // Signal plugin module implements event handler behavior.
 import { setTimeout as sleep } from "node:timers/promises";
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveHumanDelayConfig } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   createStatusReactionController,
   DEFAULT_EMOJIS,
@@ -11,7 +11,7 @@ import {
   shouldAckReaction,
   type StatusReactionController,
   type StatusReactionEmojis,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "natesclaw/plugin-sdk/channel-feedback";
 import {
   buildMentionRegexes,
   buildChannelInboundEventContext,
@@ -30,34 +30,34 @@ import {
   toHistoryMediaEntries,
   type ChannelInboundMediaInput,
   type ChannelInboundTurnPlan,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { fanInChannelIngressLifecycles } from "openclaw/plugin-sdk/channel-ingress-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { fanInChannelIngressLifecycles } from "natesclaw/plugin-sdk/channel-ingress-runtime";
 import {
   bindIngressLifecycleToReplyOptions,
   createChannelMessageReplyPipeline,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   resolveChannelGroupPolicy,
   resolveChannelGroupRequireMention,
-} from "openclaw/plugin-sdk/channel-policy";
-import { isControlCommandMessage } from "openclaw/plugin-sdk/command-detection";
-import { collectErrorGraphCandidates, formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/channel-policy";
+import { isControlCommandMessage } from "natesclaw/plugin-sdk/command-detection";
+import { collectErrorGraphCandidates, formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   createInternalHookEvent,
   fireAndForgetHook,
   toInternalMessageReceivedContext,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { kindFromMime } from "openclaw/plugin-sdk/media-runtime";
-import { createChannelHistoryWindow } from "openclaw/plugin-sdk/reply-history";
-import { resolveBatchedReplyThreadingPolicy } from "openclaw/plugin-sdk/reply-reference";
-import { resolveAgentRoute, resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { readSessionUpdatedAt, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
-import { normalizeE164, truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/hook-runtime";
+import { kindFromMime } from "natesclaw/plugin-sdk/media-runtime";
+import { createChannelHistoryWindow } from "natesclaw/plugin-sdk/reply-history";
+import { resolveBatchedReplyThreadingPolicy } from "natesclaw/plugin-sdk/reply-reference";
+import { resolveAgentRoute, resolveInboundLastRouteSessionKey } from "natesclaw/plugin-sdk/routing";
+import { danger, logVerbose, shouldLogVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "natesclaw/plugin-sdk/security-runtime";
+import { readSessionUpdatedAt, resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { enqueueSystemEvent } from "natesclaw/plugin-sdk/system-event-runtime";
+import { normalizeE164, truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { resolveSignalReplyToMode } from "../accounts.js";
 import {
   maybeResolveSignalApprovalReaction,

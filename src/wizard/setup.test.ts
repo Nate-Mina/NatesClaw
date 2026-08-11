@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+import type { ProviderPlugin } from "natesclaw/plugin-sdk/provider-model-shared";
 // Setup wizard tests cover end-to-end onboarding prompt flows.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createWizardPrompter as buildWizardPrompter } from "../../test/helpers/wizard-prompter.js";
 import {
@@ -13,7 +13,7 @@ import {
 import { upsertAuthProfileWithLock } from "../agents/auth-profiles/profiles.js";
 import { DEFAULT_BOOTSTRAP_FILENAME } from "../agents/workspace.js";
 import { ConfigMutationConflictError } from "../config/config.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.openclaw.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginCompatibilityNotice } from "../plugins/status.js";
 import type { ProviderAuthResult } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
@@ -172,7 +172,7 @@ const ensureWorkspaceAndSessions = vi.hoisted(() => vi.fn(async () => {}));
 const replaceConfigFile = vi.hoisted(() =>
   vi.fn(
     async (params: {
-      nextConfig: OpenClawConfig;
+      nextConfig: NatesclawConfig;
       snapshot?: { hash?: string };
       baseHash?: string;
     }) => ({ config: params.nextConfig }),
@@ -180,19 +180,19 @@ const replaceConfigFile = vi.hoisted(() =>
 );
 const resolveGatewayPort = vi.hoisted(() =>
   vi.fn((_cfg?: unknown, env?: NodeJS.ProcessEnv) => {
-    const raw = env?.OPENCLAW_GATEWAY_PORT ?? process.env.OPENCLAW_GATEWAY_PORT;
+    const raw = env?.NATESCLAW_GATEWAY_PORT ?? process.env.NATESCLAW_GATEWAY_PORT;
     const port = raw ? Number.parseInt(raw, 10) : Number.NaN;
     return Number.isFinite(port) && port > 0 ? port : 18789;
   }),
 );
 const readConfigFileSnapshot = vi.hoisted(() =>
   vi.fn(async () => ({
-    path: "/tmp/.openclaw/openclaw.json",
+    path: "/tmp/.natesclaw/natesclaw.json",
     exists: false,
     raw: null as string | null,
     parsed: {},
     resolved: {},
-    sourceConfigBeforeMigrations: undefined as OpenClawConfig | undefined,
+    sourceConfigBeforeMigrations: undefined as NatesclawConfig | undefined,
     valid: true,
     config: {},
     issues: [] as Array<{ path: string; message: string }>,
@@ -222,7 +222,7 @@ function getWizardNoteCalls(note: WizardPrompter["note"]) {
   return (note as unknown as { mock: { calls: unknown[][] } }).mock.calls;
 }
 
-function modelConfigWithApiKey(apiKey: string): OpenClawConfig {
+function modelConfigWithApiKey(apiKey: string): NatesclawConfig {
   return {
     agents: {
       defaults: { model: { primary: "openai/gpt-5.5" } },
@@ -283,9 +283,9 @@ function prepareMockAuthProfilesIn(
   return persistCalls;
 }
 
-function persistedWizardConfigs(): OpenClawConfig[] {
+function persistedWizardConfigs(): NatesclawConfig[] {
   return (replaceConfigFile.mock.calls as unknown[][]).map(
-    ([params]) => (params as { nextConfig: OpenClawConfig }).nextConfig,
+    ([params]) => (params as { nextConfig: NatesclawConfig }).nextConfig,
   );
 }
 
@@ -426,14 +426,14 @@ vi.mock("../config/config.js", async (importActual) => {
       maxAttempts?: number;
       writeOptions?: Record<string, unknown>;
       transform: (
-        config: OpenClawConfig,
+        config: NatesclawConfig,
         context: {
           snapshot: Record<string, unknown>;
           previousHash: string | null;
           attempt: number;
         },
-      ) => Promise<{ nextConfig: OpenClawConfig }> | { nextConfig: OpenClawConfig };
-      commit: (params: Record<string, unknown>) => Promise<{ config: OpenClawConfig }>;
+      ) => Promise<{ nextConfig: NatesclawConfig }> | { nextConfig: NatesclawConfig };
+      commit: (params: Record<string, unknown>) => Promise<{ config: NatesclawConfig }>;
     }) => {
       const maxAttempts = params.maxAttempts ?? 5;
       for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
@@ -470,7 +470,7 @@ vi.mock("../config/config.js", async (importActual) => {
 vi.mock("../commands/onboard-agent.js", async () => {
   const { resolveDefaultAgentId } = await import("../agents/agent-scope-config.js");
   return {
-    ensureOnboardingConfig: async (config: OpenClawConfig) => ({
+    ensureOnboardingConfig: async (config: NatesclawConfig) => ({
       config,
       agentId: resolveDefaultAgentId(config),
       bootstrapPending: true,
@@ -478,7 +478,7 @@ vi.mock("../commands/onboard-agent.js", async () => {
   };
 });
 vi.mock("../commands/onboard-helpers.js", () => ({
-  DEFAULT_WORKSPACE: "/tmp/openclaw-workspace",
+  DEFAULT_WORKSPACE: "/tmp/natesclaw-workspace",
   applyWizardMetadata: (cfg: unknown) => cfg,
   summarizeExistingConfig: () => "summary",
   handleReset: async () => {},
@@ -568,7 +568,7 @@ describe("runSetupWizard", () => {
   let suiteCase = 0;
 
   beforeAll(async () => {
-    suiteRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-onboard-suite-"));
+    suiteRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-onboard-suite-"));
   });
 
   afterAll(async () => {
@@ -584,12 +584,12 @@ describe("runSetupWizard", () => {
   }
 
   function configSnapshot(
-    config: OpenClawConfig,
+    config: NatesclawConfig,
     exists = true,
-    runtimeConfig: OpenClawConfig = config,
+    runtimeConfig: NatesclawConfig = config,
   ) {
     return {
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists,
       raw: exists ? "{}" : null,
       parsed: config,
@@ -621,7 +621,7 @@ describe("runSetupWizard", () => {
     setupSkills.mockReset();
     setupSkills.mockImplementation(async (cfg) => cfg);
     runSearchSetupFlow.mockReset();
-    runSearchSetupFlow.mockImplementation(async (config: OpenClawConfig) => ({
+    runSearchSetupFlow.mockImplementation(async (config: NatesclawConfig) => ({
       outcome: "completed",
       config,
     }));
@@ -641,7 +641,7 @@ describe("runSetupWizard", () => {
         tailscaleResetOnExit: false,
       },
     }));
-    let authoredConfig: OpenClawConfig | undefined;
+    let authoredConfig: NatesclawConfig | undefined;
     readConfigFileSnapshot.mockReset();
     readConfigFileSnapshot.mockImplementation(async () =>
       authoredConfig
@@ -724,7 +724,7 @@ describe("runSetupWizard", () => {
   it("skips provider entries without an id during preferred-provider lookup", async () => {
     setupChannels.mockClear();
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -787,7 +787,7 @@ describe("runSetupWizard", () => {
 
   it("exits when config is invalid", async () => {
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -866,7 +866,7 @@ describe("runSetupWizard", () => {
   });
 
   it("preserves an unrelated config edit made during classic onboarding", async () => {
-    const initialConfig: OpenClawConfig = { ui: { seamColor: "blue" } };
+    const initialConfig: NatesclawConfig = { ui: { seamColor: "blue" } };
     let diskConfig = structuredClone(initialConfig);
     let diskHash = "hash-1";
     const snapshotFromDisk = () => ({
@@ -913,7 +913,7 @@ describe("runSetupWizard", () => {
   });
 
   it("re-reads and merges the latest config after a write conflict", async () => {
-    let diskConfig: OpenClawConfig = { ui: { seamColor: "blue" } };
+    let diskConfig: NatesclawConfig = { ui: { seamColor: "blue" } };
     let diskHash = "hash-1";
     let writeAttempts = 0;
     readConfigFileSnapshot.mockImplementation(async () => ({
@@ -961,7 +961,7 @@ describe("runSetupWizard", () => {
   it("seeds interactive remote setup from command flags", async () => {
     const remoteToken = "REDACTED";
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -1057,7 +1057,7 @@ describe("runSetupWizard", () => {
       }),
     );
     vi.stubEnv("REMOTE_SECRET_TOKEN", "resolved-remote-token");
-    vi.stubEnv("OPENCLAW_GATEWAY_PASSWORD", "env-password"); // pragma: allowlist secret
+    vi.stubEnv("NATESCLAW_GATEWAY_PASSWORD", "env-password"); // pragma: allowlist secret
 
     try {
       await runSetupWizard(
@@ -1086,8 +1086,8 @@ describe("runSetupWizard", () => {
         },
       }),
     );
-    const previousToken = process.env.OPENCLAW_GATEWAY_TOKEN;
-    process.env.OPENCLAW_GATEWAY_TOKEN = "ambient-token"; // pragma: allowlist secret
+    const previousToken = process.env.NATESCLAW_GATEWAY_TOKEN;
+    process.env.NATESCLAW_GATEWAY_TOKEN = "ambient-token"; // pragma: allowlist secret
 
     try {
       await runSetupWizard(
@@ -1097,9 +1097,9 @@ describe("runSetupWizard", () => {
       );
     } finally {
       if (previousToken === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_TOKEN;
+        delete process.env.NATESCLAW_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_GATEWAY_TOKEN = previousToken;
+        process.env.NATESCLAW_GATEWAY_TOKEN = previousToken;
       }
     }
 
@@ -1111,7 +1111,7 @@ describe("runSetupWizard", () => {
 
   it("does not reuse stored remote credentials for an overridden URL", async () => {
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -1131,7 +1131,7 @@ describe("runSetupWizard", () => {
       warnings: [],
       legacyIssues: [],
     });
-    vi.stubEnv("OPENCLAW_GATEWAY_PASSWORD", "ambient-password"); // pragma: allowlist secret
+    vi.stubEnv("NATESCLAW_GATEWAY_PASSWORD", "ambient-password"); // pragma: allowlist secret
 
     try {
       await runSetupWizard(
@@ -1302,7 +1302,7 @@ describe("runSetupWizard", () => {
 
   it("skips the security acknowledgement after it was accepted once", async () => {
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -1625,7 +1625,7 @@ describe("runSetupWizard", () => {
   it("preserves imported fleet workspace ownership until the user confirms a move", async () => {
     const currentWorkspace = await makeCaseDir("imported-fleet-current-");
     const requestedWorkspace = await makeCaseDir("imported-fleet-requested-");
-    const importedConfig: OpenClawConfig = {
+    const importedConfig: NatesclawConfig = {
       agents: {
         defaults: { workspace: currentWorkspace },
         entries: { main: { default: true }, ops: {} },
@@ -1698,7 +1698,7 @@ describe("runSetupWizard", () => {
 
   it("preserves concurrent edits while migrating pending plugin install records", async () => {
     const pendingInstallSnapshot = {
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -1709,7 +1709,7 @@ describe("runSetupWizard", () => {
         agents: { entries: { main: { default: true } } },
         plugins: {
           installs: {
-            demo: { source: "npm", spec: "@openclaw/demo-plugin" },
+            demo: { source: "npm", spec: "@natesclaw/demo-plugin" },
           },
         },
       },
@@ -1717,7 +1717,7 @@ describe("runSetupWizard", () => {
       warnings: [],
       legacyIssues: [],
     };
-    let diskConfig = structuredClone(pendingInstallSnapshot.config) as OpenClawConfig;
+    let diskConfig = structuredClone(pendingInstallSnapshot.config) as NatesclawConfig;
     let diskHash = "pending-1";
     let snapshotReads = 0;
     let writeAttempts = 0;
@@ -1850,7 +1850,7 @@ describe("runSetupWizard", () => {
     promptDefaultModel.mockClear();
     replaceConfigFile.mockClear();
     readConfigFileSnapshot.mockResolvedValue({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -1920,7 +1920,7 @@ describe("runSetupWizard", () => {
     const currentWorkspace = await makeCaseDir("current-fleet-workspace-");
     const requestedWorkspace = await makeCaseDir("requested-fleet-workspace-");
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -2083,7 +2083,7 @@ describe("runSetupWizard", () => {
   });
 
   it("continues onboarding when search-provider installation fails", async () => {
-    const config: OpenClawConfig = { agents: { defaults: { workspace: "/tmp/workspace" } } };
+    const config: NatesclawConfig = { agents: { defaults: { workspace: "/tmp/workspace" } } };
     runSearchSetupFlow.mockResolvedValueOnce({
       outcome: "install-failed",
       config,
@@ -2321,7 +2321,7 @@ describe("runSetupWizard", () => {
     const retryAgents = requireRecord(retryConfig.agents, "retry agents");
     expect(retryAgents.entries).toEqual({ main: { default: true } });
     expect(requireRecord(retryAgents.defaults, "retry defaults").workspace).toBe(
-      "/tmp/openclaw-workspace",
+      "/tmp/natesclaw-workspace",
     );
   });
 
@@ -2425,7 +2425,7 @@ describe("runSetupWizard", () => {
       },
     ]);
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -2477,11 +2477,11 @@ describe("runSetupWizard", () => {
   });
 
   it("resolves gateway.auth.password SecretRef for local setup probe", async () => {
-    const previous = process.env.OPENCLAW_GATEWAY_PASSWORD;
-    process.env.OPENCLAW_GATEWAY_PASSWORD = "gateway-ref-password"; // pragma: allowlist secret
+    const previous = process.env.NATESCLAW_GATEWAY_PASSWORD;
+    process.env.NATESCLAW_GATEWAY_PASSWORD = "gateway-ref-password"; // pragma: allowlist secret
     probeGatewayReachable.mockClear();
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.openclaw/openclaw.json",
+      path: "/tmp/.natesclaw/natesclaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -2496,7 +2496,7 @@ describe("runSetupWizard", () => {
             password: {
               source: "env",
               provider: "default",
-              id: "OPENCLAW_GATEWAY_PASSWORD",
+              id: "NATESCLAW_GATEWAY_PASSWORD",
             },
           },
         },
@@ -2528,9 +2528,9 @@ describe("runSetupWizard", () => {
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+        delete process.env.NATESCLAW_GATEWAY_PASSWORD;
       } else {
-        process.env.OPENCLAW_GATEWAY_PASSWORD = previous;
+        process.env.NATESCLAW_GATEWAY_PASSWORD = previous;
       }
     }
 
@@ -2671,8 +2671,8 @@ describe("runSetupWizard", () => {
   });
 
   it("shows the resolved gateway port in quickstart for fresh envs", async () => {
-    const previousPort = process.env.OPENCLAW_GATEWAY_PORT;
-    process.env.OPENCLAW_GATEWAY_PORT = "18791";
+    const previousPort = process.env.NATESCLAW_GATEWAY_PORT;
+    process.env.NATESCLAW_GATEWAY_PORT = "18791";
     const note: WizardPrompter["note"] = vi.fn(async () => {});
     const prompter = buildWizardPrompter({ note });
     const runtime = createRuntime();
@@ -2695,9 +2695,9 @@ describe("runSetupWizard", () => {
       );
     } finally {
       if (previousPort === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PORT;
+        delete process.env.NATESCLAW_GATEWAY_PORT;
       } else {
-        process.env.OPENCLAW_GATEWAY_PORT = previousPort;
+        process.env.NATESCLAW_GATEWAY_PORT = previousPort;
       }
     }
 
@@ -2712,10 +2712,10 @@ describe("runSetupWizard", () => {
   });
 
   it("localizes the quickstart summary", async () => {
-    const previousPort = process.env.OPENCLAW_GATEWAY_PORT;
-    const previousLocale = process.env.OPENCLAW_LOCALE;
-    process.env.OPENCLAW_GATEWAY_PORT = "18791";
-    process.env.OPENCLAW_LOCALE = "zh-CN";
+    const previousPort = process.env.NATESCLAW_GATEWAY_PORT;
+    const previousLocale = process.env.NATESCLAW_LOCALE;
+    process.env.NATESCLAW_GATEWAY_PORT = "18791";
+    process.env.NATESCLAW_LOCALE = "zh-CN";
     const note: WizardPrompter["note"] = vi.fn(async () => {});
     const prompter = buildWizardPrompter({ note });
     const runtime = createRuntime();
@@ -2738,14 +2738,14 @@ describe("runSetupWizard", () => {
       );
     } finally {
       if (previousPort === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PORT;
+        delete process.env.NATESCLAW_GATEWAY_PORT;
       } else {
-        process.env.OPENCLAW_GATEWAY_PORT = previousPort;
+        process.env.NATESCLAW_GATEWAY_PORT = previousPort;
       }
       if (previousLocale === undefined) {
-        delete process.env.OPENCLAW_LOCALE;
+        delete process.env.NATESCLAW_LOCALE;
       } else {
-        process.env.OPENCLAW_LOCALE = previousLocale;
+        process.env.NATESCLAW_LOCALE = previousLocale;
       }
     }
 

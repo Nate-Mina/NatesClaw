@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-// Check Codex App Server Protocol script supports OpenClaw repository automation.
+// Check Codex App Server Protocol script supports Natesclaw repository automation.
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
@@ -269,14 +269,14 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `Codex app-server generated protocol matches OpenClaw bridge assumptions: ${source.codexRepo}`,
+    `Codex app-server generated protocol matches Natesclaw bridge assumptions: ${source.codexRepo}`,
   );
 }
 
 async function checkMaintainedProtocolTypes(sourceRoot: string): Promise<void> {
-  // Raw requests go to Codex; raw responses flow into OpenClaw. Keep the
+  // Raw requests go to Codex; raw responses flow into Natesclaw. Keep the
   // assignability direction explicit so the probe permits deliberate projections.
-  const probePath = path.join(sourceRoot, "openclaw-protocol-compatibility.ts");
+  const probePath = path.join(sourceRoot, "natesclaw-protocol-compatibility.ts");
   const protocolPath = path.resolve(process.cwd(), "extensions/codex/src/app-server/protocol.ts");
   const protocolImport = relativeTypeScriptImport(probePath, protocolPath);
   const generatedImport = (file: string) =>
@@ -340,117 +340,117 @@ import type { TurnEnvironmentParams } from ${JSON.stringify(generatedImport("v2/
 import type { TurnInterruptParams } from ${JSON.stringify(generatedImport("v2/TurnInterruptParams.ts"))};
 import type { TurnStartParams } from ${JSON.stringify(generatedImport("v2/TurnStartParams.ts"))};
 
-declare const openClawAppsInstalledParams: CodexAppServerRequestParams<"app/installed">;
-const generatedAppsInstalledParams: AppsInstalledParams = openClawAppsInstalledParams;
-declare const openClawAppsListParams: CodexAppServerRequestParams<"app/list">;
-const generatedAppsListParams: AppsListParams = openClawAppsListParams;
-declare const openClawAppsReadParams: CodexAppServerRequestParams<"app/read">;
-const generatedAppsReadParams: AppsReadParams = openClawAppsReadParams;
-declare const openClawAppSummary: v2.AppSummary;
-const generatedAppSummary: AppSummary = openClawAppSummary;
-declare const openClawCommandExecParams: CodexAppServerRequestParams<"command/exec">;
-const generatedCommandExecParams: CommandExecParams = openClawCommandExecParams;
+declare const NatesclawAppsInstalledParams: CodexAppServerRequestParams<"app/installed">;
+const generatedAppsInstalledParams: AppsInstalledParams = NatesclawAppsInstalledParams;
+declare const NatesclawAppsListParams: CodexAppServerRequestParams<"app/list">;
+const generatedAppsListParams: AppsListParams = NatesclawAppsListParams;
+declare const NatesclawAppsReadParams: CodexAppServerRequestParams<"app/read">;
+const generatedAppsReadParams: AppsReadParams = NatesclawAppsReadParams;
+declare const NatesclawAppSummary: v2.AppSummary;
+const generatedAppSummary: AppSummary = NatesclawAppSummary;
+declare const NatesclawCommandExecParams: CodexAppServerRequestParams<"command/exec">;
+const generatedCommandExecParams: CommandExecParams = NatesclawCommandExecParams;
 declare const generatedNullableCommandExecParams: CommandExecParams;
-const openClawNullableCommandExecParams: CodexAppServerRequestParams<"command/exec"> =
+const NatesclawNullableCommandExecParams: CodexAppServerRequestParams<"command/exec"> =
   generatedNullableCommandExecParams;
-declare const openClawConfigBatchWriteParams: CodexAppServerRequestParams<"config/batchWrite">;
-const generatedConfigBatchWriteParams: ConfigBatchWriteParams = openClawConfigBatchWriteParams;
-declare const openClawConfigEdit: CodexConfigEdit;
-const generatedConfigEdit: ConfigEdit = openClawConfigEdit;
-declare const openClawConfigValueWriteParams: CodexAppServerRequestParams<"config/value/write">;
-const generatedConfigValueWriteParams: ConfigValueWriteParams = openClawConfigValueWriteParams;
-declare const openClawPluginInstalledParams: CodexAppServerRequestParams<"plugin/installed">;
-const generatedPluginInstalledParams: PluginInstalledParams = openClawPluginInstalledParams;
-declare const openClawPluginInstallParams: CodexAppServerRequestParams<"plugin/install">;
-const generatedPluginInstallParams: PluginInstallParams = openClawPluginInstallParams;
-declare const openClawPluginListParams: CodexAppServerRequestParams<"plugin/list">;
-const generatedPluginListParams: PluginListParams = openClawPluginListParams;
-declare const openClawPluginReadParams: CodexAppServerRequestParams<"plugin/read">;
-const generatedPluginReadParams: PluginReadParams = openClawPluginReadParams;
-declare const openClawDynamicToolSpec: CodexDynamicToolSpec;
-const generatedDynamicToolSpec: DynamicToolSpec = openClawDynamicToolSpec;
-declare const openClawTurnEnvironmentParams: CodexTurnEnvironmentParams;
-const generatedTurnEnvironmentParams: TurnEnvironmentParams = openClawTurnEnvironmentParams;
-declare const openClawThreadStartParams: CodexThreadStartParams;
-const generatedThreadStartParams: ThreadStartParams = openClawThreadStartParams;
-declare const openClawThreadResumeParams: CodexThreadResumeParams;
-const generatedThreadResumeParams: ThreadResumeParams = openClawThreadResumeParams;
-declare const openClawThreadForkParams: CodexThreadForkParams;
-const generatedThreadForkParams: ThreadForkParams = openClawThreadForkParams;
-declare const openClawThreadDeleteParams: CodexAppServerRequestParams<"thread/delete">;
-const generatedThreadDeleteParams: ThreadDeleteParams = openClawThreadDeleteParams;
-declare const openClawTurnInterruptParams: CodexAppServerRequestParams<"turn/interrupt">;
-const generatedTurnInterruptParams: TurnInterruptParams = openClawTurnInterruptParams;
-declare const openClawTurnStartParams: CodexTurnStartParams;
-const generatedTurnStartParams: TurnStartParams = openClawTurnStartParams;
+declare const NatesclawConfigBatchWriteParams: CodexAppServerRequestParams<"config/batchWrite">;
+const generatedConfigBatchWriteParams: ConfigBatchWriteParams = NatesclawConfigBatchWriteParams;
+declare const NatesclawConfigEdit: CodexConfigEdit;
+const generatedConfigEdit: ConfigEdit = NatesclawConfigEdit;
+declare const NatesclawConfigValueWriteParams: CodexAppServerRequestParams<"config/value/write">;
+const generatedConfigValueWriteParams: ConfigValueWriteParams = NatesclawConfigValueWriteParams;
+declare const NatesclawPluginInstalledParams: CodexAppServerRequestParams<"plugin/installed">;
+const generatedPluginInstalledParams: PluginInstalledParams = NatesclawPluginInstalledParams;
+declare const NatesclawPluginInstallParams: CodexAppServerRequestParams<"plugin/install">;
+const generatedPluginInstallParams: PluginInstallParams = NatesclawPluginInstallParams;
+declare const NatesclawPluginListParams: CodexAppServerRequestParams<"plugin/list">;
+const generatedPluginListParams: PluginListParams = NatesclawPluginListParams;
+declare const NatesclawPluginReadParams: CodexAppServerRequestParams<"plugin/read">;
+const generatedPluginReadParams: PluginReadParams = NatesclawPluginReadParams;
+declare const NatesclawDynamicToolSpec: CodexDynamicToolSpec;
+const generatedDynamicToolSpec: DynamicToolSpec = NatesclawDynamicToolSpec;
+declare const NatesclawTurnEnvironmentParams: CodexTurnEnvironmentParams;
+const generatedTurnEnvironmentParams: TurnEnvironmentParams = NatesclawTurnEnvironmentParams;
+declare const NatesclawThreadStartParams: CodexThreadStartParams;
+const generatedThreadStartParams: ThreadStartParams = NatesclawThreadStartParams;
+declare const NatesclawThreadResumeParams: CodexThreadResumeParams;
+const generatedThreadResumeParams: ThreadResumeParams = NatesclawThreadResumeParams;
+declare const NatesclawThreadForkParams: CodexThreadForkParams;
+const generatedThreadForkParams: ThreadForkParams = NatesclawThreadForkParams;
+declare const NatesclawThreadDeleteParams: CodexAppServerRequestParams<"thread/delete">;
+const generatedThreadDeleteParams: ThreadDeleteParams = NatesclawThreadDeleteParams;
+declare const NatesclawTurnInterruptParams: CodexAppServerRequestParams<"turn/interrupt">;
+const generatedTurnInterruptParams: TurnInterruptParams = NatesclawTurnInterruptParams;
+declare const NatesclawTurnStartParams: CodexTurnStartParams;
+const generatedTurnStartParams: TurnStartParams = NatesclawTurnStartParams;
 
 declare const generatedAppsInstalledResponse: AppsInstalledResponse;
-const openClawAppsInstalledResponse: CodexAppServerRequestResult<"app/installed"> =
+const NatesclawAppsInstalledResponse: CodexAppServerRequestResult<"app/installed"> =
   generatedAppsInstalledResponse;
 declare const generatedAppsListResponse: AppsListResponse;
-const openClawAppsListResponse: CodexAppServerRequestResult<"app/list"> =
+const NatesclawAppsListResponse: CodexAppServerRequestResult<"app/list"> =
   generatedAppsListResponse;
 declare const generatedAppsReadResponse: AppsReadResponse;
-const openClawAppsReadResponse: CodexAppServerRequestResult<"app/read"> =
+const NatesclawAppsReadResponse: CodexAppServerRequestResult<"app/read"> =
   generatedAppsReadResponse;
 declare const generatedAppSummaryResponse: AppSummary;
-const openClawAppSummaryResponse: v2.AppSummary = generatedAppSummaryResponse;
+const NatesclawAppSummaryResponse: v2.AppSummary = generatedAppSummaryResponse;
 declare const generatedCommandExecResponse: CommandExecResponse;
-const openClawCommandExecResponse: CodexAppServerRequestResult<"command/exec"> =
+const NatesclawCommandExecResponse: CodexAppServerRequestResult<"command/exec"> =
   generatedCommandExecResponse;
 declare const generatedConfigWriteResponse: ConfigWriteResponse;
-const openClawConfigBatchWriteResponse: CodexAppServerRequestResult<"config/batchWrite"> =
+const NatesclawConfigBatchWriteResponse: CodexAppServerRequestResult<"config/batchWrite"> =
   generatedConfigWriteResponse;
-const openClawConfigValueWriteResponse: CodexAppServerRequestResult<"config/value/write"> =
+const NatesclawConfigValueWriteResponse: CodexAppServerRequestResult<"config/value/write"> =
   generatedConfigWriteResponse;
 const generatedExactConfigBatchWriteResponse: ConfigWriteResponse =
-  openClawConfigBatchWriteResponse;
+  NatesclawConfigBatchWriteResponse;
 const generatedExactConfigValueWriteResponse: ConfigWriteResponse =
-  openClawConfigValueWriteResponse;
+  NatesclawConfigValueWriteResponse;
 declare const generatedPluginInstalledResponse: PluginInstalledResponse;
-const openClawPluginInstalledResponse: CodexAppServerRequestResult<"plugin/installed"> =
+const NatesclawPluginInstalledResponse: CodexAppServerRequestResult<"plugin/installed"> =
   generatedPluginInstalledResponse;
 const generatedPluginInstalledMarketplaceLoadErrors: MarketplaceLoadErrorInfo[] =
-  openClawPluginInstalledResponse.marketplaceLoadErrors;
+  NatesclawPluginInstalledResponse.marketplaceLoadErrors;
 type InstalledPluginResponseHasNoFeaturedCatalog =
   "featuredPluginIds" extends keyof v2.PluginInstalledResponse ? never : true;
 const installedPluginResponseHasNoFeaturedCatalog: InstalledPluginResponseHasNoFeaturedCatalog =
   true;
 declare const generatedPluginInstallResponse: PluginInstallResponse;
-const openClawPluginInstallResponse: CodexAppServerRequestResult<"plugin/install"> =
+const NatesclawPluginInstallResponse: CodexAppServerRequestResult<"plugin/install"> =
   generatedPluginInstallResponse;
 declare const generatedPluginListResponse: PluginListResponse;
-const openClawPluginListResponse: CodexAppServerRequestResult<"plugin/list"> =
+const NatesclawPluginListResponse: CodexAppServerRequestResult<"plugin/list"> =
   generatedPluginListResponse;
 const generatedPluginListMarketplaceLoadErrors: MarketplaceLoadErrorInfo[] =
-  openClawPluginListResponse.marketplaceLoadErrors;
-const generatedPluginListFeaturedPluginIds: string[] = openClawPluginListResponse.featuredPluginIds;
+  NatesclawPluginListResponse.marketplaceLoadErrors;
+const generatedPluginListFeaturedPluginIds: string[] = NatesclawPluginListResponse.featuredPluginIds;
 declare const generatedPluginReadResponse: PluginReadResponse;
-const openClawPluginReadResponse: CodexAppServerRequestResult<"plugin/read"> =
+const NatesclawPluginReadResponse: CodexAppServerRequestResult<"plugin/read"> =
   generatedPluginReadResponse;
 declare const generatedDynamicToolCallParams: Omit<DynamicToolCallParams, "arguments">;
-const openClawDynamicToolCallParams: Omit<CodexDynamicToolCallParams, "arguments"> =
+const NatesclawDynamicToolCallParams: Omit<CodexDynamicToolCallParams, "arguments"> =
   generatedDynamicToolCallParams;
 declare const generatedErrorNotification: ErrorNotification;
-const openClawErrorNotification: CodexErrorNotification = generatedErrorNotification;
+const NatesclawErrorNotification: CodexErrorNotification = generatedErrorNotification;
 declare const generatedGetAccountResponse: GetAccountResponse;
-const openClawGetAccountResponse: CodexGetAccountResponse = generatedGetAccountResponse;
+const NatesclawGetAccountResponse: CodexGetAccountResponse = generatedGetAccountResponse;
 declare const generatedModelListResponse: ModelListResponse;
-const openClawModelListResponse: CodexModelListResponse = generatedModelListResponse;
+const NatesclawModelListResponse: CodexModelListResponse = generatedModelListResponse;
 declare const generatedThreadDeleteResponse: ThreadDeleteResponse;
-const openClawThreadDeleteResponse: CodexAppServerRequestResult<"thread/delete"> =
+const NatesclawThreadDeleteResponse: CodexAppServerRequestResult<"thread/delete"> =
   generatedThreadDeleteResponse;
 
 // Thread and turn bodies are normalized behind checked-in JSON schemas. Their
 // raw generated shapes must not be confused with the projector-facing types.
 declare const generatedThreadForkResponse: Omit<ThreadForkResponse, "thread">;
-const openClawThreadForkResponse: Omit<CodexThreadForkResponse, "thread"> =
+const NatesclawThreadForkResponse: Omit<CodexThreadForkResponse, "thread"> =
   generatedThreadForkResponse;
 declare const generatedThreadResumeResponse: Omit<ThreadResumeResponse, "thread">;
-const openClawThreadResumeResponse: Omit<CodexThreadResumeResponse, "thread"> =
+const NatesclawThreadResumeResponse: Omit<CodexThreadResumeResponse, "thread"> =
   generatedThreadResumeResponse;
 declare const generatedThreadStartResponse: Omit<ThreadStartResponse, "thread">;
-const openClawThreadStartResponse: Omit<CodexThreadStartResponse, "thread"> =
+const NatesclawThreadStartResponse: Omit<CodexThreadStartResponse, "thread"> =
   generatedThreadStartResponse;
 
 export {};

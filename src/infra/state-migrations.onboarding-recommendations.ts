@@ -1,10 +1,10 @@
 import { existsSync } from "node:fs";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveWorkspaceStateIdentity } from "../agents/workspace-state-store.js";
-import type { OpenClawConfig } from "../config/config.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
-import { runOpenClawStateWriteTransaction } from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+import type { NatesclawConfig } from "../config/config.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
+import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
@@ -15,17 +15,17 @@ import type { MigrationMessages } from "./state-migrations.types.js";
 const LEGACY_ONBOARDING_RECOMMENDATIONS_KEY = "primary";
 
 type OnboardingRecommendationsMigrationDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "onboarding_recommendations"
 >;
 
 /** Move the shipped singleton row into the default workspace during doctor repair. */
 export function migrateLegacyOnboardingRecommendationsScope(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): MigrationMessages {
   const env = params.env ?? process.env;
-  if (!existsSync(resolveOpenClawStateSqlitePath(env))) {
+  if (!existsSync(resolveNatesclawStateSqlitePath(env))) {
     return { changes: [], warnings: [] };
   }
 
@@ -36,7 +36,7 @@ export function migrateLegacyOnboardingRecommendationsScope(params: {
       env,
     );
     const workspaceKey = resolveWorkspaceStateIdentity(workspaceDir).workspaceKey;
-    const outcome = runOpenClawStateWriteTransaction(
+    const outcome = runNatesclawStateWriteTransaction(
       ({ db: database }) => {
         const db = getNodeSqliteKysely<OnboardingRecommendationsMigrationDatabase>(database);
         const legacy = executeSqliteQueryTakeFirstSync(

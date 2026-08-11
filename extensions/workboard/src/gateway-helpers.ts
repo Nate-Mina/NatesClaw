@@ -1,8 +1,8 @@
-import { WORKBOARD_STATUSES, type WorkboardCard } from "@openclaw/workboard-contract";
+import { WORKBOARD_STATUSES, type WorkboardCard } from "@natesclaw/workboard-contract";
 // Workboard plugin module implements shared gateway request helpers.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import type { OpenClawPluginApi } from "../api.js";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import type { NatesclawPluginApi } from "../api.js";
 import { dispatchAndStartWorkboardCards } from "./dispatcher.js";
 import type { WorkboardStore } from "./store.js";
 import {
@@ -13,7 +13,7 @@ import {
 } from "./workspace-access.js";
 
 export type GatewayMethodContext = Parameters<
-  Parameters<OpenClawPluginApi["registerGatewayMethod"]>[1]
+  Parameters<NatesclawPluginApi["registerGatewayMethod"]>[1]
 >[0];
 type GatewayRespond = GatewayMethodContext["respond"];
 
@@ -86,7 +86,7 @@ export function resolveGatewayWorkboardWorkspaceAccess(params: {
 }
 
 export function createWorkboardDispatchHandler(params: {
-  api: OpenClawPluginApi;
+  api: NatesclawPluginApi;
   store: WorkboardStore;
   redactCard: (card: WorkboardCard) => WorkboardCard;
 }) {

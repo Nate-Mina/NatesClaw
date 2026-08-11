@@ -5,7 +5,7 @@ import { resolveDefaultChannelAccountContext } from "../channels/account-context
 import { listReadOnlyChannelPluginsForConfig } from "../channels/plugins/read-only.js";
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
 import type { ChannelAccountSnapshot } from "../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 type LinkChannelContext = {
   linked: boolean;
@@ -17,8 +17,8 @@ type LinkChannelContext = {
 
 /** Returns link status for the first configured read-only channel that exposes linked state. */
 export async function resolveLinkChannelContext(
-  cfg: OpenClawConfig,
-  options: { sourceConfig?: OpenClawConfig } = {},
+  cfg: NatesclawConfig,
+  options: { sourceConfig?: NatesclawConfig } = {},
 ): Promise<LinkChannelContext | null> {
   const sourceConfig = options.sourceConfig ?? cfg;
   for (const plugin of listReadOnlyChannelPluginsForConfig(cfg, {

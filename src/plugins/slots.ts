@@ -2,8 +2,8 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.js";
+} from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.js";
 import type { PluginSlotsConfig } from "../config/types.plugins.js";
 import type { PluginKind } from "./plugin-kind.types.js";
 
@@ -115,14 +115,14 @@ export function resetPluginSlotsToDefaults(
 }
 
 type SlotSelectionResult = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   warnings: string[];
   changed: boolean;
 };
 
 /** Updates config so the selected plugin owns all slots implied by its kind. */
 export function applyExclusiveSlotSelection(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   selectedId: string;
   selectedKind?: PluginKind | PluginKind[];
   registry?: { plugins: SlotPluginRecord[] };

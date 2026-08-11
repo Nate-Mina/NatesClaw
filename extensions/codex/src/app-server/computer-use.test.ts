@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 // Codex tests cover computer use plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { resolveCodexAppServerRuntimeOptions } from "./config.js";
 import { acquireCodexNativeConfigFence } from "./native-config-fence.js";
@@ -99,7 +99,7 @@ describe("Codex Computer Use setup", () => {
       new Error("captured start options"),
     );
     const config = { agents: { list: [{ id: "worker" }] } };
-    const agentDir = "/tmp/openclaw-worker-agent";
+    const agentDir = "/tmp/natesclaw-worker-agent";
 
     await expect(installCodexComputerUse({ pluginConfig: {}, config, agentDir })).rejects.toThrow(
       "captured start options",
@@ -117,7 +117,7 @@ describe("Codex Computer Use setup", () => {
   });
 
   it("holds the Codex-home fence until an install request settles", async () => {
-    const agentDir = "/tmp/openclaw-computer-use-fence-agent";
+    const agentDir = "/tmp/natesclaw-computer-use-fence-agent";
     let rejectInstallRequest: (error: Error) => void = () => undefined;
     const request = vi.fn(
       async () =>
@@ -162,7 +162,7 @@ describe("Codex Computer Use setup", () => {
     async (mode) => {
       const harness = createClientHarness();
       sharedClientMocks.getLeasedSharedCodexAppServerClient.mockResolvedValueOnce(harness.client);
-      const agentDir = `/tmp/openclaw-computer-use-${mode}-agent`;
+      const agentDir = `/tmp/natesclaw-computer-use-${mode}-agent`;
       const abortController = new AbortController();
       const install = installCodexComputerUse({
         pluginConfig: {},
@@ -216,7 +216,7 @@ describe("Codex Computer Use setup", () => {
     async (stream) => {
       const harness = createClientHarness();
       sharedClientMocks.getLeasedSharedCodexAppServerClient.mockResolvedValueOnce(harness.client);
-      const agentDir = `/tmp/openclaw-computer-use-${stream}-failure-agent`;
+      const agentDir = `/tmp/natesclaw-computer-use-${stream}-failure-agent`;
       const install = installCodexComputerUse({ pluginConfig: {}, agentDir, timeoutMs: 1_000 });
       await vi.waitFor(() => {
         const methods = harness.writes.map(
@@ -297,7 +297,7 @@ describe("Codex Computer Use setup", () => {
       "thread/start",
       {
         input: [],
-        developerInstructions: "OpenClaw Computer Use readiness probe",
+        developerInstructions: "Natesclaw Computer Use readiness probe",
         sandbox: "danger-full-access",
         approvalPolicy: "never",
         ephemeral: true,
@@ -785,7 +785,7 @@ describe("Codex Computer Use setup", () => {
   });
 
   it("auto-registers the current ChatGPT.app bundled marketplace before legacy Codex.app", async () => {
-    const root = tempDirs.make("openclaw-codex-bundled-marketplace-");
+    const root = tempDirs.make("natesclaw-codex-bundled-marketplace-");
     const chatGptMarketplacePath = path.join(
       root,
       "Applications",
@@ -831,7 +831,7 @@ describe("Codex Computer Use setup", () => {
   });
 
   it("auto-registers the legacy Codex.app bundled marketplace when ChatGPT.app is absent", async () => {
-    const root = tempDirs.make("openclaw-codex-bundled-marketplace-");
+    const root = tempDirs.make("natesclaw-codex-bundled-marketplace-");
     const chatGptMarketplacePath = path.join(
       root,
       "Applications",
@@ -876,7 +876,7 @@ describe("Codex Computer Use setup", () => {
   });
 
   it("keeps explicit bundled marketplace test overrides authoritative during auto-install", async () => {
-    const bundledMarketplacePath = tempDirs.make("openclaw-codex-bundled-marketplace-");
+    const bundledMarketplacePath = tempDirs.make("natesclaw-codex-bundled-marketplace-");
     const request = createBundledMarketplaceComputerUseRequest(bundledMarketplacePath);
 
     const status = await ensureCodexComputerUse({

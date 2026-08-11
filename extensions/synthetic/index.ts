@@ -1,7 +1,7 @@
-// Synthetic plugin entrypoint registers its OpenClaw integration.
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
+// Synthetic plugin entrypoint registers its Natesclaw integration.
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
 import { applySyntheticConfig, SYNTHETIC_DEFAULT_MODEL_REF } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import { buildSyntheticProvider } from "./provider-catalog.js";
 
 const PROVIDER_ID = "synthetic";

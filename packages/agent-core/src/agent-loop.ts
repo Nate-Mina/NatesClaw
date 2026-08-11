@@ -1,14 +1,14 @@
-// Keep the runtime class on the public package specifier so OpenClaw and
+// Keep the runtime class on the public package specifier so Natesclaw and
 // external consumers share one constructor identity.
-import { EventStream as LlmEventStream } from "@openclaw/ai/event-stream";
+import { EventStream as LlmEventStream } from "@natesclaw/ai/event-stream";
 import type {
   AssistantMessage,
   AssistantMessageEvent,
   Context,
   EventStream,
   ToolResultMessage,
-} from "@openclaw/llm-core";
-import type { EventStream as SourceEventStream } from "@openclaw/llm-core";
+} from "@natesclaw/llm-core";
+import type { EventStream as SourceEventStream } from "@natesclaw/llm-core";
 import { TranscriptNotContinuableError } from "./errors.js";
 import { uuidv7 } from "./harness/session/uuid.js";
 import {
@@ -67,7 +67,7 @@ type AssistantMessageUpdateEvent = Extract<
 >;
 
 const TOOL_LOOP_RECOVERY_TERMINATED_MESSAGE =
-  "OpenClaw stopped this run because tool-loop recovery encountered another critical loop. No blocked tool action was executed.";
+  "Natesclaw stopped this run because tool-loop recovery encountered another critical loop. No blocked tool action was executed.";
 const STEERING_TOOL_SKIP_MESSAGE = "Skipped due to queued user message.";
 
 function getSteeringAtCheckpoint(
@@ -1878,7 +1878,7 @@ type TurnTaintMetadata = {
 };
 
 function readTurnTaintMetadata(message: AgentMessage): TurnTaintMetadata | undefined {
-  const metadata = (message as unknown as Record<string, unknown>)["__openclaw"];
+  const metadata = (message as unknown as Record<string, unknown>)["__natesclaw"];
   return metadata && typeof metadata === "object" && !Array.isArray(metadata)
     ? (metadata as TurnTaintMetadata)
     : undefined;
@@ -1907,7 +1907,7 @@ function withAssistantTurnTaint(message: AssistantMessage, tainted: boolean): As
   }
   return {
     ...message,
-    __openclaw: { ...readTurnTaintMetadata(message), turnTainted: true },
+    __natesclaw: { ...readTurnTaintMetadata(message), turnTainted: true },
   } as unknown as AssistantMessage;
 }
 
@@ -1920,7 +1920,7 @@ function withToolResultContentSource(
   }
   return {
     ...message,
-    __openclaw: { ...readTurnTaintMetadata(message), resultContentSource: source },
+    __natesclaw: { ...readTurnTaintMetadata(message), resultContentSource: source },
   } as ToolResultMessage;
 }
 

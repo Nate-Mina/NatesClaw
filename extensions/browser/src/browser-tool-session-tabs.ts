@@ -1,7 +1,7 @@
 /**
  * Session tracking for tabs created through the browser tool.
  */
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { BrowserTabOwnership } from "./browser/client.types.js";
 
 type SessionTabParams = {

@@ -176,7 +176,7 @@ describe("CI changed Node test plan", () => {
   });
 
   it("runs only the boundary shard when a diff deletes test files", () => {
-    const cwd = mkdtempSync(path.join(tmpdir(), "openclaw-ci-deleted-test-"));
+    const cwd = mkdtempSync(path.join(tmpdir(), "natesclaw-ci-deleted-test-"));
     try {
       expect(createChangedNodeTestShards(["src/gone.test.ts"], { cwd })).toEqual([
         {
@@ -222,7 +222,7 @@ describe("CI changed Node test plan", () => {
   });
 
   it("fails safe when an unresolved source only finds an unrelated directory test", () => {
-    const cwd = mkdtempSync(path.join(tmpdir(), "openclaw-ci-target-"));
+    const cwd = mkdtempSync(path.join(tmpdir(), "natesclaw-ci-target-"));
     try {
       mkdirSync(path.join(cwd, "src"));
       writeFileSync(path.join(cwd, "src/value.ts"), "export const value = 1;\n");

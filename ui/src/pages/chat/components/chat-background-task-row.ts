@@ -65,7 +65,7 @@ function renderTaskMeta(
       ${facts.active && facts.startedMs > 0
         ? html`<span class="chat-tasks-rail__task-sep" aria-hidden="true">·</span>
             <span
-              ><openclaw-elapsed-time .startMs=${facts.startedMs}></openclaw-elapsed-time
+              ><natesclaw-elapsed-time .startMs=${facts.startedMs}></natesclaw-elapsed-time
             ></span>`
         : nothing}
       ${facts.finishedDuration
@@ -137,16 +137,16 @@ export function renderTaskRow(task: TaskSummary, props: BackgroundTasksProps): T
           ${task.status === "running"
             ? html`<span class="chat-tasks-rail__task-pulse" aria-hidden="true"></span>`
             : nothing}
-          <openclaw-tooltip .content=${facts.title}>
+          <natesclaw-tooltip .content=${facts.title}>
             <span class="chat-tasks-rail__task-title">${facts.title}</span>
-          </openclaw-tooltip>
+          </natesclaw-tooltip>
           <span class="chat-tasks-rail__task-chevron" aria-hidden="true">
             ${icons.chevronRight}
           </span>
         </button>
         ${facts.active && props.canCancel
           ? html`
-              <openclaw-tooltip
+              <natesclaw-tooltip
                 .content=${t("chat.backgroundTasks.stopTask", { title: facts.title })}
               >
                 <button
@@ -161,7 +161,7 @@ export function renderTaskRow(task: TaskSummary, props: BackgroundTasksProps): T
                 >
                   ${cancelling ? icons.loader : icons.stop}
                 </button>
-              </openclaw-tooltip>
+              </natesclaw-tooltip>
             `
           : nothing}
       </div>
@@ -190,7 +190,7 @@ export function renderTaskDetail(task: TaskSummary, props: BackgroundTasksProps)
         </div>
         ${facts.active && props.canCancel
           ? html`
-              <openclaw-tooltip
+              <natesclaw-tooltip
                 .content=${t("chat.backgroundTasks.stopTask", { title: facts.title })}
               >
                 <button
@@ -202,7 +202,7 @@ export function renderTaskDetail(task: TaskSummary, props: BackgroundTasksProps)
                 >
                   ${cancelling ? icons.loader : icons.stop}
                 </button>
-              </openclaw-tooltip>
+              </natesclaw-tooltip>
             `
           : nothing}
       </div>

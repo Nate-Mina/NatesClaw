@@ -3,13 +3,13 @@
  * model discovery, thinking policy, guardrails, and embedding integration.
  */
 import type { BedrockClient } from "@aws-sdk/client-bedrock";
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resolvePluginConfigObject } from "natesclaw/plugin-sdk/plugin-config-runtime";
 import type {
-  OpenClawPluginApi,
+  NatesclawPluginApi,
   ProviderNormalizeResolvedModelContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import {
   buildProviderReplayFamilyHooks,
   normalizeProviderId,
@@ -18,8 +18,8 @@ import {
   resolveClaudeMythos5ModelIdentity,
   resolveClaudeOpus5ModelIdentity,
   resolveClaudeSonnet5ModelIdentity,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { createPayloadPatchStreamWrapper } from "openclaw/plugin-sdk/provider-stream-shared";
+} from "natesclaw/plugin-sdk/provider-model-shared";
+import { createPayloadPatchStreamWrapper } from "natesclaw/plugin-sdk/provider-stream-shared";
 import { refreshAwsSharedConfigCacheForBedrock } from "./aws-credential-refresh.js";
 import { supportsBedrockPromptCaching } from "./bedrock-options.js";
 import { loadBedrockControlPlaneSdk, runBedrockControlPlaneRequest } from "./control-plane.js";
@@ -199,7 +199,7 @@ function isBedrockAppInferenceProfile(modelId: string): boolean {
 /**
  * The shared runtime's `supportsPromptCaching` checks `model.id` for specific Claude
  * model name patterns, which fails for application inference profile ARNs (opaque
- * IDs that may not contain the model name). When OpenClaw's `isAnthropicBedrockModel`
+ * IDs that may not contain the model name). When Natesclaw's `isAnthropicBedrockModel`
  * identifies the model but the shared runtime won't inject cache points, we do it via onPayload.
  *
  * Gated to application inference profile ARNs only — regular Claude model IDs and
@@ -214,7 +214,7 @@ function needsCachePointInjection(modelId: string): boolean {
   if (sharedRuntimeWouldInjectCachePoints(modelId)) {
     return false;
   }
-  // Check if OpenClaw identifies this as an Anthropic model via the ARN heuristic.
+  // Check if Natesclaw identifies this as an Anthropic model via the ARN heuristic.
   if (isAnthropicBedrockModel(modelId)) {
     return true;
   }
@@ -233,7 +233,7 @@ function extractRegionFromArn(arn: string): string | undefined {
 
 /**
  * Check if a resolved foundation model ARN supports prompt caching using the
- * same matcher OpenClaw uses for direct model IDs.
+ * same matcher Natesclaw uses for direct model IDs.
  */
 function resolvedModelSupportsCaching(modelArn: string): boolean {
   return supportsBedrockPromptCaching(modelArn);
@@ -246,7 +246,7 @@ function resolvedModelSupportsCaching(modelArn: string): boolean {
  * otherwise opaque.
  *
  * Region is extracted from the profile ARN itself to avoid mismatches when
- * the OpenClaw config region differs from the profile's home region.
+ * the Natesclaw config region differs from the profile's home region.
  */
 type BedrockAppProfileTraits = {
   cacheEligible: boolean;
@@ -369,7 +369,7 @@ function patchMaxThinkingEffort(payload: Record<string, unknown>): void {
 }
 
 /** Register Amazon Bedrock provider, discovery catalog, stream wrappers, and embeddings. */
-export function registerAmazonBedrockPlugin(api: OpenClawPluginApi): void {
+export function registerAmazonBedrockPlugin(api: NatesclawPluginApi): void {
   // Keep registration-local constants inside the function so partial module
   // initialization during test bootstrap cannot trip TDZ reads.
   const providerId = "amazon-bedrock";
@@ -389,7 +389,7 @@ export function registerAmazonBedrockPlugin(api: OpenClawPluginApi): void {
   const startupPluginConfig = (api.pluginConfig ?? {}) as AmazonBedrockPluginConfig;
 
   function resolveCurrentPluginConfig(
-    config: OpenClawConfig | undefined,
+    config: NatesclawConfig | undefined,
   ): AmazonBedrockPluginConfig | undefined {
     const runtimePluginConfig = resolvePluginConfigObject(config, providerId);
     return (

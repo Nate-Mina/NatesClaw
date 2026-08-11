@@ -38,7 +38,7 @@ printf 'FORCE_COLOR=%s\\n' "\${FORCE_COLOR-}"
 printf 'CLICOLOR=%s\\n' "\${CLICOLOR-}"
 printf 'CLICOLOR_FORCE=%s\\n' "\${CLICOLOR_FORCE-}"
 printf 'COLORTERM_SET=%s\\n' "\${COLORTERM+x}"
-printf 'OPENCLAW_GH_BIN_SET=%s\\n' "\${OPENCLAW_GH_BIN+x}"
+printf 'NATESCLAW_GH_BIN_SET=%s\\n' "\${NATESCLAW_GH_BIN+x}"
 `,
   );
   chmodSync(ghPath, 0o755);
@@ -61,13 +61,13 @@ process.stdout.write("x".repeat(bytes));
 }
 
 describe("plain gh helpers", () => {
-  it("prefers OPENCLAW_GH_BIN over PATH shims", () => {
+  it("prefers NATESCLAW_GH_BIN over PATH shims", () => {
     const ghPath = makeFakeGh();
 
     expect(
       resolvePlainGhBin({
         HOME: path.dirname(path.dirname(ghPath)),
-        OPENCLAW_GH_BIN: ghPath,
+        NATESCLAW_GH_BIN: ghPath,
         PATH: "",
       }),
     ).toBe(ghPath);
@@ -103,17 +103,17 @@ describe("plain gh helpers", () => {
 
   it("routes explicit GET reads through the PATH shim", () => {
     const ghPath = makeFakeGh();
-    const output = execGhApiRead("repos/openclaw/openclaw/pulls/1", {
+    const output = execGhApiRead("repos/natesclaw/natesclaw/pulls/1", {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_GH_BIN: "/identity-sensitive/plain-gh",
+        NATESCLAW_GH_BIN: "/identity-sensitive/plain-gh",
         PATH: `${path.dirname(ghPath)}${path.delimiter}${process.env.PATH ?? ""}`,
       },
     });
 
-    expect(output).toContain("argv=api repos/openclaw/openclaw/pulls/1 --method GET");
-    expect(output).toContain("OPENCLAW_GH_BIN_SET=");
+    expect(output).toContain("argv=api repos/natesclaw/natesclaw/pulls/1 --method GET");
+    expect(output).toContain("NATESCLAW_GH_BIN_SET=");
   });
 
   it("shares bounded PATH-shim reads and JSON parsing", () => {
@@ -125,7 +125,7 @@ describe("plain gh helpers", () => {
 
     expect(
       execGhJson(
-        ["api", "repos/openclaw/openclaw"],
+        ["api", "repos/natesclaw/natesclaw"],
         {
           killSignal: "SIGKILL",
           stdio: ["ignore", "pipe", "inherit"],
@@ -137,7 +137,7 @@ describe("plain gh helpers", () => {
     expect(calls).toEqual([
       [
         "gh",
-        ["api", "repos/openclaw/openclaw"],
+        ["api", "repos/natesclaw/natesclaw"],
         expect.objectContaining({
           encoding: "utf8",
           killSignal: "SIGKILL",
@@ -175,8 +175,8 @@ describe("plain gh helpers", () => {
     const script = [
       "set -euo pipefail",
       "source scripts/lib/plain-gh.sh",
-      `OPENCLAW_GH_BIN=${JSON.stringify(ghPath)}`,
-      "export OPENCLAW_GH_BIN",
+      `NATESCLAW_GH_BIN=${JSON.stringify(ghPath)}`,
+      "export NATESCLAW_GH_BIN",
       `gh_plain api rate_limit > ${JSON.stringify(outputPath)}`,
     ].join("\n");
 
@@ -209,7 +209,7 @@ describe("plain gh helpers", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_GH_BIN: ghPath,
+        NATESCLAW_GH_BIN: ghPath,
         PLAIN_GH_FAKE_BYTES: String(bytes),
       },
     });

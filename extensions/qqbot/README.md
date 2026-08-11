@@ -1,11 +1,11 @@
-# OpenClaw QQ Bot
+# Natesclaw QQ Bot
 
-Official OpenClaw channel plugin for QQ Bot group and direct-message workflows.
+Official Natesclaw channel plugin for QQ Bot group and direct-message workflows.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/qqbot
+natesclaw plugins install @natesclaw/qqbot
 ```
 
-Configure QQ Bot credentials in OpenClaw, then connect the bot to the groups or direct-message contexts where agents should operate.
+Configure QQ Bot credentials in Natesclaw, then connect the bot to the groups or direct-message contexts where agents should operate.

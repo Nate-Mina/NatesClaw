@@ -85,7 +85,7 @@ describe("model setup first-run redirect", () => {
           client: { request: vi.fn() },
           hello: {
             auth: { role: "operator", scopes: ["operator.admin"] },
-            features: { methods: ["openclaw.setup.detect"] },
+            features: { methods: ["natesclaw.setup.detect"] },
           },
         },
         subscribe,
@@ -123,7 +123,7 @@ describe("model setup first-run redirect", () => {
         type: "hello-ok" as const,
         protocol: 1,
         auth: { role: "operator", scopes: ["operator.admin"] },
-        features: { methods: ["openclaw.setup.detect"] },
+        features: { methods: ["natesclaw.setup.detect"] },
       },
     };
     const replace = vi.fn();
@@ -146,7 +146,7 @@ describe("model setup first-run redirect", () => {
 
     expect(request).toHaveBeenCalledOnce();
     expect(request).toHaveBeenCalledWith(
-      "openclaw.setup.detect",
+      "natesclaw.setup.detect",
       {},
       expect.objectContaining({ timeoutMs: 20_000 }),
     );
@@ -172,7 +172,7 @@ describe("model setup first-run redirect", () => {
         type: "hello-ok" as const,
         protocol: 1,
         auth: { role: "operator", scopes: ["operator.admin"] },
-        features: { methods: ["openclaw.setup.detect"] },
+        features: { methods: ["natesclaw.setup.detect"] },
       },
     };
     const replace = vi.fn();
@@ -223,7 +223,7 @@ describe("model setup first-run redirect", () => {
       type: "hello-ok" as const,
       protocol: 1,
       auth: { role: "operator", scopes: ["operator.admin"] },
-      features: { methods: ["openclaw.setup.detect"] },
+      features: { methods: ["natesclaw.setup.detect"] },
     };
     const gateway = {
       snapshot: { phase: "connected", client, hello: firstHello as typeof firstHello | null },
@@ -274,7 +274,7 @@ describe("model setup first-run redirect", () => {
       client,
       hello: {
         auth: { role: "operator", scopes: ["operator.read"] },
-        features: { methods: ["openclaw.setup.detect"] },
+        features: { methods: ["natesclaw.setup.detect"] },
       },
     } as Parameters<GatewayListener>[0]);
     listener!({

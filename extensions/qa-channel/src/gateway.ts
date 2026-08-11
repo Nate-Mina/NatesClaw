@@ -1,5 +1,5 @@
 // Qa Channel plugin module implements gateway behavior.
-import { channelReadyPatch, channelStoppedPatch } from "openclaw/plugin-sdk/gateway-runtime";
+import { channelReadyPatch, channelStoppedPatch } from "natesclaw/plugin-sdk/gateway-runtime";
 import { pollQaBus } from "./bus-client.js";
 import { handleQaInbound } from "./inbound.js";
 import type { ChannelGatewayContext } from "./runtime-api.js";

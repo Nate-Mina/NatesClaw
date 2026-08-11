@@ -3,12 +3,12 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { formatErrorMessage } from "../infra/errors.js";
 import { resolveRequiredHomeDir } from "../infra/home-dir.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
-import { resolveOpenClawDevSourceRoot } from "./dev-source-root.js";
+import { resolveNatesclawPackageRootSync } from "../infra/natesclaw-root.js";
+import { resolveNatesclawDevSourceRoot } from "./dev-source-root.js";
 import { PluginLruCache } from "./plugin-cache-primitives.js";
 
 type PluginSdkAliasCandidateKind = "dist" | "src";
@@ -91,9 +91,9 @@ function resolvePluginLoaderJitiNativeModules(): string[] {
     const nativeModules = Array.isArray(configured)
       ? configured.filter((entry): entry is string => typeof entry === "string")
       : [];
-    return [...new Set([...nativeModules, "openclaw"])];
+    return [...new Set([...nativeModules, "natesclaw"])];
   } catch {
-    return ["openclaw"];
+    return ["natesclaw"];
   }
 }
 
@@ -147,7 +147,7 @@ function resolvePluginLoaderJitiFsCacheDir(params: LoaderModuleResolveParams = {
   }
   return path.join(
     resolveJitiFsCacheRoot(),
-    "openclaw",
+    "natesclaw",
     "jiti",
     version,
     sanitizeJitiCachePathSegment(installMarker),
@@ -172,7 +172,7 @@ function listPluginSdkSubpathsFromPackageJson(pkg: PluginSdkPackageJson): string
     .toSorted();
 }
 
-function hasTrustedOpenClawRootIndicator(params: {
+function hasTrustedNatesclawRootIndicator(params: {
   packageRoot: string;
   packageJson: PluginSdkPackageJson;
 }): boolean {
@@ -184,14 +184,14 @@ function hasTrustedOpenClawRootIndicator(params: {
     return false;
   }
   const hasCliEntryExport = Object.hasOwn(packageExports, "./cli-entry");
-  const hasOpenClawBin =
+  const hasNatesclawBin =
     (typeof params.packageJson.bin === "string" &&
-      normalizeLowercaseStringOrEmpty(params.packageJson.bin).includes("openclaw")) ||
+      normalizeLowercaseStringOrEmpty(params.packageJson.bin).includes("natesclaw")) ||
     (typeof params.packageJson.bin === "object" &&
       params.packageJson.bin !== null &&
-      typeof params.packageJson.bin.openclaw === "string");
-  const hasOpenClawEntrypoint = fs.existsSync(path.join(params.packageRoot, "openclaw.mjs"));
-  return hasCliEntryExport || hasOpenClawBin || hasOpenClawEntrypoint;
+      typeof params.packageJson.bin.natesclaw === "string");
+  const hasNatesclawEntrypoint = fs.existsSync(path.join(params.packageRoot, "natesclaw.mjs"));
+  return hasCliEntryExport || hasNatesclawBin || hasNatesclawEntrypoint;
 }
 
 function readPluginSdkSubpathsFromPackageRoot(packageRoot: string): string[] | null {
@@ -199,21 +199,21 @@ function readPluginSdkSubpathsFromPackageRoot(packageRoot: string): string[] | n
   if (!pkg) {
     return null;
   }
-  if (!hasTrustedOpenClawRootIndicator({ packageRoot, packageJson: pkg })) {
+  if (!hasTrustedNatesclawRootIndicator({ packageRoot, packageJson: pkg })) {
     return null;
   }
   const subpaths = listPluginSdkSubpathsFromPackageJson(pkg);
   return subpaths.length > 0 ? subpaths : null;
 }
 
-function resolveTrustedOpenClawRootFromArgvHint(params: {
+function resolveTrustedNatesclawRootFromArgvHint(params: {
   argv1?: string;
   cwd: string;
 }): string | null {
   if (!params.argv1) {
     return null;
   }
-  const packageRoot = resolveOpenClawPackageRootSync({
+  const packageRoot = resolveNatesclawPackageRootSync({
     cwd: params.cwd,
     argv1: params.argv1,
   });
@@ -224,7 +224,7 @@ function resolveTrustedOpenClawRootFromArgvHint(params: {
   if (!packageJson) {
     return null;
   }
-  return hasTrustedOpenClawRootIndicator({ packageRoot, packageJson }) ? packageRoot : null;
+  return hasTrustedNatesclawRootIndicator({ packageRoot, packageJson }) ? packageRoot : null;
 }
 
 function findNearestPluginSdkPackageRoot(startDir: string, maxDepth = 12): string | null {
@@ -247,13 +247,13 @@ export function resolveLoaderPackageRoot(
   params: LoaderModuleResolveParams & { modulePath: string },
 ): string | null {
   const cwd = params.cwd ?? path.dirname(params.modulePath);
-  const fromModulePath = resolveOpenClawPackageRootSync({ cwd });
+  const fromModulePath = resolveNatesclawPackageRootSync({ cwd });
   if (fromModulePath) {
     return fromModulePath;
   }
   const argv1 = params.argv1 ?? process.argv[1];
   const moduleUrl = params.moduleUrl ?? (params.modulePath ? undefined : import.meta.url);
-  return resolveOpenClawPackageRootSync({
+  return resolveNatesclawPackageRootSync({
     cwd,
     ...(argv1 ? { argv1 } : {}),
     ...(moduleUrl ? { moduleUrl } : {}),
@@ -358,7 +358,7 @@ function listArgvRuntimeFallbackStartDirs(argv1: string | undefined): string[] {
 function resolveDevSourceRootParam(params: { devSourceRoot?: string | null }): string | null {
   return params.devSourceRoot !== undefined
     ? params.devSourceRoot
-    : resolveOpenClawDevSourceRoot(process.env);
+    : resolveNatesclawDevSourceRoot(process.env);
 }
 
 function resolveLoaderPluginSdkPackageRoot(
@@ -369,11 +369,11 @@ function resolveLoaderPluginSdkPackageRoot(
     return devSourceRoot;
   }
   const cwd = params.cwd ?? path.dirname(params.modulePath);
-  const fromCwd = resolveOpenClawPackageRootSync({ cwd });
+  const fromCwd = resolveNatesclawPackageRootSync({ cwd });
   const fromExplicitHints =
-    resolveTrustedOpenClawRootFromArgvHint({ cwd, argv1: params.argv1 }) ??
+    resolveTrustedNatesclawRootFromArgvHint({ cwd, argv1: params.argv1 }) ??
     (params.moduleUrl
-      ? resolveOpenClawPackageRootSync({
+      ? resolveNatesclawPackageRootSync({
           cwd,
           moduleUrl: params.moduleUrl,
         })
@@ -416,7 +416,7 @@ const cachedBundledPluginPublicSurfaceAliasMaps = new PluginLruCache<Record<stri
 const cachedWorkspacePackageAliasMaps = new PluginLruCache<Record<string, string>>(
   MAX_PLUGIN_LOADER_ALIAS_CACHE_ENTRIES,
 );
-const PLUGIN_SDK_PACKAGE_NAMES = ["openclaw/plugin-sdk", "@openclaw/plugin-sdk"] as const;
+const PLUGIN_SDK_PACKAGE_NAMES = ["natesclaw/plugin-sdk", "@natesclaw/plugin-sdk"] as const;
 const CODEX_MCP_PROJECTION_PLUGIN_SDK_SUBPATH = "codex-mcp-projection";
 const CODEX_SESSION_TRANSCRIPT_PLUGIN_SDK_SUBPATH = "codex-session-transcript-runtime";
 const OLLAMA_CONFIGURED_LOCAL_ORIGIN_RUNTIME_PLUGIN_SDK_SUBPATH = "ssrf-runtime-internal";
@@ -454,7 +454,7 @@ type PrivatePluginSdkSubpathOwner = {
 const PRIVATE_PLUGIN_SDK_SUBPATH_OWNERS: readonly PrivatePluginSdkSubpathOwner[] = [
   {
     bundledPluginId: "codex",
-    officialInstalledPackageName: "@openclaw/codex",
+    officialInstalledPackageName: "@natesclaw/codex",
     allowPrivateQaCli: true,
     subpaths: [
       CODEX_MCP_PROJECTION_PLUGIN_SDK_SUBPATH,
@@ -576,7 +576,7 @@ const WORKSPACE_PACKAGE_ALIAS_ENTRIES: WorkspacePackageAliasEntry[] =
   WORKSPACE_PACKAGE_ALIAS_SUBPATHS.flatMap(([packageDir, subpaths]) =>
     subpaths.map(
       (subpath): WorkspacePackageAliasEntry => ({
-        packageName: `@openclaw/${packageDir}`,
+        packageName: `@natesclaw/${packageDir}`,
         packageDir,
         subpath,
         srcFile: `${subpath || "index"}.ts`,
@@ -669,7 +669,7 @@ export function listWorkspacePackageExportAliasEntries(params: {
     params.packageDir,
     "package.json",
   );
-  const fallbackPackageRoot = resolveOpenClawPackageRootSync({ cwd: process.cwd() });
+  const fallbackPackageRoot = resolveNatesclawPackageRootSync({ cwd: process.cwd() });
   const packageJson =
     tryReadJsonSync<PluginSdkPackageJson>(packageJsonPath) ??
     (fallbackPackageRoot
@@ -748,7 +748,7 @@ function readPrivateLocalOnlyPluginSdkSubpaths(packageRoot: string): string[] {
 function readBundledPluginPackageName(packageJsonPath: string): string | null {
   const parsed = tryReadJsonSync<{ name?: unknown }>(packageJsonPath);
   const name = typeof parsed?.name === "string" ? parsed.name.trim() : "";
-  return name.startsWith("@openclaw/") ? name : null;
+  return name.startsWith("@natesclaw/") ? name : null;
 }
 
 function isBundledPluginPublicSurfaceSourceBasename(params: {
@@ -917,7 +917,7 @@ function resolveWorkspacePackageAliasMap(params: {
     ...["normalization-core", "acp-core"].flatMap((packageDir) =>
       listWorkspacePackageExportAliasEntries({
         packageRoot,
-        packageName: `@openclaw/${packageDir}`,
+        packageName: `@natesclaw/${packageDir}`,
         packageDir,
       }),
     ),
@@ -953,7 +953,7 @@ function resolveWorkspacePackageAliasMap(params: {
 }
 
 function shouldIncludePrivateLocalOnlyPluginSdkSubpaths() {
-  return process.env.OPENCLAW_ENABLE_PRIVATE_QA_CLI === "1";
+  return process.env.NATESCLAW_ENABLE_PRIVATE_QA_CLI === "1";
 }
 
 function isBundledPluginModulePath(params: {
@@ -1248,7 +1248,7 @@ function resolvePluginSdkScopedAliasMap(
         }
         break;
       }
-      if (Object.hasOwn(aliasMap, `openclaw/plugin-sdk/${subpath}`)) {
+      if (Object.hasOwn(aliasMap, `natesclaw/plugin-sdk/${subpath}`)) {
         break;
       }
     }
@@ -1584,7 +1584,7 @@ export function buildPluginLoaderJitiOptions(
     // Prefer Node's native sync ESM loader for built dist/*.js modules so
     // bundled plugins and plugin-sdk subpaths stay on the canonical module graph.
     tryNative: true,
-    // When jiti must transform a plugin entry, keep OpenClaw's own package
+    // When jiti must transform a plugin entry, keep Natesclaw's own package
     // chunks on the native module graph instead of re-evaluating them in jiti.
     nativeModules: resolvePluginLoaderJitiNativeModules(),
     extensions: [".ts", ".tsx", ".mts", ".cts", ".mtsx", ".ctsx", ".js", ".mjs", ".cjs", ".json"],

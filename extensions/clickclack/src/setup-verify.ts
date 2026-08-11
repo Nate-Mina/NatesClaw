@@ -1,8 +1,8 @@
 // ClickClack plugin module implements shared setup connection verification.
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { hasConfiguredSecretInput } from "openclaw/plugin-sdk/setup";
+import { DEFAULT_ACCOUNT_ID } from "natesclaw/plugin-sdk/account-id";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { hasConfiguredSecretInput } from "natesclaw/plugin-sdk/setup";
 import { resolveClickClackAccount } from "./accounts.js";
 import { createClickClackClient } from "./http-client.js";
 import { resolveWorkspaceId } from "./resolve.js";
@@ -18,10 +18,10 @@ type ClickClackSetupConnectionResult =
 
 type ClickClackGatewayStatus = "running" | "not-running" | "unavailable";
 
-const GATEWAY_RUNNING_MESSAGE = "OpenClaw is running — ClickClack will connect automatically.";
-const GATEWAY_NOT_RUNNING_MESSAGE = "Start OpenClaw to connect: openclaw gateway";
+const GATEWAY_RUNNING_MESSAGE = "Natesclaw is running — ClickClack will connect automatically.";
+const GATEWAY_NOT_RUNNING_MESSAGE = "Start Natesclaw to connect: natesclaw gateway";
 const GATEWAY_UNKNOWN_MESSAGE =
-  "If OpenClaw is running it connects automatically; otherwise start it with: openclaw gateway";
+  "If Natesclaw is running it connects automatically; otherwise start it with: natesclaw gateway";
 
 function isHttpStatus(error: unknown, status: number): boolean {
   return (
@@ -122,7 +122,7 @@ function isGatewayNotRunningError(error: unknown): boolean {
 
 async function probeClickClackGatewayStatus(): Promise<ClickClackGatewayStatus> {
   try {
-    const { callGatewayFromCli } = await import("openclaw/plugin-sdk/gateway-runtime");
+    const { callGatewayFromCli } = await import("natesclaw/plugin-sdk/gateway-runtime");
     await callGatewayFromCli("health", { timeout: "1000", json: true }, undefined, {
       expectFinal: false,
       progress: false,

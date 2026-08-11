@@ -1,5 +1,5 @@
 // Shared session-handler target resolution and mutation guards.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -8,7 +8,7 @@ import {
 } from "../../../packages/gateway-protocol/src/index.js";
 import { listConfiguredSessionStoreAgentIds, type SessionEntry } from "../../config/sessions.js";
 import { resolveAgentMainSessionKey } from "../../config/sessions/main-session.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../../routing/session-key.js";
 import { createLazyRuntimeModule } from "../../shared/lazy-runtime.js";
@@ -45,7 +45,7 @@ export function respondSessionWorkerPlacementMutationError(
 
 export function resolveSessionWorkerPlacementPatchError(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   context: GatewayRequestContext;
   entry: SessionEntry | undefined;
   key: string;
@@ -82,7 +82,7 @@ export function resolveSessionWorkerPlacementPatchError(params: {
 }
 
 export function filterSessionStoreToConfiguredAgents(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   store: Record<string, SessionEntry>,
 ): Record<string, SessionEntry> {
   const configuredAgentIds = new Set(listConfiguredSessionStoreAgentIds(cfg));
@@ -154,7 +154,7 @@ export function rejectPluginRuntimeSessionOwnershipMismatch(params: {
 
 export function resolveGatewaySessionTargetFromKey(
   key: string,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   opts?: { agentId?: string },
 ) {
   const target = resolveGatewaySessionStoreTarget({
@@ -167,7 +167,7 @@ export function resolveGatewaySessionTargetFromKey(
 
 export function loadAccessorSessionEntryForGatewayTarget(params: {
   key: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
 }) {
   const target = resolveGatewaySessionStoreTargetWithStore({
@@ -210,7 +210,7 @@ export function loadAccessorSessionEntryForGatewayTarget(params: {
 
 export function loadSessionEntriesForTarget(params: {
   key: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
 }) {
   const target = resolveGatewaySessionStoreTargetWithStore({
@@ -251,7 +251,7 @@ export function isWorkerDispatchInputError(error: unknown): boolean {
   return code === "invalid_profile" || code === "profile_not_found" || code === "invalid_state";
 }
 
-export function isAgentMainSessionKey(cfg: OpenClawConfig, sessionKey: string): boolean {
+export function isAgentMainSessionKey(cfg: NatesclawConfig, sessionKey: string): boolean {
   const parsed = parseAgentSessionKey(sessionKey);
   if (!parsed) {
     return false;

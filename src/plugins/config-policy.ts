@@ -1,5 +1,5 @@
 // Evaluates plugin config policy without activating plugin runtime code.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   resolvePluginActivationDecisionShared,
   toPluginActivationState,
@@ -19,7 +19,7 @@ type PluginActivationState = PluginActivationStateLike;
 type NormalizedPluginsConfig = SharedNormalizedPluginsConfig;
 
 export function normalizePluginsConfigWithResolver(
-  config?: OpenClawConfig["plugins"],
+  config?: NatesclawConfig["plugins"],
   normalizePluginId: NormalizePluginId = identityNormalizePluginId,
 ): NormalizedPluginsConfig {
   return normalizePluginsConfigWithResolverShared(config, normalizePluginId);
@@ -29,10 +29,10 @@ function resolvePluginActivationState(params: {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: NatesclawConfig;
   enabledByDefault?: boolean;
   sourceConfig?: NormalizedPluginsConfig;
-  sourceRootConfig?: OpenClawConfig;
+  sourceRootConfig?: NatesclawConfig;
   autoEnabledReason?: string;
 }): PluginActivationState {
   return toPluginActivationState(
@@ -53,10 +53,10 @@ type PolicyEffectiveActivationParams = {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: NatesclawConfig;
   enabledByDefault?: boolean;
   sourceConfig?: NormalizedPluginsConfig;
-  sourceRootConfig?: OpenClawConfig;
+  sourceRootConfig?: NatesclawConfig;
   autoEnabledReason?: string;
 };
 

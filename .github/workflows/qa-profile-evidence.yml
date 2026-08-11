@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: OpenClaw branch, tag, or SHA to run
+        description: Natesclaw branch, tag, or SHA to run
         required: true
         default: main
         type: string
@@ -33,7 +33,7 @@ on:
   workflow_call:
     inputs:
       ref:
-        description: OpenClaw branch, tag, or SHA to run
+        description: Natesclaw branch, tag, or SHA to run
         required: true
         type: string
       trusted_ref:
@@ -59,10 +59,10 @@ on:
       OPENAI_API_KEY:
         description: OpenAI API key used by live QA profile scenarios
         required: true
-      OPENCLAW_QA_CONVEX_SITE_URL:
+      NATESCLAW_QA_CONVEX_SITE_URL:
         description: Optional Convex credential broker URL supplied by qa-live-shared
         required: false
-      OPENCLAW_QA_CONVEX_SECRET_CI:
+      NATESCLAW_QA_CONVEX_SECRET_CI:
         description: Optional Convex CI credential supplied by qa-live-shared
         required: false
     outputs:
@@ -79,7 +79,7 @@ on:
         description: Whether the QA profile command exited successfully
         value: ${{ jobs.run_qa_profile.outputs.qa_passed }}
       target_sha:
-        description: Resolved OpenClaw SHA that produced the evidence
+        description: Resolved Natesclaw SHA that produced the evidence
         value: ${{ jobs.run_qa_profile.outputs.target_sha }}
       trusted_reason:
         description: Trust reason accepted before the secret-bearing QA job
@@ -98,10 +98,10 @@ concurrency:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   NODE_VERSION: "24.x"
-  OPENCLAW_BUILD_PRIVATE_QA: "1"
-  OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1"
-  OPENCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-  OPENCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "180000"
+  NATESCLAW_BUILD_PRIVATE_QA: "1"
+  NATESCLAW_ENABLE_PRIVATE_QA_CLI: "1"
+  NATESCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+  NATESCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "180000"
 
 jobs:
   authorize_actor:
@@ -328,8 +328,8 @@ jobs:
       - name: Require live profile credentials
         if: steps.profile.outputs.channel_driver == 'live'
         env:
-          OPENCLAW_QA_CONVEX_SITE_URL: ${{ secrets.OPENCLAW_QA_CONVEX_SITE_URL }}
-          OPENCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.OPENCLAW_QA_CONVEX_SECRET_CI }}
+          NATESCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NATESCLAW_QA_CONVEX_SITE_URL }}
+          NATESCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NATESCLAW_QA_CONVEX_SECRET_CI }}
         shell: bash
         run: |
           set -euo pipefail
@@ -342,8 +342,8 @@ jobs:
             fi
           }
 
-          require_var OPENCLAW_QA_CONVEX_SITE_URL
-          require_var OPENCLAW_QA_CONVEX_SECRET_CI
+          require_var NATESCLAW_QA_CONVEX_SITE_URL
+          require_var NATESCLAW_QA_CONVEX_SECRET_CI
 
       - name: Build private QA runtime
         env:
@@ -364,12 +364,12 @@ jobs:
           TARGET_SHA: ${{ needs.validate_selected_ref.outputs.selected_revision }}
           PROTOCOL_SINCE_BASE_SHA: ${{ needs.validate_selected_ref.outputs.protocol_base_revision }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENCLAW_QA_CONVEX_SITE_URL: ${{ secrets.OPENCLAW_QA_CONVEX_SITE_URL }}
-          OPENCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.OPENCLAW_QA_CONVEX_SECRET_CI }}
-          OPENCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS: "120000"
-          OPENCLAW_QA_CREDENTIAL_ROLE: ci
-          OPENCLAW_QA_CREDENTIAL_SOURCE: convex
-          OPENCLAW_QA_ALLOW_UPDATE_RUN_SELF: "1"
+          NATESCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NATESCLAW_QA_CONVEX_SITE_URL }}
+          NATESCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NATESCLAW_QA_CONVEX_SECRET_CI }}
+          NATESCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS: "120000"
+          NATESCLAW_QA_CREDENTIAL_ROLE: ci
+          NATESCLAW_QA_CREDENTIAL_SOURCE: convex
+          NATESCLAW_QA_ALLOW_UPDATE_RUN_SELF: "1"
         shell: bash
         run: |
           set -euo pipefail
@@ -404,7 +404,7 @@ jobs:
           qa_exit_code=0
           LC_ALL=C timeout --verbose --signal=TERM --kill-after=30s 110m \
             "${timeout_child_env[@]}" bash -c 'exec "$@" 2>&3' bash \
-            pnpm openclaw qa run \
+            pnpm natesclaw qa run \
               --repo-root . \
               --qa-profile "${QA_PROFILE}" \
               --concurrency 3 \

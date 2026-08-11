@@ -2,9 +2,9 @@
 import {
   implicitMentionKindWhen,
   matchesMentionWithExplicit,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { findCodeRegions, isInsideCode } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { findCodeRegions, isInsideCode } from "natesclaw/plugin-sdk/text-chunking";
 import { ChannelType, type Message } from "../internal/discord.js";
 import type { DiscordMessagePreflightParams } from "./message-handler.preflight.types.js";
 import type { DiscordChannelInfo } from "./message-utils.js";

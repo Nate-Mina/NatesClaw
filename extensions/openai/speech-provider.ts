@@ -1,21 +1,21 @@
 // Openai provider module implements model/runtime integration.
-import { resolveGeneratedMediaMaxBytes } from "openclaw/plugin-sdk/media-generation-runtime";
-import { isVoiceMessageCompatibleAudio } from "openclaw/plugin-sdk/media-runtime";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+import { resolveGeneratedMediaMaxBytes } from "natesclaw/plugin-sdk/media-generation-runtime";
+import { isVoiceMessageCompatibleAudio } from "natesclaw/plugin-sdk/media-runtime";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderOverrides,
   SpeechProviderPlugin,
-} from "openclaw/plugin-sdk/speech-core";
-import { parseSpeechDirectiveNumberOverride } from "openclaw/plugin-sdk/speech-core";
+} from "natesclaw/plugin-sdk/speech-core";
+import { parseSpeechDirectiveNumberOverride } from "natesclaw/plugin-sdk/speech-core";
 import {
   asFiniteNumber,
   asOptionalRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveOpenAIProviderConfigRecord } from "./realtime-provider-shared.js";
 import {
   DEFAULT_OPENAI_BASE_URL,

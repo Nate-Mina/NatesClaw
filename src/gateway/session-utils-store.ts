@@ -1,7 +1,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   readAcpSessionMeta,
   readAcpSessionMetaForEntry,
@@ -28,7 +28,7 @@ import {
   type SessionScope,
 } from "../config/sessions.js";
 import { canonicalSessionKeyMigrationRequiredError } from "../config/sessions/session-canonical-key.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
 import { isAcpSessionKey } from "../sessions/session-key-utils.js";
 import { listGatewayAgentsBasic } from "./agent-list.js";
@@ -46,7 +46,7 @@ import type { GatewayAgentRow } from "./session-utils.types.js";
  * exists (#65524).
  */
 export function resolveDeletedAgentIdFromSessionKey(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   sessionKey: string,
   entry?: SessionEntry | null,
   options?: { acpMetadataSessionKey?: string | null },
@@ -77,7 +77,7 @@ export function resolveDeletedAgentIdFromSessionKey(
 }
 
 function readAcpMetaForDeletedAgentCheck(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   entry?: Pick<SessionEntry, "acp" | "lifecycleRevision"> | null;
   acpMetadataSessionKey?: string | null;
@@ -207,7 +207,7 @@ export function resolveCanonicalSessionEntryFromStoreKeys(
 }
 
 export function resolveCanonicalGatewaySessionStoreKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string;
   store: Record<string, SessionEntry>;
   agentId?: string;
@@ -270,7 +270,7 @@ function normalizeFallbackList(values: readonly string[]): string[] {
 }
 
 function resolveGatewayAgentModel(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
 ): GatewayAgentRow["model"] | undefined {
   // Agent rows expose model identity to clients; credential-profile binding stays in
@@ -293,7 +293,7 @@ function resolveGatewayAgentModel(
 }
 
 export function listAgentsForGateway(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   modelCatalog?: ModelCatalogEntry[],
   options?: {
     modelCatalogByAgentId?: ReadonlyMap<string, ModelCatalogEntry[]>;

@@ -132,7 +132,7 @@ describe("sessions.catalog.startTerminal", () => {
   });
 
   it("rechecks local cwd after the provider plan resolves", async () => {
-    const cwd = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-catalog-start-"));
+    const cwd = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-catalog-start-"));
     let releasePlan!: () => void;
     const planGate = new Promise<void>((resolve) => {
       releasePlan = resolve;

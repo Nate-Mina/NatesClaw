@@ -91,7 +91,7 @@ describe("bundled plugin build entries", () => {
     const entries = listBundledPluginBuildEntries({
       env: {
         ...process.env,
-        OPENCLAW_BUNDLED_PLUGIN_BUILD_IDS: "active-memory,acpx",
+        NATESCLAW_BUNDLED_PLUGIN_BUILD_IDS: "active-memory,acpx",
       },
     });
     const entryKeys = Object.keys(entries);
@@ -107,11 +107,11 @@ describe("bundled plugin build entries", () => {
       listBundledPluginBuildEntries({
         env: {
           ...process.env,
-          OPENCLAW_BUNDLED_PLUGIN_BUILD_IDS: "missing-plugin",
+          NATESCLAW_BUNDLED_PLUGIN_BUILD_IDS: "missing-plugin",
         },
       }),
     ).toThrow(
-      "OPENCLAW_BUNDLED_PLUGIN_BUILD_IDS references unknown bundled plugin id(s): missing-plugin",
+      "NATESCLAW_BUNDLED_PLUGIN_BUILD_IDS references unknown bundled plugin id(s): missing-plugin",
     );
   });
 
@@ -155,10 +155,10 @@ describe("bundled plugin build entries", () => {
 
     expect(artifacts).toContain("dist/extensions/image-generation-core/package.json");
     expect(artifacts).toContain("dist/extensions/image-generation-core/runtime-api.js");
-    expect(artifacts).not.toContain("dist/extensions/image-generation-core/openclaw.plugin.json");
+    expect(artifacts).not.toContain("dist/extensions/image-generation-core/natesclaw.plugin.json");
     expect(artifacts).toContain("dist/extensions/media-understanding-core/runtime-api.js");
     expect(artifacts).not.toContain(
-      "dist/extensions/media-understanding-core/openclaw.plugin.json",
+      "dist/extensions/media-understanding-core/natesclaw.plugin.json",
     );
   });
 
@@ -243,7 +243,7 @@ describe("bundled plugin build entries", () => {
   });
 
   it("sorts Docker-selected build entries without git metadata", () => {
-    const repoDir = tempDirs.make("openclaw-docker-build-entries-");
+    const repoDir = tempDirs.make("natesclaw-docker-build-entries-");
     const extensionsDir = path.join(repoDir, "extensions");
 
     for (const pluginId of ["clickclack", "msteams", "slack"]) {
@@ -251,14 +251,14 @@ describe("bundled plugin build entries", () => {
       fs.mkdirSync(pluginDir, { recursive: true });
       fs.writeFileSync(path.join(pluginDir, "index.ts"), "export default {};\n");
       fs.writeFileSync(
-        path.join(pluginDir, "openclaw.plugin.json"),
+        path.join(pluginDir, "natesclaw.plugin.json"),
         `${JSON.stringify({ id: pluginId })}\n`,
       );
       fs.writeFileSync(
         path.join(pluginDir, "package.json"),
         `${JSON.stringify({
-          name: `@openclaw/${pluginId}`,
-          openclaw: {
+          name: `@natesclaw/${pluginId}`,
+          natesclaw: {
             extensions: ["./index.ts"],
             build: { bundledDist: false },
           },
@@ -359,7 +359,7 @@ describe("bundled plugin build entries", () => {
       "xiaomi",
     ]) {
       expect(artifacts).not.toContain(`dist/extensions/${pluginId}/index.js`);
-      expect(artifacts).not.toContain(`dist/extensions/${pluginId}/openclaw.plugin.json`);
+      expect(artifacts).not.toContain(`dist/extensions/${pluginId}/natesclaw.plugin.json`);
       expect(artifacts).not.toContain(`dist/extensions/${pluginId}/package.json`);
     }
   });
@@ -370,7 +370,7 @@ describe("bundled plugin build entries", () => {
     expect(artifacts).toEqual(
       expect.arrayContaining([
         "dist/extensions/opencode-go/index.js",
-        "dist/extensions/opencode-go/openclaw.plugin.json",
+        "dist/extensions/opencode-go/natesclaw.plugin.json",
         "dist/extensions/opencode-go/package.json",
       ]),
     );
@@ -380,7 +380,7 @@ describe("bundled plugin build entries", () => {
     const artifacts = listBundledPluginPackArtifacts();
 
     expect(artifacts).not.toContain("dist/extensions/vydra/index.js");
-    expect(artifacts).not.toContain("dist/extensions/vydra/openclaw.plugin.json");
+    expect(artifacts).not.toContain("dist/extensions/vydra/natesclaw.plugin.json");
     expect(artifacts).not.toContain("dist/extensions/vydra/package.json");
   });
 
@@ -395,7 +395,7 @@ describe("bundled plugin build entries", () => {
 
     for (const pluginId of ["teams-meetings", "zoom-meetings"]) {
       expect(artifacts).not.toContain(`dist/extensions/${pluginId}/index.js`);
-      expect(artifacts).not.toContain(`dist/extensions/${pluginId}/openclaw.plugin.json`);
+      expect(artifacts).not.toContain(`dist/extensions/${pluginId}/natesclaw.plugin.json`);
       expect(artifacts).not.toContain(`dist/extensions/${pluginId}/package.json`);
     }
   });
@@ -412,7 +412,7 @@ describe("bundled plugin build entries", () => {
     const artifacts = listBundledPluginPackArtifacts();
 
     expect(artifacts).not.toContain("dist/extensions/duckduckgo/index.js");
-    expect(artifacts).not.toContain("dist/extensions/duckduckgo/openclaw.plugin.json");
+    expect(artifacts).not.toContain("dist/extensions/duckduckgo/natesclaw.plugin.json");
     expect(artifacts).not.toContain("dist/extensions/duckduckgo/package.json");
   });
 
@@ -420,7 +420,7 @@ describe("bundled plugin build entries", () => {
     const artifacts = listBundledPluginPackArtifacts();
 
     expect(artifacts).not.toContain("dist/extensions/voyage/index.js");
-    expect(artifacts).not.toContain("dist/extensions/voyage/openclaw.plugin.json");
+    expect(artifacts).not.toContain("dist/extensions/voyage/natesclaw.plugin.json");
     expect(artifacts).not.toContain("dist/extensions/voyage/package.json");
   });
 
@@ -428,7 +428,7 @@ describe("bundled plugin build entries", () => {
     const artifacts = listBundledPluginPackArtifacts();
 
     expect(artifacts).not.toContain("dist/extensions/volcengine/index.js");
-    expect(artifacts).not.toContain("dist/extensions/volcengine/openclaw.plugin.json");
+    expect(artifacts).not.toContain("dist/extensions/volcengine/natesclaw.plugin.json");
     expect(artifacts).not.toContain("dist/extensions/volcengine/package.json");
   });
 

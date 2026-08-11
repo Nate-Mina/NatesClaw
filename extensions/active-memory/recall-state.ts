@@ -1,11 +1,11 @@
 import crypto from "node:crypto";
-import { closeActiveMemorySearchManager } from "openclaw/plugin-sdk/memory-host-search";
+import { closeActiveMemorySearchManager } from "natesclaw/plugin-sdk/memory-host-search";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { resolveActiveMemoryCleanupConfig } from "./config.js";
 import {
   CACHE_SWEEP_INTERVAL_MS,
@@ -57,7 +57,7 @@ function resetCircuitBreaker(key: string): void {
 }
 
 function scheduleMemorySearchCleanupAfterTimeout(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   logPrefix: string,
   agentId: string,
 ): Promise<void> {

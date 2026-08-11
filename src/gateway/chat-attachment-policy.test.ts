@@ -1,8 +1,8 @@
 // Attachment policy tests guard the numbers advertised on `hello-ok` against the
 // ceilings the parser actually enforces.
-import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
+import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   DEFAULT_CHAT_ATTACHMENT_MAX_BYTES,
   resolveChatAttachmentMaxBytes,
@@ -11,8 +11,8 @@ import {
 
 const MB = 1024 * 1024;
 
-const cfgWithMediaMaxMb = (value: unknown): OpenClawConfig =>
-  ({ agents: { defaults: { mediaMaxMb: value } } }) as unknown as OpenClawConfig;
+const cfgWithMediaMaxMb = (value: unknown): NatesclawConfig =>
+  ({ agents: { defaults: { mediaMaxMb: value } } }) as unknown as NatesclawConfig;
 
 describe("resolveChatAttachmentMaxBytes", () => {
   it("honours a configured agents.defaults.mediaMaxMb", () => {
@@ -21,10 +21,10 @@ describe("resolveChatAttachmentMaxBytes", () => {
   });
 
   it("falls back to the default ceiling when unset", () => {
-    expect(resolveChatAttachmentMaxBytes({} as OpenClawConfig)).toBe(
+    expect(resolveChatAttachmentMaxBytes({} as NatesclawConfig)).toBe(
       DEFAULT_CHAT_ATTACHMENT_MAX_BYTES,
     );
-    expect(resolveChatAttachmentMaxBytes({ agents: {} } as unknown as OpenClawConfig)).toBe(
+    expect(resolveChatAttachmentMaxBytes({ agents: {} } as unknown as NatesclawConfig)).toBe(
       DEFAULT_CHAT_ATTACHMENT_MAX_BYTES,
     );
   });

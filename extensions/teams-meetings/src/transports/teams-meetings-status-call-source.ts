@@ -1,14 +1,14 @@
-import { MeetingPlatformAdapter } from "openclaw/plugin-sdk/meeting-runtime";
+import { MeetingPlatformAdapter } from "natesclaw/plugin-sdk/meeting-runtime";
 
 export function teamsMeetingStatusCallSource(): string {
   return MeetingPlatformAdapter.createStatusCallSource({
     platform: {
-      audioOutputElementIdPrefix: "openclaw-teams-audio-output-",
+      audioOutputElementIdPrefix: "natesclaw-teams-audio-output-",
       displayName: "Teams",
       globals: {
-        audioOutputs: "__openclawTeamsAudioOutputs",
-        captions: "__openclawTeamsCaptions",
-        meeting: "__openclawTeamsMeeting",
+        audioOutputs: "__natesclawTeamsAudioOutputs",
+        captions: "__natesclawTeamsCaptions",
+        meeting: "__natesclawTeamsMeeting",
       },
       manualActionReasonPrefix: "teams",
     },

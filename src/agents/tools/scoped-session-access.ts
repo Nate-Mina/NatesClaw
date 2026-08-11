@@ -1,12 +1,12 @@
 import { resolveSessionStorePathCore } from "../../config/sessions.js";
 import { loadSessionEntry as getSessionEntry } from "../../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveAgentIdFromSessionKey } from "../../routing/session-key.js";
 import { beginSessionWorkAdmission } from "../../sessions/session-lifecycle-admission.js";
 
 /** Linearizes a host-scoped grant against reset/delete of its expected incarnation. */
 export async function runWithScopedSessionAccess<T>(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   expectedSessionId?: string;
   signal?: AbortSignal;
   targetSessionKey: string;

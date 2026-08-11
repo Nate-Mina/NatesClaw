@@ -6,8 +6,8 @@ import {
   resolveCronStyleNow,
   SILENT_REPLY_TOKEN,
   type MemoryFlushPlan,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+  type NatesclawConfig,
+} from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
 import {
   DREAMING_DAILY_PROVENANCE_NAMESPACE,
   deleteMemoryCoreWorkspaceEntry,
@@ -119,7 +119,7 @@ function appendCurrentTimeLine(text: string, timeLine: string): string {
 
 export function buildMemoryFlushPlan(
   params: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     nowMs?: number;
   } = {},
 ): MemoryFlushPlan | null {

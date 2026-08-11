@@ -160,7 +160,7 @@ function createHarness(initialScopeId: string) {
 
 function appendPage(context: ApplicationContext) {
   const page = document.createElement(
-    "openclaw-model-providers-page",
+    "natesclaw-model-providers-page",
   ) as ModelProvidersPageTestElement;
   page.context = context;
   document.body.append(page);
@@ -180,7 +180,7 @@ describe("ModelProvidersPage agent scope", () => {
 
     const link = page.querySelector<HTMLAnchorElement>(".page-subtitle a");
     expect(link?.textContent?.trim()).toBe("Learn more");
-    expect(link?.href).toBe("https://docs.openclaw.ai/concepts/model-providers");
+    expect(link?.href).toBe("https://docs.natesclaw.ai/concepts/model-providers");
   });
 
   it("patches thinking and fast mode through the shared config draft", async () => {
@@ -543,7 +543,7 @@ describe("ModelProvidersPage agent scope", () => {
     const { context, request, snapshot } = createHarness("writer");
     const staleData = { ...EMPTY_MODEL_PROVIDERS_DATA, updatedAt: 1 };
     const page = document.createElement(
-      "openclaw-model-providers-page",
+      "natesclaw-model-providers-page",
     ) as ModelProvidersPageTestElement;
     page.context = context;
     page.routeData = { data: staleData, client: snapshot.client, agentId: "main" };

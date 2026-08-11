@@ -1,11 +1,11 @@
 import { isDeepStrictEqual } from "node:util";
-import { expectDefined } from "@openclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
 import {
   type WorkerAdmissionHandshake,
   WORKER_RPC_SET_VERSION,
 } from "../../../packages/gateway-protocol/src/schema/worker-admission.js";
-import type { OpenClawConfig } from "../../config/types.js";
+import type { NatesclawConfig } from "../../config/types.js";
 import type { SecretRef } from "../../config/types.secrets.js";
 import { validateCloudWorkerProfileSettings } from "../../config/zod-schema.cloud-workers.js";
 import { normalizeCapabilityProviderId } from "../../plugins/provider-registry-shared.js";
@@ -35,7 +35,7 @@ const ORPHANED_LEASE_ERROR = "Worker provider no longer recognizes the lease";
 
 type WorkerProviderLifecycleOptions = {
   store: WorkerEnvironmentStore;
-  getConfig: () => OpenClawConfig;
+  getConfig: () => NatesclawConfig;
   resolveProvider: (providerId: string) => WorkerProvider | undefined;
   prepareInstallation: (
     install: WorkerInstallationArtifact["install"],

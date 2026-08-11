@@ -13,23 +13,23 @@ const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 const ENV_KEYS = [
   "HOME",
   "USERPROFILE",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_SKIP_CHANNELS",
+  "NATESCLAW_SKIP_GMAIL_WATCHER",
+  "NATESCLAW_SKIP_CRON",
+  "NATESCLAW_SKIP_CANVAS_HOST",
+  "NATESCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "NATESCLAW_SKIP_PROVIDERS",
+  "NATESCLAW_TEST_MINIMAL_GATEWAY",
+  "NATESCLAW_BUNDLED_PLUGINS_DIR",
+  "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 async function setupTempHome() {
   const env = captureEnv([...ENV_KEYS]);
-  const home = tempDirs.make("openclaw-rpc-models-");
-  const stateDir = path.join(home, ".openclaw");
+  const home = tempDirs.make("natesclaw-rpc-models-");
+  const stateDir = path.join(home, ".natesclaw");
   const workspace = path.join(home, "workspace");
   const bundledPlugins = path.join(home, "empty-bundled-plugins");
   await Promise.all([
@@ -39,19 +39,19 @@ async function setupTempHome() {
   ]);
   setTestEnvValue("HOME", home);
   setTestEnvValue("USERPROFILE", home);
-  setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
-  setTestEnvValue("OPENCLAW_SKIP_CHANNELS", "1");
-  setTestEnvValue("OPENCLAW_SKIP_GMAIL_WATCHER", "1");
-  setTestEnvValue("OPENCLAW_SKIP_CRON", "1");
-  setTestEnvValue("OPENCLAW_SKIP_CANVAS_HOST", "1");
-  setTestEnvValue("OPENCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
-  setTestEnvValue("OPENCLAW_BUNDLED_PLUGINS_DIR", bundledPlugins);
-  setTestEnvValue("OPENCLAW_DISABLE_BUNDLED_PLUGINS", "1");
-  delete process.env.OPENCLAW_CONFIG_PATH;
-  delete process.env.OPENCLAW_SKIP_PROVIDERS;
-  delete process.env.OPENCLAW_TEST_MINIMAL_GATEWAY;
+  setTestEnvValue("NATESCLAW_STATE_DIR", stateDir);
+  setTestEnvValue("NATESCLAW_SKIP_CHANNELS", "1");
+  setTestEnvValue("NATESCLAW_SKIP_GMAIL_WATCHER", "1");
+  setTestEnvValue("NATESCLAW_SKIP_CRON", "1");
+  setTestEnvValue("NATESCLAW_SKIP_CANVAS_HOST", "1");
+  setTestEnvValue("NATESCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
+  setTestEnvValue("NATESCLAW_BUNDLED_PLUGINS_DIR", bundledPlugins);
+  setTestEnvValue("NATESCLAW_DISABLE_BUNDLED_PLUGINS", "1");
+  delete process.env.NATESCLAW_CONFIG_PATH;
+  delete process.env.NATESCLAW_SKIP_PROVIDERS;
+  delete process.env.NATESCLAW_TEST_MINIMAL_GATEWAY;
   return {
-    configPath: path.join(stateDir, "openclaw.json"),
+    configPath: path.join(stateDir, "natesclaw.json"),
     env,
     home,
     workspace,

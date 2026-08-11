@@ -1,7 +1,7 @@
 // Covers exec approval config normalization and safe-bin policy.
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { makeExecApprovalsTempDir } from "./exec-approvals-test-helpers.js";
 import {
   isSafeBinUsage,
@@ -32,10 +32,10 @@ describe.sequential("exec approval temp fixture cleanup", () => {
 describe("exec approvals wildcard agent", () => {
   it("merges wildcard allowlist entries with agent entries", () => {
     const dir = makeExecApprovalsTempDir();
-    const prevOpenClawHome = process.env.OPENCLAW_HOME;
+    const prevNatesclawHome = process.env.NATESCLAW_HOME;
 
     try {
-      process.env.OPENCLAW_HOME = dir;
+      process.env.NATESCLAW_HOME = dir;
       saveExecApprovals({
         version: 1,
         agents: {
@@ -50,11 +50,11 @@ describe("exec approvals wildcard agent", () => {
         "/usr/bin/uname",
       ]);
     } finally {
-      closeOpenClawStateDatabaseForTest();
-      if (prevOpenClawHome === undefined) {
-        delete process.env.OPENCLAW_HOME;
+      closeNatesclawStateDatabaseForTest();
+      if (prevNatesclawHome === undefined) {
+        delete process.env.NATESCLAW_HOME;
       } else {
-        process.env.OPENCLAW_HOME = prevOpenClawHome;
+        process.env.NATESCLAW_HOME = prevNatesclawHome;
       }
     }
   });

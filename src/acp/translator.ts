@@ -24,8 +24,8 @@ import type {
   SetSessionModeRequest,
   SetSessionModeResponse,
 } from "@agentclientprotocol/sdk";
-import { defaultAcpSessionStore, type AcpSessionStore } from "@openclaw/acp-core/session";
-import type { AcpServerOptions } from "@openclaw/acp-core/types";
+import { defaultAcpSessionStore, type AcpSessionStore } from "@natesclaw/acp-core/session";
+import type { AcpServerOptions } from "@natesclaw/acp-core/types";
 import type { EventFrame } from "../../packages/gateway-protocol/src/index.js";
 import type { GatewayClient } from "../gateway/client.js";
 import {
@@ -57,7 +57,7 @@ type AcpGatewayAgentOptions = AcpServerOptions & {
   sessionStore?: AcpSessionStore;
 };
 
-/** ACP Agent implementation backed by the OpenClaw Gateway and replay ledger. */
+/** ACP Agent implementation backed by the Natesclaw Gateway and replay ledger. */
 export class AcpGatewayAgent implements Agent {
   private readonly sessionUpdates: AcpTranslatorSessionUpdates;
   private readonly promptStream: AcpTranslatorPromptStream;

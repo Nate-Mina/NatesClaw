@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginToolContext,
-} from "openclaw/plugin-sdk/core";
+  NatesclawPluginApi,
+  NatesclawPluginToolContext,
+} from "natesclaw/plugin-sdk/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { fetchWithSsrFGuardMock, getAccessTokenMock } = vi.hoisted(() => ({
@@ -11,8 +11,8 @@ const { fetchWithSsrFGuardMock, getAccessTokenMock } = vi.hoisted(() => ({
   getAccessTokenMock: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/ssrf-runtime")>();
   return { ...actual, fetchWithSsrFGuard: fetchWithSsrFGuardMock };
 });
 
@@ -37,22 +37,22 @@ const cfg = {
       },
     },
   },
-} as OpenClawConfig;
+} as NatesclawConfig;
 
 function registerToolFactory(
-  config: OpenClawConfig = cfg,
-): (context: OpenClawPluginToolContext) => AnyAgentTool | null {
-  let factory: ((context: OpenClawPluginToolContext) => AnyAgentTool | null) | undefined;
+  config: NatesclawConfig = cfg,
+): (context: NatesclawPluginToolContext) => AnyAgentTool | null {
+  let factory: ((context: NatesclawPluginToolContext) => AnyAgentTool | null) | undefined;
   const api = {
     config,
     registerTool(
-      tool: AnyAgentTool | ((context: OpenClawPluginToolContext) => AnyAgentTool | null),
+      tool: AnyAgentTool | ((context: NatesclawPluginToolContext) => AnyAgentTool | null),
     ) {
       if (typeof tool === "function") {
         factory = tool;
       }
     },
-  } as unknown as OpenClawPluginApi;
+  } as unknown as NatesclawPluginApi;
   registerChannelTool(api);
   if (!factory) {
     throw new Error("Expected QQBot channel API tool factory");
@@ -105,7 +105,7 @@ describe("bridge/tools/channel", () => {
           defaultAccount: "bot2",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const tool = registerToolFactory(configuredDefault)({});
     expect(tool).not.toBeNull();
 
@@ -144,7 +144,7 @@ describe("bridge/tools/channel", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       registerToolFactory(disabledAccount)({

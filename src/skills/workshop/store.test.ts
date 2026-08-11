@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { requireNodeSqlite } from "../../infra/node-sqlite.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  OPENCLAW_STATE_SCHEMA_VERSION,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  NATESCLAW_STATE_SCHEMA_VERSION,
+  openNatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import { createSkillProposalEvent } from "./plugin-hooks.js";
 import { listSkillProposalEvents, listSkillProposals, proposeCreateSkill } from "./service.js";
 import { parseSkillProposalEvaluation } from "./store-record.js";
@@ -18,12 +18,12 @@ import {
 } from "./store-sqlite-transition.js";
 import { updateSkillProposalRecord } from "./store.js";
 
-let testState: OpenClawTestState;
+let testState: NatesclawTestState;
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-workshop-store-",
+    prefix: "natesclaw-workshop-store-",
   });
 });
 
@@ -65,8 +65,8 @@ describe("Skill Workshop SQLite store", () => {
   });
 
   it("lazily ensures additive tables without changing the schema version", async () => {
-    const databasePath = openOpenClawStateDatabase().path;
-    closeOpenClawStateDatabaseForTest();
+    const databasePath = openNatesclawStateDatabase().path;
+    closeNatesclawStateDatabaseForTest();
     const { DatabaseSync } = requireNodeSqlite();
     const existing = new DatabaseSync(databasePath);
     existing.exec(`
@@ -77,7 +77,7 @@ describe("Skill Workshop SQLite store", () => {
     `);
     existing.close();
 
-    const reopened = openOpenClawStateDatabase();
+    const reopened = openNatesclawStateDatabase();
     expect(
       reopened.db
         .prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name = ?")
@@ -95,7 +95,7 @@ describe("Skill Workshop SQLite store", () => {
         .get("skill_workshop_proposal_events"),
     ).toEqual({ name: "skill_workshop_proposal_events" });
     expect(reopened.db.prepare("PRAGMA user_version").get()).toEqual({
-      user_version: OPENCLAW_STATE_SCHEMA_VERSION,
+      user_version: NATESCLAW_STATE_SCHEMA_VERSION,
     });
   });
 
@@ -219,7 +219,7 @@ describe("Skill Workshop SQLite store", () => {
       description: "Reject silent audit data loss",
       content: "# Oversized Stored Event\n",
     });
-    openOpenClawStateDatabase()
+    openNatesclawStateDatabase()
       .db.prepare(
         "UPDATE skill_workshop_proposal_events SET payload_json = ? WHERE proposal_id = ?",
       )

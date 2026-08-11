@@ -48,7 +48,7 @@ describe("CUA Driver direct session", () => {
     });
   });
 
-  it("uses configured creation and one fixed trusted OpenClaw session", async () => {
+  it("uses configured creation and one fixed trusted Natesclaw session", async () => {
     const driver = createCuaDriver({ loadSdk: () => sdk as never });
 
     expect(driver.isAvailable()).toBe(true);
@@ -60,7 +60,7 @@ describe("CUA Driver direct session", () => {
     expect(mocks.createTrustedSession).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
-        publicSession: expect.stringMatching(/^openclaw-/),
+        publicSession: expect.stringMatching(/^natesclaw-/),
         mode: "unrestricted",
         ttlSeconds: authorization.maxSessionTtlSeconds,
         idleTtlSeconds: authorization.maxIdleTtlSeconds,

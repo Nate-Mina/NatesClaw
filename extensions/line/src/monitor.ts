@@ -1,17 +1,17 @@
 // Line plugin module implements monitor behavior.
 import type { webhook } from "@line/bot-sdk";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/channel-contract";
-import { hasFinalInboundReplyDispatch } from "openclaw/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { channelReadyPatch, channelStoppedPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { chunkMarkdownText } from "openclaw/plugin-sdk/reply-runtime";
+import type { ChannelAccountSnapshot } from "natesclaw/plugin-sdk/channel-contract";
+import { hasFinalInboundReplyDispatch } from "natesclaw/plugin-sdk/channel-inbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { channelReadyPatch, channelStoppedPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { chunkMarkdownText } from "natesclaw/plugin-sdk/reply-runtime";
 import {
   danger,
   logVerbose,
   waitForAbortSignal,
   type RuntimeEnv,
-} from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/runtime-env";
 import {
   canonicalizeWebhookRouteKey,
   isRequestBodyLimitError,
@@ -20,11 +20,11 @@ import {
   registerWebhookTargetWithPluginRoute,
   requestBodyErrorToText,
   resolveSingleWebhookTarget,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "natesclaw/plugin-sdk/webhook-ingress";
 import {
   beginWebhookRequestPipelineOrReject,
   createWebhookInFlightLimiter,
-} from "openclaw/plugin-sdk/webhook-request-guards";
+} from "natesclaw/plugin-sdk/webhook-request-guards";
 import { resolveDefaultLineAccountId } from "./accounts.js";
 import { deliverLineAutoReply } from "./auto-reply-delivery.js";
 import { createLineBot } from "./bot.js";
@@ -51,7 +51,7 @@ interface MonitorLineProviderOptions {
   channelAccessToken: string;
   channelSecret: string;
   accountId?: string;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   runtime: RuntimeEnv;
   abortSignal?: AbortSignal;
   webhookUrl?: string;
@@ -92,7 +92,7 @@ async function registerLineWebhookTarget(
 const lineWebhookTargets = new Map<string, LineWebhookTarget[]>();
 
 function startLineLoadingKeepalive(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   userId: string;
   accountId?: string;
   intervalMs?: number;
@@ -399,7 +399,7 @@ export async function monitorLineProvider(
             logVerbose(`line: received ${body.events.length} webhook events`);
             await match.target.bot.handleWebhook(body);
             // Only a committed event is adopted; signed LINE verification pings must stay unmarked.
-            res.setHeader("x-openclaw-delivery-accepted", "durable");
+            res.setHeader("x-natesclaw-delivery-accepted", "durable");
           }
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");

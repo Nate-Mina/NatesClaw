@@ -31,7 +31,7 @@ function configSnapshot(enabled: boolean) {
   return {
     config,
     hash: `workboard-routing-${enabled}`,
-    path: "/tmp/openclaw-e2e/openclaw.json",
+    path: "/tmp/natesclaw-e2e/natesclaw.json",
     raw: JSON.stringify(config),
     resolved: config,
     sourceConfig: config,
@@ -108,7 +108,7 @@ suite.define(() => {
         path: path.join(artifactDir, "01-board-route.png"),
       });
 
-      const sidebar = page.locator("openclaw-app-sidebar");
+      const sidebar = page.locator("natesclaw-app-sidebar");
       await sidebar.locator(".sidebar-nav__head-action").click();
       await sidebar
         .locator("wa-dropdown.sidebar-more-menu")
@@ -198,7 +198,7 @@ suite.define(() => {
         await page.goto(`${suite.server.baseUrl}workboard`);
         await gateway.waitForRequest("agents.list");
 
-        const agentScope = page.locator(".agent-scope-control openclaw-agent-select");
+        const agentScope = page.locator(".agent-scope-control natesclaw-agent-select");
         await agentScope.locator(".agent-select__trigger").click();
         await expect
           .poll(() =>
@@ -236,7 +236,7 @@ suite.define(() => {
         await gateway.deferNext("workboard.cards.create");
         await page.getByRole("button", { name: /New card/u }).click();
 
-        const createForm = page.locator('openclaw-modal-dialog[label="New card"]');
+        const createForm = page.locator('natesclaw-modal-dialog[label="New card"]');
         await expect
           .poll(() =>
             createForm
@@ -271,7 +271,7 @@ suite.define(() => {
         },
       });
       await page.goto(`${suite.server.baseUrl}chat`);
-      const sidebar = page.locator("openclaw-app-sidebar");
+      const sidebar = page.locator("natesclaw-app-sidebar");
       await sidebar.locator(".sidebar-nav__head-action").click();
       const moreMenu = sidebar.locator("wa-dropdown.sidebar-more-menu");
       await moreMenu.waitFor();

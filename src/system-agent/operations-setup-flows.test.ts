@@ -116,12 +116,12 @@ describe("system agent setup-flow operations", () => {
     }
 
     const output = lines.join("\n");
-    expect(output).toContain("openclaw onboard`");
-    expect(output).toContain("openclaw onboard --classic");
-    expect(output).toContain("openclaw channels add --channel slack");
-    expect(output).toContain("openclaw configure --section web");
-    expect(output).toContain("openclaw configure --section gateway");
-    expect(output).toContain("on the machine running OpenClaw");
+    expect(output).toContain("natesclaw onboard`");
+    expect(output).toContain("natesclaw onboard --classic");
+    expect(output).toContain("natesclaw channels add --channel slack");
+    expect(output).toContain("natesclaw configure --section web");
+    expect(output).toContain("natesclaw configure --section gateway");
+    expect(output).toContain("on the machine running Natesclaw");
   });
 
   it("prints one-shot pointers for hosted skills, search, and Gateway setup", async () => {
@@ -131,9 +131,9 @@ describe("system agent setup-flow operations", () => {
     await executeSystemAgentOperation({ kind: "search-setup" }, runtime);
     await executeSystemAgentOperation({ kind: "gateway-config-setup" }, runtime);
 
-    expect(lines.join("\n")).toContain("openclaw configure --section skills");
-    expect(lines.join("\n")).toContain("openclaw configure --section web");
-    expect(lines.join("\n")).toContain("openclaw configure --section gateway");
+    expect(lines.join("\n")).toContain("natesclaw configure --section skills");
+    expect(lines.join("\n")).toContain("natesclaw configure --section web");
+    expect(lines.join("\n")).toContain("natesclaw configure --section gateway");
   });
 
   it("points one-shot memory import at interactive owners", async () => {
@@ -142,19 +142,19 @@ describe("system agent setup-flow operations", () => {
     await executeSystemAgentOperation({ kind: "memory-import" }, runtime);
 
     expect(lines.join("\n")).toContain("Memory page in the Control UI");
-    expect(lines.join("\n")).toContain("openclaw onboard");
+    expect(lines.join("\n")).toContain("natesclaw onboard");
   });
 
-  it("routes one-shot model setup through the verified OpenClaw flow", async () => {
+  it("routes one-shot model setup through the verified Natesclaw flow", async () => {
     const { runtime, lines } = createSystemAgentTestRuntime();
 
     const result = await executeSystemAgentOperation({ kind: "model-setup" }, runtime);
 
     expect(result.applied).toBe(false);
-    expect(lines.join("\n")).toContain("Run `openclaw onboard` on the machine running OpenClaw");
-    expect(lines.join("\n")).toContain("Stop the OpenClaw host");
+    expect(lines.join("\n")).toContain("Run `natesclaw onboard` on the machine running Natesclaw");
+    expect(lines.join("\n")).toContain("Stop the Natesclaw host");
     expect(lines.join("\n")).toContain("restart the host");
-    expect(lines.join("\n")).not.toContain("openclaw configure --section model");
+    expect(lines.join("\n")).not.toContain("natesclaw configure --section model");
   });
 
   it("prints discovered channel metadata and sorted unknown-channel choices", async () => {
@@ -197,7 +197,7 @@ describe("system agent setup-flow operations", () => {
     expect(knownOutput).toContain("Slack app messaging.");
     expect(knownOutput).toContain("Configured: yes");
     expect(knownOutput).toContain("Installed: yes");
-    expect(knownOutput).toContain("https://docs.openclaw.ai/channels/slack");
+    expect(knownOutput).toContain("https://docs.natesclaw.ai/channels/slack");
     expect(knownOutput).toContain("open channel wizard for slack");
 
     lines.length = 0;

@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { removePathWithinRoot } from "../../infra/fs-safe-remove.js";
 import { pathExists } from "../../infra/fs-safe.js";
 import type { PluginHookSkillArtifact } from "../../plugins/hook-types.js";
@@ -52,7 +52,7 @@ import { prepareSkillProposalDraft } from "./proposal-draft.js";
 import { withSkillCollectionLock } from "./target-lock.js";
 import { assertWritableSkillTarget } from "./workspace-skill-read.js";
 
-const BACKUP_SCHEMA = "openclaw.skill-collection-backup.v1";
+const BACKUP_SCHEMA = "natesclaw.skill-collection-backup.v1";
 
 type CollectionBackupManifest = {
   schema: typeof BACKUP_SCHEMA;
@@ -66,7 +66,7 @@ type CollectionBackupManifest = {
 
 export function listWritableSkillCollection(
   workspaceDir: string,
-  options: { agentId?: string; agentIds?: readonly string[]; config?: OpenClawConfig } = {},
+  options: { agentId?: string; agentIds?: readonly string[]; config?: NatesclawConfig } = {},
 ): WritableSkillCollectionEntry[] {
   const byFile = new Map<string, WritableSkillCollectionEntry>();
   const agentIds = options.agentIds?.length ? options.agentIds : [options.agentId];
@@ -101,7 +101,7 @@ export async function reconcileSkillCollection(params: {
   plan: readonly SkillCollectionPlanEntry[];
   readSkillHashes: ReadonlyMap<string, string>;
   readSkillTreeHashes: ReadonlyMap<string, string>;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   agentIds?: readonly string[];
   approvedSkillNamesByAgent?: readonly ReadonlySet<string>[];
@@ -411,7 +411,7 @@ async function prepareWrites(params: {
   workspaceDir: string;
   current: readonly WritableSkillCollectionEntry[];
   plan: readonly SkillCollectionPlanEntry[];
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
 }): Promise<PreparedWorkspaceSkillMutation[]> {
   const workshop = resolveSkillWorkshopConfig(params.config);
   const currentByName = new Map(params.current.map((skill) => [skill.name, skill]));

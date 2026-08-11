@@ -1,5 +1,5 @@
 import type { SessionToolOverrides } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 /**
  * Public native agent harness contracts and capability shapes.
  */
@@ -145,7 +145,7 @@ type AgentHarnessIsolatedCompletionParams = {
   auth: import("../model-auth-runtime-shared.js").ResolvedProviderAuth;
   /** Non-reversible proof of the prepared credential owner when available. */
   sourceAuthFingerprint?: string;
-  config: import("../../config/types.openclaw.js").OpenClawConfig;
+  config: import("../../config/types.natesclaw.js").NatesclawConfig;
   agentId: string;
   agentDir: string;
   workspaceDir: string;
@@ -167,7 +167,7 @@ export type AgentHarnessAuthBindingFingerprintParams = {
   authProfileId: string;
   authProfileStore: import("../auth-profiles/types.js").AuthProfileStore;
   agentDir: string;
-  config?: import("../../config/types.openclaw.js").OpenClawConfig;
+  config?: import("../../config/types.natesclaw.js").NatesclawConfig;
 };
 /**
  * @deprecated Use {@link AgentHarnessSideQuestionParamsV2}. This compatibility
@@ -178,11 +178,11 @@ export type AgentHarnessSideQuestionParams = {
   hostCapabilities?: AgentHarnessHostCapabilities;
   /** Host-resolved sandbox snapshot for this side execution. */
   sandbox?: import("../sandbox/types.js").SandboxContext | null;
-  cfg: import("../../config/types.openclaw.js").OpenClawConfig;
+  cfg: import("../../config/types.natesclaw.js").NatesclawConfig;
   agentDir: string;
   provider: string;
   model: string;
-  runtimeModel?: import("openclaw/plugin-sdk/llm").Model<import("openclaw/plugin-sdk/llm").Api>;
+  runtimeModel?: import("natesclaw/plugin-sdk/llm").Model<import("natesclaw/plugin-sdk/llm").Api>;
   /** One atomic route/profile/store snapshot prepared before native dispatch. */
   preparedRuntimeAuth: {
     plan: import("../runtime-plan/types.js").AgentRuntimeAuthPlan;
@@ -406,12 +406,12 @@ type AgentHarnessProviderUsageCapability = {
 };
 
 type AgentHarnessMcpCatalogParams = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId: string;
   sessionId: string;
   sessionKey: string;
   workspaceDir: string;
-  /** OpenClaw-configured servers whose session policy this harness can enforce. */
+  /** Natesclaw-configured servers whose session policy this harness can enforce. */
   mcpServerNames: readonly string[];
   toolOverrides?: Pick<SessionToolOverrides, "mcpServers" | "mcpToolsDeny">;
 };

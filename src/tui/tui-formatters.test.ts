@@ -247,7 +247,7 @@ describe("extractTextFromMessage", () => {
       extractTextFromMessage({
         role: "user",
         content: "",
-        __openclaw: { media },
+        __natesclaw: { media },
       }),
     ).toBe(expected);
   });
@@ -327,7 +327,7 @@ describe("extractTextFromMessage", () => {
       extractTextFromMessage({
         role: "assistant",
         content: [],
-        __openclaw: {
+        __natesclaw: {
           media: [
             { kind: "image", path: "/private/generated.png" },
             { kind: "audio", url: "https://secret.test/voice.ogg?ticket=secret" },

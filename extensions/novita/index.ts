@@ -1,16 +1,16 @@
-// Novita plugin entrypoint registers its OpenClaw integration.
-import { readConfiguredProviderCatalogEntries } from "openclaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
-import { buildProviderReplayFamilyHooks } from "openclaw/plugin-sdk/provider-model-shared";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+// Novita plugin entrypoint registers its Natesclaw integration.
+import { readConfiguredProviderCatalogEntries } from "natesclaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
+import { buildProviderReplayFamilyHooks } from "natesclaw/plugin-sdk/provider-model-shared";
+import { buildProviderToolCompatFamilyHooks } from "natesclaw/plugin-sdk/provider-tools";
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 
 const PROVIDER_ID = "novita";
 
 export default defineSingleProviderPluginEntry({
   id: PROVIDER_ID,
   name: "NovitaAI Provider",
-  description: "Official OpenClaw NovitaAI provider plugin",
+  description: "Official Natesclaw NovitaAI provider plugin",
   manifest,
   provider: {
     label: "NovitaAI",

@@ -6,7 +6,7 @@ type ActiveCronTaskRunTestApi = {
 
 function getTestApi(): ActiveCronTaskRunTestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.activeCronTaskRunTestApi")
+    Symbol.for("natesclaw.activeCronTaskRunTestApi")
   ] as ActiveCronTaskRunTestApi;
 }
 

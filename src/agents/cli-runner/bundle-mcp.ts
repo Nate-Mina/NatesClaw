@@ -5,14 +5,14 @@ import crypto from "node:crypto";
 import path from "node:path";
 import { applyMergePatch } from "../../config/merge-patch.js";
 import type { SessionToolOverrides } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { tryReadJson } from "../../infra/json-files.js";
 import {
-  OPENCLAW_TOOLS_MCP_SYSTEM_AGENT_APPROVAL_ARMED_ENV,
-  OPENCLAW_TOOLS_MCP_SYSTEM_AGENT_PROPOSAL_ENV,
-  OPENCLAW_TOOLS_MCP_TOOLS_ENV,
-} from "../../mcp/openclaw-tools-serve-config.js";
+  NATESCLAW_TOOLS_MCP_SYSTEM_AGENT_APPROVAL_ARMED_ENV,
+  NATESCLAW_TOOLS_MCP_SYSTEM_AGENT_PROPOSAL_ENV,
+  NATESCLAW_TOOLS_MCP_TOOLS_ENV,
+} from "../../mcp/natesclaw-tools-serve-config.js";
 import {
   extractMcpServerMap,
   type BundleMcpConfig,
@@ -68,19 +68,19 @@ function sortJsonValue(value: unknown): unknown {
   );
 }
 
-function normalizeOpenClawLoopbackUrl(value: string): string {
+function normalizeNatesclawLoopbackUrl(value: string): string {
   const match =
     /^(http:\/\/(?:127\.0\.0\.1|localhost|\[::1\])):\d+(\/mcp)$/.exec(value.trim()) ?? undefined;
   if (!match) {
     return value;
   }
-  return `${match[1]}:<openclaw-loopback>${match[2]}`;
+  return `${match[1]}:<natesclaw-loopback>${match[2]}`;
 }
 
 function canonicalizeSystemAgentTurnStateForResume(
   server: BundleMcpConfig["mcpServers"][string],
 ): BundleMcpConfig["mcpServers"][string] {
-  if (!isRecord(server.env) || server.env[OPENCLAW_TOOLS_MCP_TOOLS_ENV] !== "openclaw") {
+  if (!isRecord(server.env) || server.env[NATESCLAW_TOOLS_MCP_TOOLS_ENV] !== "natesclaw") {
     return server;
   }
   // The host reissues approval authority through a fresh stdio server each turn.
@@ -89,26 +89,26 @@ function canonicalizeSystemAgentTurnStateForResume(
     ...server,
     env: {
       ...server.env,
-      [OPENCLAW_TOOLS_MCP_SYSTEM_AGENT_APPROVAL_ARMED_ENV]: "<openclaw-turn-state>",
-      [OPENCLAW_TOOLS_MCP_SYSTEM_AGENT_PROPOSAL_ENV]: "<openclaw-turn-state>",
+      [NATESCLAW_TOOLS_MCP_SYSTEM_AGENT_APPROVAL_ARMED_ENV]: "<natesclaw-turn-state>",
+      [NATESCLAW_TOOLS_MCP_SYSTEM_AGENT_PROPOSAL_ENV]: "<natesclaw-turn-state>",
     },
   };
 }
 
 function canonicalizeBundleMcpConfigForResume(config: BundleMcpConfig): BundleMcpConfig {
-  // The OpenClaw loopback MCP port changes across runs. Replace it before
+  // The Natesclaw loopback MCP port changes across runs. Replace it before
   // hashing so resume compatibility tracks config shape, not ephemeral ports.
   const canonicalServers = Object.fromEntries(
     Object.entries(config.mcpServers).map(([name, server]) => {
       const canonicalServer = canonicalizeSystemAgentTurnStateForResume(server);
-      if (name !== "openclaw" || typeof canonicalServer.url !== "string") {
+      if (name !== "natesclaw" || typeof canonicalServer.url !== "string") {
         return [name, sortJsonValue(canonicalServer)];
       }
       return [
         name,
         sortJsonValue({
           ...canonicalServer,
-          url: normalizeOpenClawLoopbackUrl(canonicalServer.url),
+          url: normalizeNatesclawLoopbackUrl(canonicalServer.url),
         }),
       ];
     }),
@@ -118,7 +118,7 @@ function canonicalizeBundleMcpConfigForResume(config: BundleMcpConfig): BundleMc
   };
 }
 
-const OPENCLAW_MCP_ENV_TEMPLATE_PATTERN = /\$\{(OPENCLAW_MCP_[A-Z0-9_]+)\}/g;
+const NATESCLAW_MCP_ENV_TEMPLATE_PATTERN = /\$\{(NATESCLAW_MCP_[A-Z0-9_]+)\}/g;
 
 function normalizeMcpToolDenials(
   value?: Record<string, string[]>,
@@ -179,24 +179,24 @@ function applyMcpServerOverrides(
     : config;
 }
 
-function resolveOpenClawMcpEnvTemplates(value: unknown, env?: Record<string, string>): unknown {
+function resolveNatesclawMcpEnvTemplates(value: unknown, env?: Record<string, string>): unknown {
   if (!env) {
     return value;
   }
   if (typeof value === "string") {
-    return value.replace(OPENCLAW_MCP_ENV_TEMPLATE_PATTERN, (match, name: string) => {
+    return value.replace(NATESCLAW_MCP_ENV_TEMPLATE_PATTERN, (match, name: string) => {
       const replacement = env[name];
       return Object.hasOwn(env, name) && replacement !== undefined ? replacement : match;
     });
   }
   if (Array.isArray(value)) {
-    return value.map((entry) => resolveOpenClawMcpEnvTemplates(entry, env));
+    return value.map((entry) => resolveNatesclawMcpEnvTemplates(entry, env));
   }
   if (!isRecord(value)) {
     return value;
   }
   return Object.fromEntries(
-    Object.entries(value).map(([key, entry]) => [key, resolveOpenClawMcpEnvTemplates(entry, env)]),
+    Object.entries(value).map(([key, entry]) => [key, resolveNatesclawMcpEnvTemplates(entry, env)]),
   );
 }
 
@@ -259,12 +259,12 @@ async function prepareModeSpecificBundleMcpConfig(params: {
     };
   }
 
-  const runtimeConfig = resolveOpenClawMcpEnvTemplates(
+  const runtimeConfig = resolveNatesclawMcpEnvTemplates(
     params.mergedConfig,
     params.env,
   ) as BundleMcpConfig;
   const temporary = await writeTemporaryBundleMcpJson(
-    "openclaw-cli-mcp-",
+    "natesclaw-cli-mcp-",
     runtimeConfig,
     "mcp.json",
     false,
@@ -310,14 +310,14 @@ export async function prepareCliBundleMcpConfig(params: {
   mode?: CliBundleMcpMode;
   backend: CliBackendConfig;
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   toolOverrides?: SessionToolOverrides;
   agentDir?: string;
   additionalConfig?: BundleMcpConfig;
   /**
    * Serve exactly these servers, skipping user/plugin/additional merges.
-   * Ring-zero OpenClaw runs use this so the CLI harness sees only the
-   * openclaw MCP server instead of the normal openclaw tool surface.
+   * Ring-zero Natesclaw runs use this so the CLI harness sees only the
+   * natesclaw MCP server instead of the normal natesclaw tool surface.
    */
   exclusiveConfig?: BundleMcpConfig;
   env?: Record<string, string>;
@@ -446,7 +446,7 @@ export async function prepareCliBundleMcpCaptureAttempt(params: {
   return {
     env: {
       ...params.env,
-      OPENCLAW_MCP_CLI_CAPTURE_KEY: params.captureKey,
+      NATESCLAW_MCP_CLI_CAPTURE_KEY: params.captureKey,
     },
   };
 }

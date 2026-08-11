@@ -1,9 +1,9 @@
 // Memory Wiki plugin module implements tool behavior.
 import path from "node:path";
-import { optionalFiniteNumberSchema } from "openclaw/plugin-sdk/channel-actions";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
+import { optionalFiniteNumberSchema } from "natesclaw/plugin-sdk/channel-actions";
+import type { NatesclawPluginToolContext } from "natesclaw/plugin-sdk/plugin-entry";
 import { Type } from "typebox";
-import type { AnyAgentTool, OpenClawConfig } from "../api.js";
+import type { AnyAgentTool, NatesclawConfig } from "../api.js";
 import { applyMemoryWikiMutation, normalizeMemoryWikiMutationInput } from "./apply.js";
 import {
   WIKI_SEARCH_BACKENDS,
@@ -104,7 +104,7 @@ const WikiApplySchema = Type.Object(
 
 async function syncImportedSourcesIfNeeded(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
 ) {
   await syncMemoryWikiImportedSources({ config, appConfig });
 }
@@ -113,12 +113,12 @@ type WikiToolMemoryContext = {
   agentId?: string;
   agentSessionKey?: string;
   sandboxed?: boolean;
-  conversationRecall?: OpenClawPluginToolContext["conversationRecall"];
+  conversationRecall?: NatesclawPluginToolContext["conversationRecall"];
 };
 
 export function createWikiStatusTool(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
   memoryContext: WikiToolMemoryContext = {},
 ): AnyAgentTool {
   return {
@@ -143,7 +143,7 @@ export function createWikiStatusTool(
 
 export function createWikiSearchTool(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
   memoryContext: WikiToolMemoryContext = {},
 ): AnyAgentTool {
   return {
@@ -193,7 +193,7 @@ export function createWikiSearchTool(
 
 export function createWikiLintTool(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
 ): AnyAgentTool {
   return {
     name: "wiki_lint",
@@ -235,7 +235,7 @@ export function createWikiLintTool(
 
 export function createWikiApplyTool(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
 ): AnyAgentTool {
   return {
     name: "wiki_apply",
@@ -267,7 +267,7 @@ export function createWikiApplyTool(
 
 export function createWikiGetTool(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
   memoryContext: WikiToolMemoryContext = {},
 ): AnyAgentTool {
   return {

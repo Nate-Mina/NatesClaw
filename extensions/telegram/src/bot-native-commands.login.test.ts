@@ -2,11 +2,11 @@
 import {
   createEmptyPluginRegistry,
   withPluginRuntimeRegistryScope,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import type { ModelsAuthLoginFlowOptions } from "openclaw/plugin-sdk/provider-auth-login-flow-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import type { ModelsAuthLoginFlowOptions } from "natesclaw/plugin-sdk/provider-auth-login-flow-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createTelegramGroupCommandContext } from "./bot-native-commands.fixture-test-support.js";
 import { registerTelegramNativeCommands } from "./bot-native-commands.js";
@@ -39,10 +39,10 @@ vi.mock("./bot-native-commands.runtime.js", () => ({
     }),
   ),
 }));
-vi.mock("openclaw/plugin-sdk/session-store-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/session-store-runtime", () => ({
   formatSqliteSessionFileMarker: vi.fn(() => "sqlite:test"),
   getSessionEntry: vi.fn(() => undefined),
-  resolveStorePath: vi.fn(() => "/tmp/openclaw-login-test.sqlite"),
+  resolveStorePath: vi.fn(() => "/tmp/natesclaw-login-test.sqlite"),
   updateSessionStoreEntry: vi.fn(async () => undefined),
 }));
 
@@ -51,7 +51,7 @@ type LoginFlowMock = ReturnType<typeof vi.fn>;
 let loginAccountIndex = 0;
 
 function registerLoginCommand(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   loginFlow: LoginFlowMock;
   allowFrom?: string[];
   abortSignal?: AbortSignal;
@@ -134,7 +134,7 @@ describe("registerTelegramNativeCommands /login", () => {
           ownerAllowFrom: ["200"],
         },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
     });
 
@@ -185,7 +185,7 @@ describe("registerTelegramNativeCommands /login", () => {
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
     });
 
@@ -244,7 +244,7 @@ describe("registerTelegramNativeCommands /login", () => {
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
     });
     if (!nativeCommandCallbackDispatcher) {
@@ -307,7 +307,7 @@ describe("registerTelegramNativeCommands /login", () => {
           ownerAllowFrom: ["200"],
         },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
       allowFrom: ["200"],
     });
@@ -336,7 +336,7 @@ describe("registerTelegramNativeCommands /login", () => {
           allowFrom: { telegram: ["200"] },
           ownerAllowFrom: ["999"],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
     });
 
@@ -344,7 +344,7 @@ describe("registerTelegramNativeCommands /login", () => {
 
     expect(loginFlow).not.toHaveBeenCalled();
     expect(sendMessage.mock.calls.map((call) => String(call[1]))).toContain(
-      "Only a configured OpenClaw owner can start Codex login from Telegram.",
+      "Only a configured Natesclaw owner can start Codex login from Telegram.",
     );
   });
 
@@ -371,7 +371,7 @@ describe("registerTelegramNativeCommands /login", () => {
           ownerAllowFrom: ["200"],
         },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
     });
 
@@ -398,7 +398,7 @@ describe("registerTelegramNativeCommands /login", () => {
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
     });
 
@@ -428,7 +428,7 @@ describe("registerTelegramNativeCommands /login", () => {
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
       runtime,
     });
@@ -479,7 +479,7 @@ describe("registerTelegramNativeCommands /login", () => {
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
       abortSignal: shutdown.signal,
     });
@@ -511,7 +511,7 @@ describe("registerTelegramNativeCommands /login", () => {
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       loginFlow,
       abortSignal: account.signal,
     });

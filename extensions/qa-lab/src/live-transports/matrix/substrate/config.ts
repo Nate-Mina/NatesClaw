@@ -1,10 +1,10 @@
 // Qa Lab Matrix helper module supports config behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   isRecord,
   normalizeStringEntries,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { MatrixQaProvisionedTopology } from "./topology.js";
 
 type MatrixQaReplyToMode = "off" | "first" | "all" | "batched";
@@ -41,10 +41,10 @@ type MatrixQaToolConfigOverrides = {
   deny?: string[];
 };
 type MatrixQaAudioConfigOverrides = NonNullable<
-  NonNullable<NonNullable<OpenClawConfig["tools"]>["media"]>["audio"]
+  NonNullable<NonNullable<NatesclawConfig["tools"]>["media"]>["audio"]
 >;
 type MatrixQaMediaModelsOverrides = NonNullable<
-  NonNullable<NonNullable<OpenClawConfig["tools"]>["media"]>["models"]
+  NonNullable<NonNullable<NatesclawConfig["tools"]>["media"]>["models"]
 >;
 type MatrixQaGroupConfigOverrides = {
   allowBots?: MatrixQaAllowBotsMode;
@@ -548,9 +548,9 @@ function buildMatrixQaConfigSnapshot(params: {
 }
 
 export function buildMatrixQaConfig(
-  baselineCfg: OpenClawConfig,
+  baselineCfg: NatesclawConfig,
   params: {
-    currentConfig?: OpenClawConfig;
+    currentConfig?: NatesclawConfig;
     driverAccessToken?: string;
     driverUserId: string;
     homeserver: string;
@@ -563,7 +563,7 @@ export function buildMatrixQaConfig(
     sutUserId: string;
     topology: MatrixQaProvisionedTopology;
   },
-): OpenClawConfig {
+): NatesclawConfig {
   const currentCfg = params.currentConfig ?? baselineCfg;
   const pluginAllow = uniqueStrings([...(currentCfg.plugins?.allow ?? []), "matrix"]);
   const snapshot = buildMatrixQaConfigSnapshot({
@@ -683,12 +683,12 @@ export function buildMatrixQaConfig(
   Object.assign(matrixAccounts, configuredBotAccounts);
 
   const config = structuredClone(currentCfg);
-  config.approvals = approvals as OpenClawConfig["approvals"];
+  config.approvals = approvals as NatesclawConfig["approvals"];
   config.agents = {
     ...currentCfg.agents,
-    defaults: agentDefaults as NonNullable<OpenClawConfig["agents"]>["defaults"],
+    defaults: agentDefaults as NonNullable<NatesclawConfig["agents"]>["defaults"],
   };
-  config.tools = tools as OpenClawConfig["tools"];
+  config.tools = tools as NatesclawConfig["tools"];
   config.plugins = {
     ...currentCfg.plugins,
     allow: pluginAllow,
@@ -699,7 +699,7 @@ export function buildMatrixQaConfig(
   };
   config.messages = {
     ...currentCfg.messages,
-    groupChat: groupChat as NonNullable<OpenClawConfig["messages"]>["groupChat"],
+    groupChat: groupChat as NonNullable<NatesclawConfig["messages"]>["groupChat"],
   };
   config.channels = {
     ...currentCfg.channels,

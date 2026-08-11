@@ -1,20 +1,20 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { normalizeStringifiedOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeStringifiedOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { parseReleaseVersion } from "./release-version.mjs";
 
 function parseVersion(version: unknown) {
   return parseReleaseVersion(normalizeStringifiedOptionalString(version) ?? "") ?? undefined;
 }
 
-export function compareOpenClawVersions(leftVersion: unknown, rightVersion: unknown) {
+export function compareNatesclawVersions(leftVersion: unknown, rightVersion: unknown) {
   const left = parseVersion(leftVersion);
   const right = parseVersion(rightVersion);
   if (!left || !right) {
     const leftText = normalizeStringifiedOptionalString(leftVersion) ?? "";
     const rightText = normalizeStringifiedOptionalString(rightVersion) ?? "";
-    throw new Error(`cannot compare OpenClaw versions: ${leftText} ${rightText}`);
+    throw new Error(`cannot compare Natesclaw versions: ${leftText} ${rightText}`);
   }
   for (const key of ["year", "month", "patch"] as const) {
     const delta = left[key] - right[key];
@@ -45,7 +45,7 @@ function normalizePublishedVersions(publishedVersions: readonly unknown[]) {
     ),
   ]
     .filter((version) => parseVersion(version))
-    .toSorted((left, right) => compareOpenClawVersions(right, left));
+    .toSorted((left, right) => compareNatesclawVersions(right, left));
 }
 
 export function resolveDefaultReleaseUpgradeBaseline(
@@ -55,23 +55,23 @@ export function resolveDefaultReleaseUpgradeBaseline(
   const candidate = parseVersion(candidateVersion);
   if (!candidate) {
     const candidateText = normalizeStringifiedOptionalString(candidateVersion) ?? "";
-    throw new Error(`invalid candidate OpenClaw version: ${candidateText}`);
+    throw new Error(`invalid candidate Natesclaw version: ${candidateText}`);
   }
 
   const versions = normalizePublishedVersions(publishedVersions);
-  const older = versions.find((version) => compareOpenClawVersions(version, candidate.version) < 0);
+  const older = versions.find((version) => compareNatesclawVersions(version, candidate.version) < 0);
   if (older) {
-    return `openclaw@${older}`;
+    return `natesclaw@${older}`;
   }
 
   const same = versions.find(
-    (version) => compareOpenClawVersions(version, candidate.version) === 0,
+    (version) => compareNatesclawVersions(version, candidate.version) === 0,
   );
   if (same) {
-    return `openclaw@${same}`;
+    return `natesclaw@${same}`;
   }
 
-  throw new Error(`no published OpenClaw baseline is <= candidate ${candidate.version}`);
+  throw new Error(`no published Natesclaw baseline is <= candidate ${candidate.version}`);
 }
 
 export function parseArgs(argv: readonly string[]) {
@@ -104,13 +104,13 @@ function readPublishedVersions(args: Map<string, string>): unknown[] {
     }
     return parsed;
   }
-  const raw = execFileSync("npm", ["view", "openclaw", "versions", "--json", "--silent"], {
+  const raw = execFileSync("npm", ["view", "natesclaw", "versions", "--json", "--silent"], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "inherit"],
   });
   const parsed: unknown = JSON.parse(raw);
   if (!Array.isArray(parsed)) {
-    throw new Error("npm returned a non-array openclaw versions payload");
+    throw new Error("npm returned a non-array natesclaw versions payload");
   }
   return parsed;
 }

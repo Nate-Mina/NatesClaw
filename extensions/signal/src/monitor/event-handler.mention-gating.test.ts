@@ -1,9 +1,9 @@
 // Signal tests cover event handler.mention gating plugin behavior.
-import { expectDefined } from "@openclaw/normalization-core";
-import { buildDispatchInboundCaptureMock } from "openclaw/plugin-sdk/channel-contract-testing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { HistoryMediaEntry } from "openclaw/plugin-sdk/reply-history";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { buildDispatchInboundCaptureMock } from "natesclaw/plugin-sdk/channel-contract-testing";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { HistoryMediaEntry } from "natesclaw/plugin-sdk/reply-history";
+import type { MsgContext } from "natesclaw/plugin-sdk/reply-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { formatSignalMediaText } from "../media-text.js";
 
@@ -41,18 +41,18 @@ function getGroupHistoryEntries(
   return entries;
 }
 
-vi.mock("openclaw/plugin-sdk/reply-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/reply-runtime")>(
-    "openclaw/plugin-sdk/reply-runtime",
+vi.mock("natesclaw/plugin-sdk/reply-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/reply-runtime")>(
+    "natesclaw/plugin-sdk/reply-runtime",
   );
   return buildDispatchInboundCaptureMock(actual, (ctx) => {
     capturedCtx = ctx as SignalMsgContext;
   });
 });
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/channel-inbound")>(
-    "openclaw/plugin-sdk/channel-inbound",
+vi.mock("natesclaw/plugin-sdk/channel-inbound", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/channel-inbound")>(
+    "natesclaw/plugin-sdk/channel-inbound",
   );
   type RunParams = Parameters<typeof actual.runChannelInboundEvent>[0];
   return {
@@ -79,7 +79,7 @@ vi.mock("openclaw/plugin-sdk/channel-inbound", async () => {
         channel: resolved.channel,
         accountId: resolved.accountId,
         routeSessionKey: resolved.route.sessionKey,
-        storePath: "/tmp/openclaw/signal-sessions.json",
+        storePath: "/tmp/natesclaw/signal-sessions.json",
         ctxPayload: resolved.ctxPayload,
         recordInboundSession: async () => {},
         afterRecord: resolved.afterRecord,
@@ -176,7 +176,7 @@ function createSignalConfig(params: { requireMention: boolean; mentionPattern?: 
         groups: { "*": { requireMention: params.requireMention } },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as NatesclawConfig;
 }
 
 async function expectSkippedGroupHistory(
@@ -236,7 +236,7 @@ describe("signal mention gating", () => {
               groups: { g1: {} },
             },
           },
-        } as unknown as OpenClawConfig,
+        } as unknown as NatesclawConfig,
         groupPolicy: "allowlist",
         groupAllowFrom: ["group:g1"],
       }),

@@ -5,12 +5,12 @@ import {
   createMigrationItem,
   MIGRATION_REASON_TARGET_EXISTS,
   summarizeMigrationItems,
-} from "openclaw/plugin-sdk/migration";
+} from "natesclaw/plugin-sdk/migration";
 import type {
   MigrationItem,
   MigrationPlan,
   MigrationProviderContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import type { HermesSource } from "./source.js";
 import { resolveTargets } from "./targets.js";
 
@@ -64,7 +64,7 @@ async function buildMemoryItem(params: {
       : targetConflict
         ? MIGRATION_REASON_TARGET_EXISTS
         : undefined,
-    message: "Copy Hermes memory into the OpenClaw memory index.",
+    message: "Copy Hermes memory into the Natesclaw memory index.",
     details: {
       sourceType: "hermes-memory",
       sourceLabel: params.sourceLabel,

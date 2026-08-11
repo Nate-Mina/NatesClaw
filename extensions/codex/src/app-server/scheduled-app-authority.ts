@@ -2,11 +2,11 @@ import crypto from "node:crypto";
 import {
   AgentHarnessPreflightError,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   asOptionalRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isCodexAppServerRequestTimeoutError, type CodexAppServerClient } from "./client.js";
 import type { CodexPluginDestructiveApprovalMode } from "./config.js";
 import {

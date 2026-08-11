@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-source scripts/lib/openclaw-e2e-instance.sh
+source scripts/lib/natesclaw-e2e-instance.sh
 
-SCENARIO="${OPENCLAW_UPGRADE_SURVIVOR_SCENARIO:-base}"
+SCENARIO="${NATESCLAW_UPGRADE_SURVIVOR_SCENARIO:-base}"
 
 export npm_config_loglevel=error
 export npm_config_fund=false
 export npm_config_audit=false
 export CI=true
-export OPENCLAW_NO_ONBOARD=1
-export OPENCLAW_NO_PROMPT=1
-export OPENCLAW_SKIP_PROVIDERS=1
-export OPENCLAW_SKIP_CHANNELS=1
-export OPENCLAW_DISABLE_BONJOUR=1
+export NATESCLAW_NO_ONBOARD=1
+export NATESCLAW_NO_PROMPT=1
+export NATESCLAW_SKIP_PROVIDERS=1
+export NATESCLAW_SKIP_CHANNELS=1
+export NATESCLAW_DISABLE_BONJOUR=1
 export GATEWAY_AUTH_TOKEN_REF="upgrade-survivor-token"
-export OPENAI_API_KEY="sk-openclaw-upgrade-survivor"
+export OPENAI_API_KEY="sk-natesclaw-upgrade-survivor"
 export DISCORD_BOT_TOKEN="upgrade-survivor-discord-token"
 export TELEGRAM_BOT_TOKEN="123456:upgrade-survivor-telegram-token"
 if [ "$SCENARIO" = "feishu-channel" ]; then
@@ -26,32 +26,32 @@ if [ "$SCENARIO" = "configured-plugin-installs" ]; then
   export BRAVE_API_KEY="BSA_upgrade_survivor_brave_key"
 fi
 
-ARTIFACT_ROOT="$(dirname "${OPENCLAW_UPGRADE_SURVIVOR_SUMMARY_JSON:-/tmp/openclaw-upgrade-survivor-artifacts/summary.json}")"
-export OPENCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT="${OPENCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT:-/tmp/openclaw-upgrade-survivor-runtime}"
-RUNTIME_ROOT="$OPENCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT"
-STATE_HOME_ROOT="${OPENCLAW_UPGRADE_SURVIVOR_STATE_HOME_ROOT:-$RUNTIME_ROOT/state-home}"
+ARTIFACT_ROOT="$(dirname "${NATESCLAW_UPGRADE_SURVIVOR_SUMMARY_JSON:-/tmp/natesclaw-upgrade-survivor-artifacts/summary.json}")"
+export NATESCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT="${NATESCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT:-/tmp/natesclaw-upgrade-survivor-runtime}"
+RUNTIME_ROOT="$NATESCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT"
+STATE_HOME_ROOT="${NATESCLAW_UPGRADE_SURVIVOR_STATE_HOME_ROOT:-$RUNTIME_ROOT/state-home}"
 mkdir -p "$ARTIFACT_ROOT"
 mkdir -p "$RUNTIME_ROOT"
-export TMPDIR="${OPENCLAW_UPGRADE_SURVIVOR_TMPDIR:-$RUNTIME_ROOT/tmp}"
-export OPENCLAW_TEST_STATE_TMPDIR="${OPENCLAW_UPGRADE_SURVIVOR_TEST_STATE_TMPDIR:-$RUNTIME_ROOT/state-tmp}"
-mkdir -p "$TMPDIR" "$OPENCLAW_TEST_STATE_TMPDIR"
+export TMPDIR="${NATESCLAW_UPGRADE_SURVIVOR_TMPDIR:-$RUNTIME_ROOT/tmp}"
+export NATESCLAW_TEST_STATE_TMPDIR="${NATESCLAW_UPGRADE_SURVIVOR_TEST_STATE_TMPDIR:-$RUNTIME_ROOT/state-tmp}"
+mkdir -p "$TMPDIR" "$NATESCLAW_TEST_STATE_TMPDIR"
 export npm_config_prefix="$ARTIFACT_ROOT/npm-prefix"
 export NPM_CONFIG_PREFIX="$npm_config_prefix"
-export npm_config_cache="${OPENCLAW_UPGRADE_SURVIVOR_NPM_CACHE:-$OPENCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT/npm-cache}"
+export npm_config_cache="${NATESCLAW_UPGRADE_SURVIVOR_NPM_CACHE:-$NATESCLAW_UPGRADE_SURVIVOR_RUNTIME_ROOT/npm-cache}"
 export NPM_CONFIG_CACHE="$npm_config_cache"
 export npm_config_tmp="$TMPDIR"
 mkdir -p "$npm_config_prefix" "$npm_config_cache"
 chmod 700 "$npm_config_cache" || true
 export PATH="$npm_config_prefix/bin:$PATH"
 
-SUMMARY_JSON="${OPENCLAW_UPGRADE_SURVIVOR_SUMMARY_JSON:-$ARTIFACT_ROOT/summary.json}"
+SUMMARY_JSON="${NATESCLAW_UPGRADE_SURVIVOR_SUMMARY_JSON:-$ARTIFACT_ROOT/summary.json}"
 PHASE_LOG="$ARTIFACT_ROOT/phases.jsonl"
-BASELINE_RAW="${OPENCLAW_UPGRADE_SURVIVOR_BASELINE:?missing OPENCLAW_UPGRADE_SURVIVOR_BASELINE}"
-CANDIDATE_KIND="${OPENCLAW_UPGRADE_SURVIVOR_CANDIDATE_KIND:-tarball}"
-CANDIDATE_SPEC="${OPENCLAW_UPGRADE_SURVIVOR_CANDIDATE_SPEC:-${OPENCLAW_CURRENT_PACKAGE_TGZ:-}}"
-UPDATE_RESTART_MODE="${OPENCLAW_UPGRADE_SURVIVOR_UPDATE_RESTART_MODE:-manual}"
-ROOT_MANAGED_VPS="${OPENCLAW_UPGRADE_SURVIVOR_ROOT_MANAGED_VPS:-0}"
-COMMAND_TIMEOUT="${OPENCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"
+BASELINE_RAW="${NATESCLAW_UPGRADE_SURVIVOR_BASELINE:?missing NATESCLAW_UPGRADE_SURVIVOR_BASELINE}"
+CANDIDATE_KIND="${NATESCLAW_UPGRADE_SURVIVOR_CANDIDATE_KIND:-tarball}"
+CANDIDATE_SPEC="${NATESCLAW_UPGRADE_SURVIVOR_CANDIDATE_SPEC:-${NATESCLAW_CURRENT_PACKAGE_TGZ:-}}"
+UPDATE_RESTART_MODE="${NATESCLAW_UPGRADE_SURVIVOR_UPDATE_RESTART_MODE:-manual}"
+ROOT_MANAGED_VPS="${NATESCLAW_UPGRADE_SURVIVOR_ROOT_MANAGED_VPS:-0}"
+COMMAND_TIMEOUT="${NATESCLAW_UPGRADE_SURVIVOR_COMMAND_TIMEOUT:-900s}"
 CURRENT_PHASE="setup"
 FAILURE_PHASE=""
 FAILURE_MESSAGE=""
@@ -86,38 +86,38 @@ SYSTEMCTL_SHIM_LOG="$ARTIFACT_ROOT/systemctl-shim.log"
 SYSTEMCTL_SHIM_PID_FILE="$ARTIFACT_ROOT/systemctl-shim.pid"
 SYSTEMCTL_SHIM_DAEMON_LOG="$ARTIFACT_ROOT/systemctl-shim-gateway.log"
 CONFIG_COVERAGE_JSON="$ARTIFACT_ROOT/config-recipe.json"
-PREPUBLISH_AUTHORED_CONFIG="$RUNTIME_ROOT/prepublish-authored-openclaw.json"
-export OPENCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON="$CONFIG_COVERAGE_JSON"
+PREPUBLISH_AUTHORED_CONFIG="$RUNTIME_ROOT/prepublish-authored-natesclaw.json"
+export NATESCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON="$CONFIG_COVERAGE_JSON"
 rm -f "$SUMMARY_JSON" "$CONFIG_COVERAGE_JSON"
 : >"$PHASE_LOG"
 
 validate_baseline_package_spec() {
   local spec="$1"
-  if [[ "$spec" =~ ^openclaw@(alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$ ]]; then
+  if [[ "$spec" =~ ^natesclaw@(alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$ ]]; then
     return 0
   fi
-  echo "OPENCLAW_UPGRADE_SURVIVOR_BASELINE must be openclaw@latest, openclaw@beta, openclaw@alpha, an exact OpenClaw release version, or a bare release version; got: $spec" >&2
+  echo "NATESCLAW_UPGRADE_SURVIVOR_BASELINE must be natesclaw@latest, natesclaw@beta, natesclaw@alpha, an exact Natesclaw release version, or a bare release version; got: $spec" >&2
   return 1
 }
 
 normalize_baseline() {
   local raw="${BASELINE_RAW//[[:space:]]/}"
   if [ -z "$raw" ]; then
-    echo "OPENCLAW_UPGRADE_SURVIVOR_BASELINE cannot be empty" >&2
+    echo "NATESCLAW_UPGRADE_SURVIVOR_BASELINE cannot be empty" >&2
     return 1
   fi
   case "$raw" in
-    openclaw@*)
+    natesclaw@*)
       baseline_spec="$raw"
-      baseline_version="${raw#openclaw@}"
+      baseline_version="${raw#natesclaw@}"
       ;;
     *@*)
-      echo "OPENCLAW_UPGRADE_SURVIVOR_BASELINE must be openclaw@<version> or a bare version" >&2
+      echo "NATESCLAW_UPGRADE_SURVIVOR_BASELINE must be natesclaw@<version> or a bare version" >&2
       return 1
       ;;
     *)
       baseline_version="$raw"
-      baseline_spec="openclaw@$raw"
+      baseline_spec="natesclaw@$raw"
       ;;
   esac
   case "$baseline_version" in
@@ -126,7 +126,7 @@ normalize_baseline() {
       baseline_version_expected="0"
       ;;
     dev | main | "")
-      echo "OPENCLAW_UPGRADE_SURVIVOR_BASELINE must be openclaw@latest, openclaw@beta, openclaw@alpha, openclaw@<version>, or a bare version" >&2
+      echo "NATESCLAW_UPGRADE_SURVIVOR_BASELINE must be natesclaw@latest, natesclaw@beta, natesclaw@alpha, natesclaw@<version>, or a bare version" >&2
       return 1
       ;;
     *)
@@ -141,7 +141,7 @@ validate_update_restart_mode() {
     manual | auto-auth)
       ;;
     *)
-      echo "OPENCLAW_UPGRADE_SURVIVOR_UPDATE_RESTART_MODE must be manual or auto-auth; got: $UPDATE_RESTART_MODE" >&2
+      echo "NATESCLAW_UPGRADE_SURVIVOR_UPDATE_RESTART_MODE must be manual or auto-auth; got: $UPDATE_RESTART_MODE" >&2
       return 1
       ;;
   esac
@@ -204,8 +204,8 @@ const summary = {
   },
   scenario: process.env.SUMMARY_SCENARIO || "base",
   candidate: {
-    kind: process.env.OPENCLAW_UPGRADE_SURVIVOR_CANDIDATE_KIND || null,
-    spec: process.env.OPENCLAW_UPGRADE_SURVIVOR_CANDIDATE_SPEC || process.env.OPENCLAW_CURRENT_PACKAGE_TGZ || null,
+    kind: process.env.NATESCLAW_UPGRADE_SURVIVOR_CANDIDATE_KIND || null,
+    spec: process.env.NATESCLAW_UPGRADE_SURVIVOR_CANDIDATE_SPEC || process.env.NATESCLAW_CURRENT_PACKAGE_TGZ || null,
     version: process.env.SUMMARY_CANDIDATE_VERSION || null,
   },
   installedVersion: process.env.SUMMARY_INSTALLED_VERSION || null,
@@ -232,18 +232,18 @@ NODE
 
 cleanup() {
   if [ -s "$SYSTEMCTL_SHIM_PID_FILE" ]; then
-    systemctl --user stop openclaw-gateway.service >/dev/null 2>&1 || true
+    systemctl --user stop natesclaw-gateway.service >/dev/null 2>&1 || true
   fi
-  openclaw_e2e_terminate_gateways "${gateway_pid:-}"
+  natesclaw_e2e_terminate_gateways "${gateway_pid:-}"
   if [ -s "$SYSTEMCTL_SHIM_PID_FILE" ]; then
     local shim_pid
     shim_pid="$(cat "$SYSTEMCTL_SHIM_PID_FILE" 2>/dev/null || true)"
     if [[ "$shim_pid" =~ ^[0-9]+$ ]] && [ "$shim_pid" -gt 1 ]; then
-      openclaw_e2e_terminate_gateways "$shim_pid"
+      natesclaw_e2e_terminate_gateways "$shim_pid"
     fi
   fi
-  openclaw_e2e_stop_process "${plugin_registry_pid:-}"
-  openclaw_e2e_stop_process "${clawhub_fixture_pid:-}"
+  natesclaw_e2e_stop_process "${plugin_registry_pid:-}"
+  natesclaw_e2e_stop_process "${clawhub_fixture_pid:-}"
 }
 
 on_error() {
@@ -285,17 +285,17 @@ phase() {
 }
 
 package_root() {
-  printf '%s/lib/node_modules/openclaw\n' "$npm_config_prefix"
+  printf '%s/lib/node_modules/natesclaw\n' "$npm_config_prefix"
 }
 
 legacy_runtime_deps_symlink_plugin() {
-  local plugin="${OPENCLAW_UPGRADE_SURVIVOR_LEGACY_RUNTIME_DEPS_SYMLINK:-}"
+  local plugin="${NATESCLAW_UPGRADE_SURVIVOR_LEGACY_RUNTIME_DEPS_SYMLINK:-}"
   if [ -z "$plugin" ]; then
     return 1
   fi
   case "$plugin" in
     *[!A-Za-z0-9._-]*)
-      echo "OPENCLAW_UPGRADE_SURVIVOR_LEGACY_RUNTIME_DEPS_SYMLINK must be a plugin id, got: $plugin" >&2
+      echo "NATESCLAW_UPGRADE_SURVIVOR_LEGACY_RUNTIME_DEPS_SYMLINK must be a plugin id, got: $plugin" >&2
       return 2
       ;;
   esac
@@ -304,7 +304,7 @@ legacy_runtime_deps_symlink_plugin() {
 
 legacy_runtime_deps_symlink_target() {
   local plugin="$1"
-  printf '%s/@openclaw-upgrade-survivor/%s-runtime-dep\n' "$(dirname "$(package_root)")" "$plugin"
+  printf '%s/@natesclaw-upgrade-survivor/%s-runtime-dep\n' "$(dirname "$(package_root)")" "$plugin"
 }
 
 legacy_runtime_deps_symlink_source() {
@@ -319,7 +319,7 @@ plugin_deps_cleanup_enabled() {
 }
 
 plugin_deps_cleanup_plugins() {
-  printf '%s\n' "${OPENCLAW_UPGRADE_SURVIVOR_PLUGIN_DEPS_CLEANUP_PLUGINS:-discord telegram}"
+  printf '%s\n' "${NATESCLAW_UPGRADE_SURVIVOR_PLUGIN_DEPS_CLEANUP_PLUGINS:-discord telegram}"
 }
 
 plugin_deps_cleanup_plugin_dirs() {
@@ -340,20 +340,20 @@ source_only_plugin_shadow_enabled() {
 seed_source_only_plugin_shadow() {
   source_only_plugin_shadow_enabled || return 0
 
-  local shadow_root="$OPENCLAW_STATE_DIR/extensions/opik-openclaw"
+  local shadow_root="$NATESCLAW_STATE_DIR/extensions/opik-natesclaw"
   mkdir -p "$shadow_root/src"
   cat >"$shadow_root/package.json" <<'JSON'
 {
-  "name": "@opik/opik-openclaw",
+  "name": "@opik/opik-natesclaw",
   "version": "0.0.0-upgrade-survivor",
-  "openclaw": {
+  "natesclaw": {
     "extensions": ["./src/index.ts"]
   }
 }
 JSON
-  cat >"$shadow_root/openclaw.plugin.json" <<'JSON'
+  cat >"$shadow_root/natesclaw.plugin.json" <<'JSON'
 {
-  "id": "opik-openclaw",
+  "id": "opik-natesclaw",
   "activation": {
     "onStartup": false
   },
@@ -366,7 +366,7 @@ JSON
 JSON
   cat >"$shadow_root/src/index.ts" <<'TS'
 export default {
-  id: "opik-openclaw",
+  id: "opik-natesclaw",
   name: "Source-only Opik shadow",
   register() {},
 };
@@ -378,53 +378,53 @@ wait_for_fixture_port() {
   local pid="$1" port_file="$2" log_file="$3" label="$4"
   for _ in $(seq 1 100); do
     [ -s "$port_file" ] && return 0
-    openclaw_e2e_process_alive "$pid" || break
+    natesclaw_e2e_process_alive "$pid" || break
     sleep 0.1
   done
-  openclaw_e2e_print_log "$log_file" >&2
+  natesclaw_e2e_print_log "$log_file" >&2
   echo "Timed out waiting for upgrade survivor $label." >&2
   return 1
 }
 
 configure_clawhub_fixture() {
-  unset OPENCLAW_CLAWHUB_URL CLAWHUB_URL
-  [ -z "${OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR:-}" ] && return 0
+  unset NATESCLAW_CLAWHUB_URL CLAWHUB_URL
+  [ -z "${NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR:-}" ] && return 0
   local fixture_root="$ARTIFACT_ROOT/clawhub-fixture" port_file log_file
   port_file="$fixture_root/port"
   log_file="$fixture_root/server.log"
   mkdir -p "$fixture_root"
-  node "${OPENCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
+  node "${NATESCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
     prepublish-artifacts "$port_file" \
-    "$OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR/prepublish-plugin-registry.json" >"$log_file" 2>&1 &
+    "$NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR/prepublish-plugin-registry.json" >"$log_file" 2>&1 &
   clawhub_fixture_pid="$!"
   wait_for_fixture_port "$clawhub_fixture_pid" "$port_file" "$log_file" "ClawHub fixture"
-  export OPENCLAW_CLAWHUB_URL="http://127.0.0.1:$(cat "$port_file")"
+  export NATESCLAW_CLAWHUB_URL="http://127.0.0.1:$(cat "$port_file")"
 }
 
 prepublish_auto_auth_enabled() {
   [ "$UPDATE_RESTART_MODE" = "auto-auth" ] &&
-    [ -n "${OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR:-}" ]
+    [ -n "${NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR:-}" ]
 }
 
 park_prepublish_authored_config() {
   prepublish_auto_auth_enabled || return 0
-  node "${OPENCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
-    park-prepublish-auth-config "$OPENCLAW_CONFIG_PATH" "$PREPUBLISH_AUTHORED_CONFIG"
+  node "${NATESCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
+    park-prepublish-auth-config "$NATESCLAW_CONFIG_PATH" "$PREPUBLISH_AUTHORED_CONFIG"
 }
 
 assert_prepublish_fixture_idle() {
   prepublish_auto_auth_enabled || return 0
-  node "${OPENCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
-    assert-no-requests "$OPENCLAW_CLAWHUB_URL"
+  node "${NATESCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
+    assert-no-requests "$NATESCLAW_CLAWHUB_URL"
 }
 
 restore_prepublish_authored_config() {
   prepublish_auto_auth_enabled || return 0
-  if ! node "${OPENCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
-    restore-prepublish-auth-config "$OPENCLAW_CONFIG_PATH" "$PREPUBLISH_AUTHORED_CONFIG"; then
+  if ! node "${NATESCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
+    restore-prepublish-auth-config "$NATESCLAW_CONFIG_PATH" "$PREPUBLISH_AUTHORED_CONFIG"; then
     return 1
   fi
-  if ! cmp -s "$PREPUBLISH_AUTHORED_CONFIG" "$OPENCLAW_CONFIG_PATH"; then
+  if ! cmp -s "$PREPUBLISH_AUTHORED_CONFIG" "$NATESCLAW_CONFIG_PATH"; then
     echo "restored prepublish config did not match authored bytes" >&2
     return 1
   fi
@@ -434,13 +434,13 @@ restore_prepublish_authored_config() {
 configure_plugin_registry() {
   local fixture_root="$ARTIFACT_ROOT/plugin-registry"
   local package_dir="$fixture_root/package"
-  local tarball="$fixture_root/openclaw-brave-plugin-${candidate_version}.tgz"
+  local tarball="$fixture_root/natesclaw-brave-plugin-${candidate_version}.tgz"
   local port_file="$fixture_root/npm-registry-port"
   local log_file="$fixture_root/npm-registry.log"
   local registry_args=()
 
-  if [ -n "${OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR:-}" ]; then
-    local manifest="$OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR/prepublish-plugin-registry.json"
+  if [ -n "${NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR:-}" ]; then
+    local manifest="$NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR/prepublish-plugin-registry.json"
     local registry_rows
     registry_rows="$(
       PREPUBLISH_PLUGIN_REGISTRY_MANIFEST="$manifest" node <<'NODE'
@@ -486,16 +486,16 @@ fs.writeFileSync(
   path.join(root, "package.json"),
   `${JSON.stringify(
     {
-      name: "@openclaw/brave-plugin",
+      name: "@natesclaw/brave-plugin",
       version,
-      openclaw: { extensions: ["./index.js"] },
+      natesclaw: { extensions: ["./index.js"] },
     },
     null,
     2,
   )}\n`,
 );
 fs.writeFileSync(
-  path.join(root, "openclaw.plugin.json"),
+  path.join(root, "natesclaw.plugin.json"),
   `${JSON.stringify(
     {
       id: "brave",
@@ -528,7 +528,7 @@ fs.writeFileSync(
 );
 NODE
     tar -czf "$tarball" -C "$fixture_root" package
-    registry_args+=("@openclaw/brave-plugin" "$candidate_version" "$tarball")
+    registry_args+=("@natesclaw/brave-plugin" "$candidate_version" "$tarball")
   fi
 
   if [ "${#registry_args[@]}" -eq 0 ]; then
@@ -536,8 +536,8 @@ NODE
   fi
 
   mkdir -p "$fixture_root"
-  OPENCLAW_NPM_REGISTRY_DIST_TAGS="beta=$candidate_version" \
-  OPENCLAW_NPM_REGISTRY_UPSTREAM=https://registry.npmjs.org \
+  NATESCLAW_NPM_REGISTRY_DIST_TAGS="beta=$candidate_version" \
+  NATESCLAW_NPM_REGISTRY_UPSTREAM=https://registry.npmjs.org \
     node scripts/e2e/lib/plugins/npm-registry-server.mjs \
     "$port_file" \
     "${registry_args[@]}" \
@@ -555,16 +555,16 @@ legacy_plugin_dependency_probe_paths() {
   while IFS= read -r plugin_dir; do
     printf '%s\n' \
       "$plugin_dir/node_modules" \
-      "$plugin_dir/.openclaw-runtime-deps.json" \
-      "$plugin_dir/.openclaw-runtime-deps-stamp.json" \
-      "$plugin_dir/.openclaw-runtime-deps-copy-upgrade-survivor" \
-      "$plugin_dir/.openclaw-install-stage-upgrade-survivor" \
-      "$plugin_dir/.openclaw-pnpm-store"
+      "$plugin_dir/.natesclaw-runtime-deps.json" \
+      "$plugin_dir/.natesclaw-runtime-deps-stamp.json" \
+      "$plugin_dir/.natesclaw-runtime-deps-copy-upgrade-survivor" \
+      "$plugin_dir/.natesclaw-install-stage-upgrade-survivor" \
+      "$plugin_dir/.natesclaw-pnpm-store"
   done < <(plugin_deps_cleanup_plugin_dirs "$plugin")
   printf '%s\n' \
     "$(package_root)/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor" \
-    "$OPENCLAW_STATE_DIR/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor" \
-    "$OPENCLAW_STATE_DIR/plugin-runtime-deps/$plugin-upgrade-survivor"
+    "$NATESCLAW_STATE_DIR/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor" \
+    "$NATESCLAW_STATE_DIR/plugin-runtime-deps/$plugin-upgrade-survivor"
 }
 
 install_baseline_plugin_dependencies() {
@@ -590,27 +590,27 @@ seed_legacy_plugin_dependency_debris() {
     [ -n "$plugin_dir" ] || continue
     found=1
     mkdir -p \
-      "$plugin_dir/node_modules/openclaw-upgrade-survivor-dep" \
-      "$plugin_dir/.openclaw-runtime-deps-copy-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep" \
-      "$plugin_dir/.openclaw-install-stage-upgrade-survivor" \
-      "$plugin_dir/.openclaw-pnpm-store" \
-      "$(package_root)/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep" \
-      "$OPENCLAW_STATE_DIR/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep" \
-      "$OPENCLAW_STATE_DIR/plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep"
-    printf '{"name":"openclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
-      >"$plugin_dir/node_modules/openclaw-upgrade-survivor-dep/package.json"
+      "$plugin_dir/node_modules/natesclaw-upgrade-survivor-dep" \
+      "$plugin_dir/.natesclaw-runtime-deps-copy-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep" \
+      "$plugin_dir/.natesclaw-install-stage-upgrade-survivor" \
+      "$plugin_dir/.natesclaw-pnpm-store" \
+      "$(package_root)/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep" \
+      "$NATESCLAW_STATE_DIR/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep" \
+      "$NATESCLAW_STATE_DIR/plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep"
+    printf '{"name":"natesclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
+      >"$plugin_dir/node_modules/natesclaw-upgrade-survivor-dep/package.json"
     printf '{"plugin":"%s","scenario":"plugin-deps-cleanup"}\n' "$plugin" \
-      >"$plugin_dir/.openclaw-runtime-deps.json"
+      >"$plugin_dir/.natesclaw-runtime-deps.json"
     printf '{"plugin":"%s","scenario":"plugin-deps-cleanup","stale":true}\n' "$plugin" \
-      >"$plugin_dir/.openclaw-runtime-deps-stamp.json"
-    printf '{"name":"openclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
-      >"$plugin_dir/.openclaw-runtime-deps-copy-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep/package.json"
-    printf '{"name":"openclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
-      >"$(package_root)/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep/package.json"
-    printf '{"name":"openclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
-      >"$OPENCLAW_STATE_DIR/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep/package.json"
-    printf '{"name":"openclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
-      >"$OPENCLAW_STATE_DIR/plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/openclaw-upgrade-survivor-dep/package.json"
+      >"$plugin_dir/.natesclaw-runtime-deps-stamp.json"
+    printf '{"name":"natesclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
+      >"$plugin_dir/.natesclaw-runtime-deps-copy-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep/package.json"
+    printf '{"name":"natesclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
+      >"$(package_root)/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep/package.json"
+    printf '{"name":"natesclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
+      >"$NATESCLAW_STATE_DIR/.local/bundled-plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep/package.json"
+    printf '{"name":"natesclaw-upgrade-survivor-dep","version":"0.0.0"}\n' \
+      >"$NATESCLAW_STATE_DIR/plugin-runtime-deps/$plugin-upgrade-survivor/node_modules/natesclaw-upgrade-survivor-dep/package.json"
     echo "Seeded legacy plugin dependency debris for configured plugin: $plugin"
   done
 
@@ -700,7 +700,7 @@ seed_legacy_runtime_deps_symlink() {
   target_dir="$(legacy_runtime_deps_symlink_target "$plugin")"
   mkdir -p "$source_dir"
   mkdir -p "$(dirname "$target_dir")"
-  printf '{"name":"openclaw-upgrade-survivor-legacy-runtime-deps","version":"0.0.0"}\n' \
+  printf '{"name":"natesclaw-upgrade-survivor-legacy-runtime-deps","version":"0.0.0"}\n' \
     >"$source_dir/package.json"
   rm -rf "$target_dir"
   ln -s "$source_dir" "$target_dir"
@@ -747,21 +747,21 @@ rm_rf_retry() {
 }
 
 reset_run_state() {
-  rm_rf_retry "$npm_config_prefix" "$TMPDIR" "$OPENCLAW_TEST_STATE_TMPDIR" "$STATE_HOME_ROOT"
+  rm_rf_retry "$npm_config_prefix" "$TMPDIR" "$NATESCLAW_TEST_STATE_TMPDIR" "$STATE_HOME_ROOT"
   rm -f "$SYSTEMCTL_SHIM_PID_FILE" "$SYSTEMCTL_SHIM_DAEMON_LOG"
-  mkdir -p "$npm_config_prefix" "$npm_config_cache" "$TMPDIR" "$OPENCLAW_TEST_STATE_TMPDIR"
+  mkdir -p "$npm_config_prefix" "$npm_config_cache" "$TMPDIR" "$NATESCLAW_TEST_STATE_TMPDIR"
 }
 
 install_baseline() {
   normalize_baseline
   echo "Installing baseline package: $baseline_spec"
-  if ! openclaw_e2e_maybe_timeout "${OPENCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g --prefix "$npm_config_prefix" "$baseline_spec" --no-fund --no-audit >"$BASELINE_INSTALL_LOG" 2>&1; then
+  if ! natesclaw_e2e_maybe_timeout "${NATESCLAW_E2E_NPM_INSTALL_TIMEOUT:-600s}" npm install -g --prefix "$npm_config_prefix" "$baseline_spec" --no-fund --no-audit >"$BASELINE_INSTALL_LOG" 2>&1; then
     echo "baseline npm install failed" >&2
-    openclaw_e2e_print_log "$BASELINE_INSTALL_LOG" >&2
+    natesclaw_e2e_print_log "$BASELINE_INSTALL_LOG" >&2
     return 1
   fi
-  if ! command -v openclaw >/dev/null; then
-    echo "baseline install did not expose openclaw on PATH" >&2
+  if ! command -v natesclaw >/dev/null; then
+    echo "baseline install did not expose natesclaw on PATH" >&2
     echo "PATH=$PATH" >&2
     find "$npm_config_prefix" -maxdepth 3 -type f -o -type l >&2 || true
     return 1
@@ -774,13 +774,13 @@ install_baseline() {
   fi
   baseline_version="$installed_version"
   local version_output
-  if ! version_output="$(openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw --version 2>&1)"; then
-    echo "baseline openclaw --version failed" >&2
+  if ! version_output="$(natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" natesclaw --version 2>&1)"; then
+    echo "baseline natesclaw --version failed" >&2
     echo "$version_output" >&2
     return 1
   fi
   if [[ "$version_output" != *"$baseline_version"* ]]; then
-    echo "baseline openclaw --version mismatch: expected output to include $baseline_version" >&2
+    echo "baseline natesclaw --version mismatch: expected output to include $baseline_version" >&2
     echo "$version_output" >&2
     return 1
   fi
@@ -788,16 +788,16 @@ install_baseline() {
 
 seed_state() {
   local account_home=""
-  openclaw_e2e_eval_test_state_from_b64 "${OPENCLAW_TEST_STATE_FUNCTION_B64:?missing OPENCLAW_TEST_STATE_FUNCTION_B64}"
+  natesclaw_e2e_eval_test_state_from_b64 "${NATESCLAW_TEST_STATE_FUNCTION_B64:?missing NATESCLAW_TEST_STATE_FUNCTION_B64}"
   if [ "$ROOT_MANAGED_VPS" = "1" ]; then
     if [ "$(id -u)" -ne 0 ]; then
       echo "root-managed VPS survivor mode must run as uid 0" >&2
       return 1
     fi
-    rm -rf /root/.openclaw /root/workspace
-    openclaw_test_state_create /root minimal
+    rm -rf /root/.natesclaw /root/workspace
+    natesclaw_test_state_create /root minimal
   else
-    openclaw_test_state_create "$STATE_HOME_ROOT" minimal
+    natesclaw_test_state_create "$STATE_HOME_ROOT" minimal
   fi
   if [ "$UPDATE_RESTART_MODE" = "auto-auth" ]; then
     account_home="$(getent passwd "$(id -u)" | cut -d: -f6)"
@@ -807,16 +807,16 @@ seed_state() {
     fi
     export HOME="$account_home"
     export USERPROFILE="$account_home"
-    unset OPENCLAW_HOME
-    export OPENCLAW_STATE_DIR="$account_home/.openclaw"
-    export OPENCLAW_CONFIG_PATH="$OPENCLAW_STATE_DIR/openclaw.json"
+    unset NATESCLAW_HOME
+    export NATESCLAW_STATE_DIR="$account_home/.natesclaw"
+    export NATESCLAW_CONFIG_PATH="$NATESCLAW_STATE_DIR/natesclaw.json"
   fi
-  export OPENCLAW_UPGRADE_SURVIVOR_BASELINE_VERSION="$baseline_version"
+  export NATESCLAW_UPGRADE_SURVIVOR_BASELINE_VERSION="$baseline_version"
   node scripts/e2e/lib/upgrade-survivor/assertions.mjs seed
 }
 
 apply_baseline_config_recipe() {
-  local tsx_import="${OPENCLAW_UPGRADE_SURVIVOR_TSX_IMPORT:-tsx}"
+  local tsx_import="${NATESCLAW_UPGRADE_SURVIVOR_TSX_IMPORT:-tsx}"
   local recipe_runner=(
     node --import "$tsx_import" scripts/e2e/lib/upgrade-survivor/config-recipe.mts
   )
@@ -829,9 +829,9 @@ apply_baseline_config_recipe() {
 }
 
 validate_baseline_config() {
-  if ! openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw config validate >"$BASELINE_CONFIG_VALIDATE_LOG" 2>&1; then
+  if ! natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" natesclaw config validate >"$BASELINE_CONFIG_VALIDATE_LOG" 2>&1; then
     echo "generated baseline config failed baseline validation" >&2
-    openclaw_e2e_print_log "$BASELINE_CONFIG_VALIDATE_LOG" >&2
+    natesclaw_e2e_print_log "$BASELINE_CONFIG_VALIDATE_LOG" >&2
     return 1
   fi
 }
@@ -843,9 +843,9 @@ install_update_restart_systemctl_shim() {
 #!/usr/bin/env bash
 set -euo pipefail
 
-log_file="${OPENCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_LOG:-/tmp/openclaw-systemctl-shim.log}"
-pid_file="${OPENCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE:-/tmp/openclaw-systemctl-shim.pid}"
-daemon_log="${OPENCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_DAEMON_LOG:-/tmp/openclaw-systemctl-shim-gateway.log}"
+log_file="${NATESCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_LOG:-/tmp/natesclaw-systemctl-shim.log}"
+pid_file="${NATESCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE:-/tmp/natesclaw-systemctl-shim.pid}"
+daemon_log="${NATESCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_DAEMON_LOG:-/tmp/natesclaw-systemctl-shim-gateway.log}"
 supervisor_script="${pid_file}.supervisor.mjs"
 printf '%s\n' "$*" >>"$log_file"
 
@@ -902,7 +902,7 @@ stop_gateway() {
 }
 
 unit_path() {
-  printf '%s/.config/systemd/user/openclaw-gateway.service\n' "${HOME:?missing HOME}"
+  printf '%s/.config/systemd/user/natesclaw-gateway.service\n' "${HOME:?missing HOME}"
 }
 
 load_unit_environment() {
@@ -944,23 +944,23 @@ start_gateway() {
 import fs from "node:fs";
 import { spawn } from "node:child_process";
 
-const command = process.env.OPENCLAW_SYSTEMCTL_SHIM_EXEC_START;
-const daemonLog = process.env.OPENCLAW_SYSTEMCTL_SHIM_DAEMON_LOG;
+const command = process.env.NATESCLAW_SYSTEMCTL_SHIM_EXEC_START;
+const daemonLog = process.env.NATESCLAW_SYSTEMCTL_SHIM_DAEMON_LOG;
 if (!command || !daemonLog) {
   process.exit(2);
 }
 
 const output = fs.openSync(daemonLog, "a");
 const childEnv = { ...process.env };
-delete childEnv.OPENCLAW_SYSTEMCTL_SHIM_EXEC_START;
-delete childEnv.OPENCLAW_SYSTEMCTL_SHIM_DAEMON_LOG;
+delete childEnv.NATESCLAW_SYSTEMCTL_SHIM_EXEC_START;
+delete childEnv.NATESCLAW_SYSTEMCTL_SHIM_DAEMON_LOG;
 // systemd does not pass transient systemctl-caller update state into the service.
 for (const key of Object.keys(childEnv)) {
-  if (key.startsWith("OPENCLAW_UPDATE_")) {
+  if (key.startsWith("NATESCLAW_UPDATE_")) {
     delete childEnv[key];
   }
 }
-delete childEnv.OPENCLAW_COMPATIBILITY_HOST_VERSION;
+delete childEnv.NATESCLAW_COMPATIBILITY_HOST_VERSION;
 const restartDelayMs = 5_000;
 const restartWindowMs = 60_000;
 const restartBurst = 5;
@@ -1079,8 +1079,8 @@ start();
 SUPERVISOR
   (
     load_unit_environment "$unit"
-    OPENCLAW_SYSTEMCTL_SHIM_EXEC_START="$exec_start" \
-      OPENCLAW_SYSTEMCTL_SHIM_DAEMON_LOG="$daemon_log" \
+    NATESCLAW_SYSTEMCTL_SHIM_EXEC_START="$exec_start" \
+      NATESCLAW_SYSTEMCTL_SHIM_DAEMON_LOG="$daemon_log" \
       nohup node "$supervisor_script" </dev/null >/dev/null 2>&1 &
     printf '%s\n' "$!" >"$pid_file"
   )
@@ -1140,17 +1140,17 @@ case "$command" in
 esac
 SHIM
   chmod +x "$shim_dir/systemctl"
-  export OPENCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_LOG="$SYSTEMCTL_SHIM_LOG"
-  export OPENCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE="$SYSTEMCTL_SHIM_PID_FILE"
-  export OPENCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_DAEMON_LOG="$SYSTEMCTL_SHIM_DAEMON_LOG"
+  export NATESCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_LOG="$SYSTEMCTL_SHIM_LOG"
+  export NATESCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE="$SYSTEMCTL_SHIM_PID_FILE"
+  export NATESCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_DAEMON_LOG="$SYSTEMCTL_SHIM_DAEMON_LOG"
   export PATH="$shim_dir:$PATH"
 }
 
 install_update_restart_service_unit() {
-  if ! openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" env -u OPENCLAW_GATEWAY_TOKEN -u OPENCLAW_GATEWAY_PASSWORD openclaw gateway install --force --json >"$BASELINE_SERVICE_INSTALL_JSON" 2>"$BASELINE_SERVICE_INSTALL_ERR"; then
+  if ! natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" env -u NATESCLAW_GATEWAY_TOKEN -u NATESCLAW_GATEWAY_PASSWORD natesclaw gateway install --force --json >"$BASELINE_SERVICE_INSTALL_JSON" 2>"$BASELINE_SERVICE_INSTALL_ERR"; then
     echo "baseline gateway service install failed" >&2
-    openclaw_e2e_print_log "$BASELINE_SERVICE_INSTALL_ERR" >&2
-    openclaw_e2e_print_log "$BASELINE_SERVICE_INSTALL_JSON" >&2
+    natesclaw_e2e_print_log "$BASELINE_SERVICE_INSTALL_ERR" >&2
+    natesclaw_e2e_print_log "$BASELINE_SERVICE_INSTALL_JSON" >&2
     return 1
   fi
 }
@@ -1161,9 +1161,9 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-const stateDir = process.env.OPENCLAW_STATE_DIR;
+const stateDir = process.env.NATESCLAW_STATE_DIR;
 if (!stateDir) {
-  throw new Error("missing OPENCLAW_STATE_DIR");
+  throw new Error("missing NATESCLAW_STATE_DIR");
 }
 
 const base64UrlEncode = (buf) =>
@@ -1242,18 +1242,18 @@ NODE
 }
 
 write_update_restart_service_env() {
-  mkdir -p "$OPENCLAW_STATE_DIR"
-  local dotenv_path="$OPENCLAW_STATE_DIR/.env"
+  mkdir -p "$NATESCLAW_STATE_DIR"
+  local dotenv_path="$NATESCLAW_STATE_DIR/.env"
   local tmp_path="$dotenv_path.tmp.$$"
   if [ -f "$dotenv_path" ]; then
-    grep -Ev '^(GATEWAY_AUTH_TOKEN_REF|OPENCLAW_CLAWHUB_URL)=' "$dotenv_path" >"$tmp_path" || true
+    grep -Ev '^(GATEWAY_AUTH_TOKEN_REF|NATESCLAW_CLAWHUB_URL)=' "$dotenv_path" >"$tmp_path" || true
   else
     : >"$tmp_path"
   fi
   # Managed restarts resolve auth and fixture routing from service-owned durable env.
   printf 'GATEWAY_AUTH_TOKEN_REF=%s\n' "$GATEWAY_AUTH_TOKEN_REF" >>"$tmp_path"
-  if [ -n "${OPENCLAW_CLAWHUB_URL:-}" ]; then
-    printf 'OPENCLAW_CLAWHUB_URL=%s\n' "$OPENCLAW_CLAWHUB_URL" >>"$tmp_path"
+  if [ -n "${NATESCLAW_CLAWHUB_URL:-}" ]; then
+    printf 'NATESCLAW_CLAWHUB_URL=%s\n' "$NATESCLAW_CLAWHUB_URL" >>"$tmp_path"
   fi
   chmod 600 "$tmp_path"
   mv "$tmp_path" "$dotenv_path"
@@ -1286,15 +1286,15 @@ prepare_update_restart_probe() {
 }
 
 assert_baseline_state() {
-  OPENCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE=baseline \
+  NATESCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE=baseline \
     node scripts/e2e/lib/upgrade-survivor/assertions.mjs assert-config
-  OPENCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE=baseline \
+  NATESCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE=baseline \
     node scripts/e2e/lib/upgrade-survivor/assertions.mjs assert-state
 }
 
 resolve_candidate_version() {
   if [ -z "$CANDIDATE_SPEC" ]; then
-    echo "missing OPENCLAW_UPGRADE_SURVIVOR_CANDIDATE_SPEC" >&2
+    echo "missing NATESCLAW_UPGRADE_SURVIVOR_CANDIDATE_SPEC" >&2
     return 1
   fi
   case "$CANDIDATE_KIND" in
@@ -1321,10 +1321,10 @@ resolve_candidate_version() {
     echo "could not resolve candidate version from $CANDIDATE_KIND:$CANDIDATE_SPEC" >&2
     return 1
   fi
-  OPENCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT="$(
+  NATESCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT="$(
     node scripts/e2e/lib/package-compat.mjs "$candidate_version"
   )"
-  export OPENCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT
+  export NATESCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT
 }
 
 candidate_update_spec() {
@@ -1374,9 +1374,9 @@ update_candidate() {
   local update_args=(update --tag "$update_spec" --yes --json)
   local update_env=(
     env
-    -u OPENCLAW_GATEWAY_TOKEN
-    -u OPENCLAW_GATEWAY_PASSWORD
-    -u OPENCLAW_ALLOW_ROOT
+    -u NATESCLAW_GATEWAY_TOKEN
+    -u NATESCLAW_GATEWAY_PASSWORD
+    -u NATESCLAW_ALLOW_ROOT
   )
   if [ "$UPDATE_RESTART_MODE" = "manual" ]; then
     update_args+=(--no-restart)
@@ -1384,12 +1384,12 @@ update_candidate() {
     update_start="$(node -e "process.stdout.write(String(Date.now()))")"
   fi
   if [ "$ROOT_MANAGED_VPS" != "1" ]; then
-    update_env+=(OPENCLAW_ALLOW_ROOT=1)
+    update_env+=(NATESCLAW_ALLOW_ROOT=1)
   fi
-  if ! openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${update_env[@]}" openclaw "${update_args[@]}" >"$UPDATE_JSON" 2>"$UPDATE_ERR"; then
-    echo "openclaw update failed" >&2
-    openclaw_e2e_print_log "$UPDATE_ERR" >&2
-    openclaw_e2e_print_log "$UPDATE_JSON" >&2
+  if ! natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${update_env[@]}" natesclaw "${update_args[@]}" >"$UPDATE_JSON" 2>"$UPDATE_ERR"; then
+    echo "natesclaw update failed" >&2
+    natesclaw_e2e_print_log "$UPDATE_ERR" >&2
+    natesclaw_e2e_print_log "$UPDATE_JSON" >&2
     return 1
   fi
   if [ "$UPDATE_RESTART_MODE" = "auto-auth" ]; then
@@ -1406,26 +1406,26 @@ assert_root_managed_vps_cli_usable() {
   fi
   local root_cli_env=(
     env
-    -u OPENCLAW_GATEWAY_TOKEN
-    -u OPENCLAW_GATEWAY_PASSWORD
-    -u OPENCLAW_ALLOW_ROOT
+    -u NATESCLAW_GATEWAY_TOKEN
+    -u NATESCLAW_GATEWAY_PASSWORD
+    -u NATESCLAW_ALLOW_ROOT
   )
-  openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${root_cli_env[@]}" openclaw config file >"$ARTIFACT_ROOT/root-vps-config-file.out" 2>"$ARTIFACT_ROOT/root-vps-config-file.err"
-  openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${root_cli_env[@]}" openclaw plugins >"$ARTIFACT_ROOT/root-vps-plugins.out" 2>"$ARTIFACT_ROOT/root-vps-plugins.err"
+  natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${root_cli_env[@]}" natesclaw config file >"$ARTIFACT_ROOT/root-vps-config-file.out" 2>"$ARTIFACT_ROOT/root-vps-config-file.err"
+  natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" "${root_cli_env[@]}" natesclaw plugins >"$ARTIFACT_ROOT/root-vps-plugins.out" 2>"$ARTIFACT_ROOT/root-vps-plugins.err"
 }
 
 run_doctor() {
-  if ! openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw doctor --fix --non-interactive >"$DOCTOR_LOG" 2>&1; then
-    echo "openclaw doctor failed" >&2
-    openclaw_e2e_print_log "$DOCTOR_LOG" >&2
+  if ! natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" natesclaw doctor --fix --non-interactive >"$DOCTOR_LOG" 2>&1; then
+    echo "natesclaw doctor failed" >&2
+    natesclaw_e2e_print_log "$DOCTOR_LOG" >&2
     return 1
   fi
 }
 
 validate_post_doctor_config() {
-  if ! openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw config validate >>"$DOCTOR_LOG" 2>&1; then
+  if ! natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" natesclaw config validate >>"$DOCTOR_LOG" 2>&1; then
     echo "post-doctor config validation failed" >&2
-    openclaw_e2e_print_log "$DOCTOR_LOG" >&2
+    natesclaw_e2e_print_log "$DOCTOR_LOG" >&2
     return 1
   fi
 }
@@ -1451,10 +1451,10 @@ probe_gateway_endpoint() {
     --path "$path"
     --expect "$expect_kind"
   )
-  if [ -n "${OPENCLAW_UPGRADE_SURVIVOR_READYZ_ALLOW_FAILING:-}" ]; then
-    args+=(--allow-failing "$OPENCLAW_UPGRADE_SURVIVOR_READYZ_ALLOW_FAILING")
+  if [ -n "${NATESCLAW_UPGRADE_SURVIVOR_READYZ_ALLOW_FAILING:-}" ]; then
+    args+=(--allow-failing "$NATESCLAW_UPGRADE_SURVIVOR_READYZ_ALLOW_FAILING")
   fi
-  if [ "${OPENCLAW_UPGRADE_SURVIVOR_READYZ_ALLOW_DEGRADED:-}" = "1" ]; then
+  if [ "${NATESCLAW_UPGRADE_SURVIVOR_READYZ_ALLOW_DEGRADED:-}" = "1" ]; then
     args+=(--allow-degraded-ready)
   fi
   args+=(--out "$out_file")
@@ -1467,21 +1467,21 @@ probe_gateway_endpoint() {
 start_gateway() {
   local port=18789
   local budget
-  budget="$(openclaw_e2e_read_positive_int_env OPENCLAW_UPGRADE_SURVIVOR_START_BUDGET_SECONDS 90)"
+  budget="$(natesclaw_e2e_read_positive_int_env NATESCLAW_UPGRADE_SURVIVOR_START_BUDGET_SECONDS 90)"
   local start_epoch
   local ready_epoch
   start_epoch="$(node -e "process.stdout.write(String(Date.now()))")"
-  env -u OPENCLAW_GATEWAY_TOKEN -u OPENCLAW_GATEWAY_PASSWORD openclaw gateway --port "$port" --bind loopback --allow-unconfigured >"$GATEWAY_LOG" 2>&1 &
+  env -u NATESCLAW_GATEWAY_TOKEN -u NATESCLAW_GATEWAY_PASSWORD natesclaw gateway --port "$port" --bind loopback --allow-unconfigured >"$GATEWAY_LOG" 2>&1 &
   gateway_pid="$!"
   if [ "$UPDATE_RESTART_MODE" = "auto-auth" ]; then
     printf '%s\n' "$gateway_pid" >"$SYSTEMCTL_SHIM_PID_FILE"
   fi
-  openclaw_e2e_wait_gateway_ready "$gateway_pid" "$GATEWAY_LOG" 360 "$port" "${1:-strict}"
+  natesclaw_e2e_wait_gateway_ready "$gateway_pid" "$GATEWAY_LOG" 360 "$port" "${1:-strict}"
   ready_epoch="$(node -e "process.stdout.write(String(Date.now()))")"
   start_seconds=$(((ready_epoch - start_epoch + 999) / 1000))
   if [ "$start_seconds" -gt "$budget" ]; then
     echo "gateway startup exceeded survivor budget: ${start_seconds}s > ${budget}s" >&2
-    openclaw_e2e_print_log "$GATEWAY_LOG" >&2
+    natesclaw_e2e_print_log "$GATEWAY_LOG" >&2
     return 1
   fi
 }
@@ -1501,21 +1501,21 @@ check_gateway_probes() {
 check_gateway_status() {
   local port=18789
   local budget
-  budget="$(openclaw_e2e_read_positive_int_env OPENCLAW_UPGRADE_SURVIVOR_STATUS_BUDGET_SECONDS 30)"
+  budget="$(natesclaw_e2e_read_positive_int_env NATESCLAW_UPGRADE_SURVIVOR_STATUS_BUDGET_SECONDS 30)"
   local status_start
   local status_end
   status_start="$(node -e "process.stdout.write(String(Date.now()))")"
-  if ! openclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" openclaw gateway status --url "ws://127.0.0.1:$port" --token "$GATEWAY_AUTH_TOKEN_REF" --require-rpc --timeout 30000 --json >"$STATUS_JSON" 2>"$STATUS_ERR"; then
+  if ! natesclaw_e2e_maybe_timeout "$COMMAND_TIMEOUT" natesclaw gateway status --url "ws://127.0.0.1:$port" --token "$GATEWAY_AUTH_TOKEN_REF" --require-rpc --timeout 30000 --json >"$STATUS_JSON" 2>"$STATUS_ERR"; then
     echo "gateway status failed" >&2
-    openclaw_e2e_print_log "$STATUS_ERR" >&2
-    openclaw_e2e_print_log "$GATEWAY_LOG" >&2
+    natesclaw_e2e_print_log "$STATUS_ERR" >&2
+    natesclaw_e2e_print_log "$GATEWAY_LOG" >&2
     return 1
   fi
   status_end="$(node -e "process.stdout.write(String(Date.now()))")"
   status_seconds=$(((status_end - status_start + 999) / 1000))
   if [ "$status_seconds" -gt "$budget" ]; then
     echo "gateway status exceeded survivor budget: ${status_seconds}s > ${budget}s" >&2
-    openclaw_e2e_print_log "$STATUS_JSON" >&2
+    natesclaw_e2e_print_log "$STATUS_JSON" >&2
     return 1
   fi
   node scripts/e2e/lib/upgrade-survivor/assertions.mjs assert-status-json "$STATUS_JSON"
@@ -1539,11 +1539,11 @@ phase configure-clawhub-fixture configure_clawhub_fixture
 phase prepare-update-restart-probe prepare_update_restart_probe
 phase configure-plugin-registry configure_plugin_registry
 phase update-candidate update_candidate
-if [ -n "${OPENCLAW_CLAWHUB_URL:-}" ]; then
+if [ -n "${NATESCLAW_CLAWHUB_URL:-}" ]; then
   clawhub_security_mode="required"
-  prepublish_package="@openclaw/whatsapp"
+  prepublish_package="@natesclaw/whatsapp"
   if [ "$SCENARIO" = "configured-plugin-installs" ]; then
-    prepublish_package="@openclaw/matrix"
+    prepublish_package="@natesclaw/matrix"
   fi
   # 2026.6.35 predates the release-security endpoint. The trusted fixture still
   # asserts its exact older request contract instead of accepting arbitrary IO.
@@ -1551,8 +1551,8 @@ if [ -n "${OPENCLAW_CLAWHUB_URL:-}" ]; then
     clawhub_security_mode="absent"
   fi
   phase assert-prepublish-requests node \
-    "${OPENCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
-    assert-prepublish-requests "$OPENCLAW_CLAWHUB_URL" "$prepublish_package" "$candidate_version" "$clawhub_security_mode"
+    "${NATESCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER:-scripts/e2e/lib/clawhub-fixture-server.cjs}" \
+    assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "$prepublish_package" "$candidate_version" "$clawhub_security_mode"
 fi
 phase root-managed-vps-cli-usable assert_root_managed_vps_cli_usable
 phase assert-legacy-plugin-dependency-debris-before-doctor assert_legacy_plugin_dependency_debris_before_doctor

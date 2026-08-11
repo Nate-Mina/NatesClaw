@@ -1,4 +1,4 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 // Qqbot tests cover format plugin behavior.
 import { describe, expect, it } from "vitest";
 import { formatDuration } from "./format.js";

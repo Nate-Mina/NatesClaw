@@ -1,8 +1,8 @@
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { applyClawMcpUpdate } from "./mcp-update.js";
 import {
   CLAW_MCP_REF_SCHEMA_VERSION,
@@ -23,7 +23,7 @@ const remote: ClawMcpServer = {
   auth: "oauth",
 };
 
-afterEach(() => closeOpenClawStateDatabaseForTest());
+afterEach(() => closeNatesclawStateDatabaseForTest());
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 function ref(name: string, server: ClawMcpServer): PersistedClawMcpServerRef {
@@ -132,7 +132,7 @@ describe("applyClawMcpUpdate", () => {
       {
         config: {
           mcp: { servers: { docs: { command: "uvx", args: ["docs-resolved"] }, legacy } },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         sourceMcpServers: { docs: oldDocs, legacy },
         nowMs: 20,
         readRefs: () => currentRefs,
@@ -249,8 +249,8 @@ describe("applyClawMcpUpdate", () => {
   });
 
   it("restores complete MCP ownership through a real release rollback", async () => {
-    const root = tempDirs.make("openclaw-mcp-release-");
-    const stateOptions = { env: { OPENCLAW_STATE_DIR: join(root, "state") } };
+    const root = tempDirs.make("natesclaw-mcp-release-");
+    const stateOptions = { env: { NATESCLAW_STATE_DIR: join(root, "state") } };
     const independent = {
       ...ref("legacy", legacy),
       relationship: "referenced" as const,

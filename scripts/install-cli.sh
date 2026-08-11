@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# OpenClaw CLI installer (non-interactive, no onboarding)
-# Usage: curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash -s -- [--json] [--prefix <path>] [--version <ver>] [--node-version <ver>] [--onboard]
+# Natesclaw CLI installer (non-interactive, no onboarding)
+# Usage: curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install-cli.sh | bash -s -- [--json] [--prefix <path>] [--version <ver>] [--node-version <ver>] [--onboard]
 
 ensure_home_env() {
   if [[ -n "${HOME:-}" && "${HOME}" != "/" && -d "${HOME}" ]]; then
@@ -41,35 +41,35 @@ cleanup_tmpfiles() {
 }
 trap cleanup_tmpfiles EXIT
 
-resolve_openclaw_effective_home() {
-  local openclaw_home="${OPENCLAW_HOME:-}"
-  if [[ -z "$openclaw_home" ]]; then
+resolve_natesclaw_effective_home() {
+  local natesclaw_home="${NATESCLAW_HOME:-}"
+  if [[ -z "$natesclaw_home" ]]; then
     echo "$HOME"
     return 0
   fi
 
-  case "$openclaw_home" in
+  case "$natesclaw_home" in
     \~)
       echo "$HOME"
       ;;
     \~/*)
-      echo "${HOME}/${openclaw_home#~/}"
+      echo "${HOME}/${natesclaw_home#~/}"
       ;;
     *)
-      echo "$openclaw_home"
+      echo "$natesclaw_home"
       ;;
   esac
 }
 
-OPENCLAW_EFFECTIVE_HOME="$(resolve_openclaw_effective_home)"
-PREFIX="${OPENCLAW_PREFIX:-${HOME}/.openclaw}"
-OPENCLAW_VERSION="${OPENCLAW_VERSION:-latest}"
+NATESCLAW_EFFECTIVE_HOME="$(resolve_natesclaw_effective_home)"
+PREFIX="${NATESCLAW_PREFIX:-${HOME}/.natesclaw}"
+NATESCLAW_VERSION="${NATESCLAW_VERSION:-latest}"
 REQUIRED_COMPATIBLE_VERSION=""
 DEFAULT_NODE_VERSION="24.15.0"
 ARMV7_DEFAULT_NODE_VERSION="22.22.3"
-NODE_VERSION="${OPENCLAW_NODE_VERSION:-${DEFAULT_NODE_VERSION}}"
+NODE_VERSION="${NATESCLAW_NODE_VERSION:-${DEFAULT_NODE_VERSION}}"
 NODE_VERSION_REQUESTED=0
-if [[ -n "${OPENCLAW_NODE_VERSION:-}" ]]; then
+if [[ -n "${NATESCLAW_NODE_VERSION:-}" ]]; then
   NODE_VERSION_REQUESTED=1
 fi
 MIN_NODE_22_VERSION="22.22.3"
@@ -77,10 +77,10 @@ MIN_NODE_24_VERSION="24.15.0"
 MIN_NODE_25_VERSION="25.9.0"
 SUPPORTED_NODE_VERSION_LABEL="Node 22.22.3+, Node 24.15.0+, or Node 25.9.0+"
 APK_NODE_BIN_DIR="/usr/bin"
-NPM_LOGLEVEL="${OPENCLAW_NPM_LOGLEVEL:-error}"
-INSTALL_METHOD="${OPENCLAW_INSTALL_METHOD:-npm}"
-GIT_DIR="${OPENCLAW_GIT_DIR:-${OPENCLAW_EFFECTIVE_HOME}/openclaw}"
-GIT_UPDATE="${OPENCLAW_GIT_UPDATE:-1}"
+NPM_LOGLEVEL="${NATESCLAW_NPM_LOGLEVEL:-error}"
+INSTALL_METHOD="${NATESCLAW_INSTALL_METHOD:-npm}"
+GIT_DIR="${NATESCLAW_GIT_DIR:-${NATESCLAW_EFFECTIVE_HOME}/natesclaw}"
+GIT_UPDATE="${NATESCLAW_GIT_UPDATE:-1}"
 JSON=0
 RUN_ONBOARD=0
 SET_NPM_PREFIX=0
@@ -91,26 +91,26 @@ print_usage() {
   cat <<EOF
 Usage: install-cli.sh [options]
   --json                              Emit NDJSON events (no human output)
-  --prefix <path>                     Install prefix (default: ~/.openclaw; use \$OPENCLAW_PREFIX to override)
+  --prefix <path>                     Install prefix (default: ~/.natesclaw; use \$NATESCLAW_PREFIX to override)
   --install-method, --method npm|git  Install via npm (default) or from a git checkout
   --npm                               Shortcut for --install-method npm
   --git, --github                     Shortcut for --install-method git
-  --git-dir, --dir <path>             Checkout directory (default: ~/openclaw, or \$OPENCLAW_HOME/openclaw)
-  --version <ver>                     OpenClaw version (default: latest)
+  --git-dir, --dir <path>             Checkout directory (default: ~/natesclaw, or \$NATESCLAW_HOME/natesclaw)
+  --version <ver>                     Natesclaw version (default: latest)
   --compatible-with <ver>             Refuse a CLI that cannot modify config written by <ver>
   --node-version <ver>                Node version (default: 24.15.0; 22.22.3 on Linux ARMv7)
-  --onboard                           Run "openclaw onboard" after install
+  --onboard                           Run "natesclaw onboard" after install
   --no-onboard                        Skip onboarding (default)
   --set-npm-prefix                    Force npm prefix to ~/.npm-global if current prefix is not writable (Linux)
 
 Environment variables:
-  OPENCLAW_NPM_LOGLEVEL=error|warn|notice  Default: error (hide npm deprecation noise)
-  OPENCLAW_INSTALL_METHOD=git|npm
-  OPENCLAW_HOME=...
-  OPENCLAW_PREFIX=...
-  OPENCLAW_VERSION=latest|next|<semver>
-  OPENCLAW_GIT_DIR=...
-  OPENCLAW_GIT_UPDATE=0|1
+  NATESCLAW_NPM_LOGLEVEL=error|warn|notice  Default: error (hide npm deprecation noise)
+  NATESCLAW_INSTALL_METHOD=git|npm
+  NATESCLAW_HOME=...
+  NATESCLAW_PREFIX=...
+  NATESCLAW_VERSION=latest|next|<semver>
+  NATESCLAW_GIT_DIR=...
+  NATESCLAW_GIT_UPDATE=0|1
 EOF
 }
 
@@ -151,7 +151,7 @@ download_file() {
 }
 
 cleanup_legacy_submodules() {
-  local repo_dir="${1:-${OPENCLAW_GIT_DIR:-${OPENCLAW_EFFECTIVE_HOME}/openclaw}}"
+  local repo_dir="${1:-${NATESCLAW_GIT_DIR:-${NATESCLAW_EFFECTIVE_HOME}/natesclaw}}"
   local legacy_dir="${repo_dir}/Peekaboo"
   if [[ -d "$legacy_dir" ]]; then
     emit_json "{\"event\":\"step\",\"name\":\"legacy-submodule\",\"status\":\"start\",\"path\":\"${legacy_dir//\"/\\\"}\"}"
@@ -333,7 +333,7 @@ parse_args() {
         if [[ $# -lt 2 || "${2:-}" == --* ]]; then
           fail "Missing value for $1"
         fi
-        OPENCLAW_VERSION="$2"
+        NATESCLAW_VERSION="$2"
         shift 2
         ;;
       --compatible-with)
@@ -762,24 +762,24 @@ to_lowercase_ascii() {
   printf '%s' "${1:-}" | tr '[:upper:]' '[:lower:]'
 }
 
-is_openclaw_source_package_install_spec() {
+is_natesclaw_source_package_install_spec() {
   local value="${1:-}"
   local normalized_value=""
   normalized_value="$(to_lowercase_ascii "$value")"
-  normalized_value="${normalized_value#openclaw@}"
+  normalized_value="${normalized_value#natesclaw@}"
 
   [[ "$normalized_value" == "main" ]] && return 0
-  [[ "$normalized_value" =~ ^github:openclaw/openclaw($|[#/]) ]] && return 0
+  [[ "$normalized_value" =~ ^github:natesclaw/natesclaw($|[#/]) ]] && return 0
 
   normalized_value="${normalized_value#git+}"
-  [[ "$normalized_value" =~ ^https?://github\.com/openclaw/openclaw(\.git)?($|[?#]) ]] && return 0
-  [[ "$normalized_value" =~ ^ssh://git@github\.com[:/]openclaw/openclaw(\.git)?($|[?#]) ]] && return 0
-  [[ "$normalized_value" =~ ^git://github\.com/openclaw/openclaw(\.git)?($|[?#]) ]] && return 0
-  [[ "$normalized_value" =~ ^git@github\.com:openclaw/openclaw(\.git)?($|[?#]) ]] && return 0
+  [[ "$normalized_value" =~ ^https?://github\.com/natesclaw/natesclaw(\.git)?($|[?#]) ]] && return 0
+  [[ "$normalized_value" =~ ^ssh://git@github\.com[:/]natesclaw/natesclaw(\.git)?($|[?#]) ]] && return 0
+  [[ "$normalized_value" =~ ^git://github\.com/natesclaw/natesclaw(\.git)?($|[?#]) ]] && return 0
+  [[ "$normalized_value" =~ ^git@github\.com:natesclaw/natesclaw(\.git)?($|[?#]) ]] && return 0
   return 1
 }
 
-openclaw_version_is_compatible_with() {
+natesclaw_version_is_compatible_with() {
   local candidate="$1"
   local config_writer="$2"
 
@@ -862,29 +862,29 @@ process.exit(compare(candidate, writer) < 0 ? 1 : 0);
 NODE
 }
 
-require_openclaw_version_compatible() {
+require_natesclaw_version_compatible() {
   local candidate="$1"
   local config_writer="${REQUIRED_COMPATIBLE_VERSION:-}"
   if [[ -z "$config_writer" ]]; then
     return 0
   fi
 
-  if openclaw_version_is_compatible_with "$candidate" "$config_writer"; then
+  if natesclaw_version_is_compatible_with "$candidate" "$config_writer"; then
     return 0
   fi
   local status="$?"
   if [[ "$status" -eq 2 ]]; then
-    fail "Cannot compare resolved OpenClaw version '${candidate}' with config writer '${config_writer}'."
+    fail "Cannot compare resolved Natesclaw version '${candidate}' with config writer '${config_writer}'."
   fi
-  fail "OpenClaw ${candidate} is older than config writer ${config_writer}. Choose a newer CLI channel or retry after the channel is updated."
+  fail "Natesclaw ${candidate} is older than config writer ${config_writer}. Choose a newer CLI channel or retry after the channel is updated."
 }
 
-resolve_npm_openclaw_version() {
+resolve_npm_natesclaw_version() {
   local requested="$1"
-  "$(npm_bin)" view "openclaw@${requested}" version 2>/dev/null | awk 'NF { value = $0 } END { print value }'
+  "$(npm_bin)" view "natesclaw@${requested}" version 2>/dev/null | awk 'NF { value = $0 } END { print value }'
 }
 
-resolve_git_checkout_openclaw_version() {
+resolve_git_checkout_natesclaw_version() {
   local repo_dir="$1"
   "$(node_bin)" -e '
     const fs = require("node:fs");
@@ -895,13 +895,13 @@ resolve_git_checkout_openclaw_version() {
   ' "$repo_dir"
 }
 
-resolve_git_openclaw_ref() {
-  local requested="${OPENCLAW_VERSION:-latest}"
+resolve_git_natesclaw_ref() {
+  local requested="${NATESCLAW_VERSION:-latest}"
   local resolved_version=""
 
   case "$requested" in
     ""|latest)
-      resolved_version="$("$(npm_bin)" view "openclaw" "dist-tags.${requested:-latest}" 2>/dev/null || true)"
+      resolved_version="$("$(npm_bin)" view "natesclaw" "dist-tags.${requested:-latest}" 2>/dev/null || true)"
       if [[ -n "$resolved_version" ]]; then
         echo "v${resolved_version}"
         return 0
@@ -910,7 +910,7 @@ resolve_git_openclaw_ref() {
       return 0
       ;;
     next|beta)
-      resolved_version="$("$(npm_bin)" view "openclaw" "dist-tags.${requested:-latest}" 2>/dev/null || true)"
+      resolved_version="$("$(npm_bin)" view "natesclaw" "dist-tags.${requested:-latest}" 2>/dev/null || true)"
       if [[ -n "$resolved_version" ]]; then
         echo "v${resolved_version}"
         return 0
@@ -937,7 +937,7 @@ resolve_git_openclaw_ref() {
   esac
 }
 
-checkout_git_openclaw_ref() {
+checkout_git_natesclaw_ref() {
   local repo_dir="$1"
   local ref="$2"
 
@@ -1249,10 +1249,10 @@ npm_config_has_raw_key() {
   return 1
 }
 
-install_openclaw() {
-  local requested="${OPENCLAW_VERSION:-latest}"
-  if is_openclaw_source_package_install_spec "$requested"; then
-    fail "npm installs do not support OpenClaw GitHub source targets like '${requested}'. Use --install-method git --version main, latest, beta, an exact version, or a built .tgz package."
+install_natesclaw() {
+  local requested="${NATESCLAW_VERSION:-latest}"
+  if is_natesclaw_source_package_install_spec "$requested"; then
+    fail "npm installs do not support Natesclaw GitHub source targets like '${requested}'. Use --install-method git --version main, latest, beta, an exact version, or a built .tgz package."
   fi
   local freshness_flag="--min-release-age=0"
   local min_release_age=""
@@ -1274,46 +1274,46 @@ install_openclaw() {
   )
   local resolved_requested="$requested"
   if [[ -n "${REQUIRED_COMPATIBLE_VERSION:-}" ]]; then
-    resolved_requested="$(resolve_npm_openclaw_version "$requested")"
+    resolved_requested="$(resolve_npm_natesclaw_version "$requested")"
     if [[ -z "$resolved_requested" ]]; then
-      fail "Could not resolve OpenClaw ${requested} before compatibility checking."
+      fail "Could not resolve Natesclaw ${requested} before compatibility checking."
     fi
-    require_openclaw_version_compatible "$resolved_requested"
+    require_natesclaw_version_compatible "$resolved_requested"
   fi
-  emit_json "{\"event\":\"step\",\"name\":\"openclaw\",\"status\":\"start\",\"version\":\"${requested}\"}"
-  log "Installing OpenClaw (${requested})..."
+  emit_json "{\"event\":\"step\",\"name\":\"natesclaw\",\"status\":\"start\",\"version\":\"${requested}\"}"
+  log "Installing Natesclaw (${requested})..."
   if [[ "$SET_NPM_PREFIX" -eq 1 ]]; then
     fix_npm_prefix_if_needed
   fi
 
   if [[ "${requested}" == "latest" ]]; then
-    if ! env -u NPM_CONFIG_BEFORE -u npm_config_before -u NPM_CONFIG_MIN_RELEASE_AGE -u npm_config_min_release_age -u npm_config_min-release-age "$(npm_bin)" install -g --prefix "$(node_dir)" "${npm_args[@]}" "openclaw@${resolved_requested}"; then
-      log "npm install openclaw@latest failed; retrying openclaw@next"
-      emit_json "{\"event\":\"step\",\"name\":\"openclaw\",\"status\":\"retry\",\"version\":\"next\"}"
+    if ! env -u NPM_CONFIG_BEFORE -u npm_config_before -u NPM_CONFIG_MIN_RELEASE_AGE -u npm_config_min_release_age -u npm_config_min-release-age "$(npm_bin)" install -g --prefix "$(node_dir)" "${npm_args[@]}" "natesclaw@${resolved_requested}"; then
+      log "npm install natesclaw@latest failed; retrying natesclaw@next"
+      emit_json "{\"event\":\"step\",\"name\":\"natesclaw\",\"status\":\"retry\",\"version\":\"next\"}"
       resolved_requested="next"
       if [[ -n "${REQUIRED_COMPATIBLE_VERSION:-}" ]]; then
-        resolved_requested="$(resolve_npm_openclaw_version next)"
+        resolved_requested="$(resolve_npm_natesclaw_version next)"
         if [[ -z "$resolved_requested" ]]; then
-          fail "Could not resolve OpenClaw next before compatibility checking."
+          fail "Could not resolve Natesclaw next before compatibility checking."
         fi
-        require_openclaw_version_compatible "$resolved_requested"
+        require_natesclaw_version_compatible "$resolved_requested"
       fi
-      env -u NPM_CONFIG_BEFORE -u npm_config_before -u NPM_CONFIG_MIN_RELEASE_AGE -u npm_config_min_release_age -u npm_config_min-release-age "$(npm_bin)" install -g --prefix "$(node_dir)" "${npm_args[@]}" "openclaw@${resolved_requested}"
+      env -u NPM_CONFIG_BEFORE -u npm_config_before -u NPM_CONFIG_MIN_RELEASE_AGE -u npm_config_min_release_age -u npm_config_min-release-age "$(npm_bin)" install -g --prefix "$(node_dir)" "${npm_args[@]}" "natesclaw@${resolved_requested}"
       requested="next"
     fi
   else
-    env -u NPM_CONFIG_BEFORE -u npm_config_before -u NPM_CONFIG_MIN_RELEASE_AGE -u npm_config_min_release_age -u npm_config_min-release-age "$(npm_bin)" install -g --prefix "$(node_dir)" "${npm_args[@]}" "openclaw@${resolved_requested}"
+    env -u NPM_CONFIG_BEFORE -u npm_config_before -u NPM_CONFIG_MIN_RELEASE_AGE -u npm_config_min_release_age -u npm_config_min-release-age "$(npm_bin)" install -g --prefix "$(node_dir)" "${npm_args[@]}" "natesclaw@${resolved_requested}"
   fi
 
   mkdir -p "${PREFIX}/bin"
-  rm -f "${PREFIX}/bin/openclaw"
-  cat > "${PREFIX}/bin/openclaw" <<EOF
+  rm -f "${PREFIX}/bin/natesclaw"
+  cat > "${PREFIX}/bin/natesclaw" <<EOF
 #!/usr/bin/env bash
 set -euo pipefail
-exec "${PREFIX}/tools/node/bin/node" "$(node_dir)/lib/node_modules/openclaw/dist/entry.js" "\$@"
+exec "${PREFIX}/tools/node/bin/node" "$(node_dir)/lib/node_modules/natesclaw/dist/entry.js" "\$@"
 EOF
-  chmod +x "${PREFIX}/bin/openclaw"
-  emit_json "{\"event\":\"step\",\"name\":\"openclaw\",\"status\":\"ok\",\"version\":\"${requested}\"}"
+  chmod +x "${PREFIX}/bin/natesclaw"
+  emit_json "{\"event\":\"step\",\"name\":\"natesclaw\",\"status\":\"ok\",\"version\":\"${requested}\"}"
 }
 
 ensure_pnpm_git_prepare_allowlist() {
@@ -1348,9 +1348,9 @@ ensure_pnpm_git_prepare_allowlist() {
   log "Updated pnpm allowlist for git-hosted build dependency: ${dep}"
 }
 
-install_openclaw_from_git() {
+install_natesclaw_from_git() {
   local repo_dir="$1"
-  local repo_url="https://github.com/openclaw/openclaw.git"
+  local repo_url="https://github.com/natesclaw/natesclaw.git"
   local fresh_checkout=0
 
   if [[ -z "$repo_dir" ]]; then
@@ -1362,11 +1362,11 @@ install_openclaw_from_git() {
   mkdir -p "$(dirname "$repo_dir")"
   repo_dir="$(cd "$(dirname "$repo_dir")" && pwd)/$(basename "$repo_dir")"
 
-  emit_json "{\"event\":\"step\",\"name\":\"openclaw\",\"status\":\"start\",\"method\":\"git\",\"repo\":\"${repo_url//\"/\\\"}\"}"
+  emit_json "{\"event\":\"step\",\"name\":\"natesclaw\",\"status\":\"start\",\"method\":\"git\",\"repo\":\"${repo_url//\"/\\\"}\"}"
   if [[ -d "$repo_dir/.git" ]]; then
-    log "Installing Openclaw from git checkout: ${repo_dir}"
+    log "Installing Natesclaw from git checkout: ${repo_dir}"
   else
-    log "Installing Openclaw from GitHub (${repo_url})..."
+    log "Installing Natesclaw from GitHub (${repo_url})..."
   fi
 
   emit_json '{"event":"step","name":"git-tools","status":"start"}'
@@ -1399,13 +1399,13 @@ install_openclaw_from_git() {
   fi
 
   local git_ref
-  git_ref="$(resolve_git_openclaw_ref)"
+  git_ref="$(resolve_git_natesclaw_ref)"
   if [[ -z "$(git -C "$repo_dir" status --porcelain 2>/dev/null || true)" ]]; then
     log "Using git ref: ${git_ref}"
     if [[ "$fresh_checkout" -eq 0 ]]; then
       emit_json '{"event":"step","name":"git-update","status":"start"}'
     fi
-    checkout_git_openclaw_ref "$repo_dir" "$git_ref"
+    checkout_git_natesclaw_ref "$repo_dir" "$git_ref"
     if [[ "$fresh_checkout" -eq 0 ]]; then
       emit_json '{"event":"step","name":"git-update","status":"ok"}'
     fi
@@ -1416,11 +1416,11 @@ install_openclaw_from_git() {
 
   if [[ -n "${REQUIRED_COMPATIBLE_VERSION:-}" ]]; then
     local resolved_version
-    resolved_version="$(resolve_git_checkout_openclaw_version "$repo_dir" 2>/dev/null || true)"
+    resolved_version="$(resolve_git_checkout_natesclaw_version "$repo_dir" 2>/dev/null || true)"
     if [[ -z "$resolved_version" ]]; then
       fail "Could not resolve the Git checkout version before compatibility checking."
     fi
-    require_openclaw_version_compatible "$resolved_version"
+    require_natesclaw_version_compatible "$resolved_version"
   fi
 
   cleanup_legacy_submodules "$repo_dir"
@@ -1445,19 +1445,19 @@ install_openclaw_from_git() {
   emit_json '{"event":"step","name":"cli-build","status":"ok"}'
 
   mkdir -p "${PREFIX}/bin"
-  cat > "${PREFIX}/bin/openclaw" <<EOF
+  cat > "${PREFIX}/bin/natesclaw" <<EOF
 #!/usr/bin/env bash
 set -euo pipefail
 exec "${PREFIX}/tools/node/bin/node" "${repo_dir}/dist/entry.js" "\$@"
 EOF
-  chmod +x "${PREFIX}/bin/openclaw"
-  emit_json "{\"event\":\"step\",\"name\":\"openclaw\",\"status\":\"ok\",\"method\":\"git\"}"
+  chmod +x "${PREFIX}/bin/natesclaw"
+  emit_json "{\"event\":\"step\",\"name\":\"natesclaw\",\"status\":\"ok\",\"method\":\"git\"}"
 }
 
-resolve_openclaw_version() {
+resolve_natesclaw_version() {
   local version=""
-  if [[ -x "${PREFIX}/bin/openclaw" ]]; then
-    version="$("${PREFIX}/bin/openclaw" --version 2>/dev/null | head -n 1 | tr -d '\r')"
+  if [[ -x "${PREFIX}/bin/natesclaw" ]]; then
+    version="$("${PREFIX}/bin/natesclaw" --version 2>/dev/null | head -n 1 | tr -d '\r')"
   fi
   echo "$version"
 }
@@ -1488,7 +1488,7 @@ try {
 }
 
 refresh_gateway_service_if_loaded() {
-  local claw="${PREFIX}/bin/openclaw"
+  local claw="${PREFIX}/bin/natesclaw"
   if [[ ! -x "$claw" ]]; then
     return 0
   fi
@@ -1516,7 +1516,7 @@ refresh_gateway_service_if_loaded() {
 main() {
   parse_args "$@"
 
-  if [[ "${OPENCLAW_NO_ONBOARD:-0}" == "1" ]]; then
+  if [[ "${NATESCLAW_NO_ONBOARD:-0}" == "1" ]]; then
     RUN_ONBOARD=0
   fi
 
@@ -1530,13 +1530,13 @@ main() {
 
   install_node
   if [[ "$INSTALL_METHOD" == "git" ]]; then
-    install_openclaw_from_git "$GIT_DIR"
+    install_natesclaw_from_git "$GIT_DIR"
   elif [[ "$INSTALL_METHOD" == "npm" ]]; then
     ensure_git
     if [[ "$SET_NPM_PREFIX" -eq 1 ]]; then
       fix_npm_prefix_if_needed
     fi
-    install_openclaw
+    install_natesclaw
   else
     fail "Unknown install method: ${INSTALL_METHOD} (use npm or git)"
   fi
@@ -1544,20 +1544,20 @@ main() {
   refresh_gateway_service_if_loaded
 
   local installed_version
-  installed_version="$(resolve_openclaw_version)"
+  installed_version="$(resolve_natesclaw_version)"
   if [[ -n "$installed_version" ]]; then
     emit_json "{\"event\":\"done\",\"ok\":true,\"version\":\"${installed_version//\"/\\\"}\"}"
-    log "OpenClaw installed (${installed_version})."
+    log "Natesclaw installed (${installed_version})."
   else
     emit_json "{\"event\":\"done\",\"ok\":true}"
-    log "OpenClaw installed."
+    log "Natesclaw installed."
   fi
 
   if [[ "$RUN_ONBOARD" -eq 1 ]]; then
-    "${PREFIX}/bin/openclaw" onboard
+    "${PREFIX}/bin/natesclaw" onboard
   fi
 }
 
-if [[ "${OPENCLAW_INSTALL_CLI_SH_NO_RUN:-0}" != "1" ]]; then
+if [[ "${NATESCLAW_INSTALL_CLI_SH_NO_RUN:-0}" != "1" ]]; then
   main "$@"
 fi

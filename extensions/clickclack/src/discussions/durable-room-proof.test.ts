@@ -1,9 +1,9 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
-import { createPluginRuntimeMock } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawPluginSessionsChangedEvent, PluginRuntime } from "openclaw/plugin-sdk/core";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { buildAgentSessionKey, resolveAgentRoute } from "openclaw/plugin-sdk/routing";
+import { createPluginRuntimeMock } from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawPluginSessionsChangedEvent, PluginRuntime } from "natesclaw/plugin-sdk/core";
+import type { PluginStateSyncKeyedStore } from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { buildAgentSessionKey, resolveAgentRoute } from "natesclaw/plugin-sdk/routing";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { resolveClickClackAccount } from "../accounts.js";
 import { createClickClackClient } from "../http-client.js";
@@ -216,7 +216,7 @@ describe("ClickClack durable room real-behavior proof", () => {
       },
     } as unknown as PluginRuntime);
     setClickClackRuntime(runtime);
-    const eventHandlers = new Set<(event: OpenClawPluginSessionsChangedEvent) => void>();
+    const eventHandlers = new Set<(event: NatesclawPluginSessionsChangedEvent) => void>();
     const service = new ClickClackDiscussionService(runtime, {
       clientFactory: (account) =>
         createClickClackClient({ baseUrl: account.apiEndpoint, token: account.token }),
@@ -231,7 +231,7 @@ describe("ClickClack durable room real-behavior proof", () => {
       startTimer: false,
     });
     cleanups.push(async () => service.cleanup());
-    const emit = async (event: OpenClawPluginSessionsChangedEvent) => {
+    const emit = async (event: NatesclawPluginSessionsChangedEvent) => {
       for (const handler of eventHandlers) {
         handler(event);
       }

@@ -1,7 +1,7 @@
 // Tlon monitor tests cover authentication retry scheduling and shutdown lifecycle.
 import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const {
@@ -44,8 +44,8 @@ const {
 
 const runningServers: Server[] = [];
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/runtime-env")>();
+vi.mock("natesclaw/plugin-sdk/runtime-env", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/runtime-env")>();
   return {
     ...actual,
     sleepWithAbort: sleepWithAbortMock,

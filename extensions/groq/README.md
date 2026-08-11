@@ -1,12 +1,12 @@
-# OpenClaw Groq Provider
+# Natesclaw Groq Provider
 
-Official OpenClaw provider plugin for Groq.
+Official Natesclaw provider plugin for Groq.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/groq-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/groq-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/groq> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/groq> for setup and configuration.

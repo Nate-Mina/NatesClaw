@@ -9,11 +9,11 @@ import type {
   LlamaChatResponseFunctionCallParamsChunk,
   LlamaModel,
 } from "node-llama-cpp";
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { AssistantMessage, Context, StopReason, ToolCall } from "openclaw/plugin-sdk/llm";
-import { createAssistantMessageEventStream, parseStreamingJson } from "openclaw/plugin-sdk/llm";
-import type { ModelProviderConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { createPlainTextToolCallCompatWrapper } from "openclaw/plugin-sdk/provider-stream-shared";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import type { AssistantMessage, Context, StopReason, ToolCall } from "natesclaw/plugin-sdk/llm";
+import { createAssistantMessageEventStream, parseStreamingJson } from "natesclaw/plugin-sdk/llm";
+import type { ModelProviderConfig } from "natesclaw/plugin-sdk/provider-model-shared";
+import { createPlainTextToolCallCompatWrapper } from "natesclaw/plugin-sdk/provider-stream-shared";
 import {
   DEFAULT_LLAMA_CPP_CONTEXT_SIZE,
   resolveLlamaCppModelCacheDir,
@@ -702,10 +702,10 @@ export function createLlamaCppInferenceRuntime(): LlamaCppInferenceRuntime {
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
   const globalStore = globalThis as Record<PropertyKey, unknown>;
-  const testApiKey = Symbol.for("openclaw.llamaCppInferenceTestApi");
+  const testApiKey = Symbol.for("natesclaw.llamaCppInferenceTestApi");
   Object.assign((globalStore[testApiKey] ??= {}), {
     mapContextToLlamaChatHistory,
     mapToolsToLlamaFunctions,
   });
 }
-import { asNonArrayRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { asNonArrayRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";

@@ -1,6 +1,6 @@
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { isFutureDateTimestampMs, parseFiniteNumber } from "openclaw/plugin-sdk/number-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { isFutureDateTimestampMs, parseFiniteNumber } from "natesclaw/plugin-sdk/number-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { Dialog } from "playwright-core";
 import type {
   BrowserObservedDialogRecord,

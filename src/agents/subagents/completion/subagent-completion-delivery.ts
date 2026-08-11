@@ -13,7 +13,7 @@ import {
   SessionDeliveryDeadLetteredError,
   SessionDeliveryDeferredError,
 } from "../../../infra/session-delivery-queue-storage.js";
-import type { OpenClawStateDatabaseOptions } from "../../../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../../../state/natesclaw-state-db.js";
 import {
   findTaskByRunId,
   getTaskById,
@@ -245,7 +245,7 @@ export async function settleCorrelatedSubagentDelivery(
 
 export async function retrySubagentCompletionDelivery(
   taskId: string,
-  databaseOptions?: OpenClawStateDatabaseOptions,
+  databaseOptions?: NatesclawStateDatabaseOptions,
 ): Promise<CompletionDeliveryRecoveryResult> {
   const task = getTaskById(taskId);
   const current = task ? findSubagentForTask(task) : undefined;
@@ -318,7 +318,7 @@ export async function dismissSubagentCompletionDelivery(
   taskId: string,
   options: {
     discardTerminalDelivery: typeof SubagentLifecycleController.discardTerminalDelivery;
-    databaseOptions?: OpenClawStateDatabaseOptions;
+    databaseOptions?: NatesclawStateDatabaseOptions;
   },
 ): Promise<CompletionDeliveryRecoveryResult> {
   const task = getTaskById(taskId);

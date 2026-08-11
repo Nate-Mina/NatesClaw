@@ -3,14 +3,14 @@
  * explicit per-model config, global defaults, catalog metadata, and model
  * family fallbacks.
  */
-import { resolveClaudeOpus5ModelIdentity } from "@openclaw/llm-core";
+import { resolveClaudeOpus5ModelIdentity } from "@natesclaw/llm-core";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveThinkingDefaultForModel } from "../auto-reply/thinking.js";
 import type { ThinkLevel } from "../auto-reply/thinking.shared.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ModelCatalogEntry } from "./model-catalog.types.js";
 import { legacyModelKey, modelKey, normalizeProviderId } from "./model-ref-shared.js";
 import { normalizeModelSelection } from "./model-selection-resolve.js";
@@ -18,7 +18,7 @@ import { buildConfiguredModelCatalog } from "./model-selection-shared.js";
 
 /** Resolves configured thinking without consulting model capability metadata. */
 export function resolveConfiguredThinkingDefault(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: string;
   model: string;
 }): ThinkLevel | undefined {
@@ -53,7 +53,7 @@ export function resolveConfiguredThinkingDefault(params: {
 
 /** Resolves the default thinking level for a provider/model pair. */
 export function resolveThinkingDefault(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: string;
   model: string;
   catalog?: ModelCatalogEntry[];
@@ -123,7 +123,7 @@ export function resolveThinkingDefault(params: {
 
 /** Resolves thinking default after loading runtime catalog only when needed. */
 export async function resolveThinkingDefaultWithRuntimeCatalog(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: string;
   model: string;
   loadRuntimeCatalog: () => Promise<ModelCatalogEntry[]>;

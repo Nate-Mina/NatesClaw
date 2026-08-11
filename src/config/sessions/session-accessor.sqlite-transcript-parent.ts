@@ -1,12 +1,12 @@
 /** Resolves the effective parent for a transcript message append inside the write transaction. */
 import { executeSqliteQueryTakeFirstSync } from "../../infra/kysely-sync.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import type { TranscriptMessageAppendOptions } from "./session-accessor.sqlite-contract.js";
 import { getSessionKysely } from "./session-accessor.sqlite-scope.js";
 import { readActiveTranscriptAppendParentId } from "./session-accessor.sqlite-transcript-store.js";
 
 export function resolveTranscriptMessageAppendParent<TMessage>(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
   options: Pick<TranscriptMessageAppendOptions<TMessage>, "appendIntent" | "parentId">,
 ): string | null {

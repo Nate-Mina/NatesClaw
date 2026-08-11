@@ -6,8 +6,8 @@ import type {
   WorkboardLink,
   WorkboardMetadata,
   WorkboardStatus,
-} from "@openclaw/workboard-contract";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "@natesclaw/workboard-contract";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   PersistedWorkboardAttachment,
   PersistedWorkboardBoard,

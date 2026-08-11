@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { startWhatsAppQaDriverSession, type WhatsAppQaDriverSession } from "./qa-driver.runtime.js";
 import { DEFAULT_WHATSAPP_SOCKET_TIMING } from "./socket-timing.js";
 
-const AUTH_DIR = "/tmp/openclaw-whatsapp-auth";
+const AUTH_DIR = "/tmp/natesclaw-whatsapp-auth";
 const mocks = vi.hoisted(() => ({
   createWebSendApi: vi.fn(),
   createWaSocket: vi.fn(),
@@ -210,21 +210,21 @@ describe("startWhatsAppQaDriverSession", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-06-04T23:42:32.036Z"));
     const session = await startSession();
-    emitMessages(incoming({ conversation: "OpenClaw status stale" }, { id: "stale-message" }));
+    emitMessages(incoming({ conversation: "Natesclaw status stale" }, { id: "stale-message" }));
 
     const observedAfter = new Date("2026-06-04T23:46:59.166Z");
     vi.setSystemTime(observedAfter);
     const waited = session.waitForMessage({
       observedAfter,
       timeoutMs: 1_000,
-      match: (message) => message.text.includes("OpenClaw status"),
+      match: (message) => message.text.includes("Natesclaw status"),
     });
     vi.setSystemTime(new Date("2026-06-04T23:47:00.000Z"));
-    emitMessages(incoming({ conversation: "OpenClaw status fresh" }, { id: "fresh-message" }));
+    emitMessages(incoming({ conversation: "Natesclaw status fresh" }, { id: "fresh-message" }));
 
     await expect(waited).resolves.toMatchObject({
       messageId: "fresh-message",
-      text: "OpenClaw status fresh",
+      text: "Natesclaw status fresh",
     });
   });
 

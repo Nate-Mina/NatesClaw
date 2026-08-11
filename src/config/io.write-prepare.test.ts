@@ -6,7 +6,7 @@ import { restoreEnvRefsFromMap, resolveWriteEnvSnapshotForPath } from "./env-pre
 import { formatConfigValidationFailure } from "./io.write-errors.js";
 import { resolvePersistCandidateForWrite } from "./io.write-prepare.js";
 import { createMergePatch } from "./merge-patch.js";
-import type { OpenClawConfig } from "./types.js";
+import type { NatesclawConfig } from "./types.js";
 
 vi.unmock("../agents/agent-scope-config.js");
 
@@ -21,7 +21,7 @@ type WriteCase = {
   options?: Partial<PersistInput>;
   expected?: unknown;
   error?: string;
-  verify?: (persisted: OpenClawConfig) => void;
+  verify?: (persisted: NatesclawConfig) => void;
 };
 
 const main = { default: true };
@@ -613,17 +613,17 @@ const writeCases: WriteCase[] = [
   },
   {
     name: "preserves root $schema during unrelated partial writes",
-    current: { $schema: "https://openclaw.ai/config.json", gateway: { mode: "local" } },
+    current: { $schema: "https://natesclaw.ai/config.json", gateway: { mode: "local" } },
     next: { gateway: { mode: "local", port: 18789 } },
     expected: {
-      $schema: "https://openclaw.ai/config.json",
+      $schema: "https://natesclaw.ai/config.json",
       gateway: { mode: "local", port: 18789 },
     },
   },
   {
     name: "rejects writes that would flatten a root include",
     current: {
-      $schema: "https://openclaw.ai/config-from-include.json",
+      $schema: "https://natesclaw.ai/config-from-include.json",
       gateway: { mode: "local" },
     },
     authored: { $include: "./extra.json5", gateway: { mode: "local" } },
@@ -632,19 +632,19 @@ const writeCases: WriteCase[] = [
   },
   {
     name: "does not restore root $schema when the next config explicitly clears it",
-    current: { $schema: "https://openclaw.ai/config.json", gateway: { mode: "local" } },
+    current: { $schema: "https://natesclaw.ai/config.json", gateway: { mode: "local" } },
     next: { $schema: null, gateway: { mode: "local", port: 18789 } },
     expected: { gateway: { mode: "local", port: 18789 } },
   },
   {
     name: "does not restore root $schema when the next config sets an invalid value",
-    current: { $schema: "https://openclaw.ai/config.json", gateway: { mode: "local" } },
+    current: { $schema: "https://natesclaw.ai/config.json", gateway: { mode: "local" } },
     next: { $schema: 123, gateway: { mode: "local", port: 18789 } },
     expected: { $schema: 123, gateway: { mode: "local", port: 18789 } },
   },
 ];
 
-function resolveWriteCase(testCase: WriteCase): OpenClawConfig {
+function resolveWriteCase(testCase: WriteCase): NatesclawConfig {
   return resolvePersistCandidateForWrite({
     runtimeConfig: testCase.current,
     sourceConfig: testCase.source ?? testCase.current,
@@ -652,7 +652,7 @@ function resolveWriteCase(testCase: WriteCase): OpenClawConfig {
     ...(testCase.authored === undefined ? {} : { rootAuthoredConfig: testCase.authored }),
     ...(testCase.before === undefined ? {} : { sourceConfigBeforeMigrations: testCase.before }),
     ...testCase.options,
-  }) as OpenClawConfig;
+  }) as NatesclawConfig;
 }
 
 describe("config io write prepare", () => {
@@ -728,7 +728,7 @@ describe("config io write prepare", () => {
           nextConfig: roster(entries),
           unsetPaths,
           allowedAgentRosterRemovals: ["worker"],
-        }) as OpenClawConfig,
+        }) as NatesclawConfig,
         unsetPaths,
       ),
     ).toEqual(roster({ main }));
@@ -744,7 +744,7 @@ describe("config io write prepare", () => {
         nextConfig: roster({ main }),
         unsetPaths,
         allowedAgentRosterRemovals: ["main"],
-      }) as OpenClawConfig,
+      }) as NatesclawConfig,
       unsetPaths,
     );
     expect(persisted.agents).not.toHaveProperty("list");
@@ -754,24 +754,24 @@ describe("config io write prepare", () => {
   it("strips transient plugin install records from partial writes", () => {
     const install = {
       source: "npm",
-      spec: "@ollama/openclaw-web-search",
-      installPath: "/tmp/openclaw-web-search",
-      resolvedName: "@ollama/openclaw-web-search",
+      spec: "@ollama/natesclaw-web-search",
+      installPath: "/tmp/natesclaw-web-search",
+      resolvedName: "@ollama/natesclaw-web-search",
       resolvedVersion: "0.2.2",
     };
     const persisted = applyUnsetPathsForWrite(
       resolvePersistCandidateForWrite({
         runtimeConfig: { plugins: { entries: {} } },
-        sourceConfig: { plugins: { entries: {}, installs: { "openclaw-web-search": install } } },
+        sourceConfig: { plugins: { entries: {}, installs: { "natesclaw-web-search": install } } },
         nextConfig: {
           plugins: {
             entries: {},
             installs: {
-              "openclaw-web-search": { ...install, spec: "@ollama/openclaw-web-search@0.2.2" },
+              "natesclaw-web-search": { ...install, spec: "@ollama/natesclaw-web-search@0.2.2" },
             },
           },
         },
-      }) as OpenClawConfig,
+      }) as NatesclawConfig,
       [["plugins", "installs"]],
     );
     expect(persisted.plugins).not.toHaveProperty("installs");
@@ -1030,7 +1030,7 @@ describe("config io write prepare", () => {
   });
 
   it("applies explicit unsets without mutating caller config", () => {
-    const input: OpenClawConfig = {
+    const input: NatesclawConfig = {
       gateway: { mode: "local" },
       commands: { ownerDisplay: "hash" },
       tools: { alsoAllow: ["exec", "fetch", "read"] },
@@ -1055,7 +1055,7 @@ describe("config io write prepare", () => {
     ["constructor key", ["commands", "constructor"]],
     ["prototype constructor property", ["commands", "prototype"]],
   ] as const)("treats %s unset paths as immutable no-ops", (_name, unsetPath) => {
-    const input: OpenClawConfig = {
+    const input: NatesclawConfig = {
       gateway: { mode: "local" },
       commands: { ownerDisplay: "hash" },
       tools: { alsoAllow: ["exec", "fetch"] },
@@ -1068,8 +1068,8 @@ describe("config io write prepare", () => {
       "channels.telegram.allowFrom",
       'channels.telegram.dmPolicy = "open" requires channels.telegram.allowFrom to include "*"',
     );
-    expect(message).toContain("openclaw config set channels.telegram.allowFrom '[\"*\"]'");
-    expect(message).toContain('openclaw config set channels.telegram.dmPolicy "pairing"');
+    expect(message).toContain("natesclaw config set channels.telegram.allowFrom '[\"*\"]'");
+    expect(message).toContain('natesclaw config set channels.telegram.dmPolicy "pairing"');
   });
 
   it("preserves env refs on unchanged paths while keeping changed paths resolved", () => {
@@ -1191,7 +1191,7 @@ describe("config io write prepare", () => {
   it.each([
     {
       name: "keeps the read-time env snapshot when writing the same config path",
-      expectedPath: "/tmp/openclaw.json",
+      expectedPath: "/tmp/natesclaw.json",
       retained: true,
     },
     {
@@ -1202,7 +1202,7 @@ describe("config io write prepare", () => {
   ])("$name", ({ expectedPath, retained }) => {
     const snapshot = { OPENAI_API_KEY: "sk-secret" };
     const actual = resolveWriteEnvSnapshotForPath({
-      actualConfigPath: "/tmp/openclaw.json",
+      actualConfigPath: "/tmp/natesclaw.json",
       expectedConfigPath: expectedPath,
       envSnapshotForRestore: snapshot,
     });

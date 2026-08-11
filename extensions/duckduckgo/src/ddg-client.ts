@@ -1,7 +1,7 @@
 // Duckduckgo plugin module implements ddg client behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { decodeHtmlEntities as decodeHtmlEntity } from "openclaw/plugin-sdk/html-entity-runtime";
-import { readProviderTextResponse } from "openclaw/plugin-sdk/provider-http";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { decodeHtmlEntities as decodeHtmlEntity } from "natesclaw/plugin-sdk/html-entity-runtime";
+import { readProviderTextResponse } from "natesclaw/plugin-sdk/provider-http";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   DEFAULT_SEARCH_COUNT,
@@ -15,7 +15,7 @@ import {
   withTrustedWebSearchEndpoint,
   wrapWebContent,
   writeCache,
-} from "openclaw/plugin-sdk/provider-web-search";
+} from "natesclaw/plugin-sdk/provider-web-search";
 import { resolveDdgRegion, resolveDdgSafeSearch, type DdgSafeSearch } from "./config.js";
 
 const DDG_HTML_ENDPOINT = "https://html.duckduckgo.com/html";
@@ -119,7 +119,7 @@ function parseDuckDuckGoHtml(html: string): DuckDuckGoResult[] {
 }
 
 export async function runDuckDuckGoSearch(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   query: string;
   count?: number;
   region?: string;

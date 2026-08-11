@@ -1,6 +1,6 @@
 // Discord plugin module implements send harness behavior.
 import { createServer } from "node:http";
-import type { MockFn } from "openclaw/plugin-sdk/plugin-test-runtime";
+import type { MockFn } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { vi } from "vitest";
 import { RequestClient } from "./internal/discord.js";
 

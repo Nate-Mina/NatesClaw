@@ -1,4 +1,4 @@
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import { getRuntimeConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
 import {
   parseBrowserNativeHostOrigins,
   runBrowserNativeHost,

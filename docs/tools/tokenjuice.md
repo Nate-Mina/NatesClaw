@@ -2,7 +2,7 @@
 summary: "Compact noisy exec and bash tool results with the optional Tokenjuice plugin"
 title: "Tokenjuice"
 read_when:
-  - You want shorter `exec` or `bash` tool results in OpenClaw
+  - You want shorter `exec` or `bash` tool results in Natesclaw
   - You want to install or enable the Tokenjuice plugin
   - You need to understand what tokenjuice changes and what it leaves raw
 ---
@@ -13,8 +13,8 @@ tool results after the command has already run.
 It changes the returned `tool_result`, not the command itself. Tokenjuice does
 not rewrite shell input, rerun commands, or change exit codes.
 
-Today this applies to OpenClaw embedded runs and OpenClaw dynamic tools in the Codex
-app-server harness. Tokenjuice hooks OpenClaw's tool-result middleware and
+Today this applies to Natesclaw embedded runs and Natesclaw dynamic tools in the Codex
+app-server harness. Tokenjuice hooks Natesclaw's tool-result middleware and
 trims the output before it goes back into the active harness session.
 
 ## Enable the plugin
@@ -22,19 +22,19 @@ trims the output before it goes back into the active harness session.
 Install once:
 
 ```bash
-openclaw plugins install clawhub:@openclaw/tokenjuice
+natesclaw plugins install clawhub:@natesclaw/tokenjuice
 ```
 
 Then enable it:
 
 ```bash
-openclaw config set plugins.entries.tokenjuice.enabled true
+natesclaw config set plugins.entries.tokenjuice.enabled true
 ```
 
 Equivalent:
 
 ```bash
-openclaw plugins enable tokenjuice
+natesclaw plugins enable tokenjuice
 ```
 
 If you prefer editing config directly:
@@ -68,13 +68,13 @@ If you prefer editing config directly:
 ## Disable the plugin
 
 ```bash
-openclaw config set plugins.entries.tokenjuice.enabled false
+natesclaw config set plugins.entries.tokenjuice.enabled false
 ```
 
 Or:
 
 ```bash
-openclaw plugins disable tokenjuice
+natesclaw plugins disable tokenjuice
 ```
 
 ## Related

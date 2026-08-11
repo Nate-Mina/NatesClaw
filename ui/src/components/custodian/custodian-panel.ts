@@ -1,8 +1,8 @@
 import { html, nothing, type PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { t } from "../../i18n/index.ts";
-import "../openclaw-mascot.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import "../natesclaw-mascot.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import {
   custodianSessionStore,
   type CustodianSessionStore,
@@ -20,7 +20,7 @@ import "../../styles/custodian-panel.css";
 type CustodianDock = Exclude<DockPanelSide, "left">;
 
 const panelLayout = createDockPanelLayout({
-  storageKey: "openclaw.custodian.panel.v1",
+  storageKey: "natesclaw.custodian.panel.v1",
   minHeight: 240,
   minWidth: 320,
   defaultDock: "right",
@@ -29,7 +29,7 @@ const panelLayout = createDockPanelLayout({
   defaultWidth: 440,
 });
 
-export class OpenClawCustodianPanel extends OpenClawLightDomElement {
+export class NatesclawCustodianPanel extends NatesclawLightDomElement {
   @property({ type: Boolean }) available = false;
   @property({ type: Boolean }) suppressed = false;
   @property({ type: Number }) minimizeRequestId = 0;
@@ -147,10 +147,10 @@ export class OpenClawCustodianPanel extends OpenClawLightDomElement {
         ${this.dockLayout.renderResizer("cp", t("custodian.panel.resize"))}
         <header class="cp-header">
           <div class="cp-title">
-            <openclaw-mascot
+            <natesclaw-mascot
               .mood=${this.store.sending ? "thinking" : "idle"}
               .size=${26}
-            ></openclaw-mascot>
+            ></natesclaw-mascot>
             <strong>${t("custodian.panel.title")}</strong>
           </div>
           <div class="cp-actions">
@@ -174,23 +174,23 @@ export class OpenClawCustodianPanel extends OpenClawLightDomElement {
             </button>
           </div>
         </header>
-        <openclaw-custodian-surface
+        <natesclaw-custodian-surface
           .store=${this.store}
           .onboarding=${this.store.activeVariant === "onboarding"}
           .newAgentIntent=${this.store.activeVariant === "new-agent"}
           compact
-        ></openclaw-custodian-surface>
+        ></natesclaw-custodian-surface>
       </section>
     `;
   }
 }
 
-if (!customElements.get("openclaw-custodian-panel")) {
-  customElements.define("openclaw-custodian-panel", OpenClawCustodianPanel);
+if (!customElements.get("natesclaw-custodian-panel")) {
+  customElements.define("natesclaw-custodian-panel", NatesclawCustodianPanel);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-custodian-panel": OpenClawCustodianPanel;
+    "natesclaw-custodian-panel": NatesclawCustodianPanel;
   }
 }

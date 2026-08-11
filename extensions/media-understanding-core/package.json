@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/media-understanding-core",
+  "name": "@natesclaw/media-understanding-core",
   "version": "2026.8.1",
   "private": true,
-  "description": "OpenClaw media understanding runtime package",
+  "description": "Natesclaw media understanding runtime package",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {}
+  "natesclaw": {}
 }

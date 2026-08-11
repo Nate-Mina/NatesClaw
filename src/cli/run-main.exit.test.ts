@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { CommanderError } from "commander";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { GATEWAY_SERVICE_RUNTIME_PID_ENV } from "../daemon/constants.js";
@@ -185,8 +185,8 @@ const maybeRunCliInContainerMock = vi.hoisted(() =>
   >((argv: string[]) => ({ handled: false, argv })),
 );
 const serviceEnvSnapshot = captureEnv([
-  "OPENCLAW_SERVICE_MARKER",
-  "OPENCLAW_SERVICE_KIND",
+  "NATESCLAW_SERVICE_MARKER",
+  "NATESCLAW_SERVICE_KIND",
   GATEWAY_SERVICE_RUNTIME_PID_ENV,
 ]);
 
@@ -303,7 +303,7 @@ vi.mock("../utils.js", async (importOriginal) => ({
 }));
 
 vi.mock("../infra/path-env.js", () => ({
-  ensureOpenClawCliOnPath: ensurePathMock,
+  ensureNatesclawCliOnPath: ensurePathMock,
 }));
 
 vi.mock("../infra/runtime-guard.js", () => ({
@@ -498,7 +498,7 @@ function withInteractiveTty(fn: () => Promise<void>): Promise<void> {
 }
 
 function runBareCli(): Promise<void> {
-  return withInteractiveTty(() => runCli(["node", "openclaw"]));
+  return withInteractiveTty(() => runCli(["node", "natesclaw"]));
 }
 
 function expectBoundTui(expected: {
@@ -528,7 +528,7 @@ async function expectNonInteractiveBareCliError(
   const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
   process.exitCode = undefined;
   try {
-    await withCliTty(false, () => runCli(["node", "openclaw"]));
+    await withCliTty(false, () => runCli(["node", "natesclaw"]));
     expect(process.exitCode).toBe(1);
     expect(errorSpy).toHaveBeenCalledWith(message);
     assert?.();
@@ -552,13 +552,13 @@ describe("runCli exit behavior", () => {
   });
 
   beforeEach(() => {
-    delete process.env.OPENCLAW_SERVICE_MARKER;
-    delete process.env.OPENCLAW_SERVICE_KIND;
+    delete process.env.NATESCLAW_SERVICE_MARKER;
+    delete process.env.NATESCLAW_SERVICE_KIND;
     // Sibling CLI suites run `gateway run --token/--password`, which exports
     // credentials into process.env; leaked values change gateway preflight
     // auth in shared vitest workers.
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+    delete process.env.NATESCLAW_GATEWAY_TOKEN;
+    delete process.env.NATESCLAW_GATEWAY_PASSWORD;
     delete process.env[GATEWAY_SERVICE_RUNTIME_PID_ENV];
     existsSyncOverride.value = undefined;
     vi.clearAllMocks();
@@ -602,8 +602,8 @@ describe("runCli exit behavior", () => {
     resolveManifestCommandAliasOwnerMock.mockReturnValue(undefined);
     resolveManifestToolOwnerMock.mockReturnValue(undefined);
     resolveManifestCliCommandSurfaceOwnerMock.mockReturnValue(undefined);
-    delete process.env.OPENCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH;
-    delete process.env.OPENCLAW_HIDE_BANNER;
+    delete process.env.NATESCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH;
+    delete process.env.NATESCLAW_HIDE_BANNER;
     loggingState.forceConsoleToStderr = false;
   });
 
@@ -615,11 +615,11 @@ describe("runCli exit behavior", () => {
       parseAsync,
     });
 
-    await withEnvAsync({ OPENCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH: "1" }, async () => {
-      await runCli(["node", "openclaw", "nodes", "--help"]);
+    await withEnvAsync({ NATESCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH: "1" }, async () => {
+      await runCli(["node", "natesclaw", "nodes", "--help"]);
     });
 
-    expect(parseAsync).toHaveBeenCalledWith(["node", "openclaw", "nodes", "--help"]);
+    expect(parseAsync).toHaveBeenCalledWith(["node", "natesclaw", "nodes", "--help"]);
     expect(providerCleanupModuleImportState).toEqual({ local: 0, transport: 0 });
   });
 
@@ -627,21 +627,21 @@ describe("runCli exit behavior", () => {
     existsSyncOverride.value = () => false;
     expect(dotenvModuleImportState.count).toBe(0);
 
-    await runCli(["node", "openclaw", "gateway"]);
-    await runCli(["node", "openclaw", "gateway", "run"]);
+    await runCli(["node", "natesclaw", "gateway"]);
+    await runCli(["node", "natesclaw", "gateway", "run"]);
     tryRouteCliMock.mockResolvedValueOnce(false);
     buildProgramMock.mockReturnValueOnce({
       commands: [{ name: () => "gateway", aliases: () => [] }],
       parseAsync: commanderParseAsyncMock,
     });
-    await runCli(["node", "openclaw", "--log-level", "debug", "gateway", "run"]);
+    await runCli(["node", "natesclaw", "--log-level", "debug", "gateway", "run"]);
 
     expect(dotenvModuleImportState.count).toBe(0);
     expect(loadDotEnvMock).not.toHaveBeenCalled();
     expect(buildProgramMock).toHaveBeenCalledTimes(1);
     expect(commanderParseAsyncMock).toHaveBeenLastCalledWith([
       "node",
-      "openclaw",
+      "natesclaw",
       "--log-level",
       "debug",
       "gateway",
@@ -655,11 +655,11 @@ describe("runCli exit behavior", () => {
       throw new Error(`unexpected process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "openclaw", "status"]);
+    await runCli(["node", "natesclaw", "status"]);
 
-    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "openclaw", "status"]);
+    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "natesclaw", "status"]);
     expect(enableConsoleCaptureMock).toHaveBeenCalledTimes(1);
-    expect(tryRouteCliMock).toHaveBeenCalledWith(["node", "openclaw", "status"]);
+    expect(tryRouteCliMock).toHaveBeenCalledWith(["node", "natesclaw", "status"]);
     const captureOrder = enableConsoleCaptureMock.mock.invocationCallOrder[0] ?? 0;
     const routeOrder = tryRouteCliMock.mock.invocationCallOrder[0] ?? 0;
     expect(captureOrder).toBeGreaterThan(0);
@@ -675,10 +675,10 @@ describe("runCli exit behavior", () => {
   it("passes config get machine ownership into route-first startup", async () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "openclaw", "config", "get", "gateway.port"]);
+    await runCli(["node", "natesclaw", "config", "get", "gateway.port"]);
 
     expect(tryRouteCliMock).toHaveBeenCalledWith(
-      ["node", "openclaw", "config", "get", "gateway.port"],
+      ["node", "natesclaw", "config", "get", "gateway.port"],
       { machineOutput: true },
     );
   });
@@ -692,9 +692,9 @@ describe("runCli exit behavior", () => {
       parseAsync,
     });
 
-    await runCli(["node", "openclaw", "agent", "--local"]);
+    await runCli(["node", "natesclaw", "agent", "--local"]);
 
-    expect(parseAsync).toHaveBeenCalledWith(["node", "openclaw", "agent", "--local"]);
+    expect(parseAsync).toHaveBeenCalledWith(["node", "natesclaw", "agent", "--local"]);
     expect(disposeRegisteredAgentHarnessesMock).toHaveBeenCalledTimes(1);
   });
 
@@ -722,7 +722,7 @@ describe("runCli exit behavior", () => {
     });
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "openclaw", "models", "status", "--probe"]);
+    await runCli(["node", "natesclaw", "models", "status", "--probe"]);
 
     expect(order).toEqual([
       "harnesses",
@@ -739,7 +739,7 @@ describe("runCli exit behavior", () => {
     getActiveMcpLoopbackRuntimeMock.mockReturnValueOnce({ port: 1234 });
     closeMcpLoopbackServerMock.mockRejectedValueOnce(new Error("listener cleanup failed"));
 
-    await expect(runCli(["node", "openclaw", "status"])).resolves.toBeUndefined();
+    await expect(runCli(["node", "natesclaw", "status"])).resolves.toBeUndefined();
 
     expect(closeMcpLoopbackServerMock).toHaveBeenCalledTimes(1);
   });
@@ -752,10 +752,10 @@ describe("runCli exit behavior", () => {
       parseAsync,
     });
 
-    await runCli(["node", "openclaw", "config"]);
+    await runCli(["node", "natesclaw", "config"]);
 
     expect(createCliProgressMock).toHaveBeenCalledWith({
-      label: "Loading OpenClaw CLI…",
+      label: "Loading Natesclaw CLI…",
       indeterminate: true,
       delayMs: 0,
     });
@@ -770,17 +770,17 @@ describe("runCli exit behavior", () => {
       parseAsync,
     });
 
-    await runCli(["node", "openclaw", "sessions", "--json", "--limit", "all"]);
+    await runCli(["node", "natesclaw", "sessions", "--json", "--limit", "all"]);
 
     expect(createCliProgressMock).toHaveBeenCalledWith({
-      label: "Loading OpenClaw CLI…",
+      label: "Loading Natesclaw CLI…",
       indeterminate: true,
       delayMs: 0,
       enabled: false,
     });
     expect(parseAsync).toHaveBeenCalledWith([
       "node",
-      "openclaw",
+      "natesclaw",
       "sessions",
       "--json",
       "--limit",
@@ -801,9 +801,9 @@ describe("runCli exit behavior", () => {
     const pauseSpy = vi.spyOn(process.stdin, "pause").mockImplementation(() => process.stdin);
 
     try {
-      await runCli(["node", "openclaw", "channels"]);
+      await runCli(["node", "natesclaw", "channels"]);
 
-      expect(parseAsync).toHaveBeenCalledWith(["node", "openclaw", "channels"]);
+      expect(parseAsync).toHaveBeenCalledWith(["node", "natesclaw", "channels"]);
       expect(pauseSpy).toHaveBeenCalledTimes(1);
     } finally {
       pauseSpy.mockRestore();
@@ -816,23 +816,23 @@ describe("runCli exit behavior", () => {
   });
 
   it("emits the startup banner before gateway foreground fast-path startup", async () => {
-    await runCli(["node", "openclaw", "gateway", "--force"]);
+    await runCli(["node", "natesclaw", "gateway", "--force"]);
 
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(emitCliBannerMock).toHaveBeenCalledWith("9.9.9-test", {
-      argv: ["node", "openclaw", "gateway", "--force"],
+      argv: ["node", "natesclaw", "gateway", "--force"],
     });
     expect(addGatewayRunCommandMock).toHaveBeenCalledTimes(2);
     expect(commanderParseAsyncMock).toHaveBeenCalledWith([
       "node",
-      "openclaw",
+      "natesclaw",
       "gateway",
       "--force",
     ]);
   });
 
   it("installs console capture before parsing the gateway foreground fast path", async () => {
-    await runCli(["node", "openclaw", "gateway", "--force"]);
+    await runCli(["node", "natesclaw", "gateway", "--force"]);
 
     expect(enableConsoleCaptureMock).toHaveBeenCalledTimes(1);
     expect(commanderParseAsyncMock).toHaveBeenCalledTimes(1);
@@ -843,7 +843,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("configures the gateway foreground fast path with the standard CLI bootstrap", async () => {
-    await runCli(["node", "openclaw", "gateway", "--force"]);
+    await runCli(["node", "natesclaw", "gateway", "--force"]);
 
     expect(readConfigFileSnapshotMock.mock.calls).toEqual([[{ isolateEnv: true, observe: false }]]);
     const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
@@ -873,7 +873,7 @@ describe("runCli exit behavior", () => {
     readConfigFileSnapshotMock.mockResolvedValue({
       exists: true,
       hash: "guarded",
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       raw: "{}",
       valid: true,
       sourceConfig: {
@@ -881,7 +881,7 @@ describe("runCli exit behavior", () => {
         gateway: { mode: "local" },
       },
     });
-    await runCli(["node", "openclaw", "gateway"]);
+    await runCli(["node", "natesclaw", "gateway"]);
     const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
       | { beforeRun?: (opts: { reset?: boolean }) => Promise<void> }
       | undefined;
@@ -894,7 +894,7 @@ describe("runCli exit behavior", () => {
     readConfigFileSnapshotMock.mockResolvedValue({
       exists: true,
       hash: "guarded",
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       raw: "{}",
       valid: true,
       sourceConfig: {
@@ -923,12 +923,12 @@ describe("runCli exit behavior", () => {
     readConfigFileSnapshotMock.mockResolvedValue({
       exists: true,
       hash: "guarded",
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       raw: "{}",
       valid: true,
       sourceConfig: { gateway: { mode: "local" } },
     });
-    await runCli(["node", "openclaw", "gateway"]);
+    await runCli(["node", "natesclaw", "gateway"]);
     const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
       | { beforeRun?: (opts: { reset?: boolean }) => Promise<void> }
       | undefined;
@@ -942,19 +942,19 @@ describe("runCli exit behavior", () => {
     try {
       await withEnvAsync(
         {
-          OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
-          OPENCLAW_SERVICE_MARKER: undefined,
+          NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
+          NATESCLAW_SERVICE_MARKER: undefined,
         },
         async () => {
           await expect(
             beforeStateMigrations?.({
               exists: true,
               hash: "future",
-              path: "/tmp/openclaw.json",
+              path: "/tmp/natesclaw.json",
               raw: "{}",
               valid: true,
               sourceConfig: {
-                env: { vars: { OPENCLAW_SERVICE_MARKER: "gateway" } },
+                env: { vars: { NATESCLAW_SERVICE_MARKER: "gateway" } },
                 meta: { lastTouchedVersion: "9999.1.1" },
               },
             }),
@@ -962,7 +962,7 @@ describe("runCli exit behavior", () => {
           expect(errorSpy).toHaveBeenCalledWith(
             expect.stringContaining("start the gateway service"),
           );
-          expect(process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
+          expect(process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
           expect(exitSpy).not.toHaveBeenCalled();
         },
       );
@@ -1019,24 +1019,24 @@ describe("runCli exit behavior", () => {
       valid: true,
       sourceConfig: { meta: { lastTouchedVersion: "9999.1.1" } },
     });
-    const previousMarker = process.env.OPENCLAW_SERVICE_MARKER;
-    const previousOverride = process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS;
+    const previousMarker = process.env.NATESCLAW_SERVICE_MARKER;
+    const previousOverride = process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS;
     if (params.marker) {
-      process.env.OPENCLAW_SERVICE_MARKER = params.marker;
+      process.env.NATESCLAW_SERVICE_MARKER = params.marker;
     } else {
-      delete process.env.OPENCLAW_SERVICE_MARKER;
+      delete process.env.NATESCLAW_SERVICE_MARKER;
     }
     if (params.override) {
-      process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = params.override;
+      process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = params.override;
     } else {
-      delete process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS;
+      delete process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS;
     }
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const exitSpy = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {
       throw new Error(`exit:${String(code)}`);
     }) as typeof process.exit);
     try {
-      await expect(runCli(["node", "openclaw", "gateway", ...params.flags])).rejects.toThrow(
+      await expect(runCli(["node", "natesclaw", "gateway", ...params.flags])).rejects.toThrow(
         `exit:${params.expectedExitCode}`,
       );
       expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining(params.expectedAction));
@@ -1045,20 +1045,20 @@ describe("runCli exit behavior", () => {
         [{ isolateEnv: true, observe: false }],
       ]);
       if (params.marker) {
-        expect(process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
+        expect(process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
       }
     } finally {
       exitSpy.mockRestore();
       errorSpy.mockRestore();
       if (previousMarker === undefined) {
-        delete process.env.OPENCLAW_SERVICE_MARKER;
+        delete process.env.NATESCLAW_SERVICE_MARKER;
       } else {
-        process.env.OPENCLAW_SERVICE_MARKER = previousMarker;
+        process.env.NATESCLAW_SERVICE_MARKER = previousMarker;
       }
       if (previousOverride === undefined) {
-        delete process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS;
+        delete process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS;
       } else {
-        process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = previousOverride;
+        process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = previousOverride;
       }
     }
   });
@@ -1068,7 +1068,7 @@ describe("runCli exit behavior", () => {
       exists: true,
       valid: true,
       sourceConfig: {
-        env: { vars: { OPENCLAW_SERVICE_MARKER: "gateway" } },
+        env: { vars: { NATESCLAW_SERVICE_MARKER: "gateway" } },
         meta: { lastTouchedVersion: "9999.1.1" },
       },
     });
@@ -1079,13 +1079,13 @@ describe("runCli exit behavior", () => {
     try {
       await withEnvAsync(
         {
-          OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
-          OPENCLAW_SERVICE_MARKER: undefined,
+          NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
+          NATESCLAW_SERVICE_MARKER: undefined,
         },
         async () => {
-          await expect(runCli(["node", "openclaw", "gateway"])).rejects.toThrow("exit:78");
-          expect(process.env.OPENCLAW_SERVICE_MARKER).toBeUndefined();
-          expect(process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
+          await expect(runCli(["node", "natesclaw", "gateway"])).rejects.toThrow("exit:78");
+          expect(process.env.NATESCLAW_SERVICE_MARKER).toBeUndefined();
+          expect(process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
           expect(ensureCliExecutionBootstrapMock).not.toHaveBeenCalled();
         },
       );
@@ -1100,35 +1100,35 @@ describe("runCli exit behavior", () => {
       exists: true,
       valid: false,
       sourceConfig: {
-        env: { vars: { OPENCLAW_SERVICE_MARKER: "gateway" } },
+        env: { vars: { NATESCLAW_SERVICE_MARKER: "gateway" } },
         meta: { lastTouchedVersion: "9999.1.1" },
       },
     });
 
     await withEnvAsync(
       {
-        OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
-        OPENCLAW_SERVICE_MARKER: undefined,
+        NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
+        NATESCLAW_SERVICE_MARKER: undefined,
       },
       async () => {
-        await runCli(["node", "openclaw", "gateway"]);
+        await runCli(["node", "natesclaw", "gateway"]);
 
-        expect(process.env.OPENCLAW_SERVICE_MARKER).toBeUndefined();
-        expect(process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBe("1");
+        expect(process.env.NATESCLAW_SERVICE_MARKER).toBeUndefined();
+        expect(process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBe("1");
       },
     );
   });
 
   it("guards the config selected by trusted global dotenv before the default config", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-global-selection-"));
-    const stateDir = path.join(homeDir, ".openclaw");
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-global-selection-"));
+    const stateDir = path.join(homeDir, ".natesclaw");
     const selectedConfigPath = path.join(stateDir, "selected.json");
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(
       path.join(stateDir, ".env"),
       [
-        `OPENCLAW_CONFIG_PATH=${selectedConfigPath}`,
-        "OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1",
+        `NATESCLAW_CONFIG_PATH=${selectedConfigPath}`,
+        "NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1",
         "",
       ].join("\n"),
     );
@@ -1136,14 +1136,14 @@ describe("runCli exit behavior", () => {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: undefined,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: undefined,
+          NATESCLAW_CONFIG_PATH: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
           readConfigFileSnapshotMock.mockImplementation(async () =>
-            process.env.OPENCLAW_CONFIG_PATH === selectedConfigPath
+            process.env.NATESCLAW_CONFIG_PATH === selectedConfigPath
               ? {
                   exists: true,
                   valid: true,
@@ -1156,10 +1156,10 @@ describe("runCli exit behavior", () => {
                 },
           );
 
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
 
-          expect(process.env.OPENCLAW_CONFIG_PATH).toBe(selectedConfigPath);
-          expect(process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
+          expect(process.env.NATESCLAW_CONFIG_PATH).toBe(selectedConfigPath);
+          expect(process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
           expect(readConfigFileSnapshotMock).toHaveBeenCalledOnce();
         },
       );
@@ -1169,18 +1169,18 @@ describe("runCli exit behavior", () => {
   });
 
   it("loads state dotenv before a custom config-root fallback", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-config-env-"));
-    const stateDir = path.join(homeDir, ".openclaw");
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-config-env-"));
+    const stateDir = path.join(homeDir, ".natesclaw");
     const configDir = path.join(homeDir, "profile");
-    const configPath = path.join(configDir, "openclaw.json");
+    const configPath = path.join(configDir, "natesclaw.json");
     await fs.mkdir(stateDir, { recursive: true });
     await fs.mkdir(configDir, { recursive: true });
-    await fs.writeFile(path.join(stateDir, ".env"), "OPENCLAW_GATEWAY_TOKEN=state-token\n");
+    await fs.writeFile(path.join(stateDir, ".env"), "NATESCLAW_GATEWAY_TOKEN=state-token\n");
     await fs.writeFile(
       path.join(configDir, ".env"),
       [
-        "OPENCLAW_GATEWAY_PASSWORD=config-root-password",
-        "OPENCLAW_GATEWAY_TOKEN=config-root-token",
+        "NATESCLAW_GATEWAY_PASSWORD=config-root-password",
+        "NATESCLAW_GATEWAY_TOKEN=config-root-token",
         "",
       ].join("\n"),
     );
@@ -1188,17 +1188,17 @@ describe("runCli exit behavior", () => {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_GATEWAY_PASSWORD: undefined,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_GATEWAY_PASSWORD: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
 
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("state-token");
-          expect(process.env.OPENCLAW_GATEWAY_PASSWORD).toBe("config-root-password");
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("state-token");
+          expect(process.env.NATESCLAW_GATEWAY_PASSWORD).toBe("config-root-password");
         },
       );
     } finally {
@@ -1207,32 +1207,32 @@ describe("runCli exit behavior", () => {
   });
 
   it("loads and repins a legacy state dotenv after automatic state migration", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-legacy-env-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-legacy-env-"));
     const legacyStateDir = path.join(homeDir, ".clawdbot");
-    const newStateDir = path.join(homeDir, ".openclaw");
+    const newStateDir = path.join(homeDir, ".natesclaw");
     await fs.mkdir(legacyStateDir, { recursive: true });
-    await fs.writeFile(path.join(legacyStateDir, ".env"), "OPENCLAW_GATEWAY_TOKEN=legacy-token\n");
+    await fs.writeFile(path.join(legacyStateDir, ".env"), "NATESCLAW_GATEWAY_TOKEN=legacy-token\n");
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
-          OPENCLAW_TEST_FAST: undefined,
+          NATESCLAW_CONFIG_PATH: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
+          NATESCLAW_TEST_FAST: undefined,
         },
         async () => {
           ensureCliExecutionBootstrapMock.mockImplementationOnce(async () => {
             await fs.rename(legacyStateDir, newStateDir);
           });
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
           const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
             | { beforeRun?: (opts: { reset?: boolean }) => Promise<void> }
             | undefined;
           await hooks?.beforeRun?.({});
 
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("legacy-token");
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("legacy-token");
           await expect(fs.access(path.join(newStateDir, ".env"))).resolves.toBeUndefined();
           const bootstrapOrder = ensureCliExecutionBootstrapMock.mock.invocationCallOrder[0] ?? 0;
           const finalPinOrder = pinRuntimePathsMock.mock.invocationCallOrder.at(-1) ?? 0;
@@ -1267,7 +1267,7 @@ describe("runCli exit behavior", () => {
       throw new Error(`exit:${String(code)}`);
     }) as typeof process.exit);
     try {
-      await runCli(["node", "openclaw", "gateway", "--dev", "--reset"]);
+      await runCli(["node", "natesclaw", "gateway", "--dev", "--reset"]);
       const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
         | { beforeRun?: (opts: { reset?: boolean }) => Promise<void> }
         | undefined;
@@ -1305,7 +1305,7 @@ describe("runCli exit behavior", () => {
       throw new Error(`exit:${String(code)}`);
     }) as typeof process.exit);
     try {
-      await runCli(["node", "openclaw", "gateway"]);
+      await runCli(["node", "natesclaw", "gateway"]);
       const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
         | { beforeRun?: (opts: { force?: boolean }) => Promise<void> }
         | undefined;
@@ -1330,7 +1330,7 @@ describe("runCli exit behavior", () => {
       if (options?.recoverSuspicious) {
         await options.allowSuspiciousRecovery?.(
           {
-            env: { vars: { OPENCLAW_SERVICE_MARKER: "gateway" } },
+            env: { vars: { NATESCLAW_SERVICE_MARKER: "gateway" } },
             gateway: { mode: "local" },
             meta: { lastTouchedVersion: "9999.1.1" },
           },
@@ -1346,11 +1346,11 @@ describe("runCli exit behavior", () => {
     try {
       await withEnvAsync(
         {
-          OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
-          OPENCLAW_SERVICE_MARKER: undefined,
+          NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: "1",
+          NATESCLAW_SERVICE_MARKER: undefined,
         },
         async () => {
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
           const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
             | { beforeRun?: (opts: { force?: boolean }) => Promise<void> }
             | undefined;
@@ -1366,30 +1366,30 @@ describe("runCli exit behavior", () => {
   });
 
   it("re-guards config env path selection until the gateway config is stable", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-selection-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-selection-"));
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_CONFIG_PATH: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
           readConfigFileSnapshotMock.mockImplementation(async () => {
-            if (process.env.OPENCLAW_CONFIG_PATH === "/tmp/openclaw-chain-c.json") {
+            if (process.env.NATESCLAW_CONFIG_PATH === "/tmp/natesclaw-chain-c.json") {
               return {
                 exists: true,
                 valid: true,
                 sourceConfig: { meta: { lastTouchedVersion: "9999.1.1" } },
               };
             }
-            if (process.env.OPENCLAW_STATE_DIR === "/tmp/openclaw-chain-b") {
+            if (process.env.NATESCLAW_STATE_DIR === "/tmp/natesclaw-chain-b") {
               return {
                 exists: true,
                 valid: true,
                 sourceConfig: {
-                  env: { vars: { OPENCLAW_CONFIG_PATH: "/tmp/openclaw-chain-c.json" } },
+                  env: { vars: { NATESCLAW_CONFIG_PATH: "/tmp/natesclaw-chain-c.json" } },
                   gateway: { mode: "local" },
                 },
               };
@@ -1398,7 +1398,7 @@ describe("runCli exit behavior", () => {
               exists: true,
               valid: true,
               sourceConfig: {
-                env: { vars: { OPENCLAW_STATE_DIR: "/tmp/openclaw-chain-b" } },
+                env: { vars: { NATESCLAW_STATE_DIR: "/tmp/natesclaw-chain-b" } },
                 gateway: { mode: "local" },
               },
             };
@@ -1408,7 +1408,7 @@ describe("runCli exit behavior", () => {
             throw new Error(`exit:${String(code)}`);
           }) as typeof process.exit);
           try {
-            await expect(runCli(["node", "openclaw", "gateway"])).rejects.toThrow("exit:1");
+            await expect(runCli(["node", "natesclaw", "gateway"])).rejects.toThrow("exit:1");
             expect(errorSpy).toHaveBeenCalledWith(
               expect.stringContaining("run automatic gateway startup migrations"),
             );
@@ -1454,7 +1454,7 @@ describe("runCli exit behavior", () => {
         throw new Error(`exit:${String(code)}`);
       }) as typeof process.exit);
       try {
-        await expect(runCli(["node", "openclaw", "gateway"])).rejects.toThrow("exit:1");
+        await expect(runCli(["node", "natesclaw", "gateway"])).rejects.toThrow("exit:1");
         expect(errorSpy).toHaveBeenCalledWith(
           expect.stringContaining("run automatic gateway startup migrations"),
         );
@@ -1469,18 +1469,18 @@ describe("runCli exit behavior", () => {
   it("drops credentials from configs superseded during state selection", async () => {
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_TOKEN: undefined,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_STATE_DIR: undefined,
+        NATESCLAW_GATEWAY_TOKEN: undefined,
+        NATESCLAW_HOME: undefined,
+        NATESCLAW_STATE_DIR: undefined,
       },
       async () => {
         readConfigFileSnapshotMock.mockImplementation(async () =>
-          process.env.OPENCLAW_STATE_DIR === "/tmp/openclaw-selected-state"
+          process.env.NATESCLAW_STATE_DIR === "/tmp/natesclaw-selected-state"
             ? {
                 exists: true,
                 valid: true,
                 sourceConfig: {
-                  env: { vars: { OPENCLAW_GATEWAY_TOKEN: "selected-token" } },
+                  env: { vars: { NATESCLAW_GATEWAY_TOKEN: "selected-token" } },
                   gateway: { mode: "local" },
                 },
               }
@@ -1490,50 +1490,50 @@ describe("runCli exit behavior", () => {
                 sourceConfig: {
                   env: {
                     vars: {
-                      OPENCLAW_GATEWAY_TOKEN: "superseded-token",
-                      OPENCLAW_STATE_DIR: "/tmp/openclaw-selected-state",
+                      NATESCLAW_GATEWAY_TOKEN: "superseded-token",
+                      NATESCLAW_STATE_DIR: "/tmp/natesclaw-selected-state",
                     },
                   },
                   gateway: { mode: "local" },
                 },
               },
         );
-        await runCli(["node", "openclaw", "gateway"]);
+        await runCli(["node", "natesclaw", "gateway"]);
 
         const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
           | { beforeRun?: (opts: { force?: boolean }) => Promise<void> }
           | undefined;
         await hooks?.beforeRun?.({});
 
-        expect(process.env.OPENCLAW_STATE_DIR).toBe("/tmp/openclaw-selected-state");
-        expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("selected-token");
+        expect(process.env.NATESCLAW_STATE_DIR).toBe("/tmp/natesclaw-selected-state");
+        expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("selected-token");
         expect(ensureCliExecutionBootstrapMock).toHaveBeenCalledOnce();
       },
     );
   });
 
   it("re-guards config selection from a newly selected state dotenv", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-dotenv-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-dotenv-"));
     const futureConfigPath = path.join(stateDir, "future.json");
     await fs.writeFile(
       path.join(stateDir, ".env"),
       [
-        `OPENCLAW_CONFIG_PATH=${futureConfigPath}`,
-        "OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1",
+        `NATESCLAW_CONFIG_PATH=${futureConfigPath}`,
+        "NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1",
         "",
       ].join("\n"),
     );
     try {
       await withEnvAsync(
         {
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_HOME: undefined,
-          OPENCLAW_STATE_DIR: undefined,
-          OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: undefined,
+          NATESCLAW_CONFIG_PATH: undefined,
+          NATESCLAW_HOME: undefined,
+          NATESCLAW_STATE_DIR: undefined,
+          NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: undefined,
         },
         async () => {
           readConfigFileSnapshotMock.mockImplementation(async () => {
-            if (process.env.OPENCLAW_CONFIG_PATH === futureConfigPath) {
+            if (process.env.NATESCLAW_CONFIG_PATH === futureConfigPath) {
               return {
                 exists: true,
                 valid: true,
@@ -1544,7 +1544,7 @@ describe("runCli exit behavior", () => {
               exists: true,
               valid: true,
               sourceConfig: {
-                env: { vars: { OPENCLAW_STATE_DIR: stateDir } },
+                env: { vars: { NATESCLAW_STATE_DIR: stateDir } },
                 gateway: { mode: "local" },
               },
             };
@@ -1554,13 +1554,13 @@ describe("runCli exit behavior", () => {
             throw new Error(`exit:${String(code)}`);
           }) as typeof process.exit);
           try {
-            await expect(runCli(["node", "openclaw", "gateway"])).rejects.toThrow("exit:1");
+            await expect(runCli(["node", "natesclaw", "gateway"])).rejects.toThrow("exit:1");
             expect(errorSpy).toHaveBeenCalledWith(
               expect.stringContaining("run automatic gateway startup migrations"),
             );
             expect(ensureCliExecutionBootstrapMock).not.toHaveBeenCalled();
             expect(readConfigFileSnapshotMock).toHaveBeenCalledTimes(2);
-            expect(process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
+            expect(process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
           } finally {
             exitSpy.mockRestore();
             errorSpy.mockRestore();
@@ -1573,8 +1573,8 @@ describe("runCli exit behavior", () => {
   });
 
   it("re-inspects recovery after recovery changes config selection", async () => {
-    await withEnvAsync({ OPENCLAW_CONFIG_PATH: undefined }, async () => {
-      const selectedConfigPath = "/tmp/openclaw-recovered-selection.json";
+    await withEnvAsync({ NATESCLAW_CONFIG_PATH: undefined }, async () => {
+      const selectedConfigPath = "/tmp/natesclaw-recovered-selection.json";
       const currentSnapshot = {
         exists: true,
         valid: true,
@@ -1591,7 +1591,7 @@ describe("runCli exit behavior", () => {
             exists: true,
             valid: true,
             sourceConfig: {
-              env: { vars: { OPENCLAW_CONFIG_PATH: selectedConfigPath } },
+              env: { vars: { NATESCLAW_CONFIG_PATH: selectedConfigPath } },
               gateway: { mode: "local" },
             },
           };
@@ -1615,7 +1615,7 @@ describe("runCli exit behavior", () => {
         throw new Error(`exit:${String(code)}`);
       }) as typeof process.exit);
       try {
-        await runCli(["node", "openclaw", "gateway"]);
+        await runCli(["node", "natesclaw", "gateway"]);
         const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
           | { beforeRun?: (opts: { force?: boolean }) => Promise<void> }
           | undefined;
@@ -1634,31 +1634,31 @@ describe("runCli exit behavior", () => {
 
   it("discards env from a config replaced by suspicious recovery", async () => {
     await withEnvAsync(
-      { OPENCLAW_GATEWAY_TOKEN: undefined, OPENCLAW_PROXY_ACTIVE: undefined },
+      { NATESCLAW_GATEWAY_TOKEN: undefined, NATESCLAW_PROXY_ACTIVE: undefined },
       async () => {
         const clobberedSnapshot = {
           exists: true,
           valid: true,
           sourceConfig: {
-            env: { vars: { OPENCLAW_GATEWAY_TOKEN: "discarded-token" } },
+            env: { vars: { NATESCLAW_GATEWAY_TOKEN: "discarded-token" } },
             gateway: { mode: "local" },
           },
           hash: "clobbered",
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
         };
         const recoveredSnapshot = {
           exists: true,
           valid: true,
           sourceConfig: { gateway: { mode: "local" } },
           hash: "recovered",
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
         };
         const initialSnapshot = {
           exists: true,
           valid: true,
           sourceConfig: { gateway: { mode: "local" } },
           hash: "initial",
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
         };
         let currentSnapshot = initialSnapshot;
         let recovered = false;
@@ -1673,40 +1673,40 @@ describe("runCli exit behavior", () => {
           );
           return recoveredSnapshot;
         });
-        await runCli(["node", "openclaw", "gateway"]);
+        await runCli(["node", "natesclaw", "gateway"]);
 
         currentSnapshot = clobberedSnapshot;
-        process.env.OPENCLAW_PROXY_ACTIVE = "1";
+        process.env.NATESCLAW_PROXY_ACTIVE = "1";
         const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
           | { beforeRun?: (opts: { force?: boolean }) => Promise<void> }
           | undefined;
         await hooks?.beforeRun?.({});
 
-        expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBeUndefined();
-        expect(process.env.OPENCLAW_PROXY_ACTIVE).toBe("1");
+        expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBeUndefined();
+        expect(process.env.NATESCLAW_PROXY_ACTIVE).toBe("1");
         expect(ensureCliExecutionBootstrapMock).toHaveBeenCalledOnce();
       },
     );
   });
 
   it("does not apply environment variables from invalid config snapshots", async () => {
-    await withEnvAsync({ OPENCLAW_INCLUDE_ROOTS: undefined }, async () => {
+    await withEnvAsync({ NATESCLAW_INCLUDE_ROOTS: undefined }, async () => {
       readConfigFileSnapshotMock.mockResolvedValue({
         exists: true,
         valid: false,
         sourceConfig: {
-          env: { vars: { OPENCLAW_INCLUDE_ROOTS: "/tmp/openclaw-includes" } },
+          env: { vars: { NATESCLAW_INCLUDE_ROOTS: "/tmp/natesclaw-includes" } },
           gateway: { mode: "local" },
         },
       });
 
-      await runCli(["node", "openclaw", "gateway"]);
+      await runCli(["node", "natesclaw", "gateway"]);
       const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
         | { beforeRun?: (opts: { force?: boolean }) => Promise<void> }
         | undefined;
       await hooks?.beforeRun?.({});
 
-      expect(process.env.OPENCLAW_INCLUDE_ROOTS).toBeUndefined();
+      expect(process.env.NATESCLAW_INCLUDE_ROOTS).toBeUndefined();
       expect(readConfigFileSnapshotMock.mock.calls).toEqual([
         [{ isolateEnv: true, observe: false }],
         [{ isolateEnv: true, observe: false }],
@@ -1716,18 +1716,18 @@ describe("runCli exit behavior", () => {
   });
 
   it("loads selected state dotenv before config env and environment normalization", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-selected-env-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-selected-env-"));
     const stateDir = path.join(homeDir, "state");
     await fs.mkdir(stateDir, { recursive: true });
-    await fs.writeFile(path.join(stateDir, ".env"), "OPENCLAW_GATEWAY_TOKEN=state-token\n");
+    await fs.writeFile(path.join(stateDir, ".env"), "NATESCLAW_GATEWAY_TOKEN=state-token\n");
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_CONFIG_PATH: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
           readConfigFileSnapshotMock.mockResolvedValue({
@@ -1736,8 +1736,8 @@ describe("runCli exit behavior", () => {
             sourceConfig: {
               env: {
                 vars: {
-                  OPENCLAW_GATEWAY_TOKEN: "config-token",
-                  OPENCLAW_STATE_DIR: stateDir,
+                  NATESCLAW_GATEWAY_TOKEN: "config-token",
+                  NATESCLAW_STATE_DIR: stateDir,
                 },
               },
               gateway: { mode: "local" },
@@ -1745,12 +1745,12 @@ describe("runCli exit behavior", () => {
           });
           let tokenAtNormalize: string | undefined;
           normalizeEnvMock.mockImplementation(() => {
-            tokenAtNormalize = process.env.OPENCLAW_GATEWAY_TOKEN;
+            tokenAtNormalize = process.env.NATESCLAW_GATEWAY_TOKEN;
           });
 
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
 
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("state-token");
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("state-token");
           expect(tokenAtNormalize).toBe("state-token");
         },
       );
@@ -1760,36 +1760,36 @@ describe("runCli exit behavior", () => {
   });
 
   it("drops credentials from a trusted dotenv superseded by state selection", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-dotenv-hop-"));
-    const defaultStateDir = path.join(homeDir, ".openclaw");
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-dotenv-hop-"));
+    const defaultStateDir = path.join(homeDir, ".natesclaw");
     const selectedStateDir = path.join(homeDir, "selected-state");
     await fs.mkdir(defaultStateDir, { recursive: true });
     await fs.mkdir(selectedStateDir, { recursive: true });
     await fs.writeFile(
       path.join(defaultStateDir, ".env"),
       [
-        `OPENCLAW_STATE_DIR=${selectedStateDir}`,
-        "OPENCLAW_GATEWAY_TOKEN=superseded-token",
+        `NATESCLAW_STATE_DIR=${selectedStateDir}`,
+        "NATESCLAW_GATEWAY_TOKEN=superseded-token",
         "",
       ].join("\n"),
     );
     await fs.writeFile(
       path.join(selectedStateDir, ".env"),
-      "OPENCLAW_GATEWAY_TOKEN=selected-token\n",
+      "NATESCLAW_GATEWAY_TOKEN=selected-token\n",
     );
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
 
-          expect(process.env.OPENCLAW_STATE_DIR).toBe(selectedStateDir);
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("selected-token");
+          expect(process.env.NATESCLAW_STATE_DIR).toBe(selectedStateDir);
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("selected-token");
         },
       );
     } finally {
@@ -1798,30 +1798,30 @@ describe("runCli exit behavior", () => {
   });
 
   it("drops gateway.env selectors when the default state dotenv selects a custom state", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-env-hop-"));
-    const defaultStateDir = path.join(homeDir, ".openclaw");
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-env-hop-"));
+    const defaultStateDir = path.join(homeDir, ".natesclaw");
     const selectedStateDir = path.join(homeDir, "selected-state");
-    const gatewayEnvDir = path.join(homeDir, ".config", "openclaw");
+    const gatewayEnvDir = path.join(homeDir, ".config", "natesclaw");
     await fs.mkdir(defaultStateDir, { recursive: true });
     await fs.mkdir(selectedStateDir, { recursive: true });
     await fs.mkdir(gatewayEnvDir, { recursive: true });
     await fs.writeFile(
       path.join(defaultStateDir, ".env"),
-      `OPENCLAW_STATE_DIR=${selectedStateDir}\n`,
+      `NATESCLAW_STATE_DIR=${selectedStateDir}\n`,
     );
     await fs.writeFile(
       path.join(gatewayEnvDir, "gateway.env"),
       [
-        "OPENCLAW_CONFIG_PATH=/tmp/wrong-openclaw.json",
-        "OPENCLAW_GATEWAY_TOKEN=fallback-token",
+        "NATESCLAW_CONFIG_PATH=/tmp/wrong-natesclaw.json",
+        "NATESCLAW_GATEWAY_TOKEN=fallback-token",
         "",
       ].join("\n"),
     );
     await fs.writeFile(
       path.join(selectedStateDir, ".env"),
       [
-        "OPENCLAW_GATEWAY_TOKEN=selected-token",
-        "OPENCLAW_INCLUDE_ROOTS=/tmp/untrusted-include-root",
+        "NATESCLAW_GATEWAY_TOKEN=selected-token",
+        "NATESCLAW_INCLUDE_ROOTS=/tmp/untrusted-include-root",
         "NODE_OPTIONS=--require /tmp/untrusted.js",
         "",
       ].join("\n"),
@@ -1830,18 +1830,18 @@ describe("runCli exit behavior", () => {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_CONFIG_PATH: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
           NODE_OPTIONS: undefined,
         },
         async () => {
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
 
-          expect(process.env.OPENCLAW_STATE_DIR).toBe(selectedStateDir);
-          expect(process.env.OPENCLAW_CONFIG_PATH).toBeUndefined();
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("selected-token");
+          expect(process.env.NATESCLAW_STATE_DIR).toBe(selectedStateDir);
+          expect(process.env.NATESCLAW_CONFIG_PATH).toBeUndefined();
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("selected-token");
         },
       );
     } finally {
@@ -1850,37 +1850,37 @@ describe("runCli exit behavior", () => {
   });
 
   it("preserves gateway.env selectors when the compatibility fallback selects the target", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-env-select-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-env-select-"));
     const selectedStateDir = path.join(homeDir, "selected-state");
-    const gatewayEnvDir = path.join(homeDir, ".config", "openclaw");
+    const gatewayEnvDir = path.join(homeDir, ".config", "natesclaw");
     await fs.mkdir(selectedStateDir, { recursive: true });
     await fs.mkdir(gatewayEnvDir, { recursive: true });
     await fs.writeFile(
       path.join(gatewayEnvDir, "gateway.env"),
-      [`OPENCLAW_STATE_DIR=${selectedStateDir}`, "OPENCLAW_GATEWAY_TOKEN=fallback-token", ""].join(
+      [`NATESCLAW_STATE_DIR=${selectedStateDir}`, "NATESCLAW_GATEWAY_TOKEN=fallback-token", ""].join(
         "\n",
       ),
     );
     await fs.writeFile(
       path.join(selectedStateDir, ".env"),
-      "OPENCLAW_GATEWAY_TOKEN=selected-token\n",
+      "NATESCLAW_GATEWAY_TOKEN=selected-token\n",
     );
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_INCLUDE_ROOTS: undefined,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_INCLUDE_ROOTS: undefined,
+          NATESCLAW_STATE_DIR: undefined,
           NODE_OPTIONS: undefined,
         },
         async () => {
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
 
-          expect(process.env.OPENCLAW_STATE_DIR).toBe(selectedStateDir);
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("selected-token");
-          expect(process.env.OPENCLAW_INCLUDE_ROOTS).toBeUndefined();
+          expect(process.env.NATESCLAW_STATE_DIR).toBe(selectedStateDir);
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("selected-token");
+          expect(process.env.NATESCLAW_INCLUDE_ROOTS).toBeUndefined();
           expect(process.env.NODE_OPTIONS).toBeUndefined();
         },
       );
@@ -1890,44 +1890,44 @@ describe("runCli exit behavior", () => {
   });
 
   it("drops old state dotenv credentials when config selects another state", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-config-state-hop-"));
-    const defaultStateDir = path.join(homeDir, ".openclaw");
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-config-state-hop-"));
+    const defaultStateDir = path.join(homeDir, ".natesclaw");
     const selectedStateDir = path.join(homeDir, "selected-state");
     await fs.mkdir(defaultStateDir, { recursive: true });
     await fs.mkdir(selectedStateDir, { recursive: true });
     await fs.writeFile(
       path.join(defaultStateDir, ".env"),
-      "OPENCLAW_GATEWAY_TOKEN=superseded-token\n",
+      "NATESCLAW_GATEWAY_TOKEN=superseded-token\n",
     );
     await fs.writeFile(
       path.join(selectedStateDir, ".env"),
-      "OPENCLAW_GATEWAY_TOKEN=selected-token\n",
+      "NATESCLAW_GATEWAY_TOKEN=selected-token\n",
     );
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
           readConfigFileSnapshotMock.mockImplementation(async () => ({
             exists: true,
             valid: true,
             sourceConfig:
-              process.env.OPENCLAW_STATE_DIR === selectedStateDir
+              process.env.NATESCLAW_STATE_DIR === selectedStateDir
                 ? { gateway: { mode: "local" } }
                 : {
-                    env: { vars: { OPENCLAW_STATE_DIR: selectedStateDir } },
+                    env: { vars: { NATESCLAW_STATE_DIR: selectedStateDir } },
                     gateway: { mode: "local" },
                   },
           }));
 
-          await runCli(["node", "openclaw", "gateway"]);
+          await runCli(["node", "natesclaw", "gateway"]);
 
-          expect(process.env.OPENCLAW_STATE_DIR).toBe(selectedStateDir);
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("selected-token");
+          expect(process.env.NATESCLAW_STATE_DIR).toBe(selectedStateDir);
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("selected-token");
         },
       );
     } finally {
@@ -1936,23 +1936,23 @@ describe("runCli exit behavior", () => {
   });
 
   it("drops early target credentials when a later guard selects another state", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-late-state-hop-"));
-    const defaultStateDir = path.join(homeDir, ".openclaw");
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-late-state-hop-"));
+    const defaultStateDir = path.join(homeDir, ".natesclaw");
     const selectedStateDir = path.join(homeDir, "selected-state");
     await fs.mkdir(defaultStateDir, { recursive: true });
     await fs.mkdir(selectedStateDir, { recursive: true });
-    await fs.writeFile(path.join(defaultStateDir, ".env"), "OPENCLAW_GATEWAY_TOKEN=early-token\n");
+    await fs.writeFile(path.join(defaultStateDir, ".env"), "NATESCLAW_GATEWAY_TOKEN=early-token\n");
     await fs.writeFile(
       path.join(selectedStateDir, ".env"),
-      "OPENCLAW_GATEWAY_TOKEN=selected-token\n",
+      "NATESCLAW_GATEWAY_TOKEN=selected-token\n",
     );
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
           let selectLateState = false;
@@ -1960,16 +1960,16 @@ describe("runCli exit behavior", () => {
             exists: true,
             valid: true,
             sourceConfig:
-              selectLateState && process.env.OPENCLAW_STATE_DIR !== selectedStateDir
+              selectLateState && process.env.NATESCLAW_STATE_DIR !== selectedStateDir
                 ? {
-                    env: { vars: { OPENCLAW_STATE_DIR: selectedStateDir } },
+                    env: { vars: { NATESCLAW_STATE_DIR: selectedStateDir } },
                     gateway: { mode: "local" },
                   }
                 : { gateway: { mode: "local" } },
           }));
 
-          await runCli(["node", "openclaw", "gateway"]);
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("early-token");
+          await runCli(["node", "natesclaw", "gateway"]);
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("early-token");
 
           selectLateState = true;
           const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
@@ -1977,8 +1977,8 @@ describe("runCli exit behavior", () => {
             | undefined;
           await hooks?.beforeRun?.({});
 
-          expect(process.env.OPENCLAW_STATE_DIR).toBe(selectedStateDir);
-          expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("selected-token");
+          expect(process.env.NATESCLAW_STATE_DIR).toBe(selectedStateDir);
+          expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBe("selected-token");
           expect(ensureCliExecutionBootstrapMock).toHaveBeenCalledOnce();
         },
       );
@@ -2008,7 +2008,7 @@ describe("runCli exit behavior", () => {
         }
       });
 
-      await runCli(["node", "openclaw", "gateway"]);
+      await runCli(["node", "natesclaw", "gateway"]);
       expect(process.env.ZAI_API_KEY).toBe("superseded-key");
 
       useReplacement = true;
@@ -2023,26 +2023,26 @@ describe("runCli exit behavior", () => {
   });
 
   it("does not let gateway.env authorize automatic mutations of a selected future config", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-global-env-"));
-    const gatewayEnvDir = path.join(homeDir, ".config", "openclaw");
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-global-env-"));
+    const gatewayEnvDir = path.join(homeDir, ".config", "natesclaw");
     const futureConfigPath = path.join(homeDir, "future.json");
     await fs.mkdir(gatewayEnvDir, { recursive: true });
     await fs.writeFile(
       path.join(gatewayEnvDir, "gateway.env"),
-      "OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1\n",
+      "NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1\n",
     );
     try {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: undefined,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_STATE_DIR: undefined,
+          NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS: undefined,
+          NATESCLAW_CONFIG_PATH: undefined,
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_STATE_DIR: undefined,
         },
         async () => {
           readConfigFileSnapshotMock.mockImplementation(async () =>
-            process.env.OPENCLAW_CONFIG_PATH === futureConfigPath
+            process.env.NATESCLAW_CONFIG_PATH === futureConfigPath
               ? {
                   exists: true,
                   valid: true,
@@ -2052,7 +2052,7 @@ describe("runCli exit behavior", () => {
                   exists: true,
                   valid: true,
                   sourceConfig: {
-                    env: { vars: { OPENCLAW_CONFIG_PATH: futureConfigPath } },
+                    env: { vars: { NATESCLAW_CONFIG_PATH: futureConfigPath } },
                     gateway: { mode: "local" },
                   },
                 },
@@ -2062,11 +2062,11 @@ describe("runCli exit behavior", () => {
             throw new Error(`exit:${String(code)}`);
           }) as typeof process.exit);
           try {
-            await expect(runCli(["node", "openclaw", "gateway"])).rejects.toThrow("exit:1");
+            await expect(runCli(["node", "natesclaw", "gateway"])).rejects.toThrow("exit:1");
             expect(errorSpy).toHaveBeenCalledWith(
               expect.stringContaining("run automatic gateway startup migrations"),
             );
-            expect(process.env.OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
+            expect(process.env.NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS).toBeUndefined();
           } finally {
             exitSpy.mockRestore();
             errorSpy.mockRestore();
@@ -2079,7 +2079,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("does not treat gateway option values as bootstrap command paths", async () => {
-    await runCli(["node", "openclaw", "gateway", "--raw-stream-path", "status"]);
+    await runCli(["node", "natesclaw", "gateway", "--raw-stream-path", "status"]);
 
     const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
       | { beforeRun?: (opts: { reset?: boolean }) => Promise<void> }
@@ -2095,7 +2095,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("guards then skips state migration before destructive gateway dev resets", async () => {
-    await runCli(["node", "openclaw", "gateway", "--dev", "--reset"]);
+    await runCli(["node", "natesclaw", "gateway", "--dev", "--reset"]);
 
     const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
       | { beforeRun?: (opts: { reset?: boolean }) => Promise<void> }
@@ -2109,14 +2109,14 @@ describe("runCli exit behavior", () => {
   it("retains selected config paths and invocation reset targets", async () => {
     await withEnvAsync(
       {
-        OPENCLAW_CONFIG_PATH: "/tmp/openclaw-invocation/openclaw.json",
-        OPENCLAW_GATEWAY_TOKEN: undefined,
-        OPENCLAW_HOME: "/tmp/openclaw-invocation-home",
-        OPENCLAW_INCLUDE_ROOTS: undefined,
-        OPENCLAW_PROFILE: undefined,
-        OPENCLAW_STATE_DIR: "/tmp/openclaw-invocation-state",
-        OPENCLAW_TEST_FAST: "1",
-        OPENCLAW_WORKSPACE_DIR: "/tmp/openclaw-invocation-workspace",
+        NATESCLAW_CONFIG_PATH: "/tmp/natesclaw-invocation/natesclaw.json",
+        NATESCLAW_GATEWAY_TOKEN: undefined,
+        NATESCLAW_HOME: "/tmp/natesclaw-invocation-home",
+        NATESCLAW_INCLUDE_ROOTS: undefined,
+        NATESCLAW_PROFILE: undefined,
+        NATESCLAW_STATE_DIR: "/tmp/natesclaw-invocation-state",
+        NATESCLAW_TEST_FAST: "1",
+        NATESCLAW_WORKSPACE_DIR: "/tmp/natesclaw-invocation-workspace",
       },
       async () => {
         readConfigFileSnapshotMock.mockResolvedValue({
@@ -2125,34 +2125,34 @@ describe("runCli exit behavior", () => {
           sourceConfig: {
             env: {
               vars: {
-                OPENCLAW_CONFIG_PATH: "/tmp/openclaw-reset/openclaw.json",
-                OPENCLAW_GATEWAY_TOKEN: "old-token",
-                OPENCLAW_HOME: "/tmp/openclaw-reset-home",
-                OPENCLAW_INCLUDE_ROOTS: "/tmp/openclaw-reset-includes",
-                OPENCLAW_PROFILE: "config-dev",
-                OPENCLAW_STATE_DIR: "/tmp/openclaw-reset",
-                OPENCLAW_TEST_FAST: "0",
-                OPENCLAW_WORKSPACE_DIR: "/tmp/openclaw-reset-workspace",
+                NATESCLAW_CONFIG_PATH: "/tmp/natesclaw-reset/natesclaw.json",
+                NATESCLAW_GATEWAY_TOKEN: "old-token",
+                NATESCLAW_HOME: "/tmp/natesclaw-reset-home",
+                NATESCLAW_INCLUDE_ROOTS: "/tmp/natesclaw-reset-includes",
+                NATESCLAW_PROFILE: "config-dev",
+                NATESCLAW_STATE_DIR: "/tmp/natesclaw-reset",
+                NATESCLAW_TEST_FAST: "0",
+                NATESCLAW_WORKSPACE_DIR: "/tmp/natesclaw-reset-workspace",
               },
             },
             gateway: { mode: "local" },
           },
         });
-        await runCli(["node", "openclaw", "gateway", "--dev", "--reset"]);
+        await runCli(["node", "natesclaw", "gateway", "--dev", "--reset"]);
 
         const hooks = addGatewayRunCommandMock.mock.calls[0]?.[1] as
           | { beforeRun?: (opts: { reset?: boolean }) => Promise<void> }
           | undefined;
         await hooks?.beforeRun?.({ reset: true });
 
-        expect(process.env.OPENCLAW_CONFIG_PATH).toBe("/tmp/openclaw-invocation/openclaw.json");
-        expect(process.env.OPENCLAW_HOME).toBe("/tmp/openclaw-invocation-home");
-        expect(process.env.OPENCLAW_PROFILE).toBeUndefined();
-        expect(process.env.OPENCLAW_STATE_DIR).toBe("/tmp/openclaw-invocation-state");
-        expect(process.env.OPENCLAW_TEST_FAST).toBe("1");
-        expect(process.env.OPENCLAW_WORKSPACE_DIR).toBe("/tmp/openclaw-invocation-workspace");
-        expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBeUndefined();
-        expect(process.env.OPENCLAW_INCLUDE_ROOTS).toBeUndefined();
+        expect(process.env.NATESCLAW_CONFIG_PATH).toBe("/tmp/natesclaw-invocation/natesclaw.json");
+        expect(process.env.NATESCLAW_HOME).toBe("/tmp/natesclaw-invocation-home");
+        expect(process.env.NATESCLAW_PROFILE).toBeUndefined();
+        expect(process.env.NATESCLAW_STATE_DIR).toBe("/tmp/natesclaw-invocation-state");
+        expect(process.env.NATESCLAW_TEST_FAST).toBe("1");
+        expect(process.env.NATESCLAW_WORKSPACE_DIR).toBe("/tmp/natesclaw-invocation-workspace");
+        expect(process.env.NATESCLAW_GATEWAY_TOKEN).toBeUndefined();
+        expect(process.env.NATESCLAW_INCLUDE_ROOTS).toBeUndefined();
         expect(ensureCliExecutionBootstrapMock).not.toHaveBeenCalled();
       },
     );
@@ -2160,7 +2160,7 @@ describe("runCli exit behavior", () => {
 
   it("does not let config env authorize or retarget an explicit reset", async () => {
     await withEnvAsync(
-      { OPENCLAW_PROFILE: undefined, OPENCLAW_WORKSPACE_DIR: undefined },
+      { NATESCLAW_PROFILE: undefined, NATESCLAW_WORKSPACE_DIR: undefined },
       async () => {
         readConfigFileSnapshotMock.mockResolvedValue({
           exists: true,
@@ -2168,30 +2168,30 @@ describe("runCli exit behavior", () => {
           sourceConfig: {
             env: {
               vars: {
-                OPENCLAW_PROFILE: "dev",
-                OPENCLAW_WORKSPACE_DIR: "/tmp/openclaw-config-workspace",
+                NATESCLAW_PROFILE: "dev",
+                NATESCLAW_WORKSPACE_DIR: "/tmp/natesclaw-config-workspace",
               },
             },
             gateway: { mode: "local" },
           },
         });
 
-        await runCli(["node", "openclaw", "gateway", "--reset"]);
+        await runCli(["node", "natesclaw", "gateway", "--reset"]);
 
-        expect(process.env.OPENCLAW_PROFILE).toBeUndefined();
-        expect(process.env.OPENCLAW_WORKSPACE_DIR).toBeUndefined();
+        expect(process.env.NATESCLAW_PROFILE).toBeUndefined();
+        expect(process.env.NATESCLAW_WORKSPACE_DIR).toBeUndefined();
       },
     );
   });
 
   it("honors banner suppression on the gateway foreground fast path", async () => {
-    process.env.OPENCLAW_HIDE_BANNER = "1";
+    process.env.NATESCLAW_HIDE_BANNER = "1";
 
-    await runCli(["node", "openclaw", "gateway"]);
+    await runCli(["node", "natesclaw", "gateway"]);
 
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(emitCliBannerMock).not.toHaveBeenCalled();
-    expect(commanderParseAsyncMock).toHaveBeenCalledWith(["node", "openclaw", "gateway"]);
+    expect(commanderParseAsyncMock).toHaveBeenCalledWith(["node", "natesclaw", "gateway"]);
   });
 
   it("renders browser help from startup metadata without building the full program", async () => {
@@ -2200,11 +2200,11 @@ describe("runCli exit behavior", () => {
       throw new Error(`unexpected process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "openclaw", "browser", "--help"]);
+    await runCli(["node", "natesclaw", "browser", "--help"]);
 
     expect(maybeRunCliInContainerMock).toHaveBeenCalledWith([
       "node",
-      "openclaw",
+      "natesclaw",
       "browser",
       "--help",
     ]);
@@ -2220,7 +2220,7 @@ describe("runCli exit behavior", () => {
   it("renders secrets help from startup metadata without building the full program", async () => {
     outputPrecomputedSecretsHelpTextMock.mockReturnValueOnce(true);
 
-    await runCli(["node", "openclaw", "secrets", "--help"]);
+    await runCli(["node", "natesclaw", "secrets", "--help"]);
 
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(outputPrecomputedSecretsHelpTextMock).toHaveBeenCalledTimes(1);
@@ -2231,7 +2231,7 @@ describe("runCli exit behavior", () => {
   it("renders nodes help from startup metadata without building the full program", async () => {
     outputPrecomputedNodesHelpTextMock.mockReturnValueOnce(true);
 
-    await runCli(["node", "openclaw", "nodes", "--help"]);
+    await runCli(["node", "natesclaw", "nodes", "--help"]);
 
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(outputPrecomputedNodesHelpTextMock).toHaveBeenCalledTimes(1);
@@ -2240,7 +2240,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("defers nodes help startup metadata when plugin config can change command metadata", async () => {
-    const argv = ["node", "openclaw", "nodes", "--help"];
+    const argv = ["node", "natesclaw", "nodes", "--help"];
     const parseAsync = vi.fn().mockResolvedValueOnce(undefined);
     const program = {
       commands: [{ name: () => "nodes", aliases: () => [] }],
@@ -2261,7 +2261,7 @@ describe("runCli exit behavior", () => {
   it("renders selected subcommand help from startup metadata without building the full program", async () => {
     outputPrecomputedSubcommandHelpTextMock.mockReturnValueOnce(true);
 
-    await runCli(["node", "openclaw", "doctor", "--help"]);
+    await runCli(["node", "natesclaw", "doctor", "--help"]);
 
     expect(outputPrecomputedSubcommandHelpTextMock).toHaveBeenCalledWith("doctor");
     expect(tryRouteCliMock).not.toHaveBeenCalled();
@@ -2274,7 +2274,7 @@ describe("runCli exit behavior", () => {
       throw new Error("startup metadata failed");
     });
 
-    await expect(runCli(["node", "openclaw", "secrets", "--help"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "secrets", "--help"])).rejects.toThrow(
       "startup metadata failed",
     );
   });
@@ -2284,7 +2284,7 @@ describe("runCli exit behavior", () => {
       new Error("live config failed"),
     );
 
-    await expect(runCli(["node", "openclaw", "nodes", "--help"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "nodes", "--help"])).rejects.toThrow(
       "live config failed",
     );
   });
@@ -2292,7 +2292,7 @@ describe("runCli exit behavior", () => {
   it("keeps root help on the precomputed path without proxy bootstrap", async () => {
     outputPrecomputedRootHelpTextMock.mockReturnValueOnce(true);
 
-    await runCli(["node", "openclaw", "--help"]);
+    await runCli(["node", "natesclaw", "--help"]);
 
     expect(loadRootHelpRenderOptionsForConfigSensitivePluginsMock).toHaveBeenCalledTimes(1);
     expect(outputPrecomputedRootHelpTextMock).toHaveBeenCalledTimes(1);
@@ -2301,11 +2301,11 @@ describe("runCli exit behavior", () => {
   });
 
   it("renders setup/onboard/configure help without building the full program", async () => {
-    await runCli(["node", "openclaw", "setup", "--help"]);
+    await runCli(["node", "natesclaw", "setup", "--help"]);
 
     expect(tryOutputSetupOnboardConfigureHelpMock).toHaveBeenCalledWith([
       "node",
-      "openclaw",
+      "natesclaw",
       "setup",
       "--help",
     ]);
@@ -2319,9 +2319,9 @@ describe("runCli exit behavior", () => {
       throw new Error(`unexpected process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "openclaw", "--help"]);
+    await runCli(["node", "natesclaw", "--help"]);
 
-    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "openclaw", "--help"]);
+    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "natesclaw", "--help"]);
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(loadRootHelpRenderOptionsForConfigSensitivePluginsMock).toHaveBeenCalledTimes(1);
     expect(outputPrecomputedRootHelpTextMock).toHaveBeenCalledTimes(1);
@@ -2346,7 +2346,7 @@ describe("runCli exit behavior", () => {
     loadRootHelpRenderOptionsForConfigSensitivePluginsMock.mockResolvedValueOnce(liveOptions);
     outputPrecomputedRootHelpTextMock.mockReturnValueOnce(true);
 
-    await runCli(["node", "openclaw", "--help"]);
+    await runCli(["node", "natesclaw", "--help"]);
 
     expect(loadRootHelpRenderOptionsForConfigSensitivePluginsMock).toHaveBeenCalledTimes(1);
     expect(outputPrecomputedRootHelpTextMock).not.toHaveBeenCalled();
@@ -2355,10 +2355,10 @@ describe("runCli exit behavior", () => {
   });
 
   it.each([
-    ["local gateway status", ["node", "openclaw", "status"]],
-    ["models JSON alias", ["node", "openclaw", "models", "--json"]],
-    ["models status JSON alias", ["node", "openclaw", "models", "--status-json"]],
-    ["models plain alias", ["node", "openclaw", "models", "--status-plain"]],
+    ["local gateway status", ["node", "natesclaw", "status"]],
+    ["models JSON alias", ["node", "natesclaw", "models", "--json"]],
+    ["models status JSON alias", ["node", "natesclaw", "models", "--status-json"]],
+    ["models plain alias", ["node", "natesclaw", "models", "--status-plain"]],
   ])("does not start the managed proxy for %s", async (_name, argv) => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
@@ -2369,50 +2369,50 @@ describe("runCli exit behavior", () => {
   });
 
   it.each([
-    ["gateway runtime", ["node", "openclaw", "gateway", "run"]],
-    ["bare gateway runtime", ["node", "openclaw", "gateway"]],
-    ["node runtime", ["node", "openclaw", "node", "run"]],
-    ["local agent runtime", ["node", "openclaw", "agent", "--local"]],
-    ["provider inference", ["node", "openclaw", "infer", "web", "fetch", "https://example.com"]],
-    ["model command", ["node", "openclaw", "models", "auth", "login", "openai"]],
-    ["plugin command", ["node", "openclaw", "plugins", "marketplace", "list"]],
-    ["skill command", ["node", "openclaw", "skills", "search", "browser"]],
-    ["update command", ["node", "openclaw", "update", "check"]],
-    ["channel probe", ["node", "openclaw", "channels", "status", "--probe"]],
-    ["channel capabilities probe", ["node", "openclaw", "channels", "capabilities"]],
-    ["directory plugin command", ["node", "openclaw", "directory", "peers", "list"]],
-    ["message plugin command", ["node", "openclaw", "message", "send", "--to", "demo"]],
-    ["metadata-owned plugin command", ["node", "openclaw", "googlemeet", "login"]],
+    ["gateway runtime", ["node", "natesclaw", "gateway", "run"]],
+    ["bare gateway runtime", ["node", "natesclaw", "gateway"]],
+    ["node runtime", ["node", "natesclaw", "node", "run"]],
+    ["local agent runtime", ["node", "natesclaw", "agent", "--local"]],
+    ["provider inference", ["node", "natesclaw", "infer", "web", "fetch", "https://example.com"]],
+    ["model command", ["node", "natesclaw", "models", "auth", "login", "openai"]],
+    ["plugin command", ["node", "natesclaw", "plugins", "marketplace", "list"]],
+    ["skill command", ["node", "natesclaw", "skills", "search", "browser"]],
+    ["update command", ["node", "natesclaw", "update", "check"]],
+    ["channel probe", ["node", "natesclaw", "channels", "status", "--probe"]],
+    ["channel capabilities probe", ["node", "natesclaw", "channels", "capabilities"]],
+    ["directory plugin command", ["node", "natesclaw", "directory", "peers", "list"]],
+    ["message plugin command", ["node", "natesclaw", "message", "send", "--to", "demo"]],
+    ["metadata-owned plugin command", ["node", "natesclaw", "googlemeet", "login"]],
   ])("starts managed proxy routing for %s", (_name, argv) => {
     expect(shouldStartProxyForCli(argv)).toBe(true);
   });
 
   it.each([
-    ["root help", ["node", "openclaw", "--help"]],
-    ["root version", ["node", "openclaw", "--version"]],
-    ["gateway help", ["node", "openclaw", "gateway", "--help"]],
-    ["gateway run help", ["node", "openclaw", "gateway", "run", "--help"]],
-    ["status", ["node", "openclaw", "status"]],
-    ["health", ["node", "openclaw", "health"]],
-    ["gateway status", ["node", "openclaw", "gateway", "status"]],
-    ["gateway health", ["node", "openclaw", "gateway", "health"]],
-    ["remote agent control-plane", ["node", "openclaw", "agent", "run"]],
-    ["chat control-plane", ["node", "openclaw", "chat"]],
-    ["terminal control-plane", ["node", "openclaw", "terminal"]],
-    ["config", ["node", "openclaw", "config", "get", "proxy.enabled"]],
-    ["channels parent help", ["node", "openclaw", "channels"]],
-    ["completion", ["node", "openclaw", "completion", "zsh"]],
-    ["debug proxy cli", ["node", "openclaw", "proxy", "start"]],
-    ["agents list", ["node", "openclaw", "agents", "list"]],
-    ["models list", ["node", "openclaw", "models", "list"]],
-    ["models status without live probe", ["node", "openclaw", "models", "status"]],
-    ["skills check", ["node", "openclaw", "skills", "check"]],
-    ["skills info", ["node", "openclaw", "skills", "info", "weather"]],
-    ["skills list", ["node", "openclaw", "skills", "list"]],
-    ["tasks list", ["node", "openclaw", "tasks", "list"]],
-    ["legacy singular tool namespace", ["node", "openclaw", "tool", "image_generate"]],
-    ["gateway tools namespace typo", ["node", "openclaw", "tools", "effective"]],
-    ["migrate", ["node", "openclaw", "migrate"]],
+    ["root help", ["node", "natesclaw", "--help"]],
+    ["root version", ["node", "natesclaw", "--version"]],
+    ["gateway help", ["node", "natesclaw", "gateway", "--help"]],
+    ["gateway run help", ["node", "natesclaw", "gateway", "run", "--help"]],
+    ["status", ["node", "natesclaw", "status"]],
+    ["health", ["node", "natesclaw", "health"]],
+    ["gateway status", ["node", "natesclaw", "gateway", "status"]],
+    ["gateway health", ["node", "natesclaw", "gateway", "health"]],
+    ["remote agent control-plane", ["node", "natesclaw", "agent", "run"]],
+    ["chat control-plane", ["node", "natesclaw", "chat"]],
+    ["terminal control-plane", ["node", "natesclaw", "terminal"]],
+    ["config", ["node", "natesclaw", "config", "get", "proxy.enabled"]],
+    ["channels parent help", ["node", "natesclaw", "channels"]],
+    ["completion", ["node", "natesclaw", "completion", "zsh"]],
+    ["debug proxy cli", ["node", "natesclaw", "proxy", "start"]],
+    ["agents list", ["node", "natesclaw", "agents", "list"]],
+    ["models list", ["node", "natesclaw", "models", "list"]],
+    ["models status without live probe", ["node", "natesclaw", "models", "status"]],
+    ["skills check", ["node", "natesclaw", "skills", "check"]],
+    ["skills info", ["node", "natesclaw", "skills", "info", "weather"]],
+    ["skills list", ["node", "natesclaw", "skills", "list"]],
+    ["tasks list", ["node", "natesclaw", "tasks", "list"]],
+    ["legacy singular tool namespace", ["node", "natesclaw", "tool", "image_generate"]],
+    ["gateway tools namespace typo", ["node", "natesclaw", "tools", "effective"]],
+    ["migrate", ["node", "natesclaw", "migrate"]],
   ])("skips managed proxy routing for %s", (_name, argv) => {
     expect(shouldStartProxyForCli(argv)).toBe(false);
   });
@@ -2420,14 +2420,14 @@ describe("runCli exit behavior", () => {
   it("starts the managed proxy for network-capable commands by default", async () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "openclaw", "plugins", "marketplace", "list"]);
+    await runCli(["node", "natesclaw", "plugins", "marketplace", "list"]);
 
     expect(startProxyMock).toHaveBeenCalledWith(undefined);
   });
 
   it.each([
-    ["root command", ["node", "openclaw", "update", "--dry-run", "--json"]],
-    ["root shorthand", ["node", "openclaw", "--update", "--dry-run", "--json"]],
+    ["root command", ["node", "natesclaw", "update", "--dry-run", "--json"]],
+    ["root shorthand", ["node", "natesclaw", "--update", "--dry-run", "--json"]],
   ])("reads source-only proxy config for the update dry-run %s", async (_name, argv) => {
     tryRouteCliMock.mockResolvedValueOnce(true);
     readSourceConfigBestEffortMock.mockResolvedValueOnce({ proxy: { selected: "dry-run" } });
@@ -2442,7 +2442,7 @@ describe("runCli exit behavior", () => {
   it("reads source-only proxy config for mutable updates", async () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "openclaw", "update"]);
+    await runCli(["node", "natesclaw", "update"]);
 
     expect(readSourceConfigBestEffortMock).toHaveBeenCalledOnce();
     expect(loadConfigMock).not.toHaveBeenCalled();
@@ -2452,21 +2452,21 @@ describe("runCli exit behavior", () => {
   it.each([
     {
       name: "version-pinned skill install",
-      argv: ["node", "openclaw", "skills", "install", "@owner/weather", "--version", "1.2.3"],
+      argv: ["node", "natesclaw", "skills", "install", "@owner/weather", "--version", "1.2.3"],
     },
     {
       name: "version-pinned skill verification",
-      argv: ["node", "openclaw", "skills", "verify", "@owner/weather", "--version", "1.2.3"],
+      argv: ["node", "natesclaw", "skills", "verify", "@owner/weather", "--version", "1.2.3"],
     },
     {
       name: "equals-form version-pinned skill install",
-      argv: ["node", "openclaw", "skills", "install", "@owner/weather", "--version=1.2.3"],
+      argv: ["node", "natesclaw", "skills", "install", "@owner/weather", "--version=1.2.3"],
     },
     {
       name: "profiled version-pinned skill verification",
       argv: [
         "node",
-        "openclaw",
+        "natesclaw",
         "--profile",
         "work",
         "skills",
@@ -2479,9 +2479,9 @@ describe("runCli exit behavior", () => {
   ])("starts the managed proxy for $name", async ({ argv }) => {
     await withEnvAsync(
       {
-        OPENCLAW_PROFILE: undefined,
-        OPENCLAW_STATE_DIR: undefined,
-        OPENCLAW_CONFIG_PATH: undefined,
+        NATESCLAW_PROFILE: undefined,
+        NATESCLAW_STATE_DIR: undefined,
+        NATESCLAW_CONFIG_PATH: undefined,
       },
       async () => {
         hasEnvHttpProxyAgentConfiguredMock.mockReturnValue(true);
@@ -2502,33 +2502,33 @@ describe("runCli exit behavior", () => {
       return null;
     });
 
-    await runCli(["node", "openclaw", "plugins", "marketplace", "list", "--json"]);
+    await runCli(["node", "natesclaw", "plugins", "marketplace", "list", "--json"]);
 
     expect(startProxyMock).toHaveBeenCalledWith(undefined);
     expect(loggingState.forceConsoleToStderr).toBe(false);
   });
 
   it.each([
-    ["cron", ["node", "openclaw", "cron", "status"]],
-    ["cron alias", ["node", "openclaw", "cron", "create", "daily", "message"]],
-    ["cron removal alias", ["node", "openclaw", "cron", "delete", "job"]],
-    ["cron scratch equals", ["node", "openclaw", "cron", "scratch", "job", "--set=text"]],
-    ["device token", ["node", "openclaw", "devices", "rotate", "--device", "one"]],
+    ["cron", ["node", "natesclaw", "cron", "status"]],
+    ["cron alias", ["node", "natesclaw", "cron", "create", "daily", "message"]],
+    ["cron removal alias", ["node", "natesclaw", "cron", "delete", "job"]],
+    ["cron scratch equals", ["node", "natesclaw", "cron", "scratch", "job", "--set=text"]],
+    ["device token", ["node", "natesclaw", "devices", "rotate", "--device", "one"]],
     [
       "gateway handoff",
-      ["node", "openclaw", "gateway", "--port", "18789", "restart-handoff", "capabilities"],
+      ["node", "natesclaw", "gateway", "--port", "18789", "restart-handoff", "capabilities"],
     ],
-    ["node pairing", ["node", "openclaw", "nodes", "approve", "request-one"]],
-    ["node invoke", ["node", "openclaw", "nodes", "invoke", "--node", "one"]],
-    ["skill verification", ["node", "openclaw", "skills", "verify", "@owner/skill"]],
+    ["node pairing", ["node", "natesclaw", "nodes", "approve", "request-one"]],
+    ["node invoke", ["node", "natesclaw", "nodes", "invoke", "--node", "one"]],
+    ["skill verification", ["node", "natesclaw", "skills", "verify", "@owner/skill"]],
     [
       "agent-scoped skill verification",
-      ["node", "openclaw", "skills", "--agent", "main", "verify", "@owner/skill"],
+      ["node", "natesclaw", "skills", "--agent", "main", "verify", "@owner/skill"],
     ],
-    ["system heartbeat", ["node", "openclaw", "system", "heartbeat", "last"]],
-    ["system presence", ["node", "openclaw", "system", "presence"]],
-    ["doctor lint", ["node", "openclaw", "doctor", "--lint"]],
-    ["proxy coverage", ["node", "openclaw", "proxy", "coverage"]],
+    ["system heartbeat", ["node", "natesclaw", "system", "heartbeat", "last"]],
+    ["system presence", ["node", "natesclaw", "system", "presence"]],
+    ["doctor lint", ["node", "natesclaw", "doctor", "--lint"]],
+    ["proxy coverage", ["node", "natesclaw", "proxy", "coverage"]],
   ])("routes startup diagnostics for default-machine %s output", async (_name, argv) => {
     tryRouteCliMock.mockImplementationOnce(async () => {
       expect(loggingState.forceConsoleToStderr).toBe(true);
@@ -2566,7 +2566,7 @@ describe("runCli exit behavior", () => {
     const stdoutDescriptor = Object.getOwnPropertyDescriptor(process.stdout, "isTTY");
     Object.defineProperty(process.stdout, "isTTY", { configurable: true, value: undefined });
     try {
-      await runCli(["node", "openclaw", "path", "validate", "oc://AGENTS.md"]);
+      await runCli(["node", "natesclaw", "path", "validate", "oc://AGENTS.md"]);
     } finally {
       if (stdoutDescriptor) {
         Object.defineProperty(process.stdout, "isTTY", stdoutDescriptor);
@@ -2581,11 +2581,11 @@ describe("runCli exit behavior", () => {
   });
 
   it.each([
-    ["bare gateway fast path", ["node", "openclaw", "gateway"]],
-    ["fast path", ["node", "openclaw", "gateway", "run"]],
+    ["bare gateway fast path", ["node", "natesclaw", "gateway"]],
+    ["fast path", ["node", "natesclaw", "gateway", "run"]],
     [
       "full Commander path with root options",
-      ["node", "openclaw", "--log-level", "debug", "gateway", "run"],
+      ["node", "natesclaw", "--log-level", "debug", "gateway", "run"],
     ],
   ])("loads trusted dotenv and isolates %s gateway proxy config reads", async (_name, argv) => {
     existsSyncOverride.value = (target) => target === path.join(process.cwd(), ".env");
@@ -2612,12 +2612,12 @@ describe("runCli exit behavior", () => {
   });
 
   it("keeps state dotenv loading for non-gateway commands", async () => {
-    const stateDir = path.join(os.tmpdir(), "openclaw-run-main-state");
+    const stateDir = path.join(os.tmpdir(), "natesclaw-run-main-state");
     existsSyncOverride.value = (target) => target === path.join(stateDir, ".env");
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, () =>
-      runCli(["node", "openclaw", "status"]),
+    await withEnvAsync({ NATESCLAW_STATE_DIR: stateDir }, () =>
+      runCli(["node", "natesclaw", "status"]),
     );
 
     expect(loadDotEnvMock).toHaveBeenCalledWith({ loadGlobalEnv: true, quiet: true });
@@ -2628,10 +2628,10 @@ describe("runCli exit behavior", () => {
 
     await runCli([
       "node",
-      "openclaw",
+      "natesclaw",
       "database",
       "preflight",
-      "/tmp/openclaw-candidate.sqlite",
+      "/tmp/natesclaw-candidate.sqlite",
       "--json",
     ]);
 
@@ -2642,13 +2642,13 @@ describe("runCli exit behavior", () => {
 
   it("keeps agent exec outside the CLI dotenv loader", async () => {
     buildProgramMock.mockReturnValueOnce({ commands: [], parseAsync: vi.fn() });
-    await runCli(["node", "openclaw", "agent", "exec", "test prompt"]);
+    await runCli(["node", "natesclaw", "agent", "exec", "test prompt"]);
 
     expect(loadDotEnvMock).not.toHaveBeenCalled();
   });
 
   it("validates the runtime before selecting gateway config", async () => {
-    await runCli(["node", "openclaw", "gateway", "run"]);
+    await runCli(["node", "natesclaw", "gateway", "run"]);
 
     const runtimeGuardOrder = assertRuntimeMock.mock.invocationCallOrder[0] ?? 0;
     const configReadOrder = readConfigFileSnapshotMock.mock.invocationCallOrder[0] ?? 0;
@@ -2657,7 +2657,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("re-pins runtime paths after selecting gateway config", async () => {
-    await runCli(["node", "openclaw", "gateway", "run"]);
+    await runCli(["node", "natesclaw", "gateway", "run"]);
 
     expect(pinRuntimePathsMock).toHaveBeenCalledWith(process.env);
     expect(pinConfigDirMock).toHaveBeenCalledWith(process.env);
@@ -2667,20 +2667,20 @@ describe("runCli exit behavior", () => {
   });
 
   it("selects gateway config env before starting its managed proxy", async () => {
-    await withEnvAsync({ OPENCLAW_TEST_PROXY_SELECTION: undefined }, async () => {
+    await withEnvAsync({ NATESCLAW_TEST_PROXY_SELECTION: undefined }, async () => {
       readConfigFileSnapshotMock.mockResolvedValue({
         exists: true,
         valid: true,
         sourceConfig: {
-          env: { vars: { OPENCLAW_TEST_PROXY_SELECTION: "selected" } },
+          env: { vars: { NATESCLAW_TEST_PROXY_SELECTION: "selected" } },
           gateway: { mode: "local" },
         },
       });
       loadConfigMock.mockImplementationOnce(() => ({
-        proxy: { selected: process.env.OPENCLAW_TEST_PROXY_SELECTION },
+        proxy: { selected: process.env.NATESCLAW_TEST_PROXY_SELECTION },
       }));
 
-      await runCli(["node", "openclaw", "gateway", "run"]);
+      await runCli(["node", "natesclaw", "gateway", "run"]);
 
       expect(startProxyMock).toHaveBeenCalledWith({ selected: "selected" });
     });
@@ -2701,7 +2701,7 @@ describe("runCli exit behavior", () => {
       await getGatewayRunRuntimeHooks().refreshManagedProxy?.(finalProxy);
     });
 
-    await runCli(["node", "openclaw", "gateway", "run"]);
+    await runCli(["node", "natesclaw", "gateway", "run"]);
 
     expect(startProxyMock).toHaveBeenNthCalledWith(1, earlyProxy);
     expect(startProxyMock).toHaveBeenNthCalledWith(2, finalProxy);
@@ -2735,7 +2735,7 @@ describe("runCli exit behavior", () => {
     });
 
     try {
-      await runCli(["node", "openclaw", "gateway", "run"]);
+      await runCli(["node", "natesclaw", "gateway", "run"]);
     } finally {
       processOffSpy.mockRestore();
       processOnceSpy.mockRestore();
@@ -2750,13 +2750,13 @@ describe("runCli exit behavior", () => {
   it("starts the managed proxy for metadata-owned plugin commands by default", async () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "openclaw", "googlemeet", "login"]);
+    await runCli(["node", "natesclaw", "googlemeet", "login"]);
 
     expect(startProxyMock).toHaveBeenCalledWith(undefined);
   });
 
   it("rejects unowned command roots before proxy and plugin runtime registration", async () => {
-    await expect(runCli(["node", "openclaw", "foo"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "foo"])).rejects.toThrow(
       'No built-in command or plugin CLI metadata owns "foo"',
     );
 
@@ -2769,7 +2769,7 @@ describe("runCli exit behavior", () => {
   it("routes a bare-root Control UI URL directly to the TUI action", async () => {
     const target = "https://gateway.example/dashboard/main/movies-a1166b81";
 
-    await withInteractiveTty(() => runCli(["node", "openclaw", target]));
+    await withInteractiveTty(() => runCli(["node", "natesclaw", target]));
 
     expect(runTuiCliActionMock).toHaveBeenCalledWith(target, {});
     expect(buildProgramMock).not.toHaveBeenCalled();
@@ -2780,7 +2780,7 @@ describe("runCli exit behavior", () => {
     "leaves an explicit %s URL invocation on the Commander path",
     async (command) => {
       const target = "https://gateway.example/dashboard/main/movies-a1166b81";
-      const argv = ["node", "openclaw", command, target];
+      const argv = ["node", "natesclaw", command, target];
       buildProgramMock.mockReturnValueOnce({
         commands: [{ name: () => command, aliases: () => [] }],
         parseAsync: commanderParseAsyncMock,
@@ -2796,7 +2796,7 @@ describe("runCli exit behavior", () => {
 
   it("leaves plugin-owned URL arguments on the plugin command path", async () => {
     const target = "https://gateway.example/dashboard/main/movies-a1166b81";
-    const argv = ["node", "openclaw", "googlemeet", target];
+    const argv = ["node", "natesclaw", "googlemeet", target];
     buildProgramMock.mockReturnValueOnce({ commands: [], parseAsync: commanderParseAsyncMock });
 
     await runCli(argv);
@@ -2809,8 +2809,8 @@ describe("runCli exit behavior", () => {
   it("does not steal a URL argument from an unowned command", async () => {
     const target = "https://gateway.example/dashboard/main/movies-a1166b81";
 
-    await expect(runCli(["node", "openclaw", "unknown-owner", target])).rejects.toThrow(
-      "Unknown command: openclaw unknown-owner",
+    await expect(runCli(["node", "natesclaw", "unknown-owner", target])).rejects.toThrow(
+      "Unknown command: natesclaw unknown-owner",
     );
 
     expect(runTuiCliActionMock).not.toHaveBeenCalled();
@@ -2861,10 +2861,10 @@ describe("runCli exit behavior", () => {
     const target = "https://gateway.example/dashboard/main/movies-a1166b81";
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_TOKEN: "ambient-token",
-        OPENCLAW_GATEWAY_PASSWORD: "ambient-password",
+        NATESCLAW_GATEWAY_TOKEN: "ambient-token",
+        NATESCLAW_GATEWAY_PASSWORD: "ambient-password",
       },
-      () => withInteractiveTty(() => runCli(["node", "openclaw", ...args])),
+      () => withInteractiveTty(() => runCli(["node", "natesclaw", ...args])),
     );
 
     expect(runTuiCliActionMock).toHaveBeenCalledWith(target, {
@@ -2884,7 +2884,7 @@ describe("runCli exit behavior", () => {
     const target = "https://gateway.example/dashboard/main/movies-a1166b81";
     let error: unknown;
     try {
-      await runCli(["node", "openclaw", ...prefix, target]);
+      await runCli(["node", "natesclaw", ...prefix, target]);
     } catch (caught) {
       error = caught;
     }
@@ -2897,31 +2897,31 @@ describe("runCli exit behavior", () => {
   it("rejects a missing pre-URL direct option value before command discovery", async () => {
     const target = "https://gateway.example/dashboard/main/movies-a1166b81";
 
-    await expect(runCli(["node", "openclaw", "--token", target])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "--token", target])).rejects.toThrow(
       "--token requires a value",
     );
     expect(runTuiCliActionMock).not.toHaveBeenCalled();
   });
 
   it("does not claim a bare session ref as root-command sugar", async () => {
-    await expect(runCli(["node", "openclaw", "movies-a1166b81"])).rejects.toThrow(
-      "Unknown command: openclaw movies-a1166b81",
+    await expect(runCli(["node", "natesclaw", "movies-a1166b81"])).rejects.toThrow(
+      "Unknown command: natesclaw movies-a1166b81",
     );
 
     expect(runTuiCliActionMock).not.toHaveBeenCalled();
   });
 
   it("does not claim host shorthand as root-command sugar", async () => {
-    await expect(runCli(["node", "openclaw", "gateway.example/main/a1166b81"])).rejects.toThrow(
-      "Unknown command: openclaw gateway.example/main/a1166b81",
+    await expect(runCli(["node", "natesclaw", "gateway.example/main/a1166b81"])).rejects.toThrow(
+      "Unknown command: natesclaw gateway.example/main/a1166b81",
     );
 
     expect(runTuiCliActionMock).not.toHaveBeenCalled();
   });
 
   it("suggests close known commands for unowned command roots before proxy startup", async () => {
-    await expect(runCli(["node", "openclaw", "upate"])).rejects.toThrow(
-      "Did you mean this?\n  openclaw update",
+    await expect(runCli(["node", "natesclaw", "upate"])).rejects.toThrow(
+      "Did you mean this?\n  natesclaw update",
     );
 
     expect(startProxyMock).not.toHaveBeenCalled();
@@ -2933,8 +2933,8 @@ describe("runCli exit behavior", () => {
   it("sanitizes control characters in unowned command diagnostics", async () => {
     const primary = "bad\u001b[31m-red\u001b[0m\nforged\tline";
 
-    await expect(runCli(["node", "openclaw", primary])).rejects.toThrow(
-      'Unknown command: openclaw bad-red\\nforged\\tline. No built-in command or plugin CLI metadata owns "bad-red\\nforged\\tline".',
+    await expect(runCli(["node", "natesclaw", primary])).rejects.toThrow(
+      'Unknown command: natesclaw bad-red\\nforged\\tline. No built-in command or plugin CLI metadata owns "bad-red\\nforged\\tline".',
     );
 
     expect(startProxyMock).not.toHaveBeenCalled();
@@ -2948,7 +2948,7 @@ describe("runCli exit behavior", () => {
 
     let error: unknown;
     try {
-      await runCli(["node", "openclaw", primary]);
+      await runCli(["node", "natesclaw", primary]);
     } catch (caught) {
       error = caught;
     }
@@ -2957,7 +2957,7 @@ describe("runCli exit behavior", () => {
     const message = (error as Error).message;
     const displayPrimary = `${"🦞".repeat(63)}…`;
     expect(displayPrimary.length).toBeLessThanOrEqual(128);
-    expect(message).toContain(`Unknown command: openclaw ${displayPrimary}`);
+    expect(message).toContain(`Unknown command: natesclaw ${displayPrimary}`);
     expect(message).not.toContain("�");
     expect(message.length).toBeLessThan(500);
     expect(startProxyMock).not.toHaveBeenCalled();
@@ -2975,7 +2975,7 @@ describe("runCli exit behavior", () => {
 
     let error: unknown;
     try {
-      await runCli(["node", "openclaw", "codex"]);
+      await runCli(["node", "natesclaw", "codex"]);
     } catch (caught) {
       error = caught;
     }
@@ -2991,7 +2991,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("rejects unowned command roots even when --help is appended (regression for #81077)", async () => {
-    await expect(runCli(["node", "openclaw", "foo", "--help"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "foo", "--help"])).rejects.toThrow(
       'No built-in command or plugin CLI metadata owns "foo"',
     );
 
@@ -3002,7 +3002,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("rejects unowned command roots even when --version is appended", async () => {
-    await expect(runCli(["node", "openclaw", "foo", "--version"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "foo", "--version"])).rejects.toThrow(
       'No built-in command or plugin CLI metadata owns "foo"',
     );
 
@@ -3019,7 +3019,7 @@ describe("runCli exit behavior", () => {
 
     let error: unknown;
     try {
-      await runCli(["node", "openclaw", "totally-unknown"]);
+      await runCli(["node", "natesclaw", "totally-unknown"]);
     } catch (caught) {
       error = caught;
     }
@@ -3049,7 +3049,7 @@ describe("runCli exit behavior", () => {
       }) => (primaryCommand === "qa" && cfg?.plugins?.allow?.length === 0 ? ["qa-lab"] : []),
     );
 
-    await expect(runCli(["node", "openclaw", "qa"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "qa"])).rejects.toThrow(
       'Add "qa-lab" to `plugins.allow` instead of "qa"',
     );
     expect(startProxyMock).not.toHaveBeenCalled();
@@ -3064,7 +3064,7 @@ describe("runCli exit behavior", () => {
       availability: "loaded",
     });
 
-    await expect(runCli(["node", "openclaw", "lcm_recent"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "lcm_recent"])).rejects.toThrow(
       '"lcm_recent" is an agent tool available from the "lossless-claw" plugin',
     );
 
@@ -3077,16 +3077,16 @@ describe("runCli exit behavior", () => {
     hasEnvHttpProxyAgentConfiguredMock.mockReturnValue(true);
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "openclaw", "skills", "check"]);
+    await runCli(["node", "natesclaw", "skills", "check"]);
 
     expect(hasEnvHttpProxyAgentConfiguredMock).not.toHaveBeenCalled();
     expect(ensureGlobalUndiciEnvProxyDispatcherMock).not.toHaveBeenCalled();
   });
 
   it.each([
-    ["auth", ["node", "openclaw", "auth", "--help"]],
-    ["tool", ["node", "openclaw", "tool", "image_generate"]],
-    ["tools", ["node", "openclaw", "tools", "effective"]],
+    ["auth", ["node", "natesclaw", "auth", "--help"]],
+    ["tool", ["node", "natesclaw", "tool", "image_generate"]],
+    ["tools", ["node", "natesclaw", "tools", "effective"]],
   ])("keeps reserved %s command roots out of plugin command discovery", async (_name, argv) => {
     const parseAsync = vi.fn().mockResolvedValueOnce(undefined);
     const program = {
@@ -3123,7 +3123,7 @@ describe("runCli exit behavior", () => {
       parseAsync,
     });
 
-    await runCli(["node", "openclaw", "memory", "search", "query", "--json"]);
+    await runCli(["node", "natesclaw", "memory", "search", "query", "--json"]);
 
     expect(registerPluginCliCommandsFromValidatedConfigMock).toHaveBeenCalledWith(
       expect.anything(),
@@ -3167,7 +3167,7 @@ describe("runCli exit behavior", () => {
     });
 
     try {
-      await runCli(["node", "openclaw", "agent", "exec", "inspect", "--json"], {
+      await runCli(["node", "natesclaw", "agent", "exec", "inspect", "--json"], {
         retainConsoleRoutingUntilProcessExit: true,
       });
       createSubsystemLogger("state/db").info("late migration diagnostic");
@@ -3205,7 +3205,7 @@ describe("runCli exit behavior", () => {
     });
     buildProgramMock.mockReturnValueOnce({ commands: [], parseAsync: vi.fn() });
 
-    await runCli(["node", "openclaw", "path", "validate", "oc://AGENTS.md"]);
+    await runCli(["node", "natesclaw", "path", "validate", "oc://AGENTS.md"]);
 
     expect(stderrDuringPluginRegistration).toBe(true);
     expect(loggingState.forceConsoleToStderr).toBe(false);
@@ -3228,7 +3228,7 @@ describe("runCli exit behavior", () => {
       parseAsync,
     });
 
-    await runCli(["node", "openclaw", "memory", "--", "--json"]);
+    await runCli(["node", "natesclaw", "memory", "--", "--json"]);
 
     expect(registerPluginCliCommandsFromValidatedConfigMock).toHaveBeenCalledWith(
       expect.anything(),
@@ -3243,7 +3243,7 @@ describe("runCli exit behavior", () => {
   it("fails protected commands when managed proxy activation fails", async () => {
     startProxyMock.mockRejectedValueOnce(new Error("proxy: enabled but no HTTP proxy URL"));
 
-    await expect(runCli(["node", "openclaw", "gateway", "run"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "gateway", "run"])).rejects.toThrow(
       "proxy: enabled but no HTTP proxy URL",
     );
 
@@ -3256,7 +3256,7 @@ describe("runCli exit behavior", () => {
       throw new Error("config parse failed");
     });
 
-    await expect(runCli(["node", "openclaw", "gateway", "run"])).rejects.toThrow(
+    await expect(runCli(["node", "natesclaw", "gateway", "run"])).rejects.toThrow(
       "config parse failed",
     );
 
@@ -3268,7 +3268,7 @@ describe("runCli exit behavior", () => {
     const handle = makeProxyHandle();
     startProxyMock.mockResolvedValueOnce(handle);
 
-    await runCli(["node", "openclaw", "gateway", "run"]);
+    await runCli(["node", "natesclaw", "gateway", "run"]);
 
     expect(startProxyMock).toHaveBeenCalledWith(undefined);
     expect(stopProxyMock).toHaveBeenCalledOnce();
@@ -3299,7 +3299,7 @@ describe("runCli exit behavior", () => {
     );
 
     try {
-      const runPromise = runCli(["node", "openclaw", "plugins", "marketplace", "list"]);
+      const runPromise = runCli(["node", "natesclaw", "plugins", "marketplace", "list"]);
       await vi.waitFor(() => {
         expect(
           processOnceSpy.mock.calls.some(
@@ -3348,7 +3348,7 @@ describe("runCli exit behavior", () => {
 
     const processOnceSpy = vi.spyOn(process, "once");
     try {
-      const runPromise = runCli(["node", "openclaw", "plugins", "marketplace", "list"]);
+      const runPromise = runCli(["node", "natesclaw", "plugins", "marketplace", "list"]);
       await vi.waitFor(() => {
         expect(
           processOnceSpy.mock.calls.reduce(
@@ -3388,7 +3388,7 @@ describe("runCli exit behavior", () => {
         exists: true,
         valid: true,
         sourceConfig: {
-          $schema: "https://openclaw.ai/config.json",
+          $schema: "https://natesclaw.ai/config.json",
           meta: { updatedBy: "fixture" },
         },
       },
@@ -3429,7 +3429,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("resumes pending local onboarding after inference persisted its model", async () => {
-    const configPath = "/tmp/openclaw.json";
+    const configPath = "/tmp/natesclaw.json";
     const securityAcknowledgedAt = "2026-08-02T00:00:00.000Z";
     const sourceConfig = {
       agents: { defaults: { model: { primary: "openai/gpt-5.6-luna" } } },
@@ -3460,7 +3460,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("keeps a completed model-only onboarding on its existing local TUI path", async () => {
-    const configPath = "/tmp/openclaw.json";
+    const configPath = "/tmp/natesclaw.json";
     const securityAcknowledgedAt = "2026-08-02T00:00:00.000Z";
     const sourceConfig = {
       agents: { defaults: { model: { primary: "openai/gpt-5.6-luna" } } },
@@ -3496,7 +3496,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("does not resume a receipt belonging to the config replaced at the same path", async () => {
-    const configPath = "/tmp/openclaw.json";
+    const configPath = "/tmp/natesclaw.json";
     const sourceConfig = {
       agents: { defaults: { model: { primary: "openai/gpt-5.6-luna" } } },
       wizard: { securityAcknowledgedAt: "2026-08-03T00:00:00.000Z" },
@@ -3541,7 +3541,7 @@ describe("runCli exit behavior", () => {
     });
 
     await expectNonInteractiveBareCliError(
-      "Onboarding needs an interactive TTY. Use `openclaw onboard --non-interactive --accept-risk ...` for automation.",
+      "Onboarding needs an interactive TTY. Use `natesclaw onboard --non-interactive --accept-risk ...` for automation.",
       () => {
         expect(setupWizardCommandMock).not.toHaveBeenCalled();
         expect(tryRouteCliMock).not.toHaveBeenCalled();
@@ -3562,14 +3562,14 @@ describe("runCli exit behavior", () => {
             password: {
               source: "env",
               provider: "default",
-              id: "OPENCLAW_GATEWAY_PASSWORD",
+              id: "NATESCLAW_GATEWAY_PASSWORD",
             },
           },
         },
       },
     });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_PASSWORD: "gateway-ref-password" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_PASSWORD: "gateway-ref-password" }, async () => {
       await runBareCli();
     });
 
@@ -3649,7 +3649,7 @@ describe("runCli exit behavior", () => {
       detail: "Gateway default agent has no configured model",
     });
     await expectNonInteractiveBareCliError(
-      "Remote Gateway inference setup needs an interactive TTY. Re-run `openclaw` in a terminal connected to this Gateway.",
+      "Remote Gateway inference setup needs an interactive TTY. Re-run `natesclaw` in a terminal connected to this Gateway.",
       () => {
         expect(setupWizardCommandMock).not.toHaveBeenCalled();
         expect(runRemoteGatewayInferenceOnboardingMock).not.toHaveBeenCalled();
@@ -3686,7 +3686,7 @@ describe("runCli exit behavior", () => {
     });
     readActiveGatewayLockPortMock.mockResolvedValueOnce(48789);
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_PORT: "19001" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_PORT: "19001" }, async () => {
       await runBareCli();
     });
 
@@ -3733,7 +3733,7 @@ describe("runCli exit behavior", () => {
       },
     });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_TOKEN: "bare-root-env-auth" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_TOKEN: "bare-root-env-auth" }, async () => {
       await runBareCli();
     });
 
@@ -3745,7 +3745,7 @@ describe("runCli exit behavior", () => {
   });
 
   it("resolves only the configured auth-mode SecretRef for bare root preflight", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-bare-auth-mode-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-bare-auth-mode-"));
     const tokenMarker = path.join(tempDir, "token-provider-ran");
     const passwordMarker = path.join(tempDir, "password-provider-ran");
     const tokenProgram = [
@@ -4008,7 +4008,7 @@ describe("runCli exit behavior", () => {
       },
     });
 
-    await withEnvAsync({ OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: undefined }, async () => {
+    await withEnvAsync({ NATESCLAW_ALLOW_INSECURE_PRIVATE_WS: undefined }, async () => {
       await runBareCli();
     });
 
@@ -4029,7 +4029,7 @@ describe("runCli exit behavior", () => {
       },
     });
 
-    await withEnvAsync({ OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: undefined }, async () => {
+    await withEnvAsync({ NATESCLAW_ALLOW_INSECURE_PRIVATE_WS: undefined }, async () => {
       await runBareCli();
     });
 
@@ -4053,7 +4053,7 @@ describe("runCli exit behavior", () => {
       },
     });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_PASSWORD: "obsolete-shell-pass-value" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_PASSWORD: "obsolete-shell-pass-value" }, async () => {
       await runBareCli();
     });
 
@@ -4089,8 +4089,8 @@ describe("runCli exit behavior", () => {
       {
         MISSING_REMOTE_GATEWAY_TOKEN: undefined,
         MISSING_REMOTE_GATEWAY_PASSWORD: undefined,
-        OPENCLAW_GATEWAY_TOKEN: "shell-fallback-auth-value",
-        OPENCLAW_GATEWAY_PASSWORD: "env-remote-password",
+        NATESCLAW_GATEWAY_TOKEN: "shell-fallback-auth-value",
+        NATESCLAW_GATEWAY_PASSWORD: "env-remote-password",
       },
       async () => {
         await runBareCli();
@@ -4122,7 +4122,7 @@ describe("runCli exit behavior", () => {
       },
     });
 
-    await withEnvAsync({ OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: "1" }, async () => {
+    await withEnvAsync({ NATESCLAW_ALLOW_INSECURE_PRIVATE_WS: "1" }, async () => {
       await runBareCli();
     });
 
@@ -4171,7 +4171,7 @@ describe("runCli exit behavior", () => {
       },
     });
 
-    await withEnvAsync({ OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: undefined }, async () => {
+    await withEnvAsync({ NATESCLAW_ALLOW_INSECURE_PRIVATE_WS: undefined }, async () => {
       await runBareCli();
     });
 
@@ -4190,11 +4190,11 @@ describe("runCli exit behavior", () => {
     Object.defineProperty(process.stdout, "isTTY", { configurable: true, value: false });
 
     try {
-      await runCli(["node", "openclaw"]);
+      await runCli(["node", "natesclaw"]);
 
       expect(process.exitCode).toBe(1);
       expect(errorSpy).toHaveBeenCalledWith(
-        "OpenClaw TUI needs an interactive TTY. Use `openclaw agent --local ...` for automation.",
+        "Natesclaw TUI needs an interactive TTY. Use `natesclaw agent --local ...` for automation.",
       );
       expect(runTuiMock).not.toHaveBeenCalled();
     } finally {
@@ -4234,7 +4234,7 @@ describe("runCli exit behavior", () => {
       sourceConfig: { gateway: { mode: "local" } },
     });
     await expectNonInteractiveBareCliError(
-      "OpenClaw config is invalid. Run `openclaw doctor --fix` before onboarding.",
+      "Natesclaw config is invalid. Run `natesclaw doctor --fix` before onboarding.",
       () => expect(setupWizardCommandMock).not.toHaveBeenCalled(),
     );
   });
@@ -4264,7 +4264,7 @@ describe("runCli exit behavior", () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
     hasMemoryRuntimeMock.mockReturnValue(true);
 
-    await runCli(["node", "openclaw", "status"]);
+    await runCli(["node", "natesclaw", "status"]);
 
     expect(closeActiveMemorySearchManagersMock).toHaveBeenCalledTimes(1);
   });
@@ -4275,7 +4275,7 @@ describe("runCli exit behavior", () => {
       throw new Error("stale memory-state chunk");
     });
 
-    await expect(runCli(["node", "openclaw", "status"])).resolves.toBeUndefined();
+    await expect(runCli(["node", "natesclaw", "status"])).resolves.toBeUndefined();
 
     expect(closeActiveMemorySearchManagersMock).not.toHaveBeenCalled();
   });
@@ -4283,11 +4283,11 @@ describe("runCli exit behavior", () => {
   it("returns after a handled container-target invocation", async () => {
     maybeRunCliInContainerMock.mockReturnValueOnce({ handled: true, exitCode: 0 });
 
-    await runCli(["node", "openclaw", "--container", "demo", "status"]);
+    await runCli(["node", "natesclaw", "--container", "demo", "status"]);
 
     expect(maybeRunCliInContainerMock).toHaveBeenCalledWith([
       "node",
-      "openclaw",
+      "natesclaw",
       "--container",
       "demo",
       "status",
@@ -4306,7 +4306,7 @@ describe("runCli exit behavior", () => {
     const exitCode = process.exitCode;
     maybeRunCliInContainerMock.mockReturnValueOnce({ handled: true, exitCode: 7 });
 
-    await runCli(["node", "openclaw", "--container", "demo", "status"]);
+    await runCli(["node", "natesclaw", "--container", "demo", "status"]);
 
     expect(process.exitCode).toBe(7);
     process.exitCode = exitCode;
@@ -4324,10 +4324,10 @@ describe("runCli exit behavior", () => {
     };
     buildProgramMock.mockReturnValueOnce(program);
 
-    await expect(runCli(["node", "openclaw", "status"])).resolves.toBeUndefined();
+    await expect(runCli(["node", "natesclaw", "status"])).resolves.toBeUndefined();
 
     expect(registerSubCliByNameMock.mock.calls).toEqual([
-      [program, "status", ["node", "openclaw", "status"]],
+      [program, "status", ["node", "natesclaw", "status"]],
     ]);
     expect(process.exitCode).toBe(1);
     process.exitCode = exitCode;
@@ -4343,7 +4343,7 @@ describe("runCli exit behavior", () => {
     };
     buildProgramMock.mockReturnValueOnce(program);
 
-    await runCli(["node", "openclaw", "security", "--help"]);
+    await runCli(["node", "natesclaw", "security", "--help"]);
 
     expect(requestExitAfterOneShotOutputMock).toHaveBeenCalledOnce();
     expect(flushExitAfterOneShotOutputMock).not.toHaveBeenCalled();
@@ -4359,7 +4359,7 @@ describe("runCli exit behavior", () => {
     buildProgramMock.mockReturnValueOnce(program);
     resolvePluginCliRootOwnerIdsMock.mockReturnValueOnce(["memory-core"]);
 
-    await runCli(["node", "openclaw", "memory", "--help"]);
+    await runCli(["node", "natesclaw", "memory", "--help"]);
 
     expect(requestExitAfterOneShotOutputMock).toHaveBeenCalledOnce();
     expect(flushExitAfterOneShotOutputMock).not.toHaveBeenCalled();
@@ -4374,13 +4374,13 @@ describe("runCli exit behavior", () => {
     const ctx = { programVersion: "0.0.0-test" };
     getProgramContextMock.mockReturnValueOnce(ctx as never);
 
-    await runCli(["node", "openclaw", "doctor", "--help"]);
+    await runCli(["node", "natesclaw", "doctor", "--help"]);
 
     expect(registerCoreCliByNameMock.mock.calls).toEqual([
-      [program, ctx, "doctor", ["node", "openclaw", "doctor", "--help"]],
+      [program, ctx, "doctor", ["node", "natesclaw", "doctor", "--help"]],
     ]);
     expect(registerSubCliByNameMock.mock.calls).toEqual([
-      [program, "doctor", ["node", "openclaw", "doctor", "--help"]],
+      [program, "doctor", ["node", "natesclaw", "doctor", "--help"]],
     ]);
   });
 
@@ -4398,7 +4398,7 @@ describe("runCli exit behavior", () => {
         throw new Error(`process.exit(${String(code)})`);
       }) as typeof process.exit);
 
-      await runCli(["node", "openclaw", "status"]);
+      await runCli(["node", "natesclaw", "status"]);
 
       const handler = processOnSpy.mock.calls.find(([event]) => event === "uncaughtException")?.[1];
       if (typeof handler !== "function") {
@@ -4409,9 +4409,9 @@ describe("runCli exit behavior", () => {
         loggingState.forceConsoleToStderr = machineOutput;
         expect(() => handler(new Error("boom"))).toThrow("process.exit(1)");
         expect(consoleErrorSpy).toHaveBeenCalledWith(
-          "[openclaw] OpenClaw hit an unexpected runtime error.",
+          "[natesclaw] Natesclaw hit an unexpected runtime error.",
         );
-        expect(consoleErrorSpy).toHaveBeenCalledWith("[openclaw] Reason: boom");
+        expect(consoleErrorSpy).toHaveBeenCalledWith("[natesclaw] Reason: boom");
         expect(restoreRuntimeTerminalStateMock).toHaveBeenCalledWith("uncaught exception", {
           resumeStdinIfPaused: false,
         });
@@ -4439,7 +4439,7 @@ describe("runCli exit behavior", () => {
       throw new Error(`process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "openclaw", "status"]);
+    await runCli(["node", "natesclaw", "status"]);
 
     const handler = processOnSpy.mock.calls.find(([event]) => event === "uncaughtException")?.[1];
     if (typeof handler !== "function") {
@@ -4452,7 +4452,7 @@ describe("runCli exit behavior", () => {
       });
       expect(handler(hostUnreachable)).toBeUndefined();
       expect(consoleWarnSpy.mock.calls).toEqual([
-        ["[openclaw] Non-fatal uncaught exception (continuing):", hostUnreachable.stack],
+        ["[natesclaw] Non-fatal uncaught exception (continuing):", hostUnreachable.stack],
       ]);
       expect(restoreRuntimeTerminalStateMock).not.toHaveBeenCalled();
       expect(exitSpy).not.toHaveBeenCalled();

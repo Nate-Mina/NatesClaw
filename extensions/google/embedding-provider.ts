@@ -7,24 +7,24 @@ import {
   type EmbeddingInput,
   type MemoryEmbeddingProvider,
   type MemoryEmbeddingProviderCreateOptions,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveMemorySecretInputString } from "openclaw/plugin-sdk/memory-core-host-secret";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveMemorySecretInputString } from "natesclaw/plugin-sdk/memory-core-host-secret";
 import {
   collectProviderApiKeysForExecution,
   executeWithApiKeyRotation,
   requireApiKey,
   resolveApiKeyForProvider,
-} from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "natesclaw/plugin-sdk/provider-auth-runtime";
 import {
   createProviderHttpError,
   providerOperationRetryConfig,
   readProviderJsonObjectResponse,
-} from "openclaw/plugin-sdk/provider-http";
-import type { SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import type { SsrFPolicy } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   asOptionalRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { parseGeminiAuth } from "./gemini-auth.js";
 import { resolveGoogleApiClientHeaders } from "./google-api-client-header.js";
 

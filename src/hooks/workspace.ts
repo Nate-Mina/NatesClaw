@@ -1,10 +1,10 @@
 // Hook workspace helpers resolve hook roots and workspace-local hook files.
 import fs from "node:fs";
 import path from "node:path";
-import { safeParseJson } from "@openclaw/normalization-core";
-import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
+import { safeParseJson } from "@natesclaw/normalization-core";
+import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
 import { MANIFEST_KEY } from "../compat/legacy-names.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { openRootFileSync } from "../infra/boundary-file-read.js";
 import { readFileDescriptorBoundedSync } from "../infra/boundary-file-read.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -228,7 +228,7 @@ function loadHookEntriesFromDir(params: {
 function discoverWorkspaceHookEntries(
   workspaceDir: string,
   opts?: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     managedHooksDir?: string;
     bundledHooksDir?: string;
   },
@@ -246,30 +246,30 @@ function discoverWorkspaceHookEntries(
   const bundledHooks = bundledHooksDir
     ? loadHookEntriesFromDir({
         dir: bundledHooksDir,
-        source: "openclaw-bundled",
+        source: "natesclaw-bundled",
       })
     : [];
   const extraHooks = extraDirs.flatMap((dir) => {
     const resolved = resolveUserPath(dir);
     return loadHookEntriesFromDir({
       dir: resolved,
-      source: "openclaw-managed",
+      source: "natesclaw-managed",
     });
   });
   const pluginHooks = pluginHookDirs.flatMap(({ dir, pluginId }) =>
     loadHookEntriesFromDir({
       dir,
-      source: "openclaw-plugin",
+      source: "natesclaw-plugin",
       pluginId,
     }),
   );
   const managedHooks = loadHookEntriesFromDir({
     dir: managedHooksDir,
-    source: "openclaw-managed",
+    source: "natesclaw-managed",
   });
   const workspaceHooks = loadHookEntriesFromDir({
     dir: workspaceHooksDir,
-    source: "openclaw-workspace",
+    source: "natesclaw-workspace",
   });
 
   return [...extraHooks, ...bundledHooks, ...pluginHooks, ...managedHooks, ...workspaceHooks];
@@ -278,7 +278,7 @@ function discoverWorkspaceHookEntries(
 export function loadWorkspaceHookEntries(
   workspaceDir: string,
   opts?: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     managedHooksDir?: string;
     bundledHooksDir?: string;
     entries?: HookEntry[];

@@ -1,4 +1,4 @@
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import { listSecretStoreEntries, readSecretStoreValue } from "./store/secret-store.js";
 
 export type PlaintextAssignment = {
@@ -9,7 +9,7 @@ export type PlaintextAssignment = {
 
 export function findSecretStorePlaintextResidueFindings(params: {
   assignments: PlaintextAssignment[];
-  database: OpenClawStateDatabaseOptions;
+  database: NatesclawStateDatabaseOptions;
 }): Array<{
   code: "STORE_PLAINTEXT_RESIDUE";
   severity: "warn";

@@ -1,4 +1,4 @@
-import { runOpenClawAgentWriteTransaction } from "../../state/openclaw-agent-db.js";
+import { runNatesclawAgentWriteTransaction } from "../../state/natesclaw-agent-db.js";
 import { readExactSessionEntryRowForCanonicalRepair } from "./session-accessor.sqlite-canonical-repair.js";
 import type { TranscriptEvent } from "./session-accessor.sqlite-contract.js";
 import { publishSessionEntryCacheInvalidation } from "./session-accessor.sqlite-entry-cache.js";
@@ -54,7 +54,7 @@ export async function importSqliteSessionRows(
     : resolvedScope;
   return await runExclusiveSqliteSessionWrite(resolved, async () => {
     let transcriptEvents = 0;
-    runOpenClawAgentWriteTransaction((database) => {
+    runNatesclawAgentWriteTransaction((database) => {
       // Doctor may have staged another legacy alias in this database already. Inspect only this
       // exact import target; runtime-wide canonical validation runs after the import phase.
       const currentEntry = readExactSessionEntryRowForCanonicalRepair(

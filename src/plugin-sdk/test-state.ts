@@ -1,6 +1,6 @@
-// Test-state exports provide isolated OpenClaw filesystem and environment fixtures.
+// Test-state exports provide isolated Natesclaw filesystem and environment fixtures.
 export {
-  createOpenClawTestState,
-  withOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  withNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";

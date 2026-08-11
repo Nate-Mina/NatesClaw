@@ -1,17 +1,17 @@
 // Line plugin module implements auto reply delivery behavior.
 import { HTTPFetchError, type messagingApi } from "@line/bot-sdk";
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   collectErrorGraphCandidates,
   extractErrorCode,
   readErrorName,
-} from "openclaw/plugin-sdk/error-runtime";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { classifyTransientNetworkErrorCode } from "openclaw/plugin-sdk/retry-runtime";
-import { sanitizeAssistantVisibleText } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/error-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { resolveSendableOutboundReplyParts } from "natesclaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import { classifyTransientNetworkErrorCode } from "natesclaw/plugin-sdk/retry-runtime";
+import { sanitizeAssistantVisibleText } from "natesclaw/plugin-sdk/text-chunking";
 import type { FlexContainer } from "./flex-templates.js";
 import type { ProcessedLineMessage } from "./markdown-to-line.js";
 import { hasLineSpecificMediaOptions } from "./outbound-media.js";
@@ -28,7 +28,7 @@ type LineAutoReplyDeps = {
   pushMessagesLine: (
     to: string,
     messages: messagingApi.Message[],
-    opts: { cfg: OpenClawConfig; accountId?: string },
+    opts: { cfg: NatesclawConfig; accountId?: string },
   ) => Promise<unknown>;
   createFlexMessage: (altText: string, contents: FlexContainer) => messagingApi.FlexMessage;
   buildMediaMessage: (
@@ -45,7 +45,7 @@ type LineAutoReplyDeps = {
   replyMessageLine: (
     replyToken: string,
     messages: messagingApi.Message[],
-    opts: { cfg: OpenClawConfig; accountId?: string },
+    opts: { cfg: NatesclawConfig; accountId?: string },
   ) => Promise<unknown>;
   onReplyError?: (err: unknown) => void;
 };
@@ -118,7 +118,7 @@ export async function deliverLineAutoReply(params: {
   replyToken?: string | null;
   replyTokenUsed: boolean;
   accountId?: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   textLimit: number;
   deps: LineAutoReplyDeps;
 }): Promise<LineAutoReplyDeliveryResult> {

@@ -1,18 +1,18 @@
 // Discord plugin module implements security audit behavior.
-import { coerceNativeSetting, normalizeAllowFromList } from "openclaw/plugin-sdk/channel-policy";
+import { coerceNativeSetting, normalizeAllowFromList } from "natesclaw/plugin-sdk/channel-policy";
 import type {
   DiscordGuildChannelConfig,
   DiscordGuildEntry,
-} from "openclaw/plugin-sdk/config-contracts";
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/conversation-runtime";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
+} from "natesclaw/plugin-sdk/config-contracts";
+import { readChannelAllowFromStore } from "natesclaw/plugin-sdk/conversation-runtime";
+import { isDangerousNameMatchingEnabled } from "natesclaw/plugin-sdk/dangerous-name-runtime";
 import {
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
-} from "openclaw/plugin-sdk/native-command-config-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/native-command-config-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { ResolvedDiscordAccount } from "./accounts.js";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { NatesclawConfig } from "./runtime-api.js";
 import { isDiscordMutableAllowEntry } from "./security-doctor.js";
 
 function isWildcardEntry(value: unknown): boolean {
@@ -76,7 +76,7 @@ function addDiscordNameBasedEntries(params: {
 }
 
 export async function collectDiscordSecurityAuditFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   account: ResolvedDiscordAccount;
   orderedAccountIds: string[];
@@ -136,7 +136,7 @@ export async function collectDiscordSecurityAuditFindings(params: {
   addDiscordNameBasedEntries({
     target: discordNameBasedAllowEntries,
     values: storeAllowFrom,
-    source: "~/.openclaw/credentials/discord-allowFrom.json",
+    source: "~/.natesclaw/credentials/discord-allowFrom.json",
   });
 
   const guildEntries = (discordCfg.guilds as Record<string, unknown> | undefined) ?? {};

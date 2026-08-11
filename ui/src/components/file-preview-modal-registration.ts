@@ -1,5 +1,5 @@
-import { OpenClawFilePreviewModal } from "./file-preview-modal.ts";
+import { NatesclawFilePreviewModal } from "./file-preview-modal.ts";
 
-if (!customElements.get("openclaw-file-preview-modal")) {
-  customElements.define("openclaw-file-preview-modal", OpenClawFilePreviewModal);
+if (!customElements.get("natesclaw-file-preview-modal")) {
+  customElements.define("natesclaw-file-preview-modal", NatesclawFilePreviewModal);
 }

@@ -5,10 +5,10 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { replaceSessionEntry } from "../../config/sessions/session-accessor.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { GATEWAY_OWNER_ONLY_CORE_TOOLS } from "../../security/dangerous-tools.js";
 
-type CreateOpenClawToolsArg = {
+type CreateNatesclawToolsArg = {
   beforeToolCallHookContext?: {
     skillCommand?: { skillFile?: string };
   };
@@ -28,7 +28,7 @@ const hoisted = vi.hoisted(() => {
     };
   }
   return {
-    createOpenClawToolsMock: vi.fn((_args: CreateOpenClawToolsArg) => [
+    createNatesclawToolsMock: vi.fn((_args: CreateNatesclawToolsArg) => [
       makeTool("read"),
       makeTool("cron"),
       makeTool("exec"),
@@ -37,8 +37,8 @@ const hoisted = vi.hoisted(() => {
   };
 });
 
-vi.mock("../../agents/openclaw-tools.runtime.js", () => ({
-  createOpenClawTools: (args: CreateOpenClawToolsArg) => hoisted.createOpenClawToolsMock(args),
+vi.mock("../../agents/natesclaw-tools.runtime.js", () => ({
+  createNatesclawTools: (args: CreateNatesclawToolsArg) => hoisted.createNatesclawToolsMock(args),
 }));
 
 import { resolveSkillDispatchTools } from "./tool-dispatch.js";
@@ -53,16 +53,16 @@ describe("resolveSkillDispatchTools", () => {
       },
       cfg: {
         tools: { allow: ["read", "cron"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       agentId: "main",
       sessionKey: "agent:main:telegram:group:restricted-room",
-      workspaceDir: "/tmp/openclaw-skill-tool-dispatch-test",
+      workspaceDir: "/tmp/natesclaw-skill-tool-dispatch-test",
       provider: "openai",
       model: "gpt-5.5",
       senderIsOwner: true,
     });
 
-    const args = hoisted.createOpenClawToolsMock.mock.calls[0]?.[0];
+    const args = hoisted.createNatesclawToolsMock.mock.calls[0]?.[0];
     expect(tools.map((tool) => tool.name)).toEqual(["read", "cron"]);
     expect(args?.cronCreatorToolAllowlist).toEqual([{ name: "read" }, { name: "automations" }]);
     expect(args?.nativeChannelId).toBe("native-room-1");
@@ -71,16 +71,16 @@ describe("resolveSkillDispatchTools", () => {
   it("passes unrestricted skill-dispatch tool surfaces to cron jobs", () => {
     const tools = resolveSkillDispatchTools({
       message: { surface: "telegram", senderId: "user-1" },
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       agentId: "main",
       sessionKey: "agent:main:telegram:direct:user-1",
-      workspaceDir: "/tmp/openclaw-skill-tool-dispatch-test",
+      workspaceDir: "/tmp/natesclaw-skill-tool-dispatch-test",
       provider: "openai",
       model: "gpt-5.5",
       senderIsOwner: true,
     });
 
-    const args = hoisted.createOpenClawToolsMock.mock.calls.at(-1)?.[0];
+    const args = hoisted.createNatesclawToolsMock.mock.calls.at(-1)?.[0];
     expect(tools.map((tool) => tool.name)).toEqual(["read", "cron", "exec", "conversations_send"]);
     expect(args?.cronCreatorToolAllowlist).toEqual([
       { name: "read" },
@@ -93,10 +93,10 @@ describe("resolveSkillDispatchTools", () => {
   it("carries command skill file identity into tool diagnostics", () => {
     resolveSkillDispatchTools({
       message: { surface: "telegram", senderId: "user-1" },
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       agentId: "main",
       sessionKey: "agent:main:telegram:direct:user-1",
-      workspaceDir: "/tmp/openclaw-skill-tool-dispatch-test",
+      workspaceDir: "/tmp/natesclaw-skill-tool-dispatch-test",
       provider: "openai",
       model: "gpt-5.5",
       senderIsOwner: true,
@@ -109,14 +109,14 @@ describe("resolveSkillDispatchTools", () => {
       },
     });
 
-    const args = hoisted.createOpenClawToolsMock.mock.calls.at(-1)?.[0];
+    const args = hoisted.createNatesclawToolsMock.mock.calls.at(-1)?.[0];
     expect(args?.beforeToolCallHookContext?.skillCommand?.skillFile).toBe(
       "/workspace/skills/daily-brief/SKILL.md",
     );
   });
 
   it("uses persisted delegated policy instead of a sender wildcard", async () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-skill-delegated-policy-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-skill-delegated-policy-"));
     const storePath = path.join(tempDir, "sessions.json");
     const sessionKey = "agent:main:subagent:skill-child";
     await replaceSessionEntry({ storePath, sessionKey }, {
@@ -140,10 +140,10 @@ describe("resolveSkillDispatchTools", () => {
               "id:alice": {},
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         agentId: "main",
         sessionKey,
-        workspaceDir: "/tmp/openclaw-skill-tool-dispatch-test",
+        workspaceDir: "/tmp/natesclaw-skill-tool-dispatch-test",
         provider: "openai",
         model: "gpt-5.5",
         senderIsOwner: true,
@@ -158,10 +158,10 @@ describe("resolveSkillDispatchTools", () => {
   it("removes owner-only core tools for authorized non-owner dispatch", () => {
     const common = {
       message: { surface: "telegram", senderId: "allowed-user" },
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       agentId: "main",
       sessionKey: "agent:main:telegram:direct:allowed-user",
-      workspaceDir: "/tmp/openclaw-skill-tool-dispatch-test",
+      workspaceDir: "/tmp/natesclaw-skill-tool-dispatch-test",
       provider: "openai",
       model: "gpt-5.5",
     };
@@ -170,7 +170,7 @@ describe("resolveSkillDispatchTools", () => {
       ...common,
       senderIsOwner: false,
     });
-    const nonOwnerArgs = hoisted.createOpenClawToolsMock.mock.calls.at(-1)?.[0];
+    const nonOwnerArgs = hoisted.createNatesclawToolsMock.mock.calls.at(-1)?.[0];
     expect(nonOwnerTools.map((tool) => tool.name)).not.toContain("conversations_send");
     expect(nonOwnerArgs?.senderIsOwner).toBe(false);
     expect(nonOwnerArgs?.pluginToolDenylist).toEqual(
@@ -181,7 +181,7 @@ describe("resolveSkillDispatchTools", () => {
       ...common,
       senderIsOwner: true,
     });
-    const ownerArgs = hoisted.createOpenClawToolsMock.mock.calls.at(-1)?.[0];
+    const ownerArgs = hoisted.createNatesclawToolsMock.mock.calls.at(-1)?.[0];
     expect(ownerTools.map((tool) => tool.name)).toContain("conversations_send");
     expect(ownerArgs?.senderIsOwner).toBe(true);
     expect(ownerArgs?.pluginToolDenylist).not.toContain("conversations_send");

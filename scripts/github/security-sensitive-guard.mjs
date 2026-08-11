@@ -18,7 +18,7 @@ import {
 } from "./guard-shared.mjs";
 
 /** Marker used to identify security-sensitive guard comments. */
-export const securitySensitiveGuardMarker = "<!-- openclaw:security-sensitive-guard -->";
+export const securitySensitiveGuardMarker = "<!-- natesclaw:security-sensitive-guard -->";
 const securitySensitiveChangedLabel = "security-sensitive-changed";
 export const allowSecuritySensitiveCommand = "/allow-security-sensitive-change";
 export {
@@ -29,7 +29,7 @@ export {
   readBoundedGitHubJson,
 };
 
-const securityTeamSlug = process.env.OPENCLAW_SECURITY_TEAM_SLUG ?? "openclaw-secops";
+const securityTeamSlug = process.env.NATESCLAW_SECURITY_TEAM_SLUG ?? "natesclaw-secops";
 const maxListedFiles = 25;
 const securitySensitiveFiles = [
   {
@@ -248,7 +248,7 @@ export function renderSecuritySensitiveAwarenessComment(changes) {
     "Maintainer follow-up:",
     "- Review whether each security-sensitive file change is intentional.",
     "- Confirm the change does not weaken secret, credential, or local-state protection.",
-    "- If this PR intentionally needs the change, a repository admin or member of `@openclaw/openclaw-secops` must approve the exact head SHA.",
+    "- If this PR intentionally needs the change, a repository admin or member of `@natesclaw/natesclaw-secops` must approve the exact head SHA.",
   ].join("\n");
 }
 
@@ -258,7 +258,7 @@ export function renderAuthorizedSecuritySensitiveComment(override) {
     "",
     "### Security-sensitive change authorized",
     "",
-    "This PR includes security-sensitive file changes. A repository admin or member of `@openclaw/openclaw-secops` authorized this exact head SHA with `/allow-security-sensitive-change`.",
+    "This PR includes security-sensitive file changes. A repository admin or member of `@natesclaw/natesclaw-secops` authorized this exact head SHA with `/allow-security-sensitive-change`.",
     "",
     `- Approved SHA: ${markdownCode(override.sha)}`,
     `- Approved by: @${sanitizeDisplayValue(override.login)}`,
@@ -276,7 +276,7 @@ export function renderTrustedSecuritySensitiveComment({ actor, headSha, changes 
     "",
     "### Security-sensitive changes noted",
     "",
-    "This PR includes security-sensitive file changes. The guard is informational because the PR author is a repository admin or a member of `@openclaw/openclaw-secops`.",
+    "This PR includes security-sensitive file changes. The guard is informational because the PR author is a repository admin or a member of `@natesclaw/natesclaw-secops`.",
     "",
     `- Current SHA: ${markdownCode(headSha ?? "<head-sha>")}`,
     `- Trusted actor: @${sanitizeDisplayValue(actor.login)}`,
@@ -307,12 +307,12 @@ export function renderBlockedSecuritySensitiveComment({ headSha, changes }) {
     "",
     "### Security-sensitive changes are blocked",
     "",
-    "OpenClaw does not accept security-sensitive file changes through PRs unless a repository admin or security explicitly authorizes the current head SHA.",
+    "Natesclaw does not accept security-sensitive file changes through PRs unless a repository admin or security explicitly authorizes the current head SHA.",
     "",
     "Detected security-sensitive changes:",
     ...renderChangedFileLines(changes),
     "",
-    "If this PR intentionally needs these changes, ask a repository admin or member of `@openclaw/openclaw-secops` to comment:",
+    "If this PR intentionally needs these changes, ask a repository admin or member of `@natesclaw/natesclaw-secops` to comment:",
     "",
     "```text",
     allowSecuritySensitiveCommand,
@@ -355,7 +355,7 @@ export async function findTrustedSecuritySensitiveGuardActor({
 export function githubApi(token, options = {}) {
   return createGitHubApi(token, {
     ...options,
-    userAgent: "openclaw-security-sensitive-guard",
+    userAgent: "natesclaw-security-sensitive-guard",
   });
 }
 
@@ -384,14 +384,14 @@ async function main() {
   }
 
   const api = githubApi(token);
-  const explicitSecurityApprovers = securityApproverSet(process.env.OPENCLAW_SECURITY_APPROVERS);
+  const explicitSecurityApprovers = securityApproverSet(process.env.NATESCLAW_SECURITY_APPROVERS);
   const trustedCommentAuthors = securitySensitiveGuardCommentAuthors(
-    process.env.OPENCLAW_SECURITY_SENSITIVE_GUARD_COMMENT_BOTS,
+    process.env.NATESCLAW_SECURITY_SENSITIVE_GUARD_COMMENT_BOTS,
   );
   const issuePath = `/repos/${owner}/${repo}/issues/${eventPullRequest.number}`;
   const pullPath = `/repos/${owner}/${repo}/pulls/${eventPullRequest.number}`;
   const pullRequest = await api.request(pullPath);
-  const mode = process.env.OPENCLAW_SECURITY_SENSITIVE_GUARD_MODE ?? "enforce";
+  const mode = process.env.NATESCLAW_SECURITY_SENSITIVE_GUARD_MODE ?? "enforce";
   const files = await api.paginate(`${pullPath}/files`);
   const securitySensitiveChanges = collectSecuritySensitiveChanges(files);
 

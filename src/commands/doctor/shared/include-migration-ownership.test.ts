@@ -1,6 +1,6 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import {
   classifyOtelGrpcMigrationOwnership,
   isSingleTopLevelIncludeMigration,
@@ -8,14 +8,14 @@ import {
 
 const sourceConfig = {
   mcp: { servers: { local: { command: "node", disabled: true } } },
-} as unknown as OpenClawConfig;
+} as unknown as NatesclawConfig;
 const candidate = {
   mcp: { servers: { local: { command: "node", enabled: false } } },
-} as OpenClawConfig;
+} as NatesclawConfig;
 
 describe("include migration ownership", () => {
-  const configDir = path.resolve("/tmp/openclaw-config");
-  const configPath = path.join(configDir, "openclaw.json");
+  const configDir = path.resolve("/tmp/natesclaw-config");
+  const configPath = path.join(configDir, "natesclaw.json");
   const diagnosticsPath = path.join(configDir, "diagnostics.json5");
   const classifyOtelOwnership = (
     includeProvenance: NonNullable<
@@ -136,7 +136,7 @@ describe("include migration ownership", () => {
   });
 
   it.each([
-    ["root include", { $include: "./openclaw.json5" }],
+    ["root include", { $include: "./natesclaw.json5" }],
     ["include array", { mcp: { $include: ["./a.json5", "./b.json5"] } }],
     ["nested include", { mcp: { servers: { $include: "./servers.json5" } } }],
     ["sibling override", { mcp: { $include: "./mcp.json5", sessionIdleTtlMs: 1000 } }],

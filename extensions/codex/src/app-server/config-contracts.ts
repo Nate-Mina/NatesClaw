@@ -1,5 +1,5 @@
-import type { ProviderAuthAliasLookupParams } from "openclaw/plugin-sdk/agent-runtime";
-import type { SecretInput } from "openclaw/plugin-sdk/secret-input";
+import type { ProviderAuthAliasLookupParams } from "natesclaw/plugin-sdk/agent-runtime";
+import type { SecretInput } from "natesclaw/plugin-sdk/secret-input";
 import type { z } from "zod";
 import type { CodexApprovalPolicy, CodexServiceTier, JsonObject } from "./protocol.js";
 import type {
@@ -12,20 +12,20 @@ export type CodexAppServerHomeScope = "agent" | "user";
 export type CodexAppServerPolicyMode = "yolo" | "guardian";
 export type CodexAppServerConnectionClass = "local-loopback" | "remote";
 export type CodexAppServerRemoteAppsSubstrate = "preconfigured";
-export type OpenClawExecMode = "deny" | "allowlist" | "ask" | "auto" | "full";
-export type OpenClawExecSecurity = "deny" | "allowlist" | "full";
-export type OpenClawExecAsk = "off" | "on-miss" | "always";
-export type OpenClawExecApprovalFloorsForCodexAppServer = {
-  security?: OpenClawExecSecurity;
-  ask?: OpenClawExecAsk;
+export type NatesclawExecMode = "deny" | "allowlist" | "ask" | "auto" | "full";
+export type NatesclawExecSecurity = "deny" | "allowlist" | "full";
+export type NatesclawExecAsk = "off" | "on-miss" | "always";
+export type NatesclawExecApprovalFloorsForCodexAppServer = {
+  security?: NatesclawExecSecurity;
+  ask?: NatesclawExecAsk;
 };
-export type OpenClawExecPolicyForCodexAppServer = {
-  mode?: OpenClawExecMode;
-  security: OpenClawExecSecurity;
-  ask: OpenClawExecAsk;
+export type NatesclawExecPolicyForCodexAppServer = {
+  mode?: NatesclawExecMode;
+  security: NatesclawExecSecurity;
+  ask: NatesclawExecAsk;
   touched: boolean;
 };
-export type OpenClawExecPolicy = OpenClawExecPolicyForCodexAppServer;
+export type NatesclawExecPolicy = NatesclawExecPolicyForCodexAppServer;
 export type ProviderAuthAliasConfig = NonNullable<ProviderAuthAliasLookupParams>["config"];
 export type CodexAppServerDefaultPolicy = {
   mode: CodexAppServerPolicyMode;

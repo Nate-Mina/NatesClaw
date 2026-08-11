@@ -4,22 +4,22 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { resolveGatewayLockDir } from "../config/paths.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { withStateDirEnv } from "../test-helpers/state-dir-env.js";
 import { withTempDir } from "../test-utils/temp-dir.js";
 import { resolveDeviceIdentityCoordinatorPaths } from "./device-identity-coordinator-paths.js";
 import { loadDeviceIdentityIfPresent, loadOrCreateDeviceIdentity } from "./device-identity.js";
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   vi.restoreAllMocks();
 });
 
 describe("device identity state dir defaults", () => {
   it("writes the default identity to the shared state database", async () => {
-    await withStateDirEnv("openclaw-identity-state-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-identity-state-", async ({ stateDir }) => {
       const identity = loadOrCreateDeviceIdentity();
-      const databasePath = path.join(stateDir, "state", "openclaw.sqlite");
+      const databasePath = path.join(stateDir, "state", "natesclaw.sqlite");
       const lockDir = resolveGatewayLockDir(stateDir);
 
       expect(loadDeviceIdentityIfPresent()).toEqual(identity);
@@ -32,7 +32,7 @@ describe("device identity state dir defaults", () => {
   });
 
   it("reuses the stored identity on subsequent loads", async () => {
-    await withStateDirEnv("openclaw-identity-state-", async () => {
+    await withStateDirEnv("natesclaw-identity-state-", async () => {
       const first = loadOrCreateDeviceIdentity();
       const second = loadOrCreateDeviceIdentity();
 
@@ -41,7 +41,7 @@ describe("device identity state dir defaults", () => {
   });
 
   it("uses the supplied state environment for its coordinator", async () => {
-    await withTempDir("openclaw-identity-env-state-", async (rootDir) => {
+    await withTempDir("natesclaw-identity-env-state-", async (rootDir) => {
       const stateDir = path.join(rootDir, "selected-state");
       const fakeHome = path.join(rootDir, "home");
       const legacyTmpDir = path.join(rootDir, "legacy-process-tmp");
@@ -52,14 +52,14 @@ describe("device identity state dir defaults", () => {
       const env = {
         ...process.env,
         HOME: fakeHome,
-        OPENCLAW_HOME: fakeHome,
-        OPENCLAW_STATE_DIR: stateDir,
+        NATESCLAW_HOME: fakeHome,
+        NATESCLAW_STATE_DIR: stateDir,
       };
 
       loadOrCreateDeviceIdentity({ env });
 
       const coordinatorPaths = resolveDeviceIdentityCoordinatorPaths({
-        databasePath: path.join(stateDir, "state", "openclaw.sqlite"),
+        databasePath: path.join(stateDir, "state", "natesclaw.sqlite"),
         stateDir,
         temporaryDirectory: legacyTmpDir,
         uid: typeof process.getuid === "function" ? process.getuid() : undefined,
@@ -77,13 +77,13 @@ describe("device identity state dir defaults", () => {
         .filter((entry) => entry.startsWith("device-identity."));
       expect(stateCoordinators).toHaveLength(1);
       expect(processTempCoordinators).toEqual(stateCoordinators);
-      expect(fs.existsSync(path.join(fakeHome, ".openclaw"))).toBe(false);
+      expect(fs.existsSync(path.join(fakeHome, ".natesclaw"))).toBe(false);
     });
   });
 
   it("keeps read-only lookup non-creating when the default database is absent", async () => {
-    await withStateDirEnv("openclaw-identity-state-", async ({ stateDir }) => {
-      const databasePath = path.join(stateDir, "state", "openclaw.sqlite");
+    await withStateDirEnv("natesclaw-identity-state-", async ({ stateDir }) => {
+      const databasePath = path.join(stateDir, "state", "natesclaw.sqlite");
 
       expect(loadDeviceIdentityIfPresent()).toBeNull();
       expect(fs.existsSync(databasePath)).toBe(false);

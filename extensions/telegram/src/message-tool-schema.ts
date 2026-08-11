@@ -1,5 +1,5 @@
 // Telegram helper module supports message tool schema behavior.
-import { optionalPositiveIntegerSchema } from "openclaw/plugin-sdk/channel-actions";
+import { optionalPositiveIntegerSchema } from "natesclaw/plugin-sdk/channel-actions";
 import { Type } from "typebox";
 
 export function createTelegramPollExtraToolSchemas() {

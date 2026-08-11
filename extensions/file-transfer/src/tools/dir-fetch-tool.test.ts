@@ -14,7 +14,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  vi.doUnmock("openclaw/plugin-sdk/media-store");
+  vi.doUnmock("natesclaw/plugin-sdk/media-store");
   vi.doUnmock("../shared/audit.js");
   vi.doUnmock("./node-tool-invoke.js");
   vi.resetModules();
@@ -43,7 +43,7 @@ async function importTool(tarBuffer: Buffer) {
     return { path: archivePath };
   });
   vi.resetModules();
-  vi.doMock("openclaw/plugin-sdk/media-store", () => ({
+  vi.doMock("natesclaw/plugin-sdk/media-store", () => ({
     saveMediaBuffer,
   }));
   vi.doMock("../shared/audit.js", () => ({ appendFileTransferAudit }));

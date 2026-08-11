@@ -1,7 +1,7 @@
 // Discord plugin module implements tts behavior.
-import { resolveAgentDir } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig, TtsConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { resolveAgentDir } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig, TtsConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { getDiscordRuntime } from "../runtime.js";
 import { sanitizeVoiceReplyTextForSpeech } from "./sanitize.js";
 
@@ -28,7 +28,7 @@ type VoiceReplyAudioResult =
     };
 
 export async function transcribeVoiceAudio(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   filePath: string;
 }): Promise<string | undefined> {
@@ -42,7 +42,7 @@ export async function transcribeVoiceAudio(params: {
 }
 
 export async function synthesizeVoiceReplyAudio(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   override?: TtsConfig;
   replyText: string;
   speakerLabel: string;

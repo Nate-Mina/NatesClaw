@@ -1,5 +1,5 @@
-import { expectDefined } from "@openclaw/normalization-core";
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
 import { listAgentEntries, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { redactChannelStatusSummaryBaseUrl } from "../../channels/account-snapshot-fields.js";
 import { resolveChannelDefaultAccountId } from "../../channels/plugins/helpers.js";
@@ -7,7 +7,7 @@ import { listReadOnlyChannelPluginsForConfig } from "../../channels/plugins/read
 import { buildChannelAccountSnapshotFromAccount } from "../../channels/plugins/status.js";
 import type { ChannelAccountSnapshot } from "../../channels/plugins/types.public.js";
 import { resolveSessionStorePathCore } from "../../config/sessions/paths.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { listContextEngineQuarantines } from "../../context-engine/registry.js";
 import { isDiagnosticFlagEnabled } from "../../infra/diagnostic-flags.js";
 import { formatErrorMessage } from "../../infra/errors.js";
@@ -46,7 +46,7 @@ const healthLog = createSubsystemLogger("health");
 type HealthSnapshotAudience = "public" | "admin";
 
 const debugHealth = (
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
   message: string,
   meta?: Record<string, unknown>,
 ) => {
@@ -72,10 +72,10 @@ function buildContextEngineHealthSummary(): ContextEngineHealthSummary | undefin
   return quarantined.length > 0 ? { quarantined } : undefined;
 }
 
-const resolveHeartbeatSummary = (cfg: OpenClawConfig, agentId: string) =>
+const resolveHeartbeatSummary = (cfg: NatesclawConfig, agentId: string) =>
   resolveHeartbeatSummaryForAgent(cfg, agentId);
 
-export function resolveHealthAgentOrder(cfg: OpenClawConfig) {
+export function resolveHealthAgentOrder(cfg: NatesclawConfig) {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   const entries = listAgentEntries(cfg);
   const seen = new Set<string>();
@@ -421,7 +421,7 @@ export async function collectGatewayHealthSnapshot(params: {
   };
 }
 
-async function readRuntimeHealthConfig(): Promise<OpenClawConfig> {
+async function readRuntimeHealthConfig(): Promise<NatesclawConfig> {
   const { getRuntimeConfig } = await import("../../config/config.js");
   return getRuntimeConfig();
 }

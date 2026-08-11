@@ -1,14 +1,14 @@
 // Openshell plugin module implements fs bridge behavior.
 import fsPromises from "node:fs/promises";
 import path from "node:path";
-import { root as fsRoot } from "openclaw/plugin-sdk/file-access-runtime";
+import { root as fsRoot } from "natesclaw/plugin-sdk/file-access-runtime";
 import type {
   SandboxFsBridge,
   SandboxFsStat,
   SandboxResolvedPath,
-} from "openclaw/plugin-sdk/sandbox";
-import { createWritableRenameTargetResolver } from "openclaw/plugin-sdk/sandbox";
-import { FsSafeError, isPathInside } from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/sandbox";
+import { createWritableRenameTargetResolver } from "natesclaw/plugin-sdk/sandbox";
+import { FsSafeError, isPathInside } from "natesclaw/plugin-sdk/security-runtime";
 import type { OpenShellFsBridgeContext, OpenShellSandboxBackend } from "./backend.types.js";
 
 type ResolvedMountPath = SandboxResolvedPath & {
@@ -20,7 +20,7 @@ type ResolvedMountPath = SandboxResolvedPath & {
 type FsSafeRoot = Awaited<ReturnType<typeof fsRoot>>;
 type FsSafeStat = Awaited<ReturnType<FsSafeRoot["stat"]>>;
 
-const MATERIALIZED_SKILLS_CONTAINER_PARTS = [".openclaw", "sandbox-skills", "skills"] as const;
+const MATERIALIZED_SKILLS_CONTAINER_PARTS = [".natesclaw", "sandbox-skills", "skills"] as const;
 
 export function createOpenShellFsBridge(params: {
   sandbox: OpenShellFsBridgeContext;

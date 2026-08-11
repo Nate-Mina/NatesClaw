@@ -13,7 +13,7 @@ import { renderSettingsWorkspace } from "../../components/settings-workspace.ts"
 import { t } from "../../i18n/index.ts";
 import { listSelectableAgents } from "../../lib/agents/display.ts";
 import { isGatewayMethodAdvertised } from "../../lib/gateway-methods.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import {
   renderMemoryImport,
@@ -23,7 +23,7 @@ import {
 } from "./view.ts";
 
 const SESSION_BACKFILL_BATCH_DAYS = 14;
-const MEMORY_IMPORT_DOCS_URL = "https://docs.openclaw.ai/install/migrating";
+const MEMORY_IMPORT_DOCS_URL = "https://docs.natesclaw.ai/install/migrating";
 
 type PendingMemoryImport = {
   providerId: string;
@@ -52,7 +52,7 @@ function createIdempotencyKey(): string {
     .join("");
 }
 
-export class MemoryImportPage extends OpenClawLightDomElement {
+export class MemoryImportPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -581,6 +581,6 @@ export class MemoryImportPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-memory-import-page")) {
-  customElements.define("openclaw-memory-import-page", MemoryImportPage);
+if (!customElements.get("natesclaw-memory-import-page")) {
+  customElements.define("natesclaw-memory-import-page", MemoryImportPage);
 }

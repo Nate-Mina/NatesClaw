@@ -18,7 +18,7 @@ suite.define(() => {
     const imageUrl = `/api/chat/media/outgoing/agent%3Amain%3Amain/${attachmentId}/full`;
     const ticketedUrl = `${imageUrl}?mediaTicket=ticket-e2e`;
     const imageBytes = await readFile(
-      path.join(process.cwd(), "docs/assets/openclaw-banner-dark.png"),
+      path.join(process.cwd(), "docs/assets/natesclaw-banner-dark.png"),
     );
     const requestedVariants: string[] = [];
     await page.addInitScript(() => {
@@ -126,7 +126,7 @@ suite.define(() => {
         )
         .toEqual({ size: imageBytes.byteLength, type: "image/png" });
       await expect
-        .poll(() => page.locator("openclaw-toast-host").textContent())
+        .poll(() => page.locator("natesclaw-toast-host").textContent())
         .toContain("Copied!");
 
       await page.locator('.chat-image-action[title="Open original"]').click();

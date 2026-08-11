@@ -1,32 +1,32 @@
 // Sms plugin module implements channel behavior.
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/account-resolution";
+import { DEFAULT_ACCOUNT_ID } from "natesclaw/plugin-sdk/account-id";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/account-resolution";
 import {
   createHybridChannelConfigAdapter,
   createScopedDmSecurityResolver,
-} from "openclaw/plugin-sdk/channel-config-helpers";
+} from "natesclaw/plugin-sdk/channel-config-helpers";
 import {
   buildChannelOutboundSessionRoute,
   createChatChannelPlugin,
   type ChannelOutboundSessionRouteParams,
   type ChannelPlugin,
-} from "openclaw/plugin-sdk/channel-core";
+} from "natesclaw/plugin-sdk/channel-core";
 import {
   createAccountStatusSink,
   defineChannelMessageAdapter,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { createConditionalWarningCollector } from "openclaw/plugin-sdk/channel-policy";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { createConditionalWarningCollector } from "natesclaw/plugin-sdk/channel-policy";
 import {
   defineChannelSetupContract,
   type ChannelSetupInput,
-} from "openclaw/plugin-sdk/channel-setup";
-import { createEmptyChannelDirectoryAdapter } from "openclaw/plugin-sdk/directory-runtime";
+} from "natesclaw/plugin-sdk/channel-setup";
+import { createEmptyChannelDirectoryAdapter } from "natesclaw/plugin-sdk/directory-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { isRecord, normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/status-helpers";
+import { isRecord, normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { chunkTextForOutbound } from "natesclaw/plugin-sdk/text-chunking";
 import {
   inspectSmsAccount,
   isSmsAccountConfigured,
@@ -97,7 +97,7 @@ const resolveSmsDmPolicy = createScopedDmSecurityResolver<ResolvedSmsAccount>({
   resolveAllowFrom: (account) => account.allowFrom,
   policyPathSuffix: "dmPolicy",
   defaultPolicy: "pairing",
-  approveHint: "openclaw pairing approve sms <code>",
+  approveHint: "natesclaw pairing approve sms <code>",
   normalizeEntry: normalizeSmsAllowFrom,
 });
 
@@ -132,10 +132,10 @@ function smsSetupPatch(input: SmsSetupInput): Record<string, unknown> {
 }
 
 function applySmsAccountConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   input: SmsSetupInput;
-}): OpenClawConfig {
+}): NatesclawConfig {
   const patch = smsSetupPatch(params.input);
   const channels = { ...params.cfg.channels };
   const current = { ...(channels[CHANNEL_ID] as Record<string, unknown> | undefined) };
@@ -215,7 +215,7 @@ function createSmsReceipt(params: {
 }
 
 function resolveSmsTextChunkLimit(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   fallbackLimit?: number;
 }): number {
@@ -225,7 +225,7 @@ function resolveSmsTextChunkLimit(params: {
 }
 
 async function sendSmsText(ctx: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   to: string;
   text: string;
@@ -248,7 +248,7 @@ async function sendSmsText(ctx: {
 }
 
 type SmsAttachmentContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   to: string;
   text: string;
@@ -506,7 +506,7 @@ export const smsPlugin: ChannelPlugin<ResolvedSmsAccount, SmsProbe> = createChat
   pairing: {
     text: {
       idLabel: "phoneNumber",
-      message: "OpenClaw: your SMS access has been approved.",
+      message: "Natesclaw: your SMS access has been approved.",
       normalizeAllowEntry: normalizeSmsAllowFrom,
       notify: async ({ cfg, id, message, accountId }) => {
         const account = resolveSmsAccount(cfg, accountId);

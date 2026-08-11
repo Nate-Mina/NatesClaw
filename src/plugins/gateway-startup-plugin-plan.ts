@@ -1,11 +1,11 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 // Plans deterministic Gateway startup plugin activation from prepared registry metadata.
 import { collectConfiguredAgentHarnessRuntimes } from "../agents/harness-runtimes.js";
 import {
   listExplicitlyDisabledChannelIdsForConfig,
   type AmbientEnvTriggerPolicy,
 } from "../channels/config-presence.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveEffectivePluginActivationState } from "./config-state.js";
 import { isPluginEnabledByDefaultForPlatform } from "./default-enablement.js";
 import {
@@ -50,8 +50,8 @@ export function resolveChannelPluginIdsFromRegistry(params: {
 }
 
 export function resolveGatewayStartupPluginPlanFromRegistry(params: {
-  config: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config: NatesclawConfig;
+  activationSourceConfig?: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   index: PluginRegistrySnapshot;
   manifestRegistry: PluginManifestRegistry;

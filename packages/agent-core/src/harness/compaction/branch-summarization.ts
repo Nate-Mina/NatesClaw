@@ -1,5 +1,5 @@
 // Agent Core module implements branch summarization behavior.
-import type { Model, StreamFn } from "@openclaw/llm-core";
+import type { Model, StreamFn } from "@natesclaw/llm-core";
 import {
   type AgentCoreCompletionRuntimeDeps,
   resolveAgentCoreCompleteFn,

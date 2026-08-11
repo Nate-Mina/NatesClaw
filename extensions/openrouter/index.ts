@@ -1,21 +1,21 @@
-// Openrouter plugin entrypoint registers its OpenClaw integration.
+// Openrouter plugin entrypoint registers its Natesclaw integration.
 import type {
   ProviderReplayPolicy,
   ProviderReplayPolicyContext,
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
 import {
   buildProviderReplayFamilyHooks,
   DEFAULT_CONTEXT_TOKENS,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   getOpenRouterModelCapabilities,
   loadOpenRouterModelCapabilities,
-} from "openclaw/plugin-sdk/provider-stream-family";
-import { asOptionalRecord as readRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/provider-stream-family";
+import { asOptionalRecord as readRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { buildOpenRouterImageGenerationProvider } from "./image-generation-provider.js";
 import { openrouterMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import {
@@ -26,7 +26,7 @@ import {
 import { buildOpenRouterMusicGenerationProvider } from "./music-generation-provider.js";
 import { createOpenRouterOAuthAuthMethod } from "./oauth.js";
 import { applyOpenrouterConfig, OPENROUTER_DEFAULT_MODEL_REF } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import {
   buildOpenrouterLiveProvider,
   buildOpenrouterProvider,

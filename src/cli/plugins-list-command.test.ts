@@ -1,6 +1,6 @@
 // Plugins list command tests cover plugin list command execution and output.
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { OutputRuntimeEnv } from "../runtime.js";
 
 function createJsonRuntime(writes: unknown[]): OutputRuntimeEnv {
@@ -22,7 +22,7 @@ type SnapshotPlugin = {
   agentHarnessIds?: string[];
 };
 
-function mockPluginListSnapshot(plugins: SnapshotPlugin[], config: OpenClawConfig = {}): void {
+function mockPluginListSnapshot(plugins: SnapshotPlugin[], config: NatesclawConfig = {}): void {
   vi.doMock("../config/config.js", () => ({
     getRuntimeConfig: () => config,
   }));
@@ -191,7 +191,7 @@ describe("runPluginsListCommand", () => {
       await runPluginsListCommand(options, createJsonRuntime(writes));
 
       expect(writes).toEqual([
-        "No enabled plugins found. Run formatted(openclaw plugins list) to inspect installed plugins.",
+        "No enabled plugins found. Run formatted(natesclaw plugins list) to inspect installed plugins.",
       ]);
     },
   );
@@ -210,7 +210,7 @@ describe("runPluginsListCommand", () => {
     await runPluginsListCommand(options, createJsonRuntime(writes));
 
     expect(writes).toEqual([
-      "No enabled plugins found. Plugins are globally disabled. Run formatted(openclaw plugins list) to inspect installed plugins.",
+      "No enabled plugins found. Plugins are globally disabled. Run formatted(natesclaw plugins list) to inspect installed plugins.",
     ]);
   });
 
@@ -229,7 +229,7 @@ describe("runPluginsListCommand", () => {
     await runPluginsListCommand({ enabled: true }, createJsonRuntime(writes));
 
     expect(writes).toEqual([
-      "No enabled plugins found. Run formatted(openclaw plugins list) to inspect installed plugins.",
+      "No enabled plugins found. Run formatted(natesclaw plugins list) to inspect installed plugins.",
     ]);
   });
 
@@ -242,7 +242,7 @@ describe("runPluginsListCommand", () => {
     await runPluginsListCommand({ enabled: true }, createJsonRuntime(writes));
 
     expect(writes).toEqual([
-      "No plugins found. Run formatted(openclaw plugins install <plugin>) to add one, or formatted(openclaw plugins list --json) to inspect raw discovery state.",
+      "No plugins found. Run formatted(natesclaw plugins install <plugin>) to add one, or formatted(natesclaw plugins list --json) to inspect raw discovery state.",
     ]);
   });
 

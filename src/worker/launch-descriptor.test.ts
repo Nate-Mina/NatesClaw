@@ -12,7 +12,7 @@ import { buildWorkerConnectParams, parseWorkerLaunchDescriptor } from "./launch-
 function launchDescriptor(): WorkerLaunchDescriptor {
   return {
     version: 2,
-    socketPath: "/tmp/openclaw-worker/gateway.sock",
+    socketPath: "/tmp/natesclaw-worker/gateway.sock",
     admission: {
       environmentId: "environment-1",
       credential: ["worker", "fixture", "value"].join("-"),
@@ -21,7 +21,7 @@ function launchDescriptor(): WorkerLaunchDescriptor {
       rpcSetVersion: WORKER_RPC_SET_VERSION,
       handshake: {
         bundleHash: "a".repeat(64),
-        openclawVersion: "2026.7.12",
+        natesclawVersion: "2026.7.12",
         protocolFeatures: [...WORKER_PROTOCOL_FEATURES],
       },
     },
@@ -33,7 +33,7 @@ function launchDescriptor(): WorkerLaunchDescriptor {
       turnId: "turn-1",
       prompt: "Inspect the workspace.",
       suppressPromptTranscript: false,
-      workspaceDir: "/tmp/openclaw-worker/workspace",
+      workspaceDir: "/tmp/natesclaw-worker/workspace",
       modelRef: { provider: "provider-1", model: "model-1" },
       inferenceOptions: { reasoning: "medium", maxTokens: 512 },
       initialMessages: [
@@ -57,7 +57,7 @@ describe("worker launch descriptor", () => {
     expect(parseWorkerLaunchDescriptor(structuredClone(descriptor))).toEqual(descriptor);
     expect(buildWorkerConnectParams(descriptor)).toMatchObject({
       role: "worker",
-      client: { id: "openclaw-worker", mode: "worker", version: "2026.7.12" },
+      client: { id: "natesclaw-worker", mode: "worker", version: "2026.7.12" },
       admission: { ...descriptor.admission, runId: descriptor.assignment.runId },
     });
   });
@@ -164,7 +164,7 @@ describe("worker launch descriptor", () => {
     const descriptor = launchDescriptor();
     descriptor.assignment.browser = {
       cdpUrl: "http://127.0.0.1:9222",
-      launcherPath: "/usr/local/bin/openclaw-worker-browser",
+      launcherPath: "/usr/local/bin/natesclaw-worker-browser",
     };
     expect(parseWorkerLaunchDescriptor(structuredClone(descriptor))).toEqual(descriptor);
 
@@ -175,7 +175,7 @@ describe("worker launch descriptor", () => {
       { ...browser, cdpUrl: "http://localhost:9222" },
       { ...browser, cdpUrl: "http://127.0.0.1" },
       { ...browser, cdpUrl: "http://127.0.0.1:9222/json/version" },
-      { ...browser, launcherPath: "openclaw-worker-browser" },
+      { ...browser, launcherPath: "natesclaw-worker-browser" },
     ];
     for (const invalidBrowser of cases) {
       expect(() =>

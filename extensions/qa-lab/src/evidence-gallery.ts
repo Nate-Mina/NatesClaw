@@ -4,8 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { StringDecoder } from "node:string_decoder";
 import { pathToFileURL } from "node:url";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { readStringValue } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { readStringValue } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import pLimit from "p-limit";
 import type {
   QaEvidenceArtifactView,

@@ -1,13 +1,13 @@
 // Tlon plugin module implements channel behavior.
 import crypto from "node:crypto";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/channel-contract";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/core";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { readResponseTextLimited } from "openclaw/plugin-sdk/provider-http";
-import { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
-import { runChannelProbe } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { ChannelAccountSnapshot } from "natesclaw/plugin-sdk/channel-contract";
+import type { ChannelOutboundAdapter } from "natesclaw/plugin-sdk/channel-send-result";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ChannelPlugin } from "natesclaw/plugin-sdk/core";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { readResponseTextLimited } from "natesclaw/plugin-sdk/provider-http";
+import { chunkTextForOutbound } from "natesclaw/plugin-sdk/text-chunking";
+import { runChannelProbe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { monitorTlonProvider } from "./monitor/index.js";
 import { tlonSetupWizard } from "./setup-surface.js";
 import {
@@ -96,7 +96,7 @@ async function createHttpPokeApi(params: {
 }
 
 function resolveOutboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   to: string;
 }) {

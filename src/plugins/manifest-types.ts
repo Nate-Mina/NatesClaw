@@ -1,4 +1,4 @@
-import type { ModelCatalog } from "@openclaw/model-catalog-core/model-catalog-types";
+import type { ModelCatalog } from "@natesclaw/model-catalog-core/model-catalog-types";
 import type { ChannelConfigRuntimeSchema } from "../channels/plugins/types.config.js";
 import type { ConfigUiPresentation } from "../shared/config-ui-hints-types.js";
 import type { JsonSchemaObject } from "../shared/json-schema.types.js";
@@ -18,7 +18,7 @@ export type PluginConfigUiHint = {
 };
 
 /** Top-level plugin manifest format. */
-export type PluginFormat = "openclaw" | "bundle";
+export type PluginFormat = "natesclaw" | "bundle";
 
 /** Supported external bundle manifest formats. */
 export type PluginBundleFormat = "agent" | "codex" | "claude" | "cursor";
@@ -231,14 +231,14 @@ export type PluginManifestDoctorContract = {
   resolveSessionStoreAgentIds?: boolean;
   /**
    * @deprecated Declare static ownership in top-level sessionRouteStateOwners instead.
-   * Removal plan: remove the module fallback in OpenClaw 2027.1 after external plugins migrate.
+   * Removal plan: remove the module fallback in Natesclaw 2027.1 after external plugins migrate.
    */
   sessionRouteStateOwners?: boolean;
   stateMigrations?: boolean;
 };
 
 export type PluginManifestQaRunner = {
-  /** Subcommand mounted beneath `openclaw qa`, for example `matrix`. */
+  /** Subcommand mounted beneath `natesclaw qa`, for example `matrix`. */
   commandName: string;
   /** Optional user-facing help text for fallback host stubs. */
   description?: string;

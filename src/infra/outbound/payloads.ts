@@ -1,6 +1,6 @@
 // Outbound payload planning normalizes reply payloads into sendable text,
 // media, presentation, interactive, and mirror projections.
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "natesclaw/plugin-sdk/reply-payload";
 import {
   mergeReactionDirectiveChannelData,
   parseReplyDirectives,
@@ -12,7 +12,7 @@ import {
 } from "../../auto-reply/reply/reply-payloads.js";
 import { stripLeadingInboundMetadata } from "../../auto-reply/reply/strip-inbound-meta.js";
 import type { ReplyPayload } from "../../auto-reply/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   hasLegacyInteractiveReplyBlocks,
   hasMessagePresentationBlocks,
@@ -69,7 +69,7 @@ export type OutboundPayloadPlan = {
 };
 
 type OutboundPayloadPlanContext = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   sessionKey?: string;
   surface?: string;
   conversationType?: SilentReplyConversationType;

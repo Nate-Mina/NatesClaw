@@ -1,13 +1,13 @@
 import type { Message } from "grammy/types";
 import type {
   DmPolicy,
-  OpenClawConfig,
+  NatesclawConfig,
   TelegramAccountConfig,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/config-contracts";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { expandTelegramAllowFromWithAccessGroups } from "./access-groups.js";
 import { resolveTelegramAccount } from "./accounts.js";
 import {
@@ -42,7 +42,7 @@ export type TelegramEventAuthorizationMode =
 
 export interface TelegramHandlerAuthorization {
   resolveTelegramEventAuthorizationContext: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     chatId: number;
     isGroup: boolean;
     senderId?: string;
@@ -129,7 +129,7 @@ export function createTelegramHandlerAuthorization({
   // Authorization owns one ingress snapshot. The agent turn intentionally
   // captures again after batching so reloads during debounce apply to execution.
   const resolveTelegramEventAuthorizationContext = async (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     chatId: number;
     isGroup: boolean;
     senderId?: string;
@@ -446,7 +446,7 @@ export function createTelegramHandlerAuthorization({
 }
 
 type TelegramEventAuthorizationContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   telegramCfg: TelegramAccountConfig;
   allowFrom?: Array<string | number>;
   dmPolicy: DmPolicy;
@@ -481,7 +481,7 @@ function shouldSkipTelegramGroupMessage(
     hasGroupAllowOverride: boolean;
     groupConfig?: TelegramGroupConfig;
     topicConfig?: TelegramTopicConfig;
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     telegramCfg: TelegramAccountConfig;
   },
   runtime: Pick<RegisterTelegramHandlerParams, "logger" | "resolveGroupPolicy">,

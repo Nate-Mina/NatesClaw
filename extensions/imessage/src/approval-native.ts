@@ -1,33 +1,33 @@
 // Imessage plugin module implements approval native behavior.
-import { createApproverRestrictedNativeApprovalCapabilityFromForwardingRoutes } from "openclaw/plugin-sdk/approval-delivery-runtime";
-import { createLazyChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
-import { shouldSuppressLocalNativeExecApprovalPrompt } from "openclaw/plugin-sdk/approval-native-runtime";
+import { createApproverRestrictedNativeApprovalCapabilityFromForwardingRoutes } from "natesclaw/plugin-sdk/approval-delivery-runtime";
+import { createLazyChannelApprovalNativeRuntimeAdapter } from "natesclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelApprovalNativeRuntimeAdapter } from "natesclaw/plugin-sdk/approval-handler-runtime";
+import { shouldSuppressLocalNativeExecApprovalPrompt } from "natesclaw/plugin-sdk/approval-native-runtime";
 import {
   buildTypedExecApprovalPendingReplyPayload,
   buildTypedPluginApprovalPendingReplyPayload,
-} from "openclaw/plugin-sdk/approval-reply-runtime";
+} from "natesclaw/plugin-sdk/approval-reply-runtime";
 import {
   getExecApprovalReplyMetadata,
   resolveExecApprovalCommandDisplay,
   resolveExecApprovalRequestAllowedDecisions,
-} from "openclaw/plugin-sdk/approval-runtime";
+} from "natesclaw/plugin-sdk/approval-runtime";
 import type {
   ExecApprovalRequest,
   ExecApprovalReplyDecision,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
+} from "natesclaw/plugin-sdk/approval-runtime";
 import type {
   ChannelApprovalCapability,
   ChannelOutboundPayloadHint,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeAccountId, parseAgentSessionKey } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/channel-contract";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import { normalizeAccountId, parseAgentSessionKey } from "natesclaw/plugin-sdk/routing";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   listIMessageAccountIds,
   resolveDefaultIMessageAccountId,
@@ -46,7 +46,7 @@ const DEFAULT_PLUGIN_APPROVAL_DECISIONS: readonly ExecApprovalReplyDecision[] = 
 ];
 
 function isIMessageApprovalTransportEnabled(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
 }): boolean {
   return resolveIMessageAccount({ cfg: params.cfg, accountId: params.accountId }).enabled;
@@ -143,7 +143,7 @@ function resolveIMessageSessionTargetFromSessionKey(sessionKey?: string | null) 
 }
 
 export function shouldSuppressLocalIMessageExecApprovalPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   payload: ReplyPayload;
   hint?: ChannelOutboundPayloadHint;

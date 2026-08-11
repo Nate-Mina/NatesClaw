@@ -1,9 +1,9 @@
 /** Exact-registry plugin command execution shared by focused and compatibility runtimes. */
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { resolveBoundAgentIdForSession } from "../agents/session-agent-binding.js";
 import { resolveConversationBindingContext } from "../channels/conversation-binding-context.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { ADMIN_SCOPE, isOperatorScope } from "../gateway/operator-scopes.js";
 import { logVerbose } from "../globals.js";
 import { withPluginCommandExecution } from "./command-execution-lock.js";
@@ -41,7 +41,7 @@ export type PluginCommandExecutionParams = {
   sessionFile?: PluginCommandContext["sessionFile"];
   authProfileId?: string;
   commandBody: string;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   from?: PluginCommandContext["from"];
   to?: PluginCommandContext["to"];
   originatingTo?: string;
@@ -71,7 +71,7 @@ function sanitizeArgs(args: string | undefined): string | undefined {
 
 function resolveBindingConversation(params: {
   registry: PluginRegistry;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   channel: string;
   senderId?: string;
   from?: string;
@@ -88,7 +88,7 @@ function resolveBindingConversation(params: {
     return null;
   }
   return resolveConversationBindingContext({
-    cfg: params.config ?? ({} as OpenClawConfig),
+    cfg: params.config ?? ({} as NatesclawConfig),
     channel: params.channel,
     accountId: params.accountId,
     threadId: params.messageThreadId,
@@ -107,7 +107,7 @@ type PluginCommandLlmCompleteParams = Parameters<
 
 function buildRuntimeContext(params: {
   command: RegisteredPluginCommand;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId?: string;
   sessionKey?: string;
   authProfileId?: string;

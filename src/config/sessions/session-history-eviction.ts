@@ -5,11 +5,11 @@ import {
 } from "../../sessions/session-lifecycle-admission.js";
 import { runQueuedStoreWrite, type StoreWriterQueue } from "../../shared/store-writer-queue.js";
 import {
-  isIncognitoOpenClawAgentSqlitePath,
-  openOpenClawAgentDatabase,
-  runOpenClawAgentWriteTransaction,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  isIncognitoNatesclawAgentSqlitePath,
+  openNatesclawAgentDatabase,
+  runNatesclawAgentWriteTransaction,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import {
   hasRetainedSessionTranscriptArchives,
   measureSessionPhysicalDiskUsage,
@@ -93,7 +93,7 @@ export async function inspectSqliteSessionHistoryDiskBudget(
     sessionKey: "",
     storePath: params.storePath,
   });
-  const database = openOpenClawAgentDatabase(toDatabaseOptions(resolved));
+  const database = openNatesclawAgentDatabase(toDatabaseOptions(resolved));
   const candidates = readHistoricalSessionIds({
     database,
     protectedSessionIds: collectProtectedHistoricalSessionIds({
@@ -105,7 +105,7 @@ export async function inspectSqliteSessionHistoryDiskBudget(
 }
 
 function collectProtectedHistoricalSessionIds(params: {
-  database: OpenClawAgentDatabase;
+  database: NatesclawAgentDatabase;
   storePath: string;
 }): Set<string> {
   const protectedSessionIds = readReferencedSessionIds(params.database);
@@ -117,7 +117,7 @@ function collectProtectedHistoricalSessionIds(params: {
 
 /** Session ids owned by in-flight work admissions, without live-reference protection. */
 export function collectAdmissionProtectedSessionIds(params: {
-  database: OpenClawAgentDatabase;
+  database: NatesclawAgentDatabase;
   storePath: string;
 }): Set<string> {
   const protectedSessionIds = new Set<string>();
@@ -167,7 +167,7 @@ export function collectAdmissionProtectedSessionIds(params: {
 }
 
 function readHistoricalSessionIds(params: {
-  database: OpenClawAgentDatabase;
+  database: NatesclawAgentDatabase;
   protectedSessionIds: ReadonlySet<string>;
 }): string[] {
   const db = getSessionKysely(params.database.db);
@@ -181,7 +181,7 @@ function readHistoricalSessionIds(params: {
   ).rows.flatMap((row) => (params.protectedSessionIds.has(row.session_id) ? [] : [row.session_id]));
 }
 
-function reclaimSqliteFreePages(database: OpenClawAgentDatabase): void {
+function reclaimSqliteFreePages(database: NatesclawAgentDatabase): void {
   // Committed row deletion first lands in the WAL. TRUNCATE makes that shrink immediately;
   // incremental vacuum can then return free tail pages from the main file without a rewrite.
   database.walMaintenance.checkpoint();
@@ -216,7 +216,7 @@ export function kickSessionHistoryDiskBudgetMaintenance(params: {
 }): void {
   if (
     params.agentId &&
-    isIncognitoOpenClawAgentSqlitePath(params.storePath, { agentId: params.agentId })
+    isIncognitoNatesclawAgentSqlitePath(params.storePath, { agentId: params.agentId })
   ) {
     return;
   }
@@ -311,7 +311,7 @@ async function enforceSessionHistoryMaintenanceSerialized(
     sessionKey: "",
     storePath: params.storePath,
   });
-  const database = openOpenClawAgentDatabase(toDatabaseOptions(resolved));
+  const database = openNatesclawAgentDatabase(toDatabaseOptions(resolved));
   const archiveDirectory = resolveSqliteTranscriptArchiveDirectory(resolved);
   let usage: SessionPhysicalDiskUsage = await runExclusiveSqliteSessionWrite(resolved, async () => {
     reclaimSqliteFreePages(database);
@@ -374,7 +374,7 @@ async function enforceSessionHistoryMaintenanceSerialized(
         const committedArchives = await runExclusiveSqliteSessionWrite(resolved, async () => {
           let deleted = false;
           let archivedTranscripts: ReturnType<typeof deleteMaterializedSessionStatePlans> = [];
-          runOpenClawAgentWriteTransaction((transactionDb) => {
+          runNatesclawAgentWriteTransaction((transactionDb) => {
             const protectedAtDelete = collectProtectedHistoricalSessionIds({
               database: transactionDb,
               storePath: params.storePath,

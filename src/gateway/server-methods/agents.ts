@@ -2,7 +2,7 @@
 // reads/writes, identity merging, and safe deletion for operator clients.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeOptionalString as resolveOptionalStringParam } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString as resolveOptionalStringParam } from "@natesclaw/normalization-core/string-coerce";
 import {
   GATEWAY_CLIENT_CAPS,
   hasGatewayClientCap,
@@ -71,7 +71,7 @@ import {
 import { purgeAgentSessionStoreEntries } from "../../config/sessions.js";
 import { resolveSessionTranscriptsDirForAgent } from "../../config/sessions/paths.js";
 import type { IdentityConfig } from "../../config/types.base.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { isMissingPathError } from "../../infra/errors.js";
 import { withAgentExecApprovalsRemoved } from "../../infra/exec-approvals.js";
 import { root, FsSafeError, type ReadResult } from "../../infra/fs-safe.js";
@@ -83,13 +83,13 @@ import {
   readAgentDeletionJournal,
   type AgentDeletionJournalCleanupPath,
 } from "../../state/agent-deletion-journal.js";
-import { assertNoOpenClawAgentDatabaseLeases } from "../../state/openclaw-agent-db-lease.js";
-import { unregisterOpenClawAgentDatabase } from "../../state/openclaw-agent-db-registry.js";
+import { assertNoNatesclawAgentDatabaseLeases } from "../../state/natesclaw-agent-db-lease.js";
+import { unregisterNatesclawAgentDatabase } from "../../state/natesclaw-agent-db-registry.js";
 import {
-  closeOpenClawAgentDatabaseByPath,
-  listOpenClawRegisteredAgentDatabases,
-  resolveOpenClawAgentSqlitePath,
-} from "../../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabaseByPath,
+  listNatesclawRegisteredAgentDatabases,
+  resolveNatesclawAgentSqlitePath,
+} from "../../state/natesclaw-agent-db.js";
 import { resolveUserPath } from "../../utils.js";
 import { listAgentsForGateway } from "../session-utils.js";
 import {
@@ -147,9 +147,9 @@ const ALLOWED_FILE_NAMES = new Set<string>(WORKSPACE_BOOTSTRAP_FILENAMES);
 function resolveAgentWorkspaceFileOrRespondError(
   params: Record<string, unknown>,
   respond: RespondFn,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   workspaceDir: string;
   name: string;
@@ -288,7 +288,7 @@ async function listAgentFiles(workspaceDir: string, options?: { hideBootstrap?: 
   return files;
 }
 
-function resolveAgentIdOrError(agentIdRaw: string, cfg: OpenClawConfig) {
+function resolveAgentIdOrError(agentIdRaw: string, cfg: NatesclawConfig) {
   const agentId = normalizeAgentId(agentIdRaw);
   const allowed = new Set(listAgentIds(cfg));
   if (!allowed.has(agentId)) {
@@ -650,7 +650,7 @@ type AgentDeleteDatabasePlan = {
 };
 
 function resolveSurvivingDatabaseFilePaths(
-  registeredDatabases: ReturnType<typeof listOpenClawRegisteredAgentDatabases>,
+  registeredDatabases: ReturnType<typeof listNatesclawRegisteredAgentDatabases>,
   agentId: string,
 ): string[] {
   return [
@@ -664,7 +664,7 @@ function resolveSurvivingDatabaseFilePaths(
 }
 
 function isPathOwnedBySurvivingAgent(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   pathname: string,
   survivingDatabaseFilePaths: readonly string[] = [],
@@ -683,19 +683,19 @@ function isPathOwnedBySurvivingAgent(
 }
 
 function prepareAgentDeleteDatabases(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   agentDir: string,
 ): AgentDeleteDatabasePlan {
-  const registeredDatabases = listOpenClawRegisteredAgentDatabases();
+  const registeredDatabases = listNatesclawRegisteredAgentDatabases();
   const survivingDatabaseFilePaths = resolveSurvivingDatabaseFilePaths(
     registeredDatabases,
     agentId,
   );
   const registeredDatabasePaths = new Set([
-    resolveOpenClawAgentSqlitePath({
+    resolveNatesclawAgentSqlitePath({
       agentId,
-      path: path.join(agentDir, "openclaw-agent.sqlite"),
+      path: path.join(agentDir, "natesclaw-agent.sqlite"),
     }),
     ...registeredDatabases
       .filter((entry) => normalizeAgentId(entry.agentId) === agentId)
@@ -708,9 +708,9 @@ function prepareAgentDeleteDatabases(
     ),
   );
   for (const databasePath of databasePaths) {
-    closeOpenClawAgentDatabaseByPath(databasePath);
+    closeNatesclawAgentDatabaseByPath(databasePath);
   }
-  assertNoOpenClawAgentDatabaseLeases(agentId);
+  assertNoNatesclawAgentDatabaseLeases(agentId);
   const fileGroups = databasePaths.map(resolveSqliteDatabaseFilePaths);
   const relocatedFileGroups = fileGroups.filter((fileGroup) => {
     const relative = path.relative(agentDir, fileGroup[0] ?? agentDir);
@@ -726,12 +726,12 @@ function prepareAgentDeleteDatabases(
 
 function unregisterAgentDeleteDatabases(agentId: string, databasePaths: string[]): void {
   for (const databasePath of databasePaths) {
-    unregisterOpenClawAgentDatabase({ agentId, path: databasePath });
+    unregisterNatesclawAgentDatabase({ agentId, path: databasePath });
   }
 }
 
 function prepareJournaledAgentDirOwnership(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   agentDir: string,
 ): void {
@@ -1221,7 +1221,7 @@ export const agentsHandlers: GatewayRequestHandlers = {
 
         if (deleteFiles) {
           const survivingDatabaseFilePaths = resolveSurvivingDatabaseFilePaths(
-            listOpenClawRegisteredAgentDatabases(),
+            listNatesclawRegisteredAgentDatabases(),
             agentId,
           );
           const workspaceTrashEligible = !isPathOwnedBySurvivingAgent(
@@ -1349,7 +1349,7 @@ export const agentsHandlers: GatewayRequestHandlers = {
               continue;
             }
             const refreshedDatabaseFilePaths = resolveSurvivingDatabaseFilePaths(
-              listOpenClawRegisteredAgentDatabases(),
+              listNatesclawRegisteredAgentDatabases(),
               agentId,
             );
             const blockingProtection = protectedCleanupPaths.find(

@@ -1,19 +1,19 @@
 // Telegram plugin module implements token behavior.
-import { resolveNormalizedAccountEntry } from "openclaw/plugin-sdk/account-core";
-import type { BaseTokenResolution } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { TelegramAccountConfig } from "openclaw/plugin-sdk/config-contracts";
+import { resolveNormalizedAccountEntry } from "natesclaw/plugin-sdk/account-core";
+import type { BaseTokenResolution } from "natesclaw/plugin-sdk/channel-contract";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { TelegramAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   normalizeOptionalAccountId,
-} from "openclaw/plugin-sdk/routing";
-import { tryReadSecretFileSync } from "openclaw/plugin-sdk/secret-file-runtime";
+} from "natesclaw/plugin-sdk/routing";
+import { tryReadSecretFileSync } from "natesclaw/plugin-sdk/secret-file-runtime";
 import {
   normalizeSecretInputString,
   resolveSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { resolveDefaultSecretProviderAlias } from "openclaw/plugin-sdk/secret-provider-alias";
+} from "natesclaw/plugin-sdk/secret-input";
+import { resolveDefaultSecretProviderAlias } from "natesclaw/plugin-sdk/secret-provider-alias";
 import { resolveDefaultTelegramAccountId } from "./account-selection.js";
 
 type CredentialUnavailableDiagnostic = Extract<
@@ -34,7 +34,7 @@ type RuntimeTokenValueResolution =
   | { status: "missing" };
 
 function resolveEnvSecretRefValue(params: {
-  cfg?: Pick<OpenClawConfig, "secrets">;
+  cfg?: Pick<NatesclawConfig, "secrets">;
   provider: string;
   id: string;
   env?: NodeJS.ProcessEnv;
@@ -62,7 +62,7 @@ function resolveEnvSecretRefValue(params: {
 }
 
 function resolveRuntimeTokenValue(params: {
-  cfg?: Pick<OpenClawConfig, "secrets">;
+  cfg?: Pick<NatesclawConfig, "secrets">;
   value: unknown;
   path: string;
 }): RuntimeTokenValueResolution {
@@ -112,7 +112,7 @@ type ResolveTelegramTokenOpts = {
 };
 
 export function resolveTelegramToken(
-  cfg?: OpenClawConfig,
+  cfg?: NatesclawConfig,
   opts: ResolveTelegramTokenOpts = {},
 ): TelegramTokenResolution {
   const requestedAccountId = normalizeOptionalAccountId(opts.accountId);
@@ -142,7 +142,7 @@ export function resolveTelegramToken(
   //
   // Single-bot: no accounts section (or empty) → allow fallthrough so that
   // binding-created accountIds inherit the channel-level token.
-  // See: https://github.com/openclaw/openclaw/issues/53876
+  // See: https://github.com/natesclaw/natesclaw/issues/53876
   if (accountId !== DEFAULT_ACCOUNT_ID && !accountCfg) {
     const accounts = telegramCfg?.accounts;
     const hasConfiguredAccounts =

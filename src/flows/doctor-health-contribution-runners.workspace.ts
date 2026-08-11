@@ -1,5 +1,5 @@
 import type { DoctorOptions } from "../commands/doctor-prompter.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { DoctorHealthFlowContext } from "./doctor-health-contribution-types.js";
 import { resolveDoctorWorkspaceSuggestionScopes } from "./doctor-workspace-suggestion-scopes.js";
 import type { HealthCheckContext, HealthFinding } from "./health-checks.js";
@@ -78,7 +78,7 @@ export async function runHooksModelHealth(ctx: DoctorHealthFlowContext): Promise
 }
 
 export async function collectWorkspaceStatusPluginVersionDrift(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   options?: Pick<DoctorOptions, "allowExec" | "deep" | "nonInteractive">;
 }): Promise<PluginVersionDriftReport | undefined> {
   if (params.cfg.gateway?.mode === "remote") {

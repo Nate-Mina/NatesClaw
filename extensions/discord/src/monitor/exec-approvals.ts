@@ -3,13 +3,13 @@ import { ButtonStyle } from "discord-api-types/v10";
 import {
   resolveApprovalOverGateway,
   type ApprovalResolveResult,
-} from "openclaw/plugin-sdk/approval-gateway-runtime";
-import type { PendingApprovalView } from "openclaw/plugin-sdk/approval-handler-runtime";
-import type { ExecApprovalDecision } from "openclaw/plugin-sdk/approval-runtime";
+} from "natesclaw/plugin-sdk/approval-gateway-runtime";
+import type { PendingApprovalView } from "natesclaw/plugin-sdk/approval-handler-runtime";
+import type { ExecApprovalDecision } from "natesclaw/plugin-sdk/approval-runtime";
 import type {
   DiscordExecApprovalConfig,
-  OpenClawConfig,
-} from "openclaw/plugin-sdk/config-contracts";
+  NatesclawConfig,
+} from "natesclaw/plugin-sdk/config-contracts";
 import { parseExecApprovalData } from "../approval-custom-id.js";
 import {
   DISCORD_APPROVAL_ALLOWED_MENTIONS,
@@ -187,7 +187,7 @@ export function createExecApprovalButton(ctx: ExecApprovalButtonContext): Button
 }
 
 export function createDiscordExecApprovalButtonContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   config: DiscordExecApprovalConfig;
   gatewayUrl?: string;

@@ -276,7 +276,7 @@ suite.define(() => {
       await neutralRow.click();
       await expect.poll(() => page.url()).toContain("neutral-e2e");
       await page.evaluate((pathname) => {
-        const app = document.querySelector("openclaw-app") as HTMLElement & {
+        const app = document.querySelector("natesclaw-app") as HTMLElement & {
           runtime?: {
             context: {
               navigate: (routeId: string, options: { pathname: string }) => void;
@@ -336,7 +336,7 @@ suite.define(() => {
             kind: "direct",
             label: "Cloud session",
             updatedAt: Date.now(),
-            worktree: { id: "worktree-1", branch: "openclaw/cloud-e2e", repoRoot: WORKSPACE },
+            worktree: { id: "worktree-1", branch: "natesclaw/cloud-e2e", repoRoot: WORKSPACE },
             placement: { state: "active" },
           },
           {
@@ -375,7 +375,7 @@ suite.define(() => {
       await sessionRow.hover();
       await sessionRow.getByRole("button", { name: "Open session menu" }).click();
       const stopWorker = page
-        .locator("openclaw-session-menu")
+        .locator("natesclaw-session-menu")
         .getByRole("menuitem", { name: "Stop cloud worker…" });
       await stopWorker.waitFor();
       await captureUiProof(page, "02-active-cloud-worker-stop.png");
@@ -463,7 +463,7 @@ suite.define(() => {
         .toBe(true);
       await page.keyboard.press("Escape");
 
-      const agentPicker = page.locator(".new-session-page__select--agent openclaw-agent-select");
+      const agentPicker = page.locator(".new-session-page__select--agent natesclaw-agent-select");
       await agentPicker.locator(".agent-select__trigger").click();
       await agentPicker
         .locator("wa-dropdown-item[data-agent-option]")
@@ -553,8 +553,8 @@ suite.define(() => {
         const originalSetItem = sessionStorage.setItem.bind(sessionStorage);
         Storage.prototype.setItem = function (key: string, value: string) {
           if (
-            key.startsWith("openclaw.new-session.cloud-recovery.v2:") ||
-            key.startsWith("openclaw.control-ui-e2e.")
+            key.startsWith("natesclaw.new-session.cloud-recovery.v2:") ||
+            key.startsWith("natesclaw.control-ui-e2e.")
           ) {
             originalSetItem(key, value);
             return;
@@ -594,7 +594,7 @@ suite.define(() => {
       await expect
         .poll(() =>
           page.evaluate(() => {
-            const app = document.querySelector("openclaw-app") as HTMLElement & {
+            const app = document.querySelector("natesclaw-app") as HTMLElement & {
               runtime?: { context: { gateway: { snapshot: { phase: string } } } };
             };
             return app.runtime?.context.gateway.snapshot.phase;
@@ -660,7 +660,7 @@ suite.define(() => {
       await page.goto(`${suite.server.baseUrl}new`);
       await gateway.waitForRequest("environments.list");
       const recoveryIdentity = await page.evaluate(async () => {
-        const app = document.querySelector("openclaw-app") as HTMLElement & {
+        const app = document.querySelector("natesclaw-app") as HTMLElement & {
           runtime?: {
             context: {
               gateway: {
@@ -688,7 +688,7 @@ suite.define(() => {
       await expect
         .poll(() =>
           page.evaluate(() => {
-            const app = document.querySelector("openclaw-app") as HTMLElement & {
+            const app = document.querySelector("natesclaw-app") as HTMLElement & {
               runtime?: { context: { gateway: { snapshot: { phase: string } } } };
             };
             return app.runtime?.context.gateway.snapshot.phase === "connected";
@@ -697,7 +697,7 @@ suite.define(() => {
         .toBe(false);
       await page.evaluate(({ gatewayUrl, legacyScope }) => {
         sessionStorage.setItem(
-          `openclaw.new-session.cloud-recovery.v1:${gatewayUrl}:${legacyScope}`,
+          `natesclaw.new-session.cloud-recovery.v1:${gatewayUrl}:${legacyScope}`,
           JSON.stringify({
             sessionKey: "agent:cloud:offline-recovery",
             messageId: "message-offline-recovery",
@@ -722,7 +722,7 @@ suite.define(() => {
         await page.evaluate(
           ({ gatewayUrl, legacyScope }) =>
             sessionStorage.getItem(
-              `openclaw.new-session.cloud-recovery.v1:${gatewayUrl}:${legacyScope}`,
+              `natesclaw.new-session.cloud-recovery.v1:${gatewayUrl}:${legacyScope}`,
             ),
           recoveryIdentity,
         ),
@@ -862,7 +862,7 @@ suite.define(() => {
     const readRecovery = () =>
       page.evaluate(() => {
         const key = Object.keys(sessionStorage).find((candidate) =>
-          candidate.startsWith("openclaw.new-session.cloud-recovery.v2:"),
+          candidate.startsWith("natesclaw.new-session.cloud-recovery.v2:"),
         );
         return key ? (JSON.parse(sessionStorage.getItem(key) ?? "null") as unknown) : null;
       });
@@ -989,7 +989,7 @@ suite.define(() => {
       await page.evaluate(() => {
         const originalSetItem = sessionStorage.setItem.bind(sessionStorage);
         Storage.prototype.setItem = function (key: string, value: string) {
-          if (key.startsWith("openclaw.new-session.cloud-recovery.v2:")) {
+          if (key.startsWith("natesclaw.new-session.cloud-recovery.v2:")) {
             originalSetItem(key, value);
             return;
           }

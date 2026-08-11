@@ -1,10 +1,10 @@
 // Nostr plugin module implements channel.setup behavior.
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { describeAccountSnapshot } from "natesclaw/plugin-sdk/account-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   createDelegatedSetupWizardProxy,
   DEFAULT_ACCOUNT_ID,
-} from "openclaw/plugin-sdk/setup-runtime";
+} from "natesclaw/plugin-sdk/setup-runtime";
 import { buildChannelConfigSchema, type ChannelPlugin } from "./channel-api.js";
 import { NostrConfigSchema } from "./config-schema.js";
 import { DEFAULT_RELAYS } from "./default-relays.js";
@@ -19,13 +19,13 @@ const channel = "nostr" as const;
 
 type NostrAccountConfig = ResolvedNostrAccount["config"];
 
-function getNostrConfig(cfg: OpenClawConfig): NostrAccountConfig | undefined {
+function getNostrConfig(cfg: NatesclawConfig): NostrAccountConfig | undefined {
   return (cfg.channels as Record<string, unknown> | undefined)?.nostr as
     | NostrAccountConfig
     | undefined;
 }
 
-function resolveDefaultSetupNostrAccountId(cfg: OpenClawConfig): string {
+function resolveDefaultSetupNostrAccountId(cfg: NatesclawConfig): string {
   const configured = getNostrConfig(cfg)?.defaultAccount;
   return typeof configured === "string" && configured.trim()
     ? configured.trim()
@@ -33,7 +33,7 @@ function resolveDefaultSetupNostrAccountId(cfg: OpenClawConfig): string {
 }
 
 function resolveSetupNostrAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
 }): ResolvedNostrAccount {
   const nostrCfg = getNostrConfig(params.cfg);

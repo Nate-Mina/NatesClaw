@@ -19,9 +19,9 @@ describe("debug proxy coverage report", () => {
 
     maybeWarnAboutDebugProxyCoverage(
       {
-        blobDir: "/tmp/openclaw-debug-proxy-blobs",
-        certDir: "/tmp/openclaw-debug-proxy-certs",
-        dbPath: "/tmp/openclaw-debug-proxy.sqlite",
+        blobDir: "/tmp/natesclaw-debug-proxy-blobs",
+        certDir: "/tmp/natesclaw-debug-proxy-certs",
+        dbPath: "/tmp/natesclaw-debug-proxy.sqlite",
         enabled: true,
         proxyUrl: "http://127.0.0.1:8080",
         required: true,

@@ -1,7 +1,7 @@
 import type { Command } from "commander";
-import { callGatewayFromCli } from "openclaw/plugin-sdk/gateway-runtime";
-import { generateHexPkceVerifierChallenge } from "openclaw/plugin-sdk/provider-auth";
-import { generateOAuthState } from "openclaw/plugin-sdk/provider-auth-runtime";
+import { callGatewayFromCli } from "natesclaw/plugin-sdk/gateway-runtime";
+import { generateHexPkceVerifierChallenge } from "natesclaw/plugin-sdk/provider-auth";
+import { generateOAuthState } from "natesclaw/plugin-sdk/provider-auth-runtime";
 import { registerGoogleMeetArtifactCommands } from "./cli-artifact-commands.js";
 import type { GoogleMeetCliCommandContext } from "./cli-command-context.js";
 import { registerGoogleMeetDoctorCommand } from "./cli-doctor.js";
@@ -110,7 +110,7 @@ export function registerGoogleMeetCli(params: {
   const root = params.program
     .command("googlemeet")
     .description("Google Meet participant utilities")
-    .addHelpText("after", () => `\nDocs: https://docs.openclaw.ai/plugins/google-meet\n`);
+    .addHelpText("after", () => `\nDocs: https://docs.natesclaw.ai/plugins/google-meet\n`);
 
   const auth = root.command("auth").description("Google Meet OAuth helpers");
 

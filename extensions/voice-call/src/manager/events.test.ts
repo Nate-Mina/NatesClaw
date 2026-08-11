@@ -2,11 +2,11 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
+import type { OpenKeyedStoreOptions } from "natesclaw/plugin-sdk/plugin-state-runtime";
 import {
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { VoiceCallConfigSchema } from "../config.js";
 import type { VoiceCallProvider } from "../providers/base.js";
@@ -28,8 +28,8 @@ const logSpy = vi.hoisted(() => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/runtime-env")>();
+vi.mock("natesclaw/plugin-sdk/runtime-env", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/runtime-env")>();
   return {
     ...actual,
     createSubsystemLogger: (_subsystem: string) => ({
@@ -94,7 +94,7 @@ afterEach(async () => {
 });
 
 function createContext(overrides: Partial<CallManagerContext> = {}): CallManagerContext {
-  const storePath = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-voice-call-events-test-"));
+  const storePath = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-voice-call-events-test-"));
   const ctx: CallManagerContext = {
     activeCalls: new Map(),
     providerCallIdMap: new Map(),

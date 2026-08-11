@@ -92,9 +92,9 @@ const RUNTIME_SIDECAR_BASELINE_PATH_RE =
 // must re-prove the src/plugins-owned declaration and closure-guard tests that the
 // extension lanes would otherwise never select.
 const DOCTOR_CONTRACT_OWNER_TEST_PATH_RE =
-  /^extensions\/[^/]+\/(?:openclaw\.plugin\.json$|(?!.*\.test\.).*\.(?:c|m)?[jt]s$)/u;
+  /^extensions\/[^/]+\/(?:natesclaw\.plugin\.json$|(?!.*\.test\.).*\.(?:c|m)?[jt]s$)/u;
 const SQLITE_SESSION_SCHEMA_BASELINE_PATH_RE =
-  /^(?:src\/state\/openclaw-agent-schema\.sql|scripts\/(?:generate-sqlite-session-schema-baseline\.ts|lib\/sqlite-session-schema-baseline\.ts)|test\/scripts\/sqlite-session-schema-baseline\.test\.ts|docs\/\.generated\/sqlite-session-transcript-schema-baseline\.sha256)$/u;
+  /^(?:src\/state\/natesclaw-agent-schema\.sql|scripts\/(?:generate-sqlite-session-schema-baseline\.ts|lib\/sqlite-session-schema-baseline\.ts)|test\/scripts\/sqlite-session-schema-baseline\.test\.ts|docs\/\.generated\/sqlite-session-transcript-schema-baseline\.sha256)$/u;
 const PLUGIN_SDK_API_BASELINE_PATH_RE =
   /^(?:src\/|packages\/|extensions\/|pnpm-lock\.yaml$|tsconfig\.json$|scripts\/(?:generate-plugin-sdk-api-baseline\.ts|lib\/plugin-sdk-(?:doc-metadata\.ts|entries\.mts|entrypoints\.json|private-local-only-subpaths\.json))|docs\/\.generated\/plugin-sdk-api-baseline\/[^/]+\.json$)/u;
 const PLUGIN_SDK_SURFACE_PATH_RE =
@@ -104,7 +104,7 @@ const DEPRECATION_HYGIENE_PATH_RE =
 const WRAPPER_SHADOWING_PATH_RE =
   /^(?:package\.json$|src\/|scripts\/(?:check-(?:export-name-collisions|wrapper-shadowing)\.mts$|lib\/(?:export-name-collision-baseline\.json$|ts-guard-utils\.mts$|wrapper-shadowing-baseline\.json$)))/u;
 const CANVAS_A2UI_NATIVE_RESOURCE_PATH_RE =
-  /^(?:pnpm-lock\.yaml$|apps\/(?:android\/app\/build\.gradle\.kts$|ios\/project\.yml$|linux\/src-tauri\/(?:build\.rs$|src\/canvas\.rs$)|shared\/OpenClawKit\/Sources\/OpenClawKit\/Resources\/CanvasA2UI\/)|extensions\/canvas\/(?:package\.json$|scripts\/bundle-a2ui\.mjs$|src\/host\/a2ui(?:\/(?:index\.html|a2ui\.bundle\.js|\.bundle\.hash)$|-app\/))|scripts\/(?:bundle-a2ui|sync-native-a2ui)\.mts$)/u;
+  /^(?:pnpm-lock\.yaml$|apps\/(?:android\/app\/build\.gradle\.kts$|ios\/project\.yml$|linux\/src-tauri\/(?:build\.rs$|src\/canvas\.rs$)|shared\/NatesclawKit\/Sources\/NatesclawKit\/Resources\/CanvasA2UI\/)|extensions\/canvas\/(?:package\.json$|scripts\/bundle-a2ui\.mjs$|src\/host\/a2ui(?:\/(?:index\.html|a2ui\.bundle\.js|\.bundle\.hash)$|-app\/))|scripts\/(?:bundle-a2ui|sync-native-a2ui)\.mts$)/u;
 const CONTROL_UI_I18N_VERIFY_PATH_RE =
   /^(?:package\.json$|ui\/(?:src\/|config\/control-ui-locales\.ts$)|scripts\/(?:control-ui-i18n(?:-(?:report|verify))?\.ts|lib\/control-ui-i18n-[^/]+\.ts)$|test\/scripts\/control-ui-i18n[^/]*\.test\.ts$)/u;
 const CORE_OXLINT_TS_CONFIG = "config/tsconfig/oxlint.core.json";
@@ -151,9 +151,9 @@ export function createChangedCheckChildEnv(baseEnv: NodeJS.ProcessEnv = process.
   const resolvedBaseEnv = resolveLocalHeavyCheckEnv(baseEnv);
   return {
     ...resolvedBaseEnv,
-    OPENCLAW_OXLINT_SKIP_LOCK: "1",
-    OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-    OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+    NATESCLAW_OXLINT_SKIP_LOCK: "1",
+    NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+    NATESCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
   };
 }
 
@@ -231,7 +231,7 @@ export function shouldDelegateChangedCheckToCrabbox(
   env: NodeJS.ProcessEnv = process.env,
   options: ChangedCheckDelegateOptions = {},
 ) {
-  if (isTruthyEnvFlag(env.OPENCLAW_CHECK_CHANGED_REMOTE_CHILD)) {
+  if (isTruthyEnvFlag(env.NATESCLAW_CHECK_CHANGED_REMOTE_CHILD)) {
     return false;
   }
   if (isTruthyEnvFlag(env.CI) || isTruthyEnvFlag(env.GITHUB_ACTIONS)) {
@@ -247,7 +247,7 @@ export function shouldDelegateChangedCheckToCrabbox(
   if (result.paths.length === 0) {
     return false;
   }
-  if (isTruthyEnvFlag(env.OPENCLAW_TESTBOX)) {
+  if (isTruthyEnvFlag(env.NATESCLAW_TESTBOX)) {
     return true;
   }
   // Release metadata plans diff the supplied commits after classification. A missing
@@ -299,8 +299,8 @@ export function buildChangedCheckCrabboxArgs(argv: string[] = [], options: { cwd
     "--timing-json",
     "--",
     "env",
-    "OPENCLAW_CHECK_CHANGED_REMOTE_CHILD=1",
-    "OPENCLAW_CHANGED_LANES_RAW_SYNC=1",
+    "NATESCLAW_CHECK_CHANGED_REMOTE_CHILD=1",
+    "NATESCLAW_CHANGED_LANES_RAW_SYNC=1",
     "CI=1",
     "PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false",
     "corepack",
@@ -708,10 +708,10 @@ export function createChangedCheckPlan(
   add("package patch guard", ["deps:patches:check"]);
   if (
     hasDeadcodeScannedSource(result.paths) &&
-    !isTruthyEnvFlag(baseEnv.OPENCLAW_CHECK_CHANGED_SKIP_DEADCODE)
+    !isTruthyEnvFlag(baseEnv.NATESCLAW_CHECK_CHANGED_SKIP_DEADCODE)
   ) {
     addCommand(
-      "dead export scan (skip with OPENCLAW_CHECK_CHANGED_SKIP_DEADCODE=1)",
+      "dead export scan (skip with NATESCLAW_CHECK_CHANGED_SKIP_DEADCODE=1)",
       "node",
       ["--import", "tsx", "scripts/check-deadcode-exports.mts"],
       baseEnv,
@@ -873,8 +873,8 @@ export function createChangedCheckPlan(
     addCommand("live Docker shell syntax", "bash", ["-n", ...LIVE_DOCKER_AUTH_SHELL_TARGETS]);
     addCommand("live Docker scheduler dry run", "node", ["scripts/test-docker-all.mjs"], {
       ...baseEnv,
-      OPENCLAW_DOCKER_ALL_DRY_RUN: "1",
-      OPENCLAW_DOCKER_ALL_LIVE_MODE: "only",
+      NATESCLAW_DOCKER_ALL_DRY_RUN: "1",
+      NATESCLAW_DOCKER_ALL_LIVE_MODE: "only",
     });
   }
 
@@ -1090,7 +1090,7 @@ function ensureCorepackPnpmShimDir() {
   if (corepackPnpmShimDir) {
     return corepackPnpmShimDir;
   }
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-corepack-pnpm-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "natesclaw-corepack-pnpm-"));
   const pnpmPath = path.join(dir, "pnpm");
   writeFileSync(pnpmPath, '#!/bin/sh\nexec corepack pnpm "$@"\n', "utf8");
   chmodSync(pnpmPath, 0o755);

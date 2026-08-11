@@ -1,6 +1,6 @@
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
 // Feishu plugin module implements thread bindings behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   resolveThreadBindingIdleTimeoutMsForChannel,
   resolveThreadBindingMaxAgeMsForChannel,
@@ -10,10 +10,10 @@ import {
   type BindingTargetKind,
   type SessionBindingAdapter,
   type SessionBindingRecord,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { isFutureDateTimestampMs } from "openclaw/plugin-sdk/number-runtime";
-import { normalizeAccountId, resolveAgentIdFromSessionKey } from "openclaw/plugin-sdk/routing";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { isFutureDateTimestampMs } from "natesclaw/plugin-sdk/number-runtime";
+import { normalizeAccountId, resolveAgentIdFromSessionKey } from "natesclaw/plugin-sdk/routing";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 type FeishuBindingTargetKind = "subagent" | "acp";
 
@@ -54,7 +54,7 @@ type FeishuThreadBindingsState = {
   bindingsByAccountConversation: Map<string, FeishuThreadBindingRecord>;
 };
 
-const FEISHU_THREAD_BINDINGS_STATE_KEY = Symbol.for("openclaw.feishuThreadBindingsState");
+const FEISHU_THREAD_BINDINGS_STATE_KEY = Symbol.for("natesclaw.feishuThreadBindingsState");
 let state: FeishuThreadBindingsState | undefined;
 
 function getState(): FeishuThreadBindingsState {
@@ -125,7 +125,7 @@ function toSessionBindingRecord(
 
 export function createFeishuThreadBindingManager(params: {
   accountId?: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 }): FeishuThreadBindingManager {
   const accountId = normalizeAccountId(params.accountId);
   const existing = getState().managersByAccountId.get(accountId);

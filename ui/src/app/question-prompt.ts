@@ -1,6 +1,6 @@
 // Control UI module owns transient operator question state.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeNullableString as readNonEmptyString } from "@openclaw/normalization-core/string-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeNullableString as readNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
 import type {
   Question,
   QuestionAnswers,

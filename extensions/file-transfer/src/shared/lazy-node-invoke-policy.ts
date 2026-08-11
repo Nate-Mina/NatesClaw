@@ -1,8 +1,8 @@
 // File Transfer plugin module implements lazy node invoke policy behavior.
-import type { OpenClawPluginNodeInvokePolicy } from "openclaw/plugin-sdk/plugin-entry";
+import type { NatesclawPluginNodeInvokePolicy } from "natesclaw/plugin-sdk/plugin-entry";
 import { FILE_TRANSFER_NODE_INVOKE_COMMANDS } from "./node-invoke-policy-commands.js";
 
-type LoadFileTransferNodeInvokePolicy = () => Promise<OpenClawPluginNodeInvokePolicy>;
+type LoadFileTransferNodeInvokePolicy = () => Promise<NatesclawPluginNodeInvokePolicy>;
 
 const loadFileTransferNodeInvokePolicy: LoadFileTransferNodeInvokePolicy = async () => {
   const { createFileTransferNodeInvokePolicy } = await import("./node-invoke-policy.js");
@@ -11,13 +11,13 @@ const loadFileTransferNodeInvokePolicy: LoadFileTransferNodeInvokePolicy = async
 
 export function createLazyFileTransferNodeInvokePolicy(
   loadPolicy: LoadFileTransferNodeInvokePolicy = loadFileTransferNodeInvokePolicy,
-): OpenClawPluginNodeInvokePolicy {
-  let policyPromise: Promise<OpenClawPluginNodeInvokePolicy> | undefined;
+): NatesclawPluginNodeInvokePolicy {
+  let policyPromise: Promise<NatesclawPluginNodeInvokePolicy> | undefined;
 
   return {
     commands: [...FILE_TRANSFER_NODE_INVOKE_COMMANDS],
     async handle(ctx) {
-      let policy: OpenClawPluginNodeInvokePolicy;
+      let policy: NatesclawPluginNodeInvokePolicy;
       try {
         policyPromise ??= loadPolicy();
         policy = await policyPromise;

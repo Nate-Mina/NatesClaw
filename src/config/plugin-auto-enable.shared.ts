@@ -1,13 +1,13 @@
 // Shares plugin auto-enable detection across config and runtime code.
-import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { expectDefined } from "@openclaw/normalization-core";
+import { collectConfiguredModelRefs } from "@natesclaw/model-catalog-core/configured-model-refs";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   asOptionalObjectRecord,
   asOptionalRecord,
   isRecord,
-} from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 import { listAgentEntries } from "../agents/agent-scope-config.js";
 import { collectConfiguredAgentHarnessRuntimes } from "../agents/harness-runtimes.js";
 import {
@@ -40,7 +40,7 @@ import type {
   PluginAutoEnableResult,
 } from "./plugin-auto-enable.types.js";
 import { ensurePluginAllowlisted } from "./plugins-allowlist.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { NatesclawConfig } from "./types.natesclaw.js";
 
 const EMPTY_PLUGIN_MANIFEST_REGISTRY: PluginManifestRegistry = {
   plugins: [],
@@ -61,7 +61,7 @@ function resolveAutoEnableProviderPluginIds(
   return Object.fromEntries(entries);
 }
 
-function canReuseUnscopedCurrentPluginMetadataSnapshot(config: OpenClawConfig): boolean {
+function canReuseUnscopedCurrentPluginMetadataSnapshot(config: NatesclawConfig): boolean {
   return normalizePluginsConfig(config.plugins).loadPaths.length === 0;
 }
 
@@ -75,7 +75,7 @@ function extractProviderFromModelRef(value: string): string | null {
 }
 
 function hasConfiguredEmbeddedHarnessRuntime(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   _env: NodeJS.ProcessEnv,
 ): boolean {
   return collectConfiguredAgentHarnessRuntimes(cfg).length > 0;
@@ -99,7 +99,7 @@ function resolveAgentHarnessOwnerPluginIds(
     .toSorted((left, right) => left.localeCompare(right));
 }
 
-function isProviderConfigured(cfg: OpenClawConfig, providerId: string): boolean {
+function isProviderConfigured(cfg: NatesclawConfig, providerId: string): boolean {
   const normalized = normalizeProviderId(providerId);
   const profiles = cfg.auth?.profiles;
   if (profiles && typeof profiles === "object") {
@@ -135,12 +135,12 @@ function isProviderConfigured(cfg: OpenClawConfig, providerId: string): boolean 
   return false;
 }
 
-function hasPluginOwnedWebSearchConfig(cfg: OpenClawConfig, pluginId: string): boolean {
+function hasPluginOwnedWebSearchConfig(cfg: NatesclawConfig, pluginId: string): boolean {
   const pluginConfig = cfg.plugins?.entries?.[pluginId]?.config;
   return isRecord(pluginConfig) && isRecord(pluginConfig.webSearch);
 }
 
-function hasPluginOwnedWebFetchConfig(cfg: OpenClawConfig, pluginId: string): boolean {
+function hasPluginOwnedWebFetchConfig(cfg: NatesclawConfig, pluginId: string): boolean {
   const pluginConfig = cfg.plugins?.entries?.[pluginId]?.config;
   return isRecord(pluginConfig) && isRecord(pluginConfig.webFetch);
 }
@@ -156,7 +156,7 @@ function resolvePluginOwnedToolConfigKeys(plugin: PluginManifestRecord): string[
   return Object.keys(properties).filter((key) => key !== "webSearch" && key !== "webFetch");
 }
 
-function hasPluginOwnedToolConfig(cfg: OpenClawConfig, plugin: PluginManifestRecord): boolean {
+function hasPluginOwnedToolConfig(cfg: NatesclawConfig, plugin: PluginManifestRecord): boolean {
   const pluginConfig = cfg.plugins?.entries?.[plugin.id]?.config;
   if (!isRecord(pluginConfig)) {
     return false;
@@ -293,7 +293,7 @@ function collectPluginIdsForConfiguredChannel(
 }
 
 function collectConfiguredChannelIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv,
   discovery?: PluginDiscoveryResult,
   ambientEnvTriggers: AmbientEnvTriggerPolicy = "allow",
@@ -322,7 +322,7 @@ function collectConfiguredChannelIds(
 }
 
 function isAutoEnableConfiguredChannelSignal(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   channelId: string;
   source: ChannelPresenceSignalSource;
@@ -344,7 +344,7 @@ function isAutoEnableConfiguredChannelSignal(params: {
   return isChannelConfigured(params.cfg, params.channelId, params.env);
 }
 
-function hasConfiguredWebSearchProviderSelection(cfg: OpenClawConfig): boolean {
+function hasConfiguredWebSearchProviderSelection(cfg: NatesclawConfig): boolean {
   const provider = cfg.tools?.web?.search?.provider;
   return (
     cfg.tools?.web?.search?.enabled !== false &&
@@ -353,12 +353,12 @@ function hasConfiguredWebSearchProviderSelection(cfg: OpenClawConfig): boolean {
   );
 }
 
-function hasConfiguredSpeechProviderSelection(cfg: OpenClawConfig): boolean {
+function hasConfiguredSpeechProviderSelection(cfg: NatesclawConfig): boolean {
   return collectConfiguredSpeechProviderIds(cfg).size > 0;
 }
 
 function hasConfiguredPluginConfigEntry(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   configKey?: "webSearch" | "webFetch",
 ): boolean {
   const entries = asOptionalObjectRecord(cfg.plugins?.entries);
@@ -388,14 +388,14 @@ function toolPolicyReferencesBrowser(value: unknown): boolean {
   );
 }
 
-function hasBrowserToolReference(cfg: OpenClawConfig): boolean {
+function hasBrowserToolReference(cfg: NatesclawConfig): boolean {
   if (toolPolicyReferencesBrowser(cfg.tools)) {
     return true;
   }
   return listAgentEntries(cfg).some((entry) => toolPolicyReferencesBrowser(entry.tools));
 }
 
-function collectConfiguredPluginEntryIds(cfg: OpenClawConfig): string[] {
+function collectConfiguredPluginEntryIds(cfg: NatesclawConfig): string[] {
   const entries = asOptionalObjectRecord(cfg.plugins?.entries);
   if (!entries) {
     return [];
@@ -405,23 +405,23 @@ function collectConfiguredPluginEntryIds(cfg: OpenClawConfig): string[] {
     .filter((pluginId) => pluginId && !isPluginEntryExplicitlyDisabled(cfg, pluginId));
 }
 
-function hasOwnPluginEntry(cfg: OpenClawConfig, pluginId: string): boolean {
+function hasOwnPluginEntry(cfg: NatesclawConfig, pluginId: string): boolean {
   const entries = asOptionalObjectRecord(cfg.plugins?.entries);
   return entries !== undefined && Object.hasOwn(entries, pluginId);
 }
 
-function isPluginEntryExplicitlyDisabled(cfg: OpenClawConfig, pluginId: string): boolean {
+function isPluginEntryExplicitlyDisabled(cfg: NatesclawConfig, pluginId: string): boolean {
   return cfg.plugins?.entries?.[pluginId]?.enabled === false;
 }
 
-function hasNonDisabledPluginEntry(cfg: OpenClawConfig, pluginId: string): boolean {
+function hasNonDisabledPluginEntry(cfg: NatesclawConfig, pluginId: string): boolean {
   if (!hasOwnPluginEntry(cfg, pluginId)) {
     return false;
   }
   return !isPluginEntryExplicitlyDisabled(cfg, pluginId);
 }
 
-function hasBrowserSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
+function hasBrowserSetupAutoEnableRelevantConfig(cfg: NatesclawConfig): boolean {
   if (cfg.browser?.enabled === false || isPluginEntryExplicitlyDisabled(cfg, "browser")) {
     return false;
   }
@@ -434,7 +434,7 @@ function hasBrowserSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
   return hasBrowserToolReference(cfg);
 }
 
-function hasAcpxSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
+function hasAcpxSetupAutoEnableRelevantConfig(cfg: NatesclawConfig): boolean {
   if (isPluginEntryExplicitlyDisabled(cfg, "acpx")) {
     return false;
   }
@@ -449,7 +449,7 @@ function hasAcpxSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
   return configured && (!backend || backend === "acpx");
 }
 
-function hasXaiSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
+function hasXaiSetupAutoEnableRelevantConfig(cfg: NatesclawConfig): boolean {
   if (isPluginEntryExplicitlyDisabled(cfg, "xai")) {
     return false;
   }
@@ -460,7 +460,7 @@ function hasXaiSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
   );
 }
 
-function resolveRelevantSetupAutoEnablePluginIds(cfg: OpenClawConfig): string[] {
+function resolveRelevantSetupAutoEnablePluginIds(cfg: NatesclawConfig): string[] {
   const pluginIds = new Set<string>(collectConfiguredPluginEntryIds(cfg));
   if (hasBrowserSetupAutoEnableRelevantConfig(cfg)) {
     pluginIds.add("browser");
@@ -474,7 +474,7 @@ function resolveRelevantSetupAutoEnablePluginIds(cfg: OpenClawConfig): string[] 
   return [...pluginIds].toSorted((left, right) => left.localeCompare(right));
 }
 
-function hasSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
+function hasSetupAutoEnableRelevantConfig(cfg: NatesclawConfig): boolean {
   return (
     hasBrowserSetupAutoEnableRelevantConfig(cfg) ||
     hasAcpxSetupAutoEnableRelevantConfig(cfg) ||
@@ -483,12 +483,12 @@ function hasSetupAutoEnableRelevantConfig(cfg: OpenClawConfig): boolean {
   );
 }
 
-function hasPluginEntries(cfg: OpenClawConfig): boolean {
+function hasPluginEntries(cfg: NatesclawConfig): boolean {
   const entries = asOptionalObjectRecord(cfg.plugins?.entries);
   return entries !== undefined && Object.keys(entries).length > 0;
 }
 
-function hasPluginAllowlistWithMaterialEntries(cfg: OpenClawConfig): boolean {
+function hasPluginAllowlistWithMaterialEntries(cfg: NatesclawConfig): boolean {
   if (
     !Array.isArray(cfg.plugins?.allow) ||
     cfg.plugins.allow.length === 0 ||
@@ -503,7 +503,7 @@ function hasPluginAllowlistWithMaterialEntries(cfg: OpenClawConfig): boolean {
   return Object.values(entries).some(hasMaterialPluginEntryConfig);
 }
 
-function hasConfiguredProviderModelOrHarness(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
+function hasConfiguredProviderModelOrHarness(cfg: NatesclawConfig, env: NodeJS.ProcessEnv): boolean {
   if (cfg.auth?.profiles && Object.keys(cfg.auth.profiles).length > 0) {
     return true;
   }
@@ -516,11 +516,11 @@ function hasConfiguredProviderModelOrHarness(cfg: OpenClawConfig, env: NodeJS.Pr
   return hasConfiguredEmbeddedHarnessRuntime(cfg, env);
 }
 
-function arePluginsGloballyDisabled(cfg: OpenClawConfig): boolean {
+function arePluginsGloballyDisabled(cfg: NatesclawConfig): boolean {
   return cfg.plugins?.enabled === false;
 }
 
-function configMayNeedPluginManifestRegistry(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
+function configMayNeedPluginManifestRegistry(cfg: NatesclawConfig, env: NodeJS.ProcessEnv): boolean {
   if (arePluginsGloballyDisabled(cfg)) {
     return false;
   }
@@ -556,14 +556,14 @@ function configMayNeedPluginManifestRegistry(cfg: OpenClawConfig, env: NodeJS.Pr
 }
 
 export function configMayNeedPluginAutoEnable(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv,
 ): boolean {
   return resolvePluginAutoEnableReadiness(cfg, env).mayNeedAutoEnable;
 }
 
 export function resolvePluginAutoEnableReadiness(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv,
   discovery?: PluginDiscoveryResult,
   ambientEnvTriggers: AmbientEnvTriggerPolicy = "allow",
@@ -646,7 +646,7 @@ export function resolvePluginAutoEnableCandidateReason(
 }
 
 export function resolveConfiguredPluginAutoEnableCandidates(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   registry: PluginManifestRegistry;
   configuredChannelIds?: readonly string[];
@@ -791,7 +791,7 @@ export function resolveConfiguredPluginAutoEnableCandidates(params: {
   return changes;
 }
 
-function isPluginExplicitlyDisabled(cfg: OpenClawConfig, pluginId: string): boolean {
+function isPluginExplicitlyDisabled(cfg: NatesclawConfig, pluginId: string): boolean {
   const builtInChannelId = normalizeChatChannelId(pluginId);
   if (builtInChannelId) {
     const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -802,12 +802,12 @@ function isPluginExplicitlyDisabled(cfg: OpenClawConfig, pluginId: string): bool
   return cfg.plugins?.entries?.[pluginId]?.enabled === false;
 }
 
-function isPluginDenied(cfg: OpenClawConfig, pluginId: string): boolean {
+function isPluginDenied(cfg: NatesclawConfig, pluginId: string): boolean {
   const deny = cfg.plugins?.deny;
   return Array.isArray(deny) && deny.includes(pluginId);
 }
 
-function isPluginExplicitlySelected(cfg: OpenClawConfig, pluginId: string): boolean {
+function isPluginExplicitlySelected(cfg: NatesclawConfig, pluginId: string): boolean {
   const allow = cfg.plugins?.allow;
   if (Array.isArray(allow) && allow.includes(pluginId)) {
     return true;
@@ -816,11 +816,11 @@ function isPluginExplicitlySelected(cfg: OpenClawConfig, pluginId: string): bool
 }
 
 function disableImplicitPreferredOverPlugin(params: {
-  config: OpenClawConfig;
-  originalConfig: OpenClawConfig;
+  config: NatesclawConfig;
+  originalConfig: NatesclawConfig;
   pluginId: string;
   manifestRegistry: PluginManifestRegistry;
-}): OpenClawConfig {
+}): NatesclawConfig {
   if (isPluginExplicitlySelected(params.originalConfig, params.pluginId)) {
     return params.config;
   }
@@ -846,7 +846,7 @@ function disableImplicitPreferredOverPlugin(params: {
   };
 }
 
-function isBuiltInChannelAlreadyEnabled(cfg: OpenClawConfig, channelId: string): boolean {
+function isBuiltInChannelAlreadyEnabled(cfg: NatesclawConfig, channelId: string): boolean {
   const channels = cfg.channels as Record<string, unknown> | undefined;
   return asOptionalRecord(channels?.[channelId])?.enabled === true;
 }
@@ -887,10 +887,10 @@ function resolveAutoEnableChannelId(params: {
 }
 
 function registerPluginEntry(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   entry: PluginAutoEnableCandidate,
   manifestRegistry: PluginManifestRegistry,
-): OpenClawConfig {
+): NatesclawConfig {
   const builtInChannelId = resolveAutoEnableChannelId({ entry, manifestRegistry });
   if (builtInChannelId) {
     const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -947,10 +947,10 @@ function isKnownPluginId(pluginId: string, manifestRegistry: PluginManifestRegis
 }
 
 function materializeConfiguredPluginEntryAllowlist(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   changes: string[];
   manifestRegistry: PluginManifestRegistry;
-}): OpenClawConfig {
+}): NatesclawConfig {
   let next = params.config;
   const allow = next.plugins?.allow;
   const entries = asOptionalObjectRecord(next.plugins?.entries);
@@ -1005,7 +1005,7 @@ function formatAutoEnableChange(
 }
 
 export function resolvePluginAutoEnableManifestRegistry(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   manifestRegistry?: PluginManifestRegistry;
 }): PluginManifestRegistry {
@@ -1045,7 +1045,7 @@ export function resolvePluginAutoEnableManifestRegistry(params: {
 }
 
 export function materializePluginAutoEnableCandidatesInternal(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   candidates: readonly PluginAutoEnableCandidate[];
   env: NodeJS.ProcessEnv;
   manifestRegistry: PluginManifestRegistry;

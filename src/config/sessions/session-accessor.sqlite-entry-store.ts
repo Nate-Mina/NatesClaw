@@ -1,11 +1,11 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import type { Selectable } from "kysely";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
 } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import {
   linkSessionConversation,
   prepareSessionConversation,
@@ -53,8 +53,8 @@ import {
 export { collectSessionEntryLookupKeys } from "./store-entry.js";
 import type { SessionEntry } from "./types.js";
 
-type OpenClawAgentDatabaseReader = Pick<OpenClawAgentDatabase, "agentId" | "db">;
-type SessionEntryRow = Selectable<OpenClawAgentKyselyDatabase["session_nodes"]>;
+type NatesclawAgentDatabaseReader = Pick<NatesclawAgentDatabase, "agentId" | "db">;
+type SessionEntryRow = Selectable<NatesclawAgentKyselyDatabase["session_nodes"]>;
 export type ResolvedSessionEntryRow = {
   entry: SessionEntry;
   legacyKeys: string[];
@@ -70,7 +70,7 @@ type SqliteLifecycleTargetSnapshot = {
 };
 
 function parseReadableSqliteSessionEntryRow(
-  database: Pick<OpenClawAgentDatabase, "db">,
+  database: Pick<NatesclawAgentDatabase, "db">,
   row: Pick<SessionEntryRow, "current_session_id" | "entry_json" | "session_key" | "updated_at">,
 ): SessionEntry | null {
   const record = parseSqliteSessionEntryRecord(row);
@@ -110,7 +110,7 @@ class SqliteSessionMutationConflictError extends Error {
 }
 
 export function readSessionIdentitySnapshot(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKeys: Iterable<string>,
 ): Map<string, SessionEntry> {
   const snapshot = new Map<string, SessionEntry>();
@@ -130,7 +130,7 @@ export function createSessionIdentitySnapshot(
 }
 
 export function readSessionEntryRow(
-  database: OpenClawAgentDatabaseReader,
+  database: NatesclawAgentDatabaseReader,
   sessionKey: string,
 ): ResolvedSessionEntryRow | undefined {
   assertCanonicalSqliteSessionKeysCurrent(database);
@@ -138,7 +138,7 @@ export function readSessionEntryRow(
 }
 
 function readSessionEntryRowUnchecked(
-  database: OpenClawAgentDatabaseReader,
+  database: NatesclawAgentDatabaseReader,
   sessionKey: string,
 ): ResolvedSessionEntryRow | undefined {
   const db = getSessionKysely(database.db);
@@ -168,7 +168,7 @@ function readSessionEntryRowUnchecked(
 // Async updaters prepare against this complete selection. Capturing alias rows
 // prevents the commit phase from deleting a concurrently changed legacy key.
 export function readSessionEntrySelectionSnapshot(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKey: string,
   exact: boolean,
 ): SqliteSessionEntrySelectionSnapshot {
@@ -202,7 +202,7 @@ export function assertSessionEntrySelectionUnchanged(
 }
 
 export function readExactSessionEntryRow(
-  database: OpenClawAgentDatabaseReader,
+  database: NatesclawAgentDatabaseReader,
   sessionKey: string,
 ): ResolvedSessionEntryRow | undefined {
   const db = getSessionKysely(database.db);
@@ -218,7 +218,7 @@ export function readExactSessionEntryRow(
 }
 
 export function readExactSessionEntryJsonForCanonicalRepair(
-  database: Pick<OpenClawAgentDatabase, "db">,
+  database: Pick<NatesclawAgentDatabase, "db">,
   sessionKey: string,
 ): string | undefined {
   const db = getSessionKysely(database.db);
@@ -229,7 +229,7 @@ export function readExactSessionEntryJsonForCanonicalRepair(
 }
 
 export function readExactSessionEntryRowValidated(
-  database: OpenClawAgentDatabaseReader,
+  database: NatesclawAgentDatabaseReader,
   sessionKey: string,
 ): ResolvedSessionEntryRow | undefined {
   assertCanonicalSqliteSessionKeysCurrent(database);
@@ -237,7 +237,7 @@ export function readExactSessionEntryRowValidated(
 }
 
 export function readSessionEntryStore(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   options: { allowCanonicalRepair?: boolean } = {},
 ): Record<string, SessionEntry> {
   if (options.allowCanonicalRepair !== true) {
@@ -263,7 +263,7 @@ export function readSessionEntryStore(
   return store;
 }
 
-export function readSessionEntryCount(database: OpenClawAgentDatabase): number {
+export function readSessionEntryCount(database: NatesclawAgentDatabase): number {
   const db = getSessionKysely(database.db);
   const rows = executeSqliteQuerySync(
     database.db,
@@ -272,7 +272,7 @@ export function readSessionEntryCount(database: OpenClawAgentDatabase): number {
   return rows.reduce((count, row) => count + (parseSessionEntryRow(row) ? 1 : 0), 0);
 }
 
-export function readSessionEntryKeys(database: OpenClawAgentDatabaseReader): string[] {
+export function readSessionEntryKeys(database: NatesclawAgentDatabaseReader): string[] {
   const db = getSessionKysely(database.db);
   return executeSqliteQuerySync(
     database.db,
@@ -284,7 +284,7 @@ export function readSessionEntryKeys(database: OpenClawAgentDatabaseReader): str
 }
 
 export function resolveLifecyclePrimaryEntry(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   target: { canonicalKey: string; storeKeys: string[] },
   options: { allowCanonicalMove?: boolean } = {},
 ): { key: string; entry: SessionEntry } | undefined {
@@ -308,7 +308,7 @@ export function resolveLifecyclePrimaryEntry(
 }
 
 export function readLifecycleTargetSnapshot(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   target: { canonicalKey: string; storeKeys: string[] },
   options: { allowCanonicalMove?: boolean } = {},
 ): SqliteLifecycleTargetSnapshot {
@@ -348,7 +348,7 @@ export function normalizeLifecycleTarget(target: { canonicalKey: string; storeKe
 }
 
 export function deleteSessionEntryRows(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKey: string,
   options: { deleteOwnedWindows?: boolean; deliveryCleanupKeys?: readonly string[] } = {},
 ): void {
@@ -422,7 +422,7 @@ export function deleteSessionEntryRows(
 
 /** Remove the logical entry while retaining its node-owned transcript windows. */
 function clearSqliteSessionEntryPreservingWindows(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   params: { sessionId: string; sessionKey: string; updatedAt: number },
 ): void {
   const db = getSessionKysely(database.db);
@@ -468,7 +468,7 @@ function clearSqliteSessionEntryPreservingWindows(
 }
 
 export function deleteLifecycleTargetRows(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   target: { canonicalKey: string; storeKeys: string[] },
 ): void {
   for (const sessionKey of uniqueStrings([target.canonicalKey, ...target.storeKeys])) {
@@ -504,7 +504,7 @@ function sqliteSessionSnapshotRowsEqual(
 }
 
 function sqliteLifecycleTargetMatchesExpectedEntry(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   target: { canonicalKey: string; storeKeys: string[] },
   expectedEntry: SessionEntry | undefined,
 ): boolean {
@@ -516,7 +516,7 @@ function sqliteLifecycleTargetMatchesExpectedEntry(
 }
 
 export function assertLifecycleTargetUnchanged(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   target: { canonicalKey: string; storeKeys: string[] },
   expectedEntry: SessionEntry | undefined,
   operation: "deleted" | "reset",
@@ -528,7 +528,7 @@ export function assertLifecycleTargetUnchanged(
 }
 
 export function deleteLegacySessionEntryRows(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   legacyKeys: string[],
   sessionKey: string,
   options: { rehomeMembers?: boolean } = {},
@@ -553,7 +553,7 @@ export function deleteLegacySessionEntryRows(
 
 /** Move retained generations to the canonical node before removing key aliases. */
 export function rehomeSessionWindows(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   canonicalKey: string,
   previousKeys: Iterable<string>,
 ): void {
@@ -574,7 +574,7 @@ export function rehomeSessionWindows(
 }
 
 export function writeSessionEntry(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionKey: string,
   entry: SessionEntry,
   options: {

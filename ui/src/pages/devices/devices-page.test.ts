@@ -51,7 +51,7 @@ const ROTATED_TOKEN = "rotated-operator-token";
 /** Keep the identity fingerprint off jsdom's absent SubtleCrypto. */
 function stubLocalDeviceIdentity() {
   localStorage.setItem(
-    "openclaw-device-identity-v1",
+    "natesclaw-device-identity-v1",
     JSON.stringify({ version: 1, deviceId: "00", publicKey: "AA", privateKey: "AA" }),
   );
   vi.stubGlobal("crypto", {
@@ -83,7 +83,7 @@ function clickDialogButton(label: string) {
 }
 
 function createConnectedPage(client: GatewayBrowserClient) {
-  const page = document.createElement("openclaw-devices-page") as TestDevicesPage;
+  const page = document.createElement("natesclaw-devices-page") as TestDevicesPage;
   page.context = {
     gateway: { connection: { gatewayUrl: "http://gateway.test" } },
     runtimeConfig: { state: { configSnapshot: null, configLoading: false } },
@@ -162,7 +162,7 @@ describe("DevicesPage gateway lifecycle", () => {
     const client = null;
     const currentGateway = gateway(client);
     const preloadedNodes = [{ id: "preloaded" }];
-    const page = document.createElement("openclaw-devices-page") as TestDevicesPage;
+    const page = document.createElement("natesclaw-devices-page") as TestDevicesPage;
     page.routeData = {
       gateway: currentGateway,
       gatewaySnapshot: currentGateway.snapshot,
@@ -195,7 +195,7 @@ describe("DevicesPage gateway lifecycle", () => {
     const client = {} as GatewayBrowserClient;
     const currentGateway = gateway(client);
     const preloadedNodes = [{ id: "stale" }];
-    const page = document.createElement("openclaw-devices-page") as TestDevicesPage;
+    const page = document.createElement("natesclaw-devices-page") as TestDevicesPage;
     page.ensureInitialData = vi.fn();
     page.routeData = {
       gateway: currentGateway,
@@ -221,7 +221,7 @@ describe("DevicesPage gateway lifecycle", () => {
       .mockReturnValueOnce(first.promise)
       .mockReturnValueOnce(second.promise);
     const client = { request } as unknown as GatewayBrowserClient;
-    const page = document.createElement("openclaw-devices-page") as TestDevicesPage;
+    const page = document.createElement("natesclaw-devices-page") as TestDevicesPage;
     page.pageState = createInitialDevicesState({ client, connected: true });
     page.context = {
       runtimeConfig: { state: { configSnapshot: null, configLoading: false } },
@@ -254,7 +254,7 @@ describe("DevicesPage gateway lifecycle", () => {
       .mockReturnValueOnce(second.promise);
     const client = { request } as unknown as GatewayBrowserClient;
     const snapshot = gatewaySnapshot(client, true);
-    const page = document.createElement("openclaw-devices-page") as TestDevicesPage;
+    const page = document.createElement("natesclaw-devices-page") as TestDevicesPage;
     page.context = {
       runtimeConfig: { state: { configSnapshot: null, configLoading: false } },
     } as unknown as ApplicationContext;
@@ -288,7 +288,7 @@ describe("DevicesPage gateway lifecycle", () => {
       .mockReturnValueOnce(second.promise);
     const client = { request } as unknown as GatewayBrowserClient;
     const snapshot = gatewaySnapshot(client, true);
-    const page = document.createElement("openclaw-devices-page") as TestDevicesPage;
+    const page = document.createElement("natesclaw-devices-page") as TestDevicesPage;
     page.context = {
       runtimeConfig: { state: { configSnapshot: null, configLoading: false } },
     } as unknown as ApplicationContext;
@@ -326,7 +326,7 @@ describe("DevicesPage gateway lifecycle", () => {
     await pending;
 
     expect(request).not.toHaveBeenCalled();
-    expect(document.body.querySelector("openclaw-modal-dialog")).toBeNull();
+    expect(document.body.querySelector("natesclaw-modal-dialog")).toBeNull();
   });
 
   it("rejects a device pairing request after the in-app dialog is confirmed", async () => {
@@ -402,7 +402,7 @@ describe("DevicesPage gateway lifecycle", () => {
     clickDialogButton(t("devices.inventory.rotateAcknowledge"));
     await pending;
 
-    expect(document.body.querySelector("openclaw-modal-dialog")).toBeNull();
+    expect(document.body.querySelector("natesclaw-modal-dialog")).toBeNull();
     applyGatewaySnapshot(page, gatewaySnapshot(client, false));
   });
 
@@ -465,7 +465,7 @@ describe("DevicesPage gateway lifecycle", () => {
 
     await page.revealRotatedToken("device-1", "operator");
 
-    expect(document.body.querySelector("openclaw-modal-dialog")).toBeNull();
+    expect(document.body.querySelector("natesclaw-modal-dialog")).toBeNull();
     expect(page.pageState.devicesError).toContain("rotate refused");
     applyGatewaySnapshot(page, gatewaySnapshot(client, false));
   });

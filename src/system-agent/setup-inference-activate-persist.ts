@@ -2,7 +2,7 @@ import { isDeepStrictEqual } from "node:util";
 import type { AgentExecutionAuthBinding } from "../agents/execution-auth-binding.js";
 import { applyAutoLocalModelLean } from "../config/local-model-lean-auto.js";
 import { applyMergePatch } from "../config/merge-patch.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { normalizePluginTargetConfig } from "../plugins/config-state.js";
 import { enablePluginInConfig } from "../plugins/enable.js";
@@ -45,7 +45,7 @@ import type { SystemAgentOwnerPluginArtifactSnapshot } from "./verified-inferenc
 type ProjectedInferenceRoute = Awaited<ReturnType<typeof projectDefaultInferenceRoute>>;
 
 export type SetupInferenceActivationPersistenceState = {
-  committedConfig: OpenClawConfig | undefined;
+  committedConfig: NatesclawConfig | undefined;
   autoLocalModelLeanApplied: boolean;
   codexInstallOwnership: "unknown" | "owned" | "unowned";
 };
@@ -58,8 +58,8 @@ export async function persistActivatedSetupInference(input: {
   test: Extract<Awaited<ReturnType<typeof runSetupInferenceTest>>, { ok: true }>;
   codexPluginPatch: unknown;
   pendingCodexInstall: PluginInstallRecord | undefined;
-  cfg: OpenClawConfig;
-  sourceCfg: OpenClawConfig;
+  cfg: NatesclawConfig;
+  sourceCfg: NatesclawConfig;
   verifiedRoute: ProjectedInferenceRoute;
   baselineRoute: ProjectedInferenceRoute;
   stagedRoute: NonNullable<ProjectedInferenceRoute["route"]>;
@@ -99,10 +99,10 @@ export async function persistActivatedSetupInference(input: {
     state,
     revalidateOwner,
   } = input;
-  let committedConfig: OpenClawConfig | undefined;
+  let committedConfig: NatesclawConfig | undefined;
   let { codexInstallOwnership } = state;
-  const projectRoute = (config: OpenClawConfig) => projectDefaultInferenceRoute(config, routeDeps);
-  const resolveRoute = (config: OpenClawConfig) =>
+  const projectRoute = (config: NatesclawConfig) => projectDefaultInferenceRoute(config, routeDeps);
+  const resolveRoute = (config: NatesclawConfig) =>
     resolveSystemAgentConfiguredRouteFromConfig(config, undefined, routeDeps);
 
   const { stripPendingPluginInstallRecords } = await import("../plugins/install-record-commit.js");
@@ -115,9 +115,9 @@ export async function persistActivatedSetupInference(input: {
       })
     : undefined;
   const stageCandidate = (
-    current: OpenClawConfig,
+    current: NatesclawConfig,
     configKind: "runtime" | "source",
-  ): OpenClawConfig => {
+  ): NatesclawConfig => {
     let next = codexPluginPatch === undefined ? current : stripPendingPluginInstallRecords(current);
     if (plan.manualAuth) {
       next = applyManualAuthConfig(
@@ -128,7 +128,7 @@ export async function persistActivatedSetupInference(input: {
       );
     }
     if (codexPluginPatch !== undefined) {
-      const patched = applyMergePatch(next, codexPluginPatch) as OpenClawConfig;
+      const patched = applyMergePatch(next, codexPluginPatch) as NatesclawConfig;
       const enabledCodex = enablePluginInConfig(
         normalizePluginTargetConfig(patched, "codex"),
         "codex",
@@ -206,7 +206,7 @@ export async function persistActivatedSetupInference(input: {
         };
       }
       throw new SetupInferenceActivationIndeterminateError(
-        "Inference activation could not confirm whether its verified credential was saved or rolled back. No config commit was attempted; run openclaw doctor --fix before retrying.",
+        "Inference activation could not confirm whether its verified credential was saved or rolled back. No config commit was attempted; run natesclaw doctor --fix before retrying.",
       );
     }
     if (persistedManualAuth.status === "not-persisted") {
@@ -318,7 +318,7 @@ export async function persistActivatedSetupInference(input: {
         const rolledBack = await rollbackManualAuthProfiles(manualAuthReceipt, deps);
         if (!rolledBack) {
           throw new SetupInferenceActivationIndeterminateError(
-            "Inference activation stopped before its config commit, but could not confirm removal of its staged credential. Run openclaw doctor --fix before retrying.",
+            "Inference activation stopped before its config commit, but could not confirm removal of its staged credential. Run natesclaw doctor --fix before retrying.",
           );
         }
       }
@@ -348,13 +348,13 @@ export async function persistActivatedSetupInference(input: {
           configReferencesManualAuthProfiles(reconciledRuntime, manualAuthReceipt)
         ) {
           throw new SetupInferenceActivationIndeterminateError(
-            "Inference activation could not confirm its config commit state. The verified credential was retained because the current config may reference it. Run openclaw doctor --fix before retrying.",
+            "Inference activation could not confirm its config commit state. The verified credential was retained because the current config may reference it. Run natesclaw doctor --fix before retrying.",
           );
         }
         const rolledBack = await rollbackManualAuthProfiles(manualAuthReceipt, deps);
         if (!rolledBack) {
           throw new SetupInferenceActivationIndeterminateError(
-            "Inference activation failed and its staged credential could not be rolled back. Run openclaw doctor --fix before retrying.",
+            "Inference activation failed and its staged credential could not be rolled back. Run natesclaw doctor --fix before retrying.",
           );
         }
       }

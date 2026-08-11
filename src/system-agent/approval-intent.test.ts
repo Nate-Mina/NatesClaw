@@ -1,6 +1,6 @@
 // Approval-intent tests: closed-list fast path plus model-judged classification.
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   classifySystemAgentApprovalIntent,
   type SystemAgentApprovalIntentDeps,
@@ -17,16 +17,16 @@ import type { SystemAgentVerifiedInferenceBinding } from "./verified-inference.j
 const DEFAULT_MODEL = "openai/gpt-5.5@openai:p2";
 const CLI_MODEL = "claude-cli/claude-opus-4-8";
 
-function verifiedInferenceConfig(model: string): OpenClawConfig {
-  const openClawRuntime = model.startsWith("openai/")
+function verifiedInferenceConfig(model: string): NatesclawConfig {
+  const NatesclawRuntime = model.startsWith("openai/")
     ? {
         models: {
-          "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+          "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
         },
       }
     : {};
   return {
-    agents: { defaults: { model, ...openClawRuntime } },
+    agents: { defaults: { model, ...NatesclawRuntime } },
     auth: {
       order: { openai: ["openai:p1", "openai:p2"] },
       profiles: {

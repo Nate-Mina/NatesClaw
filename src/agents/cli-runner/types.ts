@@ -21,7 +21,7 @@ import type {
 } from "../../config/sessions.js";
 import type { SessionTranscriptRuntimeTarget } from "../../config/sessions/session-accessor.js";
 import type { SessionSystemPromptReport } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ContextEngine } from "../../context-engine/types.js";
 import type { ImageContent } from "../../llm/types.js";
 import type { MediaFact } from "../../media/media-facts.js";
@@ -85,7 +85,7 @@ export type RunCliAgentParams = {
   cwd?: string;
   /** Start a fresh CLI process so per-turn MCP authority is reloaded from this run. */
   disableCliLiveSession?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   toolOverrides?: SessionToolOverrides;
   prompt: string;
   transcriptPrompt?: string;
@@ -100,7 +100,7 @@ export type RunCliAgentParams = {
   executionMode?: CliBackendExecutionMode;
   /** Internal one-shot inference path: suppress transcript, hook, context-engine, and delivery work. */
   isolatedCompletion?: true;
-  /** Persist the successful CLI assistant reply into the OpenClaw session transcript. */
+  /** Persist the successful CLI assistant reply into the Natesclaw session transcript. */
   persistAssistantTranscript?: boolean;
   /** Session store path used when assistant transcript persistence is enabled. */
   storePath?: string;
@@ -228,10 +228,10 @@ export type RunCliAgentParams = {
   toolsAllow?: string[];
   /** Trusted server-stamped authority for an explicitly capped scheduled run. */
   scheduledToolPolicy?: ScheduledToolPolicyContext;
-  /** Exact native plus canonical OpenClaw surface for a selectable CLI backend. */
+  /** Exact native plus canonical Natesclaw surface for a selectable CLI backend. */
   cliToolAvailability?: {
     native: string[];
-    openClaw: string[];
+    Natesclaw: string[];
   };
   disableTools?: boolean;
   abortSignal?: AbortSignal;
@@ -314,7 +314,7 @@ export type PreparedCliRunContext = {
   /** Resume is safe only while the exact managed Claude stdio child still exists. */
   requiredClaudeLiveSessionGeneration?: string;
   hadSessionFile: boolean;
-  contextEngineConfig: OpenClawConfig;
+  contextEngineConfig: NatesclawConfig;
   contextEngine?: ContextEngine;
   contextEngineTurnPrompt?: string;
   contextEngineDeferredTurnMaintenance?: Promise<void>;
@@ -325,7 +325,7 @@ export type PreparedCliRunContext = {
   systemPromptReport: SessionSystemPromptReport;
   claudeSkillsPluginArgs?: string[] | undefined;
   bootstrapPromptWarningLines: string[];
-  openClawHistoryPrompt?: string;
+  NatesclawHistoryPrompt?: string;
   heartbeatPrompt?: string;
   authEpoch?: string;
   /** Strict owner fingerprint captured for live inference verification only. */

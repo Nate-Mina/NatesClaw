@@ -5,9 +5,9 @@ import { constants } from "node:sqlite";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanupTempDirs, makeTempDir } from "../../test/helpers/temp-dir.js";
 import { resolveSqliteDatabaseFilePaths } from "../infra/sqlite-files.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
-import { claimOpenClawStateOwnership } from "../state/openclaw-state-ownership-operations.js";
-import { OpenClawStateOwnershipError } from "../state/openclaw-state-ownership.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
+import { claimNatesclawStateOwnership } from "../state/natesclaw-state-ownership-operations.js";
+import { NatesclawStateOwnershipError } from "../state/natesclaw-state-ownership.js";
 import {
   acquireDebugProxyCaptureStore,
   closeDebugProxyCaptureStore,
@@ -20,19 +20,19 @@ const cleanupDirs: string[] = [];
 
 afterEach(() => {
   closeDebugProxyCaptureStore();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   vi.restoreAllMocks();
   cleanupTempDirs(cleanupDirs);
 });
 
 function makeStore() {
-  const root = makeTempDir(cleanupDirs, "openclaw-proxy-capture-");
-  return new DebugProxyCaptureStore({ env: { OPENCLAW_STATE_DIR: root } });
+  const root = makeTempDir(cleanupDirs, "natesclaw-proxy-capture-");
+  return new DebugProxyCaptureStore({ env: { NATESCLAW_STATE_DIR: root } });
 }
 
 function makeStateEnv(prefix: string): NodeJS.ProcessEnv {
   const root = makeTempDir(cleanupDirs, prefix);
-  return { OPENCLAW_STATE_DIR: root };
+  return { NATESCLAW_STATE_DIR: root };
 }
 
 function readMode(target: string): number {
@@ -41,7 +41,7 @@ function readMode(target: string): number {
 
 describe("DebugProxyCaptureStore", () => {
   it("keeps the cached store open until the last lease releases", () => {
-    const options = { env: makeStateEnv("openclaw-proxy-capture-lease-") };
+    const options = { env: makeStateEnv("natesclaw-proxy-capture-lease-") };
 
     const first = acquireDebugProxyCaptureStore(options);
     const second = acquireDebugProxyCaptureStore(options);
@@ -59,19 +59,19 @@ describe("DebugProxyCaptureStore", () => {
   });
 
   it("rebinds a cached shared store after the state database closes underneath it", () => {
-    const options = { env: makeStateEnv("openclaw-proxy-capture-rebind-") };
+    const options = { env: makeStateEnv("natesclaw-proxy-capture-rebind-") };
     const stale = getDebugProxyCaptureStore(options);
     stale.upsertSession({
       id: "exit-session",
       startedAt: 1,
       mode: "proxy-run",
-      sourceScope: "openclaw",
+      sourceScope: "natesclaw",
       sourceProcess: "cli",
     });
 
     // Exit-time hook closes the shared handle out from under the cached store;
     // finalizeDebugProxyCapture then re-fetches and must not get a dead handle.
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     expect(stale.isClosed).toBe(true);
 
     const rebound = getDebugProxyCaptureStore(options);
@@ -80,29 +80,29 @@ describe("DebugProxyCaptureStore", () => {
   });
 
   it("fences a shared store that was opened before external ownership was claimed", () => {
-    const env = makeStateEnv("openclaw-proxy-capture-preclaim-");
+    const env = makeStateEnv("natesclaw-proxy-capture-preclaim-");
     const store = new DebugProxyCaptureStore({ env });
-    env.OPENCLAW_SUPERVISOR_MODE = "external";
-    claimOpenClawStateOwnership("gateway-supervisor", { env });
-    delete env.OPENCLAW_SUPERVISOR_MODE;
+    env.NATESCLAW_SUPERVISOR_MODE = "external";
+    claimNatesclawStateOwnership("gateway-supervisor", { env });
+    delete env.NATESCLAW_SUPERVISOR_MODE;
 
     expect(() =>
       store.upsertSession({
         id: "preclaim-session",
         startedAt: 1,
         mode: "proxy-run",
-        sourceScope: "openclaw",
+        sourceScope: "natesclaw",
         sourceProcess: "cli",
       }),
-    ).toThrow(OpenClawStateOwnershipError);
+    ).toThrow(NatesclawStateOwnershipError);
   });
 
   it("tracks and closes cached stores independently across paths", () => {
     const first = acquireDebugProxyCaptureStore({
-      env: makeStateEnv("openclaw-proxy-capture-first-"),
+      env: makeStateEnv("natesclaw-proxy-capture-first-"),
     });
     const second = acquireDebugProxyCaptureStore({
-      env: makeStateEnv("openclaw-proxy-capture-second-"),
+      env: makeStateEnv("natesclaw-proxy-capture-second-"),
     });
 
     first.release();
@@ -115,7 +115,7 @@ describe("DebugProxyCaptureStore", () => {
   });
 
   it("preserves the shipped path-based Plugin SDK overloads", () => {
-    const root = makeTempDir(cleanupDirs, "openclaw-proxy-capture-legacy-sdk-");
+    const root = makeTempDir(cleanupDirs, "natesclaw-proxy-capture-legacy-sdk-");
     const dbPath = path.join(root, "capture.sqlite");
     const blobDir = path.join(root, "blobs");
     const lease = acquireDebugProxyCaptureStore(dbPath, blobDir);
@@ -133,7 +133,7 @@ describe("DebugProxyCaptureStore", () => {
       id: "legacy-sdk-session",
       startedAt: 1,
       mode: "sdk",
-      sourceScope: "openclaw",
+      sourceScope: "natesclaw",
       sourceProcess: "plugin",
       dbPath,
       blobDir,
@@ -142,7 +142,7 @@ describe("DebugProxyCaptureStore", () => {
     lease.store.recordEvent({
       sessionId: "legacy-sdk-session",
       ts: 2,
-      sourceScope: "openclaw",
+      sourceScope: "natesclaw",
       sourceProcess: "plugin",
       protocol: "https",
       direction: "outbound",
@@ -194,7 +194,7 @@ describe("DebugProxyCaptureStore", () => {
   it.each(["deleteSessions", "purgeAll"] as const)(
     "rolls back path-based %s when session deletion fails",
     (operation) => {
-      const root = makeTempDir(cleanupDirs, "openclaw-proxy-capture-rollback-");
+      const root = makeTempDir(cleanupDirs, "natesclaw-proxy-capture-rollback-");
       const dbPath = path.join(root, "capture.sqlite");
       const blobDir = path.join(root, "blobs");
       const lease = acquireDebugProxyCaptureStore(dbPath, blobDir);
@@ -205,7 +205,7 @@ describe("DebugProxyCaptureStore", () => {
           id: sessionId,
           startedAt: 1,
           mode: "sdk",
-          sourceScope: "openclaw",
+          sourceScope: "natesclaw",
           sourceProcess: "plugin",
           dbPath,
           blobDir,
@@ -214,7 +214,7 @@ describe("DebugProxyCaptureStore", () => {
         lease.store.recordEvent({
           sessionId,
           ts: 2,
-          sourceScope: "openclaw",
+          sourceScope: "natesclaw",
           sourceProcess: "plugin",
           protocol: "https",
           direction: "outbound",
@@ -264,7 +264,7 @@ describe("DebugProxyCaptureStore", () => {
     });
 
     const store = new DebugProxyCaptureStore({
-      env: makeStateEnv("openclaw-proxy-capture-nfs-"),
+      env: makeStateEnv("natesclaw-proxy-capture-nfs-"),
     });
     try {
       expect(store.db.prepare("PRAGMA journal_mode").get()).toMatchObject({
@@ -278,8 +278,8 @@ describe("DebugProxyCaptureStore", () => {
   it.runIf(process.platform !== "win32")(
     "stores capture blobs in the private shared state database",
     () => {
-      const env = makeStateEnv("openclaw-proxy-capture-permissions-");
-      const root = env.OPENCLAW_STATE_DIR!;
+      const env = makeStateEnv("natesclaw-proxy-capture-permissions-");
+      const root = env.NATESCLAW_STATE_DIR!;
       const store = new DebugProxyCaptureStore({ env });
       const blob = store.persistPayload(Buffer.from("authorization: Bearer secret"));
       const row = store.db
@@ -292,7 +292,7 @@ describe("DebugProxyCaptureStore", () => {
         | { data: Uint8Array; encoding: string; sha256: string; sizeBytes: number }
         | undefined;
 
-      expect(store.dbPath).toBe(path.join(root, "state", "openclaw.sqlite"));
+      expect(store.dbPath).toBe(path.join(root, "state", "natesclaw.sqlite"));
       expect(fs.existsSync(path.join(root, "debug-proxy", "capture.sqlite"))).toBe(false);
       expect(fs.existsSync(path.join(root, "debug-proxy", "blobs"))).toBe(false);
       expect(row).toMatchObject({
@@ -324,8 +324,8 @@ describe("DebugProxyCaptureStore", () => {
       id: "session-1",
       startedAt: Date.now(),
       mode: "proxy-run",
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
     });
     const firstPayload = persistEventPayload(store, {
       data: '{"ok":true}',
@@ -334,8 +334,8 @@ describe("DebugProxyCaptureStore", () => {
     store.recordEvent({
       sessionId: "session-1",
       ts: 1,
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -348,8 +348,8 @@ describe("DebugProxyCaptureStore", () => {
     store.recordEvent({
       sessionId: "session-1",
       ts: 2,
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -386,7 +386,7 @@ describe("DebugProxyCaptureStore", () => {
     store.recordEvent({
       sessionId: "session-direct",
       ts: 20,
-      sourceScope: "openclaw",
+      sourceScope: "natesclaw",
       sourceProcess: "provider",
       protocol: "https",
       direction: "outbound",
@@ -407,8 +407,8 @@ describe("DebugProxyCaptureStore", () => {
       id: "session-direct",
       startedAt: 10,
       mode: "runtime",
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
     });
 
     expect(store.listSessions(10)[0]).toMatchObject({
@@ -430,14 +430,14 @@ describe("DebugProxyCaptureStore", () => {
         id: sessionId,
         startedAt: Date.now(),
         mode: "proxy-run",
-        sourceScope: "openclaw",
-        sourceProcess: "openclaw",
+        sourceScope: "natesclaw",
+        sourceProcess: "natesclaw",
       });
       store.recordEvent({
         sessionId,
         ts: Date.now(),
-        sourceScope: "openclaw",
-        sourceProcess: "openclaw",
+        sourceScope: "natesclaw",
+        sourceProcess: "natesclaw",
         protocol: "https",
         direction: "outbound",
         kind: "request",

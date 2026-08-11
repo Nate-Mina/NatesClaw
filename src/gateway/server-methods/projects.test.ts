@@ -3,9 +3,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
 import { expect, test } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { registerProjectRegistry } from "../../projects/project-registry.js";
-import { createOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import { createNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import { projectsHandlers } from "./projects.js";
 
 const execFileAsync = promisify(execFile);
@@ -14,15 +14,15 @@ async function initializeRepository(root: string): Promise<string> {
   const repo = path.join(root, "registered");
   await fs.mkdir(repo, { recursive: true });
   await execFileAsync("git", ["init", "-b", "main", repo]);
-  await execFileAsync("git", ["-C", repo, "config", "user.name", "OpenClaw Tests"]);
-  await execFileAsync("git", ["-C", repo, "config", "user.email", "tests@openclaw.invalid"]);
+  await execFileAsync("git", ["-C", repo, "config", "user.name", "Natesclaw Tests"]);
+  await execFileAsync("git", ["-C", repo, "config", "user.email", "tests@natesclaw.invalid"]);
   await execFileAsync("git", [
     "-C",
     repo,
     "remote",
     "add",
     "origin",
-    "https://github.com/openclaw/openclaw.git",
+    "https://github.com/natesclaw/natesclaw.git",
   ]);
   await fs.writeFile(path.join(repo, "README.md"), "registered\n");
   await execFileAsync("git", ["-C", repo, "add", "README.md"]);
@@ -49,7 +49,7 @@ async function invokeProjectMethod(
     respond: (ok, payload, error) => {
       capture.result = { ok, payload, error };
     },
-    context: { getRuntimeConfig: () => cfg as OpenClawConfig } as never,
+    context: { getRuntimeConfig: () => cfg as NatesclawConfig } as never,
     client: { connect: { scopes } } as never,
     isWebchatConnect: () => false,
   });
@@ -57,7 +57,7 @@ async function invokeProjectMethod(
 }
 
 test("projects.list merges synthesized workspaces with stored rows deterministically", async () => {
-  const state = await createOpenClawTestState({ layout: "state-only", prefix: "projects-rpc-" });
+  const state = await createNatesclawTestState({ layout: "state-only", prefix: "projects-rpc-" });
   try {
     const repo = await initializeRepository(state.root);
     await registerProjectRegistry({ path: repo, name: "Beta" });
@@ -85,7 +85,7 @@ test("projects.list merges synthesized workspaces with stored rows deterministic
 });
 
 test("projects.list exposes checkout details only at write scope", async () => {
-  const state = await createOpenClawTestState({ layout: "state-only", prefix: "projects-rpc-" });
+  const state = await createNatesclawTestState({ layout: "state-only", prefix: "projects-rpc-" });
   try {
     const repo = await initializeRepository(state.root);
     await registerProjectRegistry({ path: repo, name: "Registered" });
@@ -119,7 +119,7 @@ test("projects.list exposes checkout details only at write scope", async () => {
             {
               id: "registered",
               repoRoot: repo,
-              originUrl: "https://github.com/openclaw/openclaw.git",
+              originUrl: "https://github.com/natesclaw/natesclaw.git",
             },
           ],
         },
@@ -131,7 +131,7 @@ test("projects.list exposes checkout details only at write scope", async () => {
 });
 
 test("projects.remove returns INVALID_REQUEST for an unknown id", async () => {
-  const state = await createOpenClawTestState({ layout: "state-only", prefix: "projects-rpc-" });
+  const state = await createNatesclawTestState({ layout: "state-only", prefix: "projects-rpc-" });
   try {
     expect(await invokeProjectMethod("projects.remove", { id: "missing" })).toMatchObject({
       ok: false,

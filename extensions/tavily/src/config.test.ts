@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { resolveTavilyApiKey } from "./config.js";
 
-function configWithApiKey(apiKey: unknown, extra?: Partial<OpenClawConfig>): OpenClawConfig {
+function configWithApiKey(apiKey: unknown, extra?: Partial<NatesclawConfig>): NatesclawConfig {
   return {
     ...extra,
     plugins: {
@@ -16,7 +16,7 @@ function configWithApiKey(apiKey: unknown, extra?: Partial<OpenClawConfig>): Ope
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 describe("resolveTavilyApiKey", () => {
@@ -58,7 +58,7 @@ describe("resolveTavilyApiKey", () => {
                 },
               },
             },
-          } as Partial<OpenClawConfig>,
+          } as Partial<NatesclawConfig>,
         ),
       ),
     ).toBe("dummy");
@@ -105,7 +105,7 @@ describe("resolveTavilyApiKey", () => {
             },
           },
         },
-      } as Partial<OpenClawConfig>,
+      } as Partial<NatesclawConfig>,
     },
   ])("does not fall back to process.env.TAVILY_API_KEY for $name", ({ apiKey, extra }) => {
     vi.stubEnv("TAVILY_API_KEY", "dummy");

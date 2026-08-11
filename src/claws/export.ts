@@ -7,17 +7,17 @@ import { listAgentEntries, resolveAgentWorkspaceDir } from "../agents/agent-scop
 import { openLocalAgentAvatarFile } from "../agents/identity-avatar-file.js";
 import { MAX_WORKSPACE_BOOTSTRAP_FILE_BYTES } from "../agents/workspace-bootstrap-read.js";
 import { normalizeConfiguredMcpServers } from "../config/mcp-config-normalize.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { readFileDescriptorBoundedSync } from "../infra/boundary-file-read.js";
 import { FsSafeError, root as fsSafeRoot } from "../infra/fs-safe.js";
 import { AVATAR_MAX_BYTES, isAvatarDataUrl, isAvatarHttpUrl } from "../shared/avatar-policy.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import { resolveUserPath } from "../utils.js";
 import { readClawStatus } from "./lifecycle-state.js";
 import type { PackageRemovalDeps } from "./package-remove.js";
 import { readClawManifestFile } from "./reader.js";
 import { isPortableClawAvatar } from "./schema-portability.js";
-import { parseClawManifest, parseClawOpenClawProfile } from "./schema.js";
+import { parseClawManifest, parseClawNatesclawProfile } from "./schema.js";
 import { MAX_CLAW_MANIFEST_BYTES, MAX_MANAGED_WORKSPACE_BYTES } from "./source-limits.js";
 import {
   CLAW_BOOTSTRAP_FILE_NAMES,
@@ -25,15 +25,15 @@ import {
   CLAW_SCHEMA_VERSION,
   type ClawManifest,
   type ClawMcpServer,
-  type ClawOpenClawExtension,
-  type ClawOpenClawProfile,
+  type ClawNatesclawExtension,
+  type ClawNatesclawProfile,
   type ClawPackagePreflight,
 } from "./types.js";
 
-export const CLAW_EXPORT_RESULT_SCHEMA_VERSION = "openclaw.clawExportResult.v1" as const;
+export const CLAW_EXPORT_RESULT_SCHEMA_VERSION = "natesclaw.clawExportResult.v1" as const;
 const MAX_EXPORT_FILE_BYTES = 1024 * 1024;
 
-type AgentConfig = NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>[number];
+type AgentConfig = NonNullable<NonNullable<NatesclawConfig["agents"]>["list"]>[number];
 type ClawBootstrapFileName = (typeof CLAW_BOOTSTRAP_FILE_NAMES)[number];
 
 function decodeUtf8(content: Buffer): string | undefined {
@@ -50,7 +50,7 @@ type ClawExportResult = {
   agentId: string;
   outputDirectory: string;
   manifest: ClawManifest;
-  openClawProfile?: ClawOpenClawProfile;
+  NatesclawProfile?: ClawNatesclawProfile;
   filesWritten: string[];
 };
 
@@ -81,10 +81,10 @@ function portableAgent(agent: AgentConfig, avatar: string | undefined): ClawMani
   };
 }
 
-function portableOpenClawProfile(
+function portableNatesclawProfile(
   agent: AgentConfig,
-  extensions: ClawOpenClawExtension[],
-): ClawOpenClawProfile | undefined {
+  extensions: ClawNatesclawExtension[],
+): ClawNatesclawProfile | undefined {
   const tools = {
     ...(agent.tools?.profile ? { profile: agent.tools.profile } : {}),
     ...(agent.tools?.allow?.length ? { allow: agent.tools.allow } : {}),
@@ -185,7 +185,7 @@ function isClawBootstrapFileName(value: string): value is ClawBootstrapFileName 
   return (CLAW_BOOTSTRAP_FILE_NAMES as readonly string[]).includes(value);
 }
 function readPortableAvatar(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agent: AgentConfig;
   workspace: string;
 }): { source?: string; sidecar?: { path: string; content: Buffer } } {
@@ -298,8 +298,8 @@ function portableMcpServer(server: Record<string, unknown>): ClawMcpServer {
 export async function exportClawAgent(
   agentId: string,
   outputDirectory: string,
-  options: OpenClawStateDatabaseOptions & {
-    config: OpenClawConfig;
+  options: NatesclawStateDatabaseOptions & {
+    config: NatesclawConfig;
     packageDeps?: PackageRemovalDeps;
     packagePreflight?: ClawPackagePreflight;
     sourceMcpServers?: Record<string, Record<string, unknown>>;
@@ -471,10 +471,10 @@ export async function exportClawAgent(
       version: pkg.version,
     }))
     .toSorted((left, right) => comparePortableText(left.id, right.id));
-  const openClawProfile = portableOpenClawProfile(agent, extensions);
-  const openClawProfilePath = "profiles/openclaw.yml";
-  const openClawProfileRaw = openClawProfile
-    ? Buffer.from(stringifyYaml(openClawProfile))
+  const NatesclawProfile = portableNatesclawProfile(agent, extensions);
+  const NatesclawProfilePath = "profiles/natesclaw.yml";
+  const NatesclawProfileRaw = NatesclawProfile
+    ? Buffer.from(stringifyYaml(NatesclawProfile))
     : undefined;
   const portablePackages = record.packages
     .filter((pkg) => !pkg.extension)
@@ -535,11 +535,11 @@ export async function exportClawAgent(
       parsed.diagnostics.map((diagnostic) => diagnostic.message).join("; "),
     );
   }
-  if (openClawProfile) {
-    const parsedProfile = parseClawOpenClawProfile(openClawProfile);
+  if (NatesclawProfile) {
+    const parsedProfile = parseClawNatesclawProfile(NatesclawProfile);
     if (!parsedProfile.ok) {
       throw new ClawExportError(
-        "export_openclaw_profile_invalid",
+        "export_natesclaw_profile_invalid",
         parsedProfile.diagnostics.map((diagnostic) => diagnostic.message).join("; "),
       );
     }
@@ -566,23 +566,23 @@ export async function exportClawAgent(
       await output.write(path, file.content, { mkdir: true, overwrite: false });
       filesWritten.push(path);
     }
-    if (openClawProfileRaw) {
-      await output.write(openClawProfilePath, openClawProfileRaw, {
+    if (NatesclawProfileRaw) {
+      await output.write(NatesclawProfilePath, NatesclawProfileRaw, {
         mkdir: true,
         overwrite: false,
       });
-      filesWritten.push(openClawProfilePath);
+      filesWritten.push(NatesclawProfilePath);
     }
     const packageJson = {
-      name: `openclaw-claw-${record.install.agentId}`,
+      name: `natesclaw-claw-${record.install.agentId}`,
       version: derivativePackageVersion(manifest, [
         ...contents,
         ...(clawMarkdownBody ? [{ path: "CLAW.md#body", content: clawMarkdownBody }] : []),
-        ...(openClawProfileRaw ? [{ path: openClawProfilePath, content: openClawProfileRaw }] : []),
+        ...(NatesclawProfileRaw ? [{ path: NatesclawProfilePath, content: NatesclawProfileRaw }] : []),
         ...(exportedBootstrap ? [{ path: "BOOTSTRAP.md", content: exportedBootstrap }] : []),
       ]),
       type: "module",
-      openclaw: { claw: "CLAW.md" },
+      natesclaw: { claw: "CLAW.md" },
     };
     await output.write("package.json", Buffer.from(`${JSON.stringify(packageJson, null, 2)}\n`), {
       overwrite: false,
@@ -617,7 +617,7 @@ export async function exportClawAgent(
     agentId,
     outputDirectory: target,
     manifest,
-    ...(openClawProfile ? { openClawProfile } : {}),
+    ...(NatesclawProfile ? { NatesclawProfile } : {}),
     filesWritten,
   };
 }

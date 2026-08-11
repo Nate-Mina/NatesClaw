@@ -1,12 +1,12 @@
 import { hashRuntimeConfigValue } from "../config/runtime-snapshot.js";
 import type { ConfigFileSnapshot } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { MigrationCheckpointIdentity } from "../infra/startup-migration-checkpoint.js";
 import { resolveStateMigrationConfigInput } from "./doctor/shared/legacy-config-state-migration-input.js";
 
 export function resolveMigrationCheckpointIdentity(params: {
   snapshot: ConfigFileSnapshot;
-  baseConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
   pluginMigrationFingerprint: string | null;
 }): MigrationCheckpointIdentity | null {
   if (!params.snapshot.valid || !params.pluginMigrationFingerprint) {

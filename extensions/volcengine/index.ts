@@ -1,11 +1,11 @@
-// Volcengine plugin entrypoint registers its OpenClaw integration.
-import { buildOpenAICompatibleProviderFamilyCatalog } from "openclaw/plugin-sdk/provider-catalog-live-runtime";
-import { readManifestProviderDefaultModelRef } from "openclaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
-import { ensureModelAllowlistEntry } from "openclaw/plugin-sdk/provider-onboard";
+// Volcengine plugin entrypoint registers its Natesclaw integration.
+import { buildOpenAICompatibleProviderFamilyCatalog } from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
+import { readManifestProviderDefaultModelRef } from "natesclaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
+import { ensureModelAllowlistEntry } from "natesclaw/plugin-sdk/provider-onboard";
 import { applyVolcengineToolSchemaCompat } from "./api.js";
 import { VOLCENGINE_PROVIDER_CATALOG } from "./models.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import { buildVolcengineSpeechProvider } from "./speech-provider.js";
 
 const PROVIDER_ID = "volcengine";

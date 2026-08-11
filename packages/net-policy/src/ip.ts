@@ -2,7 +2,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import ipaddr from "ipaddr.js";
 
 /** Parsed IP address value returned by the net-policy parsing helpers. */

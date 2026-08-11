@@ -1,0 +1,4 @@
+interface:
+  display_name: "Natesclaw Testing"
+  short_description: "Choose cheap, targeted Natesclaw validation"
+  default_prompt: "Use $natesclaw-testing to choose the cheapest safe test or CI verification path, inspect failures, and rerun only the relevant Natesclaw lane."

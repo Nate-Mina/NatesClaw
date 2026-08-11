@@ -12,7 +12,7 @@ import { getTerminalTableWidth, renderTable } from "../../packages/terminal-core
 import { theme } from "../../packages/terminal-core/src/theme.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { getRuntimeConfig, readConfigFileSnapshot, replaceConfigFile } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   buildWorkspaceHookStatus,
   type HookStatusEntry,
@@ -52,7 +52,7 @@ type HooksUpdateOptions = {
 
 const GATEWAY_HOOKS_STATUS_TIMEOUT_MS = 1_500;
 
-function buildHooksReport(config: OpenClawConfig): HookStatusReport {
+function buildHooksReport(config: NatesclawConfig): HookStatusReport {
   // Plugin-managed and workspace hooks share one resolved policy view for status/actions.
   const workspaceDir = resolveAgentWorkspaceDir(config, resolveDefaultAgentId(config));
   const workspaceEntries = loadWorkspaceHookEntries(workspaceDir, { config });
@@ -119,11 +119,11 @@ function resolveHookForToggle(
 }
 
 function buildConfigWithHookEnabled(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   hookName: string;
   enabled: boolean;
   ensureHooksEnabled?: boolean;
-}): OpenClawConfig {
+}): NatesclawConfig {
   const entries = { ...params.config.hooks?.internal?.entries };
   entries[params.hookName] = { ...entries[params.hookName], enabled: params.enabled };
 
@@ -266,7 +266,7 @@ export function formatHooksList(report: HookStatusReport, opts: HooksListOptions
 
   if (hooks.length === 0) {
     const message = opts.eligible
-      ? `No eligible hooks found. Run \`${formatCliCommand("openclaw hooks list")}\` to see all hooks.`
+      ? `No eligible hooks found. Run \`${formatCliCommand("natesclaw hooks list")}\` to see all hooks.`
       : "No hooks found.";
     return message;
   }
@@ -322,7 +322,7 @@ export function formatHookInfo(
     if (opts.json) {
       return JSON.stringify({ error: "not found", hook: hookName }, null, 2);
     }
-    return `Hook "${hookName}" not found. Run \`${formatCliCommand("openclaw hooks list")}\` to see available hooks.`;
+    return `Hook "${hookName}" not found. Run \`${formatCliCommand("natesclaw hooks list")}\` to see available hooks.`;
   }
 
   if (opts.json) {
@@ -498,7 +498,7 @@ export function formatHooksCheck(report: HookStatusReport, opts: HooksCheckOptio
 
 async function enableHook(hookName: string): Promise<void> {
   const snapshot = await readConfigFileSnapshot();
-  const config = (snapshot.sourceConfig ?? snapshot.config) as OpenClawConfig;
+  const config = (snapshot.sourceConfig ?? snapshot.config) as NatesclawConfig;
   const hook = resolveHookForToggle(buildHooksReport(config), hookName, { requireEligible: true });
   const nextConfig = buildConfigWithHookEnabled({
     config,
@@ -518,7 +518,7 @@ async function enableHook(hookName: string): Promise<void> {
 
 async function disableHook(hookName: string): Promise<void> {
   const snapshot = await readConfigFileSnapshot();
-  const config = (snapshot.sourceConfig ?? snapshot.config) as OpenClawConfig;
+  const config = (snapshot.sourceConfig ?? snapshot.config) as NatesclawConfig;
   const hook = resolveHookForToggle(buildHooksReport(config), hookName);
   const nextConfig = buildConfigWithHookEnabled({
     config,
@@ -543,7 +543,7 @@ export function registerHooksCli(program: Command): void {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/hooks", "docs.openclaw.ai/cli/hooks")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/hooks", "docs.natesclaw.ai/cli/hooks")}\n`,
     );
   const hasJsonOutput = (opts: { json?: boolean } | undefined): boolean =>
     Boolean(opts?.json || hooks.opts<{ json?: boolean }>().json);
@@ -624,27 +624,27 @@ export function registerHooksCli(program: Command): void {
 
   hooks
     .command("install")
-    .description("Deprecated: install a hook pack via `openclaw plugins install`")
+    .description("Deprecated: install a hook pack via `natesclaw plugins install`")
     .argument("<path-or-spec>", "Path to a hook pack or npm package spec")
     .option("-l, --link", "Link a local path instead of copying", false)
     .option("--pin", "Record npm installs as exact resolved <name>@<version>", false)
     .option("--force", "Confirm non-ClawHub sources and overwrite an existing hook pack", false)
     .action(async (raw: string, opts: { force?: boolean; link?: boolean; pin?: boolean }) => {
       defaultRuntime.log(
-        theme.warn("`openclaw hooks install` is deprecated; use `openclaw plugins install`."),
+        theme.warn("`natesclaw hooks install` is deprecated; use `natesclaw plugins install`."),
       );
       await runPluginInstallCommand({ raw, opts, invalidateRuntimeCache: false });
     });
 
   hooks
     .command("update")
-    .description("Deprecated: update hook packs via `openclaw plugins update`")
+    .description("Deprecated: update hook packs via `natesclaw plugins update`")
     .argument("[id]", "Hook pack id (omit with --all)")
     .option("--all", "Update all tracked hooks", false)
     .option("--dry-run", "Show what would change without writing", false)
     .action(async (id: string | undefined, opts: HooksUpdateOptions) => {
       defaultRuntime.log(
-        theme.warn("`openclaw hooks update` is deprecated; use `openclaw plugins update`."),
+        theme.warn("`natesclaw hooks update` is deprecated; use `natesclaw plugins update`."),
       );
       await runPluginUpdateCommand({ id, opts });
     });

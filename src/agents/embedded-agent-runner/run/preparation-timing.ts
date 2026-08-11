@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import {
   measureDiagnosticsTimelineSpan,
   measureDiagnosticsTimelineSpanSync,
 } from "../../../infra/diagnostics-timeline.js";
 
 type EmbeddedAgentPreparationTimingOptions = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 };
 

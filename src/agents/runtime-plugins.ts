@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { promoteMatchingRuntimeContextEngineRegistrations } from "../context-engine/registry.js";
 import { listRuntimePluginIdsFromRegistry } from "../plugins/active-runtime-registry.js";
 import { normalizePluginsConfig } from "../plugins/config-state.js";
@@ -26,7 +26,7 @@ type StartupScopedPluginSnapshot = NonNullable<
 };
 
 function resolveStartupPluginIdsFromCurrentSnapshot(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
 }): string[] | undefined {
@@ -43,7 +43,7 @@ function resolveStartupPluginIdsFromCurrentSnapshot(params: {
 }
 
 type AgentRuntimePluginRegistryParams = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string | null;
   allowGatewaySubagentBinding?: boolean;
@@ -127,7 +127,7 @@ export function loadAgentRuntimePluginRegistryHandle(
 
 /** Binds a scoped plugin generation when a direct host has no Gateway owner. */
 export async function withAgentPluginRegistry<T>(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   workspaceDir: string;
   run: () => Promise<T>;
 }): Promise<T> {

@@ -1,6 +1,6 @@
 // QA Lab Slack live domain contracts and wire schemas.
 import type { WebClient } from "@slack/web-api";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { z } from "zod";
 import type { startQaGatewayChild } from "../../gateway-child.js";
 import { splitQaModelRef } from "../../model-selection.js";
@@ -86,7 +86,7 @@ const SLACK_QA_CODEX_PROVIDER_IDS = new Set(["codex", "openai"]);
 
 export type SlackQaApprovalKind = "exec" | "plugin";
 export type SlackQaApprovalDecision = "allow-always" | "allow-once" | "deny";
-export const SLACK_QA_APPROVAL_ACTION_PREFIX = "openclaw:approval:v1:";
+export const SLACK_QA_APPROVAL_ACTION_PREFIX = "natesclaw:approval:v1:";
 export const SlackQaApprovalActionValueSchema = z
   .object({
     approvalId: z.string().min(1),
@@ -134,7 +134,7 @@ type SlackQaDirectTransportScenarioRun = {
 };
 
 export type SlackQaDirectTransportScenarioContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channelId: string;
   sutAccountId: string;
   sutIdentity: SlackAuthIdentity;
@@ -277,15 +277,15 @@ export type SlackApprovalCheckpointMessage = {
   text: string;
 };
 
-export const SLACK_QA_APPROVAL_CHECKPOINT_DIR_ENV = "OPENCLAW_QA_SLACK_APPROVAL_CHECKPOINT_DIR";
+export const SLACK_QA_APPROVAL_CHECKPOINT_DIR_ENV = "NATESCLAW_QA_SLACK_APPROVAL_CHECKPOINT_DIR";
 export const SLACK_QA_APPROVAL_CHECKPOINT_TIMEOUT_MS_ENV =
-  "OPENCLAW_QA_SLACK_APPROVAL_CHECKPOINT_TIMEOUT_MS";
+  "NATESCLAW_QA_SLACK_APPROVAL_CHECKPOINT_TIMEOUT_MS";
 export const SLACK_QA_WEB_API_TIMEOUT_MS = 45_000;
 export const SLACK_QA_ENV_KEYS = [
-  "OPENCLAW_QA_SLACK_CHANNEL_ID",
-  "OPENCLAW_QA_SLACK_DRIVER_BOT_TOKEN",
-  "OPENCLAW_QA_SLACK_SUT_BOT_TOKEN",
-  "OPENCLAW_QA_SLACK_SUT_APP_TOKEN",
+  "NATESCLAW_QA_SLACK_CHANNEL_ID",
+  "NATESCLAW_QA_SLACK_DRIVER_BOT_TOKEN",
+  "NATESCLAW_QA_SLACK_SUT_BOT_TOKEN",
+  "NATESCLAW_QA_SLACK_SUT_APP_TOKEN",
 ] as const;
 
 export const slackQaCredentialPayloadSchema = z.object({

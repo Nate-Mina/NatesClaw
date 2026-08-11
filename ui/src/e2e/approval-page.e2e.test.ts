@@ -137,16 +137,16 @@ async function closeRecordedSurface(surface: ApprovalSurface, targetName: string
 }
 
 async function waitForApprovalPage(page: Page): Promise<void> {
-  await page.locator("openclaw-approval-page").waitFor();
+  await page.locator("natesclaw-approval-page").waitFor();
   await page.getByText("Waiting for your decision", { exact: true }).waitFor();
 }
 
 async function expectStandaloneApprovalPage(page: Page): Promise<void> {
-  expect(await page.locator("openclaw-approval-page").count()).toBe(1);
+  expect(await page.locator("natesclaw-approval-page").count()).toBe(1);
   expect(await page.locator(".approval-page").count()).toBe(1);
-  expect(await page.locator("openclaw-app-shell, .shell").count()).toBe(0);
-  expect(await page.locator("openclaw-app-topbar, openclaw-app-sidebar").count()).toBe(0);
-  expect(await page.locator("openclaw-exec-approval").count()).toBe(0);
+  expect(await page.locator("natesclaw-app-shell, .shell").count()).toBe(0);
+  expect(await page.locator("natesclaw-app-topbar, natesclaw-app-sidebar").count()).toBe(0);
+  expect(await page.locator("natesclaw-exec-approval").count()).toBe(0);
 }
 
 async function expectNoDecisionButtons(page: Page): Promise<void> {
@@ -279,7 +279,7 @@ suite.define(() => {
         expectStandaloneApprovalPage(desktop.page),
       ]);
       await expectMobilePendingLayout(mobile.page);
-      expect(await mobile.page.title()).toBe("Command approval — OpenClaw");
+      expect(await mobile.page.title()).toBe("Command approval — Natesclaw");
       await waitForStableApprovalPaint(mobile.page);
       await mobile.page.screenshot({
         path: path.join(ARTIFACT_DIR, "01-pending-mobile.png"),
@@ -345,7 +345,7 @@ suite.define(() => {
       expect(terminalFocus.id).toBe("approval-page-title");
       expect(terminalFocus.top).toBeGreaterThanOrEqual(0);
       expect(terminalFocus.bottom).toBeLessThanOrEqual(terminalFocus.viewportHeight);
-      expect(await mobile.page.title()).toBe("Approved here — OpenClaw");
+      expect(await mobile.page.title()).toBe("Approved here — Natesclaw");
       await waitForStableApprovalPaint(mobile.page);
       await mobile.page.screenshot({
         path: path.join(ARTIFACT_DIR, "02-competing-answer-terminal.png"),
@@ -359,7 +359,7 @@ suite.define(() => {
       expect(terminalReload?.status()).toBe(200);
       await mobile.gateway.waitForRequest("approval.get");
       await mobile.page.getByRole("heading", { name: "Approved", exact: true }).waitFor();
-      expect(await mobile.page.title()).toBe("Approved — OpenClaw");
+      expect(await mobile.page.title()).toBe("Approved — Natesclaw");
       expect(new URL(mobile.page.url()).pathname).toBe(approvalPath(""));
       await expectStandaloneApprovalPage(mobile.page);
       await expectNoDecisionButtons(mobile.page);
@@ -376,7 +376,7 @@ suite.define(() => {
   });
 
   it("preserves a mounted deep link across the authentication gate", async () => {
-    const basePath = "/openclaw";
+    const basePath = "/natesclaw";
     const pending = pendingApproval(basePath);
     const surface = await createSurface({
       basePath,
@@ -388,7 +388,7 @@ suite.define(() => {
     const response = await surface.page.goto(approvalUrl(basePath));
     expect(response?.status()).toBe(200);
     await surface.gateway.waitForRequest("connect");
-    await surface.page.locator("openclaw-login-gate").waitFor();
+    await surface.page.locator("natesclaw-login-gate").waitFor();
     expect(new URL(surface.page.url()).pathname).toBe(approvalPath(basePath));
     expect(await surface.gateway.getRequests("approval.get")).toHaveLength(0);
 
@@ -410,16 +410,16 @@ suite.define(() => {
     });
     const appUrl = new URL(suite.server?.baseUrl ?? "http://127.0.0.1/");
     const pageGatewayScope = `ws://${appUrl.host}`;
-    const selectionKey = `openclaw.control.currentGateway.v1:${pageGatewayScope}`;
+    const selectionKey = `natesclaw.control.currentGateway.v1:${pageGatewayScope}`;
     const pageGateway = pageGatewayScope;
-    const pageSettingsKey = `openclaw.control.settings.v1:${pageGateway}`;
+    const pageSettingsKey = `natesclaw.control.settings.v1:${pageGateway}`;
     const pageSettings = JSON.stringify({
       gatewayUrl: pageGateway,
       theme: "claw",
       sessionKey: "agent:page:saved",
     });
     const remoteGateway = "wss://saved-remote.example.test";
-    const remoteSettingsKey = `openclaw.control.settings.v1:${remoteGateway}`;
+    const remoteSettingsKey = `natesclaw.control.settings.v1:${remoteGateway}`;
     await surface.page.addInitScript(
       ({
         nextPageSettings,
@@ -539,7 +539,7 @@ suite.define(() => {
     expect(await surface.page.getByRole("button", { name: "Allow once" }).isDisabled()).toBe(true);
     await surface.page
       .getByText(
-        "OpenClaw cannot confirm or record a decision while disconnected. Reconnect to check the current status.",
+        "Natesclaw cannot confirm or record a decision while disconnected. Reconnect to check the current status.",
         { exact: true },
       )
       .waitFor();

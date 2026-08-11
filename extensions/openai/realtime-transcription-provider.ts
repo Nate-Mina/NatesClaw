@@ -1,10 +1,10 @@
 // Openai provider module implements model/runtime integration.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   isProviderAuthProfileConfigured,
   resolveProviderAuthProfileApiKey,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveProviderRequestHeaders } from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-auth";
+import { resolveProviderRequestHeaders } from "natesclaw/plugin-sdk/provider-http";
 import {
   createRealtimeTranscriptionWebSocketSession,
   type RealtimeTranscriptionProviderConfig,
@@ -12,9 +12,9 @@ import {
   type RealtimeTranscriptionSession,
   type RealtimeTranscriptionSessionCreateRequest,
   type RealtimeTranscriptionWebSocketTransport,
-} from "openclaw/plugin-sdk/realtime-transcription";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
-import { asFiniteNumber, normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/realtime-transcription";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
+import { asFiniteNumber, normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   createOpenAIRealtimeTranscriptionClientSecret,
   readRealtimeErrorDetail,
@@ -32,7 +32,7 @@ type OpenAIRealtimeTranscriptionProviderConfig = {
 
 type OpenAIRealtimeTranscriptionSessionConfig = RealtimeTranscriptionSessionCreateRequest & {
   apiKey?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   language?: string;
   model: string;
   prompt?: string;
@@ -208,7 +208,7 @@ function createOpenAIRealtimeTranscriptionSession(
   const completedTranscripts = new Map<string, string | undefined>();
   const trackedItemIds = new Set<string>();
   const settledItemIds = new Set<string>();
-  const unkeyedTranscript = "__openclaw_unkeyed_transcript__";
+  const unkeyedTranscript = "__natesclaw_unkeyed_transcript__";
   let retainedTranscriptBytes = 0;
   let settledItemIdBytes = 0;
   let appendedAudioBytes = 0;

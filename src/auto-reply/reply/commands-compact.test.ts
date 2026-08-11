@@ -1,7 +1,7 @@
 // Tests compact command behavior for session compaction and reply status.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { testing as cliBackendsTesting } from "../../agents/cli-backends.test-support.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import {
   resolveAgentDirMock,
   resolveSessionAgentIdMock,
@@ -33,7 +33,7 @@ const { handleCompactCommand } = await import("./commands-compact.js");
 
 function buildCompactParams(
   commandBodyNormalized: string,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): HandleCommandsParams {
   return {
     cfg,
@@ -69,7 +69,7 @@ function requireCompactEmbeddedAgentSessionCall(index = 0) {
 function requireResolveSessionAgentIdCall(index = 0) {
   const call = (
     resolveSessionAgentIdMock.mock.calls[index] as unknown as [unknown] | undefined
-  )?.[0] as { sessionKey?: string; config?: OpenClawConfig } | undefined;
+  )?.[0] as { sessionKey?: string; config?: NatesclawConfig } | undefined;
   if (!call) {
     throw new Error(`resolveSessionAgentId call ${index} missing`);
   }
@@ -77,7 +77,7 @@ function requireResolveSessionAgentIdCall(index = 0) {
 }
 
 function requireResolveAgentDirCall(index = 0) {
-  const call = resolveAgentDirMock.mock.calls[index] as [OpenClawConfig, string] | undefined;
+  const call = resolveAgentDirMock.mock.calls[index] as [NatesclawConfig, string] | undefined;
   if (!call) {
     throw new Error(`resolveAgentDir call ${index} missing`);
   }
@@ -96,7 +96,7 @@ describe("handleCompactCommand", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resolveAgentDirMock.mockImplementation(
-      (_cfg: unknown, agentId: string) => `/tmp/workspace/.openclaw/agents/${agentId}/agent`,
+      (_cfg: unknown, agentId: string) => `/tmp/workspace/.natesclaw/agents/${agentId}/agent`,
     );
     resolveSessionAgentIdMock.mockReturnValue("main");
   });
@@ -106,7 +106,7 @@ describe("handleCompactCommand", () => {
       buildCompactParams("/status", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       true,
     );
 
@@ -118,7 +118,7 @@ describe("handleCompactCommand", () => {
     const params = buildCompactParams("/compact", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const result = await handleCompactCommand(
       {
@@ -148,8 +148,8 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-          session: { store: "/tmp/openclaw-session-store.json" },
-        } as OpenClawConfig),
+          session: { store: "/tmp/natesclaw-session-store.json" },
+        } as NatesclawConfig),
         ctx: {
           Provider: "whatsapp",
           Surface: "whatsapp",
@@ -162,7 +162,7 @@ describe("handleCompactCommand", () => {
           SenderUsername: "alice_u",
           SenderE164: "+15551234567",
         },
-        agentDir: "/tmp/openclaw-agent-compact",
+        agentDir: "/tmp/natesclaw-agent-compact",
         opts: { abortSignal: abortController.signal },
         sessionEntry: {
           sessionId: "session-1",
@@ -196,7 +196,7 @@ describe("handleCompactCommand", () => {
     expect(call.senderName).toBe("Alice");
     expect(call.senderUsername).toBe("alice_u");
     expect(call.senderE164).toBe("+15551234567");
-    expect(call.agentDir).toBe("/tmp/openclaw-agent-compact");
+    expect(call.agentDir).toBe("/tmp/natesclaw-agent-compact");
     expect(call.authProfileId).toBe("github-copilot:work");
     expect(call.authProfileIdSource).toBe("user");
     expect(vi.mocked(abortEmbeddedAgentRun)).not.toHaveBeenCalled();
@@ -212,7 +212,7 @@ describe("handleCompactCommand", () => {
     const params = buildCompactParams("/compact", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     params.command = {
       ...params.command,
       ownerList: ownerIds,
@@ -245,7 +245,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -274,7 +274,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -297,7 +297,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -330,7 +330,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -358,7 +358,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -385,7 +385,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -409,8 +409,8 @@ describe("handleCompactCommand", () => {
     const cfg = {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-      session: { store: "/tmp/openclaw-session-store.json" },
-    } as OpenClawConfig;
+      session: { store: "/tmp/natesclaw-session-store.json" },
+    } as NatesclawConfig;
 
     await handleCompactCommand(
       {
@@ -435,7 +435,7 @@ describe("handleCompactCommand", () => {
           agentId: "target",
           sessionId: "session-1",
           sessionKey: "agent:target:whatsapp:direct:12345",
-          storePath: "/tmp/openclaw-session-store.json",
+          storePath: "/tmp/natesclaw-session-store.json",
         },
       }),
     );
@@ -450,7 +450,7 @@ describe("handleCompactCommand", () => {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
       session: { store: "/tmp/default-sessions.json" },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     await handleCompactCommand(
       {
@@ -483,7 +483,7 @@ describe("handleCompactCommand", () => {
     const cfg = {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     await handleCompactCommand(
       {
@@ -517,7 +517,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionKey: "agent:target:whatsapp:direct:12345",
         sessionEntry: {
           sessionId: "wrapper-session",
@@ -566,12 +566,12 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "locked-session",
           updatedAt: Date.now(),
           agentHarnessId: "codex",
-          agentRuntimeOverride: "openclaw",
+          agentRuntimeOverride: "natesclaw",
           modelSelectionLocked: true,
         },
       } as HandleCommandsParams,
@@ -622,7 +622,7 @@ describe("handleCompactCommand", () => {
             ...buildCompactParams("/compact", {
               commands: { text: true },
               channels: { whatsapp: { allowFrom: ["*"] } },
-            } as OpenClawConfig),
+            } as NatesclawConfig),
             provider,
             sessionEntry: {
               sessionId: "picker-session",
@@ -659,7 +659,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionKey: "agent:target:whatsapp:direct:12345",
         sessionEntry: {
           sessionId: "wrapper-session",
@@ -694,7 +694,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "target-session",
           updatedAt: Date.now(),
@@ -744,7 +744,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         sessionEntry: {
           sessionId: "native-session",
           updatedAt: Date.now(),
@@ -798,7 +798,7 @@ describe("handleCompactCommand", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig),
+        } as unknown as NatesclawConfig),
         provider: "openai",
         model: "openai/gpt-5.5",
         contextTokens: 0,
@@ -844,7 +844,7 @@ describe("handleCompactCommand", () => {
           },
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         provider: "claude-cli",
         model: "claude-fable-5",
         contextTokens: testCase.globalCap ?? 0,
@@ -879,7 +879,7 @@ describe("handleCompactCommand", () => {
           },
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NatesclawConfig),
         provider: "custom",
         model: "actual-model",
         contextTokens: 0,

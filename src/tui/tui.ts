@@ -15,11 +15,11 @@ import type { CommandEntry } from "../../packages/gateway-protocol/src/index.js"
 import { resolveAgentIdByWorkspacePath, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { normalizeThinkLevel } from "../auto-reply/thinking.shared.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import { getRuntimeConfig, type OpenClawConfig } from "../config/config.js";
+import { getRuntimeConfig, type NatesclawConfig } from "../config/config.js";
 import { resolveCanonicalMainSessionKey } from "../config/sessions/main-session-key.js";
 import type { EmbeddedStateSignalProcess } from "../infra/embedded-state-lock.js";
 import type { GatewayLockIdentity, GatewayLockOptions } from "../infra/gateway-lock.js";
-import { resolveCurrentOpenClawCliInvocation } from "../infra/openclaw-cli-invocation.js";
+import { resolveCurrentNatesclawCliInvocation } from "../infra/natesclaw-cli-invocation.js";
 import { tryProcessCwd } from "../infra/safe-cwd.js";
 import { registerUncaughtExceptionHandler } from "../infra/unhandled-rejections.js";
 import { getWindowsSystem32ExePath } from "../infra/windows-install-roots.js";
@@ -107,7 +107,7 @@ type RunTuiOptions = TuiOptions & {
     password?: string;
     tlsFingerprint?: string;
   };
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   title?: string;
 };
 
@@ -156,7 +156,7 @@ export function resolveTuiLocalAuthCliInvocation(params: {
   execArgv?: readonly string[];
 }) {
   const provider = params.provider?.trim();
-  return resolveCurrentOpenClawCliInvocation(
+  return resolveCurrentNatesclawCliInvocation(
     ["models", "auth", "login", ...(provider ? ["--provider", provider] : [])],
     {
       execArgv: filterTuiExecArgv(params.execArgv ?? process.execArgv),
@@ -195,7 +195,7 @@ export function resolveTuiSessionKey(params: {
 }
 
 export function resolveInitialTuiAgentId(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   fallbackAgentId: string;
   initialSessionInput?: string;
   agentId?: string;
@@ -537,7 +537,7 @@ export function scheduleProcessExitAfterTuiReturn(
     });
   const timer = setTimeoutFn(() => {
     try {
-      writeStderr("openclaw tui forcing process exit after return\n");
+      writeStderr("natesclaw tui forcing process exit after return\n");
     } catch {
       // Best effort only; forced exit must not depend on stderr.
     }
@@ -595,14 +595,14 @@ export function resolveTuiCtrlCAction(params: {
   return resolveCtrlCAction(params);
 }
 
-function resolveEmptySessionInfoDefaults(config: OpenClawConfig): SessionInfo {
+function resolveEmptySessionInfoDefaults(config: NatesclawConfig): SessionInfo {
   return {
     verboseLevel: config.agents?.defaults?.verboseDefault,
   };
 }
 
 function formatActiveGatewayTuiRefusal(identity: GatewayLockIdentity): string {
-  return `A Gateway is running for this state directory (pid ${identity.pid}, port ${identity.port}). Run without --local to use it, or stop the Gateway first (${formatCliCommand("openclaw gateway stop")}).`;
+  return `A Gateway is running for this state directory (pid ${identity.pid}, port ${identity.port}). Run without --local to use it, or stop the Gateway first (${formatCliCommand("natesclaw gateway stop")}).`;
 }
 
 /** Hold canonical state ownership for the complete lifetime of a local TUI. */
@@ -640,7 +640,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
 async function runTuiUnlocked(opts: RunTuiOptions): Promise<TuiResult> {
   const isLocalMode = opts.local === true || opts.backend !== undefined;
   const config = opts.config ?? getRuntimeConfig({ skipPluginValidation: !isLocalMode });
-  const cliInvocation = resolveCurrentOpenClawCliInvocation([]);
+  const cliInvocation = resolveCurrentNatesclawCliInvocation([]);
   const resolveUsableCwd = () => tryProcessCwd() ?? cliInvocation.cwd;
   const emptySessionInfoDefaults = resolveEmptySessionInfoDefaults(config);
   const initialSessionInput = (opts.session ?? "").trim();
@@ -778,7 +778,7 @@ async function runTuiUnlocked(opts: RunTuiOptions): Promise<TuiResult> {
       : null
     : null;
   if (isLocalMode) {
-    setConsoleSubsystemFilter(["__openclaw_tui_quiet__"]);
+    setConsoleSubsystemFilter(["__natesclaw_tui_quiet__"]);
   }
 
   const tui = new TUI(new ProcessTerminal());
@@ -1008,7 +1008,7 @@ async function runTuiUnlocked(opts: RunTuiOptions): Promise<TuiResult> {
   const updateHeader = () => {
     const sessionLabel = formatSessionKey(currentSessionKey);
     const agentLabel = formatAgentLabel(state.currentAgentId);
-    const title = opts.title ?? "openclaw tui";
+    const title = opts.title ?? "natesclaw tui";
     const text = `${title} - ${client.connection.url} - agent ${agentLabel} - session ${sessionLabel}`;
     header.setText(theme.header(sanitizeRenderableLine(text)));
   };
@@ -1211,7 +1211,7 @@ async function runTuiUnlocked(opts: RunTuiOptions): Promise<TuiResult> {
       return await work();
     } finally {
       if (isLocalMode) {
-        setConsoleSubsystemFilter(["__openclaw_tui_quiet__"]);
+        setConsoleSubsystemFilter(["__natesclaw_tui_quiet__"]);
       }
       tui.start();
       tui.setFocus(editor);
@@ -1400,7 +1400,7 @@ async function runTuiUnlocked(opts: RunTuiOptions): Promise<TuiResult> {
   let disposeSubmitBurst = () => {};
   const forceExit = () => {
     try {
-      process.stderr.write("openclaw tui forcing exit\n");
+      process.stderr.write("natesclaw tui forcing exit\n");
     } catch {
       // Best effort only; force exit must not depend on stderr.
     }
@@ -1433,7 +1433,7 @@ async function runTuiUnlocked(opts: RunTuiOptions): Promise<TuiResult> {
       onError: (err) => {
         if (!isTuiTerminalLossError(err)) {
           try {
-            process.stderr.write(`openclaw tui shutdown failed: ${formatTuiErrorMessage(err)}\n`);
+            process.stderr.write(`natesclaw tui shutdown failed: ${formatTuiErrorMessage(err)}\n`);
           } catch {
             // Best effort only; exit must still complete.
           }

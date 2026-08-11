@@ -1,9 +1,9 @@
 // Provider-index types describe install hints, auth choices, and preview catalogs for discoverable providers.
-import type { ModelCatalogProvider } from "@openclaw/model-catalog-core/model-catalog-types";
+import type { ModelCatalogProvider } from "@natesclaw/model-catalog-core/model-catalog-types";
 
 // Normalized provider-index schema. It describes providers discoverable before
 // plugin install, including install hints, auth choices, and preview catalogs.
-export type OpenClawProviderIndexPluginInstall = {
+export type NatesclawProviderIndexPluginInstall = {
   clawhubSpec?: string;
   npmSpec?: string;
   defaultChoice?: "clawhub" | "npm";
@@ -11,14 +11,14 @@ export type OpenClawProviderIndexPluginInstall = {
   expectedIntegrity?: string;
 };
 
-export type OpenClawProviderIndexPlugin = {
+export type NatesclawProviderIndexPlugin = {
   id: string;
   package?: string;
   source?: string;
-  install?: OpenClawProviderIndexPluginInstall;
+  install?: NatesclawProviderIndexPluginInstall;
 };
 
-export type OpenClawProviderIndexProviderAuthChoice = {
+export type NatesclawProviderIndexProviderAuthChoice = {
   method: string;
   choiceId: string;
   choiceLabel: string;
@@ -35,17 +35,17 @@ export type OpenClawProviderIndexProviderAuthChoice = {
   onboardingScopes?: readonly ("text-inference" | "image-generation" | "music-generation")[];
 };
 
-export type OpenClawProviderIndexProvider = {
+export type NatesclawProviderIndexProvider = {
   id: string;
   name: string;
-  plugin: OpenClawProviderIndexPlugin;
+  plugin: NatesclawProviderIndexPlugin;
   docs?: string;
   categories?: readonly string[];
-  authChoices?: readonly OpenClawProviderIndexProviderAuthChoice[];
+  authChoices?: readonly NatesclawProviderIndexProviderAuthChoice[];
   previewCatalog?: ModelCatalogProvider;
 };
 
-export type OpenClawProviderIndex = {
+export type NatesclawProviderIndex = {
   version: number;
-  providers: Readonly<Record<string, OpenClawProviderIndexProvider>>;
+  providers: Readonly<Record<string, NatesclawProviderIndexProvider>>;
 };

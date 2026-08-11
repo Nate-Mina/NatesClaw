@@ -1,9 +1,9 @@
 // Imessage plugin module implements approval reaction poller behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
 import type { IMessageApprovalGatewayRuntime } from "./approval-gateway-types.js";
 import {
   extractIMessageApprovalPromptBinding,
@@ -225,7 +225,7 @@ function bindObservedApprovalPrompt(params: {
 
 export async function pollPendingIMessageApprovalReactions(params: {
   client: IMessageRpcClient;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   allowRecentChatDiscovery?: boolean;
   gatewayRuntime?: IMessageApprovalGatewayRuntime;

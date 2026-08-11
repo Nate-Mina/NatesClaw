@@ -1,7 +1,7 @@
 // Matrix plugin module implements shared behavior.
-import { normalizeOptionalAccountId } from "openclaw/plugin-sdk/account-id";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { normalizeOptionalAccountId } from "natesclaw/plugin-sdk/account-id";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 import type { CoreConfig } from "../../types.js";
 import type { MatrixClient } from "../sdk.js";
 import { LogService } from "../sdk/logger.js";

@@ -1,11 +1,11 @@
-# OpenClaw WhatsApp
+# Natesclaw WhatsApp
 
-Official OpenClaw channel plugin for WhatsApp Web chats.
+Official Natesclaw channel plugin for WhatsApp Web chats.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/whatsapp
+natesclaw plugins install @natesclaw/whatsapp
 ```
 
-Link a WhatsApp account through the plugin's setup flow, then configure which chats OpenClaw agents should monitor and reply to.
+Link a WhatsApp account through the plugin's setup flow, then configure which chats Natesclaw agents should monitor and reply to.

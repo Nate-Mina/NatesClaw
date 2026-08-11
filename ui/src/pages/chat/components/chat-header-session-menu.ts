@@ -7,7 +7,7 @@ import type { SessionMenuActionKind } from "../../../components/session-menu.ts"
 import "../../../components/web-awesome.ts";
 import { t } from "../../../i18n/index.ts";
 import { EDITOR_IDS, EDITOR_LABELS, type EditorId } from "../../../lib/editor-links.ts";
-import { OpenClawLightDomElement } from "../../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../../lit/natesclaw-element.ts";
 
 export type HeaderMenuAction =
   | { kind: "open-in"; editor: EditorId; path: string }
@@ -27,7 +27,7 @@ export type HeaderMenuQuickAction = {
 
 const EMPTY_SETTINGS = {} as UiSettings;
 
-class ChatHeaderSessionMenu extends OpenClawLightDomElement {
+class ChatHeaderSessionMenu extends NatesclawLightDomElement {
   @property({ attribute: false }) sessionLabel = "";
   @property({ attribute: false }) worktreePath: string | null = null;
   @property({ attribute: false }) archived = false;
@@ -289,12 +289,12 @@ class ChatHeaderSessionMenu extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-chat-header-session-menu")) {
-  customElements.define("openclaw-chat-header-session-menu", ChatHeaderSessionMenu);
+if (!customElements.get("natesclaw-chat-header-session-menu")) {
+  customElements.define("natesclaw-chat-header-session-menu", ChatHeaderSessionMenu);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-chat-header-session-menu": ChatHeaderSessionMenu;
+    "natesclaw-chat-header-session-menu": ChatHeaderSessionMenu;
   }
 }

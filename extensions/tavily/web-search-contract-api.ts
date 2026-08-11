@@ -1,6 +1,6 @@
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 // Tavily API module exposes the plugin public contract.
-import type { WebSearchProviderPlugin } from "openclaw/plugin-sdk/provider-web-search-config-contract";
+import type { WebSearchProviderPlugin } from "natesclaw/plugin-sdk/provider-web-search-config-contract";
 import {
   buildTavilyWebSearchProviderBase,
   TAVILY_GENERIC_SEARCH_DESCRIPTION,

@@ -1,11 +1,11 @@
-import { downloadGeneratedVideoAsset } from "openclaw/plugin-sdk/media-generation-runtime";
+import { downloadGeneratedVideoAsset } from "natesclaw/plugin-sdk/media-generation-runtime";
 import {
   assertOkOrThrowHttpError,
   executeProviderOperationWithRetry,
   fetchWithTimeoutGuarded,
   type ProviderOperationTimeoutMs,
-} from "openclaw/plugin-sdk/provider-http";
-import type { GeneratedVideoAsset } from "openclaw/plugin-sdk/video-generation";
+} from "natesclaw/plugin-sdk/provider-http";
+import type { GeneratedVideoAsset } from "natesclaw/plugin-sdk/video-generation";
 
 export type XaiVideoRequestPolicy = {
   allowPrivateNetwork: boolean;

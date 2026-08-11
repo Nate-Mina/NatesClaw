@@ -2,7 +2,7 @@ import * as auditActivity from "./audit-activity.js";
 import * as auditRun from "./audit-run.js";
 import * as audit from "./audit.js";
 import * as config from "./config.js";
-import * as openclaw from "./openclaw.js";
+import * as natesclaw from "./natesclaw.js";
 import * as taskSuggestions from "./task-suggestions.js";
 import * as tasks from "./tasks.js";
 import * as wizard from "./wizard.js";
@@ -55,24 +55,24 @@ export const OperationsProtocolSchemas = {
   ConfigSchemaLookupParams: config.ConfigSchemaLookupParamsSchema,
   ConfigSchemaResponse: config.ConfigSchemaResponseSchema,
   ConfigSchemaLookupResult: config.ConfigSchemaLookupResultSchema,
-  SystemAgentChatParams: openclaw.SystemAgentChatParamsSchema,
-  SystemAgentChatResult: openclaw.SystemAgentChatResultSchema,
-  SystemAgentChatHistoryParams: openclaw.SystemAgentChatHistoryParamsSchema,
-  SystemAgentChatHistoryTurn: openclaw.SystemAgentChatHistoryTurnSchema,
-  SystemAgentChatHistoryResult: openclaw.SystemAgentChatHistoryResultSchema,
-  SystemChangeEntry: openclaw.SystemChangeEntrySchema,
-  SystemChangeKind: openclaw.SystemChangeKindSchema,
-  SystemChangeSource: openclaw.SystemChangeSourceSchema,
-  SystemChangesListParams: openclaw.SystemChangesListParamsSchema,
-  SystemChangesListResult: openclaw.SystemChangesListResultSchema,
-  SystemAgentSetupDetectParams: openclaw.SystemAgentSetupDetectParamsSchema,
-  SystemAgentSetupDetectResult: openclaw.SystemAgentSetupDetectResultSchema,
-  SystemAgentSetupVerifyParams: openclaw.SystemAgentSetupVerifyParamsSchema,
-  SystemAgentSetupVerifyResult: openclaw.SystemAgentSetupVerifyResultSchema,
-  SystemAgentSetupActivateParams: openclaw.SystemAgentSetupActivateParamsSchema,
-  SystemAgentSetupActivateResult: openclaw.SystemAgentSetupActivateResultSchema,
-  SystemAgentSetupAuthStartParams: openclaw.SystemAgentSetupAuthStartParamsSchema,
-  SystemAgentSetupAuthStartResult: openclaw.SystemAgentSetupAuthStartResultSchema,
+  SystemAgentChatParams: natesclaw.SystemAgentChatParamsSchema,
+  SystemAgentChatResult: natesclaw.SystemAgentChatResultSchema,
+  SystemAgentChatHistoryParams: natesclaw.SystemAgentChatHistoryParamsSchema,
+  SystemAgentChatHistoryTurn: natesclaw.SystemAgentChatHistoryTurnSchema,
+  SystemAgentChatHistoryResult: natesclaw.SystemAgentChatHistoryResultSchema,
+  SystemChangeEntry: natesclaw.SystemChangeEntrySchema,
+  SystemChangeKind: natesclaw.SystemChangeKindSchema,
+  SystemChangeSource: natesclaw.SystemChangeSourceSchema,
+  SystemChangesListParams: natesclaw.SystemChangesListParamsSchema,
+  SystemChangesListResult: natesclaw.SystemChangesListResultSchema,
+  SystemAgentSetupDetectParams: natesclaw.SystemAgentSetupDetectParamsSchema,
+  SystemAgentSetupDetectResult: natesclaw.SystemAgentSetupDetectResultSchema,
+  SystemAgentSetupVerifyParams: natesclaw.SystemAgentSetupVerifyParamsSchema,
+  SystemAgentSetupVerifyResult: natesclaw.SystemAgentSetupVerifyResultSchema,
+  SystemAgentSetupActivateParams: natesclaw.SystemAgentSetupActivateParamsSchema,
+  SystemAgentSetupActivateResult: natesclaw.SystemAgentSetupActivateResultSchema,
+  SystemAgentSetupAuthStartParams: natesclaw.SystemAgentSetupAuthStartParamsSchema,
+  SystemAgentSetupAuthStartResult: natesclaw.SystemAgentSetupAuthStartResultSchema,
   WizardStartParams: wizard.WizardStartParamsSchema,
   WizardNextParams: wizard.WizardNextParamsSchema,
   WizardCancelParams: wizard.WizardCancelParamsSchema,

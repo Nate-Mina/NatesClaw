@@ -1,7 +1,7 @@
 // Imessage plugin module implements deliver behavior.
-export { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
+export { resolveMarkdownTableMode } from "natesclaw/plugin-sdk/markdown-table-runtime";
 export {
   chunkMarkdownTextWithMode as chunkTextWithMode,
   resolveChunkMode,
-} from "openclaw/plugin-sdk/reply-runtime";
-export { convertMarkdownTables } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/reply-runtime";
+export { convertMarkdownTables } from "natesclaw/plugin-sdk/text-chunking";

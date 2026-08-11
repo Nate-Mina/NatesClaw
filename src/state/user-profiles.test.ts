@@ -2,12 +2,12 @@ import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { tableExists } from "./openclaw-state-db-schema-helpers.js";
-import { OPENCLAW_STATE_SCHEMA_VERSION } from "./openclaw-state-db.js";
+import { tableExists } from "./natesclaw-state-db-schema-helpers.js";
+import { NATESCLAW_STATE_SCHEMA_VERSION } from "./natesclaw-state-db.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "./openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "./natesclaw-state-db.js";
 import { migrateLegacyTailscaleProfileIdentities } from "./user-profiles-tailscale-migration.js";
 import {
   adoptTailscaleProfileAvatar,
@@ -26,8 +26,8 @@ import {
 const statePaths: string[] = [];
 
 function stateOptions() {
-  const directory = mkdtempSync(join(tmpdir(), "openclaw-user-profiles-"));
-  const path = join(directory, "openclaw.sqlite");
+  const directory = mkdtempSync(join(tmpdir(), "natesclaw-user-profiles-"));
+  const path = join(directory, "natesclaw.sqlite");
   statePaths.push(path);
   return { path };
 }
@@ -53,13 +53,13 @@ async function ensureTailscaleProfileWithAvatar(
 
 afterEach(() => {
   vi.restoreAllMocks();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 describe("user profiles", () => {
   it("lazily ensures and resolves lowercased email aliases idempotently", () => {
     const options = stateOptions();
-    const database = openOpenClawStateDatabase(options).db;
+    const database = openNatesclawStateDatabase(options).db;
     const versionBefore = database.prepare("PRAGMA user_version").get()?.user_version;
     expect(tableExists(database, "user_profiles")).toBe(false);
     expect(tableExists(database, "user_profile_identities")).toBe(false);
@@ -67,14 +67,14 @@ describe("user profiles", () => {
     const first = ensureProfileForEmail("  Ada@Example.COM ", options);
     const second = ensureProfileForEmail("ada@example.com", options);
 
-    expect(tableExists(openOpenClawStateDatabase(options).db, "user_profiles")).toBe(true);
-    expect(tableExists(openOpenClawStateDatabase(options).db, "user_profile_identities")).toBe(
+    expect(tableExists(openNatesclawStateDatabase(options).db, "user_profiles")).toBe(true);
+    expect(tableExists(openNatesclawStateDatabase(options).db, "user_profile_identities")).toBe(
       true,
     );
     expect(
-      openOpenClawStateDatabase(options).db.prepare("PRAGMA user_version").get()?.user_version,
+      openNatesclawStateDatabase(options).db.prepare("PRAGMA user_version").get()?.user_version,
     ).toBe(versionBefore);
-    expect(OPENCLAW_STATE_SCHEMA_VERSION).toBe(6);
+    expect(NATESCLAW_STATE_SCHEMA_VERSION).toBe(6);
     expect(second).toEqual(first);
     expect(ensureProfileForEmail("ADA@example.com", options)).toEqual(first);
     expect(listProfiles(options)).toEqual([
@@ -100,7 +100,7 @@ describe("user profiles", () => {
       expect.objectContaining({ id: first.id, emails: [], displayName: "Ada Lovelace" }),
     ]);
     expect(
-      openOpenClawStateDatabase(options)
+      openNatesclawStateDatabase(options)
         .db.prepare(
           "SELECT provider, subject, profile_id FROM user_profile_identities ORDER BY provider, subject",
         )
@@ -244,7 +244,7 @@ describe("user profiles", () => {
 
   it.each([
     ["image/png", "ui/public/favicon-32.png"],
-    ["image/jpeg", "docs/whatsapp-openclaw.jpg"],
+    ["image/jpeg", "docs/whatsapp-natesclaw.jpg"],
     ["image/webp", "ui/public/app-art/android.webp"],
   ])("adopts a bounded %s Tailscale avatar", async (mime, path) => {
     const options = stateOptions();
@@ -389,7 +389,7 @@ describe("user profiles", () => {
     });
     expect(migrateLegacyTailscaleProfileIdentities(options)).toEqual({ changes: [], warnings: [] });
 
-    const database = openOpenClawStateDatabase(options).db;
+    const database = openNatesclawStateDatabase(options).db;
     expect(
       database.prepare("SELECT provider, subject, profile_id FROM user_profile_identities").all(),
     ).toEqual([{ provider: "github", subject: "user", profile_id: provider.id }]);
@@ -412,7 +412,7 @@ describe("user profiles", () => {
 
   it("does not activate user-profile tables when Doctor has no legacy aliases", () => {
     const options = stateOptions();
-    const database = openOpenClawStateDatabase(options).db;
+    const database = openNatesclawStateDatabase(options).db;
 
     expect(migrateLegacyTailscaleProfileIdentities(options)).toEqual({ changes: [], warnings: [] });
     expect(tableExists(database, "user_profiles")).toBe(false);

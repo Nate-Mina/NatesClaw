@@ -1,6 +1,6 @@
 // Tracks per-session run usage totals and last-run accounting facts.
 import { deriveSessionTotalTokens, type NormalizedUsage } from "../../agents/usage.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { incrementCompactionCount } from "./session-updates.js";
 import { persistSessionUsageUpdate } from "./session-usage.js";
 
@@ -11,7 +11,7 @@ type IncrementRunCompactionCountParams = Omit<
   "tokensAfter"
 > & {
   amount?: number;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   compactionTokensAfter?: number;
   lastCallUsage?: NormalizedUsage;
   contextTokensUsed?: number;

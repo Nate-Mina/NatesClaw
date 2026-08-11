@@ -1,6 +1,6 @@
 // Covers config snapshot redaction and restoration behavior.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import JSON5 from "json5";
 import { describe, expect, it } from "vitest";
 import { redactSnapshotTestHints as mainSchemaHints } from "../../test/helpers/config/redact-snapshot-test-hints.js";
@@ -13,7 +13,7 @@ import {
   type TestSnapshot,
 } from "./redact-snapshot.test-helpers.js";
 import { buildConfigSchemaCore } from "./schema.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "./types.openclaw.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "./types.natesclaw.js";
 
 function expectNestedPairValue(
   source: Record<string, Record<string, Record<string, unknown>>>,
@@ -63,7 +63,7 @@ describe("redactConfigSnapshot", () => {
             {
               id: "demo",
               rootDir: "/private/plugin/root",
-              manifestPath: "/private/plugin/root/openclaw.plugin.json",
+              manifestPath: "/private/plugin/root/natesclaw.plugin.json",
             },
           ],
           diagnostics: [],
@@ -455,7 +455,7 @@ describe("redactConfigSnapshot", () => {
       enabled: true,
       exec: {
         source: "exec",
-        command: "/usr/local/bin/openclaw-install-policy",
+        command: "/usr/local/bin/natesclaw-install-policy",
         env: {
           POLICY_TOKEN: "operator-policy-secret-token",
           AUDIT_ENDPOINT: "operator-policy-secret-endpoint",
@@ -471,7 +471,7 @@ describe("redactConfigSnapshot", () => {
             enabled: true,
             exec: {
               source: "exec",
-              command: "/usr/local/bin/openclaw-install-policy",
+              command: "/usr/local/bin/natesclaw-install-policy",
               env: {
                 POLICY_TOKEN: "operator-policy-secret-token",
                 AUDIT_ENDPOINT: "operator-policy-secret-endpoint",
@@ -619,9 +619,9 @@ describe("redactConfigSnapshot", () => {
     const snapshot = makeSnapshot({
       channels: {
         irc: {
-          passwordFile: "/etc/openclaw/irc-password.txt",
+          passwordFile: "/etc/natesclaw/irc-password.txt",
           nickserv: {
-            passwordFile: "/etc/openclaw/nickserv-password.txt",
+            passwordFile: "/etc/natesclaw/nickserv-password.txt",
             password: "super-secret-nickserv-password",
           },
         },
@@ -633,8 +633,8 @@ describe("redactConfigSnapshot", () => {
     const irc = expectDefined(channels.irc, "channels.irc test invariant");
     const nickserv = irc.nickserv as Record<string, unknown>;
 
-    expect(irc.passwordFile).toBe("/etc/openclaw/irc-password.txt");
-    expect(nickserv.passwordFile).toBe("/etc/openclaw/nickserv-password.txt");
+    expect(irc.passwordFile).toBe("/etc/natesclaw/irc-password.txt");
+    expect(nickserv.passwordFile).toBe("/etc/natesclaw/nickserv-password.txt");
     expect(nickserv.password).toBe(REDACTED_SENTINEL);
   });
 
@@ -660,7 +660,7 @@ describe("redactConfigSnapshot", () => {
           mode: "full",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const raw = JSON.stringify(sourceConfig);
     const runtimeConfig = materializeRuntimeConfig(structuredClone(sourceConfig), "snapshot");
     const snapshot = {

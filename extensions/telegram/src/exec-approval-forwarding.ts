@@ -3,14 +3,14 @@ import {
   buildTypedExecApprovalPendingReplyPayload,
   resolveExecApprovalRequestAllowedDecisions,
   resolveExecApprovalCommandDisplay,
-} from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { ExecApprovalRequest } from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeMessageChannel } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/approval-reply-runtime";
+import type { ExecApprovalRequest } from "natesclaw/plugin-sdk/approval-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { normalizeMessageChannel } from "natesclaw/plugin-sdk/routing";
 import { isTelegramExecApprovalClientEnabled } from "./exec-approvals.js";
 
 export function shouldSuppressTelegramExecApprovalForwardingFallback(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   target: { channel: string; accountId?: string | null };
   request: ExecApprovalRequest;
 }): boolean {

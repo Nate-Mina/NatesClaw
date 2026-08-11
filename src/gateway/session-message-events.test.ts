@@ -1,11 +1,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
+import { rawDataToString } from "@natesclaw/gateway-client/websocket-data";
 /**
  * Session message event indexing and broadcast tests.
  */
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 import type { RawData } from "ws";
 import {
@@ -23,7 +23,7 @@ import {
   persistSessionTranscriptTurn,
 } from "../config/sessions/session-accessor.js";
 import { appendAssistantMessageToSessionTranscript } from "../config/sessions/transcript.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { emitAgentEvent } from "../infra/agent-events.js";
 import { claimAgentRunContext, clearAgentRunContext } from "../infra/agent-run-registry.js";
 import { emitSessionLifecycleEvent } from "../sessions/session-lifecycle-events.js";
@@ -32,9 +32,9 @@ import { emitSessionTranscriptUpdate } from "../sessions/transcript-events.js";
 import { persistUserTurnTranscript } from "../sessions/user-turn-transcript.test-support.js";
 import { ensureProfileForEmail, setAvatar, setDisplayName } from "../state/user-profiles.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { resolveCurrentUserProfileDisplay } from "./current-user-profile-display.js";
 import { testState } from "./test-helpers.runtime-state.js";
 import {
@@ -54,7 +54,7 @@ import { createWorkerTranscriptCommitter } from "./worker-environments/transcrip
 installGatewayTestHooks({ scope: "suite" });
 
 const cleanupDirs: string[] = [];
-const cleanupTestStates: OpenClawTestState[] = [];
+const cleanupTestStates: NatesclawTestState[] = [];
 const SETUP_RPC_TIMEOUT_MS = 30_000;
 let harness: Awaited<ReturnType<typeof createGatewaySuiteHarness>>;
 let subscribedOperatorWs:
@@ -92,7 +92,7 @@ afterEach(async () => {
 });
 
 async function createSessionStoreFile(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-message-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-session-message-"));
   cleanupDirs.push(dir);
   const storePath = path.join(dir, "sessions.json");
   testState.sessionStorePath = storePath;
@@ -211,11 +211,11 @@ function withMockedDateNow<T>(now: number, run: () => T): T {
 
 function attributedMessageProjection(value: unknown) {
   const message = requireRecord(value, "attributed message");
-  const metadata = requireRecord(message["__openclaw"], "attributed message metadata");
+  const metadata = requireRecord(message["__natesclaw"], "attributed message metadata");
   return {
     role: message.role,
     content: message.content,
-    __openclaw: {
+    __natesclaw: {
       senderId: metadata.senderId,
       senderName: metadata.senderName,
       senderUsername: metadata.senderUsername,
@@ -935,7 +935,7 @@ describe("session.message websocket events", () => {
             sessionKey,
           });
           expect(requireRecord(delivery.payload, "shared session event").message).toMatchObject({
-            __openclaw: {
+            __natesclaw: {
               id: messageId,
               idempotencyKey: `${messageId}:user`,
               seq: index + 1,
@@ -966,7 +966,7 @@ describe("session.message websocket events", () => {
 
   test("projects current revisioned sender avatars consistently across live events and RPC reads", async () => {
     const SHARED_REV = 1_800_000_000_000;
-    const profileState = await createOpenClawTestState({
+    const profileState = await createNatesclawTestState({
       label: "session-message-current-profile-display",
       layout: "state-only",
     });
@@ -1030,7 +1030,7 @@ describe("session.message websocket events", () => {
         const messages = response.payload?.messages ?? [];
         const message = messages.find((candidate) => {
           const record = requireRecord(candidate, "history message");
-          const metadata = requireRecord(record["__openclaw"], "history message metadata");
+          const metadata = requireRecord(record["__natesclaw"], "history message metadata");
           return metadata.id === messageId;
         });
         expect(message).toBeDefined();
@@ -1048,7 +1048,7 @@ describe("session.message websocket events", () => {
       const expectedProjection = (text: string, senderName: string, avatarUrl: string) => ({
         role: "user",
         content: text,
-        __openclaw: {
+        __natesclaw: {
           senderId: profile.id,
           senderName,
           senderUsername: "ada",
@@ -1272,7 +1272,7 @@ describe("session.message websocket events", () => {
             throw new Error(`unexpected committed-turn delivery at index ${index}`);
           }
           expect(requireRecord(frame.payload, "committed session event").message).toMatchObject({
-            __openclaw: {
+            __natesclaw: {
               id: expected.id,
               idempotencyKey: `${expected.id}:user`,
               seq: index + 2,
@@ -1287,7 +1287,7 @@ describe("session.message websocket events", () => {
       expect(history.ok).toBe(true);
       expect((history.payload as { messages?: unknown[] }).messages).toMatchObject(
         [earlierMessage, ...committedMessages].map(({ id, text }, index) => ({
-          __openclaw: { id, idempotencyKey: `${id}:user`, seq: index + 1 },
+          __natesclaw: { id, idempotencyKey: `${id}:user`, seq: index + 1 },
           content: [{ type: "text", text }],
           role: "user",
         })),
@@ -1541,14 +1541,14 @@ describe("session.message websocket events", () => {
         message: {
           role: "user",
           content: [{ type: "text", text: "The agent cannot read this message." }],
-          __openclaw: {
+          __natesclaw: {
             beforeAgentRunBlocked: { blockedBy: "policy-plugin", blockedAt: 1 },
           },
         },
       });
 
       const payload = messageEvent.payload as {
-        message?: { content?: unknown; __openclaw?: { beforeAgentRunBlocked?: unknown } };
+        message?: { content?: unknown; __natesclaw?: { beforeAgentRunBlocked?: unknown } };
       };
       expect(payload.message?.content).toEqual([
         { type: "text", text: "The agent cannot read this message." },
@@ -1579,7 +1579,7 @@ describe("session.message websocket events", () => {
         message: {
           role: "user",
           content: [{ type: "text", text: "The agent cannot read this message." }],
-          __openclaw: {
+          __natesclaw: {
             beforeAgentRunBlocked: {
               blockedBy: "policy-plugin",
               blockedAt: Date.now(),
@@ -1593,7 +1593,7 @@ describe("session.message websocket events", () => {
         message?: {
           role?: unknown;
           content?: unknown;
-          __openclaw?: { beforeAgentRunBlocked?: unknown };
+          __natesclaw?: { beforeAgentRunBlocked?: unknown };
         };
       };
       expect(payload.message?.role).toBe("user");
@@ -1641,7 +1641,7 @@ describe("session.message websocket events", () => {
             messageSeq: 1,
             message: {
               role: "custom",
-              customType: "openclaw.runtime-context",
+              customType: "natesclaw.runtime-context",
               content: "secret runtime context",
               display: false,
             },
@@ -1843,7 +1843,7 @@ describe("session.message websocket events", () => {
       });
       const payload = requireRecord(messageEvent.payload, "session.message payload");
       const message = requireRecord(payload.message, "session.message payload message");
-      expect((message["__openclaw"] as { seq?: unknown } | undefined)?.seq).toBe(7);
+      expect((message["__natesclaw"] as { seq?: unknown } | undefined)?.seq).toBe(7);
     });
   });
 
@@ -2466,7 +2466,7 @@ describe("session.message websocket events", () => {
       },
       storePath,
     });
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       agents: { list: [{ id: "main", default: true }] },
       session: { mainKey: "main", store: storePath },
     };
@@ -2551,13 +2551,13 @@ describe("session.message websocket events", () => {
       expect(
         payloads.map((payload) => {
           const message = requireRecord(payload.message, "session.message payload message");
-          return requireRecord(message["__openclaw"], "session.message metadata").id;
+          return requireRecord(message["__natesclaw"], "session.message metadata").id;
         }),
       ).toEqual(outcome.result.entryIds);
       expect(
         payloads.map((payload) => {
           const message = requireRecord(payload.message, "session.message payload message");
-          return requireRecord(message["__openclaw"], "session.message metadata").seq;
+          return requireRecord(message["__natesclaw"], "session.message metadata").seq;
         }),
       ).toEqual([1, 2, 3]);
 

@@ -9,7 +9,7 @@ import {
 import { loadAgentRuntimePluginRegistryHandle } from "../agents/runtime-plugins.js";
 import { applyAutoLocalModelLean } from "../config/local-model-lean-auto.js";
 import { createMergePatch } from "../config/merge-patch.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { normalizePluginTargetConfig } from "../plugins/config-state.js";
@@ -120,10 +120,10 @@ async function activateSetupInferenceUnredacted(
   }
   // Missing-file snapshots still carry the load-time implicit-main roster.
   // Setup must probe against that runtime view without treating it as authored config.
-  const cfg: OpenClawConfig = snapshot.runtimeConfig ?? snapshot.config;
+  const cfg: NatesclawConfig = snapshot.runtimeConfig ?? snapshot.config;
   // The source snapshot includes raw compatibility migrations for comparison,
   // while the writer still projects changes back onto the untouched authored bytes.
-  const sourceCfg: OpenClawConfig = snapshot.sourceConfig ?? snapshot.config;
+  const sourceCfg: NatesclawConfig = snapshot.sourceConfig ?? snapshot.config;
   const workspace = params.workspace?.trim()
     ? resolveUserPath(params.workspace)
     : (
@@ -134,7 +134,7 @@ async function activateSetupInferenceUnredacted(
       ).workspace;
 
   const tempDir = await (
-    deps.createTempDir ?? (() => fs.mkdtemp(path.join(os.tmpdir(), "openclaw-setup-inference-")))
+    deps.createTempDir ?? (() => fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-setup-inference-")))
   )();
   const testAgentDir = path.join(tempDir, "agent");
   let pendingCodexInstall: PluginInstallRecord | undefined;
@@ -284,7 +284,7 @@ async function activateSetupInferenceUnredacted(
         reason: "source-changed",
         workspaceDir: workspace,
         policyPluginIds: ["codex"],
-        traceCommand: "openclaw-setup-probe",
+        traceCommand: "natesclaw-setup-probe",
         logger: { warn: (message) => (registryRefreshWarning = message) },
       });
       try {
@@ -356,7 +356,7 @@ async function activateSetupInferenceUnredacted(
       sourceCfg,
       stagedRoute.modelLabel,
     );
-    // OpenClaw executes through the reserved agent id but reuses the default
+    // Natesclaw executes through the reserved agent id but reuses the default
     // route's agent directory. Only a submitted key stays in the isolated store.
     if (testPlan.runner === "embedded" && stagedRoute.runner === "embedded") {
       testPlan = {
@@ -465,7 +465,7 @@ async function activateSetupInferenceUnredacted(
         ok: false,
         status: "unknown",
         error:
-          "Inference succeeded, but its runtime did not report an owner that OpenClaw can safely reuse. No model or credential route was saved.",
+          "Inference succeeded, but its runtime did not report an owner that Natesclaw can safely reuse. No model or credential route was saved.",
       };
     }
     if (
@@ -496,7 +496,7 @@ async function activateSetupInferenceUnredacted(
         };
       }
       if (
-        successfulHarnessId !== "openclaw" &&
+        successfulHarnessId !== "natesclaw" &&
         (test.auth.runtimeOwnerKind !== "plugin-harness" ||
           test.auth.runtimeOwnerId?.trim() !== successfulHarnessId ||
           !test.auth.runtimeArtifactFingerprint ||
@@ -510,7 +510,7 @@ async function activateSetupInferenceUnredacted(
         };
       }
     }
-    let committedConfig: OpenClawConfig | undefined;
+    let committedConfig: NatesclawConfig | undefined;
     let autoLocalModelLeanApplied = false;
     if (!needsPersistence) {
       const latestSnapshot = await readSnapshot();
@@ -603,8 +603,8 @@ async function activateSetupInferenceUnredacted(
       const after = await readSnapshot().catch(() => null);
       try {
         await appendSystemAgentAuditEntry({
-          operation: "openclaw.setup",
-          summary: "Verified and configured AI access through OpenClaw setup",
+          operation: "natesclaw.setup",
+          summary: "Verified and configured AI access through Natesclaw setup",
           configPath: after?.path ?? snapshot.path,
           configHashBefore: snapshot.hash ?? null,
           configHashAfter: after?.hash ?? null,
@@ -613,7 +613,7 @@ async function activateSetupInferenceUnredacted(
       } catch (error) {
         // Inference is already verified and its route may already be durable.
         // Surface audit failure as a warning instead of misreporting setup failure.
-        const warning = `Inference setup completed, but OpenClaw could not record its audit entry: ${formatErrorMessage(error)}`;
+        const warning = `Inference setup completed, but Natesclaw could not record its audit entry: ${formatErrorMessage(error)}`;
         params.runtime.error?.(warning);
         lines = [...lines, warning];
       }

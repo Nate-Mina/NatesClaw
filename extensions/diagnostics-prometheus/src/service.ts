@@ -3,13 +3,13 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import {
   normalizeDiagnosticValue,
   normalizeDiagnosticLane,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/diagnostic-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type {
   DiagnosticEventMetadata,
   DiagnosticEventPayload,
-  OpenClawPluginHttpRouteHandler,
-  OpenClawPluginService,
+  NatesclawPluginHttpRouteHandler,
+  NatesclawPluginService,
 } from "../api.js";
 import { isInternalDiagnosticEventMetadata, redactSensitiveText } from "../api.js";
 
@@ -54,7 +54,7 @@ const BYTE_BUCKETS = [
 ];
 const RATIO_BUCKETS = [0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 1, 2, 4, 8, 16];
 const MAX_PROMETHEUS_SERIES = 2048;
-const DROPPED_SERIES_COUNTER_NAME = "openclaw_prometheus_series_dropped_total";
+const DROPPED_SERIES_COUNTER_NAME = "natesclaw_prometheus_series_dropped_total";
 
 function numericValue(value: number | undefined): number | undefined {
   return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : undefined;
@@ -494,7 +494,7 @@ function recordModelUsage(
       return;
     }
     store.counter(
-      "openclaw_model_tokens_total",
+      "natesclaw_model_tokens_total",
       "Model tokens reported by diagnostic usage events.",
       {
         ...labels,
@@ -504,7 +504,7 @@ function recordModelUsage(
     );
     if (tokenType === "input" || tokenType === "output") {
       store.histogram(
-        "openclaw_gen_ai_client_token_usage",
+        "natesclaw_gen_ai_client_token_usage",
         "GenAI token usage distribution for input and output tokens.",
         {
           model: labels.model,
@@ -525,13 +525,13 @@ function recordModelUsage(
   recordTokens("total", usage.total);
 
   store.counter(
-    "openclaw_model_cost_usd_total",
+    "natesclaw_model_cost_usd_total",
     "Estimated model cost in USD reported by diagnostic usage events.",
     labels,
     numericValue(evt.costUsd) ?? 0,
   );
   store.histogram(
-    "openclaw_model_usage_duration_seconds",
+    "natesclaw_model_usage_duration_seconds",
     "Model usage event duration in seconds.",
     labels,
     seconds(evt.durationMs),
@@ -553,13 +553,13 @@ function recordDiagnosticEvent(
       return;
     case "run.completed":
       store.histogram(
-        "openclaw_run_duration_seconds",
+        "natesclaw_run_duration_seconds",
         "Agent run duration in seconds.",
         runLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "openclaw_run_completed_total",
+        "natesclaw_run_completed_total",
         "Agent runs completed by outcome.",
         runLabels(evt),
       );
@@ -567,20 +567,20 @@ function recordDiagnosticEvent(
     case "model.call.completed":
     case "model.call.error":
       store.histogram(
-        "openclaw_model_call_duration_seconds",
+        "natesclaw_model_call_duration_seconds",
         "Model request or synthetic agent-turn duration in seconds.",
         modelCallLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "openclaw_model_call_total",
+        "natesclaw_model_call_total",
         "Model requests or synthetic agent turns completed by outcome.",
         modelCallLabels(evt),
       );
       return;
     case "model.failover":
       store.counter(
-        "openclaw_model_failover_total",
+        "natesclaw_model_failover_total",
         "Model failovers by source, destination, lane, and reason.",
         modelFailoverLabels(evt),
       );
@@ -588,49 +588,49 @@ function recordDiagnosticEvent(
     case "tool.execution.completed":
     case "tool.execution.error":
       store.histogram(
-        "openclaw_tool_execution_duration_seconds",
+        "natesclaw_tool_execution_duration_seconds",
         "Tool execution duration in seconds.",
         toolExecutionLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "openclaw_tool_execution_total",
+        "natesclaw_tool_execution_total",
         "Tool executions completed by outcome.",
         toolExecutionLabels(evt),
       );
       return;
     case "tool.execution.blocked":
       store.counter(
-        "openclaw_tool_execution_blocked_total",
+        "natesclaw_tool_execution_blocked_total",
         "Tool executions blocked by policy or sandbox diagnostics.",
         toolExecutionBlockedLabels(evt),
       );
       return;
     case "skill.used":
-      store.counter("openclaw_skill_used_total", "Skills used by agent runs.", skillLabels(evt));
+      store.counter("natesclaw_skill_used_total", "Skills used by agent runs.", skillLabels(evt));
       return;
     case "harness.run.completed":
     case "harness.run.error":
       store.histogram(
-        "openclaw_harness_run_duration_seconds",
+        "natesclaw_harness_run_duration_seconds",
         "Agent harness run duration in seconds.",
         harnessLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "openclaw_harness_run_total",
+        "natesclaw_harness_run_total",
         "Agent harness runs completed by outcome.",
         harnessLabels(evt),
       );
       return;
     case "message.processed":
-      store.counter("openclaw_message_processed_total", "Inbound messages processed by outcome.", {
+      store.counter("natesclaw_message_processed_total", "Inbound messages processed by outcome.", {
         channel: normalizeDiagnosticValue(evt.channel),
         outcome: evt.outcome,
         reason: normalizeDiagnosticValue(evt.reason, "none"),
       });
       store.histogram(
-        "openclaw_message_processed_duration_seconds",
+        "natesclaw_message_processed_duration_seconds",
         "Inbound message processing duration in seconds.",
         {
           channel: normalizeDiagnosticValue(evt.channel),
@@ -642,14 +642,14 @@ function recordDiagnosticEvent(
       return;
     case "webhook.received":
       store.counter(
-        "openclaw_webhook_received_total",
+        "natesclaw_webhook_received_total",
         "Webhook requests received by channel and update type.",
         webhookLabels(evt),
       );
       return;
     case "webhook.processed":
       store.histogram(
-        "openclaw_webhook_duration_seconds",
+        "natesclaw_webhook_duration_seconds",
         "Webhook processing duration in seconds.",
         webhookLabels(evt),
         seconds(evt.durationMs),
@@ -657,14 +657,14 @@ function recordDiagnosticEvent(
       return;
     case "webhook.error":
       store.counter(
-        "openclaw_webhook_error_total",
+        "natesclaw_webhook_error_total",
         "Webhook processing errors by channel and update type.",
         webhookLabels(evt),
       );
       return;
     case "message.delivery.started":
       store.counter(
-        "openclaw_message_delivery_started_total",
+        "natesclaw_message_delivery_started_total",
         "Outbound message delivery attempts started.",
         {
           channel: normalizeDiagnosticValue(evt.channel),
@@ -673,14 +673,14 @@ function recordDiagnosticEvent(
       );
       return;
     case "message.received":
-      store.counter("openclaw_message_received_total", "Inbound messages received by channel.", {
+      store.counter("natesclaw_message_received_total", "Inbound messages received by channel.", {
         channel: normalizeDiagnosticValue(evt.channel),
         source: normalizeDiagnosticValue(evt.source),
       });
       return;
     case "message.dispatch.started":
       store.counter(
-        "openclaw_message_dispatch_started_total",
+        "natesclaw_message_dispatch_started_total",
         "Inbound message dispatch attempts started by channel.",
         {
           channel: normalizeDiagnosticValue(evt.channel),
@@ -690,7 +690,7 @@ function recordDiagnosticEvent(
       return;
     case "message.dispatch.completed":
       store.counter(
-        "openclaw_message_dispatch_completed_total",
+        "natesclaw_message_dispatch_completed_total",
         "Inbound message dispatch attempts completed by outcome.",
         {
           channel: normalizeDiagnosticValue(evt.channel),
@@ -700,7 +700,7 @@ function recordDiagnosticEvent(
         },
       );
       store.histogram(
-        "openclaw_message_dispatch_duration_seconds",
+        "natesclaw_message_dispatch_duration_seconds",
         "Inbound message dispatch duration in seconds.",
         {
           channel: normalizeDiagnosticValue(evt.channel),
@@ -714,7 +714,7 @@ function recordDiagnosticEvent(
     case "message.delivery.completed":
     case "message.delivery.error":
       store.counter(
-        "openclaw_message_delivery_total",
+        "natesclaw_message_delivery_total",
         "Outbound message delivery attempts by outcome.",
         {
           channel: normalizeDiagnosticValue(evt.channel),
@@ -727,7 +727,7 @@ function recordDiagnosticEvent(
         },
       );
       store.histogram(
-        "openclaw_message_delivery_duration_seconds",
+        "natesclaw_message_delivery_duration_seconds",
         "Outbound message delivery duration in seconds.",
         {
           channel: normalizeDiagnosticValue(evt.channel),
@@ -742,15 +742,15 @@ function recordDiagnosticEvent(
       );
       return;
     case "talk.event":
-      store.counter("openclaw_talk_event_total", "Talk events emitted by type.", talkLabels(evt));
+      store.counter("natesclaw_talk_event_total", "Talk events emitted by type.", talkLabels(evt));
       store.histogram(
-        "openclaw_talk_event_duration_seconds",
+        "natesclaw_talk_event_duration_seconds",
         "Talk event duration in seconds when reported.",
         talkLabels(evt),
         seconds(evt.durationMs),
       );
       store.histogram(
-        "openclaw_talk_audio_bytes",
+        "natesclaw_talk_audio_bytes",
         "Talk audio frame byte lengths.",
         talkLabels(evt),
         numericValue(evt.byteLength),
@@ -760,12 +760,12 @@ function recordDiagnosticEvent(
     case "session.recovery.requested":
     case "session.recovery.completed":
       store.counter(
-        "openclaw_session_recovery_total",
+        "natesclaw_session_recovery_total",
         "Session recovery observations by status and action.",
         sessionRecoveryLabels(evt),
       );
       store.histogram(
-        "openclaw_session_recovery_age_seconds",
+        "natesclaw_session_recovery_age_seconds",
         "Age of sessions selected for recovery in seconds.",
         sessionRecoveryLabels(evt),
         seconds(evt.ageMs),
@@ -774,7 +774,7 @@ function recordDiagnosticEvent(
     case "queue.lane.enqueue":
     case "queue.lane.dequeue":
       store.gauge(
-        "openclaw_queue_lane_size",
+        "natesclaw_queue_lane_size",
         "Current diagnostic queue lane size.",
         {
           lane: normalizeDiagnosticLane(evt.lane),
@@ -783,7 +783,7 @@ function recordDiagnosticEvent(
       );
       if (evt.type === "queue.lane.dequeue") {
         store.histogram(
-          "openclaw_queue_lane_wait_seconds",
+          "natesclaw_queue_lane_wait_seconds",
           "Queue lane wait time in seconds.",
           { lane: normalizeDiagnosticLane(evt.lane) },
           seconds(evt.waitMs),
@@ -791,13 +791,13 @@ function recordDiagnosticEvent(
       }
       return;
     case "session.state":
-      store.counter("openclaw_session_state_total", "Session state observations.", {
+      store.counter("natesclaw_session_state_total", "Session state observations.", {
         reason: normalizeDiagnosticValue(evt.reason, "none"),
         state: evt.state,
       });
       if (evt.queueDepth !== undefined) {
         store.gauge(
-          "openclaw_session_queue_depth",
+          "natesclaw_session_queue_depth",
           "Latest observed session queue depth.",
           {
             state: evt.state,
@@ -808,19 +808,19 @@ function recordDiagnosticEvent(
       return;
     case "session.stuck":
       store.counter(
-        "openclaw_session_stuck_total",
+        "natesclaw_session_stuck_total",
         "Stale session bookkeeping observations with no active work.",
         sessionStuckLabels(evt),
       );
       store.histogram(
-        "openclaw_session_stuck_age_seconds",
+        "natesclaw_session_stuck_age_seconds",
         "Age of stale session bookkeeping observations in seconds.",
         sessionStuckLabels(evt),
         seconds(evt.ageMs),
       );
       return;
     case "session.turn.created":
-      store.counter("openclaw_session_turn_created_total", "Agent session turns created.", {
+      store.counter("natesclaw_session_turn_created_total", "Agent session turns created.", {
         agent: normalizeDiagnosticValue(evt.agentId),
         channel: normalizeDiagnosticValue(evt.channel),
         trigger: evt.trigger,
@@ -828,25 +828,25 @@ function recordDiagnosticEvent(
       return;
     case "diagnostic.memory.sample":
       store.gauge(
-        "openclaw_memory_bytes",
+        "natesclaw_memory_bytes",
         "Latest process memory usage by memory kind.",
         { kind: "rss" },
         evt.memory.rssBytes,
       );
       store.gauge(
-        "openclaw_memory_bytes",
+        "natesclaw_memory_bytes",
         "Latest process memory usage by memory kind.",
         { kind: "heap_total" },
         evt.memory.heapTotalBytes,
       );
       store.gauge(
-        "openclaw_memory_bytes",
+        "natesclaw_memory_bytes",
         "Latest process memory usage by memory kind.",
         { kind: "heap_used" },
         evt.memory.heapUsedBytes,
       );
       store.histogram(
-        "openclaw_memory_rss_bytes",
+        "natesclaw_memory_rss_bytes",
         "RSS memory sample distribution in bytes.",
         {},
         numericValue(evt.memory.rssBytes),
@@ -855,7 +855,7 @@ function recordDiagnosticEvent(
       return;
     case "diagnostic.memory.pressure":
       store.counter(
-        "openclaw_memory_pressure_total",
+        "natesclaw_memory_pressure_total",
         "Memory pressure events by level and reason.",
         {
           level: evt.level,
@@ -865,49 +865,49 @@ function recordDiagnosticEvent(
       return;
     case "diagnostic.liveness.warning":
       store.counter(
-        "openclaw_liveness_warning_total",
+        "natesclaw_liveness_warning_total",
         "Diagnostic liveness warning events.",
         livenessLabels(evt),
       );
       store.gauge(
-        "openclaw_liveness_sessions",
+        "natesclaw_liveness_sessions",
         "Latest session counts reported with diagnostic liveness warnings.",
         { state: "active" },
         numericValue(evt.active),
       );
       store.gauge(
-        "openclaw_liveness_sessions",
+        "natesclaw_liveness_sessions",
         "Latest session counts reported with diagnostic liveness warnings.",
         { state: "waiting" },
         numericValue(evt.waiting),
       );
       store.gauge(
-        "openclaw_liveness_sessions",
+        "natesclaw_liveness_sessions",
         "Latest session counts reported with diagnostic liveness warnings.",
         { state: "queued" },
         numericValue(evt.queued),
       );
       store.histogram(
-        "openclaw_liveness_event_loop_delay_p99_seconds",
+        "natesclaw_liveness_event_loop_delay_p99_seconds",
         "P99 event-loop delay reported by diagnostic liveness warnings in seconds.",
         livenessLabels(evt),
         seconds(evt.eventLoopDelayP99Ms),
       );
       store.histogram(
-        "openclaw_liveness_event_loop_delay_max_seconds",
+        "natesclaw_liveness_event_loop_delay_max_seconds",
         "Maximum event-loop delay reported by diagnostic liveness warnings in seconds.",
         livenessLabels(evt),
         seconds(evt.eventLoopDelayMaxMs),
       );
       store.histogram(
-        "openclaw_liveness_event_loop_utilization_ratio",
+        "natesclaw_liveness_event_loop_utilization_ratio",
         "Event-loop utilization reported by diagnostic liveness warnings.",
         livenessLabels(evt),
         numericValue(evt.eventLoopUtilization),
         RATIO_BUCKETS,
       );
       store.histogram(
-        "openclaw_liveness_cpu_core_ratio",
+        "natesclaw_liveness_cpu_core_ratio",
         "CPU core ratio reported by diagnostic liveness warnings.",
         livenessLabels(evt),
         numericValue(evt.cpuCoreRatio),
@@ -916,14 +916,14 @@ function recordDiagnosticEvent(
       return;
     case "diagnostic.async_queue.dropped":
       store.counter(
-        "openclaw_diagnostic_async_queue_dropped_total",
+        "natesclaw_diagnostic_async_queue_dropped_total",
         "Async diagnostic queue drops by dropped event class.",
         { drop_class: "total" },
         numericValue(evt.droppedEvents),
       );
       if (evt.droppedTrustedEvents !== undefined) {
         store.counter(
-          "openclaw_diagnostic_async_queue_dropped_total",
+          "natesclaw_diagnostic_async_queue_dropped_total",
           "Async diagnostic queue drops by dropped event class.",
           { drop_class: "trusted" },
           numericValue(evt.droppedTrustedEvents),
@@ -931,7 +931,7 @@ function recordDiagnosticEvent(
       }
       if (evt.droppedUntrustedEvents !== undefined) {
         store.counter(
-          "openclaw_diagnostic_async_queue_dropped_total",
+          "natesclaw_diagnostic_async_queue_dropped_total",
           "Async diagnostic queue drops by dropped event class.",
           { drop_class: "untrusted" },
           numericValue(evt.droppedUntrustedEvents),
@@ -939,14 +939,14 @@ function recordDiagnosticEvent(
       }
       if (evt.droppedPriorityEvents !== undefined) {
         store.counter(
-          "openclaw_diagnostic_async_queue_dropped_total",
+          "natesclaw_diagnostic_async_queue_dropped_total",
           "Async diagnostic queue drops by dropped event class.",
           { drop_class: "priority" },
           numericValue(evt.droppedPriorityEvents),
         );
       }
       store.gauge(
-        "openclaw_diagnostic_async_queue_length",
+        "natesclaw_diagnostic_async_queue_length",
         "Latest async diagnostic queue length after a drop summary.",
         {},
         numericValue(evt.queueLength),
@@ -955,7 +955,7 @@ function recordDiagnosticEvent(
     case "diagnostic.heartbeat":
       break;
     case "telemetry.exporter":
-      store.counter("openclaw_telemetry_exporter_total", "Telemetry exporter lifecycle events.", {
+      store.counter("natesclaw_telemetry_exporter_total", "Telemetry exporter lifecycle events.", {
         exporter: normalizeDiagnosticValue(evt.exporter),
         reason: normalizeDiagnosticValue(evt.reason, "none"),
         signal: evt.signal,
@@ -964,12 +964,12 @@ function recordDiagnosticEvent(
       return;
     case "payload.large":
       store.counter(
-        "openclaw_payload_large_total",
+        "natesclaw_payload_large_total",
         "Oversized payload diagnostics by surface and action.",
         payloadLargeLabels(evt),
       );
       store.histogram(
-        "openclaw_payload_large_bytes",
+        "natesclaw_payload_large_bytes",
         "Oversized payload byte sizes by surface and action.",
         payloadLargeLabels(evt),
         numericValue(evt.bytes),
@@ -979,7 +979,7 @@ function recordDiagnosticEvent(
   }
 }
 
-function createMetricsHandler(store: PrometheusMetricStore): OpenClawPluginHttpRouteHandler {
+function createMetricsHandler(store: PrometheusMetricStore): NatesclawPluginHttpRouteHandler {
   return (req: IncomingMessage, res: ServerResponse) => {
     if (req.method !== "GET" && req.method !== "HEAD") {
       res.statusCode = 405;
@@ -1080,7 +1080,7 @@ export function createDiagnosticsPrometheusExporter() {
       internalDiagnostics = undefined;
       store.reset();
     },
-  } satisfies OpenClawPluginService;
+  } satisfies NatesclawPluginService;
 
   return {
     handler: createMetricsHandler(store),

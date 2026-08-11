@@ -5,27 +5,27 @@ import { isCurrentProcessLaunchdServiceLabel } from "./launchd-current-service.j
 describe("isCurrentProcessLaunchdServiceLabel", () => {
   it("matches launchd-provided service labels", () => {
     expect(
-      isCurrentProcessLaunchdServiceLabel("ai.openclaw.gateway", {
-        LAUNCH_JOB_LABEL: "ai.openclaw.gateway",
+      isCurrentProcessLaunchdServiceLabel("ai.natesclaw.gateway", {
+        LAUNCH_JOB_LABEL: "ai.natesclaw.gateway",
       }),
     ).toBe(true);
   });
 
-  it("falls back to OpenClaw service markers when XPC_SERVICE_NAME is inherited", () => {
+  it("falls back to Natesclaw service markers when XPC_SERVICE_NAME is inherited", () => {
     expect(
-      isCurrentProcessLaunchdServiceLabel("ai.openclaw.gateway", {
+      isCurrentProcessLaunchdServiceLabel("ai.natesclaw.gateway", {
         XPC_SERVICE_NAME: "0",
-        OPENCLAW_SERVICE_MARKER: "openclaw",
-        OPENCLAW_SERVICE_KIND: "gateway",
-        OPENCLAW_LAUNCHD_LABEL: "ai.openclaw.gateway",
+        NATESCLAW_SERVICE_MARKER: "natesclaw",
+        NATESCLAW_SERVICE_KIND: "gateway",
+        NATESCLAW_LAUNCHD_LABEL: "ai.natesclaw.gateway",
       }),
     ).toBe(true);
   });
 
   it("preserves label-only fallback when launchd exposes no label variables", () => {
     expect(
-      isCurrentProcessLaunchdServiceLabel("ai.openclaw.gateway", {
-        OPENCLAW_LAUNCHD_LABEL: "ai.openclaw.gateway",
+      isCurrentProcessLaunchdServiceLabel("ai.natesclaw.gateway", {
+        NATESCLAW_LAUNCHD_LABEL: "ai.natesclaw.gateway",
       }),
     ).toBe(true);
   });
@@ -33,9 +33,9 @@ describe("isCurrentProcessLaunchdServiceLabel", () => {
   it("can require service markers for label-only fallback", () => {
     expect(
       isCurrentProcessLaunchdServiceLabel(
-        "ai.openclaw.gateway",
+        "ai.natesclaw.gateway",
         {
-          OPENCLAW_LAUNCHD_LABEL: "ai.openclaw.gateway",
+          NATESCLAW_LAUNCHD_LABEL: "ai.natesclaw.gateway",
         },
         { allowConfiguredLabelFallback: false },
       ),
@@ -44,9 +44,9 @@ describe("isCurrentProcessLaunchdServiceLabel", () => {
 
   it("does not treat unrelated inherited launchd labels as current services", () => {
     expect(
-      isCurrentProcessLaunchdServiceLabel("ai.openclaw.gateway", {
+      isCurrentProcessLaunchdServiceLabel("ai.natesclaw.gateway", {
         XPC_SERVICE_NAME: "0",
-        OPENCLAW_LAUNCHD_LABEL: "ai.openclaw.gateway",
+        NATESCLAW_LAUNCHD_LABEL: "ai.natesclaw.gateway",
       }),
     ).toBe(false);
   });

@@ -6,8 +6,8 @@ describe("isSafeExecutableValue", () => {
   it.each([
     ["node", true],
     ["/usr/bin/node", true],
-    ["./bin/openclaw", true],
-    ["C:\\Tools\\openclaw.exe", true],
+    ["./bin/natesclaw", true],
+    ["C:\\Tools\\natesclaw.exe", true],
     [" tool ", true],
     [undefined, false],
     ["   ", false],

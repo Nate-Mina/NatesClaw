@@ -3,8 +3,8 @@ import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
   type ChannelIngressEventInput,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import type { DmPolicy, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import type { DmPolicy, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { normalizeAllowFrom, type NormalizedAllowFrom } from "./bot-access.js";
 
 const TELEGRAM_CHANNEL_ID = "telegram";
@@ -24,7 +24,7 @@ export function createTelegramIngressSubject(senderId: string) {
 
 export function createTelegramIngressResolver(params: {
   accountId?: string;
-  cfg?: Pick<OpenClawConfig, "accessGroups" | "commands">;
+  cfg?: Pick<NatesclawConfig, "accessGroups" | "commands">;
 }) {
   return createChannelIngressResolver({
     channelId: TELEGRAM_CHANNEL_ID,
@@ -54,7 +54,7 @@ function telegramConversation(params: {
 
 export async function resolveTelegramCommandIngressAuthorization(params: {
   accountId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   dmPolicy: DmPolicy;
   isGroup: boolean;
   chatId: string | number;

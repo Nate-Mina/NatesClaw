@@ -34,36 +34,36 @@ export async function writeTuiPtyFixtureScript(dir: string) {
       import type { TuiBackend } from ${JSON.stringify(tuiModuleUrl.replace("/tui.ts", "/tui-backend.ts"))};
       import { runTui } from ${JSON.stringify(tuiModuleUrl)};
 
-      const actionLogPath = process.env.OPENCLAW_TUI_PTY_LOG_PATH;
-      const gatewayStatus = process.env.OPENCLAW_TUI_PTY_GATEWAY_STATUS ?? "fixture gateway ok";
-      const startupDelayMs = Number(process.env.OPENCLAW_TUI_PTY_STARTUP_DELAY_MS ?? 0);
-      const footerModel = process.env.OPENCLAW_TUI_PTY_MODEL;
-      const footerThinkingLevel = process.env.OPENCLAW_TUI_PTY_THINKING_LEVEL;
-      let verboseLevel = process.env.OPENCLAW_TUI_PTY_VERBOSE_LEVEL;
+      const actionLogPath = process.env.NATESCLAW_TUI_PTY_LOG_PATH;
+      const gatewayStatus = process.env.NATESCLAW_TUI_PTY_GATEWAY_STATUS ?? "fixture gateway ok";
+      const startupDelayMs = Number(process.env.NATESCLAW_TUI_PTY_STARTUP_DELAY_MS ?? 0);
+      const footerModel = process.env.NATESCLAW_TUI_PTY_MODEL;
+      const footerThinkingLevel = process.env.NATESCLAW_TUI_PTY_THINKING_LEVEL;
+      let verboseLevel = process.env.NATESCLAW_TUI_PTY_VERBOSE_LEVEL;
       let modeTargetTraceLevel: string | undefined;
-      const launchThinkingLevel = process.env.OPENCLAW_TUI_PTY_LAUNCH_THINKING;
-      const initialMessage = process.env.OPENCLAW_TUI_PTY_INITIAL_MESSAGE;
-      const inFlightRunText = process.env.OPENCLAW_TUI_PTY_IN_FLIGHT_TEXT;
-      const dynamicCommandDescription = process.env.OPENCLAW_TUI_PTY_DYNAMIC_COMMAND_DESCRIPTION;
-      const thinkingLabel = process.env.OPENCLAW_TUI_PTY_THINKING_LABEL;
-      const safeThinkingLabel = process.env.OPENCLAW_TUI_PTY_SAFE_THINKING_LABEL;
+      const launchThinkingLevel = process.env.NATESCLAW_TUI_PTY_LAUNCH_THINKING;
+      const initialMessage = process.env.NATESCLAW_TUI_PTY_INITIAL_MESSAGE;
+      const inFlightRunText = process.env.NATESCLAW_TUI_PTY_IN_FLIGHT_TEXT;
+      const dynamicCommandDescription = process.env.NATESCLAW_TUI_PTY_DYNAMIC_COMMAND_DESCRIPTION;
+      const thinkingLabel = process.env.NATESCLAW_TUI_PTY_THINKING_LABEL;
+      const safeThinkingLabel = process.env.NATESCLAW_TUI_PTY_SAFE_THINKING_LABEL;
       const thinkingLevels = [
         ...(thinkingLabel ? [{ id: "fixture-thinking", label: thinkingLabel }] : []),
         ...(safeThinkingLabel ? [{ id: "fixture-thinking-safe", label: safeThinkingLabel }] : []),
       ];
-      const disconnectReason = process.env.OPENCLAW_TUI_PTY_DISCONNECT_REASON;
+      const disconnectReason = process.env.NATESCLAW_TUI_PTY_DISCONNECT_REASON;
       let disconnectPending = disconnectReason !== undefined;
-      const enablePickerFixture = process.env.OPENCLAW_TUI_PTY_PICKER_FIXTURE === "1";
-      const pickerModelValue = process.env.OPENCLAW_TUI_PTY_PICKER_MODEL_VALUE ?? "fixture-provider/fixture-model-2";
-      const pickerModelName = process.env.OPENCLAW_TUI_PTY_PICKER_MODEL_NAME ?? "Fixture 2";
-      const pickerSessionKey = process.env.OPENCLAW_TUI_PTY_PICKER_SESSION_KEY ?? "agent:main:picker-target";
-      const pickerSessionTitle = process.env.OPENCLAW_TUI_PTY_PICKER_SESSION_TITLE;
-      const pickerSessionPreview = process.env.OPENCLAW_TUI_PTY_PICKER_SESSION_PREVIEW;
-      const pickerSessionDisplayName = process.env.OPENCLAW_TUI_PTY_PICKER_SESSION_DISPLAY_NAME ?? "Picker target";
+      const enablePickerFixture = process.env.NATESCLAW_TUI_PTY_PICKER_FIXTURE === "1";
+      const pickerModelValue = process.env.NATESCLAW_TUI_PTY_PICKER_MODEL_VALUE ?? "fixture-provider/fixture-model-2";
+      const pickerModelName = process.env.NATESCLAW_TUI_PTY_PICKER_MODEL_NAME ?? "Fixture 2";
+      const pickerSessionKey = process.env.NATESCLAW_TUI_PTY_PICKER_SESSION_KEY ?? "agent:main:picker-target";
+      const pickerSessionTitle = process.env.NATESCLAW_TUI_PTY_PICKER_SESSION_TITLE;
+      const pickerSessionPreview = process.env.NATESCLAW_TUI_PTY_PICKER_SESSION_PREVIEW;
+      const pickerSessionDisplayName = process.env.NATESCLAW_TUI_PTY_PICKER_SESSION_DISPLAY_NAME ?? "Picker target";
       const xaiLimitError = '403 {"code":"The caller does not have permission to execute the specified operation","error":"Your team team-redacted has either used all available credits or reached its monthly spending limit. To continue making API requests, please purchase more credits or raise your spending limit."}';
       let currentModel = footerModel ?? "fixture-provider/fixture-model";
       let currentThinkingLevel = footerThinkingLevel;
-      let fastMode = process.env.OPENCLAW_TUI_PTY_FAST_MODE === "true";
+      let fastMode = process.env.NATESCLAW_TUI_PTY_FAST_MODE === "true";
       let pendingPluginApproval: {
         id: string;
         request: {
@@ -171,7 +171,7 @@ export async function writeTuiPtyFixtureScript(dir: string) {
                   kind: "btw",
                   runId,
                   sessionKey: opts.sessionKey,
-                  question: process.env.OPENCLAW_TUI_PTY_BTW_QUESTION ?? "picker focus proof",
+                  question: process.env.NATESCLAW_TUI_PTY_BTW_QUESTION ?? "picker focus proof",
                   text: "PTY_SIDE_OK",
                 },
               });
@@ -553,11 +553,11 @@ export async function writeTuiPtyFixtureScript(dir: string) {
             },
             session: { scope: "per-sender", mainKey: "main" },
           },
-          deliver: process.env.OPENCLAW_TUI_PTY_DELIVER === "1",
+          deliver: process.env.NATESCLAW_TUI_PTY_DELIVER === "1",
           thinking: launchThinkingLevel,
           message: initialMessage,
           historyLimit: 5,
-          title: "openclaw tui pty fixture",
+          title: "natesclaw tui pty fixture",
           ${TUI_PTY_RESET_FIXTURE.options}
         });
       }

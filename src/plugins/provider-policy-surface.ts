@@ -1,6 +1,6 @@
 /** Lightweight direct loader for bundled provider policy public artifacts. */
 import type { ModelProviderConfig } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type {
   ProviderModelRouteResolution,
   ProviderNormalizeModelCatalogIdContext,
@@ -26,7 +26,7 @@ import {
 const PROVIDER_POLICY_ARTIFACT_CANDIDATES = ["provider-policy-api.js"] as const;
 
 type ProviderProjectConfiguredModelRowContext = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentDir?: string;
   workspaceDir?: string;
   provider: string;
@@ -39,7 +39,7 @@ export type ProviderPolicySurface = {
   normalizeConfig?: (ctx: ProviderNormalizeConfigContext) => ModelProviderConfig | null | undefined;
   applyConfigDefaults?: (
     ctx: ProviderApplyConfigDefaultsContext,
-  ) => OpenClawConfig | null | undefined;
+  ) => NatesclawConfig | null | undefined;
   resolveConfigApiKey?: (ctx: ProviderResolveConfigApiKeyContext) => string | null | undefined;
   resolveThinkingProfile?: (
     ctx: ProviderDefaultThinkingPolicyContext,

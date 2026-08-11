@@ -1,6 +1,6 @@
-import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
-import { readStringField as readString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { AssistantMessage } from "natesclaw/plugin-sdk/llm";
+import { readStringField as readString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   createAssistantCommentaryMessage as buildAssistantCommentaryMessage,
   createAssistantMessage as buildAssistantMessage,

@@ -24,14 +24,14 @@ import {
   syncWorkboardLifecycle,
   WORKBOARD_CHANGED_EVENT,
 } from "../../lib/workboard/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { matchesAgentScope } from "./agent-filter.ts";
 import { matchesBoardFilter, WORKBOARD_ALL_BOARDS_FILTER } from "./board-filter.ts";
 import type { WorkboardRouteData } from "./route.ts";
 import { renderWorkboard } from "./view.ts";
 
-class WorkboardPage extends OpenClawLightDomElement {
+class WorkboardPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context?: ApplicationContext;
 
@@ -414,6 +414,6 @@ class WorkboardPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-workboard-page")) {
-  customElements.define("openclaw-workboard-page", WorkboardPage);
+if (!customElements.get("natesclaw-workboard-page")) {
+  customElements.define("natesclaw-workboard-page", WorkboardPage);
 }

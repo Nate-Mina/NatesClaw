@@ -1,25 +1,25 @@
 {
-  "name": "@openclaw/nextcloud-talk",
+  "name": "@natesclaw/nextcloud-talk",
   "version": "2026.8.1",
-  "description": "OpenClaw Nextcloud Talk channel plugin for conversations.",
+  "description": "Natesclaw Nextcloud Talk channel plugin for conversations.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -123,7 +123,7 @@
       }
     },
     "install": {
-      "npmSpec": "@openclaw/nextcloud-talk",
+      "npmSpec": "@natesclaw/nextcloud-talk",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -131,7 +131,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1"
+      "natesclawVersion": "2026.8.1"
     },
     "release": {
       "publishToClawHub": true,

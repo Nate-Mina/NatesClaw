@@ -1,7 +1,7 @@
 /**
  * Builds plugin hook context metadata for native agent harness events.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { DiagnosticTraceContext } from "../../infra/diagnostic-trace-context.js";
 import { buildAgentHookContextIdentityFields } from "../../plugins/hook-agent-context.js";
 import type {
@@ -32,7 +32,7 @@ export type AgentHarnessHookContext = {
   contextTokenBudget?: number;
   contextWindowSource?: PluginHookContextWindowSource;
   contextWindowReferenceTokens?: number;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   senderId?: string;
   chatId?: string;
   channel?: string;

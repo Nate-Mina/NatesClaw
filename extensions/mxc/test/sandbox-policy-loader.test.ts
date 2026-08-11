@@ -15,7 +15,7 @@ afterEach(() => {
 });
 
 function makeTestDir(): string {
-  const dir = mkdtempSync(join(tmpdir(), "openclaw-mxc-policy-"));
+  const dir = mkdtempSync(join(tmpdir(), "natesclaw-mxc-policy-"));
   testDirs.push(dir);
   return dir;
 }

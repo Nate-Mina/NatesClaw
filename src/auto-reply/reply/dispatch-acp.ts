@@ -1,14 +1,14 @@
 // Dispatches reply turns through ACP runtimes and projects their events.
-import { resolveAcpThreadSessionDetailLines } from "@openclaw/acp-core/runtime/session-identifiers";
+import { resolveAcpThreadSessionDetailLines } from "@natesclaw/acp-core/runtime/session-identifiers";
 import {
   isSessionIdentityPending,
   resolveSessionIdentityFromMeta,
-} from "@openclaw/acp-core/runtime/session-identity";
+} from "@natesclaw/acp-core/runtime/session-identity";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import type { AcpTurnAttachment } from "../../acp/control-plane/manager.types.js";
 import { resolveAcpAgentPolicyError, resolveAcpDispatchPolicyError } from "../../acp/policy.js";
 import {
@@ -25,7 +25,7 @@ import {
 import { resolveAgentDir, resolveAgentWorkspaceDir } from "../../agents/agent-scope.js";
 import { toolPolicyRestrictsTools } from "../../agents/tool-policy.js";
 import type { ChatType } from "../../channels/chat-type.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { TtsAutoMode } from "../../config/types.tts.js";
 import { logVerbose } from "../../globals.js";
 import { isDiagnosticsEnabled } from "../../infra/diagnostic-events.js";
@@ -174,7 +174,7 @@ function isRestrictiveRuntimeToolsAllow(toolsAllow: string[] | undefined): boole
 }
 
 async function hasBoundConversationForSession(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   channelRaw: string | undefined;
   accountIdRaw: string | undefined;
@@ -286,7 +286,7 @@ async function maybeUnbindStaleBoundConversations(params: {
 }
 
 async function finalizeAcpTurnOutput(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   agentId: string;
   delivery: AcpDispatchDeliveryCoordinator;
@@ -420,7 +420,7 @@ async function finalizeAcpTurnOutput(params: {
 
 export async function tryDispatchAcpReplyCore(params: {
   ctx: FinalizedRuntimeMsgContext;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   dispatcher: ReplyDispatcher;
   runId?: string;
   sessionKey?: string;

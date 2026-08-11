@@ -1,7 +1,7 @@
 import {
   isActiveHarnessContextEngine,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   resolveCodexContextEngineProjectionMaxChars,
   resolveCodexContextEngineProjectionReserveTokens,

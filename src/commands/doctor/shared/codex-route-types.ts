@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 
 export type MutableRecord = Record<string, unknown>;
 
@@ -47,7 +47,7 @@ export type DisabledCodexPluginRouteIssue = {
 export type SharedDefaultCompactionOverrideConsumers = Record<CompactionOverrideKey, boolean>;
 
 export type ConfigRouteRepairResult = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   changes: CodexRouteHit[];
   runtimePinChanges: string[];
   runtimePolicyChanges: string[];

@@ -1,12 +1,12 @@
 // Persists the root ownership record for one Claw-created agent and workspace.
 import { createHash } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import {
   CLAW_PACKAGE_REF_SCHEMA_VERSION,
   rowToPackageRef,
@@ -27,7 +27,7 @@ export {
   type PersistedClawPackageRef,
 } from "./package-extension-provenance.js";
 
-const CLAW_INSTALL_RECORD_SCHEMA_VERSION = "openclaw.clawInstallRecord.v1" as const;
+const CLAW_INSTALL_RECORD_SCHEMA_VERSION = "natesclaw.clawInstallRecord.v1" as const;
 
 export type ClawInstallStatus =
   | "pending"
@@ -219,14 +219,14 @@ export function readClawInstallRecordFromDatabase(
 
 function getClawInstallRow(
   agentId: string,
-  options: OpenClawStateDatabaseOptions,
+  options: NatesclawStateDatabaseOptions,
 ): ClawInstallRow | undefined {
-  return selectClawInstallRow(openOpenClawStateDatabase(options).db, agentId);
+  return selectClawInstallRow(openNatesclawStateDatabase(options).db, agentId);
 }
 
 export function readClawInstallRecord(
   agentId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): PersistedClawInstall | undefined {
   const row = getClawInstallRow(agentId, options);
   return row ? rowToRecord(row) : undefined;
@@ -238,14 +238,14 @@ function isSameInstallAttempt(row: ClawInstallRow, plan: ClawAddPlan): boolean {
 
 export function persistClawInstallRecord(
   plan: ClawAddPlan,
-  options: OpenClawStateDatabaseOptions & { status?: ClawInstallStatus; nowMs?: number } = {},
+  options: NatesclawStateDatabaseOptions & { status?: ClawInstallStatus; nowMs?: number } = {},
 ): PersistedClawInstall {
   const nowMs = options.nowMs ?? Date.now();
   const status = options.status ?? "complete";
   const agentConfigDigest = digestAgentConfig(plan);
   const ownedPaths = agentOwnedPaths(plan);
   const bootstrap = bootstrapProvenance(plan);
-  return runOpenClawStateWriteTransaction(({ db }) => {
+  return runNatesclawStateWriteTransaction(({ db }) => {
     const existing = selectClawInstallRow(db, plan.agent.finalId);
     if (existing) {
       if (existing.status !== "complete" && isSameInstallAttempt(existing, plan)) {
@@ -314,12 +314,12 @@ export function persistClawInstallRecord(
 export function updateClawInstallRecordStatus(
   agentId: string,
   status: ClawInstallStatus,
-  options: OpenClawStateDatabaseOptions & {
+  options: NatesclawStateDatabaseOptions & {
     nowMs?: number;
     expectedStatuses?: ClawInstallStatus[];
   } = {},
 ): void {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const expectedStatuses = options.expectedStatuses ?? [];
     const expectedClause =
       expectedStatuses.length > 0
@@ -343,9 +343,9 @@ export function updateClawInstallRecordStatus(
 
 export function deleteClawInstallRecord(
   agentId: string,
-  options: OpenClawStateDatabaseOptions & { expectedStatuses?: ClawInstallStatus[] } = {},
+  options: NatesclawStateDatabaseOptions & { expectedStatuses?: ClawInstallStatus[] } = {},
 ): void {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const expectedStatuses = options.expectedStatuses ?? [];
     const expectedClause =
       expectedStatuses.length > 0
@@ -364,9 +364,9 @@ export function deleteClawInstallRecord(
 }
 
 export function readClawInstallRecords(
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): PersistedClawInstall[] {
-  const database = openOpenClawStateDatabase(options);
+  const database = openNatesclawStateDatabase(options);
   const bootstrapColumns = selectClawBootstrapProvenanceColumns(database.db);
   const rows =
     database.db /* sqlite-allow-raw: read-only Claw install inventory ordered by stable agent id. */
@@ -386,7 +386,7 @@ export function readClawInstallRecords(
 
 export function updateClawInstallRecord(
   plan: ClawAddPlan,
-  options: OpenClawStateDatabaseOptions & {
+  options: NatesclawStateDatabaseOptions & {
     nowMs?: number;
     expectedClaw?: { version: string; integrity: string };
     status?: ClawInstallStatus;
@@ -405,7 +405,7 @@ export function updateClawInstallRecord(
     .filter((action) => action.kind === "agent")
     .map((action) => action.target);
   const bootstrap = bootstrapProvenance(plan) ?? current.bootstrap;
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const result = db /* sqlite-allow-raw: Claw install provenance compare-and-swap write. */
       .prepare(
         `UPDATE claw_installs
@@ -477,7 +477,7 @@ export function updateClawInstallRecord(
 export function persistClawPackageRef(
   plan: ClawAddPlan,
   pkg: ResolvedClawPackage,
-  options: OpenClawStateDatabaseOptions & {
+  options: NatesclawStateDatabaseOptions & {
     nowMs?: number;
     status?: ClawPackageRefStatus;
     relationship?: ClawPackageRelationship;
@@ -503,7 +503,7 @@ export function persistClawPackageRef(
     installedAtMs: nowMs,
     updatedAtMs: nowMs,
   };
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const existing = db /* sqlite-allow-raw: exact owned package-ref replay lookup. */
       .prepare(
         `SELECT schema_version, agent_id, claw_name, package_kind, package_source,
@@ -637,10 +637,10 @@ export function persistClawPackageRef(
 export function updateClawPackageRefStatus(
   ref: PersistedClawPackageRef,
   status: ClawPackageRefStatus,
-  options: OpenClawStateDatabaseOptions & { nowMs?: number } = {},
+  options: NatesclawStateDatabaseOptions & { nowMs?: number } = {},
 ): PersistedClawPackageRef {
   const nowMs = options.nowMs ?? Date.now();
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     // sqlite-allow-raw: this Claw package reference status update is scoped to one owned row.
     db.prepare(
       `UPDATE claw_package_refs
@@ -666,7 +666,7 @@ export function updateClawPackageRefStatus(
 }
 
 export function readClawPackageRefs(
-  options: OpenClawStateDatabaseOptions & {
+  options: NatesclawStateDatabaseOptions & {
     agentId?: string;
     kind?: ClawPackage["kind"];
     source?: ClawPackage["source"];
@@ -676,7 +676,7 @@ export function readClawPackageRefs(
     status?: ClawPackageRefStatus;
   } = {},
 ): PersistedClawPackageRef[] {
-  const database = openOpenClawStateDatabase(options);
+  const database = openNatesclawStateDatabase(options);
   if (
     options.readOnly &&
     !database.db /* sqlite-allow-raw: read-only Claw package-ref table-existence probe. */

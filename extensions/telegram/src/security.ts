@@ -1,7 +1,7 @@
 // Telegram plugin module implements security behavior.
-import { createScopedDmSecurityResolver } from "openclaw/plugin-sdk/channel-config-helpers";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createAllowlistProviderRouteAllowlistWarningCollector } from "openclaw/plugin-sdk/channel-policy";
+import { createScopedDmSecurityResolver } from "natesclaw/plugin-sdk/channel-config-helpers";
+import type { ChannelPlugin } from "natesclaw/plugin-sdk/channel-core";
+import { createAllowlistProviderRouteAllowlistWarningCollector } from "natesclaw/plugin-sdk/channel-policy";
 import { resolveDefaultTelegramAccountId } from "./account-selection.js";
 import type { ResolvedTelegramAccount } from "./accounts.js";
 import { resolveTelegramSecurityDmRoute } from "./dm-session-key.js";

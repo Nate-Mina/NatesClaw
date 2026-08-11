@@ -24,19 +24,19 @@ import {
   upsertSessionEntryCore,
 } from "../config/sessions/session-accessor.js";
 import { resolveSqliteTargetFromSessionStorePath } from "../config/sessions/session-sqlite-target.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
 import { isSessionLifecycleMutationActive } from "../sessions/session-lifecycle-admission.js";
 import { listSessionStateEventsSince } from "../sessions/session-state-events.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
+  closeNatesclawAgentDatabasesForTest,
   listOpenIncognitoAgentDatabases,
-  openOpenClawAgentDatabase,
-  resolveIncognitoOpenClawAgentSqlitePath,
-} from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
-import { createOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+  openNatesclawAgentDatabase,
+  resolveIncognitoNatesclawAgentSqlitePath,
+} from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
+import { createNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import { GATEWAY_CLIENT_MODES, GATEWAY_CLIENT_NAMES } from "../utils/message-channel.js";
 import { resolveGatewaySessionStoreTarget } from "./session-utils.js";
 import {
@@ -273,9 +273,9 @@ test("sessions.create keeps incognito rows process-local through list, spawn, re
     expect(entry?.incognito).toBe(true);
     expect(entry?.parentSessionKey).toBeUndefined();
     expect(entry).not.toHaveProperty("sessionFile");
-    const openedIncognitoDatabase = openOpenClawAgentDatabase({
+    const openedIncognitoDatabase = openNatesclawAgentDatabase({
       agentId: "main",
-      path: resolveIncognitoOpenClawAgentSqlitePath({ agentId: "main" }),
+      path: resolveIncognitoNatesclawAgentSqlitePath({ agentId: "main" }),
     });
     expect(
       openedIncognitoDatabase.db
@@ -287,7 +287,7 @@ test("sessions.create keeps incognito rows process-local through list, spawn, re
       true,
     );
     expect(loadSessionEntry({ agentId: "main", sessionKey: key, storePath })?.incognito).toBe(true);
-    const persistentDatabase = openOpenClawAgentDatabase({
+    const persistentDatabase = openNatesclawAgentDatabase({
       agentId: "main",
       path: resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "main" }).path,
     });
@@ -387,11 +387,11 @@ test("sessions.create keeps incognito rows process-local through list, spawn, re
     const reset = await directSessionReq<{ deleted?: boolean }>("sessions.reset", { key });
     expect(reset.payload).toMatchObject({ deleted: true });
     expect(resolveGatewaySessionStoreTarget({ cfg: getRuntimeConfig(), key }).storePath).toBe(
-      resolveIncognitoOpenClawAgentSqlitePath({ agentId: "main" }),
+      resolveIncognitoNatesclawAgentSqlitePath({ agentId: "main" }),
     );
-    const incognitoDatabase = openOpenClawAgentDatabase({
+    const incognitoDatabase = openNatesclawAgentDatabase({
       agentId: "main",
-      path: resolveIncognitoOpenClawAgentSqlitePath({ agentId: "main" }),
+      path: resolveIncognitoNatesclawAgentSqlitePath({ agentId: "main" }),
     });
     for (const table of ["session_nodes", "session_windows", "transcript_events"] as const) {
       expect(incognitoDatabase.db.prepare(`SELECT count(*) AS count FROM ${table}`).get()).toEqual({
@@ -480,7 +480,7 @@ test("sessions.create keeps incognito rows process-local through list, spawn, re
       },
     });
   } finally {
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
   }
 });
 
@@ -514,7 +514,7 @@ test("incognito sessions survive non-default-agent webchat reply initialization"
     );
     dispatchInboundMessageMock.mockImplementationOnce(async (params: unknown) => {
       const input = params as {
-        cfg: OpenClawConfig;
+        cfg: NatesclawConfig;
         ctx: Parameters<typeof initSessionState>[0]["ctx"];
         replyOptions?: {
           expectedExistingSessionId?: string;
@@ -554,13 +554,13 @@ test("incognito sessions survive non-default-agent webchat reply initialization"
     await expect(dispatched).resolves.toMatchObject({
       sessionId,
       sessionKey,
-      storePath: resolveIncognitoOpenClawAgentSqlitePath({ agentId: "work" }),
+      storePath: resolveIncognitoNatesclawAgentSqlitePath({ agentId: "work" }),
     });
     await new Promise<void>((resolve) => {
       setImmediate(resolve);
     });
 
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
     dispatchInboundMessageMock.mockClear();
     const stale = await rpcReq(ws, "chat.send", {
       sessionKey,
@@ -576,7 +576,7 @@ test("incognito sessions survive non-default-agent webchat reply initialization"
     expect(dispatchInboundMessageMock).not.toHaveBeenCalled();
     expect(listOpenIncognitoAgentDatabases()).toEqual([]);
 
-    const persistentDatabase = openOpenClawAgentDatabase({
+    const persistentDatabase = openNatesclawAgentDatabase({
       agentId: "work",
       path: resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "work" }).path,
     });
@@ -587,7 +587,7 @@ test("incognito sessions survive non-default-agent webchat reply initialization"
     ).toBeUndefined();
   } finally {
     ws.close();
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
   }
 });
 
@@ -620,7 +620,7 @@ test("createGatewaySession rechecks admin scope after incognito inheritance reso
       createGatewaySession({ ...base, requestingOperatorScopes: ["operator.admin"] }),
     ).resolves.toMatchObject({ ok: true, entry: { incognito: true } });
   } finally {
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
   }
 });
 
@@ -656,7 +656,7 @@ test("createGatewaySession forwards its commit guard into main-session reset", a
     );
   } finally {
     testState.sessionConfig = undefined;
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
   }
 });
 
@@ -773,7 +773,7 @@ test("incognito operator RPCs treat identityless connections as owner-equivalent
     admin.ws.close();
     reader.ws.close();
     writer.ws.close();
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
   }
 });
 
@@ -792,9 +792,9 @@ async function initializeGitWorkspace(root: string): Promise<string> {
   await execFileAsync("git", ["-C", workspace, "add", "README.md"]);
   await execFileAsync("git", [
     "-c",
-    "user.name=OpenClaw Test",
+    "user.name=Natesclaw Test",
     "-c",
-    "user.email=openclaw-test@example.invalid",
+    "user.email=natesclaw-test@example.invalid",
     "-C",
     workspace,
     "commit",
@@ -805,7 +805,7 @@ async function initializeGitWorkspace(root: string): Promise<string> {
 }
 
 test("sessions.create captures and persists the initial workspace diff baseline", async () => {
-  const root = tempDirs.make("openclaw-session-diff-baseline-");
+  const root = tempDirs.make("natesclaw-session-diff-baseline-");
   const workspace = await initializeGitWorkspace(root);
   await fs.appendFile(path.join(workspace, "README.md"), "dirty at session start\n");
   const { storePath } = await createSessionStoreDir();
@@ -960,12 +960,12 @@ test("sessions.create rejects draft visibility when policy disables drafts", asy
 });
 
 test("sessions.create provisions its worktree inside the target lifecycle fence", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-session-worktree-fence-",
+    prefix: "natesclaw-session-worktree-fence-",
   });
-  const workspace = await initializeGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   const { storePath } = await createSessionStoreDir();
   const key = "agent:main:dashboard:worktree-fence";
@@ -991,19 +991,19 @@ test("sessions.create provisions its worktree inside the target lifecycle fence"
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create rolls back failed provisioning before a same-key creator proceeds", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-session-worktree-rollback-",
+    prefix: "natesclaw-session-worktree-rollback-",
   });
-  const workspace = await initializeGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   testState.sessionConfig = { sharing: { drafts: false } };
   const { storePath } = await createSessionStoreDir();
@@ -1108,21 +1108,21 @@ test("sessions.create rolls back failed provisioning before a same-key creator p
         force: true,
       });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
     testState.sessionConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create provisions and reuses a session worktree for later runs", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-session-worktree-",
+    prefix: "natesclaw-session-worktree-",
   });
-  const root = openClawState.root;
+  const root = NatesclawState.root;
   const workspace = await initializeGitWorkspace(root);
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -1140,7 +1140,7 @@ test("sessions.create provisions and reuses a session worktree for later runs", 
     expect(created.ok).toBe(true);
     const key = requireNonEmptyString(created.payload?.key, "created session key");
     const worktree = created.payload?.worktree;
-    expect(worktree?.branch).toBe("openclaw/release-planning");
+    expect(worktree?.branch).toBe("natesclaw/release-planning");
     expect(created.payload?.entry.spawnedCwd).toBe(worktree?.path);
     worktreeId = worktree?.id;
     expect(findLiveRegistryWorktreeByOwner(process.env, "session", key)).toMatchObject({
@@ -1188,19 +1188,19 @@ test("sessions.create provisions and reuses a session worktree for later runs", 
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create preserves a committed worktree when initial-turn setup fails", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-session-worktree-post-commit-failure-",
+    prefix: "natesclaw-session-worktree-post-commit-failure-",
   });
-  const workspace = await initializeGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   const { storePath } = await createSessionStoreDir();
   const key = "agent:main:dashboard:post-commit-worktree";
@@ -1225,7 +1225,7 @@ test("sessions.create preserves a committed worktree when initial-turn setup fai
 
     expect(loadSessionEntry({ sessionKey: key, storePath })).toMatchObject({
       sessionId: expect.any(String),
-      worktree: { id: expect.any(String), branch: "openclaw/post-commit-worktree" },
+      worktree: { id: expect.any(String), branch: "natesclaw/post-commit-worktree" },
     });
     const owned = findLiveRegistryWorktreeByOwner(process.env, "session", key);
     expect(owned).toBeDefined();
@@ -1237,19 +1237,19 @@ test("sessions.create preserves a committed worktree when initial-turn setup fai
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create derives its managed-worktree title from message and pasted text", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-session-worktree-title-",
+    prefix: "natesclaw-session-worktree-title-",
   });
-  const workspace = await initializeGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   const { ws } = await openClient({ scopes: ["operator.admin"] });
@@ -1274,7 +1274,7 @@ test("sessions.create derives its managed-worktree title from message and pasted
 
     expect(created.ok, JSON.stringify(created.error)).toBe(true);
     worktreeId = created.payload?.worktree.id;
-    expect(created.payload?.worktree.branch).toBe("openclaw/attachment-repair");
+    expect(created.payload?.worktree.branch).toBe("natesclaw/attachment-repair");
     expect(dashboardTitleMocks.generate).toHaveBeenCalledWith(
       expect.objectContaining({
         agentId: "main",
@@ -1286,28 +1286,28 @@ test("sessions.create derives its managed-worktree title from message and pasted
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
     ws.close();
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create honors worktree name/base ref and persists worktree info", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-session-worktree-target-",
+    prefix: "natesclaw-session-worktree-target-",
   });
-  const root = openClawState.root;
+  const root = NatesclawState.root;
   const workspace = await initializeGitWorkspace(root);
   await execFileAsync("git", ["-C", workspace, "checkout", "-b", "base-branch"]);
   await fs.writeFile(path.join(workspace, "base.txt"), "base\n");
   await execFileAsync("git", ["-C", workspace, "add", "base.txt"]);
   await execFileAsync("git", [
     "-c",
-    "user.name=OpenClaw Test",
+    "user.name=Natesclaw Test",
     "-c",
-    "user.email=openclaw-test@example.invalid",
+    "user.email=natesclaw-test@example.invalid",
     "-C",
     workspace,
     "commit",
@@ -1321,7 +1321,7 @@ test("sessions.create honors worktree name/base ref and persists worktree info",
     "HEAD",
   ]);
   await execFileAsync("git", ["-C", workspace, "checkout", "main"]);
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -1344,7 +1344,7 @@ test("sessions.create honors worktree name/base ref and persists worktree info",
     expect(created.ok).toBe(true);
     const worktree = created.payload?.worktree;
     worktreeId = worktree?.id;
-    expect(worktree?.branch).toBe("openclaw/target-task");
+    expect(worktree?.branch).toBe("natesclaw/target-task");
     const { stdout: worktreeCommitRaw } = await execFileAsync("git", [
       "-C",
       requireNonEmptyString(worktree?.path, "worktree path"),
@@ -1354,7 +1354,7 @@ test("sessions.create honors worktree name/base ref and persists worktree info",
     expect(worktreeCommitRaw.trim()).toBe(baseCommitRaw.trim());
     expect(created.payload?.entry.worktree).toEqual({
       id: worktree?.id,
-      branch: "openclaw/target-task",
+      branch: "natesclaw/target-task",
       repoRoot: workspace,
     });
 
@@ -1368,9 +1368,9 @@ test("sessions.create honors worktree name/base ref and persists worktree info",
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
@@ -1395,7 +1395,7 @@ test("sessions.create accepts a node-host cwd without provisioning a Gateway wor
     entry: { execHost?: string; execNode?: string; execCwd?: string; spawnedCwd?: string };
   }>(
     "sessions.create",
-    { agentId: "main", execNode: "macbook", cwd: "/Users/peter/Projects/openclaw" },
+    { agentId: "main", execNode: "macbook", cwd: "/Users/peter/Projects/natesclaw" },
     { client: { connect: { scopes: ["operator.admin"] } } as never },
   );
 
@@ -1403,7 +1403,7 @@ test("sessions.create accepts a node-host cwd without provisioning a Gateway wor
   expect(created.payload?.entry).toMatchObject({
     execHost: "node",
     execNode: "macbook",
-    execCwd: "/Users/peter/Projects/openclaw",
+    execCwd: "/Users/peter/Projects/natesclaw",
   });
   expect(created.payload?.entry.spawnedCwd).toBeUndefined();
 });
@@ -1440,7 +1440,7 @@ test("sessions.create reset-in-place clears a prior node binding for Gateway exe
       parentSessionKey: "main",
       emitCommandHooks: true,
       execNode: "macbook",
-      cwd: "/Users/peter/Projects/openclaw",
+      cwd: "/Users/peter/Projects/natesclaw",
     },
     { client: { connect: { scopes: ["operator.admin"] } } as never },
   );
@@ -1448,7 +1448,7 @@ test("sessions.create reset-in-place clears a prior node binding for Gateway exe
   expect(nodeSession.payload?.entry).toMatchObject({
     execHost: "node",
     execNode: "macbook",
-    execCwd: "/Users/peter/Projects/openclaw",
+    execCwd: "/Users/peter/Projects/natesclaw",
   });
   expect(nodeSession.payload?.entry.spawnedCwd).toBeUndefined();
 
@@ -1501,17 +1501,17 @@ test("sessions.create rejects a Gateway worktree targeting a node", async () => 
 });
 
 test("sessions.create provisions a worktree from an admin-selected cwd", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-configured-workspace-",
+    prefix: "natesclaw-configured-workspace-",
   });
-  const configuredRoot = openClawState.root;
+  const configuredRoot = NatesclawState.root;
   const selectedRoot = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-selected-workspace-"),
+    path.join(await fs.realpath(os.tmpdir()), "natesclaw-selected-workspace-"),
   );
   const configuredWorkspace = await initializeGitWorkspace(configuredRoot);
   const selectedWorkspace = await initializeGitWorkspace(selectedRoot);
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace: configuredWorkspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -1555,9 +1555,9 @@ test("sessions.create provisions a worktree from an admin-selected cwd", async (
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
     await fs.rm(selectedRoot, { recursive: true, force: true });
   }
 });
@@ -1576,7 +1576,7 @@ test("sessions.create persists a Gateway cwd without a managed worktree", async 
 });
 
 test("sessions.create allows a write-scoped cwd inside the configured workspace", async () => {
-  const workspace = tempDirs.make("openclaw-session-cwd-workspace-");
+  const workspace = tempDirs.make("natesclaw-session-cwd-workspace-");
   const cwd = path.join(workspace, "packages", "app");
   await fs.mkdir(cwd, { recursive: true });
   testState.agentConfig = { workspace };
@@ -1599,8 +1599,8 @@ test("sessions.create allows a write-scoped cwd inside the configured workspace"
 });
 
 test("sessions.create rejects a write-scoped cwd outside configured workspaces", async () => {
-  const workspace = tempDirs.make("openclaw-session-cwd-workspace-");
-  const outside = tempDirs.make("openclaw-session-cwd-outside-");
+  const workspace = tempDirs.make("natesclaw-session-cwd-workspace-");
+  const outside = tempDirs.make("natesclaw-session-cwd-outside-");
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   const { ws } = await openClient({
@@ -1621,7 +1621,7 @@ test("sessions.create rejects a write-scoped cwd outside configured workspaces",
 });
 
 test("sessions.create uses a non-git Gateway cwd directly but not as a worktree source", async () => {
-  const cwd = await makeNonGitTempDir("openclaw-session-direct-cwd-");
+  const cwd = await makeNonGitTempDir("natesclaw-session-direct-cwd-");
   const client = { client: { connect: { scopes: ["operator.admin"] } } as never };
   const direct = await directSessionReq("sessions.create", { cwd }, client);
   expect(direct.ok).toBe(true);
@@ -1682,17 +1682,17 @@ test("sessions.create allows cwd within a sandboxed agent workspace", async () =
 });
 
 test("sessions.create skips the worktree setup script for non-admin callers", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-worktree-setup-scope-",
+    prefix: "natesclaw-worktree-setup-scope-",
   });
-  const root = openClawState.root;
+  const root = NatesclawState.root;
   const workspace = await initializeGitWorkspace(root);
-  await fs.mkdir(path.join(workspace, ".openclaw"), { recursive: true });
-  const setupScript = path.join(workspace, ".openclaw", "worktree-setup.sh");
+  await fs.mkdir(path.join(workspace, ".natesclaw"), { recursive: true });
+  const setupScript = path.join(workspace, ".natesclaw", "worktree-setup.sh");
   await fs.writeFile(setupScript, "#!/bin/sh\ntouch setup-marker.txt\n");
   await fs.chmod(setupScript, 0o755);
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -1714,24 +1714,24 @@ test("sessions.create skips the worktree setup script for non-admin callers", as
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create preserves a linked-worktree subdirectory", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-subdir-session-worktree-",
+    prefix: "natesclaw-subdir-session-worktree-",
   });
-  const root = openClawState.root;
+  const root = NatesclawState.root;
   const repoRoot = await initializeGitWorkspace(root);
   const linkedRoot = path.join(root, "linked");
   await execFileAsync("git", ["-C", repoRoot, "worktree", "add", "-b", "linked", linkedRoot]);
   const workspace = path.join(linkedRoot, "packages", "app");
   await fs.mkdir(workspace, { recursive: true });
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -1750,7 +1750,7 @@ test("sessions.create preserves a linked-worktree subdirectory", async () => {
     worktreeId = worktree?.id;
     // The managed worktree anchors at the repo root even when the workspace is nested;
     // the session cwd points at the equivalent subdirectory inside the worktree.
-    expect(worktree?.branch).toMatch(/^openclaw\/[a-z0-9]+(?:-[a-z0-9]+)+$/);
+    expect(worktree?.branch).toMatch(/^natesclaw\/[a-z0-9]+(?:-[a-z0-9]+)+$/);
     expect(created.payload?.entry.spawnedCwd).toBe(
       path.join(requireNonEmptyString(worktree?.path, "worktree path"), "packages", "app"),
     );
@@ -1758,18 +1758,18 @@ test("sessions.create preserves a linked-worktree subdirectory", async () => {
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create reset-in-place persists the returned worktree cwd", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-reset-session-worktree-",
+    prefix: "natesclaw-reset-session-worktree-",
   });
-  const root = openClawState.root;
+  const root = NatesclawState.root;
   const workspace = await initializeGitWorkspace(root);
   // A remote makes the base commit reachable from `--remotes`, so leaving the worktree via a
   // plain New Chat is lossless and the reset can remove it (the real leave-worktree flow).
@@ -1777,7 +1777,7 @@ test("sessions.create reset-in-place persists the returned worktree cwd", async 
   await execFileAsync("git", ["init", "--bare", origin]);
   await execFileAsync("git", ["-C", workspace, "remote", "add", "origin", origin]);
   await execFileAsync("git", ["-C", workspace, "push", "-u", "origin", "main"]);
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace, model: { primary: "openai/current-model" } };
   testState.sessionConfig = { dmScope: "main" };
   const { storePath } = await createSessionStoreDir();
@@ -1898,15 +1898,15 @@ test("sessions.create reset-in-place persists the returned worktree cwd", async 
     if (worktreeId && getRegistryWorktree(process.env, worktreeId)?.removedAt === undefined) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
     testState.sessionConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.create rejects worktrees for non-git agent workspaces", async () => {
-  const workspace = await makeNonGitTempDir("openclaw-session-plain-workspace-");
+  const workspace = await makeNonGitTempDir("natesclaw-session-plain-workspace-");
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   try {
@@ -1927,7 +1927,7 @@ test("sessions.create rejects worktrees for non-git agent workspaces", async () 
 });
 
 test("sessions.create rejects worktrees for agent workspaces without a commit", async () => {
-  const workspace = await makeNonGitTempDir("openclaw-session-unborn-workspace-");
+  const workspace = await makeNonGitTempDir("natesclaw-session-unborn-workspace-");
   await execFileAsync("git", ["init", workspace]);
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
@@ -2301,12 +2301,12 @@ test("sessions.create starts no initial turn when authority closes after session
 });
 
 test("sessions.create removes a provisioned worktree when authority closes before session commit", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-session-authority-worktree-",
+    prefix: "natesclaw-session-authority-worktree-",
   });
-  const workspace = await initializeGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let validations = 0;
@@ -2345,9 +2345,9 @@ test("sessions.create removes a provisioned worktree when authority closes befor
       ),
     ).toEqual([]);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 

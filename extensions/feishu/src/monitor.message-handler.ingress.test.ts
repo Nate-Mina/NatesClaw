@@ -1,5 +1,5 @@
-import { createTestInboundDebounceFlush } from "openclaw/plugin-sdk/channel-test-helpers";
-import { createNonExitingRuntimeEnv } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { createTestInboundDebounceFlush } from "natesclaw/plugin-sdk/channel-test-helpers";
+import { createNonExitingRuntimeEnv } from "natesclaw/plugin-sdk/plugin-test-runtime";
 // Feishu ingress tests cover debounce ownership and constituent claim settlement.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ClawdbotConfig, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
@@ -174,7 +174,7 @@ describe("Feishu durable ingress debounce lifecycle", () => {
       {
         key: "@_bot_1",
         id: { open_id: "ou-bot" },
-        name: "OpenClaw",
+        name: "Natesclaw",
       },
     ];
 

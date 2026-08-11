@@ -240,13 +240,13 @@ describe("readRemoteMediaBuffer", () => {
 
   beforeAll(async () => {
     vi.resetModules();
-    tempHome = await createTempHomeEnv("openclaw-test-home-");
+    tempHome = await createTempHomeEnv("natesclaw-test-home-");
     const fetchModule = await import("./fetch.js");
     readRemoteMediaBuffer = fetchModule.readRemoteMediaBuffer;
     saveRemoteMedia = fetchModule.saveRemoteMedia;
     saveResponseMedia = fetchModule.saveResponseMedia;
     // Default cap mirrors the module-private DEFAULT_FETCH_MEDIA_MAX_BYTES.
-    defaultFetchMediaMaxBytes = (await import("@openclaw/media-core/constants")).MAX_DOCUMENT_BYTES;
+    defaultFetchMediaMaxBytes = (await import("@natesclaw/media-core/constants")).MAX_DOCUMENT_BYTES;
   });
 
   beforeEach(() => {
@@ -889,7 +889,7 @@ describe("readRemoteMediaBuffer", () => {
   });
 
   it("preserves content-disposition CSV detection for streamed downloads", async () => {
-    const csv = Buffer.from("name,value\nopenclaw,1\n");
+    const csv = Buffer.from("name,value\nnatesclaw,1\n");
     const fetchImpl = vi.fn(
       async () =>
         new Response(makeStream([csv.subarray(0, 8), csv.subarray(8)]), {
@@ -916,7 +916,7 @@ describe("readRemoteMediaBuffer", () => {
   });
 
   it("preserves content-disposition CSV detection for provided response streams", async () => {
-    const csv = Buffer.from("name,value\nopenclaw,1\n");
+    const csv = Buffer.from("name,value\nnatesclaw,1\n");
     const response = new Response(makeStream([csv.subarray(0, 8), csv.subarray(8)]), {
       status: 200,
       headers: {
@@ -937,7 +937,7 @@ describe("readRemoteMediaBuffer", () => {
   });
 
   it("preserves content-disposition CSV detection for buffered downloads", async () => {
-    const csv = Buffer.from("name,value\nopenclaw,1\n");
+    const csv = Buffer.from("name,value\nnatesclaw,1\n");
     const fetchImpl = vi.fn(
       async () =>
         new Response(makeStream([csv.subarray(0, 8), csv.subarray(8)]), {

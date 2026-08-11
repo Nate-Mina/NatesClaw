@@ -95,7 +95,7 @@ describe("chat pane terminal action", () => {
     const panelActionIds = () =>
       container
         .querySelector<HTMLElement & { panelActions: Array<{ id: string }> }>(
-          "openclaw-chat-header-session-menu",
+          "natesclaw-chat-header-session-menu",
         )
         ?.panelActions.map((action) => action.id) ?? [];
     const snapshot = pane.context.gateway.snapshot;

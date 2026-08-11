@@ -12,8 +12,8 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { execGhRead, plainGhEnv, resolvePlainGhBin } from "./lib/plain-gh.mjs";
 
-const DEFAULT_REPO = process.env.OPENCLAW_RELEASE_REPO || "openclaw/openclaw";
-const RELEASE_EVIDENCE_SCHEMA = "openclaw.release-validation-evidence/v3";
+const DEFAULT_REPO = process.env.NATESCLAW_RELEASE_REPO || "natesclaw/natesclaw";
+const RELEASE_EVIDENCE_SCHEMA = "natesclaw.release-validation-evidence/v3";
 const SHA_PINNED_BRANCH_PATTERN = /^release-ci\/[a-f0-9]{12}-[1-9][0-9]*$/u;
 const RELEASE_EVIDENCE_SCRIPT = "scripts/release-ci-summary.mjs";
 const RELEASE_EVIDENCE_FILE = fileURLToPath(import.meta.url);
@@ -39,11 +39,11 @@ const CHILD_DISPATCHES = [
   },
   {
     manifestKey: "releaseChecks",
-    name: "OpenClaw Release Checks",
+    name: "Natesclaw Release Checks",
     parentJobName: "Run release/live/Docker/QA validation",
     suffix: "-release-checks",
     trustedRef: "parent",
-    workflow: "openclaw-release-checks.yml",
+    workflow: "natesclaw-release-checks.yml",
   },
   {
     manifestKey: "pluginPrerelease",
@@ -63,11 +63,11 @@ const CHILD_DISPATCHES = [
   },
   {
     manifestKey: "productPerformance",
-    name: "OpenClaw Performance",
+    name: "Natesclaw Performance",
     parentJobName: "Run product performance evidence",
     suffix: "",
     trustedRef: "parent",
-    workflow: "openclaw-performance.yml",
+    workflow: "natesclaw-performance.yml",
   },
 ];
 
@@ -987,7 +987,7 @@ function downloadParentManifestEvidence(runId, runAttempt, repository, manifestP
       runId,
     },
   );
-  const downloadDir = mkdtempSync(join(tmpdir(), "openclaw-release-ci-summary-"));
+  const downloadDir = mkdtempSync(join(tmpdir(), "natesclaw-release-ci-summary-"));
   try {
     const archivePath = join(downloadDir, "manifest.zip");
     downloadArtifactZip(String(artifact.id), archivePath, targetRepository);

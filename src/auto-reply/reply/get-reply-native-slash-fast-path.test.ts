@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
 import { testing as cliBackendsTesting } from "../../agents/cli-backends.test-support.js";
 import * as preparedModelCatalog from "../../agents/prepared-model-catalog.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import {
   loadExactSessionEntry,
   loadSessionEntry,
@@ -78,7 +78,7 @@ function runTestNativeSlashFastReply(
 describe("maybeResolveNativeSlashCommandFastReply", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.stubEnv("OPENCLAW_TEST_FAST", "1");
+    vi.stubEnv("NATESCLAW_TEST_FAST", "1");
     vi.spyOn(preparedModelCatalog, "loadPreparedModelCatalogSnapshot").mockResolvedValue({
       entries: [
         {
@@ -105,7 +105,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
 
   async function resolveNativeDirectiveCommand(
     body: string,
-    config?: OpenClawConfig,
+    config?: NatesclawConfig,
     response: { shouldContinue: boolean; reply?: { text: string } } = { shouldContinue: true },
   ) {
     handleCommandsMock.mockResolvedValue(response);
@@ -136,9 +136,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
         config ??
           ({
             session: {
-              store: path.join(tempDirs.make("openclaw-native-directive-"), "sessions.json"),
+              store: path.join(tempDirs.make("natesclaw-native-directive-"), "sessions.json"),
             },
-          } as OpenClawConfig),
+          } as NatesclawConfig),
       ),
       agentId: "main",
       agentCfg: config?.agents?.defaults,
@@ -214,7 +214,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   it.each(["--runtime codex -s", "-s --runtime codex"])(
     "applies native /model runtime and session options from %s",
     async (options) => {
-      const storePath = path.join(tempDirs.make("openclaw-native-model-options-"), "sessions.json");
+      const storePath = path.join(tempDirs.make("natesclaw-native-model-options-"), "sessions.json");
       const { result } = await resolveNativeDirectiveCommand(
         `/model openai/gpt-5.5 ${options}`,
         {
@@ -266,7 +266,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
         reply: { text: "⚙️ Compacted" },
       });
 
-      const storePath = path.join(tempDirs.make("openclaw-native-override-"), "sessions.json");
+      const storePath = path.join(tempDirs.make("natesclaw-native-override-"), "sessions.json");
       await replaceSessionEntry(
         { agentId: "main", sessionKey: "agent:main:main", storePath },
         {
@@ -313,7 +313,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
                   },
                 }
               : {}),
-          } as OpenClawConfig,
+          } as NatesclawConfig,
           { runtimeMode: "full" },
         ),
         agentId: "main",
@@ -442,7 +442,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
           },
         });
       }
-      const storePath = path.join(tempDirs.make("openclaw-native-source-"), "sessions.json");
+      const storePath = path.join(tempDirs.make("natesclaw-native-source-"), "sessions.json");
       await replaceSessionEntry(
         { agentId: targetAgentId, sessionKey: targetSessionKey, storePath },
         {
@@ -532,7 +532,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
                   },
                 }
               : {}),
-          } as OpenClawConfig,
+          } as NatesclawConfig,
           { runtimeMode: "full" },
         ),
         agentId: targetAgentId,
@@ -582,7 +582,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   ])("preserves canonical native /status $selection", async (testCase) => {
     vi.spyOn(preparedModelCatalog, "loadPreparedModelCatalog").mockResolvedValueOnce([]);
     const targetSessionKey = "agent:main:main";
-    const storePath = path.join(tempDirs.make("openclaw-native-status-"), "sessions.json");
+    const storePath = path.join(tempDirs.make("natesclaw-native-status-"), "sessions.json");
     await replaceSessionEntry(
       { agentId: "main", sessionKey: targetSessionKey, storePath },
       {
@@ -635,7 +635,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
           },
         },
         channels: { modelByChannel: { telegram: { "123": "openai/gpt-5.5" } } },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       agentId: "main",
       commandAuthorized: true,
       typing: createTypingController(),
@@ -659,7 +659,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   it("keeps model-independent /status plugins available under an invalid model policy", async () => {
     const { result } = await resolveNativeDirectiveCommand(
       "/status plugins",
-      { agents: { defaults: { modelPolicy: { allow: ["anthropic/*"] } } } } as OpenClawConfig,
+      { agents: { defaults: { modelPolicy: { allow: ["anthropic/*"] } } } } as NatesclawConfig,
       { shouldContinue: false, reply: { text: "plugin status" } },
     );
 
@@ -674,14 +674,14 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
         `/${commandName}`,
         {
           session: {
-            store: path.join(tempDirs.make("openclaw-native-recovery-"), "sessions.json"),
+            store: path.join(tempDirs.make("natesclaw-native-recovery-"), "sessions.json"),
           },
           agents: {
             defaults: {
               modelPolicy: { allow: ["anthropic/*"] },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         { shouldContinue: false, reply: { text: "recovery available" } },
       );
 
@@ -721,9 +721,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
       ctx,
       cfg: markCompleteReplyConfig({
         session: {
-          store: path.join(tempDirs.make("openclaw-text-slash-"), "sessions.json"),
+          store: path.join(tempDirs.make("natesclaw-text-slash-"), "sessions.json"),
         },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       agentId: "dev",
       commandAuthorized: true,
       typing,
@@ -768,9 +768,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
       ctx,
       cfg: markCompleteReplyConfig({
         session: {
-          store: path.join(tempDirs.make("openclaw-external-text-slash-"), "sessions.json"),
+          store: path.join(tempDirs.make("natesclaw-external-text-slash-"), "sessions.json"),
         },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       agentId: "dev",
       commandAuthorized: true,
       typing,
@@ -788,7 +788,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   ])("rejects unauthorized native /$commandName before model selection", async (testCase) => {
     const { commandName, authorized } = testCase;
     const storePath = path.join(
-      tempDirs.make("openclaw-native-slash-unauthorized-"),
+      tempDirs.make("natesclaw-native-slash-unauthorized-"),
       "sessions.json",
     );
     const sessionKey = "agent:main:telegram:slash:unauthorized";
@@ -821,7 +821,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
         ...("deniedByPolicy" in testCase
           ? { commands: { allowFrom: { "*": ["approved-sender"] } } }
           : {}),
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       agentId: "main",
       commandAuthorized: authorized,
       typing: createTypingController(),
@@ -871,7 +871,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   );
 
   it("adopts a supported legacy alias before native command initialization", async () => {
-    const storePath = path.join(tempDirs.make("openclaw-native-slash-alias-"), "sessions.json");
+    const storePath = path.join(tempDirs.make("natesclaw-native-slash-alias-"), "sessions.json");
     const sessionKey = "agent:main:main";
     await replaceSessionEntry({ sessionKey: "Agent:main:main", storePath }, {
       sessionId: "legacy-session",
@@ -897,7 +897,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
           body: "/compact",
         },
       }),
-      cfg: markCompleteReplyConfig({ session: { store: storePath } } as OpenClawConfig),
+      cfg: markCompleteReplyConfig({ session: { store: storePath } } as NatesclawConfig),
       agentId: "main",
       commandAuthorized: true,
       typing: createTypingController(),
@@ -911,7 +911,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   });
 
   it("does not mutate an archived session during native command initialization", async () => {
-    const storePath = path.join(tempDirs.make("openclaw-native-slash-archived-"), "sessions.json");
+    const storePath = path.join(tempDirs.make("natesclaw-native-slash-archived-"), "sessions.json");
     const sessionKey = "agent:main:main";
     const archivedEntry = {
       sessionId: "archived-session",
@@ -939,7 +939,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
           body: "/compact",
         },
       }),
-      cfg: markCompleteReplyConfig({ session: { store: storePath } } as OpenClawConfig),
+      cfg: markCompleteReplyConfig({ session: { store: storePath } } as NatesclawConfig),
       agentId: "main",
       commandAuthorized: true,
       typing: createTypingController(),
@@ -954,7 +954,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   });
 
   it("persists fast-path session initialization before command mutation", async () => {
-    const storePath = path.join(tempDirs.make("openclaw-native-slash-init-"), "sessions.json");
+    const storePath = path.join(tempDirs.make("natesclaw-native-slash-init-"), "sessions.json");
     const sessionKey = "agent:main:main";
     await replaceSessionEntry({ sessionKey, storePath }, {
       sessionId: "session-1",
@@ -992,7 +992,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
             body: "/compact",
           },
         }),
-        cfg: markCompleteReplyConfig({ session: { store: storePath } } as OpenClawConfig),
+        cfg: markCompleteReplyConfig({ session: { store: storePath } } as NatesclawConfig),
         agentId: "main",
         commandAuthorized: true,
         typing: createTypingController(),

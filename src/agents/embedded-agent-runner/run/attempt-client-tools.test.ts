@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { applyCodeModeCatalog, createCodeModeTools } from "../../code-mode.js";
 import { createStubTool } from "../../test-helpers/agent-tool-stubs.js";
 import {
@@ -9,11 +9,11 @@ import {
 } from "../../tool-search.js";
 import { prepareEmbeddedAttemptClientTools } from "./attempt-client-tools.js";
 
-const CODE_MODE_CONFIG: OpenClawConfig = { tools: { codeMode: true, toolSearch: false } };
-const TOOL_SEARCH_CONFIG: OpenClawConfig = {
+const CODE_MODE_CONFIG: NatesclawConfig = { tools: { codeMode: true, toolSearch: false } };
+const TOOL_SEARCH_CONFIG: NatesclawConfig = {
   tools: { codeMode: false, toolSearch: { enabled: true, mode: "tools" } },
 };
-const CATALOGS_DISABLED_CONFIG: OpenClawConfig = {
+const CATALOGS_DISABLED_CONFIG: NatesclawConfig = {
   tools: { codeMode: false, toolSearch: false },
 };
 
@@ -29,7 +29,7 @@ function clientTool(name: string) {
  * appended; without a registered catalog the append is a no-op and both
  * branches look identical.
  */
-function seedCatalog(mode: "code-mode" | "tool-search", config: OpenClawConfig) {
+function seedCatalog(mode: "code-mode" | "tool-search", config: NatesclawConfig) {
   const catalogRef = createToolSearchCatalogRef();
   // A catalog only registers when its own control tools are present, so the
   // seed has to carry them exactly as the runner's tool surface does.
@@ -60,8 +60,8 @@ function seedCatalog(mode: "code-mode" | "tool-search", config: OpenClawConfig) 
 
 function prepare(input: {
   codeModeControlsEnabledForRun: boolean;
-  attemptConfig: OpenClawConfig;
-  toolSearchRuntimeConfig: OpenClawConfig;
+  attemptConfig: NatesclawConfig;
+  toolSearchRuntimeConfig: NatesclawConfig;
   catalogRef: ReturnType<typeof createToolSearchCatalogRef>;
 }) {
   return prepareEmbeddedAttemptClientTools({

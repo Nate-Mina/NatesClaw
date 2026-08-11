@@ -2,7 +2,7 @@
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ProviderAuthMethod, ProviderPlugin } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { resolveUserPath } from "../utils.js";
@@ -11,8 +11,8 @@ import { setupWizardCommand } from "./onboard.js";
 type ConfigSnapshotStub = {
   exists: boolean;
   valid: boolean;
-  config: OpenClawConfig;
-  sourceConfig?: OpenClawConfig;
+  config: NatesclawConfig;
+  sourceConfig?: NatesclawConfig;
   readError?: { code: string | null };
 };
 
@@ -115,7 +115,7 @@ vi.mock("../wizard/setup.migration-snapshot.js", () => ({
 
 vi.mock("./onboard-helpers.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./onboard-helpers.js")>()),
-  DEFAULT_WORKSPACE: "~/.openclaw/workspace",
+  DEFAULT_WORKSPACE: "~/.natesclaw/workspace",
   handleReset: mocks.handleReset,
 }));
 
@@ -203,7 +203,7 @@ describe("setupWizardCommand", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Invalid --secret-input-mode. Use "plaintext" or "ref", or run ${formatCliCommand("openclaw onboard")} for the interactive setup.`,
+      `Invalid --secret-input-mode. Use "plaintext" or "ref", or run ${formatCliCommand("natesclaw onboard")} for the interactive setup.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(mocks.runInteractiveSetup).not.toHaveBeenCalled();
@@ -219,10 +219,10 @@ describe("setupWizardCommand", () => {
 
       expect(runtime.log).toHaveBeenCalledWith(
         [
-          "Windows detected - OpenClaw runs great on WSL2!",
+          "Windows detected - Natesclaw runs great on WSL2!",
           "Native Windows might be trickier.",
           "Quick setup: wsl --install (one command, one reboot)",
-          "Guide: https://docs.openclaw.ai/windows",
+          "Guide: https://docs.natesclaw.ai/windows",
         ].join("\n"),
       );
     } finally {
@@ -253,7 +253,7 @@ describe("setupWizardCommand", () => {
     await setupWizardCommand(options, runtime);
 
     expect(runtime.error).toHaveBeenCalledWith(
-      "Onboarding needs an interactive TTY. Use `openclaw onboard --non-interactive --accept-risk ...` for automation.",
+      "Onboarding needs an interactive TTY. Use `natesclaw onboard --non-interactive --accept-risk ...` for automation.",
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(mocks.readConfigFileSnapshot).not.toHaveBeenCalled();
@@ -290,7 +290,7 @@ describe("setupWizardCommand", () => {
       config: {
         agents: {
           defaults: {
-            workspace: "/tmp/openclaw-custom-workspace",
+            workspace: "/tmp/natesclaw-custom-workspace",
           },
         },
       },
@@ -305,7 +305,7 @@ describe("setupWizardCommand", () => {
 
     expect(mocks.handleReset).toHaveBeenCalledWith(
       "config+creds+sessions",
-      path.resolve("/tmp/openclaw-custom-workspace"),
+      path.resolve("/tmp/natesclaw-custom-workspace"),
       runtime,
     );
   });
@@ -319,7 +319,7 @@ describe("setupWizardCommand", () => {
       sourceConfig: {
         agents: {
           defaults: {
-            workspace: "/tmp/openclaw-invalid-config-workspace",
+            workspace: "/tmp/natesclaw-invalid-config-workspace",
           },
         },
       },
@@ -335,12 +335,12 @@ describe("setupWizardCommand", () => {
 
     expect(mocks.handleReset).toHaveBeenCalledWith(
       "full",
-      path.resolve("/tmp/openclaw-invalid-config-workspace"),
+      path.resolve("/tmp/natesclaw-invalid-config-workspace"),
       runtime,
     );
     expect(mocks.handleReset).not.toHaveBeenCalledWith(
       "full",
-      path.resolve("~/.openclaw/workspace"),
+      path.resolve("~/.natesclaw/workspace"),
       runtime,
     );
   });
@@ -357,7 +357,7 @@ describe("setupWizardCommand", () => {
             workspace: 42,
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
     });
 
     await setupWizardCommand(
@@ -419,7 +419,7 @@ describe("setupWizardCommand", () => {
 
     expect(mocks.handleReset).toHaveBeenCalledWith(
       "full",
-      resolveUserPath("~/.openclaw/workspace"),
+      resolveUserPath("~/.natesclaw/workspace"),
       runtime,
     );
   });
@@ -451,7 +451,7 @@ describe("setupWizardCommand", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Invalid --reset-scope. Use "config", "config+creds+sessions", or "full". Run ${formatCliCommand("openclaw onboard --reset --reset-scope config")} for a config-only reset.`,
+      `Invalid --reset-scope. Use "config", "config+creds+sessions", or "full". Run ${formatCliCommand("natesclaw onboard --reset --reset-scope config")} for a config-only reset.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(mocks.handleReset).not.toHaveBeenCalled();
@@ -470,7 +470,7 @@ describe("setupWizardCommand", () => {
     );
 
     expect(runtime.error).toHaveBeenCalledWith(
-      "--reset-scope requires --reset. Re-run with openclaw onboard --reset --reset-scope full.",
+      "--reset-scope requires --reset. Re-run with natesclaw onboard --reset --reset-scope full.",
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(mocks.handleReset).not.toHaveBeenCalled();
@@ -493,7 +493,7 @@ describe("setupWizardCommand", () => {
     );
 
     expect(runtime.error).toHaveBeenCalledWith(
-      `Invalid --mode "typo". Use "local" or "remote", or run ${formatCliCommand("openclaw onboard")} for interactive setup.`,
+      `Invalid --mode "typo". Use "local" or "remote", or run ${formatCliCommand("natesclaw onboard")} for interactive setup.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(mocks.handleReset).not.toHaveBeenCalled();
@@ -514,7 +514,7 @@ describe("setupWizardCommand", () => {
     );
 
     expect(runtime.error).toHaveBeenCalledWith(
-      `Invalid --mode "". Use "local" or "remote", or run ${formatCliCommand("openclaw onboard")} for interactive setup.`,
+      `Invalid --mode "". Use "local" or "remote", or run ${formatCliCommand("natesclaw onboard")} for interactive setup.`,
     );
     expect(mocks.handleReset).not.toHaveBeenCalled();
   });
@@ -630,8 +630,8 @@ describe("setupWizardCommand", () => {
   });
 
   it("rejects conflicting gateway token inputs before reset", async () => {
-    const previous = process.env.OPENCLAW_GATEWAY_TOKEN;
-    process.env.OPENCLAW_GATEWAY_TOKEN = "env-token";
+    const previous = process.env.NATESCLAW_GATEWAY_TOKEN;
+    process.env.NATESCLAW_GATEWAY_TOKEN = "env-token";
     const runtime = makeRuntime();
 
     try {
@@ -639,15 +639,15 @@ describe("setupWizardCommand", () => {
         {
           reset: true,
           gatewayToken: "plaintext-token",
-          gatewayTokenRefEnv: "OPENCLAW_GATEWAY_TOKEN",
+          gatewayTokenRefEnv: "NATESCLAW_GATEWAY_TOKEN",
         },
         runtime,
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_TOKEN;
+        delete process.env.NATESCLAW_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_GATEWAY_TOKEN = previous;
+        process.env.NATESCLAW_GATEWAY_TOKEN = previous;
       }
     }
 
@@ -833,7 +833,7 @@ describe("setupWizardCommand", () => {
     );
 
     expect(runtime.error).toHaveBeenCalledWith(
-      `Missing --anthropic-api-key (or ANTHROPIC_API_KEY in env). Export ANTHROPIC_API_KEY, pass --anthropic-api-key, or run ${formatCliCommand("openclaw onboard")} for interactive setup.`,
+      `Missing --anthropic-api-key (or ANTHROPIC_API_KEY in env). Export ANTHROPIC_API_KEY, pass --anthropic-api-key, or run ${formatCliCommand("natesclaw onboard")} for interactive setup.`,
     );
     expect(mocks.handleReset).not.toHaveBeenCalled();
     expect(mocks.runNonInteractiveSetup).not.toHaveBeenCalled();

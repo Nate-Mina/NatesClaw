@@ -1,20 +1,20 @@
 // Sms plugin module implements send behavior.
-import { createChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { createChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createMessageReceiptFromOutboundResults,
   type ChannelMessageSendResult,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   formatErrorMessage,
   PlatformMessageNotDispatchedError,
-} from "openclaw/plugin-sdk/error-runtime";
-import type { OutboundMediaLoadOptions } from "openclaw/plugin-sdk/outbound-media";
+} from "natesclaw/plugin-sdk/error-runtime";
+import type { OutboundMediaLoadOptions } from "natesclaw/plugin-sdk/outbound-media";
 import {
   type MarkdownIR,
   renderMarkdownIRChunksWithinLimit,
   sanitizeAssistantVisibleText,
   stripMarkdown,
-} from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/text-chunking";
 import { recordInitialSmsDeliveryResult } from "./delivery-observations.js";
 import { getSmsRuntime } from "./runtime.js";
 import { sendSmsViaTwilio, TWILIO_MESSAGE_BODY_MAX_LENGTH } from "./twilio.js";

@@ -1,4 +1,4 @@
-openclaw-custodian-panel {
+natesclaw-custodian-panel {
   position: fixed;
   z-index: 60;
   color: var(--text);
@@ -107,7 +107,7 @@ openclaw-custodian-panel {
   height: 15px;
 }
 
-.cp > openclaw-custodian-surface {
+.cp > natesclaw-custodian-surface {
   display: flex;
   min-height: 0;
   flex: 1 1 0;

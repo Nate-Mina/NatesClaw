@@ -1,8 +1,8 @@
 // Vydra tests cover video generation provider plugin behavior.
-import * as providerHttp from "openclaw/plugin-sdk/provider-http";
-import { expectExplicitVideoGenerationCapabilities } from "openclaw/plugin-sdk/provider-test-contracts";
-import { bufferedOversizedJsonResponse as oversizedJsonResponse } from "openclaw/plugin-sdk/test-fixtures";
-import { installPinnedHostnameTestHooks } from "openclaw/plugin-sdk/test-media-understanding";
+import * as providerHttp from "natesclaw/plugin-sdk/provider-http";
+import { expectExplicitVideoGenerationCapabilities } from "natesclaw/plugin-sdk/provider-test-contracts";
+import { bufferedOversizedJsonResponse as oversizedJsonResponse } from "natesclaw/plugin-sdk/test-fixtures";
+import { installPinnedHostnameTestHooks } from "natesclaw/plugin-sdk/test-media-understanding";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   binaryResponse,

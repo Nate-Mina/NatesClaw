@@ -1,6 +1,6 @@
 // Tavily plugin module implements tavily client behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { readProviderJsonResponse } from "natesclaw/plugin-sdk/provider-http";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   normalizeCacheKey,
@@ -8,13 +8,13 @@ import {
   readCache,
   resolveCacheTtlMs,
   writeCache,
-} from "openclaw/plugin-sdk/provider-web-search";
+} from "natesclaw/plugin-sdk/provider-web-search";
 import {
   truncateSanitizedExternalContent,
   wrapExternalContent,
   wrapWebContent,
-} from "openclaw/plugin-sdk/security-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/security-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   DEFAULT_TAVILY_BASE_URL,
   resolveTavilyApiKey,
@@ -41,7 +41,7 @@ const TAVILY_RESULT_URL_MAX_CHARS = 2_048;
 const TAVILY_PUBLISHED_DATE_RE = /^\d{4}-\d{2}-\d{2}(?:[T ][\d:.+Z-]{0,20})?$/u;
 
 export type TavilySearchParams = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   query: string;
   searchDepth?: string;
   topic?: string;
@@ -55,7 +55,7 @@ export type TavilySearchParams = {
 };
 
 export type TavilyExtractParams = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   urls: string[];
   query?: string;
   extractDepth?: string;
@@ -116,7 +116,7 @@ async function postTavilyJson(params: {
       apiKey: params.apiKey,
       body: params.body,
       errorLabel: params.errorLabel,
-      extraHeaders: { "X-Client-Source": "openclaw" },
+      extraHeaders: { "X-Client-Source": "natesclaw" },
       ...(params.signal ? { signal: params.signal } : {}),
     },
     async (response) =>

@@ -3,7 +3,7 @@
  * combines explicit policy, configured models, defaults, and runtime
  * auth-backed availability.
  */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type {
   ModelAuthAvailabilityEvaluation,
   ModelAuthAvailabilityRef,
@@ -121,7 +121,7 @@ function isPickerVisibleCatalogEntry(
  * policy, configured models, and providers with usable auth.
  */
 type ResolveVisibleModelCatalogParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   catalog: ModelCatalogEntry[];
   defaultProvider: string;
   defaultModel?: string;
@@ -191,7 +191,7 @@ async function resolveVisibleModelCatalogWithPolicy(
 
 /** Resolves logical rows while keeping provider-owned physical route precedence. */
 export async function resolveLogicalVisibleModelCatalog(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   catalog: ModelCatalogEntry[];
   defaultProvider: string;
   defaultModel?: string;

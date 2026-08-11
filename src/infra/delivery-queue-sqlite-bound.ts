@@ -1,7 +1,7 @@
 // Database-bound delivery queue serialization and mutations used by shared transactions.
 import type { Insertable } from "kysely";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
-import type { OpenClawStateDatabase } from "../state/openclaw-state-db.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
+import type { NatesclawStateDatabase } from "../state/natesclaw-state-db.js";
 import type { DeliveryQueueEntryState } from "./delivery-queue-sqlite.types.js";
 import {
   executeSqliteQuerySync,
@@ -10,9 +10,9 @@ import {
 } from "./kysely-sync.js";
 
 type QueueStatus = "pending" | "failed" | "completed";
-type DeliveryQueueTable = OpenClawStateKyselyDatabase["delivery_queue_entries"];
+type DeliveryQueueTable = NatesclawStateKyselyDatabase["delivery_queue_entries"];
 
-export type DeliveryQueueDatabase = Pick<OpenClawStateKyselyDatabase, "delivery_queue_entries">;
+export type DeliveryQueueDatabase = Pick<NatesclawStateKyselyDatabase, "delivery_queue_entries">;
 
 export type DeliveryQueueSqliteRow = {
   id: string;
@@ -133,7 +133,7 @@ export function bindDeliveryQueueEntry(
 /** Mutates only the exact supplied shared-state handle; never opens or hardens a file. */
 export function upsertBoundDeliveryQueueEntryInDatabase(
   bound: BoundDeliveryQueueEntry,
-  database: OpenClawStateDatabase,
+  database: NatesclawStateDatabase,
 ): boolean {
   const queueDb = getNodeSqliteKysely<DeliveryQueueDatabase>(database.db);
   const insert = queueDb.insertInto("delivery_queue_entries").values(bound.row);
@@ -183,7 +183,7 @@ export function upsertBoundDeliveryQueueEntryInDatabase(
 
 /** Reads one row from the exact supplied handle for cross-owner invariant validation. */
 export function loadDeliveryQueueEntryInDatabase(
-  database: OpenClawStateDatabase,
+  database: NatesclawStateDatabase,
   queueName: string,
   id: string,
 ): DeliveryQueueEntryState | null {

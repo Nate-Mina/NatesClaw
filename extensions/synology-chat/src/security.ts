@@ -2,14 +2,14 @@
  * Security module: token validation, rate limiting, input sanitization, user allowlist.
  */
 
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { finiteSecondsToTimerSafeMilliseconds } from "openclaw/plugin-sdk/number-runtime";
-import { safeEqualSecret } from "openclaw/plugin-sdk/security-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { resolveStableChannelMessageIngress } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { finiteSecondsToTimerSafeMilliseconds } from "natesclaw/plugin-sdk/number-runtime";
+import { safeEqualSecret } from "natesclaw/plugin-sdk/security-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import {
   createFixedWindowRateLimiter,
   type FixedWindowRateLimiter,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "natesclaw/plugin-sdk/webhook-ingress";
 
 /**
  * Validate webhook token using constant-time comparison.

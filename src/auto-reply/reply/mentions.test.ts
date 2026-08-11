@@ -120,7 +120,7 @@ describe("derived Unicode mention matching", () => {
 
   it("keeps explicit configured patterns on their existing regex flags", () => {
     const regexes = buildMentionRegexes({
-      messages: { groupChat: { mentionPatterns: [String.raw`\bopenclaw\b`] } },
+      messages: { groupChat: { mentionPatterns: [String.raw`\bnatesclaw\b`] } },
     });
 
     expect(regexes[0]?.flags).toBe("i");

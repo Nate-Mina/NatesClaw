@@ -1,9 +1,9 @@
-import { expectDefined } from "@openclaw/normalization-core";
-import type { ProviderRuntimeModel } from "openclaw/plugin-sdk/plugin-entry";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { ProviderRuntimeModel } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   clearLiveCatalogCacheForTests,
   type LiveModelCatalogFetchGuard,
-} from "openclaw/plugin-sdk/provider-catalog-live-runtime";
+} from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
 import { beforeEach, describe, expect, it, vi, type MockedFunction } from "vitest";
 import {
   buildClawRouterProviderConfig,
@@ -145,7 +145,7 @@ describe("ClawRouter provider catalog", () => {
     clearLiveCatalogCacheForTests();
   });
 
-  it("maps every supported catalog protocol to its OpenClaw transport", async () => {
+  it("maps every supported catalog protocol to its Natesclaw transport", async () => {
     const { fetchGuard, fetchGuardMock } = buildFetchGuard();
     const provider = await buildClawRouterProviderConfig({
       apiKey: "clawrouter-test-key",

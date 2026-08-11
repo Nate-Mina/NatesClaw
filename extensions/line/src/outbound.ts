@@ -1,19 +1,19 @@
 import type { messagingApi } from "@line/bot-sdk";
-import { createChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { createChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 // Line plugin module implements outbound behavior.
 import {
   defineChannelMessageAdapter,
   listMessageReceiptPlatformIds,
   type ChannelMessageSendResult,
   type MessageReceiptPartKind,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   createAttachedChannelResultAdapter,
   createEmptyChannelResult,
-} from "openclaw/plugin-sdk/channel-send-result";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { resolveOutboundMediaUrls } from "openclaw/plugin-sdk/reply-payload";
-import { sanitizeAssistantVisibleText } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/channel-send-result";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { resolveOutboundMediaUrls } from "natesclaw/plugin-sdk/reply-payload";
+import { sanitizeAssistantVisibleText } from "natesclaw/plugin-sdk/text-chunking";
 import type { ChannelPlugin, ResolvedLineAccount } from "./channel-api.js";
 import {
   buildLineMediaMessage,

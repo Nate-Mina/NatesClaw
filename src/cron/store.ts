@@ -6,10 +6,10 @@ import { expandHomePrefix } from "../infra/home-dir.js";
 import { pruneMapToMaxSize } from "../infra/map-size.js";
 import { openNodeSqliteDatabase } from "../infra/node-sqlite.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import { resolveConfigDir } from "../utils.js";
 import { readCronStoreStatePath } from "./store/config-state.js";
 import { cronStoreKey } from "./store/key.js";
@@ -93,7 +93,7 @@ export function resolveCronJobsStorePathFromConfig(
 export async function loadCronJobsStoreWithConfigJobs(storePath: string): Promise<LoadedCronStore> {
   const resolvedStorePath = path.resolve(storePath);
   const storeKey = cronStoreKey(resolvedStorePath);
-  const database = openOpenClawStateDatabase().db;
+  const database = openNatesclawStateDatabase().db;
   const rows = loadCronRows(database, storeKey);
   if (rows.length > 0) {
     const loaded = loadedCronStoreFromRows(rows);
@@ -124,7 +124,7 @@ function repairLoadedCronRuntimeAuthority(params: {
   if (params.jobIds.length === 0) {
     return;
   }
-  const repaired = runOpenClawStateWriteTransaction(
+  const repaired = runNatesclawStateWriteTransaction(
     ({ db }) => {
       const rows = loadCronRows(db, params.storeKey);
       if (rows.length === 0) {
@@ -152,7 +152,7 @@ export function removeStaleCronJobFamilyRows(
   family: CronJobFamilyIdentity,
 ): number {
   const activeStoreKey = cronStoreKey(path.resolve(storePath));
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => deleteStaleCronJobFamilyRows(db, activeStoreKey, family),
     {},
     { operationLabel: "cron.job-family-adoption" },
@@ -182,7 +182,7 @@ export async function loadCronJobsStoreWithConfigJobsReadOnly(
   storePath: string,
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<LoadedCronStore> {
-  const statePath = resolveOpenClawStateSqlitePath(env);
+  const statePath = resolveNatesclawStateSqlitePath(env);
   if (!fs.existsSync(statePath)) {
     return emptyLoadedCronStore();
   }
@@ -214,7 +214,7 @@ export async function loadCronJobsStore(storePath: string): Promise<CronStoreFil
 export function loadCronJobsStoreSync(storePath: string): CronStoreFile {
   const resolvedStorePath = path.resolve(storePath);
   const storeKey = cronStoreKey(resolvedStorePath);
-  const database = openOpenClawStateDatabase().db;
+  const database = openNatesclawStateDatabase().db;
   const rows = loadCronRows(database, storeKey);
   if (rows.length > 0) {
     const loaded = loadedCronStoreFromRows(rows);
@@ -255,7 +255,7 @@ export async function saveCronJobsStore(
   if (!stateOnly) {
     assertCronStoreCanPersist(store);
   }
-  runOpenClawStateWriteTransaction((database) => {
+  runNatesclawStateWriteTransaction((database) => {
     if (opts?.quarantine?.entries.length) {
       saveCronQuarantinedJobs({
         storePath: resolvedStorePath,
@@ -286,7 +286,7 @@ export async function saveCronJobsStoreWithMetadata(
   const resolvedStorePath = path.resolve(storePath);
   const storeKey = cronStoreKey(resolvedStorePath);
   assertCronStoreCanPersist(store);
-  const committed = runOpenClawStateWriteTransaction((database) => {
+  const committed = runNatesclawStateWriteTransaction((database) => {
     if (!acquireMetadata(database.db)) {
       return false;
     }

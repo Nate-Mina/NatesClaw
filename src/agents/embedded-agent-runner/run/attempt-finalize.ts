@@ -4,7 +4,7 @@
  */
 
 import { readActiveTranscriptEntryAnchor } from "../../../config/sessions/session-accessor.js";
-import { OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../../context-engine/host-compat.js";
+import { NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../../context-engine/host-compat.js";
 import type { ContextEngine } from "../../../context-engine/types.js";
 import { freezeDiagnosticTraceContext } from "../../../infra/diagnostic-trace-context.js";
 import { isFastTestRuntimeEnv } from "../../../infra/env.js";
@@ -266,7 +266,7 @@ export async function completeEmbeddedAttemptAfterTurn(
         prePromptMessageCount: transcript.prePromptMessageCount,
         tokenBudget: attempt.contextTokenBudget,
         runtimeContext: afterTurnRuntimeContext,
-        contextEngineHostSupport: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+        contextEngineHostSupport: NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
         providerId: attempt.provider,
         requestedModelId: attempt.requestedModelId,
         modelId: attempt.modelId,
@@ -312,7 +312,7 @@ export async function completeEmbeddedAttemptAfterTurn(
           yieldAborted: state.yieldAborted,
           tokenBudget: attempt.contextTokenBudget,
           runtimeContext: afterTurnRuntimeContext,
-          contextEngineHostSupport: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+          contextEngineHostSupport: NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
           providerId: attempt.provider,
           requestedModelId: attempt.requestedModelId,
           modelId: attempt.modelId,
@@ -649,7 +649,7 @@ export async function flushEmbeddedAttemptTrajectoryRecorder(params: {
   await runAgentCleanupStep({
     runId: params.runId,
     sessionId: params.sessionId,
-    step: "openclaw-trajectory-flush",
+    step: "natesclaw-trajectory-flush",
     log: params.log,
     env: params.env,
     timeoutMs: params.timeoutMs,
@@ -665,7 +665,7 @@ export async function flushEmbeddedAttemptTrajectoryRecorder(params: {
  */
 
 type AbortSettleTimeoutEnv = Partial<
-  Pick<NodeJS.ProcessEnv, "OPENCLAW_EMBEDDED_ABORT_SETTLE_TIMEOUT_MS" | "OPENCLAW_TEST_FAST">
+  Pick<NodeJS.ProcessEnv, "NATESCLAW_EMBEDDED_ABORT_SETTLE_TIMEOUT_MS" | "NATESCLAW_TEST_FAST">
 >;
 
 /**
@@ -676,7 +676,7 @@ type AbortSettleTimeoutEnv = Partial<
 export function resolveEmbeddedAbortSettleTimeoutMs(
   env: AbortSettleTimeoutEnv = process.env,
 ): number {
-  const override = parseStrictPositiveInteger(env.OPENCLAW_EMBEDDED_ABORT_SETTLE_TIMEOUT_MS);
+  const override = parseStrictPositiveInteger(env.NATESCLAW_EMBEDDED_ABORT_SETTLE_TIMEOUT_MS);
   if (override !== undefined) {
     return override;
   }

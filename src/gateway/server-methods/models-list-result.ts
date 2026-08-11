@@ -1,7 +1,7 @@
 // Model list result building resolves visible model catalogs for an agent and
 // strips runtime-only provider params before sending the browse API payload.
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { asPositiveSafeInteger as resolvePositiveSafeInteger } from "@openclaw/normalization-core/number-coercion";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { asPositiveSafeInteger as resolvePositiveSafeInteger } from "@natesclaw/normalization-core/number-coercion";
 import type { ModelChoice } from "../../../packages/gateway-protocol/src/schema/agents-models-skills.js";
 import type { PreparedAgentCredentialModes } from "../../agents/agent-auth-credentials.js";
 import {
@@ -49,7 +49,7 @@ import { publishedModelCatalogOwnerMatchesAgent } from "../../agents/prepared-mo
 import { resolveProviderIdForAuth } from "../../agents/provider-auth-aliases.js";
 import { resolveDefaultAgentWorkspaceDir } from "../../agents/workspace.js";
 import { getRuntimeConfigSourceSnapshot } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { getCurrentPluginMetadataSnapshot } from "../../plugins/current-plugin-metadata-snapshot.js";
 import type { PluginMetadataSnapshot } from "../../plugins/plugin-metadata-snapshot.types.js";
 import { resolveManifestProviderAuthChoices } from "../../plugins/provider-auth-choices.js";
@@ -103,7 +103,7 @@ function buildPublicModelProjection(entry: ModelCatalogEntry): ModelsListEntry {
 }
 
 function resolveModelChoiceAgentRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   entry: ModelCatalogEntry;
 }): GatewayAgentRuntime | undefined {
@@ -128,7 +128,7 @@ function resolveLegacyEntryAvailability(params: {
   authResolver: ModelAuthAvailabilityResolver;
   entry: ModelCatalogEntry;
   primaryAvailability: ModelsListAvailability;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
 }): ModelsListAvailability {
   if (params.primaryAvailability === true) {
@@ -157,7 +157,7 @@ function resolveLegacyEntryAvailability(params: {
 }
 
 function createModelsListEntryEvaluator(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   authResolver: ModelAuthAvailabilityResolver;
   providerOutcomes?: readonly ProviderCatalogOutcome[];
@@ -224,7 +224,7 @@ function resolveGatewayModelCatalogRouteKey(entry: ModelCatalogEntry): string {
 
 /** Configured dynamic-catalog providers that omit explicit model inventory. */
 function listConfiguredRuntimeDiscoveryProviderIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   metadataSnapshot?: Pick<PluginMetadataSnapshot, "plugins">,
 ): Set<string> {
   const ids = new Set<string>();
@@ -294,7 +294,7 @@ function resolveProviderConfigInventoryEntries(params: {
 
 /** Builds one per-agent, snapshot-scoped route projection for Gateway thinking metadata. */
 export function createGatewayAgentModelCatalogProjector(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   snapshot: ModelCatalogSnapshot;
   metadataSnapshot?: PluginMetadataSnapshot;
@@ -416,7 +416,7 @@ export function createGatewayAgentModelCatalogProjector(params: {
 
 async function buildPublicModelsListEntries(params: {
   catalog: ModelCatalogEntry[];
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   evaluateEntry(entry: ModelCatalogEntry): Promise<ModelsListEntryEvaluation>;
   includeInput?: boolean;
@@ -472,7 +472,7 @@ async function buildPublicModelsListEntries(params: {
 }
 
 function apiKeyProviderCapabilities(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   workspaceDir: string;
 }): ApiKeyProviderCapabilities {
   const capabilities = new Map<string, boolean>();
@@ -504,7 +504,7 @@ type BuildModelsListResultParams = {
   params: Record<string, unknown>;
   preloadedCatalog?: {
     agentId: string;
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     snapshot: ModelCatalogSnapshot;
     /** The owner already ran full discovery for this exact snapshot. */
     fullyDiscovered?: boolean;

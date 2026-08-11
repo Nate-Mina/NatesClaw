@@ -2,9 +2,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
-import { sanitizeForPlainText } from "openclaw/plugin-sdk/channel-outbound";
-import { createOpenClawTestState, type OpenClawTestState } from "openclaw/plugin-sdk/test-state";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
+import { sanitizeForPlainText } from "natesclaw/plugin-sdk/channel-outbound";
+import { createNatesclawTestState, type NatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { IMessageRpcClient } from "./client.js";
 import {
@@ -83,12 +83,12 @@ function createApprovalText(id = "approval-123"): string {
 }
 
 describe("sendMessageIMessage receipts", () => {
-  let openClawState: OpenClawTestState;
+  let NatesclawState: NatesclawTestState;
 
   beforeEach(async () => {
-    openClawState = await createOpenClawTestState({
+    NatesclawState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-imessage-send-",
+      prefix: "natesclaw-imessage-send-",
     });
     await loadFreshSendModule();
   });
@@ -98,19 +98,19 @@ describe("sendMessageIMessage receipts", () => {
     vi.restoreAllMocks();
     vi.unstubAllEnvs();
     vi.useRealTimers();
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   });
 
   function createOutboundMediaFile(filename: string, contents: Buffer): string {
-    const sourcePath = openClawState.path(filename);
+    const sourcePath = NatesclawState.path(filename);
     fs.writeFileSync(sourcePath, contents);
     return sourcePath;
   }
 
   it("scrubs private markers before delivering fenced YAML over real iMessage RPC", async () => {
-    const cliPath = openClawState.path("fake-imsg");
-    const requestLogPath = openClawState.path("fake-imsg-requests.jsonl");
-    const actionLogPath = openClawState.path("fake-imsg-actions.jsonl");
+    const cliPath = NatesclawState.path("fake-imsg");
+    const requestLogPath = NatesclawState.path("fake-imsg-requests.jsonl");
+    const actionLogPath = NatesclawState.path("fake-imsg-actions.jsonl");
     fs.writeFileSync(
       cliPath,
       [
@@ -174,11 +174,11 @@ describe("sendMessageIMessage receipts", () => {
       const privateRuntimeBlocks = [
         "<system-reminder>\nuser:\nHIDDEN_RUNTIME_REMINDER\n\ue000\n</system-reminder>",
         "< previous_response origin='runtime'>HIDDEN_RUNTIME_PREVIOUS\ue001< / previous_response >",
-        "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>HIDDEN_RUNTIME_CONTEXT\ue002<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+        "<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>HIDDEN_RUNTIME_CONTEXT\ue002<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         "<system-reminder><system-reminder>inner</system-reminder>HIDDEN_RUNTIME_NESTED_REMINDER\ue003</system-reminder>",
         "<previous_response><system-reminder>inner</system-reminder>HIDDEN_RUNTIME_NESTED_MIXED\ue004</previous_response>",
         "< SYSTEM-REMINDER>< previous_response origin='runtime'>inner< / previous_response >HIDDEN_RUNTIME_NESTED_CASE\ue005< / SYSTEM-REMINDER >",
-        "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>><system-reminder>inner</system-reminder>HIDDEN_RUNTIME_NESTED_CONTEXT\ue006<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+        "<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>><system-reminder>inner</system-reminder>HIDDEN_RUNTIME_NESTED_CONTEXT\ue006<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         ...(["system-reminder", "previous_response"] as const).flatMap((name) =>
           ["'", '"'].flatMap((quote) =>
             [">", "/>"].map(
@@ -448,8 +448,8 @@ describe("sendMessageIMessage receipts", () => {
         "std::vector<std::vector<int>>",
         "t<int>",
         "```cpp\nif(a<b && c<d)\nstd::vector<std::vector<int>>\n```",
-        "ordinary <<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>> marker mention",
-        "ordinary <<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>opaque prose<<<END_OPENCLAW_INTERNAL_CONTEXT>>> remains safe",
+        "ordinary <<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>> marker mention",
+        "ordinary <<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>opaque prose<<<END_NATESCLAW_INTERNAL_CONTEXT>>> remains safe",
       ]) {
         // Unknown generic tags already follow the shared renderer's shipped stripping semantics.
         const baseline = sanitizeForPlainText(sanitizeOutboundText(source), { style: "markdown" });
@@ -543,7 +543,7 @@ describe("sendMessageIMessage receipts", () => {
         ["spaced_details", "< details>< summary>noise< / summary>< / details>"],
         [
           "runtime_context",
-          "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>noise<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+          "<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>noise<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         ],
       ] as const) {
         for (const [kind, malformed] of [
@@ -582,7 +582,7 @@ describe("sendMessageIMessage receipts", () => {
         "< system-reminder>noise< / system-reminder>",
         "< previous_response>noise< / previous_response>",
         "< details>< summary>noise< / summary>< / details>",
-        "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>noise<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+        "<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>noise<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
       ]) {
         for (const name of [
           "thinking",
@@ -1750,7 +1750,7 @@ describe("sendMessageIMessage receipts", () => {
     const createClientForAccount = vi.fn(async () => client);
     const withRemoteFile = vi.fn(
       async (params: { use: (remotePath: string) => Promise<Record<string, unknown>> }) =>
-        await params.use("/tmp/openclaw-imessage-safe/photo.png"),
+        await params.use("/tmp/natesclaw-imessage-safe/photo.png"),
     );
 
     await sendMessageIMessage("chat_id:42", "", {
@@ -1787,7 +1787,7 @@ describe("sendMessageIMessage receipts", () => {
       "send.attachment",
       {
         chat_id: 42,
-        file: "/tmp/openclaw-imessage-safe/photo.png",
+        file: "/tmp/natesclaw-imessage-safe/photo.png",
       },
       expect.any(Object),
     );
@@ -1802,7 +1802,7 @@ describe("sendMessageIMessage receipts", () => {
     const createClientForAccount = vi.fn(async () => client);
     const withRemoteFile = vi.fn(
       async (params: { use: (remotePath: string) => Promise<Record<string, unknown>> }) =>
-        await params.use("/tmp/openclaw-imessage-safe/photo.png"),
+        await params.use("/tmp/natesclaw-imessage-safe/photo.png"),
     );
 
     const result = await sendMessageIMessage("imessage:+15550004567", "", {
@@ -1833,7 +1833,7 @@ describe("sendMessageIMessage receipts", () => {
       "send",
       expect.objectContaining({
         to: "+15550004567",
-        file: "/tmp/openclaw-imessage-safe/photo.png",
+        file: "/tmp/natesclaw-imessage-safe/photo.png",
         service: "imessage",
       }),
       expect.any(Object),
@@ -1859,7 +1859,7 @@ describe("sendMessageIMessage receipts", () => {
     const createClientForAccount = vi.fn(async () => client);
     const withRemoteFile = vi.fn(
       async (params: { use: (remotePath: string) => Promise<Record<string, unknown>> }) =>
-        await params.use("/tmp/openclaw-imessage-safe/photo.png"),
+        await params.use("/tmp/natesclaw-imessage-safe/photo.png"),
     );
 
     await sendMessageIMessage("chat_id:42", "", {
@@ -1887,7 +1887,7 @@ describe("sendMessageIMessage receipts", () => {
     );
     expect(getClientMocks(client).request).toHaveBeenCalledWith(
       "send.attachment",
-      expect.objectContaining({ file: "/tmp/openclaw-imessage-safe/photo.png" }),
+      expect.objectContaining({ file: "/tmp/natesclaw-imessage-safe/photo.png" }),
       expect.any(Object),
     );
   });
@@ -1954,7 +1954,7 @@ describe("sendMessageIMessage receipts", () => {
     const createClientForAccount = vi.fn(async () => client);
     const withRemoteFile = vi.fn(
       async (params: { use: (remotePath: string) => Promise<Record<string, unknown>> }) =>
-        await params.use("/tmp/openclaw-imessage-safe/photo.png"),
+        await params.use("/tmp/natesclaw-imessage-safe/photo.png"),
     );
 
     await sendMessageIMessage("chat_id:42", "", {
@@ -1982,7 +1982,7 @@ describe("sendMessageIMessage receipts", () => {
     );
     expect(getClientMocks(client).request).toHaveBeenCalledWith(
       "send.attachment",
-      expect.objectContaining({ file: "/tmp/openclaw-imessage-safe/photo.png" }),
+      expect.objectContaining({ file: "/tmp/natesclaw-imessage-safe/photo.png" }),
       expect.any(Object),
     );
   });
@@ -2171,7 +2171,7 @@ describe("sendMessageIMessage receipts", () => {
       await sendMessageIMessage("chat_guid:chat-1", "", {
         config: IMESSAGE_TEST_CFG,
         mediaUrl: sourcePath,
-        mediaLocalRoots: [openClawState.root],
+        mediaLocalRoots: [NatesclawState.root],
         audioAsVoice,
         runCliJson,
       });
@@ -2180,11 +2180,11 @@ describe("sendMessageIMessage receipts", () => {
         filename,
       ]);
       expect(fs.existsSync(deliveredPaths[0]!)).toBe(false);
-      const storedFilenames = fs.readdirSync(openClawState.statePath("media", "outbound"));
+      const storedFilenames = fs.readdirSync(NatesclawState.statePath("media", "outbound"));
       expect(storedFilenames).toHaveLength(1);
       expect(storedFilenames[0]).toMatch(/---[a-f\d-]{36}\./iu);
       expect(
-        fs.readFileSync(openClawState.statePath("media", "outbound", storedFilenames[0]!)),
+        fs.readFileSync(NatesclawState.statePath("media", "outbound", storedFilenames[0]!)),
       ).toEqual(attachmentBytes);
       expect(fs.existsSync(sourcePath)).toBe(true);
     },
@@ -2206,14 +2206,14 @@ describe("sendMessageIMessage receipts", () => {
       sendMessageIMessage("chat_guid:chat-1", "", {
         config: IMESSAGE_TEST_CFG,
         mediaUrl: sourcePath,
-        mediaLocalRoots: [openClawState.root],
+        mediaLocalRoots: [NatesclawState.root],
         runCliJson,
       }),
     ).rejects.toBe(providerError);
 
     expect(deliveredPath).toBeDefined();
     expect(fs.existsSync(deliveredPath!)).toBe(false);
-    expect(fs.readdirSync(openClawState.statePath("media", "outbound"))).toHaveLength(1);
+    expect(fs.readdirSync(NatesclawState.statePath("media", "outbound"))).toHaveLength(1);
   });
 
   it("sends audioAsVoice media through send-attachment audio transport", async () => {
@@ -2753,7 +2753,7 @@ describe("sendMessageIMessage receipts", () => {
       conversationReadOrigin: "direct-operator",
       replyToId: "p:0/thread-root",
       mediaUrl: sourcePath,
-      mediaLocalRoots: [openClawState.root],
+      mediaLocalRoots: [NatesclawState.root],
     });
 
     expect(result.messageId).toBe("p:0/provider-accepted-rpc");
@@ -2762,7 +2762,7 @@ describe("sendMessageIMessage receipts", () => {
       filename,
     ]);
     expect(deliveredPaths.every((attachmentPath) => !fs.existsSync(attachmentPath))).toBe(true);
-    expect(fs.readdirSync(openClawState.statePath("media", "outbound"))).toHaveLength(1);
+    expect(fs.readdirSync(NatesclawState.statePath("media", "outbound"))).toHaveLength(1);
   });
 
   it("sends service-qualified DM media and its caption through the resolved RPC chat", async () => {
@@ -3236,7 +3236,7 @@ describe("sendMessageIMessage receipts", () => {
           },
         },
         client,
-        cliPath: "/Users/me/.openclaw/scripts/imsg",
+        cliPath: "/Users/me/.natesclaw/scripts/imsg",
         runCliJson,
         resolveSentMessageGuidImpl,
       }),
@@ -3254,7 +3254,7 @@ describe("sendMessageIMessage receipts", () => {
 
   it("does not use the local default chat.db path for auto-detected ssh wrappers", async () => {
     vi.stubEnv("HOME", "/Users/me");
-    const wrapperDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-imsg-wrapper-"));
+    const wrapperDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-imsg-wrapper-"));
     const wrapperPath = path.join(wrapperDir, "imsg");
     fs.writeFileSync(wrapperPath, '#!/bin/sh\nexec ssh -T gateway-host imsg "$@"\n');
     await resolveIMessageRemoteHost({ cliPath: wrapperPath });

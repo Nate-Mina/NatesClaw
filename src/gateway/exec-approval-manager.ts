@@ -1,9 +1,9 @@
 // Gateway exec approval manager.
 // Tracks pending operator decisions and short-lived resolved approval records.
 import { randomUUID } from "node:crypto";
-import { expectDefined } from "@openclaw/normalization-core";
-import { resolveExpiresAtMsFromDurationMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { resolveExpiresAtMsFromDurationMs } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import type { ExecutionIdentityAdmissionToken } from "../audit/execution-identity-admission.js";
 import { buildApprovalPresentation } from "../infra/approval-presentation.js";
 import { buildApprovalResolutionRef } from "../infra/approval-resolution-ref.js";
@@ -12,7 +12,7 @@ import type {
   ExecApprovalRequestPayload as InfraExecApprovalRequestPayload,
 } from "../infra/exec-approvals.js";
 import { resolveTimerTimeoutMs } from "../shared/number-coercion.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import type { AgentRuntimeDelegatedAuthority } from "./agent-runtime-identity-token.js";
 import {
   consumeOperatorApprovalAllowOnce,
@@ -107,7 +107,7 @@ export type ExecApprovalRecord<TPayload = ExecApprovalRequestPayload> = {
 
 type OperatorApprovalPersistenceRuntime = {
   runtimeEpoch: string;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 };
 
 type ExecApprovalManagerOptions<TPayload> = {

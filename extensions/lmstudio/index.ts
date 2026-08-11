@@ -1,19 +1,19 @@
-// Lmstudio plugin entrypoint registers its OpenClaw integration.
+// Lmstudio plugin entrypoint registers its Natesclaw integration.
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type NatesclawPluginApi,
   type ProviderAuthContext,
   type ProviderAuthMethod,
   type ProviderAuthMethodNonInteractiveContext,
   type ProviderAuthResult,
   type ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   CUSTOM_LOCAL_AUTH_MARKER,
   normalizeOptionalSecretInput,
-} from "openclaw/plugin-sdk/provider-auth";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
+} from "natesclaw/plugin-sdk/provider-auth";
+import { buildProviderToolCompatFamilyHooks } from "natesclaw/plugin-sdk/provider-tools";
 import { lmstudioMemoryEmbeddingProviderAdapter } from "./memory-embedding-adapter.js";
 import {
   LMSTUDIO_DEFAULT_API_KEY_ENV_VAR,
@@ -44,7 +44,7 @@ async function validateLmstudioNonInteractive(
 ): Promise<boolean> {
   const configuredBaseUrl = normalizeOptionalSecretInput(ctx.opts.customBaseUrl);
   const dockerSetup = ["1", "true", "yes", "on"].includes(
-    process.env.OPENCLAW_DOCKER_SETUP?.trim().toLowerCase() ?? "",
+    process.env.NATESCLAW_DOCKER_SETUP?.trim().toLowerCase() ?? "",
   );
   const baseUrl = resolveLmstudioInferenceBase(
     configuredBaseUrl ||
@@ -124,7 +124,7 @@ async function validateLmstudioNonInteractive(
   return true;
 }
 
-function resolveLmstudioAugmentedCatalogEntries(config: OpenClawConfig | undefined) {
+function resolveLmstudioAugmentedCatalogEntries(config: NatesclawConfig | undefined) {
   if (!config) {
     return [];
   }
@@ -151,7 +151,7 @@ export default definePluginEntry({
   id: PROVIDER_ID,
   name: "LM Studio Provider",
   description: "Bundled LM Studio provider plugin",
-  register(api: OpenClawPluginApi) {
+  register(api: NatesclawPluginApi) {
     api.registerMemoryEmbeddingProvider(lmstudioMemoryEmbeddingProviderAdapter);
     api.registerProvider({
       id: PROVIDER_ID,

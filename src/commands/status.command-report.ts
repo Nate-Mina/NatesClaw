@@ -1,4 +1,4 @@
-// Renders the standard `openclaw status` report from prebuilt section data.
+// Renders the standard `natesclaw status` report from prebuilt section data.
 // Report data assembly stays separate so tests can validate rows without terminal formatting.
 
 import type { RenderTableOptions, TableColumn } from "../../packages/terminal-core/src/table.js";
@@ -31,7 +31,7 @@ export async function buildStatusCommandReportLines(params: {
   footerLines: string[];
 }) {
   const lines: string[] = [];
-  lines.push(params.heading("OpenClaw status"));
+  lines.push(params.heading("Natesclaw status"));
 
   appendStatusReportSections({
     lines,

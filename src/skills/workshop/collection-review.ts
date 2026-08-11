@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
-import { stableStringify } from "@openclaw/normalization-core";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { stableStringify } from "@natesclaw/normalization-core";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import {
   listAgentIds,
   resolveAgentDir,
@@ -14,7 +14,7 @@ import { splitTrailingAuthProfile } from "../../agents/model-ref-profile.js";
 import { resolveDefaultModelForAgent } from "../../agents/model-selection-config.js";
 import { SessionManager } from "../../agents/sessions/index.js";
 import { canonicalizePath } from "../../agents/utils/paths.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { sha256Hex } from "../../infra/crypto-digest.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { runWithGatewayIndependentRootWorkAdmission } from "../../process/gateway-work-admission.js";
@@ -67,7 +67,7 @@ export function startSkillCollectionMaintenance(options: {
 async function runSkillCollectionReview(params: {
   agentId: string;
   agentIds?: readonly string[];
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   workspaceDir: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<SkillCollectionReconcileResult | null> {
@@ -117,8 +117,8 @@ async function runSkillCollectionReview(params: {
     agentId: params.agentId,
     trigger: "cron",
     lane: CommandLane.SkillWorkshopReview,
-    agentHarnessId: "openclaw",
-    agentHarnessRuntimeOverride: "openclaw",
+    agentHarnessId: "natesclaw",
+    agentHarnessRuntimeOverride: "natesclaw",
     workspaceDir: params.workspaceDir,
     config: params.config,
     prompt: buildCollectionReviewPrompt(skills),
@@ -151,7 +151,7 @@ async function runSkillCollectionReview(params: {
 }
 
 export async function runScheduledSkillCollectionReviews(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   onError?: (error: unknown, workspaceDir: string) => void;
 }): Promise<void> {
@@ -209,7 +209,7 @@ export async function runScheduledSkillCollectionReviews(params: {
   }
 }
 
-function resolveCollectionReviewModel(config: OpenClawConfig, agentId: string) {
+function resolveCollectionReviewModel(config: NatesclawConfig, agentId: string) {
   const model = resolveDefaultModelForAgent({ cfg: config, agentId });
   const authProfileId = splitTrailingAuthProfile(
     resolveAgentEffectiveModelPrimary(config, agentId) ?? "",
@@ -218,7 +218,7 @@ function resolveCollectionReviewModel(config: OpenClawConfig, agentId: string) {
 }
 
 function resolveCollectionReviewIdentity(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   agentId: string,
   env?: NodeJS.ProcessEnv,
 ) {

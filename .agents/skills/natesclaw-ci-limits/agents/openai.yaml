@@ -1,0 +1,4 @@
+interface:
+  display_name: "Natesclaw CI Limits"
+  short_description: "Tune Natesclaw CI fanout and runner budgets"
+  default_prompt: "Use $natesclaw-ci-limits to inspect Natesclaw CI pressure, tune runner-registration fanout safely, and document the exact validation before landing."

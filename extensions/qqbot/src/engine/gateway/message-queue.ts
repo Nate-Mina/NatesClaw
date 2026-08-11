@@ -1,7 +1,7 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 // Qqbot plugin module implements message queue behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { isQQBotAuthenticationFailure } from "./ingress-errors.js";
 import { buildQQBotMergedIngressLifecycle } from "./message-queue-ingress.js";
 import type { QQBotIngressLifecycle } from "./types.js";

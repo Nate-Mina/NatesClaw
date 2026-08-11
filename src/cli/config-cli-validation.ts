@@ -1,10 +1,10 @@
-import { isRecord as isPlainRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord as isPlainRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { ConfigFileSnapshot } from "../config/config.js";
 import { readConfigFileSnapshot } from "../config/config.js";
 import { formatConfigIssueLines, normalizeConfigIssues } from "../config/issue-format.js";
 import { attachConfigIssueDiagnostics } from "../config/issue-location.js";
 import { isPluginPackagingRuntimeOutputInvalidConfigSnapshot } from "../config/recovery-policy.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   coerceSecretRef,
   resolveSecretInputRef,
@@ -37,7 +37,7 @@ function formatInvalidConfigRepairHint(
 ): string {
   return isPluginPackagingRuntimeOutputInvalidConfigSnapshot(snapshot)
     ? formatPluginPackagingRuntimeOutputRecoveryHint()
-    : `Run \`${formatCliCommand("openclaw doctor --fix")}\` ${doctorMessage}`;
+    : `Run \`${formatCliCommand("natesclaw doctor --fix")}\` ${doctorMessage}`;
 }
 
 export async function loadValidConfig(
@@ -53,13 +53,13 @@ export async function loadValidConfig(
   }
   if (options.json) {
     writeRuntimeJson(runtime, {
-      error: `OpenClaw config is invalid: ${shortenHomePath(snapshot.path)}`,
+      error: `Natesclaw config is invalid: ${shortenHomePath(snapshot.path)}`,
       issues: normalizeConfigIssues(snapshot.issues),
     });
     runtime.exit(1);
     return snapshot;
   }
-  runtime.error(`OpenClaw config is invalid: ${shortenHomePath(snapshot.path)}`);
+  runtime.error(`Natesclaw config is invalid: ${shortenHomePath(snapshot.path)}`);
   const displayIssues = attachConfigIssueDiagnostics(snapshot.issues, {
     raw: snapshot.raw,
     parsed: snapshot.parsed,
@@ -97,7 +97,7 @@ function collectSecretRefsFromUnknown(value: unknown): SecretRef[] {
 }
 
 export function collectDryRunRefs(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   operations: ConfigSetOperation[];
 }): SecretRef[] {
   const refsByKey = new Map<string, SecretRef>();
@@ -146,7 +146,7 @@ export function collectDryRunRefs(params: {
 
 export async function collectDryRunResolvabilityErrors(params: {
   refs: SecretRef[];
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): Promise<ConfigSetDryRunError[]> {
   const failures: ConfigSetDryRunError[] = [];
   for (const ref of params.refs) {
@@ -165,7 +165,7 @@ export async function collectDryRunResolvabilityErrors(params: {
 
 export function collectDryRunStaticErrorsForSkippedExecRefs(params: {
   refs: SecretRef[];
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): ConfigSetDryRunError[] {
   const failures: ConfigSetDryRunError[] = [];
   for (const ref of params.refs) {
@@ -221,7 +221,7 @@ export function selectDryRunRefsForResolution(params: {
   return { refsToResolve, skippedExecRefs };
 }
 
-export function collectDryRunSchemaErrors(config: OpenClawConfig): ConfigSetDryRunError[] {
+export function collectDryRunSchemaErrors(config: NatesclawConfig): ConfigSetDryRunError[] {
   const validated = validateConfigObjectRawWithPlugins(config);
   if (validated.ok) {
     return [];
@@ -240,7 +240,7 @@ function touchesSecretProviderCollection(path: readonly string[]): boolean {
 }
 
 export function collectPluginIntegrationProviderErrors(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   operations: ConfigSetOperation[];
 }): ConfigSetDryRunError[] {
   const providers = params.config.secrets?.providers ?? {};

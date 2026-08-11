@@ -93,7 +93,7 @@ vi.mock("../../../packages/terminal-core/src/health-style.js", () => ({
 }));
 
 vi.mock("../../../packages/terminal-core/src/links.js", () => ({
-  formatDocsLink: () => "docs.openclaw.ai/cli/gateway",
+  formatDocsLink: () => "docs.natesclaw.ai/cli/gateway",
 }));
 
 vi.mock("../../../packages/terminal-core/src/theme.js", () => ({
@@ -335,7 +335,7 @@ describe("gateway register option collisions", () => {
       loadHealthStyleModule: loadHealthStyleModule as never,
     });
 
-    await program.parseAsync(["node", "openclaw", "gateway", "health", "--json"]);
+    await program.parseAsync(["node", "natesclaw", "gateway", "health", "--json"]);
 
     expect(callGatewayCli).toHaveBeenCalledWith(
       "health",

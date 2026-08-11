@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
 import type { GatewayRequestContext } from "./shared-types.js";
 

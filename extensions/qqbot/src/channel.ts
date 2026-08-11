@@ -1,20 +1,20 @@
 // Qqbot plugin module implements channel behavior.
-import { getExecApprovalReplyMetadata } from "openclaw/plugin-sdk/approval-runtime";
-import { buildChannelOutboundSessionRoute } from "openclaw/plugin-sdk/channel-core";
+import { getExecApprovalReplyMetadata } from "natesclaw/plugin-sdk/approval-runtime";
+import { buildChannelOutboundSessionRoute } from "natesclaw/plugin-sdk/channel-core";
 import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
   type ChannelMessageSendResult,
   type MessageReceiptPartKind,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/core";
-import { channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ChannelPlugin } from "natesclaw/plugin-sdk/core";
+import { channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 // Register the PlatformAdapter before any core/ module is used.
 import "./bridge/bootstrap.js";
-import { sanitizeAssistantVisibleText } from "openclaw/plugin-sdk/text-chunking";
+import { sanitizeAssistantVisibleText } from "natesclaw/plugin-sdk/text-chunking";
 import { getQQBotApprovalCapability } from "./bridge/approval/capability.js";
 import { qqbotConfigAdapter, qqbotMeta, qqbotSetupContract } from "./bridge/config-shared.js";
 import {
@@ -23,7 +23,7 @@ import {
   resolveQQBotAccount,
 } from "./bridge/config.js";
 import type { GatewayContext } from "./bridge/gateway.js";
-import { toGatewayAccount, writeOpenClawConfigThroughRuntime } from "./bridge/narrowing.js";
+import { toGatewayAccount, writeNatesclawConfigThroughRuntime } from "./bridge/narrowing.js";
 import { getQQBotRuntime } from "./bridge/runtime.js";
 import { qqbotSetupWizard } from "./bridge/setup/surface.js";
 import { qqbotChannelConfigSchema } from "./config-schema.js";
@@ -67,7 +67,7 @@ function createQQBotSendReceipt(params: {
 }
 
 function resolveQQBotOutboundSessionRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   accountId?: string | null;
   target: string;
@@ -90,7 +90,7 @@ function resolveQQBotOutboundSessionRoute(params: {
 
 async function sendQQBotText(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     to: string;
     text: string;
     accountId?: string | null;
@@ -126,7 +126,7 @@ async function sendQQBotText(
 
 async function sendQQBotMedia(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     to: string;
     text?: string | null;
     mediaUrl?: string | null;
@@ -265,7 +265,7 @@ function resolveQQBotCredentialRecoveryState(
 }
 
 function shouldSuppressLocalQQBotApprovalPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   payload: { text?: string; channelData?: unknown };
   hint?: { kind: "approval-pending" | "approval-resolved"; approvalKind: "exec" | "plugin" };
@@ -388,7 +388,7 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
             appId: credentialState.appId,
             clientSecret: credentialState.clientSecret,
           });
-          await writeOpenClawConfigThroughRuntime(getQQBotRuntime(), nextCfg);
+          await writeNatesclawConfigThroughRuntime(getQQBotRuntime(), nextCfg);
           cfg = nextCfg;
           account = resolveQQBotAccount(nextCfg, account.accountId);
           log?.info(
@@ -420,7 +420,7 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
           log?.info(`[qqbot:${account.accountId}] Gateway ready`);
           ctx.setStatus(channelReadyPatch({ accountId: account.accountId }));
           // Snapshot credentials so we can recover from the next hot
-          // upgrade that might wipe openclaw.json mid-flight.
+          // upgrade that might wipe natesclaw.json mid-flight.
           persistAccountCredentialSnapshot(account);
         },
         onResumed: () => {
@@ -458,10 +458,10 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
       );
 
       if (changed) {
-        await writeOpenClawConfigThroughRuntime(getQQBotRuntime(), nextCfg as OpenClawConfig);
+        await writeNatesclawConfigThroughRuntime(getQQBotRuntime(), nextCfg as NatesclawConfig);
       }
 
-      const resolved = resolveQQBotAccount((changed ? nextCfg : cfg) as OpenClawConfig, accountId);
+      const resolved = resolveQQBotAccount((changed ? nextCfg : cfg) as NatesclawConfig, accountId);
       const loggedOut = resolved.secretSource === "none";
       const envToken = Boolean(normalizeOptionalString(process.env.QQBOT_CLIENT_SECRET));
 

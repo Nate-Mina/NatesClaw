@@ -40,7 +40,7 @@ type LocalHeavyCheckLockParams = {
 
 /** Return whether local-heavy-check safeguards are enabled for an environment. */
 export function isLocalCheckEnabled(env: Env) {
-  const raw = env.OPENCLAW_LOCAL_CHECK?.trim().toLowerCase();
+  const raw = env.NATESCLAW_LOCAL_CHECK?.trim().toLowerCase();
   return raw !== "0" && raw !== "false";
 }
 
@@ -56,7 +56,7 @@ export function resolveLocalHeavyCheckEnv(env: Env = process.env) {
 
   return {
     ...env,
-    OPENCLAW_LOCAL_CHECK: "1",
+    NATESCLAW_LOCAL_CHECK: "1",
   };
 }
 
@@ -162,7 +162,7 @@ export function applyLocalTsgoPolicy(args: string[], env: Env, hostResources: Re
     insertBeforeSeparator(
       nextArgs,
       "--tsBuildInfoFile",
-      nextEnv.OPENCLAW_TSGO_BUILD_INFO_FILE ?? DEFAULT_LOCAL_TSGO_BUILD_INFO_FILE,
+      nextEnv.NATESCLAW_TSGO_BUILD_INFO_FILE ?? DEFAULT_LOCAL_TSGO_BUILD_INFO_FILE,
     );
   }
 
@@ -183,8 +183,8 @@ export function applyLocalTsgoPolicy(args: string[], env: Env, hostResources: Re
       nextEnv.GOMEMLIMIT = DEFAULT_LOCAL_GO_MEMORY_LIMIT;
     }
   }
-  if (nextEnv.OPENCLAW_TSGO_PPROF_DIR && !hasFlag(nextArgs, "--pprofDir")) {
-    insertBeforeSeparator(nextArgs, "--pprofDir", nextEnv.OPENCLAW_TSGO_PPROF_DIR);
+  if (nextEnv.NATESCLAW_TSGO_PPROF_DIR && !hasFlag(nextArgs, "--pprofDir")) {
+    insertBeforeSeparator(nextArgs, "--pprofDir", nextEnv.NATESCLAW_TSGO_PPROF_DIR);
   }
 
   return { env: nextEnv, args: nextArgs };
@@ -227,7 +227,7 @@ export function shouldAcquireLocalHeavyCheckLockForOxlint(
   args: string[],
   { cwd = process.cwd(), env = process.env }: { cwd?: string; env?: Env } = {},
 ) {
-  if (env.OPENCLAW_OXLINT_FORCE_LOCK === "1") {
+  if (env.NATESCLAW_OXLINT_FORCE_LOCK === "1") {
     return true;
   }
 
@@ -270,7 +270,7 @@ export function shouldAcquireLocalHeavyCheckLockForOxlint(
 
 /** Decide whether a tsgo invocation needs the local heavy-check lock. */
 export function shouldAcquireLocalHeavyCheckLockForTsgo(args: string[], env: Env = process.env) {
-  if (env.OPENCLAW_TSGO_FORCE_LOCK === "1") {
+  if (env.NATESCLAW_TSGO_FORCE_LOCK === "1") {
     return true;
   }
 
@@ -321,24 +321,24 @@ export function acquireLocalHeavyCheckLockSync(params: LocalHeavyCheckLockParams
   const lockDir = path.join(locksDir, `${params.lockName ?? "heavy-check"}.lock`);
   const ownerPath = path.join(lockDir, "owner.json");
   const timeoutMs = readPositiveInt(
-    env.OPENCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS,
+    env.NATESCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS,
     DEFAULT_LOCK_TIMEOUT_MS,
-    "OPENCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS",
+    "NATESCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS",
   );
   const pollMs = readPositiveInt(
-    env.OPENCLAW_HEAVY_CHECK_LOCK_POLL_MS,
+    env.NATESCLAW_HEAVY_CHECK_LOCK_POLL_MS,
     DEFAULT_LOCK_POLL_MS,
-    "OPENCLAW_HEAVY_CHECK_LOCK_POLL_MS",
+    "NATESCLAW_HEAVY_CHECK_LOCK_POLL_MS",
   );
   const progressMs = readPositiveInt(
-    env.OPENCLAW_HEAVY_CHECK_LOCK_PROGRESS_MS,
+    env.NATESCLAW_HEAVY_CHECK_LOCK_PROGRESS_MS,
     DEFAULT_LOCK_PROGRESS_MS,
-    "OPENCLAW_HEAVY_CHECK_LOCK_PROGRESS_MS",
+    "NATESCLAW_HEAVY_CHECK_LOCK_PROGRESS_MS",
   );
   const staleLockMs = readPositiveInt(
-    env.OPENCLAW_HEAVY_CHECK_STALE_LOCK_MS,
+    env.NATESCLAW_HEAVY_CHECK_STALE_LOCK_MS,
     DEFAULT_STALE_LOCK_MS,
-    "OPENCLAW_HEAVY_CHECK_STALE_LOCK_MS",
+    "NATESCLAW_HEAVY_CHECK_STALE_LOCK_MS",
   );
   const startedAt = Date.now();
   let waitLogBudget = 1;
@@ -414,12 +414,12 @@ export function acquireLocalHeavyCheckLockSync(params: LocalHeavyCheckLockParams
 }
 
 function resolveHeavyCheckLocksDir(cwd: string, env: Env) {
-  const lockScope = env.OPENCLAW_HEAVY_CHECK_LOCK_SCOPE?.trim().toLowerCase();
+  const lockScope = env.NATESCLAW_HEAVY_CHECK_LOCK_SCOPE?.trim().toLowerCase();
   if (lockScope === "worktree") {
-    return path.join(resolveGitWorktreeRoot(cwd), ".artifacts", "openclaw-local-checks");
+    return path.join(resolveGitWorktreeRoot(cwd), ".artifacts", "natesclaw-local-checks");
   }
 
-  return path.join(resolveGitCommonDir(cwd), "openclaw-local-checks");
+  return path.join(resolveGitCommonDir(cwd), "natesclaw-local-checks");
 }
 
 function resolveGitWorktreeRoot(cwd: string) {
@@ -481,7 +481,7 @@ function insertBeforeSeparator(args: string[], ...items: [string, ...string[]]) 
 }
 
 function readLocalCheckMode(env: Env, defaultMode: LocalCheckMode) {
-  const raw = env.OPENCLAW_LOCAL_CHECK_MODE?.trim().toLowerCase();
+  const raw = env.NATESCLAW_LOCAL_CHECK_MODE?.trim().toLowerCase();
   if (raw === "throttled" || raw === "low-memory") {
     return "throttled";
   }

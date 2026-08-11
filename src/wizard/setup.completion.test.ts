@@ -14,15 +14,15 @@ import { setupWizardShellCompletion } from "./setup.completion.js";
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 async function withLocale(locale: string, run: () => Promise<void>): Promise<void> {
-  const previousLocale = process.env.OPENCLAW_LOCALE;
-  process.env.OPENCLAW_LOCALE = locale;
+  const previousLocale = process.env.NATESCLAW_LOCALE;
+  process.env.NATESCLAW_LOCALE = locale;
   try {
     await run();
   } finally {
     if (previousLocale === undefined) {
-      delete process.env.OPENCLAW_LOCALE;
+      delete process.env.NATESCLAW_LOCALE;
     } else {
-      process.env.OPENCLAW_LOCALE = previousLocale;
+      process.env.NATESCLAW_LOCALE = previousLocale;
     }
   }
 }
@@ -36,12 +36,12 @@ function createPrompter(confirmValue = false) {
 
 function createDeps(shell: "zsh" | "bash" | "fish" | "powershell" = "zsh") {
   const deps: NonNullable<Parameters<typeof setupWizardShellCompletion>[0]["deps"]> = {
-    resolveCliName: () => "openclaw",
+    resolveCliName: () => "natesclaw",
     checkShellCompletionStatus: vi.fn(async (_binName: string) => ({
       shell,
       profileInstalled: false,
       cacheExists: false,
-      cachePath: `/tmp/openclaw.${shell === "powershell" ? "ps1" : shell}`,
+      cachePath: `/tmp/natesclaw.${shell === "powershell" ? "ps1" : shell}`,
       usesSlowPattern: false,
     })),
     ensureCompletionCacheExists: vi.fn(async (_binName: string) => true),
@@ -58,10 +58,10 @@ describe("setupWizardShellCompletion", () => {
     await setupWizardShellCompletion({ flow: "quickstart", prompter, deps });
 
     expect(prompter.confirm).not.toHaveBeenCalled();
-    expect(deps.ensureCompletionCacheExists).toHaveBeenCalledWith("openclaw", {
+    expect(deps.ensureCompletionCacheExists).toHaveBeenCalledWith("natesclaw", {
       generationMode: "full",
     });
-    expect(deps.installCompletion).toHaveBeenCalledWith("zsh", true, "openclaw");
+    expect(deps.installCompletion).toHaveBeenCalledWith("zsh", true, "natesclaw");
     expect(prompter.note).toHaveBeenCalled();
   });
 
@@ -102,18 +102,18 @@ describe("setupWizardShellCompletion", () => {
         shell: "zsh",
         profileInstalled,
         cacheExists: false,
-        cachePath: "/tmp/openclaw.zsh",
+        cachePath: "/tmp/natesclaw.zsh",
         usesSlowPattern,
       });
       vi.mocked(deps.ensureCompletionCacheExists!).mockResolvedValue(false);
 
       await setupWizardShellCompletion({ flow: "quickstart", prompter, deps });
 
-      expect(deps.ensureCompletionCacheExists).toHaveBeenCalledWith("openclaw", {
+      expect(deps.ensureCompletionCacheExists).toHaveBeenCalledWith("natesclaw", {
         generationMode: "full",
       });
       expect(prompter.note).toHaveBeenCalledWith(
-        "Failed to generate completion cache. Run `openclaw completion --write-state --install` later.",
+        "Failed to generate completion cache. Run `natesclaw completion --write-state --install` later.",
         "Shell completion",
       );
       expect(deps.installCompletion).not.toHaveBeenCalled();
@@ -129,7 +129,7 @@ describe("setupWizardShellCompletion", () => {
 
       expect(prompter.confirm).toHaveBeenCalledWith(
         expect.objectContaining({
-          message: "为 openclaw 启用 zsh shell completion？",
+          message: "为 natesclaw 启用 zsh shell completion？",
         }),
       );
       expect(prompter.note).toHaveBeenCalledWith(
@@ -147,24 +147,24 @@ describe("setupWizardShellCompletion", () => {
       profileName: path.join("fish", "config.fish"),
     },
   ])("installs and reports the actual configured $shell startup profile", async (testCase) => {
-    const homeDir = tempDirs.make("openclaw-wizard-completion-home-");
-    const stateDir = tempDirs.make("openclaw-wizard-completion-state-");
-    const profileRoot = tempDirs.make(`openclaw wizard ${testCase.shell} Ada's !42 profile-`);
+    const homeDir = tempDirs.make("natesclaw-wizard-completion-home-");
+    const stateDir = tempDirs.make("natesclaw-wizard-completion-state-");
+    const profileRoot = tempDirs.make(`natesclaw wizard ${testCase.shell} Ada's !42 profile-`);
 
     await withEnvAsync(
       {
         HOME: homeDir,
         USERPROFILE: homeDir,
-        OPENCLAW_STATE_DIR: stateDir,
+        NATESCLAW_STATE_DIR: stateDir,
         SHELL: `/bin/${testCase.shell}`,
         ZDOTDIR: undefined,
         XDG_CONFIG_HOME: undefined,
         [testCase.variable]: profileRoot,
       },
       async () => {
-        const cachePath = resolveCompletionCachePath(testCase.shell, "openclaw");
+        const cachePath = resolveCompletionCachePath(testCase.shell, "natesclaw");
         await fs.mkdir(path.dirname(cachePath), { recursive: true });
-        await fs.writeFile(cachePath, "OPENCLAW_COMPLETION_LOADED=ready\n", "utf8");
+        await fs.writeFile(cachePath, "NATESCLAW_COMPLETION_LOADED=ready\n", "utf8");
         const prompter = createPrompter();
 
         await setupWizardShellCompletion({
@@ -210,7 +210,7 @@ describe("setupWizardShellCompletion", () => {
 
       await setupWizardShellCompletion({ flow: "quickstart", prompter, deps });
 
-      expect(deps.installCompletion).toHaveBeenCalledWith("powershell", true, "openclaw");
+      expect(deps.installCompletion).toHaveBeenCalledWith("powershell", true, "natesclaw");
       expect(prompter.note).toHaveBeenCalledWith(
         "Shell completion installed. Restart your shell or run: . '/Users/ada/.config/powershell/Microsoft.PowerShell_profile.ps1'",
         "Shell completion",

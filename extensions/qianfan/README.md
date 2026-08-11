@@ -1,12 +1,12 @@
-# OpenClaw Qianfan Provider
+# Natesclaw Qianfan Provider
 
-Official OpenClaw provider plugin for Qianfan.
+Official Natesclaw provider plugin for Qianfan.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/qianfan-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/qianfan-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/qianfan> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/qianfan> for setup and configuration.

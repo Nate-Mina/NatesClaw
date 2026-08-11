@@ -22,7 +22,7 @@ import {
   type TranscriptEvent,
 } from "../../../config/sessions/session-accessor.js";
 import { selectVisibleTranscriptEvents } from "../../../config/sessions/transcript-visible-events.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { isVitestRuntimeEnv } from "../../../infra/env.js";
 import { root } from "../../../infra/fs-safe.js";
 import { createSubsystemLogger } from "../../../logging/subsystem.js";
@@ -187,7 +187,7 @@ function captureRecentSessionMemoryEvents(
 }
 
 function resolveDisplaySessionKey(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   sessionKey: string;
 }): string {
@@ -219,7 +219,7 @@ async function saveSessionMemoryNow(
     log.debug("Session memory hook triggered", { action: event.action, type: event.type });
 
     const context = event.context || {};
-    const cfg = context.cfg as OpenClawConfig | undefined;
+    const cfg = context.cfg as NatesclawConfig | undefined;
     const contextWorkspaceDir =
       typeof context.workspaceDir === "string" && context.workspaceDir.trim().length > 0
         ? context.workspaceDir
@@ -395,7 +395,7 @@ const saveSessionToMemory: HookHandler = (event) => {
         ? sessionEntry.sessionId.trim()
         : undefined;
     if (sessionId) {
-      const cfg = context.cfg as OpenClawConfig | undefined;
+      const cfg = context.cfg as NatesclawConfig | undefined;
       const agentId =
         typeof context.agentId === "string" && context.agentId.trim()
           ? context.agentId.trim()

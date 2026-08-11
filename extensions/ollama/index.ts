@@ -1,14 +1,14 @@
-// Ollama plugin entrypoint registers its OpenClaw integration.
+// Ollama plugin entrypoint registers its Natesclaw integration.
 import { createHash } from "node:crypto";
-import { collectConfiguredModelRefValues } from "@openclaw/model-catalog-core/configured-model-refs";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { MediaUnderstandingProvider } from "openclaw/plugin-sdk/media-understanding";
-import type { MemoryEmbeddingProviderAdapter } from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
+import { collectConfiguredModelRefValues } from "@natesclaw/model-catalog-core/configured-model-refs";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { MediaUnderstandingProvider } from "natesclaw/plugin-sdk/media-understanding";
+import type { MemoryEmbeddingProviderAdapter } from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolvePluginConfigObject } from "natesclaw/plugin-sdk/plugin-config-runtime";
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type NatesclawPluginApi,
   type ProviderAppGuidedSetupContext,
   type ProviderAuthContext,
   type ProviderAuthMethod,
@@ -19,20 +19,20 @@ import {
   type ProviderPlugin,
   type ProviderReplayPolicy,
   type ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import {
   buildApiKeyCredential,
   coerceSecretRef,
   isNonSecretApiKeyMarker,
-} from "openclaw/plugin-sdk/provider-auth";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
+} from "natesclaw/plugin-sdk/provider-auth";
+import { createProviderApiKeyAuthMethod } from "natesclaw/plugin-sdk/provider-auth-api-key";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { buildOpenAICompatibleReplayPolicy } from "openclaw/plugin-sdk/provider-model-shared";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
-import { resolveConfiguredSecretInputString } from "openclaw/plugin-sdk/secret-input-runtime";
+} from "natesclaw/plugin-sdk/provider-model-shared";
+import { buildOpenAICompatibleReplayPolicy } from "natesclaw/plugin-sdk/provider-model-shared";
+import { buildProviderToolCompatFamilyHooks } from "natesclaw/plugin-sdk/provider-tools";
+import { resolveConfiguredSecretInputString } from "natesclaw/plugin-sdk/secret-input-runtime";
 import { resolveThinkingProfile as resolveOllamaThinkingProfile } from "./provider-policy-api.js";
 import {
   DEFAULT_OLLAMA_EMBEDDING_MODEL,
@@ -125,9 +125,9 @@ const lazyOllamaMediaUnderstandingProvider: MediaUnderstandingProvider = {
   },
 };
 
-async function checkWsl2CrashLoopRiskLazily(api: OpenClawPluginApi): Promise<void> {
+async function checkWsl2CrashLoopRiskLazily(api: NatesclawPluginApi): Promise<void> {
   try {
-    const { isWSL2Sync } = await import("openclaw/plugin-sdk/runtime-env");
+    const { isWSL2Sync } = await import("natesclaw/plugin-sdk/runtime-env");
     if (!isWSL2Sync()) {
       return;
     }
@@ -159,7 +159,7 @@ function classifyOllamaFailoverReason(errorMessage: string): "server_error" | un
 }
 
 const dynamicModelCache = new Map<string, ProviderRuntimeModel[]>();
-const dynamicManagedCredentialFingerprints = new WeakMap<OpenClawConfig, Map<string, string>>();
+const dynamicManagedCredentialFingerprints = new WeakMap<NatesclawConfig, Map<string, string>>();
 const OLLAMA_CLOUD_DEFAULT_MODEL_REF = `${OLLAMA_CLOUD_PROVIDER_ID}/${OLLAMA_CLOUD_DEFAULT_MODELS[0].id}`;
 const OLLAMA_CONFIGURED_SHOW_CONCURRENCY = 4;
 const OLLAMA_CONFIGURED_SHOW_MAX_MODELS = 8;
@@ -444,7 +444,7 @@ function buildDynamicCacheKey(
   provider: string,
   baseUrl: string | undefined,
   configuredApiKey: unknown,
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
 ): string {
   const secretRef = coerceSecretRef(configuredApiKey);
   const managedSecretScope = buildDynamicManagedSecretScope(provider, baseUrl, configuredApiKey);
@@ -636,7 +636,7 @@ function readUsableOllamaShowApiKey(params: {
 }
 
 function collectConfiguredOllamaModelIds(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   provider: string;
   entries?: ProviderAugmentModelCatalogContext["entries"];
 }): Array<{
@@ -774,7 +774,7 @@ async function resolveRequestedDynamicOllamaModel(params: {
 }
 
 async function augmentConfiguredOllamaCatalogModels(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   defaultBaseUrl: string;
   env: NodeJS.ProcessEnv;
   provider: string;
@@ -890,7 +890,7 @@ export default definePluginEntry({
   id: "ollama",
   name: "Ollama Provider",
   description: "Bundled Ollama provider plugin",
-  register(api: OpenClawPluginApi) {
+  register(api: NatesclawPluginApi) {
     const startupPluginConfig = (api.pluginConfig ?? {}) as OllamaPluginConfig;
     if (api.registrationMode === "full") {
       void checkWsl2CrashLoopRiskLazily(api);
@@ -904,7 +904,7 @@ export default definePluginEntry({
     }
     api.registerNodeInvokePolicy(createOllamaNodeInvokePolicy());
     api.registerTool(createLazyOllamaNodeInferenceTool(api));
-    const resolveCurrentPluginConfig = (config?: OpenClawConfig): OllamaPluginConfig => {
+    const resolveCurrentPluginConfig = (config?: NatesclawConfig): OllamaPluginConfig => {
       const runtimePluginConfig = resolvePluginConfigObject(config, "ollama");
       if (runtimePluginConfig) {
         return runtimePluginConfig as OllamaPluginConfig;
@@ -986,8 +986,8 @@ export default definePluginEntry({
         }),
       buildUnknownModelHint: () =>
         "Ollama Cloud requires an API key. " +
-        'Set OLLAMA_API_KEY or run "openclaw onboard --auth-choice ollama-cloud". ' +
-        "See: https://docs.openclaw.ai/providers/ollama",
+        'Set OLLAMA_API_KEY or run "natesclaw onboard --auth-choice ollama-cloud". ' +
+        "See: https://docs.natesclaw.ai/providers/ollama",
     });
     api.registerProvider({
       id: OLLAMA_PROVIDER_ID,
@@ -1295,8 +1295,8 @@ export default definePluginEntry({
       },
       buildUnknownModelHint: () =>
         "Ollama requires authentication to be registered as a provider. " +
-        'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "openclaw configure". ' +
-        "See: https://docs.openclaw.ai/providers/ollama",
+        'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "natesclaw configure". ' +
+        "See: https://docs.natesclaw.ai/providers/ollama",
     });
   },
 });

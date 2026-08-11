@@ -2,15 +2,15 @@
 import {
   getCachedLiveProviderModelRows,
   type LiveModelCatalogFetchGuard,
-} from "openclaw/plugin-sdk/provider-catalog-live-runtime";
+} from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   asPositiveSafeInteger,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isGoogleTextGenerationModelId, resolveGoogleStaticModelId } from "./provider-models.js";
 
 const GOOGLE_GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta";

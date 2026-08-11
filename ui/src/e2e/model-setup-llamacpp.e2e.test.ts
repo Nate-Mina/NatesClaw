@@ -11,7 +11,7 @@ const suite = createControlUiE2eSuite({
   unavailableMessage: (executablePath) => `Playwright Chromium is unavailable at ${executablePath}`,
 });
 
-const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
 const prepareOptions = [
   {
     id: "ollama",
@@ -52,7 +52,7 @@ suite.define(() => {
           candidates: [],
           manualProviders: [],
           prepareOptions,
-          workspace: "/tmp/openclaw-e2e",
+          workspace: "/tmp/natesclaw-e2e",
           setupComplete: false,
         };
         const modelRef = "llama-cpp/gemma-4-e4b-it-q4_k_m";
@@ -60,19 +60,19 @@ suite.define(() => {
           featureMethods: [
             "chat.metadata",
             "chat.startup",
-            "openclaw.setup.detect",
-            "openclaw.setup.activate",
-            "openclaw.setup.prepare.start",
+            "natesclaw.setup.detect",
+            "natesclaw.setup.activate",
+            "natesclaw.setup.prepare.start",
             "wizard.next",
           ],
           methodResponses: {
-            "openclaw.setup.detect": initialDetection,
-            "openclaw.setup.prepare.start": {
+            "natesclaw.setup.detect": initialDetection,
+            "natesclaw.setup.prepare.start": {
               sessionId: "llama-cpp-prepare-session",
               done: false,
               status: "running",
             },
-            "openclaw.setup.activate": {
+            "natesclaw.setup.activate": {
               ok: true,
               modelRef,
               latencyMs: 731,
@@ -87,7 +87,7 @@ suite.define(() => {
                     id: "llama-cpp-consent",
                     type: "confirm",
                     message:
-                      "OpenClaw will download Gemma 4 E4B IT Q4_K_M (about 5.0 GB) and run it directly inside this Gateway. Continue?",
+                      "Natesclaw will download Gemma 4 E4B IT Q4_K_M (about 5.0 GB) and run it directly inside this Gateway. Continue?",
                     initialValue: false,
                   },
                 },
@@ -138,10 +138,10 @@ suite.define(() => {
         }
 
         await llamaCppRow.getByRole("button", { name: "Set up model" }).click();
-        const start = await gateway.waitForRequest("openclaw.setup.prepare.start");
+        const start = await gateway.waitForRequest("natesclaw.setup.prepare.start");
         expect(start.params).toMatchObject({ authChoice: "llama-cpp" });
         await page.getByRole("heading", { name: "Set up a local model" }).waitFor();
-        await page.getByText("OpenClaw will download Gemma 4 E4B IT Q4_K_M").waitFor();
+        await page.getByText("Natesclaw will download Gemma 4 E4B IT Q4_K_M").waitFor();
 
         if (artifactDir) {
           await page.screenshot({
@@ -151,7 +151,7 @@ suite.define(() => {
           });
         }
 
-        await gateway.setMethodResponse("openclaw.setup.detect", {
+        await gateway.setMethodResponse("natesclaw.setup.detect", {
           ...initialDetection,
           candidates: [
             {
@@ -177,7 +177,7 @@ suite.define(() => {
           .poll(() => page.locator('.model-setup-success [data-provider-icon="llamacpp"]').count())
           .toBe(1);
 
-        const activate = await gateway.waitForRequest("openclaw.setup.activate");
+        const activate = await gateway.waitForRequest("natesclaw.setup.activate");
         expect(activate.params).toEqual({
           kind: "provider-auto:llama-cpp",
           modelRef,
@@ -197,7 +197,7 @@ suite.define(() => {
           });
         }
 
-        await gateway.setMethodResponse("openclaw.setup.detect", {
+        await gateway.setMethodResponse("natesclaw.setup.detect", {
           ...initialDetection,
           candidates: [],
           configuredModel: modelRef,

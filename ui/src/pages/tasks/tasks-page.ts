@@ -30,7 +30,7 @@ import {
 } from "../../lib/tasks/data.ts";
 import type { TaskSummary } from "../../lib/tasks/task-summary.ts";
 import { GatewayPageController } from "../../lit/gateway-page-controller.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderTasks } from "./view.ts";
 
@@ -62,7 +62,7 @@ type TaskRefreshEventBuffer = {
   events: TaskRefreshEvent[];
 };
 
-class TasksPage extends OpenClawLightDomElement {
+class TasksPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -404,6 +404,6 @@ class TasksPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-tasks-page")) {
-  customElements.define("openclaw-tasks-page", TasksPage);
+if (!customElements.get("natesclaw-tasks-page")) {
+  customElements.define("natesclaw-tasks-page", TasksPage);
 }

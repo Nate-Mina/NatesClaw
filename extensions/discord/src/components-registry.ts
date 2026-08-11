@@ -4,9 +4,9 @@ import {
   isFutureDateTimestampMs,
   resolveDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { createPluginStateErrorReporter } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { createPluginStateErrorReporter } from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   discordComponentRegistryState,
   type DiscordRegistryStore,

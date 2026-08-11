@@ -1,11 +1,11 @@
 // Doctor-only import for the retired device-auth JSON store.
 import fs from "node:fs";
 import path from "node:path";
-import { root } from "@openclaw/fs-safe";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { root } from "@natesclaw/fs-safe";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { normalizeDeviceAuthRole, normalizeDeviceAuthScopes } from "../shared/device-auth.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
-import { runOpenClawStateWriteTransaction } from "../state/openclaw-state-db.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
+import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 import { resetLegacyDeviceAuthPresenceCache } from "./device-auth-store.js";
 import {
   executeSqliteQuerySync,
@@ -16,7 +16,7 @@ import { withLegacyMigrationStateLock } from "./state-migrations.lock.js";
 import type { MigrationMessages } from "./state-migrations.types.js";
 
 const LEGACY_PATH = "identity/device-auth.json";
-type DeviceAuthMigrationDatabase = Pick<OpenClawStateKyselyDatabase, "device_auth_tokens">;
+type DeviceAuthMigrationDatabase = Pick<NatesclawStateKyselyDatabase, "device_auth_tokens">;
 type LegacyDeviceAuthDetection = {
   sourcePath: string;
   sourcePresent: boolean;
@@ -97,7 +97,7 @@ async function importLegacyStore(params: {
     symlinks: "reject",
   });
   const store = parseStore(JSON.parse(source.buffer.toString("utf8")));
-  const counts = runOpenClawStateWriteTransaction(
+  const counts = runNatesclawStateWriteTransaction(
     ({ db }) => {
       const stateDb = getNodeSqliteKysely<DeviceAuthMigrationDatabase>(db);
       let imported = 0;

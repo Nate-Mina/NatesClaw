@@ -11,7 +11,7 @@ import { icons } from "../../../components/icons.ts";
 import "../../../components/tooltip.ts";
 import { t } from "../../../i18n/index.ts";
 import { parseSessionDiffPatch, type ParsedFilePatch } from "../../../lib/chat/session-diff.ts";
-import { OpenClawLightDomElement } from "../../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../../lit/natesclaw-element.ts";
 import { renderDiffBlock, renderDiffStatChips } from "./chat-diff-render.ts";
 
 export type SessionDiffLoader = () => Promise<SessionsDiffResult>;
@@ -39,7 +39,7 @@ function statusLabel(file: SessionDiffFile): string {
   }
 }
 
-class SessionDiffPanel extends OpenClawLightDomElement {
+class SessionDiffPanel extends NatesclawLightDomElement {
   @property({ attribute: false }) loader: SessionDiffLoader | null = null;
 
   @state() private collapsedPaths = new Set<string>();
@@ -98,7 +98,7 @@ class SessionDiffPanel extends OpenClawLightDomElement {
           <span class="session-diff__branch-label">${branchLabel}</span>
         </span>
         ${renderDiffStatChips({ added: result.additions, removed: result.deletions })}
-        <openclaw-tooltip .content=${t("chat.sessionDiff.refresh")}>
+        <natesclaw-tooltip .content=${t("chat.sessionDiff.refresh")}>
           <button
             class="btn btn--ghost btn--icon session-diff__refresh"
             type="button"
@@ -108,7 +108,7 @@ class SessionDiffPanel extends OpenClawLightDomElement {
           >
             ${icons.refresh}
           </button>
-        </openclaw-tooltip>
+        </natesclaw-tooltip>
       </div>
     `;
   }
@@ -198,12 +198,12 @@ class SessionDiffPanel extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-session-diff")) {
-  customElements.define("openclaw-session-diff", SessionDiffPanel);
+if (!customElements.get("natesclaw-session-diff")) {
+  customElements.define("natesclaw-session-diff", SessionDiffPanel);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-session-diff": SessionDiffPanel;
+    "natesclaw-session-diff": SessionDiffPanel;
   }
 }

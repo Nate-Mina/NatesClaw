@@ -462,7 +462,7 @@ describe("cli program (nodes basics)", () => {
         "Pending Node",
         "approval pending",
         "Approval pending for Pending Node",
-        "openclaw nodes approve request-approval",
+        "natesclaw nodes approve request-approval",
       ],
     },
     {
@@ -483,7 +483,7 @@ describe("cli program (nodes basics)", () => {
         "Pending Reapproval Node",
         "reapproval pending",
         "Reapproval pending for Pending Reapproval Node",
-        "openclaw nodes approve request-reapproval",
+        "natesclaw nodes approve request-reapproval",
       ],
     },
   ])("runs nodes status and renders $label", async ({ node, expectedOutput }) => {
@@ -603,7 +603,7 @@ describe("cli program (nodes basics)", () => {
     expect(out).toContain("canvas");
     expect(out).toContain("Pending commands");
     expect(out).toContain("canvas.eval");
-    expect(out).toContain("openclaw nodes approve request-approval");
+    expect(out).toContain("natesclaw nodes approve request-approval");
     expect(out).not.toContain("\u001b");
     expect(out).not.toContain("[2K");
   });
@@ -627,7 +627,7 @@ describe("cli program (nodes basics)", () => {
       "nodes",
       "status",
       "--url",
-      "ws://gateway-user:url-secret@gateway.example:18789/openclaw?cluster=qa",
+      "ws://gateway-user:url-secret@gateway.example:18789/natesclaw?cluster=qa",
       "--timeout",
       "3000",
       "--token",
@@ -635,7 +635,7 @@ describe("cli program (nodes basics)", () => {
     ]);
 
     const output = getRuntimeOutput();
-    expect(output).toContain("openclaw nodes approve request-reapproval --timeout 3000");
+    expect(output).toContain("natesclaw nodes approve request-reapproval --timeout 3000");
     expect(output).toContain("Reuse the same connection options when rerunning: --url, --token.");
     expect(output).not.toContain("gateway-user");
     expect(output).not.toContain("url-secret");
@@ -931,7 +931,7 @@ describe("cli program (nodes basics)", () => {
 
     const output = getRuntimeOutput();
     expect(output).toContain("stale-request");
-    expect(output).not.toContain("openclaw nodes approve stale-request");
+    expect(output).not.toContain("natesclaw nodes approve stale-request");
     expect(output).not.toContain("Reuse the same --token option when rerunning.");
     expect(output).not.toContain("secret-token");
   });

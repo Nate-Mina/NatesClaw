@@ -1,9 +1,9 @@
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
 import { drainGlobalSingletonLifecycleState } from "../shared/global-singleton.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
-import { runOpenClawStateWriteTransaction } from "../state/openclaw-state-db.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
+import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 
-type PluginBindingApprovalsDatabase = Pick<OpenClawStateKyselyDatabase, "plugin_binding_approvals">;
+type PluginBindingApprovalsDatabase = Pick<NatesclawStateKyselyDatabase, "plugin_binding_approvals">;
 
 export function seedPluginConversationBindingApprovalForTest(params: {
   pluginRoot: string;
@@ -13,7 +13,7 @@ export function seedPluginConversationBindingApprovalForTest(params: {
   accountId: string;
   approvedAt?: number;
 }): void {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const approvalsDb = getNodeSqliteKysely<PluginBindingApprovalsDatabase>(db);
     executeSqliteQuerySync(
       db,

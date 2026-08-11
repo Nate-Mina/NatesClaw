@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
-import { withTempDir } from "openclaw/plugin-sdk/test-env";
+import { MAX_TIMER_TIMEOUT_MS } from "natesclaw/plugin-sdk/number-runtime";
+import { withTempDir } from "natesclaw/plugin-sdk/test-env";
 // Codex tests cover config plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it, vi } from "vitest";
 import {
   canUseCodexModelBackedApprovalsReviewerForModel,
@@ -16,7 +16,7 @@ import {
   resolveCodexSupervisionAppServerRuntimeOptions,
   resolveCodexComputerUseConfig,
   resolveCodexModelBackedReviewerPolicyContext,
-  resolveOpenClawExecPolicyForCodexAppServer,
+  resolveNatesclawExecPolicyForCodexAppServer,
   resolveCodexPluginsPolicy,
   shouldAutoApproveCodexAppServerApprovals,
   withMcpElicitationsApprovalPolicy,
@@ -96,11 +96,11 @@ describe("Codex app-server config", () => {
         approvalPolicy: "never",
         sandbox: "danger-full-access",
         networkProxy: {
-          profileName: "openclaw-network",
+          profileName: "natesclaw-network",
           configFingerprint: "network-proxy-v1",
           configPatch: {
             "features.network_proxy.enabled": true,
-            default_permissions: "openclaw-network",
+            default_permissions: "natesclaw-network",
             permissions: {},
           },
         },
@@ -128,8 +128,8 @@ describe("Codex app-server config", () => {
         },
       },
       env: {
-        OPENCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
-        OPENCLAW_CODEX_APP_SERVER_SANDBOX: "read-only",
+        NATESCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
+        NATESCLAW_CODEX_APP_SERVER_SANDBOX: "read-only",
       },
       modelProvider: "openai",
     });
@@ -248,7 +248,7 @@ describe("Codex app-server config", () => {
       { filesystem: { ":project_roots": { ".": string } } }
     >;
 
-    expect(profileName).toMatch(/^openclaw-network-[a-f0-9]{16}$/u);
+    expect(profileName).toMatch(/^natesclaw-network-[a-f0-9]{16}$/u);
     expect(runtime.networkProxy?.configPatch.default_permissions).toBe(profileName);
     expect(permissions[profileName ?? ""]?.filesystem[":project_roots"]["."]).toBe("read");
   });
@@ -393,8 +393,8 @@ describe("Codex app-server config", () => {
           connectionClass: "remote",
           remoteAppsSubstrate: "preconfigured",
           remoteWorkspace: {
-            localRoot: "/Users/kevinlin/code/openclaw",
-            remoteRoot: "/home/oai/openclaw-workspaces",
+            localRoot: "/Users/kevinlin/code/natesclaw",
+            remoteRoot: "/home/oai/natesclaw-workspaces",
           },
         },
       }),
@@ -403,8 +403,8 @@ describe("Codex app-server config", () => {
       readCodexPluginConfig({
         appServer: {
           remoteWorkspace: {
-            localRoot: "/Users/kevinlin/code/openclaw",
-            remoteRoot: "/home/oai/openclaw-workspaces",
+            localRoot: "/Users/kevinlin/code/natesclaw",
+            remoteRoot: "/home/oai/natesclaw-workspaces",
           },
         },
       }),
@@ -427,7 +427,7 @@ describe("Codex app-server config", () => {
           transport: "websocket",
           url: "wss://codex-app-server.example.internal/ws",
           authToken: "capability-token",
-          remoteWorkspaceRoot: " /home/oai/openclaw-workspaces ",
+          remoteWorkspaceRoot: " /home/oai/natesclaw-workspaces ",
         },
       },
     });
@@ -435,7 +435,7 @@ describe("Codex app-server config", () => {
     expectFields(runtime, "runtime", {
       connectionClass: "remote",
       remoteAppsSubstrate: "preconfigured",
-      remoteWorkspaceRoot: "/home/oai/openclaw-workspaces",
+      remoteWorkspaceRoot: "/home/oai/natesclaw-workspaces",
     });
   });
 
@@ -572,8 +572,8 @@ describe("Codex app-server config", () => {
 
   it("does not let private-QA environment flags override native sandbox policy", () => {
     const privateQaCodexEnv = {
-      OPENCLAW_BUILD_PRIVATE_QA: "1",
-      OPENCLAW_QA_FORCE_RUNTIME: "codex",
+      NATESCLAW_BUILD_PRIVATE_QA: "1",
+      NATESCLAW_QA_FORCE_RUNTIME: "codex",
     };
     const runtime = resolveRuntimeForTest({
       pluginConfig: {
@@ -632,8 +632,8 @@ describe("Codex app-server config", () => {
 
   it("preserves an explicitly read-only sandbox for forced private-QA Codex runtime", () => {
     const privateQaCodexEnv = {
-      OPENCLAW_BUILD_PRIVATE_QA: "1",
-      OPENCLAW_QA_FORCE_RUNTIME: "codex",
+      NATESCLAW_BUILD_PRIVATE_QA: "1",
+      NATESCLAW_QA_FORCE_RUNTIME: "codex",
     };
     const runtime = resolveRuntimeForTest({
       pluginConfig: {
@@ -661,18 +661,18 @@ describe("Codex app-server config", () => {
 
   it.each([
     { label: "ordinary production", env: {} },
-    { label: "private build without a forced runtime", env: { OPENCLAW_BUILD_PRIVATE_QA: "1" } },
+    { label: "private build without a forced runtime", env: { NATESCLAW_BUILD_PRIVATE_QA: "1" } },
     {
       label: "forced runtime without a private build",
-      env: { OPENCLAW_QA_FORCE_RUNTIME: "codex" },
+      env: { NATESCLAW_QA_FORCE_RUNTIME: "codex" },
     },
     {
       label: "forced private-QA Codex runtime without explicit sandbox configuration",
-      env: { OPENCLAW_BUILD_PRIVATE_QA: "1", OPENCLAW_QA_FORCE_RUNTIME: "codex" },
+      env: { NATESCLAW_BUILD_PRIVATE_QA: "1", NATESCLAW_QA_FORCE_RUNTIME: "codex" },
     },
     {
-      label: "forced private-QA OpenClaw runtime",
-      env: { OPENCLAW_BUILD_PRIVATE_QA: "1", OPENCLAW_QA_FORCE_RUNTIME: "openclaw" },
+      label: "forced private-QA Natesclaw runtime",
+      env: { NATESCLAW_BUILD_PRIVATE_QA: "1", NATESCLAW_QA_FORCE_RUNTIME: "natesclaw" },
     },
   ])("preserves production yolo filesystem policy for $label", ({ env }) => {
     const runtime = resolveRuntimeForTest({ pluginConfig: {}, env });
@@ -867,7 +867,7 @@ describe("Codex app-server config", () => {
   });
 
   it("checks shared user config before enabling model-backed approval review", async () => {
-    await withTempDir("openclaw-codex-user-home-", async (codexHome) => {
+    await withTempDir("natesclaw-codex-user-home-", async (codexHome) => {
       await fs.writeFile(
         path.join(codexHome, "config.toml"),
         'openai_base_url = "http://localhost:8080/v1"\n',
@@ -1046,7 +1046,7 @@ describe("Codex app-server config", () => {
       },
       {
         baseUrl: "https://api.openai.com/v1",
-        headers: { "x-openclaw-reviewer-proxy": "local" },
+        headers: { "x-natesclaw-reviewer-proxy": "local" },
         models: [],
       },
       {
@@ -1065,7 +1065,7 @@ describe("Codex app-server config", () => {
             cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
             contextWindow: 128_000,
             maxTokens: 8_192,
-            headers: { "x-openclaw-reviewer-proxy": "local" },
+            headers: { "x-natesclaw-reviewer-proxy": "local" },
           },
         ],
       },
@@ -1413,7 +1413,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     expectRuntimePolicy(
       resolveRuntimeForTest({
         pluginConfig: {},
-        env: { OPENCLAW_CODEX_APP_SERVER_MODE: "yolo" },
+        env: { NATESCLAW_CODEX_APP_SERVER_MODE: "yolo" },
         requirementsToml,
       }),
       {
@@ -1451,7 +1451,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
   it("rejects the retired dynamic tool profile key", () => {
     expect(
       readCodexPluginConfig({
-        codexDynamicToolsProfile: "openclaw-compat",
+        codexDynamicToolsProfile: "natesclaw-compat",
         codexDynamicToolsLoading: "direct",
       }),
     ).toEqual({});
@@ -1752,7 +1752,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     expectFields(
       resolveRuntimeForTest({
         pluginConfig: { appServer: { command: "/opt/codex/bin/codex" } },
-        env: { OPENCLAW_CODEX_APP_SERVER_BIN: "/usr/local/bin/codex" },
+        env: { NATESCLAW_CODEX_APP_SERVER_BIN: "/usr/local/bin/codex" },
       }).start,
       "configured start",
       {
@@ -1764,7 +1764,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     expectFields(
       resolveRuntimeForTest({
         pluginConfig: {},
-        env: { OPENCLAW_CODEX_APP_SERVER_BIN: "/usr/local/bin/codex" },
+        env: { NATESCLAW_CODEX_APP_SERVER_BIN: "/usr/local/bin/codex" },
       }).start,
       "environment start",
       {
@@ -1805,7 +1805,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     const resolveForConfig = (codexConfigToml: string) =>
       resolveCodexAppServerStartOptionsForAgent({
         startOptions,
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
         codexConfigToml,
       }).managedCommandOrder;
 
@@ -1838,14 +1838,14 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     expect(
       resolveCodexAppServerStartOptionsForAgent({
         startOptions: customIdentityStartOptions,
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
         codexConfigToml: '[plugins."computer-use@openai-bundled"]\nenabled = true\n',
       }).managedCommandOrder,
     ).toBe("desktop-first");
     expect(
       resolveCodexAppServerStartOptionsForAgent({
         startOptions: customIdentityStartOptions,
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
         codexConfigToml:
           '[plugins."computer-use@openai-bundled"]\nenabled = false\n[plugins."custom-computer-use@local"]\nenabled = true\n',
       }).managedCommandOrder,
@@ -1858,14 +1858,14 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     expect(
       resolveCodexAppServerStartOptionsForAgent({
         startOptions: privateStartOptions,
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
         codexConfigToml: '[plugins."computer-use@openai-bundled"]\nenabled = true\n',
       }).managedCommandOrder,
     ).toBe("package-first");
   });
 
   it("keeps desktop ownership for Computer Use persisted in an agent Codex home", async () => {
-    await withTempDir("openclaw-codex-agent-home-", async (agentDir) => {
+    await withTempDir("natesclaw-codex-agent-home-", async (agentDir) => {
       const startOptions = resolveRuntimeForTest({ pluginConfig: {} }).start;
       const codexHome = path.join(agentDir, "codex-home");
       await fs.mkdir(codexHome);
@@ -1884,7 +1884,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
   });
 
   it("uses desktop-first when persisted Codex state cannot be read", async () => {
-    await withTempDir("openclaw-codex-unreadable-home-", async (agentDir) => {
+    await withTempDir("natesclaw-codex-unreadable-home-", async (agentDir) => {
       const startOptions = resolveRuntimeForTest({ pluginConfig: {} }).start;
       await fs.mkdir(path.join(agentDir, "codex-home"), { recursive: true });
       await fs.mkdir(path.join(agentDir, "codex-home", "config.toml"));
@@ -1919,7 +1919,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
         pluginConfig: {
           appServer: {
             command:
-              "node C:\\Users\\me\\.openclaw\\npm\\node_modules\\@openai\\codex\\bin\\codex.js",
+              "node C:\\Users\\me\\.natesclaw\\npm\\node_modules\\@openai\\codex\\bin\\codex.js",
           },
         },
       }),
@@ -1930,11 +1930,11 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
       resolveRuntimeForTest({
         pluginConfig: {},
         env: {
-          OPENCLAW_CODEX_APP_SERVER_BIN:
-            "node C:\\Users\\me\\.openclaw\\npm\\node_modules\\@openai\\codex\\bin\\codex.js",
+          NATESCLAW_CODEX_APP_SERVER_BIN:
+            "node C:\\Users\\me\\.natesclaw\\npm\\node_modules\\@openai\\codex\\bin\\codex.js",
         },
       }),
-    ).toThrow("OPENCLAW_CODEX_APP_SERVER_BIN must be only the Codex app-server executable path");
+    ).toThrow("NATESCLAW_CODEX_APP_SERVER_BIN must be only the Codex app-server executable path");
   });
 
   it("preserves executable paths that contain spaces", () => {
@@ -1956,7 +1956,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
           },
         },
         env: {
-          OPENCLAW_CODEX_COMPUTER_USE_PLUGIN_NAME: "env-fallback-plugin",
+          NATESCLAW_CODEX_COMPUTER_USE_PLUGIN_NAME: "env-fallback-plugin",
         },
       }),
     ).toEqual({
@@ -1979,10 +1979,10 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
       resolveCodexComputerUseConfig({
         pluginConfig: {},
         env: {
-          OPENCLAW_CODEX_COMPUTER_USE: "1",
-          OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_SOURCE: "github:example/plugins",
-          OPENCLAW_CODEX_COMPUTER_USE_AUTO_INSTALL: "true",
-          OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS: "30000",
+          NATESCLAW_CODEX_COMPUTER_USE: "1",
+          NATESCLAW_CODEX_COMPUTER_USE_MARKETPLACE_SOURCE: "github:example/plugins",
+          NATESCLAW_CODEX_COMPUTER_USE_AUTO_INSTALL: "true",
+          NATESCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS: "30000",
         },
       }),
       "computer use config",
@@ -2006,8 +2006,8 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
         resolveCodexComputerUseConfig({
           pluginConfig: {},
           env: {
-            OPENCLAW_CODEX_COMPUTER_USE: "1",
-            OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS: value,
+            NATESCLAW_CODEX_COMPUTER_USE: "1",
+            NATESCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS: value,
           },
         }),
         "computer use config",
@@ -2042,10 +2042,10 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
           },
         },
         env: {
-          OPENCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_ENABLED: "false",
-          OPENCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_INTERVAL_MINUTES: "240",
-          OPENCLAW_CODEX_COMPUTER_USE_STRICT_READINESS: "false",
-          OPENCLAW_CODEX_COMPUTER_USE_AUTO_REPAIR: "false",
+          NATESCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_ENABLED: "false",
+          NATESCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_INTERVAL_MINUTES: "240",
+          NATESCLAW_CODEX_COMPUTER_USE_STRICT_READINESS: "false",
+          NATESCLAW_CODEX_COMPUTER_USE_AUTO_REPAIR: "false",
         },
       }),
       "computer use config",
@@ -2065,11 +2065,11 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
       resolveCodexComputerUseConfig({
         pluginConfig: { computerUse: { enabled: true } },
         env: {
-          OPENCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_ENABLED: "1",
-          OPENCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_INTERVAL_MINUTES: "90",
-          OPENCLAW_CODEX_COMPUTER_USE_STRICT_READINESS: "true",
-          OPENCLAW_CODEX_COMPUTER_USE_AUTO_REPAIR: "true",
-          OPENCLAW_CODEX_COMPUTER_USE_PLUGIN_CACHE_MODE: "stale-copy",
+          NATESCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_ENABLED: "1",
+          NATESCLAW_CODEX_COMPUTER_USE_HEALTH_CHECK_INTERVAL_MINUTES: "90",
+          NATESCLAW_CODEX_COMPUTER_USE_STRICT_READINESS: "true",
+          NATESCLAW_CODEX_COMPUTER_USE_AUTO_REPAIR: "true",
+          NATESCLAW_CODEX_COMPUTER_USE_PLUGIN_CACHE_MODE: "stale-copy",
         },
       }),
       "computer use config",
@@ -2122,7 +2122,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     const runtime = resolveRuntimeForTest({
       pluginConfig: {},
       modelProvider: "openai",
-      env: { OPENCLAW_CODEX_APP_SERVER_MODE: "guardian" },
+      env: { NATESCLAW_CODEX_APP_SERVER_MODE: "guardian" },
     });
 
     expectRuntimePolicy(runtime, {
@@ -2132,7 +2132,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     });
   });
 
-  it("maps normalized OpenClaw auto exec mode to guardian-reviewed local execution", () => {
+  it("maps normalized Natesclaw auto exec mode to guardian-reviewed local execution", () => {
     const runtime = resolveRuntimeForTest({
       pluginConfig: {},
       execMode: "auto",
@@ -2156,8 +2156,8 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
         },
       },
       env: {
-        OPENCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
-        OPENCLAW_CODEX_APP_SERVER_SANDBOX: "danger-full-access",
+        NATESCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
+        NATESCLAW_CODEX_APP_SERVER_SANDBOX: "danger-full-access",
       },
       execMode: "auto",
       modelProvider: "openai",
@@ -2189,9 +2189,9 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
       execMode: "auto",
       modelProvider: "openai",
       env: {
-        OPENCLAW_CODEX_APP_SERVER_MODE: "yolo",
-        OPENCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
-        OPENCLAW_CODEX_APP_SERVER_SANDBOX: "read-only",
+        NATESCLAW_CODEX_APP_SERVER_MODE: "yolo",
+        NATESCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
+        NATESCLAW_CODEX_APP_SERVER_SANDBOX: "read-only",
       },
     });
 
@@ -2208,7 +2208,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
   });
 
   it.each(["deny", "allowlist"] as const)(
-    "blocks Codex app-server local execution for normalized OpenClaw %s exec mode",
+    "blocks Codex app-server local execution for normalized Natesclaw %s exec mode",
     (execMode) => {
       expect(() =>
         resolveRuntimeForTest({
@@ -2221,7 +2221,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     },
   );
 
-  it("maps normalized OpenClaw ask exec mode away from Codex yolo", () => {
+  it("maps normalized Natesclaw ask exec mode away from Codex yolo", () => {
     const runtime = resolveRuntimeForTest({
       pluginConfig: {},
       execMode: "ask",
@@ -2247,7 +2247,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     const envRuntime = resolveRuntimeForTest({
       pluginConfig: {},
       execMode: "ask",
-      env: { OPENCLAW_CODEX_APP_SERVER_MODE: "guardian" },
+      env: { NATESCLAW_CODEX_APP_SERVER_MODE: "guardian" },
     });
 
     expectRuntimePolicy(configRuntime, {
@@ -2279,9 +2279,9 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
       pluginConfig: {},
       execMode: "ask",
       env: {
-        OPENCLAW_CODEX_APP_SERVER_MODE: "yolo",
-        OPENCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
-        OPENCLAW_CODEX_APP_SERVER_SANDBOX: "danger-full-access",
+        NATESCLAW_CODEX_APP_SERVER_MODE: "yolo",
+        NATESCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
+        NATESCLAW_CODEX_APP_SERVER_SANDBOX: "danger-full-access",
       },
     });
 
@@ -2314,9 +2314,9 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
       pluginConfig: {},
       execMode: "ask",
       env: {
-        OPENCLAW_CODEX_APP_SERVER_MODE: "yolo",
-        OPENCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
-        OPENCLAW_CODEX_APP_SERVER_SANDBOX: "read-only",
+        NATESCLAW_CODEX_APP_SERVER_MODE: "yolo",
+        NATESCLAW_CODEX_APP_SERVER_APPROVAL_POLICY: "never",
+        NATESCLAW_CODEX_APP_SERVER_SANDBOX: "read-only",
       },
     });
 
@@ -2332,7 +2332,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     });
   });
 
-  it("fails closed when normalized OpenClaw ask mode cannot use user approvals", () => {
+  it("fails closed when normalized Natesclaw ask mode cannot use user approvals", () => {
     expect(() =>
       resolveRuntimeForTest({
         pluginConfig: {},
@@ -2366,7 +2366,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     { execMode: "ask", policies: ["never"] },
     { execMode: "ask", policies: ["untrusted"] },
   ] as const)(
-    "fails closed when normalized OpenClaw $execMode mode can only use $policies approvals",
+    "fails closed when normalized Natesclaw $execMode mode can only use $policies approvals",
     ({ execMode, policies }) => {
       expect(() =>
         resolveRuntimeForTest({
@@ -2380,7 +2380,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     },
   );
 
-  it("keeps normalized OpenClaw full exec mode on default Codex yolo", () => {
+  it("keeps normalized Natesclaw full exec mode on default Codex yolo", () => {
     const runtime = resolveRuntimeForTest({
       pluginConfig: {},
       execMode: "full",
@@ -2423,7 +2423,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     });
   });
 
-  it("uses user approvals when normalized OpenClaw auto mode cannot use Codex auto-review", () => {
+  it("uses user approvals when normalized Natesclaw auto mode cannot use Codex auto-review", () => {
     const runtime = resolveRuntimeForTest({
       pluginConfig: {},
       execMode: "auto",
@@ -2463,7 +2463,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     },
   );
 
-  it("keeps normalized OpenClaw auto mode when legacy app-server yolo was schema-defaulted", () => {
+  it("keeps normalized Natesclaw auto mode when legacy app-server yolo was schema-defaulted", () => {
     const runtime = resolveRuntimeForTest({
       pluginConfig: {
         appServer: {
@@ -2497,7 +2497,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     });
   });
 
-  it("forces guarded policy fields for normalized OpenClaw auto mode", () => {
+  it("forces guarded policy fields for normalized Natesclaw auto mode", () => {
     const runtime = resolveRuntimeForTest({
       pluginConfig: {
         appServer: {
@@ -2528,7 +2528,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
           },
         },
       };
-      const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({ config });
+      const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({ config });
 
       expectRuntimePolicy(
         resolveRuntimeForTest({
@@ -2560,7 +2560,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
         },
       },
     };
-    const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({ config });
+    const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({ config });
 
     expectRuntimePolicy(resolveRuntimeForTest({ execPolicy }), {
       approvalPolicy: "never",
@@ -2581,13 +2581,13 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
 
     expect(() =>
       resolveRuntimeForTest({
-        execPolicy: resolveOpenClawExecPolicyForCodexAppServer({ config }),
+        execPolicy: resolveNatesclawExecPolicyForCodexAppServer({ config }),
         requirementsToml: 'allowed_sandbox_modes = ["read-only", "workspace-write"]\n',
       }),
     ).toThrow("legacy full exec security with ask requires Codex app-server danger-full-access");
   });
 
-  it("clamps legacy full exec with ask when an OpenClaw sandbox is active", () => {
+  it("clamps legacy full exec with ask when an Natesclaw sandbox is active", () => {
     const config = {
       tools: {
         exec: {
@@ -2599,8 +2599,8 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
 
     expectRuntimePolicy(
       resolveRuntimeForTest({
-        execPolicy: resolveOpenClawExecPolicyForCodexAppServer({ config }),
-        openClawSandboxActive: true,
+        execPolicy: resolveNatesclawExecPolicyForCodexAppServer({ config }),
+        NatesclawSandboxActive: true,
         requirementsToml: 'allowed_sandbox_modes = ["read-only", "workspace-write"]\n',
       }),
       {
@@ -2612,7 +2612,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
   });
 
   it("applies host exec approval security floors before starting Codex app-server", () => {
-    const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+    const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({
       config: {
         tools: {
           exec: {
@@ -2649,14 +2649,14 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
       name: "AgentHarnessPreflightError",
       scope: "harness",
       message: expect.stringContaining(
-        "inspect them with `openclaw approvals get --gateway` and update that same target with `openclaw approvals set --gateway --stdin`",
+        "inspect them with `natesclaw approvals get --gateway` and update that same target with `natesclaw approvals set --gateway --stdin`",
       ),
     });
     expect((error as Error).message).not.toContain("--node");
   });
 
   it("applies host exec approval ask floors before starting Codex app-server", () => {
-    const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+    const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({
       config: {
         tools: {
           exec: {
@@ -2695,7 +2695,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
   });
 
   it("preserves explicit read-only sandbox for host exec approval ask floors", () => {
-    const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+    const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({
       config: {
         tools: {
           exec: {
@@ -2734,7 +2734,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
   });
 
   it("applies agent-scoped exec approval security floors before starting Codex app-server", () => {
-    const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+    const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({
       config: {
         tools: {
           exec: {
@@ -2774,7 +2774,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
   });
 
   it("applies agent-scoped exec approval ask floors before starting Codex app-server", () => {
-    const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+    const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({
       config: {
         tools: {
           exec: {
@@ -2834,10 +2834,10 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
     ).toBe("guardian_subagent");
   });
 
-  it("ignores removed OPENCLAW_CODEX_APP_SERVER_GUARDIAN fallback", () => {
+  it("ignores removed NATESCLAW_CODEX_APP_SERVER_GUARDIAN fallback", () => {
     const runtime = resolveRuntimeForTest({
       pluginConfig: {},
-      env: { OPENCLAW_CODEX_APP_SERVER_GUARDIAN: "1" },
+      env: { NATESCLAW_CODEX_APP_SERVER_GUARDIAN: "1" },
     });
 
     expectRuntimePolicy(runtime, {
@@ -3082,7 +3082,7 @@ allowed_sandbox_modes = ["read-only", "workspace-write"]
 
   it("publishes stable defaults without schema-defaulting mode-derived policy fields", async () => {
     const manifest = JSON.parse(
-      await fs.readFile(new URL("../../openclaw.plugin.json", import.meta.url), "utf8"),
+      await fs.readFile(new URL("../../natesclaw.plugin.json", import.meta.url), "utf8"),
     ) as {
       configSchema: {
         properties: {

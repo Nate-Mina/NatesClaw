@@ -1,22 +1,22 @@
 // Tts Local Cli provider module implements model/runtime integration.
 import { readdirSync } from "node:fs";
 import path from "node:path";
-import { runFfmpeg } from "openclaw/plugin-sdk/media-runtime";
-import { runCommandBuffered } from "openclaw/plugin-sdk/process-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+import { runFfmpeg } from "natesclaw/plugin-sdk/media-runtime";
+import { runCommandBuffered } from "natesclaw/plugin-sdk/process-runtime";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
 import {
   readRegularFileSync,
   writeExternalFileWithinRoot,
-} from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/security-runtime";
 import type {
   SpeechProviderConfig,
   SpeechProviderPlugin,
   SpeechSynthesisRequest,
   SpeechTelephonySynthesisRequest,
-} from "openclaw/plugin-sdk/speech-core";
-import { asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { tempWorkspace, resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/speech-core";
+import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { tempWorkspace, resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 
 const log = createSubsystemLogger("tts-local-cli");
 
@@ -339,8 +339,8 @@ export function buildCliSpeechProvider(): SpeechProviderPlugin {
       log.debug(`synthesize: text=${truncateUtf16Safe(req.text, 50)}...`);
 
       const temp = await tempWorkspace({
-        rootDir: resolvePreferredOpenClawTmpDir(),
-        prefix: "openclaw-cli-tts-",
+        rootDir: resolvePreferredNatesclawTmpDir(),
+        prefix: "natesclaw-cli-tts-",
       });
       const tempDir = temp.dir;
 
@@ -412,8 +412,8 @@ export function buildCliSpeechProvider(): SpeechProviderPlugin {
       log.debug(`synthesizeTelephony: text=${truncateUtf16Safe(req.text, 50)}...`);
 
       const temp = await tempWorkspace({
-        rootDir: resolvePreferredOpenClawTmpDir(),
-        prefix: "openclaw-cli-tts-",
+        rootDir: resolvePreferredNatesclawTmpDir(),
+        prefix: "natesclaw-cli-tts-",
       });
       const tempDir = temp.dir;
 

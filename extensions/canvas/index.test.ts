@@ -1,12 +1,12 @@
 // Canvas tests cover index plugin behavior.
-import type { AgentMessage, StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { AssistantMessage, Model } from "openclaw/plugin-sdk/llm";
+import type { AgentMessage, StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import type { AssistantMessage, Model } from "natesclaw/plugin-sdk/llm";
 import type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginNodeInvokePolicyContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+  NatesclawPluginApi,
+  NatesclawPluginNodeInvokePolicyContext,
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import canvasPlugin from "./index.js";
 
@@ -62,18 +62,18 @@ vi.mock("./src/tool.js", () => ({
 }));
 
 function registerCanvas() {
-  const routes: Array<Parameters<OpenClawPluginApi["registerHttpRoute"]>[0]> = [];
-  const services: Array<Parameters<OpenClawPluginApi["registerService"]>[0]> = [];
-  const resolvers: Array<Parameters<OpenClawPluginApi["registerHostedMediaResolver"]>[0]> = [];
+  const routes: Array<Parameters<NatesclawPluginApi["registerHttpRoute"]>[0]> = [];
+  const services: Array<Parameters<NatesclawPluginApi["registerService"]>[0]> = [];
+  const resolvers: Array<Parameters<NatesclawPluginApi["registerHostedMediaResolver"]>[0]> = [];
   const tools: Array<{
-    tool: Parameters<OpenClawPluginApi["registerTool"]>[0];
-    opts: Parameters<OpenClawPluginApi["registerTool"]>[1];
+    tool: Parameters<NatesclawPluginApi["registerTool"]>[0];
+    opts: Parameters<NatesclawPluginApi["registerTool"]>[1];
   }> = [];
   const cliFeatures: Array<{
-    registrar: Parameters<OpenClawPluginApi["registerNodeCliFeature"]>[0];
-    opts: Parameters<OpenClawPluginApi["registerNodeCliFeature"]>[1];
+    registrar: Parameters<NatesclawPluginApi["registerNodeCliFeature"]>[0];
+    opts: Parameters<NatesclawPluginApi["registerNodeCliFeature"]>[1];
   }> = [];
-  const nodeInvokePolicies: Array<Parameters<OpenClawPluginApi["registerNodeInvokePolicy"]>[0]> =
+  const nodeInvokePolicies: Array<Parameters<NatesclawPluginApi["registerNodeInvokePolicy"]>[0]> =
     [];
   canvasPlugin.register?.(
     createTestPluginApi({
@@ -92,8 +92,8 @@ function registerCanvas() {
 }
 
 function createNodeInvokeContext(
-  params: Partial<OpenClawPluginNodeInvokePolicyContext>,
-): OpenClawPluginNodeInvokePolicyContext {
+  params: Partial<NatesclawPluginNodeInvokePolicyContext>,
+): NatesclawPluginNodeInvokePolicyContext {
   return {
     nodeId: "node-1",
     command: "canvas.a2ui.pushJSONL",
@@ -132,7 +132,7 @@ describe("Canvas plugin entry", () => {
     await services[0]?.stop?.({} as never);
     expect(mocks.createCanvasHttpRouteHandler).not.toHaveBeenCalled();
 
-    await routes[0]?.handler({ url: "/__openclaw__/canvas" } as never, {} as never);
+    await routes[0]?.handler({ url: "/__natesclaw__/canvas" } as never, {} as never);
     expect(mocks.createCanvasHttpRouteHandler).toHaveBeenCalledTimes(1);
     expect(mocks.httpHandler.handleHttpRequest).toHaveBeenCalledTimes(1);
 
@@ -188,10 +188,10 @@ describe("Canvas plugin entry", () => {
 
   it("preserves registered Canvas network provenance through the real agent loop", async () => {
     const [{ runAgentLoop }, { createAssistantMessageEventStream }] = await Promise.all([
-      vi.importActual<typeof import("openclaw/plugin-sdk/agent-core")>(
-        "openclaw/plugin-sdk/agent-core",
+      vi.importActual<typeof import("natesclaw/plugin-sdk/agent-core")>(
+        "natesclaw/plugin-sdk/agent-core",
       ),
-      vi.importActual<typeof import("openclaw/plugin-sdk/llm")>("openclaw/plugin-sdk/llm"),
+      vi.importActual<typeof import("natesclaw/plugin-sdk/llm")>("natesclaw/plugin-sdk/llm"),
     ]);
     const registeredTool = registerCanvas().tools[0]?.tool;
     if (typeof registeredTool !== "function") {
@@ -264,7 +264,7 @@ describe("Canvas plugin entry", () => {
       streamFn,
     );
     const metadata = (message: AgentMessage | undefined) =>
-      message ? (message as unknown as Record<string, unknown>)["__openclaw"] : undefined;
+      message ? (message as unknown as Record<string, unknown>)["__natesclaw"] : undefined;
 
     expect(metadata(messages.find((message) => message.role === "toolResult"))).toEqual({
       resultContentSource: "network",

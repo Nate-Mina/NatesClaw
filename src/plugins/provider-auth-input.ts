@@ -1,14 +1,14 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 /** Normalizes provider auth input metadata collected from plugin setup flows. */
 import {
   normalizeOptionalLowercaseString,
   normalizeStringifiedOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+} from "@natesclaw/normalization-core/string-coerce";
+import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import { isMalformedApiKeyInput } from "../agents/auth-profiles/credential-state.js";
 import { resolveEnvApiKey } from "../agents/model-auth-env.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NatesclawConfig } from "../config/types.js";
 import type { SecretInput } from "../config/types.secrets.js";
 import { normalizeSecretInput } from "../utils/normalize-secret-input.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -59,7 +59,7 @@ export const validateApiKeyInput = (value: string) => {
     return "Required";
   }
   if (isMalformedApiKeyInput(normalized)) {
-    return "Paste the API key value, not an OpenClaw onboarding command.";
+    return "Paste the API key value, not an Natesclaw onboarding command.";
   }
   return undefined;
 };
@@ -135,7 +135,7 @@ export async function ensureApiKeyFromOptionEnvOrPrompt(params: {
   token: string | undefined;
   tokenProvider: string | undefined;
   secretInputMode?: SecretInputMode;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   expectedProviders: string[];
   provider: string;
@@ -181,7 +181,7 @@ export async function ensureApiKeyFromOptionEnvOrPrompt(params: {
 
 /** Resolves an API key from environment or interactive prompt and records the chosen secret mode. */
 export async function ensureApiKeyFromEnvOrPrompt(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   provider: string;
   envLabel: string;

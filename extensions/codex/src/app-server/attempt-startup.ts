@@ -10,7 +10,7 @@ import {
   type CodexBundleMcpThreadConfig,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
   type resolveSandboxContext,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   CODEX_APP_SERVER_UNSUBSCRIBE_TIMEOUT_MS,
   CodexAppServerUnsafeSubscriptionError,
@@ -40,7 +40,7 @@ import {
 } from "./config.js";
 import {
   resolveCodexAppServerExecutionCwd,
-  resolveCodexExternalSandboxPolicyForOpenClawSandbox,
+  resolveCodexExternalSandboxPolicyForNatesclawSandbox,
   resolveCodexSandboxEnvironmentSelection,
   shouldRequireCodexSandboxExecServerEnvironment,
 } from "./dynamic-tool-build.js";
@@ -156,7 +156,7 @@ export async function startCodexAttemptThread(params: {
   buildFinalConfigPatch?: Parameters<typeof startOrResumeThread>[0]["buildFinalConfigPatch"];
   nativeHookRelayGeneration?: string;
   bundleMcpThreadConfig: CodexBundleMcpThreadConfig;
-  /** OpenClaw owns configured MCP dynamically for this scheduled turn. */
+  /** Natesclaw owns configured MCP dynamically for this scheduled turn. */
   configuredMcpOwnershipVersion?: 1;
   nativeToolSurfaceEnabled: boolean;
   nativeProviderWebSearchSupport: CodexNativeWebSearchSupport;
@@ -415,7 +415,7 @@ export async function startCodexAttemptThread(params: {
                 !startupSandboxEnvironment
               ) {
                 throw new Error(
-                  "Codex app-server did not register an OpenClaw sandbox exec-server environment.",
+                  "Codex app-server did not register an Natesclaw sandbox exec-server environment.",
                 );
               }
             } catch (error) {
@@ -434,7 +434,7 @@ export async function startCodexAttemptThread(params: {
               remoteWorkspaceRoot: params.appServer.remoteWorkspaceRoot,
             });
             const startupSandboxPolicy = startupSandboxEnvironment
-              ? resolveCodexExternalSandboxPolicyForOpenClawSandbox(params.sandbox)
+              ? resolveCodexExternalSandboxPolicyForNatesclawSandbox(params.sandbox)
               : undefined;
             let startupReservation: CodexThreadRouteReservation | undefined;
             const releaseStartupReservation = () => {

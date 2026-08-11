@@ -2,14 +2,14 @@
  * Credential storage facade for API keys and OAuth tokens.
  * Canonical persistence is the per-agent SQLite auth-profile store.
  *
- * The backend contract keeps the upstream session SDK shape while OpenClaw
+ * The backend contract keeps the upstream session SDK shape while Natesclaw
  * projects provider-default profiles into it.
  */
 
 import fs from "node:fs";
 import { dirname } from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import { findEnvKeys, getEnvApiKey } from "@openclaw/ai/internal/runtime";
+import { findEnvKeys, getEnvApiKey } from "@natesclaw/ai/internal/runtime";
 import { withFileLock } from "../../infra/file-lock.js";
 import type {
   OAuthCredentials,
@@ -17,7 +17,7 @@ import type {
   OAuthProviderId,
 } from "../../llm/utils/oauth/types.js";
 import { OAuthProviderConfiguredUnavailableError } from "../../plugins/provider-runtime.errors.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import { AUTH_STORE_VERSION, OAUTH_REFRESH_LOCK_OPTIONS } from "../auth-profiles/constants.js";
 import {
   assertAuthProfileMigrationReady,
@@ -94,7 +94,7 @@ class AuthStorageLegacyPathMigrationRequiredError extends Error {
 
   constructor() {
     super(
-      "Deprecated AuthStorage path contains unmigrated credentials; run openclaw doctor --fix for standard agent auth.json or migrate plugin storage to AuthStorage.forAgent(agentDir).",
+      "Deprecated AuthStorage path contains unmigrated credentials; run natesclaw doctor --fix for standard agent auth.json or migrate plugin storage to AuthStorage.forAgent(agentDir).",
     );
     this.name = "AuthStorageLegacyPathMigrationRequiredError";
   }
@@ -269,7 +269,7 @@ function collectStateOnlyAuthProfileIds(store: AuthProfileStore): string[] {
 
 function loadSqliteAuthStorageStore(
   agentDir: string,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): AuthProfileStore {
   const inspection = inspectPersistedAuthProfileStoreRaw(agentDir, database);
   if (inspection.status === "missing") {

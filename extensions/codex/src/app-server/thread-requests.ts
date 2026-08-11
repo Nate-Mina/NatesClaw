@@ -1,7 +1,7 @@
 import {
   isHostScopedAgentToolActive,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import { isIncognitoSessionKey } from "../incognito-session.js";
 import type { CodexAppServerClient } from "./client.js";
 import type { CodexAppServerRuntimeOptions } from "./config.js";
@@ -12,7 +12,7 @@ import {
 } from "./dynamic-tool-profile.js";
 import { mergeCodexThreadConfigs } from "./plugin-thread-config.js";
 import {
-  CODEX_OPENCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
+  CODEX_NATESCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
   isJsonObject,
   type CodexConfigReadResponse,
   type CodexConfigRequirementsReadResponse,
@@ -144,7 +144,7 @@ export function buildThreadStartParams(
   },
 ): CodexThreadStartParams {
   const ringZeroActive =
-    (options.hostSystemAgentActive ?? isHostScopedAgentToolActive("openclaw")) &&
+    (options.hostSystemAgentActive ?? isHostScopedAgentToolActive("natesclaw")) &&
     isSystemAgentOnlyCodexDynamicToolAllowlist(params.toolsAllow);
   const resolvedModelProvider = resolveCodexAppServerModelProvider({
     provider: params.provider,
@@ -172,7 +172,7 @@ export function buildThreadStartParams(
       ? { serviceTier: options.appServer.serviceTier }
       : {}),
     personality: CODEX_NATIVE_PERSONALITY_NONE,
-    serviceName: "OpenClaw",
+    serviceName: "Natesclaw",
     ...(ringZeroActive ? { baseInstructions: CODEX_RING_ZERO_BASE_INSTRUCTIONS } : {}),
     config: buildCodexRuntimeThreadConfigForRun(params, options.config, {
       nativeCodeModeEnabled: options.nativeCodeModeEnabled,
@@ -353,7 +353,7 @@ function resolveDirectOnlyToolNamespaces(
   return (dynamicTools ?? [])
     .filter(
       (tool) =>
-        tool.type === "namespace" && tool.name === CODEX_OPENCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
+        tool.type === "namespace" && tool.name === CODEX_NATESCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
     )
     .map((tool) => tool.name);
 }
@@ -373,7 +373,7 @@ export function buildCodexRuntimeThreadConfigForRun(
   } = {},
 ): JsonObject {
   const ringZeroActive =
-    (options.hostSystemAgentActive ?? isHostScopedAgentToolActive("openclaw")) &&
+    (options.hostSystemAgentActive ?? isHostScopedAgentToolActive("natesclaw")) &&
     isSystemAgentOnlyCodexDynamicToolAllowlist(params.toolsAllow);
   const messageOnlySourceReply = isMessageOnlyCodexSourceReply(params);
   const restrictedToolSurface =
@@ -434,7 +434,7 @@ export function buildCodexRuntimeThreadConfigForRun(
 
 export function buildCodexRingZeroThreadConfigPatch(
   params: Pick<EmbeddedRunAttemptParams, "toolsAllow">,
-  hostSystemAgentActive = isHostScopedAgentToolActive("openclaw"),
+  hostSystemAgentActive = isHostScopedAgentToolActive("natesclaw"),
   inheritedMcpServerNames: readonly string[] = [],
 ): JsonObject | undefined {
   if (!hostSystemAgentActive || !isSystemAgentOnlyCodexDynamicToolAllowlist(params.toolsAllow)) {

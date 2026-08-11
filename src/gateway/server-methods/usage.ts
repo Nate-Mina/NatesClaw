@@ -1,8 +1,8 @@
 // Usage gateway methods aggregate provider and session cost/token metrics from
 // caches, logs, session stores, and discovered transcript files.
 import fs from "node:fs";
-import { expectDefined } from "@openclaw/normalization-core";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -15,7 +15,7 @@ import {
   resolveSessionFilePathOptions,
 } from "../../config/sessions/paths.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   createTimeZoneDayKeyFormatter,
   resolveTimezone,
@@ -132,7 +132,7 @@ type ResolvedSessionUsageTarget = {
 
 function resolveSessionUsageTarget(
   key: string,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   agentIdHint?: string,
 ): ResolvedSessionUsageTarget | undefined {
   const { canonicalKey, entry, storePath } = loadSessionEntryReadOnly(
@@ -295,8 +295,8 @@ async function loadSessionsUsageResultCached(
 function resolveSessionUsageFileOrRespond(
   key: string,
   respond: RespondFn,
-  config: OpenClawConfig,
-): (ResolvedSessionUsageTarget & { config: OpenClawConfig }) | null {
+  config: NatesclawConfig,
+): (ResolvedSessionUsageTarget & { config: NatesclawConfig }) | null {
   let resolved: ResolvedSessionUsageTarget | undefined;
   try {
     resolved = resolveSessionUsageTarget(key, config);
@@ -731,7 +731,7 @@ function buildStoreBySessionId(
 }
 
 function filterSessionStoreByAgent(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   store: Record<string, SessionEntry>;
   agentId: string;
 }): Record<string, SessionEntry> {
@@ -750,7 +750,7 @@ function filterSessionStoreByAgent(params: {
 }
 
 async function discoverAllSessionsForUsage(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId?: string;
   startMs: number;
   endMs: number;
@@ -1022,7 +1022,7 @@ async function loadCostUsageSummaryCached(params: {
   startMs: number;
   endMs: number;
   dayBucket?: UsageDailyBucket;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId?: string;
   agentScope?: "all";
 }): Promise<CostUsageSummary> {
@@ -1059,7 +1059,7 @@ async function loadAllAgentCostUsageSummary(params: {
   startMs: number;
   endMs: number;
   dayBucket?: UsageDailyBucket;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): Promise<CostUsageSummary> {
   const agentIds = listAgentIds(params.config).map((agentId) => normalizeAgentId(agentId));
   const summaries = await runUsageAgentTasks(

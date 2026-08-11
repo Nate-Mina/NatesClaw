@@ -5,9 +5,9 @@
 // legacy-state import, so it stays a leaf.
 import { createHash } from "node:crypto";
 import fs from "node:fs";
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-scope-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-paths";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-scope-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveStorePath } from "natesclaw/plugin-sdk/session-store-paths";
 
 export const TTL_MS = 24 * 60 * 60 * 1000;
 export const TELEGRAM_SENT_MESSAGE_CACHE_NAMESPACE = "telegram.sent-messages";
@@ -20,10 +20,10 @@ export type PersistedSentMessage = {
   timestamp: number;
 };
 
-export type SentMessageConfig = Pick<OpenClawConfig, "agents" | "session">;
+export type SentMessageConfig = Pick<NatesclawConfig, "agents" | "session">;
 
 function resolveSentMessageAgentId(cfg?: SentMessageConfig, agentId?: string): string {
-  return agentId?.trim() || (cfg?.agents ? resolveDefaultAgentId(cfg as OpenClawConfig) : "main");
+  return agentId?.trim() || (cfg?.agents ? resolveDefaultAgentId(cfg as NatesclawConfig) : "main");
 }
 
 function sentMessageScopeKeyForStorePath(storePath: string): string {

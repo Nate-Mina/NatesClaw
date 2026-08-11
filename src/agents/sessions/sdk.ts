@@ -5,7 +5,7 @@
  */
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
-import { clampThinkingLevel } from "@openclaw/ai/internal/runtime";
+import { clampThinkingLevel } from "@natesclaw/ai/internal/runtime";
 import {
   resolveThinkingDefaultForModel,
   type ThinkingCatalogEntry,
@@ -77,7 +77,7 @@ function projectThinkingCatalogCompat(compat: Model["compat"]) {
 export interface CreateAgentSessionOptions {
   /** Working directory for project-local discovery. Default: process.cwd() */
   cwd?: string;
-  /** Global config directory. Default: ~/.openclaw/agents/default */
+  /** Global config directory. Default: ~/.natesclaw/agents/default */
   agentDir?: string;
 
   /** Auth storage for credentials. Default: canonical per-agent SQLite auth profiles. */
@@ -103,7 +103,7 @@ export interface CreateAgentSessionOptions {
   /**
    * Optional allowlist of tool names.
    *
-   * When omitted, OpenClaw enables the default built-in tools (read, bash, edit, write)
+   * When omitted, Natesclaw enables the default built-in tools (read, bash, edit, write)
    * and leaves extension/custom tools enabled unless `noTools` changes that default.
    * When provided, only the listed tool names are enabled.
    */
@@ -231,8 +231,8 @@ function getAttributionHeaders(
 
   if (model.provider === "openrouter" || baseUrl.includes("openrouter.ai")) {
     return {
-      "HTTP-Referer": "https://openclaw.ai",
-      "X-OpenRouter-Title": "OpenClaw",
+      "HTTP-Referer": "https://natesclaw.ai",
+      "X-OpenRouter-Title": "Natesclaw",
       "X-OpenRouter-Categories": "cli-agent",
     };
   }
@@ -244,7 +244,7 @@ function getAttributionHeaders(
     baseUrl.includes("gateway.ai.cloudflare.com")
   ) {
     return {
-      "User-Agent": "openclaw",
+      "User-Agent": "natesclaw",
     };
   }
 
@@ -593,7 +593,7 @@ async function createDefaultSdkSessionManager(
     agentId: "main",
     sessionId,
     sessionKey: `agent:main:sdk:${sessionId}`,
-    storePath: join(agentDir, "openclaw-agent.sqlite"),
+    storePath: join(agentDir, "natesclaw-agent.sqlite"),
   };
   const created = await createSessionEntryWithTranscript(
     target,

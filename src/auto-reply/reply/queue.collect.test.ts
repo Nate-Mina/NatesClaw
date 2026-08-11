@@ -1726,7 +1726,7 @@ describe("followup queue collect routing", () => {
     enqueueTestRun(
       key,
       {
-        prompt: "[OpenClaw room event]",
+        prompt: "[Natesclaw room event]",
         originatingChannel: "telegram",
         originatingTo: "-100123",
       },
@@ -1755,7 +1755,7 @@ describe("followup queue collect routing", () => {
     await drainRecordedQueue(key, runFollowup, done);
 
     expect(calls).toHaveLength(2);
-    expect(calls[0]?.prompt).toBe("[OpenClaw room event]");
+    expect(calls[0]?.prompt).toBe("[Natesclaw room event]");
     expect(calls[0]?.currentInboundEventKind).toBe("room_event");
     expect(calls[0]?.currentInboundAudio).toBe(true);
     expect(calls[0]?.currentInboundContext?.text).toBe("room event body");
@@ -2627,7 +2627,7 @@ describe("followup queue collect routing", () => {
   });
 
   it("persists overflow summaries to the session selected after queue admission", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-overflow-session-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-overflow-session-"));
     const storePath = path.join(tempDir, "sessions.json");
     const oldTranscriptPath = path.join(tempDir, "old-session.jsonl");
     const { key, calls, done, settings } = createQueueCase(
@@ -3353,8 +3353,8 @@ describe("followup queue collect routing", () => {
     expect(message?.content).toContain("first transcript");
     expect(message?.content).toContain("second transcript");
     expect(
-      (message as unknown as { __openclaw?: { media?: Array<{ path?: string }> } } | undefined)?.[
-        "__openclaw"
+      (message as unknown as { __natesclaw?: { media?: Array<{ path?: string }> } } | undefined)?.[
+        "__natesclaw"
       ]?.media?.map((fact) => fact.path),
     ).toEqual(["/tmp/first.png", "/tmp/second.png"]);
     await vi.waitFor(() => expect(firstComplete).toHaveBeenCalledTimes(1));

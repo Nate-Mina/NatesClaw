@@ -1,9 +1,9 @@
 import { executeSqliteQueryTakeFirstSync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
 import type { SessionStateDeleteSnapshot } from "./session-accessor.sqlite-archive.js";
 
 type SessionStateDeleteSnapshotDatabase = Pick<
-  OpenClawAgentKyselyDatabase,
+  NatesclawAgentKyselyDatabase,
   | "acp_parent_stream_events"
   | "session_windows"
   | "trajectory_runtime_events"

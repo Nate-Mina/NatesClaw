@@ -1,18 +1,18 @@
 ---
-summary: "Configure native Codex plugins for Codex-mode OpenClaw agents"
+summary: "Configure native Codex plugins for Codex-mode Natesclaw agents"
 title: "Native Codex plugins"
 read_when:
-  - You want Codex-mode OpenClaw agents to use native Codex plugins
+  - You want Codex-mode Natesclaw agents to use native Codex plugins
   - You are migrating source-installed openai-curated Codex plugins
   - You are configuring an existing workspace-directory Codex plugin
   - You are troubleshooting codexPlugins, app inventory, destructive actions, or plugin app diagnostics
 ---
 
-Native Codex plugin support lets a Codex-mode OpenClaw agent use Codex
+Native Codex plugin support lets a Codex-mode Natesclaw agent use Codex
 app-server's own app and plugin capabilities inside the same Codex thread that
-handles the OpenClaw turn. Plugin calls stay in the native Codex transcript;
-Codex app-server owns app-backed MCP execution. OpenClaw does not translate
-Codex plugins into synthetic `codex_plugin_*` OpenClaw dynamic tools.
+handles the Natesclaw turn. Plugin calls stay in the native Codex transcript;
+Codex app-server owns app-backed MCP execution. Natesclaw does not translate
+Codex plugins into synthetic `codex_plugin_*` Natesclaw dynamic tools.
 
 Use this page after the base [Codex harness](/plugins/codex-harness) is
 working.
@@ -30,14 +30,14 @@ working.
 - Migration supports only `openai-curated` plugins that it observed as
   source-installed in the source Codex home. Codex serves the same catalog to
   API-key and Bedrock accounts under the `openai-api-curated` wire name;
-  OpenClaw treats both names as the one curated catalog, so configured
+  Natesclaw treats both names as the one curated catalog, so configured
   `openai-curated` plugins resolve from either.
 - Manually configured `workspace-directory` plugins must already appear
   installed and enabled under their exact marketplace-qualified identity in
   `plugin/installed`. Their owned apps must be accessible and callable for the
   configured Codex thread.
 
-`codexPlugins` has no effect on OpenClaw-provider runs, ACP conversation
+`codexPlugins` has no effect on Natesclaw-provider runs, ACP conversation
 bindings, or other harnesses, because those paths never create Codex
 app-server threads with native `apps` config.
 
@@ -51,7 +51,7 @@ for the OpenAI account and admin model.
 Preview migration from the source Codex home:
 
 ```bash
-openclaw migrate codex --dry-run
+natesclaw migrate codex --dry-run
 ```
 
 Add `--verify-plugin-apps` to make migration read the source installed app
@@ -59,13 +59,13 @@ snapshot and app metadata, requiring every owned app to be present, enabled,
 and accessible before planning native activation:
 
 ```bash
-openclaw migrate codex --dry-run --verify-plugin-apps
+natesclaw migrate codex --dry-run --verify-plugin-apps
 ```
 
 Apply the migration when the plan looks right:
 
 ```bash
-openclaw migrate apply codex --yes
+natesclaw migrate apply codex --yes
 ```
 
 Migration writes explicit `codexPlugins` entries for eligible plugins and
@@ -127,11 +127,11 @@ value instead of its display name:
 }
 ```
 
-OpenClaw does not call `plugin/install` or start authentication for a
+Natesclaw does not call `plugin/install` or start authentication for a
 `workspace-directory` plugin. Install, enable, and authenticate it in Codex
-before adding or enabling the OpenClaw policy. OpenClaw keeps apps hidden when
+before adding or enabling the Natesclaw policy. Natesclaw keeps apps hidden when
 the response omits the exact marketplace, plugin ID, detail ID, or app-readiness
-evidence. If the installed snapshot omits the workspace marketplace, OpenClaw
+evidence. If the installed snapshot omits the workspace marketplace, Natesclaw
 reports `marketplace_missing` for each enabled workspace plugin and keeps any
 independently discovered curated plugins available.
 
@@ -142,7 +142,7 @@ changes.
 
 ## Scheduled automations
 
-When an authenticated owner creates an automation from a Codex turn, OpenClaw
+When an authenticated owner creates an automation from a Codex turn, Natesclaw
 captures the app IDs and approval limits callable on that exact Codex thread.
 The stored authority is bound to the creator's prepared Codex profile and
 account. Scheduled runs intersect that cap with current Codex policy and app
@@ -157,7 +157,7 @@ runtime, revoked app, narrower policy, or unavailable inventory stops before
 app execution and reports how to restore access or reauthorize the automation.
 Model fallbacks cannot move this authority to another runtime or account.
 
-Jobs created before app authority capture may keep their ordinary OpenClaw
+Jobs created before app authority capture may keep their ordinary Natesclaw
 tool cap and continue non-app work, but cannot recover Codex app access
 automatically. Recreate or reauthorize only a job that needs app access, from a
 fresh authenticated owner turn. See
@@ -184,14 +184,14 @@ same chat where you operate the Codex harness:
 configured plugin's key, on/off state, Codex plugin name, and marketplace
 from `plugins.entries.codex.config.codexPlugins.plugins`.
 
-`enable`/`disable` write only to `~/.openclaw/openclaw.json`; they never edit
+`enable`/`disable` write only to `~/.natesclaw/natesclaw.json`; they never edit
 `~/.codex/config.toml` or install new Codex plugins. Only the owner or a
 gateway client with the `operator.admin` scope can run them.
 
 Enabling a configured plugin also turns on the global `codexPlugins.enabled`
 switch. If a curated plugin was written disabled because migration returned
-`auth_required`, reauthorize the app in Codex before enabling it in OpenClaw.
-For a `workspace-directory` entry, enabling it here changes only OpenClaw
+`auth_required`, reauthorize the app in Codex before enabling it in Natesclaw.
+For a `workspace-directory` entry, enabling it here changes only Natesclaw
 policy; the plugin and app must already be active in Codex.
 
 ## How native plugin setup works
@@ -201,13 +201,13 @@ The integration tracks three states:
 | State      | Meaning                                                                                                                            |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | Installed  | Codex has the plugin bundle in the target app-server runtime.                                                                      |
-| Enabled    | Codex reports the plugin enabled, and OpenClaw config allows it for Codex harness turns.                                           |
+| Enabled    | Codex reports the plugin enabled, and Natesclaw config allows it for Codex harness turns.                                           |
 | Accessible | Codex app-server confirms the plugin's app entries are available for the active account and map to the configured plugin identity. |
 
 For `openai-curated` plugins, migration is the durable install/eligibility
 step:
 
-- During planning, OpenClaw reads source Codex `plugin/read` details and
+- During planning, Natesclaw reads source Codex `plugin/read` details and
   checks the source Codex app-server account. `codex_subscription_required`
   means `account/read` positively identified an API-key or other
   non-ChatGPT account; a missing account is not evidence that a subscription
@@ -224,12 +224,12 @@ step:
   configured bearer or header authentication. A positively identified
   non-ChatGPT account remains ineligible.
 
-For `workspace-directory` plugins, setup happens outside OpenClaw. OpenClaw
+For `workspace-directory` plugins, setup happens outside Natesclaw. Natesclaw
 uses its `plugin/installed` snapshot only for explicitly configured enabled
 entries, or when `allow_all_plugins` requires identifying apps owned by an
 explicitly configured disabled workspace plugin. It resolves each plugin by
 exact `summary.id` and uses `plugin/read` for ownership. The disabled-plugin
-check is read-only: its apps stay denied, and OpenClaw does not install,
+check is read-only: its apps stay denied, and Natesclaw does not install,
 enable, or authenticate the plugin. Missing or ambiguous ownership fails
 closed instead of granting account-wide access.
 
@@ -249,7 +249,7 @@ current conversation.
   `plugin/installed`. These entries must use their exact
   marketplace-qualified `summary.id` and must already be installed, enabled,
   and app-accessible. A missing marketplace, plugin, ownership detail, or app
-  readiness evidence exposes no workspace app. OpenClaw never scans the
+  readiness evidence exposes no workspace app. Natesclaw never scans the
   marketplace catalog to discover or activate a workspace plugin.
 - Positively identified non-ChatGPT source accounts fail the subscription gate.
   Missing or unreadable source accounts are unavailable by default.
@@ -270,7 +270,7 @@ current conversation.
 
 ## App inventory and ownership
 
-OpenClaw first reads and caches one `plugin/installed` snapshot scoped to the
+Natesclaw first reads and caches one `plugin/installed` snapshot scoped to the
 target Codex app-server and configured workspace. That snapshot covers
 installed curated and workspace plugins, including disabled plugin identities;
 failed or incomplete snapshots are never cached. `plugin/read` is limited to
@@ -279,12 +279,12 @@ thread setup never scans the marketplace catalog. `plugin/list` runs only to
 find or repair an explicitly enabled missing curated plugin, and
 `plugin/install` runs only for that explicitly configured curated plugin.
 
-OpenClaw reads installed app runtime state through `app/installed` and fetches
+Natesclaw reads installed app runtime state through `app/installed` and fetches
 canonical app metadata with `app/read` in batches of at most 100 app IDs. The
 first read force-refreshes a cold installed runtime snapshot. When multiple
-configured curated plugins are installed, OpenClaw combines their cache
+configured curated plugins are installed, Natesclaw combines their cache
 invalidations into a single app-inventory refresh. Ordinary cached reads do
-not force a connector refresh for every new thread. OpenClaw caches the
+not force a connector refresh for every new thread. Natesclaw caches the
 combined inventory in memory for one hour and refreshes stale or missing
 entries asynchronously. The cache is process-local; restarting the CLI or
 gateway drops it.
@@ -302,7 +302,7 @@ Migration and runtime use separate cache keys:
   invalidates that target cache key, then force-refreshes it after
   `plugin/install`. `workspace-directory` setup never runs this activation path.
 
-A plugin app is exposed only when OpenClaw can map it back to the configured
+A plugin app is exposed only when Natesclaw can map it back to the configured
 plugin through stable ownership: an exact app id from plugin detail, a known
 MCP server name, or unique stable metadata. Display-name-only or ambiguous
 ownership is excluded until the next inventory refresh proves ownership.
@@ -334,13 +334,13 @@ account without requiring a matching plugin package:
 `allow_all_plugins: true` reads the installed app snapshot and authenticated
 metadata when a new native Codex thread is established. It admits only
 account-accessible apps. Codex must also confirm each admitted app is enabled
-and callable for that thread. OpenClaw does not install, authenticate, or enable
+and callable for that thread. Natesclaw does not install, authenticate, or enable
 apps globally. Existing threads keep their persisted app set; use `/new`,
 `/reset`, or restart the gateway to pick up newly connected or revoked apps.
 
 An explicitly disabled configured plugin always overrides account-wide app
 access. Because Codex `app/read` omits a disabled workspace plugin's display
-names, OpenClaw uses its `plugin/installed` snapshot and reads only that exact
+names, Natesclaw uses its `plugin/installed` snapshot and reads only that exact
 configured plugin's details to reserve its owned app IDs. This narrow,
 read-only check does not discover unrelated marketplaces, activate the plugin,
 or grant its apps. If the disabled plugin's ownership cannot be established,
@@ -353,18 +353,18 @@ closed instead of falling back to an unrestricted default.
 
 ## Thread app config
 
-OpenClaw injects a restrictive `config.apps` patch for the Codex thread:
+Natesclaw injects a restrictive `config.apps` patch for the Codex thread:
 `_default` is disabled, and only apps owned by enabled configured plugins or
 accessible account apps admitted by `allow_all_plugins` are enabled.
 
 An app can be installed and authenticated but non-callable in the account-wide
-snapshot while `_default` is disabled. OpenClaw provisionally admits only
+snapshot while `_default` is disabled. Natesclaw provisionally admits only
 ownership-proven, policy-allowed apps, creates the restrictive thread, and then
 rereads `app/installed` once with the resulting thread ID and
 `forceRefresh: false`. Codex must confirm each admitted app is enabled and
 callable under the thread's effective app, managed, workspace, and tool
 policies before the turn proceeds. If that attestation fails, the provisional
-thread is never bound or used. OpenClaw deletes a failed persistent provisional
+thread is never bound or used. Natesclaw deletes a failed persistent provisional
 thread, unsubscribes a failed ephemeral thread, and retires the app-server
 connection if safe cleanup cannot be confirmed.
 
@@ -373,7 +373,7 @@ per-plugin `allow_destructive_actions` policy; `true`, `"auto"`, and `"ask"`
 all set `destructive_enabled: true`, and `false` sets it `false`. Codex still
 enforces destructive tool metadata from its native app tool annotations.
 `_default` is disabled with `open_world_enabled: false`; enabled plugin apps
-get `open_world_enabled: true`. OpenClaw does not expose a separate
+get `open_world_enabled: true`. Natesclaw does not expose a separate
 plugin-level open-world policy knob and does not maintain per-plugin
 destructive tool-name deny lists.
 
@@ -389,19 +389,19 @@ plugins, while unsafe schemas and ambiguous ownership fail closed:
 - Global `allow_destructive_actions` defaults to `true`.
 - Per-plugin `allow_destructive_actions` overrides the global policy for
   that plugin.
-- `false`: OpenClaw returns a deterministic decline.
-- `true`: OpenClaw auto-accepts only safe schemas it can map to an approval
+- `false`: Natesclaw returns a deterministic decline.
+- `true`: Natesclaw auto-accepts only safe schemas it can map to an approval
   response, such as a boolean approve field.
-- `"auto"`: OpenClaw exposes destructive plugin actions to Codex, then
-  turns ownership-proven MCP approval elicitations into OpenClaw plugin
+- `"auto"`: Natesclaw exposes destructive plugin actions to Codex, then
+  turns ownership-proven MCP approval elicitations into Natesclaw plugin
   approvals before returning the Codex approval response.
-- `"ask"`: OpenClaw uses the same Codex write/destructive gating as
+- `"ask"`: Natesclaw uses the same Codex write/destructive gating as
   `"auto"`, clears durable Codex per-tool approval overrides for the app
   before the thread starts, and offers only one-shot approval or denial so
   durable approvals cannot suppress later write-action prompts. For each
-  admitted app using `"ask"`, OpenClaw selects Codex's human approvals
+  admitted app using `"ask"`, Natesclaw selects Codex's human approvals
   reviewer for that app so Codex sends its approval elicitations to
-  OpenClaw; other apps and non-app thread approvals keep their configured
+  Natesclaw; other apps and non-app thread approvals keep their configured
   reviewer and policy.
 - Missing plugin identity, ambiguous ownership, a missing or mismatched
   turn id, or an unsafe elicitation schema declines instead of prompting.
@@ -410,40 +410,40 @@ plugins, while unsafe schemas and ambiguous ownership fail closed:
 
 | Code                                              | Meaning                                                                                                                              | Fix                                                                                                                    |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `auth_required`                                   | Migration installed the plugin, but one of its apps still needs authentication. The entry is written disabled until you reauthorize. | Reauthorize the app in Codex, then enable the plugin in OpenClaw.                                                      |
+| `auth_required`                                   | Migration installed the plugin, but one of its apps still needs authentication. The entry is written disabled until you reauthorize. | Reauthorize the app in Codex, then enable the plugin in Natesclaw.                                                      |
 | `app_inaccessible`, `app_disabled`, `app_missing` | With `--verify-plugin-apps`, the source Codex app inventory did not show all owned apps as present, enabled, and accessible.         | Reauthorize or enable the app in Codex, then rerun migration with `--verify-plugin-apps`.                              |
 | `app_inventory_unavailable`                       | Strict source app verification was requested but the source Codex app inventory refresh failed.                                      | Fix source Codex app-server access, or retry without `--verify-plugin-apps` to accept the faster account-gated plan.   |
 | `codex_subscription_required`                     | The source app-server positively identified an API-key or other non-ChatGPT account.                                                 | Log in to the Codex app with subscription auth, then rerun migration.                                                  |
 | `codex_account_unavailable`                       | The source account was missing or `account/read` failed without strict app verification.                                             | Restore source account access, or use `--verify-plugin-apps` when authenticated source app inventory can prove access. |
 | `marketplace_missing`, `plugin_missing`           | The exact marketplace or configured plugin is unavailable in the installed snapshot; workspace apps fail closed.                     | Verify the target app-server's `plugin/installed` response and exact configured plugin identity.                       |
-| `plugin_detail_unavailable`                       | OpenClaw could not read the exact configured plugin's ownership details.                                                             | Inspect the target app-server's `plugin/installed` and `plugin/read` responses.                                        |
+| `plugin_detail_unavailable`                       | Natesclaw could not read the exact configured plugin's ownership details.                                                             | Inspect the target app-server's `plugin/installed` and `plugin/read` responses.                                        |
 | `plugin_disabled`                                 | Codex reports the plugin installed but disabled.                                                                                     | Curated activation may repair it; enable a workspace plugin in Codex before retrying.                                  |
 | `plugin_activation_failed`                        | Plugin activation did not complete.                                                                                                  | Use the attached diagnostic to distinguish marketplace, auth, refresh, or workspace-readiness failures.                |
-| `app_inventory_missing`, `app_inventory_stale`    | App readiness came from an empty or stale cache.                                                                                     | OpenClaw schedules an async refresh automatically; plugin apps stay excluded until ownership and readiness are known.  |
+| `app_inventory_missing`, `app_inventory_stale`    | App readiness came from an empty or stale cache.                                                                                     | Natesclaw schedules an async refresh automatically; plugin apps stay excluded until ownership and readiness are known.  |
 | `app_ownership_ambiguous`                         | App inventory only matched by display name.                                                                                          | The app stays hidden from the Codex thread until a later refresh proves ownership.                                     |
 
 **Workspace plugin is installed but not visible:** confirm the workspace
 `plugin/installed` snapshot reports the exact configured ID as installed and
 enabled, then confirm `app/installed` returns every owned app for the same
 Codex account and `app/read` returns its metadata. An app disabled only by the
-account-wide default can become callable after OpenClaw starts and verifies
+account-wide default can become callable after Natesclaw starts and verifies
 its explicitly configured thread. Revoked auth, missing metadata, disabled
 workspace plugins, and Codex managed or workspace restrictions still block
 access. Reauthorize or repair those upstream conditions before starting a new
 thread. If you changed that state after the gateway cached app inventory, wait
 for the one-hour cache refresh or restart the gateway, then use `/new` or
-`/reset`. OpenClaw does not repair or authenticate workspace plugins.
+`/reset`. Natesclaw does not repair or authenticate workspace plugins.
 
 For `plugin_detail_unavailable`, verify that the exact installed marketplace
-and plugin identity select a matching `plugin/read` result. OpenClaw keeps
+and plugin identity select a matching `plugin/read` result. Natesclaw keeps
 owned apps hidden when that selector or ownership detail is unavailable. For
 `plugin_activation_failed`, curated plugins may report a marketplace, auth, or
 post-install refresh failure. A workspace plugin reports this code when it is
-not already active; install, enable, and authenticate it outside OpenClaw.
+not already active; install, enable, and authenticate it outside Natesclaw.
 
 **Config changed but the agent cannot see the plugin:** run `/codex plugins
 list` to confirm the configured state, then `/new` or `/reset`. Existing
-Codex thread bindings keep the app config they started with until OpenClaw
+Codex thread bindings keep the app config they started with until Natesclaw
 establishes a new harness session or replaces a stale binding.
 
 **Destructive action is declined:** check the global and per-plugin

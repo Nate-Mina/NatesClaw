@@ -17,7 +17,7 @@ import {
   isMissingOperatorReadScopeError,
 } from "../../lib/gateway-errors.ts";
 import { GatewayPageController } from "../../lit/gateway-page-controller.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { PollController } from "../../lit/poll-controller.ts";
 import { StreamAutoFollowController } from "../../lit/stream-auto-follow-controller.ts";
 import {
@@ -31,7 +31,7 @@ import { renderLogs } from "./view.ts";
 const LOG_BUFFER_LIMIT = 2000;
 const LOGS_POLL_INTERVAL_MS = 2000;
 
-class LogsPage extends OpenClawLightDomElement {
+class LogsPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -241,7 +241,7 @@ class LogsPage extends OpenClawLightDomElement {
     const anchor = document.createElement("a");
     const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
     anchor.href = url;
-    anchor.download = `openclaw-logs-${label}-${stamp}.log`;
+    anchor.download = `natesclaw-logs-${label}-${stamp}.log`;
     anchor.click();
     URL.revokeObjectURL(url);
   }
@@ -281,6 +281,6 @@ class LogsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-logs-page")) {
-  customElements.define("openclaw-logs-page", LogsPage);
+if (!customElements.get("natesclaw-logs-page")) {
+  customElements.define("natesclaw-logs-page", LogsPage);
 }

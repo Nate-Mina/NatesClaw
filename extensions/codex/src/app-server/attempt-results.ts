@@ -5,7 +5,7 @@
 import type {
   AgentMessage,
   EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import type { CodexSystemPromptReport } from "./attempt-context.js";
 import { attemptTerminal, type EmbeddedRunAttemptResult } from "./attempt-terminal.js";
 import type { CodexAttemptTurnWatchTimeoutKind } from "./attempt-turn-watches.js";

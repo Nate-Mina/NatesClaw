@@ -4,7 +4,7 @@
 import { vi } from "vitest";
 import { installChromeUserDataDirHooks } from "./chrome-user-data-dir.test-harness.js";
 
-const chromeUserDataDir = { dir: "/tmp/openclaw" };
+const chromeUserDataDir = { dir: "/tmp/natesclaw" };
 installChromeUserDataDirHooks(chromeUserDataDir);
 
 vi.mock("./chrome.diagnostics.js", () => ({
@@ -37,9 +37,9 @@ vi.mock("./chrome.js", () => ({
   isChromeCdpOwnedByPid: vi.fn(async () => true),
   isChromeCdpReady: vi.fn(async () => true),
   isChromeReachable: vi.fn(async () => true),
-  launchOpenClawChrome: vi.fn(async () => {
+  launchNatesclawChrome: vi.fn(async () => {
     throw new Error("unexpected launch");
   }),
-  resolveOpenClawUserDataDir: vi.fn(() => chromeUserDataDir.dir),
-  stopOpenClawChrome: vi.fn(async () => {}),
+  resolveNatesclawUserDataDir: vi.fn(() => chromeUserDataDir.dir),
+  stopNatesclawChrome: vi.fn(async () => {}),
 }));

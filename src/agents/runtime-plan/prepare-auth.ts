@@ -4,7 +4,7 @@
  * resolves secrets or loads a provider runtime.
  */
 import { resolveMergedModelProviderConfig } from "../../config/model-provider-config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { coerceSecretRef } from "../../config/types.secrets.js";
 import type { ProviderRouteOverridePresence } from "../../plugin-sdk/provider-model-types.js";
 import {
@@ -37,7 +37,7 @@ type PrepareAgentRuntimeAuthPlanParams = {
   modelApi?: string | null;
   modelBaseUrl?: unknown;
   requestTransportOverrides?: ProviderRouteOverridePresence;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   agentDir?: string;
   workspaceDir?: string;
@@ -50,7 +50,7 @@ type PrepareAgentRuntimeAuthPlanParams = {
   allowHarnessAuthProfileForwarding?: boolean;
   allowTransientCooldownProbe?: boolean;
   resolveProviderPreferredProfileId?(context: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     agentDir?: string;
     workspaceDir?: string;
     provider: string;
@@ -352,7 +352,7 @@ export function prepareAgentRuntimeAuth(
       )
     : null;
   // OpenAI native account discovery is harness-owned synthetic auth, not a
-  // bearer credential for an OpenClaw request route.
+  // bearer credential for an Natesclaw request route.
   const directPlanningEvidence =
     directPlanningCandidate?.kind === "setup-provider" &&
     authProfileSelectionProvider.trim().toLowerCase() === "openai"

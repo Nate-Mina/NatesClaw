@@ -39,7 +39,7 @@ function buildAssistantMessage(text: string) {
 
 describe("SessionManager persistence compatibility", () => {
   it("rewrites SQLite transcript rows when removing trailing entries", async () => {
-    const dir = tempDirs.make("openclaw-session-manager-compat-");
+    const dir = tempDirs.make("natesclaw-session-manager-compat-");
     const storePath = path.join(dir, "sessions.json");
     const sessionId = "sqlite-remove-trailing-session";
     const sessionKey = "agent:main:dashboard:sqlite-remove-trailing";
@@ -106,7 +106,7 @@ describe("SessionManager persistence compatibility", () => {
   });
 
   it("keeps the default fixture cwd independent from its transcript directory", async () => {
-    const dir = tempDirs.make("openclaw-session-manager-compat-");
+    const dir = tempDirs.make("natesclaw-session-manager-compat-");
     const manager = openFileBackedSessionManagerForTest(path.join(dir, "session.jsonl"));
 
     expect(manager.getCwd()).toBe(process.cwd());
@@ -114,7 +114,7 @@ describe("SessionManager persistence compatibility", () => {
   });
 
   it("keeps requested file fixture session identities aligned", async () => {
-    const dir = tempDirs.make("openclaw-session-manager-compat-");
+    const dir = tempDirs.make("natesclaw-session-manager-compat-");
     const sessionFile = path.join(dir, "session.jsonl");
     const manager = openFileBackedSessionManagerForTest(sessionFile, {
       sessionId: "session-1",
@@ -140,7 +140,7 @@ describe("SessionManager persistence compatibility", () => {
   });
 
   it("separates appended records from a final unterminated JSONL record", async () => {
-    const dir = tempDirs.make("openclaw-session-manager-compat-");
+    const dir = tempDirs.make("natesclaw-session-manager-compat-");
     const sessionFile = path.join(dir, "unterminated.jsonl");
     await fs.writeFile(
       sessionFile,
@@ -163,7 +163,7 @@ describe("SessionManager persistence compatibility", () => {
   });
 
   it("rotates new-session fixtures without rewriting the previous file", async () => {
-    const dir = tempDirs.make("openclaw-session-manager-compat-");
+    const dir = tempDirs.make("natesclaw-session-manager-compat-");
     const sessionFile = path.join(dir, "original.jsonl");
     const manager = openFileBackedSessionManagerForTest(sessionFile, dir);
     manager.appendMessage({ role: "user", content: "original", timestamp: 1 });

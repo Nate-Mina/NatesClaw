@@ -8,7 +8,7 @@ import {
   resolvePositiveTimerTimeoutMs,
   resolveTimerTimeoutMs,
   resolveTimestampMsToIsoString,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@natesclaw/normalization-core/number-coercion";
 import { z } from "zod";
 import { resolveConfigPath, resolveGatewayLockDir, resolveStateDir } from "../config/paths.js";
 import { getFileLockProcessStartTime, isPidAlive } from "../shared/pid-alive.js";
@@ -17,8 +17,8 @@ import { sha256HexPrefixCore } from "./crypto-digest.js";
 import { createFileLockManager } from "./file-lock-manager.js";
 import {
   isGatewayArgv,
-  isOpenClawArgv,
-  isOpenClawCommandArgv,
+  isNatesclawArgv,
+  isNatesclawCommandArgv,
   parseProcCmdline,
 } from "./gateway-process-argv.js";
 import { tryAcquireExclusiveSqliteCoordinator } from "./node-sqlite.js";
@@ -30,7 +30,7 @@ import {
 const DEFAULT_TIMEOUT_MS = 5000;
 const DEFAULT_POLL_INTERVAL_MS = 100;
 const DEFAULT_STALE_MS = 30_000;
-const GATEWAY_LOCKS = createFileLockManager("openclaw.gateway-lock");
+const GATEWAY_LOCKS = createFileLockManager("natesclaw.gateway-lock");
 
 type LockPayload = {
   pid: number;
@@ -216,12 +216,12 @@ async function resolveGatewayOwnerStatus(
     }
     if (role === "agent-embedded") {
       // The role covers every direct embedded surface (agent --local, agent exec,
-      // local TUI, and CLI model probes), so validate the owning OpenClaw process
+      // local TUI, and CLI model probes), so validate the owning Natesclaw process
       // instead of baking one command spelling into stale-lock recovery.
-      return isOpenClawArgv(args) ? "alive" : "dead";
+      return isNatesclawArgv(args) ? "alive" : "dead";
     }
     const command = role === "sqlite-maintenance" ? "doctor" : "skills";
-    return isOpenClawCommandArgv(args, command) ? "alive" : "dead";
+    return isNatesclawCommandArgv(args, command) ? "alive" : "dead";
   }
 
   const args = readFn(pid);
@@ -393,7 +393,7 @@ export async function acquireGatewayLock(
     stateDir: paths.stateDir,
     ownerId,
   });
-  const shouldAcquireConfigLock = role !== "gateway" || env.OPENCLAW_ALLOW_MULTI_GATEWAY !== "1";
+  const shouldAcquireConfigLock = role !== "gateway" || env.NATESCLAW_ALLOW_MULTI_GATEWAY !== "1";
   if (!shouldAcquireConfigLock) {
     return {
       ...stateLock,
@@ -565,7 +565,7 @@ async function acquireLockFile(
   const ownerPid = lastPayload?.pid ? ` (pid ${lastPayload.pid})` : "";
   const owner =
     lastPayload?.role === "agent-embedded"
-      ? `another embedded OpenClaw state writer is active${ownerPid}`
+      ? `another embedded Natesclaw state writer is active${ownerPid}`
       : lastPayload?.role && lastPayload.role !== "gateway"
         ? `state directory is locked by ${lastPayload.role}${ownerPid}`
         : `gateway already running${ownerPid}`;

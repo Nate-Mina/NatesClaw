@@ -2,13 +2,13 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import {
-  openOpenClawAgentDatabase,
-  resolveOpenClawAgentSqlitePath,
-} from "openclaw/plugin-sdk/sqlite-runtime";
+  openNatesclawAgentDatabase,
+  resolveNatesclawAgentSqlitePath,
+} from "natesclaw/plugin-sdk/sqlite-runtime";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  closeOpenClawStateDatabaseForTest,
-} from "openclaw/plugin-sdk/sqlite-runtime-testing";
+  closeNatesclawAgentDatabasesForTest,
+  closeNatesclawStateDatabaseForTest,
+} from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createStandingIntentTool } from "./standing-intents-tool.js";
 import {
@@ -45,17 +45,17 @@ describe("standing intents", () => {
 
   beforeEach(async () => {
     stateDir = await fs.realpath(
-      await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-standing-intents-")),
+      await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-standing-intents-")),
     );
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
-    await fs.mkdir(path.dirname(resolveOpenClawAgentSqlitePath({ agentId: "main" })), {
+    vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
+    await fs.mkdir(path.dirname(resolveNatesclawAgentSqlitePath({ agentId: "main" })), {
       recursive: true,
     });
   });
 
   afterEach(async () => {
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     vi.unstubAllEnvs();
     await fs.rm(stateDir, { recursive: true, force: true });
   });
@@ -153,7 +153,7 @@ describe("standing intents", () => {
       }).map((intent) => intent.id),
     ).toEqual([created.id]);
 
-    const db = openOpenClawAgentDatabase({ agentId: "main" }).db;
+    const db = openNatesclawAgentDatabase({ agentId: "main" }).db;
     const insertUnknownCreator = db.prepare(
       `INSERT INTO standing_intents (
         id, description, trigger_keywords, trigger_embedding, channel_scope, sender_scope,

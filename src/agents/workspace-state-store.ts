@@ -7,13 +7,13 @@ import {
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
 import { runSqliteDeferredTransactionSync } from "../infra/sqlite-transaction.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import { resolveUserPath } from "../utils.js";
 
 export const WORKSPACE_SETUP_STATE_VERSION = 1 as const;
@@ -87,7 +87,7 @@ type WorkspaceStateDeletionPlan = {
 };
 
 type WorkspaceStateDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   | "workspace_setup_state"
   | "workspace_path_aliases"
   | "workspace_attestations"
@@ -182,7 +182,7 @@ export function resolveWorkspaceStateIdentity(workspaceDir: string): WorkspaceSt
 
 function resolveWorkspaceIdentityFromDatabase(params: {
   workspaceDir: string;
-  database: ReturnType<typeof openOpenClawStateDatabase>;
+  database: ReturnType<typeof openNatesclawStateDatabase>;
 }): WorkspaceIdentityResolution {
   const aliases = resolveWorkspaceStateAliases(params.workspaceDir);
   const canonicalIdentity = aliases.at(-1)!;
@@ -232,7 +232,7 @@ function resolveWorkspaceIdentityFromDatabase(params: {
 }
 
 function registerWorkspacePathAliases(params: {
-  database: ReturnType<typeof openOpenClawStateDatabase>;
+  database: ReturnType<typeof openNatesclawStateDatabase>;
   identity: WorkspaceStateIdentity;
   aliases: readonly WorkspaceStateIdentity[];
   updatedAtMs: number;
@@ -271,7 +271,7 @@ function registerWorkspacePathAliases(params: {
 }
 
 export function registerWorkspaceStateAliasesInTransaction(params: {
-  database: ReturnType<typeof openOpenClawStateDatabase>;
+  database: ReturnType<typeof openNatesclawStateDatabase>;
   workspaceDirs: readonly string[];
   identity: WorkspaceStateIdentity;
   updatedAtMs: number;
@@ -292,7 +292,7 @@ export function registerWorkspaceStateAliasesInTransaction(params: {
 
 function readSnapshotFromDatabase(params: {
   identity: WorkspaceStateIdentity;
-  database: ReturnType<typeof openOpenClawStateDatabase>;
+  database: ReturnType<typeof openNatesclawStateDatabase>;
 }): WorkspaceStateSnapshot {
   const identity = params.identity;
   const kysely = getNodeSqliteKysely<WorkspaceStateDatabase>(params.database.db);
@@ -307,7 +307,7 @@ function readSnapshotFromDatabase(params: {
     throw new Error("workspace state key collision");
   }
   if (setupRow && setupRow.version !== WORKSPACE_SETUP_STATE_VERSION) {
-    throw new Error("workspace setup state version requires openclaw doctor --fix");
+    throw new Error("workspace setup state version requires natesclaw doctor --fix");
   }
   if (setupRow) {
     assertCanonicalTimestamp(setupRow.bootstrap_seeded_at, "bootstrap seeded");
@@ -366,9 +366,9 @@ function readSnapshotFromDatabase(params: {
 
 export function readWorkspaceStateSnapshot(
   workspaceDir: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): WorkspaceStateSnapshot {
-  const database = openOpenClawStateDatabase(options);
+  const database = openNatesclawStateDatabase(options);
   const initial = runSqliteDeferredTransactionSync(database.db, () => {
     const resolution = resolveWorkspaceIdentityFromDatabase({ workspaceDir, database });
     return {
@@ -385,7 +385,7 @@ export function readWorkspaceStateSnapshot(
   }
   // Register a newly observed configured spelling once state proves the target
   // identity. Later disappearance must still find the same safety evidence.
-  return runOpenClawStateWriteTransaction((writeDatabase) => {
+  return runNatesclawStateWriteTransaction((writeDatabase) => {
     const currentAliases = resolveWorkspaceStateAliases(workspaceDir);
     const currentCanonicalIdentity = currentAliases.at(-1)!;
     if (
@@ -420,7 +420,7 @@ export function mergeWorkspaceSetupState(
   workspaceDir: string,
   next: Partial<Omit<WorkspaceSetupState, "version">>,
   nowMs = Date.now(),
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): WorkspaceSetupState {
   assertCanonicalIntegerTimestamp(nowMs, "setup update");
   if (next.bootstrapSeededAt) {
@@ -429,7 +429,7 @@ export function mergeWorkspaceSetupState(
   if (next.setupCompletedAt) {
     assertCanonicalTimestamp(next.setupCompletedAt, "setup completed");
   }
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const resolution = resolveWorkspaceIdentityFromDatabase({ workspaceDir, database });
     const identity = resolution.identity;
     const snapshot = readSnapshotFromDatabase({ identity, database });
@@ -491,7 +491,7 @@ export function replaceWorkspaceAttestation(params: {
   const sortedHashes = [...params.generatedHashes.entries()].toSorted(([left], [right]) =>
     left.localeCompare(right),
   );
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     // Capture the comparison clock only after BEGIN IMMEDIATE acquires the
     // writer lock, so a newer committed row cannot look future-dated.
     const updatedAtMs = params.nowMs ?? Date.now();
@@ -564,7 +564,7 @@ export function replaceWorkspaceAttestation(params: {
 }
 
 function deleteWorkspaceRows(
-  database: ReturnType<typeof openOpenClawStateDatabase>,
+  database: ReturnType<typeof openNatesclawStateDatabase>,
   workspaceKey: string,
 ): void {
   const kysely = getNodeSqliteKysely<WorkspaceStateDatabase>(database.db);
@@ -632,7 +632,7 @@ export function clearExpiredWorkspaceStateForVanishedWorkspace(
   nowMs = Date.now(),
 ): boolean {
   assertCanonicalIntegerTimestamp(nowMs, "workspace expiry check");
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const resolution = resolveWorkspaceIdentityFromDatabase({ workspaceDir, database });
     const identity = resolution.identity;
     const snapshot = readSnapshotFromDatabase({ identity, database });
@@ -678,10 +678,10 @@ export function prepareWorkspaceStateDeletion(workspaceDir: string): WorkspaceSt
 export function deleteWorkspaceState(plan: WorkspaceStateDeletionPlan): void {
   // Delete-only cleanup must not recreate state after reset/uninstall removed
   // the canonical database successfully or partially.
-  if (!existsSync(resolveOpenClawStateSqlitePath())) {
+  if (!existsSync(resolveNatesclawStateSqlitePath())) {
     return;
   }
-  runOpenClawStateWriteTransaction((database) => {
+  runNatesclawStateWriteTransaction((database) => {
     const { lexicalAlias, currentCanonicalIdentity } = plan;
     const kysely = getNodeSqliteKysely<WorkspaceStateDatabase>(database.db);
     const storedAlias = executeSqliteQueryTakeFirstSync(

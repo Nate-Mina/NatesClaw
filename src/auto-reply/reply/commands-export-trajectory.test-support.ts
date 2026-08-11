@@ -7,12 +7,12 @@ import type { HandleCommandsParams } from "./commands-types.js";
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 function makeParams(
-  workspaceDir = tempDirs.make("openclaw-export-command-"),
+  workspaceDir = tempDirs.make("natesclaw-export-command-"),
 ): HandleCommandsParams {
   return {
     cfg: {
       session: {
-        store: "/tmp/openclaw-sessions.json",
+        store: "/tmp/natesclaw-sessions.json",
       },
     },
     ctx: {
@@ -71,7 +71,7 @@ function createExecDeps(
           expiresAtMs: Date.now() + 60_000,
           allowedDecisions: ["allow-once", "deny"] as const,
           host: "gateway" as const,
-          command: "openclaw sessions export-trajectory --session-key agent:target:session",
+          command: "natesclaw sessions export-trajectory --session-key agent:target:session",
           cwd: "/tmp",
         },
       };
@@ -137,7 +137,7 @@ describe("buildExportTrajectoryCommandReply", () => {
     expect(reply.text).toContain(
       "Trajectory exports can include prompts, model messages, tool schemas",
     );
-    expect(reply.text).toContain("https://docs.openclaw.ai/tools/trajectory");
+    expect(reply.text).toContain("https://docs.natesclaw.ai/tools/trajectory");
     expect(reply.text).toContain("do not use allow-all");
     expect(reply.text).toContain("Allowed decisions: allow-once, deny");
     expect(execCalls).toHaveLength(1);
@@ -148,7 +148,7 @@ describe("buildExportTrajectoryCommandReply", () => {
     expect(execCall.defaults.trigger).toBe("export-trajectory");
     expect(execCall.defaults.approvalFollowupMode).toBe("agent");
     expect(execCall.defaults.sessionId).toBe("session-1");
-    expect(execCall.defaults.sessionStore).toBe("/tmp/openclaw-sessions.json");
+    expect(execCall.defaults.sessionStore).toBe("/tmp/natesclaw-sessions.json");
     expect(execCall.defaults.currentChannelId).toBe("bot");
     expect(execCall.defaults.accountId).toBe("account-1");
     expect(execCall.params.security).toBe("allowlist");
@@ -160,11 +160,11 @@ describe("buildExportTrajectoryCommandReply", () => {
     expect(command).toContain("--request-json-base64");
     expect(command).toContain("--json");
     expect(command).not.toContain("--session-key");
-    expect(command).not.toContain("openclaw sessions export-trajectory");
+    expect(command).not.toContain("natesclaw sessions export-trajectory");
     const request = readEncodedRequestFromCommand(command);
     expect(request.sessionKey).toBe("agent:target:session");
     expect(request.workspace).toBe(params.workspaceDir);
-    expect(String(request.workspace)).toContain("openclaw-export-command-");
+    expect(String(request.workspace)).toContain("natesclaw-export-command-");
   });
 
   it("uses the originating Telegram route for native trajectory export followups", async () => {
@@ -257,7 +257,7 @@ describe("buildExportTrajectoryCommandReply", () => {
       { channel: "telegram", to: "owner-dm", accountId: "account-1" },
     ]);
     expect(privateReplies[0]?.text).toContain("Trajectory exports can include prompts");
-    expect(privateReplies[0]?.text).toContain("openclaw sessions export-trajectory");
+    expect(privateReplies[0]?.text).toContain("natesclaw sessions export-trajectory");
     expect(privateReplies[0]?.text).toContain("Session: agent:target:session");
     expect(execCalls).toHaveLength(1);
     const execCall = execCallRecord(execCalls);

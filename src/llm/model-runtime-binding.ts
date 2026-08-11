@@ -1,7 +1,7 @@
-import type { LlmRuntime } from "@openclaw/ai";
+import type { LlmRuntime } from "@natesclaw/ai";
 import type { Model } from "./types.js";
 
-const MODEL_LLM_RUNTIME = Symbol("openclaw.modelLlmRuntime");
+const MODEL_LLM_RUNTIME = Symbol("natesclaw.modelLlmRuntime");
 const streamLlmRuntimes = new WeakMap<object, LlmRuntime>();
 
 type RuntimeBoundModel = Model & {

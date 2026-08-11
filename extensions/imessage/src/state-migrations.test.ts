@@ -2,12 +2,12 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { buildLegacyMigrationPreview } from "openclaw/plugin-sdk/runtime-doctor-migrations";
+import { buildLegacyMigrationPreview } from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { stateMigrations } from "../doctor-contract-api.js";
 import { resolveIMessageCatchupCursorKey } from "./monitor/catchup.js";
@@ -18,8 +18,8 @@ describe("detectIMessageLegacyStateMigrations", () => {
 
   beforeEach(() => {
     stateWorkspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-imsg-migration-",
+      rootDir: resolvePreferredNatesclawTmpDir(),
+      prefix: "natesclaw-imsg-migration-",
     });
   });
 

@@ -1,5 +1,5 @@
 // Sms tests cover channel plugin behavior.
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SmsDeliveryRecord } from "./delivery-observations.js";
 import type { probeSmsAccount as probeSmsAccountType } from "./status.js";
@@ -7,7 +7,7 @@ import type { sendSmsViaTwilio as sendSmsViaTwilioType } from "./twilio.js";
 
 type ChannelModule = typeof import("./channel.js");
 type PlatformMessageNotDispatchedErrorConstructor =
-  (typeof import("openclaw/plugin-sdk/error-runtime"))["PlatformMessageNotDispatchedError"];
+  (typeof import("natesclaw/plugin-sdk/error-runtime"))["PlatformMessageNotDispatchedError"];
 
 let smsPlugin: ChannelModule["smsPlugin"];
 let PlatformMessageNotDispatchedError: PlatformMessageNotDispatchedErrorConstructor;
@@ -83,7 +83,7 @@ beforeEach(async () => {
     probeSmsAccount,
     formatSmsProbeLines: vi.fn(() => []),
   }));
-  ({ PlatformMessageNotDispatchedError } = await import("openclaw/plugin-sdk/error-runtime"));
+  ({ PlatformMessageNotDispatchedError } = await import("natesclaw/plugin-sdk/error-runtime"));
   ({ smsPlugin } = await import("./channel.js"));
 });
 

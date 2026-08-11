@@ -1,6 +1,6 @@
 /** Tests Code Mode catalog and model-visible surface. */
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { Type } from "typebox";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -250,7 +250,7 @@ describe("Code Mode catalog and model-visible surface", () => {
       "a trailing expression is discarded and yields `null`",
     );
     expect(parameters.properties?.code?.description).toContain(
-      'tools.callValue("openclaw:core:read", { path: "notes.txt" })',
+      'tools.callValue("natesclaw:core:read", { path: "notes.txt" })',
     );
     expect(parameters.properties?.code?.description).toContain("Use `callValue`, not `call`");
     expect(parameters.properties?.code?.description).toContain("return file.content");
@@ -316,9 +316,9 @@ describe("Code Mode catalog and model-visible surface", () => {
     expect(description).toContain("descriptions are intentionally deferred");
     expect(description).toContain("OUTPUT DECLARED RULE");
     expect(description).toContain(
-      '- "openclaw:fake-code-mode:alpha_tool" { value?: string } -> Array<{ id: string; score: number }>',
+      '- "natesclaw:fake-code-mode:alpha_tool" { value?: string } -> Array<{ id: string; score: number }>',
     );
-    expect(description).toContain('- "openclaw:fake-code-mode:zeta_tool" { value?: string } -> ?');
+    expect(description).toContain('- "natesclaw:fake-code-mode:zeta_tool" { value?: string } -> ?');
     expect(description.indexOf("alpha_tool")).toBeLessThan(description.indexOf("zeta_tool"));
     expect(description).not.toContain("Description stays deferred.");
     expect(description).not.toContain("Another deferred description.");
@@ -339,8 +339,8 @@ describe("Code Mode catalog and model-visible surface", () => {
     });
 
     const description = compacted.tools[0]?.description ?? "";
-    expect(description).toContain('"openclaw:catalog-owner:tool_071"');
-    expect(description).not.toContain("additional OpenClaw/plugin tools omitted");
+    expect(description).toContain('"natesclaw:catalog-owner:tool_071"');
+    expect(description).not.toContain("additional Natesclaw/plugin tools omitted");
   });
 
   it("keeps declared-output tools indexed when truncation drops unknown-output lines", () => {
@@ -365,9 +365,9 @@ describe("Code Mode catalog and model-visible surface", () => {
     });
 
     const description = compacted.tools[0]?.description ?? "";
-    const indexStart = description.indexOf("OpenClaw/plugin tool quick index");
+    const indexStart = description.indexOf("Natesclaw/plugin tool quick index");
     const index = indexStart >= 0 ? description.slice(indexStart) : "";
-    expect(index).toContain("additional OpenClaw/plugin tools omitted");
+    expect(index).toContain("additional Natesclaw/plugin tools omitted");
     expect(index).toContain("zzz_contracted_tool");
     expect(index).toContain("-> { ok: boolean }");
   });
@@ -399,7 +399,7 @@ describe("Code Mode catalog and model-visible surface", () => {
     });
 
     const description = compacted.tools[0]?.description ?? "";
-    const indexStart = description.indexOf("OpenClaw/plugin tool quick index");
+    const indexStart = description.indexOf("Natesclaw/plugin tool quick index");
     const index = indexStart >= 0 ? description.slice(indexStart) : "";
     expect(index.length).toBeLessThanOrEqual(8_000);
     // The oversized line is skipped, but every short declared contract survives.
@@ -428,14 +428,14 @@ describe("Code Mode catalog and model-visible surface", () => {
         catalogRef,
       });
       const description = compacted.tools[0]?.description ?? "";
-      const start = description.indexOf("OpenClaw/plugin tool quick index");
+      const start = description.indexOf("Natesclaw/plugin tool quick index");
       return start >= 0 ? description.slice(start) : "";
     };
     const first = build();
     for (let i = 0; i < 5; i += 1) {
       expect(build()).toBe(first);
     }
-    expect(first).toContain("additional OpenClaw/plugin tools omitted");
+    expect(first).toContain("additional Natesclaw/plugin tools omitted");
   });
 
   it("bounds the model-visible native tool index", () => {
@@ -454,10 +454,10 @@ describe("Code Mode catalog and model-visible surface", () => {
     });
 
     const description = compacted.tools[0]?.description ?? "";
-    const indexStart = description.indexOf("OpenClaw/plugin tool quick index");
+    const indexStart = description.indexOf("Natesclaw/plugin tool quick index");
     const index = indexStart >= 0 ? description.slice(indexStart) : "";
     expect(index.length).toBeLessThanOrEqual(8_000);
-    expect(index).toContain("additional OpenClaw/plugin tools omitted");
+    expect(index).toContain("additional Natesclaw/plugin tools omitted");
     expect(index).not.toContain("fake_099");
   });
 
@@ -476,13 +476,13 @@ describe("Code Mode catalog and model-visible surface", () => {
     });
 
     const description = compacted.tools[0]?.description ?? "";
-    const indexStart = description.indexOf("OpenClaw/plugin tool quick index");
+    const indexStart = description.indexOf("Natesclaw/plugin tool quick index");
     const index = indexStart >= 0 ? description.slice(indexStart) : "";
 
     expect(index.length).toBeLessThanOrEqual(8_000);
-    expect(index).toContain('"openclaw:catalog-owner:tool_0000"');
-    expect(index).toContain("additional OpenClaw/plugin tools omitted");
-    expect(index).not.toContain('"openclaw:catalog-owner:tool_1023"');
+    expect(index).toContain('"natesclaw:catalog-owner:tool_0000"');
+    expect(index).toContain("additional Natesclaw/plugin tools omitted");
+    expect(index).not.toContain('"natesclaw:catalog-owner:tool_1023"');
   });
 
   it("omits MCP and namespace guidance from the exec schema when the run catalog has neither", () => {
@@ -531,7 +531,7 @@ describe("Code Mode catalog and model-visible surface", () => {
     const description = compacted.tools[0]?.description ?? "";
     expect(description).toContain("API.list(prefix?)");
     expect(description).toContain("MCP tools are available only through");
-    expect(description).toContain('"openclaw:fake-code-mode:fake_noop"');
+    expect(description).toContain('"natesclaw:fake-code-mode:fake_noop"');
     expect(description).not.toContain("github__create_issue");
     expect(description).not.toContain("malicious_prompt");
   });

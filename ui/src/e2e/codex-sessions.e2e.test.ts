@@ -12,9 +12,9 @@ const suite = createControlUiE2eSuite({
   unavailableMessage: (executablePath) => `Playwright Chromium is unavailable at ${executablePath}`,
 });
 
-const captureUiProofEnabled = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
-const catalogGroupingStorageKey = "openclaw:sidebar:sessions:catalog-grouping";
-const collapsedSessionSectionsStorageKey = "openclaw:sidebar:sessions:collapsed-sections";
+const captureUiProofEnabled = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
+const catalogGroupingStorageKey = "natesclaw:sidebar:sessions:catalog-grouping";
+const collapsedSessionSectionsStorageKey = "natesclaw:sidebar:sessions:collapsed-sections";
 const uiProofArtifactDir = path.join(
   process.cwd(),
   ".artifacts",
@@ -126,7 +126,7 @@ suite.define(() => {
               worktree: {
                 id: "startup-phases",
                 branch: "startup-phases",
-                repoRoot: "/workspace/openclaw",
+                repoRoot: "/workspace/natesclaw",
               },
             },
           ],
@@ -148,7 +148,7 @@ suite.define(() => {
                     {
                       threadId: "thread-startup",
                       name: "Trace startup labels to code paths",
-                      cwd: "/workspace/openclaw",
+                      cwd: "/workspace/natesclaw",
                       status: "idle",
                       archived: false,
                       canContinue: true,
@@ -172,7 +172,7 @@ suite.define(() => {
                     {
                       threadId: "thread-claude",
                       name: "Review the provider catalog UI",
-                      cwd: "/workspace/openclaw",
+                      cwd: "/workspace/natesclaw",
                       status: "idle",
                       archived: false,
                       canContinue: true,
@@ -358,7 +358,7 @@ suite.define(() => {
                     {
                       threadId: "thread-local",
                       name: "Local planning session",
-                      cwd: "/Users/dev/openclaw",
+                      cwd: "/Users/dev/natesclaw",
                       status: "idle",
                       archived: false,
                       canContinue: true,
@@ -368,7 +368,7 @@ suite.define(() => {
                     {
                       threadId: "thread-worktree",
                       name: "Worktree fix session",
-                      cwd: "/Users/dev/openclaw/.claude/worktrees/fix-1",
+                      cwd: "/Users/dev/natesclaw/.claude/worktrees/fix-1",
                       status: "idle",
                       archived: false,
                       canContinue: true,
@@ -450,23 +450,23 @@ suite.define(() => {
           .locator(":scope > *")
           .evaluateAll((items) => items.map((item) => item.getAttribute("role"))),
       ).toEqual(["listitem", "listitem"]);
-      const openclawProject = section.locator(
-        '[data-session-catalog-project="/Users/dev/openclaw"]',
+      const natesclawProject = section.locator(
+        '[data-session-catalog-project="/Users/dev/natesclaw"]',
       );
-      const openclawProjectItem = openclawProject.locator("..");
-      const openclawProjectList = openclawProjectItem.locator(":scope > [role=list]");
-      expect(await openclawProjectItem.getAttribute("role")).toBe("listitem");
-      expect(await openclawProjectList.getAttribute("aria-label")).toBe("Local Codex: openclaw");
+      const natesclawProjectItem = natesclawProject.locator("..");
+      const natesclawProjectList = natesclawProjectItem.locator(":scope > [role=list]");
+      expect(await natesclawProjectItem.getAttribute("role")).toBe("listitem");
+      expect(await natesclawProjectList.getAttribute("aria-label")).toBe("Local Codex: natesclaw");
       expect(
-        await openclawProject.locator(".sidebar-session-catalog-project__label").textContent(),
-      ).toBe("openclaw");
+        await natesclawProject.locator(".sidebar-session-catalog-project__label").textContent(),
+      ).toBe("natesclaw");
       expect(
-        await openclawProject.locator(".sidebar-session-catalog-project__count").textContent(),
+        await natesclawProject.locator(".sidebar-session-catalog-project__count").textContent(),
       ).toBe("2");
       const projectRows = section.locator(".sidebar-recent-session--catalog-project-child");
       await expect.poll(() => projectRows.count()).toBe(3);
       expect(
-        await openclawProjectList
+        await natesclawProjectList
           .locator(":scope > *")
           .evaluateAll((items) => items.map((item) => item.getAttribute("role"))),
       ).toEqual(["listitem", "listitem"]);
@@ -525,7 +525,7 @@ suite.define(() => {
           paddingTop: "3px",
         },
       ]);
-      const projectLabelTone = await openclawProject
+      const projectLabelTone = await natesclawProject
         .locator(".sidebar-session-catalog-project__label")
         .evaluate((label) => {
           const probe = document.createElement("span");
@@ -632,24 +632,24 @@ suite.define(() => {
         await page.evaluate((key) => localStorage.getItem(key), catalogGroupingStorageKey),
       ).toBe("project");
 
-      await openclawProject.click();
-      await expect.poll(() => openclawProject.getAttribute("aria-expanded")).toBe("false");
+      await natesclawProject.click();
+      await expect.poll(() => natesclawProject.getAttribute("aria-expanded")).toBe("false");
       expect(await section.getByText("Local planning session", { exact: true }).count()).toBe(0);
       expect(await section.getByText("Worktree fix session", { exact: true }).count()).toBe(0);
       expect(await section.getByText("Other project session", { exact: true }).count()).toBe(1);
-      expect(await openclawProject.count()).toBe(1);
+      expect(await natesclawProject.count()).toBe(1);
       expect(
-        await openclawProject.locator(".sidebar-session-catalog-project__count").textContent(),
+        await natesclawProject.locator(".sidebar-session-catalog-project__count").textContent(),
       ).toBe("2");
       expect(
         await page.evaluate(
           (key) => JSON.parse(localStorage.getItem(key) ?? "[]"),
           collapsedSessionSectionsStorageKey,
         ),
-      ).toContain("catalog-project:codex:gateway:local:/Users/dev/openclaw");
+      ).toContain("catalog-project:codex:gateway:local:/Users/dev/natesclaw");
 
-      await openclawProject.click();
-      await expect.poll(() => openclawProject.getAttribute("aria-expanded")).toBe("true");
+      await natesclawProject.click();
+      await expect.poll(() => natesclawProject.getAttribute("aria-expanded")).toBe("true");
       expect(await section.getByText("Local planning session", { exact: true }).count()).toBe(1);
       expect(await section.getByText("Worktree fix session", { exact: true }).count()).toBe(1);
       expect(
@@ -657,7 +657,7 @@ suite.define(() => {
           (key) => JSON.parse(localStorage.getItem(key) ?? "[]"),
           collapsedSessionSectionsStorageKey,
         ),
-      ).not.toContain("catalog-project:codex:gateway:local:/Users/dev/openclaw");
+      ).not.toContain("catalog-project:codex:gateway:local:/Users/dev/natesclaw");
 
       if (captureUiProofEnabled) {
         await mkdir(uiProofArtifactDir, { recursive: true });
@@ -968,7 +968,7 @@ suite.define(() => {
     await expandCodingSection(page);
     await page.getByText("Release checklist", { exact: true }).click();
     const catalogPane = page
-      .locator("openclaw-chat-pane.chat-pane-cache__pane--visible")
+      .locator("natesclaw-chat-pane.chat-pane-cache__pane--visible")
       .filter({ hasText: "prepare release" });
     await catalogPane.getByText("prepare release", { exact: true }).waitFor();
     const composer = catalogPane.locator(".agent-chat__composer-combobox > textarea");

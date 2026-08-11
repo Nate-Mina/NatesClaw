@@ -25,33 +25,33 @@ type PublishablePluginPackage = {
 
 const execFileAsync = promisify(execFile);
 const REQUIRED_REVIEWED_PUBLISHABLE_CRITICAL_FINDING_COUNTS = new Map<string, number>([
-  ["@openclaw/acpx:dangerous-exec:src/codex-auth-bridge.ts", 1],
-  ["@openclaw/acpx:dangerous-exec:src/runtime-internals/mcp-proxy.mjs", 1],
-  ["@openclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/http.ts", 1],
-  ["@openclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/processes.ts", 1],
-  ["@openclaw/codex:dangerous-exec:src/app-server/transport-stdio.ts", 1],
-  ["@openclaw/codex:dangerous-exec:src/node-cli-sessions.ts", 1],
-  ["@openclaw/discord:dangerous-exec:src/voice/audio.ts", 1],
-  ["@openclaw/google-meet:dangerous-exec:src/node-host.ts", 1],
-  ["@openclaw/imessage:dangerous-exec:src/client.ts", 1],
-  ["@openclaw/mxc-sandbox:dangerous-exec:src/readiness.ts", 2],
-  ["@openclaw/opencode-provider:dangerous-exec:session-catalog.ts", 1],
-  ["@openclaw/raft:dangerous-exec:src/gateway.ts", 1],
-  ["@openclaw/signal:dangerous-exec:src/daemon.ts", 1],
-  ["@openclaw/voice-call:dangerous-exec:src/tunnel.ts", 1],
+  ["@natesclaw/acpx:dangerous-exec:src/codex-auth-bridge.ts", 1],
+  ["@natesclaw/acpx:dangerous-exec:src/runtime-internals/mcp-proxy.mjs", 1],
+  ["@natesclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/http.ts", 1],
+  ["@natesclaw/codex:dangerous-exec:src/app-server/sandbox-exec-server/processes.ts", 1],
+  ["@natesclaw/codex:dangerous-exec:src/app-server/transport-stdio.ts", 1],
+  ["@natesclaw/codex:dangerous-exec:src/node-cli-sessions.ts", 1],
+  ["@natesclaw/discord:dangerous-exec:src/voice/audio.ts", 1],
+  ["@natesclaw/google-meet:dangerous-exec:src/node-host.ts", 1],
+  ["@natesclaw/imessage:dangerous-exec:src/client.ts", 1],
+  ["@natesclaw/mxc-sandbox:dangerous-exec:src/readiness.ts", 2],
+  ["@natesclaw/opencode-provider:dangerous-exec:session-catalog.ts", 1],
+  ["@natesclaw/raft:dangerous-exec:src/gateway.ts", 1],
+  ["@natesclaw/signal:dangerous-exec:src/daemon.ts", 1],
+  ["@natesclaw/voice-call:dangerous-exec:src/tunnel.ts", 1],
 ]);
 
 // Generated chunks can contain multiple reviewed execution sites. Counts are
 // part of the contract so an added or missing site fails the release scan.
 const OPTIONAL_REVIEWED_PUBLISHABLE_DIST_CRITICAL_FINDING_COUNTS = new Map<string, number>([
-  ["@openclaw/acpx:dangerous-exec:dist/mcp-proxy.mjs", 1],
-  ["@openclaw/acpx:dangerous-exec:dist/service-<hash>.js", 1],
-  ["@openclaw/codex:dangerous-exec:dist/run-attempt-<hash>.js", 2],
-  ["@openclaw/codex:dangerous-exec:dist/session-catalog-<hash>.js", 1],
-  ["@openclaw/codex:dangerous-exec:dist/transport-stdio-<hash>.js", 1],
-  ["@openclaw/google-meet:dangerous-exec:dist/index.js", 1],
-  ["@openclaw/slack:dynamic-code-execution:dist/outbound-payload.test-harness-<hash>.js", 1],
-  ["@openclaw/voice-call:dangerous-exec:dist/runtime-entry-<hash>.js", 1],
+  ["@natesclaw/acpx:dangerous-exec:dist/mcp-proxy.mjs", 1],
+  ["@natesclaw/acpx:dangerous-exec:dist/service-<hash>.js", 1],
+  ["@natesclaw/codex:dangerous-exec:dist/run-attempt-<hash>.js", 2],
+  ["@natesclaw/codex:dangerous-exec:dist/session-catalog-<hash>.js", 1],
+  ["@natesclaw/codex:dangerous-exec:dist/transport-stdio-<hash>.js", 1],
+  ["@natesclaw/google-meet:dangerous-exec:dist/index.js", 1],
+  ["@natesclaw/slack:dynamic-code-execution:dist/outbound-payload.test-harness-<hash>.js", 1],
+  ["@natesclaw/voice-call:dangerous-exec:dist/runtime-entry-<hash>.js", 1],
 ]);
 
 function parseNpmPackFiles(raw: string, packageName: string): string[] {
@@ -128,7 +128,7 @@ function stageScannerRelevantPackedFiles(
   packageDir: string,
   packedFiles: readonly string[],
 ): string {
-  const stageDir = mkdtempSync(join(tmpdir(), "openclaw-plugin-npm-scan-"));
+  const stageDir = mkdtempSync(join(tmpdir(), "natesclaw-plugin-npm-scan-"));
 
   for (const packedPath of packedFiles) {
     if (!isScannerWalkedPackedPath(packedPath)) {
@@ -201,14 +201,14 @@ function collectPublishablePluginPackages(): PublishablePluginPackage[] {
       const packageJsonPath = join(packageDir, "package.json");
       let packageJson: {
         name?: unknown;
-        openclaw?: { release?: { publishToNpm?: unknown } };
+        natesclaw?: { release?: { publishToNpm?: unknown } };
       };
       try {
         packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as typeof packageJson;
       } catch {
         return [];
       }
-      if (packageJson.openclaw?.release?.publishToNpm !== true) {
+      if (packageJson.natesclaw?.release?.publishToNpm !== true) {
         return [];
       }
       if (typeof packageJson.name !== "string" || !packageJson.name.trim()) {
@@ -324,28 +324,28 @@ describe("publishable plugin npm package install security scan", () => {
     const packedPath = "dist/future-exec-unknown.js";
 
     expect(normalizePackedFindingPath(packedPath)).toBe(packedPath);
-    expect(expectedOptionalReviewedFindingsForPackedPath("@openclaw/codex", packedPath)).toEqual(
+    expect(expectedOptionalReviewedFindingsForPackedPath("@natesclaw/codex", packedPath)).toEqual(
       [],
     );
   });
 
   it("requires exact occurrence counts for reviewed Codex dist chunks", () => {
-    const runAttemptKey = "@openclaw/codex:dangerous-exec:dist/run-attempt-<hash>.js";
+    const runAttemptKey = "@natesclaw/codex:dangerous-exec:dist/run-attempt-<hash>.js";
 
     expect(
       expectedOptionalReviewedFindingsForPackedPath(
-        "@openclaw/codex",
+        "@natesclaw/codex",
         "dist/run-attempt-current.js",
       ),
     ).toEqual([runAttemptKey, runAttemptKey]);
     expect(
       expectedOptionalReviewedFindingsForPackedPath(
-        "@openclaw/codex",
+        "@natesclaw/codex",
         "dist/session-catalog-current.js",
       ),
-    ).toEqual(["@openclaw/codex:dangerous-exec:dist/session-catalog-<hash>.js"]);
+    ).toEqual(["@natesclaw/codex:dangerous-exec:dist/session-catalog-<hash>.js"]);
     expect(
-      expectedOptionalReviewedFindingsForPackedPath("@openclaw/codex", "dist/client-retired.js"),
+      expectedOptionalReviewedFindingsForPackedPath("@natesclaw/codex", "dist/client-retired.js"),
     ).toEqual([]);
   });
 

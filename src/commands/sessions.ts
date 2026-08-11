@@ -7,7 +7,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { isRich, theme } from "../../packages/terminal-core/src/theme.js";
 import { readAcpSessionMetaBatch } from "../acp/runtime/session-meta.js";
 import { resolveModelAgentRuntimeMetadata } from "../agents/agent-runtime-metadata.js";
@@ -23,7 +23,7 @@ import { resolveFreshSessionTotalTokens, resolveSessionTotalTokens } from "../co
 import { listSessionEntriesReadOnly } from "../config/sessions/session-accessor.js";
 import { resolveSqliteTargetFromSessionStorePath } from "../config/sessions/session-sqlite-target.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveStoredSessionKeyForAgentStore } from "../gateway/session-store-key.js";
 import { info } from "../globals.js";
 import { parseStrictPositiveInteger } from "../infra/parse-finite-number.js";
@@ -197,14 +197,14 @@ const formatKindCell = (kind: SessionRow["kind"], rich: boolean) => {
 };
 
 function resolveSessionRuntimeLabel(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry: SessionEntry;
   agentRuntime: ReturnType<typeof resolveModelAgentRuntimeMetadata>;
   modelProvider: string;
   classifyCliProvider: CliProviderClassifier;
 }): string {
   const id = normalizeOptionalLowercaseString(params.agentRuntime.id);
-  const resolvedHarness = id && id !== "openclaw" && id !== "auto" ? id : undefined;
+  const resolvedHarness = id && id !== "natesclaw" && id !== "auto" ? id : undefined;
   return resolveAgentRuntimeLabel({
     config: params.cfg,
     sessionEntry: params.entry,
@@ -253,7 +253,7 @@ function stripChannelRecipientPrefix(
 }
 
 function resolveDisplayRuntimePolicySessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string;
   entry: SessionEntry;
 }): string | undefined {

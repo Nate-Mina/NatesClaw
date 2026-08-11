@@ -1,7 +1,7 @@
 import {
   DEFAULT_GATEWAY_REQUEST_TIMEOUT_MS,
   GatewayProtocolRequestTimeoutError,
-} from "@openclaw/gateway-client/browser";
+} from "@natesclaw/gateway-client/browser";
 import { GatewayRequestError, type GatewayBrowserClient } from "../../api/gateway.ts";
 
 type SessionEventSubscriptionScope = {

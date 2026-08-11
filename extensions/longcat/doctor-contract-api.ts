@@ -1,8 +1,8 @@
 // LongCat doctor contract repairs the historical stock model price persisted
 // by onboarding. Match the complete stock row so operator-customized models
 // and prices are never rewritten when the vendor catalog changes.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { asObjectRecord } from "openclaw/plugin-sdk/runtime-doctor-migrations";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { asObjectRecord } from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 
 const MODELS_PATH = ["models", "providers", "longcat", "models"];
 const LEGACY_CACHE_WRITE_PRICE = 0.75;
@@ -60,13 +60,13 @@ export const legacyConfigRules = [
   {
     path: MODELS_PATH,
     message:
-      'models.providers.longcat.models contains the historical stock LongCat-2.0 cache-write price; run "openclaw doctor --fix" to update it without changing customized rows.',
+      'models.providers.longcat.models contains the historical stock LongCat-2.0 cache-write price; run "natesclaw doctor --fix" to update it without changing customized rows.',
     match: hasLegacyStockLongCatModel,
   },
 ];
 
-export function normalizeCompatibilityConfig({ cfg }: { cfg: OpenClawConfig }): {
-  config: OpenClawConfig;
+export function normalizeCompatibilityConfig({ cfg }: { cfg: NatesclawConfig }): {
+  config: NatesclawConfig;
   changes: string[];
 } {
   const models = asObjectRecord(cfg.models);
@@ -97,7 +97,7 @@ export function normalizeCompatibilityConfig({ cfg }: { cfg: OpenClawConfig }): 
           ...providers,
           longcat: { ...provider, models: nextModels },
         },
-      } as unknown as OpenClawConfig["models"],
+      } as unknown as NatesclawConfig["models"],
     },
     changes: ["Updated the historical stock LongCat-2.0 cache-write price from $0.75 to $0."],
   };

@@ -3,13 +3,13 @@ import {
   applyChannelMatchMeta,
   buildChannelKeyCandidates,
   type ChannelMatchSource,
-} from "openclaw/plugin-sdk/channel-targets";
+} from "natesclaw/plugin-sdk/channel-targets";
 import type {
   ChannelBotLoopProtectionConfig,
   ReplyToMode,
   SlackChannelConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { mergePairLoopGuardConfig } from "openclaw/plugin-sdk/pair-loop-guard-runtime";
+} from "natesclaw/plugin-sdk/config-contracts";
+import { mergePairLoopGuardConfig } from "natesclaw/plugin-sdk/pair-loop-guard-runtime";
 import { buildSlackChannelIdCandidates, buildSlackChannelPolicyScope } from "../group-policy.js";
 import { normalizeSlackSlug } from "./allow-list.js";
 

@@ -1,6 +1,6 @@
 // Synology Chat tests cover channel plugin behavior.
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-outbound";
-import { createPluginSetupWizardStatus } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { verifyChannelMessageAdapterCapabilityProofs } from "natesclaw/plugin-sdk/channel-outbound";
+import { createPluginSetupWizardStatus } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedSynologyChatAccount } from "./types.js";
 
@@ -324,7 +324,7 @@ describe("createSynologyChatPlugin", () => {
 
       expect(mockSendMessage).toHaveBeenCalledWith(
         "https://nas/incoming",
-        "OpenClaw: your access has been approved.",
+        "Natesclaw: your access has been approved.",
         "USER1",
         true,
       );

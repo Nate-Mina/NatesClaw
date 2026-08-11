@@ -1,11 +1,11 @@
-import { installedPluginRoot } from "openclaw/plugin-sdk/test-fixtures";
+import { installedPluginRoot } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // Plugins CLI uninstall tests cover plugin removal selection and uninstall output.
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { persistClawPackageRef } from "../claws/provenance.js";
 import type { ClawAddPlan } from "../claws/types.js";
-import type { OpenClawConfig } from "../config/config.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import type { NatesclawConfig } from "../config/config.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
   applyPluginUninstallDirectoryRemovalMock,
   buildPluginDiagnosticsReportMock,
@@ -28,13 +28,13 @@ import {
   writePersistedInstalledPluginIndexInstallRecordsWithLeaseMock,
 } from "./plugins-cli-test-helpers.js";
 
-const CLI_STATE_ROOT = "/tmp/openclaw-state";
+const CLI_STATE_ROOT = "/tmp/natesclaw-state";
 const ALPHA_INSTALL_PATH = installedPluginRoot(CLI_STATE_ROOT, "alpha");
-const ORIGINAL_OPENCLAW_NIX_MODE = process.env.OPENCLAW_NIX_MODE;
+const ORIGINAL_NATESCLAW_NIX_MODE = process.env.NATESCLAW_NIX_MODE;
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 function primeUninstallPlan(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   overrides: {
     actions?: Record<string, boolean>;
     directoryRemoval?: { target: string } | null;
@@ -97,26 +97,26 @@ describe("plugins cli uninstall", () => {
   });
 
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
-    if (ORIGINAL_OPENCLAW_NIX_MODE === undefined) {
-      delete process.env.OPENCLAW_NIX_MODE;
+    closeNatesclawStateDatabaseForTest();
+    if (ORIGINAL_NATESCLAW_NIX_MODE === undefined) {
+      delete process.env.NATESCLAW_NIX_MODE;
     } else {
-      process.env.OPENCLAW_NIX_MODE = ORIGINAL_OPENCLAW_NIX_MODE;
+      process.env.NATESCLAW_NIX_MODE = ORIGINAL_NATESCLAW_NIX_MODE;
     }
   });
 
   it("refuses plugin uninstalls in Nix mode before planning file removal", async () => {
-    const previous = process.env.OPENCLAW_NIX_MODE;
-    process.env.OPENCLAW_NIX_MODE = "1";
+    const previous = process.env.NATESCLAW_NIX_MODE;
+    process.env.NATESCLAW_NIX_MODE = "1";
     try {
       await expect(runPluginsCommand(["plugins", "uninstall", "alpha", "--force"])).rejects.toThrow(
-        "OPENCLAW_NIX_MODE=1",
+        "NATESCLAW_NIX_MODE=1",
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_NIX_MODE;
+        delete process.env.NATESCLAW_NIX_MODE;
       } else {
-        process.env.OPENCLAW_NIX_MODE = previous;
+        process.env.NATESCLAW_NIX_MODE = previous;
       }
     }
 
@@ -126,7 +126,7 @@ describe("plugins cli uninstall", () => {
   });
 
   it("shows uninstall dry-run preview without mutating config or acquiring write mode", async () => {
-    process.env.OPENCLAW_NIX_MODE = "1";
+    process.env.NATESCLAW_NIX_MODE = "1";
     pluginCliConfigMock.mockReturnValue({
       plugins: {
         entries: {
@@ -145,12 +145,12 @@ describe("plugins cli uninstall", () => {
           contextEngine: "alpha",
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     buildPluginSnapshotReportMock.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],
     });
-    primeUninstallPlan({} as OpenClawConfig, { actions: { contextEngineSlot: true } });
+    primeUninstallPlan({} as NatesclawConfig, { actions: { contextEngineSlot: true } });
 
     await runPluginsCommand(["plugins", "uninstall", "alpha", "--dry-run"]);
 
@@ -177,13 +177,13 @@ describe("plugins cli uninstall", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
@@ -240,7 +240,7 @@ describe("plugins cli uninstall", () => {
           calendar: { source: "npm", spec: "calendar@1.0.0" },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       plugins: {
         entries: { "unrelated-plugin": { enabled: true } },
@@ -248,7 +248,7 @@ describe("plugins cli uninstall", () => {
           "unrelated-plugin": { source: "npm", spec: "unrelated-plugin@1.0.0" },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
@@ -288,7 +288,7 @@ describe("plugins cli uninstall", () => {
           "calendar-two": { source: "npm", spec: "calendar-two@1.0.0" },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
@@ -314,9 +314,9 @@ describe("plugins cli uninstall", () => {
   });
 
   it("warns but proceeds when a shared plugin has an uncertain Claw reference", async () => {
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    process.env.OPENCLAW_STATE_DIR = tempDirs.make("openclaw-claw-plugin-ref-");
-    closeOpenClawStateDatabaseForTest();
+    const previousStateDir = process.env.NATESCLAW_STATE_DIR;
+    process.env.NATESCLAW_STATE_DIR = tempDirs.make("natesclaw-claw-plugin-ref-");
+    closeNatesclawStateDatabaseForTest();
     try {
       const installRecord = {
         source: "clawhub" as const,
@@ -330,14 +330,14 @@ describe("plugins cli uninstall", () => {
           entries: { alpha: { enabled: true } },
           installs: { alpha: installRecord },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       pluginCliConfigMock.mockReturnValue(baseConfig);
       setInstalledPluginIndexInstallRecords({ alpha: installRecord });
       buildPluginSnapshotReportMock.mockReturnValue({
         plugins: [{ id: "alpha", name: "alpha" }],
         diagnostics: [],
       });
-      primeUninstallPlan({ plugins: { entries: {}, installs: {} } } as OpenClawConfig, {
+      primeUninstallPlan({ plugins: { entries: {}, installs: {} } } as NatesclawConfig, {
         actions: { channelConfig: false },
       });
       persistClawPackageRef(
@@ -362,11 +362,11 @@ describe("plugins cli uninstall", () => {
       expectInstallRecordsWrittenWithLease({}, { plugins: { entries: {} } });
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.NATESCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.NATESCLAW_STATE_DIR = previousStateDir;
       }
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
     }
   });
 
@@ -384,14 +384,14 @@ describe("plugins cli uninstall", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
     buildPluginSnapshotReportMock.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],
     });
-    primeUninstallPlan({ plugins: { entries: {}, installs: {} } } as OpenClawConfig);
+    primeUninstallPlan({ plugins: { entries: {}, installs: {} } } as NatesclawConfig);
     promptYesNoMock.mockRejectedValueOnce(new PromptInputClosedError());
 
     await expect(runPluginsCommand(["plugins", "uninstall", "alpha"])).rejects.toThrow(
@@ -422,13 +422,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const previousPersistedIndex = createTestInstalledPluginIndex({
       policyHash: "previous-policy",
       installRecords,
@@ -476,13 +476,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -518,7 +518,7 @@ describe("plugins cli uninstall", () => {
   });
 
   it("keeps the install tracked and disabled when directory removal fails", async () => {
-    const installPath = tempDirs.make("openclaw-plugin-uninstall-failure-");
+    const installPath = tempDirs.make("natesclaw-plugin-uninstall-failure-");
     const installRecords = {
       alpha: {
         source: "npm",
@@ -533,14 +533,14 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
     buildPluginSnapshotReportMock.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],
     });
-    primeUninstallPlan({ plugins: { entries: {}, installs: {} } } as OpenClawConfig, {
+    primeUninstallPlan({ plugins: { entries: {}, installs: {} } } as NatesclawConfig, {
       directoryRemoval: { target: installPath },
     });
     applyPluginUninstallDirectoryRemovalMock.mockResolvedValue({
@@ -570,12 +570,12 @@ describe("plugins cli uninstall", () => {
         allow: ["alpha", "beta"],
         deny: ["alpha"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       plugins: {
         allow: ["beta"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     buildPluginSnapshotReportMock.mockReturnValue({
@@ -606,8 +606,8 @@ describe("plugins cli uninstall", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
-    const nextConfig = {} as OpenClawConfig;
+    } as NatesclawConfig;
+    const nextConfig = {} as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     buildPluginSnapshotReportMock.mockReturnValue({
@@ -662,7 +662,7 @@ describe("plugins cli uninstall", () => {
         installs: installRecords,
       },
       channels,
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -732,14 +732,14 @@ describe("plugins cli uninstall", () => {
           enabled: true,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       channels: {
         discord: {
           enabled: true,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     pluginCliConfigMock.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -768,7 +768,7 @@ describe("plugins cli uninstall", () => {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     buildPluginSnapshotReportMock.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],

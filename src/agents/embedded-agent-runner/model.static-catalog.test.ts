@@ -3,7 +3,7 @@ import { createManifestRecord } from "./model.static-catalog.test-helpers.js";
 
 const manifestMocks = vi.hoisted(() => ({
   getCurrentPluginMetadataSnapshot: vi.fn(),
-  listOpenClawPluginManifestMetadata: vi.fn(),
+  listNatesclawPluginManifestMetadata: vi.fn(),
   loadPluginManifest: vi.fn(),
   loadPluginManifestRegistryCore: vi.fn(),
 }));
@@ -17,7 +17,7 @@ const providerMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("../../plugins/manifest-metadata-scan.js", () => ({
-  listOpenClawPluginManifestMetadata: manifestMocks.listOpenClawPluginManifestMetadata,
+  listNatesclawPluginManifestMetadata: manifestMocks.listNatesclawPluginManifestMetadata,
 }));
 
 vi.mock("../../plugins/current-plugin-metadata-snapshot.js", () => ({
@@ -71,7 +71,7 @@ function setManifestPlugins(plugins: unknown[]) {
       return [`/fixtures/${id}`, plugin];
     }),
   );
-  manifestMocks.listOpenClawPluginManifestMetadata.mockReturnValue(
+  manifestMocks.listNatesclawPluginManifestMetadata.mockReturnValue(
     [...byPluginDir].map(([pluginDir, plugin]) => ({
       pluginDir,
       manifest: plugin,
@@ -82,7 +82,7 @@ function setManifestPlugins(plugins: unknown[]) {
     const plugin = byPluginDir.get(pluginDir);
     return plugin
       ? { ok: true, manifest: plugin }
-      : { ok: false, error: "missing manifest", manifestPath: `${pluginDir}/openclaw.plugin.json` };
+      : { ok: false, error: "missing manifest", manifestPath: `${pluginDir}/natesclaw.plugin.json` };
   });
 }
 
@@ -193,7 +193,7 @@ function expectManifestAliasResolution(
 
 beforeEach(() => {
   manifestMocks.getCurrentPluginMetadataSnapshot.mockReset();
-  manifestMocks.listOpenClawPluginManifestMetadata.mockReset();
+  manifestMocks.listNatesclawPluginManifestMetadata.mockReset();
   manifestMocks.loadPluginManifest.mockReset();
   manifestMocks.loadPluginManifestRegistryCore.mockReset();
   providerMocks.normalizePluginDiscoveryResult.mockReset();
@@ -545,7 +545,7 @@ describe("resolveBundledStaticCatalogModel", () => {
       "mistral-medium-3-5",
     );
     expect(resolveModel({ provider: "mistral", modelId: "missing" })).toBeUndefined();
-    expect(manifestMocks.listOpenClawPluginManifestMetadata).toHaveBeenCalledTimes(1);
+    expect(manifestMocks.listNatesclawPluginManifestMetadata).toHaveBeenCalledTimes(1);
   });
 
   it("synthesizes a runtime model from an exact bundled static manifest catalog row", () => {

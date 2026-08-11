@@ -11,7 +11,7 @@ const suite = createControlUiE2eSuite({
   unavailableMessage: (executablePath) => `Playwright Chromium is unavailable at ${executablePath}`,
 });
 
-const captureUiProofEnabled = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
+const captureUiProofEnabled = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
 const artifactDir = path.join(
   process.cwd(),
   ".artifacts",
@@ -25,7 +25,7 @@ function detection(modelRef: string) {
     manualProviders: [],
     configuredModel: modelRef,
     setupComplete: true,
-    workspace: "/tmp/openclaw-e2e",
+    workspace: "/tmp/natesclaw-e2e",
   };
 }
 
@@ -41,17 +41,17 @@ suite.define(() => {
         const pageErrors: string[] = [];
         page.on("pageerror", (error) => pageErrors.push(String(error)));
         const gateway = await installMockGateway(page, {
-          featureMethods: ["openclaw.setup.detect"],
-          methodResponses: { "openclaw.setup.detect": detection("provider/original-model") },
+          featureMethods: ["natesclaw.setup.detect"],
+          methodResponses: { "natesclaw.setup.detect": detection("provider/original-model") },
         });
 
         const response = await page.goto(`${suite.server.baseUrl}settings/model-setup`);
         expect(response?.status()).toBe(200);
         await page.getByText("original-model", { exact: true }).waitFor();
-        const initialDetections = (await gateway.getRequests("openclaw.setup.detect")).length;
+        const initialDetections = (await gateway.getRequests("natesclaw.setup.detect")).length;
         const initialConnections = (await gateway.getRequests("connect")).length;
         await gateway.setMethodResponse(
-          "openclaw.setup.detect",
+          "natesclaw.setup.detect",
           detection("provider/reconnected-model"),
         );
         await gateway.deferNext("connect");
@@ -64,14 +64,14 @@ suite.define(() => {
           .toBeGreaterThan(initialConnections);
         await gateway.resolveDeferred("connect");
         await expect
-          .poll(async () => (await gateway.getRequests("openclaw.setup.detect")).length)
+          .poll(async () => (await gateway.getRequests("natesclaw.setup.detect")).length)
           .toBe(initialDetections + 1);
         await page.getByText("reconnected-model", { exact: true }).waitFor();
         expect(pageErrors).toEqual([]);
 
         if (captureUiProofEnabled) {
           await mkdir(artifactDir, { recursive: true });
-          await page.locator("openclaw-model-setup-page").screenshot({
+          await page.locator("natesclaw-model-setup-page").screenshot({
             animations: "disabled",
             path: path.join(artifactDir, "00-reconnected-model-visible.png"),
           });

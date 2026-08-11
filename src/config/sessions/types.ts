@@ -4,8 +4,8 @@ import type {
   AcpSessionRuntimeOptions,
   SessionAcpIdentity,
   SessionAcpMeta,
-} from "@openclaw/acp-core/types";
-import { normalizeOptionalString, type FastMode } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/acp-core/types";
+import { normalizeOptionalString, type FastMode } from "@natesclaw/normalization-core/string-coerce";
 import type { QueueMode } from "../../../packages/gateway-protocol/src/schema/logs-chat.js";
 import type { SessionRunStatus } from "../../../packages/gateway-protocol/src/schema/sessions-row.js";
 import type { SessionObserverDigest } from "../../../packages/gateway-protocol/src/schema/sessions.js";
@@ -544,7 +544,7 @@ type SessionEntryCore = SessionRestartRecoveryState &
     modelProvider?: string;
     model?: string;
     /**
-     * Prevents OpenClaw model changes and automatic maintenance eviction until
+     * Prevents Natesclaw model changes and automatic maintenance eviction until
      * the owning harness explicitly retires the session.
      */
     modelSelectionLocked?: boolean;
@@ -571,7 +571,7 @@ type SessionEntryCore = SessionRestartRecoveryState &
     /** Preferred Control UI face when a caller opens this session without explicit face intent. */
     boardFace?: SessionBoardFace;
     displayName?: string;
-    /** Canonical delivery state. Legacy delivery fields are migrated by `openclaw doctor --fix`. */
+    /** Canonical delivery state. Legacy delivery fields are migrated by `natesclaw doctor --fix`. */
     delivery?: SessionDeliveryState;
     groupId?: string;
     subject?: string;

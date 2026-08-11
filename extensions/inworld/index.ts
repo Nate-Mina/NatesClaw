@@ -1,5 +1,5 @@
-// Inworld plugin entrypoint registers its OpenClaw integration.
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+// Inworld plugin entrypoint registers its Natesclaw integration.
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 import { buildInworldSpeechProvider } from "./speech-provider.js";
 
 export default definePluginEntry({

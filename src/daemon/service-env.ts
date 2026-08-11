@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveNodeStartupTlsEnvironment } from "../bootstrap/node-startup-env.js";
 import {
   GATEWAY_SERVICE_KIND,
@@ -37,7 +37,7 @@ type SharedServiceEnvironmentFields = {
 };
 
 export const SERVICE_PROXY_ENV_KEYS = [
-  "OPENCLAW_PROXY_URL",
+  "NATESCLAW_PROXY_URL",
   "HTTP_PROXY",
   "HTTPS_PROXY",
   "NO_PROXY",
@@ -51,10 +51,10 @@ export const SERVICE_PROXY_ENV_KEYS = [
 function readServiceProxyEnvironment(
   env: Record<string, string | undefined>,
 ): Record<string, string | undefined> {
-  // Service env intentionally preserves only the canonical OpenClaw proxy knob;
+  // Service env intentionally preserves only the canonical Natesclaw proxy knob;
   // generic shell proxy vars are audited but not frozen into services.
-  const proxyUrl = normalizeOptionalString(env.OPENCLAW_PROXY_URL);
-  return proxyUrl ? { OPENCLAW_PROXY_URL: proxyUrl } : {};
+  const proxyUrl = normalizeOptionalString(env.NATESCLAW_PROXY_URL);
+  return proxyUrl ? { NATESCLAW_PROXY_URL: proxyUrl } : {};
 }
 
 function normalizeServicePathDir(dir: string | undefined): string | undefined {
@@ -322,11 +322,11 @@ function buildMinimalServicePath(options: MinimalServicePathOptions = {}): strin
 }
 
 function resolveGatewaySystemdUnitEnv(env: Record<string, string | undefined>): string {
-  const override = normalizeOptionalString(env.OPENCLAW_SYSTEMD_UNIT);
+  const override = normalizeOptionalString(env.NATESCLAW_SYSTEMD_UNIT);
   if (override) {
     return override.endsWith(".service") ? override : `${override}.service`;
   }
-  return `${resolveGatewaySystemdServiceName(env.OPENCLAW_PROFILE)}.service`;
+  return `${resolveGatewaySystemdServiceName(env.NATESCLAW_PROFILE)}.service`;
 }
 
 export function buildServiceEnvironment(params: {
@@ -346,23 +346,23 @@ export function buildServiceEnvironment(params: {
     extraPathDirs,
     params.execPath,
   );
-  const profile = env.OPENCLAW_PROFILE;
-  const wrapperPath = normalizeOptionalString(env.OPENCLAW_WRAPPER);
+  const profile = env.NATESCLAW_PROFILE;
+  const wrapperPath = normalizeOptionalString(env.NATESCLAW_WRAPPER);
   const resolvedLaunchdLabel =
     launchdLabel || (platform === "darwin" ? resolveGatewayLaunchAgentLabel(profile) : undefined);
   const systemdUnit = resolveGatewaySystemdUnitEnv(env);
   return {
     ...buildCommonServiceEnvironment(env, sharedEnv),
     NODE_OPTIONS: resolveGatewayHeapNodeOptions(params.existingNodeOptions),
-    OPENCLAW_PROFILE: profile,
-    OPENCLAW_WRAPPER: wrapperPath,
-    OPENCLAW_GATEWAY_PORT: String(port),
-    OPENCLAW_LAUNCHD_LABEL: resolvedLaunchdLabel,
-    OPENCLAW_SYSTEMD_UNIT: systemdUnit,
-    OPENCLAW_WINDOWS_TASK_NAME: resolveGatewayWindowsTaskName(profile),
-    OPENCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "1",
-    OPENCLAW_SERVICE_MARKER: GATEWAY_SERVICE_MARKER,
-    OPENCLAW_SERVICE_KIND: GATEWAY_SERVICE_KIND,
+    NATESCLAW_PROFILE: profile,
+    NATESCLAW_WRAPPER: wrapperPath,
+    NATESCLAW_GATEWAY_PORT: String(port),
+    NATESCLAW_LAUNCHD_LABEL: resolvedLaunchdLabel,
+    NATESCLAW_SYSTEMD_UNIT: systemdUnit,
+    NATESCLAW_WINDOWS_TASK_NAME: resolveGatewayWindowsTaskName(profile),
+    NATESCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "1",
+    NATESCLAW_SERVICE_MARKER: GATEWAY_SERVICE_MARKER,
+    NATESCLAW_SERVICE_KIND: GATEWAY_SERVICE_KIND,
   };
 }
 
@@ -380,14 +380,14 @@ export function buildNodeServiceEnvironment(params: {
     extraPathDirs,
     params.execPath,
   );
-  const gatewayToken = normalizeOptionalString(env.OPENCLAW_GATEWAY_TOKEN);
-  const gatewayPassword = normalizeOptionalString(env.OPENCLAW_GATEWAY_PASSWORD);
-  const allowInsecurePrivateWs = normalizeOptionalString(env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS);
+  const gatewayToken = normalizeOptionalString(env.NATESCLAW_GATEWAY_TOKEN);
+  const gatewayPassword = normalizeOptionalString(env.NATESCLAW_GATEWAY_PASSWORD);
+  const allowInsecurePrivateWs = normalizeOptionalString(env.NATESCLAW_ALLOW_INSECURE_PRIVATE_WS);
   return {
     ...buildCommonServiceEnvironment(env, sharedEnv),
-    OPENCLAW_GATEWAY_TOKEN: gatewayToken,
-    OPENCLAW_GATEWAY_PASSWORD: gatewayPassword,
-    OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: allowInsecurePrivateWs,
+    NATESCLAW_GATEWAY_TOKEN: gatewayToken,
+    NATESCLAW_GATEWAY_PASSWORD: gatewayPassword,
+    NATESCLAW_ALLOW_INSECURE_PRIVATE_WS: allowInsecurePrivateWs,
     ...resolveNodeServiceIdentityEnvironment(),
   };
 }
@@ -401,8 +401,8 @@ function buildCommonServiceEnvironment(
     TMPDIR: sharedEnv.tmpDir,
     NODE_EXTRA_CA_CERTS: sharedEnv.nodeCaCerts,
     NODE_USE_SYSTEM_CA: sharedEnv.nodeUseSystemCa,
-    OPENCLAW_STATE_DIR: sharedEnv.stateDir,
-    OPENCLAW_CONFIG_PATH: sharedEnv.configPath,
+    NATESCLAW_STATE_DIR: sharedEnv.stateDir,
+    NATESCLAW_CONFIG_PATH: sharedEnv.configPath,
     ...sharedEnv.proxyEnv,
   };
   if (sharedEnv.minimalPath) {
@@ -431,8 +431,8 @@ function resolveSharedServiceEnvironmentFields(
   extraPathDirs: string[] | undefined,
   execPath?: string,
 ): SharedServiceEnvironmentFields {
-  const stateDir = env.OPENCLAW_STATE_DIR;
-  const configPath = env.OPENCLAW_CONFIG_PATH;
+  const stateDir = env.NATESCLAW_STATE_DIR;
+  const configPath = env.NATESCLAW_CONFIG_PATH;
   const tmpDir = resolveServiceTmpDir(env, platform);
   // On macOS, launchd services don't inherit the shell environment, so Node's undici/fetch
   // cannot locate the system CA bundle. Default to /etc/ssl/cert.pem so TLS verification

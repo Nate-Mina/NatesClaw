@@ -11,11 +11,11 @@ import {
   setTimeout as scheduleNativeTimeout,
 } from "node:timers";
 import chokidar from "chokidar";
-import { detectMime } from "openclaw/plugin-sdk/media-mime";
-import { isTruthyEnvValue, type RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
-import { lowercasePreservingWhitespace } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { ensureDir, resolveUserPath } from "openclaw/plugin-sdk/text-utility-runtime";
+import { detectMime } from "natesclaw/plugin-sdk/media-mime";
+import { isTruthyEnvValue, type RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { resolveStateDir } from "natesclaw/plugin-sdk/state-paths";
+import { lowercasePreservingWhitespace } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { ensureDir, resolveUserPath } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { WebSocketServer } from "ws";
 import { CANVAS_HOST_PATH, CANVAS_WS_PATH, injectCanvasRuntime } from "./a2ui-shared.js";
 import { normalizeUrlPath, resolveFileWithinRoot } from "./file-resolver.js";
@@ -46,7 +46,7 @@ function defaultIndexHTML() {
   return `<!doctype html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>OpenClaw Canvas</title>
+<title>Natesclaw Canvas</title>
 <style>
   html, body { height: 100%; margin: 0; background: #000; color: #fff; font: 16px/1.4 -apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
   .wrap { min-height: 100%; display: grid; place-items: center; padding: 24px; }
@@ -64,7 +64,7 @@ function defaultIndexHTML() {
 <div class="wrap">
   <div class="card">
     <div class="title">
-      <h1>OpenClaw Canvas</h1>
+      <h1>Natesclaw Canvas</h1>
       <div class="sub">Interactive test page</div>
     </div>
 
@@ -89,14 +89,14 @@ function defaultIndexHTML() {
     !!(
       window.webkit &&
       window.webkit.messageHandlers &&
-      window.webkit.messageHandlers.openclawCanvasA2UIAction
+      window.webkit.messageHandlers.natesclawCanvasA2UIAction
     );
   const hasAndroid = () =>
     !!(
-      (window.openclawCanvasA2UIAction &&
-        typeof window.openclawCanvasA2UIAction.postMessage === "function")
+      (window.natesclawCanvasA2UIAction &&
+        typeof window.natesclawCanvasA2UIAction.postMessage === "function")
     );
-  const hasHelper = () => typeof window.openclawSendUserAction === "function";
+  const hasHelper = () => typeof window.natesclawSendUserAction === "function";
   const helperReady = hasHelper();
   statusEl.textContent = "";
   statusEl.appendChild(document.createTextNode("Bridge: "));
@@ -114,16 +114,16 @@ function defaultIndexHTML() {
     const d = ev && ev.detail || {};
     log("Action status: id=" + (d.id || "?") + " ok=" + String(!!d.ok) + (d.error ? (" error=" + d.error) : ""));
   };
-  window.addEventListener("openclaw:a2ui-action-status", onStatus);
+  window.addEventListener("natesclaw:a2ui-action-status", onStatus);
 
   function send(name, sourceComponentId) {
     if (!hasHelper()) {
-      log("No action bridge found. Ensure you're viewing this on an iOS/Android OpenClaw node canvas.");
+      log("No action bridge found. Ensure you're viewing this on an iOS/Android Natesclaw node canvas.");
       return;
     }
     const sendUserAction =
-      typeof window.openclawSendUserAction === "function"
-        ? window.openclawSendUserAction
+      typeof window.natesclawSendUserAction === "function"
+        ? window.natesclawSendUserAction
         : undefined;
     const ok = sendUserAction({
       name,
@@ -144,7 +144,7 @@ function defaultIndexHTML() {
 }
 
 function isDisabledByEnv() {
-  if (isTruthyEnvValue(process.env.OPENCLAW_SKIP_CANVAS_HOST)) {
+  if (isTruthyEnvValue(process.env.NATESCLAW_SKIP_CANVAS_HOST)) {
     return true;
   }
   if (process.env.NODE_ENV === "test") {
@@ -196,7 +196,7 @@ function shouldIgnoreCanvasWatchPath(rootReal: string, candidatePath: string): b
     return false;
   }
   // Chokidar evaluates ignored matchers against absolute paths. Scope the
-  // policy below the root so the default ~/.openclaw parent is still watched.
+  // policy below the root so the default ~/.natesclaw parent is still watched.
   return relative
     .split(/[\\/]/u)
     .some((segment) => segment.startsWith(".") || segment === "node_modules");
@@ -338,7 +338,7 @@ export async function createCanvasHostHandler(
           res.statusCode = 404;
           res.setHeader("Content-Type", "text/html; charset=utf-8");
           res.end(
-            `<!doctype html><meta charset="utf-8" /><title>OpenClaw Canvas</title><pre>Missing file.\nCreate ${rootDir}/index.html</pre>`,
+            `<!doctype html><meta charset="utf-8" /><title>Natesclaw Canvas</title><pre>Missing file.\nCreate ${rootDir}/index.html</pre>`,
           );
           return true;
         }

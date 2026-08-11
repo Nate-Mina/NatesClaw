@@ -15,13 +15,13 @@ import {
   listSessionEntryKeysReadOnly,
   upsertSessionEntryCore,
 } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { parseAgentSessionKey } from "../routing/session-key.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  resolveOpenClawAgentSqlitePath,
-} from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  resolveNatesclawAgentSqlitePath,
+} from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { captureEnv, setTestEnvValue } from "../test-utils/env.js";
 import {
   detectLegacyWorkspaceState,
@@ -32,8 +32,8 @@ describe("sandbox workspace Doctor migration", () => {
   let envSnapshot: ReturnType<typeof captureEnv> | undefined;
   const tempDirs = useAutoCleanupTempDirTracker((cleanup) => {
     afterEach(() => {
-      closeOpenClawAgentDatabasesForTest();
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawAgentDatabasesForTest();
+      closeNatesclawStateDatabaseForTest();
       envSnapshot?.restore();
       envSnapshot = undefined;
       cleanup();
@@ -43,15 +43,15 @@ describe("sandbox workspace Doctor migration", () => {
   function setup() {
     // macOS os.tmpdir() is a /var -> /private/var symlink; prod resolvers return
     // canonical paths, so expectations must build from the realpathed root.
-    const homeDir = fs.realpathSync(tempDirs.make("openclaw-sandbox-workspace-migration-home-"));
-    const stateDir = path.join(homeDir, ".openclaw");
+    const homeDir = fs.realpathSync(tempDirs.make("natesclaw-sandbox-workspace-migration-home-"));
+    const stateDir = path.join(homeDir, ".natesclaw");
     const workspaceDir = path.join(homeDir, "workspace");
     fs.mkdirSync(workspaceDir, { recursive: true });
-    envSnapshot ??= captureEnv(["HOME", "OPENCLAW_HOME", "OPENCLAW_STATE_DIR"]);
+    envSnapshot ??= captureEnv(["HOME", "NATESCLAW_HOME", "NATESCLAW_STATE_DIR"]);
     setTestEnvValue("HOME", homeDir);
-    setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
+    setTestEnvValue("NATESCLAW_STATE_DIR", stateDir);
     return {
-      env: { ...process.env, HOME: homeDir, OPENCLAW_STATE_DIR: stateDir },
+      env: { ...process.env, HOME: homeDir, NATESCLAW_STATE_DIR: stateDir },
       homeDir,
       stateDir,
       workspaceDir,
@@ -74,7 +74,7 @@ describe("sandbox workspace Doctor migration", () => {
       sessionKey,
       createdAtMs: 1,
       lastUsedAtMs: 1,
-      image: "openclaw-sandbox:test",
+      image: "natesclaw-sandbox:test",
     });
   }
 
@@ -83,7 +83,7 @@ describe("sandbox workspace Doctor migration", () => {
 
     expect(listSessionEntryKeysReadOnly({ agentId: "main", env: context.env })).toEqual([]);
     expect(
-      fs.existsSync(resolveOpenClawAgentSqlitePath({ agentId: "main", env: context.env })),
+      fs.existsSync(resolveNatesclawAgentSqlitePath({ agentId: "main", env: context.env })),
     ).toBe(false);
   });
 
@@ -104,7 +104,7 @@ describe("sandbox workspace Doctor migration", () => {
     const context = setup();
     const env = {
       ...context.env,
-      OPENCLAW_CONFIG_PATH: path.join(context.stateDir, "openclaw.json"),
+      NATESCLAW_CONFIG_PATH: path.join(context.stateDir, "natesclaw.json"),
     };
     const sandboxRoot = path.join(context.homeDir, "sandboxes");
     const configuredSandboxRoot = "~/sandboxes";
@@ -121,13 +121,13 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const sandboxLayout = resolveSandboxWorkspaceLayoutPaths({
       cfg: { scope: "agent", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
       rawSessionKey: "agent:main:main",
       workspaceDir: context.workspaceDir,
     });
-    const setupPath = path.join(sandboxLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+    const setupPath = path.join(sandboxLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     await fsp.mkdir(sandboxLayout.sandboxWorkspaceDir, { recursive: true });
     await fsp.writeFile(
       setupPath,
@@ -188,7 +188,7 @@ describe("sandbox workspace Doctor migration", () => {
           },
           entries: { main: { default: true } },
         },
-      } satisfies OpenClawConfig;
+      } satisfies NatesclawConfig;
       const sandboxLayout = resolveSandboxWorkspaceLayoutPaths({
         cfg: { scope, workspaceAccess: "ro", workspaceRoot: sandboxRoot },
         rawSessionKey: "agent:main:telegram:direct:doctor-proof",
@@ -199,7 +199,7 @@ describe("sandbox workspace Doctor migration", () => {
       }
       const setupPath = path.join(
         sandboxLayout.sandboxWorkspaceDir,
-        "openclaw-workspace-state.json",
+        "natesclaw-workspace-state.json",
       );
       await fsp.mkdir(sandboxLayout.sandboxWorkspaceDir, { recursive: true });
       await fsp.writeFile(
@@ -260,13 +260,13 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const layout = resolveSandboxWorkspaceLayoutPaths({
       cfg: { scope: "session", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
       rawSessionKey: sessionKey,
       workspaceDir: context.workspaceDir,
     });
-    const setupPath = path.join(layout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+    const setupPath = path.join(layout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     await fsp.mkdir(layout.sandboxWorkspaceDir, { recursive: true });
     await fsp.writeFile(
       setupPath,
@@ -325,7 +325,7 @@ describe("sandbox workspace Doctor migration", () => {
           },
           entries: { main: { default: true } },
         },
-      } satisfies OpenClawConfig;
+      } satisfies NatesclawConfig;
       const sandboxLayout = resolveSandboxWorkspaceLayoutPaths({
         cfg: { scope: "agent", workspaceAccess, workspaceRoot: sandboxRoot },
         rawSessionKey: "agent:main:main",
@@ -333,7 +333,7 @@ describe("sandbox workspace Doctor migration", () => {
       });
       const setupPath = path.join(
         sandboxLayout.sandboxWorkspaceDir,
-        "openclaw-workspace-state.json",
+        "natesclaw-workspace-state.json",
       );
       await fsp.mkdir(sandboxLayout.sandboxWorkspaceDir, { recursive: true });
       await fsp.writeFile(setupPath, JSON.stringify({ version: 1 }), "utf8");
@@ -371,7 +371,7 @@ describe("sandbox workspace Doctor migration", () => {
           writer: { sandbox: { workspaceAccess: "rw" } },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const activeLayout = resolveSandboxWorkspaceLayoutPaths({
       cfg: { scope: "session", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
       rawSessionKey: "agent:main:telegram:direct:doctor-proof",
@@ -387,17 +387,17 @@ describe("sandbox workspace Doctor migration", () => {
       rawSessionKey: "agent:writer:telegram:direct:doctor-proof",
       workspaceDir: context.workspaceDir,
     });
-    const activePath = path.join(activeLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+    const activePath = path.join(activeLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     const protectedPaths = [
-      path.join(inactiveLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json"),
-      path.join(readWriteLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json"),
+      path.join(inactiveLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json"),
+      path.join(readWriteLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json"),
       path.join(
         resolveSandboxWorkspaceLayoutPaths({
           cfg: { scope: "session", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
           rawSessionKey: "agent:main",
           workspaceDir: context.workspaceDir,
         }).sandboxWorkspaceDir,
-        "openclaw-workspace-state.json",
+        "natesclaw-workspace-state.json",
       ),
       path.join(
         resolveSandboxWorkspaceLayoutPaths({
@@ -405,10 +405,10 @@ describe("sandbox workspace Doctor migration", () => {
           rawSessionKey: "shared",
           workspaceDir: context.workspaceDir,
         }).sandboxWorkspaceDir,
-        "openclaw-workspace-state.json",
+        "natesclaw-workspace-state.json",
       ),
-      path.join(sandboxRoot, "notes", "openclaw-workspace-state.json"),
-      path.join(sandboxRoot, "agent-unknown-12345678", "openclaw-workspace-state.json"),
+      path.join(sandboxRoot, "notes", "natesclaw-workspace-state.json"),
+      path.join(sandboxRoot, "agent-unknown-12345678", "natesclaw-workspace-state.json"),
     ];
     for (const setupPath of [activePath, ...protectedPaths]) {
       await fsp.mkdir(path.dirname(setupPath), { recursive: true });
@@ -473,7 +473,7 @@ describe("sandbox workspace Doctor migration", () => {
           "main-telegram": {},
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const resolveSetupPath = (rawSessionKey: string) => {
       const layout = resolveSandboxWorkspaceLayoutPaths({
         cfg: { scope: "session", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
@@ -484,7 +484,7 @@ describe("sandbox workspace Doctor migration", () => {
           context.env,
         ),
       });
-      return path.join(layout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+      return path.join(layout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     };
     const inactivePath = resolveSetupPath("agent:main:telegram:direct:doctor-proof");
     const activePath = resolveSetupPath("agent:main-telegram:signal:direct:doctor-proof");
@@ -525,7 +525,7 @@ describe("sandbox workspace Doctor migration", () => {
   it("derives the default sandbox root from the requested state profile", async () => {
     const context = setup();
     const requestedStateDir = path.join(context.homeDir, "requested-profile");
-    const requestedEnv = { ...context.env, OPENCLAW_STATE_DIR: requestedStateDir };
+    const requestedEnv = { ...context.env, NATESCLAW_STATE_DIR: requestedStateDir };
     const sessionKey = "agent:main:telegram:direct:requested-default-root";
     const cfg = {
       agents: {
@@ -535,7 +535,7 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const workspaceFor = (stateDir: string) =>
       resolveSandboxWorkspaceLayoutPaths({
         cfg: {
@@ -548,9 +548,9 @@ describe("sandbox workspace Doctor migration", () => {
       }).sandboxWorkspaceDir;
     const requestedPath = path.join(
       workspaceFor(requestedStateDir),
-      "openclaw-workspace-state.json",
+      "natesclaw-workspace-state.json",
     );
-    const ambientPath = path.join(workspaceFor(context.stateDir), "openclaw-workspace-state.json");
+    const ambientPath = path.join(workspaceFor(context.stateDir), "natesclaw-workspace-state.json");
     for (const setupPath of [requestedPath, ambientPath]) {
       await fsp.mkdir(path.dirname(setupPath), { recursive: true });
       await fsp.writeFile(
@@ -559,9 +559,9 @@ describe("sandbox workspace Doctor migration", () => {
         "utf8",
       );
     }
-    setTestEnvValue("OPENCLAW_STATE_DIR", requestedStateDir);
+    setTestEnvValue("NATESCLAW_STATE_DIR", requestedStateDir);
     await registerSandboxSession(sessionKey);
-    setTestEnvValue("OPENCLAW_STATE_DIR", context.stateDir);
+    setTestEnvValue("NATESCLAW_STATE_DIR", context.stateDir);
 
     const detected = detectLegacyWorkspaceState({
       cfg,
@@ -592,7 +592,7 @@ describe("sandbox workspace Doctor migration", () => {
   it("reads persisted session ownership from the requested state profile", async () => {
     const context = setup();
     const requestedStateDir = path.join(context.homeDir, "requested-profile");
-    const requestedEnv = { ...context.env, OPENCLAW_STATE_DIR: requestedStateDir };
+    const requestedEnv = { ...context.env, NATESCLAW_STATE_DIR: requestedStateDir };
     const sandboxRoot = path.join(context.homeDir, "sandboxes");
     const cfg = {
       agents: {
@@ -607,7 +607,7 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const requestedSession = "agent:main:telegram:direct:requested-profile";
     const ambientSession = "agent:main:slack:direct:ambient-profile";
     const workspaceFor = (sessionKey: string) =>
@@ -618,17 +618,17 @@ describe("sandbox workspace Doctor migration", () => {
       }).sandboxWorkspaceDir;
     const requestedPath = path.join(
       workspaceFor(requestedSession),
-      "openclaw-workspace-state.json",
+      "natesclaw-workspace-state.json",
     );
-    const ambientPath = path.join(workspaceFor(ambientSession), "openclaw-workspace-state.json");
+    const ambientPath = path.join(workspaceFor(ambientSession), "natesclaw-workspace-state.json");
     for (const setupPath of [requestedPath, ambientPath]) {
       await fsp.mkdir(path.dirname(setupPath), { recursive: true });
       await fsp.writeFile(setupPath, JSON.stringify({ version: 1 }), "utf8");
     }
 
-    setTestEnvValue("OPENCLAW_STATE_DIR", requestedStateDir);
+    setTestEnvValue("NATESCLAW_STATE_DIR", requestedStateDir);
     await registerSandboxSession(requestedSession);
-    setTestEnvValue("OPENCLAW_STATE_DIR", context.stateDir);
+    setTestEnvValue("NATESCLAW_STATE_DIR", context.stateDir);
     await registerSandboxSession(ambientSession);
 
     expect(listSessionEntryKeysReadOnly({ agentId: "main", env: requestedEnv })).toEqual([
@@ -680,7 +680,7 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const activeLayout = resolveSandboxWorkspaceLayoutPaths({
       cfg: { scope: "session", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
       rawSessionKey: "agent:main:telegram:direct:doctor-proof",
@@ -691,10 +691,10 @@ describe("sandbox workspace Doctor migration", () => {
       rawSessionKey: "agent:main-foo:telegram:direct:doctor-proof",
       workspaceDir: context.workspaceDir,
     });
-    const activePath = path.join(activeLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+    const activePath = path.join(activeLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     const removedAgentPath = path.join(
       removedAgentLayout.sandboxWorkspaceDir,
-      "openclaw-workspace-state.json",
+      "natesclaw-workspace-state.json",
     );
     for (const setupPath of [activePath, removedAgentPath]) {
       await fsp.mkdir(path.dirname(setupPath), { recursive: true });
@@ -745,13 +745,13 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const sandboxLayout = resolveSandboxWorkspaceLayoutPaths({
       cfg: { scope: "session", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
       rawSessionKey: "global",
       workspaceDir: context.workspaceDir,
     });
-    const setupPath = path.join(sandboxLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+    const setupPath = path.join(sandboxLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     await fsp.mkdir(sandboxLayout.sandboxWorkspaceDir, { recursive: true });
     await fsp.writeFile(
       setupPath,
@@ -802,7 +802,7 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const mainLayout = resolveSandboxWorkspaceLayoutPaths({
       cfg: { scope: "session", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
       rawSessionKey: "agent:main:main",
@@ -813,8 +813,8 @@ describe("sandbox workspace Doctor migration", () => {
       rawSessionKey: "agent:main:telegram:direct:doctor-proof",
       workspaceDir: context.workspaceDir,
     });
-    const mainPath = path.join(mainLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
-    const activePath = path.join(activeLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+    const mainPath = path.join(mainLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
+    const activePath = path.join(activeLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     for (const setupPath of [mainPath, activePath]) {
       await fsp.mkdir(path.dirname(setupPath), { recursive: true });
       await fsp.writeFile(
@@ -852,14 +852,14 @@ describe("sandbox workspace Doctor migration", () => {
     expect(fs.existsSync(mainPath)).toBe(true);
   });
 
-  it("repairs sandbox workspace copies beneath the configured OpenClaw home", async () => {
+  it("repairs sandbox workspace copies beneath the configured Natesclaw home", async () => {
     const context = setup();
-    const effectiveHome = path.join(context.homeDir, "effective-openclaw-home");
-    setTestEnvValue("OPENCLAW_HOME", effectiveHome);
+    const effectiveHome = path.join(context.homeDir, "effective-natesclaw-home");
+    setTestEnvValue("NATESCLAW_HOME", effectiveHome);
     const env = {
       ...context.env,
-      OPENCLAW_HOME: effectiveHome,
-      OPENCLAW_CONFIG_PATH: path.join(context.stateDir, "openclaw.json"),
+      NATESCLAW_HOME: effectiveHome,
+      NATESCLAW_CONFIG_PATH: path.join(context.stateDir, "natesclaw.json"),
     };
     const sandboxRoot = path.join(effectiveHome, "sandboxes");
     const cfg = {
@@ -875,13 +875,13 @@ describe("sandbox workspace Doctor migration", () => {
         },
         entries: { main: { default: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const sandboxLayout = resolveSandboxWorkspaceLayoutPaths({
       cfg: { scope: "agent", workspaceAccess: "ro", workspaceRoot: sandboxRoot },
       rawSessionKey: "agent:main:main",
       workspaceDir: context.workspaceDir,
     });
-    const setupPath = path.join(sandboxLayout.sandboxWorkspaceDir, "openclaw-workspace-state.json");
+    const setupPath = path.join(sandboxLayout.sandboxWorkspaceDir, "natesclaw-workspace-state.json");
     await fsp.mkdir(sandboxLayout.sandboxWorkspaceDir, { recursive: true });
     await fsp.writeFile(
       setupPath,

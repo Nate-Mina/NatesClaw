@@ -1,4 +1,4 @@
-import { normalizeStringifiedOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeStringifiedOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { z } from "zod";
 import { parseDurationMs } from "../cli/parse-duration.js";
 import { SilentReplyPolicyConfigSchema } from "./zod-schema.agent-defaults.js";
@@ -40,7 +40,7 @@ const MetricNamePrefixSchema = z
   .max(128)
   .regex(/^(?:[A-Za-z][A-Za-z0-9_./-]*)?$/);
 
-export const OpenClawSchemaShape = {
+export const NatesclawSchemaShape = {
   $schema: z.string().optional(),
   meta: z
     .strictObject({
@@ -166,7 +166,7 @@ export const OpenClawSchemaShape = {
               mcpArgs: z.array(z.string()).optional(),
               driver: z
                 .union([
-                  z.literal("openclaw"),
+                  z.literal("natesclaw"),
                   z.literal("clawd"),
                   z.literal("existing-session"),
                   z.literal("extension"),

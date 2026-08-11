@@ -3,10 +3,10 @@
  * Keeps callers from reaching into runtime config or plugin metadata snapshot
  * plumbing directly.
  */
-import { findNormalizedProviderValue } from "@openclaw/model-catalog-core/provider-id";
-import { normalizeUniqueSingleOrTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
+import { findNormalizedProviderValue } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeUniqueSingleOrTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { getCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";
 import { resolvePluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "./agent-scope.js";
@@ -25,7 +25,7 @@ function providerConfigDeclaresModel(
 
 /** Resolves provider/model refs used to scope model catalog discovery. */
 export function resolveModelCatalogScope(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   provider: string;
   model: string;
 }): { providerRefs: string[]; modelRefs: string[] } {
@@ -44,7 +44,7 @@ export function resolveModelCatalogScope(params: {
 
 /** Resolve the workspace directory model discovery should use for agent scope. */
 export function resolveModelWorkspaceDir(
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
   explicitWorkspaceDir: string | undefined,
 ): string | undefined {
   if (explicitWorkspaceDir !== undefined || !cfg) {
@@ -61,7 +61,7 @@ export function resolveModelWorkspaceDir(
  */
 export function resolveModelPluginMetadataSnapshot(params: {
   allowWorkspaceScopedCurrent?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   pluginMetadataSnapshot?: PluginModelCatalogMetadataSnapshot;
   useRuntimeConfig?: boolean;

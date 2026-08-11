@@ -1,10 +1,10 @@
 // Reads provider ids selected by auth, model, channel, and media configuration.
-import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
-import { normalizeNullableString as normalizeId } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import { collectConfiguredModelRefs } from "@natesclaw/model-catalog-core/configured-model-refs";
+import { normalizeNullableString as normalizeId } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { asObjectRecord } from "./object.js";
 
-function collectConfiguredProviderIds(cfg: OpenClawConfig): Set<string> {
+function collectConfiguredProviderIds(cfg: NatesclawConfig): Set<string> {
   const ids = new Set<string>();
   const add = (value: unknown) => {
     const id = normalizeId(value);
@@ -42,7 +42,7 @@ function collectConfiguredProviderIds(cfg: OpenClawConfig): Set<string> {
   return ids;
 }
 
-function collectConfiguredMediaProviderIds(cfg: OpenClawConfig): Set<string> {
+function collectConfiguredMediaProviderIds(cfg: NatesclawConfig): Set<string> {
   const ids = new Set<string>();
   const add = (value: unknown) => {
     const id = normalizeId(value);
@@ -64,18 +64,18 @@ function collectConfiguredMediaProviderIds(cfg: OpenClawConfig): Set<string> {
 }
 
 /** Provider ids used by static and installed-registry plugin matching. */
-export function collectConfiguredProviderSelectionIds(cfg: OpenClawConfig): ReadonlySet<string> {
+export function collectConfiguredProviderSelectionIds(cfg: NatesclawConfig): ReadonlySet<string> {
   return new Set([...collectConfiguredProviderIds(cfg), ...collectConfiguredMediaProviderIds(cfg)]);
 }
 
 export function collectConfiguredMediaProviderSelectionIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): ReadonlySet<string> {
   return collectConfiguredMediaProviderIds(cfg);
 }
 
 export function collectConfiguredModelProviderSelectionIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): ReadonlySet<string> {
   return collectConfiguredProviderIds(cfg);
 }

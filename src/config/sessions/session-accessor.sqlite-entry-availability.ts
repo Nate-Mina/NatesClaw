@@ -1,5 +1,5 @@
 import { executeSqliteQueryTakeFirstSync } from "../../infra/kysely-sync.js";
-import { withOpenClawAgentDatabaseReadOnly } from "../../state/openclaw-agent-db-readonly.js";
+import { withNatesclawAgentDatabaseReadOnly } from "../../state/natesclaw-agent-db-readonly.js";
 import type { ExactSessionEntry, SessionAccessScope } from "./session-accessor.sqlite-contract.js";
 import { readExactSessionEntryRowValidated } from "./session-accessor.sqlite-entry-store.js";
 import {
@@ -30,7 +30,7 @@ export function loadExactSessionEntryReadOnlyResult(
     | { found: true; value: { entry: SessionEntry | undefined; rowExists: boolean } }
     | { found: false; reason: "database-missing" | "schema-missing" | "table-missing" };
   try {
-    result = withOpenClawAgentDatabaseReadOnly((database) => {
+    result = withNatesclawAgentDatabaseReadOnly((database) => {
       const entry = readExactSessionEntryRowValidated(database, sessionKey)?.entry;
       const rowExists = entry
         ? true

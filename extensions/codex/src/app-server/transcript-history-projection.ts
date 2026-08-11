@@ -1,8 +1,8 @@
 import { Buffer } from "node:buffer";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { AssistantMessage, Usage } from "openclaw/plugin-sdk/llm";
-import type { SessionTranscriptMessageEntry } from "openclaw/plugin-sdk/session-transcript-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { AssistantMessage, Usage } from "natesclaw/plugin-sdk/llm";
+import type { SessionTranscriptMessageEntry } from "natesclaw/plugin-sdk/session-transcript-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { CodexThread, JsonValue } from "./protocol.js";
 import { attachCodexMirrorIdentity } from "./upstream-prompt-provenance.js";
 

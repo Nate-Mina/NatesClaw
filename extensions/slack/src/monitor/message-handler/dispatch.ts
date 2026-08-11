@@ -1,23 +1,23 @@
 // Slack plugin module implements dispatch behavior.
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveHumanDelayConfig } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   dispatchChannelInboundTurn,
   type InboundReplyRecordOptions,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { hasVisibleInboundReplyDispatch } from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { hasVisibleInboundReplyDispatch } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { toErrorObject } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { toErrorObject } from "natesclaw/plugin-sdk/error-runtime";
 import {
   buildTtsSupplementMediaPayload,
   getReplyPayloadTtsSupplement,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import type { ReplyDispatchKind } from "openclaw/plugin-sdk/reply-runtime";
-import { danger, logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import type { ReplyDispatchKind } from "natesclaw/plugin-sdk/reply-runtime";
+import { danger, logVerbose, shouldLogVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { formatSlackError } from "../../errors.js";
 import { normalizeSlackOutboundText } from "../../format.js";
 import { SLACK_EDIT_TEXT_MAX_BYTES } from "../../limits.js";

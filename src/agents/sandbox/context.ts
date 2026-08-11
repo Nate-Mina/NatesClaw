@@ -4,7 +4,7 @@
  * Prepares workspace layout, backend handle, filesystem bridge, browser bridge, and registry state for one run.
  */
 import fs from "node:fs/promises";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   ensureBrowserControlAuth,
   resolveBrowserControlAuth,
@@ -38,7 +38,7 @@ const loadSyncWorkspaceSkills = createLazyRuntimeNamedExport(
 async function syncSandboxSkillsToWorkspace(params: {
   sourceWorkspaceDir: string;
   targetWorkspaceDir: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId: string;
   rawSessionKey: string;
   execOverrides?: ExecPolicyOverrides;
@@ -83,7 +83,7 @@ async function ensureSandboxWorkspaceLayout(params: {
   cfg: ReturnType<typeof resolveSandboxConfigForAgent>;
   agentId: string;
   rawSessionKey: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   execOverrides?: ExecPolicyOverrides;
   skillsSnapshot?: SkillSnapshot;
   workspaceDir?: string;
@@ -146,7 +146,7 @@ async function ensureSandboxWorkspaceLayout(params: {
 }
 
 function resolveSandboxSession(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   sessionKey?: string;
 }) {
@@ -187,7 +187,7 @@ function resolveSandboxWorkspaceInfoWorkdir(params: {
 }
 
 type ResolveSandboxContextParams = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   execOverrides?: ExecPolicyOverrides;
   requireCurrentConfig?: boolean;
@@ -199,7 +199,7 @@ type ResolveSandboxContextParams = {
 type ResolvedSandboxSession = NonNullable<ReturnType<typeof resolveSandboxSession>>;
 
 function assertSandboxSessionSecretOwnerAvailable(
-  config: OpenClawConfig | undefined,
+  config: NatesclawConfig | undefined,
   resolved: ResolvedSandboxSession,
 ): void {
   if (resolved.cfg.backend !== "ssh") {
@@ -345,7 +345,7 @@ async function resolveProvisionedSandboxContext(
 }
 
 export async function resolveSandboxContext(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   execOverrides?: ExecPolicyOverrides;
   requireCurrentConfig?: boolean;
@@ -369,7 +369,7 @@ export async function resolveSandboxContext(params: {
 }
 
 export async function ensureSandboxWorkspaceForSession(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   sessionKey?: string;
   workspaceDir?: string;
 }): Promise<SandboxWorkspaceInfo | null> {

@@ -4,7 +4,7 @@ import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
 import type { DispatchReplyWithBufferedBlockDispatcher } from "../../auto-reply/reply/provider-dispatcher.types.js";
 import { createReplyDispatcher } from "../../auto-reply/reply/reply-dispatcher.js";
 import type { FinalizedMsgContext } from "../../auto-reply/templating.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   emitTrustedDiagnosticEvent,
   onInternalDiagnosticEvent,
@@ -91,7 +91,7 @@ vi.mock("../../config/sessions/transcript.js", () => ({
   readRecentUserAssistantTextForSession,
 }));
 
-const cfg = {} as OpenClawConfig;
+const cfg = {} as NatesclawConfig;
 
 function createCtx(overrides: Partial<FinalizedMsgContext> = {}): FinalizedMsgContext {
   return {

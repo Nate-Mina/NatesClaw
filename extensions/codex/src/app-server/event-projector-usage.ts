@@ -1,8 +1,8 @@
-import { normalizeUsage } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { normalizeUsage } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   asFiniteNumber,
   readStringField as readString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { readNonNegativeInteger } from "./event-projector-values.js";
 import { isJsonObject, type JsonObject } from "./protocol.js";
 
@@ -82,7 +82,7 @@ function normalizeCodexTokenUsageBreakdown(
   record: JsonObject,
   source: "thread" | "response",
 ): ReturnType<typeof normalizeUsage> {
-  // v2 TokenUsageBreakdown. inputTokens includes cached input; OpenClaw usage
+  // v2 TokenUsageBreakdown. inputTokens includes cached input; Natesclaw usage
   // tracks uncached input, cache reads, and cache writes separately.
   const readCount =
     source === "response"

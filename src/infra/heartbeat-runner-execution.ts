@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { hasOutboundReplyContent } from "openclaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { hasOutboundReplyContent } from "natesclaw/plugin-sdk/reply-payload";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { appendCronStyleCurrentTimeLine } from "../agents/current-time.js";
 import { resolveEmbeddedSessionLane } from "../agents/embedded-agent-runner/lanes.js";
@@ -33,7 +33,7 @@ import {
   loadExactSessionEntry,
   type SessionEntryLifecycleRemoval,
 } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   hasActiveCronJobs,
   hasActiveCronJobsExceptMarker,
@@ -134,7 +134,7 @@ function hasActiveRunForSession(
 }
 
 export type HeartbeatRunOptions = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   agentId?: string;
   sessionKey?: string;
   heartbeat?: HeartbeatConfig;

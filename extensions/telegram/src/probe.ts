@@ -1,10 +1,10 @@
 // Telegram plugin module implements probe behavior.
-import type { BaseProbeResult } from "openclaw/plugin-sdk/channel-contract";
-import type { TelegramNetworkConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage, toErrorObject } from "openclaw/plugin-sdk/error-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithTimeout, runChannelProbe } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { BaseProbeResult } from "natesclaw/plugin-sdk/channel-contract";
+import type { TelegramNetworkConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage, toErrorObject } from "natesclaw/plugin-sdk/error-runtime";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
+import { sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
+import { fetchWithTimeout, runChannelProbe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { normalizeTelegramBotInfo, type TelegramBotInfo } from "./bot-info.js";
 import {
   resolveTelegramApiBase,

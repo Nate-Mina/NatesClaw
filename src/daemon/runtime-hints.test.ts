@@ -9,16 +9,16 @@ describe("buildPlatformRuntimeLogHints", () => {
         platform: "darwin",
         env: {
           HOME: "/Users/test",
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
-          OPENCLAW_LOG_PREFIX: "gateway",
+          NATESCLAW_STATE_DIR: "/tmp/natesclaw-state",
+          NATESCLAW_LOG_PREFIX: "gateway",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "natesclaw-gateway",
+        windowsTaskName: "Natesclaw Gateway",
       }),
     ).toEqual([
-      "Launchd stdout (if installed): /Users/test/Library/Logs/openclaw/gateway.log",
+      "Launchd stdout (if installed): /Users/test/Library/Logs/natesclaw/gateway.log",
       "Launchd stderr (if installed): suppressed",
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      "Restart attempts: /tmp/natesclaw-state/logs/gateway-restart.log",
     ]);
   });
 
@@ -27,27 +27,27 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "linux",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
+          NATESCLAW_STATE_DIR: "/tmp/natesclaw-state",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "natesclaw-gateway",
+        windowsTaskName: "Natesclaw Gateway",
       }),
     ).toEqual([
-      "Logs: journalctl --user -u openclaw-gateway.service -n 200 --no-pager",
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      "Logs: journalctl --user -u natesclaw-gateway.service -n 200 --no-pager",
+      "Restart attempts: /tmp/natesclaw-state/logs/gateway-restart.log",
     ]);
     expect(
       buildPlatformRuntimeLogHints({
         platform: "win32",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
+          NATESCLAW_STATE_DIR: "/tmp/natesclaw-state",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "natesclaw-gateway",
+        windowsTaskName: "Natesclaw Gateway",
       }),
     ).toEqual([
-      'Logs: schtasks /Query /TN "OpenClaw Gateway" /V /FO LIST',
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      'Logs: schtasks /Query /TN "Natesclaw Gateway" /V /FO LIST',
+      "Restart attempts: /tmp/natesclaw-state/logs/gateway-restart.log",
     ]);
   });
 });
@@ -57,30 +57,30 @@ describe("buildPlatformServiceStartHints", () => {
     expect(
       buildPlatformServiceStartHints({
         platform: "darwin",
-        installCommand: "openclaw gateway install",
-        startCommand: "openclaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.openclaw.gateway.plist",
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        installCommand: "natesclaw gateway install",
+        startCommand: "natesclaw gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.natesclaw.gateway.plist",
+        systemdServiceName: "natesclaw-gateway",
+        windowsTaskName: "Natesclaw Gateway",
       }),
     ).toEqual([
-      "openclaw gateway install",
-      "openclaw gateway",
-      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.openclaw.gateway.plist",
+      "natesclaw gateway install",
+      "natesclaw gateway",
+      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.natesclaw.gateway.plist",
     ]);
     expect(
       buildPlatformServiceStartHints({
         platform: "linux",
-        installCommand: "openclaw gateway install",
-        startCommand: "openclaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.openclaw.gateway.plist",
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        installCommand: "natesclaw gateway install",
+        startCommand: "natesclaw gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.natesclaw.gateway.plist",
+        systemdServiceName: "natesclaw-gateway",
+        windowsTaskName: "Natesclaw Gateway",
       }),
     ).toEqual([
-      "openclaw gateway install",
-      "openclaw gateway",
-      "systemctl --user start openclaw-gateway.service",
+      "natesclaw gateway install",
+      "natesclaw gateway",
+      "systemctl --user start natesclaw-gateway.service",
     ]);
   });
 });

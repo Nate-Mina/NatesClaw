@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 
 const inventoryMocks = vi.hoisted(() => {
   const runtimeModel = {
@@ -56,7 +56,7 @@ describe("resolveBareResetBootstrapFileAccess runtime model ownership", () => {
 
   it("resolves runtime model context once and passes explicit facts to sync inventory", async () => {
     const { resolveBareResetBootstrapFileAccess } = await import("./session-reset-prompt.js");
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const params = {
       cfg,
       agentId: "main",

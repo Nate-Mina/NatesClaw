@@ -1,9 +1,9 @@
-import type { ChannelMessageActionContext } from "openclaw/plugin-sdk/channel-contract";
+import type { ChannelMessageActionContext } from "natesclaw/plugin-sdk/channel-contract";
 import {
   asDateTimestampMs,
   parseStrictInteger,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
 import type { IMessageActionTransportOptions } from "./actions-rpc.js";
 import { normalizeDirectChatIdentifier } from "./chat-context.js";
 import { createIMessageRpcClient } from "./client.js";

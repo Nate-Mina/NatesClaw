@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { setPluginToolMeta } from "../plugins/tools.js";
 import {
   McpLoopbackToolCache,
@@ -22,7 +22,7 @@ function scopedToolFixture(names: string[]) {
 
 function scopeParams(overrides: Record<string, unknown> = {}) {
   return {
-    cfg: {} as OpenClawConfig,
+    cfg: {} as NatesclawConfig,
     sessionKey: "agent:main:recall",
     messageProvider: undefined,
     currentChannelId: undefined,
@@ -166,8 +166,8 @@ describe("McpLoopbackToolCache", () => {
   it("expires at the ttl boundary and partitions rows by config identity", () => {
     vi.useFakeTimers();
     const cache = new McpLoopbackToolCache();
-    const cfgA = {} as OpenClawConfig;
-    const cfgB = {} as OpenClawConfig;
+    const cfgA = {} as NatesclawConfig;
+    const cfgB = {} as NatesclawConfig;
     const paramsA = scopeParams({ cfg: cfgA });
 
     cache.resolve(paramsA);
@@ -185,7 +185,7 @@ describe("McpLoopbackToolCache", () => {
 
   it("does not share cache rows across different grant allowlists", () => {
     const cache = new McpLoopbackToolCache();
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
 
     const unrestricted = cache.resolve(scopeParams({ cfg }));
     const restricted = cache.resolve(scopeParams({ cfg, toolsAllow: ["memory_search"] }));
@@ -203,7 +203,7 @@ describe("McpLoopbackToolCache", () => {
 
   it("evicts only the revoked grant's cached tool closures", () => {
     const cache = new McpLoopbackToolCache();
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
 
     cache.resolve(scopeParams({ cfg, grantToken: "grant-a" }));
     cache.resolve(scopeParams({ cfg, grantToken: "grant-b" }));
@@ -220,7 +220,7 @@ describe("McpLoopbackToolCache", () => {
 
   it("preserves the global 256-entry cache cap across grants", () => {
     const cache = new McpLoopbackToolCache();
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
 
     for (let index = 0; index < 256; index += 1) {
       cache.resolve(
@@ -239,7 +239,7 @@ describe("McpLoopbackToolCache", () => {
 
   it("never reuses ordinary private-mode tools for a source-reply-only grant", () => {
     const cache = new McpLoopbackToolCache();
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const params = scopeParams({
       cfg,
       messageProvider: "telegram",

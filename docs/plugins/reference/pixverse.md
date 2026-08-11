@@ -1,5 +1,5 @@
 ---
-summary: "OpenClaw PixVerse video generation provider plugin."
+summary: "Natesclaw PixVerse video generation provider plugin."
 read_when:
   - You are installing, configuring, or auditing the pixverse plugin
 title: "PixVerse plugin"
@@ -7,12 +7,12 @@ title: "PixVerse plugin"
 
 # PixVerse plugin
 
-OpenClaw PixVerse video generation provider plugin.
+Natesclaw PixVerse video generation provider plugin.
 
 ## Distribution
 
-- Package: `@openclaw/pixverse-provider`
-- Install route: npm; ClawHub: `clawhub:@openclaw/pixverse-provider`
+- Package: `@natesclaw/pixverse-provider`
+- Install route: npm; ClawHub: `clawhub:@natesclaw/pixverse-provider`
 
 ## Surface
 

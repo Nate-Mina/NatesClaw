@@ -1,4 +1,4 @@
-// Covers supervisor marker files used to identify managed OpenClaw processes.
+// Covers supervisor marker files used to identify managed Natesclaw processes.
 import { describe, expect, it } from "vitest";
 import {
   detectGatewayRespawnSupervisor,
@@ -9,39 +9,39 @@ import {
 describe("SUPERVISOR_HINT_ENV_VARS", () => {
   it("includes the cross-platform supervisor hint env vars", () => {
     const envVars = new Set(SUPERVISOR_HINT_ENV_VARS);
-    expect(envVars.has("OPENCLAW_SUPERVISOR_MODE")).toBe(true);
+    expect(envVars.has("NATESCLAW_SUPERVISOR_MODE")).toBe(true);
     expect(envVars.has("LAUNCH_JOB_LABEL")).toBe(true);
     expect(envVars.has("INVOCATION_ID")).toBe(true);
-    expect(envVars.has("OPENCLAW_WINDOWS_TASK_NAME")).toBe(true);
-    expect(envVars.has("OPENCLAW_SERVICE_MARKER")).toBe(true);
-    expect(envVars.has("OPENCLAW_SERVICE_KIND")).toBe(true);
+    expect(envVars.has("NATESCLAW_WINDOWS_TASK_NAME")).toBe(true);
+    expect(envVars.has("NATESCLAW_SERVICE_MARKER")).toBe(true);
+    expect(envVars.has("NATESCLAW_SERVICE_KIND")).toBe(true);
   });
 });
 
 describe("detectRespawnSupervisor", () => {
-  it("detects launchd from OpenClaw's explicit marker or current gateway launchd job", () => {
+  it("detects launchd from Natesclaw's explicit marker or current gateway launchd job", () => {
     expect(
-      detectRespawnSupervisor({ OPENCLAW_LAUNCHD_LABEL: " ai.openclaw.gateway " }, "darwin"),
+      detectRespawnSupervisor({ NATESCLAW_LAUNCHD_LABEL: " ai.natesclaw.gateway " }, "darwin"),
     ).toBe("launchd");
-    expect(detectRespawnSupervisor({ OPENCLAW_LAUNCHD_LABEL: "   " }, "darwin")).toBeNull();
-    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.openclaw.gateway" }, "darwin")).toBe(
+    expect(detectRespawnSupervisor({ NATESCLAW_LAUNCHD_LABEL: "   " }, "darwin")).toBeNull();
+    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.natesclaw.gateway" }, "darwin")).toBe(
       "launchd",
     );
     expect(
       detectRespawnSupervisor(
-        { LAUNCH_JOB_NAME: "ai.openclaw.work", OPENCLAW_PROFILE: "work" },
+        { LAUNCH_JOB_NAME: "ai.natesclaw.work", NATESCLAW_PROFILE: "work" },
         "darwin",
       ),
     ).toBe("launchd");
-    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.openclaw.mac" }, "darwin")).toBeNull();
-    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.openclaw.mac" }, "darwin")).toBeNull();
+    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.natesclaw.mac" }, "darwin")).toBeNull();
+    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.natesclaw.mac" }, "darwin")).toBeNull();
     expect(
       detectRespawnSupervisor(
-        { XPC_SERVICE_NAME: "ai.openclaw.mac", OPENCLAW_PROFILE: "mac" },
+        { XPC_SERVICE_NAME: "ai.natesclaw.mac", NATESCLAW_PROFILE: "mac" },
         "darwin",
       ),
     ).toBeNull();
-    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.openclaw.gateway" }, "darwin")).toBe(
+    expect(detectRespawnSupervisor({ XPC_SERVICE_NAME: "ai.natesclaw.gateway" }, "darwin")).toBe(
       "launchd",
     );
   });
@@ -51,48 +51,48 @@ describe("detectRespawnSupervisor", () => {
     expect(detectRespawnSupervisor({ JOURNAL_STREAM: "" }, "linux")).toBeNull();
   });
 
-  it("detects Linux OpenClaw gateway service markers only for opt-in callers", () => {
+  it("detects Linux Natesclaw gateway service markers only for opt-in callers", () => {
     const gatewayServiceEnv = {
-      OPENCLAW_SERVICE_MARKER: " openclaw ",
-      OPENCLAW_SERVICE_KIND: " gateway ",
+      NATESCLAW_SERVICE_MARKER: " natesclaw ",
+      NATESCLAW_SERVICE_KIND: " gateway ",
     };
     expect(detectRespawnSupervisor(gatewayServiceEnv, "linux")).toBeNull();
     expect(
       detectRespawnSupervisor(gatewayServiceEnv, "linux", {
-        includeLinuxOpenClawGatewayServiceMarker: true,
+        includeLinuxNatesclawGatewayServiceMarker: true,
       }),
     ).toBe("systemd");
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "openclaw",
-          OPENCLAW_SERVICE_KIND: "worker",
+          NATESCLAW_SERVICE_MARKER: "natesclaw",
+          NATESCLAW_SERVICE_KIND: "worker",
         },
         "linux",
-        { includeLinuxOpenClawGatewayServiceMarker: true },
+        { includeLinuxNatesclawGatewayServiceMarker: true },
       ),
     ).toBeNull();
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "other",
-          OPENCLAW_SERVICE_KIND: "gateway",
+          NATESCLAW_SERVICE_MARKER: "other",
+          NATESCLAW_SERVICE_KIND: "gateway",
         },
         "linux",
-        { includeLinuxOpenClawGatewayServiceMarker: true },
+        { includeLinuxNatesclawGatewayServiceMarker: true },
       ),
     ).toBeNull();
   });
 
   it("detects scheduled-task supervision on Windows from either hint family", () => {
     expect(
-      detectRespawnSupervisor({ OPENCLAW_WINDOWS_TASK_NAME: "OpenClaw Gateway" }, "win32"),
+      detectRespawnSupervisor({ NATESCLAW_WINDOWS_TASK_NAME: "Natesclaw Gateway" }, "win32"),
     ).toBe("schtasks");
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "openclaw",
-          OPENCLAW_SERVICE_KIND: "gateway",
+          NATESCLAW_SERVICE_MARKER: "natesclaw",
+          NATESCLAW_SERVICE_KIND: "gateway",
         },
         "win32",
       ),
@@ -100,8 +100,8 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "openclaw",
-          OPENCLAW_SERVICE_KIND: "worker",
+          NATESCLAW_SERVICE_MARKER: "natesclaw",
+          NATESCLAW_SERVICE_KIND: "worker",
         },
         "win32",
       ),
@@ -112,14 +112,14 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          OPENCLAW_SERVICE_MARKER: "openclaw",
-          OPENCLAW_SERVICE_KIND: "gateway",
+          NATESCLAW_SERVICE_MARKER: "natesclaw",
+          NATESCLAW_SERVICE_KIND: "gateway",
         },
         "linux",
       ),
     ).toBeNull();
     expect(
-      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.openclaw.gateway" }, "freebsd"),
+      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.natesclaw.gateway" }, "freebsd"),
     ).toBeNull();
   });
 });
@@ -127,8 +127,8 @@ describe("detectRespawnSupervisor", () => {
 describe("detectGatewayRespawnSupervisor", () => {
   it("keeps external ownership separate from native supervisor detection", () => {
     const env = {
-      OPENCLAW_SUPERVISOR_MODE: "external",
-      OPENCLAW_LAUNCHD_LABEL: "ai.openclaw.gateway",
+      NATESCLAW_SUPERVISOR_MODE: "external",
+      NATESCLAW_LAUNCHD_LABEL: "ai.natesclaw.gateway",
     };
 
     expect(detectGatewayRespawnSupervisor(env, "darwin")).toBe("external");

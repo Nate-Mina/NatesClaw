@@ -1,6 +1,6 @@
 // Discord plugin module implements inbound context behavior.
-import { resolveInboundSupplementalSenderAllowed } from "openclaw/plugin-sdk/channel-inbound";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
+import { resolveInboundSupplementalSenderAllowed } from "natesclaw/plugin-sdk/channel-inbound";
+import type { MsgContext } from "natesclaw/plugin-sdk/reply-runtime";
 import {
   resolveDiscordMemberAllowed,
   resolveDiscordOwnerAllowFrom,

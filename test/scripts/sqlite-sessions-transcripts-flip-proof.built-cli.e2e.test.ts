@@ -17,9 +17,9 @@ import {
   connectGatewayClient,
   disconnectGatewayClient,
 } from "../../src/gateway/test-helpers.e2e.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../src/state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../src/state/openclaw-state-db.js";
-import { createOpenClawTestInstance } from "../helpers/openclaw-test-instance.js";
+import { closeNatesclawAgentDatabasesForTest } from "../../src/state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../src/state/natesclaw-state-db.js";
+import { createNatesclawTestInstance } from "../helpers/natesclaw-test-instance.js";
 import { assertSqliteFlipProofCore } from "../helpers/sqlite-sessions-transcripts-flip-proof-assertions.ts";
 import { runSqliteSessionsTranscriptsFlipProof } from "../helpers/sqlite-sessions-transcripts-flip-proof.ts";
 
@@ -34,7 +34,7 @@ describe("SQLite sessions/transcripts flip built CLI proof", () => {
   }, 420_000);
 
   it("keeps built gateway RPC responsive while deleting a large transcript", async () => {
-    const inst = await createOpenClawTestInstance({
+    const inst = await createNatesclawTestInstance({
       name: `sqlite-archive-responsive-${randomUUID()}`,
       startTimeoutMs: 90_000,
       stopTimeoutMs: 5_000,
@@ -79,7 +79,7 @@ describe("SQLite sessions/transcripts flip built CLI proof", () => {
         sessionWindows: 1,
         transcriptEvents: events.length,
       });
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
 
       await expect(inst.entrypoint()).resolves.toEqual(
         expect.arrayContaining([expect.stringMatching(/^dist\/index\.(?:js|mjs)$/u)]),
@@ -198,8 +198,8 @@ describe("SQLite sessions/transcripts flip built CLI proof", () => {
           .map((client) => disconnectGatewayClient(client)),
       );
       await inst.stopGateway();
-      closeOpenClawAgentDatabasesForTest();
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawAgentDatabasesForTest();
+      closeNatesclawStateDatabaseForTest();
       await inst.cleanup();
     }
   }, 180_000);

@@ -1,9 +1,9 @@
 /** Builds agent tools registered by plugins, preserving plugin scope around callbacks and descriptors. */
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   normalizeUniqueStringEntries,
   uniqueStrings,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@natesclaw/normalization-core/string-normalization";
 import { compileGlobPatterns, matchesAnyGlobPattern } from "../agents/glob-pattern.js";
 import type { McpCodexToolAnnotations } from "../agents/mcp-codex-tool-approval.js";
 import {
@@ -50,7 +50,7 @@ import {
   writeCachedPluginToolDescriptors,
 } from "./tool-descriptor-cache.js";
 import { isPluginToolAllowed } from "./tool-grant-allowlist.js";
-import type { OpenClawPluginToolContext } from "./types.js";
+import type { NatesclawPluginToolContext } from "./types.js";
 
 /** MCP bridge metadata attached to plugin tools surfaced through agent tool lists. */
 export type PluginToolMcpMeta = {
@@ -244,7 +244,7 @@ function wrapPluginToolFactoryResult(
 function resolvePluginToolFactory(
   entry: PluginToolRegistration,
   pluginRegistry: PluginRegistry | undefined,
-  ctx: OpenClawPluginToolContext,
+  ctx: NatesclawPluginToolContext,
 ) {
   return runWithPluginToolScope(entry, pluginRegistry, () =>
     wrapPluginToolFactoryResult(entry, pluginRegistry, entry.factory(ctx)),
@@ -255,7 +255,7 @@ function blocksHostRestrictedConversationReadTool(params: {
   pluginId: string;
   toolNames: readonly string[];
   bundledOwner: boolean;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
 }): boolean {
   if (
     normalizeConversationReadInvocationOrigin(params.ctx.conversationReadOrigin) ===
@@ -272,7 +272,7 @@ function blocksHostRestrictedConversationReadTool(params: {
 function blocksHostRestrictedConversationReadRegistration(params: {
   entry: PluginToolRegistration;
   manifestPlugin: PluginManifestRecord | undefined;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
 }): boolean {
   return (
     registrationIncludesHostRestrictedConversationReadTool(params.entry) &&
@@ -290,7 +290,7 @@ function blocksHostRestrictedConversationReadRegistration(params: {
 
 function resolveCurrentManifestPlugin(params: {
   pluginId: string;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
   loadContext: ReturnType<typeof resolvePluginRuntimeLoadContext>;
 }): PluginManifestRecord | undefined {
   let config = params.ctx.runtimeConfig ?? params.ctx.config ?? params.loadContext.config;
@@ -500,7 +500,7 @@ function createPluginToolFactoryTiming(params: {
 function resolvePluginToolFactoryEntry(params: {
   entry: PluginToolRegistration;
   pluginRegistry: PluginRegistry | undefined;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
   declaredNames: string[];
   factoryTimingStartedAt: number;
   logError: (message: string) => void;
@@ -773,7 +773,7 @@ function readPluginCacheSource(plugin: PluginManifestRecord): string {
 
 function buildPluginDescriptorCacheKey(params: {
   plugin: PluginManifestRecord;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
   currentRuntimeConfig?: PluginLoadOptions["config"] | null;
   configCacheKeyMemo?: PluginToolDescriptorConfigCacheKeyMemo;
   clientCaps?: ReadonlySet<string>;
@@ -803,7 +803,7 @@ function cachedDescriptorsCoverToolNames(params: {
 function createCachedDescriptorPluginTool(params: {
   descriptor: CachedPluginToolDescriptor;
   plugin: PluginManifestRecord;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
   loadContext: ReturnType<typeof resolvePluginRuntimeLoadContext>;
   runtimeOptions: PluginLoadOptions["runtimeOptions"];
 }): AnyAgentTool {
@@ -928,7 +928,7 @@ function resolveCachedPluginTools(params: {
   existing: Set<string>;
   existingNormalized: Set<string>;
   pluginToolOwnersByName: Map<string, string>;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
   loadContext: ReturnType<typeof resolvePluginRuntimeLoadContext>;
   runtimeOptions: PluginLoadOptions["runtimeOptions"];
   currentRuntimeConfig?: PluginLoadOptions["config"] | null;
@@ -1128,7 +1128,7 @@ type PreparedPluginToolRuntime = {
 };
 
 function resolvePluginToolLoadState(params: {
-  context: OpenClawPluginToolContext;
+  context: NatesclawPluginToolContext;
   toolAllowlist?: string[];
   toolDenylist?: string[];
   allowGatewaySubagentBinding?: boolean;
@@ -1196,7 +1196,7 @@ function resolvePluginToolLoadState(params: {
 }
 
 export function ensureStandalonePluginToolRegistryLoaded(params: {
-  context: OpenClawPluginToolContext;
+  context: NatesclawPluginToolContext;
   toolAllowlist?: string[];
   toolDenylist?: string[];
   allowGatewaySubagentBinding?: boolean;
@@ -1218,7 +1218,7 @@ export function ensureStandalonePluginToolRegistryLoaded(params: {
 }
 
 export function resolvePluginTools(params: {
-  context: OpenClawPluginToolContext;
+  context: NatesclawPluginToolContext;
   existingToolNames?: Set<string>;
   clientCaps?: string[];
   toolAllowlist?: string[];

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveImageSanitizationLimits } from "../image-sanitization.js";
 import type { AgentToolResult } from "../runtime/index.js";
 import { sanitizeToolResultImages } from "../tool-images.js";
@@ -30,7 +30,7 @@ export function buildImageToolReferenceDetails(
 
 export async function buildNativeImageToolResult(
   images: readonly LoadedImageForTool[],
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
 ): Promise<AgentToolResult<unknown>> {
   const result: AgentToolResult<unknown> = {
     content: [

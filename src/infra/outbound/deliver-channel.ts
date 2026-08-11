@@ -13,7 +13,7 @@ import type {
   ChannelOutboundPayloadContext,
   ChannelOutboundTargetRef,
 } from "../../channels/plugins/types.adapters.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import type { PluginRegistry } from "../../plugins/registry-types.js";
 import { withPluginRuntimeRegistryScope } from "../../plugins/runtime/gateway-request-scope.js";
@@ -40,7 +40,7 @@ const loadChannelBootstrapRuntime = createLazyRuntimeModule(
   () => import("./channel-bootstrap.runtime.js"),
 );
 export async function resolveChannelOutboundDirectiveOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
 }): Promise<{ extractMarkdownImages?: boolean }> {
   const { outbound } = await loadBootstrappedOutboundAdapter(params);
@@ -62,7 +62,7 @@ export async function createChannelHandler(params: ChannelHandlerParams): Promis
 }
 
 async function loadBootstrappedOutboundAdapter(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
 }): Promise<{ outbound?: ChannelOutboundAdapter; pluginRegistry?: PluginRegistry }> {
   let outbound = await loadChannelOutboundAdapter(params.channel);
@@ -156,7 +156,7 @@ async function runChannelMessageSendWithLifecycle<
 }
 
 export async function resolveOutboundDurableFinalDeliverySupport(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
   requirements?: DurableFinalDeliveryRequirements;
 }): Promise<OutboundDurableDeliverySupport> {

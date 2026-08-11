@@ -1,7 +1,7 @@
 // Slack plugin module implements interactions.modal behavior.
 import type { AllMiddlewareArgs } from "@slack/bolt";
-import { requestHeartbeat } from "openclaw/plugin-sdk/heartbeat-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
+import { requestHeartbeat } from "natesclaw/plugin-sdk/heartbeat-runtime";
+import { enqueueSystemEvent } from "natesclaw/plugin-sdk/system-event-runtime";
 import { dispatchSlackPluginInteractiveHandler } from "../../interactive-dispatch.js";
 import { parseSlackModalPrivateMetadata } from "../../modal-metadata.js";
 import { authorizeSlackSystemEventSender } from "../auth.js";
@@ -62,7 +62,7 @@ type RegisterSlackModalHandler = (
 ) => void;
 
 type SlackInteractionContextPrefix = "slack:interaction:view" | "slack:interaction:view-closed";
-const OPENCLAW_MODAL_CALLBACK_PREFIX = "openclaw:";
+const NATESCLAW_MODAL_CALLBACK_PREFIX = "natesclaw:";
 
 function resolveSlackModalPluginInteractiveData(params: {
   callbackId: string;
@@ -72,17 +72,17 @@ function resolveSlackModalPluginInteractiveData(params: {
   if (metadataData) {
     return metadataData;
   }
-  if (!params.callbackId.startsWith(OPENCLAW_MODAL_CALLBACK_PREFIX)) {
+  if (!params.callbackId.startsWith(NATESCLAW_MODAL_CALLBACK_PREFIX)) {
     return undefined;
   }
-  const callbackData = params.callbackId.slice(OPENCLAW_MODAL_CALLBACK_PREFIX.length).trim();
+  const callbackData = params.callbackId.slice(NATESCLAW_MODAL_CALLBACK_PREFIX.length).trim();
   return callbackData || undefined;
 }
 
 function shouldHandleSlackModalLifecycleBody(body: unknown): boolean {
   const typed = body as SlackModalBody;
   const callbackId = typed.view?.callback_id ?? "";
-  if (callbackId.startsWith(OPENCLAW_MODAL_CALLBACK_PREFIX)) {
+  if (callbackId.startsWith(NATESCLAW_MODAL_CALLBACK_PREFIX)) {
     return true;
   }
   const metadata = parseSlackModalPrivateMetadata(typed.view?.private_metadata);

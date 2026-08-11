@@ -7,12 +7,12 @@
  * tell how a node fulfills computer.act; macOS nodes are the first fulfiller.
  */
 import crypto from "node:crypto";
-import { imageMimeFromFormat } from "@openclaw/media-core/mime";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { imageMimeFromFormat } from "@natesclaw/media-core/mime";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
 import { parseScreenSnapshotPayload } from "../../cli/nodes-screen.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { sleep } from "../../utils/sleep.js";
 import {
@@ -328,7 +328,7 @@ function isEligibleComputerNode(node: NodeListNode): boolean {
 }
 
 const NOT_COMPUTER_CAPABLE_HINT =
-  "enable Computer Control in the OpenClaw app and approve the pairing update";
+  "enable Computer Control in the Natesclaw app and approve the pairing update";
 
 const COMPUTER_NODE_MESSAGES: EligibleNodeMessages = {
   ineligibleExact: (query, eligibleIds) =>
@@ -578,7 +578,7 @@ function isButtonAlreadyReleasedError(err: unknown): boolean {
 }
 
 export function createComputerTool(options?: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   modelHasVision?: boolean;
   /** Stable run scope used to deduplicate a replayed model tool call on the node. */
   idempotencyScope?: string;
@@ -784,7 +784,7 @@ export function createComputerTool(options?: {
           // >= referenceWidth, so it is a no-op and the node maps coordinates
           // against this same width for both portrait and landscape captures. A
           // portrait frame (height > referenceWidth) is uniformly scaled down here,
-          // matching OpenClawComputerInputGeometry.capturedWidth on the node.
+          // matching NatesclawComputerInputGeometry.capturedWidth on the node.
           // media.outbound=false keeps desktop pixels model-only (#44759).
           const result = await sanitizeToolResultImages(
             {

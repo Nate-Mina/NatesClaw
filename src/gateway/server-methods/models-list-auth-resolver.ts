@@ -14,12 +14,12 @@ import {
   type ModelAuthAvailabilityResolver,
 } from "../../agents/model-auth-availability.js";
 import { createOpenAIModelRoutesResolver } from "../../agents/openai-model-routes.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { PluginMetadataSnapshot } from "../../plugins/plugin-metadata-snapshot.types.js";
 import { loadPluginRegistrySnapshotWithMetadata } from "../../plugins/plugin-registry.js";
 
 function listEnabledSyntheticAuthProviderRefs(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   metadataSnapshot?: PluginMetadataSnapshot;
   workspaceDir: string;
 }): readonly string[] {
@@ -42,7 +42,7 @@ function listEnabledSyntheticAuthProviderRefs(params: {
 }
 
 export function createModelsListAuthResolver(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   includeOpenAIExternalProfiles: boolean;
   metadataSnapshot?: PluginMetadataSnapshot;

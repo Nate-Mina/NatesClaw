@@ -1,17 +1,17 @@
-import { buildExecApprovalPendingReplyPayload } from "openclaw/plugin-sdk/approval-reply-runtime";
+import { buildExecApprovalPendingReplyPayload } from "natesclaw/plugin-sdk/approval-reply-runtime";
 // Signal tests cover core plugin behavior.
 import {
   createMessageReceiptFromOutboundResults,
   verifyChannelMessageAdapterCapabilityProofs,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { installChannelDmPolicyContractSuite } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { installChannelDmPolicyContractSuite } from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   createPluginSetupWizardStatus,
   createTestWizardPrompter,
   type WizardPrompter,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { listSignalAccountIds } from "./accounts.js";
 import {
@@ -359,7 +359,7 @@ describe("probeSignal", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       accountOverrides: {},
     });
 
@@ -385,7 +385,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       input: "signal:ops",
       normalized: "ops",
       preferredKind: "group",
@@ -409,7 +409,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       to: "signal:me",
       accountId: "default",
     });
@@ -444,7 +444,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       to: "signal:me",
       text: "approval",
       deps: { signal: send },
@@ -477,7 +477,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       to: "signal:ops",
       text: "approval",
       deps: { signal: send },
@@ -501,7 +501,7 @@ describe("signal outbound", () => {
 
     await expect(
       signalPlugin.outbound?.sendFormattedText?.({
-        cfg: { channels: { signal: { replyToMode: "first" } } } as OpenClawConfig,
+        cfg: { channels: { signal: { replyToMode: "first" } } } as NatesclawConfig,
         to: "+15551234567",
         text: "a".repeat(5000),
         deps: { signal: send },
@@ -544,7 +544,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       to: "signal:ops",
       text: "approval",
       mediaUrl: "file:///tmp/signal-proof.png",
@@ -572,7 +572,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       to: "signal:home",
     });
 
@@ -595,7 +595,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       input: "signal:home",
       normalized: "home",
       preferredKind: "user",
@@ -615,7 +615,7 @@ describe("signal outbound", () => {
           defaultTo: "signal:home",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const defaultTo = signalPlugin.config.resolveDefaultTo?.({
       cfg,
@@ -647,7 +647,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       agentId: "main",
       target: "signal:ops",
       resolvedTarget: {
@@ -673,7 +673,7 @@ describe("signal outbound", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     await expect(
       signalPlugin.directory?.listPeers?.({ cfg, query: "me", runtime: {} as never }),
@@ -708,7 +708,7 @@ describe("signal outbound", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveReplyToMode({ cfg, accountId: "work", chatType: "group" })).toBe("all");
     expect(resolveReplyToMode({ cfg, accountId: "work", chatType: "direct" })).toBe("off");
@@ -731,7 +731,7 @@ describe("signal outbound", () => {
             replyToModeByChatType: { direct: "first" },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       accountId: "default",
       context: {
         Channel: "signal",
@@ -805,7 +805,7 @@ describe("signal outbound", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         accountId: "default",
         payload: {
           text: "Approval required.",
@@ -843,7 +843,7 @@ describe("signal outbound", () => {
           targets: [{ channel: "signal", to: "+15551230000" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const payload = buildExecApprovalPendingReplyPayload({
       approvalId: "exec-after-delivery",
       approvalSlug: "exec-aft",
@@ -919,7 +919,7 @@ describe("signal outbound", () => {
           targets: [{ channel: "signal", to: "+15551230000" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const payload = buildExecApprovalPendingReplyPayload({
       approvalId: "exec-rendered-approval",
       approvalSlug: "exec-ren",
@@ -979,7 +979,7 @@ describe("signal outbound", () => {
           targets: [{ channel: "signal", to: "+15551230000" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const payload = buildExecApprovalPendingReplyPayload({
       approvalId: "exec-mixed-presentation",
       approvalSlug: "exec-mixed-presentation",
@@ -1053,7 +1053,7 @@ describe("signal outbound", () => {
           targets: [{ channel: "signal", to: "+15551230000" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const payload: ReplyPayload = {
       text: ["Exec approval required", "ID: exec-1"].join("\n"),
       channelData: {
@@ -1170,7 +1170,7 @@ describe("signal outbound", () => {
     const send = vi.fn(async () => ({ messageId: "signal-text-1" }));
 
     await signalPlugin.message?.send?.text?.({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       to: "signal:+15555550123",
       text: "reply",
       replyToId: "1700000000001",
@@ -1208,7 +1208,7 @@ describe("signal outbound", () => {
       proofs: {
         text: async () => {
           const result = await signalPlugin.message?.send?.text?.({
-            cfg: {} as OpenClawConfig,
+            cfg: {} as NatesclawConfig,
             to: "signal:+15555550123",
             text: "hello",
             deps,
@@ -1224,7 +1224,7 @@ describe("signal outbound", () => {
         },
         media: async () => {
           const result = await signalPlugin.message?.send?.media?.({
-            cfg: {} as OpenClawConfig,
+            cfg: {} as NatesclawConfig,
             to: "signal:+15555550123",
             text: "image",
             mediaUrl: "https://example.com/image.png",

@@ -9,7 +9,7 @@ title: "Audit history"
 
 # Audit history
 
-The Gateway keeps a bounded, metadata-only audit ledger in the shared OpenClaw
+The Gateway keeps a bounded, metadata-only audit ledger in the shared Natesclaw
 state database. It answers operational questions such as "which agent ran,
 when, and how did it end", "which tool actions did a run execute", and, when
 message auditing is enabled, "did an accepted inbound message reach dispatch"
@@ -31,8 +31,8 @@ Execution identity recording is off by default, including on fresh installs
 and upgrades. Enable it explicitly, then restart the Gateway:
 
 ```bash
-openclaw config set logging.audit.executionIdentity true
-openclaw gateway restart
+natesclaw config set logging.audit.executionIdentity true
+natesclaw gateway restart
 ```
 
 Collection requires both `logging.audit.enabled` and
@@ -41,7 +41,7 @@ stops new contexts after restart; no environment-variable alias or silent
 migration enables the feature. Retained contexts remain inspectable until
 their 30-day expiry.
 
-After session work admission succeeds, OpenClaw validates and freezes
+After session work admission succeeds, Natesclaw validates and freezes
 one bounded identity envelope, immediately offers it to the existing audit
 writer queue, and continues the run without waiting for writer readiness,
 SQLite, or persistence. The worker initializes schema and HMAC-key state,
@@ -68,10 +68,10 @@ Each admitted outer turn receives a new opaque `executionId`; `contextId`
 identifies its immutable evidence record, while the existing `runId` remains a
 possibly shared routing, session, or recovery correlation. Query one exact
 execution with `audit.run.inspect` or
-[`openclaw audit --execution <id> --explain`](/cli/audit). Use `--run <id>
+[`natesclaw audit --execution <id> --explain`](/cli/audit). Use `--run <id>
 --explain` to discover executions for a run correlation. One retained match
 resolves directly. Multiple matches return `ambiguous` with at most 50
-candidate execution ids and require exact selection; OpenClaw never chooses the
+candidate execution ids and require exact selection; Natesclaw never chooses the
 first or latest execution silently. The result explicitly states the evidence
 state for these fields:
 
@@ -83,7 +83,7 @@ state for these fields:
 
 The foundation records direct local CLI ingress and Gateway boot-system ingress
 at their authoritative producers. Generic public ingress remains explicitly
-unknown when its boundary cannot prove a more specific source; OpenClaw never
+unknown when its boundary cannot prove a more specific source; Natesclaw never
 infers ingress or invoker identity from a session key. A direct local execution
 is `unattributed`: the Gateway cell, local CLI ingress, configured agent, and
 runtime binding are present, but no durable invoker principal is supplied at
@@ -228,14 +228,14 @@ compliance archive; if you need one, use an external system fed by
 
 ## Storage, retention, and migration
 
-Records live in the shared state database (`state/openclaw.sqlite`) and are
+Records live in the shared state database (`state/natesclaw.sqlite`) and are
 written off the delivery hot path. Queries never return records older than 30
 days, and the ledger is capped at 100,000 rows; expired rows are pruned during
 startup, hourly maintenance, and later writes. Retention maintenance keeps
 running even when collection is disabled.
 
 Upgrading from a Gateway with the earlier run/tool-only ledger migrates the
-schema automatically at startup (or via `openclaw doctor --fix`); existing
+schema automatically at startup (or via `natesclaw doctor --fix`); existing
 rows and their ledger sequences are preserved.
 
 Execution identity contexts also live in the shared state database. Canonical
@@ -265,7 +265,7 @@ archive.
 
 ## Querying
 
-- CLI: [`openclaw audit`](/cli/audit) with filters for agent, session, run,
+- CLI: [`natesclaw audit`](/cli/audit) with filters for agent, session, run,
   kind, status, direction, channel, time bounds, and cursor paging.
 - Gateway RPC: `audit.activity.list` (requires `operator.read`) returns the
   versioned V1 activity event union; the shipped `audit.list` RPC is unchanged

@@ -7,7 +7,7 @@ import {
   sendGatewayCronWebhook,
 } from "../gateway/server-cron-notifications.js";
 import { resetTaskRegistryForTests } from "../tasks/task-runtime.test-helpers.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import { runCronCommandJob } from "./command-runner.js";
 import { resolveCronDeliveryPreviews } from "./delivery-preview.js";
 import { CronService } from "./service.js";
@@ -86,8 +86,8 @@ describe.sequential("cron delivery outcomes", () => {
   it("delivers a command result through the guarded webhook boundary and persists it", async () => {
     const receiver = await createWebhookReceiver();
     try {
-      await withOpenClawTestState(
-        { layout: "state-only", prefix: "openclaw-cron-webhook-delivery-" },
+      await withNatesclawTestState(
+        { layout: "state-only", prefix: "natesclaw-cron-webhook-delivery-" },
         async (state) => {
           resetTaskRegistryForTests({ persist: false });
           const storePath = state.path("cron", "jobs.json");
@@ -157,8 +157,8 @@ describe.sequential("cron delivery outcomes", () => {
   it("dispatches a failed run to its real failure webhook and keeps durable error state", async () => {
     const receiver = await createWebhookReceiver();
     try {
-      await withOpenClawTestState(
-        { layout: "state-only", prefix: "openclaw-cron-failure-destination-" },
+      await withNatesclawTestState(
+        { layout: "state-only", prefix: "natesclaw-cron-failure-destination-" },
         async (state) => {
           resetTaskRegistryForTests({ persist: false });
           const storePath = state.path("cron", "jobs.json");
@@ -241,8 +241,8 @@ describe.sequential("cron delivery outcomes", () => {
   it("sends skipped-run alerts through the real webhook path and persists alert state", async () => {
     const receiver = await createWebhookReceiver();
     try {
-      await withOpenClawTestState(
-        { layout: "state-only", prefix: "openclaw-cron-skipped-alert-" },
+      await withNatesclawTestState(
+        { layout: "state-only", prefix: "natesclaw-cron-skipped-alert-" },
         async (state) => {
           resetTaskRegistryForTests({ persist: false });
           const storePath = state.path("cron", "jobs.json");
@@ -320,8 +320,8 @@ describe.sequential("cron delivery outcomes", () => {
   });
 
   it("builds delivery previews from persisted webhook and opt-out jobs", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-cron-delivery-preview-" },
+    await withNatesclawTestState(
+      { layout: "state-only", prefix: "natesclaw-cron-delivery-preview-" },
       async (state) => {
         resetTaskRegistryForTests({ persist: false });
         const cron = new CronService({

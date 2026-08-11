@@ -80,8 +80,8 @@ describe("headless Code Mode", () => {
       await runCodeModeScriptHeadless({
         ctx,
         code: `
-          const first = await tools.callValue("openclaw:core:headless_first", {});
-          const second = await tools.callValue("openclaw:core:headless_second", {
+          const first = await tools.callValue("natesclaw:core:headless_first", {});
+          const second = await tools.callValue("natesclaw:core:headless_second", {
             value: first.value,
           });
           return second;
@@ -119,8 +119,8 @@ describe("headless Code Mode", () => {
       await runCodeModeScriptHeadless({
         ctx: createHeadlessHarness([first, second]),
         code: `return await Promise.race([
-          tools.callValue("openclaw:core:headless_first_race", {}),
-          tools.callValue("openclaw:core:headless_second_race", {}),
+          tools.callValue("natesclaw:core:headless_first_race", {}),
+          tools.callValue("natesclaw:core:headless_second_race", {}),
         ]);`,
         wallClockMs: 5_000,
       }),
@@ -156,8 +156,8 @@ describe("headless Code Mode", () => {
       await runCodeModeScriptHeadless({
         ctx: createHeadlessHarness([never, fast]),
         code: `return await Promise.race([
-          Promise.all([tools.callValue("openclaw:core:headless_nested_race_never", {})]),
-          tools.callValue("openclaw:core:headless_nested_race_fast", {}),
+          Promise.all([tools.callValue("natesclaw:core:headless_nested_race_never", {})]),
+          tools.callValue("natesclaw:core:headless_nested_race_fast", {}),
         ]);`,
         wallClockMs: 5_000,
       }),
@@ -173,29 +173,29 @@ describe("headless Code Mode", () => {
   it.each([
     {
       label: "directly",
-      auditCode: 'void tools.callValue("openclaw:core:headless_early_audit", {});',
+      auditCode: 'void tools.callValue("natesclaw:core:headless_early_audit", {});',
     },
     {
       label: "in a detached already-settled Promise.race",
       auditCode:
-        'void Promise.race([tools.callValue("openclaw:core:headless_early_audit", {}), Promise.resolve()]);',
+        'void Promise.race([tools.callValue("natesclaw:core:headless_early_audit", {}), Promise.resolve()]);',
     },
     {
       label: "in a detached Promise.all",
-      auditCode: 'void Promise.all([tools.callValue("openclaw:core:headless_early_audit", {})]);',
+      auditCode: 'void Promise.all([tools.callValue("natesclaw:core:headless_early_audit", {})]);',
     },
     {
       label: "in a detached Promise.allSettled",
       auditCode:
-        'void Promise.allSettled([tools.callValue("openclaw:core:headless_early_audit", {})]);',
+        'void Promise.allSettled([tools.callValue("natesclaw:core:headless_early_audit", {})]);',
     },
     {
       label: "in a detached Promise.any",
-      auditCode: 'void Promise.any([tools.callValue("openclaw:core:headless_early_audit", {})]);',
+      auditCode: 'void Promise.any([tools.callValue("natesclaw:core:headless_early_audit", {})]);',
     },
     {
       label: "in a detached Promise.race",
-      auditCode: 'void Promise.race([tools.callValue("openclaw:core:headless_early_audit", {})]);',
+      auditCode: 'void Promise.race([tools.callValue("natesclaw:core:headless_early_audit", {})]);',
     },
   ])(
     "drains a headless detached audit started $label before an awaited nested call",
@@ -221,7 +221,7 @@ describe("headless Code Mode", () => {
         await runCodeModeScriptHeadless({
           ctx: createHeadlessHarness([audit, fast]),
           code: `${auditCode}
-          return await tools.callValue("openclaw:core:headless_awaited_fast", {});`,
+          return await tools.callValue("natesclaw:core:headless_awaited_fast", {});`,
           wallClockMs: 5_000,
         }),
       );
@@ -259,10 +259,10 @@ describe("headless Code Mode", () => {
       await runCodeModeScriptHeadless({
         ctx: createHeadlessHarness([winner, loser, audit]),
         code: `return Promise.race([
-          tools.callValue("openclaw:core:headless_race_winner", {}),
-          tools.callValue("openclaw:core:headless_race_loser", {}),
+          tools.callValue("natesclaw:core:headless_race_winner", {}),
+          tools.callValue("natesclaw:core:headless_race_loser", {}),
         ]).then((value) => {
-          void tools.callValue("openclaw:core:headless_race_audit", {});
+          void tools.callValue("natesclaw:core:headless_race_audit", {});
           return value;
         });`,
         wallClockMs: 5_000,
@@ -284,8 +284,8 @@ describe("headless Code Mode", () => {
     const result = expectCompleted(
       await runCodeModeScriptHeadless({
         ctx: createHeadlessHarness([first, second]),
-        code: `void tools.callValue("openclaw:core:headless_detached_first", {});
-          void tools.callValue("openclaw:core:headless_detached_second", {});
+        code: `void tools.callValue("natesclaw:core:headless_detached_first", {});
+          void tools.callValue("natesclaw:core:headless_detached_second", {});
           return "done";`,
         wallClockMs: 5_000,
       }),
@@ -324,8 +324,8 @@ describe("headless Code Mode", () => {
         await runCodeModeScriptHeadless({
           ctx: createHeadlessHarness([fast, slow]),
           code: `return await Promise.${combinator}([
-            tools.callValue("openclaw:core:headless_fast", {}),
-            tools.callValue("openclaw:core:headless_slow", {}),
+            tools.callValue("natesclaw:core:headless_fast", {}),
+            tools.callValue("natesclaw:core:headless_slow", {}),
           ]);`,
           wallClockMs: 5_000,
         }),
@@ -368,8 +368,8 @@ describe("headless Code Mode", () => {
         ctx: createHeadlessHarness([failed, slow]),
         code: `try {
           await Promise.all([
-            tools.callValue("openclaw:core:headless_failed", {}),
-            tools.callValue("openclaw:core:headless_slow", {}),
+            tools.callValue("natesclaw:core:headless_failed", {}),
+            tools.callValue("natesclaw:core:headless_slow", {}),
           ]);
           return "unexpected success";
         } catch (error) {
@@ -598,8 +598,8 @@ describe("headless Code Mode", () => {
       await runCodeModeScriptHeadless({
         ctx: createHeadlessHarness([tool]),
         code: `
-          await tools.call("openclaw:core:budgeted", {});
-          await tools.call("openclaw:core:budgeted", {});
+          await tools.call("natesclaw:core:budgeted", {});
+          await tools.call("natesclaw:core:budgeted", {});
           return true;
         `,
         maxToolCalls: 1,
@@ -655,7 +655,7 @@ describe("headless Code Mode", () => {
         ctx: createHeadlessHarness([tool]),
         code: `
           text("x".repeat(700));
-          await tools.call("openclaw:core:output_boundary", {});
+          await tools.call("natesclaw:core:output_boundary", {});
           return "y".repeat(700);
         `,
         overrides: { maxOutputBytes: 1_024 },
@@ -673,7 +673,7 @@ describe("headless Code Mode", () => {
         ctx: createHeadlessHarness([tool]),
         code: `
           const calls = Array.from({ length: 129 }, () => () =>
-            tools.call("openclaw:core:budgeted", {}),
+            tools.call("natesclaw:core:budgeted", {}),
           );
           // Keep each leg within the default 16-call pending cap while proving the cumulative budget.
           for (let offset = 0; offset < calls.length; offset += 16) {
@@ -712,7 +712,7 @@ describe("headless Code Mode", () => {
     const resultPromise = runCodeModeScriptHeadless({
       ctx: createHeadlessHarness([slow]),
       code: `
-        await tools.call("openclaw:core:slow_leg", {});
+        await tools.call("natesclaw:core:slow_leg", {});
         return true;
       `,
       wallClockMs: 15_000,
@@ -740,7 +740,7 @@ describe("headless Code Mode", () => {
     const resultPromise = runCodeModeScriptHeadless({
       ctx: createHeadlessHarness([slow]),
       code: `
-        await tools.call("openclaw:core:slow_leg", {});
+        await tools.call("natesclaw:core:slow_leg", {});
         return true;
       `,
       wallClockMs: 360_000,

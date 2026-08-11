@@ -77,33 +77,33 @@ describe("system systemd ownership", () => {
   it("reports a unit loaded by the system manager", async () => {
     state.systemctl = { stdout: "loaded\n", stderr: "", code: 0 };
 
-    await expect(assertNoSystemSystemdOwnership("openclaw-gateway.service")).rejects.toMatchObject({
-      ownership: { status: "loaded", unitName: "openclaw-gateway.service" },
+    await expect(assertNoSystemSystemdOwnership("natesclaw-gateway.service")).rejects.toMatchObject({
+      ownership: { status: "loaded", unitName: "natesclaw-gateway.service" },
     });
   });
 
   it.each([
-    "/etc/systemd/system/openclaw-gateway.service",
-    "/run/systemd/system/openclaw-gateway.service",
-    "/usr/local/lib/systemd/system/openclaw-gateway.service",
+    "/etc/systemd/system/natesclaw-gateway.service",
+    "/run/systemd/system/natesclaw-gateway.service",
+    "/usr/local/lib/systemd/system/natesclaw-gateway.service",
   ])("detects a custom same-name system unit at %s", async (unitPath) => {
     state.paths.add(unitPath);
 
-    await expect(assertNoSystemSystemdOwnership("openclaw-gateway.service")).rejects.toMatchObject({
+    await expect(assertNoSystemSystemdOwnership("natesclaw-gateway.service")).rejects.toMatchObject({
       ownership: {
         status: "installed",
-        unitName: "openclaw-gateway.service",
+        unitName: "natesclaw-gateway.service",
         unitPath,
       },
     });
   });
 
   it("ignores differently named profile and custom units", async () => {
-    state.paths.add("/etc/systemd/system/openclaw-gateway-rescue.service");
-    state.paths.add("/etc/systemd/system/vendor-openclaw.service");
+    state.paths.add("/etc/systemd/system/natesclaw-gateway-rescue.service");
+    state.paths.add("/etc/systemd/system/vendor-natesclaw.service");
 
     await expect(
-      assertNoSystemSystemdOwnership("openclaw-gateway-primary.service"),
+      assertNoSystemSystemdOwnership("natesclaw-gateway-primary.service"),
     ).resolves.toBeUndefined();
     expect(execFileUtf8).toHaveBeenCalledTimes(3);
   });
@@ -115,10 +115,10 @@ describe("system systemd ownership", () => {
       code: 1,
     };
 
-    await expect(assertNoSystemSystemdOwnership("openclaw-gateway.service")).rejects.toMatchObject({
+    await expect(assertNoSystemSystemdOwnership("natesclaw-gateway.service")).rejects.toMatchObject({
       ownership: {
         status: "unverifiable",
-        unitName: "openclaw-gateway.service",
+        unitName: "natesclaw-gateway.service",
         operation: "systemctl",
         detail: "Failed to connect to bus: Permission denied",
       },
@@ -132,7 +132,7 @@ describe("system systemd ownership", () => {
       code: 1,
     };
 
-    await expect(assertNoSystemSystemdOwnership("openclaw-gateway.service")).rejects.toMatchObject({
+    await expect(assertNoSystemSystemdOwnership("natesclaw-gateway.service")).rejects.toMatchObject({
       ownership: {
         status: "unverifiable",
         operation: "systemctl",
@@ -142,13 +142,13 @@ describe("system systemd ownership", () => {
   });
 
   it("fails closed when an exact system path cannot be inspected", async () => {
-    const unitPath = "/etc/systemd/system/openclaw-gateway.service";
+    const unitPath = "/etc/systemd/system/natesclaw-gateway.service";
     state.pathErrors.set(unitPath, "EACCES");
 
-    await expect(assertNoSystemSystemdOwnership("openclaw-gateway.service")).rejects.toMatchObject({
+    await expect(assertNoSystemSystemdOwnership("natesclaw-gateway.service")).rejects.toMatchObject({
       ownership: {
         status: "unverifiable",
-        unitName: "openclaw-gateway.service",
+        unitName: "natesclaw-gateway.service",
         operation: "filesystem",
         detail: `${unitPath}: EACCES: ${unitPath}`,
       },
@@ -162,7 +162,7 @@ describe("system systemd ownership", () => {
       code: 1,
     };
 
-    await expect(assertNoSystemSystemdOwnership("openclaw-gateway.service")).rejects.toMatchObject({
+    await expect(assertNoSystemSystemdOwnership("natesclaw-gateway.service")).rejects.toMatchObject({
       ownership: {
         status: "unverifiable",
         operation: "systemctl",
@@ -183,8 +183,8 @@ describe("system systemd ownership", () => {
         : { stdout: "loaded\n", stderr: "", code: 0 };
     });
 
-    await expect(assertNoSystemSystemdOwnership("openclaw-gateway.service")).rejects.toMatchObject({
-      ownership: { status: "loaded", unitName: "openclaw-gateway.service" },
+    await expect(assertNoSystemSystemdOwnership("natesclaw-gateway.service")).rejects.toMatchObject({
+      ownership: { status: "loaded", unitName: "natesclaw-gateway.service" },
     });
   });
 
@@ -197,10 +197,10 @@ describe("system systemd ownership", () => {
       configurable: true,
       value: () => uid,
     });
-    state.paths.add("/etc/systemd/system/openclaw-gateway.service");
+    state.paths.add("/etc/systemd/system/natesclaw-gateway.service");
 
     try {
-      const error = await assertNoSystemSystemdOwnership("openclaw-gateway.service").catch(
+      const error = await assertNoSystemSystemdOwnership("natesclaw-gateway.service").catch(
         (caught: unknown) => caught,
       );
 
@@ -210,8 +210,8 @@ describe("system systemd ownership", () => {
         ownership: { status: "installed" },
       });
       expect(String(error)).toContain("--force does not override system ownership");
-      expect(String(error)).toContain(`${prefix}systemctl disable --now openclaw-gateway.service`);
-      expect(String(error)).toContain(`${prefix}rm /etc/systemd/system/openclaw-gateway.service`);
+      expect(String(error)).toContain(`${prefix}systemctl disable --now natesclaw-gateway.service`);
+      expect(String(error)).toContain(`${prefix}rm /etc/systemd/system/natesclaw-gateway.service`);
     } finally {
       if (existingGeteuid) {
         Object.defineProperty(process, "geteuid", existingGeteuid);
@@ -222,13 +222,13 @@ describe("system systemd ownership", () => {
   });
 
   it("does not recommend deleting package- or generator-owned units", async () => {
-    state.paths.add("/usr/lib/systemd/system/openclaw-gateway.service");
+    state.paths.add("/usr/lib/systemd/system/natesclaw-gateway.service");
 
-    const error = await assertNoSystemSystemdOwnership("openclaw-gateway.service").catch(
+    const error = await assertNoSystemSystemdOwnership("natesclaw-gateway.service").catch(
       (caught: unknown) => caught,
     );
 
     expect(String(error)).toContain("uninstall or reconfigure the package, generator");
-    expect(String(error)).not.toContain("rm /usr/lib/systemd/system/openclaw-gateway.service");
+    expect(String(error)).not.toContain("rm /usr/lib/systemd/system/natesclaw-gateway.service");
   });
 });

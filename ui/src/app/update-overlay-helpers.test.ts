@@ -33,7 +33,7 @@ const translations: Record<string, string> = {
     "The replacement process never became healthy. The previous process stayed up so you can recover.",
   "updates.failedAtStep": "The update failed at {step}: {cause}.",
   "updates.handoffTimeout":
-    "Update handoff started, but completion was not reported after reconnect. Run `openclaw update status` for the final result.",
+    "Update handoff started, but completion was not reported after reconnect. Run `natesclaw update status` for the final result.",
   "updates.campaign.countdown": "Updating in {time}",
   "updates.campaign.held": "Update held · resumes in {time}",
   "updates.campaign.waitingForIdle": "Waiting for active work · forced update in {time}",
@@ -390,7 +390,7 @@ describe("update status localization", () => {
       }),
     ).resolves.toEqual({
       tone: "danger",
-      text: "Update handoff started, but completion was not reported after reconnect. Run `openclaw update status` for the final result.",
+      text: "Update handoff started, but completion was not reported after reconnect. Run `natesclaw update status` for the final result.",
     });
   });
 });

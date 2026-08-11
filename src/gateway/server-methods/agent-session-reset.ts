@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import type { AgentCommandOpts } from "../../agents/command/types.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.public.js";
@@ -8,7 +8,7 @@ import {
   resolveAgentMainSessionKey,
   type SessionEntry,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveAgentDeliveryPlanWithSessionRoute } from "../../infra/outbound/agent-delivery.js";
 import { defaultRuntime } from "../../runtime.js";
 import { resolveSendPolicy } from "../../sessions/send-policy.js";
@@ -87,7 +87,7 @@ export function buildBareSessionResetResponse(params: {
 }
 
 async function deliverBareSessionResetResult(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   context: GatewayRequestHandlerOptions["context"];
   reason: "new" | "reset";
   sessionId?: string;
@@ -158,7 +158,7 @@ async function deliverBareSessionResetResult(params: {
 }
 
 export async function resolveBareSessionResetResult(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   context: GatewayRequestHandlerOptions["context"];
   reason: "new" | "reset";
   sessionId?: string;
@@ -247,11 +247,11 @@ export async function resolveBareSessionResetResult(params: {
 }
 
 export function loadBareSessionResetDeliverySession(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   agentId?: string;
 }): {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry?: SessionEntry;
   agentId: string;
 } {

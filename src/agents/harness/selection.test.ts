@@ -1,12 +1,12 @@
 // Covers agent harness selection, fallback behavior, and compaction routing.
-import type { Model } from "openclaw/plugin-sdk/llm";
+import type { Model } from "natesclaw/plugin-sdk/llm";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import type { TranscriptEntryAnchor } from "../../config/sessions/transcript-entry-anchor.js";
-import { OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
+import { NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
 import type { ContextEngine } from "../../context-engine/types.js";
 import { resetAgentRunRegistryForTest } from "../../infra/agent-run-registry.js";
-import { createOpenClawCodingTools } from "../../plugin-sdk/agent-harness.js";
+import { createNatesclawCodingTools } from "../../plugin-sdk/agent-harness.js";
 import { mintSecretSentinel } from "../../secrets/sentinel.js";
 import type { UserTurnTranscriptRecorder } from "../../sessions/user-turn-transcript.types.js";
 import {
@@ -28,8 +28,8 @@ import { maybeCompactAgentHarnessSession } from "./compaction.js";
 import type { ContextEngineLogicalTurnLease } from "./context-engine-logical-turn.js";
 import { clearAgentHarnesses, registerAgentHarness } from "./registry.js";
 import {
-  agentHarnessBuildsOpenClawTools,
-  agentHarnessExposesOpenClawTools,
+  agentHarnessBuildsNatesclawTools,
+  agentHarnessExposesNatesclawTools,
   resolveAgentHarnessPolicy,
   resolveAvailableAgentHarnessPolicy,
   resolvePluginHarnessPolicyToolsAllow,
@@ -50,7 +50,7 @@ import type {
 } from "./types.js";
 
 const agentRunAttempt = vi.fn<AgentHarness["runAttempt"]>(async () =>
-  createAttemptResult("openclaw"),
+  createAttemptResult("natesclaw"),
 );
 const compactAuthMocks = vi.hoisted(() => ({
   ensureAuthProfileStore: vi.fn(),
@@ -91,30 +91,30 @@ function createTranscriptRecorder(
   };
 }
 
-it("identifies harnesses that expose OpenClaw tools", () => {
-  expect(agentHarnessBuildsOpenClawTools("openclaw")).toBe(false);
-  expect(agentHarnessBuildsOpenClawTools("codex")).toBe(true);
-  expect(agentHarnessBuildsOpenClawTools("copilot")).toBe(true);
-  expect(agentHarnessBuildsOpenClawTools("custom")).toBe(false);
-  expect(agentHarnessExposesOpenClawTools("openclaw")).toBe(true);
-  expect(agentHarnessExposesOpenClawTools("codex")).toBe(true);
-  expect(agentHarnessExposesOpenClawTools("copilot")).toBe(true);
-  expect(agentHarnessExposesOpenClawTools("custom")).toBe(false);
+it("identifies harnesses that expose Natesclaw tools", () => {
+  expect(agentHarnessBuildsNatesclawTools("natesclaw")).toBe(false);
+  expect(agentHarnessBuildsNatesclawTools("codex")).toBe(true);
+  expect(agentHarnessBuildsNatesclawTools("copilot")).toBe(true);
+  expect(agentHarnessBuildsNatesclawTools("custom")).toBe(false);
+  expect(agentHarnessExposesNatesclawTools("natesclaw")).toBe(true);
+  expect(agentHarnessExposesNatesclawTools("codex")).toBe(true);
+  expect(agentHarnessExposesNatesclawTools("copilot")).toBe(true);
+  expect(agentHarnessExposesNatesclawTools("custom")).toBe(false);
 });
 
-vi.mock("./builtin-openclaw.js", () => ({
-  createOpenClawAgentHarness: (): AgentHarness => {
+vi.mock("./builtin-natesclaw.js", () => ({
+  createNatesclawAgentHarness: (): AgentHarness => {
     const harness: AgentHarness = {
-      id: "openclaw",
-      label: "OpenClaw embedded agent",
-      contextEngineHostCapabilities: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST.capabilities,
+      id: "natesclaw",
+      label: "Natesclaw embedded agent",
+      contextEngineHostCapabilities: NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST.capabilities,
       supports: () => ({ supported: true, priority: 0 }),
       runAttempt: agentRunAttempt,
     };
     builtInHarnesses.add(harness);
     return harness;
   },
-  isBuiltInOpenClawAgentHarness: (harness: AgentHarness) => builtInHarnesses.has(harness),
+  isBuiltInNatesclawAgentHarness: (harness: AgentHarness) => builtInHarnesses.has(harness),
 }));
 vi.mock("../model-auth.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../model-auth.js")>()),
@@ -146,7 +146,7 @@ vi.mock("../tools/gateway.js", () => ({ callGatewayTool: vi.fn() }));
 
 const mockCallGatewayTool = vi.mocked(callGatewayTool);
 
-const originalRuntime = process.env.OPENCLAW_AGENT_RUNTIME;
+const originalRuntime = process.env.NATESCLAW_AGENT_RUNTIME;
 let selectionAdmission: PreparedAgentRunAdmission;
 let selectionAdmittedRunContext: AdmittedRunContext;
 
@@ -220,13 +220,13 @@ afterEach(() => {
   providerOwnerMocks.resolveProviderRefOwnership.mockReset();
   contextEngineTurnAttemptMocks.drainPendingContextEngineTurnsBeforeRun.mockReset();
   if (originalRuntime == null) {
-    delete process.env.OPENCLAW_AGENT_RUNTIME;
+    delete process.env.NATESCLAW_AGENT_RUNTIME;
   } else {
-    process.env.OPENCLAW_AGENT_RUNTIME = originalRuntime;
+    process.env.NATESCLAW_AGENT_RUNTIME = originalRuntime;
   }
 });
 
-function createAttemptParams(config?: OpenClawConfig): EmbeddedRunAttemptParams {
+function createAttemptParams(config?: NatesclawConfig): EmbeddedRunAttemptParams {
   return {
     admittedRunContext: selectionAdmittedRunContext,
     prompt: "hello",
@@ -273,7 +273,7 @@ function createTranscriptAnchor(
     agentId: "main",
     sessionId: "session-1",
     sessionKey: "agent:main:session-1",
-    storePath: "/tmp/openclaw-agent.sqlite",
+    storePath: "/tmp/natesclaw-agent.sqlite",
     generation: "generation-1",
     entryId,
     effectiveParentId: rawSeq === 1 ? null : "user-1",
@@ -359,7 +359,7 @@ function registerSuccessfulCodexHarness(): void {
   );
 }
 
-function groupSenderDenyAllConfig(): OpenClawConfig {
+function groupSenderDenyAllConfig(): NatesclawConfig {
   // Mirrors Telegram sender policy shape used when selection must preserve
   // channel/group sender tool constraints across fallback attempts.
   return {
@@ -374,10 +374,10 @@ function groupSenderDenyAllConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function groupDenyAllConfig(): OpenClawConfig {
+function groupDenyAllConfig(): NatesclawConfig {
   return {
     channels: {
       telegram: {
@@ -388,10 +388,10 @@ function groupDenyAllConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function providerRuntimeConfig(provider: string, runtime: string): OpenClawConfig {
+function providerRuntimeConfig(provider: string, runtime: string): NatesclawConfig {
   return {
     models: {
       providers: {
@@ -402,14 +402,14 @@ function providerRuntimeConfig(provider: string, runtime: string): OpenClawConfi
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function agentModelRuntimeConfig(
   modelRef: string,
   runtime: string,
   agentId?: string,
-): OpenClawConfig {
+): NatesclawConfig {
   if (agentId) {
     return {
       agents: {
@@ -418,7 +418,7 @@ function agentModelRuntimeConfig(
           { id: agentId, models: { [modelRef]: { agentRuntime: { id: runtime } } } },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
   }
   return {
     agents: {
@@ -428,7 +428,7 @@ function agentModelRuntimeConfig(
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 type CompactSessionParams = Parameters<typeof maybeCompactAgentHarnessSession>[0];
@@ -532,12 +532,12 @@ describe("runAgentHarnessAttempt", () => {
   });
 
   it("routes settled turns only through an explicit harness finalizer", async () => {
-    const internalKey = "__openclawSourceReplyDeliveryRuntime";
+    const internalKey = "__natesclawSourceReplyDeliveryRuntime";
     const runAttempt = vi.fn<AgentHarness["runAttempt"]>(async () => createAttemptResult("run"));
     let hostAuthorityActive = true;
     const finalizeSettledTurn = vi.fn<NonNullable<AgentHarness["finalizeSettledTurn"]>>(
       async ({ attempt, settledAttempt: _settledAttempt }) => {
-        hostAuthorityActive = isHostScopedAgentToolActive("openclaw");
+        hostAuthorityActive = isHostScopedAgentToolActive("natesclaw");
         expect(attempt.operation).toBe("settled-tool-finalization");
         expect(attempt).not.toHaveProperty("hostCapabilities");
         expect(attempt).not.toHaveProperty(internalKey);
@@ -596,7 +596,7 @@ describe("runAgentHarnessAttempt", () => {
   });
 
   it.each(["codex", "copilot"] as const)(
-    "binds the host OpenClaw tool to the %s SDK construction path without leaking authority",
+    "binds the host Natesclaw tool to the %s SDK construction path without leaking authority",
     async (harnessId) => {
       let receivedPrivateAuthority = true;
       let hostScopeActive = false;
@@ -604,15 +604,15 @@ describe("runAgentHarnessAttempt", () => {
       const pluginRunAttempt = vi.fn<AgentHarness["runAttempt"]>(async (attemptParams) => {
         receivedPrivateAuthority = "systemAgentTool" in attemptParams;
         await Promise.resolve();
-        hostScopeActive = isHostScopedAgentToolActive("openclaw");
-        toolNames = createOpenClawCodingTools({
-          config: { tools: { allow: ["read"], deny: ["openclaw"], toolSearch: true } },
-          runtimeToolAllowlist: ["openclaw"],
+        hostScopeActive = isHostScopedAgentToolActive("natesclaw");
+        toolNames = createNatesclawCodingTools({
+          config: { tools: { allow: ["read"], deny: ["natesclaw"], toolSearch: true } },
+          runtimeToolAllowlist: ["natesclaw"],
           toolConstructionPlan: {
             includeBaseCodingTools: false,
             includeShellTools: false,
             includeChannelTools: false,
-            includeOpenClawTools: true,
+            includeNatesclawTools: true,
             includePluginTools: false,
           },
         }).map((tool) => tool.name);
@@ -630,7 +630,7 @@ describe("runAgentHarnessAttempt", () => {
       const params = createAttemptParams(
         providerRuntimeConfig("codex", harnessId),
       ) as EmbeddedRunAttemptParams & { systemAgentTool?: SystemAgentToolOptions };
-      params.toolsAllow = ["openclaw"];
+      params.toolsAllow = ["natesclaw"];
       params.systemAgentTool = { surface: "cli", proposalRef: {}, directiveRef: {} };
 
       await runAgentHarnessAttempt(params);
@@ -638,13 +638,13 @@ describe("runAgentHarnessAttempt", () => {
       expect(pluginRunAttempt).toHaveBeenCalledTimes(1);
       expect(receivedPrivateAuthority).toBe(false);
       expect(hostScopeActive).toBe(true);
-      expect(toolNames).toEqual(["openclaw"]);
-      expect(isHostScopedAgentToolActive("openclaw")).toBe(false);
+      expect(toolNames).toEqual(["natesclaw"]);
+      expect(isHostScopedAgentToolActive("natesclaw")).toBe(false);
     },
   );
 
   it("strips the internal source delivery controller at the plugin harness handoff", async () => {
-    const internalKey = "__openclawSourceReplyDeliveryRuntime";
+    const internalKey = "__natesclawSourceReplyDeliveryRuntime";
     let handedOffRuntime: unknown;
     registerAgentHarness(
       {
@@ -812,8 +812,8 @@ describe("runAgentHarnessAttempt", () => {
 
   it.each([
     { name: "missing", toolsAllow: undefined },
-    { name: "broad", toolsAllow: ["openclaw", "read"] },
-  ])("rejects $name allowlists for private OpenClaw authority", async ({ toolsAllow }) => {
+    { name: "broad", toolsAllow: ["natesclaw", "read"] },
+  ])("rejects $name allowlists for private Natesclaw authority", async ({ toolsAllow }) => {
     const pluginRunAttempt = vi.fn<AgentHarness["runAttempt"]>(async () =>
       createAttemptResult("codex"),
     );
@@ -833,13 +833,13 @@ describe("runAgentHarnessAttempt", () => {
     params.systemAgentTool = { surface: "cli", proposalRef: {}, directiveRef: {} };
 
     await expect(runAgentHarnessAttempt(params)).rejects.toThrow(
-      'OpenClaw host authority requires toolsAllow: ["openclaw"]',
+      'Natesclaw host authority requires toolsAllow: ["natesclaw"]',
     );
     expect(pluginRunAttempt).not.toHaveBeenCalled();
-    expect(isHostScopedAgentToolActive("openclaw")).toBe(false);
+    expect(isHostScopedAgentToolActive("natesclaw")).toBe(false);
   });
 
-  it("keeps the host OpenClaw allowlist across global, agent, and sandbox deny-all policy", async () => {
+  it("keeps the host Natesclaw allowlist across global, agent, and sandbox deny-all policy", async () => {
     const received: Array<{
       toolsAllow: string[] | undefined;
       extraSystemPrompt: string | undefined;
@@ -849,7 +849,7 @@ describe("runAgentHarnessAttempt", () => {
       received.push({
         toolsAllow: attemptParams.toolsAllow,
         extraSystemPrompt: attemptParams.extraSystemPrompt,
-        hostScopeActive: isHostScopedAgentToolActive("openclaw"),
+        hostScopeActive: isHostScopedAgentToolActive("natesclaw"),
       });
       return createAttemptResult("codex");
     });
@@ -863,22 +863,22 @@ describe("runAgentHarnessAttempt", () => {
       { ownerPluginId: "codex" },
     );
     const cases: Array<{
-      config: OpenClawConfig;
+      config: NatesclawConfig;
       agentId?: string;
       sessionKey?: string;
     }> = [
-      { config: { tools: { deny: ["*"] } } as OpenClawConfig },
+      { config: { tools: { deny: ["*"] } } as NatesclawConfig },
       {
         config: {
           agents: { list: [{ id: "worker", tools: { deny: ["*"] } }] },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         agentId: "worker",
       },
       {
         config: {
           agents: { defaults: { sandbox: { mode: "all" } } },
           tools: { sandbox: { tools: { deny: ["*"] } } },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         sessionKey: "agent:main:session-1",
       },
     ];
@@ -891,47 +891,47 @@ describe("runAgentHarnessAttempt", () => {
       params.agentHarnessRuntimeOverride = "codex";
       params.agentId = testCase.agentId;
       params.sessionKey = testCase.sessionKey;
-      params.toolsAllow = ["openclaw"];
+      params.toolsAllow = ["natesclaw"];
       params.systemAgentTool = { surface: "cli", proposalRef: {}, directiveRef: {} };
       await runAgentHarnessAttempt(params);
     }
 
     expect(received).toEqual([
-      { toolsAllow: ["openclaw"], extraSystemPrompt: undefined, hostScopeActive: true },
-      { toolsAllow: ["openclaw"], extraSystemPrompt: undefined, hostScopeActive: true },
-      { toolsAllow: ["openclaw"], extraSystemPrompt: undefined, hostScopeActive: true },
+      { toolsAllow: ["natesclaw"], extraSystemPrompt: undefined, hostScopeActive: true },
+      { toolsAllow: ["natesclaw"], extraSystemPrompt: undefined, hostScopeActive: true },
+      { toolsAllow: ["natesclaw"], extraSystemPrompt: undefined, hostScopeActive: true },
     ]);
-    expect(isHostScopedAgentToolActive("openclaw")).toBe(false);
+    expect(isHostScopedAgentToolActive("natesclaw")).toBe(false);
   });
 
-  it("binds the same host OpenClaw scope to the built-in OpenClaw harness", async () => {
+  it("binds the same host Natesclaw scope to the built-in Natesclaw harness", async () => {
     let toolNames: string[] = [];
     agentRunAttempt.mockImplementationOnce(async () => {
       await Promise.resolve();
-      toolNames = createOpenClawCodingTools({
-        config: { tools: { allow: ["read"], deny: ["openclaw"], toolSearch: true } },
-        runtimeToolAllowlist: ["openclaw"],
+      toolNames = createNatesclawCodingTools({
+        config: { tools: { allow: ["read"], deny: ["natesclaw"], toolSearch: true } },
+        runtimeToolAllowlist: ["natesclaw"],
         toolConstructionPlan: {
           includeBaseCodingTools: false,
           includeShellTools: false,
           includeChannelTools: false,
-          includeOpenClawTools: true,
+          includeNatesclawTools: true,
           includePluginTools: false,
         },
       }).map((tool) => tool.name);
-      return createAttemptResult("openclaw");
+      return createAttemptResult("natesclaw");
     });
     const params = createAttemptParams(
-      providerRuntimeConfig("codex", "openclaw"),
+      providerRuntimeConfig("codex", "natesclaw"),
     ) as EmbeddedRunAttemptParams & { systemAgentTool?: SystemAgentToolOptions };
-    params.toolsAllow = ["openclaw"];
+    params.toolsAllow = ["natesclaw"];
     params.systemAgentTool = { surface: "gateway", proposalRef: {}, directiveRef: {} };
 
     const result = await runAgentHarnessAttempt(params);
 
-    expect(result.sessionIdUsed).toBe("openclaw");
-    expect(toolNames).toEqual(["openclaw"]);
-    expect(isHostScopedAgentToolActive("openclaw")).toBe(false);
+    expect(result.sessionIdUsed).toBe("natesclaw");
+    expect(toolNames).toEqual(["natesclaw"]);
+    expect(isHostScopedAgentToolActive("natesclaw")).toBe(false);
   });
 
   it("unwraps sentinels only at the plugin harness handoff", async () => {
@@ -966,7 +966,7 @@ describe("runAgentHarnessAttempt", () => {
   });
 
   it("fails when a forced plugin harness is unavailable and fallback is omitted", async () => {
-    process.env.OPENCLAW_AGENT_RUNTIME = "codex";
+    process.env.NATESCLAW_AGENT_RUNTIME = "codex";
 
     await expect(
       runAgentHarnessAttempt(createAttemptParams(providerRuntimeConfig("codex", "codex"))),
@@ -974,24 +974,24 @@ describe("runAgentHarnessAttempt", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("falls back to the OpenClaw harness in auto mode when no plugin harness matches", async () => {
+  it("falls back to the Natesclaw harness in auto mode when no plugin harness matches", async () => {
     const result = await runAgentHarnessAttempt(createAttemptParams());
 
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("natesclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("allows the selected OpenClaw harness to satisfy context-engine pre-prompt assembly", async () => {
+  it("allows the selected Natesclaw harness to satisfy context-engine pre-prompt assembly", async () => {
     const result = await runAgentHarnessAttempt({
-      ...createAttemptParams(providerRuntimeConfig("codex", "openclaw")),
+      ...createAttemptParams(providerRuntimeConfig("codex", "natesclaw")),
       contextEngine: createContextEngineRequiringAssembly(),
     });
 
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("natesclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("surfaces an auto-selected plugin harness failure instead of replaying through OpenClaw", async () => {
+  it("surfaces an auto-selected plugin harness failure instead of replaying through Natesclaw", async () => {
     registerFailingCodexHarness();
 
     await expect(runAgentHarnessAttempt(createAttemptParams())).rejects.toThrow(
@@ -1043,7 +1043,7 @@ describe("runAgentHarnessAttempt", () => {
         harnessAuthProvider: "openai",
         deferredRouteSupport: {
           requestTransportOverrides: "none",
-          runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+          runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
         },
       },
     } as never;
@@ -1055,14 +1055,14 @@ describe("runAgentHarnessAttempt", () => {
       expect.objectContaining({
         modelProvider: expect.objectContaining({
           requestTransportOverrides: "none",
-          runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+          runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
           preparedAuth: { source: "harness" },
         }),
       }),
     );
   });
 
-  it("surfaces a forced plugin harness failure instead of replaying through OpenClaw", async () => {
+  it("surfaces a forced plugin harness failure instead of replaying through Natesclaw", async () => {
     registerFailingCodexHarness();
 
     await expect(
@@ -1146,13 +1146,13 @@ describe("runAgentHarnessAttempt", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("falls back to OpenClaw when the implicit OpenAI Codex harness is unavailable", async () => {
+  it("falls back to Natesclaw when the implicit OpenAI Codex harness is unavailable", async () => {
     expect(resolveAgentHarnessPolicy({ provider: "openai", modelId: "gpt-5.4" })).toEqual({
       runtime: "codex",
       runtimeSource: "implicit",
     });
     expect(resolveAvailableAgentHarnessPolicy({ provider: "openai", modelId: "gpt-5.4" })).toEqual({
-      runtime: "openclaw",
+      runtime: "natesclaw",
       runtimeSource: "implicit",
     });
 
@@ -1162,29 +1162,29 @@ describe("runAgentHarnessAttempt", () => {
       modelId: "gpt-5.4",
     });
 
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("natesclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("honors explicit OpenClaw runtime for OpenAI agent model runs", async () => {
+  it("honors explicit Natesclaw runtime for OpenAI agent model runs", async () => {
     const result = await runAgentHarnessAttempt({
-      ...createAttemptParams(providerRuntimeConfig("openai", "openclaw")),
+      ...createAttemptParams(providerRuntimeConfig("openai", "natesclaw")),
       provider: "openai",
       modelId: "gpt-5.4",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("natesclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("honors provider wildcard OpenClaw runtime policy for OpenAI agent model runs", async () => {
+  it("honors provider wildcard Natesclaw runtime policy for OpenAI agent model runs", async () => {
     registerSuccessfulCodexHarness();
 
     const result = await runAgentHarnessAttempt({
-      ...createAttemptParams(agentModelRuntimeConfig("openai/*", "openclaw")),
+      ...createAttemptParams(agentModelRuntimeConfig("openai/*", "natesclaw")),
       provider: "openai",
       modelId: "gpt-5.4",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("natesclaw");
     expect(agentRunAttempt).toHaveBeenCalledTimes(1);
   });
 
@@ -1317,26 +1317,26 @@ describe("runAgentHarnessAttempt", () => {
     );
 
     const cases: Array<{
-      config?: OpenClawConfig;
+      config?: NatesclawConfig;
       conversationToolPolicy?: EmbeddedRunAttemptParams["conversationToolPolicy"];
       agentId?: string;
       sessionKey?: string;
     }> = [
       {},
-      { config: { tools: { profile: "coding" } } as OpenClawConfig },
+      { config: { tools: { profile: "coding" } } as NatesclawConfig },
       { conversationToolPolicy: {} },
       { conversationToolPolicy: { allow: ["*"] } },
       { conversationToolPolicy: { deny: ["exec"] } },
-      { config: { tools: { deny: ["exec"] } } as OpenClawConfig },
+      { config: { tools: { deny: ["exec"] } } as NatesclawConfig },
       {
         config: {
           agents: { list: [{ id: "worker", tools: { deny: ["exec"] } }] },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         agentId: "worker",
         sessionKey: "agent:worker:session-1",
       },
       {
-        config: { tools: { deny: ["exec"] } } as OpenClawConfig,
+        config: { tools: { deny: ["exec"] } } as NatesclawConfig,
         conversationToolPolicy: {},
       },
     ];
@@ -1408,23 +1408,23 @@ describe("runAgentHarnessAttempt", () => {
   it.each([
     {
       name: "narrow allowlist",
-      config: { tools: { allow: ["message"] } } as OpenClawConfig,
+      config: { tools: { allow: ["message"] } } as NatesclawConfig,
     },
     {
       name: "specific denylist",
-      config: { tools: { deny: ["exec"] } } as OpenClawConfig,
+      config: { tools: { deny: ["exec"] } } as NatesclawConfig,
     },
     {
       name: "narrow profile",
-      config: { tools: { profile: "coding" } } as OpenClawConfig,
+      config: { tools: { profile: "coding" } } as NatesclawConfig,
     },
   ])("marks plugin side questions restricted for a $name", ({ config }) => {
     expect(resolvePluginHarnessPolicyToolsAllow(createAttemptParams(config))).toEqual([]);
   });
 
   it.each([
-    { name: "full tool profile", config: { tools: { profile: "full" } } as OpenClawConfig },
-    { name: "explicit empty allowlist", config: { tools: { allow: [] } } as OpenClawConfig },
+    { name: "full tool profile", config: { tools: { profile: "full" } } as NatesclawConfig },
+    { name: "explicit empty allowlist", config: { tools: { allow: [] } } as NatesclawConfig },
   ])("leaves plugin side questions unrestricted for an $name", ({ config }) => {
     expect(resolvePluginHarnessPolicyToolsAllow(createAttemptParams(config))).toBeUndefined();
   });
@@ -1436,7 +1436,7 @@ describe("runAgentHarnessAttempt", () => {
           "*": { deny: ["*"] },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolvePluginHarnessPolicyToolsAllow({
@@ -1454,7 +1454,7 @@ describe("runAgentHarnessAttempt", () => {
           "*": { deny: ["*"] },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolvePluginHarnessPolicyToolsAllow({
@@ -1465,7 +1465,7 @@ describe("runAgentHarnessAttempt", () => {
     ).toEqual([]);
   });
 
-  it("leaves OpenClaw harness params unchanged for channel group sender deny-all policy", async () => {
+  it("leaves Natesclaw harness params unchanged for channel group sender deny-all policy", async () => {
     await runAgentHarnessAttempt({
       ...createAttemptParams(groupSenderDenyAllConfig()),
       sessionKey: "agent:main:telegram:group:test-deny-room",
@@ -1485,7 +1485,7 @@ describe("runAgentHarnessAttempt", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("does not let a strict agent model plugin runtime fall back to OpenClaw", async () => {
+  it("does not let a strict agent model plugin runtime fall back to Natesclaw", async () => {
     await expect(
       runAgentHarnessAttempt({
         ...createAttemptParams(agentModelRuntimeConfig("codex/gpt-5.4", "codex", "strict")),
@@ -1505,7 +1505,7 @@ describe("selectAgentHarness", () => {
       runtimeSource: "implicit",
     });
     expect(selectAgentHarness({ provider: "custom", modelId: "gpt-5.4-codex" }).id).toBe(
-      "openclaw",
+      "natesclaw",
     );
   });
 
@@ -1538,7 +1538,7 @@ describe("selectAgentHarness", () => {
     });
 
     expect(selectAgentHarness({ provider: "deepseek", modelId: "deepseek-v4-pro" }).id).toBe(
-      "openclaw",
+      "natesclaw",
     );
     expect(supports).not.toHaveBeenCalled();
     expect(providerOwnerMocks.resolveProviderRefOwnership).not.toHaveBeenCalled();
@@ -1598,7 +1598,7 @@ describe("selectAgentHarness", () => {
     expect(unsupportedSupports).toHaveBeenCalledTimes(1);
   });
 
-  it("honors session-level OpenClaw pins when selecting a harness", () => {
+  it("honors session-level Natesclaw pins when selecting a harness", () => {
     const supports = vi.fn(() => ({ supported: true as const, priority: 100 }));
     registerAgentHarness({
       id: "codex",
@@ -1610,10 +1610,10 @@ describe("selectAgentHarness", () => {
     const harness = selectAgentHarness({
       provider: "codex",
       modelId: "gpt-5.4",
-      agentHarnessId: "openclaw",
+      agentHarnessId: "natesclaw",
     });
 
-    expect(harness.id).toBe("openclaw");
+    expect(harness.id).toBe("natesclaw");
     expect(supports).not.toHaveBeenCalled();
   });
 
@@ -1722,7 +1722,7 @@ describe("selectAgentHarness", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     registerAgentHarness({
       id: "copilot",
       label: "Copilot",
@@ -1779,7 +1779,7 @@ describe("selectAgentHarness", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     registerAgentHarness({
       id: "copilot",
       label: "Copilot",
@@ -1831,7 +1831,7 @@ describe("selectAgentHarness", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     expect(
       buildAgentHarnessSupportContext({
@@ -1843,7 +1843,7 @@ describe("selectAgentHarness", () => {
     ).toMatchObject({
       api: "openai-completions",
       requestTransportOverrides: "present",
-      runtimePolicy: { compatibleIds: ["openclaw"] },
+      runtimePolicy: { compatibleIds: ["natesclaw"] },
     });
   });
 
@@ -1863,7 +1863,7 @@ describe("selectAgentHarness", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     expect(
       buildAgentHarnessSupportContext({
@@ -1876,7 +1876,7 @@ describe("selectAgentHarness", () => {
       api: "openai-completions",
       baseUrl: "https://api.openai.com/v1",
       requestTransportOverrides: "present",
-      runtimePolicy: { compatibleIds: ["openclaw"] },
+      runtimePolicy: { compatibleIds: ["natesclaw"] },
     });
   });
 
@@ -1892,7 +1892,7 @@ describe("selectAgentHarness", () => {
         requestedRuntime: "codex",
       }).modelProvider,
     ).toMatchObject({
-      runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+      runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
     });
   });
 
@@ -1933,12 +1933,12 @@ describe("selectAgentHarness", () => {
             requestTransportOverrides: "none",
           },
           requestedRuntime: "codex",
-          config: config as OpenClawConfig,
+          config: config as NatesclawConfig,
           ...identity,
         }).modelProvider,
       ).toMatchObject({
         requestTransportOverrides: "present",
-        runtimePolicy: { compatibleIds: ["openclaw"] },
+        runtimePolicy: { compatibleIds: ["natesclaw"] },
       });
     },
   );
@@ -1964,11 +1964,11 @@ describe("selectAgentHarness", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
       }).modelProvider,
     ).toMatchObject({
       requestTransportOverrides: "none",
-      runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+      runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
     });
   });
 
@@ -1993,7 +1993,7 @@ describe("selectAgentHarness", () => {
           api: "openai-responses",
           baseUrl: "https://api.openai.com/v1",
           requestTransportOverrides: "none",
-          runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+          runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
         },
         config: { agents: { defaults: { params: { store: false } } } },
         agentHarnessRuntimeOverride: "codex",
@@ -2006,7 +2006,7 @@ describe("selectAgentHarness", () => {
     );
   });
 
-  it("keeps request-scoped transport overrides on the implicit OpenClaw runtime", () => {
+  it("keeps request-scoped transport overrides on the implicit Natesclaw runtime", () => {
     registerAgentHarness({
       id: "codex",
       label: "Codex",
@@ -2023,7 +2023,7 @@ describe("selectAgentHarness", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const modelProvider = {
       api: "openai-responses",
       baseUrl: "https://api.openai.com/v1",
@@ -2037,7 +2037,7 @@ describe("selectAgentHarness", () => {
         modelProvider,
         config,
       }),
-    ).toEqual({ runtime: "openclaw", runtimeSource: "implicit" });
+    ).toEqual({ runtime: "natesclaw", runtimeSource: "implicit" });
     expect(
       selectAgentHarness({
         provider: "openai",
@@ -2045,7 +2045,7 @@ describe("selectAgentHarness", () => {
         modelProvider,
         config,
       }).id,
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
     expect(
       selectAgentHarness({
         provider: "openai",
@@ -2085,13 +2085,13 @@ describe("selectAgentHarness", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveAvailableAgentHarnessPolicy({ provider: "openai", modelId: "gpt-5.5", config }),
-    ).toEqual({ runtime: "openclaw", runtimeSource: "implicit" });
+    ).toEqual({ runtime: "natesclaw", runtimeSource: "implicit" });
     expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.5", config }).id).toBe(
-      "openclaw",
+      "natesclaw",
     );
     expect(() =>
       selectAgentHarness({
@@ -2119,11 +2119,11 @@ describe("selectAgentHarness", () => {
       api: "openai-completions",
       baseUrl: "https://api.openai.com/v1",
       requestTransportOverrides: "none" as const,
-      runtimePolicy: { compatibleIds: ["openclaw"] },
+      runtimePolicy: { compatibleIds: ["natesclaw"] },
     };
 
     expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.5", modelProvider }).id).toBe(
-      "openclaw",
+      "natesclaw",
     );
     expect(() =>
       selectAgentHarness({
@@ -2148,7 +2148,7 @@ describe("selectAgentHarness", () => {
       runAttempt: vi.fn(async () => createAttemptResult("codex")),
     });
 
-    expect(selectAgentHarness({ provider: "openai", modelId: "gpt-future" }).id).toBe("openclaw");
+    expect(selectAgentHarness({ provider: "openai", modelId: "gpt-future" }).id).toBe("natesclaw");
     expect(supports).toHaveBeenCalledWith(
       expect.objectContaining({
         modelProvider: expect.objectContaining({ runtimePolicy: undefined }),
@@ -2159,7 +2159,7 @@ describe("selectAgentHarness", () => {
   it("projects a harness-owned auth plan as a closed harness source", () => {
     const deferredRouteSupport = {
       requestTransportOverrides: "none" as const,
-      runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+      runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
     };
     expect(
       resolveAgentHarnessPreparedAuthSupport({
@@ -2218,7 +2218,7 @@ describe("selectAgentHarness", () => {
         modelId: "gpt-future",
         modelProvider: {
           requestTransportOverrides: "none",
-          runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+          runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
           preparedAuth: { source: "harness" },
         },
         agentHarnessRuntimeOverride: "codex",
@@ -2228,7 +2228,7 @@ describe("selectAgentHarness", () => {
       expect.objectContaining({
         modelProvider: expect.objectContaining({
           preparedAuth: { source: "harness" },
-          runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+          runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
         }),
       }),
     );
@@ -2248,14 +2248,14 @@ describe("selectAgentHarness", () => {
       api: "openai-responses",
       baseUrl: "https://api.openai.com/v1",
       requestTransportOverrides: "none" as const,
-      runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+      runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
       preparedAuth: { source: "direct" as const, mode: "api-key", requirement: "api-key" as const },
     };
     const incompatible = {
       api: "openai-completions",
       baseUrl: "https://api.openai.com/v1",
       requestTransportOverrides: "none" as const,
-      runtimePolicy: { compatibleIds: ["openclaw"] },
+      runtimePolicy: { compatibleIds: ["natesclaw"] },
       preparedAuth: { source: "direct" as const, mode: "api-key", requirement: "api-key" as const },
     };
     const base = { provider: "openai", modelId: "gpt-5.5" };
@@ -2271,7 +2271,7 @@ describe("selectAgentHarness", () => {
         ...base,
         modelProviders: [compatible, incompatible],
       }).id,
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
   it.each([
@@ -2297,13 +2297,13 @@ describe("selectAgentHarness", () => {
             api: "openai-responses",
             baseUrl: "https://api.openai.com/v1",
             requestTransportOverrides: "none",
-            runtimePolicy: { compatibleIds: ["openclaw", "codex"] },
+            runtimePolicy: { compatibleIds: ["natesclaw", "codex"] },
           },
           {
             api: "openai-completions",
             baseUrl: "https://api.openai.com/v1",
             requestTransportOverrides: "none",
-            runtimePolicy: { compatibleIds: ["openclaw"] },
+            runtimePolicy: { compatibleIds: ["natesclaw"] },
           },
         ],
         ...pin,
@@ -2366,28 +2366,28 @@ describe("selectAgentHarness", () => {
     },
   );
 
-  it("honors explicit OpenClaw runtime overrides when selecting a harness", async () => {
+  it("honors explicit Natesclaw runtime overrides when selecting a harness", async () => {
     registerSuccessfulCodexHarness();
 
     const harness = selectAgentHarness({
       provider: "openai",
       modelId: "gpt-5.4",
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessRuntimeOverride: "natesclaw",
     });
 
-    expect(harness.id).toBe("openclaw");
+    expect(harness.id).toBe("natesclaw");
     expect(providerOwnerMocks.resolveProviderRefOwnership).not.toHaveBeenCalled();
 
     const result = await runAgentHarnessAttempt({
       ...createAttemptParams(),
       provider: "openai",
       modelId: "gpt-5.4",
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessRuntimeOverride: "natesclaw",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("natesclaw");
   });
 
-  it("treats legacy PI runtime overrides as the built-in OpenClaw harness", async () => {
+  it("treats legacy PI runtime overrides as the built-in Natesclaw harness", async () => {
     registerSuccessfulCodexHarness();
 
     const harness = selectAgentHarness({
@@ -2396,7 +2396,7 @@ describe("selectAgentHarness", () => {
       agentHarnessRuntimeOverride: "pi",
     });
 
-    expect(harness.id).toBe("openclaw");
+    expect(harness.id).toBe("natesclaw");
 
     const result = await runAgentHarnessAttempt({
       ...createAttemptParams(),
@@ -2404,7 +2404,7 @@ describe("selectAgentHarness", () => {
       modelId: "gpt-5.4",
       agentHarnessRuntimeOverride: "pi",
     });
-    expect(result.sessionIdUsed).toBe("openclaw");
+    expect(result.sessionIdUsed).toBe("natesclaw");
   });
 
   it("allows per-agent model runtime policy overrides", () => {
@@ -2419,23 +2419,23 @@ describe("selectAgentHarness", () => {
       }),
     ).toThrow('Requested agent harness "codex" is not registered');
     expect(selectAgentHarness({ provider: "anthropic", modelId: "sonnet-4.6", config }).id).toBe(
-      "openclaw",
+      "natesclaw",
     );
   });
 
-  it("selects OpenClaw when the implicit OpenAI Codex harness is unavailable", () => {
-    expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.4" }).id).toBe("openclaw");
+  it("selects Natesclaw when the implicit OpenAI Codex harness is unavailable", () => {
+    expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.4" }).id).toBe("natesclaw");
   });
 
   it.each(["default", "auto"] as const)(
-    "falls back from configured %s to OpenClaw when implicit Codex is unavailable or unsupported",
+    "falls back from configured %s to Natesclaw when implicit Codex is unavailable or unsupported",
     (runtime) => {
       const config = providerRuntimeConfig("openai", runtime);
       expect(resolveAgentHarnessPolicy({ provider: "openai", modelId: "gpt-5.4", config })).toEqual(
         { runtime: "codex", runtimeSource: "implicit" },
       );
       expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.4", config }).id).toBe(
-        "openclaw",
+        "natesclaw",
       );
 
       const supports = vi.fn(() => ({ supported: false as const, reason: "unsupported route" }));
@@ -2449,14 +2449,14 @@ describe("selectAgentHarness", () => {
         { ownerPluginId: "codex" },
       );
       expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.4", config }).id).toBe(
-        "openclaw",
+        "natesclaw",
       );
       expect(supports).toHaveBeenCalledOnce();
     },
   );
 
   it.each(["default", "auto"] as const)(
-    "keeps a custom OpenAI route on implicit OpenClaw with configured %s",
+    "keeps a custom OpenAI route on implicit Natesclaw with configured %s",
     (runtime) => {
       const supports = vi.fn(() => ({ supported: true as const, priority: 100 }));
       registerAgentHarness(
@@ -2479,13 +2479,13 @@ describe("selectAgentHarness", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       expect(resolveAgentHarnessPolicy({ provider: "openai", modelId: "gpt-5.4", config })).toEqual(
-        { runtime: "openclaw", runtimeSource: "implicit" },
+        { runtime: "natesclaw", runtimeSource: "implicit" },
       );
       expect(selectAgentHarness({ provider: "openai", modelId: "gpt-5.4", config }).id).toBe(
-        "openclaw",
+        "natesclaw",
       );
       expect(supports).not.toHaveBeenCalled();
     },
@@ -2498,7 +2498,7 @@ describe("selectAgentHarness", () => {
           agentRuntime: { id: "codex" },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       selectAgentHarness({
@@ -2506,12 +2506,12 @@ describe("selectAgentHarness", () => {
         modelId: "sonnet-4.6",
         config,
       }).id,
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
   it("ignores legacy agent CLI runtime aliases for OpenAI agent model runs", async () => {
     registerSuccessfulCodexHarness();
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       agents: {
         defaults: {
           agentRuntime: { id: "claude-cli" },
@@ -2530,21 +2530,21 @@ describe("selectAgentHarness", () => {
     expect(agentRunAttempt).not.toHaveBeenCalled();
   });
 
-  it("keeps an existing session OpenClaw pin when provider policy forces a plugin harness", () => {
+  it("keeps an existing session Natesclaw pin when provider policy forces a plugin harness", () => {
     registerFailingCodexHarness();
 
     expect(
       selectAgentHarness({
         provider: "codex",
         modelId: "gpt-5.4",
-        agentHarnessId: "openclaw",
+        agentHarnessId: "natesclaw",
         config: providerRuntimeConfig("codex", "codex"),
       }).id,
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
-  it("ignores env-forced OpenClaw for OpenAI default runtime selection", () => {
-    process.env.OPENCLAW_AGENT_RUNTIME = "openclaw";
+  it("ignores env-forced Natesclaw for OpenAI default runtime selection", () => {
+    process.env.NATESCLAW_AGENT_RUNTIME = "natesclaw";
     registerFailingCodexHarness();
 
     expect(
@@ -2584,11 +2584,11 @@ describe("selectAgentHarness", () => {
     ).resolves.toBeUndefined();
   });
 
-  it("keeps host auth on the built-in OpenClaw compaction fallback", async () => {
+  it("keeps host auth on the built-in Natesclaw compaction fallback", async () => {
     await expect(
       maybeCompactAgentHarnessSession(
         createCompactionParams({
-          agentHarnessId: "openclaw",
+          agentHarnessId: "natesclaw",
           authProfileId: "openai:work",
           authProfileIdSource: "user",
           runtimeAuthPlan: {
@@ -2768,11 +2768,11 @@ describe("selectAgentHarness", () => {
             list: [{ id: "main", default: true, agentDir: "/tmp/main-agent" }],
             defaults: {
               models: {
-                "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+                "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
       }),
     ).resolves.toEqual({ ok: true, compacted: false });
     expect(compact).toHaveBeenCalledTimes(1);
@@ -2908,7 +2908,7 @@ describe("selectAgentHarness", () => {
         model: "gpt-5.5",
         authProfileId: "deleted-profile",
         agentHarnessId: "codex",
-        config: agentModelRuntimeConfig("openai/gpt-5.5", "openclaw"),
+        config: agentModelRuntimeConfig("openai/gpt-5.5", "natesclaw"),
       }),
     ).resolves.toEqual({ ok: true, compacted: false });
     expect(compact).toHaveBeenCalledTimes(1);
@@ -3090,7 +3090,7 @@ describe("selectAgentHarness", () => {
     );
   });
 
-  it("does not compact a selected plugin harness through OpenClaw when the plugin has no compactor", async () => {
+  it("does not compact a selected plugin harness through Natesclaw when the plugin has no compactor", async () => {
     registerFailingCodexHarness();
 
     await expect(
@@ -3214,7 +3214,7 @@ describe("selectAgentHarness", () => {
     { provider: "anthropic", modelId: "sonnet-4.6", alias: "claude-cli" },
     { provider: "google", modelId: "gemini-3-pro-preview", alias: "google-gemini-cli" },
   ])(
-    "returns OpenClaw for explicit CLI runtime alias $alias on $provider instead of throwing MissingAgentHarnessError",
+    "returns Natesclaw for explicit CLI runtime alias $alias on $provider instead of throwing MissingAgentHarnessError",
     ({ provider, modelId, alias }) => {
       expect(
         selectAgentHarness({
@@ -3222,7 +3222,7 @@ describe("selectAgentHarness", () => {
           modelId,
           agentHarnessRuntimeOverride: alias,
         }).id,
-      ).toBe("openclaw");
+      ).toBe("natesclaw");
     },
   );
 

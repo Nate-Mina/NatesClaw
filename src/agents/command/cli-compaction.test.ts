@@ -2,11 +2,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { CURRENT_SESSION_VERSION } from "openclaw/plugin-sdk/agent-sessions";
+import { CURRENT_SESSION_VERSION } from "natesclaw/plugin-sdk/agent-sessions";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { replaceSessionEntry } from "../../config/sessions/session-accessor.js";
 import { SESSION_TOTAL_TOKENS_VERSION, type SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ContextEngine } from "../../context-engine/types.js";
 import { createEmptyPluginRegistry } from "../../plugins/registry-empty.js";
 import {
@@ -46,7 +46,7 @@ function buildContextEngine(params: {
 }
 
 async function writeSessionFile(params: { sessionFile: string; sessionId: string }) {
-  // The lifecycle compacts canonical OpenClaw session JSONL, so tests write the
+  // The lifecycle compacts canonical Natesclaw session JSONL, so tests write the
   // same session/message envelope the real store appends.
   await fs.mkdir(path.dirname(params.sessionFile), { recursive: true });
   await fs.writeFile(
@@ -119,7 +119,7 @@ async function prepareCompactionScenario(params: {
   sessionKey?: string;
   sessionId?: string;
   sessionEntry?: Partial<SessionEntry>;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   cwd?: string;
   contextEngine?: (compactCalls: CompactParams[]) => ContextEngine;
   maintenance?: CliCompactionTestDeps["runContextEngineMaintenance"];
@@ -165,7 +165,7 @@ async function prepareCompactionScenario(params: {
   });
 
   const runParams: CliCompactionParams = {
-    cfg: params.cfg ?? ({} as OpenClawConfig),
+    cfg: params.cfg ?? ({} as NatesclawConfig),
     sessionId,
     sessionKey,
     sessionEntry,
@@ -227,7 +227,7 @@ describe("runCliTurnCompactionLifecycle", () => {
   let tmpDir: string;
 
   beforeEach(async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-cli-compaction-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-cli-compaction-"));
     setCliCompactionTestDeps({
       resolveCliBackendConfig: () => null,
       loadAgentRuntimePluginRegistryHandle: () => createEmptyPluginRegistry(),
@@ -344,7 +344,7 @@ describe("runCliTurnCompactionLifecycle", () => {
     expect(maintenanceCall?.sessionKey).toBe(sessionKey);
     expect(maintenanceCall?.sessionFile).toBe(sessionKey);
     expect(updatedEntry?.compactionCount).toBe(1);
-    // Once OpenClaw rewrites the transcript, external CLI resume ids are stale
+    // Once Natesclaw rewrites the transcript, external CLI resume ids are stale
     // and must be cleared so the next turn starts from the compacted prompt.
     expect(updatedEntry?.cliSessionBindings?.["claude-cli"]).toBeUndefined();
     expect(updatedEntry?.cliSessionIds?.["claude-cli"]).toBeUndefined();
@@ -496,7 +496,7 @@ describe("runCliTurnCompactionLifecycle", () => {
   it.each([
     ["agent", { agentId: "other" }],
     ["session key", { sessionKey: "agent:main:other" }],
-    ["store", { storePath: "/tmp/other-openclaw-sessions.sqlite" }],
+    ["store", { storePath: "/tmp/other-natesclaw-sessions.sqlite" }],
   ])("rejects a CLI successor outside the active %s binding", async (_label, override) => {
     const scenario = await prepareContextSuccessorScenario({
       suffix: `outside-${_label.replace(" ", "-")}`,
@@ -706,9 +706,9 @@ describe("runCliTurnCompactionLifecycle", () => {
   it("ignores stale native harness ids when the active provider no longer matches", async () => {
     const compactAgentHarnessSession = vi.fn();
     const scenario = await prepareCompactionScenario({
-      suffix: "openclaw-after-codex",
+      suffix: "natesclaw-after-codex",
       tmpDir,
-      provider: "openclaw",
+      provider: "natesclaw",
       model: "sonnet-4.6",
       sessionEntry: { agentHarnessId: "codex" },
       deps: { maybeCompactAgentHarnessSession: compactAgentHarnessSession as never },
@@ -1111,7 +1111,7 @@ describe("runCliTurnCompactionLifecycle", () => {
       suffix: "cli-timeout",
       tmpDir,
       sessionKey: "agent:main:cli",
-      cfg: { agents: { defaults: { compaction: { timeoutSeconds: 1 } } } } as OpenClawConfig,
+      cfg: { agents: { defaults: { compaction: { timeoutSeconds: 1 } } } } as NatesclawConfig,
       sessionEntry: {
         cliSessionBindings: { "claude-cli": { sessionId: "claude-session" } },
         cliSessionIds: { "claude-cli": "claude-session" },

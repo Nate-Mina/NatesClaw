@@ -5,16 +5,16 @@ import {
   StickerFormatType,
 } from "discord-api-types/v10";
 // Discord tests cover message utils plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Message } from "../internal/discord.js";
 
 const readRemoteMediaBuffer = vi.fn();
 const saveMediaBuffer = vi.fn();
 
-vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/media-runtime")>(
-    "openclaw/plugin-sdk/media-runtime",
+vi.mock("natesclaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/media-runtime")>(
+    "natesclaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,
@@ -37,9 +37,9 @@ vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/runtime-env")>(
-    "openclaw/plugin-sdk/runtime-env",
+vi.mock("natesclaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/runtime-env")>(
+    "natesclaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,

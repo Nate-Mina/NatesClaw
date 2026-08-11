@@ -1,15 +1,15 @@
 /** Doctor repair for legacy OAuth sidecar files and inline auth profile stores. */
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { readNonBlankString as readNonEmptyString } from "@openclaw/normalization-core/string-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { readNonBlankString as readNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { listAgentIds, resolveAgentDir, resolveDefaultAgentDir } from "../agents/agent-scope.js";
 import { AUTH_STORE_VERSION } from "../agents/auth-profiles/constants.js";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../agents/auth-profiles/runtime-snapshots.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { resolveOAuthDir, resolveStateDir } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { loadJsonFileThroughSymlink, writeJsonTarget } from "../infra/json-file.js";
 import { shortenHomePath } from "../utils.js";
 import { resolveLegacyAuthProfilesPath as resolveAuthStorePath } from "./doctor-auth-legacy-paths.js";
@@ -80,12 +80,12 @@ function listExistingAgentDirsFromState(env: NodeJS.ProcessEnv): string[] {
 }
 
 function listAuthProfileRepairCandidates(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv,
 ): AuthProfileRepairCandidate[] {
   const candidates = new Map<string, AuthProfileRepairCandidate>();
   addCandidate(candidates, resolveDefaultAgentDir(cfg, env));
-  const envAgentDir = readNonEmptyString(env.OPENCLAW_AGENT_DIR);
+  const envAgentDir = readNonEmptyString(env.NATESCLAW_AGENT_DIR);
   if (envAgentDir) {
     addCandidate(candidates, envAgentDir);
   }
@@ -192,7 +192,7 @@ function backupLegacyOAuthSidecarStore(authPath: string, now: () => number): str
  * profile are removed; unreferenced sidecars stay because unknown agent directories may use them.
  */
 export async function maybeRepairLegacyOAuthSidecarProfiles(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   prompter: Pick<DoctorPrompter, "confirmAutoFix">;
   now?: () => number;
   emitNotes?: boolean;
@@ -232,7 +232,7 @@ export async function maybeRepairLegacyOAuthSidecarProfiles(params: {
               `- Unreferenced sidecar files are left in place because external agent directories outside this scan may still reference them.`,
             ]
           : []),
-        `- ${formatCliCommand("openclaw doctor --fix")} migrates active profiles back to inline OAuth credentials and removes only sidecar files it successfully migrated.`,
+        `- ${formatCliCommand("natesclaw doctor --fix")} migrates active profiles back to inline OAuth credentials and removes only sidecar files it successfully migrated.`,
       ].join("\n"),
       "Auth profiles",
     );

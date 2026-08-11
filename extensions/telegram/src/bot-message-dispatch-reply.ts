@@ -1,15 +1,15 @@
 import {
   createChannelPartialDeliveryError,
   isChannelPartialDeliveryError,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { normalizeMessagePresentation } from "openclaw/plugin-sdk/interactive-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { normalizeMessagePresentation } from "natesclaw/plugin-sdk/interactive-runtime";
 import {
   isFastModeAutoProgressPayload,
   isReplyPayloadNonTerminalToolErrorWarning,
   resolveSendableOutboundReplyParts,
   type ReplyPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import { danger } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/reply-payload";
+import { danger } from "natesclaw/plugin-sdk/runtime-env";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import {
   applyTextToPayload,

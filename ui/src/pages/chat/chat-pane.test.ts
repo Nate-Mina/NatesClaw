@@ -92,7 +92,7 @@ function nativeHistoryMessage(seq: number, text = `message ${seq}`) {
   return {
     role: seq % 2 === 0 ? "assistant" : "user",
     content: [{ type: "text", text }],
-    __openclaw: { seq },
+    __natesclaw: { seq },
   };
 }
 
@@ -201,10 +201,10 @@ describe("chat pane header state", () => {
       updatedAt: 0,
     } satisfies GatewaySessionRow;
     const copy = vi.fn(async () => true);
-    pane.handleHeaderMenuAction("copy-path", session, "/src/openclaw", "feature/header", copy);
-    pane.handleHeaderMenuAction("copy-branch", session, "/src/openclaw", "feature/header", copy);
+    pane.handleHeaderMenuAction("copy-path", session, "/src/natesclaw", "feature/header", copy);
+    pane.handleHeaderMenuAction("copy-branch", session, "/src/natesclaw", "feature/header", copy);
     await Promise.resolve();
-    expect(copy).toHaveBeenNthCalledWith(1, "/src/openclaw");
+    expect(copy).toHaveBeenNthCalledWith(1, "/src/natesclaw");
     expect(copy).toHaveBeenNthCalledWith(2, "feature/header");
   });
 
@@ -222,7 +222,7 @@ describe("chat pane header state", () => {
       } satisfies GatewaySessionRow;
       const copy = vi.fn(async () => false);
 
-      pane.handleHeaderMenuAction(action, session, "/src/openclaw", "feature/header", copy);
+      pane.handleHeaderMenuAction(action, session, "/src/natesclaw", "feature/header", copy);
 
       await vi.waitFor(() => expect(state.chatError).toBe("Copy failed"));
       expect(state.lastError).toBe(state.chatError);
@@ -265,7 +265,7 @@ describe("chat pane header state", () => {
       key: "agent:main:worktree",
       kind: "direct",
       updatedAt: 0,
-      worktree: { id: "wt-1", branch: "feature", repoRoot: "/src/openclaw" },
+      worktree: { id: "wt-1", branch: "feature", repoRoot: "/src/natesclaw" },
     } satisfies GatewaySessionRow;
     await pane.loadHeaderMenuData(session, "/src/default", true);
     await pane.loadHeaderMenuData(session, "/src/default", true);
@@ -286,8 +286,8 @@ describe("chat pane header state", () => {
       kind: "direct",
       updatedAt: 0,
     } satisfies GatewaySessionRow;
-    await pane.loadHeaderMenuData(session, "/src/openclaw", true);
-    await pane.loadHeaderMenuData(session, "/src/openclaw", true);
+    await pane.loadHeaderMenuData(session, "/src/natesclaw", true);
+    await pane.loadHeaderMenuData(session, "/src/natesclaw", true);
     expect(request).toHaveBeenCalledTimes(2);
   });
 
@@ -332,7 +332,7 @@ describe("chat pane header state", () => {
       key: "agent:main:reused",
       kind: "direct",
       updatedAt: 0,
-      worktree: { id: "wt-1", branch: "feature", repoRoot: "/src/openclaw" },
+      worktree: { id: "wt-1", branch: "feature", repoRoot: "/src/natesclaw" },
     } satisfies GatewaySessionRow;
     await pane.loadHeaderMenuData(worktreeRow, "/src/agent-workspace", true);
 
@@ -361,7 +361,7 @@ describe("chat pane header state", () => {
       updatedAt: 0,
       placement: { state: "active" } as GatewaySessionRow["placement"],
     } satisfies GatewaySessionRow;
-    await pane.loadHeaderMenuData(dispatched, "/src/openclaw", true);
+    await pane.loadHeaderMenuData(dispatched, "/src/natesclaw", true);
     expect(request).not.toHaveBeenCalled();
   });
 
@@ -379,8 +379,8 @@ describe("chat pane header state", () => {
       kind: "direct",
       updatedAt: 0,
     } satisfies GatewaySessionRow;
-    await pane.loadHeaderMenuData(session, "/src/openclaw", true);
-    await pane.loadHeaderMenuData(session, "/src/openclaw", true);
+    await pane.loadHeaderMenuData(session, "/src/natesclaw", true);
+    await pane.loadHeaderMenuData(session, "/src/natesclaw", true);
     expect(request).toHaveBeenCalledTimes(2);
   });
 
@@ -395,7 +395,7 @@ describe("chat pane header state", () => {
       kind: "direct",
       updatedAt: 0,
     } satisfies GatewaySessionRow;
-    pane.handleHeaderMenuAction("reveal", session, "/src/openclaw", null);
+    pane.handleHeaderMenuAction("reveal", session, "/src/natesclaw", null);
     await vi.waitFor(() => expect(state.chatError).toBe("No desktop available."));
     expect(state.lastError).toBe(state.chatError);
   });
@@ -403,7 +403,7 @@ describe("chat pane header state", () => {
 
 describe("chat pane initialization", () => {
   it("sets the pane route before attaching outbox projection", () => {
-    const pane = document.createElement("openclaw-chat-pane") as unknown as TestChatPane;
+    const pane = document.createElement("natesclaw-chat-pane") as unknown as TestChatPane;
     const targetSessionKey = "agent:main:pane-b";
     const sharedMessages = new Map();
     pane.sessionKey = targetSessionKey;
@@ -428,7 +428,7 @@ describe("chat pane initialization", () => {
   });
 
   it("hydrates a new split pane from the shared session snapshot before startup", () => {
-    const pane = document.createElement("openclaw-chat-pane") as unknown as TestChatPane;
+    const pane = document.createElement("natesclaw-chat-pane") as unknown as TestChatPane;
     const targetSessionKey = "agent:main:pane-b";
     const messages = [nativeHistoryMessage(1, "retained split history")];
     const sharedMessages: ChatMessageCache = new Map();
@@ -582,7 +582,7 @@ describe("chat pane keyboard shortcuts", () => {
     const canvasContent: SidebarContent = {
       kind: "canvas",
       docId: "canvas-1",
-      entryUrl: "/__openclaw__/canvas/canvas-1/index.html",
+      entryUrl: "/__natesclaw__/canvas/canvas-1/index.html",
     };
     pane.active = true;
     state.connected = false;

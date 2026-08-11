@@ -34,7 +34,7 @@ const FRAME_CONNECT_PARAMS: WorkerConnectParams = {
     rpcSetVersion: WORKER_RPC_SET_VERSION,
     handshake: {
       bundleHash: "a".repeat(64),
-      openclawVersion: "listener-isolation-test",
+      natesclawVersion: "listener-isolation-test",
       protocolFeatures: [...WORKER_PROTOCOL_FEATURES],
     },
     sessionId: "session-1",
@@ -62,7 +62,7 @@ function createIdleConnection() {
         rpcSetVersion: WORKER_RPC_SET_VERSION,
         handshake: {
           bundleHash: "a".repeat(64),
-          openclawVersion: "listener-isolation-test",
+          natesclawVersion: "listener-isolation-test",
           protocolFeatures: [...WORKER_PROTOCOL_FEATURES],
         },
         sessionId: null,

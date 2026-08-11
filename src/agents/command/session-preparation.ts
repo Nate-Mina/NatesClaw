@@ -1,6 +1,6 @@
 import type { ThinkLevel, VerboseLevel } from "../../auto-reply/thinking.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { assertAgentRunLifecycleGenerationCurrent } from "../../infra/agent-events.js";
 import { registerAgentRunContext } from "../../infra/agent-run-registry.js";
 import { applyVerboseOverride } from "../../sessions/level-overrides.js";
@@ -12,7 +12,7 @@ import { loadExecDefaultsRuntime, loadSkillsRuntime } from "./runtime-loaders.js
 import type { AgentCommandOpts } from "./types.js";
 
 export async function prepareEmbeddedSessionState(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   opts: AgentCommandOpts;
   sessionEntry?: SessionEntry;
   sessionStore?: Record<string, SessionEntry>;

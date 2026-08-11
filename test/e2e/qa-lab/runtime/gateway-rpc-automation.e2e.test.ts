@@ -15,7 +15,7 @@ import {
 } from "../../../../src/config/config.js";
 import { resetConfigOverrides } from "../../../../src/config/runtime-overrides.js";
 import { clearSessionStoreCacheForTest } from "../../../../src/config/sessions/store-writer-state.js";
-import type { OpenClawConfig } from "../../../../src/config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../../src/config/types.natesclaw.js";
 import {
   disconnectGatewayClient,
   startGatewayWithClient,
@@ -29,20 +29,20 @@ import { useAutoCleanupTempDirTracker } from "../../../helpers/temp-dir.js";
 
 const ISOLATED_GATEWAY_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_TEST_GATEWAY_OVERRIDE_TOKEN",
-  "OPENCLAW_TEST_RUNTIME_OVERRIDE_TOKEN",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_GATEWAY_TOKEN",
+  "NATESCLAW_TEST_GATEWAY_OVERRIDE_TOKEN",
+  "NATESCLAW_TEST_RUNTIME_OVERRIDE_TOKEN",
+  "NATESCLAW_TEST_MINIMAL_GATEWAY",
+  "NATESCLAW_SKIP_CHANNELS",
+  "NATESCLAW_SKIP_GMAIL_WATCHER",
+  "NATESCLAW_SKIP_CRON",
+  "NATESCLAW_SKIP_CANVAS_HOST",
+  "NATESCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "NATESCLAW_SKIP_PROVIDERS",
+  "NATESCLAW_BUNDLED_PLUGINS_DIR",
+  "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 let sequence = 0;
@@ -109,11 +109,11 @@ describe("Gateway task and automation RPCs", () => {
     { timeout: 90_000 },
     async () => {
       const envSnapshot = captureEnv([...ISOLATED_GATEWAY_ENV_KEYS]);
-      const tempHome = tempDirs.make("openclaw-gateway-automation-");
-      const stateDir = path.join(tempHome, ".openclaw");
+      const tempHome = tempDirs.make("natesclaw-gateway-automation-");
+      const stateDir = path.join(tempHome, ".natesclaw");
       const workspaceDir = path.join(tempHome, "workspace");
       const bundledPluginsDir = path.join(tempHome, "empty-bundled-plugins");
-      const configPath = path.join(stateDir, "openclaw.json");
+      const configPath = path.join(stateDir, "natesclaw.json");
       await Promise.all([
         fs.mkdir(workspaceDir, { recursive: true }),
         fs.mkdir(bundledPluginsDir, { recursive: true }),
@@ -127,21 +127,21 @@ describe("Gateway task and automation RPCs", () => {
       const token = nextId("gateway-automation-token");
       for (const [key, value] of Object.entries({
         HOME: tempHome,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_GATEWAY_TOKEN: token,
-        OPENCLAW_SKIP_CHANNELS: "1",
-        OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-        OPENCLAW_SKIP_CRON: "0",
-        OPENCLAW_SKIP_CANVAS_HOST: "1",
-        OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-        OPENCLAW_SKIP_PROVIDERS: "1",
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_GATEWAY_TOKEN: token,
+        NATESCLAW_SKIP_CHANNELS: "1",
+        NATESCLAW_SKIP_GMAIL_WATCHER: "1",
+        NATESCLAW_SKIP_CRON: "0",
+        NATESCLAW_SKIP_CANVAS_HOST: "1",
+        NATESCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+        NATESCLAW_SKIP_PROVIDERS: "1",
+        NATESCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
+        NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
       })) {
         setTestEnvValue(key, value);
       }
-      deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
-      deleteTestEnvValue("OPENCLAW_TEST_MINIMAL_GATEWAY");
+      deleteTestEnvValue("NATESCLAW_CONFIG_PATH");
+      deleteTestEnvValue("NATESCLAW_TEST_MINIMAL_GATEWAY");
 
       const taskPrompt = nextId("create-tracked-task");
       const wakeText = nextId("wake-heartbeat");
@@ -219,7 +219,7 @@ describe("Gateway task and automation RPCs", () => {
           },
           gateway: { auth: { mode: "token", token } },
           plugins: { slots: { memory: "none" } },
-        } satisfies OpenClawConfig;
+        } satisfies NatesclawConfig;
 
         gateway = await startGatewayWithClient({
           cfg: config,

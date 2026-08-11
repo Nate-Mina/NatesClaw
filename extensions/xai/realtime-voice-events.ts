@@ -1,9 +1,9 @@
-import { canonicalizeBase64 } from "openclaw/plugin-sdk/media-runtime";
+import { canonicalizeBase64 } from "natesclaw/plugin-sdk/media-runtime";
 import {
   normalizeRealtimeVoiceResponseOutcome,
   type RealtimeVoiceSessionConnection,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { isRecord, normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/realtime-voice";
+import { isRecord, normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   XAI_REALTIME_ACTIVE_RESPONSE_ERROR_PREFIX,
   XAI_REALTIME_NO_ACTIVE_RESPONSE_CANCEL_ERROR,

@@ -1,5 +1,5 @@
-// Copilot Proxy plugin entrypoint registers its OpenClaw integration.
-import { normalizeStringEntries, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+// Copilot Proxy plugin entrypoint registers its Natesclaw integration.
+import { normalizeStringEntries, uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   definePluginEntry,
   type ProviderAuthContext,

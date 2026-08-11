@@ -1,6 +1,6 @@
 /** Normalizes isolated cron run output into summaries, delivery payloads, and error state. */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { hasOutboundReplyContent } from "openclaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { hasOutboundReplyContent } from "natesclaw/plugin-sdk/reply-payload";
 import {
   DEFAULT_HEARTBEAT_ACK_MAX_CHARS,
   stripHeartbeatToken,

@@ -6,8 +6,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
-import { resolveIntegerOption } from "@openclaw/normalization-core/number-coercion";
-import { asOptionalObjectRecord, isRecord } from "@openclaw/normalization-core/record-coerce";
+import { resolveIntegerOption } from "@natesclaw/normalization-core/number-coercion";
+import { asOptionalObjectRecord, isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { mergeDeep } from "../../infra/deep-merge.js";
 import { acquireFileLockSyncWithRetry } from "../../infra/file-lock-sync.js";
 import type { Transport } from "../../llm/types.js";

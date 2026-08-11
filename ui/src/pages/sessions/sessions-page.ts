@@ -62,7 +62,7 @@ import { normalizeOptionalString } from "../../lib/string-coerce.ts";
 import { showToast } from "../../lib/toast.ts";
 import { isActiveWorkboardCard } from "../../lib/workboard/card-state.ts";
 import { captureSessionToWorkboard } from "../../lib/workboard/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import {
   searchVisibleSessionTranscripts,
@@ -73,7 +73,7 @@ import { rememberSessionCustomGroup, sessionCategoryNames } from "./custom-group
 import { loadStoredGroupBy, parseFilterInteger, saveStoredGroupBy } from "./page-state.ts";
 import { renderSessions, type SessionsProps, type TranscriptSearchState } from "./view.ts";
 
-const SESSIONS_DOCS_URL = "https://docs.openclaw.ai/concepts/session";
+const SESSIONS_DOCS_URL = "https://docs.natesclaw.ai/concepts/session";
 
 export type SessionsRouteData = {
   // Client identity alone cannot distinguish provider replacement or reconnect epochs.
@@ -101,7 +101,7 @@ type InputDialogOpener = (typeof import("../../components/input-dialog.ts"))["sh
 
 type SessionDeleteRow = Pick<GatewaySessionRow, "key" | "archived">;
 
-class SessionsPage extends OpenClawLightDomElement {
+class SessionsPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context?: ApplicationContext;
 
@@ -1461,7 +1461,7 @@ class SessionsPage extends OpenClawLightDomElement {
       isGatewayMethodAdvertised(gateway, cloudWorkerStopAction.method) === true,
     );
     return html`
-      <openclaw-session-menu
+      <natesclaw-session-menu
         .session=${{
           label: normalizeOptionalString(row.label) ?? row.key,
           pinned: row.pinned === true,
@@ -1534,7 +1534,7 @@ class SessionsPage extends OpenClawLightDomElement {
               break;
           }
         }}
-      ></openclaw-session-menu>
+      ></natesclaw-session-menu>
     `;
   }
 
@@ -1741,7 +1741,7 @@ class SessionsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-sessions-page")) {
-  customElements.define("openclaw-sessions-page", SessionsPage);
+if (!customElements.get("natesclaw-sessions-page")) {
+  customElements.define("natesclaw-sessions-page", SessionsPage);
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

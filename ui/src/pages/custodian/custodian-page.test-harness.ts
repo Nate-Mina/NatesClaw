@@ -1,4 +1,4 @@
-import { GATEWAY_SERVER_CAPS } from "@openclaw/gateway-protocol";
+import { GATEWAY_SERVER_CAPS } from "@natesclaw/gateway-protocol";
 import { vi } from "vitest";
 import type {
   GatewayBrowserClient,
@@ -35,7 +35,7 @@ type ContextHarness = {
 
 export function createContext(
   request: ReturnType<typeof vi.fn>,
-  methods: string[] = ["openclaw.chat"],
+  methods: string[] = ["natesclaw.chat"],
   options: {
     agentsList?: ApplicationContext["agents"]["state"]["agentsList"];
     channelsSnapshot?: ChannelsStatusSnapshot | null;
@@ -179,7 +179,7 @@ export async function mountPage(
   provider: ApplicationContextProvider;
 }> {
   const provider = createApplicationContextProvider(context);
-  const page = document.createElement("openclaw-custodian-page") as TestCustodianPage;
+  const page = document.createElement("natesclaw-custodian-page") as TestCustodianPage;
   page.store = new CustodianSessionStore();
   page.onboarding = options.onboarding ?? true;
   provider.append(page);

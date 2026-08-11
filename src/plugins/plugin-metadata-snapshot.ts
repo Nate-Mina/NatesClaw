@@ -1,5 +1,5 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   getActiveDiagnosticsTimelineSpan,
   measureDiagnosticsTimelineSpanSync,
@@ -30,14 +30,14 @@ import { normalizePluginIdScope, serializePluginIdScope } from "./plugin-scope.j
 const PLUGIN_METADATA_ENV_KEYS = [
   "APPDATA",
   "HOME",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_COMPATIBILITY_HOST_VERSION",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-  "OPENCLAW_DISABLE_BUNDLED_SOURCE_OVERLAYS",
-  "OPENCLAW_HOME",
-  "OPENCLAW_NIX_MODE",
-  "OPENCLAW_STATE_DIR",
+  "NATESCLAW_BUNDLED_PLUGINS_DIR",
+  "NATESCLAW_COMPATIBILITY_HOST_VERSION",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NATESCLAW_DISABLE_BUNDLED_SOURCE_OVERLAYS",
+  "NATESCLAW_HOME",
+  "NATESCLAW_NIX_MODE",
+  "NATESCLAW_STATE_DIR",
   "USERPROFILE",
   "XDG_CONFIG_HOME",
 ] as const;
@@ -132,7 +132,7 @@ export function isPluginMetadataSnapshotCompatible(params: {
     PluginMetadataSnapshot,
     "configFingerprint" | "index" | "pluginIds" | "policyHash" | "workspaceDir"
   >;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   allowScopedSnapshot?: boolean;
   pluginIds?: readonly string[];
@@ -296,7 +296,7 @@ export function loadPluginMetadataSnapshot(
 /** Promotes a planning-scoped graph to the complete process-lifecycle metadata snapshot. */
 export function completePluginMetadataSnapshot(params: {
   snapshot?: PluginMetadataSnapshot;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
 }): PluginMetadataSnapshot | undefined {

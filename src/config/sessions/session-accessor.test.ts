@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { withTestTimeout } from "../../../test/helpers/promise.js";
 import { cleanupTempDirs, makeTempDir } from "../../../test/helpers/temp-dir.js";
@@ -11,16 +11,16 @@ import {
   onSessionTranscriptUpdate,
 } from "../../sessions/transcript-events.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  isOpenClawAgentDatabaseOpen,
-  listOpenClawRegisteredAgentDatabases,
-  openOpenClawAgentDatabase,
-  resolveOpenClawAgentSqlitePath,
-} from "../../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  isNatesclawAgentDatabaseOpen,
+  listNatesclawRegisteredAgentDatabases,
+  openNatesclawAgentDatabase,
+  resolveNatesclawAgentSqlitePath,
+} from "../../state/natesclaw-agent-db.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  isOpenClawStateDatabaseOpen,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  isNatesclawStateDatabaseOpen,
+} from "../../state/natesclaw-state-db.js";
 import { appendSqliteTrajectoryRuntimeEvents } from "../../trajectory/runtime-store.sqlite.js";
 import type { TrajectoryEvent } from "../../trajectory/types.js";
 import {
@@ -103,7 +103,7 @@ vi.mock("../../gateway/session-archive.runtime.js", async (importOriginal) => {
 
 function createTestTrajectoryEvent(sessionId: string): TrajectoryEvent {
   return {
-    traceSchema: "openclaw-trajectory",
+    traceSchema: "natesclaw-trajectory",
     schemaVersion: 1,
     traceId: sessionId,
     source: "runtime",
@@ -140,14 +140,14 @@ describe("session accessor seam", () => {
 
   beforeEach(() => {
     cleanupArchivedSessionTranscriptsMock.mockReset();
-    tempDir = makeTempDir(tempDirs, "openclaw-session-accessor-");
+    tempDir = makeTempDir(tempDirs, "natesclaw-session-accessor-");
     storePath = path.join(tempDir, "sessions.json");
     transcriptPath = path.join(tempDir, "session.jsonl");
   });
 
   afterEach(() => {
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     cleanupTempDirs(tempDirs);
   });
 
@@ -163,13 +163,13 @@ describe("session accessor seam", () => {
       );
       cleanupProbeRoot = tempDir;
 
-      expect(isOpenClawAgentDatabaseOpen(cleanupProbeDatabasePath)).toBe(true);
-      expect(isOpenClawStateDatabaseOpen()).toBe(true);
+      expect(isNatesclawAgentDatabaseOpen(cleanupProbeDatabasePath)).toBe(true);
+      expect(isNatesclawStateDatabaseOpen()).toBe(true);
     });
 
     it("releases both cache owners before the next test", () => {
-      expect(isOpenClawAgentDatabaseOpen(cleanupProbeDatabasePath)).toBe(false);
-      expect(isOpenClawStateDatabaseOpen()).toBe(false);
+      expect(isNatesclawAgentDatabaseOpen(cleanupProbeDatabasePath)).toBe(false);
+      expect(isNatesclawStateDatabaseOpen()).toBe(false);
       expect(fs.existsSync(cleanupProbeRoot)).toBe(false);
     });
   });
@@ -292,7 +292,7 @@ describe("session accessor seam", () => {
       resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "main" }).path,
       "entry count database path",
     );
-    const database = openOpenClawAgentDatabase({ agentId: "main", path: databasePath });
+    const database = openNatesclawAgentDatabase({ agentId: "main", path: databasePath });
 
     expect(readSessionEntryCount(database)).toBe(1);
     expect(readSessionEntryKeys(database)).toEqual(["agent:main:logical-entry"]);
@@ -308,7 +308,7 @@ describe("session accessor seam", () => {
       resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "main" }).path,
       "cold count database path",
     );
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
     const database = new DatabaseSync(databasePath);
     database.prepare("UPDATE session_nodes SET entry_valid = 0").run();
     database.close();
@@ -328,7 +328,7 @@ describe("session accessor seam", () => {
       resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "main" }).path,
       "createdBy database path",
     );
-    const database = openOpenClawAgentDatabase({ agentId: "main", path: databasePath });
+    const database = openNatesclawAgentDatabase({ agentId: "main", path: databasePath });
 
     expect(
       database.db
@@ -420,7 +420,7 @@ describe("session accessor seam", () => {
       agentId: "main",
     }).path;
     expect(databasePath).toBeDefined();
-    const database = openOpenClawAgentDatabase({
+    const database = openNatesclawAgentDatabase({
       agentId: "main",
       path: databasePath,
     });
@@ -497,7 +497,7 @@ describe("session accessor seam", () => {
       agentId: "main",
     }).path;
     expect(databasePath).toBeDefined();
-    const database = openOpenClawAgentDatabase({
+    const database = openNatesclawAgentDatabase({
       agentId: "main",
       path: databasePath,
     });
@@ -810,7 +810,7 @@ describe("session accessor seam", () => {
         },
         () => ({ label: "patched" }),
       ),
-    ).rejects.toThrow("openclaw doctor --fix");
+    ).rejects.toThrow("natesclaw doctor --fix");
     await expect(
       patchSessionEntryTarget(
         {
@@ -822,7 +822,7 @@ describe("session accessor seam", () => {
         },
         () => ({ label: "patched alias" }),
       ),
-    ).rejects.toThrow("openclaw doctor --fix");
+    ).rejects.toThrow("natesclaw doctor --fix");
     await deleteSessionEntryLifecycle({
       archiveTranscript: false,
       storePath,
@@ -872,7 +872,7 @@ describe("session accessor seam", () => {
           { agentId: "main", sessionKey, storePath },
           { ...entry, sessionId: "child", updatedAt: 10 },
         ),
-      ).rejects.toThrow("openclaw doctor --fix");
+      ).rejects.toThrow("natesclaw doctor --fix");
     }
     expect(loadSessionEntry({ agentId: "main", sessionKey, storePath })).toBeUndefined();
 
@@ -940,7 +940,7 @@ describe("session accessor seam", () => {
       resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "main" }).path,
       "focused session database path",
     );
-    const database = openOpenClawAgentDatabase({ agentId: "main", path: databasePath });
+    const database = openNatesclawAgentDatabase({ agentId: "main", path: databasePath });
     const unrelatedEntryJson = "{ unrelated, intentionally invalid JSON";
     database.db
       .prepare(
@@ -1100,7 +1100,7 @@ describe("session accessor seam", () => {
       agentId: "main",
       env: {
         ...process.env,
-        OPENCLAW_STATE_DIR: stateDir,
+        NATESCLAW_STATE_DIR: stateDir,
       },
       sessionId: "default-store-turn-session",
       sessionKey: "agent:main:default-store-turn",
@@ -1183,7 +1183,7 @@ describe("session accessor seam", () => {
     const expectedStorePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
     const scope = {
       agentId: "main",
-      env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+      env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
       sessionId: "old-default-rotate",
       sessionKey: "agent:main:default-rotate",
     };
@@ -1264,12 +1264,12 @@ describe("session accessor seam", () => {
   it("does not create database state for rejected memory-only transcript turns", async () => {
     for (const source of ["sessionStore", "sessionEntry"] as const) {
       const stateDir = path.join(tempDir, `rejected-memory-only-${source}`);
-      const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+      const env = { ...process.env, NATESCLAW_STATE_DIR: stateDir };
       const agentId = "main";
       const sessionKey = `agent:main:rejected-memory-only-${source}`;
       const sessionId = `rejected-memory-only-${source}`;
       const memoryStorePath = path.join(stateDir, "agents", agentId, "sessions", "sessions.json");
-      const databasePath = resolveOpenClawAgentSqlitePath({ agentId, env });
+      const databasePath = resolveNatesclawAgentSqlitePath({ agentId, env });
       const sessionEntry: SessionEntry = { sessionId, updatedAt: Date.now() };
       const memorySource =
         source === "sessionStore"
@@ -1296,8 +1296,8 @@ describe("session accessor seam", () => {
 
       expect(result).toMatchObject({ appendedCount: 0, messages: [] });
       expect(fs.existsSync(databasePath)).toBe(false);
-      expect(isOpenClawAgentDatabaseOpen(databasePath)).toBe(false);
-      expect(listOpenClawRegisteredAgentDatabases({ env })).toEqual([]);
+      expect(isNatesclawAgentDatabaseOpen(databasePath)).toBe(false);
+      expect(listNatesclawRegisteredAgentDatabases({ env })).toEqual([]);
     }
   });
 
@@ -1445,7 +1445,7 @@ describe("session accessor seam", () => {
       updatedAt: 10,
       initializationPending: true,
     });
-    const databasePath = path.join(tempDir, "openclaw-agent.sqlite");
+    const databasePath = path.join(tempDir, "natesclaw-agent.sqlite");
     const fixedTime = new Date("2020-01-01T00:00:00.000Z");
     fs.utimesSync(databasePath, fixedTime, fixedTime);
 
@@ -1689,7 +1689,7 @@ describe("session accessor seam", () => {
       }),
     ).rejects.toMatchObject({
       code: "SESSION_CANONICAL_KEY_MIGRATION_REQUIRED",
-      message: expect.stringContaining("openclaw doctor --fix"),
+      message: expect.stringContaining("natesclaw doctor --fix"),
     });
   });
 
@@ -1733,7 +1733,7 @@ describe("session accessor seam", () => {
       ),
     ).rejects.toMatchObject({ code: "SESSION_CANONICAL_KEY_MIGRATION_REQUIRED" });
     const insertRawEntry = (sessionKey: string, sessionId: string, updatedAt: number) => {
-      const database = openOpenClawAgentDatabase({
+      const database = openNatesclawAgentDatabase({
         agentId: "ops",
         path: resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "ops" }).path,
       });
@@ -1742,7 +1742,7 @@ describe("session accessor seam", () => {
           "INSERT INTO session_nodes (session_key, current_session_id, entry_json, updated_at) VALUES (?, ?, ?, ?)",
         )
         .run(sessionKey, sessionId, JSON.stringify({ sessionId, updatedAt }), updatedAt);
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
     };
     for (const [storedKey, canonicalKey] of [
       ["agent:ops:padded ", "agent:ops:padded"],
@@ -1757,13 +1757,13 @@ describe("session accessor seam", () => {
           { sessionId: "new-session", updatedAt: 10 },
         ),
       ).rejects.toMatchObject({ code: "SESSION_CANONICAL_KEY_MIGRATION_REQUIRED" });
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
       const canonicalSessionId = `${canonicalKey}-canonical-session`;
       insertRawEntry(canonicalKey, canonicalSessionId, 6);
       expect(() =>
         loadSessionEntry({ agentId: "ops", sessionKey: canonicalKey, storePath }),
-      ).toThrow("openclaw doctor --fix");
-      closeOpenClawAgentDatabasesForTest();
+      ).toThrow("natesclaw doctor --fix");
+      closeNatesclawAgentDatabasesForTest();
     }
   });
 
@@ -2232,7 +2232,7 @@ describe("session accessor seam", () => {
     const databasePath = resolveSqliteTargetFromSessionStorePath(storePath, {
       agentId: "main",
     }).path;
-    const database = openOpenClawAgentDatabase({ agentId: "main", path: databasePath });
+    const database = openNatesclawAgentDatabase({ agentId: "main", path: databasePath });
     database.db
       .prepare(
         "INSERT INTO session_members (session_key, identity_id, added_by, added_at) VALUES (?, ?, ?, ?)",
@@ -2348,7 +2348,7 @@ describe("session accessor seam", () => {
     const databasePath = resolveSqliteTargetFromSessionStorePath(storePath, {
       agentId: "main",
     }).path;
-    const database = openOpenClawAgentDatabase({ agentId: "main", path: databasePath });
+    const database = openNatesclawAgentDatabase({ agentId: "main", path: databasePath });
     database.db.exec(`
       CREATE TRIGGER fail_mixed_replacement_after_exact_write
       BEFORE UPDATE OF entry_json ON session_nodes
@@ -2806,7 +2806,7 @@ describe("session accessor seam", () => {
     const stateDir = path.join(tempDir, "state-root");
     const scope = {
       agentId: "main",
-      env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+      env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
       sessionId,
       sessionKey: "agent:main:main",
     };
@@ -2860,7 +2860,7 @@ describe("session accessor seam", () => {
       resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "main" }).path,
       "manual compact database path",
     );
-    const database = openOpenClawAgentDatabase({ agentId: "main", path: databasePath });
+    const database = openNatesclawAgentDatabase({ agentId: "main", path: databasePath });
     database.db.exec(`
       CREATE TRIGGER reject_manual_compact_metadata_update
       BEFORE UPDATE OF entry_json ON session_nodes
@@ -4284,7 +4284,7 @@ describe("session accessor seam", () => {
     }).path;
     expect(databasePath).toBeDefined();
     const readGeneration = () =>
-      openOpenClawAgentDatabase({ agentId: scope.agentId, path: databasePath })
+      openNatesclawAgentDatabase({ agentId: scope.agentId, path: databasePath })
         .db.prepare("SELECT generation FROM transcript_rewrite_watermarks WHERE session_id = ?")
         .get(scope.sessionId) as { generation: string } | undefined;
 

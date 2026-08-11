@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { Model } from "@openclaw/llm-core";
+import type { Model } from "@natesclaw/llm-core";
 import type { ChatCompletionChunk } from "openai/resources/chat/completions.js";
 import type { OpenAICompletionsOptions } from "../provider-options.js";
 import {
@@ -317,7 +317,7 @@ export async function processCompletionsStream(
     stage: "completions",
     abort: options?.abortFirstEventStream,
     onTimeout: options?.onFirstEventTimeout,
-    hint: "The provider may be stalled while parsing the tool payload; retry with a smaller tool surface or enable OPENCLAW_DEBUG_MODEL_PAYLOAD=tools to inspect exposed tools.",
+    hint: "The provider may be stalled while parsing the tool payload; retry with a smaller tool surface or enable NATESCLAW_DEBUG_MODEL_PAYLOAD=tools to inspect exposed tools.",
   });
   for await (const rawChunk of guardedStream) {
     throwIfModelStreamAborted(options?.signal);

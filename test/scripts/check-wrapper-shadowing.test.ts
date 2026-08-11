@@ -19,7 +19,7 @@ type GuardFixture = {
 };
 
 async function runFixture(fixture: GuardFixture) {
-  return await withTempDir("openclaw-wrapper-shadowing-", async (repoRoot) => {
+  return await withTempDir("natesclaw-wrapper-shadowing-", async (repoRoot) => {
     await Promise.all(
       Object.entries(fixture.files).map(async ([repoPath, content]) => {
         const filePath = path.join(repoRoot, repoPath);

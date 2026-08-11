@@ -62,11 +62,11 @@ describe("root help", () => {
     const config = {
       agents: {
         defaults: {
-          workspace: "/tmp/openclaw-root-help-workspace",
+          workspace: "/tmp/natesclaw-root-help-workspace",
         },
       },
     };
-    const env = { OPENCLAW_STATE_DIR: "/tmp/openclaw-root-help-state" } as NodeJS.ProcessEnv;
+    const env = { NATESCLAW_STATE_DIR: "/tmp/natesclaw-root-help-state" } as NodeJS.ProcessEnv;
 
     await renderRootHelpText({ config, env, pluginSdkResolution: "src" });
 

@@ -1,4 +1,4 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 
 export const LEGACY_TASK_SUGGESTION_TOOL_NAME = "spawn_task";
 export const TASK_SUGGESTION_TOOL_NAME = "suggest_task";

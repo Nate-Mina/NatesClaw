@@ -62,7 +62,7 @@ describe("resolveCodexPluginAppCacheEndpoint", () => {
           headers: {},
         },
         connectionClass: "remote",
-        remoteWorkspaceRoot: "/home/oai/openclaw-workspaces",
+        remoteWorkspaceRoot: "/home/oai/natesclaw-workspaces",
       },
       runtimeIdentity: {
         serverVersion: "0.20.0",

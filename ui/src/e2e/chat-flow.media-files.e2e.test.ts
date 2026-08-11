@@ -22,11 +22,11 @@ suite.define(() => {
       viewport: { height: 900, width: 1280 },
     });
     const page = await context.newPage();
-    const source = "/tmp/openclaw/测试 report.pdf";
-    const mediaUrl = `/__openclaw__/assistant-media?source=${encodeURIComponent(source)}&mediaTicket=ticket-download`;
+    const source = "/tmp/natesclaw/测试 report.pdf";
+    const mediaUrl = `/__natesclaw__/assistant-media?source=${encodeURIComponent(source)}&mediaTicket=ticket-download`;
     const requestedUrls: URL[] = [];
     // The document opens in a new tab, so intercept at the context boundary.
-    await context.route("**/__openclaw__/assistant-media?**", async (route) => {
+    await context.route("**/__natesclaw__/assistant-media?**", async (route) => {
       const url = new URL(route.request().url());
       requestedUrls.push(url);
       await route.fulfill({
@@ -76,12 +76,12 @@ suite.define(() => {
   it.each([
     {
       kind: "audio",
-      source: "/home/node/.openclaw/media/outbound/bootstrap-voice.mp3",
+      source: "/home/node/.natesclaw/media/outbound/bootstrap-voice.mp3",
       ticket: "ticket-bootstrap-audio",
     },
     {
       kind: "image",
-      source: "/home/node/.openclaw/media/outbound/bootstrap-image.png",
+      source: "/home/node/.natesclaw/media/outbound/bootstrap-image.png",
       ticket: "ticket-bootstrap-image",
     },
   ] as const)(
@@ -95,7 +95,7 @@ suite.define(() => {
       const page = await context.newPage();
       const requestedMediaUrls: URL[] = [];
 
-      await page.route("**/__openclaw__/assistant-media?**", async (route) => {
+      await page.route("**/__natesclaw__/assistant-media?**", async (route) => {
         const request = route.request();
         const url = new URL(request.url());
         requestedMediaUrls.push(url);
@@ -174,7 +174,7 @@ suite.define(() => {
             .toBe(1);
         }
 
-        const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+        const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
         if (artifactDir) {
           await mkdir(artifactDir, { recursive: true });
           await page.screenshot({
@@ -182,7 +182,7 @@ suite.define(() => {
             path: path.join(artifactDir, `bootstrap-local-${kind}.png`),
           });
         }
-        if (process.env.OPENCLAW_BEHAVIOR_PROOF === "1") {
+        if (process.env.NATESCLAW_BEHAVIOR_PROOF === "1") {
           process.stdout.write(
             `${JSON.stringify({
               proof: "control-ui-local-media-bootstrap",
@@ -214,7 +214,7 @@ suite.define(() => {
     {
       code: "file-not-found",
       reason: "File not found",
-      source: "/home/node/.openclaw/media/outbound/bootstrap-missing.mp3",
+      source: "/home/node/.natesclaw/media/outbound/bootstrap-missing.mp3",
     },
   ] as const)(
     "keeps server-rejected $code media blocked before preview roots load",
@@ -227,7 +227,7 @@ suite.define(() => {
       const page = await context.newPage();
       const requestedMediaUrls: URL[] = [];
 
-      await page.route("**/__openclaw__/assistant-media?**", async (route) => {
+      await page.route("**/__natesclaw__/assistant-media?**", async (route) => {
         const request = route.request();
         const url = new URL(request.url());
         requestedMediaUrls.push(url);
@@ -260,7 +260,7 @@ suite.define(() => {
         expect(await page.locator(".chat-assistant-attachment-card audio").count()).toBe(0);
         expect(await page.locator(".chat-assistant-attachment-card__link").count()).toBe(0);
 
-        const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+        const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
         if (artifactDir) {
           await mkdir(artifactDir, { recursive: true });
           await page.screenshot({
@@ -268,7 +268,7 @@ suite.define(() => {
             path: path.join(artifactDir, `bootstrap-blocked-${code}.png`),
           });
         }
-        if (process.env.OPENCLAW_BEHAVIOR_PROOF === "1") {
+        if (process.env.NATESCLAW_BEHAVIOR_PROOF === "1") {
           process.stdout.write(
             `${JSON.stringify({
               proof: "control-ui-local-media-bootstrap",
@@ -415,7 +415,7 @@ suite.define(() => {
   ] as const)(
     "renders a $name image through the ticketed media route",
     async ({ source, workspaceDir, screenshotName }) => {
-      const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+      const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
       const context = await suite.newBrowserContext({
         locale: "en-US",
         serviceWorkers: "block",
@@ -423,7 +423,7 @@ suite.define(() => {
       });
       const page = await context.newPage();
       const requestedMediaUrls: URL[] = [];
-      await page.route("**/__openclaw__/assistant-media?**", async (route) => {
+      await page.route("**/__natesclaw__/assistant-media?**", async (route) => {
         const request = route.request();
         const url = new URL(request.url());
         requestedMediaUrls.push(url);
@@ -456,7 +456,7 @@ suite.define(() => {
             id: "user-inbound-media-ref",
             role: "user",
             content: [{ type: "text", text: "🖼️ Attached image" }],
-            __openclaw: {
+            __natesclaw: {
               media: [
                 {
                   path: source,
@@ -546,7 +546,7 @@ suite.define(() => {
       fetchedMedia.push({
         authorization: request.headers().authorization,
         pathname: url.pathname,
-        requesterSessionKey: request.headers()["x-openclaw-requester-session-key"],
+        requesterSessionKey: request.headers()["x-natesclaw-requester-session-key"],
       });
       await route.fulfill({
         body: managedImageBody,
@@ -721,7 +721,7 @@ suite.define(() => {
           "utf8",
         );
       }
-      if (process.env.OPENCLAW_BEHAVIOR_PROOF === "1") {
+      if (process.env.NATESCLAW_BEHAVIOR_PROOF === "1") {
         process.stdout.write(
           `${JSON.stringify({ proof: "managed-image-cache", ...proofSummary })}\n`,
         );
@@ -769,7 +769,7 @@ suite.define(() => {
       // The copied class clears after 1500ms, so click and read it in one browser step.
       const copied = await copyButton.evaluate(async (element) => {
         const button = element as HTMLButtonElement;
-        const owner = element.closest("openclaw-chat-pane") as
+        const owner = element.closest("natesclaw-chat-pane") as
           | (HTMLElement & {
               updateComplete: Promise<unknown>;
             })

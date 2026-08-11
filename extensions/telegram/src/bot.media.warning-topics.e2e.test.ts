@@ -74,7 +74,7 @@ describe("Telegram single-media warnings", () => {
             date: 1736380800,
             photo: [{ file_id: "topic-attachment" }],
           },
-          me: { username: "openclaw_bot", has_topics_enabled: true },
+          me: { username: "natesclaw_bot", has_topics_enabled: true },
           getFile: async () => ({ file_path: "photos/topic-attachment.jpg" }),
         });
 

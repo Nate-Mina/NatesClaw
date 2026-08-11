@@ -5,15 +5,15 @@ import crypto from "node:crypto";
 import {
   sortPromptCacheToolsByName,
   stripSystemPromptCacheBoundary,
-} from "@openclaw/ai/internal/shared";
-import { mergeTransportHeaders, sanitizeTransportPayloadText } from "@openclaw/ai/transports";
-import { stableStringify } from "@openclaw/normalization-core";
+} from "@natesclaw/ai/internal/shared";
+import { mergeTransportHeaders, sanitizeTransportPayloadText } from "@natesclaw/ai/transports";
+import { stableStringify } from "@natesclaw/normalization-core";
 import {
   asDateTimestampMs,
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { SessionTranscriptWriterClaimReboundError } from "../../config/sessions/transcript-write-context.js";
 import { parseGeminiAuth } from "../../infra/gemini-auth.js";
 import { normalizeGoogleApiBaseUrl } from "../../infra/google-api-base-url.js";
@@ -32,7 +32,7 @@ import type { StreamFn } from "../runtime/index.js";
 import { log } from "./logger.js";
 import { isGooglePromptCacheEligible, resolveCacheRetention } from "./prompt-cache-retention.js";
 
-const GOOGLE_PROMPT_CACHE_CUSTOM_TYPE = "openclaw.google-prompt-cache";
+const GOOGLE_PROMPT_CACHE_CUSTOM_TYPE = "natesclaw.google-prompt-cache";
 // CachedContent metadata responses are tiny (name + expireTime); cap the read so
 // a buggy/hostile Google endpoint cannot stream an unbounded body into memory.
 const GOOGLE_PROMPT_CACHE_RESPONSE_MAX_BYTES = 1024 * 1024;

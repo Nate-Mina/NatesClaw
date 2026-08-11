@@ -91,7 +91,7 @@ async function createSharedAppPage(): Promise<Page> {
         },
         {
           content: "Encoded transcript video",
-          __openclaw: { media: [{ url: SHARED_APP_VIDEO_URL, contentType: "video/mp4" }] },
+          __natesclaw: { media: [{ url: SHARED_APP_VIDEO_URL, contentType: "video/mp4" }] },
           role: "user",
           timestamp: Date.UTC(2026, 6, 9, 10, 1),
         },
@@ -398,7 +398,7 @@ function chatHtml(opts: ChatFixtureOptions = {}, mobileNavLayout = false) {
               </div>
               ${
                 opts.sessionRailBody !== undefined
-                  ? `<openclaw-chat-session-rail>
+                  ? `<natesclaw-chat-session-rail>
                     <section class="chat-session-rail chat-session-rail--expanded" role="region" aria-label="Session companion">
                       <header class="chat-session-rail__header">
                         <div class="chat-session-rail__header-copy">
@@ -421,7 +421,7 @@ function chatHtml(opts: ChatFixtureOptions = {}, mobileNavLayout = false) {
                         <button class="chat-send-btn">${iconSvg()}</button>
                       </footer>
                     </section>
-                  </openclaw-chat-session-rail>`
+                  </natesclaw-chat-session-rail>`
                   : ""
               }
               <div class="agent-chat__composer-shell">
@@ -737,8 +737,8 @@ describeBrowserLayout.concurrent("chat responsive browser layout", () => {
     async () => {
       const page = await getSharedAppPage();
       const result = await page.evaluate(async () => {
-        await customElements.whenDefined("openclaw-chat-session-rail");
-        localStorage.setItem("openclaw.chat.observerHud.display", "pill");
+        await customElements.whenDefined("natesclaw-chat-session-rail");
+        localStorage.setItem("natesclaw.chat.observerHud.display", "pill");
         type Rail = HTMLElement & {
           companion: {
             exchanges: [];
@@ -755,7 +755,7 @@ describeBrowserLayout.concurrent("chat responsive browser layout", () => {
           sessionKey: string;
           updateComplete: Promise<boolean>;
         };
-        const createRail = () => document.createElement("openclaw-chat-session-rail") as Rail;
+        const createRail = () => document.createElement("natesclaw-chat-session-rail") as Rail;
         let rail = createRail();
         let consumedGeneration = 0;
         let visibleReports = 0;
@@ -812,11 +812,11 @@ describeBrowserLayout.concurrent("chat responsive browser layout", () => {
           sameElementModes,
           remountMode,
           nextGenerationMode,
-          storedPreference: localStorage.getItem("openclaw.chat.observerHud.display"),
+          storedPreference: localStorage.getItem("natesclaw.chat.observerHud.display"),
           visibleReports,
         };
         rail.remove();
-        localStorage.removeItem("openclaw.chat.observerHud.display");
+        localStorage.removeItem("natesclaw.chat.observerHud.display");
         return snapshot;
       });
 
@@ -970,11 +970,11 @@ describeBrowserLayout.concurrent("chat responsive browser layout", () => {
                   >A deliberately long split-pane session title</span
                 ></span
               >
-              <openclaw-session-owner-chip>
+              <natesclaw-session-owner-chip>
                 <span class="session-owner-chip session-owner-chip--header">O</span>
-              </openclaw-session-owner-chip>
+              </natesclaw-session-owner-chip>
               <button class="chat-pane__workspace-chip" type="button">
-                ${iconSvg()}<span>openclaw-workspace</span>
+                ${iconSvg()}<span>natesclaw-workspace</span>
               </button>
               <div class="chat-pane__face-switch chat-pane__face-switch--split">
                 <div class="settings-segmented">
@@ -1019,7 +1019,7 @@ describeBrowserLayout.concurrent("chat responsive browser layout", () => {
       );
 
       const selectors = [
-        "openclaw-session-owner-chip",
+        "natesclaw-session-owner-chip",
         ".chat-session-diff-toggle",
         ".chat-tasks-toggle",
         ".chat-workspace-toggle",
@@ -1991,7 +1991,7 @@ describeBrowserLayout.concurrent("chat responsive browser layout", () => {
                 <div class="chat-group-messages">
                   <div class="chat-bubble">
                     <div class="chat-text">
-                      <p><code>openclaw_message_send_channel_webchat_target_example_com_thread_very_long_identifier_without_spaces_1234567890abcdefghijklmnopqrstuvwxyz</code></p>
+                      <p><code>natesclaw_message_send_channel_webchat_target_example_com_thread_very_long_identifier_without_spaces_1234567890abcdefghijklmnopqrstuvwxyz</code></p>
                     </div>
                   </div>
                 </div>
@@ -2768,7 +2768,7 @@ describeBrowserLayout.concurrent("chat responsive browser layout", () => {
                   <strong>Workspace</strong>
                 </div>
               </div>
-              <div class="chat-workspace-rail__path">/Users/steipete/.openclaw/workspace</div>
+              <div class="chat-workspace-rail__path">/Users/steipete/.natesclaw/workspace</div>
               <div class="chat-workspace-rail__summary">
                 <span>0 changed</span><span>0 read</span><span>0 artifacts</span><span>15 shown</span>
               </div>

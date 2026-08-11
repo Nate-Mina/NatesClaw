@@ -1,5 +1,5 @@
 // Feishu plugin module implements conversation id behavior.
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export type FeishuGroupSessionScope =
   | "group"

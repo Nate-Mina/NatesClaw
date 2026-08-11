@@ -19,7 +19,7 @@ function createStore(profiles: AuthProfileStore["profiles"] = {}): AuthProfileSt
 async function withTempHome<T>(
   run: (params: { homeDir: string; workspaceDir: string }) => Promise<T> | T,
 ): Promise<T> {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-doctor-claude-cli-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-doctor-claude-cli-"));
   const homeDir = path.join(root, "home");
   const workspaceDir = path.join(root, "workspace");
   fs.mkdirSync(homeDir, { recursive: true });
@@ -59,11 +59,11 @@ describe("resolveClaudeCliProjectDirForWorkspace", () => {
   it("matches Claude's sanitized workspace project dir shape", () => {
     expect(
       resolveClaudeCliProjectDirForWorkspace({
-        workspaceDir: "/Users/vincentkoc/GIT/_Perso/openclaw/.openclaw/workspace",
+        workspaceDir: "/Users/vincentkoc/GIT/_Perso/natesclaw/.natesclaw/workspace",
         homeDir: "/Users/vincentkoc",
       }),
     ).toBe(
-      "/Users/vincentkoc/.claude/projects/-Users-vincentkoc-GIT--Perso-openclaw--openclaw-workspace",
+      "/Users/vincentkoc/.claude/projects/-Users-vincentkoc-GIT--Perso-natesclaw--natesclaw-workspace",
     );
   });
 });
@@ -201,7 +201,7 @@ describe("noteClaudeCliHealth", () => {
       );
 
       expect(noteBody(noteFn)).toContain(
-        "Binary version advisory: Claude Code 2.1.206 is the first published build known to advertise msg_lifecycle_v1; found 2.1.205. OpenClaw verifies this capability at runtime. If this build is rejected, run `claude update`, restart OpenClaw, and retry.",
+        "Binary version advisory: Claude Code 2.1.206 is the first published build known to advertise msg_lifecycle_v1; found 2.1.205. Natesclaw verifies this capability at runtime. If this build is rejected, run `claude update`, restart Natesclaw, and retry.",
       );
     });
   });
@@ -293,9 +293,9 @@ describe("noteClaudeCliHealth", () => {
       );
 
       const body = noteBody(noteFn);
-      expect(body).toContain(`OpenClaw auth profile: missing (${CLAUDE_CLI_PROFILE_ID})`);
+      expect(body).toContain(`Natesclaw auth profile: missing (${CLAUDE_CLI_PROFILE_ID})`);
       expect(body).toContain(
-        "openclaw models auth login --provider anthropic --method cli --set-default",
+        "natesclaw models auth login --provider anthropic --method cli --set-default",
       );
       expect(body).not.toContain("Headless Claude auth: OK");
       expect(body).not.toContain("not created yet");

@@ -127,6 +127,6 @@ class SettingsSaveIndicator extends LitElement {
   }
 }
 
-if (!customElements.get("openclaw-settings-save-indicator")) {
-  customElements.define("openclaw-settings-save-indicator", SettingsSaveIndicator);
+if (!customElements.get("natesclaw-settings-save-indicator")) {
+  customElements.define("natesclaw-settings-save-indicator", SettingsSaveIndicator);
 }

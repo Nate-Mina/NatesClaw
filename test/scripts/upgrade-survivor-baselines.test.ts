@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { parseArgs, resolveBaselines } from "../../scripts/resolve-upgrade-survivor-baselines.mts";
 
 function withReleaseFixture<T>(releases: unknown[], fn: (file: string) => T): T {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-upgrade-baselines-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "natesclaw-upgrade-baselines-"));
   try {
     const file = path.join(dir, "releases.json");
     writeFileSync(file, `${JSON.stringify(releases)}\n`);
@@ -17,7 +17,7 @@ function withReleaseFixture<T>(releases: unknown[], fn: (file: string) => T): T 
 }
 
 function withJsonFixture<T>(name: string, contents: unknown, fn: (file: string) => T): T {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-upgrade-baselines-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "natesclaw-upgrade-baselines-"));
   try {
     const file = path.join(dir, name);
     writeFileSync(file, `${JSON.stringify(contents)}\n`);
@@ -34,7 +34,7 @@ describe("scripts/resolve-upgrade-survivor-baselines", () => {
   });
 
   it("keeps the single fallback baseline when no expanded request is provided", () => {
-    expect(resolveBaselines(new Map([["fallback", "2026.4.23"]]))).toEqual(["openclaw@2026.4.23"]);
+    expect(resolveBaselines(new Map([["fallback", "2026.4.23"]]))).toEqual(["natesclaw@2026.4.23"]);
   });
 
   it("resolves release-history to last six stable releases plus explicit legacy anchors", () => {
@@ -69,14 +69,14 @@ describe("scripts/resolve-upgrade-survivor-baselines", () => {
           ]),
         ),
       ).toEqual([
-        "openclaw@2026.4.29",
-        "openclaw@2026.4.27",
-        "openclaw@2026.4.26",
-        "openclaw@2026.4.25",
-        "openclaw@2026.4.24",
-        "openclaw@2026.4.22",
-        "openclaw@2026.4.23",
-        "openclaw@2026.3.13-1",
+        "natesclaw@2026.4.29",
+        "natesclaw@2026.4.27",
+        "natesclaw@2026.4.26",
+        "natesclaw@2026.4.25",
+        "natesclaw@2026.4.24",
+        "natesclaw@2026.4.22",
+        "natesclaw@2026.4.23",
+        "natesclaw@2026.3.13-1",
       ]);
     });
   });
@@ -111,10 +111,10 @@ describe("scripts/resolve-upgrade-survivor-baselines", () => {
               ]),
             ),
           ).toEqual([
-            "openclaw@2026.5.2",
-            "openclaw@2026.4.30",
-            "openclaw@2026.4.29",
-            "openclaw@2026.4.23",
+            "natesclaw@2026.5.2",
+            "natesclaw@2026.4.30",
+            "natesclaw@2026.4.29",
+            "natesclaw@2026.4.23",
           ]);
         },
       );
@@ -152,12 +152,12 @@ describe("scripts/resolve-upgrade-survivor-baselines", () => {
               ]),
             ),
           ).toEqual([
-            "openclaw@2026.5.3-1",
-            "openclaw@2026.5.3",
-            "openclaw@2026.5.2",
-            "openclaw@2026.4.29",
-            "openclaw@2026.4.23",
-            "openclaw@2026.4.15",
+            "natesclaw@2026.5.3-1",
+            "natesclaw@2026.5.3",
+            "natesclaw@2026.5.2",
+            "natesclaw@2026.4.29",
+            "natesclaw@2026.4.23",
+            "natesclaw@2026.4.15",
           ]);
         },
       );
@@ -223,7 +223,7 @@ describe("scripts/resolve-upgrade-survivor-baselines", () => {
             ["history-count", "2"],
           ]),
         ),
-      ).toEqual(["openclaw@2026.4.29"]);
+      ).toEqual(["natesclaw@2026.4.29"]);
     });
   });
 
@@ -261,13 +261,13 @@ describe("scripts/resolve-upgrade-survivor-baselines", () => {
               ]),
             ),
           ).toEqual([
-            "openclaw@2026.4.29",
-            "openclaw@2026.4.27",
-            "openclaw@2026.4.26",
-            "openclaw@2026.4.25",
-            "openclaw@2026.4.24",
-            "openclaw@2026.4.23",
-            "openclaw@2026.3.13",
+            "natesclaw@2026.4.29",
+            "natesclaw@2026.4.27",
+            "natesclaw@2026.4.26",
+            "natesclaw@2026.4.25",
+            "natesclaw@2026.4.24",
+            "natesclaw@2026.4.23",
+            "natesclaw@2026.3.13",
           ]);
         },
       );

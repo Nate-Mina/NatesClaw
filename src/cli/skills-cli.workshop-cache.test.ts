@@ -1,13 +1,13 @@
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { createTrackedTempDirs } from "../test-utils/tracked-temp-dirs.js";
 
 const tempDirs = createTrackedTempDirs();
-let testState: OpenClawTestState;
+let testState: NatesclawTestState;
 
 const mocks = vi.hoisted(() => ({
   callGateway: vi.fn(),
@@ -51,11 +51,11 @@ vi.mock("../agents/agent-scope.js", () => ({
 
 describe("skills workshop CLI gateway snapshot invalidation", () => {
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-skills-cli-workshop-cache-",
+      prefix: "natesclaw-skills-cli-workshop-cache-",
     });
-    mocks.workspaceDir = await tempDirs.make("openclaw-skills-cli-workshop-cache-");
+    mocks.workspaceDir = await tempDirs.make("natesclaw-skills-cli-workshop-cache-");
     delete mocks.config.gateway;
     mocks.gatewayApply = undefined;
     mocks.releaseGatewayLock.mockReset();
@@ -182,7 +182,7 @@ describe("skills workshop CLI gateway snapshot invalidation", () => {
     const authError = Object.assign(new Error("gateway health requires credentials"), {
       name: "GatewayCredentialsRequiredError",
       method: "health",
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
     });
     mocks.callGateway.mockRejectedValueOnce(authError);
 
@@ -219,7 +219,7 @@ describe("skills workshop CLI gateway snapshot invalidation", () => {
     const authError = Object.assign(new Error("gateway health requires credentials"), {
       name: "GatewayCredentialsRequiredError",
       method: "health",
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
     });
     mocks.callGateway.mockRejectedValueOnce(authError);
     mocks.acquireGatewayLock.mockRejectedValueOnce(new Error("gateway lock is owned"));

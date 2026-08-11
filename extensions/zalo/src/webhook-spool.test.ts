@@ -1,6 +1,6 @@
 // Zalo tests cover durable webhook admission, replay, recovery, and failure taxonomy.
-import type { ChannelIngressQueue } from "openclaw/plugin-sdk/channel-outbound";
-import { closeOpenClawStateDatabaseForTest } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import type { ChannelIngressQueue } from "natesclaw/plugin-sdk/channel-outbound";
+import { closeNatesclawStateDatabaseForTest } from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { zaloWebhookIngressRuntime } from "./webhook-spool.js";
 import {
@@ -21,7 +21,7 @@ function rawEvent(params?: Parameters<typeof createZaloWebhookTestEvent>[0]): st
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   vi.restoreAllMocks();
 });
 

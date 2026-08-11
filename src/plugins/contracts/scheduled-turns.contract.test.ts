@@ -1,9 +1,9 @@
 // Scheduled turn contract tests cover plugin scheduled turn metadata and timestamp bounds.
-import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
 import {
   createPluginRegistryFixture,
   registerTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "natesclaw/plugin-sdk/plugin-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CronServiceContract } from "../../cron/service-contract.js";
 import type { CronJob, CronJobCreate } from "../../cron/types.js";
@@ -22,7 +22,7 @@ import {
   schedulePluginSessionTurn,
   unschedulePluginSessionTurnsByTag,
 } from "../host-hook-scheduled-turns.js";
-import { loadOpenClawPlugins } from "../loader.js";
+import { loadNatesclawPlugins } from "../loader.js";
 import {
   clearPluginLoaderCache,
   makePluginLoaderTempDir,
@@ -30,7 +30,7 @@ import {
 } from "../loader.test-fixtures.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../runtime.js";
 import { createPluginRecord } from "../status.test-helpers.js";
-import type { OpenClawPluginApi } from "../types.js";
+import type { NatesclawPluginApi } from "../types.js";
 
 const workflowMocks = vi.hoisted(() => ({
   cronAdd: vi.fn(),
@@ -93,9 +93,9 @@ function createMockCronService(): CronServiceContract {
     stop: vi.fn(),
     status: vi.fn(async () => ({
       enabled: true,
-      storePath: "/tmp/openclaw-test-cron.json",
+      storePath: "/tmp/natesclaw-test-cron.json",
       storage: "sqlite" as const,
-      sqlitePath: "/tmp/openclaw-test-state/state/openclaw.sqlite",
+      sqlitePath: "/tmp/natesclaw-test-state/state/natesclaw.sqlite",
       jobs: 0,
       nextWakeAtMs: null,
     })),
@@ -612,11 +612,11 @@ describe("plugin scheduled turns", () => {
 
     const registry = withEnv(
       {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        NATESCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        NATESCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
       () =>
-        loadOpenClawPlugins({
+        loadNatesclawPlugins({
           cache: false,
           hostServices: { cron },
           config: {
@@ -750,11 +750,11 @@ describe("plugin scheduled turns", () => {
 
     const registry = withEnv(
       {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        NATESCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        NATESCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
       () =>
-        loadOpenClawPlugins({
+        loadNatesclawPlugins({
           cache: false,
           hostServices: { cron },
           config: {
@@ -1238,7 +1238,7 @@ describe("plugin scheduled turns", () => {
       },
     };
     const { config, registry } = createPluginRegistryFixture({}, { hostServices });
-    let capturedApi: OpenClawPluginApi | undefined;
+    let capturedApi: NatesclawPluginApi | undefined;
     registerTestPlugin({
       registry,
       config,

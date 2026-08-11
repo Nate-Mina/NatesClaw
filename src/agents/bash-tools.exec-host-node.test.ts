@@ -5,7 +5,7 @@
  */
 import crypto from "node:crypto";
 import { setImmediate } from "node:timers/promises";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { MAX_SAFE_TIMEOUT_DELAY_MS } from "../../packages/gateway-client/src/timeouts.js";
 import { createDeferred } from "../../test/helpers/promise.js";
@@ -2318,10 +2318,10 @@ describe("executeNodeHostCommand", () => {
 
   it("requires human approval when prepared shell payload has multiple commands", async () => {
     const chainPlan = {
-      argv: ["/bin/sh", "-lc", "openclaw status; id"],
+      argv: ["/bin/sh", "-lc", "natesclaw status; id"],
       cwd: "/tmp/work",
-      commandText: `/bin/sh -lc "openclaw status; id"`,
-      commandPreview: "openclaw status; id",
+      commandText: `/bin/sh -lc "natesclaw status; id"`,
+      commandPreview: "natesclaw status; id",
       agentId: "prepared-agent",
       sessionKey: "prepared-session",
     };
@@ -2339,15 +2339,15 @@ describe("executeNodeHostCommand", () => {
           ? [
               {
                 resolution: null,
-                argv: ["/bin/sh", "-lc", "openclaw status; id"],
-                raw: `/bin/sh -lc "openclaw status; id"`,
+                argv: ["/bin/sh", "-lc", "natesclaw status; id"],
+                raw: `/bin/sh -lc "natesclaw status; id"`,
               },
             ]
           : [
               {
                 resolution: null,
-                argv: ["openclaw", "status"],
-                raw: "openclaw status",
+                argv: ["natesclaw", "status"],
+                raw: "natesclaw status",
               },
               {
                 resolution: null,
@@ -2372,7 +2372,7 @@ describe("executeNodeHostCommand", () => {
 
     const result = await executeNodeHostCommand(
       createNodeHostRequest({
-        command: "openclaw status; id",
+        command: "natesclaw status; id",
         security: "allowlist",
         ask: "on-miss",
         autoReview: true,
@@ -2387,10 +2387,10 @@ describe("executeNodeHostCommand", () => {
 
   it("does not treat read-only suppression inspections as wrapper writes", async () => {
     const wrapperPlan = {
-      argv: ["/bin/sh", "-lc", "openclaw config get security.audit.suppressions"],
+      argv: ["/bin/sh", "-lc", "natesclaw config get security.audit.suppressions"],
       cwd: "/tmp/work",
-      commandText: `/bin/sh -lc "openclaw config get security.audit.suppressions"`,
-      commandPreview: "openclaw config get security.audit.suppressions",
+      commandText: `/bin/sh -lc "natesclaw config get security.audit.suppressions"`,
+      commandPreview: "natesclaw config get security.audit.suppressions",
       agentId: "prepared-agent",
       sessionKey: "prepared-session",
     };
@@ -2408,13 +2408,13 @@ describe("executeNodeHostCommand", () => {
           command.startsWith("/bin/sh")
             ? {
                 resolution: null,
-                argv: ["/bin/sh", "-lc", "openclaw config get security.audit.suppressions"],
-                raw: `/bin/sh -lc "openclaw config get security.audit.suppressions"`,
+                argv: ["/bin/sh", "-lc", "natesclaw config get security.audit.suppressions"],
+                raw: `/bin/sh -lc "natesclaw config get security.audit.suppressions"`,
               }
             : {
                 resolution: null,
-                argv: ["openclaw", "config", "get", "security.audit.suppressions"],
-                raw: "openclaw config get security.audit.suppressions",
+                argv: ["natesclaw", "config", "get", "security.audit.suppressions"],
+                raw: "natesclaw config get security.audit.suppressions",
               },
         ],
         segmentAllowlistEntries: [],
@@ -2433,7 +2433,7 @@ describe("executeNodeHostCommand", () => {
 
     const result = await executeNodeHostCommand(
       createNodeHostRequest({
-        command: "openclaw config get security.audit.suppressions",
+        command: "natesclaw config get security.audit.suppressions",
         security: "allowlist",
         ask: "on-miss",
         autoReview: true,
@@ -2730,7 +2730,7 @@ describe("executeNodeHostCommand", () => {
 
     const result = await executeNodeHostCommand(
       createNodeHostRequest({
-        command: "openclaw config set security.audit.suppressions '[]'",
+        command: "natesclaw config set security.audit.suppressions '[]'",
         security: "allowlist",
         ask: "on-miss",
         autoReview: true,

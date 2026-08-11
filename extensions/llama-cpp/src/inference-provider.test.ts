@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import type { AssistantMessageEvent, Context, Model } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessageEvent, Context, Model } from "natesclaw/plugin-sdk/llm";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => {
@@ -59,7 +59,7 @@ import { createLlamaCppInferenceRuntime } from "./inference-provider.js";
 type LlamaCppInferenceRuntime = ReturnType<typeof createLlamaCppInferenceRuntime>;
 let inferenceRuntime: LlamaCppInferenceRuntime;
 const testApi = (globalThis as Record<PropertyKey, unknown>)[
-  Symbol.for("openclaw.llamaCppInferenceTestApi")
+  Symbol.for("natesclaw.llamaCppInferenceTestApi")
 ] as {
   resetInferenceRuntimeCoordinator: () => void;
 };

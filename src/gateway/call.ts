@@ -1,9 +1,9 @@
 // Gateway RPC call helper.
 // Builds a GatewayClient, resolves auth/scopes, and performs one request.
 import { randomUUID } from "node:crypto";
-import { isLoopbackIpAddress } from "@openclaw/net-policy/ip";
-import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isLoopbackIpAddress } from "@natesclaw/net-policy/ip";
+import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   GATEWAY_CLIENT_MODES,
   GATEWAY_CLIENT_NAMES,
@@ -28,7 +28,7 @@ import {
   resolveStateDir as resolveStateDirFromPaths,
 } from "../config/paths.js";
 import { getRuntimeConfigSnapshot } from "../config/runtime-snapshot.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createAbortError } from "../infra/abort-signal.js";
 import { loadDeviceAuthToken, loadOriginDeviceToken } from "../infra/device-auth-store.js";
 import { loadOrCreateDeviceIdentity, type DeviceIdentity } from "../infra/device-identity.js";
@@ -86,7 +86,7 @@ type CallGatewayBaseOptions = {
   token?: string;
   password?: string;
   tlsFingerprint?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   method: string;
   params?: unknown;
   expectFinal?: boolean;
@@ -116,10 +116,10 @@ type CallGatewayBaseOptions = {
   configPath?: string;
   /**
    * Explicit local gateway port for command-line overrides such as `gateway health --port`.
-   * Bypasses OPENCLAW_GATEWAY_URL and OPENCLAW_GATEWAY_PORT for this call only.
+   * Bypasses NATESCLAW_GATEWAY_URL and NATESCLAW_GATEWAY_PORT for this call only.
    */
   localPortOverride?: number;
-  /** Keep a caller-supplied config target authoritative over OPENCLAW_GATEWAY_URL. */
+  /** Keep a caller-supplied config target authoritative over NATESCLAW_GATEWAY_URL. */
   ignoreEnvUrlOverride?: boolean;
 };
 
@@ -365,10 +365,10 @@ export function isGatewayExplicitAuthRequiredError(
 }
 
 const defaultCreateGatewayClient = (opts: GatewayClientOptions) => new GatewayClient(opts);
-type GatewayRuntimeConfigLoader = () => OpenClawConfig | Promise<OpenClawConfig>;
+type GatewayRuntimeConfigLoader = () => NatesclawConfig | Promise<NatesclawConfig>;
 // Gateway dispatch owns only connection, auth, TLS, and shell-env resolution.
 // Loading the full runtime config here makes every RPC pay unrelated plugin/state startup costs.
-const defaultGetRuntimeConfig = async (): Promise<OpenClawConfig> =>
+const defaultGetRuntimeConfig = async (): Promise<NatesclawConfig> =>
   getRuntimeConfigSnapshot() ?? (await readGatewayDispatchConfigWithShellEnvFallback());
 const defaultGatewayCallDeps: {
   createGatewayClient: typeof defaultCreateGatewayClient;
@@ -416,7 +416,7 @@ function resolveGatewayClientDisplayName(opts: CallGatewayBaseOptions): string |
   return method ? `gateway:${method}` : "gateway:request";
 }
 
-async function loadGatewayConfig(): Promise<OpenClawConfig> {
+async function loadGatewayConfig(): Promise<NatesclawConfig> {
   const loadConfigFn =
     typeof gatewayCallDeps.getRuntimeConfig === "function"
       ? gatewayCallDeps.getRuntimeConfig
@@ -426,16 +426,16 @@ async function loadGatewayConfig(): Promise<OpenClawConfig> {
   return await loadConfigFn();
 }
 
-function loadGatewayConfigForConnectionDetails(): OpenClawConfig {
+function loadGatewayConfigForConnectionDetails(): NatesclawConfig {
   if (
     gatewayCallDeps.getRuntimeConfig !== defaultGetRuntimeConfig &&
     typeof gatewayCallDeps.getRuntimeConfig === "function"
   ) {
     const config = gatewayCallDeps.getRuntimeConfig();
-    if (config && typeof (config as Promise<OpenClawConfig>).then === "function") {
+    if (config && typeof (config as Promise<NatesclawConfig>).then === "function") {
       throw new Error("async gateway config loader is not supported for connection details");
     }
-    return config as OpenClawConfig;
+    return config as NatesclawConfig;
   }
   return readGatewayDispatchConfig();
 }
@@ -456,7 +456,7 @@ function resolveGatewayConfigPath(env: NodeJS.ProcessEnv): string {
   return resolveConfigPathFn(env, resolveGatewayStateDir(env));
 }
 
-function resolveGatewayPortValue(config?: OpenClawConfig, env?: NodeJS.ProcessEnv): number {
+function resolveGatewayPortValue(config?: NatesclawConfig, env?: NodeJS.ProcessEnv): number {
   const resolveGatewayPortFn =
     typeof gatewayCallDeps.resolveGatewayPort === "function"
       ? gatewayCallDeps.resolveGatewayPort
@@ -466,7 +466,7 @@ function resolveGatewayPortValue(config?: OpenClawConfig, env?: NodeJS.ProcessEn
 
 export function buildGatewayConnectionDetails(
   options: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     url?: string;
     configPath?: string;
     urlSource?: "cli" | "env";
@@ -598,7 +598,7 @@ function hasStoredOperatorDeviceAuthToken(
   return Boolean(loadStoredOperatorDeviceAuthToken(deviceIdentity, deviceAuthScope)?.token);
 }
 
-function resolveGatewayCallAuth(config: OpenClawConfig) {
+function resolveGatewayCallAuth(config: NatesclawConfig) {
   return resolveGatewayAuth({
     authConfig: config.gateway?.auth,
     env: process.env,
@@ -644,7 +644,7 @@ export type { ExplicitGatewayAuth } from "./credentials.js";
 export { ensureExplicitGatewayAuth, resolveExplicitGatewayAuth };
 
 type ResolvedGatewayCallContext = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   configPath: string;
   isRemoteMode: boolean;
   explicitAuth: ExplicitGatewayAuth;
@@ -656,8 +656,8 @@ function resolveGatewayCallTimeout(timeoutValue: unknown): {
   safeTimerTimeoutMs: number;
 } {
   const hasEnvHandshakeTimeout =
-    Boolean(process.env.OPENCLAW_HANDSHAKE_TIMEOUT_MS) ||
-    Boolean(isVitestRuntimeEnv() && process.env.OPENCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
+    Boolean(process.env.NATESCLAW_HANDSHAKE_TIMEOUT_MS) ||
+    Boolean(isVitestRuntimeEnv() && process.env.NATESCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
   const resolvedHandshakeTimeoutMs = hasEnvHandshakeTimeout
     ? resolvePreauthHandshakeTimeoutMs()
     : undefined;
@@ -689,7 +689,7 @@ async function resolveGatewayCallContext(
     explicitAuth,
   });
   const config =
-    opts.config ?? (canSkipConfigLoad ? ({} as OpenClawConfig) : await loadGatewayConfig());
+    opts.config ?? (canSkipConfigLoad ? ({} as NatesclawConfig) : await loadGatewayConfig());
   const configPath = opts.configPath ?? resolveGatewayConfigPath(process.env);
   const isRemoteMode = config.gateway?.mode === "remote";
   return {
@@ -740,7 +740,7 @@ function formatGatewayCloseError(
       "\n- Gateway not yet ready to accept connections (retry after a moment)" +
       "\n- TLS mismatch (connecting with ws:// to a wss:// gateway, or vice versa)" +
       "\n- Gateway process stopped or became unreachable (confirm it is still running)" +
-      "\nRun `openclaw doctor` for diagnostics.";
+      "\nRun `natesclaw doctor` for diagnostics.";
   }
   return message;
 }
@@ -1139,7 +1139,7 @@ async function callGatewayWithScopes<T = Record<string, unknown>>(
       throw new GatewayStoredDeviceAuthUnavailableError(
         [
           "No stored device auth for this gateway origin.",
-          `Run \`openclaw tui --url ${deviceAuthScope}\` to send a pairing request, approve it in that gateway's Control UI (Settings -> Devices) or run \`openclaw devices approve --latest\` on the gateway host, then retry.`,
+          `Run \`natesclaw tui --url ${deviceAuthScope}\` to send a pairing request, approve it in that gateway's Control UI (Settings -> Devices) or run \`natesclaw devices approve --latest\` on the gateway host, then retry.`,
         ].join("\n"),
       );
     }

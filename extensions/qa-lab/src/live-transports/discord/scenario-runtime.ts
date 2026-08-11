@@ -1,4 +1,4 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   discordQaScenarioSupport,
   type DiscordQaScenarioImplementation,

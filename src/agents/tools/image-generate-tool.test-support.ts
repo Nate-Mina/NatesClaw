@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { AuthProfileStore } from "../auth-profiles/types.js";
 import type { ToolModelConfig } from "./model-config.helpers.js";
 import "./image-generate-tool.js";
 
 type ImageGenerateToolTestApi = {
   resolveImageGenerationModelConfigForTool(params: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     workspaceDir?: string;
     agentDir?: string;
     authStore?: AuthProfileStore;
@@ -14,7 +14,7 @@ type ImageGenerateToolTestApi = {
 
 function getTestApi(): ImageGenerateToolTestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.imageGenerateToolTestApi")
+    Symbol.for("natesclaw.imageGenerateToolTestApi")
   ] as ImageGenerateToolTestApi;
 }
 

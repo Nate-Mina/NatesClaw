@@ -1,6 +1,6 @@
 /**
  * Builds the Codex app-server dynamic tool list for one turn, including
- * OpenClaw-owned tools, Codex native-tool fallback rules, sandbox shell shims,
+ * Natesclaw-owned tools, Codex native-tool fallback rules, sandbox shell shims,
  * and provider allowlist normalization.
  */
 import {
@@ -17,10 +17,10 @@ import {
   supportsModelTools,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
   type RuntimeToolSchemaDiagnostic,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveAgentDir } from "openclaw/plugin-sdk/agent-runtime";
-import { runWithCronCreatorAuthorityCapabilityResolver } from "openclaw/plugin-sdk/codex-mcp-projection";
-import { isToolAllowed } from "openclaw/plugin-sdk/sandbox";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { resolveAgentDir } from "natesclaw/plugin-sdk/agent-runtime";
+import { runWithCronCreatorAuthorityCapabilityResolver } from "natesclaw/plugin-sdk/codex-mcp-projection";
+import { isToolAllowed } from "natesclaw/plugin-sdk/sandbox";
 import { readCodexPluginConfig, type CodexPluginConfig } from "./config.js";
 import { dynamicToolBuildState } from "./dynamic-tool-build-state.js";
 import {
@@ -48,15 +48,15 @@ import {
 import { filterToolsForVisionInputs } from "./vision-tools.js";
 import { resolveCodexWebSearchPlan, type CodexNativeWebSearchSupport } from "./web-search.js";
 
-type OpenClawCodingToolsOptions = NonNullable<
-  Parameters<(typeof import("openclaw/plugin-sdk/agent-harness"))["createOpenClawCodingTools"]>[0]
+type NatesclawCodingToolsOptions = NonNullable<
+  Parameters<(typeof import("natesclaw/plugin-sdk/agent-harness"))["createNatesclawCodingTools"]>[0]
 >;
 
-/** Factory seam for constructing OpenClaw runtime tools without eagerly loading agent-harness. */
-type OpenClawCodingToolsFactory =
-  (typeof import("openclaw/plugin-sdk/agent-harness"))["createOpenClawCodingTools"];
-type OpenClawDynamicTool = ReturnType<OpenClawCodingToolsFactory>[number];
-type OpenClawSandboxContext = Awaited<ReturnType<typeof resolveSandboxContext>>;
+/** Factory seam for constructing Natesclaw runtime tools without eagerly loading agent-harness. */
+type NatesclawCodingToolsFactory =
+  (typeof import("natesclaw/plugin-sdk/agent-harness"))["createNatesclawCodingTools"];
+type NatesclawDynamicTool = ReturnType<NatesclawCodingToolsFactory>[number];
+type NatesclawSandboxContext = Awaited<ReturnType<typeof resolveSandboxContext>>;
 type CodexDynamicToolBuildEvent = Parameters<
   NonNullable<EmbeddedRunAttemptParams["onAgentEvent"]>
 >[0];
@@ -73,13 +73,13 @@ function preserveRingZeroSystemAgentTool<T extends { name: string; catalogMode?:
   allTools: T[],
   filteredTools: T[],
 ): T[] {
-  const openclaw = allTools.find(
-    (tool) => tool.name === "openclaw" && tool.catalogMode === "direct-only",
+  const natesclaw = allTools.find(
+    (tool) => tool.name === "natesclaw" && tool.catalogMode === "direct-only",
   );
-  if (!openclaw) {
+  if (!natesclaw) {
     return filteredTools;
   }
-  return [openclaw, ...filteredTools.filter((tool) => tool.name !== "openclaw")];
+  return [natesclaw, ...filteredTools.filter((tool) => tool.name !== "natesclaw")];
 }
 /** Runtime inputs needed to derive the exact Codex dynamic tool surface for a turn. */
 type DynamicToolBuildParams = {
@@ -88,19 +88,19 @@ type DynamicToolBuildParams = {
   effectiveWorkspace: string;
   effectiveCwd?: string;
   sandboxSessionKey: string;
-  sandbox: OpenClawSandboxContext;
+  sandbox: NatesclawSandboxContext;
   nativeToolSurfaceEnabled?: boolean;
   nativeProviderWebSearchSupport?: CodexNativeWebSearchSupport;
   runAbortController: AbortController;
   sessionAgentId: string;
   pluginConfig: CodexPluginConfig;
   profilerEnabled?: boolean;
-  cronCreatorToolAllowlistRef?: OpenClawCodingToolsOptions["cronCreatorToolAllowlistRef"];
-  cronCreatorToolAllowlistCaptureRef?: OpenClawCodingToolsOptions["cronCreatorToolAllowlistCaptureRef"];
+  cronCreatorToolAllowlistRef?: NatesclawCodingToolsOptions["cronCreatorToolAllowlistRef"];
+  cronCreatorToolAllowlistCaptureRef?: NatesclawCodingToolsOptions["cronCreatorToolAllowlistCaptureRef"];
   resolveCronCreatorToolAuthority?: Parameters<
     typeof runWithCronCreatorAuthorityCapabilityResolver
   >[0]["resolve"];
-  cronCreatorAuthorityUnavailableReason?: OpenClawCodingToolsOptions["cronCreatorAuthorityUnavailableReason"];
+  cronCreatorAuthorityUnavailableReason?: NatesclawCodingToolsOptions["cronCreatorAuthorityUnavailableReason"];
   forceHeartbeatTool?: boolean;
   ignoreDisableMessageTool?: boolean;
   ignoreRuntimePlan?: boolean;
@@ -117,10 +117,10 @@ type DynamicToolBuildParams = {
   };
 };
 /** Splits sandbox and run session keys so tool calls can bind to both scopes when needed. */
-function resolveOpenClawCodingToolsSessionKeys(
+function resolveNatesclawCodingToolsSessionKeys(
   params: EmbeddedRunAttemptParams,
   sandboxSessionKey: string,
-): Pick<OpenClawCodingToolsOptions, "sessionKey" | "runSessionKey"> {
+): Pick<NatesclawCodingToolsOptions, "sessionKey" | "runSessionKey"> {
   return {
     sessionKey: sandboxSessionKey,
     runSessionKey:
@@ -233,19 +233,19 @@ export async function buildDynamicTools(input: DynamicToolBuildParams) {
   });
   const modelHasVision = params.model.input?.includes("image") ?? false;
   const agentDir = params.agentDir ?? resolveAgentDir(params.config ?? {}, input.sessionAgentId);
-  const injectedOpenClawCodingToolsFactory = dynamicToolBuildState.openClawCodingToolsFactory;
-  let agentHarnessModule: typeof import("openclaw/plugin-sdk/agent-harness") | undefined;
+  const injectedNatesclawCodingToolsFactory = dynamicToolBuildState.NatesclawCodingToolsFactory;
+  let agentHarnessModule: typeof import("natesclaw/plugin-sdk/agent-harness") | undefined;
   const loadAgentHarnessModule = async () =>
-    (agentHarnessModule ??= await import("openclaw/plugin-sdk/agent-harness"));
-  const createOpenClawCodingTools =
-    injectedOpenClawCodingToolsFactory ??
-    (await loadAgentHarnessModule()).createOpenClawCodingTools;
+    (agentHarnessModule ??= await import("natesclaw/plugin-sdk/agent-harness"));
+  const createNatesclawCodingTools =
+    injectedNatesclawCodingToolsFactory ??
+    (await loadAgentHarnessModule()).createNatesclawCodingTools;
   toolBuildStages.mark("load-agent-harness-tools");
-  const sessionKeys = resolveOpenClawCodingToolsSessionKeys(params, input.sandboxSessionKey);
+  const sessionKeys = resolveNatesclawCodingToolsSessionKeys(params, input.sandboxSessionKey);
   const nativeExecutionPolicy = resolveCodexNativeExecutionPolicyForDynamicTools(input);
-  const buildOpenClawCodingTools = () =>
+  const buildNatesclawCodingTools = () =>
     params.hostCapabilities.bindToolSurface(
-      createOpenClawCodingTools({
+      createNatesclawCodingTools({
         agentId: input.sessionAgentId,
         ...buildEmbeddedAttemptToolRunContext(params),
         exec: {
@@ -302,7 +302,7 @@ export async function buildDynamicTools(input: DynamicToolBuildParams) {
         modelId: params.modelId,
         modelCompat:
           params.model.compat && typeof params.model.compat === "object"
-            ? (params.model.compat as OpenClawCodingToolsOptions["modelCompat"])
+            ? (params.model.compat as NatesclawCodingToolsOptions["modelCompat"])
             : undefined,
         modelApi: params.model.api,
         modelContextWindowTokens: params.model.contextWindow,
@@ -359,10 +359,10 @@ export async function buildDynamicTools(input: DynamicToolBuildParams) {
         capability: params.cronCreatorAuthorityCapability,
         runId: params.runId,
         resolve: input.resolveCronCreatorToolAuthority,
-        run: buildOpenClawCodingTools,
+        run: buildNatesclawCodingTools,
       })
-    : buildOpenClawCodingTools();
-  toolBuildStages.mark("create-openclaw-coding-tools");
+    : buildNatesclawCodingTools();
+  toolBuildStages.mark("create-natesclaw-coding-tools");
   const preNormalizationDiagnostics: RuntimeToolSchemaDiagnostic[] = [];
   const readableAllToolProjection = filterProviderNormalizableTools(allTools);
   preNormalizationDiagnostics.push(...readableAllToolProjection.diagnostics);
@@ -376,11 +376,11 @@ export async function buildDynamicTools(input: DynamicToolBuildParams) {
   const normallyProfiledTools =
     input.nativeToolSurfaceEnabled === false
       ? filterCodexDynamicToolsForDisabledNativeSurface(readableAllTools, input.pluginConfig, {
-          preserveShell: shouldKeepOpenClawShellDynamicTools(input, nativeExecutionPolicy),
+          preserveShell: shouldKeepNatesclawShellDynamicTools(input, nativeExecutionPolicy),
         })
       : filterCodexDynamicTools(readableAllTools, input.pluginConfig);
   const hostSystemAgentActive =
-    input.isHostScopedToolActive?.("openclaw") ?? isHostScopedAgentToolActive("openclaw");
+    input.isHostScopedToolActive?.("natesclaw") ?? isHostScopedAgentToolActive("natesclaw");
   const profileFilteredTools =
     hostSystemAgentActive && isSystemAgentOnlyCodexDynamicToolAllowlist(params.toolsAllow)
       ? preserveRingZeroSystemAgentTool(readableAllTools, normallyProfiledTools)
@@ -534,7 +534,7 @@ function includeForcedCodexDynamicToolAllow(
 /** Decides whether Codex native code mode can own shell/file tools for this turn. */
 export function shouldEnableCodexAppServerNativeToolSurface(
   params: EmbeddedRunAttemptParams,
-  sandbox?: OpenClawSandboxContext,
+  sandbox?: NatesclawSandboxContext,
   options: {
     agentId?: string;
     runtimeSessionKey?: string;
@@ -555,20 +555,20 @@ export function shouldEnableCodexAppServerNativeToolSurface(
     return canCodexAppServerNativeToolSurfaceHonorSandbox(sandbox, options);
   }
   // Codex native code mode exposes its shell/file surface as one app-server
-  // capability, so narrow OpenClaw allowlists must fail closed rather than
+  // capability, so narrow Natesclaw allowlists must fail closed rather than
   // widening `message` or `web_search` into shell access.
   return (
     hasWildcardCodexToolsAllow(toolsAllow) &&
     canCodexAppServerNativeToolSurfaceHonorSandbox(sandbox, options)
   );
 }
-/** Returns true when OpenClaw policy requires the Node-owned exec/process tools instead. */
+/** Returns true when Natesclaw policy requires the Node-owned exec/process tools instead. */
 function isCodexNativeExecutionBlockedByNodeExecHost(
   params: EmbeddedRunAttemptParams,
   options: {
     agentId?: string;
     runtimeSessionKey?: string;
-    sandbox?: OpenClawSandboxContext;
+    sandbox?: NatesclawSandboxContext;
   } = {},
 ): boolean {
   return !resolveCodexNativeExecutionPolicy({
@@ -593,7 +593,7 @@ function resolveCodexRuntimePolicySessionKey(
   );
 }
 function canCodexAppServerNativeToolSurfaceHonorSandbox(
-  sandbox: OpenClawSandboxContext | undefined,
+  sandbox: NatesclawSandboxContext | undefined,
   options: { sandboxExecServerEnabled?: boolean } = {},
 ): boolean {
   if (!sandbox?.enabled) {
@@ -608,7 +608,7 @@ function canCodexAppServerNativeToolSurfaceHonorSandbox(
   }
   // Codex app-server native shell, filesystem, and user MCP execution are owned
   // by the app-server process. Without the explicit exec-server integration,
-  // active OpenClaw sandboxing must disable the native surface and route shell
+  // active Natesclaw sandboxing must disable the native surface and route shell
   // access through sandbox-backed dynamic tools instead.
   return false;
 }
@@ -629,9 +629,9 @@ function filterCodexMemoryFlushDynamicTools<T extends { name: string }>(tools: T
     CODEX_MEMORY_FLUSH_DYNAMIC_TOOL_ALLOW.has(normalizeCodexDynamicToolName(tool.name)),
   );
 }
-/** Requires a Codex sandbox environment only when native tools must run inside OpenClaw sandboxing. */
+/** Requires a Codex sandbox environment only when native tools must run inside Natesclaw sandboxing. */
 export function shouldRequireCodexSandboxExecServerEnvironment(params: {
-  sandbox?: OpenClawSandboxContext;
+  sandbox?: NatesclawSandboxContext;
   nativeToolSurfaceEnabled: boolean;
   sandboxExecServerEnabled: boolean;
 }): boolean {
@@ -666,23 +666,23 @@ export function resolveCodexAppServerExecutionCwd(params: {
     remoteWorkspaceRoot: params.remoteWorkspaceRoot,
   });
 }
-/** Converts OpenClaw sandbox networking into Codex's external-sandbox policy shape. */
-export function resolveCodexExternalSandboxPolicyForOpenClawSandbox(
-  sandbox: OpenClawSandboxContext | undefined,
+/** Converts Natesclaw sandbox networking into Codex's external-sandbox policy shape. */
+export function resolveCodexExternalSandboxPolicyForNatesclawSandbox(
+  sandbox: NatesclawSandboxContext | undefined,
 ): CodexSandboxPolicy {
   return {
     type: "externalSandbox",
-    networkAccess: codexNetworkAccessForOpenClawSandbox(sandbox) ? "enabled" : "restricted",
+    networkAccess: codexNetworkAccessForNatesclawSandbox(sandbox) ? "enabled" : "restricted",
   };
 }
 
-function usesDockerNetworkConfig(sandbox: OpenClawSandboxContext | undefined): boolean {
+function usesDockerNetworkConfig(sandbox: NatesclawSandboxContext | undefined): boolean {
   const backendId = sandbox?.backendId.trim().toLowerCase();
   return backendId === "docker" || backendId === "podman";
 }
 
-function codexNetworkAccessForOpenClawSandbox(
-  sandbox: OpenClawSandboxContext | undefined,
+function codexNetworkAccessForNatesclawSandbox(
+  sandbox: NatesclawSandboxContext | undefined,
 ): boolean {
   if (!usesDockerNetworkConfig(sandbox)) {
     return true;
@@ -703,10 +703,10 @@ export function disableCodexPluginThreadConfig(pluginConfig?: unknown): CodexPlu
 }
 /** Adds sandbox_exec/process aliases when native Code Mode cannot directly honor the sandbox. */
 function addSandboxShellDynamicToolsIfAvailable(
-  filteredTools: OpenClawDynamicTool[],
-  allTools: OpenClawDynamicTool[],
+  filteredTools: NatesclawDynamicTool[],
+  allTools: NatesclawDynamicTool[],
   input: DynamicToolBuildParams,
-): OpenClawDynamicTool[] {
+): NatesclawDynamicTool[] {
   if (
     !shouldExposeSandboxExecDynamicTool(input) ||
     isSandboxShellDynamicToolExcluded(input.pluginConfig)
@@ -720,11 +720,11 @@ function addSandboxShellDynamicToolsIfAvailable(
   if (!execTool || !processTool) {
     return filteredTools;
   }
-  const sandboxExecTool: OpenClawDynamicTool = {
+  const sandboxExecTool: NatesclawDynamicTool = {
     ...execTool,
     name: "sandbox_exec",
     description:
-      "Run a shell command through OpenClaw's configured sandbox backend for this session. Use when OpenClaw sandboxing is active or when a command must execute in the sandbox backend, such as an SSH-backed sandbox or Docker container-path bind layout. Use Codex's native shell only when no OpenClaw sandbox is active and native Code Mode is available.",
+      "Run a shell command through Natesclaw's configured sandbox backend for this session. Use when Natesclaw sandboxing is active or when a command must execute in the sandbox backend, such as an SSH-backed sandbox or Docker container-path bind layout. Use Codex's native shell only when no Natesclaw sandbox is active and native Code Mode is available.",
     execute: async (toolCallId, args, signal, onUpdate) => {
       const result = await execTool.execute(toolCallId, args, signal, onUpdate);
       return {
@@ -742,11 +742,11 @@ function addSandboxShellDynamicToolsIfAvailable(
       };
     },
   };
-  const sandboxProcessTool: OpenClawDynamicTool = {
+  const sandboxProcessTool: NatesclawDynamicTool = {
     ...processTool,
     name: "sandbox_process",
     description:
-      "Manage sandbox_exec sessions that were started through OpenClaw's configured sandbox backend for this session: list, poll, log, write, send-keys, submit, paste, kill, clear, or remove. Use only for sandbox_exec follow-up; use Codex's native shell session handling only when no OpenClaw sandbox is active and native Code Mode is available.",
+      "Manage sandbox_exec sessions that were started through Natesclaw's configured sandbox backend for this session: list, poll, log, write, send-keys, submit, paste, kill, clear, or remove. Use only for sandbox_exec follow-up; use Codex's native shell session handling only when no Natesclaw sandbox is active and native Code Mode is available.",
   };
   return [...filteredTools, sandboxExecTool, sandboxProcessTool];
 }
@@ -770,11 +770,11 @@ function isSandboxShellDynamicToolExcluded(config: CodexPluginConfig): boolean {
   return isCodexDynamicToolExcluded(config, ["exec", "sandbox_exec", "process", "sandbox_process"]);
 }
 function addNodeShellDynamicToolsIfNeeded(
-  filteredTools: OpenClawDynamicTool[],
-  allTools: OpenClawDynamicTool[],
+  filteredTools: NatesclawDynamicTool[],
+  allTools: NatesclawDynamicTool[],
   input: DynamicToolBuildParams,
   nodePolicy: CodexNativeExecutionPolicy,
-): OpenClawDynamicTool[] {
+): NatesclawDynamicTool[] {
   if (isCodexMemoryFlushRun(input.params)) {
     return filteredTools;
   }
@@ -791,7 +791,7 @@ function addNodeShellDynamicToolsIfNeeded(
   if (!execTool || !processTool) {
     return filteredTools;
   }
-  const toolsToAppend: OpenClawDynamicTool[] = [];
+  const toolsToAppend: NatesclawDynamicTool[] = [];
   if (
     !isCodexDynamicToolExcluded(input.pluginConfig, ["exec", CODEX_NODE_EXEC_DYNAMIC_TOOL_NAME]) &&
     !filteredTools.some(
@@ -813,14 +813,14 @@ function addNodeShellDynamicToolsIfNeeded(
   }
   return toolsToAppend.length > 0 ? [...filteredTools, ...toolsToAppend] : filteredTools;
 }
-function shouldKeepOpenClawShellDynamicTools(
+function shouldKeepNatesclawShellDynamicTools(
   input: DynamicToolBuildParams,
   nodePolicy: CodexNativeExecutionPolicy,
 ): boolean {
   return (
     !isCodexMemoryFlushRun(input.params) &&
     // Disabled native Code Mode sends `environments: []`, so Codex cannot
-    // advertise a shell. Preserve OpenClaw's policy-filtered direct shell.
+    // advertise a shell. Preserve Natesclaw's policy-filtered direct shell.
     input.nativeToolSurfaceEnabled === false &&
     input.sandbox?.enabled !== true &&
     nodePolicy.effectiveExecHost !== "node"

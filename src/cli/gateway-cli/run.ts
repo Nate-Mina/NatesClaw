@@ -3,11 +3,11 @@ import fs from "node:fs";
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { TLSSocket } from "node:tls";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import type {
   ConfigFileSnapshot,
   GatewayAuthMode,
@@ -22,7 +22,7 @@ import {
   isInvalidConfigError,
 } from "../../config/io.invalid-config.js";
 import { CONFIG_PATH, normalizeStateDirEnv, resolveGatewayPort } from "../../config/paths.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { hasConfiguredSecretInput } from "../../config/types.secrets.js";
 import { GATEWAY_SERVICE_RUNTIME_PID_ENV } from "../../daemon/constants.js";
 import {
@@ -59,8 +59,8 @@ import { setConsoleSubsystemFilter, setConsoleTimestampPrefix } from "../../logg
 import { withDiagnosticPhase } from "../../logging/diagnostic-phase.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { defaultRuntime } from "../../runtime.js";
-import { findOpenClawAgentDatabaseMediaMigrationRequiredError } from "../../state/openclaw-agent-db-migration-required.js";
-import { findOpenClawStateDatabaseSchemaMigrationRequiredError } from "../../state/openclaw-state-db-schema-migration-required.js";
+import { findNatesclawAgentDatabaseMediaMigrationRequiredError } from "../../state/natesclaw-agent-db-migration-required.js";
+import { findNatesclawStateDatabaseSchemaMigrationRequiredError } from "../../state/natesclaw-state-db-schema-migration-required.js";
 import { printClawBanner, type ClawBannerResult } from "../claw-banner.js";
 import { formatCliCommand } from "../command-format.js";
 import { formatInvalidConfigPort, formatInvalidPortOption } from "../error-format.js";
@@ -136,7 +136,7 @@ function extractGatewayMiskeys(parsed: unknown): {
 }
 
 function createGatewayCliStartupTrace() {
-  const enabled = isTruthyEnvValue(process.env.OPENCLAW_GATEWAY_STARTUP_TRACE);
+  const enabled = isTruthyEnvValue(process.env.NATESCLAW_GATEWAY_STARTUP_TRACE);
   const started = performance.now();
   let last = started;
   const emit = (name: string, durationMs: number, totalMs: number) => {
@@ -193,7 +193,7 @@ function createGatewayCliStartupTrace() {
 
 function warnInlinePasswordFlag() {
   defaultRuntime.error(
-    "Warning: --password can be exposed via process listings. Prefer --password-file or OPENCLAW_GATEWAY_PASSWORD.",
+    "Warning: --password can be exposed via process listings. Prefer --password-file or NATESCLAW_GATEWAY_PASSWORD.",
   );
 }
 
@@ -257,7 +257,7 @@ function getGatewayStartGuardErrors(params: {
   }
   if (!params.configExists) {
     return [
-      `Missing config. Run \`${formatCliCommand("openclaw setup")}\` or set gateway.mode=local (or pass --allow-unconfigured).`,
+      `Missing config. Run \`${formatCliCommand("natesclaw setup")}\` or set gateway.mode=local (or pass --allow-unconfigured).`,
     ];
   }
   if (params.mode === undefined) {
@@ -265,7 +265,7 @@ function getGatewayStartGuardErrors(params: {
       [
         "Gateway start blocked: existing config is missing gateway.mode.",
         "Treat this as suspicious or clobbered config.",
-        `Re-run \`${formatCliCommand("openclaw onboard --mode local")}\` or \`${formatCliCommand("openclaw setup")}\`, set gateway.mode=local manually, or pass --allow-unconfigured.`,
+        `Re-run \`${formatCliCommand("natesclaw onboard --mode local")}\` or \`${formatCliCommand("natesclaw setup")}\`, set gateway.mode=local manually, or pass --allow-unconfigured.`,
       ].join(" "),
       `Config write audit: ${params.configAuditLocation}`,
     ];
@@ -281,12 +281,12 @@ async function readGatewayStartupConfig(params: {
   opts: GatewayRunOpts;
   startupTrace: ReturnType<typeof createGatewayCliStartupTrace>;
 }): Promise<{
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   snapshot: ConfigFileSnapshot | null;
   startupConfigSnapshotRead?: ReadConfigFileSnapshotWithPluginMetadataResult;
 }> {
   const { readConfigFileSnapshotWithPluginMetadata } = await import("../../config/config.js");
-  let blockedRecoveryConfig: OpenClawConfig | null = null;
+  let blockedRecoveryConfig: NatesclawConfig | null = null;
   const snapshotRead: ReadConfigFileSnapshotWithPluginMetadataResult | null =
     await params.startupTrace.measure("cli.config-snapshot", () =>
       readConfigFileSnapshotWithPluginMetadata({
@@ -333,7 +333,7 @@ type GatewayRunShellEnvFallbackPlan =
     };
 
 async function resolveGatewayRunShellEnvFallbackPlan(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): Promise<GatewayRunShellEnvFallbackPlan> {
   const { createConfigRuntimeEnv } = await import("../../config/env-vars.js");
   const {
@@ -478,8 +478,8 @@ function resolveGatewayLockErrorExitCode(err: unknown): number {
 
 function resolveGatewayStartupFailureExitCode(err: unknown): number {
   return isInvalidConfigError(err) ||
-    findOpenClawAgentDatabaseMediaMigrationRequiredError(err) ||
-    findOpenClawStateDatabaseSchemaMigrationRequiredError(err)
+    findNatesclawAgentDatabaseMediaMigrationRequiredError(err) ||
+    findNatesclawStateDatabaseSchemaMigrationRequiredError(err)
     ? EXIT_CONFIG_ERROR
     : 1;
 }
@@ -577,7 +577,7 @@ async function probeGatewayHealthz(params: {
   });
 }
 
-function createConfiguredGatewayHealthProbe(cfg: OpenClawConfig) {
+function createConfiguredGatewayHealthProbe(cfg: NatesclawConfig) {
   const tlsConfig = cfg.gateway?.tls;
   let tlsFingerprint: string | undefined;
   return async (params: { host: string; port: number }): Promise<boolean> => {
@@ -692,7 +692,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
   const { clearGatewayRunConfigEnvironment } = await import("./pre-bootstrap.js");
   clearGatewayRunConfigEnvironment();
   installQaParentWatchdog();
-  const isDevProfile = normalizeOptionalLowercaseString(process.env.OPENCLAW_PROFILE) === "dev";
+  const isDevProfile = normalizeOptionalLowercaseString(process.env.NATESCLAW_PROFILE) === "dev";
   const devMode = Boolean(opts.dev) || isDevProfile;
   // Dev gateways inherit the operator shell. Suppress ambient channel credentials so a
   // development instance cannot silently connect to real channel services.
@@ -710,7 +710,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
   setVerbose(Boolean(opts.verbose));
   if (opts.cliBackendLogs || opts.claudeCliLogs) {
     setConsoleSubsystemFilter(["agent/cli-backend"]);
-    process.env.OPENCLAW_CLI_BACKEND_LOG_OUTPUT = "1";
+    process.env.NATESCLAW_CLI_BACKEND_LOG_OUTPUT = "1";
   }
   const wsLogRaw = (opts.compact ? "compact" : opts.wsLog) as string | undefined;
   const wsLogStyle: GatewayWsLogStyle =
@@ -727,11 +727,11 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
   setGatewayWsLogStyle(wsLogStyle);
 
   if (opts.rawStream) {
-    process.env.OPENCLAW_RAW_STREAM = "1";
+    process.env.NATESCLAW_RAW_STREAM = "1";
   }
   const rawStreamPath = toOptionString(opts.rawStreamPath);
   if (rawStreamPath) {
-    process.env.OPENCLAW_RAW_STREAM_PATH = rawStreamPath;
+    process.env.NATESCLAW_RAW_STREAM_PATH = rawStreamPath;
   }
 
   const startupTrace = createGatewayCliStartupTrace();
@@ -813,7 +813,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
     ) {
       return;
     }
-    const finalConfigEnteredServiceMode = Boolean(process.env.OPENCLAW_SERVICE_MARKER?.trim());
+    const finalConfigEnteredServiceMode = Boolean(process.env.NATESCLAW_SERVICE_MARKER?.trim());
     const clearRejectedFinalConfigEnv = () => {
       clearGatewayRunConfigEnvironment();
       if (finalConfigEnteredServiceMode) {
@@ -836,7 +836,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
       return;
     }
   }
-  if (process.env.OPENCLAW_SERVICE_MARKER?.trim()) {
+  if (process.env.NATESCLAW_SERVICE_MARKER?.trim()) {
     process.env[GATEWAY_SERVICE_RUNTIME_PID_ENV] = String(process.pid);
   }
   await hooks.refreshManagedProxy?.(cfg.proxy);
@@ -865,7 +865,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
     return;
   }
   const bindExplicitRaw = bindExplicitRawStr as GatewayBindMode | undefined;
-  if (process.env.OPENCLAW_SERVICE_MARKER?.trim()) {
+  if (process.env.NATESCLAW_SERVICE_MARKER?.trim()) {
     const { cleanStaleGatewayProcessesSync } = await import("../../infra/restart-stale-pids.js");
     const stale = cleanStaleGatewayProcessesSync(port, {
       protectedPid: inheritedGatewayServicePid,
@@ -959,7 +959,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
       }
     } catch (err) {
       defaultRuntime.error(
-        `Could not free port ${port}: ${formatErrorMessage(err)}. Run ${formatCliCommand("openclaw gateway status --deep")} to inspect the listener.`,
+        `Could not free port ${port}: ${formatErrorMessage(err)}. Run ${formatCliCommand("natesclaw gateway status --deep")} to inspect the listener.`,
       );
       defaultRuntime.exit(1);
       return;
@@ -968,7 +968,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
   if (opts.token) {
     const token = toOptionString(opts.token);
     if (token) {
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
+      process.env.NATESCLAW_GATEWAY_TOKEN = token;
     }
   }
   const authModeRaw = toOptionString(opts.auth);
@@ -1077,7 +1077,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
     defaultRuntime.error(
       [
         "Gateway auth is set to password, but no password is configured.",
-        "Set gateway.auth.password (or OPENCLAW_GATEWAY_PASSWORD), or pass --password.",
+        "Set gateway.auth.password (or NATESCLAW_GATEWAY_PASSWORD), or pass --password.",
         ...authHints,
       ]
         .filter(Boolean)
@@ -1105,10 +1105,10 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
         ...(isContainerEnvironment()
           ? [
               "Container environment detected \u2014 the gateway defaults to bind=auto (0.0.0.0) for port-forwarding compatibility.",
-              "Set OPENCLAW_GATEWAY_TOKEN or OPENCLAW_GATEWAY_PASSWORD, or pass --token/--password to start with auth.",
+              "Set NATESCLAW_GATEWAY_TOKEN or NATESCLAW_GATEWAY_PASSWORD, or pass --token/--password to start with auth.",
             ]
           : [
-              "Set gateway.auth.token/password (or OPENCLAW_GATEWAY_TOKEN/OPENCLAW_GATEWAY_PASSWORD) or pass --token/--password.",
+              "Set gateway.auth.token/password (or NATESCLAW_GATEWAY_TOKEN/NATESCLAW_GATEWAY_PASSWORD) or pass --token/--password.",
             ]),
         ...authHints,
       ]
@@ -1130,8 +1130,8 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
   startupTrace.mark("cli.gateway-loop");
   let startupConfigSnapshotReadForNextStart = startupConfigSnapshotRead;
   const envSidecarStartupMode =
-    isTruthyEnvValue(process.env.OPENCLAW_SKIP_CHANNELS) ||
-    isTruthyEnvValue(process.env.OPENCLAW_SKIP_PROVIDERS)
+    isTruthyEnvValue(process.env.NATESCLAW_SKIP_CHANNELS) ||
+    isTruthyEnvValue(process.env.NATESCLAW_SKIP_PROVIDERS)
       ? "defer"
       : "start";
   let crashLoopDecision: GatewayCrashLoopBreakerDecision | undefined;
@@ -1236,7 +1236,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
     if (isGatewayLockError(err)) {
       const errMessage = formatErrorMessage(err);
       defaultRuntime.error(
-        `Gateway failed to start: ${errMessage}\nIf the gateway is supervised, stop it with: ${formatCliCommand("openclaw gateway stop")}`,
+        `Gateway failed to start: ${errMessage}\nIf the gateway is supervised, stop it with: ${formatCliCommand("natesclaw gateway stop")}`,
       );
       try {
         const [{ formatPortDiagnostics }, { inspectPortUsage }] = await Promise.all([
@@ -1260,12 +1260,12 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
     if (isInvalidConfigError(err)) {
       throw err;
     }
-    if (findOpenClawAgentDatabaseMediaMigrationRequiredError(err)) {
+    if (findNatesclawAgentDatabaseMediaMigrationRequiredError(err)) {
       try {
         const { parkCurrentLaunchAgentForMaintenance } = await import("../../daemon/launchd.js");
         if (await parkCurrentLaunchAgentForMaintenance()) {
           gatewayLog.error(
-            `gateway requires offline media migration; parked the managed LaunchAgent. Run ${formatCliCommand("openclaw doctor --fix")} to repair and restart it.`,
+            `gateway requires offline media migration; parked the managed LaunchAgent. Run ${formatCliCommand("natesclaw doctor --fix")} to repair and restart it.`,
           );
         }
       } catch (parkError) {
@@ -1274,12 +1274,12 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
         );
       }
     }
-    if (findOpenClawStateDatabaseSchemaMigrationRequiredError(err)) {
+    if (findNatesclawStateDatabaseSchemaMigrationRequiredError(err)) {
       try {
         const { parkCurrentLaunchAgentForMaintenance } = await import("../../daemon/launchd.js");
         if (await parkCurrentLaunchAgentForMaintenance()) {
           gatewayLog.error(
-            `gateway requires state database schema migration; parked the managed LaunchAgent. Run ${formatCliCommand("openclaw doctor --fix")} to repair and restart it.`,
+            `gateway requires state database schema migration; parked the managed LaunchAgent. Run ${formatCliCommand("natesclaw doctor --fix")} to repair and restart it.`,
           );
         }
       } catch (parkError) {
@@ -1290,7 +1290,7 @@ async function runGatewayCommandOnce(opts: GatewayRunOpts, hooks: GatewayRunRunt
     }
     await maybeWriteGatewayStartupFailureBundle(err);
     defaultRuntime.error(
-      `Gateway failed to start: ${formatErrorMessage(err)}. Run ${formatCliCommand("openclaw gateway status --deep")} for diagnostics.`,
+      `Gateway failed to start: ${formatErrorMessage(err)}. Run ${formatCliCommand("natesclaw gateway status --deep")} for diagnostics.`,
     );
     defaultRuntime.exit(resolveGatewayStartupFailureExitCode(err));
   }
@@ -1337,6 +1337,6 @@ const testing = {
 };
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.gatewayRunTestApi")] = testing;
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.gatewayRunTestApi")] = testing;
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

@@ -5,9 +5,9 @@ import { sha256File } from "../infra/crypto-digest.js";
 import { ensureAbsoluteDirectory } from "../infra/fs-safe.js";
 import { executeSqliteQuerySync } from "../infra/kysely-sync.js";
 import {
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import type { TranscriptSessionDescriptor } from "./provider-types.js";
 import { ensureMeetingTranscriptsSchema } from "./sqlite-schema.js";
 import {
@@ -21,12 +21,12 @@ import { meetingTranscriptDb, type MeetingTranscriptSessionRow } from "./store-s
 type ExportOwnershipParams = {
   session: TranscriptSessionDescriptor;
   exportRootDir: string;
-  databaseOptions: OpenClawStateDatabaseOptions;
+  databaseOptions: NatesclawStateDatabaseOptions;
 };
 
-function database(options: OpenClawStateDatabaseOptions) {
+function database(options: NatesclawStateDatabaseOptions) {
   ensureMeetingTranscriptsSchema(options);
-  return openOpenClawStateDatabase(options);
+  return openNatesclawStateDatabase(options);
 }
 
 async function transcriptArtifactsMatchOwner(

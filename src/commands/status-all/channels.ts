@@ -1,9 +1,9 @@
-// Builds channel status rows and account details for `openclaw status --all`.
+// Builds channel status rows and account details for `natesclaw status --all`.
 // This layer stays plugin-generic: channel-specific auth rules live in plugin config/status hooks.
 
 import fs from "node:fs";
-import { asRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { resolveInspectedChannelAccount } from "../../channels/account-inspection.js";
@@ -25,7 +25,7 @@ import {
   hasRuntimeCredentialAvailable,
   markConfiguredUnavailableCredentialStatusesAvailable,
 } from "../../channels/status/read-model.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatPhoneNumberForCli } from "../../infra/phone-number-presentation.js";
 import { listExplicitConfiguredChannelIdsForConfig } from "../../plugins/channel-plugin-ids.js";
 import { resolveMissingOfficialExternalChannelPluginRepairHints } from "../../plugins/official-external-plugin-repair-hints.js";
@@ -51,8 +51,8 @@ type ChannelAccountRow = ChannelAccountTokenSummaryRow & {
 
 type ResolvedChannelAccountRowParams = {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  cfg: NatesclawConfig;
+  sourceConfig: NatesclawConfig;
   accountId: string;
 };
 
@@ -100,7 +100,7 @@ const formatAccountLabel = (params: { accountId: string; name?: string }) => {
 
 const buildAccountNotes = (params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry: ChannelAccountRow;
   liveCredentialAvailable?: boolean;
   credentialResolutionSkipped?: boolean;
@@ -225,15 +225,15 @@ function formatLoadFailureDetail(message: string): string {
   const reason = isLikelyDependencyTreeCorruption(message)
     ? "dependency tree corrupted"
     : "registration failed";
-  return `plugin load failed: ${reason}; run openclaw doctor --fix`;
+  return `plugin load failed: ${reason}; run natesclaw doctor --fix`;
 }
 
 /** Builds the `status --all` channel summary and per-account detail tables. */
 export async function buildChannelsTable(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   opts?: {
     showSecrets?: boolean;
-    sourceConfig?: OpenClawConfig;
+    sourceConfig?: NatesclawConfig;
     includeSetupFallbackPlugins?: boolean;
     liveChannelStatus?: unknown;
     credentialResolutionSkipped?: boolean;

@@ -1,11 +1,11 @@
 // Imessage plugin module implements conversation bindings behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   createAccountScopedConversationBindingManager,
   resetAccountScopedConversationBindingsForTests,
   type AccountScopedConversationBindingManager,
   type BindingTargetKind,
-} from "openclaw/plugin-sdk/thread-bindings-runtime";
+} from "natesclaw/plugin-sdk/thread-bindings-runtime";
 
 type IMessageBindingTargetKind = "subagent" | "acp";
 
@@ -13,7 +13,7 @@ type IMessageConversationBindingManager =
   AccountScopedConversationBindingManager<IMessageBindingTargetKind>;
 
 const IMESSAGE_CONVERSATION_BINDINGS_STATE_KEY = Symbol.for(
-  "openclaw.imessageConversationBindingsState",
+  "natesclaw.imessageConversationBindingsState",
 );
 
 function toSessionBindingTargetKind(raw: IMessageBindingTargetKind): BindingTargetKind {
@@ -26,7 +26,7 @@ function toIMessageTargetKind(raw: BindingTargetKind): IMessageBindingTargetKind
 
 export function createIMessageConversationBindingManager(params: {
   accountId?: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 }): IMessageConversationBindingManager {
   return createAccountScopedConversationBindingManager({
     channel: "imessage",

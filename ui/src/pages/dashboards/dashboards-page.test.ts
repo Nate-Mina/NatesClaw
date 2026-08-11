@@ -96,7 +96,7 @@ describe("DashboardsPage", () => {
       deps: "",
       cause: "navigation" as const,
     };
-    const element = document.createElement("openclaw-dashboards-page") as DashboardsPageElement;
+    const element = document.createElement("natesclaw-dashboards-page") as DashboardsPageElement;
     element.routeData = await loadDashboards(context, loaderOptions);
     const provider = createApplicationContextProvider(context);
     provider.append(element);
@@ -160,7 +160,7 @@ describe("DashboardsPage", () => {
       },
       agents: { state: { agentsList: null } },
     } as unknown as ApplicationContext;
-    const element = document.createElement("openclaw-dashboards-page") as DashboardsPageElement;
+    const element = document.createElement("natesclaw-dashboards-page") as DashboardsPageElement;
     element.routeData = {
       result: result(row("agent:main:before", "Before")),
       error: null,

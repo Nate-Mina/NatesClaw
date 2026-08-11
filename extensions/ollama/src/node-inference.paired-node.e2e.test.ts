@@ -7,9 +7,9 @@ import type { AddressInfo } from "node:net";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { setTimeout as delay } from "node:timers/promises";
-import { GatewayClient } from "openclaw/plugin-sdk/gateway-runtime";
-import type { OpenClawPluginNodeHostCommand } from "openclaw/plugin-sdk/plugin-entry";
-import { createOpenClawTestState } from "openclaw/plugin-sdk/test-state";
+import { GatewayClient } from "natesclaw/plugin-sdk/gateway-runtime";
+import type { NatesclawPluginNodeHostCommand } from "natesclaw/plugin-sdk/plugin-entry";
+import { createNatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { describe, expect, it, vi } from "vitest";
 import { createOllamaNodeHostCommands } from "./node-inference.js";
 
@@ -47,7 +47,7 @@ describe("Ollama paired-node Gateway inference", () => {
     async () => {
       const nodeOllama = await startFakeOllama("node");
       const gatewayOllama = await startFakeOllama("gateway");
-      const state = await createOpenClawTestState({
+      const state = await createNatesclawTestState({
         label: "ollama-paired-node-e2e",
         layout: "home",
       });
@@ -100,22 +100,22 @@ describe("Ollama paired-node Gateway inference", () => {
             cwd: process.cwd(),
             env: {
               ...state.env,
-              OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(process.cwd(), "extensions"),
-              OPENCLAW_CLI: "1",
-              OPENCLAW_DISABLE_BUNDLED_PLUGINS: "0",
-              OPENCLAW_GATEWAY_TOKEN: gatewayToken,
-              OPENCLAW_GATEWAY_STARTUP_TRACE: "1",
-              OPENCLAW_NO_RESPAWN: "1",
-              OPENCLAW_TEST_FAST: "1",
-              OPENCLAW_TEST_MINIMAL_GATEWAY: "1",
-              OPENCLAW_SKIP_CHANNELS: "1",
-              OPENCLAW_SKIP_PROVIDERS: "0",
-              OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-              OPENCLAW_SKIP_CRON: "1",
-              OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-              OPENCLAW_SKIP_CANVAS_HOST: "1",
-              OPENCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
-              OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+              NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(process.cwd(), "extensions"),
+              NATESCLAW_CLI: "1",
+              NATESCLAW_DISABLE_BUNDLED_PLUGINS: "0",
+              NATESCLAW_GATEWAY_TOKEN: gatewayToken,
+              NATESCLAW_GATEWAY_STARTUP_TRACE: "1",
+              NATESCLAW_NO_RESPAWN: "1",
+              NATESCLAW_TEST_FAST: "1",
+              NATESCLAW_TEST_MINIMAL_GATEWAY: "1",
+              NATESCLAW_SKIP_CHANNELS: "1",
+              NATESCLAW_SKIP_PROVIDERS: "0",
+              NATESCLAW_SKIP_GMAIL_WATCHER: "1",
+              NATESCLAW_SKIP_CRON: "1",
+              NATESCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+              NATESCLAW_SKIP_CANVAS_HOST: "1",
+              NATESCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
+              NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
             },
             stdio: "pipe",
           },
@@ -494,7 +494,7 @@ async function waitForPairedInferenceNode(
 async function respondToNodeInvocation(
   node: GatewayClient | undefined,
   payload: unknown,
-  commands: ReadonlyMap<string, OpenClawPluginNodeHostCommand>,
+  commands: ReadonlyMap<string, NatesclawPluginNodeHostCommand>,
 ): Promise<void> {
   const frame = payload as NodeInvokeFrame;
   const command = typeof frame.command === "string" ? commands.get(frame.command) : undefined;

@@ -358,7 +358,7 @@ export const en: TranslationMap = {
     errorTitle: "Panel failed to load",
     genericSubtitle: "Something went wrong while loading this panel.",
     staleTitle: "A new version is available",
-    staleSubtitle: "OpenClaw was updated in the background. Reload to get the latest panel.",
+    staleSubtitle: "Natesclaw was updated in the background. Reload to get the latest panel.",
     reloading: "Reloading…",
     retry: "Retry",
     stylesFailed: "Styles failed to load, so the page may look broken.",
@@ -375,7 +375,7 @@ export const en: TranslationMap = {
     confirm: {
       message: "Installs the available update on the connected Gateway and restarts it.",
       macMessage:
-        "Hands this update to the OpenClaw Mac app, which installs it and restarts the Gateway it manages.",
+        "Hands this update to the Natesclaw Mac app, which installs it and restarts the Gateway it manages.",
       impact:
         "Running sessions are interrupted and this Control UI disconnects until the Gateway is back.",
       versions: "Installed {installed} · Available {available}",
@@ -396,7 +396,7 @@ export const en: TranslationMap = {
       installing: "Installing the update on the Gateway. It restarts once the install finishes.",
       restarting: "The Gateway is restarting. This page disconnects and reconnects on its own.",
       notStarted:
-        "The update request went unanswered. Try again, or run `openclaw update` in the terminal.",
+        "The update request went unanswered. Try again, or run `natesclaw update` in the terminal.",
     },
     channel: {
       stable: "Stable",
@@ -421,7 +421,7 @@ export const en: TranslationMap = {
       installKind: "Install type",
       policyTitle: "Update policy",
       channel: "Release channel",
-      channelDescription: "Choose which OpenClaw release track this Gateway follows.",
+      channelDescription: "Choose which Natesclaw release track this Gateway follows.",
       automaticUpdates: "Automatic updates",
       automaticUpdatesDescription:
         "Schedule available updates automatically. Dev auto-updates apply to git checkouts.",
@@ -455,16 +455,16 @@ export const en: TranslationMap = {
     verificationFailedWithIdentity:
       "Update finished, but the running install does not match the expected revision. Expected {expected}, running {actual}.",
     handoffTimeout:
-      "Update handoff started, but completion was not reported after reconnect. Run `openclaw update status` for the final result.",
+      "Update handoff started, but completion was not reported after reconnect. Run `natesclaw update status` for the final result.",
     outcomeUnknown:
-      "The update request may have been accepted, but the Gateway did not report a final result after reconnect. Run `openclaw update status` before retrying.",
+      "The update request may have been accepted, but the Gateway did not report a final result after reconnect. Run `natesclaw update status` before retrying.",
     failureReasons: {
       dirty: "Commit or stash changes, then retry.",
       noUpstream: "Set an upstream branch, then retry.",
       notGitInstall:
-        "Not a git checkout. Run `openclaw update` from the CLI for a global reinstall.",
-      notOpenclawRoot:
-        "Run the update from an OpenClaw checkout or use the CLI global reinstall path.",
+        "Not a git checkout. Run `natesclaw update` from the CLI for a global reinstall.",
+      notNatesclawRoot:
+        "Run the update from an Natesclaw checkout or use the CLI global reinstall path.",
       depsInstallFailed: "Dependency install failed. Fix the install error and retry.",
       buildFailed: "Build failed. Fix the build error and retry.",
       buildDirty:
@@ -485,13 +485,13 @@ export const en: TranslationMap = {
       alreadyCurrent: "This checkout is already at its tracked upstream revision.",
       managedServiceHandoffAlreadyRunning:
         "Another managed update is already running. Wait for it to complete, then refresh update status.",
-      doctorFailed: "Doctor repair failed. Run `openclaw doctor --non-interactive` and retry.",
+      doctorFailed: "Doctor repair failed. Run `natesclaw doctor --non-interactive` and retry.",
       managedServiceHandoffFailed:
-        "The update helper stopped before finishing. Run `openclaw update` in the terminal to see why.",
+        "The update helper stopped before finishing. Run `natesclaw update` in the terminal to see why.",
       managedServiceHandoffSpawnFailed:
-        "The Gateway could not start the update helper. Run `openclaw update` in the terminal instead.",
+        "The Gateway could not start the update helper. Run `natesclaw update` in the terminal instead.",
       managedServiceHandoffParentTimeout:
-        "The Gateway stayed up too long for the update helper. Start the update again, or run `openclaw update`.",
+        "The Gateway stayed up too long for the update helper. Start the update again, or run `natesclaw update`.",
       default: "See the gateway logs for the exact failure and retry once the cause is fixed.",
     },
     failedAtStep: "The update failed at {step}: {cause}.",
@@ -503,7 +503,7 @@ export const en: TranslationMap = {
     pairing: {
       button: "Pair mobile device",
       adminRequired: "Administrator access is required to create setup codes.",
-      title: "OpenClaw mobile",
+      title: "Natesclaw mobile",
       subtitle: "Scan this QR code in the mobile app to connect a new phone.",
       noApp: "Don't have the app yet?",
       getApps: "Get the apps",
@@ -520,14 +520,14 @@ export const en: TranslationMap = {
       transportLimitedHint:
         "This Gateway URL uses plaintext ws://. Use wss:// or Tailscale Serve, then create a new code for full access.",
       failed: "Could not create a setup code.",
-      qrAlt: "OpenClaw mobile pairing QR code",
+      qrAlt: "Natesclaw mobile pairing QR code",
       qrUnavailable: "QR unavailable. Copy the setup code instead.",
       copySetupCode: "Copy setup code",
       newCode: "New code",
       showSetupCode: "Show setup code",
       pending: "Device requests waiting for review: {count}",
       review: "Review",
-      waiting: "Official OpenClaw mobile apps connect automatically after scanning.",
+      waiting: "Official Natesclaw mobile apps connect automatically after scanning.",
       help: "Pairing help",
       manageDevices: "Manage devices",
     },
@@ -678,7 +678,7 @@ export const en: TranslationMap = {
     ownerSession: "Session",
     ownerWorkboard: "Workboard",
     title: "Managed Worktrees",
-    subtitle: "Isolated repository checkouts owned by OpenClaw.",
+    subtitle: "Isolated repository checkouts owned by Natesclaw.",
     cleanNow: "Clean up now",
     name: "Name",
     repo: "Repository",
@@ -700,8 +700,8 @@ export const en: TranslationMap = {
     cloudWorker: "Cloud · {profile}",
     cloudWorkerProvider: "Cloud worker provider: {provider}",
     cloudRequiresWorktree: "Cloud workers require a managed worktree",
-    cloudRequiresOpenClawRuntime:
-      "Cloud workers require the OpenClaw runtime; {runtime} is selected.",
+    cloudRequiresNatesclawRuntime:
+      "Cloud workers require the Natesclaw runtime; {runtime} is selected.",
     cloudRecoveryUnavailable:
       "Cloud workers are unavailable because this connection does not support task recovery. Reconnect or update the Gateway.",
     cloudStartFailed: "The session was created locally, but cloud startup failed: {error}",
@@ -1493,7 +1493,7 @@ export const en: TranslationMap = {
       title: "Push notifications",
       nativeTitle: "Notifications",
       hint: "Receive browser push notifications from your gateway.",
-      nativeHint: "Notifications are shown natively by the OpenClaw app on this Mac.",
+      nativeHint: "Notifications are shown natively by the Natesclaw app on this Mac.",
       unavailableHint: "Not available in this browser.",
       unavailable: "Unavailable",
       checking: "Checking...",
@@ -1518,7 +1518,7 @@ export const en: TranslationMap = {
       blockedHint:
         "Notifications are blocked. Update your browser site permissions to allow notifications.",
       nativeBlockedHint:
-        "Notifications are disabled for OpenClaw in macOS. Allow them in System Settings > Notifications.",
+        "Notifications are disabled for Natesclaw in macOS. Allow them in System Settings > Notifications.",
     },
     appearance: {
       intro: "Theme, chat, and sidebar preferences for this Control UI client.",
@@ -1658,7 +1658,7 @@ export const en: TranslationMap = {
     },
   },
   approvalPage: {
-    brandName: "OpenClaw",
+    brandName: "Natesclaw",
     eyebrow: "Operator approval",
     loadingTitle: "Loading approval",
     loadingDescription: "Checking the current approval state with the Gateway.",
@@ -1667,7 +1667,7 @@ export const en: TranslationMap = {
       "This approval could not be found or this device is not authorized to review it.",
     connectionErrorTitle: "Connection interrupted",
     connectionErrorDescription:
-      "OpenClaw cannot confirm or record a decision while disconnected. Reconnect to check the current status.",
+      "Natesclaw cannot confirm or record a decision while disconnected. Reconnect to check the current status.",
     retry: "Retry",
     execTitle: "Command approval",
     pending: "Waiting for your decision",
@@ -1841,7 +1841,7 @@ export const en: TranslationMap = {
     back: "Back",
     forward: "Forward",
     settings: "Settings",
-    askOpenClaw: "Ask OpenClaw",
+    askNatesclaw: "Ask Natesclaw",
     settingsGroupConnections: "Connections",
     settingsGroupAgents: "Agents & Tools",
     settingsGroupSecurity: "Privacy & Security",
@@ -2010,7 +2010,7 @@ export const en: TranslationMap = {
     devices: "Devices",
     chat: "Chat",
     dashboards: "Dashboards",
-    custodian: "OpenClaw",
+    custodian: "Natesclaw",
     profile: "Profile",
     communications: "Communications",
     appearance: "Appearance",
@@ -2079,15 +2079,15 @@ export const en: TranslationMap = {
   modelSetup: {
     heading: "Connect a verified AI model",
     intro:
-      "OpenClaw checks the AI access available on this Gateway and verifies the exact model before it enables conversations.",
+      "Natesclaw checks the AI access available on this Gateway and verifies the exact model before it enables conversations.",
     required: {
       title: "No AI provider configured",
-      body: "We couldn't find a provider and model configured for this agent. Choose a supported connection; OpenClaw will test it before enabling chat.",
+      body: "We couldn't find a provider and model configured for this agent. Choose a supported connection; Natesclaw will test it before enabling chat.",
       action: "Connect an AI provider",
     },
     connectionFailure: {
       title: "Configured AI needs attention",
-      body: "OpenClaw found the provider and model selected for this agent, but the live check failed. Your configuration is still intact. Review the credential, model access, or provider status, then verify again.",
+      body: "Natesclaw found the provider and model selected for this agent, but the live check failed. Your configuration is still intact. Review the credential, model access, or provider status, then verify again.",
       action: "Review connection",
     },
     loading: "Checking this Gateway for available AI access…",
@@ -2106,7 +2106,7 @@ export const en: TranslationMap = {
     },
     access: {
       adminRequired: "Model setup requires operator.admin access.",
-      gatewayTooOld: "The Gateway is running an older OpenClaw version",
+      gatewayTooOld: "The Gateway is running an older Natesclaw version",
     },
     candidates: {
       title: "Found on this Gateway",
@@ -2154,12 +2154,12 @@ export const en: TranslationMap = {
       accessValuePlaceholder: "Paste an API key or token",
       connect: "Connect",
       connectAndVerify: "Connect & verify",
-      verifyHint: "OpenClaw verifies a real model reply before marking the connection ready.",
+      verifyHint: "Natesclaw verifies a real model reply before marking the connection ready.",
       required: "Choose a provider and enter an API key or token.",
     },
     success: {
       title: "Connection verified",
-      body: "OpenClaw received a real reply from {modelRef}. You can start chatting now.",
+      body: "Natesclaw received a real reply from {modelRef}. You can start chatting now.",
       activeModel: "Active model",
       latency: "Verified in {latencyMs} ms",
       openChat: "Start chatting",
@@ -2239,12 +2239,12 @@ export const en: TranslationMap = {
     confirmDescription: "Copy {count} selected memory files into this agent workspace.",
     confirmReplace:
       "Existing destination files will be backed up in the migration report before replacement.",
-    confirmBackup: "OpenClaw creates a verified pre-import backup before copying memory.",
+    confirmBackup: "Natesclaw creates a verified pre-import backup before copying memory.",
     confirmImport: "Import memory",
     disconnected: "Connect to the gateway to import memory.",
     title: "Import assistant memory",
     subtitle:
-      "Review Codex consolidated memory and Claude Code auto-memory before copying it into OpenClaw.",
+      "Review Codex consolidated memory and Claude Code auto-memory before copying it into Natesclaw.",
     agent: "Destination agent",
     replaceExisting: "Replace existing imports",
     replaceHint: "Preview conflicts again and preserve item backups before replacement.",
@@ -2285,7 +2285,7 @@ export const en: TranslationMap = {
   onboarding: {
     memoryImport: {
       title: "Bring your assistant memory with you",
-      body: "OpenClaw found memory from other coding assistants. Import it into your agent workspace?",
+      body: "Natesclaw found memory from other coding assistants. Import it into your agent workspace?",
       plannedCount: "{count} ready to import",
       alreadyImported: "Already imported: {count}",
       sourceUnavailable: "Source path unavailable",
@@ -2300,35 +2300,35 @@ export const en: TranslationMap = {
       connectionChanged: "Skipped: the Gateway connection changed during the import",
       unknownError: "Request failed",
       doneTitle: "Memory import finished",
-      doneBody: "Migrated {migrated}, skipped {skipped}. You can continue setting up OpenClaw.",
+      doneBody: "Migrated {migrated}, skipped {skipped}. You can continue setting up Natesclaw.",
     },
   },
   custodian: {
-    title: "OpenClaw",
+    title: "Natesclaw",
     subtitle: "Your system setup guide",
     subtitleCaretaker: "System setup and care.",
     exitSetup: "Exit setup",
     newAgent: "New agent",
     hatchDraft: "Wake up, my friend!",
-    placeholder: "Message OpenClaw…",
+    placeholder: "Message Natesclaw…",
     sensitivePlaceholder: "Enter sensitive value…",
     sensitiveReply: "Sensitive reply sent",
     cancel: "Cancel",
     send: "Send",
-    thinking: "OpenClaw is thinking",
+    thinking: "Natesclaw is thinking",
     earlier: "Earlier",
-    requestFailed: "OpenClaw could not reply. Try again.",
+    requestFailed: "Natesclaw could not reply. Try again.",
     connectionChanged: "The Gateway connection changed. Retry to continue this setup.",
     sessionRestarted:
-      "{error} OpenClaw started a fresh session; earlier messages remain for context.",
-    unsupportedGateway: "Update the Gateway to continue setup with OpenClaw.",
+      "{error} Natesclaw started a fresh session; earlier messages remain for context.",
+    unsupportedGateway: "Update the Gateway to continue setup with Natesclaw.",
     panel: {
-      title: "OpenClaw",
-      toggle: "Ask OpenClaw",
-      close: "Close Ask OpenClaw",
-      resize: "Resize Ask OpenClaw",
-      dockBottom: "Dock Ask OpenClaw at bottom",
-      dockRight: "Dock Ask OpenClaw at right",
+      title: "Natesclaw",
+      toggle: "Ask Natesclaw",
+      close: "Close Ask Natesclaw",
+      resize: "Resize Ask Natesclaw",
+      dockBottom: "Dock Ask Natesclaw at bottom",
+      dockRight: "Dock Ask Natesclaw at right",
     },
     history: {
       button: "History",
@@ -2336,7 +2336,7 @@ export const en: TranslationMap = {
       description: "What changed on this system, newest first.",
       loading: "Loading recent changes…",
       empty: "No recorded changes yet.",
-      requestFailed: "OpenClaw could not load change history.",
+      requestFailed: "Natesclaw could not load change history.",
       loadMore: "Load more",
       loadingMore: "Loading more…",
       changedPaths: "Changed paths ({count})",
@@ -2359,9 +2359,9 @@ export const en: TranslationMap = {
       channelDegraded: "{channel} is degraded — ask me what happened",
       channelFallback: "A channel",
       dismiss: "Dismiss this update",
-      channelSetupTitle: "Reach OpenClaw outside this app",
+      channelSetupTitle: "Reach Natesclaw outside this app",
       channelSetupBody:
-        "The web app already works. Add a channel only if you want to message OpenClaw from another service.",
+        "The web app already works. Add a channel only if you want to message Natesclaw from another service.",
       channelSetupAction: "Set up a channel",
       channelSetupDismiss: "Keep using the web app",
     },
@@ -2397,7 +2397,7 @@ export const en: TranslationMap = {
     working: "Working…",
   },
   mcpPage: {
-    intro: "Connect and manage MCP servers that provide tools to OpenClaw.",
+    intro: "Connect and manage MCP servers that provide tools to Natesclaw.",
     connectorsLink: "Discover one-click connectors on the Plugins page.",
     servers: "Servers",
     oauth: "OAuth",
@@ -2448,12 +2448,12 @@ export const en: TranslationMap = {
     },
     gptLive: {
       title: "GPT-Live",
-      hint: "GPT-Live works with a ChatGPT subscription: sign in once with “openclaw models auth login --provider openai”. No Platform API key needed. Browser Talk only. Delegated work can be steered while running and requires exact spoken confirmation for high-impact actions.",
+      hint: "GPT-Live works with a ChatGPT subscription: sign in once with “natesclaw models auth login --provider openai”. No Platform API key needed. Browser Talk only. Delegated work can be steered while running and requires exact spoken confirmation for high-impact actions.",
       ready: "Ready",
     },
   },
   memoryPage: {
-    intro: "Choose how OpenClaw stores, searches, and maintains agent memory.",
+    intro: "Choose how Natesclaw stores, searches, and maintains agent memory.",
     tablistLabel: "Memory sections",
     tabs: {
       overview: "Overview",
@@ -2547,7 +2547,7 @@ export const en: TranslationMap = {
       description:
         "Exactly one memory plugin owns the memory slot. Selecting an engine enables it and disables the others.",
       rowTitle: "Memory engine",
-      openClawMemory: "OpenClaw Memory",
+      NatesclawMemory: "Natesclaw Memory",
       off: "Off",
       unavailable: "Unavailable",
       autoHint: "No engine is pinned in config, so the slot falls back to its default owner.",
@@ -2744,7 +2744,7 @@ export const en: TranslationMap = {
       notes: "Capture notes to Markdown, Obsidian, Notion, or Bear.",
     },
     noInstalledTitle: "No optional plugins installed",
-    noInstalledBody: "Discover a featured plugin or search ClawHub to extend OpenClaw.",
+    noInstalledBody: "Discover a featured plugin or search ClawHub to extend Natesclaw.",
     noInstalledMatchTitle: "No installed plugins match",
     noMatchBody: "Try a different search.",
     filterAll: "All",
@@ -2778,7 +2778,7 @@ export const en: TranslationMap = {
     detailPluginId: "Plugin ID",
     offlineTitle: "Gateway offline",
     offlineBody: "Connect to browse installed and recommended plugins.",
-    optionalCapability: "Optional OpenClaw capability.",
+    optionalCapability: "Optional Natesclaw capability.",
     enabled: "Enabled",
     disabled: "Disabled",
     available: "Available",
@@ -2858,7 +2858,7 @@ export const en: TranslationMap = {
     },
   },
   aboutPage: {
-    productName: "OpenClaw",
+    productName: "Natesclaw",
     tagline: "Your personal AI assistant, running on your own devices.",
     waveHello: "Wave hello to Clawd",
     linksLabel: "Community and resources",
@@ -2868,7 +2868,7 @@ export const en: TranslationMap = {
     linkDiscord: "Discord",
     linkX: "X (Twitter)",
     linkChangelog: "Changelog",
-    license: "© 2026 OpenClaw Foundation — MIT License.",
+    license: "© 2026 Natesclaw Foundation — MIT License.",
     artifactTitle: "Control UI",
     artifactSubtitle: "Identity embedded when this browser artifact was built.",
     artifactDetails: "Control UI build details",
@@ -2886,7 +2886,7 @@ export const en: TranslationMap = {
       "Reported by the active Gateway connection; separate from this Control UI build.",
   },
   appsPage: {
-    heroTitle: "Take OpenClaw everywhere",
+    heroTitle: "Take Natesclaw everywhere",
     heroTagline:
       "Companion apps for your phone, watch, desktop, and browser — plus plugins to extend what your agent can do.",
     sectionMobile: "On your phone",
@@ -2912,11 +2912,11 @@ export const en: TranslationMap = {
     cards: {
       ios: {
         title: "iPhone",
-        desc: "Chat, talk, approve actions, and share into OpenClaw from iOS.",
+        desc: "Chat, talk, approve actions, and share into Natesclaw from iOS.",
       },
       android: {
         title: "Android",
-        desc: "Your Android phone as a full OpenClaw device — chat, camera, and Canvas.",
+        desc: "Your Android phone as a full Natesclaw device — chat, camera, and Canvas.",
       },
       appleWatch: {
         title: "Apple Watch",
@@ -2924,7 +2924,7 @@ export const en: TranslationMap = {
       },
       wearOs: {
         title: "Wear OS",
-        desc: "The Android companion extends OpenClaw to your watch.",
+        desc: "The Android companion extends Natesclaw to your watch.",
       },
       macos: {
         title: "macOS",
@@ -2932,7 +2932,7 @@ export const en: TranslationMap = {
       },
       windows: {
         title: "Windows",
-        desc: "The Windows companion connects your PC as an OpenClaw device.",
+        desc: "The Windows companion connects your PC as an Natesclaw device.",
       },
       linux: {
         title: "Linux",
@@ -2940,11 +2940,11 @@ export const en: TranslationMap = {
       },
       chrome: {
         title: "Chrome extension",
-        desc: "Let OpenClaw drive your existing Chrome — tabs, pages, and forms.",
+        desc: "Let Natesclaw drive your existing Chrome — tabs, pages, and forms.",
       },
       plugins: {
         title: "Plugins & ClawHub",
-        desc: "Extend OpenClaw with channels, tools, and skills from the community.",
+        desc: "Extend Natesclaw with channels, tools, and skills from the community.",
       },
     },
   },
@@ -3154,7 +3154,7 @@ export const en: TranslationMap = {
     selfLearning: {
       pitchTitle: "Turn on self-learning",
       pitchBody:
-        "OpenClaw reviews corrections and substantial completed runs, then applies scanner-approved skills and shows them on this board. Experience review spends extra background tokens.",
+        "Natesclaw reviews corrections and substantial completed runs, then applies scanner-approved skills and shows them on this board. Experience review spends extra background tokens.",
       enable: "Enable self-learning",
       enabling: "Enabling…",
       updateError: "Could not update the self-learning setting.",
@@ -4012,7 +4012,7 @@ export const en: TranslationMap = {
       heading: "Connect a verified AI model",
       signedInNoModels:
         "You're signed in, but this account exposes no usable models. Choose another provider or account to continue.",
-      notConfigured: "Choose a provider and verify the model OpenClaw will use.",
+      notConfigured: "Choose a provider and verify the model Natesclaw will use.",
       noModels: "No models available",
       modelRequired: "Model required",
       chooseProvider: "Choose another provider",
@@ -4367,9 +4367,9 @@ export const en: TranslationMap = {
         summary:
           "The Gateway is reachable, but it needs a matching token or password before this browser can connect.",
         stepPaste:
-          "Paste the token from openclaw gateway auth-token --show or enter the configured password.",
+          "Paste the token from natesclaw gateway auth-token --show or enter the configured password.",
         stepGenerate:
-          "If no token is configured, run openclaw doctor --generate-gateway-token on the gateway host.",
+          "If no token is configured, run natesclaw doctor --generate-gateway-token on the gateway host.",
         stepConnect: "Click Connect again after updating the credential.",
       },
       authFailed: {
@@ -4377,7 +4377,7 @@ export const en: TranslationMap = {
         summary:
           "The supplied credential was rejected. The most common cause is a stale token or a token copied from another Gateway URL.",
         stepDashboard:
-          "Run openclaw dashboard --no-open for a fresh URL, or openclaw gateway auth-token --show to recover the token.",
+          "Run natesclaw dashboard --no-open for a fresh URL, or natesclaw gateway auth-token --show to recover the token.",
         stepReplace:
           "Replace stale token/password values; do not reuse a token from another Gateway URL.",
         stepMode:
@@ -4401,9 +4401,9 @@ export const en: TranslationMap = {
         upgradeSummary:
           "This browser is already known, but the requested access changed and needs a fresh approval.",
         stepDashboard:
-          "On the Gateway host, run openclaw dashboard to open a secure one-time pairing link.",
-        stepList: "Run openclaw devices list on the Gateway host.",
-        stepApproveId: "Approve this request: openclaw devices approve {requestId}.",
+          "On the Gateway host, run natesclaw dashboard to open a secure one-time pairing link.",
+        stepList: "Run natesclaw devices list on the Gateway host.",
+        stepApproveId: "Approve this request: natesclaw devices approve {requestId}.",
         stepApprove: "Approve the pending browser/device request from that list.",
         stepReconnect: "Reconnect after the approval completes.",
       },
@@ -4429,21 +4429,21 @@ export const en: TranslationMap = {
           "The served Control UI and the running Gateway do not agree on the supported connection protocol.",
         refresh: "Refresh page",
         stepDashboard:
-          "Reopen the served dashboard with openclaw dashboard so the UI and Gateway come from the same install.",
+          "Reopen the served dashboard with natesclaw dashboard so the UI and Gateway come from the same install.",
         stepDevUi:
           "If using pnpm ui:dev, rebuild or restart the dev UI against the current checkout.",
         stepRestart:
-          "Restart the Gateway after updating OpenClaw so it serves the current protocol.",
+          "Restart the Gateway after updating Natesclaw so it serves the current protocol.",
       },
       network: {
         title: "Could not connect",
         summary:
           "The browser could not complete the Gateway connection. Check the target and transport before retrying credentials.",
-        stepGateway: "Confirm the Gateway is running with openclaw status or openclaw gateway run.",
+        stepGateway: "Confirm the Gateway is running with natesclaw status or natesclaw gateway run.",
         stepUrl:
           "Check the WebSocket URL and use wss:// when the Gateway is behind HTTPS/Tailscale Serve.",
         stepDashboard:
-          "Reopen the dashboard with openclaw dashboard --no-open to recopy the current URL and auth details.",
+          "Reopen the dashboard with natesclaw dashboard --no-open to recopy the current URL and auth details.",
       },
     },
   },
@@ -4655,7 +4655,7 @@ export const en: TranslationMap = {
       remoteViewOnly: "This session is on a paired device and is view-only.",
       unsupportedViewOnly: "This external session source is view-only.",
       sessionMenu: "External session actions",
-      openInOpenClaw: "Open in OpenClaw",
+      openInNatesclaw: "Open in Natesclaw",
       openInTerminal: "Open in terminal",
       terminalUnavailable: "Terminal opening is unavailable for this session.",
     },
@@ -4721,7 +4721,7 @@ export const en: TranslationMap = {
     followUpModeOverriding: "Overriding server default ({mode})",
     followUpModeReset: "Reset to server default",
     catalogOpenTarget: "Open external sessions in",
-    catalogOpenTargetViewer: "OpenClaw viewer",
+    catalogOpenTargetViewer: "Natesclaw viewer",
     catalogOpenTargetTerminal: "Terminal",
     onboardingDisabled: "Disabled during setup",
     commandPaletteTitle: "Search or jump to… (⌘K)",
@@ -4744,7 +4744,7 @@ export const en: TranslationMap = {
       titleOne: "1 cloud workspace conflict",
       titleMany: "{count} cloud workspace conflicts",
       description:
-        "OpenClaw kept your local versions and applied the other cloud changes. Inspect the staged result or take its version for a conflicted path.",
+        "Natesclaw kept your local versions and applied the other cloud changes. Inspect the staged result or take its version for a conflicted path.",
       morePaths: "+{count} more paths",
       stagedResult: "Staged cloud result",
       copyStagedResult: "Copy staged result ref",
@@ -4755,7 +4755,7 @@ export const en: TranslationMap = {
       commandHelp:
         "Run these in Bash or zsh (Git Bash on Windows). If inspect says the path does not exist, the cloud deleted it; verify and remove the local path manually. If checkout reports a file/directory conflict, move or remove the blocking local path, then retry. If the staged ref is missing, the notice is stale; do not change the local path.",
       commandsUnavailable:
-        "This filename contains terminal control characters, so OpenClaw will not build a copyable shell command for it. Inspect the staged ref directly and enter the path manually with care.",
+        "This filename contains terminal control characters, so Natesclaw will not build a copyable shell command for it. Inspect the staged ref directly and enter the path manually with care.",
       dismiss: "Dismiss workspace conflict notice",
       eventSender: "Cloud workspace",
       eventTitleOne: "Cloud result applied with 1 conflict",
@@ -5283,7 +5283,7 @@ export const en: TranslationMap = {
       checking: "Checking...",
     },
     voice: {
-      asking: "Asking OpenClaw...",
+      asking: "Asking Natesclaw...",
       connecting: "Connecting voice input...",
       listening: "Listening...",
     },
@@ -5533,7 +5533,7 @@ export const en: TranslationMap = {
       filters: "Filters",
       shownOf: "{shown} of {total}",
       emptyTitle: "No automations yet",
-      emptyHint: "Describe what OpenClaw should do and when — it runs on schedule.",
+      emptyHint: "Describe what Natesclaw should do and when — it runs on schedule.",
       noMatching: "No automations match the current filters.",
       loadMore: "Load more",
       loading: "Loading...",
@@ -5599,7 +5599,7 @@ export const en: TranslationMap = {
     detail: {
       tabsLabel: "Automation details",
       newTitle: "New automation",
-      newSubtitle: "Describe what OpenClaw should do, then pick when it runs.",
+      newSubtitle: "Describe what Natesclaw should do, then pick when it runs.",
       back: "All automations",
       settingsTab: "Settings",
       historyTitle: "Run history",
@@ -5672,7 +5672,7 @@ export const en: TranslationMap = {
       descriptionPlaceholder: "Optional context for this task",
       agentPlaceholder: "main or ops",
       agentHelp: "Start typing to pick a known agent, or enter a custom one.",
-      promptPlaceholder: "Describe what OpenClaw should do...",
+      promptPlaceholder: "Describe what Natesclaw should do...",
       repeat: "Repeat",
       repeatInterval: "Interval",
       repeatOnce: "Once",

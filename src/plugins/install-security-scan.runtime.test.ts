@@ -29,12 +29,12 @@ const {
 
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
-function makeTempDir(prefix = "openclaw-install-scan-") {
+function makeTempDir(prefix = "natesclaw-install-scan-") {
   return tempDirs.make(prefix);
 }
 
 async function addEscapingDependencyLink(rootDir: string) {
-  const outsideRoot = makeTempDir("openclaw-install-outside-");
+  const outsideRoot = makeTempDir("natesclaw-install-outside-");
   const dependencyLink = path.join(rootDir, "node_modules", "outside-package");
   await fs.mkdir(path.dirname(dependencyLink), { recursive: true });
   await fs.symlink(outsideRoot, dependencyLink, "junction");
@@ -51,13 +51,13 @@ beforeEach(() => {
 });
 
 describe("install security scan official bypass", () => {
-  it("bypasses plugin install friction for bundled OpenClaw sources", async () => {
+  it("bypasses plugin install friction for bundled Natesclaw sources", async () => {
     const sourceDir = makeTempDir();
     const result = await scanBundleInstallSourceRuntime({
       logger: {},
-      pluginId: "openclaw/kitchen-sink",
+      pluginId: "natesclaw/kitchen-sink",
       sourceDir,
-      source: { kind: "bundled", authority: "openclaw", mutable: false, network: false },
+      source: { kind: "bundled", authority: "natesclaw", mutable: false, network: false },
     });
 
     expect(result).toBeUndefined();
@@ -68,7 +68,7 @@ describe("install security scan official bypass", () => {
     const sourceDir = makeTempDir();
     const result = await scanBundleInstallSourceRuntime({
       logger: {},
-      pluginId: "@openclaw/matrix",
+      pluginId: "@natesclaw/matrix",
       sourceDir,
       source: { kind: "clawhub", authority: "official", mutable: false, network: true },
     });
@@ -77,18 +77,18 @@ describe("install security scan official bypass", () => {
     expectOnlyOperatorPolicyRan();
   });
 
-  it("bypasses skill install friction for bundled OpenClaw sources", async () => {
+  it("bypasses skill install friction for bundled Natesclaw sources", async () => {
     const result = await evaluateSkillInstallPolicyRuntime({
       installId: "node",
       logger: {},
       origin: {
-        type: "openclaw-bundled",
+        type: "natesclaw-bundled",
         skillName: "peekaboo",
         installId: "node",
       },
-      source: { kind: "bundled", authority: "openclaw", mutable: false, network: false },
+      source: { kind: "bundled", authority: "natesclaw", mutable: false, network: false },
       skillName: "peekaboo",
-      sourceDir: "/tmp/openclaw-bundled-skill/peekaboo",
+      sourceDir: "/tmp/natesclaw-bundled-skill/peekaboo",
     });
 
     expect(result).toBeUndefined();
@@ -98,10 +98,10 @@ describe("install security scan official bypass", () => {
   it("runs only operator policy for official immutable npm sources", async () => {
     const result = await preflightPluginNpmInstallPolicyRuntime({
       logger: {},
-      packageName: "@openclaw/matrix",
-      requestedSpecifier: "@openclaw/matrix@latest",
+      packageName: "@natesclaw/matrix",
+      requestedSpecifier: "@natesclaw/matrix@latest",
       source: { kind: "npm", authority: "official", mutable: false, network: true },
-      sourcePath: "/tmp/openclaw-official-npm",
+      sourcePath: "/tmp/natesclaw-official-npm",
       sourcePathKind: "directory",
     });
 
@@ -120,7 +120,7 @@ describe("install security scan official bypass", () => {
     const sourceDir = makeTempDir();
     const result = await scanBundleInstallSourceRuntime({
       logger: {},
-      pluginId: "@openclaw/matrix",
+      pluginId: "@natesclaw/matrix",
       sourceDir,
       source: { kind: "clawhub", authority: "official", mutable: false, network: true },
     });
@@ -141,7 +141,7 @@ describe("install security scan official bypass", () => {
     await expect(
       scanBundleInstallSourceRuntime({
         logger: {},
-        pluginId: "@openclaw/matrix",
+        pluginId: "@natesclaw/matrix",
         sourceDir,
         source: { kind: "clawhub", authority: "official", mutable: false, network: true },
       }),
@@ -158,7 +158,7 @@ describe("install security scan official bypass", () => {
         extensions: ["index.js"],
         logger: {},
         packageDir,
-        pluginId: "@openclaw/matrix",
+        pluginId: "@natesclaw/matrix",
         source: { kind: "npm", authority: "official", mutable: false, network: true },
         trustedSourceLinkedOfficialInstall: true,
       }),
@@ -201,13 +201,13 @@ describe("installed dependency tree scan", () => {
   it("accepts a managed host link declared as a runtime dependency", async () => {
     const npmRoot = makeTempDir();
     const packageDir = path.join(npmRoot, "node_modules", "runtime-plugin");
-    const hostLink = path.join(packageDir, "node_modules", "openclaw");
+    const hostLink = path.join(packageDir, "node_modules", "natesclaw");
     await fs.mkdir(path.dirname(hostLink), { recursive: true });
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
         name: "runtime-plugin",
-        dependencies: { openclaw: "2026.7.1" },
+        dependencies: { natesclaw: "2026.7.1" },
       }),
       "utf8",
     );
@@ -225,21 +225,21 @@ describe("installed dependency tree scan", () => {
     expect(runInstallPolicyMock).toHaveBeenCalledTimes(1);
   });
 
-  it("rejects an openclaw dependency symlink that does not target the trusted host", async () => {
+  it("rejects an natesclaw dependency symlink that does not target the trusted host", async () => {
     const npmRoot = makeTempDir();
-    const outsideRoot = makeTempDir("openclaw-install-outside-");
+    const outsideRoot = makeTempDir("natesclaw-install-outside-");
     const packageDir = path.join(npmRoot, "node_modules", "runtime-plugin");
-    const hostLink = path.join(packageDir, "node_modules", "openclaw");
+    const hostLink = path.join(packageDir, "node_modules", "natesclaw");
     await fs.mkdir(path.dirname(hostLink), { recursive: true });
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
         name: "runtime-plugin",
-        dependencies: { openclaw: "2026.7.1" },
+        dependencies: { natesclaw: "2026.7.1" },
       }),
       "utf8",
     );
-    await fs.writeFile(path.join(outsideRoot, "package.json"), '{"name":"openclaw"}', "utf8");
+    await fs.writeFile(path.join(outsideRoot, "package.json"), '{"name":"natesclaw"}', "utf8");
     await fs.symlink(outsideRoot, hostLink, "junction");
 
     await expect(
@@ -281,7 +281,7 @@ describe("installed dependency tree scan", () => {
 describe("package dependency boundaries", () => {
   it("rejects dependency symlinks outside the staged package", async () => {
     const packageDir = makeTempDir();
-    const outsideRoot = makeTempDir("openclaw-install-outside-");
+    const outsideRoot = makeTempDir("natesclaw-install-outside-");
     const dependencyLink = path.join(packageDir, "node_modules", "outside-package");
     await fs.mkdir(path.dirname(dependencyLink), { recursive: true });
     await fs.symlink(outsideRoot, dependencyLink, "junction");

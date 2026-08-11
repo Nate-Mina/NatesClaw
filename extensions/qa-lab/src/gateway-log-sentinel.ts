@@ -2,7 +2,7 @@
 import {
   isRecord,
   normalizeOptionalString as readNonEmptyString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 type GatewayLogSentinelKind =
   | "plugin-hook-failure"
@@ -21,9 +21,9 @@ type GatewayLogSentinelVerdict =
 
 type GatewayLogSentinelOwner =
   | "plugin"
-  | "openclaw-routing"
+  | "natesclaw-routing"
   | "codex-runtime"
-  | "openclaw-cron"
+  | "natesclaw-cron"
   | "environment";
 
 export type GatewayLogSentinelFinding = {
@@ -101,7 +101,7 @@ const GATEWAY_LOG_SENTINEL_RULES: GatewayLogSentinelRule[] = [
   {
     kind: "cron-model-allowlist",
     verdict: "product-bug",
-    owner: "openclaw-cron",
+    owner: "natesclaw-cron",
     productImpact: "P2",
     qaImpact: "P0",
     test: (line) =>
@@ -262,7 +262,7 @@ function createDirectReplyFinding(): GatewayLogSentinelFinding {
   return {
     kind: "direct-reply-self-message",
     verdict: "product-bug",
-    owner: "openclaw-routing",
+    owner: "natesclaw-routing",
     productImpact: "P1",
     qaImpact: "P0",
     line: 1,

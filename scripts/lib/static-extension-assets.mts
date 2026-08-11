@@ -31,7 +31,7 @@ function readJsonFile(filePath: string, fsImpl: typeof fs) {
 }
 
 function readPackageSection(pkg: Record<string, unknown>, section: "assetScripts" | "build") {
-  return asRecord(asRecord(pkg.openclaw)[section]);
+  return asRecord(asRecord(pkg.natesclaw)[section]);
 }
 
 function normalizePackageRelativePath(value: unknown) {

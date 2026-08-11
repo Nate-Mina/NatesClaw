@@ -1,10 +1,10 @@
 // TTS contract suites provide reusable text-to-speech plugin contract assertions.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ResolvedTtsConfig, SpeechProviderPlugin } from "openclaw/plugin-sdk/speech-core";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ResolvedTtsConfig, SpeechProviderPlugin } from "natesclaw/plugin-sdk/speech-core";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AssistantMessage, Model } from "../../llm/types.js";
 import {
@@ -15,8 +15,8 @@ import {
 import { withEnv, withEnvAsync, withServer } from "../../plugin-sdk/test-env.js";
 import { createLazyRuntimeModule } from "../../shared/lazy-runtime.js";
 
-type TtsRuntimeModule = typeof import("openclaw/plugin-sdk/tts-runtime");
-type TtsCoreModule = typeof import("openclaw/plugin-sdk/speech-core");
+type TtsRuntimeModule = typeof import("natesclaw/plugin-sdk/tts-runtime");
+type TtsCoreModule = typeof import("natesclaw/plugin-sdk/speech-core");
 type SummarizeTextDeps = NonNullable<Parameters<TtsCoreModule["summarizeText"]>[1]>;
 
 let ttsRuntime: TtsRuntimeModule;
@@ -65,7 +65,7 @@ async function withIsolatedSpeechProviderEnvAsync<T>(
   return await withEnvAsync(isolatedSpeechProviderEnv(overrides), fn);
 }
 
-vi.mock("openclaw/plugin-sdk/llm", () => {
+vi.mock("natesclaw/plugin-sdk/llm", () => {
   const getApiProvider = vi.fn(() => undefined);
   return {
     completeSimple: vi.fn(),
@@ -95,12 +95,12 @@ function createResolvedModel(provider: string, modelId: string) {
   };
 }
 
-function asLegacyTtsConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asLegacyTtsConfig(value: unknown): NatesclawConfig {
+  return value as NatesclawConfig;
 }
 
-function asLegacyOpenClawConfig(value: Record<string, unknown>): OpenClawConfig {
-  return value as unknown as OpenClawConfig;
+function asLegacyNatesclawConfig(value: Record<string, unknown>): NatesclawConfig {
+  return value as unknown as NatesclawConfig;
 }
 
 function mockCallAt(mock: { mock: { calls: Array<Array<unknown>> } }, index: number): unknown[] {
@@ -143,7 +143,7 @@ function createSummarizeTextDeps() {
   };
 }
 
-function createOpenAiTelephonyCfg(model: "tts-1" | "gpt-4o-mini-tts"): OpenClawConfig {
+function createOpenAiTelephonyCfg(model: "tts-1" | "gpt-4o-mini-tts"): NatesclawConfig {
   return asLegacyTtsConfig({
     tts: {
       provider: "openai",
@@ -490,7 +490,7 @@ function setupTestSpeechProviderRegistry() {
   setActivePluginRegistry(registry);
 }
 
-function createResolvedSummarizationConfig(cfg: OpenClawConfig): ResolvedTtsConfig {
+function createResolvedSummarizationConfig(cfg: NatesclawConfig): ResolvedTtsConfig {
   const rawConfig = typeof cfg.tts === "object" && cfg.tts !== null ? cfg.tts : {};
   return {
     auto: "off",
@@ -546,7 +546,7 @@ export function describeTtsConfigContract() {
     beforeEach(setupTtsContractTest);
 
     describe("resolveEdgeOutputFormat", () => {
-      const baseCfg: OpenClawConfig = {
+      const baseCfg: NatesclawConfig = {
         agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
         tts: {},
       };
@@ -564,7 +564,7 @@ export function describeTtsConfigContract() {
             tts: {
               edge: { outputFormat: "audio-24khz-96kbitrate-mono-mp3" },
             },
-          } as unknown as OpenClawConfig,
+          } as unknown as NatesclawConfig,
           expected: "audio-24khz-96kbitrate-mono-mp3",
         },
       ] as const)("$name", ({ cfg, expected, name }) => {
@@ -728,7 +728,7 @@ export function describeTtsConfigContract() {
             GOOGLE_API_KEY: undefined,
           },
           () => {
-            const cfg = asLegacyOpenClawConfig({
+            const cfg = asLegacyNatesclawConfig({
               agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
               models: {
                 providers: {
@@ -757,7 +757,7 @@ export function describeTtsConfigContract() {
     describe("resolveTtsConfig provider normalization", () => {
       it("normalizes legacy edge provider ids to microsoft", () => {
         const config = resolveTtsConfig(
-          asLegacyOpenClawConfig({
+          asLegacyNatesclawConfig({
             agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
             tts: {
               provider: "edge",
@@ -776,7 +776,7 @@ export function describeTtsConfigContract() {
     });
 
     describe("resolveTtsConfig – openai.baseUrl", () => {
-      const baseCfg: OpenClawConfig = {
+      const baseCfg: NatesclawConfig = {
         agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
         tts: {},
       };
@@ -799,7 +799,7 @@ export function describeTtsConfigContract() {
           cfg: {
             ...baseCfg,
             tts: { ...baseCfg.tts, openai: { baseUrl: "http://my-server:9000/v1" } },
-          } as unknown as OpenClawConfig,
+          } as unknown as NatesclawConfig,
           env: { OPENAI_TTS_BASE_URL: "http://localhost:8880/v1" },
           expected: "http://my-server:9000/v1",
         },
@@ -811,7 +811,7 @@ export function describeTtsConfigContract() {
               ...baseCfg.tts,
               openai: { baseUrl: "http://my-server:9000/v1///" },
             },
-          } as unknown as OpenClawConfig,
+          } as unknown as NatesclawConfig,
           env: { OPENAI_TTS_BASE_URL: undefined },
           expected: "http://my-server:9000/v1",
         },
@@ -853,7 +853,7 @@ export function describeTtsSummarizationContract() {
   describe("tts summarization contract", () => {
     beforeEach(setupTtsSummarizationTest);
 
-    const baseCfg: OpenClawConfig = {
+    const baseCfg: NatesclawConfig = {
       agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
       tts: {},
     };
@@ -861,7 +861,7 @@ export function describeTtsSummarizationContract() {
     async function runSummarizeText(params?: {
       text?: string;
       targetLength?: number;
-      cfg?: OpenClawConfig;
+      cfg?: NatesclawConfig;
     }) {
       const cfg = params?.cfg ?? baseCfg;
       const config = createResolvedSummarizationConfig(cfg);
@@ -917,7 +917,7 @@ export function describeTtsSummarizationContract() {
     });
 
     it("uses summaryModel override when configured", async () => {
-      const cfg: OpenClawConfig = {
+      const cfg: NatesclawConfig = {
         agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } },
         tts: { summaryModel: "openai/gpt-4.1-mini" },
       };
@@ -1171,7 +1171,7 @@ export function describeTtsProviderRuntimeContract() {
             async (baseUrl) => {
               const result = await ttsRuntime.synthesizeSpeech({
                 text: "hello cancel",
-                cfg: asLegacyOpenClawConfig({
+                cfg: asLegacyNatesclawConfig({
                   agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
                   tts: {
                     provider: "openai",
@@ -1270,7 +1270,7 @@ export function describeTtsProviderRuntimeContract() {
     it.each([
       {
         name: "ordinary synthesis",
-        run: async (cfg: OpenClawConfig, timeoutMs: number) =>
+        run: async (cfg: NatesclawConfig, timeoutMs: number) =>
           await ttsRuntime.textToSpeech({
             text: "Hello from the timeout contract.",
             cfg,
@@ -1280,7 +1280,7 @@ export function describeTtsProviderRuntimeContract() {
       },
       {
         name: "telephony synthesis",
-        run: async (cfg: OpenClawConfig, timeoutMs: number) =>
+        run: async (cfg: NatesclawConfig, timeoutMs: number) =>
           await ttsRuntime.textToSpeechTelephony({
             text: "Hello from the telephony timeout contract.",
             cfg,
@@ -1345,7 +1345,7 @@ export function describeTtsAutoApplyContract() {
     beforeAll(setupTtsRuntime);
     beforeEach(setupTtsContractTest);
 
-    const baseCfg: OpenClawConfig = asLegacyOpenClawConfig({
+    const baseCfg: NatesclawConfig = asLegacyNatesclawConfig({
       agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
       tts: {
         auto: "inbound",
@@ -1359,22 +1359,22 @@ export function describeTtsAutoApplyContract() {
     const withMockedAutoTtsFetch = async (
       run: (fetchMock: ReturnType<typeof vi.fn>) => Promise<void>,
     ) => {
-      const prevPrefs = process.env.OPENCLAW_TTS_PREFS;
-      process.env.OPENCLAW_TTS_PREFS = `/tmp/tts-test-${Date.now()}.json`;
+      const prevPrefs = process.env.NATESCLAW_TTS_PREFS;
+      process.env.NATESCLAW_TTS_PREFS = `/tmp/tts-test-${Date.now()}.json`;
       try {
         await withMockedSpeechFetch(run, 1);
       } finally {
-        process.env.OPENCLAW_TTS_PREFS = prevPrefs;
+        process.env.NATESCLAW_TTS_PREFS = prevPrefs;
       }
     };
 
-    const taggedCfg: OpenClawConfig = {
+    const taggedCfg: NatesclawConfig = {
       ...baseCfg,
       tts: { ...baseCfg.tts, auto: "tagged" },
     };
 
     async function expectAutoTtsOutcome(params: {
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       payload: { text: string };
       inboundAudio?: boolean;
       expectedFetchCalls: number;

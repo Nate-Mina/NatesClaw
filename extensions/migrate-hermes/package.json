@@ -1,26 +1,26 @@
 {
-  "name": "@openclaw/migrate-hermes",
+  "name": "@natesclaw/migrate-hermes",
   "version": "2026.8.1",
   "private": true,
-  "description": "Hermes to OpenClaw migration provider",
+  "description": "Hermes to Natesclaw migration provider",
   "type": "module",
   "dependencies": {
     "dotenv": "17.4.2",
     "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

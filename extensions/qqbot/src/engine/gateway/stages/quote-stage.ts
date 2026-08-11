@@ -10,8 +10,8 @@
 import {
   evaluateSupplementalContextVisibility,
   resolveChannelContextVisibilityMode,
-} from "openclaw/plugin-sdk/context-visibility-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/context-visibility-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { resolveQQBotEffectivePolicies } from "../../access/resolve-policy.js";
 import { normalizeQQBotSenderId } from "../../access/sender-match.js";
 import type { QQBotDmPolicy, QQBotGroupPolicy } from "../../access/types.js";

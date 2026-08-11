@@ -2,15 +2,15 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { AnyAgentTool } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { AnyAgentTool } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   ARCHIVE_LIMIT_ERROR_CODE,
   ArchiveLimitError,
   extractArchive,
   type ArchiveEntryKind,
-} from "openclaw/plugin-sdk/archive";
-import { saveMediaBuffer } from "openclaw/plugin-sdk/media-store";
-import { asBoolean } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/archive";
+import { saveMediaBuffer } from "natesclaw/plugin-sdk/media-store";
+import { asBoolean } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { appendFileTransferAudit } from "../shared/audit.js";
 import { IMAGE_MIME_INLINE_SET, mimeFromExtension } from "../shared/mime.js";
 import { humanSize, readClampedInt } from "../shared/params.js";

@@ -7,14 +7,14 @@ import {
   type ChannelInboundMediaPayload,
   type InboundMediaFacts,
   type MediaPlaceholderTextFact,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { pruneMapToMaxSize } from "openclaw/plugin-sdk/collection-runtime";
-import type { MediaKind } from "openclaw/plugin-sdk/media-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { pruneMapToMaxSize } from "natesclaw/plugin-sdk/collection-runtime";
+import type { MediaKind } from "natesclaw/plugin-sdk/media-runtime";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildMattermostApiUrl,
   fetchMattermostChannel,

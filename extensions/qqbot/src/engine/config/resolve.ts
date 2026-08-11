@@ -13,7 +13,7 @@ import {
   normalizeOptionalString,
   normalizeStringifiedEntries,
   readStringField,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { getPlatformAdapter } from "../adapter/index.js";
 import { readQqbotObjectRecord as asOptionalObjectRecord } from "../object-record.js";
 

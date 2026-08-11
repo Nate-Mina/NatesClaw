@@ -3,9 +3,9 @@
  * dispatch and local Browser control route dispatch.
  */
 import crypto from "node:crypto";
-import { clampTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { clampTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   BROWSER_PROXY_COMMAND,
   BROWSER_PROXY_UPLOAD_COMMAND,

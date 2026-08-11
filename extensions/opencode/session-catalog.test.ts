@@ -3,20 +3,20 @@ import { once } from "node:events";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import type { SessionTranscriptWriteLockContext } from "openclaw/plugin-sdk/session-transcript-runtime";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
+import type { SessionTranscriptWriteLockContext } from "natesclaw/plugin-sdk/session-transcript-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 type ResolveAcpSessionAvailability =
-  (typeof import("openclaw/plugin-sdk/acp-runtime"))["resolveAcpSessionAvailability"];
-type SessionCatalogProvider = Parameters<OpenClawPluginApi["registerSessionCatalog"]>[0];
-type NodeHostCommand = Parameters<OpenClawPluginApi["registerNodeHostCommand"]>[0];
-type NodeInvokePolicy = Parameters<OpenClawPluginApi["registerNodeInvokePolicy"]>[0];
+  (typeof import("natesclaw/plugin-sdk/acp-runtime"))["resolveAcpSessionAvailability"];
+type SessionCatalogProvider = Parameters<NatesclawPluginApi["registerSessionCatalog"]>[0];
+type NodeHostCommand = Parameters<NatesclawPluginApi["registerNodeHostCommand"]>[0];
+type NodeInvokePolicy = Parameters<NatesclawPluginApi["registerNodeInvokePolicy"]>[0];
 type CatalogListParams = Parameters<SessionCatalogProvider["list"]>[0];
 type CatalogReadParams = Parameters<SessionCatalogProvider["read"]>[0];
 type CreateSessionEntryParams = Parameters<
-  OpenClawPluginApi["runtime"]["agent"]["session"]["createSessionEntry"]
+  NatesclawPluginApi["runtime"]["agent"]["session"]["createSessionEntry"]
 >[0];
 
 const nodeHostMocks = vi.hoisted(() => ({
@@ -43,14 +43,14 @@ vi.mock("node:child_process", async (importOriginal) => {
   return { ...actual, spawn: childProcessMocks.spawn };
 });
 
-vi.mock("openclaw/plugin-sdk/acp-runtime", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/acp-runtime")>()),
+vi.mock("natesclaw/plugin-sdk/acp-runtime", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/acp-runtime")>()),
   resolveAcpSessionAvailability: acpRuntimeMocks.resolveAcpSessionAvailability,
 }));
 
-vi.mock("openclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
+vi.mock("natesclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/session-transcript-runtime")>();
+    await importOriginal<typeof import("natesclaw/plugin-sdk/session-transcript-runtime")>();
   return {
     ...actual,
     withSessionTranscriptWriteLock: async (
@@ -75,8 +75,8 @@ vi.mock("openclaw/plugin-sdk/session-transcript-runtime", async (importOriginal)
   };
 });
 
-vi.mock("openclaw/plugin-sdk/node-host", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/node-host")>();
+vi.mock("natesclaw/plugin-sdk/node-host", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/node-host")>();
   return {
     ...actual,
     runNodePtyCommand: nodeHostMocks.runNodePtyCommand,
@@ -118,7 +118,7 @@ const pairedNodeLocator = { hostId: "node:node-1", threadId: "ses_remote" } as c
 const removeDirectory = (directory: string) => fs.rm(directory, { recursive: true, force: true });
 
 function captureOpenCodeSessionRegistrations(
-  pluginConfig: OpenClawPluginApi["pluginConfig"] = {},
+  pluginConfig: NatesclawPluginApi["pluginConfig"] = {},
   overrides: Record<string, unknown> = {},
 ) {
   const catalogs: SessionCatalogProvider[] = [];
@@ -130,8 +130,8 @@ function captureOpenCodeSessionRegistrations(
       pluginConfig,
       runtime: {
         nodes: { list: vi.fn().mockResolvedValue({ nodes: [] }) },
-      } as unknown as OpenClawPluginApi["runtime"],
-      ...(overrides as Partial<OpenClawPluginApi>),
+      } as unknown as NatesclawPluginApi["runtime"],
+      ...(overrides as Partial<NatesclawPluginApi>),
       registerSessionCatalog: (catalog: SessionCatalogProvider) => catalogs.push(catalog),
       registerNodeHostCommand: (command: NodeHostCommand) => commands.push(command),
       registerNodeInvokePolicy: (policy: NodeInvokePolicy) => policies.push(policy),
@@ -263,7 +263,7 @@ async function installFakeOpenCode(
   sessionTitle = "Catalog session",
   toolInput: unknown = { command: "pwd" },
 ): Promise<string> {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-opencode-catalog-"));
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-opencode-catalog-"));
   temporaryDirectories.push(directory);
   const executable = path.join(directory, "opencode");
   const session = {
@@ -325,7 +325,7 @@ if (args[0] === "--pure" && args[1] === "db" && args.includes("--format") && arg
 }
 
 async function installHangingOpenCode(): Promise<void> {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-opencode-stream-"));
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-opencode-stream-"));
   temporaryDirectories.push(directory);
   const executableName = process.platform === "win32" ? "opencode.js" : "opencode";
   await fs.writeFile(
@@ -556,7 +556,7 @@ describe("OpenCode session catalog", () => {
       'Tool call\n\nbash\n{"command":"pwd"}',
       "Tool result\n\n/workspace",
     ]);
-    expect(transcriptMocks.messages[0]?.["__openclaw"]).toEqual({
+    expect(transcriptMocks.messages[0]?.["__natesclaw"]).toEqual({
       mirrorOrigin: "opencode-catalog-import",
     });
   });

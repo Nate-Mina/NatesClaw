@@ -6,22 +6,22 @@
  * to keep the two modes cleanly isolated.
  */
 
-import { toErrorObject } from "openclaw/plugin-sdk/error-runtime";
-import { resolveFetch } from "openclaw/plugin-sdk/fetch-runtime";
+import { toErrorObject } from "natesclaw/plugin-sdk/error-runtime";
+import { resolveFetch } from "natesclaw/plugin-sdk/fetch-runtime";
 import {
   detectMime,
   extractOriginalFilename,
   parseMediaContentLength,
-} from "openclaw/plugin-sdk/media-runtime";
+} from "natesclaw/plugin-sdk/media-runtime";
 import {
   parseStrictNonNegativeInteger,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
 import {
   readResponseTextPrefix,
   readResponseWithLimit,
-} from "openclaw/plugin-sdk/response-limit-runtime";
-import { readRegularFile } from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/response-limit-runtime";
+import { readRegularFile } from "natesclaw/plugin-sdk/security-runtime";
 import WebSocket from "ws";
 
 type ContainerRpcOptions = {

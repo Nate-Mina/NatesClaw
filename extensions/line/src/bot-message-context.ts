@@ -1,6 +1,6 @@
 // Line plugin module implements bot message context behavior.
 import type { webhook } from "@line/bot-sdk";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
+import { recordChannelActivity } from "natesclaw/plugin-sdk/channel-activity-runtime";
 import {
   buildChannelInboundEventContext,
   formatInboundMediaUnavailableText,
@@ -10,19 +10,19 @@ import {
   toInboundMediaFactsWithMetadata,
   toLocationContext,
   type ChannelInboundMediaInput,
-} from "openclaw/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   ensureConfiguredBindingRouteReady,
   resolvePinnedMainDmOwnerFromAllowlist,
   resolveConfiguredBindingRoute,
   resolveRuntimeConversationBindingRoute,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import type { HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import { resolveAgentRoute, resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import type { HistoryEntry } from "natesclaw/plugin-sdk/reply-history";
+import { resolveAgentRoute, resolveInboundLastRouteSessionKey } from "natesclaw/plugin-sdk/routing";
+import { logVerbose, shouldLogVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { normalizeAllowFrom } from "./bot-access.js";
 import { resolveLineGroupConfigEntry } from "./group-keys.js";
 import type { ResolvedLineAccount } from "./types.js";
@@ -41,7 +41,7 @@ interface BuildLineMessageContextParams {
   event: MessageEvent;
   allMedia: MediaRef[];
   mediaUnavailable?: boolean;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedLineAccount;
   commandAuthorized: boolean;
   inboundHistory?: HistoryEntry[];
@@ -91,7 +91,7 @@ function buildPeerId(source: EventSource): string {
 
 async function resolveLineInboundRoute(params: {
   source: EventSource;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedLineAccount;
 }): Promise<{
   userId?: string;
@@ -248,7 +248,7 @@ type LineRouteInfo = ReturnType<typeof resolveAgentRoute>;
 type LineSourceInfoWithPeerId = LineSourceInfo & { peerId: string };
 
 async function finalizeLineInboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedLineAccount;
   event: MessageEvent | PostbackEvent;
   route: LineRouteInfo;
@@ -487,7 +487,7 @@ export async function buildLineMessageContext(params: BuildLineMessageContextPar
 
 export async function buildLinePostbackContext(params: {
   event: PostbackEvent;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedLineAccount;
   commandAuthorized: boolean;
 }) {

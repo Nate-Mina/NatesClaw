@@ -1,4 +1,4 @@
-import { normalizeNullableString as normalizeLabelPart } from "@openclaw/normalization-core/string-coerce";
+import { normalizeNullableString as normalizeLabelPart } from "@natesclaw/normalization-core/string-coerce";
 
 export type SenderIdentity = {
   id?: string;

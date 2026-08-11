@@ -1,9 +1,9 @@
-// Kilocode plugin entrypoint registers its OpenClaw integration.
-import { readConfiguredProviderCatalogEntries } from "openclaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
-import { buildProviderReplayFamilyHooks } from "openclaw/plugin-sdk/provider-model-shared";
+// Kilocode plugin entrypoint registers its Natesclaw integration.
+import { readConfiguredProviderCatalogEntries } from "natesclaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
+import { buildProviderReplayFamilyHooks } from "natesclaw/plugin-sdk/provider-model-shared";
 import { applyKilocodeConfig, KILOCODE_DEFAULT_MODEL_REF } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import { buildKilocodeProvider, buildKilocodeProviderWithDiscovery } from "./provider-catalog.js";
 import { wrapKilocodeProviderStream } from "./stream.js";
 

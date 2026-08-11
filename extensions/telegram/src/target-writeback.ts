@@ -1,20 +1,20 @@
 // Telegram plugin module implements target writeback behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   readConfigFileSnapshotForWrite,
   replaceConfigFile,
-} from "openclaw/plugin-sdk/config-mutation";
+} from "natesclaw/plugin-sdk/config-mutation";
 import {
   loadCronStore,
   resolveCronStorePath,
   saveCronStore,
-} from "openclaw/plugin-sdk/cron-store-runtime";
-import { asObjectRecord } from "openclaw/plugin-sdk/runtime-doctor-migrations";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/cron-store-runtime";
+import { asObjectRecord } from "natesclaw/plugin-sdk/runtime-doctor-migrations";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   normalizeTelegramChatId,
   normalizeTelegramLookupTarget,
@@ -98,7 +98,7 @@ function rewriteTargetIfMatch(params: {
 }
 
 function replaceTelegramDefaultToTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   matchKey: string;
   resolvedTarget: string;
 }): boolean {
@@ -137,7 +137,7 @@ function replaceTelegramDefaultToTargets(params: {
 }
 
 export async function maybePersistResolvedTelegramTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   rawTarget: string;
   resolvedChatId: string;
   verbose?: boolean;

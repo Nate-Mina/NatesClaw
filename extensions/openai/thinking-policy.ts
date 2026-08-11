@@ -2,7 +2,7 @@
 import type {
   ProviderDefaultThinkingPolicyContext,
   ProviderThinkingProfile,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import {
   OPENAI_GPT_53_CODEX_SPARK_MODEL_ID,
   OPENAI_GPT_54_MINI_MODEL_ID,
@@ -106,11 +106,11 @@ function buildOpenAIThinkingProfile(params: {
   const supportsMax =
     modelId.startsWith("gpt-5.6") && (agentRuntime !== "codex" || codexSupportsMax);
   const codexSupportsUltra = (resolvedCodexEfforts ?? knownCodexEfforts)?.includes("ultra");
-  // OpenClaw owns its logical Ultra orchestration. Native Codex capabilities
+  // Natesclaw owns its logical Ultra orchestration. Native Codex capabilities
   // come only from the selected ChatGPT route's catalog metadata.
   const supportsUltra =
     (modelId === OPENAI_GPT_56_MODEL_ID || isGpt56Variant) &&
-    (agentRuntime === "openclaw" ||
+    (agentRuntime === "natesclaw" ||
       agentRuntime === "auto" ||
       (agentRuntime === "codex" && codexSupportsUltra));
   const defaultLevel = isGpt56Variant ? "medium" : undefined;

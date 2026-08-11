@@ -1,23 +1,23 @@
 // Mattermost plugin module implements client behavior.
-import { createChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
-import { collectErrorGraphCandidates } from "openclaw/plugin-sdk/error-runtime";
-import { buildTimeoutAbortSignal } from "openclaw/plugin-sdk/extension-shared";
-import { responseWithRelease } from "openclaw/plugin-sdk/fetch-runtime";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { createChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
+import { collectErrorGraphCandidates } from "natesclaw/plugin-sdk/error-runtime";
+import { buildTimeoutAbortSignal } from "natesclaw/plugin-sdk/extension-shared";
+import { responseWithRelease } from "natesclaw/plugin-sdk/fetch-runtime";
+import { resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
 import {
   readProviderJsonResponse,
   readResponseTextLimited,
-} from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { retryAsync } from "openclaw/plugin-sdk/retry-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
+import { retryAsync } from "natesclaw/plugin-sdk/retry-runtime";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromPrivateNetworkOptIn,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 
 const MATTERMOST_ERROR_BODY_LIMIT_BYTES = 8 * 1024;

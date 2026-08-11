@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import type { SubagentLifecycleHookRunner } from "../../../plugins/hooks.js";
 import {
   isValidAgentId,
@@ -36,7 +36,7 @@ type ResolvedSubagentSpawnRequest = {
   };
   runtime: {
     hookRunner: SubagentLifecycleHookRunner | null;
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     runTimeoutSeconds: number;
     contextMode: ReturnType<typeof resolveSubagentContextMode>;
     requesterInternalKey: string;

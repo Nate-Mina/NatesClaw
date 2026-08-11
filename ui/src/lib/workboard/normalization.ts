@@ -1,4 +1,4 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { normalizeTaskSummary } from "../tasks/task-summary.ts";
 import {
   normalizeEvents,

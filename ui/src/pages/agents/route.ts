@@ -1,5 +1,5 @@
-import type { RouteLocation } from "@openclaw/uirouter";
-import { definePage } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import type { AgentsListResult } from "../../api/types.ts";
 import { routePageSpec } from "../../app-route-paths.ts";
@@ -51,6 +51,6 @@ export const page = definePage({
     import("./agents-page.ts").then(() => ({
       header: true,
       render: (data: AgentsRouteData | undefined) =>
-        html`<openclaw-agents-page .routeData=${data}></openclaw-agents-page>`,
+        html`<natesclaw-agents-page .routeData=${data}></natesclaw-agents-page>`,
     })),
 });

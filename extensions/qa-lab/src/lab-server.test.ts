@@ -30,7 +30,7 @@ vi.mock("./live-transports/cli.js", () => ({
   listLiveTransportQaAdapterFactories: liveTransportMock.listAdapterFactories,
 }));
 
-vi.mock("openclaw/plugin-sdk/qa-channel", () => ({
+vi.mock("natesclaw/plugin-sdk/qa-channel", () => ({
   qaChannelPlugin: {
     config: {
       resolveAccount: qaChannelMock.resolveAccount,
@@ -155,14 +155,14 @@ const captureMock = vi.hoisted(() => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/proxy-capture", () => ({
+vi.mock("natesclaw/plugin-sdk/proxy-capture", () => ({
   acquireDebugProxyCaptureStore: () => ({
     store: captureMock.store,
     release: captureMock.store.close,
   }),
   getDebugProxyCaptureStore: () => captureMock.store,
   resolveDebugProxySettings: () => ({
-    proxyUrl: process.env.OPENCLAW_DEBUG_PROXY_URL ?? "",
+    proxyUrl: process.env.NATESCLAW_DEBUG_PROXY_URL ?? "",
     sessionId: "qa-lab-test",
   }),
 }));
@@ -762,7 +762,7 @@ describe("qa-lab server", () => {
         channelDriver: "live",
         evidenceMode: "slim",
         providerMode: "mock-openai",
-        runtimePair: ["openclaw", "codex"],
+        runtimePair: ["natesclaw", "codex"],
         runtimePairLane: "core",
       }),
     });
@@ -790,7 +790,7 @@ describe("qa-lab server", () => {
         channelId: "telegram",
         evidenceMode: "slim",
         providerMode: "mock-openai",
-        runtimePair: ["openclaw", "codex"],
+        runtimePair: ["natesclaw", "codex"],
       }),
     );
   });
@@ -808,7 +808,7 @@ describe("qa-lab server", () => {
         profile: "all",
         channelDriver: "qa-channel",
         providerMode: "live-frontier",
-        runtimePair: ["openclaw", "codex"],
+        runtimePair: ["natesclaw", "codex"],
         scenarioIds: ["browser-talk-start-stop"],
       }),
     });
@@ -1041,7 +1041,7 @@ describe("qa-lab server", () => {
       path.join(evidenceDir, "qa-evidence.json"),
       `${JSON.stringify(
         {
-          kind: "openclaw.qa.evidence-summary",
+          kind: "natesclaw.qa.evidence-summary",
           schemaVersion: 2,
           generatedAt: "2026-06-17T12:00:00.000Z",
           evidenceMode: "full",
@@ -1193,7 +1193,7 @@ describe("qa-lab server", () => {
       path.join(evidenceDir, "qa-evidence.json"),
       `${JSON.stringify(
         {
-          kind: "openclaw.qa.evidence-summary",
+          kind: "natesclaw.qa.evidence-summary",
           schemaVersion: 2,
           generatedAt: "2026-07-16T00:00:00.000Z",
           evidenceMode: "full",
@@ -1566,7 +1566,7 @@ describe("qa-lab server", () => {
         `  fs.writeFileSync(${JSON.stringify(stoppedPath)}, "terminated", "utf8");`,
         "  process.exit(0);",
         "});",
-        `fs.writeFileSync(${JSON.stringify(markerPath)}, process.env.OPENCLAW_CODEX_DISCOVERY_LIVE || "", "utf8");`,
+        `fs.writeFileSync(${JSON.stringify(markerPath)}, process.env.NATESCLAW_CODEX_DISCOVERY_LIVE || "", "utf8");`,
         "setInterval(() => {}, 1000);",
       ].join("\n"),
       "utf8",
@@ -1707,14 +1707,14 @@ describe("qa-lab server", () => {
       id: "qa-capture-session",
       startedAt: Date.now(),
       mode: "proxy-run",
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
     });
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now(),
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -1734,8 +1734,8 @@ describe("qa-lab server", () => {
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now() + 1,
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -1755,8 +1755,8 @@ describe("qa-lab server", () => {
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now() + 2,
-      sourceScope: "openclaw",
-      sourceProcess: "openclaw",
+      sourceScope: "natesclaw",
+      sourceProcess: "natesclaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",

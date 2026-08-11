@@ -58,7 +58,7 @@ describe("CustodianSessionStore", () => {
       .mockRejectedValueOnce(
         new GatewayRequestError({
           code: "UNAVAILABLE",
-          message: "OpenClaw requires working inference: no configured model",
+          message: "Natesclaw requires working inference: no configured model",
           details: { code: "system_agent_inference_unavailable" },
         }),
       )
@@ -84,7 +84,7 @@ describe("CustodianSessionStore", () => {
 
   it("shows setup before starting chat when the default agent has no model", async () => {
     const request = vi.fn();
-    const { context } = createContext(request, ["openclaw.chat"], {
+    const { context } = createContext(request, ["natesclaw.chat"], {
       agentsList: {
         defaultId: "main",
         mainKey: "main",

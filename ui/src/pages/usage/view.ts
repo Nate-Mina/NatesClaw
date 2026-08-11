@@ -520,21 +520,21 @@ export function renderUsage(props: UsageProps) {
                     switch (event.detail.item.value) {
                       case "sessions-csv":
                         downloadTextFile(
-                          `openclaw-usage-sessions-${exportStamp}.csv`,
+                          `natesclaw-usage-sessions-${exportStamp}.csv`,
                           buildSessionsCsv(filteredSessions),
                           "text/csv",
                         );
                         break;
                       case "daily-csv":
                         downloadTextFile(
-                          `openclaw-usage-daily-${exportStamp}.csv`,
+                          `natesclaw-usage-daily-${exportStamp}.csv`,
                           buildDailyCsv(filteredDaily),
                           "text/csv",
                         );
                         break;
                       case "json":
                         downloadTextFile(
-                          `openclaw-usage-${exportStamp}.json`,
+                          `natesclaw-usage-${exportStamp}.json`,
                           JSON.stringify(
                             {
                               totals: displayTotals,
@@ -726,7 +726,7 @@ export function renderUsage(props: UsageProps) {
                         return html`
                           <span class="usage-query-chip">
                             ${label}
-                            <openclaw-tooltip .content=${t("usage.filters.remove")}>
+                            <natesclaw-tooltip .content=${t("usage.filters.remove")}>
                               <button
                                 aria-label=${t("usage.filters.remove")}
                                 @click=${() =>
@@ -736,7 +736,7 @@ export function renderUsage(props: UsageProps) {
                               >
                                 ×
                               </button>
-                            </openclaw-tooltip>
+                            </natesclaw-tooltip>
                           </span>
                         `;
                       })}

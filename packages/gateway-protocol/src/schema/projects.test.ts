@@ -13,9 +13,9 @@ describe("project protocol schemas", () => {
   it("validates project method inputs as closed objects", () => {
     expect(validateProjectsListParams({})).toBe(true);
     expect(validateProjectsListParams({ extra: true })).toBe(false);
-    expect(validateProjectsRegisterParams({ path: "/repo", name: "OpenClaw" })).toBe(true);
+    expect(validateProjectsRegisterParams({ path: "/repo", name: "Natesclaw" })).toBe(true);
     expect(validateProjectsRegisterParams({ path: "" })).toBe(false);
-    expect(validateProjectsRemoveParams({ id: "openclaw-2" })).toBe(true);
+    expect(validateProjectsRemoveParams({ id: "natesclaw-2" })).toBe(true);
     expect(validateProjectsRemoveParams({ id: "workspace:main" })).toBe(false);
   });
 
@@ -23,7 +23,7 @@ describe("project protocol schemas", () => {
     expect(
       Value.Check(ProjectRecordSchema, {
         id: "workspace:main",
-        displayName: "openclaw",
+        displayName: "natesclaw",
         source: "workspace",
         agentId: "main",
       }),
@@ -32,10 +32,10 @@ describe("project protocol schemas", () => {
       Value.Check(ProjectsListResultSchema, {
         projects: [
           {
-            id: "openclaw",
-            displayName: "OpenClaw",
-            repoRoot: "/repo/openclaw",
-            originUrl: "https://github.com/openclaw/openclaw.git",
+            id: "natesclaw",
+            displayName: "Natesclaw",
+            repoRoot: "/repo/natesclaw",
+            originUrl: "https://github.com/natesclaw/natesclaw.git",
             source: "registered",
           },
         ],
@@ -44,7 +44,7 @@ describe("project protocol schemas", () => {
   });
 
   it("accepts projectId as an additive sessions.create parameter", () => {
-    expect(validateSessionsCreateParams({ agentId: "main", projectId: "openclaw" })).toBe(true);
+    expect(validateSessionsCreateParams({ agentId: "main", projectId: "natesclaw" })).toBe(true);
     expect(validateSessionsCreateParams({ agentId: "main", projectId: "" })).toBe(false);
   });
 });

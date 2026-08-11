@@ -1,18 +1,18 @@
-import { createChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { createChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createEmptyPluginRegistry,
   withPluginRuntimeRegistryScope,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
-import { registerPluginCommand } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolveChunkMode } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
-import type { SessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { getAgentScopedMediaLocalRoots } from "natesclaw/plugin-sdk/media-runtime";
+import { registerPluginCommand } from "natesclaw/plugin-sdk/plugin-runtime";
+import { resolveChunkMode } from "natesclaw/plugin-sdk/reply-dispatch-runtime";
+import { resolveThreadSessionKeys } from "natesclaw/plugin-sdk/routing";
+import type { ResolvedAgentRoute } from "natesclaw/plugin-sdk/routing";
+import type { SessionEntry } from "natesclaw/plugin-sdk/session-store-runtime";
 // Telegram tests cover bot native commands.session meta plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { RegisterTelegramHandlerParams } from "./bot-handlers.types.js";
 import type { TelegramNativeCommandDeps } from "./bot-native-command-deps.runtime.js";
@@ -28,25 +28,25 @@ import { runWithTelegramUpdateProcessingFrame } from "./bot-processing-outcome.j
 // All mocks scoped to this file only — does not affect bot-native-commands.test.ts
 
 type ResolveConfiguredBindingRouteFn =
-  typeof import("openclaw/plugin-sdk/conversation-runtime").resolveConfiguredBindingRoute;
+  typeof import("natesclaw/plugin-sdk/conversation-runtime").resolveConfiguredBindingRoute;
 type EnsureConfiguredBindingRouteReadyFn =
-  typeof import("openclaw/plugin-sdk/conversation-runtime").ensureConfiguredBindingRouteReady;
+  typeof import("natesclaw/plugin-sdk/conversation-runtime").ensureConfiguredBindingRouteReady;
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("openclaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("natesclaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyWithBufferedBlockDispatcherParams =
   Parameters<DispatchReplyWithBufferedBlockDispatcherFn>[0];
 type DispatchReplyWithBufferedBlockDispatcherResult = Awaited<
   ReturnType<DispatchReplyWithBufferedBlockDispatcherFn>
 >;
 type DispatchChannelInboundTurnFn =
-  typeof import("openclaw/plugin-sdk/channel-inbound").dispatchChannelInboundTurn;
+  typeof import("natesclaw/plugin-sdk/channel-inbound").dispatchChannelInboundTurn;
 type ResolveCommandArgMenuFn =
-  typeof import("openclaw/plugin-sdk/command-auth-native").resolveCommandArgMenu;
+  typeof import("natesclaw/plugin-sdk/command-auth-native").resolveCommandArgMenu;
 type DeliverRepliesFn = typeof import("./bot/delivery.js").deliverReplies;
 type DeliverRepliesParams = Parameters<DeliverRepliesFn>[0];
-type LoadModelCatalogFn = typeof import("openclaw/plugin-sdk/agent-runtime").loadModelCatalog;
+type LoadModelCatalogFn = typeof import("natesclaw/plugin-sdk/agent-runtime").loadModelCatalog;
 type ResolveDefaultModelForAgentFn =
-  typeof import("openclaw/plugin-sdk/agent-runtime").resolveDefaultModelForAgent;
+  typeof import("natesclaw/plugin-sdk/agent-runtime").resolveDefaultModelForAgent;
 
 const dispatchReplyResult: DispatchReplyWithBufferedBlockDispatcherResult = {
   queuedFinal: false,
@@ -155,9 +155,9 @@ const conversationStoreMocks = vi.hoisted(() => ({
   upsertChannelPairingRequest: vi.fn(async () => ({ code: "PAIRCODE", created: true })),
 }));
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/conversation-runtime")>(
-    "openclaw/plugin-sdk/conversation-runtime",
+vi.mock("natesclaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/conversation-runtime")>(
+    "natesclaw/plugin-sdk/conversation-runtime",
   );
   return {
     ...actual,
@@ -195,7 +195,7 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
     ensureConfiguredBindingRouteReady: persistentBindingMocks.ensureConfiguredBindingRouteReady,
     recordInboundSessionMetaSafe: vi.fn(
       async (params: {
-        cfg: OpenClawConfig;
+        cfg: NatesclawConfig;
         agentId: string;
         sessionKey: string;
         ctx: unknown;
@@ -227,9 +227,9 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
     }),
   };
 });
-vi.mock("openclaw/plugin-sdk/session-store-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/session-store-runtime")>(
-    "openclaw/plugin-sdk/session-store-runtime",
+vi.mock("natesclaw/plugin-sdk/session-store-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/session-store-runtime")>(
+    "natesclaw/plugin-sdk/session-store-runtime",
   );
   return {
     ...actual,
@@ -239,9 +239,9 @@ vi.mock("openclaw/plugin-sdk/session-store-runtime", async () => {
     updateSessionStoreEntry: sessionMocks.updateSessionStoreEntry,
   };
 });
-vi.mock("openclaw/plugin-sdk/command-auth-native", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/command-auth-native")>(
-    "openclaw/plugin-sdk/command-auth-native",
+vi.mock("natesclaw/plugin-sdk/command-auth-native", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/command-auth-native")>(
+    "natesclaw/plugin-sdk/command-auth-native",
   );
   commandAuthMocks.resolveCommandArgMenu.mockImplementation(actual.resolveCommandArgMenu);
   return {
@@ -249,9 +249,9 @@ vi.mock("openclaw/plugin-sdk/command-auth-native", async () => {
     resolveCommandArgMenu: commandAuthMocks.resolveCommandArgMenu,
   };
 });
-vi.mock("openclaw/plugin-sdk/agent-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/agent-runtime")>(
-    "openclaw/plugin-sdk/agent-runtime",
+vi.mock("natesclaw/plugin-sdk/agent-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/agent-runtime")>(
+    "natesclaw/plugin-sdk/agent-runtime",
   );
   agentRuntimeMocks.resolveDefaultModelForAgent.mockImplementation(
     actual.resolveDefaultModelForAgent,
@@ -270,7 +270,7 @@ vi.mock("./bot-native-commands.runtime.js", () => {
     getSessionEntry: sessionMocks.getSessionEntry,
     recordInboundSessionMetaSafe: vi.fn(
       async (params: {
-        cfg: OpenClawConfig;
+        cfg: NatesclawConfig;
         agentId: string;
         sessionKey: string;
         ctx: unknown;
@@ -315,8 +315,8 @@ type TelegramPluginCommandSpecs = Array<{
 type TelegramLoginFlow = NonNullable<TelegramNativeCommandDeps["runModelsAuthLoginFlow"]>;
 
 function registerAndResolveStatusHandler(params: {
-  cfg: OpenClawConfig;
-  runtimeCfg?: OpenClawConfig;
+  cfg: NatesclawConfig;
+  runtimeCfg?: NatesclawConfig;
   allowFrom?: string[];
   groupAllowFrom?: string[];
   storeAllowFrom?: string[];
@@ -349,8 +349,8 @@ function registerAndResolveStatusHandler(params: {
 
 function registerAndResolveCommandHandlerBase(params: {
   commandName: string;
-  cfg: OpenClawConfig;
-  runtimeCfg?: OpenClawConfig;
+  cfg: NatesclawConfig;
+  runtimeCfg?: NatesclawConfig;
   allowFrom: string[];
   groupAllowFrom: string[];
   storeAllowFrom?: string[];
@@ -432,7 +432,7 @@ function registerAndResolveCommandHandlerBase(params: {
 
 function registerAndResolveCommandHandler(params: {
   commandName: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   allowFrom?: string[];
   groupAllowFrom?: string[];
   storeAllowFrom?: string[];
@@ -699,7 +699,7 @@ function resetSessionMetaMocks() {
     return patch ? { ...current, ...patch } : current;
   });
   sessionMocks.recordSessionMetaFromInbound.mockClear().mockResolvedValue(undefined);
-  sessionMocks.resolveStorePath.mockClear().mockReturnValue("/tmp/openclaw-sessions.json");
+  sessionMocks.resolveStorePath.mockClear().mockReturnValue("/tmp/natesclaw-sessions.json");
   pluginRuntimeMocks.executePluginCommand.mockClear().mockResolvedValue({ text: "ok" });
   activePluginRegistry = createEmptyPluginRegistry();
   replyMocks.dispatchReplyWithBufferedBlockDispatcher
@@ -735,14 +735,14 @@ describe("registerTelegramNativeCommands — session metadata", () => {
         handler: shadowHandler,
       },
     });
-    const cfg: OpenClawConfig = {};
+    const cfg: NatesclawConfig = {};
     const { handler } = registerAndResolveStatusHandler({ cfg });
     await handler(createTelegramPrivateCommandContext());
 
     expect(sessionMocks.recordSessionMetaFromInbound).toHaveBeenCalledTimes(1);
     expect(shadowHandler).not.toHaveBeenCalled();
     const turnPlan = dispatchChannelInboundTurnMock.mock.calls[0]?.[0];
-    expect(turnPlan?.replyOptions?.[Symbol.for("openclaw.pluginCommandDispatch") as never]).toEqual(
+    expect(turnPlan?.replyOptions?.[Symbol.for("natesclaw.pluginCommandDispatch") as never]).toEqual(
       { kind: "non-plugin" },
     );
     const call = (
@@ -790,8 +790,8 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("keeps one live config snapshot through native command execution", async () => {
-    const startupCfg: OpenClawConfig = { session: { store: "/tmp/startup-sessions.json" } };
-    const runtimeCfg: OpenClawConfig = { session: { store: "/tmp/runtime-sessions.json" } };
+    const startupCfg: NatesclawConfig = { session: { store: "/tmp/startup-sessions.json" } };
+    const runtimeCfg: NatesclawConfig = { session: { store: "/tmp/runtime-sessions.json" } };
     const { handler } = registerAndResolveStatusHandler({ cfg: startupCfg, runtimeCfg });
 
     await handler(createTelegramPrivateCommandContext());
@@ -818,7 +818,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
             streaming: { block: { enabled: blockStreamingEnabled } },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies NatesclawConfig;
       const { handler } = registerAndResolveStatusHandler({ cfg });
 
       await handler(createTelegramPrivateCommandContext());
@@ -848,7 +848,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -875,7 +875,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       "thinking menu call",
     );
     expect(sessionMocks.getSessionEntry).toHaveBeenCalledWith({
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/natesclaw-sessions.json",
       sessionKey: "agent:main:main",
     });
     expectSendMessageCall({
@@ -890,7 +890,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
   it.each([
     { sessionRuntime: undefined, expectedRuntime: "codex" },
-    { sessionRuntime: "openclaw", expectedRuntime: "openclaw" },
+    { sessionRuntime: "natesclaw", expectedRuntime: "natesclaw" },
   ])(
     "uses the effective $expectedRuntime runtime for native /think menus",
     async ({ sessionRuntime, expectedRuntime }) => {
@@ -902,7 +902,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       sessionMocks.loadSessionStore.mockReturnValue({
         "agent:main:main": {
           providerOverride: "openai",
@@ -938,7 +938,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   it("resolves /think menu choices against the runtime catalog for live-discovered models", async () => {
     const cfg = {
       agents: { defaults: { models: { "ollama/*": {} } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "ollama",
@@ -974,7 +974,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   it("loads the runtime catalog for /think when no session model override is set", async () => {
     const cfg = {
       agents: { defaults: { model: "ollama/glm-5.2:cloud", models: { "ollama/*": {} } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({});
     const runtimeCatalog = [
       { provider: "ollama", id: "glm-5.2:cloud", name: "glm-5.2:cloud", reasoning: true },
@@ -998,7 +998,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("inherits the parent session model when building DM thread native argument menus", async () => {
-    const cfg: OpenClawConfig = {};
+    const cfg: NatesclawConfig = {};
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -1041,7 +1041,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           thinkingDefault: "medium",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -1090,7 +1090,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         modelProvider: "openai-codex",
@@ -1143,7 +1143,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           model: { primary: "anthropic/claude-opus-4-8" },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({});
     agentRuntimeMocks.loadModelCatalog.mockImplementation(async (params) => {
       if (!params?.readOnly) {
@@ -1198,7 +1198,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -1244,7 +1244,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({});
 
     const { handler, sendMessage } = registerAndResolveCommandHandler({
@@ -1281,7 +1281,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
     const deferred = createDeferred<void>();
     sessionMocks.recordSessionMetaFromInbound.mockReturnValue(deferred.promise);
 
-    const cfg: OpenClawConfig = {};
+    const cfg: NatesclawConfig = {};
     const { handler } = registerAndResolveStatusHandler({ cfg });
     const runPromise = handler(createTelegramPrivateCommandContext());
 
@@ -1962,7 +1962,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("passes persisted topic session identity to plugin commands", async () => {
-    sessionMocks.resolveStorePath.mockReturnValue("/tmp/openclaw-sessions/sessions.json");
+    sessionMocks.resolveStorePath.mockReturnValue("/tmp/natesclaw-sessions/sessions.json");
     sessionMocks.getSessionEntry.mockReturnValue({
       authProfileOverride: "openai:owner@example.com",
       sessionId: "sess-topic",
@@ -1978,7 +1978,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
     const { handler } = registerAndResolveCommandHandler({
       commandName: "plugin_meta",
-      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as OpenClawConfig,
+      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as NatesclawConfig,
       groupAllowFrom: ["-1001234567890"],
       pluginCommandSpecs: [
         {
@@ -2033,7 +2033,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       commandName: "login",
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       allowFrom: ["200"],
       runModelsAuthLoginFlow,
     });
@@ -2055,7 +2055,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
     await vi.waitFor(() =>
       expect(sessionMocks.updateSessionStoreEntry).toHaveBeenCalledWith({
         sessionKey: "agent:main:main",
-        storePath: "/tmp/openclaw-sessions.json",
+        storePath: "/tmp/natesclaw-sessions.json",
         requireWriteSuccess: true,
         skipMaintenance: true,
         update: expect.any(Function),
@@ -2106,7 +2106,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       commandName: "login",
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       allowFrom: ["200"],
       runModelsAuthLoginFlow,
     });
@@ -2165,7 +2165,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       commandName: "login",
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       allowFrom: ["200"],
       runModelsAuthLoginFlow,
     });
@@ -2215,7 +2215,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       commandName: "login",
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       allowFrom: ["200"],
       runModelsAuthLoginFlow,
     });
@@ -2269,7 +2269,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       commandName: "login",
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       allowFrom: ["200"],
       runModelsAuthLoginFlow,
     });
@@ -2298,7 +2298,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       commandName: "login",
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       allowFrom: ["200"],
       runModelsAuthLoginFlow,
     });
@@ -2345,7 +2345,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       commandName: "login",
       cfg: {
         commands: { native: true, ownerAllowFrom: ["200"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       allowFrom: ["200"],
       runModelsAuthLoginFlow,
     });
@@ -2365,7 +2365,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("passes session identity to plugin commands when the entry has no file", async () => {
-    sessionMocks.resolveStorePath.mockReturnValue("/tmp/openclaw-sessions/sessions.json");
+    sessionMocks.resolveStorePath.mockReturnValue("/tmp/natesclaw-sessions/sessions.json");
     sessionMocks.getSessionEntry.mockReturnValue({
       sessionId: "sess-main",
       updatedAt: 1,
@@ -2373,7 +2373,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
     const { handler } = registerAndResolveCommandHandler({
       commandName: "plugin_meta",
-      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as OpenClawConfig,
+      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as NatesclawConfig,
       pluginCommandSpecs: [
         {
           name: "plugin_meta",
@@ -2389,14 +2389,14 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       {
         sessionKey: "agent:main:main",
         sessionId: "sess-main",
-        sessionFile: "sqlite:main:sess-main:/tmp/openclaw-sessions/sessions.json",
+        sessionFile: "sqlite:main:sess-main:/tmp/natesclaw-sessions/sessions.json",
       },
       "plugin command params",
     );
   });
 
   it("passes SQLite transcript markers to plugin commands without path resolution", async () => {
-    const storePath = "/tmp/openclaw-sessions/sessions.json";
+    const storePath = "/tmp/natesclaw-sessions/sessions.json";
     const marker = `sqlite:main:sess-main:${storePath}`;
     sessionMocks.resolveStorePath.mockReturnValue(storePath);
     sessionMocks.getSessionEntry.mockReturnValue({
@@ -2407,7 +2407,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
     const { handler } = registerAndResolveCommandHandler({
       commandName: "plugin_meta",
-      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as OpenClawConfig,
+      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as NatesclawConfig,
       pluginCommandSpecs: [
         {
           name: "plugin_meta",
@@ -2430,7 +2430,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("replaces stale legacy transcript paths for plugin commands", async () => {
-    const storePath = "/tmp/openclaw-sessions/sessions.json";
+    const storePath = "/tmp/natesclaw-sessions/sessions.json";
     const marker = `sqlite:main:sess-main:${storePath}`;
     sessionMocks.resolveStorePath.mockReturnValue(storePath);
     sessionMocks.getSessionEntry.mockReturnValue({
@@ -2441,7 +2441,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
     const { handler } = registerAndResolveCommandHandler({
       commandName: "plugin_meta",
-      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as OpenClawConfig,
+      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as NatesclawConfig,
       pluginCommandSpecs: [
         {
           name: "plugin_meta",
@@ -2468,7 +2468,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
     const { handler } = registerAndResolveCommandHandler({
       commandName: "plugin_meta",
-      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as OpenClawConfig,
+      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as NatesclawConfig,
       pluginCommandSpecs: [
         {
           name: "plugin_meta",

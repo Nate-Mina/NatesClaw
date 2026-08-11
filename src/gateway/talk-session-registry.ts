@@ -26,11 +26,11 @@ type UnifiedTalkSessionRecord =
     };
 
 const unifiedTalkSessions = resolveGlobalMap<string, UnifiedTalkSessionRecord>(
-  Symbol.for("openclaw.unifiedTalkSessions"),
+  Symbol.for("natesclaw.unifiedTalkSessions"),
   "close-and-restart",
 );
 const talkConnectionCleanups = resolveGlobalMap<string, Map<TalkConnectionCleanupKind, () => void>>(
-  Symbol.for("openclaw.talkConnectionCleanups"),
+  Symbol.for("natesclaw.talkConnectionCleanups"),
   "close-and-restart",
 );
 

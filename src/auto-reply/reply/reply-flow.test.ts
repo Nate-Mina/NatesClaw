@@ -1,7 +1,7 @@
 // Tests high-level reply flow decisions across commands and agent dispatch.
 import { describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../test/helpers/promise.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { HEARTBEAT_TOKEN, SILENT_REPLY_TOKEN } from "../tokens.js";
 import {
   composeReplyDispatchBeforeDeliver,
@@ -37,7 +37,7 @@ describe("createReplyDispatcher", () => {
 
   it("drops exact NO_REPLY final payloads for direct sessions", async () => {
     const deliver = vi.fn().mockResolvedValue(undefined);
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: {
           silentReply: {
@@ -64,7 +64,7 @@ describe("createReplyDispatcher", () => {
 
   it("still drops exact NO_REPLY final payloads for group sessions where silence is allowed", async () => {
     const deliver = vi.fn().mockResolvedValue(undefined);
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: {
           silentReply: {

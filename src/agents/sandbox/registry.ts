@@ -6,11 +6,11 @@
 import fsSync from "node:fs";
 import type { Insertable, Selectable, Updateable } from "kysely";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import { withOpenClawStateDatabaseReadOnly } from "../../state/openclaw-state-db-readonly.js";
-import { tableExists } from "../../state/openclaw-state-db-schema-helpers.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
-import { runOpenClawStateWriteTransaction } from "../../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../../state/openclaw-state-db.paths.js";
+import { withNatesclawStateDatabaseReadOnly } from "../../state/natesclaw-state-db-readonly.js";
+import { tableExists } from "../../state/natesclaw-state-db-schema-helpers.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../../state/natesclaw-state-db.generated.js";
+import { runNatesclawStateWriteTransaction } from "../../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../../state/natesclaw-state-db.paths.js";
 import type { SandboxContainerEngineTarget } from "./container-engine.js";
 
 export type SandboxRegistryEntry = {
@@ -47,8 +47,8 @@ type SandboxBrowserRegistry = {
 
 type RegistryEntryPayload = { containerName: string } & Record<string, unknown>;
 type SandboxRegistryKind = "container" | "browser";
-type SandboxRegistryTable = OpenClawStateKyselyDatabase["sandbox_registry_entries"];
-type SandboxRegistryDatabase = Pick<OpenClawStateKyselyDatabase, "sandbox_registry_entries">;
+type SandboxRegistryTable = NatesclawStateKyselyDatabase["sandbox_registry_entries"];
+type SandboxRegistryDatabase = Pick<NatesclawStateKyselyDatabase, "sandbox_registry_entries">;
 type SandboxRegistryRow = Selectable<SandboxRegistryTable>;
 type SandboxRegistryInsert = Insertable<SandboxRegistryTable>;
 type SandboxRegistryUpdate = Updateable<SandboxRegistryTable>;
@@ -181,11 +181,11 @@ function readRegistryRows(
   kind: SandboxRegistryKind,
   filter?: { backendId: string; scopeKey: string },
 ): SandboxRegistryRow[] {
-  if (!fsSync.existsSync(resolveOpenClawStateSqlitePath(process.env))) {
+  if (!fsSync.existsSync(resolveNatesclawStateSqlitePath(process.env))) {
     return [];
   }
   // CLI reads must not join the Gateway's writable SQLite lifecycle (#101290).
-  return withOpenClawStateDatabaseReadOnly(({ db }) => {
+  return withNatesclawStateDatabaseReadOnly(({ db }) => {
     if (!tableExists(db, "sandbox_registry_entries")) {
       return [];
     }
@@ -212,11 +212,11 @@ function readRegistryRow(
   kind: SandboxRegistryKind,
   containerName: string,
 ): SandboxRegistryRow | null {
-  if (!fsSync.existsSync(resolveOpenClawStateSqlitePath(process.env))) {
+  if (!fsSync.existsSync(resolveNatesclawStateSqlitePath(process.env))) {
     return null;
   }
   // CLI reads must not join the Gateway's writable SQLite lifecycle (#101290).
-  return withOpenClawStateDatabaseReadOnly(({ db }) => {
+  return withNatesclawStateDatabaseReadOnly(({ db }) => {
     if (!tableExists(db, "sandbox_registry_entries")) {
       return null;
     }
@@ -236,7 +236,7 @@ function readRegistryRow(
 }
 
 function insertRegistryRowIfMissing(row: SandboxRegistryInsert): void {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const stateDb = getSandboxRegistryKysely(db);
     executeSqliteQuerySync(
       db,
@@ -286,7 +286,7 @@ function readRegistryRowFromDb(
 }
 
 function removeRegistryRow(kind: SandboxRegistryKind, containerName: string): void {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const stateDb = getSandboxRegistryKysely(db);
     executeSqliteQuerySync(
       db,
@@ -344,7 +344,7 @@ export function insertSandboxRegistryEntryIfMissing(entry: SandboxRegistryEntry)
 
 /** Creates or updates one sandbox runtime registry entry, preserving immutable creation fields. */
 export async function updateRegistry(entry: SandboxRegistryEntry) {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const existingRow = readRegistryRowFromDb(db, "container", entry.containerName);
     const existing = existingRow ? rowToContainerEntry(existingRow) : null;
     insertRegistryRow(db, containerEntryToRow(entry, existing));
@@ -374,7 +374,7 @@ export function insertSandboxBrowserRegistryEntryIfMissing(
 
 /** Creates or updates one browser sandbox registry entry, preserving immutable creation fields. */
 export async function updateBrowserRegistry(entry: SandboxBrowserRegistryEntry) {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const existingRow = readRegistryRowFromDb(db, "browser", entry.containerName);
     const existing = existingRow ? rowToBrowserEntry(existingRow) : null;
     insertRegistryRow(db, browserEntryToRow(entry, existing));

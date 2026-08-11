@@ -10,10 +10,10 @@ const suite = createControlUiE2eSuite({
   name: "Control UI guarded config writes mocked Gateway E2E",
   startServerBeforeBrowser: true,
   unavailableMessage: (executablePath) =>
-    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
 });
 
-const captureUiProofEnabled = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
+const captureUiProofEnabled = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
 const uiProofArtifactDir = path.join(
   process.cwd(),
   ".artifacts",
@@ -181,7 +181,7 @@ suite.define(() => {
           message: "config changed since last load; re-run config.get and retry",
         });
 
-        const saveIndicator = page.locator("openclaw-settings-save-indicator");
+        const saveIndicator = page.locator("natesclaw-settings-save-indicator");
         await expect
           .poll(() => saveIndicator.textContent())
           .toContain("Settings changed elsewhere");

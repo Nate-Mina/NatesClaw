@@ -1,19 +1,19 @@
 // Setup command tests cover local setup initialization and next-step messaging.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
+import { withTempHome } from "natesclaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import { resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
 import { createConfigIO } from "../config/io.js";
 import { replaceConfigFile } from "../config/mutate.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NatesclawConfig } from "../config/types.js";
 import { setupCommand } from "./setup.js";
 
 function createSetupDeps(home: string) {
-  const configPath = path.join(home, ".openclaw", "openclaw.json");
+  const configPath = path.join(home, ".natesclaw", "natesclaw.json");
   const configIO = createConfigIO({
     configPath,
-    env: { OPENCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
+    env: { NATESCLAW_TEST_FAST: "1" } as NodeJS.ProcessEnv,
     homedir: () => home,
     logger: { error: vi.fn(), warn: vi.fn() },
   });
@@ -24,7 +24,7 @@ function createSetupDeps(home: string) {
     }),
     ensureAgentWorkspace: vi.fn(
       async (params?: { dir?: string; skipOptionalBootstrapFiles?: string[] }) => ({
-        dir: params?.dir ?? path.join(home, ".openclaw", "workspace"),
+        dir: params?.dir ?? path.join(home, ".natesclaw", "workspace"),
       }),
     ),
     formatConfigFilePath: (value: string) => value,
@@ -35,7 +35,7 @@ function createSetupDeps(home: string) {
       },
     ),
     mkdir: vi.fn(async () => {}),
-    resolveSessionTranscriptsDir: vi.fn(() => path.join(home, ".openclaw", "sessions")),
+    resolveSessionTranscriptsDir: vi.fn(() => path.join(home, ".natesclaw", "sessions")),
     replaceConfigFile: vi.fn(async ({ nextConfig }: Parameters<typeof replaceConfigFile>[0]) => {
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(configPath, JSON.stringify(nextConfig, null, 2));
@@ -66,11 +66,11 @@ describe("setupCommand", () => {
         exit: vi.fn(),
       };
       const deps = createSetupDeps(home);
-      const workspace = path.join(home, ".openclaw", "workspace");
+      const workspace = path.join(home, ".natesclaw", "workspace");
 
       await setupCommand({ workspace }, runtime, deps);
 
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".natesclaw", "natesclaw.json");
       const raw = JSON.parse(await fs.readFile(configPath, "utf-8")) as unknown;
 
       expect(raw).toMatchObject({
@@ -111,9 +111,9 @@ describe("setupCommand", () => {
       expect(runtime.log.mock.calls.map((call) => String(call[0])).slice(-5)).toStrictEqual([
         "",
         "Setup complete: config, workspace, and session directories are ready.",
-        "Next guided path: openclaw onboard.",
-        "Next targeted changes: openclaw configure for models, channels, Gateway, plugins, skills, and health checks.",
-        "Add a chat channel later: openclaw channels add.",
+        "Next guided path: natesclaw onboard.",
+        "Next targeted changes: natesclaw configure for models, channels, Gateway, plugins, skills, and health checks.",
+        "Add a chat channel later: natesclaw channels add.",
       ]);
     });
   });
@@ -126,17 +126,17 @@ describe("setupCommand", () => {
         exit: vi.fn(),
       };
       const deps = createSetupDeps(home);
-      const workspace = path.join(home, ".openclaw", "workspace");
+      const workspace = path.join(home, ".natesclaw", "workspace");
 
       await setupCommand({ workspace, json: true }, runtime, deps);
 
       expect(runtime.log).toHaveBeenCalledOnce();
       expect(JSON.parse(String(runtime.log.mock.calls[0]?.[0]))).toEqual({
         ok: true,
-        configPath: path.join(home, ".openclaw", "openclaw.json"),
+        configPath: path.join(home, ".natesclaw", "natesclaw.json"),
         configStatus: "created",
         workspaceDir: workspace,
-        sessionsDir: path.join(home, ".openclaw", "sessions"),
+        sessionsDir: path.join(home, ".natesclaw", "sessions"),
       });
     });
   });
@@ -152,8 +152,8 @@ describe("setupCommand", () => {
       await setupCommand({ workspace: nextWorkspace }, runtime, deps);
 
       const config = JSON.parse(
-        await fs.readFile(path.join(home, ".openclaw", "openclaw.json"), "utf8"),
-      ) as OpenClawConfig;
+        await fs.readFile(path.join(home, ".natesclaw", "natesclaw.json"), "utf8"),
+      ) as NatesclawConfig;
       expect(resolveAgentWorkspaceDir(config, "main")).toBe(nextWorkspace);
       expect(config.agents?.entries?.main?.workspace).toBe(nextWorkspace);
     });
@@ -162,8 +162,8 @@ describe("setupCommand", () => {
   it("keeps the default entry workspace on bare setup", async () => {
     await withTempHome(async (home) => {
       const runtime = { log: vi.fn(), error: vi.fn(), exit: vi.fn() };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const workspace = "/srv/ops";
       const raw = JSON.stringify({
         agents: { entries: { ops: { default: true, workspace } } },
@@ -181,7 +181,7 @@ describe("setupCommand", () => {
 
       const nextWorkspace = path.join(home, "next-ops-workspace");
       await setupCommand({ workspace: nextWorkspace }, runtime, deps);
-      const updated = JSON.parse(await fs.readFile(configPath, "utf8")) as OpenClawConfig;
+      const updated = JSON.parse(await fs.readFile(configPath, "utf8")) as NatesclawConfig;
       expect(resolveAgentWorkspaceDir(updated, "ops")).toBe(nextWorkspace);
       expect(updated.agents?.entries?.ops?.workspace).toBe(nextWorkspace);
     });
@@ -190,8 +190,8 @@ describe("setupCommand", () => {
   it("does not copy an entry workspace into defaults during a gateway-only write", async () => {
     await withTempHome(async (home) => {
       const runtime = { log: vi.fn(), error: vi.fn(), exit: vi.fn() };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const workspace = "/srv/ops";
       await fs.mkdir(configDir, { recursive: true });
       await fs.writeFile(
@@ -209,7 +209,7 @@ describe("setupCommand", () => {
 
       await setupCommand(undefined, runtime, deps);
 
-      const config = JSON.parse(await fs.readFile(configPath, "utf8")) as OpenClawConfig;
+      const config = JSON.parse(await fs.readFile(configPath, "utf8")) as NatesclawConfig;
       expect(config.agents?.defaults?.workspace).toBeUndefined();
       expect(config.agents?.entries?.ops?.workspace).toBe(workspace);
       expect(config.gateway?.mode).toBe("local");
@@ -223,8 +223,8 @@ describe("setupCommand", () => {
         error: vi.fn(),
         exit: vi.fn(),
       };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const workspace = path.join(home, "custom-workspace");
       const deps = createSetupDeps(home);
 
@@ -255,8 +255,8 @@ describe("setupCommand", () => {
   it("leaves an include-owned roster in its authored file", async () => {
     await withTempHome(async (home) => {
       const runtime = { log: vi.fn(), error: vi.fn(), exit: vi.fn() };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const includePath = path.join(configDir, "agents.json");
       const workspace = path.join(home, "ops-workspace");
       const rootRaw = `{
@@ -291,8 +291,8 @@ describe("setupCommand", () => {
   it("updates only inherited workspace defaults beside an include-owned roster", async () => {
     await withTempHome(async (home) => {
       const runtime = { log: vi.fn(), error: vi.fn(), exit: vi.fn() };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const includePath = path.join(configDir, "agents.json");
       const oldWorkspace = path.join(home, "old-workspace");
       const nextWorkspace = path.join(home, "next-workspace");
@@ -315,7 +315,7 @@ describe("setupCommand", () => {
 
       await setupCommand({ workspace: nextWorkspace }, runtime, deps);
 
-      const root = JSON.parse(await fs.readFile(configPath, "utf8")) as OpenClawConfig & {
+      const root = JSON.parse(await fs.readFile(configPath, "utf8")) as NatesclawConfig & {
         $include?: string;
       };
       expect(root.$include).toBe("./agents.json");
@@ -328,8 +328,8 @@ describe("setupCommand", () => {
   it("updates inherited workspace defaults below a nested roster include", async () => {
     await withTempHome(async (home) => {
       const runtime = { log: vi.fn(), error: vi.fn(), exit: vi.fn() };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const includePath = path.join(configDir, "agents.json");
       const oldWorkspace = path.join(home, "old-workspace");
       const nextWorkspace = path.join(home, "next-workspace");
@@ -370,8 +370,8 @@ describe("setupCommand", () => {
   it("persists a roster when existing setup settings already match", async () => {
     await withTempHome(async (home) => {
       const runtime = { log: vi.fn(), error: vi.fn(), exit: vi.fn() };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const workspace = path.join(home, "workspace");
       await fs.mkdir(configDir, { recursive: true });
       await fs.writeFile(
@@ -390,7 +390,7 @@ describe("setupCommand", () => {
 
       await setupCommand(undefined, runtime, deps);
 
-      const config = JSON.parse(await fs.readFile(configPath, "utf8")) as OpenClawConfig;
+      const config = JSON.parse(await fs.readFile(configPath, "utf8")) as NatesclawConfig;
       expect(config.agents?.entries).toEqual({ main: { default: true } });
     });
   });
@@ -402,8 +402,8 @@ describe("setupCommand", () => {
         error: vi.fn(),
         exit: vi.fn(),
       };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const deps = createSetupDeps(home);
       const workspace = path.join(home, "custom-workspace");
 
@@ -436,8 +436,8 @@ describe("setupCommand", () => {
         error: vi.fn(),
         exit: vi.fn(),
       };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const workspace = path.join(home, "custom-workspace");
       const deps = createSetupDeps(home);
       const externalRaw = `${JSON.stringify({ external: true }, null, 2)}\n`;
@@ -471,8 +471,8 @@ describe("setupCommand", () => {
         error: vi.fn(),
         exit: vi.fn(),
       };
-      const configDir = path.join(home, ".openclaw");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = path.join(home, ".natesclaw");
+      const configPath = path.join(configDir, "natesclaw.json");
       const deps = createSetupDeps(home);
       const original = Buffer.from('{ "gateway": ', "utf-8");
 
@@ -482,7 +482,7 @@ describe("setupCommand", () => {
       await setupCommand(undefined, runtime, deps);
 
       expect(runtime.exit).toHaveBeenCalledWith(1);
-      expect(runtime.error).toHaveBeenCalledWith(expect.stringContaining("openclaw doctor"));
+      expect(runtime.error).toHaveBeenCalledWith(expect.stringContaining("natesclaw doctor"));
       expect(await fs.readFile(configPath)).toStrictEqual(original);
       expect(deps.replaceConfigFile).not.toHaveBeenCalled();
       expect(deps.ensureAgentWorkspace).not.toHaveBeenCalled();
@@ -504,8 +504,8 @@ describe("setupCommand", () => {
           error: vi.fn(),
           exit: vi.fn(),
         };
-        const configDir = path.join(home, ".openclaw");
-        const configPath = path.join(configDir, "openclaw.json");
+        const configDir = path.join(home, ".natesclaw");
+        const configPath = path.join(configDir, "natesclaw.json");
         const deps = createSetupDeps(home);
 
         await fs.mkdir(configDir, { recursive: true });
@@ -514,7 +514,7 @@ describe("setupCommand", () => {
         await setupCommand(undefined, runtime, deps);
 
         expect(runtime.exit).toHaveBeenCalledWith(1);
-        expect(runtime.error).toHaveBeenCalledWith(expect.stringContaining("openclaw doctor"));
+        expect(runtime.error).toHaveBeenCalledWith(expect.stringContaining("natesclaw doctor"));
         expect(await fs.readFile(configPath, "utf-8")).toBe(raw);
         expect(deps.replaceConfigFile).not.toHaveBeenCalled();
         expect(deps.ensureAgentWorkspace).not.toHaveBeenCalled();

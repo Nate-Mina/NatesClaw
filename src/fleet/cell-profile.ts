@@ -3,24 +3,24 @@ import path from "node:path";
 
 export type FleetContainerRuntimeName = "docker" | "podman";
 
-export const DEFAULT_FLEET_IMAGE = "ghcr.io/openclaw/openclaw:latest";
+export const DEFAULT_FLEET_IMAGE = "ghcr.io/natesclaw/natesclaw:latest";
 const FLEET_BASE_PORT = 19_100;
 export const FLEET_GATEWAY_PORT = 18_789;
 const FLEET_CONTAINER_HOME = "/home/node";
-const FLEET_CONTAINER_STATE_DIR = "/home/node/.openclaw";
-const FLEET_CONTAINER_AUTH_SECRET_DIR = "/home/node/.config/openclaw";
-export const FLEET_TENANT_LABEL = "openclaw.fleet.tenant";
-export const FLEET_OWNER_LABEL = "openclaw.fleet.owner";
-export const FLEET_ATTEMPT_LABEL = "openclaw.fleet.attempt";
-export const FLEET_ENV_KEYS_LABEL = "openclaw.fleet.env-keys";
-export const FLEET_DISK_LIMIT_LABEL = "openclaw.fleet.disk-limit";
+const FLEET_CONTAINER_STATE_DIR = "/home/node/.natesclaw";
+const FLEET_CONTAINER_AUTH_SECRET_DIR = "/home/node/.config/natesclaw";
+export const FLEET_TENANT_LABEL = "natesclaw.fleet.tenant";
+export const FLEET_OWNER_LABEL = "natesclaw.fleet.owner";
+export const FLEET_ATTEMPT_LABEL = "natesclaw.fleet.attempt";
+export const FLEET_ENV_KEYS_LABEL = "natesclaw.fleet.env-keys";
+export const FLEET_DISK_LIMIT_LABEL = "natesclaw.fleet.disk-limit";
 const FLEET_MANAGED_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_WORKSPACE_DIR",
-  "OPENCLAW_GATEWAY_TOKEN",
+  "NATESCLAW_HOME",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_WORKSPACE_DIR",
+  "NATESCLAW_GATEWAY_TOKEN",
 ] as const;
 
 const FLEET_TENANT_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/;
@@ -155,17 +155,17 @@ export function buildCellEnvironment(
   }
   return {
     HOME: FLEET_CONTAINER_HOME,
-    OPENCLAW_HOME: FLEET_CONTAINER_HOME,
-    OPENCLAW_STATE_DIR: FLEET_CONTAINER_STATE_DIR,
-    OPENCLAW_CONFIG_PATH: `${FLEET_CONTAINER_STATE_DIR}/openclaw.json`,
-    OPENCLAW_WORKSPACE_DIR: `${FLEET_CONTAINER_STATE_DIR}/workspace`,
-    OPENCLAW_GATEWAY_TOKEN: token,
+    NATESCLAW_HOME: FLEET_CONTAINER_HOME,
+    NATESCLAW_STATE_DIR: FLEET_CONTAINER_STATE_DIR,
+    NATESCLAW_CONFIG_PATH: `${FLEET_CONTAINER_STATE_DIR}/natesclaw.json`,
+    NATESCLAW_WORKSPACE_DIR: `${FLEET_CONTAINER_STATE_DIR}/workspace`,
+    NATESCLAW_GATEWAY_TOKEN: token,
     ...userEnv,
   };
 }
 
 export function cellContainerName(tenantId: string): string {
-  return `openclaw-cell-${validateTenantId(tenantId)}`;
+  return `natesclaw-cell-${validateTenantId(tenantId)}`;
 }
 
 export function cellNetworkName(tenantId: string): string {

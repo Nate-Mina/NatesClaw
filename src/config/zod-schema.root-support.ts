@@ -1,5 +1,5 @@
-import { isHttpsUrl, isHttpUrl } from "@openclaw/net-policy/url-protocol";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { isHttpsUrl, isHttpUrl } from "@natesclaw/net-policy/url-protocol";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { z } from "zod";
 import type { GatewayRemoteConfig } from "./types.gateway.js";
 import { MemorySearchSchema } from "./zod-schema.agent-runtime.js";
@@ -33,7 +33,7 @@ export const TailscaleServiceNameSchema = z
   .string()
   .regex(/^svc:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/, {
     message:
-      'Tailscale serviceName must use the "svc:<dns-label>" format, for example "svc:openclaw"',
+      'Tailscale serviceName must use the "svc:<dns-label>" format, for example "svc:natesclaw"',
   });
 
 export const SecuritySchema = z
@@ -337,7 +337,7 @@ const McpServerSchema = z
       const disabled = Reflect.get(data, "disabled") as unknown;
       const replacement =
         typeof disabled === "boolean"
-          ? `"enabled: ${!disabled}" instead, then run "openclaw doctor --fix" to migrate existing config`
+          ? `"enabled: ${!disabled}" instead, then run "natesclaw doctor --fix" to migrate existing config`
           : 'the canonical "enabled" boolean instead';
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

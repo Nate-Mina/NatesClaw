@@ -1,5 +1,5 @@
-// Shipped apps stamp `openclaw-native-nav`; current apps advertise web chrome
-// at document start and stamp `openclaw-native-web-chrome` at document end.
+// Shipped apps stamp `natesclaw-native-nav`; current apps advertise web chrome
+// at document start and stamp `natesclaw-native-web-chrome` at document end.
 // Plain browsers keep their normal in-page controls.
 import path from "node:path";
 import type { BrowserContext } from "playwright";
@@ -80,23 +80,23 @@ suite.define(() => {
       // document.documentElement exists, so defer until the DOM is parsed.
       await page.addInitScript(() => {
         const nativeWindow = window as Window & {
-          openclawNavMessages?: unknown[];
+          natesclawNavMessages?: unknown[];
         };
-        nativeWindow.openclawNavMessages = [];
+        nativeWindow.natesclawNavMessages = [];
         Object.defineProperty(window, "webkit", {
           configurable: true,
           value: {
             messageHandlers: {
-              openclawNav: {
+              natesclawNav: {
                 postMessage(message: unknown) {
-                  nativeWindow.openclawNavMessages?.push(message);
+                  nativeWindow.natesclawNavMessages?.push(message);
                 },
               },
             },
           },
         });
         const stamp = () =>
-          document.documentElement.classList.add("openclaw-native-macos", "openclaw-native-nav");
+          document.documentElement.classList.add("natesclaw-native-macos", "natesclaw-native-nav");
         if (document.documentElement) {
           stamp();
         } else {
@@ -107,18 +107,18 @@ suite.define(() => {
     if (options.webChrome) {
       await page.addInitScript(() => {
         const nativeWindow = window as Window & {
-          __OPENCLAW_NATIVE_WEB_CHROME__?: boolean;
-          __OPENCLAW_NATIVE_HISTORY__?: { canGoBack: boolean; canGoForward: boolean };
+          __NATESCLAW_NATIVE_WEB_CHROME__?: boolean;
+          __NATESCLAW_NATIVE_HISTORY__?: { canGoBack: boolean; canGoForward: boolean };
         };
-        nativeWindow["__OPENCLAW_NATIVE_WEB_CHROME__"] = true;
-        nativeWindow["__OPENCLAW_NATIVE_HISTORY__"] = {
+        nativeWindow["__NATESCLAW_NATIVE_WEB_CHROME__"] = true;
+        nativeWindow["__NATESCLAW_NATIVE_HISTORY__"] = {
           canGoBack: false,
           canGoForward: false,
         };
         const stamp = () =>
           document.documentElement.classList.add(
-            "openclaw-native-macos",
-            "openclaw-native-web-chrome",
+            "natesclaw-native-macos",
+            "natesclaw-native-web-chrome",
           );
         if (document.documentElement) {
           stamp();
@@ -160,8 +160,8 @@ suite.define(() => {
     await expect
       .poll(() =>
         page.evaluate(() => {
-          const messages = (window as Window & { openclawNavMessages?: unknown[] })
-            .openclawNavMessages;
+          const messages = (window as Window & { natesclawNavMessages?: unknown[] })
+            .natesclawNavMessages;
           return messages?.find(
             (message) =>
               typeof message === "object" &&
@@ -172,7 +172,7 @@ suite.define(() => {
       )
       .toMatchObject({ type: "nav-state", collapsed: false });
     const initialWidth = await page.evaluate(() => {
-      const messages = (window as Window & { openclawNavMessages?: unknown[] }).openclawNavMessages;
+      const messages = (window as Window & { natesclawNavMessages?: unknown[] }).natesclawNavMessages;
       const message = messages?.find(
         (candidate) =>
           typeof candidate === "object" &&
@@ -193,7 +193,7 @@ suite.define(() => {
     // Collapse through the native titlebar path; the whole web chrome cluster
     // hides (native titlebar provides search and new-thread while collapsed).
     await page.evaluate(() => {
-      window.dispatchEvent(new CustomEvent("openclaw:native-toggle-sidebar"));
+      window.dispatchEvent(new CustomEvent("natesclaw:native-toggle-sidebar"));
     });
     await expect
       .poll(() => page.locator(".shell").getAttribute("class"))
@@ -202,8 +202,8 @@ suite.define(() => {
       .poll(() =>
         page.evaluate(() =>
           (
-            window as Window & { openclawNavMessages?: Array<{ collapsed?: boolean }> }
-          ).openclawNavMessages?.some((message) => message.collapsed === true),
+            window as Window & { natesclawNavMessages?: Array<{ collapsed?: boolean }> }
+          ).natesclawNavMessages?.some((message) => message.collapsed === true),
         ),
       )
       .toBe(true);
@@ -215,12 +215,12 @@ suite.define(() => {
       .toBe(true);
 
     await page.evaluate(() => {
-      window.dispatchEvent(new CustomEvent("openclaw:native-open-search"));
+      window.dispatchEvent(new CustomEvent("natesclaw:native-open-search"));
     });
     await expect.poll(() => page.locator(".cmd-palette-overlay").isVisible()).toBe(true);
 
     await page.evaluate(() => {
-      window.dispatchEvent(new CustomEvent("openclaw:native-new-session"));
+      window.dispatchEvent(new CustomEvent("natesclaw:native-new-session"));
     });
     await expect.poll(() => new URL(page.url()).pathname).toBe("/new");
   });
@@ -251,7 +251,7 @@ suite.define(() => {
 
     await page.evaluate(() => {
       window.dispatchEvent(
-        new CustomEvent("openclaw:native-history-state", {
+        new CustomEvent("natesclaw:native-history-state", {
           detail: { canGoBack: true, canGoForward: false },
         }),
       );
@@ -260,7 +260,7 @@ suite.define(() => {
     await expect.poll(() => forward.isDisabled()).toBe(true);
     await page.evaluate(() => {
       window.dispatchEvent(
-        new CustomEvent("openclaw:native-history-state", {
+        new CustomEvent("natesclaw:native-history-state", {
           detail: { canGoBack: false, canGoForward: true },
         }),
       );
@@ -346,7 +346,7 @@ suite.define(() => {
       width: 900,
     });
     const navigation = page.locator(".shell-nav");
-    const drawer = navigation.locator("openclaw-modal-dialog.nav-drawer");
+    const drawer = navigation.locator("natesclaw-modal-dialog.nav-drawer");
     const dialog = page.getByRole("dialog", { name: "Navigation" });
     const trigger = page.locator(".chat-pane__nav-toggle").first();
     const readFocusLocation = () =>
@@ -444,7 +444,7 @@ suite.define(() => {
         scenario: TOAST_SCENARIO,
         width: 390,
       });
-      const drawer = page.locator("openclaw-modal-dialog.nav-drawer");
+      const drawer = page.locator("natesclaw-modal-dialog.nav-drawer");
       const dialog = page.getByRole("dialog", { name: "Navigation" });
       await page.locator(".chat-pane__nav-toggle").first().click();
       await expect.poll(() => dialog.isVisible()).toBe(true);
@@ -456,7 +456,7 @@ suite.define(() => {
       await page
         .locator('wa-dropdown-item[value="hide-catalog"]')
         .evaluate((element) => (element as HTMLElement).click());
-      const host = drawer.locator("openclaw-toast-host");
+      const host = drawer.locator("natesclaw-toast-host");
       const toast = host.locator(".app-toast");
       await toast.waitFor();
       await expect.poll(() => toast.textContent()).toContain("Codex hidden");
@@ -474,7 +474,7 @@ suite.define(() => {
         await page.setViewportSize({ width: 1280, height: 900 });
         await expect.poll(() => drawer.count()).toBe(0);
       }
-      const handedOffToast = page.locator(".shell > openclaw-toast-host .app-toast");
+      const handedOffToast = page.locator(".shell > natesclaw-toast-host .app-toast");
       await expect.poll(() => handedOffToast.textContent()).toContain("Codex hidden");
       await handedOffToast.getByRole("button", { name: "Dismiss" }).click();
       await expect.poll(() => handedOffToast.isVisible()).toBe(false);
@@ -524,7 +524,7 @@ suite.define(() => {
     // the web hamburger would be a duplicate control.
     await expect.poll(() => page.locator(".topbar-nav-toggle").isVisible()).toBe(false);
     await page.evaluate(() => {
-      window.dispatchEvent(new CustomEvent("openclaw:native-toggle-sidebar"));
+      window.dispatchEvent(new CustomEvent("natesclaw:native-toggle-sidebar"));
     });
     await expect
       .poll(() => page.locator(".shell").getAttribute("class"))
@@ -532,7 +532,7 @@ suite.define(() => {
     // Closing through the native toggle restores focus to the content anchor,
     // not the hidden hamburger the drawer recorded as its trigger.
     await page.evaluate(() => {
-      window.dispatchEvent(new CustomEvent("openclaw:native-toggle-sidebar"));
+      window.dispatchEvent(new CustomEvent("natesclaw:native-toggle-sidebar"));
     });
     await expect
       .poll(() => page.locator(".shell").getAttribute("class"))

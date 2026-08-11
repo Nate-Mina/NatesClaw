@@ -1,5 +1,5 @@
 // Covers provider model helper behavior for plugin model registries.
-import type { ModelRegistry } from "openclaw/plugin-sdk/agent-sessions";
+import type { ModelRegistry } from "natesclaw/plugin-sdk/agent-sessions";
 import { describe, expect, it } from "vitest";
 import {
   cloneFirstTemplateModel,

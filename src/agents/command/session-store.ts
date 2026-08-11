@@ -1,7 +1,7 @@
 /**
  * Updates persisted session metadata after agent command runs.
  */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   SESSION_TOTAL_TOKENS_VERSION,
   setSessionRuntimeModel,
@@ -10,7 +10,7 @@ import {
 import { patchSessionEntryCore } from "../../config/sessions/session-accessor.js";
 import { projectSessionSnapshotChanges } from "../../config/sessions/session-snapshot-merge.js";
 import { resolveMaintenanceConfigFromInput } from "../../config/sessions/store-maintenance.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import { resolveNonNegativeNumber } from "../../shared/number-coercion.js";
 import {
@@ -46,7 +46,7 @@ function resolvePositiveInteger(value: number | undefined): number | undefined {
 
 /** Applies run result metadata, usage, and CLI bindings to a session entry. */
 export async function updateSessionStoreAfterAgentRun(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   contextTokensOverride?: number;
   sessionId: string;
   sessionKey: string;

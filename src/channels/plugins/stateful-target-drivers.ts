@@ -3,7 +3,7 @@
  *
  * Stores lifecycle drivers for binding targets that carry mutable external session state.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveGlobalMap } from "../../shared/global-singleton.js";
 import type {
   ConfiguredBindingResolution,
@@ -22,19 +22,19 @@ export type StatefulBindingTargetResetResult =
 export type StatefulBindingTargetDriver = {
   id: string;
   ensureReady: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     bindingResolution: ConfiguredBindingResolution;
   }) => Promise<StatefulBindingTargetReadyResult>;
   ensureSession: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     bindingResolution: ConfiguredBindingResolution;
   }) => Promise<StatefulBindingTargetSessionResult>;
   resolveTargetBySessionKey?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     sessionKey: string;
   }) => StatefulBindingTargetDescriptor | null;
   resetInPlace?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     sessionKey: string;
     bindingTarget: StatefulBindingTargetDescriptor;
     reason: "new" | "reset";
@@ -45,7 +45,7 @@ export type StatefulBindingTargetDriver = {
 const registeredStatefulBindingTargetDrivers = resolveGlobalMap<
   string,
   StatefulBindingTargetDriver
->(Symbol.for("openclaw.statefulBindingTargetDrivers"), "plugin-registry");
+>(Symbol.for("natesclaw.statefulBindingTargetDrivers"), "plugin-registry");
 
 function listStatefulBindingTargetDrivers(): StatefulBindingTargetDriver[] {
   return [...registeredStatefulBindingTargetDrivers.values()];
@@ -83,7 +83,7 @@ export function getStatefulBindingTargetDriver(id: string): StatefulBindingTarge
 }
 
 export function resolveStatefulBindingTargetBySessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
 }): { driver: StatefulBindingTargetDriver; bindingTarget: StatefulBindingTargetDescriptor } | null {
   const sessionKey = params.sessionKey.trim();

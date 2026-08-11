@@ -1,19 +1,19 @@
-// Voice Call plugin entrypoint registers its OpenClaw integration.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { ErrorCodes, errorShape } from "openclaw/plugin-sdk/gateway-runtime";
-import { resolveGlobalSingleton } from "openclaw/plugin-sdk/global-singleton";
-import { normalizeAgentId, parseAgentSessionKey } from "openclaw/plugin-sdk/routing";
+// Voice Call plugin entrypoint registers its Natesclaw integration.
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { ErrorCodes, errorShape } from "natesclaw/plugin-sdk/gateway-runtime";
+import { resolveGlobalSingleton } from "natesclaw/plugin-sdk/global-singleton";
+import { normalizeAgentId, parseAgentSessionKey } from "natesclaw/plugin-sdk/routing";
 import {
   asNonArrayRecord,
   asOptionalRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { jsonResult as json } from "openclaw/plugin-sdk/tool-results";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { jsonResult as json } from "natesclaw/plugin-sdk/tool-results";
 import { Type } from "typebox";
 import {
   definePluginEntry,
   type GatewayRequestHandlerOptions,
-  type OpenClawPluginApi,
+  type NatesclawPluginApi,
 } from "./api.js";
 import { VOICE_CALL_CLI_DESCRIPTOR } from "./cli-output-mode.js";
 import { createVoiceCallRuntime, type VoiceCallRuntime } from "./runtime-entry.js";
@@ -52,7 +52,7 @@ const VoiceCallToolSchema = Type.Union([
     to: Type.Optional(Type.String({ description: "Call target" })),
     message: Type.String({ description: "Intro message" }),
     mode: Type.Optional(Type.Union([Type.Literal("notify"), Type.Literal("conversation")])),
-    sessionKey: Type.Optional(Type.String({ description: "OpenClaw session key for the call" })),
+    sessionKey: Type.Optional(Type.String({ description: "Natesclaw session key for the call" })),
     dtmfSequence: Type.Optional(Type.String({ description: "DTMF digits to play before connect" })),
   }),
   Type.Object({
@@ -83,7 +83,7 @@ const VoiceCallToolSchema = Type.Union([
     to: Type.Optional(Type.String({ description: "Call target" })),
     sid: Type.Optional(Type.String({ description: "Call SID" })),
     message: Type.Optional(Type.String({ description: "Optional intro message" })),
-    sessionKey: Type.Optional(Type.String({ description: "OpenClaw session key for the call" })),
+    sessionKey: Type.Optional(Type.String({ description: "Natesclaw session key for the call" })),
     dtmfSequence: Type.Optional(Type.String({ description: "DTMF digits to play before connect" })),
   }),
 ]);
@@ -93,10 +93,10 @@ function asParamRecord(params: unknown): Record<string, unknown> {
 }
 
 function isCliOnlyProcess(): boolean {
-  return process.env.OPENCLAW_CLI === "1" && !process.argv.slice(2).includes("gateway");
+  return process.env.NATESCLAW_CLI === "1" && !process.argv.slice(2).includes("gateway");
 }
 
-const VOICE_CALL_RUNTIME_COORDINATOR_KEY = Symbol.for("openclaw.voice-call.runtimeCoordinator");
+const VOICE_CALL_RUNTIME_COORDINATOR_KEY = Symbol.for("natesclaw.voice-call.runtimeCoordinator");
 
 type VoiceCallRuntimeGeneration = {
   epoch: number;
@@ -166,7 +166,7 @@ export default definePluginEntry({
   name: "Voice Call",
   description: "Voice-call plugin with Telnyx/Twilio/Plivo providers",
   configSchema: voiceCallConfigSchema,
-  register(api: OpenClawPluginApi) {
+  register(api: NatesclawPluginApi) {
     const config = resolveVoiceCallConfig(voiceCallConfigSchema.parse(api.pluginConfig));
     const validation = validateProviderConfig(config);
 

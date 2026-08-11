@@ -1,12 +1,12 @@
 // Discord plugin module implements setup surface behavior.
-import { resolveBasicAllowFromEntries } from "openclaw/plugin-sdk/allow-from";
+import { resolveBasicAllowFromEntries } from "natesclaw/plugin-sdk/allow-from";
 import {
   createSetupTranslator,
   type ChannelSetupWizard,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type WizardPrompter,
-} from "openclaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "openclaw/plugin-sdk/setup-tools";
+} from "natesclaw/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "natesclaw/plugin-sdk/setup-tools";
 import { resolveDiscordAccountAllowFrom } from "./accounts.js";
 import { resolveDiscordChannelAllowlist } from "./resolve-channels.js";
 import { resolveDiscordUserAllowlist } from "./resolve-users.js";
@@ -38,10 +38,10 @@ async function resolveDiscordAllowFromEntries(params: { token?: string; entries:
 }
 
 async function promptDiscordAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   prompter: WizardPrompter;
   accountId?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   const accountId = resolveSetupAccountId({
     accountId: params.accountId,
     defaultAccountId: resolveDefaultDiscordSetupAccountId(params.cfg),
@@ -97,7 +97,7 @@ async function promptDiscordAllowFrom(params: {
 }
 
 async function resolveDiscordGroupAllowlist(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   credentialValues: { token?: string };
   entries: string[];

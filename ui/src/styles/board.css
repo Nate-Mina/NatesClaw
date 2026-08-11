@@ -1,4 +1,4 @@
-openclaw-board-view {
+natesclaw-board-view {
   display: block;
   min-width: 0;
   width: 100%;
@@ -145,7 +145,7 @@ openclaw-board-view {
   z-index: 7;
 }
 
-openclaw-board-widget-cell {
+natesclaw-board-widget-cell {
   display: contents;
 }
 
@@ -333,8 +333,8 @@ openclaw-board-widget-cell {
   color: var(--text);
 }
 
-openclaw-workboard-card-widget,
-openclaw-workboard-mini-widget {
+natesclaw-workboard-card-widget,
+natesclaw-workboard-mini-widget {
   display: block;
   min-height: 100%;
 }

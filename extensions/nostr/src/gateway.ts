@@ -2,20 +2,20 @@
 import {
   resolveStableChannelMessageIngress,
   type StableChannelIngressIdentityParams,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
+} from "natesclaw/plugin-sdk/channel-ingress-runtime";
 import {
   bindIngressLifecycleToReplyOptions,
   runPassiveAccountLifecycle,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-import { attachChannelToResult } from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { createChannelPairingController } from "natesclaw/plugin-sdk/channel-pairing";
+import { attachChannelToResult } from "natesclaw/plugin-sdk/channel-send-result";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
 import {
   chunkTextForOutbound,
   sanitizeAssistantVisibleText,
   stripMarkdown,
-} from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/text-chunking";
 import type { ChannelOutboundAdapter, ChannelPlugin } from "./channel-api.js";
 import type { MetricEvent, MetricsSnapshot } from "./metrics.js";
 import { startNostrBus, type NostrBusHandle } from "./nostr-bus.js";
@@ -324,7 +324,7 @@ export const nostrPairingTextAdapter = {
     message,
     accountId,
   }: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     id: string;
     message: string;
     accountId?: string;

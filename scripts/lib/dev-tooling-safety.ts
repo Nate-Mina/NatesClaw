@@ -1,6 +1,6 @@
-// Dev Tooling Safety script supports OpenClaw repository automation.
+// Dev Tooling Safety script supports Natesclaw repository automation.
 import path from "node:path";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { redactSensitiveText } from "../../src/logging/redact.js";
 
 export { parseStrictIntegerOption } from "./strict-integer-option.ts";

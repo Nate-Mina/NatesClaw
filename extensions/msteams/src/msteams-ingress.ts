@@ -5,10 +5,10 @@ import {
   type ChannelIngressQueue,
   type ChannelIngressMonitorDeliveryResult,
   type ChannelIngressMonitorLifecycle,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeNullableString as nonEmptyString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeNullableString as nonEmptyString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { classifyMSTeamsSendError } from "./errors.js";
 import { MSTEAMS_REQUEST_TIMEOUT_MS } from "./request-timeout.js";
 import { getMSTeamsRuntime } from "./runtime.js";

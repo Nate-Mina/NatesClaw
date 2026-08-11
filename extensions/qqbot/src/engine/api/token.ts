@@ -6,16 +6,16 @@
  * globals, fully supporting multi-account concurrent operation.
  */
 
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   asDateTimestampMs,
   parseStrictPositiveInteger,
   resolveExpiresAtMsFromDurationSeconds,
   resolveTimestampMsToIsoString,
-} from "openclaw/plugin-sdk/number-runtime";
-import { readResponseTextLimited } from "openclaw/plugin-sdk/provider-http";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { readResponseTextLimited } from "natesclaw/plugin-sdk/provider-http";
+import { sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { qqbotNetworkGuidance, qqbotTokenFailureMessage } from "../config/setup-guidance.js";
 import type { EngineLogger } from "../types.js";
 
@@ -35,7 +35,7 @@ const QQBOT_TOKEN_REQUEST_TIMEOUT_MS = 30_000;
  * (`QQBOT_MEDIA_SSRF_POLICY` in `../utils/file-utils.ts`) so the relaxation
  * stays narrowly host-scoped instead of weakening the global default.
  *
- * See https://github.com/openclaw/openclaw/issues/88984.
+ * See https://github.com/natesclaw/natesclaw/issues/88984.
  */
 const QQBOT_TOKEN_SSRF_POLICY: SsrFPolicy = {
   hostnameAllowlist: ["bots.qq.com"],

@@ -1,14 +1,14 @@
 import type { DatabaseSync } from "node:sqlite";
 import { executeSqliteQuerySync } from "../../infra/kysely-sync.js";
 import {
-  deferOpenClawAgentPostCommitPublication,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  deferNatesclawAgentPostCommitPublication,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import { getSessionKysely } from "./session-accessor.sqlite-scope.js";
 import { parseSessionEntryJson } from "./session-accessor.sqlite-status.js";
 import type { SessionEntry } from "./types.js";
 
-type SessionEntryCacheDatabase = Pick<OpenClawAgentDatabase, "agentId" | "db">;
+type SessionEntryCacheDatabase = Pick<NatesclawAgentDatabase, "agentId" | "db">;
 
 export type SessionEntryCacheSnapshot = {
   entries: Map<string, SessionEntry>;
@@ -71,18 +71,18 @@ function ensureSessionNodesGenerationTracker(database: DatabaseSync): void {
   // observe unpublished raw DML. A main-schema change bumps the generation before reinstalling
   // them, so dropping/recreating session_nodes cannot make an old snapshot look current.
   database.exec(`
-    CREATE TEMP TABLE IF NOT EXISTS openclaw_session_nodes_cache_generation (id INTEGER NOT NULL PRIMARY KEY CHECK (id = 1), generation INTEGER NOT NULL) STRICT;
-    INSERT OR IGNORE INTO openclaw_session_nodes_cache_generation (id, generation) VALUES (1, 0);
-    ${trackedSchemaVersion === undefined ? "" : "UPDATE openclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1;"}
-    DROP TRIGGER IF EXISTS openclaw_session_nodes_cache_generation_insert;
-    DROP TRIGGER IF EXISTS openclaw_session_nodes_cache_generation_update;
-    DROP TRIGGER IF EXISTS openclaw_session_nodes_cache_generation_delete;
-    CREATE TEMP TRIGGER openclaw_session_nodes_cache_generation_insert
-      AFTER INSERT ON main.session_nodes BEGIN UPDATE openclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1; END;
-    CREATE TEMP TRIGGER openclaw_session_nodes_cache_generation_update
-      AFTER UPDATE ON main.session_nodes BEGIN UPDATE openclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1; END;
-    CREATE TEMP TRIGGER openclaw_session_nodes_cache_generation_delete
-      AFTER DELETE ON main.session_nodes BEGIN UPDATE openclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1; END;
+    CREATE TEMP TABLE IF NOT EXISTS natesclaw_session_nodes_cache_generation (id INTEGER NOT NULL PRIMARY KEY CHECK (id = 1), generation INTEGER NOT NULL) STRICT;
+    INSERT OR IGNORE INTO natesclaw_session_nodes_cache_generation (id, generation) VALUES (1, 0);
+    ${trackedSchemaVersion === undefined ? "" : "UPDATE natesclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1;"}
+    DROP TRIGGER IF EXISTS natesclaw_session_nodes_cache_generation_insert;
+    DROP TRIGGER IF EXISTS natesclaw_session_nodes_cache_generation_update;
+    DROP TRIGGER IF EXISTS natesclaw_session_nodes_cache_generation_delete;
+    CREATE TEMP TRIGGER natesclaw_session_nodes_cache_generation_insert
+      AFTER INSERT ON main.session_nodes BEGIN UPDATE natesclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1; END;
+    CREATE TEMP TRIGGER natesclaw_session_nodes_cache_generation_update
+      AFTER UPDATE ON main.session_nodes BEGIN UPDATE natesclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1; END;
+    CREATE TEMP TRIGGER natesclaw_session_nodes_cache_generation_delete
+      AFTER DELETE ON main.session_nodes BEGIN UPDATE natesclaw_session_nodes_cache_generation SET generation = generation + 1 WHERE id = 1; END;
   `);
   sessionNodesGenerationTrackerSchemaVersions.set(database, schemaRow.schema_version);
 }
@@ -90,7 +90,7 @@ function ensureSessionNodesGenerationTracker(database: DatabaseSync): void {
 function readSessionNodesGeneration(database: DatabaseSync): number {
   ensureSessionNodesGenerationTracker(database);
   const row = database
-    .prepare("SELECT generation FROM temp.openclaw_session_nodes_cache_generation WHERE id = 1")
+    .prepare("SELECT generation FROM temp.natesclaw_session_nodes_cache_generation WHERE id = 1")
     .get() as { generation?: unknown };
   if (typeof row.generation !== "number") {
     throw new Error("SQLite session_nodes cache generation is unavailable");
@@ -117,7 +117,7 @@ function cacheValidityTokensEqual(
 
 /** Bracket one accessor-owned row write so its publication cannot hide earlier raw DML. */
 export function trackSessionEntryCacheWrite(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   write: () => void,
 ): SqliteSessionEntryCacheWriteGeneration | undefined {
   const before = sessionEntryCaches.has(database.db)
@@ -287,35 +287,35 @@ export function readSessionEntryCache(
   return next;
 }
 
-function invalidateTrackedCache(database: OpenClawAgentDatabase): void {
+function invalidateTrackedCache(database: NatesclawAgentDatabase): void {
   const invalidate = () => {
     sessionEntryCaches.delete(database.db);
   };
-  if (deferOpenClawAgentPostCommitPublication(database, invalidate)) {
+  if (deferNatesclawAgentPostCommitPublication(database, invalidate)) {
     return;
   }
   if (database.db.isTransaction) {
     throw new Error(
-      "SQLite session entry writes must use runOpenClawAgentWriteTransaction for cache publication",
+      "SQLite session entry writes must use runNatesclawAgentWriteTransaction for cache publication",
     );
   }
   invalidate();
 }
 
-function publishTrackedCacheUpdate(database: OpenClawAgentDatabase, publish: () => void): void {
-  if (deferOpenClawAgentPostCommitPublication(database, publish)) {
+function publishTrackedCacheUpdate(database: NatesclawAgentDatabase, publish: () => void): void {
+  if (deferNatesclawAgentPostCommitPublication(database, publish)) {
     return;
   }
   if (database.db.isTransaction) {
     throw new Error(
-      "SQLite session entry writes must use runOpenClawAgentWriteTransaction for cache publication",
+      "SQLite session entry writes must use runNatesclawAgentWriteTransaction for cache publication",
     );
   }
   publish();
 }
 
 function publishSqliteSessionEntryCacheUpsert(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   row: {
     current_session_id: string;
     entry_json: string;
@@ -370,7 +370,7 @@ function publishSqliteSessionEntryCacheUpsert(
 }
 
 export function publishSessionEntryCacheInvalidation(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   row?: {
     current_session_id: string;
     entry_json: string;

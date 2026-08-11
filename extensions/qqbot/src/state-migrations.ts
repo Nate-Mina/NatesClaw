@@ -4,7 +4,7 @@ import {
   legacyStateFileExists,
   type PluginDoctorStateMigration,
   type PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/runtime-doctor-migrations";
+} from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 import { buildQQBotStateKey } from "./engine/utils/state-keys.js";
 
 type CredentialBackup = {

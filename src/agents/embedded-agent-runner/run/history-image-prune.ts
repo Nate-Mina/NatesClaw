@@ -85,7 +85,7 @@ function resolveMessageMediaFacts(message: AgentMessage): MediaFact[] {
 }
 
 function wasStructurallyMediaPruned(message: AgentMessage): boolean {
-  const meta = (message as unknown as Record<string, unknown>)["__openclaw"];
+  const meta = (message as unknown as Record<string, unknown>)["__natesclaw"];
   return (
     Boolean(meta) &&
     typeof meta === "object" &&
@@ -199,7 +199,7 @@ function cloneMessageWithContent(
     stripLegacyMediaContextFields(clone);
   }
   if (dropImageMetadata) {
-    const meta = clone["__openclaw"];
+    const meta = clone["__natesclaw"];
     const nextMeta =
       meta && typeof meta === "object" && !Array.isArray(meta)
         ? { ...(meta as Record<string, unknown>) }
@@ -211,9 +211,9 @@ function cloneMessageWithContent(
       nextMeta.mediaImagePruned = true;
     }
     if (Object.keys(nextMeta).length > 0) {
-      clone["__openclaw"] = nextMeta;
+      clone["__natesclaw"] = nextMeta;
     } else {
-      delete clone["__openclaw"];
+      delete clone["__natesclaw"];
     }
   }
   return clone;

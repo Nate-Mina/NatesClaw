@@ -1,5 +1,5 @@
 // Reasoning, commentary, and provider pre-tool narration delivery.
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it, vi } from "vitest";
 import {
   THINKING_TAG_CASES,

@@ -1,25 +1,25 @@
 // Slack plugin module implements outbound adapter behavior.
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
-import type { OutboundIdentity } from "openclaw/plugin-sdk/channel-outbound";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/channel-outbound";
+import type { OutboundIdentity } from "natesclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep } from "natesclaw/plugin-sdk/channel-outbound";
 import {
   attachChannelToResult,
   type ChannelOutboundAdapter,
   createAttachedChannelResultAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
+} from "natesclaw/plugin-sdk/channel-send-result";
 import {
   normalizeMessagePresentation,
   resolveLegacyInteractiveTextFallback,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { questionGatewayRuntime } from "openclaw/plugin-sdk/question-gateway-runtime";
+} from "natesclaw/plugin-sdk/interactive-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { questionGatewayRuntime } from "natesclaw/plugin-sdk/question-gateway-runtime";
 import {
   resolvePayloadMediaUrls,
   sendPayloadMediaSequenceAndFinalize,
   sendTextMediaPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveSlackAuthoredTextPlacement,
   type SlackAuthoredTextPlacement,

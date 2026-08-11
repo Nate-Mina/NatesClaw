@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createLlamaCppInferenceRuntimeToken } from "./inference-runtime-coordinator.js";
 
 const testApi = (globalThis as Record<PropertyKey, unknown>)[
-  Symbol.for("openclaw.llamaCppInferenceTestApi")
+  Symbol.for("natesclaw.llamaCppInferenceTestApi")
 ] as {
   resetInferenceRuntimeCoordinator: () => void;
 };

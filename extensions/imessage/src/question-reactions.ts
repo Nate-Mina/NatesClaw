@@ -1,11 +1,11 @@
 // iMessage transport binding for numbered ask_user reactions.
-import type { OutboundDeliveryResult } from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { OutboundDeliveryResult } from "natesclaw/plugin-sdk/channel-send-result";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   createQuestionReactionTargetStore,
   questionGatewayRuntime,
-} from "openclaw/plugin-sdk/question-gateway-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/question-gateway-runtime";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 import { resolveIMessageReactionContext } from "./monitor/reaction-context.js";
 import type { IMessagePayload } from "./monitor/types.js";
 
@@ -101,7 +101,7 @@ export function hasIMessageQuestionReactionTarget(params: {
 }
 
 export async function maybeResolveIMessageQuestionReaction(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   message: IMessagePayload;
   bodyText: string;

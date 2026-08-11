@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 
 const DEFAULT_SIZES = [24, 64, 128];
 const WORKER_TIMEOUT_MS = 300_000;
@@ -111,7 +111,7 @@ type BenchmarkRuntime = {
 };
 
 function usage(): string {
-  return `OpenClaw durable task registry churn benchmark
+  return `Natesclaw durable task registry churn benchmark
 
 Usage:
   node --import tsx scripts/bench-task-registry-sqlite.ts [options]
@@ -451,7 +451,7 @@ function runWorker(
   size: number,
   runtime: WorkerLaunchRuntime = {},
 ): WorkerResult {
-  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-task-registry-bench-"));
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-task-registry-bench-"));
   const spawnWorker =
     runtime.spawnWorker ??
     ((command, args, spawnOptions) => spawnSync(command, args, spawnOptions));

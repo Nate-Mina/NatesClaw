@@ -1,12 +1,12 @@
-# OpenClaw Kilo Gateway Provider
+# Natesclaw Kilo Gateway Provider
 
-Official OpenClaw provider plugin for Kilo Gateway.
+Official Natesclaw provider plugin for Kilo Gateway.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/kilocode-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/kilocode-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/kilocode> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/kilocode> for setup and configuration.

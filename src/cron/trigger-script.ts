@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   resolveAgentConfig,
   resolveAgentDir,
@@ -8,7 +8,7 @@ import {
 } from "../agents/agent-scope.js";
 import type { HookContext } from "../agents/agent-tools.before-tool-call.js";
 import {
-  createOpenClawCodingTools,
+  createNatesclawCodingTools,
   resolveToolLoopDetectionConfig,
 } from "../agents/agent-tools.js";
 import type {
@@ -40,7 +40,7 @@ import {
 import type { AnyAgentTool } from "../agents/tools/common.js";
 import { ensureAgentWorkspace } from "../agents/workspace.js";
 import { parseDurationMs } from "../cli/parse-duration.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { pruneMapToMaxSize } from "../infra/map-size.js";
 import type { PluginRegistry } from "../plugins/registry-types.js";
 import { withPluginRuntimeRegistryScope } from "../plugins/runtime/gateway-request-scope.js";
@@ -85,7 +85,7 @@ type PreparedTriggerRuntime = {
 };
 
 type PrepareTriggerRuntime = (params: {
-  runtimeConfig: OpenClawConfig;
+  runtimeConfig: NatesclawConfig;
   jobId: string;
   agentId?: string;
   toolsAllow?: string[];
@@ -94,24 +94,24 @@ type PrepareTriggerRuntime = (params: {
 }) => Promise<PreparedTriggerRuntime>;
 
 type CronTriggerEvaluatorDeps = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   runHeadless?: typeof runCodeModeScriptHeadless;
   prepareRuntime?: PrepareTriggerRuntime;
 };
 
 type TriggerRuntimeCacheEntry = {
   promise: Promise<PreparedTriggerRuntime>;
-  configEpoch: OpenClawConfig;
+  configEpoch: NatesclawConfig;
   agentId: string;
   toolsAllowKey: string;
 };
 
-function resolveTriggerAgentId(config: OpenClawConfig, agentId?: string): string {
+function resolveTriggerAgentId(config: NatesclawConfig, agentId?: string): string {
   return agentId?.trim() ? normalizeAgentId(agentId) : resolveDefaultAgentId(config);
 }
 
 async function prepareTriggerRuntime(params: {
-  runtimeConfig: OpenClawConfig;
+  runtimeConfig: NatesclawConfig;
   jobId: string;
   agentId?: string;
   toolsAllow?: string[];
@@ -126,7 +126,7 @@ async function prepareTriggerRuntime(params: {
     defaults: params.runtimeConfig.agents?.defaults,
     agentConfigOverride,
   });
-  const config: OpenClawConfig = {
+  const config: NatesclawConfig = {
     ...params.runtimeConfig,
     agents: Object.assign({}, params.runtimeConfig.agents, { defaults: agentDefaults }),
   };
@@ -168,7 +168,7 @@ async function prepareTriggerRuntime(params: {
     // Bundle MCP tools are source:"mcp", which the headless bridge excludes.
     // LSP runtimes are session-scoped and intentionally outside trigger v1.
     const allTools = toolPlan.constructTools
-      ? createOpenClawCodingTools({
+      ? createNatesclawCodingTools({
           agentId,
           exec: { config },
           sandbox,
@@ -345,7 +345,7 @@ function createCronCodeModeRunner(deps: CronTriggerEvaluatorDeps) {
   const runtimeCache = new Map<string, TriggerRuntimeCacheEntry>();
 
   const resolveCachedRuntime = async (request: {
-    runtimeConfig: OpenClawConfig;
+    runtimeConfig: NatesclawConfig;
     jobId: string;
     requestedAgentId?: string;
     agentId: string;

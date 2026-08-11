@@ -2,10 +2,10 @@
 import { describe, expect, it } from "vitest";
 import { resolveAgentConfig } from "../../agents/agent-scope.js";
 import { resolveAllowedModelRefCore } from "../../agents/model-selection-resolve.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { buildCronAgentDefaultsConfig } from "./run-config.js";
 
-function buildCronConfig(cfg: OpenClawConfig, agentId: string): OpenClawConfig {
+function buildCronConfig(cfg: NatesclawConfig, agentId: string): NatesclawConfig {
   const defaults = buildCronAgentDefaultsConfig({
     defaults: cfg.agents?.defaults,
     agentConfigOverride: resolveAgentConfig(cfg, agentId),
@@ -16,7 +16,7 @@ function buildCronConfig(cfg: OpenClawConfig, agentId: string): OpenClawConfig {
   };
 }
 
-function resolveCronPayloadModel(cfg: OpenClawConfig, raw: string) {
+function resolveCronPayloadModel(cfg: NatesclawConfig, raw: string) {
   return resolveAllowedModelRefCore({
     cfg,
     catalog: [
@@ -32,7 +32,7 @@ function resolveCronPayloadModel(cfg: OpenClawConfig, raw: string) {
 
 describe("buildCronAgentDefaultsConfig model policy preservation", () => {
   it("keeps the inherited default restriction when the per-agent policy is empty", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: { modelPolicy: { allow: ["openai/gpt-5.5"] } },
         list: [{ id: "worker", modelPolicy: {} }],
@@ -48,7 +48,7 @@ describe("buildCronAgentDefaultsConfig model policy preservation", () => {
   });
 
   it("applies an explicit per-agent allowlist to cron model resolution", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: { modelPolicy: { allow: ["openai/gpt-5.5"] } },
         list: [{ id: "worker", modelPolicy: { allow: ["openai/gpt-5.6-sol"] } }],

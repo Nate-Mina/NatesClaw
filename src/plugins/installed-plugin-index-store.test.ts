@@ -8,9 +8,9 @@ import {
   STARTUP_MIGRATION_LEASE_TTL_MS,
 } from "../infra/startup-migration-checkpoint.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import type { PluginCandidate } from "./discovery.js";
 import {
   readPersistedInstalledPluginIndexInstallRecords,
@@ -36,12 +36,12 @@ import { cleanupTrackedTempDirs, makeTrackedTempDir } from "./test-helpers/fs-fi
 const tempDirs: string[] = [];
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   cleanupTrackedTempDirs(tempDirs);
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("openclaw-installed-plugin-index-store", tempDirs);
+  return makeTrackedTempDir("natesclaw-installed-plugin-index-store", tempDirs);
 }
 
 function createIndex(overrides: Partial<InstalledPluginIndex> = {}): InstalledPluginIndex {
@@ -56,7 +56,7 @@ function createIndex(overrides: Partial<InstalledPluginIndex> = {}): InstalledPl
     plugins: [
       {
         pluginId: "demo",
-        manifestPath: "/plugins/demo/openclaw.plugin.json",
+        manifestPath: "/plugins/demo/natesclaw.plugin.json",
         manifestHash: "manifest-hash",
         rootDir: "/plugins/demo",
         origin: "global",
@@ -87,7 +87,7 @@ function createCandidate(
     "utf8",
   );
   fs.writeFileSync(
-    path.join(rootDir, "openclaw.plugin.json"),
+    path.join(rootDir, "natesclaw.plugin.json"),
     JSON.stringify({
       id,
       name: id === "demo" ? "Demo" : "Next Demo",
@@ -195,7 +195,7 @@ function insertPersistedIndexRow(
     diagnosticsJson?: string;
   },
 ) {
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       db.prepare(
         `
@@ -217,12 +217,12 @@ function insertPersistedIndexRow(
         diagnostics_json: values.diagnosticsJson ?? "[]",
       });
     },
-    { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } },
+    { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } },
   );
 }
 
 function readPersistedIndexRevision(stateDir: string): number | null {
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const row = db
         .prepare(
@@ -235,7 +235,7 @@ function readPersistedIndexRevision(stateDir: string): number | null {
         .get() as { updated_at_ms: number | bigint } | undefined;
       return row ? Number(row.updated_at_ms) : null;
     },
-    { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } },
+    { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } },
   );
 }
 
@@ -244,7 +244,7 @@ describe("installed plugin index persistence", () => {
     const stateDir = makeTempDir();
 
     expect(resolveInstalledPluginIndexStorePath({ stateDir })).toBe(
-      path.join(stateDir, "state", "openclaw.sqlite"),
+      path.join(stateDir, "state", "natesclaw.sqlite"),
     );
   });
 
@@ -364,7 +364,7 @@ describe("installed plugin index persistence", () => {
 
   it("rejects a stale leased write without replacing the successor index", async () => {
     const stateDir = makeTempDir();
-    const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+    const env = { ...process.env, NATESCLAW_STATE_DIR: stateDir };
     const nowMs = Date.now();
     const staleLease = acquireStartupMigrationLease({ env, nowMs, owner: "stale" });
     const successorLease = acquireStartupMigrationLease({
@@ -408,8 +408,8 @@ describe("installed plugin index persistence", () => {
       },
     };
     const env = {
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: "2026.4.25",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      NATESCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
 
@@ -437,8 +437,8 @@ describe("installed plugin index persistence", () => {
     const candidate = createCandidate(pluginDir);
     const contractPath = path.join(pluginDir, "doctor-contract-api.ts");
     const env = {
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: "2026.4.25",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      NATESCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
     fs.writeFileSync(contractPath, "export const legacyConfigRules = [];\n", "utf8");
@@ -523,7 +523,7 @@ describe("installed plugin index persistence", () => {
     const stateDir = makeTempDir();
     const filePath = resolveInstalledPluginIndexStorePath({ stateDir });
     await writePersistedInstalledPluginIndex(createIndex(), { stateDir });
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
 
     const sqlite = requireNodeSqlite();
     const mutate = new sqlite.DatabaseSync(filePath);
@@ -562,7 +562,7 @@ describe("installed plugin index persistence", () => {
       plugins: [
         {
           pluginId: "browser",
-          manifestPath: "/plugins/browser/openclaw.plugin.json",
+          manifestPath: "/plugins/browser/natesclaw.plugin.json",
           manifestHash: "browser-manifest-hash",
           rootDir: "/plugins/browser",
           origin: "bundled",
@@ -592,7 +592,7 @@ describe("installed plugin index persistence", () => {
       plugins: [
         {
           pluginId: "provider-owner",
-          manifestPath: "/plugins/provider-owner/openclaw.plugin.json",
+          manifestPath: "/plugins/provider-owner/natesclaw.plugin.json",
           manifestHash: "provider-owner-manifest-hash",
           rootDir: "/plugins/provider-owner",
           origin: "bundled",
@@ -643,8 +643,8 @@ describe("installed plugin index persistence", () => {
     const pluginDir = path.join(stateDir, "plugins", "demo");
     fs.mkdirSync(pluginDir, { recursive: true });
     const env = {
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: "2026.4.25",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      NATESCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
     const candidate = createCandidate(pluginDir, { configPaths: ["browser"] });
@@ -687,7 +687,7 @@ describe("installed plugin index persistence", () => {
     await expect(writePersistedInstalledPluginIndex(createIndex(), { stateDir })).rejects.toThrow(
       "Persisted plugin install records are invalid",
     );
-    const row = runOpenClawStateWriteTransaction(
+    const row = runNatesclawStateWriteTransaction(
       ({ db }) =>
         db
           .prepare(
@@ -696,7 +696,7 @@ describe("installed plugin index persistence", () => {
               WHERE index_key = 'installed-plugin-index'`,
           )
           .get() as { install_records_json: string; updated_at_ms: number | bigint },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } },
+      { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } },
     );
     expect(row).toEqual({ install_records_json: installRecordsJson, updated_at_ms: 123 });
   });
@@ -732,8 +732,8 @@ describe("installed plugin index persistence", () => {
     fs.mkdirSync(pluginDir, { recursive: true });
     const candidate = createCandidate(pluginDir);
     const env = {
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: "2026.4.25",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      NATESCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
 
@@ -784,7 +784,7 @@ describe("installed plugin index persistence", () => {
     expectPluginFields(policyInspect.current, "demo", { enabled: false });
 
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "natesclaw.plugin.json"),
       JSON.stringify({
         id: "demo",
         name: "Demo",
@@ -816,8 +816,8 @@ describe("installed plugin index persistence", () => {
       stateDir,
       candidates: [candidate],
       env: {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        OPENCLAW_VERSION: "2026.4.25",
+        NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        NATESCLAW_VERSION: "2026.4.25",
         VITEST: "true",
       },
     });
@@ -836,8 +836,8 @@ describe("installed plugin index persistence", () => {
     fs.mkdirSync(pluginDir, { recursive: true });
     const candidate = createCandidate(pluginDir);
     const env = {
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: "2026.4.25",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      NATESCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
     const initial = await refreshPersistedInstalledPluginIndex({
@@ -847,7 +847,7 @@ describe("installed plugin index persistence", () => {
       env,
     });
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "natesclaw.plugin.json"),
       JSON.stringify({
         id: "demo",
         name: "Demo",
@@ -892,8 +892,8 @@ describe("installed plugin index persistence", () => {
     const candidate = createCandidate(pluginDir);
     const nextCandidate = createCandidate(nextPluginDir, { id: "next-demo" });
     const env = {
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: "2026.4.25",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      NATESCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
     await refreshPersistedInstalledPluginIndex({
@@ -944,8 +944,8 @@ describe("installed plugin index persistence", () => {
       stateDir,
       candidates: [],
       env: {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        OPENCLAW_VERSION: "2026.4.25",
+        NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        NATESCLAW_VERSION: "2026.4.25",
         VITEST: "true",
       },
     });
@@ -1007,8 +1007,8 @@ describe("installed plugin index persistence", () => {
       stateDir,
       candidates: [],
       env: {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        OPENCLAW_VERSION: "2026.4.25",
+        NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        NATESCLAW_VERSION: "2026.4.25",
         VITEST: "true",
       },
     });

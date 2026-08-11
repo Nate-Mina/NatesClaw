@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { Writable } from "node:stream";
 import { pathToFileURL } from "node:url";
-import { toErrorObject } from "openclaw/plugin-sdk/error-runtime";
+import { toErrorObject } from "natesclaw/plugin-sdk/error-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   testing,
@@ -23,13 +23,13 @@ const qaTempPathState = vi.hoisted(() => ({
   preferredTmpDir: process.env.TMPDIR || "/tmp",
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: fetchWithSsrFGuardMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/temp-path", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/temp-path")>()),
-  resolvePreferredOpenClawTmpDir: () => qaTempPathState.preferredTmpDir,
+vi.mock("natesclaw/plugin-sdk/temp-path", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/temp-path")>()),
+  resolvePreferredNatesclawTmpDir: () => qaTempPathState.preferredTmpDir,
 }));
 
 vi.mock("./node-exec.js", () => ({
@@ -47,16 +47,16 @@ afterEach(async () => {
 
 function createParams(baseEnv?: NodeJS.ProcessEnv) {
   return {
-    configPath: "/tmp/openclaw-qa/openclaw.json",
+    configPath: "/tmp/natesclaw-qa/natesclaw.json",
     gatewayToken: "qa-token",
-    homeDir: "/tmp/openclaw-qa/home",
-    stateDir: "/tmp/openclaw-qa/state",
-    tempRoot: "/tmp/openclaw-qa",
-    xdgConfigHome: "/tmp/openclaw-qa/xdg-config",
-    xdgDataHome: "/tmp/openclaw-qa/xdg-data",
-    xdgCacheHome: "/tmp/openclaw-qa/xdg-cache",
-    bundledPluginsDir: "/tmp/openclaw-qa/bundled-plugins",
-    stagedBundledPluginsRoot: "/repo/.artifacts/qa-runtime/openclaw-qa-suite-test",
+    homeDir: "/tmp/natesclaw-qa/home",
+    stateDir: "/tmp/natesclaw-qa/state",
+    tempRoot: "/tmp/natesclaw-qa",
+    xdgConfigHome: "/tmp/natesclaw-qa/xdg-config",
+    xdgDataHome: "/tmp/natesclaw-qa/xdg-data",
+    xdgCacheHome: "/tmp/natesclaw-qa/xdg-cache",
+    bundledPluginsDir: "/tmp/natesclaw-qa/bundled-plugins",
+    stagedBundledPluginsRoot: "/repo/.artifacts/qa-runtime/natesclaw-qa-suite-test",
     compatibilityHostVersion: "2026.4.8",
     baseEnv,
   };
@@ -121,7 +121,7 @@ async function writeJsonFixture(filePath: string, value: unknown, space?: number
 }
 
 async function writeTempProviderConfig(value: unknown) {
-  const configPath = path.join(await tempDirs.makeTempDir("qa-provider-config-"), "openclaw.json");
+  const configPath = path.join(await tempDirs.makeTempDir("qa-provider-config-"), "natesclaw.json");
   await writeJsonFixture(configPath, value);
   return configPath;
 }
@@ -135,8 +135,8 @@ import path from "node:path";
 
 const args = process.argv.slice(2);
 const recordPath = process.env.QA_RECORD_PATH;
-const configPath = process.env.OPENCLAW_CONFIG_PATH;
-const stateDir = process.env.OPENCLAW_STATE_DIR;
+const configPath = process.env.NATESCLAW_CONFIG_PATH;
+const stateDir = process.env.NATESCLAW_STATE_DIR;
 if (!recordPath || !configPath || !stateDir) {
   throw new Error("missing fixture environment");
 }
@@ -150,11 +150,11 @@ if (args[0] === "models") {
     kind: "auth",
     args,
     stdin,
-    dbExists: fs.existsSync(path.join(stateDir, "agents", "qa", "agent", "openclaw-agent.sqlite")),
+    dbExists: fs.existsSync(path.join(stateDir, "agents", "qa", "agent", "natesclaw-agent.sqlite")),
     env: {
-      OPENCLAW_CLI: process.env.OPENCLAW_CLI,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_STATE_DIR: stateDir,
+      NATESCLAW_CLI: process.env.NATESCLAW_CLI,
+      NATESCLAW_CONFIG_PATH: configPath,
+      NATESCLAW_STATE_DIR: stateDir,
     },
   });
   if (process.env.QA_FAIL_PROVIDER === provider) {
@@ -191,7 +191,7 @@ describe("runQaGatewayCliCommand", () => {
       executablePath: process.execPath,
       argsPrefix: [
         "--eval",
-        'process.stdout.write(`${process.env.OPENCLAW_CLI}:${process.env.QA_VALUE}:${process.argv.slice(1).join(",")}`)',
+        'process.stdout.write(`${process.env.NATESCLAW_CLI}:${process.env.QA_VALUE}:${process.argv.slice(1).join(",")}`)',
       ],
       args: ["voicecall", "start"],
       cwd: process.cwd(),
@@ -210,7 +210,7 @@ describe("runQaGatewayCliCommand", () => {
         cwd: process.cwd(),
         env: process.env,
       }),
-    ).rejects.toThrow("OpenClaw CLI exited 7: fixture failure");
+    ).rejects.toThrow("Natesclaw CLI exited 7: fixture failure");
   });
 
   it.each(["stdout", "stderr"] as const)(
@@ -405,7 +405,7 @@ describe("Gateway child fixture helpers", () => {
       }),
     ).toEqual(
       expect.objectContaining({
-        OPENCLAW_CODEX_APP_SERVER_ARGS: `app-server -c openai_base_url=http://127.0.0.1:44080/v1 -c ${JSON.stringify(`model_catalog_json=${modelCatalogPath}`)} -c sandbox_workspace_write.exclude_tmpdir_env_var=true -c sandbox_workspace_write.exclude_slash_tmp=true --listen stdio://`,
+        NATESCLAW_CODEX_APP_SERVER_ARGS: `app-server -c openai_base_url=http://127.0.0.1:44080/v1 -c ${JSON.stringify(`model_catalog_json=${modelCatalogPath}`)} -c sandbox_workspace_write.exclude_tmpdir_env_var=true -c sandbox_workspace_write.exclude_slash_tmp=true --listen stdio://`,
       }),
     );
   });
@@ -415,7 +415,7 @@ describe("Gateway child fixture helpers", () => {
     await expect(
       testing.stageQaCodexMockModelCatalog({
         tempRoot,
-        forcedRuntime: "openclaw",
+        forcedRuntime: "natesclaw",
         providerMode: "mock-openai",
       }),
     ).resolves.toBeUndefined();
@@ -438,9 +438,9 @@ describe("Gateway child fixture helpers", () => {
         providerMode: "live-frontier",
       }),
     ).toEqual({
-      OPENCLAW_BUILD_PRIVATE_QA: "1",
-      OPENCLAW_QA_FORCE_RUNTIME: "codex",
-      OPENCLAW_CODEX_APP_SERVER_ARGS:
+      NATESCLAW_BUILD_PRIVATE_QA: "1",
+      NATESCLAW_QA_FORCE_RUNTIME: "codex",
+      NATESCLAW_CODEX_APP_SERVER_ARGS:
         "app-server -c sandbox_workspace_write.exclude_tmpdir_env_var=true " +
         "-c sandbox_workspace_write.exclude_slash_tmp=true --listen stdio://",
     });
@@ -455,9 +455,9 @@ describe("Gateway child fixture helpers", () => {
           'app-server -c openai_base_url="https://live.example/v1" --listen stdio://',
       }),
     ).toEqual({
-      OPENCLAW_BUILD_PRIVATE_QA: "1",
-      OPENCLAW_QA_FORCE_RUNTIME: "codex",
-      OPENCLAW_CODEX_APP_SERVER_ARGS:
+      NATESCLAW_BUILD_PRIVATE_QA: "1",
+      NATESCLAW_QA_FORCE_RUNTIME: "codex",
+      NATESCLAW_CODEX_APP_SERVER_ARGS:
         'app-server -c openai_base_url="https://live.example/v1" --listen stdio:// ' +
         "-c sandbox_workspace_write.exclude_tmpdir_env_var=true " +
         "-c sandbox_workspace_write.exclude_slash_tmp=true",
@@ -520,7 +520,7 @@ describe("buildQaRuntimeEnv", () => {
         useRepoCli: true,
         transportBaseUrl: "http://127.0.0.1:43123",
       }),
-    ).rejects.toThrow("OpenClaw CLI entry not found");
+    ).rejects.toThrow("Natesclaw CLI entry not found");
 
     await expect(readdir(tempParent)).resolves.toStrictEqual([]);
   });
@@ -565,7 +565,7 @@ describe("buildQaRuntimeEnv", () => {
     const preferredTempParent = await tempDirs.makeTempDir("qa-gateway-default-spawn-fail-");
     const commandTempParent = await tempDirs.makeTempDir("qa-gateway-command-spawn-fail-");
     qaTempPathState.preferredTmpDir = preferredTempParent;
-    const missingExecutable = path.join(commandTempParent, "missing-openclaw-node");
+    const missingExecutable = path.join(commandTempParent, "missing-natesclaw-node");
 
     await expect(
       startQaGatewayChild({
@@ -593,19 +593,19 @@ describe("buildQaRuntimeEnv", () => {
       providerMode: "mock-openai",
     });
 
-    expect(env.OPENCLAW_TEST_FAST).toBe("1");
-    expect(env.OPENCLAW_SKIP_STARTUP_MODEL_PREWARM).toBe("1");
-    expect(env.OPENCLAW_EMBEDDED_ABORT_SETTLE_TIMEOUT_MS).toBe("2000");
-    expect(env.OPENCLAW_QA_PARENT_PID).toBe(String(process.pid));
-    expect(env.OPENCLAW_QA_TEMP_ROOT).toBe("/tmp/openclaw-qa");
-    expect(env.OPENCLAW_QA_STAGED_RUNTIME_ROOT).toBe(
-      "/repo/.artifacts/qa-runtime/openclaw-qa-suite-test",
+    expect(env.NATESCLAW_TEST_FAST).toBe("1");
+    expect(env.NATESCLAW_SKIP_STARTUP_MODEL_PREWARM).toBe("1");
+    expect(env.NATESCLAW_EMBEDDED_ABORT_SETTLE_TIMEOUT_MS).toBe("2000");
+    expect(env.NATESCLAW_QA_PARENT_PID).toBe(String(process.pid));
+    expect(env.NATESCLAW_QA_TEMP_ROOT).toBe("/tmp/natesclaw-qa");
+    expect(env.NATESCLAW_QA_STAGED_RUNTIME_ROOT).toBe(
+      "/repo/.artifacts/qa-runtime/natesclaw-qa-suite-test",
     );
-    expect(env.OPENCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER).toBe("1");
-    expect(env.OPENCLAW_BUILD_PRIVATE_QA).toBe("1");
-    expect(env.OPENCLAW_ALLOW_SLOW_REPLY_TESTS).toBe("1");
-    expect(env.OPENCLAW_BUNDLED_PLUGINS_DIR).toBe("/tmp/openclaw-qa/bundled-plugins");
-    expect(env.OPENCLAW_COMPATIBILITY_HOST_VERSION).toBe("2026.4.8");
+    expect(env.NATESCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER).toBe("1");
+    expect(env.NATESCLAW_BUILD_PRIVATE_QA).toBe("1");
+    expect(env.NATESCLAW_ALLOW_SLOW_REPLY_TESTS).toBe("1");
+    expect(env.NATESCLAW_BUNDLED_PLUGINS_DIR).toBe("/tmp/natesclaw-qa/bundled-plugins");
+    expect(env.NATESCLAW_COMPATIBILITY_HOST_VERSION).toBe("2026.4.8");
   });
 
   it("isolates gateway children from Vitest without removing QA controls or non-test NODE_ENV", () => {
@@ -627,8 +627,8 @@ describe("buildQaRuntimeEnv", () => {
     expect(testEnv.VITEST).toBeUndefined();
     expect(testEnv.VITEST_POOL_ID).toBeUndefined();
     expect(testEnv.VITEST_WORKER_ID).toBeUndefined();
-    expect(testEnv.OPENCLAW_TEST_FAST).toBe("1");
-    expect(testEnv.OPENCLAW_ALLOW_SLOW_REPLY_TESTS).toBe("1");
+    expect(testEnv.NATESCLAW_TEST_FAST).toBe("1");
+    expect(testEnv.NATESCLAW_ALLOW_SLOW_REPLY_TESTS).toBe("1");
 
     const developmentEnv = buildQaRuntimeEnv({
       ...createParams({ NODE_ENV: "development" }),
@@ -639,9 +639,9 @@ describe("buildQaRuntimeEnv", () => {
   it("maps live frontier key aliases into provider env vars", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
-        OPENCLAW_LIVE_OPENAI_KEY: "openai-live",
-        OPENCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
-        OPENCLAW_LIVE_GEMINI_KEY: "gemini-live",
+        NATESCLAW_LIVE_OPENAI_KEY: "openai-live",
+        NATESCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
+        NATESCLAW_LIVE_GEMINI_KEY: "gemini-live",
       }),
       providerMode: "live-frontier",
     });
@@ -660,7 +660,7 @@ describe("buildQaRuntimeEnv", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
         OPENAI_API_KEY: "openai-explicit",
-        OPENCLAW_LIVE_OPENAI_KEY: "openai-live",
+        NATESCLAW_LIVE_OPENAI_KEY: "openai-live",
       }),
       providerMode: "live-frontier",
     });
@@ -668,7 +668,7 @@ describe("buildQaRuntimeEnv", () => {
     expect(env.OPENAI_API_KEY).toBe("openai-explicit");
   });
 
-  it("preserves Codex CLI auth home for live frontier runs while sandboxing OpenClaw home", async () => {
+  it("preserves Codex CLI auth home for live frontier runs while sandboxing Natesclaw home", async () => {
     const hostHome = await tempDirs.makeTempDir("qa-host-home-");
     const codexHome = path.join(hostHome, ".codex");
     await mkdir(codexHome);
@@ -680,12 +680,12 @@ describe("buildQaRuntimeEnv", () => {
       providerMode: "live-frontier",
     });
 
-    expect(env.HOME).toBe("/tmp/openclaw-qa/home");
-    expect(env.OPENCLAW_HOME).toBe("/tmp/openclaw-qa/home");
+    expect(env.HOME).toBe("/tmp/natesclaw-qa/home");
+    expect(env.NATESCLAW_HOME).toBe("/tmp/natesclaw-qa/home");
     expect(env.CODEX_HOME).toBe(codexHome);
   });
 
-  it("forwards host HOME for live Claude CLI runs while keeping OpenClaw home sandboxed", async () => {
+  it("forwards host HOME for live Claude CLI runs while keeping Natesclaw home sandboxed", async () => {
     const hostHome = await tempDirs.makeTempDir("qa-host-home-");
 
     const env = buildQaRuntimeEnv({
@@ -697,11 +697,11 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.HOME).toBe(hostHome);
-    expect(env.OPENCLAW_HOME).toBe("/tmp/openclaw-qa/home");
-    expect(env.OPENCLAW_STATE_DIR).toBe("/tmp/openclaw-qa/state");
+    expect(env.NATESCLAW_HOME).toBe("/tmp/natesclaw-qa/home");
+    expect(env.NATESCLAW_STATE_DIR).toBe("/tmp/natesclaw-qa/state");
   });
 
-  it("can forward host HOME for browser-backed QA runs while keeping OpenClaw home sandboxed", async () => {
+  it("can forward host HOME for browser-backed QA runs while keeping Natesclaw home sandboxed", async () => {
     const hostHome = await tempDirs.makeTempDir("qa-host-home-");
 
     const env = buildQaRuntimeEnv({
@@ -713,8 +713,8 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.HOME).toBe(hostHome);
-    expect(env.OPENCLAW_HOME).toBe("/tmp/openclaw-qa/home");
-    expect(env.OPENCLAW_STATE_DIR).toBe("/tmp/openclaw-qa/state");
+    expect(env.NATESCLAW_HOME).toBe("/tmp/natesclaw-qa/home");
+    expect(env.NATESCLAW_STATE_DIR).toBe("/tmp/natesclaw-qa/state");
   });
 
   it("preserves the live Anthropic key for live Claude CLI runs without writing it into config", async () => {
@@ -723,8 +723,8 @@ describe("buildQaRuntimeEnv", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
         HOME: hostHome,
-        OPENCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
-        OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP"]',
+        NATESCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
+        NATESCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP"]',
       }),
       providerMode: "live-frontier",
       forwardHostHomeForClaudeCli: true,
@@ -732,8 +732,8 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.ANTHROPIC_API_KEY).toBe("anthropic-live");
-    expect(env.OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP","ANTHROPIC_API_KEY"]');
-    expect(env.OPENCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("api-key");
+    expect(env.NATESCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP","ANTHROPIC_API_KEY"]');
+    expect(env.NATESCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("api-key");
   });
 
   it("removes preserved Anthropic keys for live Claude CLI subscription runs", async () => {
@@ -743,7 +743,7 @@ describe("buildQaRuntimeEnv", () => {
       ...createParams({
         HOME: hostHome,
         ANTHROPIC_API_KEY: "anthropic-live",
-        OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP","ANTHROPIC_API_KEY"]',
+        NATESCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP","ANTHROPIC_API_KEY"]',
       }),
       providerMode: "live-frontier",
       forwardHostHomeForClaudeCli: true,
@@ -751,42 +751,42 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.ANTHROPIC_API_KEY).toBe("anthropic-live");
-    expect(env.OPENCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP"]');
-    expect(env.OPENCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("subscription");
+    expect(env.NATESCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP"]');
+    expect(env.NATESCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("subscription");
   });
 
   it("does not pass QA setup-token values to the gateway child env", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
-        OPENCLAW_LIVE_SETUP_TOKEN_VALUE: `sk-ant-oat01-${"a".repeat(80)}`,
-        OPENCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: `sk-ant-oat01-${"b".repeat(80)}`,
+        NATESCLAW_LIVE_SETUP_TOKEN_VALUE: `sk-ant-oat01-${"a".repeat(80)}`,
+        NATESCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: `sk-ant-oat01-${"b".repeat(80)}`,
       }),
       providerMode: "live-frontier",
     });
 
-    expect(env.OPENCLAW_LIVE_SETUP_TOKEN_VALUE).toBeUndefined();
-    expect(env.OPENCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN).toBeUndefined();
+    expect(env.NATESCLAW_LIVE_SETUP_TOKEN_VALUE).toBeUndefined();
+    expect(env.NATESCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN).toBeUndefined();
   });
 
   it("does not pass credential broker or Telegram harness secrets to the gateway child env", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
-        OPENCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
-        OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "convex-maintainer-secret",
-        OPENCLAW_QA_SUT_FORBIDDEN_SENTINEL: "trusted-parent-only",
-        OPENCLAW_QA_TELEGRAM_GROUP_ID: "-1001234567890",
-        OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver-token",
-        OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut-token",
+        NATESCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
+        NATESCLAW_QA_CONVEX_SECRET_MAINTAINER: "convex-maintainer-secret",
+        NATESCLAW_QA_SUT_FORBIDDEN_SENTINEL: "trusted-parent-only",
+        NATESCLAW_QA_TELEGRAM_GROUP_ID: "-1001234567890",
+        NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver-token",
+        NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut-token",
       }),
       providerMode: "live-frontier",
     });
 
-    expect(env.OPENCLAW_QA_CONVEX_SECRET_CI).toBeUndefined();
-    expect(env.OPENCLAW_QA_CONVEX_SECRET_MAINTAINER).toBeUndefined();
-    expect(env.OPENCLAW_QA_SUT_FORBIDDEN_SENTINEL).toBeUndefined();
-    expect(env.OPENCLAW_QA_TELEGRAM_GROUP_ID).toBeUndefined();
-    expect(env.OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN).toBeUndefined();
-    expect(env.OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN).toBeUndefined();
+    expect(env.NATESCLAW_QA_CONVEX_SECRET_CI).toBeUndefined();
+    expect(env.NATESCLAW_QA_CONVEX_SECRET_MAINTAINER).toBeUndefined();
+    expect(env.NATESCLAW_QA_SUT_FORBIDDEN_SENTINEL).toBeUndefined();
+    expect(env.NATESCLAW_QA_TELEGRAM_GROUP_ID).toBeUndefined();
+    expect(env.NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN).toBeUndefined();
+    expect(env.NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN).toBeUndefined();
   });
 
   it("re-scrubs blocked credentials after runtime env patches", () => {
@@ -794,24 +794,24 @@ describe("buildQaRuntimeEnv", () => {
       ...createParams({ SAFE_VALUE: "base" }),
       runtimeEnvPatch: {
         SAFE_VALUE: "patched",
-        OPENCLAW_LIVE_SETUP_TOKEN_VALUE: "setup-token",
-        OPENCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: "anthropic-setup-token",
-        OPENCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
-        OPENCLAW_QA_SUT_FORBIDDEN_SENTINEL: "trusted-parent-only",
-        OPENCLAW_QA_TELEGRAM_GROUP_ID: "-1001234567890",
-        OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver-token",
-        OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut-token",
+        NATESCLAW_LIVE_SETUP_TOKEN_VALUE: "setup-token",
+        NATESCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: "anthropic-setup-token",
+        NATESCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
+        NATESCLAW_QA_SUT_FORBIDDEN_SENTINEL: "trusted-parent-only",
+        NATESCLAW_QA_TELEGRAM_GROUP_ID: "-1001234567890",
+        NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver-token",
+        NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut-token",
       },
     });
 
     expect(env.SAFE_VALUE).toBe("patched");
-    expect(env.OPENCLAW_LIVE_SETUP_TOKEN_VALUE).toBeUndefined();
-    expect(env.OPENCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN).toBeUndefined();
-    expect(env.OPENCLAW_QA_CONVEX_SECRET_CI).toBeUndefined();
-    expect(env.OPENCLAW_QA_SUT_FORBIDDEN_SENTINEL).toBeUndefined();
-    expect(env.OPENCLAW_QA_TELEGRAM_GROUP_ID).toBeUndefined();
-    expect(env.OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN).toBeUndefined();
-    expect(env.OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN).toBeUndefined();
+    expect(env.NATESCLAW_LIVE_SETUP_TOKEN_VALUE).toBeUndefined();
+    expect(env.NATESCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN).toBeUndefined();
+    expect(env.NATESCLAW_QA_CONVEX_SECRET_CI).toBeUndefined();
+    expect(env.NATESCLAW_QA_SUT_FORBIDDEN_SENTINEL).toBeUndefined();
+    expect(env.NATESCLAW_QA_TELEGRAM_GROUP_ID).toBeUndefined();
+    expect(env.NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN).toBeUndefined();
+    expect(env.NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN).toBeUndefined();
   });
 
   it("re-scrubs blocked credentials in the spawned gateway child env", async () => {
@@ -822,13 +822,13 @@ describe("buildQaRuntimeEnv", () => {
       'const fs = require("node:fs");',
       "const env = {",
       "SAFE_VALUE: process.env.SAFE_VALUE,",
-      "OPENCLAW_LIVE_SETUP_TOKEN_VALUE: process.env.OPENCLAW_LIVE_SETUP_TOKEN_VALUE,",
-      "OPENCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: process.env.OPENCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN,",
-      "OPENCLAW_QA_CONVEX_SECRET_CI: process.env.OPENCLAW_QA_CONVEX_SECRET_CI,",
-      "OPENCLAW_QA_SUT_FORBIDDEN_SENTINEL: process.env.OPENCLAW_QA_SUT_FORBIDDEN_SENTINEL,",
-      "OPENCLAW_QA_TELEGRAM_GROUP_ID: process.env.OPENCLAW_QA_TELEGRAM_GROUP_ID,",
-      "OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: process.env.OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN,",
-      "OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: process.env.OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN,",
+      "NATESCLAW_LIVE_SETUP_TOKEN_VALUE: process.env.NATESCLAW_LIVE_SETUP_TOKEN_VALUE,",
+      "NATESCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: process.env.NATESCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN,",
+      "NATESCLAW_QA_CONVEX_SECRET_CI: process.env.NATESCLAW_QA_CONVEX_SECRET_CI,",
+      "NATESCLAW_QA_SUT_FORBIDDEN_SENTINEL: process.env.NATESCLAW_QA_SUT_FORBIDDEN_SENTINEL,",
+      "NATESCLAW_QA_TELEGRAM_GROUP_ID: process.env.NATESCLAW_QA_TELEGRAM_GROUP_ID,",
+      "NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: process.env.NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN,",
+      "NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: process.env.NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN,",
       "};",
       `fs.writeFileSync(${JSON.stringify(observedEnvPath)}, JSON.stringify(env));`,
     ].join("\n");
@@ -843,13 +843,13 @@ describe("buildQaRuntimeEnv", () => {
         },
         runtimeEnvPatch: {
           SAFE_VALUE: "patched",
-          OPENCLAW_LIVE_SETUP_TOKEN_VALUE: "setup-token",
-          OPENCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: "anthropic-setup-token",
-          OPENCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
-          OPENCLAW_QA_SUT_FORBIDDEN_SENTINEL: "trusted-parent-only",
-          OPENCLAW_QA_TELEGRAM_GROUP_ID: "-1001234567890",
-          OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver-token",
-          OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut-token",
+          NATESCLAW_LIVE_SETUP_TOKEN_VALUE: "setup-token",
+          NATESCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: "anthropic-setup-token",
+          NATESCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
+          NATESCLAW_QA_SUT_FORBIDDEN_SENTINEL: "trusted-parent-only",
+          NATESCLAW_QA_TELEGRAM_GROUP_ID: "-1001234567890",
+          NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver-token",
+          NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut-token",
         },
         transport: {
           requiredPluginIds: [],
@@ -905,11 +905,11 @@ describe("buildQaRuntimeEnv", () => {
           OPENAI_API_KEY: "openai-live",
           OPENAI_API_KEYS: "openai-a,openai-b",
           CODEX_HOME: "/host/.codex",
-          OPENCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
-          OPENCLAW_LIVE_ANTHROPIC_KEYS: "anthropic-a,anthropic-b",
-          OPENCLAW_LIVE_CODEX_API_KEY: "codex-live",
-          OPENCLAW_LIVE_GEMINI_KEY: "gemini-live",
-          OPENCLAW_LIVE_OPENAI_KEY: "openai-live",
+          NATESCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
+          NATESCLAW_LIVE_ANTHROPIC_KEYS: "anthropic-a,anthropic-b",
+          NATESCLAW_LIVE_CODEX_API_KEY: "codex-live",
+          NATESCLAW_LIVE_GEMINI_KEY: "gemini-live",
+          NATESCLAW_LIVE_OPENAI_KEY: "openai-live",
         }),
         providerMode,
       });
@@ -923,11 +923,11 @@ describe("buildQaRuntimeEnv", () => {
       expect(env.GEMINI_API_KEY).toBeUndefined();
       expect(env.GEMINI_API_KEYS).toBeUndefined();
       expect(env.GOOGLE_API_KEY).toBeUndefined();
-      expect(env.OPENCLAW_LIVE_OPENAI_KEY).toBeUndefined();
-      expect(env.OPENCLAW_LIVE_ANTHROPIC_KEY).toBeUndefined();
-      expect(env.OPENCLAW_LIVE_ANTHROPIC_KEYS).toBeUndefined();
-      expect(env.OPENCLAW_LIVE_CODEX_API_KEY).toBeUndefined();
-      expect(env.OPENCLAW_LIVE_GEMINI_KEY).toBeUndefined();
+      expect(env.NATESCLAW_LIVE_OPENAI_KEY).toBeUndefined();
+      expect(env.NATESCLAW_LIVE_ANTHROPIC_KEY).toBeUndefined();
+      expect(env.NATESCLAW_LIVE_ANTHROPIC_KEYS).toBeUndefined();
+      expect(env.NATESCLAW_LIVE_CODEX_API_KEY).toBeUndefined();
+      expect(env.NATESCLAW_LIVE_GEMINI_KEY).toBeUndefined();
     },
   );
 
@@ -1081,7 +1081,7 @@ describe("buildQaRuntimeEnv", () => {
       cfg: {},
       stateDir,
       env: {
-        OPENCLAW_LIVE_SETUP_TOKEN_VALUE: token,
+        NATESCLAW_LIVE_SETUP_TOKEN_VALUE: token,
       },
     });
 
@@ -1137,7 +1137,7 @@ describe("buildQaRuntimeEnv", () => {
       stateDir,
       providerIds: ["openai"],
       env: {
-        OPENCLAW_LIVE_OPENAI_KEY: "qa-live-codex-fallback-key",
+        NATESCLAW_LIVE_OPENAI_KEY: "qa-live-codex-fallback-key",
       },
     });
 
@@ -1172,7 +1172,7 @@ describe("buildQaRuntimeEnv", () => {
       stateDir,
       providerIds: ["openai"],
       env: {
-        OPENCLAW_LIVE_CODEX_API_KEY: "qa-live-direct-codex-key",
+        NATESCLAW_LIVE_CODEX_API_KEY: "qa-live-direct-codex-key",
       },
     });
 
@@ -1189,7 +1189,7 @@ describe("buildQaRuntimeEnv", () => {
         cfg,
         providerIds: ["openai"],
         env: {
-          OPENCLAW_LIVE_CODEX_API_KEY: "qa-live-direct-codex-key",
+          NATESCLAW_LIVE_CODEX_API_KEY: "qa-live-direct-codex-key",
         },
         readCodexCredentials: () => null,
       }),
@@ -1202,7 +1202,7 @@ describe("buildQaRuntimeEnv", () => {
         cfg: {},
         providerIds: ["openai"],
         env: {
-          CODEX_HOME: path.join(os.tmpdir(), "missing-openclaw-codex-home"),
+          CODEX_HOME: path.join(os.tmpdir(), "missing-natesclaw-codex-home"),
         },
         readCodexCredentials: () => null,
       }),
@@ -1215,7 +1215,7 @@ describe("buildQaRuntimeEnv", () => {
         cfg: {},
         providerIds: ["openai"],
         env: {
-          CODEX_HOME: path.join(os.tmpdir(), "missing-openclaw-codex-home"),
+          CODEX_HOME: path.join(os.tmpdir(), "missing-natesclaw-codex-home"),
         },
         readCodexCredentials: () => null,
       }),
@@ -1237,7 +1237,7 @@ describe("buildQaRuntimeEnv", () => {
         },
         providerIds: ["openai"],
         env: {
-          CODEX_HOME: path.join(os.tmpdir(), "missing-openclaw-codex-home"),
+          CODEX_HOME: path.join(os.tmpdir(), "missing-natesclaw-codex-home"),
         },
         readCodexCredentials: () => null,
       }),
@@ -1250,8 +1250,8 @@ describe("buildQaRuntimeEnv", () => {
         cfg: {},
         providerIds: ["openai"],
         env: {
-          CODEX_HOME: path.join(os.tmpdir(), "missing-openclaw-codex-home"),
-          OPENCLAW_QA_FORCE_RUNTIME: "codex",
+          CODEX_HOME: path.join(os.tmpdir(), "missing-natesclaw-codex-home"),
+          NATESCLAW_QA_FORCE_RUNTIME: "codex",
         },
         readCodexCredentials: () => null,
       }),
@@ -1264,8 +1264,8 @@ describe("buildQaRuntimeEnv", () => {
         cfg: {},
         providerIds: ["openai"],
         env: {
-          OPENCLAW_LIVE_OPENAI_KEY: "qa-live-codex-fallback-key",
-          OPENCLAW_QA_FORCE_RUNTIME: "codex",
+          NATESCLAW_LIVE_OPENAI_KEY: "qa-live-codex-fallback-key",
+          NATESCLAW_QA_FORCE_RUNTIME: "codex",
         },
         readCodexCredentials: () => null,
       }),
@@ -1317,7 +1317,7 @@ describe("buildQaRuntimeEnv", () => {
   it("stages configured OpenAI env secret refs for default OpenAI live QA runs", async () => {
     const stateDir = await tempDirs.makeTempDir("qa-live-codex-config-ref-state-");
     const env = {
-      OPENCLAW_LIVE_CODEX_API_KEY: "qa-configured-env-ref-not-a-real-key",
+      NATESCLAW_LIVE_CODEX_API_KEY: "qa-configured-env-ref-not-a-real-key",
     };
     const cfg = await testing.stageQaLiveApiKeyProfiles({
       cfg: {
@@ -1329,7 +1329,7 @@ describe("buildQaRuntimeEnv", () => {
               apiKey: {
                 source: "env",
                 provider: "default",
-                id: "OPENCLAW_LIVE_CODEX_API_KEY",
+                id: "NATESCLAW_LIVE_CODEX_API_KEY",
               },
             },
           },
@@ -1367,7 +1367,7 @@ describe("buildQaRuntimeEnv", () => {
             openai: {
               baseUrl: "",
               models: [],
-              apiKey: "OPENCLAW_LIVE_CODEX_API_KEY",
+              apiKey: "NATESCLAW_LIVE_CODEX_API_KEY",
             },
           },
         },
@@ -1375,7 +1375,7 @@ describe("buildQaRuntimeEnv", () => {
       stateDir,
       providerIds: ["openai"],
       env: {
-        OPENCLAW_LIVE_CODEX_API_KEY: "qa-configured-marker-not-a-real-key",
+        NATESCLAW_LIVE_CODEX_API_KEY: "qa-configured-marker-not-a-real-key",
       },
     });
 
@@ -1510,7 +1510,7 @@ describe("buildQaRuntimeEnv", () => {
       expect(record.dbExists).toBe(false);
       expect(record.stdin).toMatch(/^sk-qa-mock-[a-f0-9]{32}\n$/u);
       expect(record.env).toMatchObject({
-        OPENCLAW_CLI: "1",
+        NATESCLAW_CLI: "1",
       });
     }
     expect(records.at(-1)).toMatchObject({
@@ -1548,7 +1548,7 @@ describe("buildQaRuntimeEnv", () => {
       throw new Error("expected package auth bootstrap error");
     }
     expect(error.message).toContain(
-      "installed package mock auth bootstrap failed for openai: OpenClaw CLI exited 9: Authorization: Bearer <redacted>",
+      "installed package mock auth bootstrap failed for openai: Natesclaw CLI exited 9: Authorization: Bearer <redacted>",
     );
     const records = await readJsonLines(recordPath);
     expect(records).toHaveLength(1);
@@ -1584,7 +1584,7 @@ describe("buildQaRuntimeEnv", () => {
 
     // The main agent's canonical database should not exist because it was not requested.
     await expect(
-      lstat(path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite")),
+      lstat(path.join(stateDir, "agents", "main", "agent", "natesclaw-agent.sqlite")),
     ).rejects.toThrow(/ENOENT/);
   });
 
@@ -1940,15 +1940,15 @@ describe("buildQaRuntimeEnv", () => {
     ).toBe("bind-collision");
     expect(
       testing.classifyQaGatewayStartupRetry(
-        "OpenClaw plugin migration inputs changed during startup convergence; refusing to report the gateway ready. Restart OpenClaw so state migrations run against the final config and plugin inventory.",
+        "Natesclaw plugin migration inputs changed during startup convergence; refusing to report the gateway ready. Restart Natesclaw so state migrations run against the final config and plugin inventory.",
       ),
     ).toBe("migration-convergence-restart");
   });
 
   it.each([
-    "OpenClaw startup migrations did not complete cleanly; refusing to report the gateway ready.",
-    "OpenClaw plugin migration inputs changed during startup convergence",
-    "Restart OpenClaw so state migrations can continue.",
+    "Natesclaw startup migrations did not complete cleanly; refusing to report the gateway ready.",
+    "Natesclaw plugin migration inputs changed during startup convergence",
+    "Restart Natesclaw so state migrations can continue.",
     "gateway failed to become healthy",
   ])("does not retry unrelated startup failure: %s", (details) => {
     expect(testing.classifyQaGatewayStartupRetry(details)).toBeNull();
@@ -1958,7 +1958,7 @@ describe("buildQaRuntimeEnv", () => {
     const first = testing.resolveQaGatewayStartupRetry({
       attempt: 1,
       details:
-        "OpenClaw plugin migration inputs changed during startup convergence; refusing readiness.",
+        "Natesclaw plugin migration inputs changed during startup convergence; refusing readiness.",
       migrationConvergenceRestartUsed: false,
     });
 
@@ -1971,7 +1971,7 @@ describe("buildQaRuntimeEnv", () => {
       testing.resolveQaGatewayStartupRetry({
         attempt: 2,
         details:
-          "OpenClaw plugin migration inputs changed during startup convergence; refusing readiness.",
+          "Natesclaw plugin migration inputs changed during startup convergence; refusing readiness.",
         migrationConvergenceRestartUsed: first?.migrationConvergenceRestartUsed ?? false,
       }),
     ).toBeNull();
@@ -2052,11 +2052,11 @@ describe("buildQaRuntimeEnv", () => {
     await writeFile(
       stdoutLogPath,
       [
-        "OPENCLAW_GATEWAY_TOKEN=qa-suite-token",
+        "NATESCLAW_GATEWAY_TOKEN=qa-suite-token",
         'OPENAI_API_KEY="openai-live"',
-        "OPENCLAW_QA_CONVEX_SECRET_CI=convex-ci-secret",
-        "OPENCLAW_QA_CONVEX_SECRET_MAINTAINER=convex-maintainer-secret",
-        "OPENCLAW_LIVE_CODEX_API_KEY=codex-live-secret",
+        "NATESCLAW_QA_CONVEX_SECRET_CI=convex-ci-secret",
+        "NATESCLAW_QA_CONVEX_SECRET_MAINTAINER=convex-maintainer-secret",
+        "NATESCLAW_LIVE_CODEX_API_KEY=codex-live-secret",
         "botToken=12345:AbCdEfGhIjKl",
         "--botToken=12345:flag-secret",
         '"driverToken":"12345:driver-secr3t"',
@@ -2097,11 +2097,11 @@ describe("buildQaRuntimeEnv", () => {
     ]);
     await expect(readFile(path.join(artifactDir, "gateway.stdout.log"), "utf8")).resolves.toBe(
       [
-        "OPENCLAW_GATEWAY_TOKEN=<redacted>",
+        "NATESCLAW_GATEWAY_TOKEN=<redacted>",
         "OPENAI_API_KEY=<redacted>",
-        "OPENCLAW_QA_CONVEX_SECRET_CI=<redacted>",
-        "OPENCLAW_QA_CONVEX_SECRET_MAINTAINER=<redacted>",
-        "OPENCLAW_LIVE_CODEX_API_KEY=<redacted>",
+        "NATESCLAW_QA_CONVEX_SECRET_CI=<redacted>",
+        "NATESCLAW_QA_CONVEX_SECRET_MAINTAINER=<redacted>",
+        "NATESCLAW_LIVE_CODEX_API_KEY=<redacted>",
         "botToken=<redacted>",
         "--botToken=<redacted>",
         '"driverToken":"<redacted>"',
@@ -2131,7 +2131,7 @@ describe("buildQaRuntimeEnv", () => {
 
   it("rejects preserved gateway artifacts outside the repo root", async () => {
     await expect(
-      testing.assertQaArtifactDirWithinRepo("/tmp/openclaw-repo", "/tmp/outside"),
+      testing.assertQaArtifactDirWithinRepo("/tmp/natesclaw-repo", "/tmp/outside"),
     ).rejects.toThrow("QA gateway artifact directory must stay within the repo root.");
   });
 
@@ -2153,7 +2153,7 @@ describe("buildQaRuntimeEnv", () => {
     const tempRoot = await tempDirs.makeTempDir("qa-gateway-cleanup-src-");
     const stagedRoot = await tempDirs.makeTempDir("qa-gateway-cleanup-stage-");
 
-    await writeFile(path.join(tempRoot, "openclaw.json"), "{}", "utf8");
+    await writeFile(path.join(tempRoot, "natesclaw.json"), "{}", "utf8");
     await writeFile(path.join(stagedRoot, "marker.txt"), "x", "utf8");
 
     await testing.cleanupQaGatewayTempRoots({
@@ -2220,7 +2220,7 @@ describe("qa bundled plugin dir", () => {
   it("resolves bundled plugins by manifest id when the directory name differs", async () => {
     const repoRoot = await tempDirs.makeTempDir("qa-bundled-manifest-id-root-");
     await writeJsonFixture(
-      path.join(repoRoot, "dist", "extensions", "kimi-coding", "openclaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "kimi-coding", "natesclaw.plugin.json"),
       { id: "kimi", providers: ["kimi"] },
     );
     await writeJsonFixture(
@@ -2243,12 +2243,12 @@ describe("qa bundled plugin dir", () => {
       {},
     );
     await writeJsonFixture(
-      path.join(repoRoot, "dist", "extensions", "memory-core", "openclaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "memory-core", "natesclaw.plugin.json"),
       { id: "memory-core", kind: "memory" },
     );
     await writeJsonFixture(path.join(repoRoot, "extensions", "memory-core", "package.json"), {});
     await writeJsonFixture(
-      path.join(repoRoot, "extensions", "memory-core", "openclaw.plugin.json"),
+      path.join(repoRoot, "extensions", "memory-core", "natesclaw.plugin.json"),
       { id: "memory-core", kind: "memory" },
     );
     await writeFile(
@@ -2271,7 +2271,7 @@ describe("qa bundled plugin dir", () => {
       path.join(repoRoot, "package.json"),
       JSON.stringify(
         {
-          name: "openclaw",
+          name: "natesclaw",
           type: "module",
           exports: {
             "./plugin-sdk/account-id": {
@@ -2298,13 +2298,13 @@ describe("qa bundled plugin dir", () => {
     );
     await writeFile(
       path.join(repoRoot, "dist", "extensions", "qa-channel", "package.json"),
-      JSON.stringify({ name: "@openclaw/qa-channel", type: "module" }, null, 2),
+      JSON.stringify({ name: "@natesclaw/qa-channel", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
       path.join(repoRoot, "dist", "extensions", "qa-channel", "index.js"),
       [
-        'import { normalizeAccountId } from "openclaw/plugin-sdk/account-id";',
+        'import { normalizeAccountId } from "natesclaw/plugin-sdk/account-id";',
         'export const accountId = normalizeAccountId("QA");',
         "",
       ].join("\n"),
@@ -2312,7 +2312,7 @@ describe("qa bundled plugin dir", () => {
     );
     await mkdir(path.join(repoRoot, "extensions", "qa-channel"), { recursive: true });
     await writeFile(
-      path.join(repoRoot, "extensions", "qa-channel", "openclaw.plugin.json"),
+      path.join(repoRoot, "extensions", "qa-channel", "natesclaw.plugin.json"),
       JSON.stringify({
         id: "qa-channel",
         toolMetadata: { qa_read: { replaySafe: true } },
@@ -2347,14 +2347,14 @@ describe("qa bundled plugin dir", () => {
       path.join(repoRoot, ".artifacts", "qa-runtime", path.basename(tempRoot)),
     );
     await expect(readFile(path.join(stagedRoot, "package.json"), "utf8")).resolves.toContain(
-      '"name": "openclaw"',
+      '"name": "natesclaw"',
     );
     const qaChannel = (await import(
       `${pathToFileURL(path.join(bundledPluginsDir, "qa-channel", "index.js")).href}?t=${Date.now()}`
     )) as { accountId: string };
     expect(qaChannel.accountId).toBe("qa");
     await expect(
-      readFile(path.join(bundledPluginsDir, "qa-channel", "openclaw.plugin.json"), "utf8"),
+      readFile(path.join(bundledPluginsDir, "qa-channel", "natesclaw.plugin.json"), "utf8"),
     ).resolves.toContain('"replaySafe":true');
     expect((await lstat(path.join(bundledPluginsDir, "qa-channel"))).isDirectory()).toBe(true);
     expect((await lstat(path.join(bundledPluginsDir, "memory-core"))).isDirectory()).toBe(true);
@@ -2382,7 +2382,7 @@ describe("qa bundled plugin dir", () => {
     const repoRoot = await tempDirs.makeTempDir("qa-bundled-mixed-runtime-");
     await writeFile(
       path.join(repoRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", type: "module" }, null, 2),
+      JSON.stringify({ name: "natesclaw", type: "module" }, null, 2),
       "utf8",
     );
     await mkdir(path.join(repoRoot, "dist"), { recursive: true });
@@ -2401,7 +2401,7 @@ describe("qa bundled plugin dir", () => {
     );
     await writeFile(
       path.join(repoRoot, "dist-runtime", "extensions", "runtime-only", "package.json"),
-      JSON.stringify({ name: "@openclaw/runtime-only", type: "module" }, null, 2),
+      JSON.stringify({ name: "@natesclaw/runtime-only", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
@@ -2452,7 +2452,7 @@ describe("qa bundled plugin dir", () => {
     const repoRoot = await tempDirs.makeTempDir("qa-bundled-invalid-id-");
     await writeFile(
       path.join(repoRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", type: "module" }, null, 2),
+      JSON.stringify({ name: "natesclaw", type: "module" }, null, 2),
       "utf8",
     );
     const tempRoot = await tempDirs.makeTempDir("qa-bundled-invalid-target-");
@@ -2470,7 +2470,7 @@ describe("qa bundled plugin dir", () => {
     const repoRoot = await tempDirs.makeTempDir("qa-bundled-external-id-");
     await writeFile(
       path.join(repoRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", type: "module" }, null, 2),
+      JSON.stringify({ name: "natesclaw", type: "module" }, null, 2),
       "utf8",
     );
     const tempRoot = await tempDirs.makeTempDir("qa-bundled-external-target-");
@@ -2491,7 +2491,7 @@ describe("qa bundled plugin dir", () => {
       path.join(repoRoot, "package.json"),
       JSON.stringify(
         {
-          name: "openclaw",
+          name: "natesclaw",
           type: "module",
           exports: {
             "./plugin-sdk/account-id": {
@@ -2513,13 +2513,13 @@ describe("qa bundled plugin dir", () => {
     await mkdir(path.join(repoRoot, "extensions", "qa-channel"), { recursive: true });
     await writeFile(
       path.join(repoRoot, "extensions", "qa-channel", "package.json"),
-      JSON.stringify({ name: "@openclaw/qa-channel", type: "module" }, null, 2),
+      JSON.stringify({ name: "@natesclaw/qa-channel", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
       path.join(repoRoot, "extensions", "qa-channel", "index.ts"),
       [
-        'import { normalizeAccountId } from "openclaw/plugin-sdk/account-id";',
+        'import { normalizeAccountId } from "natesclaw/plugin-sdk/account-id";',
         'import { marker } from "fake-dep";',
         'export const accountId = `${normalizeAccountId("QA")}:${marker}`;',
         "",
@@ -2578,7 +2578,7 @@ describe("qa bundled plugin dir", () => {
   it("maps cli backend provider ids to their owning bundled plugin ids", async () => {
     const repoRoot = await tempDirs.makeTempDir("qa-plugin-owner-");
     await writeJsonFixture(
-      path.join(repoRoot, "dist", "extensions", "openai", "openclaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "openai", "natesclaw.plugin.json"),
       {
         id: "openai",
         providers: ["openai", "openai"],
@@ -2597,7 +2597,7 @@ describe("qa bundled plugin dir", () => {
   it("maps configured OpenAI Responses provider aliases to the OpenAI plugin", async () => {
     const repoRoot = await tempDirs.makeTempDir("qa-plugin-owner-");
     await writeJsonFixture(
-      path.join(repoRoot, "dist", "extensions", "openai", "openclaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "openai", "natesclaw.plugin.json"),
       {
         id: "openai",
         providers: ["openai"],
@@ -2662,7 +2662,7 @@ describe("qa bundled plugin dir", () => {
 
     const overrides = await testing.readQaLiveProviderConfigOverrides({
       providerIds: ["custom-openai"],
-      env: { OPENCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
+      env: { NATESCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
     });
     expect(Object.keys(overrides)).toEqual(["custom-openai"]);
     expect(overrides["custom-openai"]?.baseUrl).toBe("https://api.example.test/v1");
@@ -2676,7 +2676,7 @@ describe("qa bundled plugin dir", () => {
           openai: {
             apiKey: {
               source: "env",
-              id: "OPENCLAW_LIVE_CODEX_API_KEY",
+              id: "NATESCLAW_LIVE_CODEX_API_KEY",
             },
           },
         },
@@ -2685,14 +2685,14 @@ describe("qa bundled plugin dir", () => {
 
     const overrides = await testing.readQaLiveProviderConfigOverrides({
       providerIds: ["openai"],
-      env: { OPENCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
+      env: { NATESCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
     });
     expect(Object.keys(overrides)).toEqual(["openai"]);
     expect(overrides["openai"]).not.toHaveProperty("baseUrl");
     expect(overrides["openai"]?.models).toEqual([]);
     expect(overrides["openai"]?.apiKey).toEqual({
       source: "env",
-      id: "OPENCLAW_LIVE_CODEX_API_KEY",
+      id: "NATESCLAW_LIVE_CODEX_API_KEY",
     });
   });
 
@@ -2711,7 +2711,7 @@ describe("qa bundled plugin dir", () => {
 
     const overrides = await testing.readQaLiveProviderConfigOverrides({
       providerIds: ["openai"],
-      env: { OPENCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
+      env: { NATESCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
     });
     expect(Object.keys(overrides)).toEqual(["openai"]);
     expect(overrides["openai"]).not.toHaveProperty("baseUrl");
@@ -2727,7 +2727,7 @@ describe("qa bundled plugin dir", () => {
             models: [],
             apiKey: {
               source: "env",
-              id: "OPENCLAW_LIVE_CODEX_API_KEY",
+              id: "NATESCLAW_LIVE_CODEX_API_KEY",
             },
           },
         },
@@ -2736,7 +2736,7 @@ describe("qa bundled plugin dir", () => {
 
     const overrides = await testing.readQaLiveProviderConfigOverrides({
       providerIds: ["openai"],
-      env: { OPENCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
+      env: { NATESCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
     });
     expect(Object.keys(overrides)).toEqual(["openai"]);
     expect(overrides.openai?.baseUrl).toBe("https://proxy.example.test/v1");
@@ -2747,11 +2747,11 @@ describe("qa bundled plugin dir", () => {
     await writeJsonFixture(path.join(repoRoot, "package.json"), { version: "2026.4.7-1" });
     const bundledRoot = path.join(repoRoot, "extensions");
     await writeJsonFixture(path.join(bundledRoot, "qa-channel", "package.json"), {
-      openclaw: { install: { minHostVersion: ">=2026.4.8" } },
+      natesclaw: { install: { minHostVersion: ">=2026.4.8" } },
     });
 
     await writeJsonFixture(path.join(bundledRoot, "memory-core", "package.json"), {
-      openclaw: { install: { minHostVersion: ">=2026.4.7" } },
+      natesclaw: { install: { minHostVersion: ">=2026.4.7" } },
     });
 
     await expect(
@@ -2767,10 +2767,10 @@ describe("qa bundled plugin dir", () => {
     await writeJsonFixture(path.join(repoRoot, "package.json"), { version: "2026.4.7-1" });
     const bundledRoot = path.join(repoRoot, "extensions");
     await writeJsonFixture(path.join(bundledRoot, "qa-channel", "package.json"), {
-      openclaw: { install: { minHostVersion: ">=2026.4.8" } },
+      natesclaw: { install: { minHostVersion: ">=2026.4.8" } },
     });
     await writeJsonFixture(path.join(bundledRoot, "image-generation-core", "package.json"), {
-      openclaw: { install: { minHostVersion: ">=2026.4.9" } },
+      natesclaw: { install: { minHostVersion: ">=2026.4.9" } },
     });
 
     await expect(

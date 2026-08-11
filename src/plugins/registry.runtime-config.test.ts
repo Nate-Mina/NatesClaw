@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { formatSqliteSessionFileMarker } from "../config/sessions/legacy-sqlite-marker.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveUserPath } from "../utils.js";
 import { createPluginRecord } from "./loader-records.js";
 import { createPluginRegistry } from "./registry.js";
@@ -35,10 +35,10 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
 
     api.registerAgentHarness({
-      id: "openclaw",
+      id: "natesclaw",
       label: "Forged built-in",
       supports: () => ({ supported: true }),
       runAttempt: async () => {
@@ -52,13 +52,13 @@ describe("plugin registry runtime config scope", () => {
       expect.objectContaining({
         level: "error",
         pluginId: "untrusted-plugin",
-        message: 'agent harness id "openclaw" is reserved for the built-in runtime',
+        message: 'agent harness id "natesclaw" is reserved for the built-in runtime',
       }),
     );
   });
 
   it("resolves plugin API paths against the plugin root", () => {
-    const pluginRoot = path.join(os.tmpdir(), "openclaw-plugins", "demo");
+    const pluginRoot = path.join(os.tmpdir(), "natesclaw-plugins", "demo");
     const pluginRegistry = createTestRegistry(createPluginRuntime());
     const record = createPluginRecord({
       id: "path-plugin",
@@ -69,19 +69,19 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
     const absolute = path.resolve(pluginRoot, "..", "outside.txt");
 
     expect(api.resolvePath("data/cache.json")).toBe(path.join(pluginRoot, "data", "cache.json"));
     expect(api.resolvePath("./data/cache.json")).toBe(path.join(pluginRoot, "data", "cache.json"));
     expect(api.resolvePath(absolute)).toBe(absolute);
-    expect(api.resolvePath("~/openclaw/plugin.txt")).toBe(resolveUserPath("~/openclaw/plugin.txt"));
+    expect(api.resolvePath("~/natesclaw/plugin.txt")).toBe(resolveUserPath("~/natesclaw/plugin.txt"));
   });
 
   it("adds plugin context to lazy runtime resolution failures", () => {
     const runtime = new Proxy({} as PluginRuntime, {
       get() {
-        throw new Error("Unable to resolve plugin runtime module; loader=/tmp/openclaw-loader.js");
+        throw new Error("Unable to resolve plugin runtime module; loader=/tmp/natesclaw-loader.js");
       },
     });
     const pluginRegistry = createTestRegistry(runtime);
@@ -93,7 +93,7 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
 
     let thrown: unknown;
     try {
@@ -114,12 +114,12 @@ describe("plugin registry runtime config scope", () => {
     let currentScope = getPluginRuntimeGatewayRequestScope();
     let mutateScope = getPluginRuntimeGatewayRequestScope();
     let replaceScope = getPluginRuntimeGatewayRequestScope();
-    const config = {} as OpenClawConfig;
+    const config = {} as NatesclawConfig;
     const replaceResult = {
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       previousHash: null,
       persistedHash: "persisted-hash",
-      snapshot: { path: "/tmp/openclaw.json" },
+      snapshot: { path: "/tmp/natesclaw.json" },
       nextConfig: config,
       afterWrite: { mode: "auto" },
       followUp: { mode: "auto", requiresRestart: false },
@@ -197,7 +197,7 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
 
     await api.runtime.llm.acquireLocalService({
       providerId: "gpu-host",
@@ -230,7 +230,7 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
 
     await api.runtime.nodes.list({ connected: true });
     await api.runtime.nodes.invoke({
@@ -268,7 +268,7 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
 
     await api.runtime.gateway.request("voicecall.start", { to: "+15550001234" });
 
@@ -314,8 +314,8 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const ownerApi = pluginRegistry.createApi(ownerRecord, { config: {} as OpenClawConfig });
-    const otherApi = pluginRegistry.createApi(otherRecord, { config: {} as OpenClawConfig });
+    const ownerApi = pluginRegistry.createApi(ownerRecord, { config: {} as NatesclawConfig });
+    const otherApi = pluginRegistry.createApi(otherRecord, { config: {} as NatesclawConfig });
     ownerApi.registerAgentHarness({
       id: "codex",
       label: "Codex",
@@ -376,7 +376,7 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
     api.registerCliBackend({ id: "claude-cli", config: { command: "claude" } });
     api.registerAgentHarness({
       id: "anthropic-harness",
@@ -441,7 +441,7 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const api = pluginRegistry.createApi(record, { config: {} as OpenClawConfig });
+    const api = pluginRegistry.createApi(record, { config: {} as NatesclawConfig });
     const initialEntry = {
       acpBackendId: "acpx",
       acpSessionBinding: {
@@ -599,9 +599,9 @@ describe("plugin registry runtime config scope", () => {
       enabled: true,
       configSchema: false,
     });
-    const ownerApi = pluginRegistry.createApi(ownerRecord, { config: {} as OpenClawConfig });
-    const otherApi = pluginRegistry.createApi(otherRecord, { config: {} as OpenClawConfig });
-    const voiceApi = pluginRegistry.createApi(voiceRecord, { config: {} as OpenClawConfig });
+    const ownerApi = pluginRegistry.createApi(ownerRecord, { config: {} as NatesclawConfig });
+    const otherApi = pluginRegistry.createApi(otherRecord, { config: {} as NatesclawConfig });
+    const voiceApi = pluginRegistry.createApi(voiceRecord, { config: {} as NatesclawConfig });
     ownerApi.registerAgentHarness({
       id: "codex",
       label: "Codex",
@@ -677,7 +677,7 @@ describe("plugin registry runtime config scope", () => {
     await expect(
       voiceApi.runtime.agent.runEmbeddedAgent({
         ...delegatedRunParams,
-        agentHarnessRuntimeOverride: "openclaw",
+        agentHarnessRuntimeOverride: "natesclaw",
       }),
     ).rejects.toThrow("only with its exact persisted identity and harness");
     await expect(

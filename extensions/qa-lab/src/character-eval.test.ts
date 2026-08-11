@@ -24,7 +24,7 @@ function makeRunJudge(rankings: TestJudgeRanking[]) {
 }
 
 function defaultModelTranscript(model: string) {
-  return `USER Alice: hi\n\nASSISTANT openclaw: reply from ${model}`;
+  return `USER Alice: hi\n\nASSISTANT natesclaw: reply from ${model}`;
 }
 
 function makeReplySuiteResult(params: CharacterRunSuiteParams, transcript?: string) {
@@ -179,7 +179,7 @@ describe("runQaCharacterEval", () => {
   let tempRoot: string;
 
   beforeEach(async () => {
-    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-character-eval-test-"));
+    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-character-eval-test-"));
   });
 
   afterEach(async () => {
@@ -189,7 +189,7 @@ describe("runQaCharacterEval", () => {
   it("runs each requested model and writes a judged report with transcripts", async () => {
     const runSuite = vi.fn(async (params: CharacterRunSuiteParams) => {
       const model = params.primaryModel;
-      const transcript = `USER Alice: prompt for ${model}\n\nASSISTANT openclaw: reply from ${model}`;
+      const transcript = `USER Alice: prompt for ${model}\n\nASSISTANT natesclaw: reply from ${model}`;
       return makeSuiteResult({ outputDir: params.outputDir, model, transcript });
     });
     const runJudge = makeRunJudge([
@@ -261,7 +261,7 @@ describe("runQaCharacterEval", () => {
       makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "USER Alice: hi\n\nASSISTANT openclaw: default dir reply",
+        transcript: "USER Alice: hi\n\nASSISTANT natesclaw: default dir reply",
       }),
     );
     const runJudge = makeRunJudge([
@@ -292,7 +292,7 @@ describe("runQaCharacterEval", () => {
       makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "USER Alice: hi\n\nASSISTANT openclaw: anonymous reply",
+        transcript: "USER Alice: hi\n\nASSISTANT natesclaw: anonymous reply",
       }),
     );
     const runJudge = vi.fn(async (params: CharacterRunJudgeParams) => {
@@ -537,28 +537,28 @@ describe("runQaCharacterEval", () => {
     {
       title: "marks raw provider error transcripts as failed output",
       transcript:
-        "USER Alice: Are you awake?\n\nASSISTANT OpenClaw QA: 400 model `qwen3.6-plus` is not supported.",
+        "USER Alice: Are you awake?\n\nASSISTANT Natesclaw QA: 400 model `qwen3.6-plus` is not supported.",
       model: "qwen/qwen3.6-plus",
       expectedReason: "model unsupported error leaked into transcript",
     },
     {
       title: "marks generic channel fallback transcripts as failed output",
       transcript:
-        "ASSISTANT OpenClaw QA: ⚠️ Something went wrong while processing your request. Please try again, or use /new to start a fresh session.",
+        "ASSISTANT Natesclaw QA: ⚠️ Something went wrong while processing your request. Please try again, or use /new to start a fresh session.",
       model: "qa/generic-fallback-model",
       expectedReason: "generic request failure leaked into transcript",
     },
     {
       title: "marks idle-timeout fallback transcripts as failed output",
       transcript:
-        "ASSISTANT OpenClaw QA: The model did not produce a response before the LLM idle timeout. Please try again, or increase `agents.defaults.llm.idleTimeoutSeconds` in your config.",
+        "ASSISTANT Natesclaw QA: The model did not produce a response before the LLM idle timeout. Please try again, or increase `agents.defaults.llm.idleTimeoutSeconds` in your config.",
       model: "google/gemini-test",
       expectedReason: "LLM timeout leaked into transcript",
     },
     {
       title: "marks leaked harness coordination transcripts as failed output",
       transcript:
-        "ASSISTANT OpenClaw QA: checking thread context; then post a tight progress reply here.\nQA_LEAK_OK",
+        "ASSISTANT Natesclaw QA: checking thread context; then post a tight progress reply here.\nQA_LEAK_OK",
       model: "codex/gpt-5.6-luna",
       expectedReason: "internal harness/meta text leaked into transcript",
     },
@@ -592,7 +592,7 @@ describe("runQaCharacterEval", () => {
       makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "USER Alice: hi\n\nASSISTANT openclaw: outwardly fine",
+        transcript: "USER Alice: hi\n\nASSISTANT natesclaw: outwardly fine",
         summaryStatus: "fail",
         summaryFailedCount: 1,
       }),
@@ -651,7 +651,7 @@ describe("runQaCharacterEval", () => {
       makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "ASSISTANT OpenClaw QA: ⚠️ ✍️ Write: to /tmp/precious.html failed",
+        transcript: "ASSISTANT Natesclaw QA: ⚠️ ✍️ Write: to /tmp/precious.html failed",
       }),
     );
     const runJudge = makeRunJudge([
@@ -743,7 +743,7 @@ describe("runQaCharacterEval", () => {
       return makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "USER Alice: hi\n\nASSISTANT openclaw: hello",
+        transcript: "USER Alice: hi\n\nASSISTANT natesclaw: hello",
       });
     });
     const runJudge = vi.fn(async (_params: CharacterRunJudgeParams) =>

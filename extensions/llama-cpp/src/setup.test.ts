@@ -4,7 +4,7 @@ import path from "node:path";
 import type {
   ProviderAppGuidedSetupContext,
   ProviderAuthContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_LLAMA_CPP_MODEL_CACHE_FILE,

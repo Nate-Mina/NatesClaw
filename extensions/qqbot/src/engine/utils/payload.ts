@@ -7,7 +7,7 @@
  * Zero external dependencies.
  */
 
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import type { ChatScope } from "../types.js";
 
 /** Structured reminder payload emitted by the model. */

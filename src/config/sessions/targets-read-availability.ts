@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../../routing/session-key.js";
-import { withOpenClawAgentDatabaseReadOnly } from "../../state/openclaw-agent-db-readonly.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import { withNatesclawAgentDatabaseReadOnly } from "../../state/natesclaw-agent-db-readonly.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import { resolveSessionStorePathCore } from "./paths.js";
 import { readSessionEntryKeys } from "./session-accessor.sqlite-entry-store.js";
 import { resolveSqliteTargetFromSessionStorePath } from "./session-sqlite-target.js";
@@ -52,7 +52,7 @@ function readSessionStoreTargetSnapshot(params: {
   if (!fs.existsSync(params.sqlitePath)) {
     snapshot = { available: false, reason: "database-missing" };
   } else {
-    const result = withOpenClawAgentDatabaseReadOnly(
+    const result = withNatesclawAgentDatabaseReadOnly(
       (database) => {
         const scopedAgentIds = new Set<string>();
         let hasUnscopedRow = false;
@@ -77,7 +77,7 @@ function readSessionStoreTargetSnapshot(params: {
 }
 
 function resolveFixedSessionStoreTargetsReadOnly(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   requested: string,
   env: NodeJS.ProcessEnv,
   cache?: SessionStoreTargetsReadCache,
@@ -131,7 +131,7 @@ function resolveFixedSessionStoreTargetsReadOnly(
 
 /** Resolves every plausible store while preserving read availability and ownership. */
 export function resolveExistingAgentSessionStoreTargetsReadOnlyResult(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   params: { cache?: SessionStoreTargetsReadCache; env?: NodeJS.ProcessEnv } = {},
 ): SessionStoreTargetsReadResult {

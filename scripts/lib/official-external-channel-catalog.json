@@ -1,16 +1,16 @@
 {
   "entries": [
     {
-      "name": "@openclaw/buzz",
+      "name": "@natesclaw/buzz",
       "version": "2026.8.1",
-      "description": "Connect OpenClaw agents to Buzz rooms",
+      "description": "Connect Natesclaw agents to Buzz rooms",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channelConfigs": {
           "buzz": {
             "label": "Buzz",
-            "description": "Connect OpenClaw agents to Buzz team rooms.",
+            "description": "Connect Natesclaw agents to Buzz team rooms.",
             "schema": {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "object",
@@ -270,7 +270,7 @@
           "selectionLabel": "Buzz",
           "docsPath": "/channels/buzz",
           "docsLabel": "buzz",
-          "blurb": "Connect OpenClaw agents to Buzz team rooms.",
+          "blurb": "Connect Natesclaw agents to Buzz team rooms.",
           "markdownCapable": true,
           "order": 56,
           "setup": {
@@ -304,20 +304,20 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/buzz",
-          "npmSpec": "@openclaw/buzz",
+          "clawhubSpec": "clawhub:@natesclaw/buzz",
+          "npmSpec": "@natesclaw/buzz",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.7.2"
         }
       }
     },
     {
-      "name": "@openclaw/clickclack",
+      "name": "@natesclaw/clickclack",
       "version": "2026.8.1",
-      "description": "OpenClaw ClickClack channel plugin",
+      "description": "Natesclaw ClickClack channel plugin",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "contracts": {
           "tools": [
             "discussion"
@@ -630,8 +630,8 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/clickclack",
-          "npmSpec": "@openclaw/clickclack",
+          "clawhubSpec": "clawhub:@natesclaw/clickclack",
+          "npmSpec": "@natesclaw/clickclack",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9",
           "allowInvalidConfigRecovery": true
@@ -639,12 +639,12 @@
       }
     },
     {
-      "name": "@openclaw/discord",
+      "name": "@natesclaw/discord",
       "version": "2026.8.1",
-      "description": "OpenClaw Discord channel plugin for channels, DMs, commands, and app events.",
+      "description": "Natesclaw Discord channel plugin for channels, DMs, commands, and app events.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "contracts": {
           "tools": [
             "show_widget",
@@ -708,7 +708,7 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/discord",
+          "npmSpec": "@natesclaw/discord",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.26",
           "allowInvalidConfigRecovery": true
@@ -716,12 +716,12 @@
       }
     },
     {
-      "name": "@openclaw/feishu",
+      "name": "@natesclaw/feishu",
       "version": "2026.8.1",
-      "description": "OpenClaw Feishu/Lark channel plugin for chats and workplace tools (community maintained by @m1heng).",
+      "description": "Natesclaw Feishu/Lark channel plugin for chats and workplace tools (community maintained by @m1heng).",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "contracts": {
           "tools": [
             "feishu_app_scopes",
@@ -767,19 +767,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/feishu",
+          "npmSpec": "@natesclaw/feishu",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.29"
         }
       }
     },
     {
-      "name": "@openclaw/googlechat",
+      "name": "@natesclaw/googlechat",
       "version": "2026.8.1",
-      "description": "OpenClaw Google Chat channel plugin for spaces and direct messages.",
+      "description": "Natesclaw Google Chat channel plugin for spaces and direct messages.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "googlechat",
           "configuredState": {
@@ -880,19 +880,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/googlechat",
+          "npmSpec": "@natesclaw/googlechat",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/imessage",
+      "name": "@natesclaw/imessage",
       "version": "2026.8.1",
-      "description": "OpenClaw iMessage channel plugin using imsg on a signed-in Mac",
+      "description": "Natesclaw iMessage channel plugin using imsg on a signed-in Mac",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "imessage",
           "approvalFlags": [
@@ -951,8 +951,8 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/imessage",
-          "npmSpec": "@openclaw/imessage",
+          "clawhubSpec": "clawhub:@natesclaw/imessage",
+          "npmSpec": "@natesclaw/imessage",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.7.2",
           "allowInvalidConfigRecovery": true
@@ -960,12 +960,12 @@
       }
     },
     {
-      "name": "@openclaw/irc",
+      "name": "@natesclaw/irc",
       "version": "2026.8.1",
-      "description": "OpenClaw IRC channel plugin",
+      "description": "Natesclaw IRC channel plugin",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "irc",
           "configuredState": {
@@ -1065,8 +1065,8 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/irc",
-          "npmSpec": "@openclaw/irc",
+          "clawhubSpec": "clawhub:@natesclaw/irc",
+          "npmSpec": "@natesclaw/irc",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9",
           "allowInvalidConfigRecovery": true
@@ -1074,12 +1074,12 @@
       }
     },
     {
-      "name": "@openclaw/line",
+      "name": "@natesclaw/line",
       "version": "2026.8.1",
-      "description": "OpenClaw LINE channel plugin for LINE Bot API chats.",
+      "description": "Natesclaw LINE channel plugin for LINE Bot API chats.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "line",
           "configuredState": {
@@ -1158,19 +1158,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/line",
+          "npmSpec": "@natesclaw/line",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/matrix",
+      "name": "@natesclaw/matrix",
       "version": "2026.8.1",
-      "description": "OpenClaw Matrix channel plugin for rooms and direct messages.",
+      "description": "Natesclaw Matrix channel plugin for rooms and direct messages.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "matrix",
           "configuredState": {
@@ -1298,8 +1298,8 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/matrix",
-          "npmSpec": "@openclaw/matrix",
+          "clawhubSpec": "clawhub:@natesclaw/matrix",
+          "npmSpec": "@natesclaw/matrix",
           "defaultChoice": "clawhub",
           "minHostVersion": ">=2026.4.10",
           "allowInvalidConfigRecovery": true
@@ -1307,12 +1307,12 @@
       }
     },
     {
-      "name": "@openclaw/mattermost",
+      "name": "@natesclaw/mattermost",
       "version": "2026.8.1",
-      "description": "OpenClaw Mattermost channel plugin",
+      "description": "Natesclaw Mattermost channel plugin",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "mattermost",
           "configuredState": {
@@ -1369,8 +1369,8 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/mattermost",
-          "npmSpec": "@openclaw/mattermost",
+          "clawhubSpec": "clawhub:@natesclaw/mattermost",
+          "npmSpec": "@natesclaw/mattermost",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9",
           "allowInvalidConfigRecovery": true
@@ -1378,12 +1378,12 @@
       }
     },
     {
-      "name": "@openclaw/msteams",
+      "name": "@natesclaw/msteams",
       "version": "2026.8.1",
-      "description": "OpenClaw Microsoft Teams channel plugin for bot conversations.",
+      "description": "Natesclaw Microsoft Teams channel plugin for bot conversations.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "msteams",
           "configuredState": {
@@ -1415,19 +1415,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/msteams",
+          "npmSpec": "@natesclaw/msteams",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/nextcloud-talk",
+      "name": "@natesclaw/nextcloud-talk",
       "version": "2026.8.1",
-      "description": "OpenClaw Nextcloud Talk channel plugin for conversations.",
+      "description": "Natesclaw Nextcloud Talk channel plugin for conversations.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "nextcloud-talk",
           "configuredState": {
@@ -1524,19 +1524,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/nextcloud-talk",
+          "npmSpec": "@natesclaw/nextcloud-talk",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/nostr",
+      "name": "@natesclaw/nostr",
       "version": "2026.8.1",
-      "description": "OpenClaw Nostr channel plugin for NIP-04 encrypted direct messages.",
+      "description": "Natesclaw Nostr channel plugin for NIP-04 encrypted direct messages.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "nostr",
           "configuredState": {
@@ -1584,24 +1584,24 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/nostr",
+          "npmSpec": "@natesclaw/nostr",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@tencent-weixin/openclaw-weixin",
-      "description": "OpenClaw Weixin channel plugin by the Tencent Weixin team.",
+      "name": "@tencent-weixin/natesclaw-weixin",
+      "description": "Natesclaw Weixin channel plugin by the Tencent Weixin team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "openclaw-weixin",
+          "id": "natesclaw-weixin",
           "label": "Weixin"
         },
         "channel": {
-          "id": "openclaw-weixin",
+          "id": "natesclaw-weixin",
           "label": "Weixin",
           "selectionLabel": "Weixin（微信）",
           "detailLabel": "Weixin",
@@ -1616,7 +1616,7 @@
           "order": 75
         },
         "channelConfigs": {
-          "openclaw-weixin": {
+          "natesclaw-weixin": {
             "label": "Weixin",
             "description": "Personal WeChat conversation channel.",
             "schema": {
@@ -1626,7 +1626,7 @@
           }
         },
         "install": {
-          "npmSpec": "@tencent-weixin/openclaw-weixin@2.4.6",
+          "npmSpec": "@tencent-weixin/natesclaw-weixin@2.4.6",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-qw9k3PLTiMWGNjjsknHgcTManH1w4j+Ji1ArWIaYLKCq3aFRsVwcqnPi127bvOoVMJGW4dbyJ8NECEMgoO+iRw==",
           "minHostVersion": ">=2026.5.12"
@@ -1634,17 +1634,17 @@
       }
     },
     {
-      "name": "@zalo-platforms/openclaw-zaloclawbot",
-      "description": "OpenClaw Zalo ClawBot channel plugin by the Zalo Platforms team.",
+      "name": "@zalo-platforms/natesclaw-zaloclawbot",
+      "description": "Natesclaw Zalo ClawBot channel plugin by the Zalo Platforms team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "openclaw-zaloclawbot",
+          "id": "natesclaw-zaloclawbot",
           "label": "Zalo ClawBot"
         },
         "channel": {
-          "id": "openclaw-zaloclawbot",
+          "id": "natesclaw-zaloclawbot",
           "label": "Zalo ClawBot",
           "selectionLabel": "Zalo ClawBot (QR)",
           "detailLabel": "Zalo ClawBot",
@@ -1658,7 +1658,7 @@
           "order": 82
         },
         "channelConfigs": {
-          "openclaw-zaloclawbot": {
+          "natesclaw-zaloclawbot": {
             "label": "Zalo ClawBot",
             "description": "Personal Zalo assistant — QR-onboarded, owner-bound.",
             "schema": {
@@ -1668,7 +1668,7 @@
           }
         },
         "install": {
-          "npmSpec": "@zalo-platforms/openclaw-zaloclawbot@0.1.4",
+          "npmSpec": "@zalo-platforms/natesclaw-zaloclawbot@0.1.4",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-5IxZriHJYACLLGqkCPPsTP9tas62kXEOFqTFAFMdunAM3SPhIJwVFRp0WvoP/m7L2PX85weD0g8LOtxM93VDYg==",
           "minHostVersion": ">=2026.4.10"
@@ -1676,12 +1676,12 @@
       }
     },
     {
-      "name": "@openclaw/qqbot",
+      "name": "@natesclaw/qqbot",
       "version": "2026.8.1",
-      "description": "OpenClaw QQ Bot channel plugin for group and direct-message workflows.",
+      "description": "Natesclaw QQ Bot channel plugin for group and direct-message workflows.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "contracts": {
           "tools": [
             "qqbot_channel_api",
@@ -1740,19 +1740,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/qqbot",
+          "npmSpec": "@natesclaw/qqbot",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/raft",
+      "name": "@natesclaw/raft",
       "version": "2026.8.1",
-      "description": "OpenClaw Raft channel plugin for Raft CLI wake bridges.",
+      "description": "Natesclaw Raft channel plugin for Raft CLI wake bridges.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channelConfigs": {
           "raft": {
             "label": "Raft",
@@ -1826,19 +1826,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/raft",
+          "npmSpec": "@natesclaw/raft",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/signal",
+      "name": "@natesclaw/signal",
       "version": "2026.8.1",
-      "description": "OpenClaw Signal channel plugin",
+      "description": "Natesclaw Signal channel plugin",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "signal",
           "approvalFlags": [
@@ -1910,8 +1910,8 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/signal",
-          "npmSpec": "@openclaw/signal",
+          "clawhubSpec": "clawhub:@natesclaw/signal",
+          "npmSpec": "@natesclaw/signal",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9",
           "allowInvalidConfigRecovery": true
@@ -1919,12 +1919,12 @@
       }
     },
     {
-      "name": "@openclaw/slack",
+      "name": "@natesclaw/slack",
       "version": "2026.8.1",
-      "description": "OpenClaw Slack channel plugin for channels, DMs, commands, and app events.",
+      "description": "Natesclaw Slack channel plugin for channels, DMs, commands, and app events.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channelConfigs": {
           "slack": {
             "label": "Slack",
@@ -2041,7 +2041,7 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/slack",
+          "npmSpec": "@natesclaw/slack",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.28",
           "allowInvalidConfigRecovery": true
@@ -2049,12 +2049,12 @@
       }
     },
     {
-      "name": "@openclaw/sms",
+      "name": "@natesclaw/sms",
       "version": "2026.8.1",
-      "description": "OpenClaw SMS/MMS channel plugin for Twilio messages.",
+      "description": "Natesclaw SMS/MMS channel plugin for Twilio messages.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "sms",
           "configuredState": {
@@ -2165,8 +2165,8 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/sms",
-          "npmSpec": "@openclaw/sms",
+          "clawhubSpec": "clawhub:@natesclaw/sms",
+          "npmSpec": "@natesclaw/sms",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9",
           "allowInvalidConfigRecovery": true
@@ -2174,12 +2174,12 @@
       }
     },
     {
-      "name": "@openclaw/synology-chat",
+      "name": "@natesclaw/synology-chat",
       "version": "2026.8.1",
-      "description": "Synology Chat channel plugin for OpenClaw channels and direct messages.",
+      "description": "Synology Chat channel plugin for Natesclaw channels and direct messages.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "synology-chat",
           "configuredState": {
@@ -2190,7 +2190,7 @@
                 "SYNOLOGY_NAS_HOST",
                 "SYNOLOGY_ALLOWED_USER_IDS",
                 "SYNOLOGY_RATE_LIMIT",
-                "OPENCLAW_BOT_NAME"
+                "NATESCLAW_BOT_NAME"
               ]
             }
           },
@@ -2198,7 +2198,7 @@
           "selectionLabel": "Synology Chat (Webhook)",
           "docsPath": "/channels/synology-chat",
           "docsLabel": "synology-chat",
-          "blurb": "Connect your Synology NAS Chat to OpenClaw with full agent capabilities.",
+          "blurb": "Connect your Synology NAS Chat to Natesclaw with full agent capabilities.",
           "order": 90,
           "setup": {
             "fields": [
@@ -2239,19 +2239,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/synology-chat",
+          "npmSpec": "@natesclaw/synology-chat",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/tlon",
+      "name": "@natesclaw/tlon",
       "version": "2026.8.1",
-      "description": "OpenClaw Tlon/Urbit channel plugin for chat workflows.",
+      "description": "Natesclaw Tlon/Urbit channel plugin for chat workflows.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "tlon",
           "label": "Tlon",
@@ -2333,25 +2333,25 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/tlon",
+          "npmSpec": "@natesclaw/tlon",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/twitch",
+      "name": "@natesclaw/twitch",
       "version": "2026.8.1",
-      "description": "OpenClaw Twitch channel plugin for chat and moderation workflows.",
+      "description": "Natesclaw Twitch channel plugin for chat and moderation workflows.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "twitch",
           "configuredState": {
             "env": {
               "anyOf": [
-                "OPENCLAW_TWITCH_ACCESS_TOKEN"
+                "NATESCLAW_TWITCH_ACCESS_TOKEN"
               ]
             }
           },
@@ -2367,20 +2367,20 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/twitch",
+          "npmSpec": "@natesclaw/twitch",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@wecom/wecom-openclaw-plugin",
-      "description": "OpenClaw WeCom channel plugin by the Tencent WeCom team.",
+      "name": "@wecom/wecom-natesclaw-plugin",
+      "description": "Natesclaw WeCom channel plugin by the Tencent WeCom team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "wecom-openclaw-plugin",
+          "id": "wecom-natesclaw-plugin",
           "label": "WeCom"
         },
         "contracts": {
@@ -2414,19 +2414,19 @@
           }
         },
         "install": {
-          "npmSpec": "@wecom/wecom-openclaw-plugin@2026.5.7",
+          "npmSpec": "@wecom/wecom-natesclaw-plugin@2026.5.7",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-TCkP9as00WfEhgFWG8YL/rcmaWGIshAki2HQh83nTRccGfVBCoGjrEboTTqq3yDmK9koWTV11zi8u8A4dNtvug=="
         }
       }
     },
     {
-      "name": "@openclaw/whatsapp",
+      "name": "@natesclaw/whatsapp",
       "version": "2026.8.1",
-      "description": "OpenClaw WhatsApp channel plugin for WhatsApp Web chats.",
+      "description": "Natesclaw WhatsApp channel plugin for WhatsApp Web chats.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "contracts": {
           "tools": [
             "whatsapp_call"
@@ -2462,21 +2462,21 @@
           }
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/whatsapp",
-          "npmSpec": "@openclaw/whatsapp",
+          "clawhubSpec": "clawhub:@natesclaw/whatsapp",
+          "npmSpec": "@natesclaw/whatsapp",
           "defaultChoice": "clawhub",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "openclaw-plugin-yuanbao",
-      "description": "OpenClaw Yuanbao channel plugin by the Tencent Yuanbao team.",
+      "name": "natesclaw-plugin-yuanbao",
+      "description": "Natesclaw Yuanbao channel plugin by the Tencent Yuanbao team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "openclaw-plugin-yuanbao",
+          "id": "natesclaw-plugin-yuanbao",
           "label": "Yuanbao"
         },
         "contracts": {
@@ -2513,19 +2513,19 @@
           }
         },
         "install": {
-          "npmSpec": "openclaw-plugin-yuanbao@2.15.0",
+          "npmSpec": "natesclaw-plugin-yuanbao@2.15.0",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-3GD+mf3EjTSUTOAREjTHAyp/deXdpgqB+q+xE0b19Qtat4ADhUV1mHDwFkVCRqTCBY5ATFKtKcipoDejqFj/+w=="
         }
       }
     },
     {
-      "name": "@openclaw/zalo",
+      "name": "@natesclaw/zalo",
       "version": "2026.8.1",
-      "description": "OpenClaw Zalo channel plugin for bot and webhook chats.",
+      "description": "Natesclaw Zalo channel plugin for bot and webhook chats.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "channel": {
           "id": "zalo",
           "configuredState": {
@@ -2578,19 +2578,19 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/zalo",
+          "npmSpec": "@natesclaw/zalo",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/zalouser",
+      "name": "@natesclaw/zalouser",
       "version": "2026.8.1",
-      "description": "OpenClaw Zalo Personal Account plugin via native zca-js integration.",
+      "description": "Natesclaw Zalo Personal Account plugin via native zca-js integration.",
       "source": "official",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "contracts": {
           "tools": [
             "zalouser"
@@ -2627,7 +2627,7 @@
           }
         },
         "install": {
-          "npmSpec": "@openclaw/zalouser",
+          "npmSpec": "@natesclaw/zalouser",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }

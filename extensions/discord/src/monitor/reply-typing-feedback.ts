@@ -1,7 +1,7 @@
 // Discord plugin module implements reply typing feedback behavior.
-import { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
-import { createTypingCallbacks } from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { logTypingFailure } from "natesclaw/plugin-sdk/channel-feedback";
+import { createTypingCallbacks } from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { createDiscordRestClient } from "../client.js";
 import type { RequestClient } from "../internal/discord.js";
 import { sendTyping } from "./typing.js";
@@ -10,7 +10,7 @@ import { sendTyping } from "./typing.js";
 const DISCORD_REPLY_TYPING_MAX_DURATION_MS = 20 * 60_000;
 
 export function createDiscordReplyTypingFeedback(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   token: string;
   accountId: string;
   channelId: string;

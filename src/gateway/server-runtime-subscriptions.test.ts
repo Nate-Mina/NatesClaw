@@ -298,7 +298,7 @@ describe("startGatewayEventSubscriptions", () => {
 
     const emitMessage = (messageId: string) =>
       emitSessionTranscriptUpdate({
-        sessionFile: "/tmp/openclaw-transcript-dispatch.sqlite",
+        sessionFile: "/tmp/natesclaw-transcript-dispatch.sqlite",
         sessionKey: "agent:main:main",
         message: { role: "assistant", content: [{ type: "text", text: "visible answer" }] },
         messageId,
@@ -306,7 +306,7 @@ describe("startGatewayEventSubscriptions", () => {
           agentId: "main",
           sessionId: "sess-transcript",
           sessionKey: "agent:main:main",
-          storePath: "/tmp/openclaw-transcript-dispatch-sessions.json",
+          storePath: "/tmp/natesclaw-transcript-dispatch-sessions.json",
         },
       });
 
@@ -485,7 +485,7 @@ describe("startGatewayEventSubscriptions", () => {
     emitAgentEvent({
       runId: secondary.runId!,
       stream: "assistant",
-      data: { text: "OpenClaw runtime context (internal): Keep internal details private." },
+      data: { text: "Natesclaw runtime context (internal): Keep internal details private." },
     });
     await vi.advanceTimersByTimeAsync(1_000);
     const sanitizedActivity = broadcast.mock.calls.find(
@@ -495,7 +495,7 @@ describe("startGatewayEventSubscriptions", () => {
         (payload as Extract<TaskEventPayload, { action: "upserted" }>).task.id === secondary.taskId,
     )?.[1] as Extract<TaskEventPayload, { action: "upserted" }> | undefined;
     expect(sanitizedActivity?.task).not.toHaveProperty("lastActivity");
-    expect(JSON.stringify(sanitizedActivity)).not.toContain("OpenClaw runtime context");
+    expect(JSON.stringify(sanitizedActivity)).not.toContain("Natesclaw runtime context");
 
     broadcast.mockClear();
     emitAgentEvent({

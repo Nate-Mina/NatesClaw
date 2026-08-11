@@ -1,12 +1,12 @@
-# OpenClaw Exa Plugin
+# Natesclaw Exa Plugin
 
-Official OpenClaw plugin for Exa.
+Official Natesclaw plugin for Exa.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/exa-plugin
-openclaw gateway restart
+natesclaw plugins install @natesclaw/exa-plugin
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/tools/exa-search> for setup and configuration.
+See <https://docs.natesclaw.ai/tools/exa-search> for setup and configuration.

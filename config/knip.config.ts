@@ -1,5 +1,5 @@
 /**
- * Knip configuration for OpenClaw root and bundled plugin dependency hygiene.
+ * Knip configuration for Natesclaw root and bundled plugin dependency hygiene.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -69,14 +69,14 @@ const repositoryScriptEntries = [
   "scripts/ios-release-plan.ts!",
   "scripts/ios-release-signing.mts!",
   "scripts/lib/docker-plugin-selection.mjs!",
-  "scripts/lib/openclaw-test-state.mts!",
+  "scripts/lib/natesclaw-test-state.mts!",
   "scripts/list-prod-store-packages.mjs!",
   // Invoked by scripts/lib/live-docker-stage.sh during container validation.
   "scripts/live-docker-normalize-config.ts!",
   "scripts/mcp-code-mode-gateway-e2e.ts!",
   "scripts/memory-index-manager.sync-repro.ts!",
-  "scripts/openclaw-release-clawhub-plan.ts!",
-  "scripts/openclaw-release-clawhub-runtime-state.ts!",
+  "scripts/natesclaw-release-clawhub-plan.ts!",
+  "scripts/natesclaw-release-clawhub-runtime-state.ts!",
   // Oxlint loads this JS plugin by path from config/oxlint/boundary-guards.json.
   "scripts/oxlint-boundary-guards.mjs!",
   "scripts/plugin-prerelease-liveish-matrix.mts!",
@@ -90,7 +90,7 @@ const repositoryScriptEntries = [
   "scripts/qa-coverage-report.ts!",
   "scripts/qa-parity-report.ts!",
   "scripts/resolve-frozen-codex-live-suite.mjs!",
-  "scripts/secrets/openclaw-bws-resolver.mjs!",
+  "scripts/secrets/natesclaw-bws-resolver.mjs!",
   "scripts/sqlite-session-entry-cache-lifetime-proof.ts!",
   "scripts/sync-labels.ts!",
   "scripts/test-built-bundled-channel-entry-smoke.mts!",
@@ -126,7 +126,7 @@ const rootEntries = [
   "config/knip.config.ts!",
   "config/knip.all-exports.config.ts!",
   "config/knip.scripts-exports.config.ts!",
-  "openclaw.mjs!",
+  "natesclaw.mjs!",
   "src/index.ts!",
   "src/entry.ts!",
   // Built as the official image's Docker HEALTHCHECK entrypoint.
@@ -141,7 +141,7 @@ const rootEntries = [
   "src/agents/compaction-planning.worker.ts!",
   "scripts/print-cli-backend-live-metadata.ts!",
   // Workflow/package-script entrypoints are not imported from production modules.
-  "scripts/openclaw-cross-os-release-checks.ts!",
+  "scripts/natesclaw-cross-os-release-checks.ts!",
   // Spawned by the agent concurrency benchmark; no static import edge exists.
   "scripts/bench-agent-concurrency-worker.ts!",
   // Spawned by the durable task registry churn benchmark in a fresh GC-enabled process.
@@ -153,7 +153,7 @@ const rootEntries = [
   "src/audit/audit-event-writer.worker.ts!",
   // Loaded by URL from the SQLite lifecycle archive owner.
   "src/config/sessions/session-accessor.sqlite-archive.worker.ts!",
-  "src/state/openclaw-database-verify.worker.ts!",
+  "src/state/natesclaw-database-verify.worker.ts!",
   "src/agents/model-provider-auth.worker.ts!",
   // Loaded by URL from setup-inference-detection.ts; no static import edge exists.
   "src/system-agent/setup-inference-detection.worker.ts!",
@@ -168,7 +168,7 @@ const rootEntries = [
   "src/infra/warning-filter.ts!",
   "src/infra/command-explainer/index.ts!",
   // Runtime modules loaded by path or namespace; static export tracing cannot see their contract.
-  // Jiti virtualizes openclaw/plugin-sdk/agent-sessions through this cycle-safe barrel.
+  // Jiti virtualizes natesclaw/plugin-sdk/agent-sessions through this cycle-safe barrel.
   "src/agents/sessions/extension-sdk.ts!",
   // Plugin-SDK ACP facades expose the registry's runtime signatures.
   "src/acp/runtime/registry.ts!",
@@ -176,7 +176,7 @@ const rootEntries = [
   "src/plugins/source-display.ts!",
   "src/mcp/codex-supervision-tools-serve.ts!",
   // Spawned by generated system-agent MCP configs; this stdio entry is not statically imported.
-  "src/mcp/openclaw-tools-serve.ts!",
+  "src/mcp/natesclaw-tools-serve.ts!",
   // Spawned by ACPX and QA Lab from a generated plugin-tool MCP command line.
   "src/mcp/plugin-tools-serve.ts!",
   // Dedicated tsdown entry exercised against built plugin singletons.
@@ -251,7 +251,7 @@ const bundledPluginIgnoredRuntimeDependencies = [
   "json5",
   "lit",
   "linkedom",
-  "openclaw",
+  "natesclaw",
   "clawpdf",
 ] as const;
 
@@ -288,7 +288,7 @@ const rootToolingAndWorkspaceDependencies = [
   // scripts/ui.mts anchors these lookups at ui/package.json before invoking the UI workspace.
   "@vitest/browser-playwright",
   "dompurify",
-  // Root typecheck/test projects compile @openclaw/net-policy source directly.
+  // Root typecheck/test projects compile @natesclaw/net-policy source directly.
   // Keep its exact dependency available without externalizing it from packaged builds.
   "ipaddr.js",
   "jscpd",
@@ -433,8 +433,8 @@ const config = {
   workspaces: {
     ".": {
       ignoreDependencies: [
-        "@openclaw/*",
-        // Docker packaging stages @openclaw/ai without nested dependencies after
+        "@natesclaw/*",
+        // Docker packaging stages @natesclaw/ai without nested dependencies after
         // verifying the root owns its exact runtime dependency versions.
         "@mistralai/mistralai",
         "openai",

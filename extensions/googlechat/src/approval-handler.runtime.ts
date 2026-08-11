@@ -3,13 +3,13 @@ import type {
   ExpiredApprovalView,
   PendingApprovalView,
   ResolvedApprovalView,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { createChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "openclaw/plugin-sdk/approval-native-runtime";
-import type { ExecApprovalDecision } from "openclaw/plugin-sdk/approval-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalNativeRuntimeAdapter } from "natesclaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "natesclaw/plugin-sdk/approval-native-runtime";
+import type { ExecApprovalDecision } from "natesclaw/plugin-sdk/approval-runtime";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { resolveGoogleChatAccount, type ResolvedGoogleChatAccount } from "./accounts.js";
 import { sendGoogleChatMessage, updateGoogleChatMessage } from "./api.js";
 import {
@@ -29,7 +29,7 @@ import { resolveGoogleChatOutboundSpace } from "./targets.js";
 import type { GoogleChatCardV2 } from "./types.js";
 
 const log = createSubsystemLogger("googlechat/approvals");
-const GOOGLECHAT_APPROVAL_CARD_ID = "openclaw-approval";
+const GOOGLECHAT_APPROVAL_CARD_ID = "natesclaw-approval";
 const MAX_TEXT_PARAGRAPH_CHARS = 1800;
 
 type GoogleChatApprovalHandlerContext = {

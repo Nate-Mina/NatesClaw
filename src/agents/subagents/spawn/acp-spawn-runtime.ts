@@ -1,9 +1,9 @@
 import {
   resolveAcpSessionCwd,
   resolveAcpThreadSessionDetailLines,
-} from "@openclaw/acp-core/runtime/session-identifiers";
-import type { AcpRuntimeSessionMode } from "@openclaw/acp-core/runtime/types";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/acp-core/runtime/session-identifiers";
+import type { AcpRuntimeSessionMode } from "@natesclaw/acp-core/runtime/types";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { getAcpSessionManager } from "../../../acp/control-plane/manager.js";
 import type { AcpSpawnRuntimeCloseHandle } from "../../../acp/control-plane/spawn.js";
 import { formatThinkingLevels } from "../../../auto-reply/thinking.js";
@@ -18,7 +18,7 @@ import {
 import { resolveSessionStorePathCore } from "../../../config/sessions/paths.js";
 import { loadSessionEntry } from "../../../config/sessions/session-accessor.js";
 import type { SessionEntry } from "../../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { isMissingPathError } from "../../../infra/errors.js";
 import {
   getSessionBindingService,
@@ -87,7 +87,7 @@ function resolveAcpRuntimeTimeoutSeconds(runTimeoutSeconds?: number): number | u
 }
 
 export function resolveAcpSpawnRuntimeOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   targetAgentId: string;
   configAgentId?: string;
   model?: string;
@@ -142,7 +142,7 @@ export function resolveAcpSpawnRuntimeOptions(params: {
 }
 
 export async function initializeAcpSpawnRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   targetAgentId: string;
   runtimeMode: AcpRuntimeSessionMode;
@@ -196,7 +196,7 @@ export async function initializeAcpSpawnRuntime(params: {
 }
 
 export async function bindPreparedAcpThread(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   targetAgentId: string;
   label?: string;

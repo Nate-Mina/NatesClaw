@@ -1,4 +1,4 @@
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it, vi } from "vitest";
 import { makeAttemptResult } from "./run.overflow-compaction.fixture.js";
 import { handleEmbeddedAssistantFailure } from "./run/assistant-failure.js";
@@ -81,7 +81,7 @@ function makeInput(
     traceAttempts: [],
     suspendForFailure: vi.fn(),
     suspensionSessionId: "session:empty-error",
-    agentDir: "/tmp/openclaw-empty-error-test",
+    agentDir: "/tmp/natesclaw-empty-error-test",
     isProbeSession: false,
   };
 }

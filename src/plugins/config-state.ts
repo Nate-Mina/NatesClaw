@@ -1,10 +1,10 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 /** Normalizes plugin config and resolves effective enablement, slots, and activation sources. */
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   createEffectiveEnableStateResolver,
   createPluginEnableStateResolver,
@@ -29,8 +29,8 @@ export type PluginActivationState = PluginActivationStateLike;
 
 export type PluginActivationConfigSource = {
   plugins: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
-} & PluginActivationConfigSourceLike<OpenClawConfig>;
+  rootConfig?: NatesclawConfig;
+} & PluginActivationConfigSourceLike<NatesclawConfig>;
 
 export type NormalizedPluginsConfig = SharedNormalizedPluginsConfig;
 
@@ -80,13 +80,13 @@ export function normalizePluginId(id: string): string {
 }
 
 export const normalizePluginsConfig = (
-  config?: OpenClawConfig["plugins"],
+  config?: NatesclawConfig["plugins"],
 ): NormalizedPluginsConfig => {
   return normalizePluginsConfigWithResolverCore(config, createScopedPluginIdNormalizer());
 };
 
 /** Resolves the enabled plugin selected to own the context-engine slot. */
-export function resolveSelectedContextEnginePluginId(config?: OpenClawConfig): string | undefined {
+export function resolveSelectedContextEnginePluginId(config?: NatesclawConfig): string | undefined {
   const plugins = normalizePluginsConfig(config?.plugins);
   return resolveSelectedContextEnginePluginIdFromConfig(plugins, plugins.slots.contextEngine);
 }
@@ -109,9 +109,9 @@ export function resolveSelectedContextEnginePluginIdFromConfig(
 
 /** Canonicalizes one plugin entry and its policy-list ids before a targeted mutation. */
 export function normalizePluginTargetConfig(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   pluginId: string,
-): OpenClawConfig {
+): NatesclawConfig {
   const normalizedId = normalizePluginId(pluginId);
   const normalized = normalizePluginsConfig(config.plugins);
   const rawEntries = config.plugins?.entries ?? {};
@@ -140,7 +140,7 @@ export function normalizePluginTargetConfig(
 }
 
 export function createPluginActivationSource(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   plugins?: NormalizedPluginsConfig;
 }): PluginActivationConfigSource {
   return {
@@ -149,13 +149,13 @@ export function createPluginActivationSource(params: {
   };
 }
 
-const hasExplicitMemorySlot = (plugins?: OpenClawConfig["plugins"]) =>
+const hasExplicitMemorySlot = (plugins?: NatesclawConfig["plugins"]) =>
   Boolean(plugins?.slots && Object.hasOwn(plugins.slots, "memory"));
 
-const hasExplicitMemoryEntry = (plugins?: OpenClawConfig["plugins"]) =>
+const hasExplicitMemoryEntry = (plugins?: NatesclawConfig["plugins"]) =>
   Boolean(plugins?.entries && Object.hasOwn(plugins.entries, defaultSlotIdForKey("memory")));
 
-export function hasExplicitPluginConfig(plugins?: OpenClawConfig["plugins"]): boolean {
+export function hasExplicitPluginConfig(plugins?: NatesclawConfig["plugins"]): boolean {
   if (!plugins) {
     return false;
   }
@@ -181,9 +181,9 @@ export function hasExplicitPluginConfig(plugins?: OpenClawConfig["plugins"]): bo
 }
 
 export function applyTestPluginDefaults(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
-): OpenClawConfig {
+): NatesclawConfig {
   if (!env.VITEST) {
     return cfg;
   }
@@ -219,7 +219,7 @@ export function applyTestPluginDefaults(
 }
 
 export function isTestDefaultMemorySlotDisabled(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   if (!env.VITEST) {
@@ -236,7 +236,7 @@ export function resolvePluginActivationState(params: {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: NatesclawConfig;
   enabledByDefault?: boolean;
   activationSource?: PluginActivationConfigSource;
   autoEnabledReason?: string;
@@ -265,7 +265,7 @@ type EffectiveActivationParams = {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: NatesclawConfig;
   enabledByDefault?: boolean;
   activationSource?: PluginActivationConfigSource;
 };

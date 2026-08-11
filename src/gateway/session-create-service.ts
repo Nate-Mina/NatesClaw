@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   type ErrorShape,
@@ -46,7 +46,7 @@ import {
   type SessionCreatedVia,
 } from "../config/sessions/session-entry-provenance.js";
 import { inheritSessionSelection } from "../config/sessions/session-entry-selection.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   createInternalHookEvent,
   hasInternalHookListeners,
@@ -100,7 +100,7 @@ const loadSessionLifecycleRuntime = createLazyRuntimeModule(
 
 async function existingModelSelectionWouldChange(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   catalogModel?: string;
   defaultModel: string;
   defaultProvider: string;
@@ -227,7 +227,7 @@ type CreateGatewaySessionResult =
   | { ok: false; error: ErrorShape };
 
 export async function createGatewaySession(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key?: string;
   agentId?: string;
   label?: string;

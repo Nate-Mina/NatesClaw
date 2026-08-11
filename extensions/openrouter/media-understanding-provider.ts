@@ -6,15 +6,15 @@ import {
   type AudioTranscriptionRequest,
   type AudioTranscriptionResult,
   type MediaUnderstandingProvider,
-} from "openclaw/plugin-sdk/media-understanding";
+} from "natesclaw/plugin-sdk/media-understanding";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   readProviderJsonResponse,
   requireTranscriptionText,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
-import { asFiniteNumber } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { asFiniteNumber } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 
 const DEFAULT_OPENROUTER_AUDIO_TRANSCRIPTION_MODEL = "openai/whisper-large-v3-turbo";
@@ -118,8 +118,8 @@ async function transcribeOpenRouterAudio(
       defaultHeaders: {
         Authorization: `Bearer ${params.apiKey}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://openclaw.ai",
-        "X-OpenRouter-Title": "OpenClaw",
+        "HTTP-Referer": "https://natesclaw.ai",
+        "X-OpenRouter-Title": "Natesclaw",
       },
       provider: "openrouter",
       api: "openrouter-stt",

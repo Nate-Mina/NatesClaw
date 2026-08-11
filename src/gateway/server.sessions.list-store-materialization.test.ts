@@ -8,7 +8,7 @@ import * as sessionsConfig from "../config/sessions.js";
 import * as sessionAccessor from "../config/sessions/session-accessor.js";
 import { resolveSqliteTargetFromSessionStorePath } from "../config/sessions/session-sqlite-target.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import { openOpenClawAgentDatabase } from "../state/openclaw-agent-db.js";
+import { openNatesclawAgentDatabase } from "../state/natesclaw-agent-db.js";
 import { scheduleGatewayHandlerPrewarm } from "./server-startup-handler-prewarm.js";
 import { testState, writeSessionStore } from "./test-helpers.js";
 import {
@@ -245,7 +245,7 @@ test("sessions.list projects out prompt snapshots without changing full entry re
   });
   const storePath = testState.sessionStorePath!;
   const target = resolveSqliteTargetFromSessionStorePath(storePath, { agentId: "main" });
-  const database = openOpenClawAgentDatabase({
+  const database = openNatesclawAgentDatabase({
     agentId: target.agentId ?? "main",
     path: target.path,
   });

@@ -2,7 +2,7 @@
 //
 // The allowlist and env/config precedence are provider policy. Deprecated SDK
 // facades keep their dated compatibility copy until its removal window closes.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 
 /** Public GitHub Copilot host used when no data-residency domain is configured. */
 export const PUBLIC_GITHUB_COPILOT_DOMAIN = "github.com";
@@ -26,7 +26,7 @@ export function normalizeGithubCopilotDomain(raw: string | undefined | null): st
     : PUBLIC_GITHUB_COPILOT_DOMAIN;
 }
 
-function readConfiguredGithubCopilotDomain(config?: OpenClawConfig): string | undefined {
+function readConfiguredGithubCopilotDomain(config?: NatesclawConfig): string | undefined {
   const params = config?.models?.providers?.["github-copilot"]?.params;
   const value = params && typeof params === "object" ? params.githubDomain : undefined;
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : undefined;
@@ -42,7 +42,7 @@ function readConfiguredGithubCopilotDomain(config?: OpenClawConfig): string | un
 export function resolveGithubCopilotDomain(params?: {
   env?: NodeJS.ProcessEnv;
   explicit?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
 }): string {
   const env = params?.env ?? process.env;
   const fromEnv = env.COPILOT_GITHUB_DOMAIN?.trim();
@@ -57,8 +57,8 @@ export function resolveGithubCopilotDomain(params?: {
 
 // Shortcut login must persist its token's tenant. A missing domain would route
 // the tenant token back to github.com after the environment override is removed.
-export function withGithubCopilotDomainConfig(cfg: OpenClawConfig, domain: string): OpenClawConfig {
-  const models: NonNullable<OpenClawConfig["models"]> = cfg.models ?? {};
+export function withGithubCopilotDomainConfig(cfg: NatesclawConfig, domain: string): NatesclawConfig {
+  const models: NonNullable<NatesclawConfig["models"]> = cfg.models ?? {};
   const providers: NonNullable<typeof models.providers> = models.providers ?? {};
   const provider = providers["github-copilot"];
   const params = provider?.params;

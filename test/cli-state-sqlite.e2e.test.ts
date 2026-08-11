@@ -2,36 +2,36 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
+import { withTempHome } from "natesclaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import {
-  closeOpenClawAgentDatabaseByPath,
-  openOpenClawAgentDatabase,
-} from "../src/state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabaseByPath,
+  openNatesclawAgentDatabase,
+} from "../src/state/natesclaw-agent-db.js";
 import {
-  closeOpenClawStateDatabase,
-  openOpenClawStateDatabase,
-} from "../src/state/openclaw-state-db.js";
+  closeNatesclawStateDatabase,
+  openNatesclawStateDatabase,
+} from "../src/state/natesclaw-state-db.js";
 
 describe("SQLite CLI maintenance ownership", () => {
   it("compacts after full CLI startup without retaining a config-health database handle", async () => {
     await withTempHome(
       async (tempHome) => {
-        const stateDir = path.join(tempHome, ".openclaw");
+        const stateDir = path.join(tempHome, ".natesclaw");
         const env: NodeJS.ProcessEnv = {
           ...process.env,
           HOME: tempHome,
           USERPROFILE: tempHome,
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_FAST: "1",
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_FAST: "1",
         };
-        delete env.OPENCLAW_CONFIG_PATH;
-        delete env.OPENCLAW_HOME;
+        delete env.NATESCLAW_CONFIG_PATH;
+        delete env.NATESCLAW_HOME;
         delete env.VITEST;
 
         try {
-          const database = openOpenClawStateDatabase({ env });
+          const database = openNatesclawStateDatabase({ env });
           database.db.exec(`
             CREATE TABLE compact_cli_payload (
               id INTEGER PRIMARY KEY,
@@ -51,7 +51,7 @@ describe("SQLite CLI maintenance ownership", () => {
             PRAGMA wal_checkpoint(TRUNCATE);
           `);
         } finally {
-          closeOpenClawStateDatabase();
+          closeNatesclawStateDatabase();
         }
 
         const entry = path.resolve(process.cwd(), "src/entry.ts");
@@ -82,9 +82,9 @@ describe("SQLite CLI maintenance ownership", () => {
           skipped: false,
         });
         expect(report.before.freelistPages).toBeGreaterThan(0);
-        expect(fs.existsSync(path.join(stateDir, "state", "openclaw.sqlite"))).toBe(true);
+        expect(fs.existsSync(path.join(stateDir, "state", "natesclaw.sqlite"))).toBe(true);
       },
-      { prefix: "openclaw-state-sqlite-cli-" },
+      { prefix: "natesclaw-state-sqlite-cli-" },
     );
   }, 90_000);
 
@@ -93,22 +93,22 @@ describe("SQLite CLI maintenance ownership", () => {
     async () => {
       await withTempHome(
         async (tempHome) => {
-          const stateDir = path.join(tempHome, ".openclaw");
+          const stateDir = path.join(tempHome, ".natesclaw");
           const env: NodeJS.ProcessEnv = {
             ...process.env,
             HOME: tempHome,
             USERPROFILE: tempHome,
-            OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-            OPENCLAW_STATE_DIR: stateDir,
-            OPENCLAW_TEST_FAST: "1",
+            NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+            NATESCLAW_STATE_DIR: stateDir,
+            NATESCLAW_TEST_FAST: "1",
           };
-          delete env.OPENCLAW_CONFIG_PATH;
-          delete env.OPENCLAW_HOME;
+          delete env.NATESCLAW_CONFIG_PATH;
+          delete env.NATESCLAW_HOME;
           delete env.VITEST;
 
-          const database = openOpenClawStateDatabase({ env });
+          const database = openNatesclawStateDatabase({ env });
           const walPath = `${database.path}-wal`;
-          const externalWalPath = path.join(tempHome, "external-state", "openclaw.sqlite-wal");
+          const externalWalPath = path.join(tempHome, "external-state", "natesclaw.sqlite-wal");
           try {
             database.db.exec(`
               PRAGMA wal_autocheckpoint = 0;
@@ -140,10 +140,10 @@ describe("SQLite CLI maintenance ownership", () => {
             expect(`${result.stderr}\n${result.stdout}`).toContain("hard-linked path");
             expect(fs.readFileSync(externalWalPath)).toEqual(externalWalBefore);
           } finally {
-            closeOpenClawStateDatabase();
+            closeNatesclawStateDatabase();
           }
         },
-        { prefix: "openclaw-state-sqlite-sidecar-cli-" },
+        { prefix: "natesclaw-state-sqlite-sidecar-cli-" },
       );
     },
     90_000,
@@ -152,7 +152,7 @@ describe("SQLite CLI maintenance ownership", () => {
   it("rejects destructive explicit session stores outside the active state owner", async () => {
     await withTempHome(
       async (tempHome) => {
-        const stateDir = path.join(tempHome, ".openclaw");
+        const stateDir = path.join(tempHome, ".natesclaw");
         const externalStorePath = path.join(
           tempHome,
           "external-state",
@@ -165,12 +165,12 @@ describe("SQLite CLI maintenance ownership", () => {
           ...process.env,
           HOME: tempHome,
           USERPROFILE: tempHome,
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_FAST: "1",
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_FAST: "1",
         };
-        delete env.OPENCLAW_CONFIG_PATH;
-        delete env.OPENCLAW_HOME;
+        delete env.NATESCLAW_CONFIG_PATH;
+        delete env.NATESCLAW_HOME;
         delete env.VITEST;
 
         const entry = path.resolve(process.cwd(), "src/entry.ts");
@@ -197,21 +197,21 @@ describe("SQLite CLI maintenance ownership", () => {
 
         expect(result.status).not.toBe(0);
         expect(`${result.stderr}\n${result.stdout}`).toContain(
-          "outside the active OpenClaw state directory",
+          "outside the active Natesclaw state directory",
         );
         expect(fs.existsSync(externalStorePath)).toBe(false);
       },
-      { prefix: "openclaw-session-sqlite-cli-" },
+      { prefix: "natesclaw-session-sqlite-cli-" },
     );
   }, 90_000);
 
   it("rejects hard-linked SQLite sidecars before destructive maintenance", async () => {
     await withTempHome(
       async (tempHome) => {
-        const stateDir = path.join(tempHome, ".openclaw");
+        const stateDir = path.join(tempHome, ".natesclaw");
         const storePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
-        const sqlitePath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
-        const externalWalPath = path.join(tempHome, "external-state", "openclaw-agent.sqlite-wal");
+        const sqlitePath = path.join(stateDir, "agents", "main", "agent", "natesclaw-agent.sqlite");
+        const externalWalPath = path.join(tempHome, "external-state", "natesclaw-agent.sqlite-wal");
         fs.mkdirSync(path.dirname(storePath), { recursive: true });
         fs.mkdirSync(path.dirname(sqlitePath), { recursive: true });
         fs.mkdirSync(path.dirname(externalWalPath), { recursive: true });
@@ -222,12 +222,12 @@ describe("SQLite CLI maintenance ownership", () => {
           ...process.env,
           HOME: tempHome,
           USERPROFILE: tempHome,
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_FAST: "1",
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_FAST: "1",
         };
-        delete env.OPENCLAW_CONFIG_PATH;
-        delete env.OPENCLAW_HOME;
+        delete env.NATESCLAW_CONFIG_PATH;
+        delete env.NATESCLAW_HOME;
         delete env.VITEST;
 
         const entry = path.resolve(process.cwd(), "src/entry.ts");
@@ -256,7 +256,7 @@ describe("SQLite CLI maintenance ownership", () => {
         expect(`${result.stderr}\n${result.stdout}`).toContain("hard-linked path");
         expect(fs.readFileSync(externalWalPath, "utf8")).toBe("external wal\n");
       },
-      { prefix: "openclaw-session-sqlite-sidecar-cli-" },
+      { prefix: "natesclaw-session-sqlite-sidecar-cli-" },
     );
   }, 90_000);
 
@@ -265,14 +265,14 @@ describe("SQLite CLI maintenance ownership", () => {
     async () => {
       await withTempHome(
         async (tempHome) => {
-          const stateDir = path.join(tempHome, ".openclaw");
+          const stateDir = path.join(tempHome, ".natesclaw");
           const storePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
           const sqlitePath = path.join(
             stateDir,
             "agents",
             "main",
             "agent",
-            "openclaw-agent.sqlite",
+            "natesclaw-agent.sqlite",
           );
           const targetPath = path.join(stateDir, "agents", "main", "agent", "sidecar-target");
           fs.mkdirSync(path.dirname(storePath), { recursive: true });
@@ -284,12 +284,12 @@ describe("SQLite CLI maintenance ownership", () => {
             ...process.env,
             HOME: tempHome,
             USERPROFILE: tempHome,
-            OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-            OPENCLAW_STATE_DIR: stateDir,
-            OPENCLAW_TEST_FAST: "1",
+            NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+            NATESCLAW_STATE_DIR: stateDir,
+            NATESCLAW_TEST_FAST: "1",
           };
-          delete env.OPENCLAW_CONFIG_PATH;
-          delete env.OPENCLAW_HOME;
+          delete env.NATESCLAW_CONFIG_PATH;
+          delete env.NATESCLAW_HOME;
           delete env.VITEST;
 
           const entry = path.resolve(process.cwd(), "src/entry.ts");
@@ -318,7 +318,7 @@ describe("SQLite CLI maintenance ownership", () => {
           expect(`${result.stderr}\n${result.stdout}`).toContain("symbolic-link path");
           expect(fs.readFileSync(targetPath, "utf8")).toBe("owned target\n");
         },
-        { prefix: "openclaw-session-sqlite-symlink-sidecar-cli-" },
+        { prefix: "natesclaw-session-sqlite-symlink-sidecar-cli-" },
       );
     },
     90_000,
@@ -327,11 +327,11 @@ describe("SQLite CLI maintenance ownership", () => {
   it("rejects hard-linked SQLite sidecars discovered through configured session stores", async () => {
     await withTempHome(
       async (tempHome) => {
-        const stateDir = path.join(tempHome, ".openclaw");
+        const stateDir = path.join(tempHome, ".natesclaw");
         const storePath = path.join(tempHome, "external-sessions", "sessions.json");
-        const sqlitePath = path.join(path.dirname(storePath), "openclaw-agent.sqlite");
-        const externalWalPath = path.join(tempHome, "external-alias", "openclaw-agent.sqlite-wal");
-        const configPath = path.join(stateDir, "openclaw.json");
+        const sqlitePath = path.join(path.dirname(storePath), "natesclaw-agent.sqlite");
+        const externalWalPath = path.join(tempHome, "external-alias", "natesclaw-agent.sqlite-wal");
+        const configPath = path.join(stateDir, "natesclaw.json");
         fs.mkdirSync(path.dirname(storePath), { recursive: true });
         fs.mkdirSync(path.dirname(externalWalPath), { recursive: true });
         fs.mkdirSync(stateDir, { recursive: true });
@@ -341,15 +341,15 @@ describe("SQLite CLI maintenance ownership", () => {
           ...process.env,
           HOME: tempHome,
           USERPROFILE: tempHome,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_FAST: "1",
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_FAST: "1",
         };
-        delete env.OPENCLAW_HOME;
+        delete env.NATESCLAW_HOME;
         delete env.VITEST;
 
-        const database = openOpenClawAgentDatabase({
+        const database = openNatesclawAgentDatabase({
           agentId: "main",
           env,
           path: sqlitePath,
@@ -385,10 +385,10 @@ describe("SQLite CLI maintenance ownership", () => {
           expect(`${result.stderr}\n${result.stdout}`).toContain("hard-linked path");
           expect(fs.readFileSync(externalWalPath)).toEqual(externalWalBefore);
         } finally {
-          closeOpenClawAgentDatabaseByPath(sqlitePath);
+          closeNatesclawAgentDatabaseByPath(sqlitePath);
         }
       },
-      { prefix: "openclaw-configured-session-sqlite-sidecar-cli-" },
+      { prefix: "natesclaw-configured-session-sqlite-sidecar-cli-" },
     );
   }, 90_000);
 });

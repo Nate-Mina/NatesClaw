@@ -30,7 +30,7 @@ afterEach(() => {
 describe("legacy session group migration", () => {
   it("does not migrate browser groups without operator.write", async () => {
     vi.stubGlobal("localStorage", createStorageMock());
-    localStorage.setItem("openclaw:sessions:custom-groups", JSON.stringify(["Research"]));
+    localStorage.setItem("natesclaw:sessions:custom-groups", JSON.stringify(["Research"]));
     const request = vi.fn(async (method: string) => {
       if (method === "sessions.groups.list") {
         return { groups: [] };
@@ -43,7 +43,7 @@ describe("legacy session group migration", () => {
 
     expect(request).toHaveBeenCalledOnce();
     expect(request).toHaveBeenCalledWith("sessions.groups.list", {});
-    expect(localStorage.getItem("openclaw:sessions:custom-groups")).toBe(
+    expect(localStorage.getItem("natesclaw:sessions:custom-groups")).toBe(
       JSON.stringify(["Research"]),
     );
     sessions.dispose();
@@ -51,7 +51,7 @@ describe("legacy session group migration", () => {
 
   it("migrates browser groups with operator.write", async () => {
     vi.stubGlobal("localStorage", createStorageMock());
-    localStorage.setItem("openclaw:sessions:custom-groups", JSON.stringify(["Research"]));
+    localStorage.setItem("natesclaw:sessions:custom-groups", JSON.stringify(["Research"]));
     const request = vi.fn(async (method: string) => {
       if (method === "sessions.groups.list") {
         return { groups: [] };
@@ -67,7 +67,7 @@ describe("legacy session group migration", () => {
 
     expect(request).toHaveBeenCalledWith("sessions.groups.put", { names: ["Research"] });
     expect(sessions.state.groups).toEqual(["Research"]);
-    expect(localStorage.getItem("openclaw:sessions:custom-groups")).toBeNull();
+    expect(localStorage.getItem("natesclaw:sessions:custom-groups")).toBeNull();
     sessions.dispose();
   });
 });

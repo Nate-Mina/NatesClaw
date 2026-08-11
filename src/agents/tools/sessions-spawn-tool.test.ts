@@ -1,7 +1,7 @@
 import path from "node:path";
 // sessions_spawn tool tests cover model-visible schema gating, ACP/subagent
 // dispatch, and result details for spawned child sessions.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { upsertSessionEntryCore } from "../../config/sessions/session-accessor.js";
 import { withTestDir } from "../../test-helpers/temp-dir.js";
@@ -433,7 +433,7 @@ describe("sessions_spawn tool", () => {
   });
 
   it("creates visible worktree sessions and registers completion announce", async () => {
-    await withTestDir({ prefix: "openclaw-visible-spawn-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-visible-spawn-" }, async (dir) => {
       const callGateway = vi.fn(async () => ({
         key: "agent:main:dashboard:child",
         runStarted: true,
@@ -515,7 +515,7 @@ describe("sessions_spawn tool", () => {
   });
 
   it("rejects a visible spawn before creation when the exact parent incarnation changed", async () => {
-    await withTestDir({ prefix: "openclaw-visible-spawn-parent-race-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-visible-spawn-parent-race-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
       const parentSessionKey = "agent:main:main";
       await upsertSessionEntryCore(
@@ -652,7 +652,7 @@ describe("sessions_spawn tool", () => {
   });
 
   it("rejects cwd escape for sandboxed visible sessions", async () => {
-    await withTestDir({ prefix: "openclaw-visible-sandbox-cwd-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-visible-sandbox-cwd-" }, async (dir) => {
       const callGateway = vi.fn();
       const tool = createSessionsSpawnTool({
         agentSessionKey: "agent:main:main",
@@ -682,7 +682,7 @@ describe("sessions_spawn tool", () => {
   });
 
   it("allows cwd within a sandboxed visible session workspace", async () => {
-    await withTestDir({ prefix: "openclaw-visible-sandbox-cwd-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-visible-sandbox-cwd-" }, async (dir) => {
       const workspace = path.join(dir, "workspace");
       const cwd = path.join(workspace, "packages", "app");
       const callGateway = vi.fn(async () => ({
@@ -1078,7 +1078,7 @@ describe("sessions_spawn tool", () => {
   });
 
   it("applies spawn depth limits to visible dashboard descendants", async () => {
-    await withTestDir({ prefix: "openclaw-visible-depth-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-visible-depth-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
       const childKey = "agent:main:dashboard:child";
       await upsertSessionEntryCore(
@@ -1624,7 +1624,7 @@ describe("sessions_spawn tool", () => {
     expect(hoisted.spawnAcpDirectMock).not.toHaveBeenCalled();
   });
 
-  it("accepts ACP spawns when inherited allows include OpenClaw command tools", async () => {
+  it("accepts ACP spawns when inherited allows include Natesclaw command tools", async () => {
     registerAcpBackendForTest();
     const tool = createSessionsSpawnTool({
       agentSessionKey: "agent:main:main",

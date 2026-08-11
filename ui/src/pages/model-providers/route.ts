@@ -1,4 +1,4 @@
-import { definePage } from "@openclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -33,6 +33,6 @@ export const page = definePage({
     import("./model-providers-page.ts").then(() => ({
       header: true,
       render: (data: ModelProvidersRouteData | undefined) =>
-        html`<openclaw-model-providers-page .routeData=${data}></openclaw-model-providers-page>`,
+        html`<natesclaw-model-providers-page .routeData=${data}></natesclaw-model-providers-page>`,
     })),
 });

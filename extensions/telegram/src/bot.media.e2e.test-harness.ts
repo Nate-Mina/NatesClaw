@@ -2,10 +2,10 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resetPluginStateStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { finalizeInboundContext, resetInboundDedupe } from "openclaw/plugin-sdk/reply-runtime";
-import type { GetReplyOptions, MsgContext } from "openclaw/plugin-sdk/reply-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resetPluginStateStoreForTests } from "natesclaw/plugin-sdk/plugin-state-test-runtime";
+import { finalizeInboundContext, resetInboundDedupe } from "natesclaw/plugin-sdk/reply-runtime";
+import type { GetReplyOptions, MsgContext } from "natesclaw/plugin-sdk/reply-runtime";
 import { afterEach, beforeEach, vi, type Mock } from "vitest";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import { runTelegramChannelInboundEventWithHarness } from "./bot.test-helpers.js";
@@ -15,10 +15,10 @@ import type { TelegramRuntime } from "./runtime.types.js";
 
 type TelegramBotRuntimeForTest = typeof import("./bot.runtime.js");
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("openclaw/plugin-sdk/reply-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("natesclaw/plugin-sdk/reply-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyHarnessParams = Parameters<DispatchReplyWithBufferedBlockDispatcherFn>[0];
 type ReadRemoteMediaBufferFn =
-  typeof import("openclaw/plugin-sdk/media-runtime").readRemoteMediaBuffer;
+  typeof import("natesclaw/plugin-sdk/media-runtime").readRemoteMediaBuffer;
 
 const useSpy: Mock = vi.fn();
 const middlewareUseSpy: Mock = vi.fn();
@@ -74,11 +74,11 @@ async function defaultSaveMediaBuffer(buffer: Buffer, contentType?: string) {
 }
 
 const saveMediaBufferSpy: Mock = vi.fn(defaultSaveMediaBuffer);
-const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalStateDir = process.env.NATESCLAW_STATE_DIR;
 let mediaHarnessStoreRoot: string | undefined;
 
 function ensureMediaHarnessStoreRoot(): string {
-  mediaHarnessStoreRoot ??= mkdtempSync(path.join(os.tmpdir(), "openclaw-telegram-media-e2e-"));
+  mediaHarnessStoreRoot ??= mkdtempSync(path.join(os.tmpdir(), "natesclaw-telegram-media-e2e-"));
   return mediaHarnessStoreRoot;
 }
 
@@ -133,7 +133,7 @@ const throttlerSpy = vi.fn(() => "throttler");
 const defaultRuntimeConfig = (() =>
   ({
     channels: { telegram: { dmPolicy: "open", allowFrom: ["*"] } },
-  }) as OpenClawConfig) as TelegramBotDeps["getRuntimeConfig"];
+  }) as NatesclawConfig) as TelegramBotDeps["getRuntimeConfig"];
 
 type TopicNameEntry = {
   name: string;
@@ -244,8 +244,8 @@ const mediaHarnessDispatchReplyWithBufferedBlockDispatcher = vi.hoisted(() =>
   }),
 );
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-inbound")>();
+vi.mock("natesclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/channel-inbound")>();
   return {
     ...actual,
     runChannelInboundEvent: async (params: Parameters<typeof actual.runChannelInboundEvent>[0]) =>
@@ -282,7 +282,7 @@ export const telegramBotDepsForTest: TelegramBotDeps = {
 beforeEach(() => {
   resetPluginStateStoreForTests();
   cleanupMediaHarnessStoreRoot();
-  process.env.OPENCLAW_STATE_DIR = ensureMediaHarnessStoreRoot();
+  process.env.NATESCLAW_STATE_DIR = ensureMediaHarnessStoreRoot();
   telegramBotDepsForTest.getRuntimeConfig = defaultRuntimeConfig;
   resetInboundDedupe();
   topicNameStoresForTest.clear();
@@ -296,9 +296,9 @@ beforeEach(() => {
 afterEach(() => {
   resetPluginStateStoreForTests();
   if (originalStateDir === undefined) {
-    delete process.env.OPENCLAW_STATE_DIR;
+    delete process.env.NATESCLAW_STATE_DIR;
   } else {
-    process.env.OPENCLAW_STATE_DIR = originalStateDir;
+    process.env.NATESCLAW_STATE_DIR = originalStateDir;
   }
   cleanupMediaHarnessStoreRoot();
 });

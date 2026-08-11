@@ -1,9 +1,9 @@
-import { expectDefined } from "@openclaw/normalization-core";
-import type { ProviderAuthMethod } from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import { clearLiveCatalogCacheForTests } from "openclaw/plugin-sdk/provider-catalog-shared";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { ProviderAuthMethod } from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
+import { clearLiveCatalogCacheForTests } from "natesclaw/plugin-sdk/provider-catalog-shared";
 // Ollama tests cover index plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
 import { OLLAMA_DEFAULT_API_KEY } from "./src/discovery-shared.js";
@@ -65,8 +65,8 @@ vi.mock("./src/provider-models.js", async (importOriginal) => ({
   queryOllamaModelShowInfo: queryOllamaModelShowInfoMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/secret-input-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/secret-input-runtime")>();
+vi.mock("natesclaw/plugin-sdk/secret-input-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/secret-input-runtime")>();
   return {
     ...actual,
     resolveConfiguredSecretInputString: resolveConfiguredSecretInputStringMock.mockImplementation(
@@ -604,7 +604,7 @@ describe("ollama plugin", () => {
 
     await provider.auth[0].appGuidedSetup?.detectAvailability?.({
       config: {},
-      env: { OPENCLAW_DOCKER_SETUP: "1" },
+      env: { NATESCLAW_DOCKER_SETUP: "1" },
     });
 
     expect(fetchOllamaModelsMock).toHaveBeenCalledWith("http://host.docker.internal:11434", {});

@@ -1,24 +1,24 @@
-import type { ImageGenerationProvider } from "openclaw/plugin-sdk/image-generation";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { MediaUnderstandingProvider } from "openclaw/plugin-sdk/media-understanding";
+import type { ImageGenerationProvider } from "natesclaw/plugin-sdk/image-generation";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { MediaUnderstandingProvider } from "natesclaw/plugin-sdk/media-understanding";
 import type {
   RealtimeTranscriptionProviderPlugin,
   RealtimeTranscriptionSession,
   RealtimeTranscriptionSessionCreateRequest,
-} from "openclaw/plugin-sdk/realtime-transcription";
+} from "natesclaw/plugin-sdk/realtime-transcription";
 import type {
   RealtimeVoiceBridge,
   RealtimeVoiceBridgeCreateRequest,
   RealtimeVoiceProviderPlugin,
   RealtimeVoiceToolResultOptions,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { createRealtimeVoiceAudioQueue } from "openclaw/plugin-sdk/realtime-voice-audio-queue";
+} from "natesclaw/plugin-sdk/realtime-voice";
+import { createRealtimeVoiceAudioQueue } from "natesclaw/plugin-sdk/realtime-voice-audio-queue";
 import type {
   SpeechProviderPlugin,
   SpeechSynthesisStreamRequest,
   SpeechTelephonySynthesisRequest,
-} from "openclaw/plugin-sdk/speech";
-import type { VideoGenerationProvider } from "openclaw/plugin-sdk/video-generation";
+} from "natesclaw/plugin-sdk/speech";
+import type { VideoGenerationProvider } from "natesclaw/plugin-sdk/video-generation";
 import {
   assertXaiRealtimeVoiceRequestSupported,
   createXaiImageGenerationProviderMetadata,

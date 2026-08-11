@@ -1,6 +1,6 @@
 import { Buffer } from "node:buffer";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { JsonValue } from "./protocol.js";
 import { readUpstreamUserText } from "./upstream-prompt-provenance.js";
 

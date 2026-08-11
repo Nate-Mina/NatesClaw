@@ -56,36 +56,36 @@ describe("resolvePluginUpdateSelection", () => {
   it.each([
     {
       title: "maps an explicit unscoped npm dist-tag update to the tracked plugin id",
-      pluginId: "openclaw-codex-app-server",
-      packageNameWithSpec: "openclaw-codex-app-server",
-      installPath: "/tmp/openclaw-codex-app-server",
-      packageName: "openclaw-codex-app-server",
-      requestedSpec: "openclaw-codex-app-server@beta",
-      expectedPluginId: "openclaw-codex-app-server",
-      expectedTrackedId: "openclaw-codex-app-server",
-      expectedSpec: "openclaw-codex-app-server@beta",
+      pluginId: "natesclaw-codex-app-server",
+      packageNameWithSpec: "natesclaw-codex-app-server",
+      installPath: "/tmp/natesclaw-codex-app-server",
+      packageName: "natesclaw-codex-app-server",
+      requestedSpec: "natesclaw-codex-app-server@beta",
+      expectedPluginId: "natesclaw-codex-app-server",
+      expectedTrackedId: "natesclaw-codex-app-server",
+      expectedSpec: "natesclaw-codex-app-server@beta",
     },
     {
       title: "maps an explicit scoped npm dist-tag update to the tracked plugin id",
       pluginId: "voice-call",
-      packageNameWithSpec: "@openclaw/voice-call",
+      packageNameWithSpec: "@natesclaw/voice-call",
       installPath: "/tmp/voice-call",
-      packageName: "@openclaw/voice-call",
-      requestedSpec: "@openclaw/voice-call@beta",
+      packageName: "@natesclaw/voice-call",
+      requestedSpec: "@natesclaw/voice-call@beta",
       expectedPluginId: "voice-call",
       expectedTrackedId: "voice-call",
-      expectedSpec: "@openclaw/voice-call@beta",
+      expectedSpec: "@natesclaw/voice-call@beta",
     },
     {
       title: "maps an explicit npm version update to the tracked plugin id",
-      pluginId: "openclaw-codex-app-server",
-      packageNameWithSpec: "openclaw-codex-app-server",
-      installPath: "/tmp/openclaw-codex-app-server",
-      packageName: "openclaw-codex-app-server",
-      requestedSpec: "openclaw-codex-app-server@0.2.0-beta.4",
-      expectedPluginId: "openclaw-codex-app-server",
-      expectedTrackedId: "openclaw-codex-app-server",
-      expectedSpec: "openclaw-codex-app-server@0.2.0-beta.4",
+      pluginId: "natesclaw-codex-app-server",
+      packageNameWithSpec: "natesclaw-codex-app-server",
+      installPath: "/tmp/natesclaw-codex-app-server",
+      packageName: "natesclaw-codex-app-server",
+      requestedSpec: "natesclaw-codex-app-server@0.2.0-beta.4",
+      expectedPluginId: "natesclaw-codex-app-server",
+      expectedTrackedId: "natesclaw-codex-app-server",
+      expectedSpec: "natesclaw-codex-app-server@0.2.0-beta.4",
     },
     {
       title: "maps a bare scoped npm package update to the tracked plugin id",
@@ -134,16 +134,16 @@ describe("resolvePluginUpdateSelection", () => {
     expect(
       resolvePluginUpdateSelection({
         installs: {
-          "openclaw-codex-app-server": createNpmInstall({
-            spec: "openclaw-codex-app-server@beta",
-            installPath: "/tmp/openclaw-codex-app-server",
-            resolvedName: "openclaw-codex-app-server",
+          "natesclaw-codex-app-server": createNpmInstall({
+            spec: "natesclaw-codex-app-server@beta",
+            installPath: "/tmp/natesclaw-codex-app-server",
+            resolvedName: "natesclaw-codex-app-server",
           }),
         },
-        rawId: "openclaw-codex-app-server",
+        rawId: "natesclaw-codex-app-server",
       }),
     ).toEqual({
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["natesclaw-codex-app-server"],
     });
   });
 
@@ -184,8 +184,8 @@ describe("resolveHookPackUpdateSelection", () => {
       resolveHookPackUpdateSelection({
         installs: {
           constructor: createNpmHookInstall({
-            spec: "openclaw-hooks-constructor",
-            resolvedName: "openclaw-hooks-constructor",
+            spec: "natesclaw-hooks-constructor",
+            resolvedName: "natesclaw-hooks-constructor",
           }),
         },
         rawId: "constructor",

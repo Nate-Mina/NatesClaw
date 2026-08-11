@@ -5,8 +5,8 @@ import { createStreamingResponse } from "../../test-support/streaming-error-resp
 // Capture every call to postTrustedWebToolsJson so we can assert on extraHeaders.
 const postTrustedWebToolsJson = vi.fn();
 
-vi.mock("openclaw/plugin-sdk/provider-web-search", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/provider-web-search")>()),
+vi.mock("natesclaw/plugin-sdk/provider-web-search", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/provider-web-search")>()),
   DEFAULT_CACHE_TTL_MINUTES: 5,
   normalizeCacheKey: (k: string) => k,
   postTrustedWebToolsJson,
@@ -39,12 +39,12 @@ describe("tavily client X-Client-Source header", () => {
     );
   });
 
-  it("runTavilySearch sends X-Client-Source: openclaw", async () => {
+  it("runTavilySearch sends X-Client-Source: natesclaw", async () => {
     await runTavilySearch({ query: "test query" });
 
     expect(postTrustedWebToolsJson).toHaveBeenCalledOnce();
     const params = postTrustedWebToolsJson.mock.calls[0]?.[0];
-    expect(params.extraHeaders).toEqual({ "X-Client-Source": "openclaw" });
+    expect(params.extraHeaders).toEqual({ "X-Client-Source": "natesclaw" });
   });
 
   it("runTavilySearch reports malformed JSON with a stable provider error", async () => {
@@ -182,12 +182,12 @@ describe("tavily client X-Client-Source header", () => {
     expect(jsonSpy).not.toHaveBeenCalled();
   });
 
-  it("runTavilyExtract sends X-Client-Source: openclaw", async () => {
+  it("runTavilyExtract sends X-Client-Source: natesclaw", async () => {
     await runTavilyExtract({ urls: ["https://example.com"] });
 
     expect(postTrustedWebToolsJson).toHaveBeenCalledOnce();
     const params = postTrustedWebToolsJson.mock.calls[0]?.[0];
-    expect(params.extraHeaders).toEqual({ "X-Client-Source": "openclaw" });
+    expect(params.extraHeaders).toEqual({ "X-Client-Source": "natesclaw" });
   });
 
   it("runTavilyExtract reports malformed JSON with a stable provider error", async () => {

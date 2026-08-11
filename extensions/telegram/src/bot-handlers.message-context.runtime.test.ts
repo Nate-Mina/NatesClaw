@@ -1,6 +1,6 @@
 // Telegram tests cover forum topic recovery from the real message cache.
 import type { Message } from "grammy/types";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createTelegramMessageContextRuntime } from "./bot-handlers.message-context.js";
 import type { RegisterTelegramHandlerParams } from "./bot-handlers.types.js";
@@ -17,14 +17,14 @@ let storeScopeId = 0;
  */
 function createRuntime() {
   storeScopeId += 1;
-  const cfg: OpenClawConfig = {};
+  const cfg: NatesclawConfig = {};
   return createTelegramMessageContextRuntime({
     cfg,
     accountId: "default",
     opts: { token: "test" },
     telegramCfg: {},
     telegramDeps: {
-      resolveStorePath: () => `/tmp/openclaw-telegram-thread-recovery-${storeScopeId}/store.json`,
+      resolveStorePath: () => `/tmp/natesclaw-telegram-thread-recovery-${storeScopeId}/store.json`,
     } as RegisterTelegramHandlerParams["telegramDeps"],
   });
 }

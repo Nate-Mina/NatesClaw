@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { resolveTelegramMiniAppUrls, TELEGRAM_MINIAPP_URL_ERROR } from "./url.js";
 
@@ -11,14 +11,14 @@ describe("resolveTelegramMiniAppUrls", () => {
     const cfg = {
       gateway: {
         tailscale: { mode: "serve" },
-        controlUi: { basePath: "/openclaw/" },
+        controlUi: { basePath: "/natesclaw/" },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     await expect(resolveTelegramMiniAppUrls({ cfg, runCommand })).resolves.toEqual({
-      pageUrl: "https://host.tailnet.ts.net/__openclaw_tg_miniapp/",
-      controlUiUrl: "https://host.tailnet.ts.net/openclaw",
-      gatewayUrl: "wss://host.tailnet.ts.net/openclaw",
+      pageUrl: "https://host.tailnet.ts.net/__natesclaw_tg_miniapp/",
+      controlUiUrl: "https://host.tailnet.ts.net/natesclaw",
+      gatewayUrl: "wss://host.tailnet.ts.net/natesclaw",
     });
     expect(runCommand).toHaveBeenCalledWith(["tailscale", "status", "--json"], {
       timeoutMs: 5000,
@@ -32,13 +32,13 @@ describe("resolveTelegramMiniAppUrls", () => {
     }));
     const cfg = {
       gateway: {
-        tailscale: { mode: "serve", serviceName: "svc:openclaw" },
+        tailscale: { mode: "serve", serviceName: "svc:natesclaw" },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     await expect(resolveTelegramMiniAppUrls({ cfg, runCommand })).resolves.toMatchObject({
-      pageUrl: "https://openclaw.tailnet.ts.net/__openclaw_tg_miniapp/",
-      gatewayUrl: "wss://openclaw.tailnet.ts.net",
+      pageUrl: "https://natesclaw.tailnet.ts.net/__natesclaw_tg_miniapp/",
+      gatewayUrl: "wss://natesclaw.tailnet.ts.net",
     });
   });
 

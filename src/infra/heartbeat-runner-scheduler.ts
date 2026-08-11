@@ -1,6 +1,6 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId, resolveAgentIdFromSessionKey } from "../routing/session-key.js";
 import { defaultRuntime, type RuntimeEnv } from "../runtime.js";
 import { formatErrorMessage } from "./errors.js";
@@ -58,12 +58,12 @@ type HeartbeatAgentState = {
 
 export type HeartbeatRunner = {
   stop: () => void;
-  updateConfig: (cfg: OpenClawConfig) => void;
+  updateConfig: (cfg: NatesclawConfig) => void;
 };
 
 export function startHeartbeatRunner(opts: {
-  cfg?: OpenClawConfig;
-  readCurrentConfig?: () => OpenClawConfig;
+  cfg?: NatesclawConfig;
+  readCurrentConfig?: () => NatesclawConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   runOnce?: typeof runHeartbeatOnce;
@@ -213,7 +213,7 @@ export function startHeartbeatRunner(opts: {
     agent.floodLoggedSinceLastRun = false;
   };
 
-  const updateConfig = (cfg: OpenClawConfig) => {
+  const updateConfig = (cfg: NatesclawConfig) => {
     if (state.stopped) {
       return;
     }

@@ -3,14 +3,14 @@ import {
   captureWsEvent,
   createDebugProxyWebSocketAgent,
   resolveDebugProxySettings,
-} from "openclaw/plugin-sdk/proxy-capture";
+} from "natesclaw/plugin-sdk/proxy-capture";
 import type {
   RealtimeVoiceBridge,
   RealtimeVoiceSessionConnection,
   RealtimeVoiceToolResultOptions,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { RealtimeVoiceSessionLifecycle } from "openclaw/plugin-sdk/realtime-voice";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/realtime-voice";
+import { RealtimeVoiceSessionLifecycle } from "natesclaw/plugin-sdk/realtime-voice";
+import { sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
 import WebSocket from "ws";
 import { resolveXaiRealtimeApiKey } from "./realtime-voice-auth.runtime.js";
 import {

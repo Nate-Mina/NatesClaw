@@ -24,7 +24,7 @@ const containers: HTMLElement[] = [];
 
 afterEach(() => {
   containers.splice(0).forEach((container) => container.remove());
-  Reflect.deleteProperty(window, "__OPENCLAW_NATIVE_WEB_CHROME__");
+  Reflect.deleteProperty(window, "__NATESCLAW_NATIVE_WEB_CHROME__");
 });
 
 function nativeGateways(snapshot: NativeGatewaysSnapshot): NativeGatewaysCapability {
@@ -77,8 +77,8 @@ function mount(patch: Partial<ChatPaneHeaderProps> = {}) {
     catalog: false,
     editing: false,
     renameValue: "Session title",
-    workspaceRoot: "/repo/openclaw",
-    workspaceLabel: "openclaw",
+    workspaceRoot: "/repo/natesclaw",
+    workspaceLabel: "natesclaw",
     workspaceIcon: null,
     branch: "feature/header",
     branches: [],
@@ -110,7 +110,7 @@ function mount(patch: Partial<ChatPaneHeaderProps> = {}) {
 
 describe("chat pane header", () => {
   it("hides the gateway picker without capability and with one gateway", () => {
-    Object.assign(window, { __OPENCLAW_NATIVE_WEB_CHROME__: true });
+    Object.assign(window, { __NATESCLAW_NATIVE_WEB_CHROME__: true });
     expect(mount().container.querySelector(".chat-pane__gateway-menu")).toBeNull();
     const one = nativeGateways({ gateways: [gatewaySnapshot.gateways[0]!], currentId: "primary" });
     expect(
@@ -119,7 +119,7 @@ describe("chat pane header", () => {
   });
 
   it("renders gateway rows, primary tag, and current checkmark", () => {
-    Object.assign(window, { __OPENCLAW_NATIVE_WEB_CHROME__: true });
+    Object.assign(window, { __NATESCLAW_NATIVE_WEB_CHROME__: true });
     const { container } = mount({ nativeGateways: nativeGateways(gatewaySnapshot) });
     const rows = container.querySelectorAll(".chat-pane__gateway-item");
     expect(rows).toHaveLength(2);
@@ -130,7 +130,7 @@ describe("chat pane header", () => {
   });
 
   it("selects normally and opens a new window on alt-click", () => {
-    Object.assign(window, { __OPENCLAW_NATIVE_WEB_CHROME__: true });
+    Object.assign(window, { __NATESCLAW_NATIVE_WEB_CHROME__: true });
     const select = vi.fn();
     const openWindow = vi.fn();
     const capability = { ...nativeGateways(gatewaySnapshot), select, openWindow };
@@ -147,7 +147,7 @@ describe("chat pane header", () => {
   });
 
   it("opens a new window when alt-clicking the current gateway", () => {
-    Object.assign(window, { __OPENCLAW_NATIVE_WEB_CHROME__: true });
+    Object.assign(window, { __NATESCLAW_NATIVE_WEB_CHROME__: true });
     const select = vi.fn();
     const openWindow = vi.fn();
     const capability = { ...nativeGateways(gatewaySnapshot), select, openWindow };
@@ -160,7 +160,7 @@ describe("chat pane header", () => {
   });
 
   it("re-renders gateway rows from a changed snapshot property", () => {
-    Object.assign(window, { __OPENCLAW_NATIVE_WEB_CHROME__: true });
+    Object.assign(window, { __NATESCLAW_NATIVE_WEB_CHROME__: true });
     let current = gatewaySnapshot;
     const capability = {
       ...nativeGateways(gatewaySnapshot),
@@ -184,7 +184,7 @@ describe("chat pane header", () => {
       ],
     };
     current = next;
-    window.dispatchEvent(new CustomEvent("openclaw:native-gateways-changed", { detail: next }));
+    window.dispatchEvent(new CustomEvent("natesclaw:native-gateways-changed", { detail: next }));
 
     const props = { ...mounted.props, gatewaysSnapshot: capability.snapshot };
     render(html`${renderChatPaneHeader(props)}`, mounted.container);
@@ -194,7 +194,7 @@ describe("chat pane header", () => {
   });
 
   it("disables set-primary when the viewed gateway cannot be promoted", () => {
-    Object.assign(window, { __OPENCLAW_NATIVE_WEB_CHROME__: true });
+    Object.assign(window, { __NATESCLAW_NATIVE_WEB_CHROME__: true });
     const snapshot = {
       ...gatewaySnapshot,
       gateways: gatewaySnapshot.gateways.map((gateway) =>
@@ -294,7 +294,7 @@ describe("chat pane header", () => {
     const title = container.querySelector<HTMLButtonElement>(".chat-pane__session-title-button");
     const chip = container.querySelector<HTMLButtonElement>(".chat-pane__workspace-chip");
     expect(title?.textContent?.trim()).toBe("Session title");
-    expect(chip?.textContent?.trim()).toContain("openclaw");
+    expect(chip?.textContent?.trim()).toContain("natesclaw");
     title?.click();
     expect(props.onBeginRename).toHaveBeenCalledOnce();
   });
@@ -346,13 +346,13 @@ describe("chat pane header", () => {
       showOwnerChip: true,
       session: row({ createdActor: { type: "human", id: "profile-ada", label: "Ada" } }),
     });
-    expect(shown.container.querySelector("openclaw-session-owner-chip")).not.toBeNull();
+    expect(shown.container.querySelector("natesclaw-session-owner-chip")).not.toBeNull();
 
     const dormant = mount({
       showOwnerChip: false,
       session: row({ createdActor: { type: "human", id: "profile-ada", label: "Ada" } }),
     });
-    expect(dormant.container.querySelector("openclaw-session-owner-chip")).toBeNull();
+    expect(dormant.container.querySelector("natesclaw-session-owner-chip")).toBeNull();
   });
 
   it("renders the durable session actor avatar with the header attribution semantics", async () => {
@@ -369,7 +369,7 @@ describe("chat pane header", () => {
     });
 
     await vi.waitFor(() => {
-      expect(mounted.container.querySelector("openclaw-session-owner-chip img")).not.toBeNull();
+      expect(mounted.container.querySelector("natesclaw-session-owner-chip img")).not.toBeNull();
     });
     const chip = mounted.container.querySelector(".session-owner-chip--header");
     expect(chip?.getAttribute("aria-label")).toBe("Created by Ada");
@@ -468,7 +468,7 @@ describe("chat pane header", () => {
     const items = multiple.container.querySelectorAll(".chat-pane__branch-item");
     expect(multiple.container.querySelector(".chat-pane__branches-trigger")).not.toBeNull();
     // wa-popup anchors to the first slot="trigger" element; a display:contents
-    // wrapper (like openclaw-tooltip) has a zero rect and pins the menu to the
+    // wrapper (like natesclaw-tooltip) has a zero rect and pins the menu to the
     // window's top-left corner, so the slotted trigger must be the button itself.
     expect(
       multiple.container
@@ -511,7 +511,7 @@ describe("chat pane header", () => {
 describe("chat pane workspace chip icon", () => {
   async function mountChip(workspaceIcon: ChatPaneHeaderProps["workspaceIcon"]) {
     const { container } = mount({ workspaceIcon });
-    const element = container.querySelector("openclaw-workspace-icon") as
+    const element = container.querySelector("natesclaw-workspace-icon") as
       | (HTMLElement & { updateComplete?: Promise<unknown> })
       | null;
     await element?.updateComplete;
@@ -527,7 +527,7 @@ describe("chat pane workspace chip icon", () => {
   it("keeps the folder glyph while credentials are not ready", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const { container, element } = await mountChip({
-      routeUrl: "/__openclaw__/workspace-icon/agent%3Amain%3Aone",
+      routeUrl: "/__natesclaw__/workspace-icon/agent%3Amain%3Aone",
       authTokens: [],
       authReady: false,
     });
@@ -543,13 +543,13 @@ describe("chat pane workspace chip icon", () => {
       .spyOn(globalThis, "fetch")
       .mockRejectedValue(new Error("workspace icon unavailable"));
     const { container } = await mountChip({
-      routeUrl: "/__openclaw__/workspace-icon/agent%3Amain%3Aone",
+      routeUrl: "/__natesclaw__/workspace-icon/agent%3Amain%3Aone",
       authTokens: ["token"],
       authReady: true,
     });
     await Promise.resolve();
     expect(fetchSpy).toHaveBeenCalledWith(
-      "/__openclaw__/workspace-icon/agent%3Amain%3Aone",
+      "/__natesclaw__/workspace-icon/agent%3Amain%3Aone",
       expect.objectContaining({ headers: { Authorization: "Bearer token" } }),
     );
     expect(container.querySelector(".workspace-icon")).toBeNull();
@@ -562,12 +562,12 @@ describe("chat pane workspace chip icon", () => {
       .spyOn(globalThis, "fetch")
       .mockResolvedValue({ ok: false, status: 404 } as Response);
     const workspaceIcon = {
-      routeUrl: "/__openclaw__/workspace-icon/agent%3Amain%3Aone",
+      routeUrl: "/__natesclaw__/workspace-icon/agent%3Amain%3Aone",
       authTokens: ["token"],
       authReady: true,
     };
     const mounted = mount({ workspaceIcon });
-    const element = mounted.container.querySelector("openclaw-workspace-icon") as
+    const element = mounted.container.querySelector("natesclaw-workspace-icon") as
       | (HTMLElement & { updateComplete?: Promise<unknown> })
       | null;
 
@@ -605,7 +605,7 @@ describe("chat pane workspace chip icon", () => {
     vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:workspace-icon");
 
     await mountChip({
-      routeUrl: "/__openclaw__/workspace-icon/agent%3Amain%3Aone",
+      routeUrl: "/__natesclaw__/workspace-icon/agent%3Amain%3Aone",
       authTokens: ["stale-token", "session-password"],
       authReady: true,
     });
@@ -626,39 +626,39 @@ describe("chat pane workspace resolution", () => {
       resolveChatPaneWorkspace({
         session: row({
           spawnedCwd: "/tmp/worktrees/title-bar",
-          worktree: { id: "wt-1", branch: "title-bar", repoRoot: "/src/openclaw" },
+          worktree: { id: "wt-1", branch: "title-bar", repoRoot: "/src/natesclaw" },
         }),
       }),
-    ).toEqual({ root: "/tmp/worktrees/title-bar", label: "openclaw" });
+    ).toEqual({ root: "/tmp/worktrees/title-bar", label: "natesclaw" });
   });
 
   it("does not substitute the agent workspace for a missing worktree checkout", () => {
     expect(
       resolveChatPaneWorkspace({
         session: row({
-          worktree: { id: "wt-missing", branch: "feature", repoRoot: "/src/openclaw" },
+          worktree: { id: "wt-missing", branch: "feature", repoRoot: "/src/natesclaw" },
         }),
         agentWorkspace: "/src/default-agent-workspace",
         worktreePath: null,
       }),
-    ).toEqual({ root: null, label: "openclaw" });
+    ).toEqual({ root: null, label: "natesclaw" });
   });
 
   it("matches the gateway root order: spawned workspace before spawned cwd", () => {
     expect(
       resolveChatPaneWorkspace({
         session: row({
-          spawnedWorkspaceDir: "/src/openclaw",
-          spawnedCwd: "/src/openclaw/packages/nested",
+          spawnedWorkspaceDir: "/src/natesclaw",
+          spawnedCwd: "/src/natesclaw/packages/nested",
         }),
       }),
-    ).toEqual({ root: "/src/openclaw", label: "openclaw" });
+    ).toEqual({ root: "/src/natesclaw", label: "natesclaw" });
     // execCwd is exec-node routing state; it never overrides local facts.
     expect(
       resolveChatPaneWorkspace({
-        session: row({ execCwd: "/remote/stale", spawnedCwd: "/src/openclaw" }),
+        session: row({ execCwd: "/remote/stale", spawnedCwd: "/src/natesclaw" }),
       }),
-    ).toEqual({ root: "/src/openclaw", label: "openclaw" });
+    ).toEqual({ root: "/src/natesclaw", label: "natesclaw" });
   });
 
   it("prefers exec cwd and falls back to the agent workspace", () => {
@@ -677,9 +677,9 @@ describe("chat pane workspace resolution", () => {
         worktreePath: "/local/worktree",
       }),
     ).toEqual({ root: null, label: null });
-    expect(resolveChatPaneWorkspace({ session: row(), agentWorkspace: "/src/openclaw" })).toEqual({
-      root: "/src/openclaw",
-      label: "openclaw",
+    expect(resolveChatPaneWorkspace({ session: row(), agentWorkspace: "/src/natesclaw" })).toEqual({
+      root: "/src/natesclaw",
+      label: "natesclaw",
     });
   });
 
@@ -703,7 +703,7 @@ describe("chat pane workspace resolution", () => {
     expect(
       canRevealSessionWorkspace({
         session: row(),
-        workspaceRoot: "/src/openclaw",
+        workspaceRoot: "/src/natesclaw",
         methodAdvertised: false,
         hasAdminAccess: true,
       }),
@@ -711,7 +711,7 @@ describe("chat pane workspace resolution", () => {
     expect(
       canRevealSessionWorkspace({
         session: row(),
-        workspaceRoot: "/src/openclaw",
+        workspaceRoot: "/src/natesclaw",
         methodAdvertised: true,
         hasAdminAccess: false,
       }),

@@ -2,8 +2,8 @@
  * Builds extension factories available to embedded-agent runtime sessions.
  */
 import { randomUUID } from "node:crypto";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";
 import { normalizeAcceptedSessionSpawnResult } from "../accepted-session-spawn.js";
 import { setCompactionSafeguardRuntime } from "../agent-hooks/compaction-safeguard-runtime.js";
@@ -53,7 +53,7 @@ function buildAgentToolResultMiddlewareFactory(
   // mutable session identity after a later turn has started.
   const sessionId = context.sessionId ?? sessionManager.getSessionId?.();
   const runner = createAgentToolResultMiddlewareRunner({
-    runtime: "openclaw",
+    runtime: "natesclaw",
     ...(agentId ? { agentId } : {}),
     ...(sessionId ? { sessionId } : {}),
     ...(sessionKey ? { sessionKey } : {}),
@@ -69,7 +69,7 @@ function buildAgentToolResultMiddlewareFactory(
         typeof event.toolCallId === "string" && event.toolCallId.trim()
           ? event.toolCallId
           : undefined;
-      const toolCallId = eventToolCallId ?? `openclaw-${randomUUID()}`;
+      const toolCallId = eventToolCallId ?? `natesclaw-${randomUUID()}`;
       const content = Array.isArray(event.content) ? event.content : [];
       const current = {
         content,
@@ -121,7 +121,7 @@ function buildAgentToolResultMiddlewareFactory(
 }
 
 export function buildEmbeddedExtensionFactories(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: NatesclawConfig | undefined;
   sessionManager: SessionManager;
   workspaceDir?: string;
   provider: string;

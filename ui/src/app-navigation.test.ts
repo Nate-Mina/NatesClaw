@@ -160,39 +160,39 @@ describe("settingsSearchTextMatches", () => {
 
 describe("formatDocumentTitle", () => {
   it("suffixes the brand after a plain context", () => {
-    expect(formatDocumentTitle({ context: "Usage" })).toBe("Usage — OpenClaw");
+    expect(formatDocumentTitle({ context: "Usage" })).toBe("Usage — Natesclaw");
   });
 
   it("does not duplicate a context ending in the brand", () => {
-    expect(formatDocumentTitle({ context: "Ask OpenClaw" })).toBe("Ask OpenClaw");
-    expect(formatDocumentTitle({ context: "OpenClaw" })).toBe("OpenClaw");
+    expect(formatDocumentTitle({ context: "Ask Natesclaw" })).toBe("Ask Natesclaw");
+    expect(formatDocumentTitle({ context: "Natesclaw" })).toBe("Natesclaw");
   });
 
   it("prefixes a positive attention count", () => {
     expect(formatDocumentTitle({ context: "Usage", attentionCount: 2 })).toBe(
-      "(2) Usage — OpenClaw",
+      "(2) Usage — Natesclaw",
     );
   });
 
   it("does not add a queued count for an empty offline outbox", () => {
     expect(formatDocumentTitle({ context: "Usage", offline: true, queuedCount: 0 })).toBe(
-      "(Offline) Usage — OpenClaw",
+      "(Offline) Usage — Natesclaw",
     );
   });
 
   it("includes the queued outbox count in the offline marker", () => {
     expect(formatDocumentTitle({ context: "Usage", offline: true, queuedCount: 3 })).toBe(
-      "(Offline · 3 queued) Usage — OpenClaw",
+      "(Offline · 3 queued) Usage — Natesclaw",
     );
   });
 
   it("ignores a queued count while online", () => {
-    expect(formatDocumentTitle({ context: "Usage", queuedCount: 3 })).toBe("Usage — OpenClaw");
+    expect(formatDocumentTitle({ context: "Usage", queuedCount: 3 })).toBe("Usage — Natesclaw");
   });
 
   it("suppresses the attention count while offline", () => {
     expect(formatDocumentTitle({ context: "Usage", attentionCount: 2, offline: true })).toBe(
-      "(Offline) Usage — OpenClaw",
+      "(Offline) Usage — Natesclaw",
     );
   });
 });
@@ -213,7 +213,7 @@ describe("titleForRoute", () => {
       Object.fromEntries(ALL_ROUTES.map((routeId) => [routeId, titleForRoute(routeId)])),
     ).toEqual({
       chat: "Chat",
-      custodian: "OpenClaw",
+      custodian: "Natesclaw",
       activity: "Activity",
       apps: "Apps",
       approvals: "Approvals",
@@ -324,7 +324,7 @@ describe("pathForRoute", () => {
 
   it("prepends base path", () => {
     expect(pathForRoute("chat", "/ui")).toBe("/ui/chat");
-    expect(pathForRoute("sessions", "/apps/openclaw")).toBe("/apps/openclaw/sessions");
+    expect(pathForRoute("sessions", "/apps/natesclaw")).toBe("/apps/natesclaw/sessions");
   });
 });
 
@@ -333,7 +333,7 @@ describe("route path normalization", () => {
     expect(normalizeBasePath("")).toBe("");
     expect(normalizeBasePath("/")).toBe("");
     expect(normalizeBasePath("ui")).toBe("/ui");
-    expect(normalizeBasePath("/apps/openclaw/")).toBe("/apps/openclaw");
+    expect(normalizeBasePath("/apps/natesclaw/")).toBe("/apps/natesclaw");
     expect(routeIdFromPath("/chat/")).toBe("chat");
     expect(routeIdFromPath("/ui/chat/", "/ui/")).toBe("chat");
   });
@@ -369,7 +369,7 @@ describe("routeIdFromPath", () => {
 
   it("handles base paths", () => {
     expect(routeIdFromPath("/ui/chat", "/ui")).toBe("chat");
-    expect(routeIdFromPath("/apps/openclaw/sessions", "/apps/openclaw")).toBe("sessions");
+    expect(routeIdFromPath("/apps/natesclaw/sessions", "/apps/natesclaw")).toBe("sessions");
     expect(routeIdFromPath("/ui/settings/plugins", "/ui")).toBe("plugins");
     expect(routeIdFromPath("/xx/chat/main", "/ui")).toBeNull();
   });
@@ -414,7 +414,7 @@ describe("routeIdFromPath", () => {
 
   it("rejects route-shaped paths outside the configured base path", () => {
     expect(routeIdFromPath("/xx/chat", "/ui")).toBeNull();
-    expect(routeIdFromPath("/other/sessions", "/apps/openclaw")).toBeNull();
+    expect(routeIdFromPath("/other/sessions", "/apps/natesclaw")).toBeNull();
   });
 
   it("returns null for unknown path", () => {
@@ -463,9 +463,9 @@ describe("inferBasePathFromPathname", () => {
     expect(inferBasePathFromPathname("/custodian")).toBe("");
     expect(inferBasePathFromPathname("/settings/connection")).toBe("");
     expect(inferBasePathFromPathname("/ui/chat")).toBe("/ui");
-    expect(inferBasePathFromPathname("/apps/openclaw/sessions")).toBe("/apps/openclaw");
-    expect(inferBasePathFromPathname("/__openclaw__/")).toBe("/__openclaw__");
-    expect(inferBasePathFromPathname("/apps/openclaw/")).toBe("/apps/openclaw");
+    expect(inferBasePathFromPathname("/apps/natesclaw/sessions")).toBe("/apps/natesclaw");
+    expect(inferBasePathFromPathname("/__natesclaw__/")).toBe("/__natesclaw__");
+    expect(inferBasePathFromPathname("/apps/natesclaw/")).toBe("/apps/natesclaw");
     expect(inferBasePathFromPathname("/typo")).toBe("");
     expect(inferBasePathFromPathname("/index.html")).toBe("");
     expect(inferBasePathFromPathname("/ui/index.html")).toBe("/ui");

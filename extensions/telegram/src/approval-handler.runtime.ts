@@ -2,21 +2,21 @@
 import type {
   ChannelApprovalCapabilityHandlerContext,
   PendingApprovalView,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { createChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "openclaw/plugin-sdk/approval-native-runtime";
-import { buildPluginApprovalPendingReplyPayload } from "openclaw/plugin-sdk/approval-reply-runtime";
+} from "natesclaw/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalNativeRuntimeAdapter } from "natesclaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "natesclaw/plugin-sdk/approval-native-runtime";
+import { buildPluginApprovalPendingReplyPayload } from "natesclaw/plugin-sdk/approval-reply-runtime";
 import {
   buildApprovalPresentationFromActionDescriptors,
   buildExecApprovalPendingReplyPayload,
-} from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { ExecApprovalPendingReplyParams } from "openclaw/plugin-sdk/approval-reply-runtime";
+} from "natesclaw/plugin-sdk/approval-reply-runtime";
+import type { ExecApprovalPendingReplyParams } from "natesclaw/plugin-sdk/approval-reply-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/approval-runtime";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildTelegramNativeExpiredApprovalText,
   buildTelegramNativeResolvedApprovalText,

@@ -6,18 +6,18 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { inspect } from "node:util";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { finiteSecondsToTimerSafeMilliseconds } from "openclaw/plugin-sdk/number-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { finiteSecondsToTimerSafeMilliseconds } from "natesclaw/plugin-sdk/number-runtime";
 import type {
   OpenKeyedStoreOptions,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   AcpRuntime,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  NatesclawPluginService,
+  NatesclawPluginServiceContext,
   PluginLogger,
 } from "../runtime-api.js";
 import { prepareAcpxCodexAuthConfig } from "./codex-auth-bridge.js";
@@ -34,9 +34,9 @@ import {
   type AcpxProcessLeaseStore,
 } from "./process-lease.js";
 import {
-  cleanupOpenClawOwnedAcpxPendingLease,
-  cleanupOpenClawOwnedAcpxProcessTree,
-  reapStaleOpenClawOwnedAcpxOrphans,
+  cleanupNatesclawOwnedAcpxPendingLease,
+  cleanupNatesclawOwnedAcpxProcessTree,
+  reapStaleNatesclawOwnedAcpxOrphans,
   type AcpxProcessCleanupDeps,
 } from "./process-reaper.js";
 import { createLazyAcpRuntimeProxy } from "./runtime-proxy.js";
@@ -57,8 +57,8 @@ type AcpxRuntimeLike = AcpRuntime & {
     details?: string[];
   }>;
 };
-const ENABLE_STARTUP_PROBE_ENV = "OPENCLAW_ACPX_RUNTIME_STARTUP_PROBE";
-const SKIP_RUNTIME_PROBE_ENV = "OPENCLAW_SKIP_ACPX_RUNTIME_PROBE";
+const ENABLE_STARTUP_PROBE_ENV = "NATESCLAW_ACPX_RUNTIME_STARTUP_PROBE";
+const SKIP_RUNTIME_PROBE_ENV = "NATESCLAW_SKIP_ACPX_RUNTIME_PROBE";
 
 type AcpxRuntimeFactoryParams = {
   pluginConfig: ResolvedAcpxPluginConfig;
@@ -102,9 +102,9 @@ function createLazyDefaultRuntime(params: AcpxRuntimeFactoryParams): AcpxRuntime
     runtimePromise ??= loadRuntimeModule().then((module) => {
       runtime = new module.AcpxRuntime({
         cwd: params.pluginConfig.cwd,
-        openclawGatewayInstanceId: params.gatewayInstanceId,
-        openclawProcessLeaseStore: params.processLeaseStore,
-        openclawWrapperRoot: params.wrapperRoot,
+        natesclawGatewayInstanceId: params.gatewayInstanceId,
+        natesclawProcessLeaseStore: params.processLeaseStore,
+        natesclawWrapperRoot: params.wrapperRoot,
         sessionStore: module.createFileSessionStore({
           stateDir: params.pluginConfig.stateDir,
         }),
@@ -114,7 +114,7 @@ function createLazyDefaultRuntime(params: AcpxRuntimeFactoryParams): AcpxRuntime
         probeAgent: params.pluginConfig.probeAgent,
         mcpServers: toAcpMcpServers(params.pluginConfig.mcpServers),
         pluginToolsMcpBridgeEnabled: params.pluginConfig.pluginToolsMcpBridge,
-        openclawToolsMcpBridgeEnabled: params.pluginConfig.openClawToolsMcpBridge,
+        natesclawToolsMcpBridgeEnabled: params.pluginConfig.NatesclawToolsMcpBridge,
         permissionMode: params.pluginConfig.permissionMode,
         nonInteractivePermissions: params.pluginConfig.nonInteractivePermissions,
         timeoutMs: resolveAcpxTimerTimeoutMs(params.pluginConfig.timeoutSeconds),
@@ -168,7 +168,7 @@ function formatDoctorFailureMessage(report: { message: string; details?: unknown
   return detailText ? `${report.message} (${detailText})` : report.message;
 }
 
-function resolveAllowedAgentsProbeAgent(ctx: OpenClawPluginServiceContext): string | undefined {
+function resolveAllowedAgentsProbeAgent(ctx: NatesclawPluginServiceContext): string | undefined {
   for (const agent of ctx.config.acp?.allowedAgents ?? []) {
     const normalized = normalizeLowercaseStringOrEmpty(agent);
     if (normalized) {
@@ -179,7 +179,7 @@ function resolveAllowedAgentsProbeAgent(ctx: OpenClawPluginServiceContext): stri
 }
 
 async function measureAcpxStartup<T>(
-  ctx: OpenClawPluginServiceContext,
+  ctx: NatesclawPluginServiceContext,
   name: string,
   run: () => T | Promise<T>,
 ): Promise<T> {
@@ -187,7 +187,7 @@ async function measureAcpxStartup<T>(
 }
 
 function detailAcpxStartup(
-  ctx: OpenClawPluginServiceContext,
+  ctx: NatesclawPluginServiceContext,
   name: string,
   metrics: ReadonlyArray<readonly [string, number | string]>,
 ): void {
@@ -269,7 +269,7 @@ async function reapOpenAcpxProcessLeases(params: {
     if (lease.rootPid <= 0) {
       legacyWrapperRoots.add(lease.wrapperRoot);
       await params.leaseStore.markState(lease.leaseId, "closing");
-      const result = await cleanupOpenClawOwnedAcpxPendingLease({
+      const result = await cleanupNatesclawOwnedAcpxPendingLease({
         leaseId: lease.leaseId,
         gatewayInstanceId: lease.gatewayInstanceId,
         wrapperRoot: lease.wrapperRoot,
@@ -294,7 +294,7 @@ async function reapOpenAcpxProcessLeases(params: {
       continue;
     }
     await params.leaseStore.markState(lease.leaseId, "closing");
-    const result = await cleanupOpenClawOwnedAcpxProcessTree({
+    const result = await cleanupNatesclawOwnedAcpxProcessTree({
       rootPid: lease.rootPid,
       expectedLeaseId: lease.leaseId,
       expectedGatewayInstanceId: lease.gatewayInstanceId,
@@ -317,7 +317,7 @@ async function reapOpenAcpxProcessLeases(params: {
   // proves this Gateway had an uncertain spawn. Keep aggregate results wholly
   // separate from the state transition of any specific lease.
   for (const wrapperRoot of legacyWrapperRoots) {
-    const legacyResult = await reapStaleOpenClawOwnedAcpxOrphans({
+    const legacyResult = await reapStaleNatesclawOwnedAcpxOrphans({
       wrapperRoot,
       deps: params.deps,
     });
@@ -330,15 +330,15 @@ async function reapOpenAcpxProcessLeases(params: {
 /** Create the ACPX plugin service that owns runtime registration and cleanup. */
 export function createAcpxRuntimeService(
   params: CreateAcpxRuntimeServiceParams,
-): OpenClawPluginService {
+): NatesclawPluginService {
   let runtime: AcpxRuntimeLike | null = null;
   let lifecycleRevision = 0;
 
   return {
     id: "acpx-runtime",
-    async start(ctx: OpenClawPluginServiceContext): Promise<void> {
-      if (process.env.OPENCLAW_SKIP_ACPX_RUNTIME === "1") {
-        ctx.logger.info("skipping embedded acpx runtime backend (OPENCLAW_SKIP_ACPX_RUNTIME=1)");
+    async start(ctx: NatesclawPluginServiceContext): Promise<void> {
+      if (process.env.NATESCLAW_SKIP_ACPX_RUNTIME === "1") {
+        ctx.logger.info("skipping embedded acpx runtime backend (NATESCLAW_SKIP_ACPX_RUNTIME=1)");
         return;
       }
       const openKeyedStore = params.openKeyedStore;
@@ -383,7 +383,7 @@ export function createAcpxRuntimeService(
       );
       if (startupReap.terminatedPids.length > 0) {
         ctx.logger.info(
-          `reaped ${startupReap.terminatedPids.length} stale OpenClaw-owned ACPX process${startupReap.terminatedPids.length === 1 ? "" : "es"}`,
+          `reaped ${startupReap.terminatedPids.length} stale Natesclaw-owned ACPX process${startupReap.terminatedPids.length === 1 ? "" : "es"}`,
         );
       }
       const startedRuntime = await measureAcpxStartup(ctx, "runtime.create", () =>
@@ -458,7 +458,7 @@ export function createAcpxRuntimeService(
         ctx.logger.warn(`embedded acpx runtime setup failed: ${formatErrorMessage(err)}`);
       }
     },
-    async stop(_ctx: OpenClawPluginServiceContext): Promise<void> {
+    async stop(_ctx: NatesclawPluginServiceContext): Promise<void> {
       lifecycleRevision += 1;
       if (runtime) {
         params.backendLifecycle.retract(runtime);

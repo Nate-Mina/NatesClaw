@@ -1,5 +1,5 @@
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { GatewayClientRequestOptions } from "../gateway/client.js";
 import { createPendingRequestRegistry } from "../shared/pending-request-registry.js";
 import type { NodeHostClient } from "./client.js";

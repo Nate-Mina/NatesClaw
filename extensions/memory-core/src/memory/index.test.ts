@@ -4,23 +4,23 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { clearMemoryEmbeddingProviders as clearRegistry } from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { clearMemoryEmbeddingProviders as clearRegistry } from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   hashText,
   INVALID_PROJECT_ANNOTATION_KEY,
   MEMORY_CHUNKING_VERSION,
   type MemorySessionSyncTarget,
   type MemorySyncParams,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { resolveSessionTranscriptsDirForAgent } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import { deleteSessionEntry, upsertSessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
-import { appendSessionTranscriptMessageByIdentity } from "openclaw/plugin-sdk/session-transcript-runtime";
-import { resolveOpenClawAgentSqlitePath } from "openclaw/plugin-sdk/sqlite-runtime";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
+import { resolveSessionTranscriptsDirForAgent } from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
+import { deleteSessionEntry, upsertSessionEntry } from "natesclaw/plugin-sdk/session-store-runtime";
+import { appendSessionTranscriptMessageByIdentity } from "natesclaw/plugin-sdk/session-transcript-runtime";
+import { resolveNatesclawAgentSqlitePath } from "natesclaw/plugin-sdk/sqlite-runtime";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawAgentDatabase,
-} from "openclaw/plugin-sdk/sqlite-runtime-testing";
+  closeNatesclawAgentDatabasesForTest,
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawAgentDatabase,
+} from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   configureMemoryCoreDreamingStateForTests,
@@ -63,7 +63,7 @@ let providerCloseGate: Promise<void> | null = null;
 let providerInitGate: Promise<void> | null = null;
 let providerCalls: Array<{ provider?: string; model?: string; outputDimensionality?: number }> = [];
 let forceNoProvider = false;
-const originalMemoryIndexStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalMemoryIndexStateDir = process.env.NATESCLAW_STATE_DIR;
 
 const identityAliasFixture = vi.hoisted(() => ({
   provider: "identity-alias-test",
@@ -80,14 +80,14 @@ function createLocalWorkerExitError(): Error {
 }
 
 function setMemoryIndexStateDir(stateDir: string): void {
-  Reflect.set(process.env, "OPENCLAW_STATE_DIR", stateDir);
+  Reflect.set(process.env, "NATESCLAW_STATE_DIR", stateDir);
 }
 
 function restoreMemoryIndexStateDir(): void {
   if (originalMemoryIndexStateDir === undefined) {
-    Reflect.deleteProperty(process.env, "OPENCLAW_STATE_DIR");
+    Reflect.deleteProperty(process.env, "NATESCLAW_STATE_DIR");
   } else {
-    Reflect.set(process.env, "OPENCLAW_STATE_DIR", originalMemoryIndexStateDir);
+    Reflect.set(process.env, "NATESCLAW_STATE_DIR", originalMemoryIndexStateDir);
   }
 }
 
@@ -307,7 +307,7 @@ describe("memory index", () => {
   const managersForCleanup = new Set<MemoryIndexManager>();
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-mem-fixtures-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-mem-fixtures-"));
     workspaceDir = path.join(fixtureRoot, "workspace");
     memoryDir = path.join(workspaceDir, "memory");
   });
@@ -321,8 +321,8 @@ describe("memory index", () => {
     vi.useRealTimers();
     await Promise.all(Array.from(managersForCleanup).map((manager) => manager.close()));
     await closeAllMemorySearchManagers();
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     resetMemoryCoreDreamingStateForTests();
     clearRegistry();
     managersForCleanup.clear();
@@ -491,7 +491,7 @@ describe("memory index", () => {
           role: message.role,
           timestamp: message.timestamp,
           content: [{ type: "text", text: message.content }],
-          ...(message.senderIsOwner ? { __openclaw: { senderIsOwner: true } } : {}),
+          ...(message.senderIsOwner ? { __natesclaw: { senderIsOwner: true } } : {}),
         },
       });
     }
@@ -651,7 +651,7 @@ describe("memory index", () => {
     );
     await fs.writeFile(
       path.join(memoryDir, "2026-01-12.md"),
-      "- Daily note. <!-- trigger: should not inject --> <!-- importance: 10 --> <!-- project: github.com/openclaw/openclaw -->\n",
+      "- Daily note. <!-- trigger: should not inject --> <!-- importance: 10 --> <!-- project: github.com/natesclaw/natesclaw -->\n",
     );
     await fs.writeFile(
       path.join(memoryDir, "2026-01-13.md"),
@@ -722,7 +722,7 @@ describe("memory index", () => {
       expect(rows.find((row) => row.path === "memory/2026-01-12.md")).toMatchObject({
         importance: null,
         triggers: null,
-        projectKey: "github.com/openclaw/openclaw",
+        projectKey: "github.com/natesclaw/natesclaw",
         originClass: "agent",
       });
       expect(rows.find((row) => row.path === "memory/2026-01-13.md")).toMatchObject({
@@ -759,7 +759,7 @@ describe("memory index", () => {
   });
 
   it("round-trips mixed-case project keys through indexed recall consumers", async () => {
-    const projectKey = "github.com/OpenClaw/OpenClaw";
+    const projectKey = "github.com/Natesclaw/Natesclaw";
     await fs.writeFile(
       path.join(workspaceDir, "MEMORY.md"),
       `- Follow the kraken deploy ritual. <!-- trigger: kraken deploy ritual --> <!-- importance: 8 --> <!-- project: ${projectKey} -->\n`,
@@ -1067,12 +1067,12 @@ describe("memory index", () => {
   it("reindexes memory tables in place without deleting unrelated agent rows", async () => {
     const stateDir = path.join(workspaceDir, "managed-memory-state");
     setMemoryIndexStateDir(stateDir);
-    const agentDbPath = resolveOpenClawAgentSqlitePath({ agentId: "main" });
-    const agentDb = openOpenClawAgentDatabase({ agentId: "main" });
+    const agentDbPath = resolveNatesclawAgentSqlitePath({ agentId: "main" });
+    const agentDb = openNatesclawAgentDatabase({ agentId: "main" });
     agentDb.db
       .prepare("INSERT INTO cache_entries (scope, key, value_json, updated_at) VALUES (?, ?, ?, ?)")
       .run("test", "keep-me", JSON.stringify({ value: "keep-me" }), 1);
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
 
     const manager = await getFreshManager(
       createCfg({
@@ -1086,7 +1086,7 @@ describe("memory index", () => {
       await manager.close?.();
     }
 
-    const reopened = openOpenClawAgentDatabase({ agentId: "main" });
+    const reopened = openNatesclawAgentDatabase({ agentId: "main" });
     expect(
       reopened.db
         .prepare("SELECT value_json FROM cache_entries WHERE scope = ? AND key = ?")
@@ -1100,7 +1100,7 @@ describe("memory index", () => {
     const manager = await getFreshManager(createCfg({}));
     await manager.close?.();
 
-    const agentDb = openOpenClawAgentDatabase({ agentId: "main" });
+    const agentDb = openNatesclawAgentDatabase({ agentId: "main" });
     expect(
       agentDb.db.prepare("SELECT role, agent_id FROM schema_meta WHERE meta_key = 'primary'").get(),
     ).toEqual({
@@ -1800,7 +1800,7 @@ describe("memory index", () => {
         });
       }
 
-      const dbPath = resolveOpenClawAgentSqlitePath({ agentId: "main" });
+      const dbPath = resolveNatesclawAgentSqlitePath({ agentId: "main" });
       lock = new DatabaseSync(dbPath);
       lock.exec("PRAGMA busy_timeout = 0");
       lock.exec("BEGIN EXCLUSIVE");
@@ -2083,7 +2083,7 @@ describe("memory index", () => {
         progress: recoveryProgress,
       });
 
-      const dbPath = resolveOpenClawAgentSqlitePath({ agentId: "main" });
+      const dbPath = resolveNatesclawAgentSqlitePath({ agentId: "main" });
       const observer = new DatabaseSync(dbPath, { readOnly: true });
       try {
         const indexedCount = (marker: string) =>
@@ -4401,7 +4401,7 @@ describe("memory index", () => {
         embedQuery: vi.fn(async () => [1, 0, 0, 0]),
         embedBatch: vi.fn(async (texts: string[]) => texts.map(() => [1, 0, 0, 0])),
       };
-      Object.defineProperty(provider, Symbol.for("openclaw.localEmbeddingRuntimeFacts"), {
+      Object.defineProperty(provider, Symbol.for("natesclaw.localEmbeddingRuntimeFacts"), {
         value: getRuntimeFacts,
       });
       const fields = manager as unknown as {
@@ -5203,7 +5203,7 @@ describe("memory index", () => {
   });
 
   it("status-purpose manager detects unindexed session transcripts as dirty", async () => {
-    // Regression test for #97814: plain openclaw memory status (purpose: status)
+    // Regression test for #97814: plain natesclaw memory status (purpose: status)
     // must report dirty=true when session files exist without index rows.
     const cfg = createCfg({ sources: ["sessions"], sessionMemory: true });
     const stateDirName = ".state-status-dirty-test";
@@ -5275,7 +5275,7 @@ describe("memory index", () => {
         initial.search("ORBIT-DELETE-91", { minScore: 0, sources: ["sessions"] }),
       ).resolves.not.toEqual([]);
       await initial.close?.();
-      const agentDb = new DatabaseSync(resolveOpenClawAgentSqlitePath({ agentId: "main" }));
+      const agentDb = new DatabaseSync(resolveNatesclawAgentSqlitePath({ agentId: "main" }));
       agentDb.exec("DELETE FROM memory_embedding_cache");
       agentDb.close();
       embedBatchCalls = 0;

@@ -1,12 +1,12 @@
-// OpenClaw gateway tests cover activation serialization and chat sessions.
+// Natesclaw gateway tests cover activation serialization and chat sessions.
 
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../test/helpers/promise.js";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { SystemAgentApprovalRequestPayload } from "../../infra/system-agent-approvals.js";
 import { resetPluginStateStoreForTests } from "../../plugin-state/plugin-state-store.js";
 import { getCommandLaneSnapshot } from "../../process/command-queue.js";
@@ -151,7 +151,7 @@ const defaultClient = {
   connect: { device: { id: "device-test" } },
 } as GatewayClient;
 
-const verifiedConfig: OpenClawConfig = {
+const verifiedConfig: NatesclawConfig = {
   agents: { defaults: { model: "openai/gpt-5.5@openai:verified" } },
   auth: { profiles: { "openai:verified": { provider: "openai", mode: "api_key" } } },
 };
@@ -171,7 +171,7 @@ function requireVerifiedInferenceDeps(): SystemAgentVerifiedInferenceDeps {
       ({
         exists: true,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         hash: "verified-config",
         config: verifiedConfig,
         runtimeConfig: verifiedConfig,
@@ -194,7 +194,7 @@ async function runSensitiveChannelSetup(_channel: string, prompter: WizardPrompt
 
 function stubEngineOverview() {
   return vi.spyOn(SystemAgentChatEngine.prototype, "loadOverview").mockResolvedValue({
-    config: { path: "/tmp/openclaw.json", exists: true, valid: true, issues: [], hash: null },
+    config: { path: "/tmp/natesclaw.json", exists: true, valid: true, issues: [], hash: null },
     agents: [],
     defaultAgentId: "main",
     defaultModel: "openai/gpt-5.5",
@@ -206,8 +206,8 @@ function stubEngineOverview() {
     },
     gateway: { url: "ws://127.0.0.1:18789", source: "test", reachable: true },
     references: {
-      docsUrl: "https://docs.openclaw.ai",
-      sourceUrl: "https://github.com/openclaw/openclaw",
+      docsUrl: "https://docs.natesclaw.ai",
+      sourceUrl: "https://github.com/natesclaw/natesclaw",
     },
   } as never);
 }
@@ -254,7 +254,7 @@ beforeEach(() => {
   setupSharedMocks.readSetupConfigFileSnapshot.mockResolvedValue({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     hash: "prepare-base-hash",
     sourceConfig: verifiedConfig,
     config: verifiedConfig,
@@ -272,7 +272,7 @@ beforeEach(() => {
     auditSequence: 0,
   });
   greetingMocks.resolveSystemAgentGreeting.mockReset().mockResolvedValue({
-    text: "I'm OpenClaw. All systems nominal.",
+    text: "I'm Natesclaw. All systems nominal.",
     source: "model",
   });
   onboardingWelcomeMocks.buildOnboardingWelcome.mockReset().mockResolvedValue({
@@ -295,7 +295,7 @@ async function callChat(
   client: GatewayClient | null = defaultClient,
 ): Promise<RespondCall> {
   const { calls, respond } = makeRespond();
-  await systemAgentHandler("openclaw.chat")({
+  await systemAgentHandler("natesclaw.chat")({
     params,
     respond,
     context,
@@ -308,7 +308,7 @@ async function callChat(
   return call;
 }
 
-describe("openclaw.setup", () => {
+describe("natesclaw.setup", () => {
   it("returns a retryable busy error while another activation is running", async () => {
     const firstStarted = createDeferred();
     const releaseFirst = createDeferred();
@@ -320,7 +320,7 @@ describe("openclaw.setup", () => {
 
     try {
       const { calls, respond } = makeRespond();
-      await systemAgentHandler("openclaw.setup.activate")({
+      await systemAgentHandler("natesclaw.setup.activate")({
         params: { kind: "claude-cli" },
         respond,
       } as never);
@@ -331,7 +331,7 @@ describe("openclaw.setup", () => {
           payload: undefined,
           error: {
             code: "UNAVAILABLE",
-            message: "OpenClaw setup is already in progress; try again when it finishes.",
+            message: "Natesclaw setup is already in progress; try again when it finishes.",
             retryable: true,
           },
         },
@@ -344,10 +344,10 @@ describe("openclaw.setup", () => {
 
   it.each([
     [
-      "openclaw.setup.auth.start" as const,
+      "natesclaw.setup.auth.start" as const,
       { sessionId: "busy-auth", authChoice: "github-copilot" },
     ],
-    ["openclaw.setup.prepare.start" as const, { sessionId: "busy-prepare", authChoice: "ollama" }],
+    ["natesclaw.setup.prepare.start" as const, { sessionId: "busy-prepare", authChoice: "ollama" }],
   ])("rejects %s before creating a wizard session when setup is busy", async (method, params) => {
     const ownerStarted = createDeferred();
     const releaseOwner = createDeferred();
@@ -368,7 +368,7 @@ describe("openclaw.setup", () => {
           payload: undefined,
           error: {
             code: "UNAVAILABLE",
-            message: "OpenClaw setup is already in progress; try again when it finishes.",
+            message: "Natesclaw setup is already in progress; try again when it finishes.",
             retryable: true,
           },
         },
@@ -387,7 +387,7 @@ describe("openclaw.setup", () => {
     });
     const { calls, respond } = makeRespond();
 
-    await systemAgentHandler("openclaw.setup.auth.start")({
+    await systemAgentHandler("natesclaw.setup.auth.start")({
       params: { sessionId: "auth-session-1", authChoice: "github-copilot" },
       respond,
       context,
@@ -415,7 +415,7 @@ describe("openclaw.setup", () => {
     await whenAdmittedWizardSessionSettled(session);
   });
   it("runs the selected provider method in a shared wizard session and commits its config", async () => {
-    const preparedConfig: OpenClawConfig = {
+    const preparedConfig: NatesclawConfig = {
       ...verifiedConfig,
       models: { providers: { ollama: { baseUrl: "http://127.0.0.1:11434", models: [] } } },
     };
@@ -429,7 +429,7 @@ describe("openclaw.setup", () => {
     const { wizardSessions, context } = makeWizardContext();
     const { calls, respond } = makeRespond();
 
-    await systemAgentHandler("openclaw.setup.prepare.start")({
+    await systemAgentHandler("natesclaw.setup.prepare.start")({
       params: {
         sessionId: "prepare-session-1",
         authChoice: "ollama",
@@ -476,7 +476,7 @@ describe("openclaw.setup", () => {
   });
 });
 
-describe("openclaw.chat", () => {
+describe("natesclaw.chat", () => {
   it("refuses to create a session before inference is available", async () => {
     inferenceFallbackMocks.verify.mockResolvedValueOnce({
       ok: false,
@@ -491,7 +491,7 @@ describe("openclaw.chat", () => {
       ok: false,
       error: {
         code: "UNAVAILABLE",
-        message: "OpenClaw requires working inference: no configured model",
+        message: "Natesclaw requires working inference: no configured model",
         details: {
           code: "system_agent_inference_unavailable",
         },
@@ -551,7 +551,7 @@ describe("openclaw.chat", () => {
     });
     const activeAtResponse: number[] = [];
 
-    const pending = systemAgentHandler("openclaw.setup.detect")({
+    const pending = systemAgentHandler("natesclaw.setup.detect")({
       params: {},
       respond: () => {
         activeAtResponse.push(systemAgentLane().activeCount);
@@ -584,7 +584,7 @@ describe("openclaw.chat", () => {
     setupInferenceMocks.verifySetupInference.mockResolvedValueOnce(result);
     const { calls, respond } = makeRespond();
 
-    await systemAgentHandler("openclaw.setup.verify")({ params: {}, respond } as never);
+    await systemAgentHandler("natesclaw.setup.verify")({ params: {}, respond } as never);
 
     expect(setupInferenceMocks.verifySetupInference).toHaveBeenCalledWith({
       runtime: defaultRuntime,
@@ -595,7 +595,7 @@ describe("openclaw.chat", () => {
   it("rejects unknown setup verification params without running inference", async () => {
     const { calls, respond } = makeRespond();
 
-    await systemAgentHandler("openclaw.setup.verify")({
+    await systemAgentHandler("natesclaw.setup.verify")({
       params: { modelRef: "openai/gpt-5.5" },
       respond,
     } as never);
@@ -621,7 +621,7 @@ describe("openclaw.chat", () => {
     const { calls, respond } = makeRespond();
     const activeAtResponse: number[] = [];
 
-    const pending = systemAgentHandler("openclaw.setup.activate")({
+    const pending = systemAgentHandler("natesclaw.setup.activate")({
       params: {
         kind: "api-key",
         modelRef: "openai/gpt-5.5",
@@ -803,7 +803,7 @@ describe("openclaw.chat", () => {
     );
     const invoke = async (params: Record<string, unknown>) => {
       const { calls, respond } = makeRespond();
-      await systemAgentHandler("openclaw.chat.history")({ params, respond } as never);
+      await systemAgentHandler("natesclaw.chat.history")({ params, respond } as never);
       return calls[0];
     };
 
@@ -820,10 +820,10 @@ describe("openclaw.chat", () => {
   it("tracks approved delegated Gateway restarts until their completion drains", async () => {
     const approvalStarted = createDeferred();
     const releaseApproval = createDeferred();
-    const stateDir = systemAgentTempDirs.make("openclaw-approved-gateway-restart-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", path.join(stateDir, "openclaw.json"));
-    fs.writeFileSync(path.join(stateDir, "openclaw.json"), JSON.stringify(verifiedConfig));
+    const stateDir = systemAgentTempDirs.make("natesclaw-approved-gateway-restart-");
+    vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("NATESCLAW_CONFIG_PATH", path.join(stateDir, "natesclaw.json"));
+    fs.writeFileSync(path.join(stateDir, "natesclaw.json"), JSON.stringify(verifiedConfig));
     const runGatewayRestart = vi.fn(async () => {
       approvalStarted.resolve();
       await releaseApproval.promise;
@@ -867,7 +867,7 @@ describe("openclaw.chat", () => {
       req: {
         type: "req",
         id: "delegated-gateway-restart",
-        method: "openclaw.chat",
+        method: "natesclaw.chat",
         params: {
           sessionId: "delegate-1",
           message: "Restart Gateway.",
@@ -882,7 +882,7 @@ describe("openclaw.chat", () => {
       } as GatewayClient,
       isWebchatConnect: () => false,
       context,
-      extraHandlers: { "openclaw.chat": systemAgentHandlers["openclaw.chat"]! },
+      extraHandlers: { "natesclaw.chat": systemAgentHandlers["natesclaw.chat"]! },
     });
     const first = expectDefined(requestResponses.calls[0], "delegated Gateway response invariant");
     expect(getActiveGatewayRootWorkCount()).toBe(0);
@@ -899,7 +899,7 @@ describe("openclaw.chat", () => {
     });
     expect(manager.getSnapshot(proposalId!)?.decision).toBeUndefined();
     expect(broadcast).toHaveBeenCalledWith(
-      "openclaw.approval.requested",
+      "natesclaw.approval.requested",
       expect.objectContaining({ id: proposalId }),
       { dropIfSlow: true },
     );
@@ -926,7 +926,7 @@ describe("openclaw.chat", () => {
       expect(systemAgentLane().activeCount).toBe(0);
     });
     await expect(resolveOperatorApproval.mock.results[0]?.value).resolves.toMatchObject({
-      text: expect.stringContaining("[openclaw] done: gateway.restart"),
+      text: expect.stringContaining("[natesclaw] done: gateway.restart"),
     });
     expect(readLastSystemAgentAuditEntry()).toMatchObject({
       operation: "gateway.restart",
@@ -940,7 +940,7 @@ describe("openclaw.chat", () => {
     const engine = new SystemAgentChatEngine({
       verifiedInference: requireVerifiedInferenceFixture(),
       runAgentTurn: async () => {
-        throw new Error("workspace owner openclaw is missing from the roster");
+        throw new Error("workspace owner natesclaw is missing from the roster");
       },
       planWithAssistant: async () => null,
       deps: requireVerifiedInferenceDeps(),
@@ -955,7 +955,7 @@ describe("openclaw.chat", () => {
       ok: false,
       error: {
         code: "UNAVAILABLE",
-        message: expect.stringContaining("workspace owner openclaw is missing from the roster"),
+        message: expect.stringContaining("workspace owner natesclaw is missing from the roster"),
         details: { code: "system_agent_session_invalidated" },
       },
     });
@@ -1005,7 +1005,7 @@ describe("openclaw.chat", () => {
     const activeAtResponse: number[] = [];
 
     const trackChat = (sessionId: string) =>
-      systemAgentHandler("openclaw.chat")({
+      systemAgentHandler("natesclaw.chat")({
         params: { sessionId, message: "yes" },
         client: defaultClient,
         context: makeContext(sessions),
@@ -1069,7 +1069,7 @@ describe("openclaw.chat", () => {
     // asserting the old engine is gone instead.
     const { calls, respond } = makeRespond();
     const context = makeContext(sessions);
-    const pending = systemAgentHandler("openclaw.chat")({
+    const pending = systemAgentHandler("natesclaw.chat")({
       params: { sessionId: "s1", reset: true },
       client: defaultClient,
       respond,

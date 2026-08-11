@@ -45,7 +45,7 @@ function routeData(agentId: string, catalogId = ""): NewSessionRouteData {
 }
 
 afterEach(() => {
-  document.querySelectorAll("openclaw-new-session-page").forEach((element) => element.remove());
+  document.querySelectorAll("natesclaw-new-session-page").forEach((element) => element.remove());
   sessionStorage.clear();
   window.history.replaceState({}, "", "/");
 });
@@ -53,7 +53,7 @@ afterEach(() => {
 describe("new session draft route ownership", () => {
   it("clears all source draft state when destination data is still pending", () => {
     const page = document.createElement(
-      "openclaw-new-session-page",
+      "natesclaw-new-session-page",
     ) as unknown as TestNewSessionPage;
     page.data = routeData("research");
     page.updated();
@@ -76,7 +76,7 @@ describe("new session draft route ownership", () => {
 
   it("keeps destination input through pending data, settlement, and agent resolution", () => {
     const page = document.createElement(
-      "openclaw-new-session-page",
+      "natesclaw-new-session-page",
     ) as unknown as TestNewSessionPage;
     page.data = routeData("research");
     page.updated();
@@ -101,7 +101,7 @@ describe("new session draft route ownership", () => {
 
   it("clears a draft when a different route settles without destination-owned input", () => {
     const page = document.createElement(
-      "openclaw-new-session-page",
+      "natesclaw-new-session-page",
     ) as unknown as TestNewSessionPage;
     page.data = routeData("research", "claude");
     page.updated();
@@ -118,7 +118,7 @@ describe("new session draft route ownership", () => {
   it("hands cloud startup to the application owner and navigates immediately", async () => {
     window.history.replaceState({}, "", "/new");
     const page = document.createElement(
-      "openclaw-new-session-page",
+      "natesclaw-new-session-page",
     ) as unknown as TestNewSessionPage;
     Object.defineProperty(page, "isConnected", { configurable: true, value: true });
     const client = { recoveryScope: "principal-a", recoveryScopeReady: true };

@@ -1,6 +1,6 @@
 import { rm } from "node:fs/promises";
 import { stripAnsi } from "../../../../packages/terminal-core/src/ansi.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../../../config/types.plugins.js";
 import type { ClawHubRiskAcknowledgementRequest } from "../../../plugins/clawhub.js";
 import { writePersistedInstalledPluginIndexInstallRecords } from "../../../plugins/installed-plugin-index-records.js";
@@ -64,9 +64,9 @@ type RepairMissingPluginInstallsResult = {
   records: Record<string, PluginInstallRecord>;
 };
 
-/** Repair missing installs inferred from the current OpenClaw config. */
+/** Repair missing installs inferred from the current Natesclaw config. */
 export async function repairMissingConfiguredPluginInstalls(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   acknowledgeClawHubRisk?: boolean;
   onClawHubRisk?: (request: ClawHubRiskAcknowledgementRequest) => boolean | Promise<boolean>;
@@ -93,7 +93,7 @@ export async function repairMissingConfiguredPluginInstalls(params: {
 
 /** Repair missing installs for an explicit plugin/channel id set. */
 export async function repairMissingPluginInstallsForIds(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   pluginIds: Iterable<string>;
   channelIds?: Iterable<string>;
   blockedPluginIds?: Iterable<string>;
@@ -125,7 +125,7 @@ export async function repairMissingPluginInstallsForIds(params: {
 }
 
 async function repairMissingPluginInstalls(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   pluginIds: ReadonlySet<string>;
   channelIds: ReadonlySet<string>;
   blockedPluginIds?: ReadonlySet<string>;
@@ -191,7 +191,7 @@ async function repairMissingPluginInstalls(params: {
       if (!record || !isInstalledRecordMissingOnDisk(record, env)) {
         continue;
       }
-      const detail = `Skipped package-manager repair for configured plugin "${pluginId}" during package update; rerun "openclaw doctor --fix" after the update completes.`;
+      const detail = `Skipped package-manager repair for configured plugin "${pluginId}" during package update; rerun "natesclaw doctor --fix" after the update completes.`;
       changes.push(detail);
       deferredRepairDetails.push(detail);
     }

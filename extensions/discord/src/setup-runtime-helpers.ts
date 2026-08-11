@@ -9,4 +9,4 @@ export {
   resolveSetupAccountId,
   setSetupChannelEnabled,
   splitSetupEntries,
-} from "openclaw/plugin-sdk/setup-runtime";
+} from "natesclaw/plugin-sdk/setup-runtime";

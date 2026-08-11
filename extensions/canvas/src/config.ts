@@ -1,18 +1,18 @@
 /**
  * Canvas plugin config parsing, enablement, and schema metadata.
  */
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   normalizePluginsConfig,
   resolveEffectiveEnableState,
   resolvePluginConfigObject,
-} from "openclaw/plugin-sdk/plugin-config-runtime";
-import { isTruthyEnvValue } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/plugin-config-runtime";
+import { isTruthyEnvValue } from "natesclaw/plugin-sdk/runtime-env";
 import {
   asBoolean as readBoolean,
   isRecord,
   readStringValue as readString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 /** Host-server configuration for Canvas and A2UI assets. */
 export type CanvasHostConfig = {
@@ -61,7 +61,7 @@ export function parseCanvasPluginConfig(value: unknown): CanvasPluginConfig {
 }
 
 /** Returns whether the bundled Canvas plugin is effectively enabled. */
-export function isCanvasPluginEnabled(config?: OpenClawConfig): boolean {
+export function isCanvasPluginEnabled(config?: NatesclawConfig): boolean {
   if (!config) {
     return true;
   }
@@ -76,7 +76,7 @@ export function isCanvasPluginEnabled(config?: OpenClawConfig): boolean {
 
 /** Resolves Canvas host config from plugin config or root config. */
 export function resolveCanvasHostConfig(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   pluginConfig?: Record<string, unknown>;
 }): CanvasHostConfig {
   const pluginConfig =
@@ -86,8 +86,8 @@ export function resolveCanvasHostConfig(params: {
 }
 
 /** Returns whether the Canvas hosted route/server surface should be active. */
-export function isCanvasHostEnabled(config?: OpenClawConfig): boolean {
-  if (isTruthyEnvValue(process.env.OPENCLAW_SKIP_CANVAS_HOST)) {
+export function isCanvasHostEnabled(config?: NatesclawConfig): boolean {
+  if (isTruthyEnvValue(process.env.NATESCLAW_SKIP_CANVAS_HOST)) {
     return false;
   }
   if (!isCanvasPluginEnabled(config)) {

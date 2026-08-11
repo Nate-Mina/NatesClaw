@@ -11,7 +11,7 @@ import { clearRuntimeAuthProfileStoreSnapshots } from "../../../agents/auth-prof
 import { writePersistedAuthProfileStoreRaw } from "../../../agents/auth-profiles/sqlite.js";
 import { saveAuthProfileStore } from "../../../agents/auth-profiles/store.js";
 import type { AuthProfileStore, OAuthCredential } from "../../../agents/auth-profiles/types.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { captureEnv } from "../../../test-utils/env.js";
 import { resolveLegacyAuthProfilesPath as resolveAuthStorePath } from "../../doctor-auth-legacy-paths.js";
 import {
@@ -62,16 +62,16 @@ async function writeRawAuthStore(agentDir: string, store: unknown): Promise<void
 }
 
 describe("stale OAuth profile shadow doctor repair", () => {
-  const envSnapshot = captureEnv(["OPENCLAW_AGENT_DIR", "OPENCLAW_STATE_DIR", "OPENCLAW_HOME"]);
+  const envSnapshot = captureEnv(["NATESCLAW_AGENT_DIR", "NATESCLAW_STATE_DIR", "NATESCLAW_HOME"]);
   let tempRoot = "";
   let stateDir = "";
 
   beforeEach(async () => {
     clearRuntimeAuthProfileStoreSnapshots();
-    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-stale-oauth-shadow-"));
+    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-stale-oauth-shadow-"));
     stateDir = path.join(tempRoot, "state");
-    process.env.OPENCLAW_STATE_DIR = stateDir;
-    process.env.OPENCLAW_HOME = stateDir;
+    process.env.NATESCLAW_STATE_DIR = stateDir;
+    process.env.NATESCLAW_HOME = stateDir;
   });
 
   afterEach(async () => {
@@ -109,17 +109,17 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const hits = await scanStaleOAuthProfileShadows({
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       now,
     });
     const warnings = collectStaleOAuthProfileShadowWarnings({
       hits,
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "natesclaw doctor --fix",
     });
 
     expect(hits).toHaveLength(1);
     expect(warnings[0]).toContain("stale OAuth auth profile anthropic:default");
-    expect(warnings[0]).toContain("openclaw doctor --fix");
+    expect(warnings[0]).toContain("natesclaw doctor --fix");
     expect(loadPersistedAuthProfileStore(childAgentDir)?.profiles[profileId]).toBeDefined();
   });
 
@@ -152,7 +152,7 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const hits = await scanStaleOAuthProfileShadows({
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       now,
     });
 
@@ -173,8 +173,8 @@ describe("stale OAuth profile shadow doctor repair", () => {
     const injectedStateDir = path.join(tempRoot, "injected-state");
     const injectedEnv = {
       ...process.env,
-      OPENCLAW_STATE_DIR: injectedStateDir,
-      OPENCLAW_HOME: injectedStateDir,
+      NATESCLAW_STATE_DIR: injectedStateDir,
+      NATESCLAW_HOME: injectedStateDir,
     };
     saveAuthProfileStore(
       storeWith(
@@ -213,7 +213,7 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const hits = await scanStaleOAuthProfileShadows({
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       env: injectedEnv,
       now,
     });
@@ -226,15 +226,15 @@ describe("stale OAuth profile shadow doctor repair", () => {
     ]);
   });
 
-  it("repairs shadows against the OPENCLAW_AGENT_DIR shared-main store", async () => {
+  it("repairs shadows against the NATESCLAW_AGENT_DIR shared-main store", async () => {
     const profileId = "anthropic:default";
     const now = Date.now();
     const relocatedMainAgentDir = path.join(tempRoot, "relocated-main-agent");
     const childAgentDir = path.join(stateDir, "agents", "telegram", "agent");
     const env = {
       ...process.env,
-      OPENCLAW_AGENT_DIR: relocatedMainAgentDir,
-      OPENCLAW_STATE_DIR: stateDir,
+      NATESCLAW_AGENT_DIR: relocatedMainAgentDir,
+      NATESCLAW_STATE_DIR: stateDir,
     };
     await writeRawAuthStore(
       relocatedMainAgentDir,
@@ -262,7 +262,7 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const result = await repairStaleOAuthProfileShadows({
-      cfg: { agents: { entries: { telegram: { default: true } } } } satisfies OpenClawConfig,
+      cfg: { agents: { entries: { telegram: { default: true } } } } satisfies NatesclawConfig,
       env,
       now,
     });
@@ -285,7 +285,7 @@ describe("stale OAuth profile shadow doctor repair", () => {
           accountId: "acct-shared",
           expires: now - 60_000,
           oauthRef: {
-            source: "openclaw-credentials",
+            source: "natesclaw-credentials",
             provider: "openai-codex",
             id: "0123456789abcdef0123456789abcdef",
           },
@@ -306,11 +306,11 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const hits = await scanStaleOAuthProfileShadows({
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       now,
     });
     const repair = await repairStaleOAuthProfileShadows({
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       now,
     });
 
@@ -362,7 +362,7 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const result = await repairStaleOAuthProfileShadows({
-      cfg: { agents: { list: [{ id: "telegram" }] } } satisfies OpenClawConfig,
+      cfg: { agents: { list: [{ id: "telegram" }] } } satisfies NatesclawConfig,
       now,
     });
 
@@ -403,7 +403,7 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const result = await repairStaleOAuthProfileShadows({
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       now,
     });
 
@@ -436,7 +436,7 @@ describe("stale OAuth profile shadow doctor repair", () => {
     );
 
     const result = await repairStaleOAuthProfileShadows({
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       now,
     });
 

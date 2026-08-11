@@ -7,10 +7,10 @@ import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
 import { createPrivateSqliteDirectory } from "../infra/sqlite-private-directory.js";
 import { runExec } from "../process/exec.js";
-import { OPENCLAW_AGENT_SCHEMA_VERSION } from "../state/openclaw-agent-db.js";
-import { OPENCLAW_AGENT_SCHEMA_SQL } from "../state/openclaw-agent-schema.js";
-import { OPENCLAW_STATE_SCHEMA_VERSION } from "../state/openclaw-state-db.js";
-import { OPENCLAW_STATE_SCHEMA_SQL } from "../state/openclaw-state-schema.js";
+import { NATESCLAW_AGENT_SCHEMA_VERSION } from "../state/natesclaw-agent-db.js";
+import { NATESCLAW_AGENT_SCHEMA_SQL } from "../state/natesclaw-agent-schema.js";
+import { NATESCLAW_STATE_SCHEMA_VERSION } from "../state/natesclaw-state-db.js";
+import { NATESCLAW_STATE_SCHEMA_SQL } from "../state/natesclaw-state-schema.js";
 import { hashSnapshotArtifact, readSnapshotManifest } from "./manifest.js";
 import {
   SNAPSHOT_MANIFEST_FILENAME,
@@ -30,8 +30,8 @@ const durabilityTestState = vi.hoisted(() => ({
     | undefined,
 }));
 
-vi.mock("@openclaw/fs-safe/durability", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@openclaw/fs-safe/durability")>();
+vi.mock("@natesclaw/fs-safe/durability", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@natesclaw/fs-safe/durability")>();
   return {
     ...actual,
     pinDirectory: async (...args: Parameters<typeof actual.pinDirectory>) => {
@@ -74,7 +74,7 @@ afterEach(() => {
 });
 
 async function createTempDir(): Promise<string> {
-  const tempDir = tempDirs.make("openclaw-snapshot-repository-");
+  const tempDir = tempDirs.make("natesclaw-snapshot-repository-");
   if (process.platform === "win32") {
     const privateTempDir = path.join(tempDir, "private");
     await createPrivateSqliteDirectory(privateTempDir);
@@ -192,8 +192,8 @@ async function createGenericSnapshotFixture(
 function createGlobalDatabase(databasePath: string): void {
   withDatabase(databasePath, (database) => {
     database.exec(`
-      ${OPENCLAW_STATE_SCHEMA_SQL}
-      PRAGMA user_version = ${OPENCLAW_STATE_SCHEMA_VERSION};
+      ${NATESCLAW_STATE_SCHEMA_SQL}
+      PRAGMA user_version = ${NATESCLAW_STATE_SCHEMA_VERSION};
     `);
     database
       .prepare(
@@ -209,7 +209,7 @@ function createGlobalDatabase(databasePath: string): void {
           ) VALUES ('primary', 'global', ?, NULL, NULL, 1, 1)
         `,
       )
-      .run(OPENCLAW_STATE_SCHEMA_VERSION);
+      .run(NATESCLAW_STATE_SCHEMA_VERSION);
     database
       .prepare(
         `
@@ -260,8 +260,8 @@ function seedGlobalPluginBlobSnapshotFixtures(databasePath: string): void {
 function createAgentDatabase(databasePath: string, agentId: string): void {
   withDatabase(databasePath, (database) => {
     database.exec(`
-      ${OPENCLAW_AGENT_SCHEMA_SQL}
-      PRAGMA user_version = ${OPENCLAW_AGENT_SCHEMA_VERSION};
+      ${NATESCLAW_AGENT_SCHEMA_SQL}
+      PRAGMA user_version = ${NATESCLAW_AGENT_SCHEMA_VERSION};
     `);
     database
       .prepare(
@@ -277,7 +277,7 @@ function createAgentDatabase(databasePath: string, agentId: string): void {
           ) VALUES ('primary', 'agent', ?, ?, NULL, 1, 1)
         `,
       )
-      .run(OPENCLAW_AGENT_SCHEMA_VERSION, agentId);
+      .run(NATESCLAW_AGENT_SCHEMA_VERSION, agentId);
   });
 }
 
@@ -1396,7 +1396,7 @@ describe("local SQLite snapshot repository", () => {
 
   it("sanitizes transient global rows and enforces the global owner", async () => {
     const tempDir = await createTempDir();
-    const sourcePath = path.join(tempDir, "openclaw.sqlite");
+    const sourcePath = path.join(tempDir, "natesclaw.sqlite");
     const repositoryPath = path.join(tempDir, "snapshots");
     createGlobalDatabase(sourcePath);
     seedGlobalPluginBlobSnapshotFixtures(sourcePath);
@@ -1460,7 +1460,7 @@ describe("local SQLite snapshot repository", () => {
     const wrongRolePath = path.join(tempDir, "wrong-role.sqlite");
     createAgentDatabase(wrongRolePath, "main");
     withDatabase(wrongRolePath, (database) => {
-      database.exec(`PRAGMA user_version = ${OPENCLAW_STATE_SCHEMA_VERSION};`);
+      database.exec(`PRAGMA user_version = ${NATESCLAW_STATE_SCHEMA_VERSION};`);
     });
     await expect(
       provider.create({ path: wrongRolePath, identity: { role: "global" } }),
@@ -1469,7 +1469,7 @@ describe("local SQLite snapshot repository", () => {
 
   it("snapshots agents without requiring legacy lease storage", async () => {
     const tempDir = await createTempDir();
-    const sourcePath = path.join(tempDir, "openclaw-agent.sqlite");
+    const sourcePath = path.join(tempDir, "natesclaw-agent.sqlite");
     const repositoryPath = path.join(tempDir, "snapshots");
     createAgentDatabase(sourcePath, "worker-1");
     const provider = createLocalSqliteSnapshotProvider({ repositoryPath });
@@ -1508,7 +1508,7 @@ describe("local SQLite snapshot repository", () => {
 
   it("enforces the exact agent owner and canonical agent id", async () => {
     const tempDir = await createTempDir();
-    const sourcePath = path.join(tempDir, "openclaw-agent.sqlite");
+    const sourcePath = path.join(tempDir, "natesclaw-agent.sqlite");
     const repositoryPath = path.join(tempDir, "snapshots");
     createAgentDatabase(sourcePath, "worker-1");
     const provider = createLocalSqliteSnapshotProvider({ repositoryPath });
@@ -1535,7 +1535,7 @@ describe("local SQLite snapshot repository", () => {
         database: {
           role: "agent",
           agentId: "worker-1",
-          userVersion: OPENCLAW_AGENT_SCHEMA_VERSION,
+          userVersion: NATESCLAW_AGENT_SCHEMA_VERSION,
         },
       },
     });
@@ -1911,8 +1911,8 @@ describe("snapshot manifest parser", () => {
     database: {
       role: "agent",
       agentId: "worker-1",
-      basename: "openclaw-agent.sqlite",
-      userVersion: OPENCLAW_AGENT_SCHEMA_VERSION,
+      basename: "natesclaw-agent.sqlite",
+      userVersion: NATESCLAW_AGENT_SCHEMA_VERSION,
     },
     artifact: {
       path: SNAPSHOT_SQLITE_FILENAME,

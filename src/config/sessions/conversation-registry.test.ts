@@ -4,9 +4,9 @@ import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js"
 import { executeSqliteQuerySync } from "../../infra/kysely-sync.js";
 import { normalizeLegacySessionEntryDelivery } from "../../infra/state-migrations.legacy-session-store.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import type { DeliveryContext } from "../../utils/delivery-context.types.js";
 import { buildConversationIdentity } from "./conversation-identity.js";
 import {
@@ -40,12 +40,12 @@ describe("conversation registry", () => {
   let storePath: string;
 
   afterEach(() => {
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
   });
   const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
   beforeEach(() => {
-    tempDir = tempDirs.make("openclaw-conversations-");
+    tempDir = tempDirs.make("natesclaw-conversations-");
     storePath = path.join(tempDir, "sessions.json");
   });
 
@@ -161,7 +161,7 @@ describe("conversation registry", () => {
       );
     }
     const resolved = resolveSqliteReadScope({ agentId: "main", storePath });
-    const database = openOpenClawAgentDatabase(toDatabaseOptions(resolved));
+    const database = openNatesclawAgentDatabase(toDatabaseOptions(resolved));
     const db = getSessionKysely(database.db);
     executeSqliteQuerySync(
       database.db,

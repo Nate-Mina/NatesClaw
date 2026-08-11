@@ -26,7 +26,7 @@ afterEach(() => {
 
 describe("staged attachment composer adoption", () => {
   function annotationEvent() {
-    return new CustomEvent<BrowserAnnotationDraft>("openclaw:browser-annotation", {
+    return new CustomEvent<BrowserAnnotationDraft>("natesclaw:browser-annotation", {
       detail: {
         modelContext: "Generated page context",
         dataUrl: "data:image/png;base64,aGVsbG8=",
@@ -80,7 +80,7 @@ describe("staged attachment composer adoption", () => {
     paneId: string,
     sessionKey: string,
   ): TestChatPane {
-    const pane = document.createElement("openclaw-chat-pane") as unknown as TestChatPane;
+    const pane = document.createElement("natesclaw-chat-pane") as unknown as TestChatPane;
     Object.defineProperty(pane, "isConnected", { configurable: true, value: true });
     pane.context = context;
     pane.paneId = paneId;
@@ -239,7 +239,7 @@ describe("staged attachment composer adoption", () => {
         inspectedElement: true,
       },
     };
-    const event = new CustomEvent<BrowserAnnotationDraft>("openclaw:browser-annotation", {
+    const event = new CustomEvent<BrowserAnnotationDraft>("natesclaw:browser-annotation", {
       detail,
       cancelable: true,
     });
@@ -275,7 +275,7 @@ describe("staged attachment composer adoption", () => {
     second.pane.active = true;
     first.state.chatAttachments = [];
     second.state.chatAttachments = [];
-    const event = new CustomEvent<BrowserAnnotationDraft>("openclaw:browser-annotation", {
+    const event = new CustomEvent<BrowserAnnotationDraft>("natesclaw:browser-annotation", {
       detail: {
         modelContext: "Context",
         dataUrl: "data:image/png;base64,aGVsbG8=",
@@ -452,7 +452,7 @@ describe("staged attachment composer adoption", () => {
     const annotation = state.chatAttachments[0]!;
     const ordinary = storedAttachment("undo-ordinary", false);
     state.chatAttachments.push(ordinary);
-    const toastHost = document.createElement("openclaw-toast-host") as HTMLElement & {
+    const toastHost = document.createElement("natesclaw-toast-host") as HTMLElement & {
       updateComplete: Promise<boolean>;
     };
     document.body.append(toastHost);

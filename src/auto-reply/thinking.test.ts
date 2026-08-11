@@ -127,11 +127,11 @@ describe("listThinkingLevels", () => {
       levels: [
         { id: "off" },
         { id: "max" },
-        ...(context.agentRuntime === "openclaw" ? [{ id: "ultra" as const }] : []),
+        ...(context.agentRuntime === "natesclaw" ? [{ id: "ultra" as const }] : []),
       ],
     }));
 
-    expect(listThinkingLevels("openai", "gpt-5.6-luna", undefined, "openclaw")).toContain("ultra");
+    expect(listThinkingLevels("openai", "gpt-5.6-luna", undefined, "natesclaw")).toContain("ultra");
     expect(listThinkingLevels("openai", "gpt-5.6-luna", undefined, "codex")).not.toContain("ultra");
     expect(providerRuntimeMocks.resolveProviderThinkingProfile).toHaveBeenLastCalledWith({
       provider: "openai",
@@ -347,7 +347,7 @@ describe("listThinkingLevels", () => {
   });
 
   it("exposes Claude Opus xhigh on custom anthropic-messages providers without a plugin profile", () => {
-    // Regression for openclaw#91975: a renamed provider serving Claude Opus over
+    // Regression for natesclaw#91975: a renamed provider serving Claude Opus over
     // anthropic-messages used to fall back to a base profile (no xhigh) and silently
     // clamp `--thinking xhigh` to `off`.
     const catalog = [
@@ -605,7 +605,7 @@ describe("listThinkingLevels", () => {
     ).toBe(true);
   });
 
-  it("uses advanced catalog efforts and derives OpenClaw Ultra from Max", () => {
+  it("uses advanced catalog efforts and derives Natesclaw Ultra from Max", () => {
     const catalog = [
       {
         provider: "myazure",
@@ -619,7 +619,7 @@ describe("listThinkingLevels", () => {
       },
     ];
 
-    expect(listThinkingLevels("myazure", "gpt-5.6-sol", catalog, "openclaw")).toEqual([
+    expect(listThinkingLevels("myazure", "gpt-5.6-sol", catalog, "natesclaw")).toEqual([
       "off",
       "minimal",
       "low",
@@ -635,7 +635,7 @@ describe("listThinkingLevels", () => {
         model: "gpt-5.6-sol",
         level: "max",
         catalog,
-        agentRuntime: "openclaw",
+        agentRuntime: "natesclaw",
       }),
     ).toBe(true);
     expect(
@@ -644,7 +644,7 @@ describe("listThinkingLevels", () => {
         model: "gpt-5.6-sol",
         level: "ultra",
         catalog,
-        agentRuntime: "openclaw",
+        agentRuntime: "natesclaw",
       }),
     ).toBe(true);
     expect(listThinkingLevels("myazure", "gpt-5.6-sol", catalog, "codex")).not.toContain("ultra");

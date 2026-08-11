@@ -218,7 +218,7 @@ vi.mock("../gateway/call.js", () => ({
 
 vi.mock("../utils.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../utils.js")>()),
-  CONFIG_DIR: "/tmp/openclaw-config",
+  CONFIG_DIR: "/tmp/natesclaw-config",
 }));
 
 vi.mock("../config/config.js", () => ({
@@ -358,7 +358,7 @@ describe("skills cli commands", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "natesclaw" },
       version: { version: "1.2.3" },
       card: {
         available: true,
@@ -441,7 +441,7 @@ describe("skills cli commands", () => {
     searchSkillsFromClawHubMock.mockResolvedValue([
       {
         slug: "weather",
-        installRef: "skills-sh:openclaw/skills/weather",
+        installRef: "skills-sh:natesclaw/skills/weather",
         trustState: "not-scanned-by-clawhub",
         displayName: "Weather",
         summary: "Forecast helpers",
@@ -455,7 +455,7 @@ describe("skills cli commands", () => {
       limit: undefined,
     });
     expect(runtimeLogs).toEqual([
-      "skills-sh:openclaw/skills/weather  Weather  Forecast helpers  Not scanned by ClawHub",
+      "skills-sh:natesclaw/skills/weather  Weather  Forecast helpers  Not scanned by ClawHub",
     ]);
   });
 
@@ -544,7 +544,7 @@ describe("skills cli commands", () => {
   });
 
   it("routes skills-sh refs through ClawHub without translating them", async () => {
-    const reference = "skills-sh:openclaw/skills/weather";
+    const reference = "skills-sh:natesclaw/skills/weather";
     installSkillFromClawHubMock.mockResolvedValue({
       ok: true,
       slug: "weather",
@@ -560,7 +560,7 @@ describe("skills cli commands", () => {
 
   it("rejects --version for skills-sh refs", async () => {
     await expect(
-      runCommand(["skills", "install", "skills-sh:openclaw/skills/weather", "--version", "1.2.3"]),
+      runCommand(["skills", "install", "skills-sh:natesclaw/skills/weather", "--version", "1.2.3"]),
     ).rejects.toThrow("__exit__:1");
 
     expect(runtimeErrors).toContain("--version is not supported for skills-sh references.");
@@ -570,11 +570,11 @@ describe("skills cli commands", () => {
 
   it("rejects the legacy skills-sh slash syntax before network access", async () => {
     await expect(
-      runCommand(["skills", "install", "skills-sh/openclaw/skills/weather"]),
+      runCommand(["skills", "install", "skills-sh/natesclaw/skills/weather"]),
     ).rejects.toThrow("__exit__:1");
 
     expect(runtimeErrors).toContain(
-      "Invalid skills.sh skill reference: skills-sh/openclaw/skills/weather",
+      "Invalid skills.sh skill reference: skills-sh/natesclaw/skills/weather",
     );
     expect(installSkillFromClawHubMock).not.toHaveBeenCalled();
     expect(installSkillFromSourceMock).not.toHaveBeenCalled();
@@ -596,8 +596,8 @@ describe("skills cli commands", () => {
 
       expect(help).toContain("<skill-ref>");
       expect(help).toContain("@owner/slug");
-      expect(help).toContain(`openclaw skills ${commandName} @owner/weather`);
-      expect(help).not.toContain(`openclaw skills ${commandName} weather`);
+      expect(help).toContain(`natesclaw skills ${commandName} @owner/weather`);
+      expect(help).not.toContain(`natesclaw skills ${commandName} weather`);
     },
   );
 
@@ -740,7 +740,7 @@ describe("skills cli commands", () => {
   });
 
   it("installs a skill into the shared global skills directory", async () => {
-    primeCalendarInstall("/tmp/openclaw-config");
+    primeCalendarInstall("/tmp/natesclaw-config");
 
     await runCommand(["skills", "install", "calendar", "--global"]);
 
@@ -749,7 +749,7 @@ describe("skills cli commands", () => {
     expect(resolveAgentWorkspaceDirMock).not.toHaveBeenCalled();
     expect(installSkillFromClawHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        workspaceDir: "/tmp/openclaw-config",
+        workspaceDir: "/tmp/natesclaw-config",
       }),
     );
   });
@@ -939,16 +939,16 @@ describe("skills cli commands", () => {
       slug: "calendar",
     },
   ])("$name", async ({ selection, slug }) => {
-    primeCalendarUpdate("/tmp/openclaw-config");
+    primeCalendarUpdate("/tmp/natesclaw-config");
 
     await runCommand(["skills", "update", selection, "--global"]);
 
     expect(resolveAgentIdByWorkspacePathMock).not.toHaveBeenCalled();
     expect(resolveDefaultAgentIdMock).not.toHaveBeenCalled();
     expect(resolveAgentWorkspaceDirMock).not.toHaveBeenCalled();
-    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/openclaw-config");
+    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/natesclaw-config");
     expect(updateSkillsFromClawHubMock).toHaveBeenCalledWith({
-      workspaceDir: "/tmp/openclaw-config",
+      workspaceDir: "/tmp/natesclaw-config",
       slug,
       logger: expect.any(Object),
       config: {},
@@ -1006,7 +1006,7 @@ describe("skills cli commands", () => {
     expect(payload.schema).toBe("clawhub.skill.verify.v1");
     expect(payload.ok).toBe(true);
     expect(payload.signature).toEqual({ status: "unsigned" });
-    expect(payload.openclaw).toEqual({
+    expect(payload.natesclaw).toEqual({
       resolution: {
         source: "installed",
         selector: "installed-version",
@@ -1090,7 +1090,7 @@ describe("skills cli commands", () => {
     expect(resolveDefaultAgentIdMock).not.toHaveBeenCalled();
     expect(resolveAgentWorkspaceDirMock).not.toHaveBeenCalled();
     expect(resolveClawHubSkillVerificationTargetMock).toHaveBeenCalledWith({
-      workspaceDir: "/tmp/openclaw-config",
+      workspaceDir: "/tmp/natesclaw-config",
       slug: "agentreceipt",
       version: "2.0.0",
       tag: undefined,
@@ -1100,16 +1100,16 @@ describe("skills cli commands", () => {
   it("includes verified ClawHub source URLs in verify JSON output", async () => {
     const provenance = {
       source: "server-resolved-github-import",
-      repo: "openclaw/skills",
+      repo: "natesclaw/skills",
       commit: "0123456789abcdef0123456789abcdef01234567",
       path: "agentreceipt",
     };
     const verifiedSourceUrl =
-      "https://github.com/openclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt";
+      "https://github.com/natesclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt";
     readVerifiedClawHubSkillSourceUrlMock.mockReturnValueOnce(verifiedSourceUrl);
     primeSkillVerification({
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "natesclaw" },
       card: {
         available: true,
         url: "https://private.example.com/clawhub/api/v1/skills/agentreceipt/card?version=1.2.3",
@@ -1125,16 +1125,16 @@ describe("skills cli commands", () => {
 
     expect(readVerifiedClawHubSkillSourceUrlMock).toHaveBeenCalledWith(provenance);
     const payload = JSON.parse(runtimeStdout.at(-1) ?? "{}") as {
-      openclaw?: { verifiedSourceUrl?: string };
+      natesclaw?: { verifiedSourceUrl?: string };
     };
-    expect(payload.openclaw?.verifiedSourceUrl).toBe(verifiedSourceUrl);
+    expect(payload.natesclaw?.verifiedSourceUrl).toBe(verifiedSourceUrl);
     expect(defaultRuntime.exit).not.toHaveBeenCalled();
   });
 
   it("fetches generated Skill Card markdown for --card", async () => {
     primeSkillVerification({
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "natesclaw" },
       card: {
         available: true,
         url: "https://cards.example.test/generated/agentreceipt.md",
@@ -1422,7 +1422,7 @@ describe("skills cli commands", () => {
     expect(defaultRuntime.log).not.toHaveBeenCalled();
     expect(runtimeErrors).toStrictEqual([]);
     expect(runtimeStdout.at(-1)).toContain("calendar");
-    expect(runtimeStdout.at(-1)).toContain("openclaw skills search");
+    expect(runtimeStdout.at(-1)).toContain("natesclaw skills search");
   });
 });
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

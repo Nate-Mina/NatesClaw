@@ -1,9 +1,9 @@
 import path from "node:path";
-import { detectMime } from "@openclaw/media-core/mime";
+import { detectMime } from "@natesclaw/media-core/mime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import type { Command } from "commander";
 import { resolveAgentDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { runWithImageModelFallback } from "../../agents/model-fallback-image.js";

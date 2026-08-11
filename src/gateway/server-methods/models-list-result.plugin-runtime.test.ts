@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ModelCatalogEntry, ModelCatalogSnapshot } from "../../agents/model-catalog.types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
+import { withNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import type { GatewayRequestContext } from "./types.js";
 
 const getCurrentPluginMetadataSnapshotMock = vi.hoisted(() => vi.fn());
@@ -59,10 +59,10 @@ describe("models.list plugin metadata handoff", () => {
   });
 
   it("reuses one Gateway-owned metadata snapshot across startup projection and browse", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-plugin-runtime-",
+        prefix: "natesclaw-models-list-plugin-runtime-",
         agentEnv: "main",
       },
       async (state) => {
@@ -77,7 +77,7 @@ describe("models.list plugin metadata handoff", () => {
               },
             },
           },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         const snapshot: ModelCatalogSnapshot = {
           entries: [catalogEntry("modern"), catalogEntry("another")],
           routeVariants: [],
@@ -114,10 +114,10 @@ describe("models.list plugin metadata handoff", () => {
   });
 
   it("preserves registry fallback when no compatible Gateway snapshot exists", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-plugin-runtime-fallback-",
+        prefix: "natesclaw-models-list-plugin-runtime-fallback-",
         agentEnv: "main",
       },
       async (state) => {
@@ -129,7 +129,7 @@ describe("models.list plugin metadata handoff", () => {
               models: { "custom/modern": {} },
             },
           },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         getCurrentPluginMetadataSnapshotMock.mockReturnValue(undefined);
         loadPluginRegistrySnapshotWithMetadataMock.mockReturnValue({
           source: "provided",

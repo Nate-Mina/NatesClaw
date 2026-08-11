@@ -1,10 +1,10 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { classifyGatewayConnectFailure } from "../../../packages/gateway-protocol/src/connect-error-details.js";
 import { createConfigIO } from "../../config/io.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { PluginHealthErrorSummary } from "../../gateway/health/types.js";
 import { resolveGatewayProbeAuthSafeWithSecretInputs } from "../../gateway/probe-auth.js";
 import { probeGateway } from "../../gateway/probe.js";
@@ -147,9 +147,9 @@ export async function confirmGatewayReachable(params: {
   env?: NodeJS.ProcessEnv;
   allowDeviceIdentityRequired?: boolean;
 }): Promise<GatewayReachability> {
-  const token = normalizeOptionalString(params.auth?.token ?? process.env.OPENCLAW_GATEWAY_TOKEN);
+  const token = normalizeOptionalString(params.auth?.token ?? process.env.NATESCLAW_GATEWAY_TOKEN);
   const password = normalizeOptionalString(
-    params.auth?.password ?? process.env.OPENCLAW_GATEWAY_PASSWORD,
+    params.auth?.password ?? process.env.NATESCLAW_GATEWAY_PASSWORD,
   );
   const probe = await probeGateway({
     url: `ws://127.0.0.1:${params.port}`,
@@ -188,7 +188,7 @@ export async function resolveGatewayRestartProbeAuth(
     suppressFutureVersionWarning: true,
   })
     .readBestEffortConfig()
-    .catch((): OpenClawConfig => ({}));
+    .catch((): NatesclawConfig => ({}));
   const resolved = await resolveGatewayProbeAuthSafeWithSecretInputs({
     cfg,
     mode: "local",

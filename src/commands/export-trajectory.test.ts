@@ -48,11 +48,11 @@ describe("exportTrajectoryCommand", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.getRuntimeConfig.mockReturnValue({});
-    mocks.resolveStorePath.mockReturnValue("/tmp/openclaw/sessions.json");
+    mocks.resolveStorePath.mockReturnValue("/tmp/natesclaw/sessions.json");
     mocks.loadSessionEntryReadOnly.mockReturnValue(undefined);
     mocks.exportTrajectoryForCommand.mockResolvedValue({
-      outputDir: "/tmp/workspace/.openclaw/trajectory-exports/export",
-      displayPath: ".openclaw/trajectory-exports/export",
+      outputDir: "/tmp/workspace/.natesclaw/trajectory-exports/export",
+      displayPath: ".natesclaw/trajectory-exports/export",
       sessionId: "session-1",
       eventCount: 2,
       runtimeEventCount: 0,
@@ -68,7 +68,7 @@ describe("exportTrajectoryCommand", () => {
     await exportTrajectoryCommand({}, runtime);
 
     expect(runtime.error).toHaveBeenCalledWith(
-      "--session-key is required. Run openclaw sessions to choose a session.",
+      "--session-key is required. Run natesclaw sessions to choose a session.",
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
   });
@@ -133,7 +133,7 @@ describe("exportTrajectoryCommand", () => {
       storePath: "/tmp/direct-store.json",
     });
     expect(runtime.error).toHaveBeenCalledWith(
-      "Session not found: agent:main:telegram:direct:123. Run openclaw sessions to see available sessions.",
+      "Session not found: agent:main:telegram:direct:123. Run natesclaw sessions to see available sessions.",
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
   });
@@ -142,8 +142,8 @@ describe("exportTrajectoryCommand", () => {
     ["home-prefixed", "~/x/sessions.json", "/home/demo/x/sessions.json"],
     [
       "agent template",
-      "/tmp/openclaw/agents/{agentId}/sessions/sessions.json",
-      "/tmp/openclaw/agents/work/sessions/sessions.json",
+      "/tmp/natesclaw/agents/{agentId}/sessions/sessions.json",
+      "/tmp/natesclaw/agents/work/sessions/sessions.json",
     ],
   ])(
     "resolves explicit --store %s paths through the shared resolver",
@@ -164,7 +164,7 @@ describe("exportTrajectoryCommand", () => {
         storePath: resolvedStore,
       });
       expect(runtime.error).toHaveBeenCalledWith(
-        "Session not found: agent:work:telegram:direct:123. Run openclaw sessions to see available sessions.",
+        "Session not found: agent:work:telegram:direct:123. Run natesclaw sessions to see available sessions.",
       );
       expect(runtime.exit).toHaveBeenCalledWith(1);
     },
@@ -173,23 +173,23 @@ describe("exportTrajectoryCommand", () => {
   it("uses configured session.store when no explicit store is provided", async () => {
     const runtime = createRuntime();
     mocks.getRuntimeConfig.mockReturnValue({
-      session: { store: "/tmp/openclaw/agents/{agentId}/sessions/sessions.json" },
+      session: { store: "/tmp/natesclaw/agents/{agentId}/sessions/sessions.json" },
     });
-    mocks.resolveStorePath.mockReturnValue("/tmp/openclaw/agents/work/sessions/sessions.json");
+    mocks.resolveStorePath.mockReturnValue("/tmp/natesclaw/agents/work/sessions/sessions.json");
 
     await exportTrajectoryCommand({ sessionKey: "agent:work:telegram:direct:123" }, runtime);
 
     expect(mocks.resolveStorePath).toHaveBeenCalledWith(
-      "/tmp/openclaw/agents/{agentId}/sessions/sessions.json",
+      "/tmp/natesclaw/agents/{agentId}/sessions/sessions.json",
       { agentId: "work" },
     );
     expect(mocks.loadSessionEntryReadOnly).toHaveBeenCalledWith({
       agentId: "work",
       sessionKey: "agent:work:telegram:direct:123",
-      storePath: "/tmp/openclaw/agents/work/sessions/sessions.json",
+      storePath: "/tmp/natesclaw/agents/work/sessions/sessions.json",
     });
     expect(runtime.error).toHaveBeenCalledWith(
-      "Session not found: agent:work:telegram:direct:123. Run openclaw sessions to see available sessions.",
+      "Session not found: agent:work:telegram:direct:123. Run natesclaw sessions to see available sessions.",
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
   });
@@ -203,10 +203,10 @@ describe("exportTrajectoryCommand", () => {
     expect(mocks.loadSessionEntryReadOnly).toHaveBeenCalledWith({
       agentId: "main",
       sessionKey: "agent:main:telegram:direct:123",
-      storePath: "/tmp/openclaw/sessions.json",
+      storePath: "/tmp/natesclaw/sessions.json",
     });
     expect(runtime.error).toHaveBeenCalledWith(
-      "Session not found: agent:main:telegram:direct:123. Run openclaw sessions to see available sessions.",
+      "Session not found: agent:main:telegram:direct:123. Run natesclaw sessions to see available sessions.",
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
   });
@@ -221,10 +221,10 @@ describe("exportTrajectoryCommand", () => {
     expect(mocks.loadSessionEntryReadOnly).toHaveBeenCalledWith({
       agentId: "main",
       sessionKey: "agent:main:telegram:direct:123",
-      storePath: "/tmp/openclaw/sessions.json",
+      storePath: "/tmp/natesclaw/sessions.json",
     });
     expect(runtime.error).toHaveBeenCalledWith(
-      "Session not found: agent:main:telegram:direct:123. Run openclaw sessions to see available sessions.",
+      "Session not found: agent:main:telegram:direct:123. Run natesclaw sessions to see available sessions.",
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
   });
@@ -252,7 +252,7 @@ describe("exportTrajectoryCommand", () => {
         agentId: "main",
         sessionId: "session-1",
         sessionKey: "agent:main:telegram:direct:123",
-        storePath: "/tmp/openclaw/sessions.json",
+        storePath: "/tmp/natesclaw/sessions.json",
       },
       workspaceDir: "/tmp/workspace",
     });

@@ -4,11 +4,11 @@ import {
   getRuntimeConfigSourceSnapshot,
   selectApplicableRuntimeConfig,
 } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 export function resolveAgentRuntimeToolConfig(
-  inputConfig?: OpenClawConfig,
-): OpenClawConfig | undefined {
+  inputConfig?: NatesclawConfig,
+): NatesclawConfig | undefined {
   const runtimeConfig = getRuntimeConfigSnapshot() ?? undefined;
   if (!runtimeConfig) {
     return inputConfig;

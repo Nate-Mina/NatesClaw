@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { OutputRuntimeEnv } from "../runtime.js";
 import { withTestDir } from "../test-helpers/temp-dir.js";
 import { withEnvAsync } from "../test-utils/env.js";
@@ -59,7 +59,7 @@ function createRuntime(): OutputRuntimeEnv & { json: unknown[] } {
   };
 }
 
-function createConfig(): OpenClawConfig {
+function createConfig(): NatesclawConfig {
   return {
     agents: {
       list: [{ id: "main", default: true }],
@@ -131,14 +131,14 @@ describe("agentsListCommand", () => {
         [
           "Agents:",
           "- main (default)",
-          `  Workspace: ~${path.sep}.openclaw${path.sep}workspace`,
-          `  Agent dir: ~${path.sep}.openclaw${path.sep}agents${path.sep}main${path.sep}agent`,
+          `  Workspace: ~${path.sep}.natesclaw${path.sep}workspace`,
+          `  Agent dir: ~${path.sep}.natesclaw${path.sep}agents${path.sep}main${path.sep}agent`,
           "  Routing rules: 1",
           "  Routing: Telegram default",
           "  Providers:",
           "    - Telegram default: configured",
           "Routing rules map channel/account/peer to an agent. Use --bindings for full rules.",
-          "Channel status reflects local config/creds. For live health: openclaw channels status --probe.",
+          "Channel status reflects local config/creds. For live health: natesclaw channels status --probe.",
         ].join("\n"),
       ],
     ]);
@@ -147,7 +147,7 @@ describe("agentsListCommand", () => {
   it.skipIf(process.platform !== "win32")(
     "shortens real Windows home casing aliases in human output",
     async () => {
-      await withTestDir({ prefix: "openclaw-home-display-" }, async (home) => {
+      await withTestDir({ prefix: "natesclaw-home-display-" }, async (home) => {
         const workspace = path.join(home, "workspace");
         const agentDir = path.join(home, "agents", "main", "agent");
         await fs.promises.mkdir(workspace, { recursive: true });
@@ -166,17 +166,17 @@ describe("agentsListCommand", () => {
               },
             ],
           },
-        } satisfies OpenClawConfig);
+        } satisfies NatesclawConfig);
         const runtime = createRuntime();
 
-        await withEnvAsync({ OPENCLAW_HOME: home }, async () => {
+        await withEnvAsync({ NATESCLAW_HOME: home }, async () => {
           await agentsListCommand({}, runtime);
         });
 
         const output = vi.mocked(runtime.log).mock.calls.flat().join("\n");
-        expect(output).toContain(`Workspace: $OPENCLAW_HOME${path.sep}workspace`);
+        expect(output).toContain(`Workspace: $NATESCLAW_HOME${path.sep}workspace`);
         expect(output).toContain(
-          `Agent dir: $OPENCLAW_HOME${path.sep}agents${path.sep}main${path.sep}agent`,
+          `Agent dir: $NATESCLAW_HOME${path.sep}agents${path.sep}main${path.sep}agent`,
         );
         expect(output).not.toContain(homeAlias);
       });

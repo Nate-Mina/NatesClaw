@@ -1,5 +1,5 @@
 /**
- * Native Codex app-server compaction bridge for bound OpenClaw sessions.
+ * Native Codex app-server compaction bridge for bound Natesclaw sessions.
  */
 import { AsyncLocalStorage } from "node:async_hooks";
 import {
@@ -7,11 +7,11 @@ import {
   resolveCompactionTimeoutMs,
   type CompactEmbeddedAgentSessionParams,
   type EmbeddedAgentCompactResult,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveAgentDir, resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import { createDedupeCache } from "openclaw/plugin-sdk/dedupe-runtime";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/keyed-async-queue";
-import { asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { resolveAgentDir, resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
+import { createDedupeCache } from "natesclaw/plugin-sdk/dedupe-runtime";
+import { KeyedAsyncQueue } from "natesclaw/plugin-sdk/keyed-async-queue";
+import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isIncognitoSessionKey } from "../incognito-session.js";
 import {
   CODEX_APP_SERVER_UNSUBSCRIBE_TIMEOUT_MS,
@@ -346,14 +346,14 @@ export async function maybeCompactCodexAppServerSession(
   params: CompactEmbeddedAgentSessionParams,
   options: CodexAppServerCompactOptions,
 ): Promise<EmbeddedAgentCompactResult | undefined> {
-  warnIfIgnoringOpenClawCompactionOverrides(params);
+  warnIfIgnoringNatesclawCompactionOverrides(params);
   // Codex owns automatic context-pressure compaction for Codex runtime sessions.
   // This entry point starts native Codex compaction for the bound thread and
   // retains the lease until Codex reports the context-compaction item complete.
   return compactCodexNativeThread(params, options);
 }
 
-function warnIfIgnoringOpenClawCompactionOverrides(
+function warnIfIgnoringNatesclawCompactionOverrides(
   params: CompactEmbeddedAgentSessionParams,
 ): void {
   const ignoredConfig = readIgnoredCompactionOverridePaths(params);
@@ -365,7 +365,7 @@ function warnIfIgnoringOpenClawCompactionOverrides(
     return;
   }
   embeddedAgentLog.warn(
-    "ignoring OpenClaw compaction overrides for Codex app-server compaction; Codex uses native server-side compaction",
+    "ignoring Natesclaw compaction overrides for Codex app-server compaction; Codex uses native server-side compaction",
     {
       sessionId: params.sessionId,
       sessionKey: params.sessionKey,
@@ -594,7 +594,7 @@ async function compactCodexNativeThread(
             }
             if (usesSupervisionConnection) {
               // A supervised thread is native user-home state, not an
-              // OpenClaw-owned remote binding. Keep the lifecycle fence held
+              // Natesclaw-owned remote binding. Keep the lifecycle fence held
               // rather than detach and permit a second writer.
               throw new Error("cannot detach an unconfirmed supervised codex thread");
             }

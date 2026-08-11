@@ -1,16 +1,16 @@
 // Memory Core helpers for safe managed DREAMS.md updates.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createAsyncLock } from "openclaw/plugin-sdk/async-lock-runtime";
-import { extractErrorCode } from "openclaw/plugin-sdk/error-runtime";
-import { resolveGlobalMap } from "openclaw/plugin-sdk/global-singleton";
-import { replaceManagedMarkdownBlock } from "openclaw/plugin-sdk/memory-host-markdown";
-import { readRegularFile, replaceFileAtomic } from "openclaw/plugin-sdk/security-runtime";
+import { createAsyncLock } from "natesclaw/plugin-sdk/async-lock-runtime";
+import { extractErrorCode } from "natesclaw/plugin-sdk/error-runtime";
+import { resolveGlobalMap } from "natesclaw/plugin-sdk/global-singleton";
+import { replaceManagedMarkdownBlock } from "natesclaw/plugin-sdk/memory-host-markdown";
+import { readRegularFile, replaceFileAtomic } from "natesclaw/plugin-sdk/security-runtime";
 
 const DREAMS_FILENAMES = ["DREAMS.md", "dreams.md"] as const;
-const DEEP_START_MARKER = "<!-- openclaw:dreaming:deep:start -->";
-const DEEP_END_MARKER = "<!-- openclaw:dreaming:deep:end -->";
-const DREAMS_FILE_LOCKS_KEY = Symbol.for("openclaw.memoryCore.dreamingNarrative.fileLocks");
+const DEEP_START_MARKER = "<!-- natesclaw:dreaming:deep:start -->";
+const DEEP_END_MARKER = "<!-- natesclaw:dreaming:deep:end -->";
+const DREAMS_FILE_LOCKS_KEY = Symbol.for("natesclaw.memoryCore.dreamingNarrative.fileLocks");
 
 type DreamsFileLockEntry = {
   withLock: ReturnType<typeof createAsyncLock>;

@@ -1,10 +1,10 @@
 // Nextcloud Talk tests cover send.cfg threading plugin behavior.
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-outbound";
+import { verifyChannelMessageAdapterCapabilityProofs } from "natesclaw/plugin-sdk/channel-outbound";
 import {
   createSendCfgThreadingRuntime,
   expectProvidedCfgSkipsRuntimeLoad,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig as CoreConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig as CoreConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const hoisted = vi.hoisted(() => ({

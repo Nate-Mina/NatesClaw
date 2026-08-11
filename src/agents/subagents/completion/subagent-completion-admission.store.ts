@@ -8,10 +8,10 @@ import {
   type QueuedSessionDelivery,
 } from "../../../infra/session-delivery-queue.js";
 import {
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-} from "../../../state/openclaw-state-db.js";
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabase,
+  type NatesclawStateDatabaseOptions,
+} from "../../../state/natesclaw-state-db.js";
 import {
   bindTaskRecord,
   upsertTaskRunRowInDatabase,
@@ -27,7 +27,7 @@ type AdmissionTestHooks = {
   afterBind?: () => unknown;
   afterMutation?: (
     phase: "queue" | "subagent" | "task",
-    database: OpenClawStateDatabase,
+    database: NatesclawStateDatabase,
   ) => unknown;
 };
 
@@ -67,7 +67,7 @@ export function admitSubagentCompletionDelivery(params: {
   queueEntry: QueuedSessionDelivery;
   subagent: SubagentRunRecord;
   task: TaskRecord;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
   /** Transaction cut points used by the real-store crash-consistency tests. */
   testHooks?: AdmissionTestHooks;
 }): { claimed: boolean } {
@@ -81,7 +81,7 @@ export function admitSubagentCompletionDelivery(params: {
   const boundTask = bindTaskRecord(params.task);
   invokeSynchronousHook(params.testHooks?.afterBind);
 
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     (database) => {
       const claimed = upsertBoundDeliveryQueueEntryInDatabase(boundQueue, database);
       invokeSynchronousHook(() => params.testHooks?.afterMutation?.("queue", database));
@@ -121,11 +121,11 @@ export function admitSubagentCompletionDelivery(params: {
 export function settleSubagentCompletionDelivery(params: {
   subagent: SubagentRunRecord;
   task: TaskRecord;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
   mutateSubagent?: (entry: SubagentRunRecord) => unknown;
 }): void {
   const boundTask = bindTaskRecord(params.task);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     (database) => {
       invokeSynchronousHook(() => params.mutateSubagent?.(params.subagent));
       upsertSubagentRunRowInDatabase(database, bindSubagentRunRecord(params.subagent));

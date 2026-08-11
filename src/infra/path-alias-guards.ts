@@ -6,4 +6,4 @@ export {
   PATH_ALIAS_POLICIES,
   assertNoPathAliasEscape,
   type PathAliasPolicy,
-} from "@openclaw/fs-safe/advanced";
+} from "@natesclaw/fs-safe/advanced";

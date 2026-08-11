@@ -1,8 +1,8 @@
 // Connection-level chat attachment ceilings shared by the parser and the
 // `hello-ok` handshake. Kept out of chat-attachments.ts so the handshake path
 // does not pull the media probe/store graph in just to read two numbers.
-import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 const DEFAULT_CHAT_ATTACHMENT_MAX_MB = 20;
 
@@ -10,7 +10,7 @@ const DEFAULT_CHAT_ATTACHMENT_MAX_MB = 20;
 export const DEFAULT_CHAT_ATTACHMENT_MAX_BYTES = DEFAULT_CHAT_ATTACHMENT_MAX_MB * 1024 * 1024;
 
 /** Resolve the maximum decoded attachment size accepted for chat inputs. */
-export function resolveChatAttachmentMaxBytes(cfg: OpenClawConfig): number {
+export function resolveChatAttachmentMaxBytes(cfg: NatesclawConfig): number {
   const configured = cfg.agents?.defaults?.mediaMaxMb;
   const mb =
     typeof configured === "number" && Number.isFinite(configured) && configured > 0
@@ -36,7 +36,7 @@ type ChatAttachmentPolicy = {
  * depend on the entrypoint, the resolved model, and payload sniffing, so they
  * cannot be stated once per connection.
  */
-export function resolveChatAttachmentPolicy(cfg: OpenClawConfig): ChatAttachmentPolicy {
+export function resolveChatAttachmentPolicy(cfg: NatesclawConfig): ChatAttachmentPolicy {
   const maxBytes = resolveChatAttachmentMaxBytes(cfg);
   return { maxBytes, maxImageBytes: Math.min(maxBytes, MAX_IMAGE_BYTES) };
 }

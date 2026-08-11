@@ -2,11 +2,11 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
-import { resolveSessionTranscriptsDirForAgent } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import { upsertSessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
-import { appendSessionTranscriptMessageByIdentity } from "openclaw/plugin-sdk/session-transcript-runtime";
-import { resolveOpenClawAgentSqlitePath } from "openclaw/plugin-sdk/sqlite-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/memory-core-host-engine-foundation";
+import { resolveSessionTranscriptsDirForAgent } from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
+import { upsertSessionEntry } from "natesclaw/plugin-sdk/session-store-runtime";
+import { appendSessionTranscriptMessageByIdentity } from "natesclaw/plugin-sdk/session-transcript-runtime";
+import { resolveNatesclawAgentSqlitePath } from "natesclaw/plugin-sdk/sqlite-runtime";
 import {
   closeAllMemorySearchManagers,
   getMemorySearchManager,
@@ -40,11 +40,11 @@ const markers = {
   archive: "RETAINED_ARCHIVE_TARGET_729",
 };
 
-Reflect.set(process.env, "OPENCLAW_STATE_DIR", stateDir);
+Reflect.set(process.env, "NATESCLAW_STATE_DIR", stateDir);
 await fs.mkdir(path.join(workspaceDir, "memory"), { recursive: true });
 await fs.writeFile(path.join(workspaceDir, "MEMORY.md"), "# Proof workspace\n");
 
-const cfg: OpenClawConfig = {
+const cfg: NatesclawConfig = {
   memory: {
     search: {
       provider: "none",
@@ -183,7 +183,7 @@ try {
     ].join("\n") + "\n",
     "utf8",
   );
-  const dbPath = resolveOpenClawAgentSqlitePath({ agentId });
+  const dbPath = resolveNatesclawAgentSqlitePath({ agentId });
 
   lock = openExclusiveLock(dbPath);
   const blockedOwner = sync({

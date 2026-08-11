@@ -1,6 +1,6 @@
 /** Tracks the current plugin metadata snapshot for control-plane lookups. */
 import { AsyncLocalStorage } from "node:async_hooks";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
 import {
   currentPluginMetadataConfigIdentityCache,
@@ -23,12 +23,12 @@ import { normalizePluginIdScope, serializePluginIdScope } from "./plugin-scope.j
 type CurrentPluginMetadataSnapshotState = ReturnType<
   typeof getCurrentPluginMetadataSnapshotState
 > & {
-  configIdentities: WeakSet<OpenClawConfig>;
+  configIdentities: WeakSet<NatesclawConfig>;
 };
 
 type CurrentPluginMetadataSnapshotOptions = {
-  config?: OpenClawConfig;
-  compatibleConfigs?: readonly OpenClawConfig[];
+  config?: NatesclawConfig;
+  compatibleConfigs?: readonly NatesclawConfig[];
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
 };
@@ -45,7 +45,7 @@ type TemporaryPluginMetadataSnapshotLease = {
 };
 
 type CurrentPluginMetadataSnapshotParams = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   allowScopedSnapshot?: boolean;
   pluginIds?: readonly string[];
@@ -60,7 +60,7 @@ type PluginMetadataSnapshotCandidate = {
   configFingerprint: string | undefined;
   compatiblePolicyHashes?: readonly string[];
   compatibleConfigFingerprints?: readonly string[];
-  hasConfigIdentity?: (config: OpenClawConfig) => boolean;
+  hasConfigIdentity?: (config: NatesclawConfig) => boolean;
 };
 
 type ScopedPluginMetadataSnapshot = PluginMetadataSnapshotCandidate & {
@@ -69,7 +69,7 @@ type ScopedPluginMetadataSnapshot = PluginMetadataSnapshotCandidate & {
 
 export type PluginMetadataSnapshotScopeRunner = <T>(
   params: {
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     workspaceDir?: string;
   },
   run: () => T,
@@ -79,13 +79,13 @@ let activeTemporaryPluginMetadataSnapshotLease:
   | TemporaryPluginMetadataSnapshotLeaseState
   | undefined;
 
-const SCOPED_PLUGIN_METADATA_SNAPSHOT_KEY = Symbol.for("openclaw.scopedPluginMetadataSnapshot");
+const SCOPED_PLUGIN_METADATA_SNAPSHOT_KEY = Symbol.for("natesclaw.scopedPluginMetadataSnapshot");
 const scopedPluginMetadataSnapshot = resolveGlobalSingleton<
   AsyncLocalStorage<ScopedPluginMetadataSnapshot>
 >(SCOPED_PLUGIN_METADATA_SNAPSHOT_KEY, () => new AsyncLocalStorage());
 
 function resolvePluginMetadataControlPlaneFingerprint(
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
   options: Omit<ResolvePluginControlPlaneContextParams, "config"> = {},
 ): string {
   return resolvePluginControlPlaneFingerprint({
@@ -277,7 +277,7 @@ export function withPluginMetadataSnapshotScope<T>(
         workspaceDir,
       })
     : snapshot.configFingerprint;
-  const configIdentities = new WeakSet<OpenClawConfig>();
+  const configIdentities = new WeakSet<NatesclawConfig>();
   if (options.config) {
     const policyHash = resolveInstalledPluginIndexPolicyHash(options.config);
     if (policyHash === snapshot.policyHash || compatiblePolicyHashes?.includes(policyHash)) {

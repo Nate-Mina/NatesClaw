@@ -1,16 +1,16 @@
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
 // Discord plugin module implements thread bindings.manager behavior.
 import {
   registerSessionBindingAdapter,
   unregisterSessionBindingAdapter,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { normalizeAccountId, resolveAgentIdFromSessionKey } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { normalizeAccountId, resolveAgentIdFromSessionKey } from "natesclaw/plugin-sdk/routing";
 import {
   getRuntimeConfigSnapshot,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+  type NatesclawConfig,
+} from "natesclaw/plugin-sdk/runtime-config-snapshot";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { createDiscordRestClient } from "../client.js";
 import { getChannel } from "../internal/discord.js";
 import {
@@ -100,7 +100,7 @@ function isDirectConversationBindingId(value?: string | null): boolean {
 export function createThreadBindingManager(params: {
   accountId?: string;
   token?: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   persist?: boolean;
   enableSweeper?: boolean;
   idleTimeoutMs?: number;

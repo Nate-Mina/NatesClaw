@@ -1,18 +1,18 @@
 // Telegram plugin module implements monitor behavior.
 import type { RunOptions } from "@grammyjs/runner";
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { resolveAgentMaxConcurrent } from "openclaw/plugin-sdk/model-session-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "natesclaw/plugin-sdk/approval-handler-adapter-runtime";
+import { registerChannelRuntimeContext } from "natesclaw/plugin-sdk/channel-runtime-context";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { resolveAgentMaxConcurrent } from "natesclaw/plugin-sdk/model-session-runtime";
+import { getRuntimeConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
 import {
   registerUncaughtExceptionHandler,
   registerUnhandledRejectionHandler,
   waitForAbortSignal,
-} from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { resolveTelegramAccount } from "./accounts.js";
 import { resolveTelegramAllowedUpdates } from "./allowed-updates.js";
 import { isTelegramExecApprovalHandlerConfigured } from "./exec-approvals.js";
@@ -33,7 +33,7 @@ import type {
   TelegramUpdateOffsetRotationInfo,
 } from "./update-offset-store.js";
 
-function createTelegramRunnerOptions(cfg: OpenClawConfig): RunOptions<unknown> {
+function createTelegramRunnerOptions(cfg: NatesclawConfig): RunOptions<unknown> {
   return {
     sink: {
       concurrency: resolveAgentMaxConcurrent(cfg),

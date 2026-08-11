@@ -5,13 +5,13 @@ import { createRequire } from "node:module";
 import { hostname } from "node:os";
 import { performance } from "node:perf_hooks";
 import type { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { getFileLockProcessStartTime, isPidDefinitelyDead } from "../shared/pid-alive.js";
-import { withOpenClawStateDatabaseReadOnly } from "../state/openclaw-state-db-readonly.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
-import { withOpenClawStateStartupMigrationCheckpointDatabase } from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
-import { assertOpenClawStateWriteAllowed } from "../state/openclaw-state-ownership.js";
+import { withNatesclawStateDatabaseReadOnly } from "../state/natesclaw-state-db-readonly.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
+import { withNatesclawStateStartupMigrationCheckpointDatabase } from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
+import { assertNatesclawStateWriteAllowed } from "../state/natesclaw-state-ownership.js";
 import { VERSION } from "../version.js";
 import {
   executeSqliteQuerySync,
@@ -21,7 +21,7 @@ import {
 import { runSqliteImmediateTransactionSync } from "./sqlite-transaction.js";
 
 type StartupMigrationCheckpointDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "schema_meta" | "state_leases"
 >;
 
@@ -150,17 +150,17 @@ function withStartupMigrationCheckpointDatabase<T>(
   env: NodeJS.ProcessEnv,
   callback: (db: DatabaseSync) => T,
 ): T {
-  return withOpenClawStateStartupMigrationCheckpointDatabase(callback, { env });
+  return withNatesclawStateStartupMigrationCheckpointDatabase(callback, { env });
 }
 
 function writeStartupMigrationCheckpointDatabase<T>(
   env: NodeJS.ProcessEnv,
   callback: (db: DatabaseSync) => T,
 ): T {
-  const databasePath = resolveOpenClawStateSqlitePath(env);
+  const databasePath = resolveNatesclawStateSqlitePath(env);
   return withStartupMigrationCheckpointDatabase(env, (db) =>
     runSqliteImmediateTransactionSync(db, () => {
-      assertOpenClawStateWriteAllowed({ database: db, databasePath, env });
+      assertNatesclawStateWriteAllowed({ database: db, databasePath, env });
       return callback(db);
     }),
   );
@@ -184,7 +184,7 @@ function assertStartupMigrationLeaseOwnedInTransaction(params: {
   );
   if (!activeLease) {
     throw new Error(
-      "OpenClaw startup migration lease was lost before startup migrations completed; retry so migrations can run under a fresh lease.",
+      "Natesclaw startup migration lease was lost before startup migrations completed; retry so migrations can run under a fresh lease.",
     );
   }
 }
@@ -268,11 +268,11 @@ export function hasActiveStartupMigrationLease(
 ): boolean {
   const env = params.env ?? process.env;
   const nowMs = params.nowMs ?? Date.now();
-  const pathname = resolveOpenClawStateSqlitePath(env);
+  const pathname = resolveNatesclawStateSqlitePath(env);
   if (!existsSync(pathname)) {
     return false;
   }
-  return withOpenClawStateDatabaseReadOnly(
+  return withNatesclawStateDatabaseReadOnly(
     ({ db }) => {
       const stateDb = getNodeSqliteKysely<StartupMigrationCheckpointDatabase>(db);
       const lease = executeSqliteQueryTakeFirstSync(
@@ -373,7 +373,7 @@ export function acquireStartupMigrationLease(
     } else if (existing) {
       const ownerHint = existingOwner ? ` (held by pid ${existingOwner.pid})` : "";
       throw new StartupMigrationLeaseConflictError(
-        `OpenClaw startup migrations are already running for this state directory; retry after the other OpenClaw process finishes or after ${new Date(existing.expiresAt ?? expiresAt).toISOString()}.${ownerHint}`,
+        `Natesclaw startup migrations are already running for this state directory; retry after the other Natesclaw process finishes or after ${new Date(existing.expiresAt ?? expiresAt).toISOString()}.${ownerHint}`,
         existingOwner?.host === hostname(),
       );
     }
@@ -422,7 +422,7 @@ export function acquireStartupMigrationLease(
         );
         if (result.numAffectedRows !== 1n) {
           throw new Error(
-            "OpenClaw startup migration lease was lost before startup migrations completed; retry so migrations can run under a fresh lease.",
+            "Natesclaw startup migration lease was lost before startup migrations completed; retry so migrations can run under a fresh lease.",
           );
         }
       });

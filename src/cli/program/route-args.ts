@@ -83,7 +83,7 @@ function parseSinglePositional(
   return positionals[0] ?? null;
 }
 
-/** Parse `openclaw health` flags for the route-first status family. */
+/** Parse `natesclaw health` flags for the route-first status family. */
 export function parseHealthRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["health"],
@@ -104,7 +104,7 @@ export function parseHealthRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw status` flags without registering the full command tree. */
+/** Parse `natesclaw status` flags without registering the full command tree. */
 export function parseStatusRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["status"],
@@ -128,7 +128,7 @@ export function parseStatusRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw gateway status` RPC-only flags accepted by the fast route. */
+/** Parse `natesclaw gateway status` RPC-only flags accepted by the fast route. */
 export function parseGatewayStatusRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["gateway", "status"],
@@ -180,7 +180,7 @@ export function parseGatewayStatusRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse machine-readable `openclaw gateway health` calls for route-first execution. */
+/** Parse machine-readable `natesclaw gateway health` calls for route-first execution. */
 export function parseGatewayHealthRouteArgs(argv: string[]) {
   if (!hasFlag(argv, "--json")) {
     return null;
@@ -234,7 +234,7 @@ export function parseGatewayHealthRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw sessions` filters for JSON/list route execution. */
+/** Parse `natesclaw sessions` filters for JSON/list route execution. */
 export function parseSessionsRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["sessions"],
@@ -270,7 +270,7 @@ export function parseSessionsRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw agents list` display switches for route-first execution. */
+/** Parse `natesclaw agents list` display switches for route-first execution. */
 export function parseAgentsListRouteArgs(argv: string[]) {
   const listPositionals = getRoutedCommandPositionals(argv, {
     commandPath: ["agents", "list"],
@@ -291,7 +291,7 @@ export function parseAgentsListRouteArgs(argv: string[]) {
     : null;
 }
 
-/** Parse `openclaw config get <path>` while preserving root option handling. */
+/** Parse `natesclaw config get <path>` while preserving root option handling. */
 export function parseConfigGetRouteArgs(argv: string[]) {
   const path = parseSinglePositional(argv, {
     commandPath: ["config", "get"],
@@ -306,7 +306,7 @@ export function parseConfigGetRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw config unset <path>` and its mutation guard flags. */
+/** Parse `natesclaw config unset <path>` and its mutation guard flags. */
 export function parseConfigUnsetRouteArgs(argv: string[]) {
   const path = parseSinglePositional(argv, {
     commandPath: ["config", "unset"],
@@ -325,7 +325,7 @@ export function parseConfigUnsetRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw models list` filters for the lightweight model catalog route. */
+/** Parse `natesclaw models list` filters for the lightweight model catalog route. */
 export function parseModelsListRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["models", "list"],
@@ -368,7 +368,7 @@ function parseModelsRootStatusRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse both parent aliases and `openclaw models status` through one status owner. */
+/** Parse both parent aliases and `natesclaw models status` through one status owner. */
 export function parseModelsStatusRouteArgs(argv: string[]) {
   const rootArgs = parseModelsRootStatusRouteArgs(argv);
   if (rootArgs) {
@@ -433,7 +433,7 @@ export function parseModelsStatusRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw channels list` display flags for the route-first list path. */
+/** Parse `natesclaw channels list` display flags for the route-first list path. */
 export function parseChannelsListRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["channels", "list"],
@@ -448,7 +448,7 @@ export function parseChannelsListRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw channels status` probe flags without full CLI registration. */
+/** Parse `natesclaw channels status` probe flags without full CLI registration. */
 export function parseChannelsStatusRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["channels", "status"],
@@ -474,7 +474,7 @@ export function parseChannelsStatusRouteArgs(argv: string[]) {
   };
 }
 
-/** Parse `openclaw plugins list` flags for the metadata-only inventory path. */
+/** Parse `natesclaw plugins list` flags for the metadata-only inventory path. */
 export function parsePluginsListRouteArgs(argv: string[]) {
   const positionals = getRoutedCommandPositionals(argv, {
     commandPath: ["plugins", "list"],
@@ -517,7 +517,7 @@ function parseTasksListRouteArgsForCommandPath(argv: string[], commandPath: stri
   };
 }
 
-/** Parse both `openclaw tasks --json` and `openclaw tasks list --json` aliases. */
+/** Parse both `natesclaw tasks --json` and `natesclaw tasks list --json` aliases. */
 export function parseTasksListRouteArgs(argv: string[]) {
   return (
     parseTasksListRouteArgsForCommandPath(argv, ["tasks"]) ??
@@ -525,7 +525,7 @@ export function parseTasksListRouteArgs(argv: string[]) {
   );
 }
 
-/** Parse JSON-only `openclaw tasks audit` filters for the route-first audit path. */
+/** Parse JSON-only `natesclaw tasks audit` filters for the route-first audit path. */
 export function parseTasksAuditRouteArgs(argv: string[]) {
   if (!hasFlag(argv, "--json")) {
     return null;

@@ -3,7 +3,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { normalizeAccountId } from "../../routing/session-key.js";
 
 /**

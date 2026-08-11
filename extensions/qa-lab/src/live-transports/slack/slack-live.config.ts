@@ -1,7 +1,7 @@
 // QA Lab Slack credentials, instrumentation, and channel config.
 import type { WebClient } from "@slack/web-api";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   type SlackQaRuntimeEnv,
   type SlackQaConfigOverrides,
@@ -32,12 +32,12 @@ function validateSlackQaRuntimeEnv(runtimeEnv: SlackQaRuntimeEnv, label: string)
 
 export function resolveSlackQaRuntimeEnv(env: NodeJS.ProcessEnv = process.env): SlackQaRuntimeEnv {
   const runtimeEnv = {
-    channelId: resolveEnvValue(env, "OPENCLAW_QA_SLACK_CHANNEL_ID"),
-    driverBotToken: resolveEnvValue(env, "OPENCLAW_QA_SLACK_DRIVER_BOT_TOKEN"),
-    sutBotToken: resolveEnvValue(env, "OPENCLAW_QA_SLACK_SUT_BOT_TOKEN"),
-    sutAppToken: resolveEnvValue(env, "OPENCLAW_QA_SLACK_SUT_APP_TOKEN"),
+    channelId: resolveEnvValue(env, "NATESCLAW_QA_SLACK_CHANNEL_ID"),
+    driverBotToken: resolveEnvValue(env, "NATESCLAW_QA_SLACK_DRIVER_BOT_TOKEN"),
+    sutBotToken: resolveEnvValue(env, "NATESCLAW_QA_SLACK_SUT_BOT_TOKEN"),
+    sutAppToken: resolveEnvValue(env, "NATESCLAW_QA_SLACK_SUT_APP_TOKEN"),
   };
-  return validateSlackQaRuntimeEnv(runtimeEnv, "OPENCLAW_QA_SLACK");
+  return validateSlackQaRuntimeEnv(runtimeEnv, "NATESCLAW_QA_SLACK");
 }
 
 export function parseSlackQaCredentialPayload(payload: unknown): SlackQaRuntimeEnv {
@@ -115,7 +115,7 @@ export function instrumentSlackPostMessage(client: WebClient) {
 }
 
 export function buildSlackQaConfig(
-  baseCfg: OpenClawConfig,
+  baseCfg: NatesclawConfig,
   params: {
     channelId: string;
     driverBotUserId: string;
@@ -125,7 +125,7 @@ export function buildSlackQaConfig(
     sutAppToken: string;
     sutBotToken: string;
   },
-): OpenClawConfig {
+): NatesclawConfig {
   const codexApprovalConfig = params.overrides?.codexApproval === true;
   const progressOverrides = params.overrides?.progress;
   const primaryModel = params.primaryModel;

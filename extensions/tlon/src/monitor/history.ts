@@ -1,6 +1,6 @@
 // Tlon plugin module implements history behavior.
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import { asNullableRecord as asRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+import { asNullableRecord as asRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { extractMessageText, formatErrorMessage } from "./utils.js";
 
 /**

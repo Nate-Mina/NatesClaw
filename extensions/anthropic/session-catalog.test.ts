@@ -1,14 +1,14 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { createPluginRuntimeMock } from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { SessionCatalogProvider } from "openclaw/plugin-sdk/session-catalog";
+  NatesclawPluginApi,
+  NatesclawPluginNodeHostCommand,
+} from "natesclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
+import { createPluginRuntimeMock } from "natesclaw/plugin-sdk/plugin-test-runtime";
+import type { SessionCatalogProvider } from "natesclaw/plugin-sdk/session-catalog";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { adoptedSourceKey } from "./session-catalog-adoption.js";
 import {
@@ -25,24 +25,24 @@ import {
   readLocalClaudeTranscriptPage,
 } from "./session-catalog.js";
 
-function registerClaudeSessionCatalog(api: OpenClawPluginApi): void {
+function registerClaudeSessionCatalog(api: NatesclawPluginApi): void {
   registerClaudeSessionDiscovery({
     ...api,
     registerNodeHostCommand: api.registerNodeHostCommand ?? (() => {}),
   });
 }
 
-function createClaudeSessionNodeHostCommands(): OpenClawPluginNodeHostCommand[] {
-  const commands: OpenClawPluginNodeHostCommand[] = [];
+function createClaudeSessionNodeHostCommands(): NatesclawPluginNodeHostCommand[] {
+  const commands: NatesclawPluginNodeHostCommand[] = [];
   registerClaudeSessionDiscovery({
     id: "anthropic",
     config: {},
     runtime: createPluginRuntimeMock(),
     registerSessionCatalog: () => {},
-    registerNodeHostCommand: (command: OpenClawPluginNodeHostCommand) => {
+    registerNodeHostCommand: (command: NatesclawPluginNodeHostCommand) => {
       commands.push(command);
     },
-  } as unknown as OpenClawPluginApi);
+  } as unknown as NatesclawPluginApi);
   return commands;
 }
 
@@ -59,7 +59,7 @@ function captureCatalogProvider(runtime: PluginRuntime): SessionCatalogProvider 
     registerSessionCatalog: (candidate: SessionCatalogProvider) => {
       provider = candidate;
     },
-  } as unknown as OpenClawPluginApi);
+  } as unknown as NatesclawPluginApi);
   if (!provider) {
     throw new Error("expected Anthropic session catalog registration");
   }
@@ -74,8 +74,8 @@ const nodeHostMocks = vi.hoisted(() => ({
   userShellPaths: new Map<string, string>(),
 }));
 
-vi.mock("openclaw/plugin-sdk/node-host", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/node-host")>();
+vi.mock("natesclaw/plugin-sdk/node-host", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/node-host")>();
   return {
     ...actual,
     runNodePtyCommand: nodeHostMocks.runNodePtyCommand,
@@ -117,7 +117,7 @@ vi.mock("openclaw/plugin-sdk/node-host", async (importOriginal) => {
 });
 
 async function createHome(): Promise<string> {
-  const home = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-claude-catalog-"));
+  const home = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-claude-catalog-"));
   homes.push(home);
   return home;
 }
@@ -180,7 +180,7 @@ async function writeIndexedDesktopSession(
       {
         sessionId,
         fullPath: path.join(home, ".claude", "projects", "-workspace", `${sessionId}.jsonl`),
-        projectPath: "/work/openclaw",
+        projectPath: "/work/natesclaw",
         isSidechain: false,
       },
     ],
@@ -189,7 +189,7 @@ async function writeIndexedDesktopSession(
   await writeDesktopMetadata(home, metadataName, {
     sessionId: localSessionId,
     cliSessionId: sessionId,
-    cwd: "/work/openclaw",
+    cwd: "/work/natesclaw",
     title,
     ...metadata,
   });
@@ -534,7 +534,7 @@ describe("Claude session catalog", () => {
           },
         },
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
 
     expect(listBoundClaudeSessions(api)).toEqual(
       new Map([
@@ -591,8 +591,8 @@ describe("Claude session catalog", () => {
     const createSessionEntry = vi.fn(async (params: Record<string, unknown>) => ({
       key: `agent:main:${String(params.key)}`,
       agentId: "main",
-      sessionId: "openclaw-adopted",
-      entry: { sessionId: "openclaw-adopted", updatedAt: Date.now() },
+      sessionId: "natesclaw-adopted",
+      entry: { sessionId: "natesclaw-adopted", updatedAt: Date.now() },
     }));
     const config = {
       agents: {
@@ -602,7 +602,7 @@ describe("Claude session catalog", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     let provider: SessionCatalogProvider | undefined;
     const api = {
       id: "anthropic",
@@ -619,7 +619,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
     registerClaudeSessionCatalog(api);
 
     expect(provider?.resolveCreateSession?.({})).toEqual({
@@ -660,7 +660,7 @@ describe("Claude session catalog", () => {
   });
 
   it("does not advertise creation without a configured Claude CLI route", () => {
-    let config: OpenClawConfig = {};
+    let config: NatesclawConfig = {};
     let provider: SessionCatalogProvider | undefined;
     const api = {
       id: "anthropic",
@@ -669,7 +669,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
 
     registerClaudeSessionCatalog(api);
 
@@ -700,7 +700,7 @@ describe("Claude session catalog", () => {
     for (const routedModel of ["anthropic/claude-opus-4-8", "anthropic/claude-sonnet-4-6"]) {
       const config = {
         agents: { defaults: { models: { [routedModel]: { agentRuntime: { id: "claude-cli" } } } } },
-      } as unknown as OpenClawConfig;
+      } as unknown as NatesclawConfig;
       let provider: SessionCatalogProvider | undefined;
       const api = {
         id: "anthropic",
@@ -709,7 +709,7 @@ describe("Claude session catalog", () => {
         registerSessionCatalog: (candidate: SessionCatalogProvider) => {
           provider = candidate;
         },
-      } as unknown as OpenClawPluginApi;
+      } as unknown as NatesclawPluginApi;
 
       registerClaudeSessionCatalog(api);
 
@@ -733,12 +733,12 @@ describe("Claude session catalog", () => {
           {
             id: "research",
             models: {
-              "anthropic/claude-opus-4-8": { agentRuntime: { id: "openclaw" } },
+              "anthropic/claude-opus-4-8": { agentRuntime: { id: "natesclaw" } },
             },
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     let provider: SessionCatalogProvider | undefined;
     const api = {
       id: "anthropic",
@@ -747,7 +747,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
 
     registerClaudeSessionCatalog(api);
 
@@ -775,7 +775,7 @@ describe("Claude session catalog", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     let provider: SessionCatalogProvider | undefined;
     const api = {
       id: "anthropic",
@@ -784,7 +784,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
 
     registerClaudeSessionCatalog(api);
 
@@ -813,7 +813,7 @@ describe("Claude session catalog", () => {
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     let provider: SessionCatalogProvider | undefined;
     const api = {
       id: "anthropic",
@@ -822,7 +822,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
 
     registerClaudeSessionCatalog(api);
 
@@ -849,7 +849,7 @@ describe("Claude session catalog", () => {
         pluginExtensions: { anthropic: { sessionCatalog: { sourceThreadId: sessionId } } },
       }),
     },
-  ])("links a catalog row to an existing OpenClaw session via $label", async ({ entry }) => {
+  ])("links a catalog row to an existing Natesclaw session via $label", async ({ entry }) => {
     const home = await createHome();
     process.env.HOME = home;
     const sessionId = "claude-bound-session";
@@ -905,8 +905,8 @@ describe("Claude session catalog", () => {
     const createSessionEntry = vi.fn(async (params: Record<string, unknown>) => ({
       key: `agent:main:${String(params.key)}`,
       agentId: "main",
-      sessionId: "openclaw-adopted",
-      entry: { sessionId: "openclaw-adopted", updatedAt: Date.now() },
+      sessionId: "natesclaw-adopted",
+      entry: { sessionId: "natesclaw-adopted", updatedAt: Date.now() },
     }));
     const provider = captureCatalogProvider({
       config: { current: () => ({}) },
@@ -1010,7 +1010,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
     registerClaudeSessionCatalog(api);
 
     const hosts = await provider?.list({ hostIds: ["node:node-a"] });
@@ -1124,7 +1124,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
     registerClaudeSessionCatalog(api);
 
     const hosts = await provider?.list({ hostIds: ["node:node-view"] });
@@ -2303,7 +2303,7 @@ describe("Claude session catalog", () => {
     const api = {
       runtime: {},
       registerSessionCatalog,
-    } as unknown as OpenClawPluginApi;
+    } as unknown as NatesclawPluginApi;
     registerClaudeSessionCatalog(api);
     expect(registerSessionCatalog).toHaveBeenCalledWith(
       expect.objectContaining({ id: "claude", label: "Claude Code" }),
@@ -2477,7 +2477,7 @@ describe("Claude session catalog", () => {
       registerSessionCatalog: (candidate: SessionCatalogProvider) => {
         provider = candidate;
       },
-    } as unknown as OpenClawPluginApi);
+    } as unknown as NatesclawPluginApi);
 
     await writeBrokenClaudeNpmShim(shellBinDir);
     nodeHostMocks.userShellPaths.set("claude", shellBinDir);

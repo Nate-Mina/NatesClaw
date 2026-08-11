@@ -1,9 +1,9 @@
-import { AGENT_MODEL_CONFIG_KEYS } from "@openclaw/model-catalog-core/configured-model-refs";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { asOptionalRecord as asMutableRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString as normalizeString } from "@openclaw/normalization-core/string-coerce";
+import { AGENT_MODEL_CONFIG_KEYS } from "@natesclaw/model-catalog-core/configured-model-refs";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { asOptionalRecord as asMutableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString as normalizeString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveModelRuntimePolicy } from "../../../agents/model-runtime-policy.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { normalizeAgentId } from "../../../routing/session-key.js";
 import { listMutableCodexRouteAgentEntries } from "./codex-route-agent-entries.js";
 import {
@@ -43,7 +43,7 @@ function agentExplicitlyReferencesCanonicalModel(agent: unknown, modelRef: strin
 }
 
 function resolveCurrentRuntimeIdForCanonicalModel(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   modelRef: string;
   agentId: string;
   env?: NodeJS.ProcessEnv;
@@ -103,7 +103,7 @@ function setModelRuntimePolicy(params: {
 }
 
 function shieldExplicitListedAgentRefsFromDefaultPolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   modelRef: string;
   targetRuntimeId: string;
   changes: string[];
@@ -189,7 +189,7 @@ function modelIdMatchesProviderModelEntry(params: {
 }
 
 function providerModelExplicitNonDefaultRuntimeId(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: string;
   modelId: string;
 }): string | undefined {
@@ -223,7 +223,7 @@ function providerModelExplicitNonDefaultRuntimeId(params: {
 }
 
 function agentModelMapExactRuntimeIdForLegacyRef(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   legacyModelRef: string;
   agentId?: string;
 }): string | undefined {
@@ -263,7 +263,7 @@ function agentModelMapExactRuntimeIdForLegacyRef(params: {
 }
 
 function preRepairLegacyModelPolicyExplicitNonDefaultRuntimePin(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   legacyModelRef?: string;
   agentId?: string;
 }): PreRepairRuntimePin | undefined {
@@ -303,14 +303,14 @@ function preRepairLegacyModelPolicyExplicitNonDefaultRuntimePin(params: {
 }
 
 export function ensureCodexRuntimePolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agent: MutableRecord;
   agentPath: string;
   agentId?: string;
   modelRef: string;
   legacyModelRef?: string;
   isDefaults?: boolean;
-  preRepairCfg?: OpenClawConfig;
+  preRepairCfg?: NatesclawConfig;
   changes: string[];
   env?: NodeJS.ProcessEnv;
 }): void {
@@ -374,7 +374,7 @@ export function ensureCodexRuntimePolicy(params: {
 }
 
 export function rewriteStringModelSlotIfCanonicalCodexRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
   hits: CodexRouteHit[];
   container: MutableRecord | undefined;
@@ -409,7 +409,7 @@ export function rewriteStringModelSlotIfCanonicalCodexRuntime(params: {
 }
 
 export function rewriteModelConfigSlotIfCanonicalCodexRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
   hits: CodexRouteHit[];
   container: MutableRecord | undefined;
@@ -466,7 +466,7 @@ export function rewriteModelConfigSlotIfCanonicalCodexRuntime(params: {
   }
 }
 
-export function clearConfigLegacyAgentRuntimePolicies(cfg: OpenClawConfig): string[] {
+export function clearConfigLegacyAgentRuntimePolicies(cfg: NatesclawConfig): string[] {
   const changes: string[] = [];
   clearLegacyAgentRuntimePolicy(asMutableRecord(cfg.agents?.defaults), "agents.defaults", changes);
   for (const { agent, path } of listMutableCodexRouteAgentEntries(cfg)) {

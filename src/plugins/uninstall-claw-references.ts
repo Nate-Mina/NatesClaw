@@ -1,6 +1,6 @@
 import { readClawPackageRefs, type PersistedClawPackageRef } from "../claws/provenance.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 
 function clawPackageRefMatchesPluginInstall(
   ref: PersistedClawPackageRef,
@@ -19,7 +19,7 @@ function clawPackageRefMatchesPluginInstall(
 export function collectClawPluginUninstallWarnings(params: {
   pluginId: string;
   installRecord?: PluginInstallRecord;
-  env?: OpenClawStateDatabaseOptions["env"];
+  env?: NatesclawStateDatabaseOptions["env"];
 }): string[] {
   const installRecord = params.installRecord;
   if (!installRecord || installRecord.source !== "clawhub") {

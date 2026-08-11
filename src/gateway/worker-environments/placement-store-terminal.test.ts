@@ -3,10 +3,10 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import type { WorkerSessionPlacementIdentity, WorkerSessionTurnClaim } from "./placement-record.js";
 import {
   createWorkerSessionPlacementStore,
@@ -21,19 +21,19 @@ const SESSION: WorkerSessionPlacementIdentity = {
 
 describe("worker placement terminal persistence", () => {
   let root: string;
-  let database: OpenClawStateDatabase;
+  let database: NatesclawStateDatabase;
   let store: WorkerSessionPlacementStore;
   let nowMs: number;
 
   beforeEach(async () => {
-    root = await fs.mkdtemp(path.join(await fs.realpath(os.tmpdir()), "openclaw-terminal-"));
-    database = openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: root } });
+    root = await fs.mkdtemp(path.join(await fs.realpath(os.tmpdir()), "natesclaw-terminal-"));
+    database = openNatesclawStateDatabase({ env: { NATESCLAW_STATE_DIR: root } });
     nowMs = 1_000;
     store = createWorkerSessionPlacementStore({ database, now: () => nowMs });
   });
 
   afterEach(async () => {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(root, { recursive: true, force: true });
   });
 
@@ -165,8 +165,8 @@ describe("worker placement terminal persistence", () => {
     expect(closedClaims).toEqual([claim]);
     unregister();
 
-    closeOpenClawStateDatabaseForTest();
-    database = openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: root } });
+    closeNatesclawStateDatabaseForTest();
+    database = openNatesclawStateDatabase({ env: { NATESCLAW_STATE_DIR: root } });
     store = createWorkerSessionPlacementStore({ database, now: () => nowMs });
     const reopened = store.get(SESSION.sessionId);
     expect(reopened).toMatchObject({ state: "failed", terminalAtMs: 2_000 });

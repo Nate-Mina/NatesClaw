@@ -28,4 +28,4 @@ export {
   getFeishuThreadBindingManager,
 } from "./src/thread-bindings.js";
 export { testing as feishuThreadBindingTesting } from "./src/thread-bindings.js";
-export { createClackPrompter } from "openclaw/plugin-sdk/setup-runtime";
+export { createClackPrompter } from "natesclaw/plugin-sdk/setup-runtime";

@@ -1,20 +1,20 @@
 import { setTimeout as sleep } from "node:timers/promises";
 // Qa Lab plugin module owns Telegram live adapter API and credential behavior.
-import type { TelegramBotMessage, TelegramBotUpdate } from "@openclaw/telegram/api.js";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { TelegramBotMessage, TelegramBotUpdate } from "@natesclaw/telegram/api.js";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   parseStrictPositiveInteger,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { readProviderJsonResponse } from "natesclaw/plugin-sdk/provider-http";
 import {
   computeBackoff,
   sleepWithAbort,
   type BackoffPolicy,
-} from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { isRecord, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { isRecord, uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 
 export type TelegramQaRuntimeEnv = {
@@ -121,9 +121,9 @@ const TELEGRAM_QA_POLL_RETRY_BACKOFF: BackoffPolicy = {
   jitter: 0,
 };
 const TELEGRAM_QA_ENV_FIELDS = [
-  { field: "groupId", envKey: "OPENCLAW_QA_TELEGRAM_GROUP_ID" },
-  { field: "driverToken", envKey: "OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN" },
-  { field: "sutToken", envKey: "OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN" },
+  { field: "groupId", envKey: "NATESCLAW_QA_TELEGRAM_GROUP_ID" },
+  { field: "driverToken", envKey: "NATESCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN" },
+  { field: "sutToken", envKey: "NATESCLAW_QA_TELEGRAM_SUT_BOT_TOKEN" },
 ] as const;
 
 const telegramQaCredentialPayloadSchema = z.object({
@@ -280,7 +280,7 @@ export function normalizeTelegramObservedMessage(
 }
 
 export function buildTelegramQaConfig(
-  baseCfg: OpenClawConfig,
+  baseCfg: NatesclawConfig,
   params: {
     groupId: string;
     sutToken: string;
@@ -288,7 +288,7 @@ export function buildTelegramQaConfig(
     sutAccountId: string;
     requireMention: boolean;
   },
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     ...baseCfg,
     agents: {
@@ -299,7 +299,7 @@ export function buildTelegramQaConfig(
           ...baseCfg.agents?.defaults?.models,
           "openai/gpt-5.6-luna": {
             ...baseCfg.agents?.defaults?.models?.["openai/gpt-5.6-luna"],
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "natesclaw" },
           },
         },
         skipBootstrap: true,
@@ -475,7 +475,7 @@ export async function flushTelegramUpdates(token: string) {
 }
 
 function resolveTelegramQaReadyTimeoutMs(env: NodeJS.ProcessEnv = process.env) {
-  const raw = env.OPENCLAW_QA_TRANSPORT_READY_TIMEOUT_MS;
+  const raw = env.NATESCLAW_QA_TRANSPORT_READY_TIMEOUT_MS;
   return raw
     ? (parseStrictPositiveInteger(raw) ?? TELEGRAM_QA_DEFAULT_READY_TIMEOUT_MS)
     : TELEGRAM_QA_DEFAULT_READY_TIMEOUT_MS;

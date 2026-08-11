@@ -1,45 +1,45 @@
-import { mergeAllowlist, summarizeMapping } from "openclaw/plugin-sdk/allow-from";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/channel-contract";
+import { mergeAllowlist, summarizeMapping } from "natesclaw/plugin-sdk/allow-from";
+import type { ChannelAccountSnapshot } from "natesclaw/plugin-sdk/channel-contract";
 import {
   createChannelInboundEnvelopeBuilder,
   createChannelPartialDeliveryError,
   implicitMentionKindWhen,
   isChannelPartialDeliveryError,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { resolveStableChannelMessageIngress } from "natesclaw/plugin-sdk/channel-ingress-runtime";
 import {
   createMessageReceiptFromOutboundResults,
   listMessageReceiptPlatformIds,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-import type { MarkdownTableMode, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { createChannelPairingController } from "natesclaw/plugin-sdk/channel-pairing";
+import type { MarkdownTableMode, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { isDangerousNameMatchingEnabled } from "natesclaw/plugin-sdk/dangerous-name-runtime";
 // Zalouser plugin module implements monitor behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   type HistoryEntry,
   createChannelHistoryWindow,
-} from "openclaw/plugin-sdk/reply-history";
+} from "natesclaw/plugin-sdk/reply-history";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
   type OutboundReplyPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
+} from "natesclaw/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
 import {
   resolveDefaultGroupPolicy,
   resolveOpenProviderRuntimeGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "natesclaw/plugin-sdk/runtime-group-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildZalouserGroupCandidates,
   findZalouserGroupEntry,
@@ -66,7 +66,7 @@ import {
 
 type ZalouserMonitorOptions = {
   account: ResolvedZalouserAccount;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   runtime: RuntimeEnv;
   abortSignal: AbortSignal;
   statusSink?: (patch: Omit<ChannelAccountSnapshot, "accountId">) => void;
@@ -220,7 +220,7 @@ async function sendZalouserDeliveryAcks(params: {
 async function processMessage(
   message: ZaloInboundMessage,
   account: ResolvedZalouserAccount,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   core: ZalouserCoreRuntime,
   runtime: RuntimeEnv,
   historyState: ZalouserGroupHistoryState,
@@ -699,7 +699,7 @@ async function deliverZalouserReply(params: {
   isGroup: boolean;
   runtime: RuntimeEnv;
   core: ZalouserCoreRuntime;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   accountId?: string;
   tableMode?: MarkdownTableMode;
 }): Promise<{ visibleReplySent: boolean }> {

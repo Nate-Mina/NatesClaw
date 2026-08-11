@@ -1,13 +1,13 @@
 ---
-summary: "Export OpenClaw diagnostics to OpenTelemetry collectors or stdout JSONL via the diagnostics-otel plugin"
+summary: "Export Natesclaw diagnostics to OpenTelemetry collectors or stdout JSONL via the diagnostics-otel plugin"
 title: "OpenTelemetry export"
 read_when:
-  - You want to send OpenClaw model usage, message flow, or session metrics to an OpenTelemetry collector
+  - You want to send Natesclaw model usage, message flow, or session metrics to an OpenTelemetry collector
   - You are wiring traces, metrics, or logs into Grafana, Datadog, Honeycomb, New Relic, Tempo, or another OTLP backend
   - You need the exact metric names, span names, or attribute shapes to build dashboards or alerts
 ---
 
-OpenClaw exports diagnostics through the official `diagnostics-otel` plugin
+Natesclaw exports diagnostics through the official `diagnostics-otel` plugin
 using **OTLP/HTTP (protobuf)**. Logs can also be written as stdout JSONL for
 container and sandbox log pipelines. Any collector or backend that accepts
 OTLP/HTTP works without code changes. For local file logs, see
@@ -29,7 +29,7 @@ OTLP/HTTP works without code changes. For local file logs, see
 ## Quick start
 
 ```bash
-openclaw plugins install clawhub:@openclaw/diagnostics-otel
+natesclaw plugins install clawhub:@natesclaw/diagnostics-otel
 ```
 
 ```json5
@@ -46,7 +46,7 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
       enabled: true,
       endpoint: "http://otel-collector:4318",
       protocol: "http/protobuf",
-      serviceName: "openclaw-gateway",
+      serviceName: "natesclaw-gateway",
       traces: true,
       metrics: true,
       logs: true,
@@ -57,13 +57,13 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
 }
 ```
 
-Or enable the plugin from the CLI: `openclaw plugins enable diagnostics-otel`.
+Or enable the plugin from the CLI: `natesclaw plugins enable diagnostics-otel`.
 
 <Note>
 `diagnostics.otel.protocol` accepts only `http/protobuf`. If a persisted config,
 including a value supplied through `${VAR}` interpolation, still resolves this
 field to the retired `grpc` value, run
-[`openclaw doctor --fix`](/cli/doctor). Doctor repairs directly authored values
+[`natesclaw doctor --fix`](/cli/doctor). Doctor repairs directly authored values
 and a sole internal single-file include that owns the top-level `diagnostics`
 section. For root or array includes, nested include chains, sibling overrides,
 external include targets, or another ambiguous source, Doctor leaves the files
@@ -94,23 +94,23 @@ stdout, or `both` for both.
 
 <Note>
 The shared `endpoint` and `OTEL_EXPORTER_OTLP_ENDPOINT` are bases for all
-enabled signals. OpenClaw appends `/v1/traces`, `/v1/metrics`, or `/v1/logs`
+enabled signals. Natesclaw appends `/v1/traces`, `/v1/metrics`, or `/v1/logs`
 to root and custom collector paths. For compatibility with hosted frontends,
 a shared endpoint already ending in one of those signal paths keeps that path
 for its matching signal and replaces the terminal segment for the others.
 
 Signal-specific `tracesEndpoint`, `metricsEndpoint`, and `logsEndpoint`
 settings, plus their matching `OTEL_EXPORTER_OTLP_*_ENDPOINT` fallbacks, are
-passed to the exporter as exact URLs. OpenClaw does not append or rewrite their
+passed to the exporter as exact URLs. Natesclaw does not append or rewrite their
 paths.
 </Note>
 
 ## Which processes export
 
 - **Gateway** starts the exporter at startup and exports from the Gateway
-  process for every run it executes, including `openclaw agent` turns
+  process for every run it executes, including `natesclaw agent` turns
   dispatched to it.
-- **One-shot local runs** (`openclaw agent --local`) execute in the CLI
+- **One-shot local runs** (`natesclaw agent --local`) execute in the CLI
   process. When OTel export is configured and
   the plugin is enabled, that same CLI process starts one exporter instance for
   the run and flushes buffered spans, metrics, and logs before the process exits.
@@ -121,14 +121,14 @@ paths.
   In JSON output mode, these one-shot runs suppress only the stdout JSONL log
   sink so command stdout stays reserved for the JSON response; OTLP traces,
   metrics, and logs continue when configured.
-- `openclaw agent exec` also runs the agent embedded in the CLI process, but
+- `natesclaw agent exec` also runs the agent embedded in the CLI process, but
   does not yet start this exporter, so its runs export no telemetry. Dispatch
-  through the Gateway, or use `openclaw agent --local`, when you need traces
+  through the Gateway, or use `natesclaw agent --local`, when you need traces
   from a headless run.
 
 ## Exporter health
 
-`openclaw doctor` and `openclaw status --all` show a bounded, redacted snapshot
+`natesclaw doctor` and `natesclaw status --all` show a bounded, redacted snapshot
 of the running Gateway's latest trusted exporter state for each signal and
 transport. For `diagnostics-otel`, the snapshot distinguishes:
 
@@ -148,7 +148,7 @@ categories rather than raw errors.
 The snapshot never includes endpoint values, headers, certificates, payloads,
 or raw error messages. Transport is retained only in this local health
 projection. It is not added to the existing
-`openclaw.telemetry.exporter.events` metric attributes, and existing Prometheus
+`natesclaw.telemetry.exporter.events` metric attributes, and existing Prometheus
 label sets are unchanged.
 
 ## Configuration reference
@@ -164,7 +164,7 @@ label sets are unchanged.
       metricsEndpoint: "http://otel-collector:4318/v1/metrics",
       logsEndpoint: "http://otel-collector:4318/v1/logs",
       protocol: "http/protobuf",
-      serviceName: "openclaw-gateway", // unset falls back to OTEL_SERVICE_NAME, then "openclaw"
+      serviceName: "natesclaw-gateway", // unset falls back to OTEL_SERVICE_NAME, then "natesclaw"
       metricNamePrefix: "acme.", // optional; include the separator
       headers: { "x-collector-token": "..." },
       traces: true,
@@ -179,12 +179,12 @@ label sets are unchanged.
 }
 ```
 
-`metricNamePrefix` replaces the default `openclaw.` prefix only on
-OpenClaw-owned metrics. For example, `"acme."` exports `openclaw.tokens` as
+`metricNamePrefix` replaces the default `natesclaw.` prefix only on
+Natesclaw-owned metrics. For example, `"acme."` exports `natesclaw.tokens` as
 `acme.tokens`; set it to `""` to export `tokens` with no prefix. Non-empty
 values must start with an ASCII letter, use only letters, digits, underscores,
 dots, hyphens, and slashes, and contain at most 128 characters. Set it to
-`"acme.openclaw."` if you want `acme.openclaw.tokens`. Standard
+`"acme.natesclaw."` if you want `acme.natesclaw.tokens`. Standard
 semantic-convention metrics such as
 `gen_ai.client.token.usage` and `gen_ai.client.operation.duration` keep their
 original names. Leave the option unset to preserve every current metric name.
@@ -197,22 +197,22 @@ dashboards, alerts, and recording rules that query the old names.
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OTEL_EXPORTER_OTLP_ENDPOINT`                                                                                                                                                                                                          | Fallback for `diagnostics.otel.endpoint` when the config key is unset.                                                                                                                                                                                                                                                                                                           |
 | `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` / `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` / `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`                                                                                                                      | Signal-specific endpoint fallbacks used when the matching `diagnostics.otel.*Endpoint` config key is unset. Signal-specific config wins over signal-specific env, which wins over the shared endpoint.                                                                                                                                                                           |
-| `OTEL_SERVICE_NAME`                                                                                                                                                                                                                    | Fallback for `diagnostics.otel.serviceName` when the config key is unset. Default service name is `openclaw`.                                                                                                                                                                                                                                                                    |
+| `OTEL_SERVICE_NAME`                                                                                                                                                                                                                    | Fallback for `diagnostics.otel.serviceName` when the config key is unset. Default service name is `natesclaw`.                                                                                                                                                                                                                                                                    |
 | `OTEL_EXPORTER_OTLP_PROTOCOL`                                                                                                                                                                                                          | Shared process-environment fallback used when `diagnostics.otel.protocol` and the signal-specific protocol variable are unset. Only `http/protobuf` enables a plugin-owned OTLP exporter.                                                                                                                                                                                        |
 | `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` / `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` / `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL`                                                                                                                      | Signal-specific protocol fallbacks used when `diagnostics.otel.protocol` is unset. A nonblank signal-specific value wins over the shared protocol value. Unsupported values disable only that plugin-owned OTLP signal.                                                                                                                                                          |
 | `OTEL_PROPAGATORS`                                                                                                                                                                                                                     | Propagators registered for each plugin-owned generation, including when `OTEL_SDK_DISABLED=true`. Defaults to `tracecontext,baggage`; `none` disables automatic propagation. Values are case-insensitive. Unavailable values and deprecated `jaeger` usage emit a plugin warning.                                                                                                |
 | `OTEL_SDK_DISABLED`                                                                                                                                                                                                                    | A case-insensitive `true` disables all plugin-owned trace, metric, log, and stdout routes before endpoint, protocol, or TLS setup. Any other value leaves the SDK enabled; unrecognized values emit a plugin warning and fall back to `false`. Async context and `OTEL_PROPAGATORS` remain active.                                                                               |
-| `OTEL_NODE_RESOURCE_DETECTORS`                                                                                                                                                                                                         | Selects resource detectors for plugin-owned trace and metric providers. Supported tokens are `env`, `host`, `os`, `process`, and `serviceinstance`; `all` runs them in host, OS, service-instance, process, environment order, while `none` disables detection. The default is environment, process, then host. Explicit OpenClaw service config wins detector attributes.       |
-| `OTEL_TRACES_SAMPLER` / `OTEL_TRACES_SAMPLER_ARG`                                                                                                                                                                                      | Standard OpenTelemetry sampler selection used when `diagnostics.otel.sampleRate` is unset. An explicit `sampleRate` remains the higher-precedence OpenClaw sampler.                                                                                                                                                                                                              |
+| `OTEL_NODE_RESOURCE_DETECTORS`                                                                                                                                                                                                         | Selects resource detectors for plugin-owned trace and metric providers. Supported tokens are `env`, `host`, `os`, `process`, and `serviceinstance`; `all` runs them in host, OS, service-instance, process, environment order, while `none` disables detection. The default is environment, process, then host. Explicit Natesclaw service config wins detector attributes.       |
+| `OTEL_TRACES_SAMPLER` / `OTEL_TRACES_SAMPLER_ARG`                                                                                                                                                                                      | Standard OpenTelemetry sampler selection used when `diagnostics.otel.sampleRate` is unset. An explicit `sampleRate` remains the higher-precedence Natesclaw sampler.                                                                                                                                                                                                              |
 | `OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT` / `OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT` / `OTEL_SPAN_EVENT_COUNT_LIMIT` / `OTEL_SPAN_LINK_COUNT_LIMIT` / `OTEL_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT` / `OTEL_SPAN_ATTRIBUTE_PER_LINK_COUNT_LIMIT` | Standard OpenTelemetry span limits applied by each plugin-owned tracer provider.                                                                                                                                                                                                                                                                                                 |
 | `OTEL_BSP_MAX_QUEUE_SIZE` / `OTEL_BSP_MAX_EXPORT_BATCH_SIZE` / `OTEL_BSP_SCHEDULE_DELAY` / `OTEL_BSP_EXPORT_TIMEOUT`                                                                                                                   | Batch span processor settings for plugin-owned trace export. Values must be positive; invalid values use OpenTelemetry defaults. Export batch size is capped at queue size.                                                                                                                                                                                                      |
 | `OTEL_METRIC_EXPORT_INTERVAL` / `OTEL_METRIC_EXPORT_TIMEOUT`                                                                                                                                                                           | Periodic metric export interval and timeout for plugin-owned metrics. Values must be positive; invalid values use OpenTelemetry defaults, and timeout is capped at the active interval. `diagnostics.otel.flushIntervalMs` overrides the interval.                                                                                                                               |
 | `OTEL_NODE_EXPERIMENTAL_SDK_METRICS`                                                                                                                                                                                                   | Enables OpenTelemetry SDK self-observation metrics for the private meter, tracer, and batch span processor when set to `true`.                                                                                                                                                                                                                                                   |
-| `OTEL_LOG_LEVEL`                                                                                                                                                                                                                       | Owned mode does not replace the process-global OpenTelemetry diagnostic logger because the public SDK APIs expose no generation-private equivalent. A preload or host may configure this variable before OpenClaw starts; the plugin preserves that external diagnostic owner.                                                                                                   |
+| `OTEL_LOG_LEVEL`                                                                                                                                                                                                                       | Owned mode does not replace the process-global OpenTelemetry diagnostic logger because the public SDK APIs expose no generation-private equivalent. A preload or host may configure this variable before Natesclaw starts; the plugin preserves that external diagnostic owner.                                                                                                   |
 | `OTEL_SEMCONV_STABILITY_OPT_IN`                                                                                                                                                                                                        | Set to `gen_ai_latest_experimental` to emit the latest GenAI inference span shape: `{gen_ai.operation.name} {gen_ai.request.model}` span names, `CLIENT` span kind, and `gen_ai.provider.name` instead of the legacy `gen_ai.system`. GenAI metrics always use bounded, low-cardinality attributes regardless.                                                                   |
-| `OPENCLAW_OTEL_PRELOADED`                                                                                                                                                                                                              | Set to `1` when another preload or host process already registered global OpenTelemetry providers. The plugin consumes external trace, metric, context, propagation, and logger ownership without registering, replacing, disabling, unregistering, or shutting it down. With `OTEL_SDK_DISABLED=true`, external ownership remains active while plugin-owned logs stay disabled. |
+| `NATESCLAW_OTEL_PRELOADED`                                                                                                                                                                                                              | Set to `1` when another preload or host process already registered global OpenTelemetry providers. The plugin consumes external trace, metric, context, propagation, and logger ownership without registering, replacing, disabling, unregistering, or shutting it down. With `OTEL_SDK_DISABLED=true`, external ownership remains active while plugin-owned logs stay disabled. |
 
-Without `OPENCLAW_OTEL_PRELOADED=1`, trace, metric, and log providers are
+Without `NATESCLAW_OTEL_PRELOADED=1`, trace, metric, and log providers are
 generation-private. The plugin publishes only its async context manager and
 propagator through the public OpenTelemetry APIs, and removes them only while
 those public behaviors still match the generation being stopped. A replacement
@@ -238,7 +238,7 @@ ID and sampling flags. Agent, harness, model-call, provider, tool-execution, and
 exec spans created inside the request remain on that trace, including spans
 recorded after their parent run has already finished. This allows a local
 experiment runner to create one Langfuse/OpenTelemetry trace per dataset item and
-correlate the corresponding OpenClaw execution.
+correlate the corresponding Natesclaw execution.
 
 Trace context is request-scoped, not connection-scoped. On a long-lived
 WebSocket, generate or inject the appropriate `traceparent` independently for
@@ -271,7 +271,7 @@ When `diagnostics-otel` tracing is active, outbound model requests may include
 a W3C `traceparent` header from the actual exporter-owned model-call span.
 Diagnostic trace IDs and span IDs only correlate events to that span; they are
 not used as outbound OTel identities. If the exporter cannot resolve a real
-span context, OpenClaw omits the header instead of naming an unexported parent.
+span context, Natesclaw omits the header instead of naming an unexported parent.
 Existing caller-supplied `traceparent` headers are removed or replaced, so
 plugins or custom provider options cannot spoof cross-service trace ancestry.
 
@@ -284,10 +284,10 @@ are also excluded: compatibility attributes retain only a redacted structural
 marker, while GenAI message attributes omit those parts.
 
 `toolInputs`/`toolOutputs` content is captured for the built-in agent
-runtime's tool executions (`openclaw.content.tool_input` and
+runtime's tool executions (`natesclaw.content.tool_input` and
 `gen_ai.tool.call.arguments` on completed/error spans;
-`openclaw.content.tool_output` and `gen_ai.tool.call.result` on completed
-spans). The `openclaw.content.*` names remain the stable OpenClaw attribute
+`natesclaw.content.tool_output` and `gen_ai.tool.call.result` on completed
+spans). The `natesclaw.content.*` names remain the stable Natesclaw attribute
 names; the `gen_ai.tool.call.*` copies mirror them for semconv-native viewers.
 External harness tool calls (Codex, Claude CLI) emit
 `tool.execution.*` spans without content payloads. Captured content travels on a
@@ -318,17 +318,17 @@ bus.
   scope inherit the request trace by default, while agent run and model-call
   spans are created as children so provider `traceparent` headers stay on the
   same trace.
-- **Model-call correlation:** `openclaw.model.call` spans include safe prompt
+- **Model-call correlation:** `natesclaw.model.call` spans include safe prompt
   component sizes by default and per-call token attributes when the provider
-  result exposes usage. `openclaw.model.usage` remains the run-level
+  result exposes usage. `natesclaw.model.usage` remains the run-level
   accounting span for aggregate cost, context, and channel dashboards, and
   stays on the same diagnostic trace when the emitting runtime has trusted
   trace context.
 
 ### Model-call observation units
 
-Every `openclaw.model.call` span identifies what its lifecycle measures through
-`openclaw.model_call.observation_unit`:
+Every `natesclaw.model.call` span identifies what its lifecycle measures through
+`natesclaw.model_call.observation_unit`:
 
 - `request` - one observable model/provider request. Native embedded model
   calls use this unit, and exporters treat a missing value as `request` for
@@ -342,18 +342,18 @@ output, usage, and hierarchy. Request spans use the API-derived GenAI operation
 (`chat`, `generate_content`, or `text_completion`), while turn spans use
 `gen_ai.operation.name = invoke_agent`. Both contribute to
 `gen_ai.client.operation.duration`, where the operation name keeps direct
-request latency separate from full-turn latency. OpenClaw's OTEL model-call
-metrics also include `openclaw.model_call.observation_unit`; the Prometheus
+request latency separate from full-turn latency. Natesclaw's OTEL model-call
+metrics also include `natesclaw.model_call.observation_unit`; the Prometheus
 model-call metrics expose the equivalent `observation_unit` label.
 
 ### Claude Code CLI model-call fidelity
 
-Claude Code CLI turns emit one synthetic, turn-level `openclaw.model.call`
-span. These are not Anthropic HTTP request spans. They use `openclaw.api =
-claude-code`, `openclaw.model_call.observation_unit = turn`, and identify
+Claude Code CLI turns emit one synthetic, turn-level `natesclaw.model.call`
+span. These are not Anthropic HTTP request spans. They use `natesclaw.api =
+claude-code`, `natesclaw.model_call.observation_unit = turn`, and identify
 the operation as `gen_ai.operation.name = invoke_agent`. They identify
-OpenClaw's CLI boundary through
-`openclaw.transport`:
+Natesclaw's CLI boundary through
+`natesclaw.transport`:
 
 - `stdio` - one-shot local Claude Code process.
 - `stdio-live` - one turn on a managed persistent Claude stdio session.
@@ -369,42 +369,42 @@ are capped at 128 KiB each; assistant output is capped at 128 KiB across at
 most 200 envelopes, with 16 KiB and one item reserved for a final visible
 fallback response. A marker records truncation when the limit is reached.
 
-OpenClaw gives Claude CLI turns the same ownership hierarchy used by other
-agent runtimes: `openclaw.harness.run` (`openclaw.harness.id = claude-cli`)
-contains `openclaw.run`, which contains the Claude `openclaw.model.call`
-span. The harness and run spans are synthetic OpenClaw turn boundaries, not
+Natesclaw gives Claude CLI turns the same ownership hierarchy used by other
+agent runtimes: `natesclaw.harness.run` (`natesclaw.harness.id = claude-cli`)
+contains `natesclaw.run`, which contains the Claude `natesclaw.model.call`
+span. The harness and run spans are synthetic Natesclaw turn boundaries, not
 Claude Code internal phases. One-shot and managed stdio turns use the same
 hierarchy; a real fresh-session retry creates another model-call child inside
-the same OpenClaw run.
+the same Natesclaw run.
 
-The span starts when OpenClaw admits the prepared CLI turn and ends only after
+The span starts when Natesclaw admits the prepared CLI turn and ends only after
 that turn succeeds or fails. For managed sessions, an interim success result
 does not end the span while Claude reports result-holding background agents or
 workflows; the final post-drain result does. Abort, timeout, process failure,
 output/parse failure, and other turn failures end the same span with an error.
 
 Claude Code reports per-assistant-message usage and may also report cumulative
-usage on its terminal result. OpenClaw reply accounting continues to use the
+usage on its terminal result. Natesclaw reply accounting continues to use the
 last assistant message so existing cost semantics do not change; the
 turn-level model-call span uses terminal cumulative usage when available,
 including cache-read and cache-creation tokens.
 
-For these CLI spans, byte and timing fields describe the observable OpenClaw
+For these CLI spans, byte and timing fields describe the observable Natesclaw
 CLI boundary:
 
-- `openclaw.model_call.request_bytes` is the UTF-8 size of the prompt value
+- `natesclaw.model_call.request_bytes` is the UTF-8 size of the prompt value
   sent over one-shot stdin/argv, or the managed stdio JSONL user envelope. It
   is not the size of Claude Code's hidden model request.
-- `openclaw.model_call.response_bytes` is the UTF-8 size of Claude CLI stdout
+- `natesclaw.model_call.response_bytes` is the UTF-8 size of Claude CLI stdout
   observed during the turn. It is not Anthropic HTTP response size.
-- `openclaw.model_call.time_to_first_byte_ms` is time to the first observable
+- `natesclaw.model_call.time_to_first_byte_ms` is time to the first observable
   Claude CLI stdout or stderr output. It is not network TTFB.
 
-With `captureContent` enabled, the span exports the effective prompt OpenClaw
+With `captureContent` enabled, the span exports the effective prompt Natesclaw
 sends to Claude Code and visible assistant text/tool-call identity
 through `gen_ai.input.messages` and `gen_ai.output.messages`. Tool arguments,
 internal thinking, opaque thinking signatures, tool results, and system prompts
-are omitted from the Claude assistant envelope. OpenClaw does not
+are omitted from the Claude assistant envelope. Natesclaw does not
 claim access to Claude Code's private system prompt, hidden resumed or
 compacted request payload, native internal tool schemas, raw Anthropic HTTP
 request, internal retries, upstream request id, or true network TTFB. Because
@@ -420,60 +420,60 @@ bounds; content remains off by default.
 
 ### Model usage
 
-- `openclaw.tokens` (counter, attrs: `openclaw.token`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.agent`)
-- `openclaw.cost.usd` (counter, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.run.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.context.tokens` (histogram, attrs: `openclaw.context`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
+- `natesclaw.tokens` (counter, attrs: `natesclaw.token`, `natesclaw.channel`, `natesclaw.provider`, `natesclaw.model`, `natesclaw.agent`)
+- `natesclaw.cost.usd` (counter, attrs: `natesclaw.channel`, `natesclaw.provider`, `natesclaw.model`)
+- `natesclaw.run.duration_ms` (histogram, attrs: `natesclaw.channel`, `natesclaw.provider`, `natesclaw.model`)
+- `natesclaw.context.tokens` (histogram, attrs: `natesclaw.context`, `natesclaw.channel`, `natesclaw.provider`, `natesclaw.model`)
 - `gen_ai.client.token.usage` (histogram, GenAI semantic-conventions metric, attrs: `gen_ai.token.type` = `input`/`output`, `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`)
 - `gen_ai.client.operation.duration` (histogram, seconds, GenAI semantic-conventions metric for model requests and synthetic agent turns; attrs: `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`, optional `error.type`; turn observations use `gen_ai.operation.name = invoke_agent`)
-- `openclaw.model_call.duration_ms` (histogram, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`, `openclaw.model_call.observation_unit`, plus `openclaw.errorCategory` and `openclaw.failureKind` on classified errors)
-- `openclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; for Claude Code CLI, the observable prompt input/envelope described above; no raw payload content)
-- `openclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed response chunk payloads; high-frequency text, thinking, and tool-call deltas count only incremental `delta` bytes; for Claude Code CLI, observed stdout bytes; no raw response content)
-- `openclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event; for Claude Code CLI, first observable CLI output rather than network TTFB)
-- `openclaw.model.failover` (counter, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.failover.to_provider`, `openclaw.failover.to_model`, `openclaw.failover.reason`, `openclaw.failover.suspended`, `openclaw.lane`)
-- `openclaw.skill.used` (counter, attrs: `openclaw.skill.name`, `openclaw.skill.source`, `openclaw.skill.activation`, optional `openclaw.agent`, optional `openclaw.toolName`)
+- `natesclaw.model_call.duration_ms` (histogram, attrs: `natesclaw.provider`, `natesclaw.model`, `natesclaw.api`, `natesclaw.transport`, `natesclaw.model_call.observation_unit`, plus `natesclaw.errorCategory` and `natesclaw.failureKind` on classified errors)
+- `natesclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; for Claude Code CLI, the observable prompt input/envelope described above; no raw payload content)
+- `natesclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed response chunk payloads; high-frequency text, thinking, and tool-call deltas count only incremental `delta` bytes; for Claude Code CLI, observed stdout bytes; no raw response content)
+- `natesclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event; for Claude Code CLI, first observable CLI output rather than network TTFB)
+- `natesclaw.model.failover` (counter, attrs: `natesclaw.provider`, `natesclaw.model`, `natesclaw.failover.to_provider`, `natesclaw.failover.to_model`, `natesclaw.failover.reason`, `natesclaw.failover.suspended`, `natesclaw.lane`)
+- `natesclaw.skill.used` (counter, attrs: `natesclaw.skill.name`, `natesclaw.skill.source`, `natesclaw.skill.activation`, optional `natesclaw.agent`, optional `natesclaw.toolName`)
 
 ### Message flow
 
-- `openclaw.webhook.received` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.error` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.message.queued` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.received` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.dispatch.started` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.dispatch.completed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`, `openclaw.source`)
-- `openclaw.message.dispatch.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`, `openclaw.source`)
-- `openclaw.message.processed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.delivery.started` (counter, attrs: `openclaw.channel`, `openclaw.delivery.kind`)
-- `openclaw.message.delivery.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`)
+- `natesclaw.webhook.received` (counter, attrs: `natesclaw.channel`, `natesclaw.webhook`)
+- `natesclaw.webhook.error` (counter, attrs: `natesclaw.channel`, `natesclaw.webhook`)
+- `natesclaw.webhook.duration_ms` (histogram, attrs: `natesclaw.channel`, `natesclaw.webhook`)
+- `natesclaw.message.queued` (counter, attrs: `natesclaw.channel`, `natesclaw.source`)
+- `natesclaw.message.received` (counter, attrs: `natesclaw.channel`, `natesclaw.source`)
+- `natesclaw.message.dispatch.started` (counter, attrs: `natesclaw.channel`, `natesclaw.source`)
+- `natesclaw.message.dispatch.completed` (counter, attrs: `natesclaw.channel`, `natesclaw.outcome`, `natesclaw.reason`, `natesclaw.source`)
+- `natesclaw.message.dispatch.duration_ms` (histogram, attrs: `natesclaw.channel`, `natesclaw.outcome`, `natesclaw.reason`, `natesclaw.source`)
+- `natesclaw.message.processed` (counter, attrs: `natesclaw.channel`, `natesclaw.outcome`)
+- `natesclaw.message.duration_ms` (histogram, attrs: `natesclaw.channel`, `natesclaw.outcome`)
+- `natesclaw.message.delivery.started` (counter, attrs: `natesclaw.channel`, `natesclaw.delivery.kind`)
+- `natesclaw.message.delivery.duration_ms` (histogram, attrs: `natesclaw.channel`, `natesclaw.delivery.kind`, `natesclaw.outcome`, `natesclaw.errorCategory`)
 
 ### Talk
 
-- `openclaw.talk.event` (counter, attrs: `openclaw.talk.event_type`, `openclaw.talk.mode`, `openclaw.talk.transport`, `openclaw.talk.brain`, `openclaw.talk.provider`)
-- `openclaw.talk.event.duration_ms` (histogram, attrs: same as `openclaw.talk.event`; emitted when a Talk event reports duration)
-- `openclaw.talk.audio.bytes` (histogram, attrs: same as `openclaw.talk.event`; emitted for Talk audio frame events that report byte length)
+- `natesclaw.talk.event` (counter, attrs: `natesclaw.talk.event_type`, `natesclaw.talk.mode`, `natesclaw.talk.transport`, `natesclaw.talk.brain`, `natesclaw.talk.provider`)
+- `natesclaw.talk.event.duration_ms` (histogram, attrs: same as `natesclaw.talk.event`; emitted when a Talk event reports duration)
+- `natesclaw.talk.audio.bytes` (histogram, attrs: same as `natesclaw.talk.event`; emitted for Talk audio frame events that report byte length)
 
 ### Queues and sessions
 
-- `openclaw.queue.lane.enqueue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.lane.dequeue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.depth` (histogram, attrs: `openclaw.lane` or `openclaw.channel=heartbeat`)
-- `openclaw.queue.wait_ms` (histogram, attrs: `openclaw.lane`)
-- `openclaw.session.state` (counter, attrs: `openclaw.state`, `openclaw.reason`)
-- `openclaw.session.stuck` (counter, attrs: `openclaw.state`; emitted for recoverable stale session bookkeeping)
-- `openclaw.session.stuck_age_ms` (histogram, attrs: `openclaw.state`; emitted for recoverable stale session bookkeeping)
-- `openclaw.session.turn.created` (counter, attrs: `openclaw.agent`, `openclaw.channel`, `openclaw.trigger`)
-- `openclaw.session.recovery.requested` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.completed` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.status`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
-- `openclaw.run.attempt` (counter, attrs: `openclaw.attempt`)
+- `natesclaw.queue.lane.enqueue` (counter, attrs: `natesclaw.lane`)
+- `natesclaw.queue.lane.dequeue` (counter, attrs: `natesclaw.lane`)
+- `natesclaw.queue.depth` (histogram, attrs: `natesclaw.lane` or `natesclaw.channel=heartbeat`)
+- `natesclaw.queue.wait_ms` (histogram, attrs: `natesclaw.lane`)
+- `natesclaw.session.state` (counter, attrs: `natesclaw.state`, `natesclaw.reason`)
+- `natesclaw.session.stuck` (counter, attrs: `natesclaw.state`; emitted for recoverable stale session bookkeeping)
+- `natesclaw.session.stuck_age_ms` (histogram, attrs: `natesclaw.state`; emitted for recoverable stale session bookkeeping)
+- `natesclaw.session.turn.created` (counter, attrs: `natesclaw.agent`, `natesclaw.channel`, `natesclaw.trigger`)
+- `natesclaw.session.recovery.requested` (counter, attrs: `natesclaw.state`, `natesclaw.action`, `natesclaw.active_work_kind`, `natesclaw.reason`)
+- `natesclaw.session.recovery.completed` (counter, attrs: `natesclaw.state`, `natesclaw.action`, `natesclaw.status`, `natesclaw.active_work_kind`, `natesclaw.reason`)
+- `natesclaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
+- `natesclaw.run.attempt` (counter, attrs: `natesclaw.attempt`)
 
 ### Session liveness telemetry
 
-A `processing` session does not age toward the built-in liveness threshold while OpenClaw observes reply, tool, status, block, or ACP runtime progress. Typing keepalives do not count as progress, so a silent model or harness can still be detected.
+A `processing` session does not age toward the built-in liveness threshold while Natesclaw observes reply, tool, status, block, or ACP runtime progress. Typing keepalives do not count as progress, so a silent model or harness can still be detected.
 
-OpenClaw classifies sessions by the work it can still observe:
+Natesclaw classifies sessions by the work it can still observe:
 
 - `session.long_running`: active embedded work, model calls, or tool calls
   are still making progress. Owned silent model calls also report as long-running before the built-in abort threshold, so slow or non-streaming model providers do not look like stalled gateway sessions while abort-observable.
@@ -492,8 +492,8 @@ Recovery emits structured `session.recovery.requested` and
 only after a mutating recovery outcome (`aborted` or `released`) and only if
 the same processing generation is still current.
 
-Only `session.stuck` emits the `openclaw.session.stuck` counter, the
-`openclaw.session.stuck_age_ms` histogram, and the `openclaw.session.stuck`
+Only `session.stuck` emits the `natesclaw.session.stuck` counter, the
+`natesclaw.session.stuck_age_ms` histogram, and the `natesclaw.session.stuck`
 span. Repeated `session.stuck` diagnostics back off while the session remains
 unchanged, so dashboards should alert on sustained increases rather than
 every heartbeat tick. For the config knob and defaults, see
@@ -501,86 +501,86 @@ every heartbeat tick. For the config knob and defaults, see
 
 Liveness warnings also emit:
 
-- `openclaw.liveness.warning` (counter, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_delay_p99_ms` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_delay_max_ms` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_utilization` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.cpu_core_ratio` (histogram, attrs: `openclaw.liveness.reason`)
+- `natesclaw.liveness.warning` (counter, attrs: `natesclaw.liveness.reason`)
+- `natesclaw.liveness.event_loop_delay_p99_ms` (histogram, attrs: `natesclaw.liveness.reason`)
+- `natesclaw.liveness.event_loop_delay_max_ms` (histogram, attrs: `natesclaw.liveness.reason`)
+- `natesclaw.liveness.event_loop_utilization` (histogram, attrs: `natesclaw.liveness.reason`)
+- `natesclaw.liveness.cpu_core_ratio` (histogram, attrs: `natesclaw.liveness.reason`)
 
 ### Harness lifecycle
 
-- `openclaw.harness.duration_ms` (histogram, attrs: `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.harness.phase` on errors)
+- `natesclaw.harness.duration_ms` (histogram, attrs: `natesclaw.harness.id`, `natesclaw.harness.plugin`, `natesclaw.outcome`, `natesclaw.harness.phase` on errors)
 
 ### Tool execution and loop detection
 
-- `openclaw.tool.execution.duration_ms` (histogram, attrs: `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.tool.source`, `openclaw.tool.owner`, `openclaw.tool.params.kind`, plus `openclaw.errorCategory` on errors)
-- `openclaw.tool.execution.blocked` (counter, attrs: `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.tool.source`, `openclaw.tool.owner`, `openclaw.tool.params.kind`, `openclaw.deniedReason`)
-- `openclaw.tool.loop` (counter, attrs: `openclaw.toolName`, `openclaw.loop.level`, `openclaw.loop.action`, `openclaw.loop.detector`, `openclaw.loop.count`, optional `openclaw.loop.paired_tool`; emitted when a repetitive tool-call loop is detected)
+- `natesclaw.tool.execution.duration_ms` (histogram, attrs: `gen_ai.tool.name`, `natesclaw.toolName`, `natesclaw.tool.source`, `natesclaw.tool.owner`, `natesclaw.tool.params.kind`, plus `natesclaw.errorCategory` on errors)
+- `natesclaw.tool.execution.blocked` (counter, attrs: `gen_ai.tool.name`, `natesclaw.toolName`, `natesclaw.tool.source`, `natesclaw.tool.owner`, `natesclaw.tool.params.kind`, `natesclaw.deniedReason`)
+- `natesclaw.tool.loop` (counter, attrs: `natesclaw.toolName`, `natesclaw.loop.level`, `natesclaw.loop.action`, `natesclaw.loop.detector`, `natesclaw.loop.count`, optional `natesclaw.loop.paired_tool`; emitted when a repetitive tool-call loop is detected)
 
 ### Exec
 
-- `openclaw.exec.duration_ms` (histogram, attrs: `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`)
+- `natesclaw.exec.duration_ms` (histogram, attrs: `natesclaw.exec.target`, `natesclaw.exec.mode`, `natesclaw.outcome`, `natesclaw.failureKind`)
 
 ### Diagnostics internals (memory, payloads, exporter health)
 
-- `openclaw.payload.large` (counter, attrs: `openclaw.payload.surface`, `openclaw.payload.action`, `openclaw.channel`, `openclaw.plugin`, `openclaw.reason`)
-- `openclaw.payload.large_bytes` (histogram, attrs: same as `openclaw.payload.large`)
-- `openclaw.memory.rss_bytes` / `openclaw.memory.heap_used_bytes` / `openclaw.memory.heap_total_bytes` / `openclaw.memory.external_bytes` / `openclaw.memory.array_buffers_bytes` (histograms, no attrs; process memory samples)
-- `openclaw.memory.pressure` (counter, attrs: `openclaw.memory.level`, `openclaw.memory.reason`)
-- `openclaw.diagnostic.async_queue.dropped` (counter, attrs: `openclaw.diagnostic.async_queue.drop_class`; internal diagnostic-queue backpressure drops)
-- `openclaw.telemetry.exporter.events` (counter, attrs: `openclaw.exporter`, `openclaw.signal`, `openclaw.status`, optional `openclaw.reason`, optional `openclaw.errorCategory`; exporter lifecycle/failure self-telemetry)
+- `natesclaw.payload.large` (counter, attrs: `natesclaw.payload.surface`, `natesclaw.payload.action`, `natesclaw.channel`, `natesclaw.plugin`, `natesclaw.reason`)
+- `natesclaw.payload.large_bytes` (histogram, attrs: same as `natesclaw.payload.large`)
+- `natesclaw.memory.rss_bytes` / `natesclaw.memory.heap_used_bytes` / `natesclaw.memory.heap_total_bytes` / `natesclaw.memory.external_bytes` / `natesclaw.memory.array_buffers_bytes` (histograms, no attrs; process memory samples)
+- `natesclaw.memory.pressure` (counter, attrs: `natesclaw.memory.level`, `natesclaw.memory.reason`)
+- `natesclaw.diagnostic.async_queue.dropped` (counter, attrs: `natesclaw.diagnostic.async_queue.drop_class`; internal diagnostic-queue backpressure drops)
+- `natesclaw.telemetry.exporter.events` (counter, attrs: `natesclaw.exporter`, `natesclaw.signal`, `natesclaw.status`, optional `natesclaw.reason`, optional `natesclaw.errorCategory`; exporter lifecycle/failure self-telemetry)
 
 ## Exported spans
 
-- `openclaw.model.usage`
-  - `openclaw.channel`, `openclaw.provider`, `openclaw.model`
-  - Optional host-derived `openclaw.plugin` only for trusted plugin runtime completions
-  - `openclaw.tokens.*` (input/output/cache_read/cache_write/total)
+- `natesclaw.model.usage`
+  - `natesclaw.channel`, `natesclaw.provider`, `natesclaw.model`
+  - Optional host-derived `natesclaw.plugin` only for trusted plugin runtime completions
+  - `natesclaw.tokens.*` (input/output/cache_read/cache_write/total)
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
   - `gen_ai.request.model`, `gen_ai.operation.name`, `gen_ai.usage.*`
 
 Plugin attribution is span-only. It does not add a plugin dimension to shared
 OpenTelemetry metrics or change Prometheus metric labels.
 
-- `openclaw.run`
-  - `openclaw.outcome`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.errorCategory`
-- `openclaw.model.call`
+- `natesclaw.run`
+  - `natesclaw.outcome`, `natesclaw.channel`, `natesclaw.provider`, `natesclaw.model`, `natesclaw.errorCategory`
+- `natesclaw.model.call`
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
-  - `gen_ai.request.model`, `gen_ai.operation.name`, `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`, `openclaw.model_call.observation_unit` (`request` or `turn`)
-  - `openclaw.errorCategory`, `error.type`, and optional `openclaw.failureKind` on errors
-  - `openclaw.model_call.request_bytes`, `openclaw.model_call.response_bytes`, `openclaw.model_call.time_to_first_byte_ms`
-  - `openclaw.model_call.prompt.input_messages_count`, `openclaw.model_call.prompt.input_messages_chars`, `openclaw.model_call.prompt.system_prompt_chars`, `openclaw.model_call.prompt.tool_definitions_count`, `openclaw.model_call.prompt.tool_definitions_chars`, `openclaw.model_call.prompt.total_chars` (safe component sizes only, no prompt text)
-  - `openclaw.model_call.usage.*` and `gen_ai.usage.*` when the result carries usage for that request or aggregate turn
-  - Span event `openclaw.provider.request` with attribute `openclaw.upstreamRequestIdHash` (bounded, hash-based) when the upstream provider result exposes a request id; raw ids are never exported
-  - With `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental`, request spans use the latest GenAI inference span name `{gen_ai.operation.name} {gen_ai.request.model}`. Turn spans use `invoke_agent` because OpenClaw does not claim a native agent name from the opaque CLI boundary. Both use `CLIENT` span kind instead of `openclaw.model.call`.
-- `openclaw.harness.run`
-  - `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.provider`, `openclaw.model`, `openclaw.channel`
-  - On completion: `openclaw.harness.result_classification`, `openclaw.harness.yield_detected`, `openclaw.harness.items.started`, `openclaw.harness.items.completed`, `openclaw.harness.items.active`
-  - On error: `openclaw.harness.phase`, `openclaw.errorCategory`, optional `openclaw.harness.cleanup_failed`
-- `openclaw.tool.execution`
-  - `gen_ai.tool.name`, `gen_ai.operation.name` (`execute_tool`), `openclaw.toolName`, `openclaw.tool.source`, optional `gen_ai.tool.call.id`, `openclaw.tool.owner`, `openclaw.tool.params.*`
-  - Optional `openclaw.errorCategory`/`openclaw.errorCode` on errors, `openclaw.deniedReason` and `openclaw.outcome=blocked` when denied by policy or sandbox
-- `openclaw.exec`
-  - `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`, `openclaw.exec.command_length`, `openclaw.exec.exit_code`, `openclaw.exec.exit_signal`, `openclaw.exec.timed_out`
-- `openclaw.webhook.processed`
-  - `openclaw.channel`, `openclaw.webhook`
-- `openclaw.webhook.error`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.error`
-- `openclaw.message.processed`
-  - `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`
-- `openclaw.message.delivery`
-  - `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`, `openclaw.delivery.result_count`
-- `openclaw.session.stuck`
-  - `openclaw.state`, `openclaw.ageMs`, `openclaw.queueDepth`
-- `openclaw.context.assembled`
-  - `openclaw.prompt.size`, `openclaw.history.size`, `openclaw.context.tokens`, `openclaw.errorCategory` (no prompt, history, response, or session-key content)
-- `openclaw.tool.loop`
-  - `openclaw.toolName`, `openclaw.loop.level`, `openclaw.loop.action`, `openclaw.loop.detector`, `openclaw.loop.count`, optional `openclaw.loop.paired_tool` (no loop messages, params, or tool output)
-- `openclaw.memory.pressure`
-  - `openclaw.memory.level`, `openclaw.memory.reason`, `openclaw.memory.rss_bytes`, `openclaw.memory.heap_used_bytes`, `openclaw.memory.heap_total_bytes`, `openclaw.memory.external_bytes`, `openclaw.memory.array_buffers_bytes`, optional `openclaw.memory.threshold_bytes`/`openclaw.memory.rss_growth_bytes`/`openclaw.memory.window_ms`
+  - `gen_ai.request.model`, `gen_ai.operation.name`, `natesclaw.provider`, `natesclaw.model`, `natesclaw.api`, `natesclaw.transport`, `natesclaw.model_call.observation_unit` (`request` or `turn`)
+  - `natesclaw.errorCategory`, `error.type`, and optional `natesclaw.failureKind` on errors
+  - `natesclaw.model_call.request_bytes`, `natesclaw.model_call.response_bytes`, `natesclaw.model_call.time_to_first_byte_ms`
+  - `natesclaw.model_call.prompt.input_messages_count`, `natesclaw.model_call.prompt.input_messages_chars`, `natesclaw.model_call.prompt.system_prompt_chars`, `natesclaw.model_call.prompt.tool_definitions_count`, `natesclaw.model_call.prompt.tool_definitions_chars`, `natesclaw.model_call.prompt.total_chars` (safe component sizes only, no prompt text)
+  - `natesclaw.model_call.usage.*` and `gen_ai.usage.*` when the result carries usage for that request or aggregate turn
+  - Span event `natesclaw.provider.request` with attribute `natesclaw.upstreamRequestIdHash` (bounded, hash-based) when the upstream provider result exposes a request id; raw ids are never exported
+  - With `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental`, request spans use the latest GenAI inference span name `{gen_ai.operation.name} {gen_ai.request.model}`. Turn spans use `invoke_agent` because Natesclaw does not claim a native agent name from the opaque CLI boundary. Both use `CLIENT` span kind instead of `natesclaw.model.call`.
+- `natesclaw.harness.run`
+  - `natesclaw.harness.id`, `natesclaw.harness.plugin`, `natesclaw.outcome`, `natesclaw.provider`, `natesclaw.model`, `natesclaw.channel`
+  - On completion: `natesclaw.harness.result_classification`, `natesclaw.harness.yield_detected`, `natesclaw.harness.items.started`, `natesclaw.harness.items.completed`, `natesclaw.harness.items.active`
+  - On error: `natesclaw.harness.phase`, `natesclaw.errorCategory`, optional `natesclaw.harness.cleanup_failed`
+- `natesclaw.tool.execution`
+  - `gen_ai.tool.name`, `gen_ai.operation.name` (`execute_tool`), `natesclaw.toolName`, `natesclaw.tool.source`, optional `gen_ai.tool.call.id`, `natesclaw.tool.owner`, `natesclaw.tool.params.*`
+  - Optional `natesclaw.errorCategory`/`natesclaw.errorCode` on errors, `natesclaw.deniedReason` and `natesclaw.outcome=blocked` when denied by policy or sandbox
+- `natesclaw.exec`
+  - `natesclaw.exec.target`, `natesclaw.exec.mode`, `natesclaw.outcome`, `natesclaw.failureKind`, `natesclaw.exec.command_length`, `natesclaw.exec.exit_code`, `natesclaw.exec.exit_signal`, `natesclaw.exec.timed_out`
+- `natesclaw.webhook.processed`
+  - `natesclaw.channel`, `natesclaw.webhook`
+- `natesclaw.webhook.error`
+  - `natesclaw.channel`, `natesclaw.webhook`, `natesclaw.error`
+- `natesclaw.message.processed`
+  - `natesclaw.channel`, `natesclaw.outcome`, `natesclaw.reason`
+- `natesclaw.message.delivery`
+  - `natesclaw.channel`, `natesclaw.delivery.kind`, `natesclaw.outcome`, `natesclaw.errorCategory`, `natesclaw.delivery.result_count`
+- `natesclaw.session.stuck`
+  - `natesclaw.state`, `natesclaw.ageMs`, `natesclaw.queueDepth`
+- `natesclaw.context.assembled`
+  - `natesclaw.prompt.size`, `natesclaw.history.size`, `natesclaw.context.tokens`, `natesclaw.errorCategory` (no prompt, history, response, or session-key content)
+- `natesclaw.tool.loop`
+  - `natesclaw.toolName`, `natesclaw.loop.level`, `natesclaw.loop.action`, `natesclaw.loop.detector`, `natesclaw.loop.count`, optional `natesclaw.loop.paired_tool` (no loop messages, params, or tool output)
+- `natesclaw.memory.pressure`
+  - `natesclaw.memory.level`, `natesclaw.memory.reason`, `natesclaw.memory.rss_bytes`, `natesclaw.memory.heap_used_bytes`, `natesclaw.memory.heap_total_bytes`, `natesclaw.memory.external_bytes`, `natesclaw.memory.array_buffers_bytes`, optional `natesclaw.memory.threshold_bytes`/`natesclaw.memory.rss_growth_bytes`/`natesclaw.memory.window_ms`
 
 When content capture is explicitly enabled, model and tool spans can also
-include bounded, redacted `openclaw.content.*` attributes for the specific
+include bounded, redacted `natesclaw.content.*` attributes for the specific
 content classes you opted into.
 
 ## Diagnostic event catalog
@@ -648,20 +648,20 @@ record. A representative event has this shape:
   it is not provider-reported billing. Trace context can also include
   `parentSpanId`.
 
-The Gateway's `/tmp/openclaw/openclaw-YYYY-MM-DD.log` JSONL file and
+The Gateway's `/tmp/natesclaw/natesclaw-YYYY-MM-DD.log` JSONL file and
 `diagnostics.otel.logsExporter: "stdout"` contain ordinary log records, not raw
 `model.usage` events. Public diagnostic subscriptions and
 `diagnostics.stability` do not expose trusted core usage events. The
-diagnostics-otel plugin converts them to metrics such as `openclaw.tokens` and
-`openclaw.cost.usd` and to `openclaw.model.usage` spans; those usage metrics
+diagnostics-otel plugin converts them to metrics such as `natesclaw.tokens` and
+`natesclaw.cost.usd` and to `natesclaw.model.usage` spans; those usage metrics
 and spans intentionally omit session identifiers.
 
 For an external integration that needs session-correlated usage, query the
 authenticated Gateway instead:
 
 ```bash
-openclaw gateway call sessions.usage --params '{"range":"30d","agentScope":"all"}' --json
-openclaw gateway usage-cost --days 30 --all-agents --json
+natesclaw gateway call sessions.usage --params '{"range":"30d","agentScope":"all"}' --json
+natesclaw gateway usage-cost --days 30 --all-agents --json
 ```
 
 Both commands require `operator.read`. `sessions.usage` can include per-session
@@ -732,7 +732,7 @@ flags. Flags are case-insensitive and support wildcards (`telegram.*` or
 Or as a one-off env override:
 
 ```bash
-OPENCLAW_DIAGNOSTICS=telegram.http,telegram.payload openclaw gateway
+NATESCLAW_DIAGNOSTICS=telegram.http,telegram.payload natesclaw gateway
 ```
 
 Flag output goes to the standard log file (`logging.file`) and is still
@@ -748,13 +748,13 @@ redacted by the always-on log redaction policy. Full guide:
 ```
 
 Or leave `diagnostics-otel` out of `plugins.allow`, or run
-`openclaw plugins disable diagnostics-otel`.
+`natesclaw plugins disable diagnostics-otel`.
 
 When the plugin would otherwise own NodeSDK, keep propagation available while
 disabling every plugin-owned exporter, listener, health route, and stdout sink:
 
 ```bash
-OTEL_SDK_DISABLED=true openclaw gateway
+OTEL_SDK_DISABLED=true natesclaw gateway
 ```
 
 ## Related

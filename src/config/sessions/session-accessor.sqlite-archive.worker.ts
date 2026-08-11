@@ -1,8 +1,8 @@
 /** Worker entrypoint for SQLite transcript archive materialization off the gateway event loop. */
 import { parentPort, workerData } from "node:worker_threads";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import { withOpenClawAgentDatabaseReadOnly } from "../../state/openclaw-agent-db-readonly.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
+import { withNatesclawAgentDatabaseReadOnly } from "../../state/natesclaw-agent-db-readonly.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
 import {
   sqliteSessionStateDeleteSnapshotsEqual,
   type SessionStateDeleteSnapshot,
@@ -14,7 +14,7 @@ import {
 import { readSessionStateDeleteSnapshot } from "./session-accessor.sqlite-delete-snapshot.js";
 import { serializeJsonlLines } from "./transcript-jsonl.js";
 
-type TranscriptArchiveDatabase = Pick<OpenClawAgentKyselyDatabase, "transcript_events">;
+type TranscriptArchiveDatabase = Pick<NatesclawAgentKyselyDatabase, "transcript_events">;
 
 function isSqliteTranscriptArchiveWorkerData(value: unknown): boolean {
   return (
@@ -106,7 +106,7 @@ function readTranscriptArchiveContent(
 export function materializeTranscriptArchiveInWorker(
   plan: TranscriptArchiveWorkerPlan,
 ): TranscriptArchiveWorkerResult {
-  const opened = withOpenClawAgentDatabaseReadOnly(
+  const opened = withNatesclawAgentDatabaseReadOnly(
     (database) => {
       let transactionOpen = false;
       try {

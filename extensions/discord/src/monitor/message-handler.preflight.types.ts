@@ -1,8 +1,8 @@
 // Discord type declarations define plugin contracts.
-import type { InboundEventKind } from "openclaw/plugin-sdk/channel-inbound";
-import type { OpenClawConfig, ReplyToMode } from "openclaw/plugin-sdk/config-contracts";
-import type { SessionBindingRecord } from "openclaw/plugin-sdk/conversation-runtime";
-import type { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
+import type { InboundEventKind } from "natesclaw/plugin-sdk/channel-inbound";
+import type { NatesclawConfig, ReplyToMode } from "natesclaw/plugin-sdk/config-contracts";
+import type { SessionBindingRecord } from "natesclaw/plugin-sdk/conversation-runtime";
+import type { resolveAgentRoute } from "natesclaw/plugin-sdk/routing";
 import type { ChannelType, Client, User } from "../internal/discord.js";
 import type { DiscordChannelConfigResolved, DiscordGuildEntryResolved } from "./allow-list.js";
 import type { DiscordIngressLifecycle } from "./ingress.js";
@@ -14,15 +14,15 @@ import type { DiscordSenderIdentity } from "./sender-identity.js";
 export type { DiscordSenderIdentity } from "./sender-identity.js";
 import type { DiscordThreadChannel } from "./threading.js";
 
-type LoadedConfig = OpenClawConfig;
-export type RuntimeEnv = import("openclaw/plugin-sdk/runtime-env").RuntimeEnv;
+type LoadedConfig = NatesclawConfig;
+export type RuntimeEnv = import("natesclaw/plugin-sdk/runtime-env").RuntimeEnv;
 
 export type DiscordMessageEvent = import("./listeners.js").DiscordMessageEvent;
 
 type DiscordMessagePreflightSharedFields = {
   cfg: LoadedConfig;
   discordConfig: NonNullable<
-    import("openclaw/plugin-sdk/config-contracts").OpenClawConfig["channels"]
+    import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig["channels"]
   >["discord"];
   accountId: string;
   token: string;

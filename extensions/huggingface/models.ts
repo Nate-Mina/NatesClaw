@@ -1,13 +1,13 @@
 // Huggingface plugin module implements models behavior.
-import { withTrustedEnvProxyGuardedFetchMode } from "openclaw/plugin-sdk/fetch-runtime";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { buildLiveModelProviderConfig } from "openclaw/plugin-sdk/provider-catalog-live-runtime";
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-model-types";
+import { withTrustedEnvProxyGuardedFetchMode } from "natesclaw/plugin-sdk/fetch-runtime";
+import { resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
+import { buildLiveModelProviderConfig } from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
+import type { ModelDefinitionConfig } from "natesclaw/plugin-sdk/provider-model-types";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isHuggingfaceModelDiscoveryTestEnvironment } from "./model-discovery-env.js";
 
 export const HUGGINGFACE_BASE_URL = "https://router.huggingface.co/v1";

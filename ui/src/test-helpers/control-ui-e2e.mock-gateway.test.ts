@@ -159,7 +159,7 @@ describe("mock gateway stateful config", () => {
     });
     window.sessionStorage.clear();
     window.sessionStorage.setItem(
-      "openclaw.control-ui-e2e.configState",
+      "natesclaw.control-ui-e2e.configState",
       JSON.stringify({ raw, revision: 2 }),
     );
     // oxlint-disable-next-line typescript/no-implied-eval -- Executes the generated init script standalone, proving it captures no module closures.
@@ -288,11 +288,11 @@ describe("mock gateway stateful sessions", () => {
 
     const gateway = (
       window as unknown as {
-        openclawControlUiE2eGateway?: {
+        natesclawControlUiE2eGateway?: {
           resolveDeferred: (method: string, payload?: unknown) => void;
         };
       }
-    ).openclawControlUiE2eGateway;
+    ).natesclawControlUiE2eGateway;
     if (!gateway) {
       throw new Error("Mock Gateway was not installed");
     }

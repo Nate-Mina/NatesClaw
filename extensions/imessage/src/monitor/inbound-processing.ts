@@ -15,26 +15,26 @@ import {
   toInboundMediaFactsWithMetadata,
   type ChannelInboundMediaInput,
   type MediaPlaceholderTextFact,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
   type ChannelIngressIdentityDescriptor,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
+} from "natesclaw/plugin-sdk/channel-ingress-runtime";
 import {
   buildChannelGroupsScopeTree,
   resolveChannelGroupPolicy,
   resolveScopeRequireMention,
-} from "openclaw/plugin-sdk/channel-policy";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-auth-native";
-import type { DmPolicy, GroupPolicy, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveChannelContextVisibilityMode } from "openclaw/plugin-sdk/context-visibility-runtime";
-import { createChannelHistoryWindow, type HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import type { FinalizedMsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { sanitizeTerminalText } from "openclaw/plugin-sdk/text-chunking";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/channel-policy";
+import { hasControlCommand } from "natesclaw/plugin-sdk/command-auth-native";
+import type { DmPolicy, GroupPolicy, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveChannelContextVisibilityMode } from "natesclaw/plugin-sdk/context-visibility-runtime";
+import { createChannelHistoryWindow, type HistoryEntry } from "natesclaw/plugin-sdk/reply-history";
+import type { FinalizedMsgContext } from "natesclaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute } from "natesclaw/plugin-sdk/routing";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { sanitizeTerminalText } from "natesclaw/plugin-sdk/text-chunking";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { resolveIMessageAccount } from "../accounts.js";
 import { resolveIMessageConversationRoute } from "../conversation-route.js";
 import {
@@ -394,7 +394,7 @@ type IMessageInboundDecision =
   | IMessageInboundDispatchDecision;
 
 export async function resolveIMessageInboundDecision(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   message: IMessagePayload;
   opts?: Pick<MonitorIMessageOpts, "requireMention">;
@@ -879,7 +879,7 @@ export async function resolveIMessageInboundDecision(params: {
 }
 
 export async function buildIMessageInboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   decision: IMessageInboundDispatchDecision;
   message: IMessagePayload;
   envelopeOptions?: EnvelopeFormatOptions;
@@ -1097,7 +1097,7 @@ function buildIMessageEchoScope(params: {
 }
 
 export function buildDirectIMessageReplyTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   sender: string;
 }): string {

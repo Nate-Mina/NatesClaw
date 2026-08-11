@@ -72,7 +72,7 @@ describe("tsdown config", () => {
   it("keeps public SDK declarations together and isolates private runtime declarations", () => {
     const [publicDeclarationSources = [], privateDeclarationSources = []] =
       TSDOWN_UNIFIED_DTS_CONFIG_GROUPS.filter((name) =>
-        name.startsWith("openclaw-dts-plugin-sdk-"),
+        name.startsWith("natesclaw-dts-plugin-sdk-"),
       ).map((name) => {
         const dts = configs.find((entry) => entry.name === name)?.dts;
         return dts && typeof dts === "object" && Array.isArray(dts.entry) ? dts.entry : [];

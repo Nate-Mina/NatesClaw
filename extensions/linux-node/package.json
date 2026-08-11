@@ -1,15 +1,15 @@
 {
-  "name": "@openclaw/linux-node",
+  "name": "@natesclaw/linux-node",
   "version": "2026.8.1",
-  "description": "OpenClaw Linux node device capabilities",
+  "description": "Natesclaw Linux node device capabilities",
   "type": "module",
   "dependencies": {
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

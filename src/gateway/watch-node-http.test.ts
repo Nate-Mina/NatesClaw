@@ -12,7 +12,7 @@ import {
   GATEWAY_CLIENT_MODES,
 } from "../../packages/gateway-protocol/src/client-info.js";
 import { PROTOCOL_VERSION, type ConnectParams } from "../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { issueDeviceBootstrapToken } from "../infra/device-bootstrap.js";
 import {
   loadOrCreateDeviceIdentity,
@@ -112,7 +112,7 @@ async function startRuntime(
   options?: {
     rateLimiter?: AuthRateLimiter;
     abortConnectResponse?: boolean;
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     now?: () => number;
     onPollReady?: (response: ServerResponse) => void;
   },
@@ -274,7 +274,7 @@ describe("watch node HTTP transport", () => {
   it("uses Gateway time for skew-independent device proof", async () => {
     const now = vi.fn(() => 1_700_000_000_123);
     const { identity, issued, baseUrl, runtime } = await createWatchNodeFixture(
-      "openclaw-watch-node-challenge-time-",
+      "natesclaw-watch-node-challenge-time-",
       { now },
     );
 
@@ -291,7 +291,7 @@ describe("watch node HTTP transport", () => {
 
   it("rejects capabilities and identities outside the bounded watch surface", async () => {
     const { identity, issued, baseUrl, runtime } = await createWatchNodeFixture(
-      "openclaw-watch-node-surface-",
+      "natesclaw-watch-node-surface-",
     );
     const variants: Array<(nonce: string) => ConnectParams> = [
       (nonce) =>
@@ -344,7 +344,7 @@ describe("watch node HTTP transport", () => {
 
   it("accepts a supported notification permission set to false", async () => {
     const { identity, issued, baseUrl, runtime } = await createWatchNodeFixture(
-      "openclaw-watch-node-permissions-",
+      "natesclaw-watch-node-permissions-",
     );
     const response = await connectWatchNode({
       baseUrl,
@@ -360,7 +360,7 @@ describe("watch node HTTP transport", () => {
 
   it("does not let attacker challenges evict another client nonce", async () => {
     const { identity, issued, baseUrl, runtime } = await createWatchNodeFixture(
-      "openclaw-watch-node-challenge-eviction-",
+      "natesclaw-watch-node-challenge-eviction-",
       {
         config: { gateway: { trustedProxies: ["127.0.0.1"] } },
       },
@@ -394,7 +394,7 @@ describe("watch node HTTP transport", () => {
 
   it("requires an authenticated disconnect and emits one lifecycle teardown", async () => {
     const { identity, issued, nodeRegistry, connectedNodes, disconnectedNodes, runtime, baseUrl } =
-      await createWatchNodeFixture("openclaw-watch-node-disconnect-");
+      await createWatchNodeFixture("natesclaw-watch-node-disconnect-");
 
     const connectResponse = await connectWatchNode({
       baseUrl,
@@ -449,7 +449,7 @@ describe("watch node HTTP transport", () => {
         resolvePollReady = resolve;
       });
       const { identity, issued, nodeRegistry, disconnectedNodes, runtime, baseUrl } =
-        await createWatchNodeFixture("openclaw-watch-node-destroyed-poll-", {
+        await createWatchNodeFixture("natesclaw-watch-node-destroyed-poll-", {
           onPollReady: resolvePollReady,
         });
       const connectResponse = await connectWatchNode({
@@ -515,7 +515,7 @@ describe("watch node HTTP transport", () => {
 
   it("rejects an HTTP node session after an external reapproval changes its generation", async () => {
     const { baseDir, identity, issued, nodeRegistry, disconnectedNodes, runtime, baseUrl } =
-      await createWatchNodeFixture("openclaw-watch-node-reapproval-");
+      await createWatchNodeFixture("natesclaw-watch-node-reapproval-");
     const connectResponse = await connectWatchNode({
       baseUrl,
       identity,
@@ -550,7 +550,7 @@ describe("watch node HTTP transport", () => {
 
   it("rejects an invoke result when pairing changes during body upload", async () => {
     const { baseDir, identity, issued, nodeRegistry, disconnectedNodes, runtime, baseUrl } =
-      await createWatchNodeFixture("openclaw-watch-node-result-generation-");
+      await createWatchNodeFixture("natesclaw-watch-node-result-generation-");
     const connectResponse = await connectWatchNode({
       baseUrl,
       identity,
@@ -614,7 +614,7 @@ describe("watch node HTTP transport", () => {
 
   it("rejects empty shadow credentials without consuming the challenge", async () => {
     const { baseDir, identity, issued, baseUrl, runtime } = await createWatchNodeFixture(
-      "openclaw-watch-node-auth-fields-",
+      "natesclaw-watch-node-auth-fields-",
     );
 
     const challenge = await readJson(await fetch(`${baseUrl}/challenge`));
@@ -653,7 +653,7 @@ describe("watch node HTTP transport", () => {
       pruneIntervalMs: 0,
     };
 
-    const abortedBaseDir = await tempDirs.make("openclaw-watch-node-aborted-connect-");
+    const abortedBaseDir = await tempDirs.make("natesclaw-watch-node-aborted-connect-");
     const abortedIdentity = loadOrCreateDeviceIdentity({
       path: path.join(abortedBaseDir, "watch-identity.sqlite"),
     });
@@ -689,7 +689,7 @@ describe("watch node HTTP transport", () => {
       abortedLimiter.dispose();
     }
 
-    const completedBaseDir = await tempDirs.make("openclaw-watch-node-completed-connect-");
+    const completedBaseDir = await tempDirs.make("natesclaw-watch-node-completed-connect-");
     const completedIdentity = loadOrCreateDeviceIdentity({
       path: path.join(completedBaseDir, "watch-identity.sqlite"),
     });
@@ -730,7 +730,7 @@ describe("watch node HTTP transport", () => {
       disconnectedNodes,
       runtime,
       baseUrl,
-    } = await createWatchNodeFixture("openclaw-watch-node-http-");
+    } = await createWatchNodeFixture("natesclaw-watch-node-http-");
 
     const connectResponse = await connectWatchNode({
       baseUrl,

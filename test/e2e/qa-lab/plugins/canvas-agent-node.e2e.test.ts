@@ -4,11 +4,11 @@ import path from "node:path";
 import {
   createPluginRegistryFixture,
   registerVirtualTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
-import { createOpenClawTestState } from "openclaw/plugin-sdk/test-state";
+} from "natesclaw/plugin-sdk/plugin-test-contracts";
+import { createNatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { describe, expect, it, vi } from "vitest";
 import canvasPlugin from "../../../../extensions/canvas/index.js";
-import type { OpenClawConfig } from "../../../../src/config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../../src/config/types.natesclaw.js";
 import type { GatewayClient } from "../../../../src/gateway/client.js";
 import { startGatewayServer } from "../../../../src/gateway/server.js";
 import {
@@ -137,26 +137,26 @@ describe("Canvas agent tool over a paired Linux node", () => {
     "forwards every registered Canvas action with its invocation context",
     { timeout: E2E_TIMEOUT_MS },
     async () => {
-      const state = await createOpenClawTestState({
+      const state = await createNatesclawTestState({
         label: "qa-canvas-agent-node",
         layout: "home",
         env: {
-          OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(process.cwd(), "extensions"),
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "0",
-          OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-          OPENCLAW_SKIP_CANVAS_HOST: "1",
-          OPENCLAW_SKIP_CHANNELS: "1",
-          OPENCLAW_SKIP_CRON: "1",
-          OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-          OPENCLAW_SKIP_PROVIDERS: "1",
-          OPENCLAW_TEST_FAST: "1",
-          OPENCLAW_TEST_MINIMAL_GATEWAY: "1",
-          OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+          NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(process.cwd(), "extensions"),
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "0",
+          NATESCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+          NATESCLAW_SKIP_CANVAS_HOST: "1",
+          NATESCLAW_SKIP_CHANNELS: "1",
+          NATESCLAW_SKIP_CRON: "1",
+          NATESCLAW_SKIP_GMAIL_WATCHER: "1",
+          NATESCLAW_SKIP_PROVIDERS: "1",
+          NATESCLAW_TEST_FAST: "1",
+          NATESCLAW_TEST_MINIMAL_GATEWAY: "1",
+          NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
         },
       });
       const port = await getGatewayE2ePortBlock();
       const gatewayToken = "qa-canvas-agent-node-token";
-      const config: OpenClawConfig = {
+      const config: NatesclawConfig = {
         gateway: {
           mode: "local",
           port,

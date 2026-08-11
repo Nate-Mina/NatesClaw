@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 import {
   HEARTBEAT_RESPONSE_TOOL_NAME,
   normalizeHeartbeatToolResponse,
@@ -363,7 +363,7 @@ export async function handleToolExecutionEnd(
       data: {
         phase: "update",
         title: "Plan updated",
-        source: "openclaw",
+        source: "natesclaw",
         ...planUpdate,
       },
     };

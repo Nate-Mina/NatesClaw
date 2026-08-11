@@ -1,48 +1,48 @@
 // Signal plugin module implements monitor behavior.
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
-import { resolveChannelStreamingBlockEnabled } from "openclaw/plugin-sdk/channel-outbound";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "natesclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelRuntimeSurface } from "natesclaw/plugin-sdk/channel-contract";
+import { resolveChannelStreamingBlockEnabled } from "natesclaw/plugin-sdk/channel-outbound";
+import { registerChannelRuntimeContext } from "natesclaw/plugin-sdk/channel-runtime-context";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   ReplyToMode,
   SignalReactionNotificationMode,
-} from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/config-contracts";
 import {
   canonicalizeBase64,
   detectMime,
   estimateBase64DecodedBytes,
   saveMediaBuffer,
-} from "openclaw/plugin-sdk/media-runtime";
-import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "openclaw/plugin-sdk/reply-history";
+} from "natesclaw/plugin-sdk/media-runtime";
+import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "natesclaw/plugin-sdk/reply-history";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 import {
   chunkTextWithMode,
   createReplyReferencePlanner,
   resolveChunkMode,
   resolveTextChunkLimit,
-} from "openclaw/plugin-sdk/reply-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+} from "natesclaw/plugin-sdk/reply-runtime";
+import { getRuntimeConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
 import {
   createNonExitingRuntime,
   type BackoffPolicy,
   type RuntimeEnv,
-} from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/runtime-env";
 import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "natesclaw/plugin-sdk/runtime-group-policy";
 import {
   normalizeOptionalString,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeE164 } from "openclaw/plugin-sdk/text-utility-runtime";
-import { waitForTransportReady } from "openclaw/plugin-sdk/transport-ready-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeE164 } from "natesclaw/plugin-sdk/text-utility-runtime";
+import { waitForTransportReady } from "natesclaw/plugin-sdk/transport-ready-runtime";
 import { resolveSignalAccount, resolveSignalReplyToMode } from "./accounts.js";
 import { isSignalNativeApprovalHandlerConfigured } from "./approval-native.js";
 import { addSignalApprovalReactionHintToStructuredPayload } from "./approval-reactions.js";
@@ -73,7 +73,7 @@ export type MonitorSignalOpts = {
   abortSignal?: AbortSignal;
   account?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   baseUrl?: string;
   channelRuntime?: ChannelRuntimeSurface;
   autoStart?: boolean;
@@ -304,7 +304,7 @@ async function fetchAttachment(params: {
 }
 
 export async function deliverReplies(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   replies: ReplyPayload[];
   target: string;
   baseUrl: string;

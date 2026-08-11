@@ -1,5 +1,5 @@
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { getRuntimeConfig } from "../config/io.js";
 import { parseSqliteSessionFileMarker } from "../config/sessions/legacy-sqlite-marker.js";
 import { resolveSessionStorePathCore } from "../config/sessions/paths.js";
@@ -9,7 +9,7 @@ import {
   resolveSessionTranscriptRuntimeTarget,
   type SessionTranscriptRuntimeTarget,
 } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   parseAgentSessionKey,
   resolveAgentIdFromSessionKey,
@@ -46,7 +46,7 @@ class AgentRunSessionTargetResolutionError extends Error {
 /** Resolves the active runtime target used by current run/session internals. */
 export async function resolveAgentRunSessionTarget(params: {
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   missingSessionKey: "create" | "resolve-existing";
   sessionId: string;
   sessionFile?: string;

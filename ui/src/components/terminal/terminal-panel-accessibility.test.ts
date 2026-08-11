@@ -11,13 +11,13 @@ import {
   terminalOpenResult,
   type CreateGhosttyTerminalMock,
 } from "./terminal-panel.test-support.ts";
-import { OpenClawTerminalPanel } from "./terminal-panel.ts";
+import { NatesclawTerminalPanel } from "./terminal-panel.ts";
 
 const createGhosttyTerminalMock: CreateGhosttyTerminalMock = vi.fn();
 const TERMINAL_PANEL_ELEMENT_NAME = defineTestTerminalPanelElement(createGhosttyTerminalMock);
 
 function createPanel(client: TerminalGatewayClient) {
-  const panel = document.createElement(TERMINAL_PANEL_ELEMENT_NAME) as OpenClawTerminalPanel;
+  const panel = document.createElement(TERMINAL_PANEL_ELEMENT_NAME) as NatesclawTerminalPanel;
   panel.client = client;
   panel.available = true;
   document.body.append(panel);
@@ -38,7 +38,7 @@ function createPickerClient() {
   } satisfies TerminalGatewayClient;
 }
 
-describe("OpenClawTerminalPanel accessibility", () => {
+describe("NatesclawTerminalPanel accessibility", () => {
   beforeEach(async () => {
     vi.stubGlobal("localStorage", createStorageMock());
     vi.stubGlobal("sessionStorage", createStorageMock());
@@ -62,7 +62,7 @@ describe("OpenClawTerminalPanel accessibility", () => {
   it("opens the base-mounted full-screen terminal in an isolated tab", async () => {
     const open = vi.spyOn(window, "open").mockReturnValue(null);
     const panel = createPanel(createPickerClient());
-    panel.basePath = "/openclaw";
+    panel.basePath = "/natesclaw";
     await waitForFast(() =>
       expect(
         panel.renderRoot.querySelector('[aria-label="Open full-screen terminal"]'),
@@ -74,7 +74,7 @@ describe("OpenClawTerminalPanel accessibility", () => {
       ?.click();
 
     expect(open).toHaveBeenCalledWith(
-      "http://localhost:3000/openclaw/terminal",
+      "http://localhost:3000/natesclaw/terminal",
       "_blank",
       "noopener,noreferrer",
     );

@@ -1,13 +1,13 @@
 // Minimax provider module implements model/runtime integration.
-import { resolveGeneratedMediaMaxBytes } from "openclaw/plugin-sdk/media-generation-runtime";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
+import { resolveGeneratedMediaMaxBytes } from "natesclaw/plugin-sdk/media-generation-runtime";
+import { extensionForMime } from "natesclaw/plugin-sdk/media-mime";
 import {
   downloadGeneratedMusicAsset,
   type GeneratedMusicAsset,
   type MusicGenerationProvider,
-} from "openclaw/plugin-sdk/music-generation";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "natesclaw/plugin-sdk/music-generation";
+import { isProviderApiKeyConfigured } from "natesclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "natesclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -18,9 +18,9 @@ import {
   resolveProviderHttpRequestConfig,
   sanitizeConfiguredModelProviderRequest,
   type ProviderOperationDeadline,
-} from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   assertMinimaxBaseResp,
   DEFAULT_MINIMAX_MEDIA_BASE_URL,

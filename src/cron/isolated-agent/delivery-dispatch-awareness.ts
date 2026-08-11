@@ -1,6 +1,6 @@
 /** Session awareness and transcript mirroring for direct cron delivery. */
-import { isAudioFileName } from "@openclaw/media-core/mime";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isAudioFileName } from "@natesclaw/media-core/mime";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
 import { resolveSessionWorkStartError } from "../../config/sessions/lifecycle.js";
 import {
@@ -9,7 +9,7 @@ import {
   resolveMainSessionKey,
 } from "../../config/sessions/main-session.js";
 import { resolveMirroredTranscriptText } from "../../config/sessions/transcript-mirror.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import type { NormalizedOutboundPayload } from "../../infra/outbound/deliver.js";
 import type {
@@ -43,7 +43,7 @@ export type DirectCronTranscriptMirror = {
   mediaUrls?: string[];
   storePath?: string;
   idempotencyKey: string;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 };
 
 const deliveryOutboundRuntimeLoader = createLazyImportLoader(
@@ -70,7 +70,7 @@ export function shouldQueueCronAwareness(params: {
 }
 
 export function resolveCronAwarenessMainSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
 }): string {
   return params.cfg.session?.scope === "global"
@@ -162,7 +162,7 @@ export function formatTargetCronDeliveryFailureAwarenessText(params: {
 }
 
 export async function queueCronAwarenessSystemEvent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   jobId: string;
   agentId: string;
   deliveryIdempotencyKey: string;
@@ -285,7 +285,7 @@ export function projectDeliveredDirectCronPayloadsForMirror(
 }
 
 function canonicalizeDirectCronRouteSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
 }): string {
@@ -316,7 +316,7 @@ function canonicalizeDirectCronRouteSessionKey(params: {
 // Resolves the session for a concrete visible delivery target and ensures the
 // outbound session exists before cron awareness or transcript code references it.
 async function resolveCronDeliveryRouteSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   job: CronJob;
   agentId: string;
   agentSessionKey: string;
@@ -382,7 +382,7 @@ async function resolveCronDeliveryRouteSessionKey(params: {
 
 /** Resolves the transcript mirror session for direct cron delivery. */
 export async function resolveDirectCronDeliverySessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   job: CronJob;
   agentId: string;
   agentSessionKey: string;
@@ -454,7 +454,7 @@ function resolveCronMessageToolAwarenessTarget(params: {
 
 /** Queues target-session context awareness for cron deliveries made via message tool. */
 export async function queueCronMessageToolDeliveryAwareness(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   job: CronJob;
   agentId: string;
   agentSessionKey: string;

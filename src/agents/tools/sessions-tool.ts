@@ -1,5 +1,5 @@
 /** Session self-service tool. */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
 import type { SessionsPatchResult } from "../../../packages/gateway-protocol/src/index.js";
 import { SESSION_AGENT_ATTENTION_ICON_IDS } from "../../../packages/gateway-protocol/src/session-agent-status.js";
@@ -7,7 +7,7 @@ import { getRuntimeConfig } from "../../config/config.js";
 import { resolveAgentMainSessionKey } from "../../config/sessions/main-session.js";
 import { resolveSessionStorePathCore } from "../../config/sessions/paths.js";
 import { loadSessionEntry } from "../../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { GatewayTransportError } from "../../gateway/call.js";
 import { withAgentSessionModelPatchOrigin } from "../../gateway/session-model-patch-origin.js";
 import { formatErrorMessage } from "../../infra/errors.js";
@@ -132,7 +132,7 @@ const SessionsToolSchema = Type.Object(
 type SessionsToolOptions = {
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   callGateway?: AgentToolGatewayRequestCaller;
   hasInProcessGatewayContext?: () => boolean;
 };
@@ -195,7 +195,7 @@ async function resolvePatchTarget(
   opts: SessionsToolOptions,
   sessionKey: string | undefined,
   callGateway: AgentToolGatewayRequestCaller,
-): Promise<{ cfg: OpenClawConfig; key: string; requesterKey: string }> {
+): Promise<{ cfg: NatesclawConfig; key: string; requesterKey: string }> {
   const context = resolveSessionToolContext(opts);
   const rawKey = sessionKey ?? context.effectiveRequesterKey;
   const resolved = await resolveSessionReference({

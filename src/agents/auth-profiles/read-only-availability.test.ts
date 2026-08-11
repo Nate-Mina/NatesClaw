@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveStoredCredentialReadOnlyAvailability } from "./read-only-availability.js";
 
 const cfg = {
@@ -8,7 +8,7 @@ const cfg = {
       vault: { source: "env" },
     },
   },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 describe("resolveStoredCredentialReadOnlyAvailability", () => {
   it("keeps an implicit store ref unknown until runtime resolution", () => {

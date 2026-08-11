@@ -4,12 +4,12 @@ import path from "node:path";
 import {
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   installQQBotRuntimeForStateTests,
@@ -37,7 +37,7 @@ async function useMockHome(homeDir: string): Promise<void> {
 }
 
 function useStateDir(stateDir: string): void {
-  vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+  vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
   installQQBotRuntimeForStateTests(stateDir);
 }
 
@@ -48,7 +48,7 @@ function writeJson(filePath: string, value: unknown): void {
 
 function legacyCredentialBackupFile(accountId: string): string {
   return path.join(
-    process.env.OPENCLAW_STATE_DIR!,
+    process.env.NATESCLAW_STATE_DIR!,
     "qqbot",
     "data",
     `credential-backup-${accountId}.json`,
@@ -56,14 +56,14 @@ function legacyCredentialBackupFile(accountId: string): string {
 }
 
 function legacySingleCredentialBackupFile(): string {
-  return path.join(process.env.OPENCLAW_STATE_DIR!, "qqbot", "data", "credential-backup.json");
+  return path.join(process.env.NATESCLAW_STATE_DIR!, "qqbot", "data", "credential-backup.json");
 }
 
 function readCredentialRows(stateDir: string): CredentialBackup[] {
   const store = createPluginStateSyncKeyedStoreForTests<CredentialBackup>("qqbot", {
     namespace: "credential-backups",
     maxEntries: 1000,
-    env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+    env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
   });
   return store.entries().map((entry) => entry.value);
 }
@@ -72,11 +72,11 @@ describe("engine/config/credential-backup", () => {
   beforeEach(async () => {
     vi.resetModules();
     const stateWorkspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-state-",
     });
     const homeWorkspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-home-",
     });
     tempWorkspaces.push(stateWorkspace, homeWorkspace);
@@ -100,7 +100,7 @@ describe("engine/config/credential-backup", () => {
 
   it("round-trips a credential snapshot through SQLite without writing JSON", async () => {
     const { loadCredentialBackup, saveCredentialBackup } = await import("./credential-backup.js");
-    const stateDir = process.env.OPENCLAW_STATE_DIR!;
+    const stateDir = process.env.NATESCLAW_STATE_DIR!;
 
     saveCredentialBackup("default", "app-1", "secret-1");
 
@@ -116,11 +116,11 @@ describe("engine/config/credential-backup", () => {
 
   it("keeps same account IDs isolated across state directories", async () => {
     const { loadCredentialBackup, saveCredentialBackup } = await import("./credential-backup.js");
-    const stateDirA = process.env.OPENCLAW_STATE_DIR!;
+    const stateDirA = process.env.NATESCLAW_STATE_DIR!;
     saveCredentialBackup("default", "app-a", "secret-a");
 
     const stateWorkspaceB = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-state-b-",
     });
     tempWorkspaces.push(stateWorkspaceB);
@@ -170,6 +170,6 @@ describe("engine/config/credential-backup", () => {
     saveCredentialBackup("default", "app", "");
 
     expect(loadCredentialBackup("default")).toBeNull();
-    expect(readCredentialRows(process.env.OPENCLAW_STATE_DIR!)).toHaveLength(0);
+    expect(readCredentialRows(process.env.NATESCLAW_STATE_DIR!)).toHaveLength(0);
   });
 });

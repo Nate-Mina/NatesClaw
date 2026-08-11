@@ -1,14 +1,14 @@
 // Covers bundled config migrations through the plugin setup registry.
 import path from "node:path";
 import { describe, expect, test } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { runPluginSetupConfigMigrations } from "./setup-registry.js";
 
-function runMigration(config: OpenClawConfig) {
+function runMigration(config: NatesclawConfig) {
   return runPluginSetupConfigMigrations({
     env: {
       ...process.env,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: path.resolve("extensions"),
+      NATESCLAW_BUNDLED_PLUGINS_DIR: path.resolve("extensions"),
     },
     config,
   });
@@ -47,7 +47,7 @@ describe("bundled setup config migrations", () => {
         root: "~/legacy-canvas",
         liveReload: false,
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(result.changes).toEqual(["migrated canvasHost to plugins.entries.canvas.config.host"]);
     expect(result.config).toEqual({

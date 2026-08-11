@@ -6,7 +6,7 @@ import { loadSessionEntry, replaceSessionEntry } from "../config/sessions/sessio
 import type { SessionEntry } from "../config/sessions/types.js";
 import { saveCronStore } from "../cron/store.js";
 import type { RuntimeEnv } from "../runtime.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
 import { createManagedTaskFlow as createManagedTaskFlowOrNull } from "../tasks/task-flow-registry.js";
 import type { TaskFlowRecord } from "../tasks/task-flow-registry.types.js";
 import {
@@ -25,8 +25,8 @@ import {
   resetTaskRegistryDeliveryRuntimeForTests,
   resetTaskRegistryForTests,
 } from "../tasks/task-runtime.test-helpers.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
-import type { OpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
+import type { NatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import type { TaskSystemAuditCode, TaskSystemAuditSeverity } from "./tasks-audit-system.js";
 import {
   tasksAuditCommand,
@@ -129,14 +129,14 @@ function resetTaskCommandRuntime() {
   resetTaskRegistryDeliveryRuntimeForTests();
   resetTaskRegistryForTests({ persist: false });
   resetTaskFlowRegistryForTests({ persist: false });
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
 }
 
 async function withTaskCommandStateDir(
-  run: (state: OpenClawTestState) => Promise<void>,
+  run: (state: NatesclawTestState) => Promise<void>,
 ): Promise<void> {
-  await withOpenClawTestState(
-    { layout: "state-only", prefix: "openclaw-tasks-command-" },
+  await withNatesclawTestState(
+    { layout: "state-only", prefix: "natesclaw-tasks-command-" },
     async (state) => {
       resetTaskCommandRuntime();
       try {

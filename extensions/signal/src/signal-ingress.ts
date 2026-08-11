@@ -5,10 +5,10 @@ import {
   type ChannelIngressQueue,
   type ChannelIngressMonitorDeliveryResult,
   type ChannelIngressMonitorLifecycle,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeNullableString as normalizeRawString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeNullableString as normalizeRawString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { SignalSseEvent } from "./client-adapter.js";
 import { getOptionalSignalRuntime } from "./runtime.js";
 

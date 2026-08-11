@@ -6,8 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { upsertSessionEntryCore } from "../config/sessions/session-accessor.js";
 import type { SessionEntry } from "../config/sessions/types.js";
 import type { RuntimeEnv } from "../runtime.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { appendSqliteTrajectoryRuntimeEvents } from "../trajectory/runtime-store.sqlite.js";
 import type { TrajectoryEvent } from "../trajectory/types.js";
 import { sessionsTailCommand } from "./sessions-tail.js";
@@ -34,7 +34,7 @@ function makeEvent(
   params: Partial<TrajectoryEvent> & { type: string; ts: string },
 ): TrajectoryEvent {
   return {
-    traceSchema: "openclaw-trajectory",
+    traceSchema: "natesclaw-trajectory",
     schemaVersion: 1,
     traceId: "trace-1",
     source: "runtime",
@@ -58,9 +58,9 @@ describe("sessionsTailCommand", () => {
   let previousStateDir: string | undefined;
 
   beforeEach(() => {
-    previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sessions-tail-"));
-    process.env.OPENCLAW_STATE_DIR = path.join(tmpDir, "state");
+    previousStateDir = process.env.NATESCLAW_STATE_DIR;
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-sessions-tail-"));
+    process.env.NATESCLAW_STATE_DIR = path.join(tmpDir, "state");
     mocks.getRuntimeConfig.mockReturnValue({
       agents: {
         list: [{ id: "main" }, { id: "ops" }],
@@ -72,12 +72,12 @@ describe("sessionsTailCommand", () => {
   afterEach(() => {
     vi.useRealTimers();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.NATESCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.NATESCLAW_STATE_DIR = previousStateDir;
     }
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
@@ -284,7 +284,7 @@ describe("sessionsTailCommand", () => {
   it("resolves the target store from a fully qualified non-default agent session key", async () => {
     const runtime = makeRuntime();
     const opsSessionKey = "agent:ops:telegram:direct:owner";
-    const opsSessionsDir = path.join(process.env.OPENCLAW_STATE_DIR!, "agents", "ops", "sessions");
+    const opsSessionsDir = path.join(process.env.NATESCLAW_STATE_DIR!, "agents", "ops", "sessions");
     const opsStorePath = path.join(opsSessionsDir, "sessions.json");
     await upsertSessionEntryCore(
       { sessionKey: opsSessionKey, storePath: opsStorePath },

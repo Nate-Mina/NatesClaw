@@ -1,19 +1,19 @@
-// Mcp Code Mode Gateway Seed script supports OpenClaw repository automation.
+// Mcp Code Mode Gateway Seed script supports Natesclaw repository automation.
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { applyDockerOpenAiProviderConfig, type OpenClawConfig } from "./docker-openai-seed.ts";
+import { applyDockerOpenAiProviderConfig, type NatesclawConfig } from "./docker-openai-seed.ts";
 import { writeProbeMcpServer } from "./lib/mcp-code-mode-probe-server.ts";
 
 async function main() {
-  const stateDir = process.env.OPENCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".openclaw");
+  const stateDir = process.env.NATESCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".natesclaw");
   const configPath =
-    process.env.OPENCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "openclaw.json");
+    process.env.NATESCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "natesclaw.json");
   const workspaceDir = path.join(stateDir, "workspace");
   const serverPath = path.join(stateDir, "mcp-code-mode-fixture", "fixture-server.mjs");
   const apiKey =
     process.env.OPENAI_API_KEY?.trim() ||
-    process.env.OPENCLAW_MCP_CODE_MODE_OPENAI_API_KEY?.trim() ||
+    process.env.NATESCLAW_MCP_CODE_MODE_OPENAI_API_KEY?.trim() ||
     "sk-docker-smoke-test";
 
   const cfg = applyDockerOpenAiProviderConfig(
@@ -66,7 +66,7 @@ async function main() {
           },
         },
       },
-    } satisfies OpenClawConfig,
+    } satisfies NatesclawConfig,
     apiKey,
   );
 

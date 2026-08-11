@@ -152,7 +152,7 @@ describe("Claude bundle plugin inspect integration", () => {
   }
 
   beforeAll(() => {
-    rootDir = makeTrackedTempDir("openclaw-claude-bundle", tempDirs);
+    rootDir = makeTrackedTempDir("natesclaw-claude-bundle", tempDirs);
     setupClaudeInspectFixture();
   });
 

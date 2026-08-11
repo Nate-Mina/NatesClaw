@@ -3,17 +3,17 @@ import { createHash } from "node:crypto";
 import type { Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
-import { listSessionTranscriptCorpusEntriesForAgent } from "openclaw/plugin-sdk/memory-core-host-engine-sessions";
-import type { MemorySearchResult } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/memory-core-host-engine-foundation";
+import { listSessionTranscriptCorpusEntriesForAgent } from "natesclaw/plugin-sdk/memory-core-host-engine-sessions";
+import type { MemorySearchResult } from "natesclaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   formatMemoryDreamingDay,
   resolveMemoryDreamingWorkspaces,
   resolveMemoryLightDreamingConfig,
   resolveMemoryRemDreamingConfig,
-} from "openclaw/plugin-sdk/memory-core-host-status";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeStringEntries, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/memory-core-host-status";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { normalizeStringEntries, uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { appendFailedDreamingEvent } from "./dreaming-events.js";
 import {
   normalizeDailyIngestionState,
@@ -66,7 +66,7 @@ import {
   type ShortTermRecallEntry,
 } from "./short-term-promotion.js";
 
-type Logger = Pick<OpenClawPluginApi["logger"], "info" | "warn" | "error">;
+type Logger = Pick<NatesclawPluginApi["logger"], "info" | "warn" | "error">;
 type DreamingHostConfig = unknown;
 type DreamingPhaseStorageConfig = {
   timezone?: string;
@@ -98,13 +98,13 @@ const GENERIC_DAY_HEADING_RE =
 const MANAGED_DAILY_DREAMING_BLOCKS = [
   {
     heading: "## Light Sleep",
-    startMarker: "<!-- openclaw:dreaming:light:start -->",
-    endMarker: "<!-- openclaw:dreaming:light:end -->",
+    startMarker: "<!-- natesclaw:dreaming:light:start -->",
+    endMarker: "<!-- natesclaw:dreaming:light:end -->",
   },
   {
     heading: "## REM Sleep",
-    startMarker: "<!-- openclaw:dreaming:rem:start -->",
-    endMarker: "<!-- openclaw:dreaming:rem:end -->",
+    startMarker: "<!-- natesclaw:dreaming:rem:start -->",
+    endMarker: "<!-- natesclaw:dreaming:rem:end -->",
   },
 ] as const;
 

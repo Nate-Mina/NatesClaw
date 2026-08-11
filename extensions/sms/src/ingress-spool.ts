@@ -3,9 +3,9 @@ import {
   bindIngressLifecycleToReplyOptions,
   createChannelIngressMonitor,
   type ChannelIngressQueue,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { runDetachedWebhookWork } from "openclaw/plugin-sdk/webhook-request-guards";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { runDetachedWebhookWork } from "natesclaw/plugin-sdk/webhook-request-guards";
 import { dispatchSmsInboundEvent, type SmsChannelRuntime } from "./inbound.js";
 import { looksLikeSmsPhoneNumber, normalizeSmsPhoneNumber } from "./phone.js";
 import { getSmsRuntime } from "./runtime.js";
@@ -80,7 +80,7 @@ function parseSmsIngressForm(
 }
 
 export function createSmsIngressSpool(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedSmsAccount;
   channelRuntime: SmsChannelRuntime;
   queue?: ChannelIngressQueue<SmsIngressPayload>;

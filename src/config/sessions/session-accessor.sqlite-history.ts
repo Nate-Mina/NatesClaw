@@ -1,6 +1,6 @@
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import { isInternalSessionEffectsKey } from "./internal-session-key.js";
 import type { SessionTranscriptInstance } from "./session-accessor.sqlite-contract.js";
 import type { SessionEntry } from "./types.js";
@@ -8,10 +8,10 @@ import type { SessionEntry } from "./types.js";
 export function listTranscriptInstancesFromDatabase(params: {
   agentId: string;
   currentEntries: ReadonlyMap<string, SessionEntry>;
-  database: OpenClawAgentDatabase;
+  database: NatesclawAgentDatabase;
   databasePath: string;
 }): SessionTranscriptInstance[] {
-  const db = getNodeSqliteKysely<OpenClawAgentKyselyDatabase>(params.database.db);
+  const db = getNodeSqliteKysely<NatesclawAgentKyselyDatabase>(params.database.db);
   const rows = executeSqliteQuerySync(
     params.database.db,
     db

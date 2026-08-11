@@ -10,7 +10,7 @@ import {
 
 describeChannelCatalogEntryContract({
   channelId: "msteams",
-  npmSpec: "@openclaw/msteams",
+  npmSpec: "@natesclaw/msteams",
   alias: "teams",
 });
 
@@ -28,9 +28,9 @@ const whatsappPackageJson = JSON.parse(
 ) as {
   name?: string;
   version?: string;
-  openclaw?: { install?: { npmSpec?: string } };
+  natesclaw?: { install?: { npmSpec?: string } };
 };
-const whatsappNpmSpec = whatsappPackageJson.openclaw?.install?.npmSpec ?? whatsappPackageJson.name;
+const whatsappNpmSpec = whatsappPackageJson.natesclaw?.install?.npmSpec ?? whatsappPackageJson.name;
 const whatsappVersion = whatsappPackageJson.version;
 if (!whatsappNpmSpec || !whatsappVersion) {
   throw new Error("missing package metadata for whatsapp");
@@ -41,8 +41,8 @@ const whatsappOfficialFallbackNpmSpec = isPrereleaseSemverVersion(whatsappVersio
 
 describeBundledMetadataOnlyChannelCatalogContract({
   pluginId: "whatsapp",
-  packageName: "@openclaw/whatsapp",
-  npmSpec: "@openclaw/whatsapp",
+  packageName: "@natesclaw/whatsapp",
+  npmSpec: "@natesclaw/whatsapp",
   meta: whatsappMeta,
   defaultChoice: "npm",
 });
@@ -51,7 +51,7 @@ describeOfficialFallbackChannelCatalogContract({
   channelId: "whatsapp",
   npmSpec: whatsappOfficialFallbackNpmSpec,
   meta: whatsappMeta,
-  packageName: "@openclaw/whatsapp",
+  packageName: "@natesclaw/whatsapp",
   pluginId: "whatsapp",
   externalNpmSpec: "@vendor/whatsapp-fork",
   externalLabel: "WhatsApp Fork",
@@ -59,18 +59,18 @@ describeOfficialFallbackChannelCatalogContract({
 
 describeChannelCatalogEntryContract({
   channelId: "wecom",
-  npmSpec: "@wecom/wecom-openclaw-plugin@2026.5.7",
+  npmSpec: "@wecom/wecom-natesclaw-plugin@2026.5.7",
   alias: "wework",
 });
 
 describeChannelCatalogEntryContract({
   channelId: "yuanbao",
-  npmSpec: "openclaw-plugin-yuanbao@2.15.0",
+  npmSpec: "natesclaw-plugin-yuanbao@2.15.0",
   alias: "yb",
 });
 
 describeChannelCatalogEntryContract({
-  channelId: "openclaw-zaloclawbot",
-  npmSpec: "@zalo-platforms/openclaw-zaloclawbot@0.1.4",
+  channelId: "natesclaw-zaloclawbot",
+  npmSpec: "@zalo-platforms/natesclaw-zaloclawbot@0.1.4",
   alias: "zaloclawbot",
 });

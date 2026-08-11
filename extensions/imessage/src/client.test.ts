@@ -268,9 +268,9 @@ describe("IMessageRpcClient child stream error handling", () => {
   });
 
   it("expands cliPath locally while preserving remote dbPath and JSON data", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-imessage-rpc-boundary-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-imessage-rpc-boundary-"));
     tempDirs.push(root);
-    const wrapperDir = path.join(root, ".openclaw");
+    const wrapperDir = path.join(root, ".natesclaw");
     const wrapperPath = path.join(wrapperDir, "imsg remote");
     const reportPath = path.join(root, "rpc-report.jsonl");
     await fs.mkdir(wrapperDir, { recursive: true });
@@ -305,7 +305,7 @@ describe("IMessageRpcClient child stream error handling", () => {
     );
     const { IMessageRpcClient } = await import("./client.js");
     const client = new IMessageRpcClient({
-      cliPath: "~/.openclaw/imsg remote",
+      cliPath: "~/.natesclaw/imsg remote",
       dbPath: "~/Library/Messages/chat.db",
       remoteHost: "messages-mac",
     });
@@ -334,14 +334,14 @@ describe("IMessageRpcClient child stream error handling", () => {
     vi.stubEnv("HOME", "/Users/gateway");
     const { IMessageRpcClient } = await import("./client.js");
     const client = new IMessageRpcClient({
-      cliPath: "~/.openclaw/imsg-local",
+      cliPath: "~/.natesclaw/imsg-local",
       dbPath: "~/Library/Messages/chat.db",
     });
 
     await client.start();
 
     expect(spawnMock).toHaveBeenCalledWith(
-      "/Users/gateway/.openclaw/imsg-local",
+      "/Users/gateway/.natesclaw/imsg-local",
       ["rpc", "--json", "--db", "/Users/gateway/Library/Messages/chat.db"],
       { stdio: ["pipe", "pipe", "pipe"] },
     );

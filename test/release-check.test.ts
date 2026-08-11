@@ -2,7 +2,7 @@
 import { chmodSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve as resolvePath, win32 } from "node:path";
-import { bundledDistPluginFile, bundledPluginFile } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledDistPluginFile, bundledPluginFile } from "natesclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 import { listBundledPluginPackArtifacts } from "../scripts/lib/bundled-plugin-build-entries.mjs";
 import { resolveNpmJsonEntries } from "../scripts/lib/npm-json-output.mts";
@@ -22,7 +22,7 @@ import {
 import {
   collectInstalledBundledRuntimeSidecarPaths,
   collectInstalledRootDependencyManifestErrors,
-} from "../scripts/openclaw-npm-postpublish-verify.ts";
+} from "../scripts/natesclaw-npm-postpublish-verify.ts";
 import {
   collectAppcastSparkleVersionErrors,
   collectBundledExtensionManifestErrors,
@@ -154,9 +154,9 @@ describe("packed CLI smoke", () => {
           SystemRoot: "C:\\Windows",
           GITHUB_TOKEN: "redacted",
           OPENAI_API_KEY: "real-secret",
-          OPENCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
+          NATESCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
         },
-        { HOME: "/tmp/smoke-home", OPENCLAW_STATE_DIR: "/tmp/smoke-state" },
+        { HOME: "/tmp/smoke-home", NATESCLAW_STATE_DIR: "/tmp/smoke-state" },
       ),
     ).toEqual({
       PATH:
@@ -173,11 +173,11 @@ describe("packed CLI smoke", () => {
       AWS_CONFIG_FILE: join("/tmp/smoke-home", ".aws", "config"),
       TMPDIR: "/tmp/original-tmp",
       SystemRoot: "C:\\Windows",
-      OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
-      OPENCLAW_NO_ONBOARD: "1",
-      OPENCLAW_SERVICE_REPAIR_POLICY: "external",
-      OPENCLAW_SUPPRESS_NOTES: "1",
-      OPENCLAW_STATE_DIR: "/tmp/smoke-state",
+      NATESCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      NATESCLAW_NO_ONBOARD: "1",
+      NATESCLAW_SERVICE_REPAIR_POLICY: "external",
+      NATESCLAW_SUPPRESS_NOTES: "1",
+      NATESCLAW_STATE_DIR: "/tmp/smoke-state",
     });
   });
 
@@ -186,19 +186,19 @@ describe("packed CLI smoke", () => {
       createPackedCompletionSmokeEnv(
         {
           PATH: "/usr/bin",
-          OPENCLAW_COMPLETION_SKIP_PLUGIN_COMMANDS: "0",
+          NATESCLAW_COMPLETION_SKIP_PLUGIN_COMMANDS: "0",
         },
         {
           HOME: "/tmp/smoke-home",
-          OPENCLAW_STATE_DIR: "/tmp/smoke-state",
+          NATESCLAW_STATE_DIR: "/tmp/smoke-state",
         },
       ),
     ).toEqual({
       PATH: "/usr/bin",
       HOME: "/tmp/smoke-home",
-      OPENCLAW_STATE_DIR: "/tmp/smoke-state",
-      OPENCLAW_SUPPRESS_NOTES: "1",
-      OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      NATESCLAW_STATE_DIR: "/tmp/smoke-state",
+      NATESCLAW_SUPPRESS_NOTES: "1",
+      NATESCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
       [COMPLETION_SKIP_PLUGIN_COMMANDS_ENV]: "1",
     });
   });
@@ -239,22 +239,22 @@ describe("runReleaseCheckCommand", () => {
   });
 
   it("rejects malformed command limit environment values", () => {
-    withProcessEnv({ OPENCLAW_RELEASE_CHECK_COMMAND_TIMEOUT_MS: "1e3" }, () => {
+    withProcessEnv({ NATESCLAW_RELEASE_CHECK_COMMAND_TIMEOUT_MS: "1e3" }, () => {
       expect(() =>
         runReleaseCheckCommand(
           { command: process.execPath, args: ["--eval", "process.stdout.write('ok')"] },
           { stdio: ["ignore", "pipe", "pipe"] },
         ),
-      ).toThrow("invalid OPENCLAW_RELEASE_CHECK_COMMAND_TIMEOUT_MS: 1e3");
+      ).toThrow("invalid NATESCLAW_RELEASE_CHECK_COMMAND_TIMEOUT_MS: 1e3");
     });
 
-    withProcessEnv({ OPENCLAW_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES: "16mb" }, () => {
+    withProcessEnv({ NATESCLAW_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES: "16mb" }, () => {
       expect(() =>
         runReleaseCheckCommand(
           { command: process.execPath, args: ["--eval", "process.stdout.write('ok')"] },
           { stdio: ["ignore", "pipe", "pipe"] },
         ),
-      ).toThrow("invalid OPENCLAW_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES: 16mb");
+      ).toThrow("invalid NATESCLAW_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES: 16mb");
     });
   });
 });
@@ -287,7 +287,7 @@ describe("resolveReleaseNpmCommand", () => {
         existsSync: () => false,
         platform: "win32",
       }),
-    ).toThrow("OpenClaw refuses to shell out to bare npm on Windows");
+    ).toThrow("Natesclaw refuses to shell out to bare npm on Windows");
   });
 });
 
@@ -301,7 +301,7 @@ describe("workspace bootstrap smoke", () => {
           TMPDIR: "/tmp/original-tmp",
           OPENAI_API_KEY: "real-secret",
           ANTHROPIC_API_KEY: "real-secret",
-          OPENCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
+          NATESCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
         },
         "/tmp/bootstrap-home",
       ),
@@ -312,12 +312,12 @@ describe("workspace bootstrap smoke", () => {
           : `${dirname(process.execPath)}:/usr/bin:/bin`,
       HOME: "/tmp/bootstrap-home",
       USERPROFILE: "/tmp/bootstrap-home",
-      OPENCLAW_HOME: "/tmp/bootstrap-home",
+      NATESCLAW_HOME: "/tmp/bootstrap-home",
       TMPDIR: "/tmp/original-tmp",
-      OPENCLAW_NO_ONBOARD: "1",
-      OPENCLAW_SUPPRESS_NOTES: "1",
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      NATESCLAW_NO_ONBOARD: "1",
+      NATESCLAW_SUPPRESS_NOTES: "1",
+      NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      NATESCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
       AWS_EC2_METADATA_DISABLED: "true",
       AWS_SHARED_CREDENTIALS_FILE: join("/tmp/bootstrap-home", ".aws", "credentials"),
       AWS_CONFIG_FILE: join("/tmp/bootstrap-home", ".aws", "config"),
@@ -332,14 +332,14 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "broken",
           packageJson: {
-            openclaw: {
+            natesclaw: {
               install: { npmSpec: "   " },
             },
           },
         },
       ]),
     ).toEqual([
-      "bundled extension 'broken' manifest invalid | openclaw.install.npmSpec must be a non-empty string",
+      "bundled extension 'broken' manifest invalid | natesclaw.install.npmSpec must be a non-empty string",
     ]);
   });
 
@@ -349,14 +349,14 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "broken",
           packageJson: {
-            openclaw: {
-              install: { npmSpec: "@openclaw/broken", minHostVersion: "2026.3.14" },
+            natesclaw: {
+              install: { npmSpec: "@natesclaw/broken", minHostVersion: "2026.3.14" },
             },
           },
         },
       ]),
     ).toEqual([
-      "bundled extension 'broken' manifest invalid | openclaw.install.minHostVersion must use a semver floor in the form \">=x.y.z[-prerelease][+build]\"",
+      "bundled extension 'broken' manifest invalid | natesclaw.install.minHostVersion must use a semver floor in the form \">=x.y.z[-prerelease][+build]\"",
     ]);
   });
 
@@ -366,7 +366,7 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "irc",
           packageJson: {
-            openclaw: {
+            natesclaw: {
               install: { minHostVersion: ">=2026.3.14" },
             },
           },
@@ -381,13 +381,13 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "broken",
           packageJson: {
-            openclaw: {
+            natesclaw: {
               install: 123,
             },
           },
         },
       ]),
-    ).toEqual(["bundled extension 'broken' manifest invalid | openclaw.install must be an object"]);
+    ).toEqual(["bundled extension 'broken' manifest invalid | natesclaw.install must be an object"]);
   });
 });
 
@@ -402,18 +402,18 @@ describe("bundled plugin package dependency checks", () => {
   });
 
   it("does not require root deps for root chunks sourced from the owning installed plugin", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "openclaw-root-owned-installed-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "natesclaw-root-owned-installed-"));
 
     try {
       mkdirSync(join(tempRoot, "dist", "extensions", "memory-lancedb"), { recursive: true });
       writeFileSync(
         join(tempRoot, "package.json"),
-        `{"name":"openclaw","dependencies":{}}\n`,
+        `{"name":"natesclaw","dependencies":{}}\n`,
         "utf8",
       );
       writeFileSync(
         join(tempRoot, "dist", "extensions", "memory-lancedb", "package.json"),
-        `{"name":"@openclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
+        `{"name":"@natesclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
         "utf8",
       );
       writeFileSync(
@@ -429,18 +429,18 @@ describe("bundled plugin package dependency checks", () => {
   });
 
   it("still requires root deps for root-owned installed chunks", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "openclaw-root-owned-installed-missing-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "natesclaw-root-owned-installed-missing-"));
 
     try {
       mkdirSync(join(tempRoot, "dist", "extensions", "memory-lancedb"), { recursive: true });
       writeFileSync(
         join(tempRoot, "package.json"),
-        `{"name":"openclaw","dependencies":{}}\n`,
+        `{"name":"natesclaw","dependencies":{}}\n`,
         "utf8",
       );
       writeFileSync(
         join(tempRoot, "dist", "extensions", "memory-lancedb", "package.json"),
-        `{"name":"@openclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
+        `{"name":"@natesclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
         "utf8",
       );
       writeFileSync(
@@ -463,7 +463,7 @@ describe("bundled plugin package dependency checks", () => {
 // statSync().mode never reports execute bits, so these tests are meaningless there.
 describe.skipIf(process.platform === "win32")("collectSkillShellScriptExecutableErrors", () => {
   it("flags non-executable shell scripts under skills/*/scripts", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-release-check-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-release-check-"));
     const scriptPath = join(root, "skills", "openai-whisper-api", "scripts", "transcribe.sh");
     mkdirSync(join(root, "skills", "openai-whisper-api", "scripts"), { recursive: true });
     writeFileSync(scriptPath, "#!/usr/bin/env bash\necho test\n", "utf8");
@@ -479,7 +479,7 @@ describe.skipIf(process.platform === "win32")("collectSkillShellScriptExecutable
   });
 
   it("accepts executable shell scripts", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-release-check-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-release-check-"));
     const scriptPath = join(root, "skills", "openai-whisper-api", "scripts", "transcribe.sh");
     mkdirSync(join(root, "skills", "openai-whisper-api", "scripts"), { recursive: true });
     writeFileSync(scriptPath, "#!/usr/bin/env bash\necho test\n", "utf8");
@@ -500,12 +500,12 @@ describe("collectForbiddenPackPaths", () => {
         "dist/index.js",
         bundledDistPluginFile("discord", "node_modules/@discordjs/voice/index.js"),
         bundledPluginFile("tlon", "node_modules/.bin/tlon"),
-        "node_modules/.bin/openclaw",
+        "node_modules/.bin/natesclaw",
       ]),
     ).toEqual([
       bundledDistPluginFile("discord", "node_modules/@discordjs/voice/index.js"),
       bundledPluginFile("tlon", "node_modules/.bin/tlon"),
-      "node_modules/.bin/openclaw",
+      "node_modules/.bin/natesclaw",
     ]);
   });
 
@@ -556,11 +556,11 @@ describe("collectForbiddenPackPaths", () => {
         "dist/index.js",
         "dist/extensions/clickclack/index.js",
         "dist/extensions/slack/setup-entry.js",
-        "dist/extensions/msteams/openclaw.plugin.json",
+        "dist/extensions/msteams/natesclaw.plugin.json",
       ]),
     ).toEqual([
       "dist/extensions/clickclack/index.js",
-      "dist/extensions/msteams/openclaw.plugin.json",
+      "dist/extensions/msteams/natesclaw.plugin.json",
       "dist/extensions/slack/setup-entry.js",
     ]);
   });
@@ -601,14 +601,14 @@ describe("collectForbiddenPackPaths", () => {
     expect(
       collectForbiddenPackPaths([
         "dist/index.js",
-        "dist/extensions/browser/.OpenClaw-Install-Stage/package.json",
-        "dist/extensions/codex/.openclaw-runtime-deps-backup-node_modules-old/zod/index.js",
-        "dist/extensions/discord/.openclaw-runtime-deps-stamp.json",
+        "dist/extensions/browser/.Natesclaw-Install-Stage/package.json",
+        "dist/extensions/codex/.natesclaw-runtime-deps-backup-node_modules-old/zod/index.js",
+        "dist/extensions/discord/.natesclaw-runtime-deps-stamp.json",
       ]),
     ).toEqual([
-      "dist/extensions/browser/.OpenClaw-Install-Stage/package.json",
-      "dist/extensions/codex/.openclaw-runtime-deps-backup-node_modules-old/zod/index.js",
-      "dist/extensions/discord/.openclaw-runtime-deps-stamp.json",
+      "dist/extensions/browser/.Natesclaw-Install-Stage/package.json",
+      "dist/extensions/codex/.natesclaw-runtime-deps-backup-node_modules-old/zod/index.js",
+      "dist/extensions/discord/.natesclaw-runtime-deps-stamp.json",
     ]);
   });
 
@@ -644,7 +644,7 @@ describe("collectForbiddenPackPaths", () => {
   });
 
   it("blocks root dist chunks that still reference private qa lab sources", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "openclaw-release-private-qa-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "natesclaw-release-private-qa-"));
 
     try {
       mkdirSync(join(tempRoot, "dist"), { recursive: true });
@@ -664,7 +664,7 @@ describe("collectForbiddenPackPaths", () => {
   });
 
   it("blocks private QA paths in the generated dist inventory", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "openclaw-release-inventory-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "natesclaw-release-inventory-"));
 
     try {
       mkdirSync(join(tempRoot, "dist"), { recursive: true });
@@ -683,7 +683,7 @@ describe("collectForbiddenPackPaths", () => {
   });
 
   it("blocks root plugin SDK declarations that still reference private test helpers", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "openclaw-release-private-sdk-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "natesclaw-release-private-sdk-"));
 
     try {
       mkdirSync(join(tempRoot, "dist", "plugin-sdk"), { recursive: true });
@@ -728,12 +728,12 @@ describe("collectMissingPackPaths", () => {
       "dist/audit/audit-event-writer.worker.js",
       "dist/config/sessions/session-accessor.sqlite-archive.worker.js",
       "dist/config/sessions/session-transcript-reconcile.worker.js",
-      "dist/state/openclaw-database-verify.worker.js",
+      "dist/state/natesclaw-database-verify.worker.js",
       "dist/system-agent/setup-inference-detection.worker.js",
       "dist/task-registry-control.runtime.js",
       "dist/telegram-ingress-worker.runtime.js",
       bundledDistPluginFile("telegram", "runtime-api.js"),
-      bundledDistPluginFile("telegram", "openclaw.plugin.json"),
+      bundledDistPluginFile("telegram", "natesclaw.plugin.json"),
       bundledDistPluginFile("telegram", "package.json"),
     ]) {
       expect(missing).toContain(path);
@@ -768,7 +768,7 @@ describe("collectMissingPackPaths", () => {
         "dist/audit/audit-event-writer.worker.js",
         "dist/config/sessions/session-accessor.sqlite-archive.worker.js",
         "dist/config/sessions/session-transcript-reconcile.worker.js",
-        "dist/state/openclaw-database-verify.worker.js",
+        "dist/state/natesclaw-database-verify.worker.js",
         "dist/system-agent/setup-inference-detection.worker.js",
         "dist/task-registry-control.runtime.js",
         "dist/telegram-ingress-worker.runtime.js",
@@ -782,7 +782,7 @@ describe("collectMissingPackPaths", () => {
   it("runs postpublish package integrity checks against the packed install before publish", () => {
     const root = mkdtempSync(join(tmpdir(), "release-check-packed-install-"));
     try {
-      const packageRoot = join(root, "openclaw");
+      const packageRoot = join(root, "natesclaw");
       const distDir = join(packageRoot, "dist");
       mkdirSync(distDir, { recursive: true });
       for (const relativePath of [
@@ -809,14 +809,14 @@ describe("collectMissingPackPaths", () => {
       }
       writeFileSync(
         join(packageRoot, "package.json"),
-        `${JSON.stringify({ name: "openclaw", version: "2026.5.14-beta.3", dependencies: {} })}\n`,
+        `${JSON.stringify({ name: "natesclaw", version: "2026.5.14-beta.3", dependencies: {} })}\n`,
       );
       writeFileSync(join(distDir, "typescript-compiler.js"), "x".repeat(6 * 1024 * 1024 + 1));
 
       expect(
         collectPackedInstalledPackageVerificationErrors({
           expectedVersion: "2026.5.14-beta.3",
-          installedBinaryVersion: "openclaw 2026.5.14-beta.3",
+          installedBinaryVersion: "natesclaw 2026.5.14-beta.3",
           packageRoot,
         }),
       ).toEqual([
@@ -869,11 +869,11 @@ describe("createPackedPluginSdkTypescriptSmokeProject", () => {
     const root = mkdtempSync(join(tmpdir(), "release-check-plugin-sdk-types-"));
     try {
       const consumerDir = join(root, "consumer");
-      const packageRoot = join(root, "openclaw");
+      const packageRoot = join(root, "natesclaw");
       createPackedPluginSdkTypescriptSmokeProject({
         consumerDir,
         packageSpec: `file:${packageRoot}`,
-        aiPackageSpec: "file:/tmp/openclaw-ai.tgz",
+        aiPackageSpec: "file:/tmp/natesclaw-ai.tgz",
       });
 
       const packageJson = JSON.parse(readFileSync(join(consumerDir, "package.json"), "utf8")) as {
@@ -888,18 +888,18 @@ describe("createPackedPluginSdkTypescriptSmokeProject", () => {
         "utf8",
       );
 
-      expect(packageJson.dependencies?.openclaw).toBe(`file:${packageRoot}`);
-      expect(packageJson.dependencies?.["@openclaw/ai"]).toBe("file:/tmp/openclaw-ai.tgz");
+      expect(packageJson.dependencies?.natesclaw).toBe(`file:${packageRoot}`);
+      expect(packageJson.dependencies?.["@natesclaw/ai"]).toBe("file:/tmp/natesclaw-ai.tgz");
       expect(tsconfig.compilerOptions?.skipLibCheck).toBe(true);
       expect(source).toBe(fixtureSource);
-      expect(source).toContain('"openclaw/plugin-sdk/core"');
-      expect(source).toContain('"openclaw/plugin-sdk/plugin-entry"');
-      expect(source).toContain('"openclaw/plugin-sdk/channel-entry-contract"');
-      expect(source).toContain('"openclaw/plugin-sdk/config-contracts"');
-      expect(source).toContain('"openclaw/plugin-sdk/runtime-env"');
+      expect(source).toContain('"natesclaw/plugin-sdk/core"');
+      expect(source).toContain('"natesclaw/plugin-sdk/plugin-entry"');
+      expect(source).toContain('"natesclaw/plugin-sdk/channel-entry-contract"');
+      expect(source).toContain('"natesclaw/plugin-sdk/config-contracts"');
+      expect(source).toContain('"natesclaw/plugin-sdk/runtime-env"');
       expect(source).toContain("type PublicPluginSdkModules = [");
       expect(source).not.toContain("TelegramAccountConfig");
-      expect(source).not.toContain("openclaw/plugin-sdk/channel-contract-testing");
+      expect(source).not.toContain("natesclaw/plugin-sdk/channel-contract-testing");
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
@@ -909,31 +909,31 @@ describe("createPackedPluginSdkTypescriptSmokeProject", () => {
 describe("collectPackUnpackedSizeErrors", () => {
   it("accepts pack results within the unpacked size budget", () => {
     expect(
-      collectPackUnpackedSizeErrors([makePackResult("openclaw-2026.3.14.tgz", 120_354_302)]),
+      collectPackUnpackedSizeErrors([makePackResult("natesclaw-2026.3.14.tgz", 120_354_302)]),
     ).toStrictEqual([]);
   });
 
   it("accepts npm 12 name-keyed pack results", () => {
     expect(
       collectPackUnpackedSizeErrors({
-        openclaw: makePackResult("openclaw-2026.3.14.tgz", 120_354_302),
+        natesclaw: makePackResult("natesclaw-2026.3.14.tgz", 120_354_302),
       }),
     ).toStrictEqual([]);
   });
 
   it("flags oversized pack results that risk low-memory startup failures", () => {
     expect(
-      collectPackUnpackedSizeErrors([makePackResult("openclaw-2026.3.12.tgz", 224_002_564)]),
+      collectPackUnpackedSizeErrors([makePackResult("natesclaw-2026.3.12.tgz", 224_002_564)]),
     ).toEqual([
-      "openclaw-2026.3.12.tgz unpackedSize 224002564 bytes (213.6 MiB) exceeds budget 211812352 bytes (202.0 MiB). Investigate duplicate channel shims, copied extension trees, or other accidental pack bloat before release.",
+      "natesclaw-2026.3.12.tgz unpackedSize 224002564 bytes (213.6 MiB) exceeds budget 211812352 bytes (202.0 MiB). Investigate duplicate channel shims, copied extension trees, or other accidental pack bloat before release.",
     ]);
   });
 
   it("fails closed when npm pack output omits unpackedSize for every result", () => {
     expect(
       collectPackUnpackedSizeErrors([
-        { filename: "openclaw-2026.3.14.tgz" },
-        { filename: "openclaw-extra.tgz", unpackedSize: Number.NaN },
+        { filename: "natesclaw-2026.3.14.tgz" },
+        { filename: "natesclaw-extra.tgz", unpackedSize: Number.NaN },
       ]),
     ).toEqual([
       "npm pack --dry-run produced no unpackedSize data; pack size budget was not verified.",
@@ -943,14 +943,14 @@ describe("collectPackUnpackedSizeErrors", () => {
 
 describe("resolveNpmJsonEntries", () => {
   it("normalizes npm <=11 arrays and npm 12 name-keyed objects", () => {
-    const entry = makePackResult("openclaw-2026.7.2.tgz", 120_354_302);
+    const entry = makePackResult("natesclaw-2026.7.2.tgz", 120_354_302);
 
     expect(resolveNpmJsonEntries([entry])).toEqual([entry]);
     expect(resolveNpmJsonEntries(entry)).toEqual([entry]);
-    expect(resolveNpmJsonEntries({ openclaw: entry })).toEqual([entry]);
-    expect(resolveNpmJsonEntries({ "@openclaw/demo": entry })).toEqual([entry]);
-    expect(resolveNpmJsonEntries({ openclaw: entry })).toEqual(
-      resolveRuntimeNpmJsonEntries({ openclaw: entry }),
+    expect(resolveNpmJsonEntries({ natesclaw: entry })).toEqual([entry]);
+    expect(resolveNpmJsonEntries({ "@natesclaw/demo": entry })).toEqual([entry]);
+    expect(resolveNpmJsonEntries({ natesclaw: entry })).toEqual(
+      resolveRuntimeNpmJsonEntries({ natesclaw: entry }),
     );
   });
 });
@@ -958,28 +958,28 @@ describe("resolveNpmJsonEntries", () => {
 describe("resolvePackedTarballPath", () => {
   it("resolves one local npm pack tarball filename inside the pack destination", () => {
     expect(
-      resolvePackedTarballPath("/tmp/openclaw-pack", [{ filename: "openclaw-2026.6.17.tgz" }]),
-    ).toBe(resolvePath("/tmp/openclaw-pack", "openclaw-2026.6.17.tgz"));
+      resolvePackedTarballPath("/tmp/natesclaw-pack", [{ filename: "natesclaw-2026.6.17.tgz" }]),
+    ).toBe(resolvePath("/tmp/natesclaw-pack", "natesclaw-2026.6.17.tgz"));
     expect(
-      resolvePackedTarballPath("/tmp/openclaw-pack", [
-        { filename: "/tmp/openclaw-pack/openclaw-2026.6.17.tgz" },
+      resolvePackedTarballPath("/tmp/natesclaw-pack", [
+        { filename: "/tmp/natesclaw-pack/natesclaw-2026.6.17.tgz" },
       ]),
-    ).toBe(resolvePath("/tmp/openclaw-pack", "openclaw-2026.6.17.tgz"));
+    ).toBe(resolvePath("/tmp/natesclaw-pack", "natesclaw-2026.6.17.tgz"));
   });
 
   it("rejects path-like npm pack tarball filenames", () => {
     const unsafeFilenames = [
-      "../openclaw.tgz",
-      "nested/openclaw.tgz",
-      "nested\\openclaw.tgz",
-      "/tmp/openclaw.tgz",
-      "C:\\temp\\openclaw.tgz",
-      "openclaw\u0000.tgz",
-      "openclaw.tar.gz",
+      "../natesclaw.tgz",
+      "nested/natesclaw.tgz",
+      "nested\\natesclaw.tgz",
+      "/tmp/natesclaw.tgz",
+      "C:\\temp\\natesclaw.tgz",
+      "natesclaw\u0000.tgz",
+      "natesclaw.tar.gz",
     ];
 
     for (const filename of unsafeFilenames) {
-      expect(() => resolvePackedTarballPath("/tmp/openclaw-pack", [{ filename }])).toThrow(
+      expect(() => resolvePackedTarballPath("/tmp/natesclaw-pack", [{ filename }])).toThrow(
         "release-check: npm pack reported unsafe tarball filename",
       );
     }
@@ -1014,7 +1014,7 @@ describe("createPackedBundledPluginPostinstallEnv", () => {
   it("keeps packed postinstall on the lazy bundled dependency path", () => {
     expect(createPackedBundledPluginPostinstallEnv({ PATH: "/usr/bin" })).toEqual({
       PATH: "/usr/bin",
-      OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      NATESCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
     });
   });
 });

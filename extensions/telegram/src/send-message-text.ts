@@ -1,8 +1,8 @@
-import { createMessageReceiptFromOutboundResults } from "openclaw/plugin-sdk/channel-outbound";
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-contracts";
-import { resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { createMessageReceiptFromOutboundResults } from "natesclaw/plugin-sdk/channel-outbound";
+import type { MarkdownTableMode } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveTextChunkLimit } from "natesclaw/plugin-sdk/reply-chunking";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/ssrf-runtime";
 import type { ResolvedTelegramAccount } from "./accounts.js";
 import { createTelegramChunkDeliveryTracker } from "./chunk-delivery.js";
 import { buildInlineKeyboard } from "./inline-keyboard.js";
@@ -31,7 +31,7 @@ import type {
   TelegramSendOpts,
   TelegramSendResult,
 } from "./send-message-types.js";
-import type { OpenClawConfig } from "./send.runtime.js";
+import type { NatesclawConfig } from "./send.runtime.js";
 import { recordSentMessage } from "./sent-message-cache.js";
 import {
   deliverTelegramTextPage,
@@ -65,7 +65,7 @@ function buildTelegramTextSendReceipt(params: {
 }
 
 export function createTelegramTextSender(config: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedTelegramAccount;
   api: TelegramApi;
   chatId: string;

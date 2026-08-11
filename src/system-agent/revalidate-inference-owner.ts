@@ -31,7 +31,7 @@ export async function revalidateSetupInferenceOwner(params: {
   if (
     params.route.runner === "embedded" &&
     successfulHarnessId &&
-    successfulHarnessId !== "openclaw"
+    successfulHarnessId !== "natesclaw"
   ) {
     const workspaceDir = resolveAgentWorkspaceDir(
       params.route.runConfig,

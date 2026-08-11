@@ -1,6 +1,6 @@
-// Llm Task plugin entrypoint registers its OpenClaw integration.
-import { optionalPositiveIntegerSchema } from "openclaw/plugin-sdk/channel-actions";
-import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
+// Llm Task plugin entrypoint registers its Natesclaw integration.
+import { optionalPositiveIntegerSchema } from "natesclaw/plugin-sdk/channel-actions";
+import { defineToolPlugin } from "natesclaw/plugin-sdk/tool-plugin";
 import { Type } from "typebox";
 import type { AnyAgentTool } from "./api.js";
 import { createLlmTaskTool, llmTaskToolDefinition } from "./src/llm-task-tool.js";

@@ -2,7 +2,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString as toText,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { z } from "zod";
 
 /**
@@ -147,12 +147,12 @@ export const ClaudePermissionRequestSchema = z.object({
 
 export { toText };
 
-/** Resolve the visible message id, including OpenClaw metadata attached to raw entries. */
+/** Resolve the visible message id, including Natesclaw metadata attached to raw entries. */
 export function resolveMessageId(entry: Record<string, unknown>): string | undefined {
   return (
     toText(entry.id) ??
-    (entry["__openclaw"] && typeof entry["__openclaw"] === "object"
-      ? toText((entry["__openclaw"] as { id?: unknown }).id)
+    (entry["__natesclaw"] && typeof entry["__natesclaw"] === "object"
+      ? toText((entry["__natesclaw"] as { id?: unknown }).id)
       : undefined)
   );
 }

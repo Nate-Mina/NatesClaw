@@ -1,9 +1,9 @@
 // Nextcloud Talk tests cover doctor contract plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { legacyConfigRules, normalizeCompatibilityConfig } from "./doctor-contract.js";
 
-function talkConfig(entry: Record<string, unknown>): OpenClawConfig {
+function talkConfig(entry: Record<string, unknown>): NatesclawConfig {
   return { channels: { "nextcloud-talk": entry } } as never;
 }
 

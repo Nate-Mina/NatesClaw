@@ -1,6 +1,6 @@
 /** Final persistence, telemetry, and delivery for an isolated cron run. */
-import { asPositiveFiniteNumber as resolvePositiveContextTokens } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asPositiveFiniteNumber as resolvePositiveContextTokens } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { hasAcceptedSessionSpawn } from "../../agents/accepted-session-spawn.js";
 import { hasCommittedMessagingToolDeliveryEvidence } from "../../agents/embedded-agent-runner/delivery-evidence.js";
 import { deriveContextPromptTokens } from "../../agents/usage.js";

@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { gatewayOriginScope } from "../../packages/gateway-client/src/gateway-origin-scope.js";
 import { storeDeviceAuthToken, storeOriginDeviceToken } from "../infra/device-auth-store.js";
 import { loadOrCreateDeviceIdentity } from "../infra/device-identity.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { withTempDir } from "../test-utils/temp-dir.js";
 
 type WebSocketEvent = "open" | "message" | "close" | "error";
@@ -83,7 +83,7 @@ type ConnectFrame = {
 };
 
 function createEnv(stateDir: string): NodeJS.ProcessEnv {
-  return { OPENCLAW_STATE_DIR: stateDir, OPENCLAW_TEST_FAST: "1" };
+  return { NATESCLAW_STATE_DIR: stateDir, NATESCLAW_TEST_FAST: "1" };
 }
 
 async function captureProbeConnectFrame(params: {
@@ -131,12 +131,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 describe("probeGateway device auth scope", () => {
   it("does not serialize origin-A legacy or scoped tokens to remote origin B", async () => {
-    await withTempDir("openclaw-probe-origin-scope-", async (stateDir) => {
+    await withTempDir("natesclaw-probe-origin-scope-", async (stateDir) => {
       const env = createEnv(stateDir);
       const identity = loadOrCreateDeviceIdentity({ env });
       storeDeviceAuthToken({
@@ -165,7 +165,7 @@ describe("probeGateway device auth scope", () => {
   });
 
   it("keeps legacy stored device auth available to local loopback probes", async () => {
-    await withTempDir("openclaw-probe-local-scope-", async (stateDir) => {
+    await withTempDir("natesclaw-probe-local-scope-", async (stateDir) => {
       const env = createEnv(stateDir);
       const identity = loadOrCreateDeviceIdentity({ env });
       storeDeviceAuthToken({
@@ -189,7 +189,7 @@ describe("probeGateway device auth scope", () => {
   });
 
   it("keeps explicit tokens authoritative for remote probes", async () => {
-    await withTempDir("openclaw-probe-explicit-scope-", async (stateDir) => {
+    await withTempDir("natesclaw-probe-explicit-scope-", async (stateDir) => {
       const env = createEnv(stateDir);
       const identity = loadOrCreateDeviceIdentity({ env });
       storeDeviceAuthToken({
@@ -211,7 +211,7 @@ describe("probeGateway device auth scope", () => {
   });
 
   it("does not reuse stored auth across SSH targets sharing a forwarded port", async () => {
-    await withTempDir("openclaw-probe-ssh-scope-", async (stateDir) => {
+    await withTempDir("natesclaw-probe-ssh-scope-", async (stateDir) => {
       const env = createEnv(stateDir);
       const identity = loadOrCreateDeviceIdentity({ env });
       storeDeviceAuthToken({
@@ -241,7 +241,7 @@ describe("probeGateway device auth scope", () => {
   });
 
   it("keeps explicit auth available through SSH forwarded transports", async () => {
-    await withTempDir("openclaw-probe-ssh-explicit-", async (stateDir) => {
+    await withTempDir("natesclaw-probe-ssh-explicit-", async (stateDir) => {
       const env = createEnv(stateDir);
       const connect = await captureProbeConnectFrame({
         url: "ws://127.0.0.1:18789",

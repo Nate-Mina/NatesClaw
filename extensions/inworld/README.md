@@ -1,12 +1,12 @@
-# OpenClaw Inworld Plugin
+# Natesclaw Inworld Plugin
 
-Official OpenClaw plugin for Inworld.
+Official Natesclaw plugin for Inworld.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/inworld-speech
-openclaw gateway restart
+natesclaw plugins install @natesclaw/inworld-speech
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/inworld> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/inworld> for setup and configuration.

@@ -2,9 +2,9 @@
 import {
   asNullableRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 
-export { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+export { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 
 export function extractAssistantText(messages: unknown[]): string | null {
   for (let index = messages.length - 1; index >= 0; index -= 1) {

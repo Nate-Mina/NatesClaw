@@ -54,7 +54,7 @@ describe("session projection Gateway run events", () => {
       message: {
         role: "assistant",
         content: [{ type: "text", text: "delivered final" }],
-        __openclaw: { id: "final-1", seq: 1 },
+        __natesclaw: { id: "final-1", seq: 1 },
       },
     };
     const first = reduceSessionProjectionRunEvent(createSessionProjection(scope), final);

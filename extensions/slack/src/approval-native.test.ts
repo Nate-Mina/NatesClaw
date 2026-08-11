@@ -2,12 +2,12 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   normalizeSessionDeliveryState,
   upsertSessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { closeOpenClawAgentDatabasesForTest } from "openclaw/plugin-sdk/sqlite-runtime-testing";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { closeNatesclawAgentDatabasesForTest } from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 import { afterEach, describe, expect, it } from "vitest";
 import { slackApprovalCapability } from "./approval-native.js";
 import { registerSlackInstallationState } from "./installation-identity-state.js";
@@ -15,8 +15,8 @@ import { registerSlackInstallationState } from "./installation-identity-state.js
 type SlackInstallationStateRegistration = ReturnType<typeof registerSlackInstallationState>;
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["slack"]>>,
-): OpenClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<NatesclawConfig["channels"]>["slack"]>>,
+): NatesclawConfig {
   return {
     channels: {
       slack: {
@@ -30,7 +30,7 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 const tempDirs: string[] = [];
@@ -40,14 +40,14 @@ afterEach(() => {
   for (const installationState of installationStates.splice(0)) {
     installationState.release();
   }
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
 
 function createTempStorePath(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-slack-approval-native-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-slack-approval-native-"));
   tempDirs.push(dir);
   return path.join(dir, "sessions.json");
 }
@@ -125,7 +125,7 @@ describe("slack native approval adapter", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const request = {
       id: "req-unbound",
       request: { command: "echo hi", turnSourceChannel: "slack" },
@@ -455,7 +455,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "U123OWNER" }],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const request = {
       id: "plugin:req-1",
       request: {
@@ -525,7 +525,7 @@ describe("slack native approval adapter", () => {
           sessionFilter: ["slack:"],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const request = {
       id: "plugin:req-open-session",
       request: {
@@ -605,7 +605,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", accountId: "work", to: "user:U123OWNER" }],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const request = {
       id: "plugin:req-transport",
       request: {
@@ -666,7 +666,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", accountId: "work", to: "user:U123OWNER" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const request = {
       id: "plugin:req-http",
       request: {
@@ -730,7 +730,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", accountId: "work", to: "user:U123OWNER" }],
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const request = {
       id: "plugin:req-http-secret-ref",
       request: {
@@ -780,7 +780,7 @@ describe("slack native approval adapter", () => {
           mode: "session",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const request = {
       id: "plugin:req-account-bound",
       request: {
@@ -1164,7 +1164,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "user:U123OWNER" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       shouldSuppress({
@@ -1206,7 +1206,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "U123OWNER" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       shouldSuppress({
@@ -1252,7 +1252,7 @@ describe("slack native approval adapter", () => {
           targets: [{ channel: "slack", to: "channel:CAPPROVALS" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       shouldSuppress({

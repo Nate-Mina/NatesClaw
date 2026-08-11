@@ -4,7 +4,7 @@ import path from "node:path";
 import {
   loadAuthProfileStoreWithoutExternalProfiles,
   saveAuthProfileStore,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "natesclaw/plugin-sdk/agent-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { createTempDirHarness } from "../../temp-dir.test-helper.js";
 import { readQaAuthProfiles, writeQaAuthProfiles } from "./auth-store.js";
@@ -17,7 +17,7 @@ describe("QA auth profile store", () => {
   });
 
   it("writes new auth profiles to SQLite without creating legacy JSON", async () => {
-    const agentDir = await tempDirs.makeTempDir("openclaw-qa-auth-store-");
+    const agentDir = await tempDirs.makeTempDir("natesclaw-qa-auth-store-");
 
     await writeQaAuthProfiles({
       agentDir,
@@ -39,7 +39,7 @@ describe("QA auth profile store", () => {
   });
 
   it("refuses to bypass a pending legacy auth source", async () => {
-    const agentDir = await tempDirs.makeTempDir("openclaw-qa-auth-store-");
+    const agentDir = await tempDirs.makeTempDir("natesclaw-qa-auth-store-");
     const authPath = path.join(agentDir, "auth-profiles.json");
     await fs.writeFile(authPath, "{not-json", "utf8");
 
@@ -59,7 +59,7 @@ describe("QA auth profile store", () => {
   });
 
   it("merges canonical API-key, token, and OAuth profile shapes", async () => {
-    const agentDir = await tempDirs.makeTempDir("openclaw-qa-auth-store-");
+    const agentDir = await tempDirs.makeTempDir("natesclaw-qa-auth-store-");
     await writeQaAuthProfiles({
       agentDir,
       profiles: {
@@ -103,7 +103,7 @@ describe("QA auth profile store", () => {
   });
 
   it("can replace an existing profile set for deterministic fixture seeding", async () => {
-    const agentDir = await tempDirs.makeTempDir("openclaw-qa-auth-store-");
+    const agentDir = await tempDirs.makeTempDir("natesclaw-qa-auth-store-");
     saveAuthProfileStore(
       {
         version: 1,

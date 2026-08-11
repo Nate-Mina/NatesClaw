@@ -990,7 +990,7 @@ describe("mcp loopback server", () => {
           token: runtime.ownerToken,
           headers: {
             ...MAIN_SESSION_HEADER,
-            "x-openclaw-current-message-id": `message-${index}`,
+            "x-natesclaw-current-message-id": `message-${index}`,
           },
         }),
       );
@@ -1102,18 +1102,18 @@ describe("mcp loopback server", () => {
       token: runtime?.nonOwnerToken,
       headers: jsonHeaders({
         "x-session-key": "agent:main:telegram:group:chat123",
-        "x-openclaw-session-id": "session-123",
-        "x-openclaw-account-id": "work",
-        "x-openclaw-message-channel": "telegram",
-        "x-openclaw-client-caps": "tool-events,inline-widgets",
-        "x-openclaw-current-channel-id": "telegram:chat123",
-        "x-openclaw-current-thread-ts": "42",
-        "x-openclaw-current-message-id": "reply-message-1",
-        "x-openclaw-current-inbound-audio": "true",
-        "x-openclaw-inbound-event-kind": "room_event",
-        "x-openclaw-source-reply-delivery-mode": "message_tool_only",
-        "x-openclaw-task-suggestion-delivery-mode": "gateway",
-        "x-openclaw-require-explicit-message-target": "true",
+        "x-natesclaw-session-id": "session-123",
+        "x-natesclaw-account-id": "work",
+        "x-natesclaw-message-channel": "telegram",
+        "x-natesclaw-client-caps": "tool-events,inline-widgets",
+        "x-natesclaw-current-channel-id": "telegram:chat123",
+        "x-natesclaw-current-thread-ts": "42",
+        "x-natesclaw-current-message-id": "reply-message-1",
+        "x-natesclaw-current-inbound-audio": "true",
+        "x-natesclaw-inbound-event-kind": "room_event",
+        "x-natesclaw-source-reply-delivery-mode": "message_tool_only",
+        "x-natesclaw-task-suggestion-delivery-mode": "gateway",
+        "x-natesclaw-require-explicit-message-target": "true",
       }),
       body: mcpToolsListBody(),
     });
@@ -1153,8 +1153,8 @@ describe("mcp loopback server", () => {
         token: runtime.ownerToken,
         headers: {
           "x-session-key": "agent:main:main",
-          "x-openclaw-current-message-id": currentMessageId,
-          "x-openclaw-client-caps": clientCaps,
+          "x-natesclaw-current-message-id": currentMessageId,
+          "x-natesclaw-client-caps": clientCaps,
         },
       });
 
@@ -1180,14 +1180,14 @@ describe("mcp loopback server", () => {
       token: grant.token,
       headers: jsonHeaders({
         "x-session-key": "agent:main:SPOOFED-other-session",
-        "x-openclaw-message-channel": "telegram",
-        "x-openclaw-client-caps": "inline-widgets",
-        "x-openclaw-account-id": "victim-account",
-        "x-openclaw-current-channel-id": "telegram:victim-chat",
-        "x-openclaw-current-thread-ts": "999",
-        "x-openclaw-source-reply-delivery-mode": "automatic",
-        "x-openclaw-source-reply-only": "true",
-        "x-openclaw-inbound-event-kind": "room_event",
+        "x-natesclaw-message-channel": "telegram",
+        "x-natesclaw-client-caps": "inline-widgets",
+        "x-natesclaw-account-id": "victim-account",
+        "x-natesclaw-current-channel-id": "telegram:victim-chat",
+        "x-natesclaw-current-thread-ts": "999",
+        "x-natesclaw-source-reply-delivery-mode": "automatic",
+        "x-natesclaw-source-reply-only": "true",
+        "x-natesclaw-inbound-event-kind": "room_event",
       }),
       body: mcpToolsListBody(),
     });
@@ -1293,21 +1293,21 @@ describe("mcp loopback server", () => {
         port,
         token: grant.token,
         headers: jsonHeaders({
-          ...(captureKey ? { "x-openclaw-cli-capture-key": captureKey } : {}),
+          ...(captureKey ? { "x-natesclaw-cli-capture-key": captureKey } : {}),
           "x-session-key": "agent:main:main",
-          "x-openclaw-session-id": "session-spoofed",
-          "x-openclaw-message-channel": "telegram",
-          "x-openclaw-client-caps": "inline-widgets,admin",
-          "x-openclaw-account-id": "spoofed-account",
-          "x-openclaw-current-channel-id": "telegram:spoofed",
-          "x-openclaw-current-thread-ts": "spoofed-thread",
-          "x-openclaw-current-message-id": "spoofed-message",
-          "x-openclaw-current-inbound-audio": "false",
-          "x-openclaw-inbound-event-kind": "room_event",
-          "x-openclaw-source-reply-delivery-mode": "automatic",
-          "x-openclaw-source-reply-only": "false",
-          "x-openclaw-task-suggestion-delivery-mode": "direct",
-          "x-openclaw-require-explicit-message-target": "false",
+          "x-natesclaw-session-id": "session-spoofed",
+          "x-natesclaw-message-channel": "telegram",
+          "x-natesclaw-client-caps": "inline-widgets,admin",
+          "x-natesclaw-account-id": "spoofed-account",
+          "x-natesclaw-current-channel-id": "telegram:spoofed",
+          "x-natesclaw-current-thread-ts": "spoofed-thread",
+          "x-natesclaw-current-message-id": "spoofed-message",
+          "x-natesclaw-current-inbound-audio": "false",
+          "x-natesclaw-inbound-event-kind": "room_event",
+          "x-natesclaw-source-reply-delivery-mode": "automatic",
+          "x-natesclaw-source-reply-only": "false",
+          "x-natesclaw-task-suggestion-delivery-mode": "direct",
+          "x-natesclaw-require-explicit-message-target": "false",
         }),
         body: method === "call" ? mcpToolCallBody("message") : mcpToolsListBody(),
       });
@@ -1386,7 +1386,7 @@ describe("mcp loopback server", () => {
         (
           await sendLoopbackToolsList({
             token,
-            headers: { "x-openclaw-cli-capture-key": captureKey },
+            headers: { "x-natesclaw-cli-capture-key": captureKey },
           })
         ).status,
       ).toBe(200);
@@ -1409,7 +1409,7 @@ describe("mcp loopback server", () => {
     resolveGatewayScopedToolsMock.mockReturnValue({
       agentId: "main",
       tools: [makeMessageTool()],
-      workspaceDir: "/tmp/openclaw-workspace",
+      workspaceDir: "/tmp/natesclaw-workspace",
     });
     const { runtime } = await startLoopbackServerForTest();
 
@@ -1419,7 +1419,7 @@ describe("mcp loopback server", () => {
       args: { body: "hello" },
     });
 
-    expect(getBeforeToolCallHookInput(0).ctx?.workspaceDir).toBe("/tmp/openclaw-workspace");
+    expect(getBeforeToolCallHookInput(0).ctx?.workspaceDir).toBe("/tmp/natesclaw-workspace");
   });
 
   it("revalidates admitted authority after async preparation before tool execution", async () => {
@@ -1467,7 +1467,7 @@ describe("mcp loopback server", () => {
     const responsePromise = sendLoopbackToolCall({
       token: grant.token,
       name: "exec",
-      headers: { "x-openclaw-cli-capture-key": captureKey },
+      headers: { "x-natesclaw-cli-capture-key": captureKey },
     });
     await preparationStarted;
     activeAdmissions.at(-1)?.close();
@@ -1503,7 +1503,7 @@ describe("mcp loopback server", () => {
         await sendRaw({
           port: successor.port,
           token: staleGrant.token,
-          headers: jsonHeaders({ "x-openclaw-cli-capture-key": "capture-stale" }),
+          headers: jsonHeaders({ "x-natesclaw-cli-capture-key": "capture-stale" }),
           body: mcpToolsListBody(),
         })
       ).status,
@@ -1524,7 +1524,7 @@ describe("mcp loopback server", () => {
         await sendRaw({
           port: successor.port,
           token: revokedGrant.token,
-          headers: jsonHeaders({ "x-openclaw-cli-capture-key": "capture-revoked" }),
+          headers: jsonHeaders({ "x-natesclaw-cli-capture-key": "capture-revoked" }),
           body: mcpToolsListBody(),
         })
       ).status,
@@ -1570,7 +1570,7 @@ describe("mcp loopback server", () => {
             authorization: `Bearer ${grant.token}`,
             "content-type": "application/json",
             "transfer-encoding": "chunked",
-            "x-openclaw-cli-capture-key": captureKey,
+            "x-natesclaw-cli-capture-key": captureKey,
           },
         },
         (res) => {
@@ -1638,8 +1638,8 @@ describe("mcp loopback server", () => {
         args: { message },
         headers: {
           "x-session-key": "agent:main:main",
-          "x-openclaw-session-id": "session-reused",
-          "x-openclaw-cli-capture-key": captureKey,
+          "x-natesclaw-session-id": "session-reused",
+          "x-natesclaw-cli-capture-key": captureKey,
         },
       });
     };
@@ -1666,17 +1666,17 @@ describe("mcp loopback server", () => {
         token: runtime?.ownerToken,
         headers: {
           "x-session-key": "agent:main:telegram:group:chat123",
-          "x-openclaw-message-channel": "telegram",
-          "x-openclaw-inbound-event-kind": inboundEventKind,
+          "x-natesclaw-message-channel": "telegram",
+          "x-natesclaw-inbound-event-kind": inboundEventKind,
           ...(sourceReplyDeliveryMode
-            ? { "x-openclaw-source-reply-delivery-mode": sourceReplyDeliveryMode }
+            ? { "x-natesclaw-source-reply-delivery-mode": sourceReplyDeliveryMode }
             : {}),
-          ...(currentInboundAudio ? { "x-openclaw-current-inbound-audio": "true" } : {}),
+          ...(currentInboundAudio ? { "x-natesclaw-current-inbound-audio": "true" } : {}),
           ...(requireExplicitMessageTarget
-            ? { "x-openclaw-require-explicit-message-target": "true" }
+            ? { "x-natesclaw-require-explicit-message-target": "true" }
             : {}),
           ...(taskSuggestionDeliveryMode
-            ? { "x-openclaw-task-suggestion-delivery-mode": taskSuggestionDeliveryMode }
+            ? { "x-natesclaw-task-suggestion-delivery-mode": taskSuggestionDeliveryMode }
             : {}),
         },
       });
@@ -1719,7 +1719,7 @@ describe("mcp loopback server", () => {
           token: runtime.ownerToken,
           headers: {
             "x-session-key": "agent:main:main",
-            ...(clientCaps ? { "x-openclaw-client-caps": clientCaps } : {}),
+            ...(clientCaps ? { "x-natesclaw-client-caps": clientCaps } : {}),
           },
         }),
       );
@@ -1974,7 +1974,7 @@ describe("mcp loopback server", () => {
         token,
         headers: {
           "x-session-key": "agent:main:matrix:dm:test",
-          "x-openclaw-message-channel": "matrix",
+          "x-natesclaw-message-channel": "matrix",
         },
       });
 
@@ -1997,8 +1997,8 @@ describe("mcp loopback server", () => {
       token: runtime?.nonOwnerToken,
       headers: {
         "x-session-key": "agent:main:matrix:dm:test",
-        "x-openclaw-message-channel": "matrix",
-        "x-openclaw-sender-is-owner": "true",
+        "x-natesclaw-message-channel": "matrix",
+        "x-natesclaw-sender-is-owner": "true",
       },
     });
 
@@ -2209,7 +2209,7 @@ describe("mcp loopback server", () => {
           token: runtime.ownerToken,
           name: "message",
           args: { action: "send", target: "chat123", message: "sent" },
-          headers: { "x-openclaw-cli-capture-key": captureKey },
+          headers: { "x-natesclaw-cli-capture-key": captureKey },
         })
       ).status,
     ).toBe(200);
@@ -2225,7 +2225,7 @@ describe("mcp loopback server", () => {
           token: runtime.ownerToken,
           name: "message",
           args: { action: "send", target: "blocked", message: "not sent" },
-          headers: { "x-openclaw-cli-capture-key": captureKey },
+          headers: { "x-natesclaw-cli-capture-key": captureKey },
         })
       ).status,
     ).toBe(200);
@@ -2287,7 +2287,7 @@ describe("mcp loopback server", () => {
         token: runtime.ownerToken,
         name: "message",
         args: { action: "send", target: testCase.disposition, message: "not sent" },
-        headers: { "x-openclaw-cli-capture-key": captureKey },
+        headers: { "x-natesclaw-cli-capture-key": captureKey },
       });
       expect(response.status).toBe(200);
       expect((await readMcpPayload(response)).result?.isError).toBe(true);
@@ -2344,7 +2344,7 @@ describe("mcp loopback server", () => {
           status: testCase.status === "completed-timeout" ? "completed" : testCase.status,
           ...("timedOut" in testCase && testCase.timedOut ? { timedOut: true } : {}),
         },
-        headers: { "x-openclaw-cli-capture-key": captureKey },
+        headers: { "x-natesclaw-cli-capture-key": captureKey },
       });
       expect(response.status).toBe(200);
       const payload = await readMcpPayload(response);
@@ -2388,7 +2388,7 @@ describe("mcp loopback server", () => {
       token: runtime.ownerToken,
       name: "message",
       args: { action: "react", target: "original-target" },
-      headers: { "x-openclaw-cli-capture-key": captureKey },
+      headers: { "x-natesclaw-cli-capture-key": captureKey },
     });
 
     expect(updatedCalls).toHaveBeenCalledWith({
@@ -2516,7 +2516,7 @@ describe("mcp loopback server", () => {
               authorization: `Bearer ${runtime.ownerToken}`,
               "content-type": "application/json",
               "transfer-encoding": "chunked",
-              "x-openclaw-cli-capture-key": captureKey,
+              "x-natesclaw-cli-capture-key": captureKey,
             },
           },
           (res) => {
@@ -2593,7 +2593,7 @@ describe("mcp loopback server", () => {
       token: runtime.ownerToken,
       name: "message",
       args: { action: "send", target: "chat123", message: "sent" },
-      headers: { "x-openclaw-cli-capture-key": captureKey },
+      headers: { "x-natesclaw-cli-capture-key": captureKey },
     });
 
     expect(response.status).toBe(200);
@@ -2621,7 +2621,7 @@ describe("mcp loopback server", () => {
       token: runtime.ownerToken,
       name: "message",
       args: { action: "send", target: "chat123", message: "sent partly" },
-      headers: { "x-openclaw-cli-capture-key": captureKey },
+      headers: { "x-natesclaw-cli-capture-key": captureKey },
     });
 
     const payload = await readMcpPayload(response);
@@ -2658,7 +2658,7 @@ describe("mcp loopback server", () => {
       token: runtime.ownerToken,
       name: "message",
       args: { action: "send", target: "chat123", message: "late" },
-      headers: { "x-openclaw-cli-capture-key": captureKey },
+      headers: { "x-natesclaw-cli-capture-key": captureKey },
     });
 
     expect((await readMcpPayload(response)).result?.isError).toBe(true);
@@ -3174,8 +3174,8 @@ describe("mcp loopback server", () => {
   });
 
   it("times out stalled request bodies and closes uploads after flushing 408", async () => {
-    const previousTimeout = process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
-    process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = "20";
+    const previousTimeout = process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
+    process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = "20";
     try {
       server = await ensureMcpLoopbackServer(0);
       const runtime = getActiveMcpLoopbackRuntime();
@@ -3195,16 +3195,16 @@ describe("mcp loopback server", () => {
       });
     } finally {
       if (previousTimeout === undefined) {
-        delete process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
+        delete process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
       } else {
-        process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = previousTimeout;
+        process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = previousTimeout;
       }
     }
   });
 
   it("keeps delayed valid MCP request bodies open when timeout config exceeds Node's timer ceiling", async () => {
-    const previousTimeout = process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
-    process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = "2147483648";
+    const previousTimeout = process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
+    process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = "2147483648";
     try {
       server = await ensureMcpLoopbackServer(0);
       const runtime = getActiveMcpLoopbackRuntime();
@@ -3226,9 +3226,9 @@ describe("mcp loopback server", () => {
       });
     } finally {
       if (previousTimeout === undefined) {
-        delete process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
+        delete process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS;
       } else {
-        process.env.OPENCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = previousTimeout;
+        process.env.NATESCLAW_MCP_LOOPBACK_BODY_TIMEOUT_MS = previousTimeout;
       }
     }
   });
@@ -3288,11 +3288,11 @@ describe("createMcpLoopbackServerConfig", () => {
         { alwaysLoad?: boolean; url?: string; headers?: Record<string, string> }
       >;
     };
-    expect(config.mcpServers?.openclaw?.url).toBe("http://127.0.0.1:23119/mcp");
-    expect(config.mcpServers?.openclaw?.alwaysLoad).toBe(true);
-    expect(config.mcpServers?.openclaw?.headers).toEqual({
-      Authorization: "Bearer ${OPENCLAW_MCP_TOKEN}",
-      "x-openclaw-cli-capture-key": "${OPENCLAW_MCP_CLI_CAPTURE_KEY}",
+    expect(config.mcpServers?.natesclaw?.url).toBe("http://127.0.0.1:23119/mcp");
+    expect(config.mcpServers?.natesclaw?.alwaysLoad).toBe(true);
+    expect(config.mcpServers?.natesclaw?.headers).toEqual({
+      Authorization: "Bearer ${NATESCLAW_MCP_TOKEN}",
+      "x-natesclaw-cli-capture-key": "${NATESCLAW_MCP_CLI_CAPTURE_KEY}",
     });
   });
 
@@ -3300,8 +3300,8 @@ describe("createMcpLoopbackServerConfig", () => {
     const config = createMcpAttachGrantServerConfig(23119) as {
       mcpServers?: Record<string, { headers?: Record<string, string> }>;
     };
-    expect(config.mcpServers?.openclaw?.headers).toEqual({
-      Authorization: "Bearer ${OPENCLAW_MCP_TOKEN}",
+    expect(config.mcpServers?.natesclaw?.headers).toEqual({
+      Authorization: "Bearer ${NATESCLAW_MCP_TOKEN}",
     });
   });
 
@@ -3335,7 +3335,7 @@ describe("createMcpLoopbackServerConfig", () => {
         port,
         method,
         token: grant.token,
-        headers: requestCaptureKey ? { "x-openclaw-cli-capture-key": requestCaptureKey } : {},
+        headers: requestCaptureKey ? { "x-natesclaw-cli-capture-key": requestCaptureKey } : {},
       });
 
     for (const method of ["GET", "DELETE"] as const) {
@@ -3422,7 +3422,7 @@ describe("createMcpLoopbackServerConfig", () => {
             authorization: `Bearer ${oldRuntime.ownerToken}`,
             connection: "close",
             "content-type": "application/json",
-            "x-openclaw-cli-capture-key": captureKey,
+            "x-natesclaw-cli-capture-key": captureKey,
           },
         },
         (res) => {
@@ -3479,7 +3479,7 @@ describe("createMcpLoopbackServerConfig", () => {
           await sendRaw({
             port: successor.port,
             token: successorGrant.token,
-            headers: jsonHeaders({ "x-openclaw-cli-capture-key": "capture-successor" }),
+            headers: jsonHeaders({ "x-natesclaw-cli-capture-key": "capture-successor" }),
             body: mcpToolsListBody(),
           })
         ).status,

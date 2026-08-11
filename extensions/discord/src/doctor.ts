@@ -1,13 +1,13 @@
-import type { ChannelDoctorAdapter } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { ChannelDoctorAdapter } from "natesclaw/plugin-sdk/channel-contract";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 // Discord plugin module implements doctor behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
 import {
   asObjectRecord,
   collectChannelAccountScopes,
   collectProviderDangerousNameMatchingScopes,
-} from "openclaw/plugin-sdk/runtime-doctor-migrations";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/runtime-doctor-migrations";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { inspectDiscordAccount } from "./account-inspect.js";
 import { resolveDefaultDiscordAccountId } from "./accounts.js";
 import { normalizeCompatibilityConfig as normalizeDiscordCompatibilityConfig } from "./doctor-contract.js";
@@ -81,7 +81,7 @@ function collectDiscordIdLists(
   return refs;
 }
 
-export function scanDiscordNumericIdEntries(cfg: OpenClawConfig): DiscordNumericIdHit[] {
+export function scanDiscordNumericIdEntries(cfg: NatesclawConfig): DiscordNumericIdHit[] {
   const hits: DiscordNumericIdHit[] = [];
   const scanList = (pathLabel: string, list: unknown) => {
     if (!Array.isArray(list)) {
@@ -154,9 +154,9 @@ export function collectDiscordNumericIdWarnings(params: {
 }
 
 export function maybeRepairDiscordNumericIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   doctorFixCommand: string,
-): { config: OpenClawConfig; changes: string[]; warnings?: string[] } {
+): { config: NatesclawConfig; changes: string[]; warnings?: string[] } {
   const hits = scanDiscordNumericIdEntries(cfg);
   if (hits.length === 0) {
     return { config: cfg, changes: [] };
@@ -215,7 +215,7 @@ export function maybeRepairDiscordNumericIds(
 }
 
 export function collectDiscordMissingEnvTokenWarnings(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): string[] {
   if (resolveDefaultDiscordAccountId(params.cfg) !== "default") {
@@ -234,7 +234,7 @@ export function collectDiscordMissingEnvTokenWarnings(params: {
   ];
 }
 
-function collectDiscordMutableAllowlistWarnings(cfg: OpenClawConfig): string[] {
+function collectDiscordMutableAllowlistWarnings(cfg: NatesclawConfig): string[] {
   const hits: Array<{ path: string; entry: string }> = [];
   const addHits = (pathLabel: string, list: unknown) => {
     if (!Array.isArray(list)) {

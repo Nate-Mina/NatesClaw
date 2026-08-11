@@ -1,14 +1,14 @@
 // Gradium provider module implements model/runtime integration.
-import { resolveGeneratedMediaMaxBytes } from "openclaw/plugin-sdk/media-generation-runtime";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+import { resolveGeneratedMediaMaxBytes } from "natesclaw/plugin-sdk/media-generation-runtime";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderPlugin,
-} from "openclaw/plugin-sdk/speech";
-import { trimToUndefined } from "openclaw/plugin-sdk/speech";
-import { resolveSpeechProviderApiKey } from "openclaw/plugin-sdk/speech-core";
-import { asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/speech";
+import { trimToUndefined } from "natesclaw/plugin-sdk/speech";
+import { resolveSpeechProviderApiKey } from "natesclaw/plugin-sdk/speech-core";
+import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { DEFAULT_GRADIUM_VOICE_ID, GRADIUM_VOICES, normalizeGradiumBaseUrl } from "./shared.js";
 import { gradiumTTS } from "./tts.js";
 

@@ -1,10 +1,10 @@
 // Google provider module implements model/runtime integration.
 import type {
-  OpenClawPluginApi,
+  NatesclawPluginApi,
   ProviderReasoningOutputModeContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "natesclaw/plugin-sdk/provider-auth-api-key";
+import type { ProviderPlugin } from "natesclaw/plugin-sdk/provider-model-shared";
 import { normalizeGoogleModelId } from "./model-id.js";
 import { GOOGLE_GEMINI_DEFAULT_MODEL, applyGoogleGeminiModelDefault } from "./onboard.js";
 import {
@@ -146,6 +146,6 @@ export function buildGoogleProvider(): ProviderPlugin {
   };
 }
 
-export function registerGoogleProvider(api: OpenClawPluginApi) {
+export function registerGoogleProvider(api: NatesclawPluginApi) {
   api.registerProvider(buildGoogleProvider());
 }

@@ -64,7 +64,7 @@ vi.mock("../../daemon/runtime-hints.js", () => ({
     "Logs: node service log",
     "Restart attempts: node restart log",
   ],
-  buildPlatformServiceStartHints: () => ["openclaw node install", "openclaw node start"],
+  buildPlatformServiceStartHints: () => ["natesclaw node install", "natesclaw node start"],
 }));
 
 vi.mock("../../daemon/systemd.js", async () => {
@@ -338,7 +338,7 @@ describe("runNodeDaemonStatus", () => {
     );
     expect(mocks.runtime.exit).toHaveBeenCalledWith(1);
     expect(stdout()).not.toContain("not loaded");
-    expect(stdout()).not.toContain("openclaw node install");
+    expect(stdout()).not.toContain("natesclaw node install");
   });
 
   it("reports a failed service check as JSON without inventing node status", async () => {
@@ -381,9 +381,9 @@ describe("runNodeDaemonStatus", () => {
     mocks.service.readCommand.mockResolvedValue({
       programArguments: ["node", "node-host"],
       environment: {
-        OPENCLAW_PROFILE: "work",
-        OPENCLAW_GATEWAY_TOKEN: "gateway-token",
-        OPENCLAW_GATEWAY_PASSWORD: "gateway-password",
+        NATESCLAW_PROFILE: "work",
+        NATESCLAW_GATEWAY_TOKEN: "gateway-token",
+        NATESCLAW_GATEWAY_PASSWORD: "gateway-password",
       },
     });
 
@@ -392,7 +392,7 @@ describe("runNodeDaemonStatus", () => {
     expect(mocks.runtime.writeJson).toHaveBeenCalledWith({
       service: expect.objectContaining({
         command: expect.objectContaining({
-          environment: { OPENCLAW_PROFILE: "work" },
+          environment: { NATESCLAW_PROFILE: "work" },
         }),
       }),
     });

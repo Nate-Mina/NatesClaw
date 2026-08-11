@@ -1,7 +1,7 @@
 import path from "node:path";
-import { MAX_VIDEO_BYTES } from "@openclaw/media-core/constants";
-import { normalizeMimeType } from "@openclaw/media-core/mime";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { MAX_VIDEO_BYTES } from "@natesclaw/media-core/constants";
+import { normalizeMimeType } from "@natesclaw/media-core/mime";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import type {
   ModelInputContent,
   ProviderContext,
@@ -35,7 +35,7 @@ import { sanitizeImageBlocks } from "../../tool-images.js";
 import { log } from "../logger.js";
 import {
   collectMediaImageRefs,
-  isOpenClawCliImageCachePath,
+  isNatesclawCliImageCachePath,
   resolveMediaFactLocalRef,
   type MediaFileRef,
   type MediaImageRef,
@@ -146,7 +146,7 @@ export function detectImageReferences(prompt: string): MediaFileRef[] {
       return;
     }
     const resolved = trimmed.startsWith("~") ? resolveUserPath(trimmed) : trimmed;
-    if (isOpenClawCliImageCachePath(resolved)) {
+    if (isNatesclawCliImageCachePath(resolved)) {
       return;
     }
     seen.add(dedupeKey);
@@ -166,7 +166,7 @@ export function detectImageReferences(prompt: string): MediaFileRef[] {
     }
     try {
       const resolved = safeFileURLToPath(raw);
-      if (isOpenClawCliImageCachePath(resolved)) {
+      if (isNatesclawCliImageCachePath(resolved)) {
         continue;
       }
       seen.add(dedupeKey);
@@ -580,7 +580,7 @@ async function materializePromptMediaMessages(
       continue;
     }
     const runtimeMedia = readRuntimePromptMediaFacts(message);
-    const meta = (message as unknown as Record<string, unknown>)["__openclaw"];
+    const meta = (message as unknown as Record<string, unknown>)["__natesclaw"];
     const resolvedMedia = runtimeMedia ?? readPersistedMediaFacts(message) ?? [];
     const runtimeImageOrder = readRuntimePromptImageOrder(message);
     const mediaImageLayout = readPersistedMediaImageLayout(message);
@@ -637,9 +637,9 @@ async function materializePromptMediaMessages(
       content: projectedContent,
     } as AgentMessage;
     if (Object.keys(nextMeta).length > 0) {
-      (hydratedMessage as unknown as Record<string, unknown>)["__openclaw"] = nextMeta;
+      (hydratedMessage as unknown as Record<string, unknown>)["__natesclaw"] = nextMeta;
     } else {
-      delete (hydratedMessage as unknown as Record<string, unknown>)["__openclaw"];
+      delete (hydratedMessage as unknown as Record<string, unknown>)["__natesclaw"];
     }
     if (runtimeMedia) {
       attachRuntimePromptMediaFacts(hydratedMessage, runtimeMedia, runtimeImageOrder);

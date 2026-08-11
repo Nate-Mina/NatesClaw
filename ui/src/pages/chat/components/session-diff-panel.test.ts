@@ -39,7 +39,7 @@ describe("SessionDiffPanel", () => {
     const second = deferred<SessionsDiffResult>();
     const firstLoader = vi.fn(() => first.promise);
     const secondLoader = vi.fn(() => second.promise);
-    const panel = document.createElement("openclaw-session-diff") as SessionDiffElement;
+    const panel = document.createElement("natesclaw-session-diff") as SessionDiffElement;
     panel.loader = firstLoader;
     document.body.append(panel);
 

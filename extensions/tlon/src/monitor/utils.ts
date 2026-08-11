@@ -1,20 +1,20 @@
-import { resolveAllowlistMatchByCandidates } from "openclaw/plugin-sdk/allow-from";
+import { resolveAllowlistMatchByCandidates } from "natesclaw/plugin-sdk/allow-from";
 import {
   formatAgentEnvelope,
   implicitMentionKindWhen,
   resolveEnvelopeFormatOptions,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 import {
   resolveChannelImplicitMentions,
   resolveStableChannelMessageIngress,
   type StableChannelIngressIdentityParams,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage as sharedFormatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage as sharedFormatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 // Tlon helper module supports utils behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { asNullableRecord, readStringField } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { asNullableRecord, readStringField } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { normalizeShip } from "../targets.js";
 
 export interface ParsedCite {
@@ -188,7 +188,7 @@ export async function resolveTlonCommandAuthorizationWithIngress(params: {
 }
 
 export function resolveTlonGroupMentionDecision(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   wasMentioned: boolean;
   botParticipatedInThread: boolean;
@@ -438,7 +438,7 @@ export function isSummarizationRequest(messageText: string): boolean {
  */
 export function formatSummarizationHistoryText(
   history: ReadonlyArray<{ author: string; content: string; timestamp: number }>,
-  cfg?: OpenClawConfig,
+  cfg?: NatesclawConfig,
 ): string {
   const envelopeOptions = resolveEnvelopeFormatOptions(cfg);
   return history

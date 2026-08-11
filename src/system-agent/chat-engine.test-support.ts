@@ -8,7 +8,7 @@ import {
   fingerprintOpaqueRuntimeOwner,
   fingerprintResolvedProviderAuth,
 } from "../agents/execution-auth-binding.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.openclaw.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "../config/types.natesclaw.js";
 import type { runSetupMemoryImportStep } from "../wizard/setup.memory-import.js";
 import {
   SystemAgentChatEngine as RuntimeSystemAgentChatEngine,
@@ -34,7 +34,7 @@ const mocks = vi.hoisted(() => ({
   readConfigFileSnapshot: vi.fn(async () => ({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     hash: "h",
     config: {},
     sourceConfig: {},
@@ -114,7 +114,7 @@ export const sharedVerifiedInferenceConfig = {
       {
         id: "main",
         default: true,
-        agentDir: "/tmp/openclaw-openclaw-chat-engine-agent",
+        agentDir: "/tmp/natesclaw-natesclaw-chat-engine-agent",
         model: "openai/gpt-5.5",
       },
     ],
@@ -129,25 +129,25 @@ export const sharedVerifiedInferenceConfig = {
       },
     },
   },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 export let sharedVerifiedInference: SystemAgentVerifiedInferenceBinding | undefined;
 let sharedVerifiedInferenceDeps: SystemAgentVerifiedInferenceDeps | undefined;
 let pluginMetadataSnapshot: SystemAgentPluginMetadataTestSnapshot | undefined;
 
 export function useTempStateDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-engine-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-engine-"));
   tempDirs.push(dir);
-  vi.stubEnv("OPENCLAW_STATE_DIR", dir);
+  vi.stubEnv("NATESCLAW_STATE_DIR", dir);
   pluginMetadataSnapshot?.rebindForCurrentEnv();
   return dir;
 }
 
-export function configSnapshot(config: OpenClawConfig): ConfigFileSnapshot {
+export function configSnapshot(config: NatesclawConfig): ConfigFileSnapshot {
   return {
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     hash: "h",
     raw: null,
     parsed: config,
@@ -167,9 +167,9 @@ function testHarnessBinding(route: SystemAgentConfiguredRoute) {
   }
   const agentHarnessId =
     route.agentHarnessRuntimeOverride === "auto"
-      ? "openclaw"
+      ? "natesclaw"
       : (route.agentHarnessRuntimeOverride ?? "codex");
-  if (agentHarnessId === "openclaw") {
+  if (agentHarnessId === "natesclaw") {
     return { auth: { agentHarnessId }, deps: {} };
   }
   return {
@@ -186,7 +186,7 @@ function testHarnessBinding(route: SystemAgentConfiguredRoute) {
   };
 }
 
-export async function createAmbientVerifiedBinding(config: OpenClawConfig) {
+export async function createAmbientVerifiedBinding(config: NatesclawConfig) {
   const route = await resolveSystemAgentConfiguredRouteFromConfig(config);
   if (!route) {
     throw new Error("missing test route");
@@ -214,7 +214,7 @@ export async function createAmbientVerifiedBinding(config: OpenClawConfig) {
 }
 
 export async function createOAuthVerifiedBinding(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   credential: Parameters<typeof fingerprintAuthProfileCredential>[0]["credential"],
 ) {
   const route = await resolveSystemAgentConfiguredRouteFromConfig(config);
@@ -241,7 +241,7 @@ export async function createOAuthVerifiedBinding(
   });
 }
 
-export async function createCliVerifiedBinding(config: OpenClawConfig) {
+export async function createCliVerifiedBinding(config: NatesclawConfig) {
   const route = await resolveSystemAgentConfiguredRouteFromConfig(config);
   if (!route || route.runner !== "cli") {
     throw new Error("missing test CLI route");
@@ -388,7 +388,7 @@ export function fakeOverviewLoader(
 ) {
   return async () =>
     ({
-      config: { path: "/tmp/openclaw.json", exists: false, valid: true, issues: [], hash: null },
+      config: { path: "/tmp/natesclaw.json", exists: false, valid: true, issues: [], hash: null },
       agents: [],
       defaultAgentId: "main",
       defaultModel: overrides.defaultModel,
@@ -400,15 +400,15 @@ export function fakeOverviewLoader(
       },
       gateway: { url: "ws://127.0.0.1:18789", source: "local", reachable: false },
       references: {
-        docsUrl: "https://docs.openclaw.ai",
-        sourceUrl: "https://github.com/openclaw/openclaw",
+        docsUrl: "https://docs.natesclaw.ai",
+        sourceUrl: "https://github.com/natesclaw/natesclaw",
       },
     }) as never;
 }
 
-export { expectDefined } from "@openclaw/normalization-core";
+export { expectDefined } from "@natesclaw/normalization-core";
 export { hashSystemAgentOperation } from "../agents/tools/system-agent-tool.js";
-export type { OpenClawConfig } from "../config/types.openclaw.js";
+export type { NatesclawConfig } from "../config/types.natesclaw.js";
 export type { WizardPrompter } from "../wizard/prompts.js";
 export { runSystemAgentTurnWithDeps } from "./agent-turn.test-support.js";
 export { classifySystemAgentApprovalText } from "./operator-approval.js";

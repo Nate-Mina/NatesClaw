@@ -3,7 +3,7 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import type { EventFrame } from "../../packages/gateway-protocol/src/index.js";
 import {
   listCliRuntimeModelBackendBindings,
@@ -52,8 +52,8 @@ export type CliBackendLiveModelSelection = {
 
 export type CliBackendLiveEnvSnapshot = LiveEnvSnapshot;
 
-export const CLI_BACKEND_LIVE_PROVIDER_SKIP_ENV = "OPENCLAW_LIVE_CLI_BACKEND_ALLOW_PROVIDER_SKIP";
-export const CLI_BACKEND_LIVE_ADVISORY_ENV = "OPENCLAW_LIVE_CLI_BACKEND_ADVISORY";
+export const CLI_BACKEND_LIVE_PROVIDER_SKIP_ENV = "NATESCLAW_LIVE_CLI_BACKEND_ALLOW_PROVIDER_SKIP";
+export const CLI_BACKEND_LIVE_ADVISORY_ENV = "NATESCLAW_LIVE_CLI_BACKEND_ADVISORY";
 
 export type CliBackendLiveProviderSkipDecision = {
   action: "fail" | "skip";
@@ -91,13 +91,13 @@ export function resolveCliBackendLiveModelSelection(params: {
   const parsed = parseModelRef(params.rawModel, params.defaultProvider);
   if (!parsed) {
     throw new Error(
-      `OPENCLAW_LIVE_CLI_BACKEND_MODEL must resolve to a CLI backend model. Got: ${params.rawModel}`,
+      `NATESCLAW_LIVE_CLI_BACKEND_MODEL must resolve to a CLI backend model. Got: ${params.rawModel}`,
     );
   }
 
   if (parsed.provider === "codex-cli") {
     throw new Error(
-      "OPENCLAW_LIVE_CLI_BACKEND_MODEL=codex-cli/... is no longer supported. Use a supported CLI backend such as claude-cli or google-gemini-cli.",
+      "NATESCLAW_LIVE_CLI_BACKEND_MODEL=codex-cli/... is no longer supported. Use a supported CLI backend such as claude-cli or google-gemini-cli.",
     );
   }
   const cliBinding = listCliRuntimeModelBackendBindings({ includeSetupRegistry: true }).find(
@@ -119,7 +119,7 @@ export function resolveCliBackendLiveModelSelection(params: {
     cliModelKey: modelKey,
     configModelKey: modelKey,
     configModelSwitchTarget: params.modelSwitchTarget,
-    agentRuntime: { id: "openclaw" },
+    agentRuntime: { id: "natesclaw" },
   };
 }
 
@@ -143,11 +143,11 @@ export function parseImageMode(raw?: string): "list" | "repeat" | undefined {
   if (trimmed === "list" || trimmed === "repeat") {
     return trimmed;
   }
-  throw new Error("OPENCLAW_LIVE_CLI_BACKEND_IMAGE_MODE must be 'list' or 'repeat'.");
+  throw new Error("NATESCLAW_LIVE_CLI_BACKEND_IMAGE_MODE must be 'list' or 'repeat'.");
 }
 
 export function shouldRunCliImageProbe(providerId: string): boolean {
-  const raw = process.env.OPENCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE?.trim();
+  const raw = process.env.NATESCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -155,7 +155,7 @@ export function shouldRunCliImageProbe(providerId: string): boolean {
 }
 
 export function shouldRunCliMcpProbe(providerId: string): boolean {
-  const raw = process.env.OPENCLAW_LIVE_CLI_BACKEND_MCP_PROBE?.trim();
+  const raw = process.env.NATESCLAW_LIVE_CLI_BACKEND_MCP_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -169,18 +169,18 @@ export function resolveCliBackendLiveArgs(params: {
 }): { args: string[]; resumeArgs?: string[] } {
   const args =
     parseJsonStringArray(
-      "OPENCLAW_LIVE_CLI_BACKEND_ARGS",
-      process.env.OPENCLAW_LIVE_CLI_BACKEND_ARGS,
+      "NATESCLAW_LIVE_CLI_BACKEND_ARGS",
+      process.env.NATESCLAW_LIVE_CLI_BACKEND_ARGS,
     ) ?? params.defaultArgs;
   if (!args || args.length === 0) {
     throw new Error(
-      `OPENCLAW_LIVE_CLI_BACKEND_ARGS is required for provider "${params.providerId}".`,
+      `NATESCLAW_LIVE_CLI_BACKEND_ARGS is required for provider "${params.providerId}".`,
     );
   }
   const resumeArgs =
     parseJsonStringArray(
-      "OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS",
-      process.env.OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS,
+      "NATESCLAW_LIVE_CLI_BACKEND_RESUME_ARGS",
+      process.env.NATESCLAW_LIVE_CLI_BACKEND_RESUME_ARGS,
     ) ?? params.defaultResumeArgs;
   return { args, resumeArgs };
 }
@@ -201,7 +201,7 @@ export function resolveCliModelSwitchProbeTarget(
 }
 
 export function shouldRunCliModelSwitchProbe(providerId: string, modelRef: string): boolean {
-  const raw = process.env.OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE?.trim();
+  const raw = process.env.NATESCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -293,7 +293,7 @@ export function resolveImportedClaudeCliSessionId(messages: unknown[]): string |
   for (const message of messages) {
     const metadata =
       typeof message === "object" && message !== null
-        ? (message as Record<string, unknown>)["__openclaw"]
+        ? (message as Record<string, unknown>)["__natesclaw"]
         : undefined;
     if (typeof metadata !== "object" || metadata === null) {
       continue;
@@ -541,22 +541,22 @@ function isRetryableGatewayConnectError(error: Error): boolean {
 
 export function snapshotCliBackendLiveEnv(): CliBackendLiveEnvSnapshot {
   return snapshotLiveEnv([
-    "OPENCLAW_SKIP_PROVIDERS",
-    "OPENCLAW_BUNDLED_PLUGINS_DIR",
-    "OPENCLAW_TEST_MINIMAL_GATEWAY",
+    "NATESCLAW_SKIP_PROVIDERS",
+    "NATESCLAW_BUNDLED_PLUGINS_DIR",
+    "NATESCLAW_TEST_MINIMAL_GATEWAY",
     "ANTHROPIC_API_KEY",
     "ANTHROPIC_API_KEY_OLD",
   ]);
 }
 
 export function applyCliBackendLiveEnv(preservedEnv: ReadonlySet<string>): void {
-  process.env.OPENCLAW_SKIP_CHANNELS = "1";
-  process.env.OPENCLAW_SKIP_PROVIDERS = "1";
-  process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.OPENCLAW_SKIP_CRON = "1";
-  process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-  process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-  process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
+  process.env.NATESCLAW_SKIP_CHANNELS = "1";
+  process.env.NATESCLAW_SKIP_PROVIDERS = "1";
+  process.env.NATESCLAW_SKIP_GMAIL_WATCHER = "1";
+  process.env.NATESCLAW_SKIP_CRON = "1";
+  process.env.NATESCLAW_SKIP_CANVAS_HOST = "1";
+  process.env.NATESCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+  process.env.NATESCLAW_TEST_MINIMAL_GATEWAY = "1";
   if (!preservedEnv.has("ANTHROPIC_API_KEY")) {
     delete process.env.ANTHROPIC_API_KEY;
   }

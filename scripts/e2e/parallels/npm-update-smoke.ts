@@ -1,6 +1,6 @@
 #!/usr/bin/env -S pnpm tsx
 import { spawn } from "node:child_process";
-// Npm Update Smoke script supports OpenClaw repository automation.
+// Npm Update Smoke script supports Natesclaw repository automation.
 import { randomUUID } from "node:crypto";
 import { appendFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { copyFile, readFile, rm } from "node:fs/promises";
@@ -10,18 +10,18 @@ import {
   addTimerTimeoutGraceMs,
   clampTimerTimeoutMs,
   finiteSecondsToTimerSafeMilliseconds,
-} from "@openclaw/normalization-core/number-coercion";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { readStringValue } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/number-coercion";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { readStringValue } from "@natesclaw/normalization-core/string-coerce";
 import prettyMilliseconds from "pretty-ms";
 import {
   die,
   ensureValue,
   extractPackageJsonFromTgz,
-  extractLastOpenClawVersionFromLog,
+  extractLastNatesclawVersionFromLog,
   isLikelyMacosDesktopHome,
   makeTempDir,
-  packOpenClaw,
+  packNatesclaw,
   packageBuildCommitFromTgz,
   parseMacosDsclUserHomeLine,
   parsePlatformList,
@@ -30,7 +30,7 @@ import {
   repoRoot,
   resolveHostIp,
   resolveLatestVersion,
-  resolveOpenClawRegistryVersion,
+  resolveNatesclawRegistryVersion,
   resolveProviderAuth,
   resolveWindowsProviderAuth,
   run,
@@ -154,13 +154,13 @@ function resolveSecondsTimerMs(timeoutSeconds: number): number {
   return finiteSecondsToTimerSafeMilliseconds(timeoutSeconds) ?? 1;
 }
 
-const updateTimeoutSeconds = readPositiveIntEnv("OPENCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S", 2700);
+const updateTimeoutSeconds = readPositiveIntEnv("NATESCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S", 2700);
 const updateCleanupBackstopMs = 60_000;
 const updateTimeoutMs = resolveSecondsTimerMs(updateTimeoutSeconds);
 const updateWithCleanupTimeoutMs =
   addTimerTimeoutGraceMs(updateTimeoutMs, updateCleanupBackstopMs) ?? 1;
 const freshLaneTimeoutKillGraceMs = readPositiveIntEnv(
-  "OPENCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_KILL_GRACE_MS",
+  "NATESCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_KILL_GRACE_MS",
   2_000,
 );
 const activeLoggedChildren = new Set<ReturnType<typeof spawn>>();
@@ -170,7 +170,7 @@ let loggedExitCleanupInstalled = false;
 export function freshLaneTimeoutMs(platform: Platform): number {
   const defaultSeconds = platform === "windows" ? 90 * 60 : 75 * 60;
   return resolveSecondsTimerMs(
-    readPositiveIntEnv("OPENCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S", defaultSeconds),
+    readPositiveIntEnv("NATESCLAW_PARALLELS_NPM_UPDATE_FRESH_TIMEOUT_S", defaultSeconds),
   );
 }
 
@@ -384,8 +384,8 @@ function usage(): string {
   return `Usage: bash scripts/e2e/parallels-npm-update-smoke.sh [options]
 
 Options:
-  --package-spec <npm-spec>  Baseline npm package spec. Default: openclaw@latest
-  --update-target <target>    Target passed to guest 'openclaw update --tag'.
+  --package-spec <npm-spec>  Baseline npm package spec. Default: natesclaw@latest
+  --update-target <target>    Target passed to guest 'natesclaw update --tag'.
                              Default: host-served tgz packed from current checkout.
   --target-tarball <path>     Host-serve this prepared tgz for update and fresh install.
   --dependency-tarball <path> Companion package tgz required by the target. Repeatable.
@@ -554,16 +554,16 @@ function readHarnessCheckoutVersion(): string {
   return typeof pkg.version === "string" ? pkg.version : "";
 }
 
-function openClawVersionFamily(version: string): string {
+function NatesclawVersionFamily(version: string): string {
   return /^(\d{4}\.\d{1,2}\.\d{1,2})(?:[-.]|$)/u.exec(version.trim())?.[1] ?? "";
 }
 
-function parseOpenClawPackageSpecVersion(spec: string): string {
+function parseNatesclawPackageSpecVersion(spec: string): string {
   const value = spec.trim();
   if (!value) {
     return "";
   }
-  return resolveOpenClawRegistryVersion(value) || "";
+  return resolveNatesclawRegistryVersion(value) || "";
 }
 
 export function parseRegistryPackageMetadata(raw: string): {
@@ -644,8 +644,8 @@ export class NpmUpdateSmoke {
 
   async run(): Promise<void> {
     this.startedAt = Date.now();
-    this.runDir = await this.makeRunTempDir("openclaw-parallels-npm-update.");
-    this.tgzDir = await this.makeRunTempDir("openclaw-parallels-npm-update-tgz.");
+    this.runDir = await this.makeRunTempDir("natesclaw-parallels-npm-update.");
+    this.tgzDir = await this.makeRunTempDir("natesclaw-parallels-npm-update-tgz.");
     try {
       await this.runSteps();
     } finally {
@@ -661,7 +661,7 @@ export class NpmUpdateSmoke {
 
   protected async runSteps(): Promise<void> {
     this.latestVersion = resolveLatestVersion();
-    this.packageSpec = this.options.packageSpec || `openclaw@${this.latestVersion}`;
+    this.packageSpec = this.options.packageSpec || `natesclaw@${this.latestVersion}`;
     this.currentHead = run("git", ["rev-parse", "HEAD"], { quiet: true }).stdout.trim();
     this.currentHeadShort = run("git", ["rev-parse", "--short=7", "HEAD"], {
       quiet: true,
@@ -688,7 +688,7 @@ export class NpmUpdateSmoke {
     await this.runFreshBaselines();
 
     await this.prepareUpdateTarget();
-    say(`Run same-guest openclaw update to ${this.updateTargetEffective}`);
+    say(`Run same-guest natesclaw update to ${this.updateTargetEffective}`);
     await this.runSameGuestUpdates();
 
     if (this.freshTargetSpec) {
@@ -716,7 +716,7 @@ export class NpmUpdateSmoke {
     if (this.options.platforms.has("linux")) {
       jobs.push(
         this.spawnFresh("Linux", "linux", ["--vm", this.linuxVm], {
-          OPENCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
+          NATESCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
         }),
       );
     }
@@ -749,7 +749,7 @@ export class NpmUpdateSmoke {
           "linux",
           ["--vm", this.linuxVm],
           {
-            OPENCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
+            NATESCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
           },
           this.freshTargetSpec,
           "fresh-target",
@@ -903,7 +903,7 @@ export class NpmUpdateSmoke {
           hostIp: this.hostIp,
           packages: [
             {
-              name: "openclaw",
+              name: "natesclaw",
               version: this.targetTarballVersion,
               tarballPath: hostedTarballPath,
             },
@@ -913,11 +913,11 @@ export class NpmUpdateSmoke {
         });
         this.targetRegistryHostUrl = this.registryServer.hostUrl;
         this.targetRegistryUrl = this.registryServer.url;
-        this.updateTargetTarball = `${this.registryServer.url}/openclaw/-/${path.basename(
+        this.updateTargetTarball = `${this.registryServer.url}/natesclaw/-/${path.basename(
           hostedTarballPath,
         )}`;
         this.updateTargetEffective = this.targetTarballVersion;
-        this.freshTargetSpec = `openclaw@${this.targetTarballVersion}`;
+        this.freshTargetSpec = `natesclaw@${this.targetTarballVersion}`;
         this.updateExpectedNeedle = this.targetTarballVersion;
         this.updateTargetPackageVersion = this.targetTarballVersion;
         this.updateTargetBuildCommit = this.artifact.buildCommitShort ?? "";
@@ -940,7 +940,7 @@ export class NpmUpdateSmoke {
       return;
     }
     if (!this.options.updateTarget || this.options.updateTarget === "local-main") {
-      this.artifact = await packOpenClaw({
+      this.artifact = await packNatesclaw({
         destination: this.tgzDir,
         requireControlUi: true,
       });
@@ -962,7 +962,7 @@ export class NpmUpdateSmoke {
     this.updateTargetEffective = this.options.updateTarget;
     this.updateExpectedNeedle = this.isExplicitPackageTarget(this.updateTargetEffective)
       ? ""
-      : resolveOpenClawRegistryVersion(this.updateTargetEffective) || this.updateTargetEffective;
+      : resolveNatesclawRegistryVersion(this.updateTargetEffective) || this.updateTargetEffective;
     const metadata = this.resolveRegistryPackageMetadata(this.updateTargetEffective);
     this.updateTargetPackageVersion = metadata.version;
     this.updateTargetBuildCommit =
@@ -1007,7 +1007,7 @@ export class NpmUpdateSmoke {
     if (this.isExplicitPackageTarget(target)) {
       return { gitHead: "", tarball: "", version: "" };
     }
-    const spec = target.startsWith("openclaw@") ? target : `openclaw@${target}`;
+    const spec = target.startsWith("natesclaw@") ? target : `natesclaw@${target}`;
     const output = run("npm", ["view", spec, "version", "dist.tarball", "gitHead", "--json"], {
       check: false,
       quiet: true,
@@ -1169,7 +1169,7 @@ export class NpmUpdateSmoke {
     const scriptPath = this.writeGuestScript(
       this.macosVm,
       script,
-      "openclaw-parallels-npm-update-macos",
+      "natesclaw-parallels-npm-update-macos",
       { execArgs: macosUpdateExec.execArgs, mode: "700" },
     );
     run(
@@ -1308,7 +1308,7 @@ export class NpmUpdateSmoke {
     const scriptPath = this.writeGuestScript(
       this.linuxVm,
       script,
-      "openclaw-parallels-npm-update-linux",
+      "natesclaw-parallels-npm-update-linux",
     );
     try {
       const status = await this.runStreamingToJobLog(
@@ -1318,7 +1318,7 @@ export class NpmUpdateSmoke {
           this.linuxVm,
           "/usr/bin/env",
           "HOME=/root",
-          "OPENCLAW_ALLOW_ROOT=1",
+          "NATESCLAW_ALLOW_ROOT=1",
           "PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin",
           "bash",
           scriptPath,
@@ -1476,11 +1476,11 @@ export class NpmUpdateSmoke {
     ) {
       return;
     }
-    const baseline = resolveOpenClawRegistryVersion(this.packageSpec);
-    const target = resolveOpenClawRegistryVersion(this.options.updateTarget);
+    const baseline = resolveNatesclawRegistryVersion(this.packageSpec);
+    const target = resolveNatesclawRegistryVersion(this.options.updateTarget);
     if (baseline && target && baseline === target) {
       die(
-        `--update-target ${this.options.updateTarget} resolves to openclaw@${target}, same as baseline ${this.packageSpec}; publish or choose a newer --update-target before running VM update coverage`,
+        `--update-target ${this.options.updateTarget} resolves to natesclaw@${target}, same as baseline ${this.packageSpec}; publish or choose a newer --update-target before running VM update coverage`,
       );
     }
   }
@@ -1493,7 +1493,7 @@ export class NpmUpdateSmoke {
   }
 
   private async extractLastVersion(logPath: string): Promise<string> {
-    return await extractLastOpenClawVersionFromLog(logPath);
+    return await extractLastNatesclawVersionFromLog(logPath);
   }
 
   private dumpLogTail(logPath: string): void {
@@ -1542,7 +1542,7 @@ export class NpmUpdateSmoke {
           }>(tarballPath, "package/package.json");
           const name = dependencyPackage.name ?? "";
           const version = dependencyPackage.version ?? "";
-          if (!name || !version || name === "openclaw") {
+          if (!name || !version || name === "natesclaw") {
             throw new Error(`dependency tarball has invalid package metadata: ${tarballPath}`);
           }
           if (targetPackageJson.dependencies?.[name] !== version) {
@@ -1565,7 +1565,7 @@ export class NpmUpdateSmoke {
           }>(tarballPath, "package/package.json");
           const name = registryPackage.name ?? "";
           const version = registryPackage.version ?? "";
-          if (!name || !version || name === "openclaw") {
+          if (!name || !version || name === "natesclaw") {
             throw new Error(`registry package tarball has invalid metadata: ${tarballPath}`);
           }
           if (version !== this.targetTarballVersion) {
@@ -1593,50 +1593,50 @@ export class NpmUpdateSmoke {
       return;
     }
     if (this.options.betaValidation) {
-      const version = resolveOpenClawRegistryVersion(this.options.betaValidation);
+      const version = resolveNatesclawRegistryVersion(this.options.betaValidation);
       if (!version) {
         die(`could not resolve beta validation target: ${this.options.betaValidation}`);
       }
       this.options.updateTarget = version;
-      this.options.freshTargetSpec = `openclaw@${version}`;
-      say(`Beta validation target: openclaw@${version}`);
+      this.options.freshTargetSpec = `natesclaw@${version}`;
+      say(`Beta validation target: natesclaw@${version}`);
     } else if (
       this.options.updateTarget &&
       this.options.updateTarget !== "local-main" &&
       !this.isExplicitPackageTarget(this.options.updateTarget)
     ) {
-      const version = resolveOpenClawRegistryVersion(this.options.updateTarget);
+      const version = resolveNatesclawRegistryVersion(this.options.updateTarget);
       if (version) {
         this.options.updateTarget = version;
       }
     }
 
     if (this.options.freshTargetSpec) {
-      const version = resolveOpenClawRegistryVersion(this.options.freshTargetSpec);
-      this.freshTargetSpec = version ? `openclaw@${version}` : this.options.freshTargetSpec;
+      const version = resolveNatesclawRegistryVersion(this.options.freshTargetSpec);
+      this.freshTargetSpec = version ? `natesclaw@${version}` : this.options.freshTargetSpec;
     }
   }
 
   private assertPublishedTargetMatchesHarnessCheckout(): void {
-    if (process.env.OPENCLAW_PARALLELS_ALLOW_HARNESS_TARGET_MISMATCH === "1") {
+    if (process.env.NATESCLAW_PARALLELS_ALLOW_HARNESS_TARGET_MISMATCH === "1") {
       return;
     }
     const candidateVersion =
       this.targetTarballVersion ||
       (this.freshTargetSpec
-        ? parseOpenClawPackageSpecVersion(this.freshTargetSpec)
-        : parseOpenClawPackageSpecVersion(this.options.updateTarget));
-    const targetFamily = openClawVersionFamily(candidateVersion);
+        ? parseNatesclawPackageSpecVersion(this.freshTargetSpec)
+        : parseNatesclawPackageSpecVersion(this.options.updateTarget));
+    const targetFamily = NatesclawVersionFamily(candidateVersion);
     if (!targetFamily) {
       return;
     }
     this.harnessTargetFamily = targetFamily;
-    const checkoutFamily = openClawVersionFamily(this.harnessCheckoutVersion);
+    const checkoutFamily = NatesclawVersionFamily(this.harnessCheckoutVersion);
     if (checkoutFamily === targetFamily) {
       return;
     }
     die(
-      `refusing to run Parallels ${candidateVersion} target with harness checkout ${this.harnessCheckoutVersion || "unknown"}; checkout the matching release branch or set OPENCLAW_PARALLELS_ALLOW_HARNESS_TARGET_MISMATCH=1 for an intentional cross-version harness run`,
+      `refusing to run Parallels ${candidateVersion} target with harness checkout ${this.harnessCheckoutVersion || "unknown"}; checkout the matching release branch or set NATESCLAW_PARALLELS_ALLOW_HARNESS_TARGET_MISMATCH=1 for an intentional cross-version harness run`,
     );
   }
 

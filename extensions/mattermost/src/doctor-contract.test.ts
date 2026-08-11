@@ -1,9 +1,9 @@
 // Mattermost tests cover doctor contract plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { legacyConfigRules, normalizeCompatibilityConfig } from "./doctor-contract.js";
 
-function mattermostConfig(entry: Record<string, unknown>): OpenClawConfig {
+function mattermostConfig(entry: Record<string, unknown>): NatesclawConfig {
   return { channels: { mattermost: entry } } as never;
 }
 

@@ -4,7 +4,7 @@ import {
   splitCuratedMarkdownEntries,
   stripMemoryAnnotationCarriers,
 } from "../../packages/memory-host-sdk/src/engine-storage.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { MemorySearchResult } from "../memory-host-sdk/host/types.js";
 import { getMemoryRuntime } from "../plugins/memory-state.js";
 import type { EmbeddedContextFile } from "./embedded-agent-helpers.js";
@@ -116,7 +116,7 @@ function buildProjectMemoryBootstrap(params: {
 }
 
 export async function prepareProjectMemoryBootstrap(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   activeProjectKeys: readonly string[];
 }): Promise<string[]> {

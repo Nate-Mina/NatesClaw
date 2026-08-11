@@ -1,7 +1,7 @@
 // Builds the status summary used by human and JSON status output.
 // It aggregates sessions, tasks, heartbeat, channel summary, and model/runtime metadata.
 
-import { normalizeLowercaseStringOrEmpty as normalizeStatusModelPart } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty as normalizeStatusModelPart } from "@natesclaw/normalization-core/string-coerce";
 import { resolveAgentConfig } from "../agents/agent-scope.js";
 import { DEFAULT_CONTEXT_TOKENS, DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { areRuntimeModelRefsEquivalent } from "../agents/model-runtime-aliases.js";
@@ -21,7 +21,7 @@ import {
   resolveSessionTotalTokens,
   type SessionEntry,
 } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NatesclawConfig } from "../config/types.js";
 import { listGatewayAgentsBasic } from "../gateway/agent-list.js";
 import { resolveHeartbeatSessionKey } from "../infra/heartbeat-runner-session.js";
 import { resolveHeartbeatSummaryForAgent } from "../infra/heartbeat-summary.js";
@@ -261,8 +261,8 @@ export async function getStatusSummary(
   options: {
     includeSensitive?: boolean;
     includeChannelSummary?: boolean;
-    config?: OpenClawConfig;
-    sourceConfig?: OpenClawConfig;
+    config?: NatesclawConfig;
+    sourceConfig?: NatesclawConfig;
   } = {},
 ): Promise<StatusSummary> {
   const { includeSensitive = true, includeChannelSummary = true } = options;

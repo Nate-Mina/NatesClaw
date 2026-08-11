@@ -12,7 +12,7 @@ const mocks = vi.hoisted(() => ({
   runDetachedWebhookWork: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/webhook-request-guards", () => ({
+vi.mock("natesclaw/plugin-sdk/webhook-request-guards", () => ({
   runDetachedWebhookWork: mocks.runDetachedWebhookWork,
 }));
 

@@ -3,7 +3,7 @@
  * Converts nested provider, transport, timeout, auth, and local coordination
  * failures into structured failover reasons and remediation metadata.
  */
-import { parseStrictNonNegativeInteger } from "@openclaw/normalization-core/number-coercion";
+import { parseStrictNonNegativeInteger } from "@natesclaw/normalization-core/number-coercion";
 import { formatCliCommand } from "../cli/command-format.js";
 import { isAgentRunStaleLifecycleError } from "../infra/agent-lifecycle-error.js";
 import { collectErrorGraphCandidates, readErrorName } from "../infra/errors.js";
@@ -723,7 +723,7 @@ export function buildFailoverRemediationHint(err: unknown): string | undefined {
     return undefined;
   }
   if (provider === "google-gemini-cli") {
-    return `Authenticate in Gemini CLI directly, or configure a supported Google API key with: ${formatCliCommand("openclaw configure")}`;
+    return `Authenticate in Gemini CLI directly, or configure a supported Google API key with: ${formatCliCommand("natesclaw configure")}`;
   }
   const command = buildProviderReauthCommand(provider);
   return command ? `Re-authenticate with: ${command}` : undefined;
@@ -743,7 +743,7 @@ export function buildProviderReauthCommand(
     return undefined;
   }
   return formatCliCommand(
-    `openclaw models auth login --provider ${quotePosixShellArg(trimmed)} --force`,
+    `natesclaw models auth login --provider ${quotePosixShellArg(trimmed)} --force`,
     env,
   );
 }

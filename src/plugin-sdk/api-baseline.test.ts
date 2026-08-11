@@ -56,9 +56,9 @@ function git(repoRoot: string, args: string[]): string {
     encoding: "utf8",
     env: {
       ...process.env,
-      GIT_AUTHOR_EMAIL: "plugin-sdk-test@openclaw.invalid",
+      GIT_AUTHOR_EMAIL: "plugin-sdk-test@natesclaw.invalid",
       GIT_AUTHOR_NAME: "Plugin SDK Test",
-      GIT_COMMITTER_EMAIL: "plugin-sdk-test@openclaw.invalid",
+      GIT_COMMITTER_EMAIL: "plugin-sdk-test@natesclaw.invalid",
       GIT_COMMITTER_NAME: "Plugin SDK Test",
     },
   });
@@ -85,7 +85,7 @@ async function renderSourceFixture(
   files: Readonly<Record<string, string>>,
   entrypoints: readonly string[] = ["fixture"],
 ) {
-  const repoRoot = tempDirs.make("openclaw-plugin-sdk-api-");
+  const repoRoot = tempDirs.make("natesclaw-plugin-sdk-api-");
   const sourceDir = path.join(repoRoot, "src", "plugin-sdk");
   fs.mkdirSync(sourceDir, { recursive: true });
   fs.writeFileSync(
@@ -110,7 +110,7 @@ async function renderPrivateDeclarationFixture(params?: {
   optionalOption?: boolean;
   optionalResult?: boolean;
 }) {
-  const repoRoot = tempDirs.make("openclaw-plugin-sdk-api-");
+  const repoRoot = tempDirs.make("natesclaw-plugin-sdk-api-");
   const sourceDir = path.join(repoRoot, "src", "plugin-sdk");
   const externalDir = path.join(repoRoot, "node_modules", "fixture-external");
   fs.mkdirSync(sourceDir, { recursive: true });
@@ -219,13 +219,13 @@ describe("Plugin SDK API baseline", () => {
   });
 
   it("normalizes dependency source paths to stable node_modules paths", () => {
-    const repoRoot = path.join(path.sep, "workspace", "openclaw-worktree");
+    const repoRoot = path.join(path.sep, "workspace", "natesclaw-worktree");
     const linkedDependencyPath = path.join(
       path.sep,
       "workspace",
-      "openclaw",
+      "natesclaw",
       "node_modules",
-      "@openclaw",
+      "@natesclaw",
       "fs-safe",
       "dist",
       "secret-file.d.ts",
@@ -234,24 +234,24 @@ describe("Plugin SDK API baseline", () => {
       repoRoot,
       "node_modules",
       ".pnpm",
-      "@openclaw+fs-safe@1.0.0",
+      "@natesclaw+fs-safe@1.0.0",
       "node_modules",
-      "@openclaw",
+      "@natesclaw",
       "fs-safe",
       "dist",
       "secret-file.d.ts",
     );
 
     expect(normalizePluginSdkApiSourcePath(repoRoot, linkedDependencyPath)).toBe(
-      "node_modules/@openclaw/fs-safe/dist/secret-file.d.ts",
+      "node_modules/@natesclaw/fs-safe/dist/secret-file.d.ts",
     );
     expect(normalizePluginSdkApiSourcePath(repoRoot, pnpmDependencyPath)).toBe(
-      "node_modules/@openclaw/fs-safe/dist/secret-file.d.ts",
+      "node_modules/@natesclaw/fs-safe/dist/secret-file.d.ts",
     );
   });
 
   it("keeps repo source paths relative when a parent directory is named node_modules", () => {
-    const repoRoot = path.join(path.sep, "workspace", "node_modules", "openclaw");
+    const repoRoot = path.join(path.sep, "workspace", "node_modules", "natesclaw");
     const sourcePath = path.join(repoRoot, "src", "plugin-sdk", "core.ts");
 
     expect(normalizePluginSdkApiSourcePath(repoRoot, sourcePath)).toBe("src/plugin-sdk/core.ts");
@@ -300,7 +300,7 @@ describe("Plugin SDK API baseline", () => {
     expect(rendered.baseline.modules.find((entry) => entry.entrypoint === "infra-runtime")).toEqual(
       expect.objectContaining({
         category: null,
-        importSpecifier: "openclaw/plugin-sdk/infra-runtime",
+        importSpecifier: "natesclaw/plugin-sdk/infra-runtime",
       }),
     );
     expect(findDeclaration("OAuthProviderInterface")).toContain("readonly id: OAuthProviderId;");
@@ -329,7 +329,7 @@ describe("Plugin SDK API baseline", () => {
     expect(findDeclaration("createWebSearchProviderContractFields")).not.toContain(
       "createBaseWebSearchProviderContractFields",
     );
-    expect(findDeclaration("OPENCLAW_VERSION")).toContain("export const OPENCLAW_VERSION:");
+    expect(findDeclaration("NATESCLAW_VERSION")).toContain("export const NATESCLAW_VERSION:");
     expect(findDeclaration("SqliteTrajectoryRuntimeEventForTest")).toContain(
       "export type SqliteTrajectoryRuntimeEventForTest =",
     );
@@ -433,7 +433,7 @@ describe("Plugin SDK API baseline", () => {
       ]),
     );
 
-    const mergeDir = tempDirs.make("openclaw-plugin-sdk-api-merge-");
+    const mergeDir = tempDirs.make("natesclaw-plugin-sdk-api-merge-");
     const contractDirectory = path.join(mergeDir, "plugin-sdk-api-baseline");
     git(mergeDir, ["init", "-q", "--initial-branch=main"]);
     writeContractFiles(contractDirectory, rendered);
@@ -481,7 +481,7 @@ describe("Plugin SDK API baseline", () => {
   });
 
   it("checks and repairs modified, missing, and stale contract records", async () => {
-    const outputDir = tempDirs.make("openclaw-plugin-sdk-api-output-");
+    const outputDir = tempDirs.make("natesclaw-plugin-sdk-api-output-");
     const contractDirectory = path.join(outputDir, "plugin-sdk-api-baseline");
     const jsonPath = path.join(outputDir, "plugin-sdk-api-baseline.json");
     const options = {
@@ -558,11 +558,11 @@ describe("Plugin SDK API baseline", () => {
       renderSourceFixture({
         "fixture.ts": [
           'import "./ambient.js";',
-          "export declare function createFixture(value: OpenClawBaselineFixtureGlobal): void;",
+          "export declare function createFixture(value: NatesclawBaselineFixtureGlobal): void;",
         ].join("\n"),
         "ambient.ts": [
           "declare global {",
-          `  interface OpenClawBaselineFixtureGlobal { value${optionalValue ? "?" : ""}: string }`,
+          `  interface NatesclawBaselineFixtureGlobal { value${optionalValue ? "?" : ""}: string }`,
           "}",
           "export {};",
         ].join("\n"),

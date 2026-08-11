@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
-import { stableStringify } from "@openclaw/normalization-core";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { stableStringify } from "@natesclaw/normalization-core";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { formatErrorMessage } from "../infra/errors.js";
 import { NODE_FS_LIST_DIR_COMMAND } from "../infra/node-commands.js";
 import { emitSessionLifecycleEvent } from "../sessions/session-lifecycle-events.js";
@@ -44,7 +44,7 @@ const defaultCodeModeSwarmDeps: CodeModeSwarmDeps = {
   waitForCollectorCompletion,
 };
 
-const CODE_MODE_NODES_TOOL_ID = "openclaw:core:nodes";
+const CODE_MODE_NODES_TOOL_ID = "natesclaw:core:nodes";
 
 type CodeModeNode = {
   id: string;
@@ -264,7 +264,7 @@ async function runAgentSpawnBridge(params: {
   const agentId = readOptionalStringOption(options, "agentId");
   const spawnEntry = params.runtime
     .namespaceEntries()
-    .find((entry) => entry.source === "openclaw" && entry.name === "sessions_spawn");
+    .find((entry) => entry.source === "natesclaw" && entry.name === "sessions_spawn");
   if (!spawnEntry) {
     throw new ToolInputError("agents.run requires the sessions_spawn tool.");
   }

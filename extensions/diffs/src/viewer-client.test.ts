@@ -2,10 +2,10 @@
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const disableAutoStartKey = Symbol.for("openclaw.diffs.disableAutoStart");
+const disableAutoStartKey = Symbol.for("natesclaw.diffs.disableAutoStart");
 (globalThis as typeof globalThis & Record<symbol, unknown>)[disableAutoStartKey] = true;
 
 const VIEWER_CLIENT_SRC = readFileSync(
@@ -65,8 +65,8 @@ function renderCard(payloadOverride?: string): void {
   document.body.insertAdjacentHTML(
     "beforeend",
     `<section class="oc-diff-card">
-      <div data-openclaw-diff-host></div>
-      <script type="application/json" data-openclaw-diff-payload>${payload}</script>
+      <div data-natesclaw-diff-host></div>
+      <script type="application/json" data-natesclaw-diff-payload>${payload}</script>
     </section>`,
   );
 }
@@ -124,8 +124,8 @@ describe("createToolbarButton icon safety", () => {
 describe("hydrateViewer", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
-    delete document.documentElement.dataset.openclawDiffsError;
-    delete document.documentElement.dataset.openclawDiffsReady;
+    delete document.documentElement.dataset.natesclawDiffsError;
+    delete document.documentElement.dataset.natesclawDiffsReady;
     vi.clearAllMocks();
   });
 
@@ -146,7 +146,7 @@ describe("hydrateViewer", () => {
       "Skipping diff card that failed to hydrate",
       expect.any(Error),
     );
-    expect(document.documentElement.dataset.openclawDiffsError).toBeUndefined();
+    expect(document.documentElement.dataset.natesclawDiffsError).toBeUndefined();
     warn.mockRestore();
   });
 
@@ -168,7 +168,7 @@ describe("hydrateViewer", () => {
       "Skipping diff card that failed to hydrate",
       expect.any(Error),
     );
-    expect(document.documentElement.dataset.openclawDiffsError).toBeUndefined();
+    expect(document.documentElement.dataset.natesclawDiffsError).toBeUndefined();
     warn.mockRestore();
   });
 
@@ -196,8 +196,8 @@ describe("hydrateViewer", () => {
 describe("viewerState initialization", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
-    delete document.documentElement.dataset.openclawDiffsError;
-    delete document.documentElement.dataset.openclawDiffsReady;
+    delete document.documentElement.dataset.natesclawDiffsError;
+    delete document.documentElement.dataset.natesclawDiffsReady;
     delete document.body.dataset.theme;
     vi.clearAllMocks();
   });

@@ -1,14 +1,14 @@
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { listAgentIds } from "openclaw/plugin-sdk/agent-runtime";
-import { isUsageCountedSessionTranscriptFileName } from "openclaw/plugin-sdk/memory-core-host-engine-sessions";
+import { listAgentIds } from "natesclaw/plugin-sdk/agent-runtime";
+import { isUsageCountedSessionTranscriptFileName } from "natesclaw/plugin-sdk/memory-core-host-engine-sessions";
 import {
   normalizeExtraMemoryPathEntries,
   type MemoryExtraPath,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { buildAgentSessionKey } from "openclaw/plugin-sdk/routing";
-import { asNullableRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
+import { buildAgentSessionKey } from "natesclaw/plugin-sdk/routing";
+import { asNullableRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   defaultRuntime,
   formatErrorMessage,
@@ -21,7 +21,7 @@ import {
   resolveSessionTranscriptsDirForAgent,
   shortenHomePath,
   theme,
-  type OpenClawConfig,
+  type NatesclawConfig,
   withManager,
 } from "./cli.host.runtime.js";
 import type { MemoryCoreAcquireLocalService } from "./memory/embedding-local-service.js";
@@ -106,7 +106,7 @@ function emitMemorySecretResolveDiagnostics(
     }
   }
 }
-export function resolveMemoryPluginConfig(cfg: OpenClawConfig): Record<string, unknown> {
+export function resolveMemoryPluginConfig(cfg: NatesclawConfig): Record<string, unknown> {
   const entry = asNullableRecord(cfg.plugins?.entries?.["memory-core"]);
   return asNullableRecord(entry?.config) ?? {};
 }
@@ -132,7 +132,7 @@ export function formatAuditCounts(audit: ShortTermAuditSummary): string {
   const suffix = scriptCoverage ? ` · scripts=${scriptCoverage}` : "";
   return `${audit.entryCount} entries · ${audit.promotedCount} promoted · ${audit.conceptTaggedEntryCount} concept-tagged · ${audit.spacedEntryCount} spaced${suffix}`;
 }
-function resolveAgent(cfg: OpenClawConfig, agent?: string) {
+function resolveAgent(cfg: NatesclawConfig, agent?: string) {
   const trimmed = agent?.trim();
   if (trimmed) {
     return trimmed;
@@ -147,7 +147,7 @@ export function buildCliMemorySearchSessionKey(agentId: string): string {
     dmScope: "per-channel-peer",
   });
 }
-function resolveAgentIds(cfg: OpenClawConfig, agent?: string): string[] {
+function resolveAgentIds(cfg: NatesclawConfig, agent?: string): string[] {
   const trimmed = agent?.trim();
   if (trimmed) {
     return [trimmed];
@@ -161,7 +161,7 @@ export function formatExtraPaths(workspaceDir: string, extraPaths: MemoryExtraPa
   });
 }
 async function withMemoryManagerForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   purpose?: MemoryManagerPurpose;
   acquireLocalService?: MemoryCoreAcquireLocalService;
@@ -195,8 +195,8 @@ export async function withMemoryCommand(params: {
   diagnosticsToStderr?: boolean;
   purpose?: MemoryManagerPurpose;
   acquireLocalService?: MemoryCoreAcquireLocalService;
-  run: (context: { manager: MemoryManager; cfg: OpenClawConfig; agentId: string }) => Promise<void>;
-}): Promise<OpenClawConfig> {
+  run: (context: { manager: MemoryManager; cfg: NatesclawConfig; agentId: string }) => Promise<void>;
+}): Promise<NatesclawConfig> {
   const { config: cfg, diagnostics } = await loadMemoryCommandConfig(
     params.commandName,
     params.purpose === "status" ? "read_only_status" : undefined,

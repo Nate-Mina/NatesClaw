@@ -1,4 +1,4 @@
-import { describePackageManifestContract } from "openclaw/plugin-sdk/plugin-test-contracts";
+import { describePackageManifestContract } from "natesclaw/plugin-sdk/plugin-test-contracts";
 import { describe, expect, it } from "vitest";
 import { validatePackageExtensionEntriesForInstall } from "../package-entry-resolution.js";
 import {
@@ -99,9 +99,9 @@ for (const params of packageManifestContractTests) {
 describe("plugin package authoring metadata", () => {
   it("exposes the declared discovery and release entrypoints", () => {
     const manifest: PackageManifest = {
-      name: "@openclaw/example",
+      name: "@natesclaw/example",
       version: "1.2.3",
-      openclaw: {
+      natesclaw: {
         extensions: ["./src/index.ts"],
         runtimeExtensions: ["./dist/index.js"],
         setupEntry: "./src/setup.ts",
@@ -115,13 +115,13 @@ describe("plugin package authoring metadata", () => {
           minGatewayVersion: "2026.8.1",
         },
         install: {
-          npmSpec: "@openclaw/example",
+          npmSpec: "@natesclaw/example",
           minHostVersion: "2026.8.1",
         },
       },
     };
 
-    expect(getPackageManifestMetadata(manifest)).toEqual(manifest.openclaw);
+    expect(getPackageManifestMetadata(manifest)).toEqual(manifest.natesclaw);
     expect(resolvePackageExtensionEntries(manifest)).toEqual({
       status: "ok",
       entries: ["./src/index.ts"],
@@ -130,19 +130,19 @@ describe("plugin package authoring metadata", () => {
 
   it.each([
     {
-      name: "non-object openclaw metadata",
-      manifest: { openclaw: "invalid" } as unknown as PackageManifest,
-      error: "package.json openclaw must be an object",
+      name: "non-object natesclaw metadata",
+      manifest: { natesclaw: "invalid" } as unknown as PackageManifest,
+      error: "package.json natesclaw must be an object",
     },
     {
       name: "non-array extension metadata",
-      manifest: { openclaw: { extensions: "./index.js" } } as unknown as PackageManifest,
-      error: "package.json openclaw.extensions must be an array",
+      manifest: { natesclaw: { extensions: "./index.js" } } as unknown as PackageManifest,
+      error: "package.json natesclaw.extensions must be an array",
     },
     {
       name: "blank extension metadata",
-      manifest: { openclaw: { extensions: [" "] } } as PackageManifest,
-      error: "package.json openclaw.extensions[0] must be a non-empty string",
+      manifest: { natesclaw: { extensions: [" "] } } as PackageManifest,
+      error: "package.json natesclaw.extensions[0] must be a non-empty string",
     },
   ])("fails fast on $name", ({ manifest, error }) => {
     expect(resolvePackageExtensionEntries(manifest)).toEqual({
@@ -157,7 +157,7 @@ describe("plugin package authoring metadata", () => {
       packageDir: process.cwd(),
       extensions: ["./src/one.ts", "./src/two.ts"],
       manifest: {
-        openclaw: {
+        natesclaw: {
           extensions: ["./src/one.ts", "./src/two.ts"],
           runtimeExtensions: ["./dist/one.js"],
         },
@@ -167,7 +167,7 @@ describe("plugin package authoring metadata", () => {
     expect(result).toEqual({
       ok: false,
       error:
-        "package.json openclaw.runtimeExtensions length (1) must match openclaw.extensions length (2)",
+        "package.json natesclaw.runtimeExtensions length (1) must match natesclaw.extensions length (2)",
     });
   });
 
@@ -176,7 +176,7 @@ describe("plugin package authoring metadata", () => {
       packageDir: process.cwd(),
       extensions: [],
       manifest: {
-        openclaw: {
+        natesclaw: {
           extensions: [],
           runtimeSetupEntry: "./dist/setup.js",
         },
@@ -185,7 +185,7 @@ describe("plugin package authoring metadata", () => {
 
     expect(result).toEqual({
       ok: false,
-      error: "package.json openclaw.runtimeSetupEntry requires openclaw.setupEntry",
+      error: "package.json natesclaw.runtimeSetupEntry requires natesclaw.setupEntry",
     });
   });
 });

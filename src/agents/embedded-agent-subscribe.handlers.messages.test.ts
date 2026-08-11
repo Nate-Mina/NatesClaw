@@ -704,9 +704,9 @@ describe("handleMessageUpdate text signatures", () => {
   it.each([
     "openai-responses",
     "openai-chatgpt-responses",
-    "openclaw-openai-responses-transport",
-    "openclaw-openai-chatgpt-responses-transport",
-    "openclaw-azure-openai-responses-transport",
+    "natesclaw-openai-responses-transport",
+    "natesclaw-openai-chatgpt-responses-transport",
+    "natesclaw-azure-openai-responses-transport",
   ])("streams %s commentary bytes exactly once across start, deltas, and end", async (api) => {
     const onAgentEvent = vi.fn();
     const context = createMessageUpdateContext({ onAgentEvent });
@@ -1735,7 +1735,7 @@ describe("handleMessageEnd", () => {
       name: "ignores transcript-only mirrored assistant messages",
       message: {
         role: "assistant",
-        provider: "openclaw",
+        provider: "natesclaw",
         model: "delivery-mirror",
         content: [{ type: "text", text: "Done." }],
       },

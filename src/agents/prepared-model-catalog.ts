@@ -1,6 +1,6 @@
 /** Lifecycle-owned model catalog access. */
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   listAgentIds,
   resolveAgentDir,
@@ -36,7 +36,7 @@ import {
 export type LoadPreparedModelCatalogParams = {
   agentId?: string;
   agentDir?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   readOnly?: boolean;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
@@ -309,7 +309,7 @@ async function loadScopedReadOnlyModelCatalog(
  * then scoped live discovery only for providers whose models exist solely at runtime.
  */
 export async function loadProviderScopedThinkingCatalog(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   provider: string;
   model: string;
   agentId?: string;

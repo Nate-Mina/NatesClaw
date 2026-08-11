@@ -1,6 +1,6 @@
 /**
- * Bridges Codex native hook callbacks into OpenClaw's native hook relay so
- * app-server tool events can still run OpenClaw policy and diagnostics.
+ * Bridges Codex native hook callbacks into Natesclaw's native hook relay so
+ * app-server tool events can still run Natesclaw policy and diagnostics.
  */
 import { createHash } from "node:crypto";
 import {
@@ -9,19 +9,19 @@ import {
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
   type NativeHookRelayEvent,
   type NativeHookRelayRegistrationHandle,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { emitTrustedDiagnosticEvent } from "openclaw/plugin-sdk/diagnostic-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { emitTrustedDiagnosticEvent } from "natesclaw/plugin-sdk/diagnostic-runtime";
 import {
   addTimerTimeoutGraceMs,
   finiteSecondsToTimerSafeMilliseconds,
-} from "openclaw/plugin-sdk/number-runtime";
-import type { PluginHookToolContext } from "openclaw/plugin-sdk/types";
+} from "natesclaw/plugin-sdk/number-runtime";
+import type { PluginHookToolContext } from "natesclaw/plugin-sdk/types";
 import type { CodexAppServerRuntimeOptions } from "./config.js";
 import { resolveCodexToolAbortTerminalReason } from "./dynamic-tool-execution.js";
 import { nativeHookRelayUnregisterQueue } from "./native-hook-relay-state.js";
 import type { JsonObject, JsonValue } from "./protocol.js";
 
-/** Codex hook events that can be registered through OpenClaw's native relay. */
+/** Codex hook events that can be registered through Natesclaw's native relay. */
 export const CODEX_NATIVE_HOOK_RELAY_EVENTS: readonly NativeHookRelayEvent[] = [
   "pre_tool_use",
   "post_tool_use",
@@ -125,7 +125,7 @@ export function emitCodexNativePreToolUseFailureDiagnostic(params: {
   });
 }
 
-/** Registers an OpenClaw native hook relay for a Codex app-server turn. */
+/** Registers an Natesclaw native hook relay for a Codex app-server turn. */
 export function createCodexNativeHookRelay(params: {
   options:
     | {
@@ -207,7 +207,7 @@ export function resolveCodexNativeHookRelayEvents(params: {
   // Codex emits PermissionRequest before the app-server approval reviewer has
   // resolved the command. In native approval modes, let Codex's app-server
   // approval bridge own the real escalation instead of surfacing a stale
-  // pre-guardian OpenClaw plugin approval prompt.
+  // pre-guardian Natesclaw plugin approval prompt.
   return params.appServer.approvalPolicy === "never"
     ? CODEX_NATIVE_HOOK_RELAY_EVENTS
     : CODEX_NATIVE_HOOK_RELAY_EVENTS_WITH_APP_SERVER_APPROVALS;
@@ -238,7 +238,7 @@ function buildCodexNativeHookRelayId(params: {
   sessionKey: string | undefined;
 }): string {
   const hash = createHash("sha256");
-  hash.update("openclaw:codex:native-hook-relay:v1");
+  hash.update("natesclaw:codex:native-hook-relay:v1");
   hash.update("\0");
   hash.update(params.agentId?.trim() || "");
   hash.update("\0");
@@ -316,7 +316,7 @@ export function buildCodexNativeHookRelayConfig(params: {
             command,
             timeout,
             async: false,
-            statusMessage: "OpenClaw native hook relay",
+            statusMessage: "Natesclaw native hook relay",
           },
         ],
       },
@@ -328,7 +328,7 @@ export function buildCodexNativeHookRelayConfig(params: {
         command,
         matcher,
         timeout,
-        statusMessage: "OpenClaw native hook relay",
+        statusMessage: "Natesclaw native hook relay",
       }),
     };
     for (const sourcePath of CODEX_SESSION_FLAGS_HOOK_SOURCE_PATHS) {
@@ -379,7 +379,7 @@ function buildCodexNativeToolMatcher(toolNames: readonly string[] | undefined): 
   for (const toolName of toolNames) {
     const canonicalToolName = toolName.trim();
     if (!canonicalToolName || canonicalToolName === "*") {
-      throw new TypeError("Codex native hook matcher requires canonical OpenClaw tool ids");
+      throw new TypeError("Codex native hook matcher requires canonical Natesclaw tool ids");
     }
     const nativeAliases = CODEX_HOOK_MATCHER_NAMES_BY_TOOL_ID[canonicalToolName];
     if (!nativeAliases) {

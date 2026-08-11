@@ -5,7 +5,7 @@ import {
   GATEWAY_CLIENT_MODES,
   GATEWAY_CLIENT_NAMES,
 } from "../../packages/gateway-protocol/src/client-info.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { callGateway } from "../gateway/call.js";
 import { resolveGatewayCredentialsWithSecretInputs } from "../gateway/credentials-secret-inputs.js";
 import type { SystemPresence } from "../infra/system-presence.js";
@@ -31,7 +31,7 @@ const HANDOFF_POLL_INTERVAL_MS = 1_000;
 const HANDOFF_PROBE_TIMEOUT_MS = 5_000;
 
 type BrowserHatchTarget = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   dashboardUrl: string;
   documentUrl: string;
   sshHint?: string;
@@ -61,7 +61,7 @@ type BrowserHatchHandoffDeps = {
   env?: NodeJS.ProcessEnv;
   platform?: NodeJS.Platform;
   openBrowser?: (url: string) => Promise<boolean>;
-  resolveTarget?: (config: OpenClawConfig, env: NodeJS.ProcessEnv) => Promise<BrowserHatchTarget>;
+  resolveTarget?: (config: NatesclawConfig, env: NodeJS.ProcessEnv) => Promise<BrowserHatchTarget>;
   probePresence?: (
     target: BrowserHatchTarget,
     timeoutMs: number,
@@ -100,7 +100,7 @@ export function detectGraphicalSession(env: NodeJS.ProcessEnv, platform: NodeJS.
 }
 
 async function resolveBrowserHatchTarget(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   env: NodeJS.ProcessEnv,
 ): Promise<BrowserHatchTarget> {
   const shared = await resolveControlUiHandoffTarget({ config, env });
@@ -157,7 +157,7 @@ async function probeDashboardPresence(
   timeoutMs: number,
 ): Promise<DashboardPresenceProbeResult> {
   try {
-    // Read presence over the same trusted local CLI path every `openclaw`
+    // Read presence over the same trusted local CLI path every `natesclaw`
     // command uses. A raw shared-auth call with a (possibly SecretRef-managed)
     // token is rejected as an unpaired Control UI client with "device identity
     // required"; the CLI-mode loopback client is granted operator.read instead.
@@ -165,7 +165,7 @@ async function probeDashboardPresence(
       config: target.config,
       method: "system-presence",
       timeoutMs,
-      // Connect as a CLI-mode loopback client (what every `openclaw` command
+      // Connect as a CLI-mode loopback client (what every `natesclaw` command
       // does) so the gateway grants operator.read via trusted local auth.
       clientName: GATEWAY_CLIENT_NAMES.CLI,
       mode: GATEWAY_CLIENT_MODES.CLI,
@@ -226,7 +226,7 @@ async function waitForDashboardClient(params: {
 /** Opens or prints the dashboard and waits for its Control UI client connection. */
 export async function runBrowserHatchHandoff(
   params: {
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     prompter: WizardPrompter;
     suppressTokenOutput?: boolean;
   },
@@ -324,7 +324,7 @@ export async function runBrowserHatchHandoff(
         ? "\n\nIf prompted, enter your Gateway token or password from its configured secret source."
         : "";
     const pairingHint = directRemoteDisplay
-      ? "\n\nIf device approval is required, run `openclaw devices list`, then `openclaw devices approve <requestId>`."
+      ? "\n\nIf device approval is required, run `natesclaw devices list`, then `natesclaw devices approve <requestId>`."
       : "";
     await params.prompter.note(
       `${t("wizard.guided.browserHandoffCopy", { url: visibleUrl })}${sshHint}${authHint}${pairingHint}`,

@@ -6,16 +6,16 @@
  * `DeliverDeps.mediaSender`.
  */
 
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   sendPayloadMediaSequence,
   sendPayloadTextChunkSequence,
-} from "openclaw/plugin-sdk/reply-payload";
+} from "natesclaw/plugin-sdk/reply-payload";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { GatewayAccount } from "../types.js";
 import { getImageSize, formatQQBotMarkdownImage, hasQQBotImageSize } from "../utils/image-size.js";
 import { normalizeMediaTags } from "../utils/media-tags.js";

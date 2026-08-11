@@ -1,8 +1,8 @@
 // Channel plugin blocker tests cover doctor diagnostics for blocked channel plugin setup.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import * as manifestRegistry from "../../../plugins/manifest-registry.js";
 import { clearPluginMetadataLifecycleCaches } from "../../../plugins/plugin-metadata-lifecycle.js";
 import {
@@ -41,7 +41,7 @@ function plugin(
     enabledByDefault,
     rootDir,
     source: `${rootDir}/index.ts`,
-    manifestPath: `${rootDir}/openclaw.plugin.json`,
+    manifestPath: `${rootDir}/natesclaw.plugin.json`,
     ...metadata,
   };
 }
@@ -194,7 +194,7 @@ describe("channel plugin blockers", () => {
           enabled: true,
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expect(hits).toEqual([
       {
@@ -569,12 +569,12 @@ describe("channel plugin blockers", () => {
     mockManifestPlugins([
       plugin("twitch", {
         origin: "bundled",
-        packageChannel: createPackageChannelEnv("twitch", ["OPENCLAW_TWITCH_ACCESS_TOKEN"]),
+        packageChannel: createPackageChannelEnv("twitch", ["NATESCLAW_TWITCH_ACCESS_TOKEN"]),
       }),
     ]);
 
     const hits = scanConfiguredChannelPluginBlockers({}, {
-      OPENCLAW_TWITCH_ACCESS_TOKEN: "configured",
+      NATESCLAW_TWITCH_ACCESS_TOKEN: "configured",
     } as NodeJS.ProcessEnv);
 
     expect(hits).toEqual([
@@ -593,7 +593,7 @@ describe("channel plugin blockers", () => {
     mockManifestPlugins([
       plugin("twitch", {
         origin: "bundled",
-        packageChannel: createPackageChannelEnv("twitch", ["OPENCLAW_TWITCH_ACCESS_TOKEN"]),
+        packageChannel: createPackageChannelEnv("twitch", ["NATESCLAW_TWITCH_ACCESS_TOKEN"]),
       }),
     ]);
 
@@ -604,7 +604,7 @@ describe("channel plugin blockers", () => {
         },
       },
       {
-        OPENCLAW_TWITCH_ACCESS_TOKEN: "configured",
+        NATESCLAW_TWITCH_ACCESS_TOKEN: "configured",
       } as NodeJS.ProcessEnv,
     );
 
@@ -732,7 +732,7 @@ describe("channel plugin blockers", () => {
   it("preserves explicit external trust across an auto-materialized allowlist", () => {
     mockManifestPlugins([plugin("discord")]);
 
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: NatesclawConfig = {
       channels: {
         discord: {
           enabled: true,
@@ -765,7 +765,7 @@ describe("channel plugin blockers", () => {
       plugin("workspace-chat", { origin: "workspace", channelId: "workspace-chat" }),
     ]);
 
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: NatesclawConfig = {
       channels: {
         "workspace-chat": {
           enabled: true,
@@ -985,7 +985,7 @@ describe("channel plugin blockers", () => {
   it("does not report a disabled bundled owner when a configured external plugin owns the channel", () => {
     mockManifestPlugins([
       plugin("feishu", { origin: "bundled", enabledByDefault: true }),
-      plugin("openclaw-lark", {
+      plugin("natesclaw-lark", {
         origin: "config",
         channelId: "feishu",
         channelConfigs: {
@@ -1004,7 +1004,7 @@ describe("channel plugin blockers", () => {
           feishu: {
             enabled: false,
           },
-          "openclaw-lark": {
+          "natesclaw-lark": {
             enabled: true,
           },
         },
@@ -1024,7 +1024,7 @@ describe("channel plugin blockers", () => {
   it("reports each blocked owner when no channel owner is active", () => {
     mockManifestPlugins([
       plugin("feishu", { origin: "bundled", enabledByDefault: true }),
-      plugin("openclaw-lark", {
+      plugin("natesclaw-lark", {
         origin: "config",
         channelId: "feishu",
         channelConfigs: {
@@ -1062,7 +1062,7 @@ describe("channel plugin blockers", () => {
       },
       {
         channelId: "feishu",
-        pluginId: "openclaw-lark",
+        pluginId: "natesclaw-lark",
         reason: "missing explicit enablement",
       },
     ]);

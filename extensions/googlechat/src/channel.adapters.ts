@@ -1,26 +1,26 @@
 // Googlechat plugin module implements channel.adapters behavior.
-import { adaptScopedAccountAccessor } from "openclaw/plugin-sdk/channel-config-helpers";
+import { adaptScopedAccountAccessor } from "natesclaw/plugin-sdk/channel-config-helpers";
 import type {
   ChannelThreadingContext,
   ChannelThreadingToolContext,
-} from "openclaw/plugin-sdk/channel-contract";
+} from "natesclaw/plugin-sdk/channel-contract";
 import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
   type MessageReceiptPartKind,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   composeAccountWarningCollectors,
   createAllowlistProviderOpenWarningCollector,
-} from "openclaw/plugin-sdk/channel-policy";
+} from "natesclaw/plugin-sdk/channel-policy";
 import {
   createChannelDirectoryAdapter,
   listResolvedDirectoryGroupEntriesFromMapKeys,
   listResolvedDirectoryUserEntriesFromAllowFrom,
-} from "openclaw/plugin-sdk/directory-runtime";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/directory-runtime";
+import { createLazyRuntimeNamedExport } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { shouldSuppressGoogleChatManualExecApprovalFollowupPayload } from "./approval-card-actions.js";
 import { formatGoogleChatAllowFromEntry } from "./channel-base.js";
 import {
@@ -31,7 +31,7 @@ import {
   PAIRING_APPROVED_MESSAGE,
   resolveGoogleChatAccount,
   resolveGoogleChatOutboundSpace,
-  type OpenClawConfig,
+  type NatesclawConfig,
 } from "./channel.deps.runtime.js";
 import {
   formatGoogleChatTextChunks,
@@ -83,7 +83,7 @@ const collectGoogleChatGroupPolicyWarnings =
 const collectGoogleChatSecurityWarnings = composeAccountWarningCollectors<
   ResolvedGoogleChatAccount,
   {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     account: ResolvedGoogleChatAccount;
   }
 >(
@@ -126,7 +126,7 @@ export const googlechatSecurityAdapter = {
 
 export const googlechatThreadingAdapter = {
   scopedAccountReplyToMode: {
-    resolveAccount: (cfg: OpenClawConfig, accountId?: string | null) =>
+    resolveAccount: (cfg: NatesclawConfig, accountId?: string | null) =>
       resolveGoogleChatAccount({ cfg, accountId }),
     resolveReplyToMode: (account: ResolvedGoogleChatAccount, _chatType?: string | null) =>
       account.config.replyToMode,
@@ -138,7 +138,7 @@ export const googlechatThreadingAdapter = {
     context,
     hasRepliedRef,
   }: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     context: ChannelThreadingContext;
     hasRepliedRef?: { value: boolean };
@@ -167,7 +167,7 @@ export const googlechatPairingTextAdapter = {
     message,
     accountId,
   }: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     id: string;
     message: string;
     accountId?: string | null;
@@ -227,7 +227,7 @@ export const googlechatOutboundAdapter = {
       replyToId,
       threadId,
     }: {
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       to: string;
       text: string;
       accountId?: string | null;

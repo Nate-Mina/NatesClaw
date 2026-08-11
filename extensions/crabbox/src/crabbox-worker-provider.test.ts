@@ -1,17 +1,17 @@
 import path from "node:path";
-import type { WorkerProfile } from "openclaw/plugin-sdk/plugin-entry";
-import type { SpawnResult } from "openclaw/plugin-sdk/process-runtime";
+import type { WorkerProfile } from "natesclaw/plugin-sdk/plugin-entry";
+import type { SpawnResult } from "natesclaw/plugin-sdk/process-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { operationLeaseId, resolveCrabboxBinary } from "./crabbox-worker-profile.js";
-import { createCrabboxWorkerProvider, resolveOpenClawRoot } from "./crabbox-worker-provider.js";
+import { createCrabboxWorkerProvider, resolveNatesclawRoot } from "./crabbox-worker-provider.js";
 
 const OPERATION_ID = `provision:v2:${"0".repeat(64)}`;
 const LEASE_ID = "cbx_6071fc2062a6";
 const HOST_KEY = [["ssh", "ed25519"].join("-"), "AAAA"].join(" ");
 const HOST_KEY_ERROR =
   "Crabbox inspect does not expose the SSH host key required by the worker provider contract";
-const OPENCLAW_ROOT = path.resolve(path.sep, "workspace", "openclaw");
-const SIBLING_BINARY = path.resolve(OPENCLAW_ROOT, "../crabbox/bin/crabbox");
+const NATESCLAW_ROOT = path.resolve(path.sep, "workspace", "natesclaw");
+const SIBLING_BINARY = path.resolve(NATESCLAW_ROOT, "../crabbox/bin/crabbox");
 const INSPECT_FAILURE_PREFIX = "Crabbox inspect failed with exit code 2: ";
 const PROFILE = {
   provider: "aws",
@@ -45,7 +45,7 @@ function inspectJson(overrides: Record<string, unknown> = {}): string {
     host: "fallback.example.test",
     sshHost: "worker.example.test",
     sshPort: "2222",
-    sshUser: "openclaw",
+    sshUser: "natesclaw",
     sshKey: "/tmp/crabbox-worker-key",
     ready: true,
     ...overrides,
@@ -59,7 +59,7 @@ function lifecycleLease(leaseId = LEASE_ID, profile: WorkerProfile = PROFILE) {
 function providerWithRawRunner(runCommand: CrabboxCommandRunner) {
   return createCrabboxWorkerProvider({
     runCommand,
-    openclawRoot: OPENCLAW_ROOT,
+    natesclawRoot: NATESCLAW_ROOT,
     pathEnv: "",
     isExecutable: (candidate) => candidate === SIBLING_BINARY,
     sleep: async () => {},
@@ -119,7 +119,7 @@ describe("Crabbox worker provider", () => {
         host: "worker.example.test",
         port: 2222,
         fallbackPorts: [22],
-        user: "openclaw",
+        user: "natesclaw",
         hostKey: HOST_KEY,
         keyRef: {
           source: "file",
@@ -392,7 +392,7 @@ describe("Crabbox worker provider", () => {
           stdout: JSON.stringify({ aws: { instanceProfile: "worker-role" } }),
         });
       },
-      openclawRoot: OPENCLAW_ROOT,
+      natesclawRoot: NATESCLAW_ROOT,
       pathEnv: "",
       isExecutable: (candidate) => candidate === SIBLING_BINARY,
     });
@@ -422,7 +422,7 @@ describe("Crabbox worker provider", () => {
           stdout: JSON.stringify({ aws: { instanceProfile: "worker-role" } }),
         });
       },
-      openclawRoot: OPENCLAW_ROOT,
+      natesclawRoot: NATESCLAW_ROOT,
       pathEnv: "",
       isExecutable: (candidate) => candidate === SIBLING_BINARY,
     });
@@ -597,7 +597,7 @@ describe("Crabbox worker provider", () => {
         }
         return commandResult();
       },
-      openclawRoot: OPENCLAW_ROOT,
+      natesclawRoot: NATESCLAW_ROOT,
       pathEnv: "",
       isExecutable: (candidate) => candidate === SIBLING_BINARY,
       sleep: async () => {},
@@ -788,12 +788,12 @@ describe("Crabbox worker provider", () => {
         apps: [
           {
             id: "browser",
-            executablePath: "/usr/local/bin/openclaw-worker-browser",
+            executablePath: "/usr/local/bin/natesclaw-worker-browser",
             cdpPort: 9222,
           },
           {
             id: "terminal",
-            executablePath: "/usr/local/bin/openclaw-worker-terminal",
+            executablePath: "/usr/local/bin/natesclaw-worker-terminal",
           },
         ],
       },
@@ -801,12 +801,12 @@ describe("Crabbox worker provider", () => {
     expect(lease.desktop?.apps).toEqual([
       {
         id: "browser",
-        executablePath: "/usr/local/bin/openclaw-worker-browser",
+        executablePath: "/usr/local/bin/natesclaw-worker-browser",
         cdpPort: 9222,
       },
       {
         id: "terminal",
-        executablePath: "/usr/local/bin/openclaw-worker-terminal",
+        executablePath: "/usr/local/bin/natesclaw-worker-terminal",
       },
     ]);
     const warmup = calls.find((argv) => argv[1] === "warmup") ?? [];
@@ -838,7 +838,7 @@ describe("Crabbox worker provider", () => {
     expect(setup).toContain("export DISPLAY");
     expect(setup).toContain("for required_command in xfconf-query curl flock");
     expect(setup.match(/^\. \/var\/lib\/crabbox\/desktop\.env$/gmu)).toHaveLength(3);
-    expect(setup).toContain("export HOME=/home/openclaw");
+    expect(setup).toContain("export HOME=/home/natesclaw");
     expect(setup).toContain("flock -x 9");
     expect(setup).toContain("--remote-debugging-address=127.0.0.1");
     expect(setup).toContain("--remote-debugging-port=9222 about:blank");
@@ -853,7 +853,7 @@ describe("Crabbox worker provider", () => {
     expect(setup).not.toContain("logger --size");
     expect(setup).toContain("/usr/bin/xfce4-terminal");
     expect(setup).toContain('fill="#111512"');
-    expect(setup).toContain("OPENCLAW WORKER");
+    expect(setup).toContain("NATESCLAW WORKER");
     expect(setup).toContain("$backdrop/last-image");
     expect(setup).toContain("$backdrop/image-style");
     expect(setup).not.toMatch(/(?:#ff|amp)/iu);
@@ -878,7 +878,7 @@ describe("Crabbox worker provider", () => {
     });
     const setup = calls.find((argv) => argv[1] === "run")?.at(-1) ?? "";
     expect(setup).toContain("ssh_home=/root");
-    expect(setup).toContain("/root/.local/share/backgrounds/openclaw-worker.svg");
+    expect(setup).toContain("/root/.local/share/backgrounds/natesclaw-worker.svg");
     expect(setup).toContain("export HOME=/root");
   });
 
@@ -992,7 +992,7 @@ describe("Crabbox worker provider", () => {
       "--lease-id",
       LEASE_ID,
       "--slug",
-      expect.stringMatching(/^openclaw-[a-f0-9]{32}$/u),
+      expect.stringMatching(/^natesclaw-[a-f0-9]{32}$/u),
       "--keep=true",
     ]);
     expect(calls[0]?.options).toEqual({
@@ -1252,7 +1252,7 @@ describe("Crabbox worker provider", () => {
         }
         return commandResult();
       },
-      openclawRoot: OPENCLAW_ROOT,
+      natesclawRoot: NATESCLAW_ROOT,
       pathEnv: "",
       isExecutable: (candidate) => candidate === SIBLING_BINARY,
       sleep: async () => {
@@ -1410,7 +1410,7 @@ describe("Crabbox worker provider", () => {
         calls.push(argv);
         return argv[1] === "inspect" ? commandResult({ stdout: inspectJson() }) : commandResult();
       },
-      openclawRoot: OPENCLAW_ROOT,
+      natesclawRoot: NATESCLAW_ROOT,
       pathEnv: "",
       isExecutable: () => false,
     });
@@ -1631,34 +1631,34 @@ describe("Crabbox binary resolution", () => {
     expect(
       resolveCrabboxBinary({
         explicit: explicitBinary,
-        openclawRoot: OPENCLAW_ROOT,
+        natesclawRoot: NATESCLAW_ROOT,
         isExecutable: () => false,
       }),
     ).toBe(explicitBinary);
     expect(
       resolveCrabboxBinary({
-        openclawRoot: OPENCLAW_ROOT,
+        natesclawRoot: NATESCLAW_ROOT,
         pathEnv: toolsDir,
         isExecutable: (candidate) => candidate === SIBLING_BINARY || candidate === pathBinary,
       }),
     ).toBe(SIBLING_BINARY);
     expect(
       resolveCrabboxBinary({
-        openclawRoot: OPENCLAW_ROOT,
+        natesclawRoot: NATESCLAW_ROOT,
         pathEnv: [path.resolve(path.sep, "not-executable"), toolsDir].join(path.delimiter),
         isExecutable: (candidate) => candidate === pathBinary,
       }),
     ).toBe(pathBinary);
     expect(
       resolveCrabboxBinary({
-        openclawRoot: OPENCLAW_ROOT,
+        natesclawRoot: NATESCLAW_ROOT,
         pathEnv: "relative-tools",
         isExecutable: (candidate) => candidate === relativePathBinary,
       }),
     ).toBe(relativePathBinary);
     expect(
       resolveCrabboxBinary({
-        openclawRoot: OPENCLAW_ROOT,
+        natesclawRoot: NATESCLAW_ROOT,
         pathEnv: path.resolve(path.sep, "not-executable"),
         isExecutable: () => false,
       }),
@@ -1666,11 +1666,11 @@ describe("Crabbox binary resolution", () => {
   });
 
   it("derives the package root from source and bundled plugin roots", () => {
-    expect(resolveOpenClawRoot(path.join(OPENCLAW_ROOT, "extensions", "crabbox"))).toBe(
-      OPENCLAW_ROOT,
+    expect(resolveNatesclawRoot(path.join(NATESCLAW_ROOT, "extensions", "crabbox"))).toBe(
+      NATESCLAW_ROOT,
     );
-    expect(resolveOpenClawRoot(path.join(OPENCLAW_ROOT, "dist", "extensions", "crabbox"))).toBe(
-      OPENCLAW_ROOT,
+    expect(resolveNatesclawRoot(path.join(NATESCLAW_ROOT, "dist", "extensions", "crabbox"))).toBe(
+      NATESCLAW_ROOT,
     );
   });
 });

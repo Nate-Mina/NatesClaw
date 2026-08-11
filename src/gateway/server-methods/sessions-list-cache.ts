@@ -1,5 +1,5 @@
 import type { SessionsListParams } from "../../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { readAgentRunIndexVersion } from "../../infra/agent-run-registry.js";
 import { readSessionIdentityMutationVersion } from "../../sessions/session-lifecycle-events.js";
 import { isGatewayAdmin } from "../session-sharing.js";
@@ -19,7 +19,7 @@ type SessionListOperation = SessionListFence & { promise: Promise<SessionsListRe
 type SessionListCompleted = SessionListFence & { expiresAt?: number; result: SessionsListResult };
 type SessionListState = {
   completed: Map<string, SessionListCompleted>;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   inFlight: Map<string, SessionListOperation>;
 };
 
@@ -61,7 +61,7 @@ function sessionListWorkKey(params: SessionsListParams, client: GatewayClient | 
 
 function sessionListState(
   context: GatewayRequestContext,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): SessionListState {
   let state = sessionListsByContext.get(context);
   if (!state || state.config !== config) {
@@ -108,7 +108,7 @@ function resolveSessionListExpiration(result: SessionsListResult): number | null
 
 export async function respondWithCachedSessionList(params: {
   client: GatewayClient | null;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   context: GatewayRequestContext;
   request: SessionsListParams;
   respond: RespondFn;

@@ -1,5 +1,5 @@
-import { gatewayOriginScope } from "@openclaw/gateway-client/browser";
-import { safeParseJson } from "@openclaw/normalization-core";
+import { gatewayOriginScope } from "@natesclaw/gateway-client/browser";
+import { safeParseJson } from "@natesclaw/normalization-core";
 import {
   DEFAULT_SIDEBAR_ENTRIES,
   normalizeSidebarEntries,
@@ -24,15 +24,15 @@ import { parseThemeSelection, type ThemeMode, type ThemeName } from "./theme.ts"
 import { normalizeLocalUserIdentity, type LocalUserIdentity } from "./user-identity.ts";
 
 // Control UI module implements storage behavior.
-const SETTINGS_KEY_PREFIX = "openclaw.control.settings.v1:";
-const LEGACY_SETTINGS_KEY = "openclaw.control.settings.v1";
+const SETTINGS_KEY_PREFIX = "natesclaw.control.settings.v1:";
+const LEGACY_SETTINGS_KEY = "natesclaw.control.settings.v1";
 export const NAV_WIDTH_MIN = 240;
 export const NAV_WIDTH_MAX = 400;
 const NAV_WIDTH_DEFAULT = 258;
-const CURRENT_GATEWAY_SELECTION_KEY_PREFIX = "openclaw.control.currentGateway.v1:";
-const LOCAL_USER_IDENTITY_KEY = "openclaw.control.user.v1";
-const LEGACY_TOKEN_SESSION_KEY = "openclaw.control.token.v1";
-const TOKEN_SESSION_KEY_PREFIX = "openclaw.control.token.v1:";
+const CURRENT_GATEWAY_SELECTION_KEY_PREFIX = "natesclaw.control.currentGateway.v1:";
+const LOCAL_USER_IDENTITY_KEY = "natesclaw.control.user.v1";
+const LEGACY_TOKEN_SESSION_KEY = "natesclaw.control.token.v1";
+const TOKEN_SESSION_KEY_PREFIX = "natesclaw.control.token.v1:";
 const MAX_SCOPED_SESSION_ENTRIES = 10;
 
 function settingsKeyForGateway(gatewayUrl: string): string {

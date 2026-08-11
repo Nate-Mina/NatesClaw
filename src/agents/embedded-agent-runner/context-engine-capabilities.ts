@@ -1,13 +1,13 @@
 /**
  * Builds host capabilities passed into context-engine runtime calls.
  */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ContextEngineRuntimeContext } from "../../context-engine/types.js";
 import { resolveBoundAgentIdForSession } from "../session-agent-binding.js";
 
 type ResolveContextEngineCapabilitiesParams = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   sessionKey?: string;
   agentId?: string;
   authProfileId?: string;

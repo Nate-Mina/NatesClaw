@@ -256,7 +256,7 @@ export async function deliverQueuedSessionDelivery(params: {
       // The per-message timestamp prefix is applied at the single LLM boundary
       // (normalizeMessagesForLlmBoundary) from each message's own timestamp, so
       // the current turn and historical turns carry identical bytes on the wire.
-      // See: https://github.com/openclaw/openclaw/issues/3658
+      // See: https://github.com/natesclaw/natesclaw/issues/3658
       Body: userMessage,
       BodyForAgent: userMessage,
       BodyForCommands: "",

@@ -7,16 +7,16 @@ describe("formatCliFailureLines", () => {
     const lines = formatCliFailureLines({
       title: "Could not start the CLI.",
       error: new Error("config file is invalid"),
-      argv: ["node", "openclaw", "status"],
+      argv: ["node", "natesclaw", "status"],
       env: {},
     });
 
     expect(lines).toEqual([
-      "[openclaw] Could not start the CLI.",
-      "[openclaw] Reason: config file is invalid",
-      "[openclaw] Debug: set OPENCLAW_DEBUG=1 to include the stack trace.",
-      "[openclaw] Try: openclaw doctor",
-      "[openclaw] Help: openclaw --help",
+      "[natesclaw] Could not start the CLI.",
+      "[natesclaw] Reason: config file is invalid",
+      "[natesclaw] Debug: set NATESCLAW_DEBUG=1 to include the stack trace.",
+      "[natesclaw] Try: natesclaw doctor",
+      "[natesclaw] Help: natesclaw --help",
     ]);
   });
 
@@ -24,14 +24,14 @@ describe("formatCliFailureLines", () => {
     const lines = formatCliFailureLines({
       title: "The CLI command failed.",
       error: new Error("boom"),
-      env: { OPENCLAW_DEBUG: "1" },
+      env: { NATESCLAW_DEBUG: "1" },
     });
 
     expect(lines.slice(0, 4)).toEqual([
-      "[openclaw] The CLI command failed.",
-      "[openclaw] Reason: boom",
-      "[openclaw] Stack:",
-      "[openclaw] Error: boom",
+      "[natesclaw] The CLI command failed.",
+      "[natesclaw] Reason: boom",
+      "[natesclaw] Stack:",
+      "[natesclaw] Error: boom",
     ]);
     expect(lines.join("\n")).toContain("Error: boom");
   });
@@ -40,12 +40,12 @@ describe("formatCliFailureLines", () => {
     const lines = formatCliFailureLines({
       title: "The CLI command failed.",
       error: new Error("boom"),
-      argv: ["node", "openclaw", "proxy", "run", debugFlag],
+      argv: ["node", "natesclaw", "proxy", "run", debugFlag],
       env: {},
     });
 
-    expect(lines).toContain("[openclaw] Stack:");
-    expect(lines).toContain("[openclaw] Error: boom");
+    expect(lines).toContain("[natesclaw] Stack:");
+    expect(lines).toContain("[natesclaw] Error: boom");
   });
 
   it.each(["--debug", "--verbose"])(
@@ -54,12 +54,12 @@ describe("formatCliFailureLines", () => {
       const lines = formatCliFailureLines({
         title: "The CLI command failed.",
         error: new Error("boom"),
-        argv: ["node", "openclaw", "proxy", "run", "--", "child", debugFlag],
+        argv: ["node", "natesclaw", "proxy", "run", "--", "child", debugFlag],
         env: {},
       });
 
-      expect(lines).not.toContain("[openclaw] Stack:");
-      expect(lines).toContain("[openclaw] Debug: set OPENCLAW_DEBUG=1 to include the stack trace.");
+      expect(lines).not.toContain("[natesclaw] Stack:");
+      expect(lines).toContain("[natesclaw] Debug: set NATESCLAW_DEBUG=1 to include the stack trace.");
     },
   );
 });

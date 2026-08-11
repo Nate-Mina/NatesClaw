@@ -121,7 +121,7 @@ export async function compactEmbeddedAgentSessionDirect(
 ): Promise<EmbeddedAgentCompactResult> {
   const paramsBase = applyAgentRunSessionTargetIdentity(paramsInput);
   const lockedHarnessRuntime = normalizeOptionalAgentRuntimeId(paramsBase.agentHarnessId);
-  if (paramsBase.modelSelectionLocked === true && lockedHarnessRuntime !== "openclaw") {
+  if (paramsBase.modelSelectionLocked === true && lockedHarnessRuntime !== "natesclaw") {
     return {
       ok: false,
       compacted: false,

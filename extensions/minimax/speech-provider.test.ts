@@ -6,12 +6,12 @@ import {
   clearRuntimeAuthProfileStoreSnapshots,
   saveAuthProfileStore,
   type AuthProfileStore,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "natesclaw/plugin-sdk/agent-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const transcodeAudioBufferToOpusMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/media-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/media-runtime", () => ({
   transcodeAudioBufferToOpus: transcodeAudioBufferToOpusMock,
 }));
 
@@ -116,11 +116,11 @@ describe("buildMinimaxSpeechProvider", () => {
     });
 
     beforeEach(async () => {
-      tempStateDir = await mkdtemp(path.join(tmpdir(), "openclaw-minimax-tts-auth-"));
+      tempStateDir = await mkdtemp(path.join(tmpdir(), "natesclaw-minimax-tts-auth-"));
       tempAgentDir = path.join(tempStateDir, "agents", "main", "agent");
       await mkdir(tempAgentDir, { recursive: true });
-      process.env.OPENCLAW_STATE_DIR = tempStateDir;
-      process.env.OPENCLAW_AGENT_DIR = tempAgentDir;
+      process.env.NATESCLAW_STATE_DIR = tempStateDir;
+      process.env.NATESCLAW_AGENT_DIR = tempAgentDir;
       clearMinimaxAuthEnv();
       clearRuntimeAuthProfileStoreSnapshots();
     });
@@ -360,13 +360,13 @@ describe("buildMinimaxSpeechProvider", () => {
     let tempAgentDir: string;
 
     beforeEach(async () => {
-      tempStateDir = await mkdtemp(path.join(tmpdir(), "openclaw-minimax-tts-synth-"));
+      tempStateDir = await mkdtemp(path.join(tmpdir(), "natesclaw-minimax-tts-synth-"));
       tempAgentDir = path.join(tempStateDir, "agents", "main", "agent");
       await mkdir(tempAgentDir, { recursive: true });
       process.env = {
         ...savedEnv,
-        OPENCLAW_AGENT_DIR: tempAgentDir,
-        OPENCLAW_STATE_DIR: tempStateDir,
+        NATESCLAW_AGENT_DIR: tempAgentDir,
+        NATESCLAW_STATE_DIR: tempStateDir,
       };
       clearMinimaxAuthEnv();
       clearRuntimeAuthProfileStoreSnapshots();

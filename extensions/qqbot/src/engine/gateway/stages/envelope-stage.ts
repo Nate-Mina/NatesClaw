@@ -10,9 +10,9 @@
 import {
   formatInboundEnvelope,
   resolveEnvelopeFormatOptions,
-} from "openclaw/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { ProcessedAttachments } from "../inbound-attachments.js";
 import type { InboundGroupInfo, InboundPipelineDeps, ReplyToInfo } from "../inbound-context.js";
 import type { QueuedMessage } from "../message-queue.js";
@@ -30,7 +30,7 @@ interface BuildBodyInput {
 /** Format the inbound envelope (Web UI body). */
 export function buildBody(input: BuildBodyInput): string {
   const { event, deps, userContent, isGroupChat, imageUrls } = input;
-  const envelopeOptions = resolveEnvelopeFormatOptions(deps.cfg as OpenClawConfig);
+  const envelopeOptions = resolveEnvelopeFormatOptions(deps.cfg as NatesclawConfig);
   return formatInboundEnvelope({
     channel: "qqbot",
     from: event.senderName ?? event.senderId,

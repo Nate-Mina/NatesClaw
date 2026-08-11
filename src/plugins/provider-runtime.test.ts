@@ -1,9 +1,9 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 /** Exercises provider runtime loading, ordering, and manifest-backed discovery paths. */
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ModelProviderConfig, OpenClawConfig } from "../config/types.js";
+import type { ModelProviderConfig, NatesclawConfig } from "../config/types.js";
 import { captureEnv, deleteTestEnvValue, setTestEnvValue } from "../test-utils/env.js";
 import type { ProviderRuntimeModel } from "./provider-runtime-model.types.js";
 import {
@@ -52,7 +52,7 @@ const resolveBundledProviderPolicySurfaceMock = vi.fn<ResolveBundledProviderPoli
 );
 const providerRuntimeWarnMock = vi.fn();
 
-let getAiTransportHost: typeof import("@openclaw/ai").getAiTransportHost;
+let getAiTransportHost: typeof import("@natesclaw/ai").getAiTransportHost;
 let attachModelProviderRuntimePluginHandle: typeof import("./provider-hook-runtime.js").attachModelProviderRuntimePluginHandle;
 let augmentModelCatalogWithProviderPlugins: typeof import("./provider-runtime.js").augmentModelCatalogWithProviderPlugins;
 let buildProviderAuthDoctorHintWithPlugin: typeof import("./provider-runtime.js").buildProviderAuthDoctorHintWithPlugin;
@@ -355,7 +355,7 @@ describe("provider-runtime", () => {
     } = await import("./provider-runtime.js"));
     ({ attachModelProviderRuntimePluginHandle } = await import("./provider-hook-runtime.js"));
     await import("../agents/ai-transport-runtime-host.js");
-    ({ getAiTransportHost } = await import("@openclaw/ai"));
+    ({ getAiTransportHost } = await import("@natesclaw/ai"));
     ({ createEmptyPluginRegistry } = await import("./registry.js"));
     ({ resetPluginRuntimeStateForTest, setActivePluginRegistry } = await import("./runtime.js"));
   });
@@ -883,14 +883,14 @@ describe("provider-runtime", () => {
           demo: { enabled: true, config: { endpoint: "https://one.example" } },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const secondConfig = {
       plugins: {
         entries: {
           demo: { enabled: true, config: { endpoint: "https://two.example" } },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config: firstConfig })).toBe(
       provider,
@@ -917,7 +917,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const secondConfig = {
       plugins: {
         entries: {
@@ -925,7 +925,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true, config: { queryMode: "recent" } },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config: firstConfig })).toBe(
       provider,
@@ -948,11 +948,11 @@ describe("provider-runtime", () => {
       label: "Demo two",
       auth: [],
     };
-    const config = {} as OpenClawConfig;
-    const envSnapshot = captureEnv(["HOME", "OPENCLAW_HOME"]);
+    const config = {} as NatesclawConfig;
+    const envSnapshot = captureEnv(["HOME", "NATESCLAW_HOME"]);
     try {
       setTestEnvValue("HOME", "/home/one");
-      deleteTestEnvValue("OPENCLAW_HOME");
+      deleteTestEnvValue("NATESCLAW_HOME");
       resolvePluginProvidersMock.mockReturnValueOnce([firstProvider]);
       expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config })).toBe(
         firstProvider,
@@ -1147,15 +1147,15 @@ describe("provider-runtime", () => {
           demo: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const firstConfig = {
       ...baseConfig,
       agents: { defaults: { model: "openai/gpt-5.4" } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const secondConfig = {
       ...baseConfig,
       agents: { defaults: { model: "anthropic/claude-sonnet-4-5" } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const metadataSnapshot = {
       index: {},
       manifestRegistry: {},
@@ -1211,7 +1211,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const secondConfig = {
       plugins: {
         entries: {
@@ -1219,7 +1219,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true, config: { queryMode: "recent" } },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     for (const config of [firstConfig, secondConfig]) {
       expect(

@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { sha256Hex } from "../../infra/crypto-digest.js";
 import { buildWorkspaceSkillStatus, resolveSkillStatusEntry } from "../discovery/status.js";
 import {
@@ -65,7 +65,7 @@ import {
 } from "./types.js";
 
 type SkillWorkshopWorkspaceOptions = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
 };
 
@@ -190,7 +190,7 @@ export async function proposeCreateSkill(
       skillKey: target.skillKey,
       skillDir: target.skillDir,
       skillFile: target.skillFile,
-      source: "openclaw-workspace",
+      source: "natesclaw-workspace",
     },
     scan,
     ...(supportFiles.length > 0

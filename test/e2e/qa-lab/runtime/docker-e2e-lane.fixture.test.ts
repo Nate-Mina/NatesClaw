@@ -54,26 +54,26 @@ describe("QA Docker E2E lane fixture", () => {
     );
 
     const updateMigration = resolveQaDockerE2eLane("update-migration", {
-      OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC: "openclaw@custom",
-      OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "custom-scenario",
+      NATESCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC: "natesclaw@custom",
+      NATESCLAW_UPGRADE_SURVIVOR_SCENARIO: "custom-scenario",
     });
 
     expect(updateMigration.script).toBe("scripts/e2e/upgrade-survivor-docker.sh");
-    expect(updateMigration.env.OPENCLAW_UPGRADE_SURVIVOR_PUBLISHED_BASELINE).toBe("1");
-    expect(updateMigration.env.OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC).toBe("openclaw@custom");
-    expect(updateMigration.env.OPENCLAW_UPGRADE_SURVIVOR_SCENARIO).toBe("custom-scenario");
+    expect(updateMigration.env.NATESCLAW_UPGRADE_SURVIVOR_PUBLISHED_BASELINE).toBe("1");
+    expect(updateMigration.env.NATESCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC).toBe("natesclaw@custom");
+    expect(updateMigration.env.NATESCLAW_UPGRADE_SURVIVOR_SCENARIO).toBe("custom-scenario");
 
     const updateRestartAuth = resolveQaDockerE2eLane("update-restart-auth", {});
-    expect(updateRestartAuth.env.OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC).toBe("openclaw@latest");
-    expect(updateRestartAuth.env.OPENCLAW_UPGRADE_SURVIVOR_PUBLISHED_BASELINE).toBe("1");
-    expect(updateRestartAuth.env.OPENCLAW_UPGRADE_SURVIVOR_UPDATE_RESTART_MODE).toBe("auto-auth");
-    expect(updateRestartAuth.env.OPENCLAW_UPGRADE_SURVIVOR_DOCKER_RUN_TIMEOUT).toBe("1500s");
+    expect(updateRestartAuth.env.NATESCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC).toBe("natesclaw@latest");
+    expect(updateRestartAuth.env.NATESCLAW_UPGRADE_SURVIVOR_PUBLISHED_BASELINE).toBe("1");
+    expect(updateRestartAuth.env.NATESCLAW_UPGRADE_SURVIVOR_UPDATE_RESTART_MODE).toBe("auto-auth");
+    expect(updateRestartAuth.env.NATESCLAW_UPGRADE_SURVIVOR_DOCKER_RUN_TIMEOUT).toBe("1500s");
 
     expect(
       resolveQaDockerE2eLane("update-restart-auth", {
-        OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC: "openclaw@custom",
-      }).env.OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC,
-    ).toBe("openclaw@custom");
+        NATESCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC: "natesclaw@custom",
+      }).env.NATESCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC,
+    ).toBe("natesclaw@custom");
   });
 
   it("dispatches through bash without running Docker in fixture tests", () => {

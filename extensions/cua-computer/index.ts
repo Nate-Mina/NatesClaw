@@ -1,4 +1,4 @@
-import { buildPluginConfigSchema, definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import { buildPluginConfigSchema, definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 import { z } from "zod";
 import { createCuaComputerCommands } from "./src/commands.js";
 

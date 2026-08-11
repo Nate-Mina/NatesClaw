@@ -236,7 +236,7 @@ function collectFiles(
   return files;
 }
 
-type SkillDiscoveryMode = "openclaw" | "agents";
+type SkillDiscoveryMode = "natesclaw" | "agents";
 
 function collectSkillEntries(
   dir: string,
@@ -309,7 +309,7 @@ function collectSkillEntries(
 
       const relPath = normalizeNativePathSeparators(relative(root, fullPath));
       if (
-        mode === "openclaw" &&
+        mode === "natesclaw" &&
         dir === root &&
         isFile &&
         entry.name.endsWith(".md") &&
@@ -427,8 +427,8 @@ function collectTopLevelAutoResourceEntries(
 function readResourceManifestFile(packageJsonPath: string): ResourceManifest | null {
   try {
     const content = readFileSync(packageJsonPath, "utf-8");
-    const pkg = JSON.parse(content) as { openclaw?: ResourceManifest };
-    return pkg.openclaw ?? null;
+    const pkg = JSON.parse(content) as { natesclaw?: ResourceManifest };
+    return pkg.natesclaw ?? null;
   } catch {
     return null;
   }
@@ -534,7 +534,7 @@ function collectAutoExtensionEntries(dir: string): string[] {
  */
 function collectResourceFiles(dir: string, resourceType: ResourceType): string[] {
   if (resourceType === "skills") {
-    return collectSkillEntries(dir, "openclaw");
+    return collectSkillEntries(dir, "natesclaw");
   }
   if (resourceType === "extensions") {
     return collectAutoExtensionEntries(dir);
@@ -1154,8 +1154,8 @@ export class DefaultPackageManager implements PackageManager {
 
     try {
       const content = readFileSync(packageJsonPath, "utf-8");
-      const pkg = JSON.parse(content) as { openclaw?: ResourceManifest };
-      return pkg.openclaw ?? null;
+      const pkg = JSON.parse(content) as { natesclaw?: ResourceManifest };
+      return pkg.natesclaw ?? null;
     } catch {
       return null;
     }
@@ -1317,7 +1317,7 @@ export class DefaultPackageManager implements PackageManager {
     // Project skills from the embedded agent project directory.
     addResources(
       "skills",
-      collectAutoSkillEntries(projectDirs.skills, "openclaw"),
+      collectAutoSkillEntries(projectDirs.skills, "natesclaw"),
       projectMetadata,
       projectOverrides.skills,
       projectBaseDir,
@@ -1354,7 +1354,7 @@ export class DefaultPackageManager implements PackageManager {
       projectBaseDir,
     );
 
-    // User extensions from ~/.openclaw/agent/
+    // User extensions from ~/.natesclaw/agent/
     addResources(
       "extensions",
       collectAutoExtensionEntries(userDirs.extensions),
@@ -1363,10 +1363,10 @@ export class DefaultPackageManager implements PackageManager {
       globalBaseDir,
     );
 
-    // User skills from ~/.openclaw/agent/
+    // User skills from ~/.natesclaw/agent/
     addResources(
       "skills",
-      collectAutoSkillEntries(userDirs.skills, "openclaw"),
+      collectAutoSkillEntries(userDirs.skills, "natesclaw"),
       userMetadata,
       userOverrides.skills,
       globalBaseDir,

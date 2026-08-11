@@ -1,11 +1,11 @@
 import {
   isFastModeAutoProgressPayload,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
+} from "natesclaw/plugin-sdk/reply-payload";
 import { shouldSuppressLocalExecApprovalPrompt } from "../../channels/plugins/exec-approval-local.js";
 import { type AgentPlanStep, formatPlanChecklistLines } from "../../channels/streaming.js";
 import { applyMergePatch } from "../../config/merge-patch.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";
 import { createTtsDirectiveTextStreamCleaner } from "../../tts/directives.js";
 import { shouldCleanTtsDirectiveText } from "../../tts/tts-config.js";
@@ -378,7 +378,7 @@ export async function prepareDispatchExecution(state: ChooseDispatchRouteReadySt
   const runtimeReplyConfig = state.preparedReplyDispatchRuntime?.config ?? cfg;
   const replyConfig = withFullRuntimeReplyConfig(
     params.configOverride
-      ? (applyMergePatch(runtimeReplyConfig, params.configOverride) as OpenClawConfig)
+      ? (applyMergePatch(runtimeReplyConfig, params.configOverride) as NatesclawConfig)
       : runtimeReplyConfig,
   );
   state.recordAgentDispatchStarted();

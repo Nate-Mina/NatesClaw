@@ -1,5 +1,5 @@
 import { isDeepStrictEqual } from "node:util";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
 import { resolveAuthProfileDatabasePath } from "./sqlite.js";
 
 /** Secret-free proof that one exact provider/model transport completed with usable auth. */

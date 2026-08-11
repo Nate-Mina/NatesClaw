@@ -1,11 +1,11 @@
-import { readAcpSessionEntry, type AcpSessionStoreEntry } from "openclaw/plugin-sdk/acp-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { readAcpSessionEntry, type AcpSessionStoreEntry } from "natesclaw/plugin-sdk/acp-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 // Discord plugin module implements thread bindings.lifecycle behavior.
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import pMap from "p-map";
 import { parseDiscordTarget } from "../targets.js";
 import { resolveChannelIdForBinding } from "./thread-bindings.discord-api.js";
@@ -40,7 +40,7 @@ export type AcpThreadBindingReconciliationResult = {
 type AcpThreadBindingHealthStatus = "healthy" | "stale" | "uncertain";
 
 type AcpThreadBindingHealthProbe = (params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   sessionKey: string;
   binding: ThreadBindingRecord;
@@ -73,7 +73,7 @@ export function listThreadBindingsBySessionKey(params: {
 }
 
 export async function autoBindSpawnedDiscordSubagent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string;
   channel?: string;
   to?: string;
@@ -208,7 +208,7 @@ function resolveStoredAcpBindingHealth(params: {
 }
 
 export async function reconcileAcpThreadBindingsOnStartup(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string;
   sendFarewell?: boolean;
   healthProbe?: AcpThreadBindingHealthProbe;

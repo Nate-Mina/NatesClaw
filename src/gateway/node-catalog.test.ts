@@ -14,7 +14,7 @@ function pairedDevice(overrides: Partial<TestPairedDevice> = {}): TestPairedDevi
     deviceId: "mac-1",
     publicKey: "public-key",
     displayName: "Mac",
-    clientId: "openclaw-macos",
+    clientId: "natesclaw-macos",
     clientMode: "node",
     role: "node",
     roles: ["node"],
@@ -108,7 +108,7 @@ describe("gateway/node-catalog", () => {
           nodeId: "mac-1",
           connId: "conn-1",
           client: {} as never,
-          clientId: "openclaw-macos",
+          clientId: "natesclaw-macos",
           clientMode: "node",
           displayName: "Mac",
           platform: "macos",
@@ -132,7 +132,7 @@ describe("gateway/node-catalog", () => {
     expect(getKnownNode(catalog, "mac-1")).toMatchObject({
       nodeId: "mac-1",
       displayName: "Mac",
-      clientId: "openclaw-macos",
+      clientId: "natesclaw-macos",
       clientMode: "node",
       remoteIp: "100.0.0.11",
       caps: ["camera", "screen"],
@@ -309,7 +309,7 @@ describe("gateway/node-catalog", () => {
       pendingNodes: [
         pendingNode({
           nodeId: "new-node",
-          clientId: "openclaw-linux",
+          clientId: "natesclaw-linux",
           clientMode: "node",
           displayName: "Pending Node",
           platform: "linux",
@@ -326,7 +326,7 @@ describe("gateway/node-catalog", () => {
 
     expect(getKnownNode(catalog, "new-node")).toMatchObject({
       nodeId: "new-node",
-      clientId: "openclaw-linux",
+      clientId: "natesclaw-linux",
       clientMode: "node",
       displayName: "Pending Node",
       platform: "linux",

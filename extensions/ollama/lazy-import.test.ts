@@ -1,13 +1,13 @@
-import type { MediaUnderstandingProvider } from "openclaw/plugin-sdk/media-understanding";
-import type { MemoryEmbeddingProviderAdapter } from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import type { MediaUnderstandingProvider } from "natesclaw/plugin-sdk/media-understanding";
+import type { MemoryEmbeddingProviderAdapter } from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import type {
   AnyAgentTool,
-  OpenClawPluginNodeHostCommand,
+  NatesclawPluginNodeHostCommand,
   ProviderPlugin,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import { createPluginRuntimeMock } from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { WebSearchProviderPlugin } from "openclaw/plugin-sdk/provider-web-search-contract";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
+import { createPluginRuntimeMock } from "natesclaw/plugin-sdk/plugin-test-runtime";
+import type { WebSearchProviderPlugin } from "natesclaw/plugin-sdk/provider-web-search-contract";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 describe("ollama lazy imports", () => {
@@ -21,7 +21,7 @@ describe("ollama lazy imports", () => {
       "./src/stream.runtime.js",
       "./src/web-search-provider.runtime.js",
       "./src/wsl2-crash-loop-check.js",
-      "openclaw/plugin-sdk/runtime-env",
+      "natesclaw/plugin-sdk/runtime-env",
     ]) {
       vi.doUnmock(moduleId);
     }
@@ -39,8 +39,8 @@ describe("ollama lazy imports", () => {
     let wslImports = 0;
     let wslChecks = 0;
 
-    vi.doMock("openclaw/plugin-sdk/runtime-env", async (importOriginal) => ({
-      ...(await importOriginal<typeof import("openclaw/plugin-sdk/runtime-env")>()),
+    vi.doMock("natesclaw/plugin-sdk/runtime-env", async (importOriginal) => ({
+      ...(await importOriginal<typeof import("natesclaw/plugin-sdk/runtime-env")>()),
       isWSL2Sync: () => {
         wslChecks += 1;
         return false;
@@ -140,7 +140,7 @@ describe("ollama lazy imports", () => {
     const { default: ollamaPlugin } = await import("./index.js");
     let embeddingAdapter: MemoryEmbeddingProviderAdapter | undefined;
     let mediaProvider: MediaUnderstandingProvider | undefined;
-    const nodeCommands: OpenClawPluginNodeHostCommand[] = [];
+    const nodeCommands: NatesclawPluginNodeHostCommand[] = [];
     const providers: ProviderPlugin[] = [];
     let nodeInferenceTool: AnyAgentTool | undefined;
     let webSearchProvider: WebSearchProviderPlugin | undefined;
@@ -200,9 +200,9 @@ describe("ollama lazy imports", () => {
       content: [],
     });
     await expect(
-      webSearchProvider?.createTool({ config: {} } as never)?.execute({ query: "openclaw" }),
+      webSearchProvider?.createTool({ config: {} } as never)?.execute({ query: "natesclaw" }),
     ).resolves.toEqual({
-      query: "openclaw",
+      query: "natesclaw",
       results: [],
     });
 

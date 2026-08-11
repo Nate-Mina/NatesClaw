@@ -1,13 +1,13 @@
 // Telegram tests cover thread bindings plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { getSessionBindingService } from "openclaw/plugin-sdk/conversation-runtime";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { getSessionBindingService } from "natesclaw/plugin-sdk/conversation-runtime";
+import type { PluginStateSyncKeyedStore } from "natesclaw/plugin-sdk/plugin-state-runtime";
 import {
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
-import { createOpenClawTestState, type OpenClawTestState } from "openclaw/plugin-sdk/test-state";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
+import { importFreshModule } from "natesclaw/plugin-sdk/test-fixtures";
+import { createNatesclawTestState, type NatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { setTelegramRuntime } from "./runtime.js";
 import { clearTelegramRuntimeForTest } from "./runtime.test-support.js";
@@ -15,9 +15,9 @@ import type { TelegramRuntime } from "./runtime.types.js";
 
 const readAcpSessionEntryMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/acp-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/acp-runtime")>(
-    "openclaw/plugin-sdk/acp-runtime",
+vi.mock("natesclaw/plugin-sdk/acp-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/acp-runtime")>(
+    "natesclaw/plugin-sdk/acp-runtime",
   );
   readAcpSessionEntryMock.mockImplementation(actual.readAcpSessionEntry);
   return {
@@ -47,7 +47,7 @@ const TELEGRAM_THREAD_BINDINGS_TEST_CFG = {
       token: "test-token",
     },
   },
-} as OpenClawConfig;
+} as NatesclawConfig;
 
 type TelegramThreadBindingManagerParams = Parameters<
   typeof createTelegramThreadBindingManagerImpl
@@ -73,7 +73,7 @@ async function flushMicrotasks(): Promise<void> {
 }
 
 describe("telegram thread bindings", () => {
-  let openClawState: OpenClawTestState;
+  let NatesclawState: NatesclawTestState;
   let threadBindingStore: PluginStateSyncKeyedStore<ThreadBindingStoreEntry>;
 
   function createThreadBindingStore(): PluginStateSyncKeyedStore<ThreadBindingStoreEntry> {
@@ -101,16 +101,16 @@ describe("telegram thread bindings", () => {
   }
 
   beforeEach(async () => {
-    openClawState = await createOpenClawTestState({
+    NatesclawState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-telegram-bindings-",
+      prefix: "natesclaw-telegram-bindings-",
     });
     resetPluginStateStoreForTests({ closeDatabase: false });
     installThreadBindingStore(createThreadBindingStore());
     threadBindingStore.clear();
     readAcpSessionEntryMock.mockReset();
-    const acpRuntime = await vi.importActual<typeof import("openclaw/plugin-sdk/acp-runtime")>(
-      "openclaw/plugin-sdk/acp-runtime",
+    const acpRuntime = await vi.importActual<typeof import("natesclaw/plugin-sdk/acp-runtime")>(
+      "natesclaw/plugin-sdk/acp-runtime",
     );
     readAcpSessionEntryMock.mockImplementation(acpRuntime.readAcpSessionEntry);
     await resetTelegramThreadBindingsForTests();
@@ -121,7 +121,7 @@ describe("telegram thread bindings", () => {
     await resetTelegramThreadBindingsForTests();
     clearTelegramRuntimeForTest();
     resetPluginStateStoreForTests();
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   });
 
   it("registers a telegram binding adapter and binds current conversations", async () => {
@@ -342,7 +342,7 @@ describe("telegram thread bindings", () => {
     });
 
     const bound = await getSessionBindingService().bind({
-      targetSessionKey: "plugin-binding:openclaw-codex-app-server:abc123",
+      targetSessionKey: "plugin-binding:natesclaw-codex-app-server:abc123",
       targetKind: "session",
       conversation: {
         channel: "telegram",
@@ -523,7 +523,7 @@ describe("telegram thread bindings", () => {
     });
 
     await getSessionBindingService().bind({
-      targetSessionKey: "plugin-binding:openclaw-codex-app-server:still-valid",
+      targetSessionKey: "plugin-binding:natesclaw-codex-app-server:still-valid",
       targetKind: "session",
       conversation: {
         channel: "telegram",
@@ -541,7 +541,7 @@ describe("telegram thread bindings", () => {
     });
 
     expect(reloaded.getByConversationId("plugin-binding-convo")?.targetSessionKey).toBe(
-      "plugin-binding:openclaw-codex-app-server:still-valid",
+      "plugin-binding:natesclaw-codex-app-server:still-valid",
     );
     expect(readAcpSessionEntryMock).not.toHaveBeenCalled();
   });

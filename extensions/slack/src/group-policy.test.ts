@@ -1,5 +1,5 @@
 // Slack tests cover group policy plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { resolveSlackGroupRequireMention, resolveSlackGroupToolPolicy } from "./group-policy.js";
 
@@ -23,7 +23,7 @@ const cfg = {
       },
     },
   },
-} as OpenClawConfig;
+} as NatesclawConfig;
 
 describe("slack group policy", () => {
   it("uses matched channel requireMention and wildcard fallback", () => {
@@ -80,7 +80,7 @@ describe("slack group policy", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       expect(resolveSlackGroupRequireMention({ cfg: channelPolicyCfg, groupId })).toBe(false);
       expect(
@@ -110,7 +110,7 @@ describe("slack group policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveSlackGroupToolPolicy({ cfg: caseSensitiveCfg, groupId: "c01234567" })).toEqual({
       allow: ["message.send"],
@@ -130,7 +130,7 @@ describe("slack group policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveSlackGroupRequireMention({ cfg: partialCfg, groupId: "partial" })).toBe(true);
     expect(resolveSlackGroupToolPolicy({ cfg: partialCfg, groupId: "partial" })).toBeUndefined();
@@ -150,7 +150,7 @@ describe("slack group policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveSlackGroupToolPolicy({

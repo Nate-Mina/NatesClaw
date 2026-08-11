@@ -5,19 +5,19 @@
 import {
   createAccountListHelpers,
   hasConfiguredAccountValue,
-} from "openclaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import { resolveNormalizedAccountEntry } from "openclaw/plugin-sdk/account-resolution-runtime";
-import { resolveIntegerOption } from "openclaw/plugin-sdk/number-runtime";
-import { mergePairLoopGuardConfig } from "openclaw/plugin-sdk/pair-loop-guard-runtime";
-import { resolveDefaultSecretProviderAlias } from "openclaw/plugin-sdk/provider-auth";
-import { tryReadSecretFileSync } from "openclaw/plugin-sdk/secret-file-runtime";
+} from "natesclaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "natesclaw/plugin-sdk/account-id";
+import { resolveNormalizedAccountEntry } from "natesclaw/plugin-sdk/account-resolution-runtime";
+import { resolveIntegerOption } from "natesclaw/plugin-sdk/number-runtime";
+import { mergePairLoopGuardConfig } from "natesclaw/plugin-sdk/pair-loop-guard-runtime";
+import { resolveDefaultSecretProviderAlias } from "natesclaw/plugin-sdk/provider-auth";
+import { tryReadSecretFileSync } from "natesclaw/plugin-sdk/secret-file-runtime";
 import {
   normalizeSecretInputString,
   normalizeResolvedSecretInputString,
   resolveSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   ClickClackAccountConfig,
   ClickClackGroupConfig,

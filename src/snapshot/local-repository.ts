@@ -39,12 +39,12 @@ import {
 import { readSqliteUserVersion } from "../infra/sqlite-user-version.js";
 import { runExec } from "../process/exec.js";
 import { isValidAgentId, normalizeAgentId } from "../routing/session-key.js";
-import { assertOpenClawAgentDatabaseForMaintenance } from "../state/openclaw-agent-db.js";
-import { assertOpenClawStateDatabaseForMaintenance } from "../state/openclaw-state-db.js";
+import { assertNatesclawAgentDatabaseForMaintenance } from "../state/natesclaw-agent-db.js";
+import { assertNatesclawStateDatabaseForMaintenance } from "../state/natesclaw-state-db.js";
 import {
-  sanitizeOpenClawGlobalStateSnapshot,
-  sanitizeOpenClawStateLeaseRows,
-} from "../state/openclaw-state-snapshot-sanitizer.js";
+  sanitizeNatesclawGlobalStateSnapshot,
+  sanitizeNatesclawStateLeaseRows,
+} from "../state/natesclaw-state-snapshot-sanitizer.js";
 import {
   containsAsciiControlCharacter,
   copySnapshotArtifact,
@@ -292,9 +292,9 @@ class LocalSqliteSnapshotProvider implements SqliteSnapshotProvider {
         requireNonEmptySource: identity.role !== "generic",
         transform:
           identity.role === "global"
-            ? sanitizeOpenClawGlobalStateSnapshot
+            ? sanitizeNatesclawGlobalStateSnapshot
             : identity.role === "agent"
-              ? sanitizeOpenClawStateLeaseRows
+              ? sanitizeNatesclawStateLeaseRows
               : undefined,
         validate: buildDatabaseValidator(identity),
       });
@@ -764,11 +764,11 @@ function buildDatabaseValidator(
 ): SqliteSnapshotValidator {
   if (identity.role === "global") {
     return (database, pathname) =>
-      assertOpenClawStateDatabaseForMaintenance(database, { pathname });
+      assertNatesclawStateDatabaseForMaintenance(database, { pathname });
   }
   if (identity.role === "agent") {
     return (database, pathname) =>
-      assertOpenClawAgentDatabaseForMaintenance(database, {
+      assertNatesclawAgentDatabaseForMaintenance(database, {
         agentId: identity.agentId,
         pathname,
       });

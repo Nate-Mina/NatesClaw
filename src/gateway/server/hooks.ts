@@ -3,9 +3,9 @@ import { randomUUID } from "node:crypto";
 import {
   resolveDateTimestampMs,
   resolveTimestampMsToIsoString,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+} from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { listAgentIds, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { resolveChannelDefaultAccountId } from "../../channels/plugins/helpers.js";
 import type { CliDeps } from "../../cli/deps.types.js";
@@ -16,7 +16,7 @@ import {
   resolveMainSessionKey,
   resolveMainSessionKeyFromConfig,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type {
   CronAgentAdmissionDisposition,
   RunCronAgentTurnResult,
@@ -60,7 +60,7 @@ type HookEventTarget = {
 };
 
 function resolveHookEventTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   resolvedAgentId: string;
   explicitAgentId?: string;
   sessionKey?: string;
@@ -192,7 +192,7 @@ function createSessionKeyedHookDispatchQueue() {
 }
 
 function validateHookAgentDeliveryAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   value: HookAgentDispatchPayload;
 }): HookAgentDispatchPayload {
   // Mapped hooks can defer partial/last targets to cron and cannot select an account.
@@ -386,7 +386,7 @@ export function createGatewayHooksRequestHandler(params: {
         });
       }
     };
-    let dispatchCfg: OpenClawConfig;
+    let dispatchCfg: NatesclawConfig;
     try {
       dispatchCfg = getRuntimeConfig();
     } catch (err) {

@@ -4,14 +4,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../test/helpers/promise.js";
 import { DEFAULT_CRON_MAX_CONCURRENT_RUNS } from "../config/cron-limits.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { enqueueCommandInLane, setCommandLaneConcurrency } from "../process/command-queue.js";
 import { resetCommandQueueStateForTest } from "../process/command-queue.test-support.js";
 import { CommandLane } from "../process/lanes.js";
 import { applyGatewayLaneConcurrency, resolveGatewayLaneConcurrency } from "./server-lanes.js";
 
 function applyConfigLaneConcurrency(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   opts: { gatewayStart?: boolean } = {},
 ): void {
   applyGatewayLaneConcurrency(resolveGatewayLaneConcurrency(config), opts);
@@ -33,7 +33,7 @@ describe("applyGatewayLaneConcurrency", () => {
   });
 
   it("uses the built-in cron concurrency", async () => {
-    applyConfigLaneConcurrency({} as OpenClawConfig);
+    applyConfigLaneConcurrency({} as NatesclawConfig);
 
     let activeRuns = 0;
     let peakActiveRuns = 0;
@@ -71,7 +71,7 @@ describe("applyGatewayLaneConcurrency", () => {
   });
 
   it("keeps the shared nested lane at its default concurrency", async () => {
-    applyConfigLaneConcurrency({} as OpenClawConfig, { gatewayStart: true });
+    applyConfigLaneConcurrency({} as NatesclawConfig, { gatewayStart: true });
 
     let startedRuns = 0;
     const releaseRuns = createDeferred();
@@ -92,7 +92,7 @@ describe("applyGatewayLaneConcurrency", () => {
 
   it("restores a suspended shared nested lane on gateway startup", async () => {
     setCommandLaneConcurrency(CommandLane.Nested, 0);
-    applyConfigLaneConcurrency({} as OpenClawConfig, { gatewayStart: true });
+    applyConfigLaneConcurrency({} as NatesclawConfig, { gatewayStart: true });
 
     let started = false;
     await enqueueCommandInLane(
@@ -108,7 +108,7 @@ describe("applyGatewayLaneConcurrency", () => {
 
   it("does not resume a suspended shared nested lane during live config publication", async () => {
     setCommandLaneConcurrency(CommandLane.Nested, 0);
-    applyConfigLaneConcurrency({} as OpenClawConfig);
+    applyConfigLaneConcurrency({} as NatesclawConfig);
 
     let started = false;
     const nestedRun = enqueueCommandInLane(
@@ -136,7 +136,7 @@ describe("applyGatewayLaneConcurrency", () => {
     });
     setCommandLaneConcurrency(CommandLane.Main, 0);
 
-    applyConfigLaneConcurrency({ agents: { defaults: { maxConcurrent: 3 } } } as OpenClawConfig);
+    applyConfigLaneConcurrency({ agents: { defaults: { maxConcurrent: 3 } } } as NatesclawConfig);
 
     let started = false;
     const mainRun = enqueueCommandInLane(
@@ -166,7 +166,7 @@ describe("applyGatewayLaneConcurrency", () => {
     });
     setCommandLaneConcurrency(CommandLane.Nested, 0);
 
-    applyConfigLaneConcurrency({} as OpenClawConfig, { gatewayStart: true });
+    applyConfigLaneConcurrency({} as NatesclawConfig, { gatewayStart: true });
 
     let started = false;
     const nestedRun = enqueueCommandInLane(

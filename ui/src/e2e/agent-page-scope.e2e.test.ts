@@ -13,7 +13,7 @@ const suite = createControlUiE2eSuite({
     `Playwright Chromium is not available at ${executablePath}`,
 });
 
-const captureUiProof = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
+const captureUiProof = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
 const proofDir = path.join(process.cwd(), ".artifacts", "control-ui-e2e", "agent-page-scope");
 
 function requestParams(request: { params?: unknown }): Record<string, unknown> {
@@ -109,7 +109,7 @@ suite.define(() => {
 
         await page.goto(`${suite.server.baseUrl}usage`);
         await gateway.waitForRequest("agents.list");
-        const sidebar = page.locator("openclaw-app-sidebar");
+        const sidebar = page.locator("natesclaw-app-sidebar");
         await sidebar.getByRole("button", { name: /Switch agent/ }).click();
         const agentMenu = sidebar.locator("wa-dropdown.sidebar-agent-menu");
         // The card sits at the top of the sidebar: the menu drops below it so the
@@ -142,7 +142,7 @@ suite.define(() => {
           .click();
         await expect.poll(() => new URL(page.url()).pathname).toBe("/usage");
         await waitForRequest(gateway, "sessions.usage", (params) => params.agentId === "writer");
-        const pageScope = page.locator(".agent-scope-control openclaw-agent-select");
+        const pageScope = page.locator(".agent-scope-control natesclaw-agent-select");
         await expect
           .poll(() =>
             pageScope.evaluate((picker) => (picker as HTMLElement & { value: string }).value),
@@ -190,7 +190,7 @@ suite.define(() => {
 
         await page.goto(`${suite.server.baseUrl}sessions`);
         await gateway.waitForRequest("agents.list");
-        const pageScope = page.locator(".agent-scope-control openclaw-agent-select");
+        const pageScope = page.locator(".agent-scope-control natesclaw-agent-select");
         await expect
           .poll(() =>
             pageScope.evaluate((picker) => (picker as HTMLElement & { value: string }).value),

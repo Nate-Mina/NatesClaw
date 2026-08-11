@@ -38,7 +38,7 @@ const workboardCardDetailDescriptionId = "workboard-card-detail-description";
 
 function ensureWorkboardCardDashboardElement(): Promise<void> {
   return ensureCustomElementDefined(
-    "openclaw-workboard-card-dashboard",
+    "natesclaw-workboard-card-dashboard",
     () => import("./workboard-card-dashboard.ts"),
   );
 }
@@ -247,13 +247,13 @@ export function renderCardDetailsPanel(props: WorkboardProps) {
     ],
   ];
   return html`
-    <openclaw-modal-dialog
+    <natesclaw-modal-dialog
       class="drawer"
       label=${card.title}
       description=${task && taskIsAuthoritative
         ? taskDetail(task)
         : (lifecycle.session?.displayName ?? formatted.detail)}
-      style="--openclaw-modal-width: min(460px, 100vw); --openclaw-modal-max-height: 100dvh;"
+      style="--natesclaw-modal-width: min(460px, 100vw); --natesclaw-modal-max-height: 100dvh;"
       @modal-cancel=${() => {
         closeCardDetails(state);
         props.onRequestUpdate?.();
@@ -268,7 +268,7 @@ export function renderCardDetailsPanel(props: WorkboardProps) {
                 <span class="sr-only">${t("workboard.detailTitle")}: </span>${card.title}
               </h2>
             </div>
-            <openclaw-tooltip .content=${t("common.cancel")}>
+            <natesclaw-tooltip .content=${t("common.cancel")}>
               <button
                 class="btn btn--icon workboard-card__icon"
                 type="button"
@@ -280,7 +280,7 @@ export function renderCardDetailsPanel(props: WorkboardProps) {
               >
                 ${icons.x}
               </button>
-            </openclaw-tooltip>
+            </natesclaw-tooltip>
           </header>
 
           <section class="workboard-detail__section">
@@ -317,13 +317,13 @@ export function renderCardDetailsPanel(props: WorkboardProps) {
             : nothing}
           ${linkedSessionKey
             ? html`
-                <openclaw-workboard-card-dashboard
+                <natesclaw-workboard-card-dashboard
                   .sessionKey=${linkedSessionKey}
                   .client=${props.client}
                   .connected=${props.connected}
                   .canMutate=${props.canWrite !== false}
                   .canGrant=${props.canGrant === true}
-                ></openclaw-workboard-card-dashboard>
+                ></natesclaw-workboard-card-dashboard>
               `
             : nothing}
           ${renderDependencyDetailList(dependencies)}
@@ -384,6 +384,6 @@ export function renderCardDetailsPanel(props: WorkboardProps) {
           </div>
         </div>
       </aside>
-    </openclaw-modal-dialog>
+    </natesclaw-modal-dialog>
   `;
 }

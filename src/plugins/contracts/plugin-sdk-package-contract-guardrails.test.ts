@@ -28,7 +28,7 @@ const PUBLIC_CONTRACT_REFERENCE_FILES = [
   "src/plugins/contracts/plugin-sdk-subpaths.test.ts",
 ] as const;
 const TYPED_PUBLIC_CONTRACT_REFERENCE_FILES = ["docs/plugins/sdk-entrypoints.md"] as const;
-const PLUGIN_SDK_SUBPATH_PATTERN = /openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)\b/g;
+const PLUGIN_SDK_SUBPATH_PATTERN = /natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)\b/g;
 const BUNDLED_PLUGIN_FACADE_LOADER_PATTERN =
   /\bload(?:Activated)?BundledPluginPublicSurfaceModuleSync\b/;
 const PRIVATE_BUNDLED_SDK_SURFACE_PATTERN =
@@ -37,15 +37,15 @@ const GENERIC_CORE_HELPER_FILES = ["src/polls.ts", "src/poll-params.ts"] as cons
 const GENERIC_CORE_PLUGIN_OWNER_NAME_PATTERN =
   /\b(?:imessage|discord|feishu|googlechat|matrix|mattermost|msteams|slack|telegram|whatsapp|zalo|zalouser)\b/gi;
 const DEPRECATED_EXTENSION_SDK_SPECIFIERS = new Set([
-  "openclaw/plugin-sdk",
+  "natesclaw/plugin-sdk",
   // Bundled code uses the canonical channel-config-schema subpath; the
   // primitives/legacy shells stay export-compatible for third parties only.
-  "openclaw/plugin-sdk/channel-config-primitives",
-  "openclaw/plugin-sdk/channel-config-schema-legacy",
-  "openclaw/plugin-sdk/compat",
-  "openclaw/plugin-sdk/test-utils",
+  "natesclaw/plugin-sdk/channel-config-primitives",
+  "natesclaw/plugin-sdk/channel-config-schema-legacy",
+  "natesclaw/plugin-sdk/compat",
+  "natesclaw/plugin-sdk/test-utils",
 ]);
-const DEPRECATED_TEST_ALIAS_SPECIFIERS = new Set(["openclaw/plugin-sdk/test-utils"]);
+const DEPRECATED_TEST_ALIAS_SPECIFIERS = new Set(["natesclaw/plugin-sdk/test-utils"]);
 const DEPRECATED_TEST_ALIAS_ALLOWED_REFERENCE_FILES = new Set([
   "src/plugins/compat/registry.ts",
   "src/plugins/contracts/plugin-sdk-package-contract-guardrails.test.ts",
@@ -62,15 +62,15 @@ const LEGACY_MEMORY_EMBEDDING_PROVIDER_API_FILES = new Set([
   "extensions/voyage/index.ts",
 ]);
 const LEGACY_MEMORY_EMBEDDING_PROVIDER_MANIFEST_FILES = new Set([
-  "extensions/amazon-bedrock/openclaw.plugin.json",
-  "extensions/github-copilot/openclaw.plugin.json",
-  "extensions/google/openclaw.plugin.json",
-  "extensions/lmstudio/openclaw.plugin.json",
-  "extensions/memory-core/openclaw.plugin.json",
-  "extensions/mistral/openclaw.plugin.json",
-  "extensions/ollama/openclaw.plugin.json",
-  "extensions/openai/openclaw.plugin.json",
-  "extensions/voyage/openclaw.plugin.json",
+  "extensions/amazon-bedrock/natesclaw.plugin.json",
+  "extensions/github-copilot/natesclaw.plugin.json",
+  "extensions/google/natesclaw.plugin.json",
+  "extensions/lmstudio/natesclaw.plugin.json",
+  "extensions/memory-core/natesclaw.plugin.json",
+  "extensions/mistral/natesclaw.plugin.json",
+  "extensions/ollama/natesclaw.plugin.json",
+  "extensions/openai/natesclaw.plugin.json",
+  "extensions/voyage/natesclaw.plugin.json",
 ]);
 const MATRIX_RUNTIME_DEPS = [
   "@matrix-org/matrix-sdk-crypto-wasm",
@@ -421,9 +421,9 @@ function collectExtensionTestHelperImportLeaks(): Array<{ file: string; specifie
 function collectDeprecatedExtensionSdkImports(): Array<{ file: string; specifier: string }> {
   const leaks: Array<{ file: string; specifier: string }> = [];
   const importPatterns = [
-    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["'](openclaw\/plugin-sdk(?:\/[a-z0-9][a-z0-9-]*)?)["']/g,
-    /\bimport\s*\(\s*["'](openclaw\/plugin-sdk(?:\/[a-z0-9][a-z0-9-]*)?)["']\s*\)/g,
-    /\bvi\.(?:mock|doMock)\s*\(\s*["'](openclaw\/plugin-sdk(?:\/[a-z0-9][a-z0-9-]*)?)["']/g,
+    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["'](natesclaw\/plugin-sdk(?:\/[a-z0-9][a-z0-9-]*)?)["']/g,
+    /\bimport\s*\(\s*["'](natesclaw\/plugin-sdk(?:\/[a-z0-9][a-z0-9-]*)?)["']\s*\)/g,
+    /\bvi\.(?:mock|doMock)\s*\(\s*["'](natesclaw\/plugin-sdk(?:\/[a-z0-9][a-z0-9-]*)?)["']/g,
   ];
   for (const file of collectExtensionFiles(resolve(REPO_ROOT, "extensions"))) {
     const repoRelativePath = toRepoRelativePath(file);
@@ -466,7 +466,7 @@ function collectNewDeprecatedMemoryEmbeddingProviderManifestFiles(): string[] {
   const files: string[] = [];
   const manifestFiles = listGitTrackedFiles({
     repoRoot: REPO_ROOT,
-    pathspecs: "extensions/**/openclaw.plugin.json",
+    pathspecs: "extensions/**/natesclaw.plugin.json",
   });
   if (!manifestFiles) {
     throw new Error("unable to list plugin manifests for the deprecated manifest guard");
@@ -510,9 +510,9 @@ function collectCodeFiles(dir: string): string[] {
 function collectDeprecatedTestAliasImports(): string[] {
   const leaks: Array<{ file: string; specifier: string }> = [];
   const importPatterns = [
-    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["'](openclaw\/plugin-sdk\/test-utils)["']/g,
-    /\bimport\s*\(\s*["'](openclaw\/plugin-sdk\/test-utils)["']\s*\)/g,
-    /\bvi\.(?:mock|doMock)\s*\(\s*["'](openclaw\/plugin-sdk\/test-utils)["']/g,
+    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["'](natesclaw\/plugin-sdk\/test-utils)["']/g,
+    /\bimport\s*\(\s*["'](natesclaw\/plugin-sdk\/test-utils)["']\s*\)/g,
+    /\bvi\.(?:mock|doMock)\s*\(\s*["'](natesclaw\/plugin-sdk\/test-utils)["']/g,
   ];
   for (const root of ["src", "test", "extensions", "packages"]) {
     for (const file of collectCodeFiles(resolve(REPO_ROOT, root))) {
@@ -557,7 +557,7 @@ function collectCrossOwnerReservedSdkImports(): Array<{
   const leaks: Array<{ file: string; specifier: string; owner?: string }> = [];
   const reserved = new Set<string>(reservedBundledPluginSdkEntrypoints);
   const importPattern =
-    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["']openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g;
+    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["']natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g;
 
   for (const file of collectExtensionFiles(resolve(REPO_ROOT, "extensions"))) {
     const repoRelativePath = toRepoRelativePath(file);
@@ -574,7 +574,7 @@ function collectCrossOwnerReservedSdkImports(): Array<{
       }
       leaks.push({
         file: repoRelativePath,
-        specifier: `openclaw/plugin-sdk/${subpath}`,
+        specifier: `natesclaw/plugin-sdk/${subpath}`,
         owner,
       });
     }
@@ -586,9 +586,9 @@ function collectReservedSdkSubpathImports(): string[] {
   const imports = new Set<string>();
   const reserved = new Set<string>(reservedBundledPluginSdkEntrypoints);
   const importPatterns = [
-    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["']openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
-    /\bimport\s*\(\s*["']openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']\s*\)/g,
-    /\bvi\.(?:mock|doMock)\s*\(\s*["']openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
+    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["']natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
+    /\bimport\s*\(\s*["']natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']\s*\)/g,
+    /\bvi\.(?:mock|doMock)\s*\(\s*["']natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
   ];
 
   for (const root of ["src", "test", "extensions", "packages", "scripts"]) {
@@ -616,9 +616,9 @@ function hasWildcardReexport(entrypoint: string): boolean {
 function collectExtensionProductionSdkSubpathImports(subpaths: ReadonlySet<string>): string[] {
   const imports = new Set<string>();
   const importPatterns = [
-    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["']openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
-    /\bimport\s*\(\s*["']openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']\s*\)/g,
-    /\bvi\.(?:mock|doMock)\s*\(\s*["']openclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
+    /\b(?:import|export)\b[\s\S]*?\bfrom\s*["']natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
+    /\bimport\s*\(\s*["']natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']\s*\)/g,
+    /\bvi\.(?:mock|doMock)\s*\(\s*["']natesclaw\/plugin-sdk\/([a-z0-9][a-z0-9-]*)["']/g,
   ];
 
   for (const file of collectExtensionFiles(resolve(REPO_ROOT, "extensions"))) {
@@ -631,7 +631,7 @@ function collectExtensionProductionSdkSubpathImports(subpaths: ReadonlySet<strin
       for (const match of source.matchAll(importPattern)) {
         const subpath = match[1];
         if (subpath && subpaths.has(subpath)) {
-          imports.add(`${repoRelativePath}: openclaw/plugin-sdk/${subpath}`);
+          imports.add(`${repoRelativePath}: natesclaw/plugin-sdk/${subpath}`);
         }
       }
     }
@@ -801,7 +801,7 @@ describe("plugin-sdk package contract guardrails", () => {
         continue;
       }
       failures.push(
-        `${reference.file} references openclaw/plugin-sdk/${reference.subpath}, but ${reference.subpath} is missing from ${missingFrom.join(" and ")}`,
+        `${reference.file} references natesclaw/plugin-sdk/${reference.subpath}, but ${reference.subpath} is missing from ${missingFrom.join(" and ")}`,
       );
     }
 
@@ -821,7 +821,7 @@ describe("plugin-sdk package contract guardrails", () => {
       )
       .map(
         ({ file, subpath }) =>
-          `${file} references openclaw/plugin-sdk/${subpath}, but its declaration is not included in the typed public package`,
+          `${file} references natesclaw/plugin-sdk/${subpath}, but its declaration is not included in the typed public package`,
       );
 
     expect(failures).toStrictEqual([]);
@@ -869,7 +869,7 @@ describe("plugin-sdk package contract guardrails", () => {
       expect(matrixRuntimeDeps.get(dep)).not.toBe("");
       expect(rootRuntimeDeps.has(dep)).toBe(false);
     }
-    expect(rootRuntimeDeps.has("@openclaw/plugin-package-contract")).toBe(false);
+    expect(rootRuntimeDeps.has("@natesclaw/plugin-package-contract")).toBe(false);
   });
 
   it("keeps extension sources on public sdk or local package seams", () => {

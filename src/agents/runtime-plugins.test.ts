@@ -66,7 +66,7 @@ describe("agent runtime plugin registries", () => {
 
   it("returns a non-activating handle for a prepared runtime", () => {
     const config = {} as never;
-    const env = { OPENCLAW_STATE_DIR: "/tmp/openclaw-state" };
+    const env = { NATESCLAW_STATE_DIR: "/tmp/natesclaw-state" };
     const selections = [{ provider: "openai", modelId: "gpt-5.5", runtime: "codex" }];
 
     expect(
@@ -144,7 +144,7 @@ describe("agent runtime plugin registries", () => {
     const requestRegistry = {
       plugins: [
         { id: "memory-core", status: "loaded" },
-        { id: "deferred", status: "loaded", format: "openclaw", imported: false },
+        { id: "deferred", status: "loaded", format: "natesclaw", imported: false },
       ],
     } as never;
 

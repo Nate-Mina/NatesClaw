@@ -1,11 +1,11 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { MemorySearchResult } from "../../memory-host-sdk/host/types.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import type { GatewayRequestContext, RespondFn } from "./types.js";
 
 const getActiveMemorySearchManagerCore = vi.hoisted(() => vi.fn());
@@ -19,9 +19,9 @@ vi.mock("../../agents/agent-scope.js", async (importOriginal) => ({
 
 import { memorySearchHandlers } from "./memory-search.js";
 
-let testState: OpenClawTestState;
+let testState: NatesclawTestState;
 
-function createConfig(workspaceDir: string): OpenClawConfig {
+function createConfig(workspaceDir: string): NatesclawConfig {
   return {
     memory: {
       search: {
@@ -36,7 +36,7 @@ function createConfig(workspaceDir: string): OpenClawConfig {
   };
 }
 
-async function invokeMemorySearch(params: unknown, cfg: OpenClawConfig) {
+async function invokeMemorySearch(params: unknown, cfg: NatesclawConfig) {
   const respond = vi.fn();
   await expectDefined(
     memorySearchHandlers["memory.search"],
@@ -67,7 +67,7 @@ function createStubManager() {
 
 describe("memory.search gateway method", () => {
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       label: "gateway-memory-search",
       layout: "state-only",
     });
@@ -207,7 +207,7 @@ describe("memory.search gateway method", () => {
   });
 
   it("returns unavailable when no memory manager is configured", async () => {
-    const cfg: OpenClawConfig = {};
+    const cfg: NatesclawConfig = {};
     getActiveMemorySearchManagerCore.mockResolvedValue({
       manager: null,
       error: "memory plugin unavailable",
@@ -248,7 +248,7 @@ describe("memory.search gateway method", () => {
         results: [],
         stale: true,
         warning: "Memory index is dirty. Search results may be incomplete.",
-        action: "Run: openclaw memory status --index --agent main",
+        action: "Run: natesclaw memory status --index --agent main",
       },
       undefined,
     );

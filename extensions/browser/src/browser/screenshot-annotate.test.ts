@@ -1,4 +1,4 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import {
   type AnnotationItem,
@@ -9,7 +9,7 @@ import {
   scaleAnnotations,
 } from "./screenshot-annotate.js";
 
-const ANNOTATION_OVERLAY_ATTR = "data-openclaw-labels";
+const ANNOTATION_OVERLAY_ATTR = "data-natesclaw-labels";
 
 const sampleInputs: RawAnnotationInput[] = [
   {

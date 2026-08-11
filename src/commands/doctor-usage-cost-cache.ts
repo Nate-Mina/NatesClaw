@@ -5,7 +5,7 @@ import path from "node:path";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { resolveStateDir } from "../config/paths.js";
 import { deleteSessionCostUsageRollupsExcept } from "../infra/session-cost-usage-cache.sqlite.js";
-import { listOpenClawRegisteredAgentDatabases } from "../state/openclaw-agent-db.js";
+import { listNatesclawRegisteredAgentDatabases } from "../state/natesclaw-agent-db.js";
 import { runDoctorAgentDatabaseOperation } from "./doctor-agent-database-operation.js";
 import { maybeScrubConfigAuditLog } from "./doctor-config-audit-scrub.js";
 
@@ -68,7 +68,7 @@ async function maybeRemoveLegacyUsageCostCacheFiles(params: {
   }
   if (!params.shouldRepair) {
     note(
-      `${files.length} rebuildable usage-cost cache ${files.length === 1 ? "file remains" : "files remain"}. Run \`openclaw doctor --fix\` to remove ${files.length === 1 ? "it" : "them"}.`,
+      `${files.length} rebuildable usage-cost cache ${files.length === 1 ? "file remains" : "files remain"}. Run \`natesclaw doctor --fix\` to remove ${files.length === 1 ? "it" : "them"}.`,
       "Usage cost cache",
     );
     return;
@@ -105,7 +105,7 @@ async function maybeRemoveLegacySkillUploadTree(params: {
   }
   if (!params.shouldRepair) {
     note(
-      "Legacy skill-upload staging remains. Run `openclaw doctor --fix` to discard it; active uploads now live in SQLite and must be retried.",
+      "Legacy skill-upload staging remains. Run `natesclaw doctor --fix` to discard it; active uploads now live in SQLite and must be retried.",
       "Skill uploads",
     );
     return;
@@ -134,7 +134,7 @@ export async function maybeRepairLegacyRuntimeFiles(
   await maybeScrubConfigAuditLog({ shouldRepair, env });
   await maybeRemoveLegacyUsageCostCacheFiles({ shouldRepair, env });
   if (shouldRepair) {
-    for (const entry of listOpenClawRegisteredAgentDatabases({ env })) {
+    for (const entry of listNatesclawRegisteredAgentDatabases({ env })) {
       if ((await fs.stat(entry.path).catch(() => null))?.isFile()) {
         runDoctorAgentDatabaseOperation({
           agentId: entry.agentId,

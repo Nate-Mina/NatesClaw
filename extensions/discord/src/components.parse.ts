@@ -3,7 +3,7 @@ import { ButtonStyle, TextInputStyle } from "discord-api-types/v10";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   DiscordComponentBlock,
   DiscordComponentButtonSpec,

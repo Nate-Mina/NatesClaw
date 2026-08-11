@@ -5,16 +5,16 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { tryReadJsonSync } from "../infra/json-files.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import { resolveNatesclawPackageRootSync } from "../infra/natesclaw-root.js";
 import { resolveBundledPluginsDir } from "../plugins/bundled-dir.js";
 import type { PluginPackageChannel } from "../plugins/manifest.js";
 import { registerPluginMetadataProcessMemoLifecycleClear } from "../plugins/plugin-metadata-lifecycle.js";
 
 type ChannelCatalogEntryLike = {
-  openclaw?: {
+  natesclaw?: {
     channel?: PluginPackageChannel;
   };
 };
@@ -36,12 +36,12 @@ registerPluginMetadataProcessMemoLifecycleClear(() => {
 });
 
 function listPackageRoots(): string[] {
-  // Source checkouts and packaged installs can resolve OpenClaw from different roots; scan both
+  // Source checkouts and packaged installs can resolve Natesclaw from different roots; scan both
   // once so channel metadata works in dev, linked packages, and published CLI layouts.
   return uniqueStrings(
     [
-      resolveOpenClawPackageRootSync({ cwd: process.cwd() }),
-      resolveOpenClawPackageRootSync({ moduleUrl: import.meta.url }),
+      resolveNatesclawPackageRootSync({ cwd: process.cwd() }),
+      resolveNatesclawPackageRootSync({ moduleUrl: import.meta.url }),
     ].filter((entry): entry is string => Boolean(entry)),
   );
 }
@@ -102,14 +102,14 @@ function readOfficialCatalogFileSync(): ChannelCatalogEntryLike[] {
 function isChannelCatalogEntryLike(
   entry: ChannelCatalogEntryLike | PluginPackageChannel,
 ): entry is ChannelCatalogEntryLike {
-  return "openclaw" in entry;
+  return "natesclaw" in entry;
 }
 
 function toBundledChannelEntry(
   entry: ChannelCatalogEntryLike | PluginPackageChannel,
 ): BundledChannelCatalogEntry | null {
   const channel: PluginPackageChannel | undefined = isChannelCatalogEntryLike(entry)
-    ? entry.openclaw?.channel
+    ? entry.natesclaw?.channel
     : entry;
   const id = normalizeOptionalLowercaseString(channel?.id);
   if (!id || !channel) {

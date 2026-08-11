@@ -1,12 +1,12 @@
 /** Resolves effective plugin ids from config, installed records, and activation metadata. */
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { sortUniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import {
   listExplicitlyDisabledChannelIdsForConfig,
   listPotentialConfiguredChannelIds,
 } from "../channels/config-presence.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isVitestRuntimeEnv } from "../infra/env.js";
 import {
   listExplicitConfiguredChannelIdsForConfig,
@@ -20,8 +20,8 @@ import type { PluginManifestRecord } from "./manifest-registry.js";
 import type { PluginMetadataSnapshot } from "./plugin-metadata-snapshot.types.js";
 
 function collectConfiguredChannelIds(
-  config: OpenClawConfig,
-  activationSourceConfig: OpenClawConfig,
+  config: NatesclawConfig,
+  activationSourceConfig: NatesclawConfig,
   env: NodeJS.ProcessEnv,
 ): string[] {
   const disabled = new Set([
@@ -44,7 +44,7 @@ function collectConfiguredChannelIds(
 }
 
 function collectBundledChannelOwnerPluginIds(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   channelIds: readonly string[];
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
@@ -63,9 +63,9 @@ function collectBundledChannelOwnerPluginIds(params: {
   const env = params.bundledPluginsDir
     ? {
         ...params.env,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir,
+        NATESCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir,
         ...(isVitestRuntimeEnv(params.env) || isVitestRuntimeEnv()
-          ? { OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1" }
+          ? { NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1" }
           : {}),
       }
     : params.env;
@@ -102,7 +102,7 @@ function collectBundledChannelOwnerPluginIds(params: {
   return sortUniqueStrings(pluginIds);
 }
 
-function collectExplicitEffectivePluginIds(config: OpenClawConfig): string[] {
+function collectExplicitEffectivePluginIds(config: NatesclawConfig): string[] {
   const plugins = normalizePluginsConfig(config.plugins);
   if (!plugins.enabled) {
     return [];
@@ -130,7 +130,7 @@ function collectExplicitEffectivePluginIds(config: OpenClawConfig): string[] {
 
 /** Lists plugin ids that are effectively enabled for a config/discovery context. */
 export function resolveEffectivePluginIds(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
   bundledPluginsDir?: string;

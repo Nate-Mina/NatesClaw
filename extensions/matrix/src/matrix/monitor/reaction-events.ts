@@ -1,9 +1,9 @@
 // Matrix plugin module implements reaction events behavior.
-import type { ApprovalResolveResult } from "openclaw/plugin-sdk/approval-gateway-runtime";
-import { isApprovalNotFoundError } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
-import { getSessionBindingService } from "openclaw/plugin-sdk/session-binding-runtime";
+import type { ApprovalResolveResult } from "natesclaw/plugin-sdk/approval-gateway-runtime";
+import { isApprovalNotFoundError } from "natesclaw/plugin-sdk/error-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { normalizeAccountId } from "natesclaw/plugin-sdk/routing";
+import { getSessionBindingService } from "natesclaw/plugin-sdk/session-binding-runtime";
 import {
   resolveMatrixApprovalReactionTargetWithPersistence,
   unregisterMatrixApprovalReactionTargetsForApproval,
@@ -22,7 +22,7 @@ const loadApprovalReactionAuth = createLazyRuntimeModule(
 );
 
 const loadExecApprovalResolver = createLazyRuntimeModule(
-  () => import("openclaw/plugin-sdk/approval-gateway-runtime"),
+  () => import("natesclaw/plugin-sdk/approval-gateway-runtime"),
 );
 
 const loadMatrixSend = createLazyRuntimeModule(() => import("../send.js"));

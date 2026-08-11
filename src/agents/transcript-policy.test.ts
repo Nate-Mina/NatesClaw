@@ -3,7 +3,7 @@
  * Exercises provider-family fallbacks, plugin replay hooks, and policy caching.
  */
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
 
 vi.mock("../plugins/provider-hook-runtime.js", async () => {
@@ -54,8 +54,8 @@ vi.mock("../plugins/provider-hook-runtime.js", async () => {
           switch (provider) {
             case "env-sensitive":
               return {
-                sanitizeToolCallIds: context?.env?.OPENCLAW_TEST_TRANSCRIPT_POLICY === "strict",
-                ...(context?.env?.OPENCLAW_TEST_TRANSCRIPT_POLICY === "strict"
+                sanitizeToolCallIds: context?.env?.NATESCLAW_TEST_TRANSCRIPT_POLICY === "strict",
+                ...(context?.env?.NATESCLAW_TEST_TRANSCRIPT_POLICY === "strict"
                   ? { toolCallIdMode: "strict" as const }
                   : {}),
               };
@@ -260,7 +260,7 @@ describe("resolveTranscriptPolicy", () => {
   });
 
   it("memoizes replay policy resolution for the same config and process env", () => {
-    const config = {} as OpenClawConfig;
+    const config = {} as NatesclawConfig;
 
     const firstPolicy = resolveTranscriptPolicy({
       provider: "mistral",
@@ -279,14 +279,14 @@ describe("resolveTranscriptPolicy", () => {
   });
 
   it("does not reuse cached replay policies across custom env objects", () => {
-    const config = {} as OpenClawConfig;
+    const config = {} as NatesclawConfig;
     const strictEnv = {
       ...process.env,
-      OPENCLAW_TEST_TRANSCRIPT_POLICY: "strict",
+      NATESCLAW_TEST_TRANSCRIPT_POLICY: "strict",
     };
     const looseEnv = {
       ...process.env,
-      OPENCLAW_TEST_TRANSCRIPT_POLICY: "loose",
+      NATESCLAW_TEST_TRANSCRIPT_POLICY: "loose",
     };
 
     const strictPolicy = resolveTranscriptPolicy({
@@ -488,7 +488,7 @@ describe("resolveTranscriptPolicy", () => {
   });
 
   it("does not reuse cached unowned Anthropic policies across reasoning compat changes", () => {
-    const config = {} as OpenClawConfig;
+    const config = {} as NatesclawConfig;
     const model = {
       id: "moonshotai/kimi-k2.5",
       name: "Kimi K2.5",
@@ -522,7 +522,7 @@ describe("resolveTranscriptPolicy", () => {
   });
 
   it("does not reuse cached OpenAI-compatible policies across reasoning metadata changes", () => {
-    const config = {} as OpenClawConfig;
+    const config = {} as NatesclawConfig;
 
     const defaultPolicy = resolveTranscriptPolicy({
       config,

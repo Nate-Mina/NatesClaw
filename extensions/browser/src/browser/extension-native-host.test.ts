@@ -165,7 +165,7 @@ describe("native bootstrap request schema", () => {
 });
 
 async function nativeFixture() {
-  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-native-host-")));
+  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-native-host-")));
   tempRoots.push(root);
   const stateDir = path.join(root, "state");
   const managedDir = path.join(stateDir, "browser", "native-messaging");
@@ -173,13 +173,13 @@ async function nativeFixture() {
   await fs.mkdir(managedDir, { recursive: true, mode: 0o700 });
   await fs.mkdir(manifestDir, { recursive: true, mode: 0o700 });
   const launcherPath = path.join(managedDir, "bootstrap.sh");
-  const manifestPath = path.join(manifestDir, "ai.openclaw.browser_bootstrap.json");
+  const manifestPath = path.join(manifestDir, "ai.natesclaw.browser_bootstrap.json");
   await fs.writeFile(launcherPath, "#!/bin/sh\n", { mode: 0o700 });
   await fs.writeFile(
     manifestPath,
     `${JSON.stringify({
-      name: "ai.openclaw.browser_bootstrap",
-      description: "OpenClaw browser extension bootstrap",
+      name: "ai.natesclaw.browser_bootstrap",
+      description: "Natesclaw browser extension bootstrap",
       path: launcherPath,
       type: "stdio",
       allowed_origins: [ORIGIN],
@@ -246,8 +246,8 @@ describe("native host origin and topology boundary", () => {
     await fs.writeFile(
       fixture.manifestPath,
       `${JSON.stringify({
-        name: "ai.openclaw.browser_bootstrap",
-        description: "OpenClaw browser extension bootstrap",
+        name: "ai.natesclaw.browser_bootstrap",
+        description: "Natesclaw browser extension bootstrap",
         path: fixture.launcherPath,
         type: "stdio",
         allowed_origins: [ORIGIN, OTHER_ORIGIN],
@@ -274,8 +274,8 @@ describe("native host origin and topology boundary", () => {
     await fs.writeFile(
       fixture.manifestPath,
       JSON.stringify({
-        name: "ai.openclaw.browser_bootstrap",
-        description: "OpenClaw browser extension bootstrap",
+        name: "ai.natesclaw.browser_bootstrap",
+        description: "Natesclaw browser extension bootstrap",
         path: fixture.launcherPath,
         type: "stdio",
         allowed_origins: ["chrome-extension://*/"],

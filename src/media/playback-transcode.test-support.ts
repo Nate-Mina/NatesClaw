@@ -15,7 +15,7 @@ type PlaybackTranscodeTestApi = {
 
 function getTestApi(): PlaybackTranscodeTestApi {
   const api = (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.playbackTranscodeTestApi")
+    Symbol.for("natesclaw.playbackTranscodeTestApi")
   ];
   if (!api) {
     throw new Error("playback transcode test API is unavailable");

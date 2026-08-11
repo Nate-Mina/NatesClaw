@@ -459,7 +459,7 @@ export function loadPluginRegistrySnapshotWithMetadata(
       level: "warn",
       code: "persisted-registry-stale-policy",
       message:
-        "Persisted plugin registry policy does not match current config; using derived plugin index. Run `openclaw plugins registry --refresh` to update the persisted registry.",
+        "Persisted plugin registry policy does not match current config; using derived plugin index. Run `natesclaw plugins registry --refresh` to update the persisted registry.",
     });
   } else if (!requiresDerivedRegistryValidation(persistedIndex, params, env, hasStalePluginFiles)) {
     return {
@@ -525,7 +525,7 @@ export function loadPluginRegistrySnapshotWithMetadata(
       level: "warn",
       code: "persisted-registry-stale-source",
       message:
-        "Persisted plugin registry no longer matches current plugin discovery or metadata; using derived plugin index. Run `openclaw plugins registry --refresh` to update the persisted registry.",
+        "Persisted plugin registry no longer matches current plugin discovery or metadata; using derived plugin index. Run `natesclaw plugins registry --refresh` to update the persisted registry.",
     });
   }
 

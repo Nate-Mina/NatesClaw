@@ -280,7 +280,7 @@ export async function runServiceStart(params: {
       if (startResult.issues.length > 0) {
         const warning = `${params.serviceNoun} service already running, but its installed service definition needs repair: ${startResult.issues
           .map((issue) => issue.message)
-          .join("; ")}; run \`openclaw gateway restart\` to apply.`;
+          .join("; ")}; run \`natesclaw gateway restart\` to apply.`;
         warnings.push(warning);
         if (!json) {
           defaultRuntime.log(warning);
@@ -332,7 +332,7 @@ export async function runServiceStart(params: {
         `${params.serviceNoun} service needs repair before it can start: ${startResult.issues
           .map((issue) => issue.message)
           .join("; ")}`,
-        [formatCliCommand("openclaw gateway install --force")],
+        [formatCliCommand("natesclaw gateway install --force")],
       );
       return;
     }
@@ -587,7 +587,7 @@ export async function runServiceRestart(params: {
             `${params.serviceNoun} service needs repair before restart: ${issues
               .map((issue) => issue.message)
               .join("; ")}`,
-            [formatCliCommand("openclaw gateway install --force")],
+            [formatCliCommand("natesclaw gateway install --force")],
           );
           return false;
         }
@@ -612,7 +612,7 @@ export async function runServiceRestart(params: {
     // Check for token drift before restart (service token vs config token)
     try {
       const command = await params.service.readCommand(process.env);
-      const serviceToken = command?.environment?.OPENCLAW_GATEWAY_TOKEN;
+      const serviceToken = command?.environment?.NATESCLAW_GATEWAY_TOKEN;
       const cfg = await readBestEffortConfig();
       const driftEnv = {
         ...process.env,

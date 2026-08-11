@@ -9,13 +9,13 @@ import {
   normalizeAgentId,
   parseAgentSessionKey,
 } from "../../routing/session-key.js";
-import { withOpenClawAgentDatabaseReadOnly } from "../../state/openclaw-agent-db-readonly.js";
+import { withNatesclawAgentDatabaseReadOnly } from "../../state/natesclaw-agent-db-readonly.js";
 import {
-  createOpenClawAgentDatabasePathMatcher,
-  listOpenClawRegisteredAgentDatabases,
-} from "../../state/openclaw-agent-db-registry.js";
+  createNatesclawAgentDatabasePathMatcher,
+  listNatesclawRegisteredAgentDatabases,
+} from "../../state/natesclaw-agent-db-registry.js";
 import { resolveStateDir } from "../paths.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import { resolveAgentsDirFromSessionStorePath, resolveSessionStorePathCore } from "./paths.js";
 import { readSessionEntryKeys } from "./session-accessor.sqlite-entry-store.js";
 import {
@@ -95,7 +95,7 @@ function resolveValidatedManagedFilePathSync(params: {
 }
 
 /** Lists agent ids whose session stores should be considered configured. */
-export function listConfiguredSessionStoreAgentIds(cfg: OpenClawConfig): string[] {
+export function listConfiguredSessionStoreAgentIds(cfg: NatesclawConfig): string[] {
   const ids = new Set(listAgentIds(cfg).map((agentId) => normalizeAgentId(agentId)));
   const addAcpAgentId = (agentId: string | undefined) => {
     const raw = agentId?.trim() ?? "";
@@ -121,12 +121,12 @@ export function listConfiguredSessionStoreAgentIds(cfg: OpenClawConfig): string[
 
 /** Lists configured owners plus persisted owners whose registered DB still matches this store. */
 export function listKnownSessionStoreAgentIds(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): string[] {
   const env = params.env ?? process.env;
   const defaultAgentId = resolveDefaultAgentId(cfg);
-  const isSameDatabasePath = createOpenClawAgentDatabasePathMatcher();
+  const isSameDatabasePath = createNatesclawAgentDatabasePathMatcher();
   const ids = new Set(listConfiguredSessionStoreAgentIds(cfg));
   if (!isPerAgentSessionStoreConfig(cfg.session?.store)) {
     const storePath = resolveSessionStorePathCore(cfg.session?.store, {
@@ -153,7 +153,7 @@ export function listKnownSessionStoreAgentIds(
     }
     if (durableTarget.shared && durableTarget.agentId && fsSync.existsSync(durableTarget.path)) {
       try {
-        const logicalOwners = withOpenClawAgentDatabaseReadOnly(
+        const logicalOwners = withNatesclawAgentDatabaseReadOnly(
           (database) =>
             readSessionEntryKeys(database).flatMap((sessionKey) => {
               const parsed = parseAgentSessionKey(sessionKey);
@@ -171,7 +171,7 @@ export function listKnownSessionStoreAgentIds(
       }
     }
   }
-  for (const registered of listOpenClawRegisteredAgentDatabases({ env })) {
+  for (const registered of listNatesclawRegisteredAgentDatabases({ env })) {
     const agentId = normalizeAgentId(registered.agentId);
     const storePath = resolveSessionStorePathCore(cfg.session?.store, { agentId, env });
     const expectedPath = resolveSqliteTargetFromSessionStorePath(storePath, {
@@ -188,7 +188,7 @@ export function listKnownSessionStoreAgentIds(
 }
 
 /** Checks whether an agent is configured to own a session store. */
-export function isConfiguredSessionStoreAgentId(cfg: OpenClawConfig, agentId: string): boolean {
+export function isConfiguredSessionStoreAgentId(cfg: NatesclawConfig, agentId: string): boolean {
   const normalizedAgentId = normalizeAgentId(agentId);
   return listConfiguredSessionStoreAgentIds(cfg).includes(normalizedAgentId);
 }
@@ -285,7 +285,7 @@ function isValidatedRecoveryCandidateSessionsDir(params: {
 }
 
 function resolveSessionStoreDiscoveryState(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv,
 ): {
   configuredTargets: SessionStoreTarget[];
@@ -342,7 +342,7 @@ function resolveExplicitSessionStoreTarget(params: {
 
 /** Resolves all configured and discoverable agent session stores synchronously. */
 export function resolveAllAgentSessionStoreTargetsSync(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): SessionStoreTarget[] {
   const env = params.env ?? process.env;
@@ -414,7 +414,7 @@ export function resolveAllAgentSessionStoreTargetsSync(
 
 /** Resolves only already-existing stores for one configured, retired, or manual agent. */
 export function resolveExistingAgentSessionStoreTargetsSync(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): SessionStoreTarget[] {
@@ -454,7 +454,7 @@ export function resolveExistingAgentSessionStoreTargetsSync(
         const databaseAgentId = resolvedTarget.shared
           ? normalizeAgentId(resolvedTarget.agentId ?? defaultAgentId)
           : requested;
-        const result = withOpenClawAgentDatabaseReadOnly(
+        const result = withNatesclawAgentDatabaseReadOnly(
           (database) =>
             readSessionEntryKeys(database).some((sessionKey) => {
               const parsed = parseAgentSessionKey(sessionKey);
@@ -500,7 +500,7 @@ export function resolveExistingAgentSessionStoreTargetsSync(
  * Callers must validate the selected artifact before performing filesystem mutations.
  */
 export function resolveAllAgentSessionStoreCandidateTargetsSync(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): SessionStoreTarget[] {
   const env = params.env ?? process.env;
@@ -576,7 +576,7 @@ export function resolveAllAgentSessionStoreCandidateTargetsSync(
 
 /** Resolves session store targets for one agent, including retired/manual stores. */
 export function resolveAgentSessionStoreTargetsSync(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): SessionStoreTarget[] {
@@ -662,7 +662,7 @@ export function resolveAgentSessionStoreTargetsSync(
 
 /** Resolves session store targets from explicit CLI-style selection options. */
 export function resolveSessionStoreTargets(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   opts: SessionStoreSelectionOptions,
   params: { env?: NodeJS.ProcessEnv; diagnostics?: string[] } = {},
 ): SessionStoreTarget[] {
@@ -700,7 +700,7 @@ export function resolveSessionStoreTargets(
     const requested = normalizeAgentId(opts.agent ?? "");
     if (!knownAgents.includes(requested)) {
       throw new Error(
-        `Unknown agent id "${opts.agent}". Use "openclaw agents list" to see configured agents.`,
+        `Unknown agent id "${opts.agent}". Use "natesclaw agents list" to see configured agents.`,
       );
     }
     return [

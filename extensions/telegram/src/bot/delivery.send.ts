@@ -1,8 +1,8 @@
 import type { Bot } from "grammy";
 import type { Message } from "grammy/types";
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-contracts";
-import { createChannelApiRetryRunner } from "openclaw/plugin-sdk/retry-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { MarkdownTableMode } from "natesclaw/plugin-sdk/config-contracts";
+import { createChannelApiRetryRunner } from "natesclaw/plugin-sdk/retry-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { withTelegramApiErrorLogging } from "../api-logging.js";
 import { isSafeToRetrySendError, isTelegramRateLimitError } from "../network-errors.js";
 import {

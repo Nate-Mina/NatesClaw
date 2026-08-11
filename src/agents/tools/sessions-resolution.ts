@@ -3,12 +3,12 @@
  *
  * Normalizes display/internal/current-session aliases and resolves session-id inputs through Gateway.
  */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   GATEWAY_CLIENT_IDS,
   normalizeGatewayClientId,
 } from "../../../packages/gateway-protocol/src/client-info.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { GatewayClientRequestError } from "../../gateway/client.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
@@ -38,7 +38,7 @@ const CURRENT_SESSION_CLIENT_ALIAS_IDS = new Set<string>([
   GATEWAY_CLIENT_IDS.ANDROID_APP,
 ]);
 
-export function resolveMainSessionAlias(cfg: OpenClawConfig) {
+export function resolveMainSessionAlias(cfg: NatesclawConfig) {
   const mainKey = normalizeMainKey(cfg.session?.mainKey);
   const scope = cfg.session?.scope ?? "per-sender";
   const alias = scope === "global" ? "global" : mainKey;

@@ -59,7 +59,7 @@ function renderStatusPreviewRow(task: TaskSummary): TemplateResult {
           ? html`<span class="chat-tasks-rail__task-sep" aria-hidden="true">·</span>
               <span>
                 ${active
-                  ? html`<openclaw-elapsed-time .startMs=${timeMs}></openclaw-elapsed-time>`
+                  ? html`<natesclaw-elapsed-time .startMs=${timeMs}></natesclaw-elapsed-time>`
                   : formatRelativeTimestamp(timeMs)}
               </span>`
           : nothing}
@@ -129,16 +129,16 @@ export function renderBackgroundTasksStatusRow(
       ${status.startedMs !== null
         ? html`
             <span class="chat-tasks-status__time" aria-hidden="true">
-              <openclaw-elapsed-time .startMs=${status.startedMs}></openclaw-elapsed-time>
+              <natesclaw-elapsed-time .startMs=${status.startedMs}></natesclaw-elapsed-time>
             </span>
             <span class="chat-tasks-status__sep" aria-hidden="true">·</span>
           `
         : nothing}
       <span class="sr-only" role="status">${label}</span>
-      <openclaw-tooltip class="chat-tasks-status__preview">
+      <natesclaw-tooltip class="chat-tasks-status__preview">
         <button class="chat-tasks-status__link" type="button" @click=${openRail}>${label}</button>
         ${renderStatusPreview(remainingTasks)}
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
     </div>
   `;
   return subagentActivity === nothing ? aggregate : html`${subagentActivity}${aggregate}`;

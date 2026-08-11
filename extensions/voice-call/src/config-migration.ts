@@ -3,7 +3,7 @@ import {
   asFiniteNumber,
   asOptionalRecord,
   readStringField,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 /** Read finite numeric config values. */
 function getNumber(obj: Record<string, unknown> | undefined, key: string): number | undefined {

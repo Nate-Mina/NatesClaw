@@ -1,5 +1,5 @@
 import { initialState, Task } from "@lit/task";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { ReactiveElement } from "lit";
 import type { ControlUiGitHubPreview } from "../../../src/gateway/control-ui-contract.js";
 import type { GatewayBrowserClient } from "../api/gateway.ts";
@@ -470,7 +470,7 @@ export class GitHubLinkHovercardProvider extends ReactiveElement {
     }
     const card = document.createElement("div");
     nextHovercardId += 1;
-    card.id = `openclaw-github-hovercard-${nextHovercardId}`;
+    card.id = `natesclaw-github-hovercard-${nextHovercardId}`;
     card.className = "github-link-hovercard";
     card.dataset.open = "true";
     card.setAttribute("role", "tooltip");

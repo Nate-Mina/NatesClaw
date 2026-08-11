@@ -1,7 +1,7 @@
 // Session utility performance tests protect resolver cache scaling for large
 // session lists with repeated provider/model tuples.
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, test, expect, vi } from "vitest";
 import {
   readAcpSessionMetaBatch,
@@ -9,12 +9,12 @@ import {
   writeAcpSessionMetaForMigration,
 } from "../acp/runtime/session-meta.js";
 import * as thinking from "../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import { resetConfigRuntimeState, setRuntimeConfigSnapshot } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
-import { openOpenClawStateDatabase } from "../state/openclaw-state-db.js";
+import { openNatesclawStateDatabase } from "../state/natesclaw-state-db.js";
 import { withStateDirEnv } from "../test-helpers/state-dir-env.js";
 import * as usageFormat from "../utils/usage-format.js";
 import * as titleReader from "./session-transcript-title-reader.js";
@@ -36,14 +36,14 @@ import { listSessionsFromStore, listSessionsFromStoreAsync } from "./session-uti
  */
 describe("listSessionsFromStore resolver cache", () => {
   test("collapses request-local resolver work to O(unique provider/model tuples)", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: {
           model: { primary: "google-vertex/gemini-3-flash-preview" },
           thinkingDefault: "off",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const tuples: Array<{ modelProvider: string; model: string }> = [
       { modelProvider: "google-vertex", model: "gemini-3-flash-preview" },
       { modelProvider: "openai", model: "gpt-5" },
@@ -118,12 +118,12 @@ describe("listSessionsFromStore resolver cache", () => {
   });
 
   test("batches ACP metadata reads once per list without changing row results", async () => {
-    await withStateDirEnv("openclaw-perf-acp-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-perf-acp-", async ({ stateDir }) => {
       resetPluginRuntimeStateForTest();
       setActivePluginRegistry(createEmptyPluginRegistry());
       const cfg = {
         agents: { defaults: { model: { primary: "openai/gpt-5" }, thinkingDefault: "off" } },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       resetConfigRuntimeState();
       setRuntimeConfigSnapshot(cfg);
 
@@ -200,7 +200,7 @@ describe("listSessionsFromStore resolver cache", () => {
         ]),
       );
 
-      const database = openOpenClawStateDatabase();
+      const database = openNatesclawStateDatabase();
       const originalPrepare = database.db.prepare.bind(database.db);
       let acpSelects = 0;
       const prepareSpy = vi.spyOn(database.db, "prepare").mockImplementation((sql: string) => {
@@ -246,12 +246,12 @@ describe("listSessionsFromStore resolver cache", () => {
   });
 
   test("batches transcript title hydration once instead of O(rows)", async () => {
-    await withStateDirEnv("openclaw-perf-title-batch-", async () => {
+    await withStateDirEnv("natesclaw-perf-title-batch-", async () => {
       resetPluginRuntimeStateForTest();
       setActivePluginRegistry(createEmptyPluginRegistry());
       const cfg = {
         agents: { defaults: { model: { primary: "openai/gpt-5" }, thinkingDefault: "off" } },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       resetConfigRuntimeState();
       setRuntimeConfigSnapshot(cfg);
       const storePath = "/tmp/sessions.json";

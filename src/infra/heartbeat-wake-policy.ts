@@ -1,6 +1,6 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { listAgentIds } from "../agents/agent-scope.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import type { HeartbeatWakeIntent, HeartbeatWakeSource } from "./heartbeat-wake.js";
 
@@ -86,7 +86,7 @@ export function isTargetedImmediateUnscheduledWake(params: TargetedImmediateWake
   return isTargetedImmediateSystemEventWake(params) || isTargetedImmediateHookWake(params);
 }
 
-export function isConfiguredHeartbeatAgent(cfg: OpenClawConfig, agentId: string): boolean {
+export function isConfiguredHeartbeatAgent(cfg: NatesclawConfig, agentId: string): boolean {
   const normalized = normalizeAgentId(agentId);
   return listAgentIds(cfg).some((candidate) => normalizeAgentId(candidate) === normalized);
 }

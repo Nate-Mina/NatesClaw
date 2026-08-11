@@ -10,7 +10,7 @@ const suite = createControlUiE2eSuite({
   name: "Control UI mobile pairing mocked Gateway E2E",
   startServerBeforeBrowser: true,
   unavailableMessage: (executablePath) =>
-    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
 });
 
 const artifactDir = path.resolve(process.cwd(), ".artifacts/control-ui-e2e/mobile-pairing");
@@ -58,7 +58,7 @@ suite.define(() => {
         expect(response?.status()).toBe(200);
 
         // Pairing lives with the account-level controls in the footer identity menu.
-        const sidebar = page.locator("openclaw-app-sidebar");
+        const sidebar = page.locator("natesclaw-app-sidebar");
         await sidebar.getByRole("button", { name: /^Identity and app menu for / }).click();
         const sidebarPairingButton = sidebar
           .locator("wa-dropdown.sidebar-identity-menu")
@@ -68,8 +68,8 @@ suite.define(() => {
         await gateway.deferNext("device.pair.list");
         await sidebarPairingButton.click();
 
-        const dialog = page.getByRole("dialog", { name: "OpenClaw mobile" });
-        const qr = page.getByAltText("OpenClaw mobile pairing QR code");
+        const dialog = page.getByRole("dialog", { name: "Natesclaw mobile" });
+        const qr = page.getByAltText("Natesclaw mobile pairing QR code");
         await dialog.waitFor();
         expect(await dialog.isVisible()).toBe(true);
         expect(await qr.count()).toBe(0);

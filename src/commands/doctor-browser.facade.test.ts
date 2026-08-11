@@ -1,6 +1,6 @@
 // Doctor browser facade tests cover legacy browser residue detection and browser doctor repair wiring.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import {
   detectLegacyClawdBrowserProfileResidue,
   maybeArchiveLegacyClawdBrowserProfileResidue,
@@ -33,7 +33,7 @@ describe("doctor browser facade", () => {
       noteChromeMcpBrowserReadiness: delegate,
     });
 
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       browser: {
         defaultProfile: "user",
       },
@@ -52,25 +52,25 @@ describe("doctor browser facade", () => {
 
   it("delegates legacy clawd browser profile detection to the browser facade surface", async () => {
     const residue = {
-      legacyProfileDir: "/tmp/openclaw-home/browser/clawd",
-      legacyUserDataDir: "/tmp/openclaw-home/browser/clawd/user-data",
-      canonicalUserDataDir: "/tmp/openclaw-home/browser/openclaw/user-data",
+      legacyProfileDir: "/tmp/natesclaw-home/browser/clawd",
+      legacyUserDataDir: "/tmp/natesclaw-home/browser/clawd/user-data",
+      canonicalUserDataDir: "/tmp/natesclaw-home/browser/natesclaw/user-data",
     };
     const detect = vi.fn().mockReturnValue(residue);
     loadBundledPluginPublicSurfaceModuleSyncCore.mockReturnValue({
       noteChromeMcpBrowserReadiness: vi.fn(),
       detectLegacyClawdBrowserProfileResidue: detect,
     });
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       browser: {
         profiles: {
-          openclaw: { color: "#FF4500" },
+          natesclaw: { color: "#FF4500" },
         },
       },
     };
     const deps = {
-      configDir: "/tmp/openclaw-home",
-      pathExists: (targetPath: string) => targetPath === "/tmp/openclaw-home/browser/clawd",
+      configDir: "/tmp/natesclaw-home",
+      pathExists: (targetPath: string) => targetPath === "/tmp/natesclaw-home/browser/clawd",
     };
 
     await expect(detectLegacyClawdBrowserProfileResidue(cfg, deps)).resolves.toEqual(residue);
@@ -88,16 +88,16 @@ describe("doctor browser facade", () => {
       maybeArchiveLegacyClawdBrowserProfileResidue: cleanup,
     });
 
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       browser: {
         profiles: {
-          openclaw: { color: "#FF4500" },
+          natesclaw: { color: "#FF4500" },
         },
       },
     };
     const deps = {
-      configDir: "/tmp/openclaw-home",
-      pathExists: (targetPath: string) => targetPath === "/tmp/openclaw-home/browser/clawd",
+      configDir: "/tmp/natesclaw-home",
+      pathExists: (targetPath: string) => targetPath === "/tmp/natesclaw-home/browser/clawd",
     };
 
     await expect(maybeArchiveLegacyClawdBrowserProfileResidue(cfg, deps)).resolves.toEqual({
@@ -134,8 +134,8 @@ describe("doctor browser facade", () => {
       maybeArchiveLegacyClawdBrowserProfileResidue(
         {},
         {
-          configDir: "/tmp/openclaw-home",
-          pathExists: (targetPath: string) => targetPath === "/tmp/openclaw-home/browser/clawd",
+          configDir: "/tmp/natesclaw-home",
+          pathExists: (targetPath: string) => targetPath === "/tmp/natesclaw-home/browser/clawd",
         },
       ),
     ).resolves.toEqual({
@@ -149,7 +149,7 @@ describe("doctor browser facade", () => {
       detectLegacyClawdBrowserProfileResidue(
         {},
         {
-          configDir: "/tmp/openclaw-home",
+          configDir: "/tmp/natesclaw-home",
           pathExists: () => false,
         },
       ),
@@ -162,7 +162,7 @@ describe("doctor browser facade", () => {
       maybeArchiveLegacyClawdBrowserProfileResidue(
         {},
         {
-          configDir: "/tmp/openclaw-home",
+          configDir: "/tmp/natesclaw-home",
           pathExists: () => false,
         },
       ),

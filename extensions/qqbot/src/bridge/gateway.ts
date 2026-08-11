@@ -6,8 +6,8 @@
  * All adapter dependencies are assembled here in one place.
  */
 
-import { resolveRuntimeServiceVersion } from "openclaw/plugin-sdk/cli-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { resolveRuntimeServiceVersion } from "natesclaw/plugin-sdk/cli-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type { EngineAdapters } from "../engine/adapter/index.js";
 import {
   startGateway as coreStartGateway,
@@ -35,7 +35,7 @@ import {
 const pluginVersion = resolveQQBotPluginVersion(import.meta.url);
 initSender({
   pluginVersion,
-  openclawVersion: resolveRuntimeServiceVersion(),
+  natesclawVersion: resolveRuntimeServiceVersion(),
 });
 
 // ============ Public types ============
@@ -43,7 +43,7 @@ initSender({
 export interface GatewayContext {
   account: ResolvedQQBotAccount;
   abortSignal: AbortSignal;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   onReady?: (data: unknown) => void;
   onResumed?: (data: unknown) => void;
   onError?: (error: Error) => void;
@@ -115,7 +115,7 @@ export async function startGateway(ctx: GatewayContext): Promise<void> {
 
   const pluginRuntime = getQQBotRuntime();
   const runtime = pluginRuntime as unknown as CoreGatewayContext["runtime"];
-  const getCurrentConfig = () => pluginRuntime.config.current() as OpenClawConfig;
+  const getCurrentConfig = () => pluginRuntime.config.current() as NatesclawConfig;
   const accountLogger = createAccountLogger(ctx.log, ctx.account.accountId);
 
   // Per-account registration (still global — sender is a leaf utility).

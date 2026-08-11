@@ -1,10 +1,10 @@
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { urbitFetch } from "./fetch.js";
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async () => ({
-  ...(await vi.importActual<typeof import("openclaw/plugin-sdk/ssrf-runtime")>(
-    "openclaw/plugin-sdk/ssrf-runtime",
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", async () => ({
+  ...(await vi.importActual<typeof import("natesclaw/plugin-sdk/ssrf-runtime")>(
+    "natesclaw/plugin-sdk/ssrf-runtime",
   )),
   fetchWithSsrFGuard: vi.fn(),
 }));

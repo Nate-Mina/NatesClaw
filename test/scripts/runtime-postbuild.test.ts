@@ -114,14 +114,14 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("discovers static assets from plugin package metadata", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const packageDir = path.join(rootDir, "extensions", "demo");
     await fs.mkdir(packageDir, { recursive: true });
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/demo",
-        openclaw: {
+        name: "@natesclaw/demo",
+        natesclaw: {
           build: {
             staticAssets: [
               {
@@ -145,14 +145,14 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("excludes external plugin (bundledDist: false) static assets by default", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const packageDir = path.join(rootDir, "extensions", "external-demo");
     await fs.mkdir(packageDir, { recursive: true });
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/external-demo",
-        openclaw: {
+        name: "@natesclaw/external-demo",
+        natesclaw: {
           build: {
             bundledDist: false,
             staticAssets: [
@@ -171,14 +171,14 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("includes external plugin (bundledDist: false) static assets when includeExternalPlugins is true", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const packageDir = path.join(rootDir, "extensions", "external-demo");
     await fs.mkdir(packageDir, { recursive: true });
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/external-demo",
-        openclaw: {
+        name: "@natesclaw/external-demo",
+        natesclaw: {
           build: {
             bundledDist: false,
             staticAssets: [
@@ -203,7 +203,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("copies declared static assets into dist", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const src = "extensions/acpx/src/runtime-internals/mcp-proxy.mjs";
     const dest = "dist/extensions/acpx/mcp-proxy.mjs";
     const sourcePath = path.join(rootDir, src);
@@ -220,7 +220,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("stages copied static assets byte-for-byte during the same postbuild run", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const source = "extensions/diffs/assets/viewer-runtime.js";
     const output = "assets/viewer-runtime.js";
     const distAsset = "dist/extensions/diffs/assets/viewer-runtime.js";
@@ -230,8 +230,8 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(rootDir, "extensions", "diffs", "package.json"),
       JSON.stringify({
-        name: "@openclaw/diffs",
-        openclaw: {
+        name: "@natesclaw/diffs",
+        natesclaw: {
           extensions: ["./index.ts"],
           build: {
             staticAssets: [{ source: `./${output}`, output }],
@@ -241,7 +241,7 @@ describe("runtime postbuild static assets", () => {
       "utf8",
     );
     await fs.writeFile(
-      path.join(rootDir, "extensions", "diffs", "openclaw.plugin.json"),
+      path.join(rootDir, "extensions", "diffs", "natesclaw.plugin.json"),
       '{"id":"diffs"}\n',
       "utf8",
     );
@@ -263,7 +263,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes every phase beneath the cwd-only caller root", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-cwd-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-cwd-");
     const sentinelDest = path.join(
       "dist",
       `runtime-postbuild-cwd-only-${path.basename(rootDir)}.js`,
@@ -276,7 +276,7 @@ describe("runtime postbuild static assets", () => {
       const params = {
         chunks: [{ dest: sentinelDest, contents: "selected root only\n" }],
         cwd: rootDir,
-        env: { OPENCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS: "0" },
+        env: { NATESCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS: "0" },
         timings: false,
       };
       runRuntimePostBuild(params);
@@ -304,14 +304,14 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("uses rootDir ahead of conflicting cwd and repoRoot for every phase", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-root-");
-    const cwd = createTempDir("openclaw-runtime-postbuild-rejected-cwd-");
-    const repoRoot = createTempDir("openclaw-runtime-postbuild-rejected-repo-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-root-");
+    const cwd = createTempDir("natesclaw-runtime-postbuild-rejected-cwd-");
+    const repoRoot = createTempDir("natesclaw-runtime-postbuild-rejected-repo-");
     await writeExportHtmlBuildFixture(rootDir);
 
     runRuntimePostBuild({
       cwd,
-      env: { OPENCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS: "0" },
+      env: { NATESCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS: "0" },
       repoRoot,
       rootDir,
       timings: false,
@@ -331,7 +331,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("validates every postbuild root before running any phase", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-roots-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-roots-");
     const distFile = path.join(rootDir, "dist", "keep.js");
     const targetDir = path.join(rootDir, "gateway-runtime");
     await fs.mkdir(path.dirname(distFile), { recursive: true });
@@ -353,7 +353,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("preserves restored dist static assets when plugin sources are absent", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const output = "assets/viewer-runtime.js";
     const distPluginDir = path.join(rootDir, "dist", "extensions", "diffs");
     const runtimeAsset = path.join(rootDir, "dist-runtime", "extensions", "diffs", output);
@@ -361,15 +361,15 @@ describe("runtime postbuild static assets", () => {
     await fs.mkdir(path.join(distPluginDir, "assets"), { recursive: true });
     await fs.writeFile(path.join(distPluginDir, "index.js"), "export default {};\n", "utf8");
     await fs.writeFile(
-      path.join(distPluginDir, "openclaw.plugin.json"),
+      path.join(distPluginDir, "natesclaw.plugin.json"),
       '{"id":"diffs"}\n',
       "utf8",
     );
     await fs.writeFile(
       path.join(distPluginDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/diffs",
-        openclaw: {
+        name: "@natesclaw/diffs",
+        natesclaw: {
           extensions: ["./index.js"],
           build: {
             staticAssets: [{ source: `./${output}`, output }],
@@ -391,7 +391,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("can skip static asset copies for minimal runtime builds", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const warn = vi.fn();
     const output = "assets/viewer-runtime.js";
 
@@ -399,8 +399,8 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(rootDir, "extensions", "diffs", "package.json"),
       JSON.stringify({
-        name: "@openclaw/diffs",
-        openclaw: {
+        name: "@natesclaw/diffs",
+        natesclaw: {
           extensions: ["./index.ts"],
           build: {
             staticAssets: [{ source: `./${output}`, output }],
@@ -414,7 +414,7 @@ describe("runtime postbuild static assets", () => {
       cwd: rootDir,
       repoRoot: rootDir,
       rootDir,
-      env: { OPENCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS: "0" },
+      env: { NATESCLAW_RUNTIME_POSTBUILD_STATIC_ASSETS: "0" },
       timings: false,
       warn,
     });
@@ -424,7 +424,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("skips runtime overlay asset copies when the runtime extension root is absent", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     await fs.mkdir(path.join(rootDir, "extensions", "demo", "assets"), { recursive: true });
     await fs.writeFile(
       path.join(rootDir, "extensions", "demo", "assets", "viewer.js"),
@@ -446,7 +446,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("ignores runtime overlay static assets outside dist extensions", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     await fs.mkdir(path.join(rootDir, "dist-runtime", "extensions"), { recursive: true });
     await fs.mkdir(path.join(rootDir, "extensions", "demo", "assets"), { recursive: true });
     await fs.writeFile(
@@ -469,7 +469,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("warns when a runtime overlay static asset source is missing", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const warn = vi.fn();
     await fs.mkdir(path.join(rootDir, "dist-runtime", "extensions"), { recursive: true });
 
@@ -493,7 +493,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("warns when a declared static asset is missing", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const warn = vi.fn();
 
     copyStaticExtensionAssets({
@@ -508,7 +508,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes stable aliases for hashed root runtime modules", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -539,7 +539,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("refuses to rewrite stable aliases through a symlinked dist root", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-symlink-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-symlink-");
     const targetDir = path.join(rootDir, "gateway-dist");
     await fs.mkdir(targetDir, { recursive: true });
     const hashedFile = path.join(targetDir, "runtime-model-auth.runtime-XyZ987.js");
@@ -555,7 +555,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("forwards default exports through stable and legacy aliases", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(path.join(rootDir, "package.json"), '{"type":"module"}\n', "utf8");
@@ -602,7 +602,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("does not write ambiguous stable aliases for colliding root runtime chunks", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -627,7 +627,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes a stable plugin install runtime alias when install runtimes collide", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -655,7 +655,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("keeps stable aliases when one colliding root runtime chunk re-exports the implementation", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -677,7 +677,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("ignores legacy wrappers to the stable runtime alias when choosing the implementation", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -708,7 +708,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("rewrites root runtime imports to stable aliases", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -738,7 +738,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("keeps text-transform runtime imports hashed after the stable alias export surface grew", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -772,7 +772,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("rewrites gateway shutdown imports to stable runtime aliases", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -802,7 +802,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("rewrites reply-dispatch imports to the stable provider dispatcher runtime alias", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -834,7 +834,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("keeps hashed imports when a stable runtime alias would collide", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -869,7 +869,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("rewrites plugin install runtime imports to stable aliases when install runtimes collide", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -910,7 +910,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("leaves stable alias files pointing at their hashed runtime chunks", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -932,7 +932,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes compatibility aliases for previous release runtime chunk names", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -1003,7 +1003,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes compatibility aliases for previous text-transform runtime chunk names", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(distDir, { recursive: true });
     await fs.writeFile(
@@ -1023,7 +1023,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes compatibility aliases for previous gateway shutdown chunk names", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(path.join(distDir, "plugins"), { recursive: true });
     await fs.mkdir(distDir, { recursive: true });
@@ -1052,7 +1052,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes compatibility aliases for previous tool and ACP manager chunk names", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
     const distDir = path.join(rootDir, "dist");
     await fs.mkdir(path.join(distDir, "acp", "control-plane"), { recursive: true });
     await fs.mkdir(path.join(distDir, "web-fetch"), { recursive: true });
@@ -1078,7 +1078,7 @@ describe("runtime postbuild static assets", () => {
   });
 
   it("writes legacy CLI exit compatibility chunks", async () => {
-    const rootDir = createTempDir("openclaw-runtime-postbuild-");
+    const rootDir = createTempDir("natesclaw-runtime-postbuild-");
 
     writeLegacyCliExitCompatChunks({ rootDir });
 

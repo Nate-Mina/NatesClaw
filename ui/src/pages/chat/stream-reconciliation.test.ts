@@ -130,7 +130,7 @@ describe("stream reconciliation", () => {
         role: "assistant",
         content: [{ type: "text", text: "already visible" }],
         timestamp: 2,
-        openclawStreamFallback: {
+        natesclawStreamFallback: {
           itemId: "preamble-1",
           replacementText: "already visible",
           source: "segment",

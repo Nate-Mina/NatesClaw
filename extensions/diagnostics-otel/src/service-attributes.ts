@@ -1,5 +1,5 @@
 import type { LogRecord } from "@opentelemetry/api-logs";
-import { normalizeDiagnosticValue } from "openclaw/plugin-sdk/diagnostic-runtime";
+import { normalizeDiagnosticValue } from "natesclaw/plugin-sdk/diagnostic-runtime";
 import type { DiagnosticEventPayload, DiagnosticTraceContext } from "../api.js";
 import { redactSensitiveText } from "../api.js";
 import {
@@ -66,7 +66,7 @@ export function writeStdoutDiagnosticLogRecord(params: {
   const { logRecord, serviceName, traceContext } = params;
   const line = {
     ts: otelLogTimestampIso(logRecord.timestamp),
-    signal: "openclaw.diagnostic.log",
+    signal: "natesclaw.diagnostic.log",
     "service.name": serviceName,
     severityText: logRecord.severityText,
     severityNumber: logRecord.severityNumber,
@@ -130,7 +130,7 @@ export function assignOtelLogEventAttributes(
     if (!OTEL_LOG_RAW_ATTRIBUTE_KEY_RE.test(key)) {
       continue;
     }
-    assignOtelLogAttribute(attributes, `openclaw.${key}`, value);
+    assignOtelLogAttribute(attributes, `natesclaw.${key}`, value);
   }
 }
 
@@ -157,7 +157,7 @@ function assignOtelSecurityEventAttributes(
     }
     assignOtelLogAttribute(
       attributes,
-      `openclaw.security.attribute.${key}`,
+      `natesclaw.security.attribute.${key}`,
       typeof value === "string" ? normalizeDiagnosticValue(value) : value,
     );
   }
@@ -185,80 +185,80 @@ export function assignOtelSecurityAttributes(
   attributes: Record<string, string | number | boolean>,
   evt: Extract<DiagnosticEventPayload, { type: "security.event" }>,
 ): void {
-  assignOtelLogAttribute(attributes, "openclaw.security.event_id", evt.eventId);
-  assignOtelLogAttribute(attributes, "openclaw.security.category", evt.category);
+  assignOtelLogAttribute(attributes, "natesclaw.security.event_id", evt.eventId);
+  assignOtelLogAttribute(attributes, "natesclaw.security.category", evt.category);
   assignOtelLogAttribute(
     attributes,
-    "openclaw.security.action",
+    "natesclaw.security.action",
     normalizeDiagnosticValue(evt.action),
   );
-  assignOtelLogAttribute(attributes, "openclaw.security.outcome", evt.outcome);
-  assignOtelLogAttribute(attributes, "openclaw.security.severity", evt.severity);
+  assignOtelLogAttribute(attributes, "natesclaw.security.outcome", evt.outcome);
+  assignOtelLogAttribute(attributes, "natesclaw.security.severity", evt.severity);
   if (evt.reason) {
     assignOtelLogAttribute(
       attributes,
-      "openclaw.security.reason",
+      "natesclaw.security.reason",
       normalizeDiagnosticValue(evt.reason),
     );
   }
   if (evt.actor) {
-    assignOtelLogAttribute(attributes, "openclaw.security.actor.kind", evt.actor.kind);
+    assignOtelLogAttribute(attributes, "natesclaw.security.actor.kind", evt.actor.kind);
     if (evt.actor.idHash) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.actor.id_hash",
+        "natesclaw.security.actor.id_hash",
         normalizeDiagnosticValue(evt.actor.idHash),
       );
     }
     if (evt.actor.deviceIdHash) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.actor.device_id_hash",
+        "natesclaw.security.actor.device_id_hash",
         normalizeDiagnosticValue(evt.actor.deviceIdHash),
       );
     }
     if (evt.actor.channel) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.actor.channel",
+        "natesclaw.security.actor.channel",
         normalizeDiagnosticValue(evt.actor.channel),
       );
     }
     if (evt.actor.role) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.actor.role",
+        "natesclaw.security.actor.role",
         normalizeDiagnosticValue(evt.actor.role),
       );
     }
     if (evt.actor.scopes?.length) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.actor.scopes",
+        "natesclaw.security.actor.scopes",
         evt.actor.scopes.map((scope) => normalizeDiagnosticValue(scope)).join(","),
       );
     }
   }
   if (evt.target) {
-    assignOtelLogAttribute(attributes, "openclaw.security.target.kind", evt.target.kind);
+    assignOtelLogAttribute(attributes, "natesclaw.security.target.kind", evt.target.kind);
     if (evt.target.idHash) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.target.id_hash",
+        "natesclaw.security.target.id_hash",
         normalizeDiagnosticValue(evt.target.idHash),
       );
     }
     if (evt.target.name) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.target.name",
+        "natesclaw.security.target.name",
         securityTargetNameAttr(evt.target.name),
       );
     }
     if (evt.target.owner) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.target.owner",
+        "natesclaw.security.target.owner",
         normalizeDiagnosticValue(evt.target.owner),
       );
     }
@@ -267,17 +267,17 @@ export function assignOtelSecurityAttributes(
     if (evt.policy.id) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.policy.id",
+        "natesclaw.security.policy.id",
         normalizeDiagnosticValue(evt.policy.id),
       );
     }
     if (evt.policy.decision) {
-      assignOtelLogAttribute(attributes, "openclaw.security.policy.decision", evt.policy.decision);
+      assignOtelLogAttribute(attributes, "natesclaw.security.policy.decision", evt.policy.decision);
     }
     if (evt.policy.reason) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.policy.reason",
+        "natesclaw.security.policy.reason",
         normalizeDiagnosticValue(evt.policy.reason),
       );
     }
@@ -286,12 +286,12 @@ export function assignOtelSecurityAttributes(
     if (evt.control.id) {
       assignOtelLogAttribute(
         attributes,
-        "openclaw.security.control.id",
+        "natesclaw.security.control.id",
         normalizeDiagnosticValue(evt.control.id),
       );
     }
     if (evt.control.family) {
-      assignOtelLogAttribute(attributes, "openclaw.security.control.family", evt.control.family);
+      assignOtelLogAttribute(attributes, "natesclaw.security.control.family", evt.control.family);
     }
   }
   assignOtelSecurityEventAttributes(attributes, evt.attributes);

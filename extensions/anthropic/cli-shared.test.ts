@@ -32,7 +32,7 @@ describe("Claude CLI adapter equivalence", () => {
     "--setting-sources",
     "user",
     "--allowedTools",
-    "mcp__openclaw__*",
+    "mcp__natesclaw__*",
     "--disallowedTools",
     CLAUDE_CLI_DISALLOWED_TOOLS,
   ];
@@ -58,7 +58,7 @@ describe("Claude CLI adapter equivalence", () => {
 
     expect(
       backend.prepareExecution?.({
-        workspaceDir: "/tmp/openclaw-claude-cli",
+        workspaceDir: "/tmp/natesclaw-claude-cli",
         provider: "claude-cli",
         modelId: "claude-opus-4-8",
         contextTokenBudget: 100_000,
@@ -69,7 +69,7 @@ describe("Claude CLI adapter equivalence", () => {
   it("privately acknowledges isolated completion preparation", () => {
     const backend = buildAnthropicCliBackend();
     const prepared = backend.prepareExecution?.({
-      workspaceDir: "/tmp/openclaw-claude-cli",
+      workspaceDir: "/tmp/natesclaw-claude-cli",
       provider: "claude-cli",
       modelId: "claude-opus-4-8",
       isolatedCompletionPrompt: "TASK: return JSON",
@@ -84,7 +84,7 @@ describe("Claude CLI adapter equivalence", () => {
 });
 
 describe("resolveClaudeCliAutoCompactEnv", () => {
-  it("maps the effective OpenClaw context budget into Claude Code compaction", () => {
+  it("maps the effective Natesclaw context budget into Claude Code compaction", () => {
     expect(resolveClaudeCliAutoCompactEnv(100_000.9)).toEqual({
       CLAUDE_CODE_AUTO_COMPACT_WINDOW: "100000",
     });
@@ -205,7 +205,7 @@ describe("Claude CLI model aliases", () => {
 });
 
 describe("resolveClaudeCliExecutionArgs", () => {
-  it("isolates OpenClaw from Claude user customizations while preserving exact MCP", () => {
+  it("isolates Natesclaw from Claude user customizations while preserving exact MCP", () => {
     expect(
       resolveClaudeCliExecutionArgs({
         workspaceDir: "/tmp",
@@ -247,20 +247,20 @@ describe("resolveClaudeCliExecutionArgs", () => {
           "--ide",
           "--strict-mcp-config",
           "--mcp-config",
-          "/tmp/openclaw-openclaw-mcp.json",
+          "/tmp/natesclaw-natesclaw-mcp.json",
           "--resume",
           "native-session",
           "--tools",
           "Bash,Edit",
           "--allowedTools",
-          "mcp__openclaw__*",
+          "mcp__natesclaw__*",
           "--disallowedTools",
           "ScheduleWakeup,mcp__other__*",
         ],
         toolAvailability: {
           native: [],
-          openClaw: ["openclaw"],
-          mcp: ["mcp__openclaw__openclaw"],
+          Natesclaw: ["natesclaw"],
+          mcp: ["mcp__natesclaw__natesclaw"],
         },
       }),
     ).toEqual([
@@ -268,7 +268,7 @@ describe("resolveClaudeCliExecutionArgs", () => {
       "--output-format",
       "stream-json",
       "--mcp-config",
-      "/tmp/openclaw-openclaw-mcp.json",
+      "/tmp/natesclaw-natesclaw-mcp.json",
       "--resume",
       "native-session",
       "--setting-sources",
@@ -281,7 +281,7 @@ describe("resolveClaudeCliExecutionArgs", () => {
       "--tools",
       "",
       "--allowedTools",
-      "mcp__openclaw__openclaw",
+      "mcp__natesclaw__natesclaw",
     ]);
   });
 
@@ -323,26 +323,26 @@ describe("resolveClaudeCliExecutionArgs", () => {
           "--ide",
           "--strict-mcp-config",
           "--mcp-config",
-          "/tmp/openclaw-message-mcp.json",
+          "/tmp/natesclaw-message-mcp.json",
           "--resume",
           "native-session",
           "--tools",
           "Bash,Edit",
           "--allowedTools",
-          "mcp__openclaw__*",
+          "mcp__natesclaw__*",
           "--disallowedTools",
           "ScheduleWakeup,mcp__other__*",
         ],
         toolAvailability: {
           native: [],
-          openClaw: ["message"],
-          mcp: ["mcp__openclaw__message"],
+          Natesclaw: ["message"],
+          mcp: ["mcp__natesclaw__message"],
         },
       }),
     ).toEqual([
       "-p",
       "--mcp-config",
-      "/tmp/openclaw-message-mcp.json",
+      "/tmp/natesclaw-message-mcp.json",
       "--resume",
       "native-session",
       "--setting-sources",
@@ -355,7 +355,7 @@ describe("resolveClaudeCliExecutionArgs", () => {
       "--tools",
       "",
       "--allowedTools",
-      "mcp__openclaw__message",
+      "mcp__natesclaw__message",
     ]);
   });
 
@@ -396,11 +396,11 @@ describe("resolveClaudeCliExecutionArgs", () => {
           "--tools",
           "Bash,Edit",
           "--allowedTools",
-          "mcp__openclaw__*",
+          "mcp__natesclaw__*",
           "--disallowedTools",
           "mcp__other__*",
         ],
-        toolAvailability: { native: [], openClaw: [], mcp: [] },
+        toolAvailability: { native: [], Natesclaw: [], mcp: [] },
       }),
     ).toEqual([
       "-p",
@@ -505,7 +505,7 @@ describe("resolveClaudeCliExecutionArgs", () => {
           "-p",
           "--output-format",
           "stream-json",
-          "--allowedTools=mcp__openclaw__*",
+          "--allowedTools=mcp__natesclaw__*",
           "--allowedTools",
           "Read",
           "Grep",
@@ -583,7 +583,7 @@ describe("normalizeClaudeBackendConfig", () => {
     expect(normalized.input).toBe("stdin");
   });
 
-  it("derives Claude bypass from OpenClaw YOLO policy and disables it for safer policy", () => {
+  it("derives Claude bypass from Natesclaw YOLO policy and disables it for safer policy", () => {
     expect(normalizeClaudeArgs(["-p"], { backendId: "claude-cli" })).toContain("bypassPermissions");
     expect(
       normalizeClaudeArgs(["-p"], {
@@ -599,7 +599,7 @@ describe("normalizeClaudeBackendConfig", () => {
     ).not.toContain("bypassPermissions");
   });
 
-  it("derives Claude bypass from per-agent OpenClaw exec policy", () => {
+  it("derives Claude bypass from per-agent Natesclaw exec policy", () => {
     expect(
       normalizeClaudeArgs(["-p"], {
         backendId: "claude-cli",
@@ -696,7 +696,7 @@ describe("normalizeClaudeBackendConfig", () => {
 
   it("passes system prompt on every turn (issue #80374 — systemPromptWhen must be 'always')", () => {
     // Before fix this was hardcoded to "first", which silently dropped updated
-    // OpenClaw system prompt context on resumed / compacted claude-cli sessions.
+    // Natesclaw system prompt context on resumed / compacted claude-cli sessions.
     const backend = buildAnthropicCliBackend();
     expect(backend.config.systemPromptWhen).toBe("always");
   });
@@ -738,7 +738,7 @@ describe("normalizeClaudeBackendConfig", () => {
 
     expect(
       backend.prepareExecution?.({
-        workspaceDir: "/tmp/openclaw-claude-cli",
+        workspaceDir: "/tmp/natesclaw-claude-cli",
         provider: "claude-cli",
         modelId: "claude-opus-4-7",
         contextTokenBudget: 100_000,
@@ -752,7 +752,7 @@ describe("normalizeClaudeBackendConfig", () => {
     const backend = buildAnthropicCliBackend();
 
     const prepared = backend.prepareExecution?.({
-      workspaceDir: "/tmp/openclaw-claude-cli",
+      workspaceDir: "/tmp/natesclaw-claude-cli",
       provider: "claude-cli",
       modelId: "claude-opus-4-7",
       authProfileId: "anthropic:claude-cli",
@@ -784,7 +784,7 @@ describe("normalizeClaudeBackendConfig", () => {
     expect(prepared.secretInput.createData().toString("utf8")).toBe("selected-access-token");
 
     const sameToken = backend.prepareExecution?.({
-      workspaceDir: "/tmp/openclaw-claude-cli",
+      workspaceDir: "/tmp/natesclaw-claude-cli",
       provider: "claude-cli",
       modelId: "claude-opus-4-7",
       authCredential: {
@@ -796,7 +796,7 @@ describe("normalizeClaudeBackendConfig", () => {
       authCredential: { type: "token"; provider: string; token: string };
     }) as ClaudePreparedExecutionWithSecret;
     const rotatedToken = backend.prepareExecution?.({
-      workspaceDir: "/tmp/openclaw-claude-cli",
+      workspaceDir: "/tmp/natesclaw-claude-cli",
       provider: "claude-cli",
       modelId: "claude-opus-4-7",
       authCredential: {
@@ -823,7 +823,7 @@ describe("normalizeClaudeBackendConfig", () => {
 
     expect(() =>
       backend.prepareExecution?.({
-        workspaceDir: "/tmp/openclaw-claude-cli",
+        workspaceDir: "/tmp/natesclaw-claude-cli",
         provider: "claude-cli",
         modelId: "claude-opus-4-7",
         authProfileId: "anthropic:claude-cli",
@@ -851,7 +851,7 @@ describe("normalizeClaudeBackendConfig", () => {
 
     expect(
       backend.prepareExecution?.({
-        workspaceDir: "/tmp/openclaw-claude-cli",
+        workspaceDir: "/tmp/natesclaw-claude-cli",
         provider: "claude-cli",
         modelId: "claude-opus-4-7",
       }),
@@ -862,7 +862,7 @@ describe("normalizeClaudeBackendConfig", () => {
     const backend = buildAnthropicCliBackend();
 
     const prepared = backend.prepareExecution?.({
-      workspaceDir: "/tmp/openclaw-claude-cli",
+      workspaceDir: "/tmp/natesclaw-claude-cli",
       provider: "claude-cli",
       modelId: "claude-opus-4-7",
       authProfileId: "claude-cli:api",

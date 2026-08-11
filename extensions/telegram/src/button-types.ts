@@ -1,6 +1,6 @@
 // Telegram plugin module implements button types behavior.
-import { parseExecApprovalCommandText } from "openclaw/plugin-sdk/approval-reply-runtime";
-import { reduceLegacyInteractiveReply } from "openclaw/plugin-sdk/interactive-runtime";
+import { parseExecApprovalCommandText } from "natesclaw/plugin-sdk/approval-reply-runtime";
+import { reduceLegacyInteractiveReply } from "natesclaw/plugin-sdk/interactive-runtime";
 import {
   isMessagePresentationInteractiveBlock,
   normalizeMessagePresentation,
@@ -9,8 +9,8 @@ import {
   type LegacyInteractiveReply,
   type MessagePresentation,
   type MessagePresentationButton,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/interactive-runtime";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 import {
   buildTelegramApprovalCallbackData,
   TELEGRAM_CALLBACK_DATA_MAX_BYTES,

@@ -4,13 +4,13 @@ import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../agents/auth-profiles/runtime-snapshots.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { maybeRepairLegacyOAuthSidecarProfiles } from "./doctor-auth-oauth-sidecar.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
-const states: OpenClawTestState[] = [];
+const states: NatesclawTestState[] = [];
 
 function makePrompter(shouldRepair: boolean): DoctorPrompter {
   return {
@@ -31,13 +31,13 @@ function makePrompter(shouldRepair: boolean): DoctorPrompter {
   };
 }
 
-async function makeTestState(seed = "legacy-oauth-seed"): Promise<OpenClawTestState> {
-  const state = await createOpenClawTestState({
+async function makeTestState(seed = "legacy-oauth-seed"): Promise<NatesclawTestState> {
+  const state = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-doctor-oauth-sidecar-",
+    prefix: "natesclaw-doctor-oauth-sidecar-",
     env: {
-      OPENCLAW_AGENT_DIR: undefined,
-      OPENCLAW_AUTH_PROFILE_SECRET_KEY: seed,
+      NATESCLAW_AGENT_DIR: undefined,
+      NATESCLAW_AUTH_PROFILE_SECRET_KEY: seed,
     },
   });
   states.push(state);
@@ -45,7 +45,7 @@ async function makeTestState(seed = "legacy-oauth-seed"): Promise<OpenClawTestSt
 }
 
 function writeLegacyAuthProfiles(
-  state: OpenClawTestState,
+  state: NatesclawTestState,
   store: unknown,
   agentId = "main",
 ): Promise<string> {
@@ -65,7 +65,7 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
     const state = await makeTestState(seed);
     const profileId = "openai-codex:default";
     const ref = {
-      source: "openclaw-credentials" as const,
+      source: "natesclaw-credentials" as const,
       provider: "openai-codex" as const,
       id: "0123456789abcdef0123456789abcdef",
     };
@@ -152,7 +152,7 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
           type: "oauth",
           provider: "openai-codex",
           oauthRef: {
-            source: "openclaw-credentials",
+            source: "natesclaw-credentials",
             provider: "openai-codex",
             id: "fedcba9876543210fedcba9876543210",
           },
@@ -176,7 +176,7 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
     const state = await makeTestState("wrong-seed");
     const profileId = "openai-codex:default";
     const ref = {
-      source: "openclaw-credentials" as const,
+      source: "natesclaw-credentials" as const,
       provider: "openai-codex" as const,
       id: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     };
@@ -251,7 +251,7 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
     async () => {
       const state = await makeTestState();
       const ref = {
-        source: "openclaw-credentials" as const,
+        source: "natesclaw-credentials" as const,
         provider: "openai-codex" as const,
         id: "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       };
@@ -317,14 +317,14 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
     },
   );
 
-  it("scans OPENCLAW_AGENT_DIR before treating sidecars as unreferenced", async () => {
+  it("scans NATESCLAW_AGENT_DIR before treating sidecars as unreferenced", async () => {
     const state = await makeTestState();
-    const previousAgentDir = process.env.OPENCLAW_AGENT_DIR;
+    const previousAgentDir = process.env.NATESCLAW_AGENT_DIR;
     const agentDir = state.path("external-agent");
     const authPath = path.join(agentDir, "auth-profiles.json");
     const profileId = "openai-codex:external";
     const ref = {
-      source: "openclaw-credentials" as const,
+      source: "natesclaw-credentials" as const,
       provider: "openai-codex" as const,
       id: "dddddddddddddddddddddddddddddddd",
     };
@@ -341,7 +341,7 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       fs.writeFileSync(authPath, `${JSON.stringify(auth, null, 2)}\n`, "utf8");
-      process.env.OPENCLAW_AGENT_DIR = agentDir;
+      process.env.NATESCLAW_AGENT_DIR = agentDir;
       const sidecarPath = await state.writeJson(
         path.join("credentials", "auth-profiles", `${ref.id}.json`),
         {
@@ -378,9 +378,9 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
       expect(fs.existsSync(sidecarPath)).toBe(false);
     } finally {
       if (previousAgentDir === undefined) {
-        delete process.env.OPENCLAW_AGENT_DIR;
+        delete process.env.NATESCLAW_AGENT_DIR;
       } else {
-        process.env.OPENCLAW_AGENT_DIR = previousAgentDir;
+        process.env.NATESCLAW_AGENT_DIR = previousAgentDir;
       }
     }
   });
@@ -390,7 +390,7 @@ describe("maybeRepairLegacyOAuthSidecarProfiles", () => {
     const state = await makeTestState(seed);
     const profileId = "openai-codex:default";
     const ref = {
-      source: "openclaw-credentials" as const,
+      source: "natesclaw-credentials" as const,
       provider: "openai-codex" as const,
       id: "cccccccccccccccccccccccccccccccc",
     };

@@ -1,39 +1,39 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { RuntimeEnv } from "../../runtime.js";
 import type { ChannelSetupInput } from "./setup-input.js";
 
 export type ChannelSetupAdapter<Input extends { name?: string } = ChannelSetupInput> = {
-  resolveAccountId?: (params: { cfg: OpenClawConfig; accountId?: string; input?: Input }) => string;
+  resolveAccountId?: (params: { cfg: NatesclawConfig; accountId?: string; input?: Input }) => string;
   prepareAccountConfigInput?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: Input;
     runtime: RuntimeEnv;
   }) => Promise<Input> | Input;
   resolveBindingAccountId?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId: string;
     accountId?: string;
   }) => string | undefined;
   applyAccountName?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     name?: string;
-  }) => OpenClawConfig;
+  }) => NatesclawConfig;
   applyAccountConfig: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: Input;
-  }) => OpenClawConfig;
+  }) => NatesclawConfig;
   afterAccountConfigWritten?: (params: {
-    previousCfg: OpenClawConfig;
-    cfg: OpenClawConfig;
+    previousCfg: NatesclawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: Input;
     runtime: RuntimeEnv;
   }) => Promise<void> | void;
   validateInput?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: Input;
   }) => string | null;

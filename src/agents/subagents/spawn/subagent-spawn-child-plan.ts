@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { isIncognitoSessionKey } from "../../../routing/session-key.js";
 import { resolveUserPath } from "../../../utils.js";
 import { resolveAgentDir } from "../../agent-scope-config.js";
@@ -48,7 +48,7 @@ function buildResolvedSubagentModelMetadata(resolvedModel?: string): {
 }
 
 async function resolveCollectorOutputModelError(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   targetAgentId: string;
   targetAgentDir: string;
   workspaceDir?: string;
@@ -103,7 +103,7 @@ type ResolveSubagentChildPlanResult =
 export async function resolveSubagentChildPlan(params: {
   request: SpawnSubagentParams;
   ctx: SpawnSubagentContext;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   requesterInternalKey: string;
   requesterAgentId: string;
   targetAgentId: string;

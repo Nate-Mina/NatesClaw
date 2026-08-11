@@ -14,8 +14,8 @@ const dotenvState = vi.hoisted(() => {
   return {
     state,
     loadDotEnv: vi.fn(() => {
-      state.profileAtDotenvLoad = process.env.OPENCLAW_PROFILE;
-      state.containerAtDotenvLoad = process.env.OPENCLAW_CONTAINER;
+      state.profileAtDotenvLoad = process.env.NATESCLAW_PROFILE;
+      state.containerAtDotenvLoad = process.env.NATESCLAW_CONTAINER;
     }),
   };
 });
@@ -53,7 +53,7 @@ vi.mock("../infra/runtime-guard.js", () => ({
 }));
 
 vi.mock("../infra/path-env.js", () => ({
-  ensureOpenClawCliOnPath: vi.fn(),
+  ensureNatesclawCliOnPath: vi.fn(),
 }));
 
 vi.mock("./route.js", () => ({
@@ -77,25 +77,25 @@ import { runCli } from "./run-main.js";
 
 describe("runCli profile env bootstrap", () => {
   const envSnapshot = captureEnv([
-    "OPENCLAW_PROFILE",
-    "OPENCLAW_STATE_DIR",
-    "OPENCLAW_CONFIG_PATH",
-    "OPENCLAW_CONTAINER",
-    "OPENCLAW_GATEWAY_PORT",
-    "OPENCLAW_GATEWAY_URL",
-    "OPENCLAW_GATEWAY_TOKEN",
-    "OPENCLAW_GATEWAY_PASSWORD",
+    "NATESCLAW_PROFILE",
+    "NATESCLAW_STATE_DIR",
+    "NATESCLAW_CONFIG_PATH",
+    "NATESCLAW_CONTAINER",
+    "NATESCLAW_GATEWAY_PORT",
+    "NATESCLAW_GATEWAY_URL",
+    "NATESCLAW_GATEWAY_TOKEN",
+    "NATESCLAW_GATEWAY_PASSWORD",
   ]);
 
   beforeEach(() => {
-    deleteTestEnvValue("OPENCLAW_PROFILE");
-    deleteTestEnvValue("OPENCLAW_STATE_DIR");
-    deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
-    deleteTestEnvValue("OPENCLAW_CONTAINER");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_PORT");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_URL");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_TOKEN");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_PASSWORD");
+    deleteTestEnvValue("NATESCLAW_PROFILE");
+    deleteTestEnvValue("NATESCLAW_STATE_DIR");
+    deleteTestEnvValue("NATESCLAW_CONFIG_PATH");
+    deleteTestEnvValue("NATESCLAW_CONTAINER");
+    deleteTestEnvValue("NATESCLAW_GATEWAY_PORT");
+    deleteTestEnvValue("NATESCLAW_GATEWAY_URL");
+    deleteTestEnvValue("NATESCLAW_GATEWAY_TOKEN");
+    deleteTestEnvValue("NATESCLAW_GATEWAY_PASSWORD");
     dotenvState.state.profileAtDotenvLoad = undefined;
     dotenvState.state.containerAtDotenvLoad = undefined;
     dotenvState.loadDotEnv.mockClear();
@@ -109,88 +109,88 @@ describe("runCli profile env bootstrap", () => {
 
   it("applies --profile before dotenv loading", async () => {
     fileState.hasCliDotEnv = true;
-    await runCli(["node", "openclaw", "--profile", "rawdog", "status"]);
+    await runCli(["node", "natesclaw", "--profile", "rawdog", "status"]);
 
     expect(dotenvState.loadDotEnv).toHaveBeenCalledOnce();
     expect(dotenvState.state.profileAtDotenvLoad).toBe("rawdog");
-    expect(process.env.OPENCLAW_PROFILE).toBe("rawdog");
+    expect(process.env.NATESCLAW_PROFILE).toBe("rawdog");
   });
 
   it("rejects --container combined with --profile", async () => {
     await expect(
-      runCli(["node", "openclaw", "--container", "demo", "--profile", "rawdog", "status"]),
+      runCli(["node", "natesclaw", "--container", "demo", "--profile", "rawdog", "status"]),
     ).rejects.toThrow("--container cannot be combined with --profile/--dev");
 
     expect(dotenvState.loadDotEnv).not.toHaveBeenCalled();
-    expect(process.env.OPENCLAW_PROFILE).toBe("rawdog");
+    expect(process.env.NATESCLAW_PROFILE).toBe("rawdog");
   });
 
   it("rejects --container combined with interleaved --profile", async () => {
     await expect(
-      runCli(["node", "openclaw", "status", "--container", "demo", "--profile", "rawdog"]),
+      runCli(["node", "natesclaw", "status", "--container", "demo", "--profile", "rawdog"]),
     ).rejects.toThrow("--container cannot be combined with --profile/--dev");
   });
 
   it("rejects --container combined with interleaved --dev", async () => {
     await expect(
-      runCli(["node", "openclaw", "status", "--container", "demo", "--dev"]),
+      runCli(["node", "natesclaw", "status", "--container", "demo", "--dev"]),
     ).rejects.toThrow("--container cannot be combined with --profile/--dev");
   });
 
   it("does not let dotenv change container target resolution", async () => {
     fileState.hasCliDotEnv = true;
     dotenvState.loadDotEnv.mockImplementationOnce(() => {
-      process.env.OPENCLAW_CONTAINER = "demo";
-      dotenvState.state.profileAtDotenvLoad = process.env.OPENCLAW_PROFILE;
-      dotenvState.state.containerAtDotenvLoad = process.env.OPENCLAW_CONTAINER;
+      process.env.NATESCLAW_CONTAINER = "demo";
+      dotenvState.state.profileAtDotenvLoad = process.env.NATESCLAW_PROFILE;
+      dotenvState.state.containerAtDotenvLoad = process.env.NATESCLAW_CONTAINER;
     });
 
-    await runCli(["node", "openclaw", "status"]);
+    await runCli(["node", "natesclaw", "status"]);
 
     expect(dotenvState.loadDotEnv).toHaveBeenCalledOnce();
-    expect(process.env.OPENCLAW_CONTAINER).toBe("demo");
+    expect(process.env.NATESCLAW_CONTAINER).toBe("demo");
     expect(dotenvState.state.containerAtDotenvLoad).toBe("demo");
-    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "openclaw", "status"]);
+    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "natesclaw", "status"]);
     expect(maybeRunCliInContainerMock).toHaveReturnedWith({
       handled: false,
-      argv: ["node", "openclaw", "status"],
+      argv: ["node", "natesclaw", "status"],
     });
   });
 
-  it("allows container mode when OPENCLAW_PROFILE is already set in env", async () => {
-    setTestEnvValue("OPENCLAW_PROFILE", "work");
+  it("allows container mode when NATESCLAW_PROFILE is already set in env", async () => {
+    setTestEnvValue("NATESCLAW_PROFILE", "work");
 
     await expect(
-      runCli(["node", "openclaw", "--container", "demo", "status"]),
+      runCli(["node", "natesclaw", "--container", "demo", "status"]),
     ).resolves.toBeUndefined();
   });
 
   it.each([
-    ["OPENCLAW_GATEWAY_PORT", "19001"],
-    ["OPENCLAW_GATEWAY_URL", "ws://127.0.0.1:18789"],
-    ["OPENCLAW_GATEWAY_TOKEN", "demo-token"],
-    ["OPENCLAW_GATEWAY_PASSWORD", "demo-password"],
+    ["NATESCLAW_GATEWAY_PORT", "19001"],
+    ["NATESCLAW_GATEWAY_URL", "ws://127.0.0.1:18789"],
+    ["NATESCLAW_GATEWAY_TOKEN", "demo-token"],
+    ["NATESCLAW_GATEWAY_PASSWORD", "demo-password"],
   ])("allows container mode when %s is set in env", async (key, value) => {
     setTestEnvValue(key, value);
 
     await expect(
-      runCli(["node", "openclaw", "--container", "demo", "status"]),
+      runCli(["node", "natesclaw", "--container", "demo", "status"]),
     ).resolves.toBeUndefined();
   });
 
-  it("allows container mode when only OPENCLAW_STATE_DIR is set in env", async () => {
-    setTestEnvValue("OPENCLAW_STATE_DIR", "/tmp/openclaw-host-state");
+  it("allows container mode when only NATESCLAW_STATE_DIR is set in env", async () => {
+    setTestEnvValue("NATESCLAW_STATE_DIR", "/tmp/natesclaw-host-state");
 
     await expect(
-      runCli(["node", "openclaw", "--container", "demo", "status"]),
+      runCli(["node", "natesclaw", "--container", "demo", "status"]),
     ).resolves.toBeUndefined();
   });
 
-  it("allows container mode when only OPENCLAW_CONFIG_PATH is set in env", async () => {
-    setTestEnvValue("OPENCLAW_CONFIG_PATH", "/tmp/openclaw-host-state/openclaw.json");
+  it("allows container mode when only NATESCLAW_CONFIG_PATH is set in env", async () => {
+    setTestEnvValue("NATESCLAW_CONFIG_PATH", "/tmp/natesclaw-host-state/natesclaw.json");
 
     await expect(
-      runCli(["node", "openclaw", "--container", "demo", "status"]),
+      runCli(["node", "natesclaw", "--container", "demo", "status"]),
     ).resolves.toBeUndefined();
   });
 });

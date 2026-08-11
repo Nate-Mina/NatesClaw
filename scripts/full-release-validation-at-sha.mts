@@ -16,7 +16,7 @@ const WORKFLOW = "full-release-validation.yml";
 const TRUSTED_WORKFLOW_PATH = `.github/workflows/${WORKFLOW}`;
 const RELEASE_EVIDENCE_VERIFIER_PATHS = [
   "scripts/release-ci-summary.mjs",
-  ".agents/skills/release-openclaw-ci/scripts/release-ci-summary.mjs",
+  ".agents/skills/release-natesclaw-ci/scripts/release-ci-summary.mjs",
 ];
 const GH_READ_TIMEOUT_MS = 60_000;
 export const FULL_RELEASE_WAIT_TIMEOUT_MINUTES = 720;
@@ -224,7 +224,7 @@ export function parseArgs(argv: string[]) {
     !RELEASE_BRANCH_PATTERN.test(args.targetRef) &&
     !RELEASE_TAG_PATTERN.test(args.targetRef)
   ) {
-    throw new Error("--target-ref must be a canonical OpenClaw release branch or tag");
+    throw new Error("--target-ref must be a canonical Natesclaw release branch or tag");
   }
   return args;
 }
@@ -365,7 +365,7 @@ function readWorkflowRun(parentRunId: string, workflowSha: string) {
     throw new Error("parent run ID must be a positive decimal");
   }
   const workflowRun: unknown = JSON.parse(
-    execGhRead(["api", `repos/openclaw/openclaw/actions/runs/${parentRunId}`], GH_READ_OPTIONS),
+    execGhRead(["api", `repos/natesclaw/natesclaw/actions/runs/${parentRunId}`], GH_READ_OPTIONS),
   );
   if (!isJsonRecord(workflowRun)) {
     throw new Error(`Full Release Validation run ${parentRunId} returned an invalid response`);
@@ -408,7 +408,7 @@ function waitForWorkflowRun(parentRunId: string, workflowSha: string) {
         return suite;
       }
       throw new Error(
-        `Full Release Validation concluded ${stringValue(suite.conclusion, "unknown").toLowerCase()}: https://github.com/openclaw/openclaw/actions/runs/${parentRunId}`,
+        `Full Release Validation concluded ${stringValue(suite.conclusion, "unknown").toLowerCase()}: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`,
       );
     }
     const remainingMs = deadline - Date.now();
@@ -423,7 +423,7 @@ function waitForWorkflowRun(parentRunId: string, workflowSha: string) {
     );
   }
   throw new Error(
-    `Timed out after ${FULL_RELEASE_WAIT_TIMEOUT_MINUTES} minutes waiting for Full Release Validation: https://github.com/openclaw/openclaw/actions/runs/${parentRunId}`,
+    `Timed out after ${FULL_RELEASE_WAIT_TIMEOUT_MINUTES} minutes waiting for Full Release Validation: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`,
   );
 }
 
@@ -498,7 +498,7 @@ export function releaseEvidenceVerifierPath(worktreeRoot: string) {
 }
 
 function verifyReleaseEvidence(parentRunId: string, workflowSha: string) {
-  const verifierWorktree = mkdtempSync(join(tmpdir(), "openclaw-release-verifier-"));
+  const verifierWorktree = mkdtempSync(join(tmpdir(), "natesclaw-release-verifier-"));
   try {
     run("git", ["worktree", "add", "--detach", verifierWorktree, workflowSha], {
       stdio: ["ignore", "ignore", "inherit"],
@@ -590,12 +590,12 @@ function main() {
       throw new Error("Could not determine Full Release Validation run id.");
     }
 
-    console.log(`Parent run: https://github.com/openclaw/openclaw/actions/runs/${parentRunId}`);
+    console.log(`Parent run: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`);
     const completedRun = waitForWorkflowRun(parentRunId, workflowSha);
     parentConclusion = stringValue(completedRun.conclusion);
     if (parentConclusion !== "success") {
       throw new Error(
-        `Full Release Validation concluded ${parentConclusion.toLowerCase() || "without a conclusion"}: https://github.com/openclaw/openclaw/actions/runs/${parentRunId}`,
+        `Full Release Validation concluded ${parentConclusion.toLowerCase() || "without a conclusion"}: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`,
       );
     }
     verifyReleaseEvidence(parentRunId, workflowSha);

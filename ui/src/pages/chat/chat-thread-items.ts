@@ -1,5 +1,5 @@
-import { readSessionMessageIdentity } from "@openclaw/gateway-client/browser";
-import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { readSessionMessageIdentity } from "@natesclaw/gateway-client/browser";
+import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
 import { resolveToolUseId } from "../../../../src/chat/tool-content.js";
 import { escapeRegExp } from "../../../../src/shared/regexp.js";
 import type { ChatItem, ChatQueueItem, ToolCard } from "../../lib/chat/chat-types.ts";
@@ -293,7 +293,7 @@ export function resolveToolBlockId(
 }
 
 export function isPendingSendMessage(message: unknown): boolean {
-  return asRecord(asRecord(message)?.["__openclaw"])?.kind === "pending-send";
+  return asRecord(asRecord(message)?.["__natesclaw"])?.kind === "pending-send";
 }
 
 function readChatThreadMessageIdentity(message: unknown) {
@@ -560,7 +560,7 @@ export function queuedSendThreadMessage(item: ChatQueueItem): Record<string, unk
     role: "user",
     content,
     timestamp: item.createdAt,
-    __openclaw: {
+    __natesclaw: {
       kind: "pending-send",
       id: item.id,
       state: item.sendState,

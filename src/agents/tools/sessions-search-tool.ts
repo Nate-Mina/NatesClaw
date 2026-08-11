@@ -1,7 +1,7 @@
 /** Full-text search over visible session transcripts. */
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { jsonUtf8Bytes } from "../../infra/json-utf8-bytes.js";
 import { redactToolPayloadText } from "../../logging/redact.js";
 import {
@@ -330,7 +330,7 @@ export function createSessionsSearchTool(opts?: {
   agentId?: string;
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   callGateway?: GatewayCaller;
 }): AnyAgentTool {
   const gatewayCall = opts?.callGateway ?? callAgentToolGatewayRequest;

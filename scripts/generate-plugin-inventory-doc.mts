@@ -39,8 +39,8 @@ const PLUGIN_DOC_ALIASES = new Map([
   ["tokenjuice", "/tools/tokenjuice"],
 ]);
 const SKIPPED_REFERENCE_PAGE_IDS = new Set(["parallel"]);
-const MANUAL_SECTION_START = "<!-- openclaw-plugin-reference:manual-start -->";
-const MANUAL_SECTION_END = "<!-- openclaw-plugin-reference:manual-end -->";
+const MANUAL_SECTION_START = "<!-- natesclaw-plugin-reference:manual-start -->";
+const MANUAL_SECTION_END = "<!-- natesclaw-plugin-reference:manual-end -->";
 // Generated link labels are user-visible product names and translation source.
 const RELATED_DOC_PRODUCT_IDS = new Set([
   "chutes",
@@ -64,7 +64,7 @@ const RELATED_DOC_PRODUCT_IDS = new Set([
 
 type PluginManifest = Partial<RuntimePluginManifest>;
 type PluginPackageJson = Partial<RuntimePackageManifest> & {
-  openclaw?: RuntimePackageManifest["openclaw"] & {
+  natesclaw?: RuntimePackageManifest["natesclaw"] & {
     release?: Partial<Record<"publishToClawHub" | "publishToNpm", boolean>>;
   };
 };
@@ -86,7 +86,7 @@ function createPluginRecord(entry: PluginSourceEntry, excludedDirs: Set<string>)
     id,
     installRoute: resolveInstallRoute(packageJson, status),
     name: humanizeId(id),
-    packageName: packageJson.name ?? (status === "core" ? "openclaw" : "-"),
+    packageName: packageJson.name ?? (status === "core" ? "natesclaw" : "-"),
     status,
     surface: resolvePluginSurface(manifest),
   };
@@ -242,12 +242,12 @@ function resolveDescription({ manifest, packageJson }: PluginSourceEntry) {
   if (channels.length > 0) {
     const channelLabel = displayList(channels);
     const channelNoun = channelLabel.toLowerCase().includes("channel") ? "" : " channel";
-    return `Adds the ${channelLabel}${channelNoun} surface for sending and receiving OpenClaw messages.`;
+    return `Adds the ${channelLabel}${channelNoun} surface for sending and receiving Natesclaw messages.`;
   }
 
   const providers = Array.isArray(manifest.providers) ? manifest.providers : [];
   if (providers.length > 0) {
-    return `Adds ${displayList(providers)} model provider support to OpenClaw.`;
+    return `Adds ${displayList(providers)} model provider support to Natesclaw.`;
   }
 
   const contracts = Object.keys(manifest.contracts ?? {}).toSorted((left, right) =>
@@ -279,7 +279,7 @@ function resolveDescription({ manifest, packageJson }: PluginSourceEntry) {
   }
 
   const packageDescription = normalizePackageDescription(packageJson.description);
-  return packageDescription ? `${packageDescription}.` : "Provides an OpenClaw plugin.";
+  return packageDescription ? `${packageDescription}.` : "Provides an Natesclaw plugin.";
 }
 
 function pushUniqueDocLink(values: DocLink[], value: DocLink | null) {
@@ -300,7 +300,7 @@ function resolveDocs({ dirName, manifest, packageJson }: PluginSourceEntry) {
     pushUniqueDocLink(links, { href: pluginAlias, label: pluginAliasLabel });
   }
 
-  const channelDoc = normalizeDocPath(packageJson.openclaw?.channel?.docsPath);
+  const channelDoc = normalizeDocPath(packageJson.natesclaw?.channel?.docsPath);
   if (channelDoc) {
     pushUniqueDocLink(links, {
       href: channelDoc,
@@ -369,17 +369,17 @@ function resolveInstallRoute(packageJson: PluginPackageJson, status: PluginStatu
   }
   if (status === "core") {
     // Explicit bundle ownership describes the current install surface; release flags may stage future publication.
-    if (packageJson.openclaw?.build?.bundledDist === true) {
-      return "included in OpenClaw";
+    if (packageJson.natesclaw?.build?.bundledDist === true) {
+      return "included in Natesclaw";
     }
-    const release = packageJson.openclaw?.release;
+    const release = packageJson.natesclaw?.release;
     if (release?.publishToClawHub === true || release?.publishToNpm === true) {
-      return `included in OpenClaw; ${resolveInstallRoute(packageJson, "external")}`;
+      return `included in Natesclaw; ${resolveInstallRoute(packageJson, "external")}`;
     }
-    return "included in OpenClaw";
+    return "included in Natesclaw";
   }
-  const install = packageJson.openclaw?.install;
-  const release = packageJson.openclaw?.release;
+  const install = packageJson.natesclaw?.install;
+  const release = packageJson.natesclaw?.release;
   const clawhubSpec =
     typeof install?.clawhubSpec === "string" ? `: \`${install.clawhubSpec}\`` : "";
   const npmSpec =
@@ -405,10 +405,10 @@ function resolveStatus(
   { dirName, packageJson }: PluginSourceEntry,
   excludedDirs: Set<string>,
 ): PluginStatus {
-  const release = packageJson.openclaw?.release;
+  const release = packageJson.natesclaw?.release;
   const hasInstallSpec =
-    typeof packageJson.openclaw?.install?.clawhubSpec === "string" ||
-    typeof packageJson.openclaw?.install?.npmSpec === "string";
+    typeof packageJson.natesclaw?.install?.clawhubSpec === "string" ||
+    typeof packageJson.natesclaw?.install?.npmSpec === "string";
   if (!excludedDirs.has(dirName)) {
     return "core";
   }
@@ -511,16 +511,16 @@ ${record.surface}${manualBlock ? `\n\n${manualBlock}` : ""}${relatedDocs ? `\n\n
 function renderReferenceIndex(records: PluginRecord[]) {
   const referenceCount = records.filter(hasGeneratedReferencePage).length;
   return `---
-summary: "Generated index of OpenClaw plugin reference pages"
+summary: "Generated index of Natesclaw plugin reference pages"
 read_when:
-  - You need a reference page for a specific OpenClaw plugin
+  - You need a reference page for a specific Natesclaw plugin
   - You are auditing plugin docs coverage
 title: "Plugin reference"
 ---
 
 # Plugin reference
 
-This page is generated from top-level \`extensions/*/openclaw.plugin.json\`
+This page is generated from top-level \`extensions/*/natesclaw.plugin.json\`
 manifests. Package metadata enriches entries when \`package.json\` is present.
 Regenerate it with:
 
@@ -539,7 +539,7 @@ function collectPluginSourceEntries(): PluginSourceEntry[] {
     .readdirSync(EXTENSIONS_DIR)
     .toSorted((left, right) => left.localeCompare(right))) {
     const packagePath = path.join(EXTENSIONS_DIR, dirName, "package.json");
-    const manifestPath = path.join(EXTENSIONS_DIR, dirName, "openclaw.plugin.json");
+    const manifestPath = path.join(EXTENSIONS_DIR, dirName, "natesclaw.plugin.json");
     if (!fs.existsSync(manifestPath)) {
       continue;
     }
@@ -558,7 +558,7 @@ function enumerateTopLevelPluginManifests() {
     .readdirSync(EXTENSIONS_DIR)
     .toSorted((left, right) => left.localeCompare(right))
     .flatMap((dirName) => {
-      const manifestPath = path.join(EXTENSIONS_DIR, dirName, "openclaw.plugin.json");
+      const manifestPath = path.join(EXTENSIONS_DIR, dirName, "natesclaw.plugin.json");
       if (!fs.existsSync(manifestPath)) {
         return [];
       }
@@ -614,7 +614,7 @@ function renderDocument() {
   };
 
   return `---
-summary: "Generated inventory of OpenClaw plugins shipped in core, published externally, or kept source-only"
+summary: "Generated inventory of Natesclaw plugins shipped in core, published externally, or kept source-only"
 read_when:
   - You are deciding whether a plugin ships in the core npm package or installs separately
   - You are updating bundled plugin package metadata or release automation
@@ -624,7 +624,7 @@ title: "Plugin inventory"
 
 # Plugin inventory
 
-This page is generated from top-level \`extensions/*/openclaw.plugin.json\`
+This page is generated from top-level \`extensions/*/natesclaw.plugin.json\`
 manifests and the root npm package \`files\` exclusions. Optional \`package.json\`
 metadata enriches package and distribution details. Regenerate it with:
 
@@ -634,8 +634,8 @@ pnpm plugins:inventory:gen
 
 ## Definitions
 
-- **Core npm package:** built into the \`openclaw\` npm package and available without a separate plugin install.
-- **Official external package:** OpenClaw-maintained plugin omitted from the core npm package, kept in this official inventory, and installed on demand through ClawHub and/or npm.
+- **Core npm package:** built into the \`natesclaw\` npm package and available without a separate plugin install.
+- **Official external package:** Natesclaw-maintained plugin omitted from the core npm package, kept in this official inventory, and installed on demand through ClawHub and/or npm.
 - **Source checkout only:** repo-local plugin omitted from published npm artifacts and not advertised as an installable package.
 
 Source checkouts are different from npm installs: after \`pnpm install\`, bundled
@@ -645,19 +645,19 @@ dependencies are available.
 ## Install a plugin
 
 Use the install route in each entry to decide whether install is needed. Plugins
-that say \`included in OpenClaw\` are already present in the core package.
+that say \`included in Natesclaw\` are already present in the core package.
 Official external packages need one install, then a Gateway restart.
 
 For example, Discord is an official external package:
 
 \`\`\`bash
-openclaw plugins install @openclaw/discord
-openclaw gateway restart
-openclaw plugins inspect discord --runtime --json
+natesclaw plugins install @natesclaw/discord
+natesclaw gateway restart
+natesclaw plugins inspect discord --runtime --json
 \`\`\`
 
 During the launch cutover, ordinary bare package specs still install from npm.
-Use \`clawhub:@openclaw/discord\` or \`npm:@openclaw/discord\` when you need an
+Use \`clawhub:@natesclaw/discord\` or \`npm:@natesclaw/discord\` when you need an
 explicit source. After install, follow the plugin's setup doc, such as
 [Discord](/channels/discord), to add credentials and channel config. See
 [Manage plugins](/plugins/manage-plugins) for update, uninstall, and publishing

@@ -16,19 +16,19 @@ const loadConfigModule = createLazyRuntimeModule(() => import("../config/config.
 
 async function assertDoctorDatabaseSchemasCompatible(): Promise<void> {
   const [databasePreflight, agentDatabase, stateDatabase] = await Promise.all([
-    import("../state/openclaw-database-preflight.js"),
-    import("../state/openclaw-agent-db.js"),
-    import("../state/openclaw-state-db.js"),
+    import("../state/natesclaw-database-preflight.js"),
+    import("../state/natesclaw-agent-db.js"),
+    import("../state/natesclaw-state-db.js"),
   ]);
-  const databaseSchemas = databasePreflight.preflightOpenClawDatabaseSchemas({
+  const databaseSchemas = databasePreflight.preflightNatesclawDatabaseSchemas({
     env: process.env,
     supportedVersions: {
-      state: stateDatabase.OPENCLAW_STATE_SCHEMA_VERSION,
-      agent: agentDatabase.OPENCLAW_AGENT_SCHEMA_VERSION,
+      state: stateDatabase.NATESCLAW_STATE_SCHEMA_VERSION,
+      agent: agentDatabase.NATESCLAW_AGENT_SCHEMA_VERSION,
     },
   });
   if (databaseSchemas.incompatible.length > 0) {
-    throw new databasePreflight.OpenClawDatabaseSchemaPreflightError(databaseSchemas.incompatible, {
+    throw new databasePreflight.NatesclawDatabaseSchemaPreflightError(databaseSchemas.incompatible, {
       operation: "doctor",
     });
   }
@@ -48,13 +48,13 @@ export async function runDoctorHealthFlow(runtime?: RuntimeEnv, options: DoctorO
   // Config loading can initialize SQLite-backed state before integrity runs.
   // Preserve the entry fact so doctor can report that automatic initialization.
   const stateDirExistedAtStart = stateDirectoryExistsAtDoctorStart();
-  intro("OpenClaw doctor");
+  intro("Natesclaw doctor");
 
   const { createDoctorPrompter } = await import("../commands/doctor-prompter.js");
   const prompter = createDoctorPrompter({ runtime: effectiveRuntime, options });
 
-  const { resolveOpenClawPackageRoot } = await import("../infra/openclaw-root.js");
-  const root = await resolveOpenClawPackageRoot({
+  const { resolveNatesclawPackageRoot } = await import("../infra/natesclaw-root.js");
+  const root = await resolveNatesclawPackageRoot({
     moduleUrl: import.meta.url,
     argv1: process.argv[1],
     cwd: process.cwd(),

@@ -3,7 +3,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 // Inventories extension imports to enforce plugin SDK boundary rules.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   BUNDLED_PLUGIN_PATH_PREFIX,
   BUNDLED_PLUGIN_ROOT_DIR,
@@ -76,7 +76,7 @@ function classifyReason(mode: BoundaryMode, kind: string, resolved: string, spec
         : "imports";
   if (mode === "relative-outside-package") {
     if (resolved.startsWith("src/plugin-sdk/")) {
-      return `${verb} plugin-sdk via relative path; use openclaw/plugin-sdk/<subpath>`;
+      return `${verb} plugin-sdk via relative path; use natesclaw/plugin-sdk/<subpath>`;
     }
     if (resolved.startsWith("src/")) {
       return `${verb} core src path via relative path outside the extension package`;

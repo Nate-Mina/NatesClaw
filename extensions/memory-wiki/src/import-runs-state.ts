@@ -5,12 +5,12 @@ import path from "node:path";
 import type {
   OpenKeyedStoreOptions,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-runtime";
 import {
   asNullableRecord,
   normalizeOptionalString,
   normalizeUniqueTrimmedStringList,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import pMap, { pMapSkip } from "p-map";
 import { walkMemoryWikiDirectory } from "./bounded-walk.js";
 
@@ -78,7 +78,7 @@ let configuredImportRunStore: MemoryWikiImportRunStateStore | undefined;
 const memoryImportRunsByVault = new Map<string, Map<string, ChatGptImportRunRecord>>();
 
 export function resolveMemoryWikiImportRunsDir(vaultRoot: string): string {
-  return path.join(vaultRoot, ".openclaw-wiki", "import-runs");
+  return path.join(vaultRoot, ".natesclaw-wiki", "import-runs");
 }
 
 function resolveVaultRootKey(vaultRoot: string): string {

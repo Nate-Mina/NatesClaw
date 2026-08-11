@@ -4,7 +4,7 @@
 // emitted declaration surface stays stable for package-boundary consumers.
 
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   DASHSCOPE_WAN_VIDEO_CATALOG_BY_MODEL,
   DASHSCOPE_WAN_VIDEO_CAPABILITIES,
@@ -88,7 +88,7 @@ export type VideoGenerationSourceAsset = {
 
 /** Context passed when checking whether a video provider is configured. */
 export type VideoGenerationProviderConfiguredContext = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   agentDir?: string;
 };
 
@@ -96,7 +96,7 @@ export type VideoGenerationProviderConfiguredContext = {
 export type VideoGenerationModelCapabilitiesContext = {
   provider: string;
   model: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
   timeoutMs?: number;
@@ -107,7 +107,7 @@ export type VideoGenerationRequest = {
   provider: string;
   model: string;
   prompt: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
   timeoutMs?: number;

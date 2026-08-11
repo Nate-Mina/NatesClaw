@@ -1,8 +1,8 @@
 // Checks install policy constraints for package and plugin operations.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { truncateWithMarker } from "@openclaw/normalization-core/utf16-slice";
-import type { OpenClawConfig, SecurityConfig } from "../config/types.openclaw.js";
+import { truncateWithMarker } from "@natesclaw/normalization-core/utf16-slice";
+import type { NatesclawConfig, SecurityConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { runCommandWithTimeout } from "../process/exec.js";
 import { normalizePositiveInt, normalizePositiveTimerMs } from "../secrets/shared.js";
@@ -63,7 +63,7 @@ export type InstallPolicySource = {
     | "npm"
     | "upload"
     | "workspace";
-  authority: "openclaw" | "official" | "third-party" | "unknown" | "user";
+  authority: "natesclaw" | "official" | "third-party" | "unknown" | "user";
   mutable: boolean;
   network: boolean;
 };
@@ -392,7 +392,7 @@ function isTargetEnabled(params: {
 }
 
 function resolvePolicy(
-  config: OpenClawConfig | undefined,
+  config: NatesclawConfig | undefined,
   targetType: InstallPolicyTarget,
 ):
   | { kind: "disabled" }
@@ -424,7 +424,7 @@ function resolveConfiguredTargets(
 }
 
 export async function validateInstallPolicyStatic(
-  config: OpenClawConfig | undefined,
+  config: NatesclawConfig | undefined,
 ): Promise<InstallPolicyStaticValidation> {
   const policy = config?.security?.installPolicy;
   if (!policy || policy.enabled !== true) {
@@ -543,7 +543,7 @@ function parsePolicyResponse(stdout: string): InstallPolicyResult {
 }
 
 export async function runInstallPolicy(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   logger?: {
     debug?: (message: string) => void;
@@ -568,7 +568,7 @@ export async function runInstallPolicy(params: {
       const { getRuntimeConfig } = await import("../config/io.js");
       config = getRuntimeConfig({ skipPluginValidation: true });
     } catch (err) {
-      return failClosed(`could not load OpenClaw config (${formatErrorMessage(err)})`);
+      return failClosed(`could not load Natesclaw config (${formatErrorMessage(err)})`);
     }
   }
 
@@ -582,7 +582,7 @@ export async function runInstallPolicy(params: {
 
   const input = JSON.stringify({
     protocolVersion: 1,
-    openclawVersion: resolveRuntimeServiceVersion(params.env ?? process.env),
+    natesclawVersion: resolveRuntimeServiceVersion(params.env ?? process.env),
     ...params.request,
   });
   if (Buffer.byteLength(input, "utf8") > DEFAULT_MAX_REQUEST_BYTES) {
@@ -683,7 +683,7 @@ function formatDecisionContext(request: InstallPolicyRequest): string {
 }
 
 export async function probeInstallPolicy(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   logger?: {
     debug?: (message: string) => void;

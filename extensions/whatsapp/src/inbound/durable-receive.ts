@@ -6,7 +6,7 @@ import {
   type ChannelIngressMonitorDeliveryResult,
   type ChannelIngressMonitorLifecycle,
   type ChannelIngressQueue,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import { getWhatsAppRuntime } from "../runtime.js";
 import {
   deserializeWhatsAppDurableInboundMessage,

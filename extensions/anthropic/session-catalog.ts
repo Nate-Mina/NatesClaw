@@ -2,21 +2,21 @@ import type { Dirent, Stats } from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import { parseDateFirstTimestampMs } from "openclaw/plugin-sdk/number-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { withTimeout } from "openclaw/plugin-sdk/security-runtime";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
+import { parseDateFirstTimestampMs } from "natesclaw/plugin-sdk/number-runtime";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
+import { withTimeout } from "natesclaw/plugin-sdk/security-runtime";
 import type {
   SessionCatalogHost,
   SessionCatalogProvider,
   SessionCatalogPullRequestSummary,
   SessionCatalogTranscriptItem,
-} from "openclaw/plugin-sdk/session-catalog";
+} from "natesclaw/plugin-sdk/session-catalog";
 import {
   isRecord,
   normalizeBoundedOptionalString as readBoundedString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { readClaudeDesktopCustomGroups } from "./claude-desktop-groups.js";
 import { CLAUDE_CLI_BACKEND_ID, CLAUDE_CLI_DEFAULT_MODEL_REF } from "./cli-constants.js";
 import {
@@ -1699,7 +1699,7 @@ async function resolveNodeClaudeRecord(params: {
 }
 
 async function continueClaudeSession(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   hostId: string,
   threadId: string,
 ): Promise<{ sessionKey: string }> {
@@ -1912,7 +1912,7 @@ type ClaudeSessionCatalogRuntime = Required<
 >;
 
 export function createClaudeSessionCatalogRuntime(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
 ): ClaudeSessionCatalogRuntime {
   return {
     list: async (query) => {

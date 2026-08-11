@@ -9,7 +9,7 @@ import {
   resolveGatewayPort,
   resolveStateDir,
 } from "../../config/paths.js";
-import { OPENCLAW_WRAPPER_ENV_KEY, resolveOpenClawWrapperPath } from "../../daemon/program-args.js";
+import { NATESCLAW_WRAPPER_ENV_KEY, resolveNatesclawWrapperPath } from "../../daemon/program-args.js";
 import type { GatewayServiceEnv } from "../../daemon/service-types.js";
 import type {
   GatewayService,
@@ -41,11 +41,11 @@ type GatewayServiceRepairResult<TResult extends "restarted" | "started"> = {
 const GATEWAY_TARGET_ENV_KEYS = [
   "HOME",
   "USERPROFILE",
-  "OPENCLAW_HOME",
-  "OPENCLAW_PROFILE",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_PORT",
+  "NATESCLAW_HOME",
+  "NATESCLAW_PROFILE",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_GATEWAY_PORT",
 ] as const;
 
 function resolveInstalledGatewayTargetEnvironment(
@@ -75,14 +75,14 @@ function assertGatewayRepairTargetMatches(params: {
   installedPort: number | null;
 }): number {
   const installedEnv = resolveInstalledGatewayTargetEnvironment(params.existingEnvironment);
-  const installedStateOverride = installedEnv.OPENCLAW_STATE_DIR?.trim();
+  const installedStateOverride = installedEnv.NATESCLAW_STATE_DIR?.trim();
   const installedHome =
-    installedEnv.OPENCLAW_HOME?.trim() ||
+    installedEnv.NATESCLAW_HOME?.trim() ||
     installedEnv.HOME?.trim() ||
     installedEnv.USERPROFILE?.trim();
   if (!installedStateOverride && !installedHome) {
     throw new Error(
-      `Refusing to repair the managed Gateway service because its installed state directory cannot be determined from the service definition. Run \`openclaw gateway install --force\` to replace it intentionally.`,
+      `Refusing to repair the managed Gateway service because its installed state directory cannot be determined from the service definition. Run \`natesclaw gateway install --force\` to replace it intentionally.`,
     );
   }
   const installedStateDir = resolveStateDir(installedEnv);
@@ -98,8 +98,8 @@ function assertGatewayRepairTargetMatches(params: {
   const differences: Array<{ name: string; installed: string; ambient: string }> = [];
 
   for (const [name, installed, ambient] of [
-    ["OPENCLAW_STATE_DIR", installedStateDir, ambientStateDir],
-    ["OPENCLAW_CONFIG_PATH", installedConfigPath, ambientConfigPath],
+    ["NATESCLAW_STATE_DIR", installedStateDir, ambientStateDir],
+    ["NATESCLAW_CONFIG_PATH", installedConfigPath, ambientConfigPath],
   ] as const) {
     if (normalizeTargetPath(installed) !== normalizeTargetPath(ambient)) {
       differences.push({ name, installed, ambient });
@@ -123,7 +123,7 @@ function assertGatewayRepairTargetMatches(params: {
     )
     .join("\n");
   throw new Error(
-    `Refusing to repair the managed Gateway service because the current invocation targets a different Gateway:\n${details}\nRun \`openclaw gateway ${params.action}\` with the installed state directory, config path, and port (or unset conflicting environment overrides). To retarget intentionally, run \`openclaw gateway install --force\`.`,
+    `Refusing to repair the managed Gateway service because the current invocation targets a different Gateway:\n${details}\nRun \`natesclaw gateway ${params.action}\` with the installed state directory, config path, and port (or unset conflicting environment overrides). To retarget intentionally, run \`natesclaw gateway install --force\`.`,
   );
 }
 
@@ -159,7 +159,7 @@ export async function repairLoadedGatewayServiceForStart(
     env: process.env,
     existingServiceEnv: existingEnvironment,
   });
-  const wrapperPath = await resolveOpenClawWrapperPath(installEnv[OPENCLAW_WRAPPER_ENV_KEY]);
+  const wrapperPath = await resolveNatesclawWrapperPath(installEnv[NATESCLAW_WRAPPER_ENV_KEY]);
 
   const tokenResolution = await resolveGatewayInstallToken({
     config: cfg,
@@ -223,7 +223,7 @@ export async function repairLoadedGatewayServiceForStart(
     message:
       params.action === "restart"
         ? "Gateway service definition repaired and restarted."
-        : "Gateway service definition repaired and started. Reopen the Control UI with `openclaw dashboard` or copy a fresh auth URL with `openclaw dashboard --no-open`.",
+        : "Gateway service definition repaired and started. Reopen the Control UI with `natesclaw dashboard` or copy a fresh auth URL with `natesclaw dashboard --no-open`.",
     warnings: warnings.length ? warnings : undefined,
     loaded,
   };

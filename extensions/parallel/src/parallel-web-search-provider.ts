@@ -1,5 +1,5 @@
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { WebSearchProviderPlugin } from "openclaw/plugin-sdk/provider-web-search-contract";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { WebSearchProviderPlugin } from "natesclaw/plugin-sdk/provider-web-search-contract";
 import { createParallelWebSearchProviderBase } from "./parallel-web-search-provider.shared.js";
 
 const PARALLEL_MAX_SEARCH_COUNT = 40;

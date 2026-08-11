@@ -2,10 +2,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   installQQBotRuntimeForStateTests,
@@ -28,17 +28,17 @@ async function useMockHome(homeDir: string): Promise<void> {
 
 async function useStateAndHome(): Promise<{ stateDir: string; homeDir: string }> {
   const stateWorkspace = tempWorkspaceSync({
-    rootDir: resolvePreferredOpenClawTmpDir(),
+    rootDir: resolvePreferredNatesclawTmpDir(),
     prefix: "qqbot-state-",
   });
   const homeWorkspace = tempWorkspaceSync({
-    rootDir: resolvePreferredOpenClawTmpDir(),
+    rootDir: resolvePreferredNatesclawTmpDir(),
     prefix: "qqbot-home-",
   });
   tempWorkspaces.push(stateWorkspace, homeWorkspace);
   const stateDir = stateWorkspace.dir;
   const homeDir = homeWorkspace.dir;
-  vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+  vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
   vi.stubEnv("HOME", homeDir);
   await useMockHome(homeDir);
   installQQBotRuntimeForStateTests(stateDir);
@@ -47,7 +47,7 @@ async function useStateAndHome(): Promise<{ stateDir: string; homeDir: string }>
 
 function sessionPath(homeDir: string, accountId: string): string {
   const encodedId = Buffer.from(accountId, "utf8").toString("base64url");
-  return path.join(homeDir, ".openclaw", "qqbot", "sessions", `session-${encodedId}.json`);
+  return path.join(homeDir, ".natesclaw", "qqbot", "sessions", `session-${encodedId}.json`);
 }
 
 function writeLegacySession(homeDir: string, state: SessionState): string {

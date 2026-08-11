@@ -2,12 +2,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { sha256Hex } from "../../infra/crypto-digest.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
-import { openOpenClawStateDatabase } from "../../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
+import { openNatesclawStateDatabase } from "../../state/natesclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 import { getSkillsSnapshotVersion } from "../runtime/refresh-state.js";
 import { writeSkill, writeWorkspaceSkills } from "../test-support/e2e-test-helpers.js";
@@ -49,7 +49,7 @@ vi.mock("../lifecycle/skill-change-hook.js", () => ({
 }));
 
 const tempDirs = createTrackedTempDirs();
-let testState: OpenClawTestState;
+let testState: NatesclawTestState;
 let workspaceDir: string;
 
 beforeEach(async () => {
@@ -60,15 +60,15 @@ beforeEach(async () => {
   dispatchCommittedSkillChangeBestEffort.mockClear();
   snapshotCommittedSkillArtifactBestEffort.mockReset();
   snapshotCommittedSkillArtifactBestEffort.mockResolvedValue(undefined);
-  testState = await createOpenClawTestState({
+  testState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-skill-collection-state-",
+    prefix: "natesclaw-skill-collection-state-",
   });
-  workspaceDir = await fs.realpath(await tempDirs.make("openclaw-skill-collection-workspace-"));
+  workspaceDir = await fs.realpath(await tempDirs.make("natesclaw-skill-collection-workspace-"));
 });
 
 afterEach(async () => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   await testState.cleanup();
   await tempDirs.cleanup();
 });
@@ -328,7 +328,7 @@ describe("skill collection reconciliation", () => {
     await writeWorkspaceSkills(workspaceDir, [
       { name: "obsolete", description: "Obsolete procedure" },
     ]);
-    const aliasParent = await tempDirs.make("openclaw-skill-collection-lock-alias-");
+    const aliasParent = await tempDirs.make("natesclaw-skill-collection-lock-alias-");
     const workspaceAlias = path.join(aliasParent, "workspace-alias");
     await fs.symlink(
       workspaceDir,
@@ -596,7 +596,7 @@ describe("skill collection reconciliation", () => {
       { name: "archived", description: "Archived procedure", body: "# Original\n" },
     ]);
     const skillFile = path.join(workspaceDir, "skills", "archived", "SKILL.md");
-    openOpenClawStateDatabase({ env: testState.env })
+    openNatesclawStateDatabase({ env: testState.env })
       .db.prepare(
         `INSERT INTO skill_lifecycle (
           skill_file, skill_key, skill_name, state, pinned,

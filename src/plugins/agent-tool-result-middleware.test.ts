@@ -10,7 +10,7 @@ import type { PluginAgentToolResultMiddlewareRegistration } from "./registry-typ
 
 describe("normalizeAgentToolResultMiddlewareRuntimes", () => {
   it("defaults omitted runtimes to every supported runtime", () => {
-    expect(normalizeAgentToolResultMiddlewareRuntimes()).toEqual(["openclaw", "codex"]);
+    expect(normalizeAgentToolResultMiddlewareRuntimes()).toEqual(["natesclaw", "codex"]);
   });
 
   it("preserves an explicit empty runtime list", () => {
@@ -18,8 +18,8 @@ describe("normalizeAgentToolResultMiddlewareRuntimes", () => {
   });
 
   it("ignores unknown runtime ids from manifest metadata", () => {
-    expect(normalizeAgentToolResultMiddlewareRuntimeIds(["codex-app-server", "openclaw"])).toEqual([
-      "openclaw",
+    expect(normalizeAgentToolResultMiddlewareRuntimeIds(["codex-app-server", "natesclaw"])).toEqual([
+      "natesclaw",
     ]);
   });
 });
@@ -36,7 +36,7 @@ describe("agent tool result middleware scopes", () => {
       source: "test",
     };
     appendAgentToolResultMiddlewareScope(registration, {
-      runtimes: ["openclaw"],
+      runtimes: ["natesclaw"],
       matcher: ["apply_patch"],
     });
 
@@ -50,12 +50,12 @@ describe("agent tool result middleware scopes", () => {
       agentToolResultMiddlewareRegistrationCoversTool(registration, "codex", "apply_patch"),
     ).toBe(false);
     expect(
-      agentToolResultMiddlewareRegistrationCoversTool(registration, "openclaw", "apply_patch"),
+      agentToolResultMiddlewareRegistrationCoversTool(registration, "natesclaw", "apply_patch"),
     ).toBe(true);
-    expect(agentToolResultMiddlewareRegistrationCoversTool(registration, "openclaw", "Write")).toBe(
+    expect(agentToolResultMiddlewareRegistrationCoversTool(registration, "natesclaw", "Write")).toBe(
       false,
     );
-    expect(agentToolResultMiddlewareRegistrationCoversTool(registration, "openclaw", "exec")).toBe(
+    expect(agentToolResultMiddlewareRegistrationCoversTool(registration, "natesclaw", "exec")).toBe(
       false,
     );
   });

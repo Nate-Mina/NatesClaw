@@ -1,15 +1,15 @@
 // Openrouter provider module implements model/runtime integration.
-import { toImageDataUrl } from "openclaw/plugin-sdk/image-generation";
-import { resolveGeneratedMediaMaxBytes } from "openclaw/plugin-sdk/media-generation-runtime";
-import { canonicalizeBase64, estimateBase64DecodedBytes } from "openclaw/plugin-sdk/media-runtime";
+import { toImageDataUrl } from "natesclaw/plugin-sdk/image-generation";
+import { resolveGeneratedMediaMaxBytes } from "natesclaw/plugin-sdk/media-generation-runtime";
+import { canonicalizeBase64, estimateBase64DecodedBytes } from "natesclaw/plugin-sdk/media-runtime";
 import type {
   MusicGenerationProvider,
   MusicGenerationRequest,
   MusicGenerationSourceImage,
-} from "openclaw/plugin-sdk/music-generation";
-import { resolvePositiveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "natesclaw/plugin-sdk/music-generation";
+import { resolvePositiveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
+import { isProviderApiKeyConfigured } from "natesclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "natesclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -18,8 +18,8 @@ import {
   resolveProviderOperationTimeoutMs,
   sanitizeConfiguredModelProviderRequest,
   type ProviderOperationDeadline,
-} from "openclaw/plugin-sdk/provider-http";
-import { isRecord, normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { isRecord, normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 
 const DEFAULT_OPENROUTER_MUSIC_MODEL = "google/lyria-3-pro-preview";
@@ -389,8 +389,8 @@ export function buildOpenRouterMusicGenerationProvider(): MusicGenerationProvide
           defaultHeaders: {
             Authorization: `Bearer ${auth.apiKey}`,
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://openclaw.ai",
-            "X-OpenRouter-Title": "OpenClaw",
+            "HTTP-Referer": "https://natesclaw.ai",
+            "X-OpenRouter-Title": "Natesclaw",
           },
           request: sanitizeConfiguredModelProviderRequest(
             req.cfg?.models?.providers?.openrouter?.request,

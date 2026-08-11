@@ -179,7 +179,7 @@ describe("hydrateDiscordMessageIfNeeded", () => {
         mentions: [
           {
             id: "bot",
-            username: "openclaw",
+            username: "natesclaw",
             global_name: null,
             discriminator: "0",
             avatar: null,

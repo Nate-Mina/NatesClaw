@@ -8,7 +8,7 @@ import { createDeferred } from "../../../test/helpers/promise.js";
 import { markInboundContextLabel } from "../../auto-reply/reply/inbound-context-marker.js";
 import type { ChannelOutboundAdapter } from "../../channels/plugins/types.public.js";
 import type { CliDeps } from "../../cli/outbound-send-deps.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import type { InternalSessionEntry as SessionEntry } from "../../config/sessions.js";
 import * as sessionAccessor from "../../config/sessions/session-accessor.js";
 import {
@@ -48,10 +48,10 @@ import {
   runExclusiveSessionLifecycleMutation,
 } from "../../sessions/session-lifecycle-admission.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import { createOutboundTestPlugin, createTestRegistry } from "../../test-utils/channel-plugins.js";
 import { deliverAgentCommandResult } from "../command/delivery.js";
 import { setActiveEmbeddedRunLifecycleGeneration } from "../embedded-agent-runner/run-state.js";
@@ -95,7 +95,7 @@ const discordDeliveryContext = {
 } as const;
 const executionIdentityEnabledConfig = {
   logging: { audit: { executionIdentity: true } },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 vi.mock("../../gateway/call.js", () => ({
   callGateway: vi.fn(async () => ({ runId: "run-resumed" })),
@@ -166,7 +166,7 @@ beforeEach(async () => {
   vi.mocked(callGateway).mockImplementation(async () => ({ runId: "run-resumed" }));
   resetAgentEventsForTest();
   resetGatewayWorkAdmission();
-  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-main-restart-recovery-"));
+  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-main-restart-recovery-"));
 });
 
 afterEach(async () => {
@@ -521,7 +521,7 @@ describe("main-session-restart-recovery", () => {
 
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const storePaths = await resolveRestartRecoveryStorePaths({ cfg, stateDir: tmpDir });
 
     expect(storePaths).toContain(path.join(configuredSessionsDir, "sessions.json"));
@@ -536,7 +536,7 @@ describe("main-session-restart-recovery", () => {
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
       session: { store: storePath },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     await expect(resolveRestartRecoveryStorePaths({ cfg, stateDir: tmpDir })).resolves.toContain(
       storePath,
@@ -915,7 +915,7 @@ describe("main-session-restart-recovery", () => {
         role: "assistant",
         content: [{ type: "text", text: "Checking the remaining background task." }],
         stopReason: "stop",
-        openclawStreamFallback: {
+        natesclawStreamFallback: {
           replacementText: "Checking the remaining background task.",
           source: "segment",
           itemId: "progress-after-recovery-mark",
@@ -925,7 +925,7 @@ describe("main-session-restart-recovery", () => {
         role: "assistant",
         content: [{ type: "text", text: "The restart handoff is in progress." }],
         stopReason: "stop",
-        openclawStreamFallback: {
+        natesclawStreamFallback: {
           replacementText: "The restart handoff is in progress.",
           source: "segment",
           itemId: "progress-after-recovery-mark-2",
@@ -951,7 +951,7 @@ describe("main-session-restart-recovery", () => {
         .filter(
           (message) =>
             message?.role === "assistant" &&
-            (message as { openclawStreamFallback?: { source?: unknown } }).openclawStreamFallback
+            (message as { natesclawStreamFallback?: { source?: unknown } }).natesclawStreamFallback
               ?.source === "segment",
         ),
     ).toHaveLength(2);
@@ -1130,8 +1130,8 @@ describe("main-session-restart-recovery", () => {
     resetGlobalHookRunner();
     initializeGlobalHookRunner(registry);
     setActivePluginRegistry(registry);
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    process.env.OPENCLAW_STATE_DIR = tmpDir;
+    const previousStateDir = process.env.NATESCLAW_STATE_DIR;
+    process.env.NATESCLAW_STATE_DIR = tmpDir;
 
     await writeMainSession({
       sessionsDir,
@@ -1158,7 +1158,7 @@ describe("main-session-restart-recovery", () => {
         meta: { durationMs: 1 },
       };
       await deliverAgentCommandResult({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NatesclawConfig,
         deps: {} as CliDeps,
         runtime: { log: vi.fn(), error: vi.fn() } as never,
         opts: {
@@ -1216,13 +1216,13 @@ describe("main-session-restart-recovery", () => {
         text: "hooked: final answer",
       });
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       resetGlobalHookRunner();
       setActivePluginRegistry(createEmptyPluginRegistry());
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.NATESCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.NATESCLAW_STATE_DIR = previousStateDir;
       }
     }
   });
@@ -1267,7 +1267,7 @@ describe("main-session-restart-recovery", () => {
     ["upgrade config without the new setting", {}],
     ["explicit collection disable", { logging: { audit: { executionIdentity: false } } }],
     ["disabled audit ledger", { logging: { audit: { enabled: false, executionIdentity: true } } }],
-  ] satisfies Array<[string, OpenClawConfig | undefined]>)(
+  ] satisfies Array<[string, NatesclawConfig | undefined]>)(
     "stores no recovery identity with %s",
     async (_label, cfg) => {
       const sessionsDir = await makeSessionsDir();
@@ -1935,7 +1935,7 @@ describe("main-session-restart-recovery", () => {
       expect(callGateway).not.toHaveBeenCalled();
       expect(sendRecoveryNotice).not.toHaveBeenCalled();
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
     }
   });
 
@@ -1968,7 +1968,7 @@ describe("main-session-restart-recovery", () => {
       expect(sendRecoveryNotice).not.toHaveBeenCalled();
       expect(loadSessionEntry({ sessionKey: "agent:main:main", storePath })?.status).toBe("done");
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
     }
   });
 
@@ -2124,7 +2124,7 @@ describe("main-session-restart-recovery", () => {
           ).toMatchObject({ intentId: `intent-owner-${ownerStatus}`, state: "owed" });
         }
       } finally {
-        closeOpenClawStateDatabaseForTest();
+        closeNatesclawStateDatabaseForTest();
       }
     },
   );
@@ -2461,7 +2461,7 @@ describe("main-session-restart-recovery", () => {
     const databasePaths = await Promise.all(
       agentIds.map(async (agentId) => {
         await makeSessionsDir(agentId);
-        return path.join(tmpDir, "agents", agentId, "agent", "openclaw-agent.sqlite");
+        return path.join(tmpDir, "agents", agentId, "agent", "natesclaw-agent.sqlite");
       }),
     );
 
@@ -2475,15 +2475,15 @@ describe("main-session-restart-recovery", () => {
 
   it("does not enter the writer lane for agent databases without running sessions", async () => {
     const agentIds = Array.from({ length: 12 }, (_, index) => `agent-${index + 1}`);
-    const env = { ...process.env, OPENCLAW_STATE_DIR: tmpDir };
+    const env = { ...process.env, NATESCLAW_STATE_DIR: tmpDir };
     for (const agentId of agentIds) {
-      openOpenClawAgentDatabase({
+      openNatesclawAgentDatabase({
         agentId,
         env,
-        path: path.join(tmpDir, "agents", agentId, "agent", "openclaw-agent.sqlite"),
+        path: path.join(tmpDir, "agents", agentId, "agent", "natesclaw-agent.sqlite"),
       });
     }
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
     const applySessionEntryReplacements = vi.spyOn(
       sessionAccessor,
       "applySessionEntryReplacements",
@@ -2501,7 +2501,7 @@ describe("main-session-restart-recovery", () => {
 
   it("keeps corrupt existing agent databases on the startup recovery error path", async () => {
     await makeSessionsDir();
-    const databasePath = path.join(tmpDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const databasePath = path.join(tmpDir, "agents", "main", "agent", "natesclaw-agent.sqlite");
     await fs.mkdir(path.dirname(databasePath), { recursive: true });
     await fs.writeFile(databasePath, "not a sqlite database");
 
@@ -2824,7 +2824,7 @@ describe("main-session-restart-recovery", () => {
     ]);
     let currentConfig = {
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const recovery = scheduleRestartAbortedMainSessionRecovery({
       delayMs: 0,
@@ -2835,7 +2835,7 @@ describe("main-session-restart-recovery", () => {
     await Promise.resolve();
     currentConfig = {
       agents: { list: [{ id: "main", default: true }, { id: "work" }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     releaseStartup.resolve();
 
     await waitForFast(() => expect(callGateway).toHaveBeenCalledOnce());
@@ -3752,7 +3752,7 @@ describe("main-session-restart-recovery", () => {
         role: "assistant",
         content: [{ type: "text", text: "delivered answer" }],
         stopReason: "stop",
-        openclawDeliveryMirror: {
+        natesclawDeliveryMirror: {
           kind: "message-tool-source-reply",
           final: true,
           sourceTurnId: "discord-message-1",
@@ -4085,7 +4085,7 @@ describe("main-session-restart-recovery", () => {
         role: "assistant",
         content: [{ type: "text", text: "not this turn's terminal answer" }],
         stopReason: "stop",
-        openclawDeliveryMirror: {
+        natesclawDeliveryMirror: {
           kind: "message-tool-source-reply",
           final,
           sourceTurnId,
@@ -4115,7 +4115,7 @@ describe("main-session-restart-recovery", () => {
         content: [{ type: "text", text: "" }],
         stopReason: "error",
         errorMessage: "This operation was aborted",
-        errorCode: "OPENCLAW_FIRST_EVENT_TIMEOUT",
+        errorCode: "NATESCLAW_FIRST_EVENT_TIMEOUT",
       },
     ],
   ])(
@@ -4418,7 +4418,7 @@ describe("main-session-restart-recovery", () => {
         {
           role: "user",
           content:
-            "[System] Your previous turn was interrupted by a gateway restart while OpenClaw was waiting on tool/model work. Continue from the existing transcript and finish the interrupted response.",
+            "[System] Your previous turn was interrupted by a gateway restart while Natesclaw was waiting on tool/model work. Continue from the existing transcript and finish the interrupted response.",
         },
         createAssistantToolCallMessage([
           {
@@ -4493,7 +4493,7 @@ describe("main-session-restart-recovery", () => {
       {
         role: "user",
         content:
-          "[System] Your previous turn was interrupted by a gateway restart while OpenClaw was waiting on tool/model work. Continue from the existing transcript and finish the interrupted response.",
+          "[System] Your previous turn was interrupted by a gateway restart while Natesclaw was waiting on tool/model work. Continue from the existing transcript and finish the interrupted response.",
       },
       { role: "assistant", content: [{ type: "text", text: "Finished that recovery." }] },
       { role: "user", content: "a later request" },
@@ -4700,7 +4700,7 @@ describe("main-session-restart-recovery", () => {
         role: "assistant",
         content: [],
         stopReason: "aborted",
-        errorCode: "OPENCLAW_RESTART_ABORT",
+        errorCode: "NATESCLAW_RESTART_ABORT",
         errorMessage: "agent run aborted for restart",
       },
     ]);

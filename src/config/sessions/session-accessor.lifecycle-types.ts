@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import type { SessionUnreferencedArtifactSweepResult } from "./disk-budget.js";
 import type { SessionResetBoundaryReason } from "./session-reset-boundary-event.js";
 import type { SessionMaintenanceApplyReport } from "./store-maintenance-operations.js";
@@ -157,7 +157,7 @@ export type SessionEntryLifecycleMutationResult = {
 };
 
 export type DeletedAgentSessionEntryPurgeParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   storeAgentId: string;
   storePath: string;

@@ -99,9 +99,9 @@ export function createEmbeddedRunSessionPromptState(input: {
     PreparedEmbeddedRunInput["runParams"]["onUserMessagePersisted"]
   > = (message) => {
     const messageMetadata = message as {
-      __openclaw?: { beforeAgentRunBlocked?: unknown };
+      __natesclaw?: { beforeAgentRunBlocked?: unknown };
     };
-    const blockedBeforeAgentRun = messageMetadata["__openclaw"]?.beforeAgentRunBlocked;
+    const blockedBeforeAgentRun = messageMetadata["__natesclaw"]?.beforeAgentRunBlocked;
     const markCurrentUserMessagePersisted = () => {
       activePrompt.persisted = true;
       params.onUserMessagePersisted?.(message);

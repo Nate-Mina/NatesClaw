@@ -1,10 +1,10 @@
 // Qa Lab Matrix module implements client behavior.
 import { randomUUID } from "node:crypto";
 import { setTimeout as sleep } from "node:timers/promises";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { uniqueValues } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
+import { uniqueValues } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildMatrixQaMediaMessageContent,
   buildMatrixQaMessageContent,
@@ -583,19 +583,19 @@ export async function provisionMatrixQaRoom(params: {
   });
   const [driver, sut, observer] = await Promise.all([
     anonClient.registerWithToken({
-      deviceName: "OpenClaw Matrix QA Driver",
+      deviceName: "Natesclaw Matrix QA Driver",
       localpart: params.driverLocalpart,
       password: `driver-${randomUUID()}`,
       registrationToken: params.registrationToken,
     }),
     anonClient.registerWithToken({
-      deviceName: "OpenClaw Matrix QA SUT",
+      deviceName: "Natesclaw Matrix QA SUT",
       localpart: params.sutLocalpart,
       password: `sut-${randomUUID()}`,
       registrationToken: params.registrationToken,
     }),
     anonClient.registerWithToken({
-      deviceName: "OpenClaw Matrix QA Observer",
+      deviceName: "Natesclaw Matrix QA Observer",
       localpart: params.observerLocalpart,
       password: `observer-${randomUUID()}`,
       registrationToken: params.registrationToken,

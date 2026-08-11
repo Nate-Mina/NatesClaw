@@ -34,7 +34,7 @@ import {
   type SkillMessageMap,
 } from "../../lib/skills/index.ts";
 import { GatewayPageController } from "../../lit/gateway-page-controller.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import {
   PLUGINS_HUB_PANEL_ID,
@@ -53,7 +53,7 @@ export type SkillsRouteData = {
   error: string | null;
 };
 
-class SkillsPage extends OpenClawLightDomElement {
+class SkillsPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -455,6 +455,6 @@ class SkillsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-skills-page")) {
-  customElements.define("openclaw-skills-page", SkillsPage);
+if (!customElements.get("natesclaw-skills-page")) {
+  customElements.define("natesclaw-skills-page", SkillsPage);
 }

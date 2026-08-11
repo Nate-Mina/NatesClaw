@@ -11,10 +11,10 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { readRegularFileSync } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { readRegularFileSync } from "natesclaw/plugin-sdk/security-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { debugLog, debugError, debugWarn } from "./log.js";
 
 type SilkWasm = typeof import("silk-wasm");

@@ -16,8 +16,8 @@ const durabilityTestState = vi.hoisted(() => ({
     | undefined,
 }));
 
-vi.mock("@openclaw/fs-safe/durability", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@openclaw/fs-safe/durability")>();
+vi.mock("@natesclaw/fs-safe/durability", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@natesclaw/fs-safe/durability")>();
   return {
     ...actual,
     publishFileExclusive: async (...args: Parameters<typeof actual.publishFileExclusive>) => {
@@ -60,7 +60,7 @@ describe("directory durability compatibility", () => {
 
   it("preserves its target with a receipt when fail-closed durability rejects", async () => {
     vi.spyOn(process, "platform", "get").mockReturnValue("linux");
-    const directoryPath = tempDirs.make("openclaw-publish-cleanup-");
+    const directoryPath = tempDirs.make("natesclaw-publish-cleanup-");
     const sourcePath = path.join(directoryPath, "source.txt");
     const targetPath = path.join(directoryPath, "target.txt");
     await fs.writeFile(sourcePath, "complete publication");
@@ -81,7 +81,7 @@ describe("directory durability compatibility", () => {
   });
 
   it.runIf(process.platform !== "win32")("reports a completed directory sync", async () => {
-    const directoryPath = tempDirs.make("openclaw-directory-sync-");
+    const directoryPath = tempDirs.make("natesclaw-directory-sync-");
 
     await expect(syncDirectoryIfSupported(directoryPath)).resolves.toEqual({ status: "synced" });
   });
@@ -90,7 +90,7 @@ describe("directory durability compatibility", () => {
     "keeps the existing %s unsupported-filesystem compatibility",
     async (code) => {
       vi.spyOn(process, "platform", "get").mockReturnValue("linux");
-      const directoryPath = tempDirs.make("openclaw-directory-unsupported-");
+      const directoryPath = tempDirs.make("natesclaw-directory-unsupported-");
       const originalOpen = fs.open.bind(fs);
       vi.spyOn(fs, "open").mockImplementation(async (filePath, flags, mode) => {
         const handle = await originalOpen(filePath, flags, mode);
@@ -107,7 +107,7 @@ describe("directory durability compatibility", () => {
 
   it("propagates real directory I/O failures", async () => {
     vi.spyOn(process, "platform", "get").mockReturnValue("linux");
-    const directoryPath = tempDirs.make("openclaw-directory-io-");
+    const directoryPath = tempDirs.make("natesclaw-directory-io-");
     const originalOpen = fs.open.bind(fs);
     vi.spyOn(fs, "open").mockImplementation(async (filePath, flags, mode) => {
       const handle = await originalOpen(filePath, flags, mode);
@@ -122,7 +122,7 @@ describe("directory durability compatibility", () => {
     "preserves Windows %s directory-open compatibility",
     async (code) => {
       vi.spyOn(process, "platform", "get").mockReturnValue("win32");
-      const directoryPath = tempDirs.make("openclaw-directory-windows-");
+      const directoryPath = tempDirs.make("natesclaw-directory-windows-");
       vi.spyOn(fs, "open").mockRejectedValue(Object.assign(new Error(code), { code }));
 
       await expect(syncDirectoryIfSupported(directoryPath)).resolves.toEqual({

@@ -3,10 +3,10 @@
  *
  * Builds agent tool schema contributions from loaded or bundled channel action hooks.
  */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { Type, type TSchema } from "typebox";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
   getPreparedMessageToolCatalog,
@@ -39,7 +39,7 @@ export const listMessageActionDiscoveryChannels = (
  * Input used to discover channel message actions for agent tool schemas.
  */
 export type ChannelMessageActionDiscoveryInput = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   channel?: string | null;
   currentChannelProvider?: string | null;
   currentChannelId?: string | null;
@@ -54,7 +54,7 @@ export type ChannelMessageActionDiscoveryInput = {
 };
 
 type ChannelMessageActionDiscoveryParams = ChannelMessageActionDiscoveryInput & {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   preparedMessageToolCatalog?: PreparedMessageToolCatalog;
 };
 
@@ -81,7 +81,7 @@ export function createMessageActionDiscoveryContext(
     params.channel ?? params.currentChannelProvider,
   );
   return {
-    cfg: params.cfg ?? ({} as OpenClawConfig),
+    cfg: params.cfg ?? ({} as NatesclawConfig),
     currentChannelId: params.currentChannelId,
     currentChannelProvider,
     currentThreadTs: params.currentThreadTs,
@@ -425,7 +425,7 @@ export function resolveChannelMessageToolMediaSourceParamKeys(
  * Returns whether any registered channel advertises a message capability.
  */
 export function channelSupportsMessageCapability(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   capability: ChannelMessageCapability,
   preparedMessageToolCatalog?: PreparedMessageToolCatalog,
 ): boolean {

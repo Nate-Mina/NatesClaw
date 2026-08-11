@@ -2,16 +2,16 @@
 import {
   classifyAttachmentBytes,
   type AttachmentClassification,
-} from "@openclaw/media-core/attachment-classify";
-import { canonicalizeBase64, estimateBase64DecodedBytes } from "@openclaw/media-core/base64";
-import { parseMediaContentLength } from "@openclaw/media-core/content-length";
-import { detectMime, normalizeMimeType } from "@openclaw/media-core/mime";
+} from "@natesclaw/media-core/attachment-classify";
+import { canonicalizeBase64, estimateBase64DecodedBytes } from "@natesclaw/media-core/base64";
+import { parseMediaContentLength } from "@natesclaw/media-core/content-length";
+import { detectMime, normalizeMimeType } from "@natesclaw/media-core/mime";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@natesclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { readResponseWithLimit } from "../infra/http-body.js";
 import { fetchWithSsrFGuard } from "../infra/net/fetch-guard.js";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
@@ -213,7 +213,7 @@ async function fetchWithGuard(params: {
     timeoutMs: params.timeoutMs,
     policy: params.policy,
     auditContext: params.auditContext,
-    init: { headers: { "User-Agent": "OpenClaw-Gateway/1.0" } },
+    init: { headers: { "User-Agent": "Natesclaw-Gateway/1.0" } },
   });
 
   try {
@@ -386,7 +386,7 @@ export async function extractImageContentFromSource(
 export async function extractFileContentFromSource(params: {
   source: InputFileSource;
   limits: InputFileLimits;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   classification?: AttachmentClassification;
 }): Promise<InputFileExtractResult> {
   const { source, limits } = params;

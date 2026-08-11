@@ -1,6 +1,6 @@
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import type { PluginRuntime } from "openclaw/plugin-sdk/core";
-import { resolveAgentIdFromSessionKey } from "openclaw/plugin-sdk/routing";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/core";
+import { resolveAgentIdFromSessionKey } from "natesclaw/plugin-sdk/routing";
 import {
   ClickClackHttpError,
   isClickClackChannelNameConflict,
@@ -179,7 +179,7 @@ export async function openClickClackDiscussionBinding(
     return undefined;
   }
   if (!entry.sessionId?.trim()) {
-    throw new Error("OpenClaw session does not yet have a concrete session id");
+    throw new Error("Natesclaw session does not yet have a concrete session id");
   }
   const client = params.clientFactory(account);
   const workspaces = await client.workspaces();
@@ -405,7 +405,7 @@ export async function openClickClackDiscussionBinding(
         expectedGeneration: bindingGeneration,
       });
       params.warn(`unattached discussion channel remains quarantined: ${channel.id}`);
-      throw new Error("OpenClaw session became inactive while opening its ClickClack discussion");
+      throw new Error("Natesclaw session became inactive while opening its ClickClack discussion");
     }
     const currentLabel = resolveDiscussionLabel(currentEntry, sessionKey, agentId);
     const currentDisplayTitle =

@@ -1,10 +1,10 @@
 // Slack plugin module polls selected participants and routes away-to-active transitions.
 import { type WebClient, WebAPIRateLimitedError } from "@slack/web-api";
-import type { SlackAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { requestHeartbeat } from "openclaw/plugin-sdk/heartbeat-runtime";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
-import { withTimeout } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { SlackAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { requestHeartbeat } from "natesclaw/plugin-sdk/heartbeat-runtime";
+import type { PluginStateSyncKeyedStore } from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { enqueueSystemEvent } from "natesclaw/plugin-sdk/system-event-runtime";
+import { withTimeout } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { formatSlackTarget } from "../target-parsing.js";
 import type { PreparedSlackMessage } from "./message-handler/types.js";
 

@@ -19,7 +19,7 @@ type SessionGroupCatalogHost = {
   retryDelayMs: (error: unknown) => number | null;
 };
 
-const LEGACY_GROUPS_STORAGE_KEY = "openclaw:sessions:custom-groups";
+const LEGACY_GROUPS_STORAGE_KEY = "natesclaw:sessions:custom-groups";
 const GROUPS_LIST_METHOD = "sessions.groups.list";
 
 function readLegacyStoredGroups(): string[] {

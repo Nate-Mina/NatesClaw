@@ -2,15 +2,15 @@
 import {
   normalizeAccountId,
   resolveMergedAccountConfig,
-} from "openclaw/plugin-sdk/account-resolution";
+} from "natesclaw/plugin-sdk/account-resolution";
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
   type ChannelIngressIdentitySubjectInput,
   type ResolveChannelMessageIngressParams,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/core";
+import { normalizeOptionalLowercaseString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { ChannelGroupContext } from "../runtime-api.js";
 import { detectIdType } from "./targets.js";
 import type { FeishuConfig } from "./types.js";
@@ -107,7 +107,7 @@ function createFeishuIngressSubject(params: {
 }
 
 function createFeishuIngressResolver(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   accountId?: string | null;
   readAllowFromStore?: ResolveChannelMessageIngressParams["readStoreAllowFrom"];
 }) {
@@ -121,7 +121,7 @@ function createFeishuIngressResolver(params: {
 }
 
 export async function resolveFeishuDmIngressAccess(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   dmPolicy?: string | null;
   allowFrom?: Array<string | number> | null;
@@ -156,7 +156,7 @@ export async function resolveFeishuDmIngressAccess(params: {
 }
 
 export async function resolveFeishuGroupConversationIngressAccess(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   chatId: string;
   groupPolicy: FeishuGroupPolicy;
@@ -186,7 +186,7 @@ export async function resolveFeishuGroupConversationIngressAccess(params: {
 }
 
 export async function resolveFeishuGroupSenderActivationIngressAccess(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   chatId: string;
   allowFrom?: Array<string | number> | null;
@@ -271,7 +271,7 @@ export function resolveFeishuGroupToolPolicy(params: ChannelGroupContext) {
 
 export function resolveFeishuReplyPolicy(params: {
   isDirectMessage: boolean;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   groupId?: string | null;
   /**

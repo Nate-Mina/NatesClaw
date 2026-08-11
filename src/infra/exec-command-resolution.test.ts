@@ -571,19 +571,19 @@ describe("exec-command-resolution", () => {
       expect(
         resolveAllowlistCandidatePath(
           {
-            rawExecutable: String.raw`:\Users\demo\AI\system\openclaw`,
-            executableName: "openclaw",
+            rawExecutable: String.raw`:\Users\demo\AI\system\natesclaw`,
+            executableName: "natesclaw",
           },
-          String.raw`C:\Users\demo\AI\system\openclaw`,
+          String.raw`C:\Users\demo\AI\system\natesclaw`,
         ),
       ).toBeUndefined();
       expect(
         resolveAllowlistCandidatePath(
           {
-            rawExecutable: String.raw`:/Users/demo/AI/system/openclaw`,
-            executableName: "openclaw",
+            rawExecutable: String.raw`:/Users/demo/AI/system/natesclaw`,
+            executableName: "natesclaw",
           },
-          String.raw`C:\Users\demo\AI\system\openclaw`,
+          String.raw`C:\Users\demo\AI\system\natesclaw`,
         ),
       ).toBeUndefined();
     });

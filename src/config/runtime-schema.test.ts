@@ -8,9 +8,9 @@ import {
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
 } from "../plugins/runtime.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "./types.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "./types.js";
 
-const mockLoadConfig = vi.hoisted(() => vi.fn<() => OpenClawConfig>());
+const mockLoadConfig = vi.hoisted(() => vi.fn<() => NatesclawConfig>());
 const mockReadConfigFileSnapshot = vi.hoisted(() =>
   vi.fn<(options?: { observe?: boolean }) => Promise<ConfigFileSnapshot>>(),
 );
@@ -20,7 +20,7 @@ const mockGetCurrentPluginMetadataSnapshot = vi.hoisted(() => vi.fn());
 let readBestEffortRuntimeConfigSchema: typeof import("./runtime-schema.js").readBestEffortRuntimeConfigSchema;
 let loadGatewayRuntimeConfigSchema: typeof import("./runtime-schema.js").loadGatewayRuntimeConfigSchema;
 
-function explicitMainRoster(): OpenClawConfig {
+function explicitMainRoster(): NatesclawConfig {
   return { agents: { list: [{ id: "main", default: true }] } };
 }
 
@@ -57,9 +57,9 @@ vi.mock("../plugins/current-plugin-metadata-snapshot.js", () => ({
     mockGetCurrentPluginMetadataSnapshot(...args),
 }));
 
-function makeSnapshot(params: { valid: boolean; config?: OpenClawConfig }): ConfigFileSnapshot {
+function makeSnapshot(params: { valid: boolean; config?: NatesclawConfig }): ConfigFileSnapshot {
   return {
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     exists: true,
     raw: "{}",
     parsed: params.config ?? {},

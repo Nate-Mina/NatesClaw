@@ -2,9 +2,9 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { readJsonFileWithFallback } from "openclaw/plugin-sdk/json-store";
-import { timestampMsToIsoString } from "openclaw/plugin-sdk/number-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { readJsonFileWithFallback } from "natesclaw/plugin-sdk/json-store";
+import { timestampMsToIsoString } from "natesclaw/plugin-sdk/number-runtime";
 import { getMatrixRuntime } from "../../runtime.js";
 import type { MatrixConfig } from "../../types.js";
 import { recordCurrentStorageMetaDeviceId, resolveMatrixStoragePaths } from "../client/storage.js";

@@ -1,11 +1,11 @@
 /**
- * Periodic cleanup for browser tabs tracked to primary OpenClaw sessions.
+ * Periodic cleanup for browser tabs tracked to primary Natesclaw sessions.
  */
 import {
   isAcpSessionKey,
   isCronSessionKey,
   isSubagentSessionKey,
-} from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/routing";
 import { getRuntimeConfig } from "../config/config.js";
 import {
   resolveBrowserConfig,

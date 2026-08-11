@@ -2,8 +2,8 @@
  * Browser-local SDK bridge for gateway, plugin runtime, CLI runtime, and timeout
  * helpers.
  */
-import { toErrorObject } from "openclaw/plugin-sdk/error-runtime";
-import { clampTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { toErrorObject } from "natesclaw/plugin-sdk/error-runtime";
+import { clampTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
 
 export {
   addGatewayClientOptions,
@@ -17,19 +17,19 @@ export {
   resolveGatewayAuth,
   resolveNodeCommandAllowlist,
   safeParseJson,
-} from "openclaw/plugin-sdk/gateway-runtime";
+} from "natesclaw/plugin-sdk/gateway-runtime";
 export type {
   GatewayRequestHandlers,
   GatewayRpcOpts,
   NodeSession,
-} from "openclaw/plugin-sdk/gateway-runtime";
-export { runCommandWithRuntime } from "openclaw/plugin-sdk/cli-runtime";
-export type { OpenClawPluginService } from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/gateway-runtime";
+export { runCommandWithRuntime } from "natesclaw/plugin-sdk/cli-runtime";
+export type { NatesclawPluginService } from "natesclaw/plugin-sdk/plugin-entry";
 export {
   startLazyPluginServiceModule,
   type LazyPluginServiceHandle,
-} from "openclaw/plugin-sdk/plugin-runtime";
-export { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/plugin-runtime";
+export { defaultRuntime } from "natesclaw/plugin-sdk/runtime-env";
 
 function normalizeTimeoutMs(timeoutMs: number | undefined): number | undefined {
   return clampTimerTimeoutMs(timeoutMs);

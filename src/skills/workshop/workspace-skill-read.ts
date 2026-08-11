@@ -1,6 +1,6 @@
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   buildWorkspaceSkillStatus,
   resolveSkillStatusEntry,
@@ -11,7 +11,7 @@ import {
   readWorkspaceSkillFile,
 } from "../lifecycle/workspace-skill-write.js";
 
-const WRITABLE_WORKSPACE_SOURCES = new Set(["openclaw-workspace", "agents-skills-project"]);
+const WRITABLE_WORKSPACE_SOURCES = new Set(["natesclaw-workspace", "agents-skills-project"]);
 
 export function assertWritableSkillTarget(workspaceDir: string, skill: SkillStatusEntry): void {
   if (!WRITABLE_WORKSPACE_SOURCES.has(skill.source)) {
@@ -37,7 +37,7 @@ type WritableWorkspaceSkillSummary = {
  */
 export function listWritableWorkspaceSkillSummaries(
   workspaceDir: string,
-  opts?: { config?: OpenClawConfig; agentId?: string },
+  opts?: { config?: NatesclawConfig; agentId?: string },
 ): WritableWorkspaceSkillSummary[] {
   const status = buildWorkspaceSkillStatus(workspaceDir, {
     config: opts?.config,
@@ -61,7 +61,7 @@ export function listWritableWorkspaceSkillSummaries(
 export async function readWritableWorkspaceSkill(
   workspaceDir: string,
   skillName: string,
-  opts?: { config?: OpenClawConfig; agentId?: string },
+  opts?: { config?: NatesclawConfig; agentId?: string },
 ): Promise<{ skillKey: string; skillFile: string; content: string }> {
   const name = normalizeOptionalString(skillName);
   if (!name) {

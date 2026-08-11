@@ -6,7 +6,7 @@ import { afterEach, expect, test } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { managedWorktrees } from "../agents/worktrees/service.js";
 import { registerProjectRegistry } from "../projects/project-registry.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { testState } from "./test-helpers.js";
 import {
   directSessionReq,
@@ -18,7 +18,7 @@ const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 const { createSessionStoreDir } = setupGatewaySessionsTestHarness();
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = undefined;
 });
 
@@ -26,8 +26,8 @@ async function initializeRepository(root: string, name: string): Promise<string>
   const repo = path.join(root, name);
   await fs.mkdir(repo, { recursive: true });
   await execFileAsync("git", ["init", "-b", "main", repo]);
-  await execFileAsync("git", ["-C", repo, "config", "user.name", "OpenClaw Tests"]);
-  await execFileAsync("git", ["-C", repo, "config", "user.email", "tests@openclaw.invalid"]);
+  await execFileAsync("git", ["-C", repo, "config", "user.name", "Natesclaw Tests"]);
+  await execFileAsync("git", ["-C", repo, "config", "user.email", "tests@natesclaw.invalid"]);
   await fs.writeFile(path.join(repo, "README.md"), `${name}\n`);
   await execFileAsync("git", ["-C", repo, "add", "README.md"]);
   await execFileAsync("git", ["-C", repo, "commit", "-m", "initial"]);
@@ -35,7 +35,7 @@ async function initializeRepository(root: string, name: string): Promise<string>
 }
 
 test("sessions.create starts directly in a synthesized workspace project", async () => {
-  const root = tempDirs.make("openclaw-session-workspace-project-");
+  const root = tempDirs.make("natesclaw-session-workspace-project-");
   const workspace = await initializeRepository(root, "workspace");
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
@@ -51,7 +51,7 @@ test("sessions.create starts directly in a synthesized workspace project", async
 });
 
 test("sessions.create starts directly in an outside registered project at write scope", async () => {
-  const root = tempDirs.make("openclaw-session-direct-project-");
+  const root = tempDirs.make("natesclaw-session-direct-project-");
   const workspace = await initializeRepository(root, "workspace");
   const projectRoot = await initializeRepository(root, "project");
   testState.agentConfig = { workspace };
@@ -69,7 +69,7 @@ test("sessions.create starts directly in an outside registered project at write 
 });
 
 test("sessions.create provisions a managed worktree from a registered project at write scope", async () => {
-  const root = tempDirs.make("openclaw-session-registered-project-");
+  const root = tempDirs.make("natesclaw-session-registered-project-");
   const workspace = await initializeRepository(root, "workspace");
   const projectRoot = await initializeRepository(root, "project");
   testState.agentConfig = { workspace };
@@ -121,7 +121,7 @@ test("sessions.create returns a typed error for an unknown project", async () =>
 });
 
 test("sessions.create reports a stale registered project as unavailable with repair guidance", async () => {
-  const root = tempDirs.make("openclaw-session-stale-project-");
+  const root = tempDirs.make("natesclaw-session-stale-project-");
   const repo = await initializeRepository(root, "project");
   const project = await registerProjectRegistry({ path: repo });
   await fs.rm(repo, { recursive: true, force: true });
@@ -129,11 +129,11 @@ test("sessions.create reports a stale registered project as unavailable with rep
   const created = await directSessionReq("sessions.create", { projectId: project.id });
   expect(created.ok).toBe(false);
   expect(created.error?.code).toBe("UNAVAILABLE");
-  expect(created.error?.message).toContain("re-register it or run openclaw doctor --fix");
+  expect(created.error?.message).toContain("re-register it or run natesclaw doctor --fix");
 });
 
 test("sessions.create rejects an outside project for a sandboxed agent", async () => {
-  const root = tempDirs.make("openclaw-session-sandbox-project-");
+  const root = tempDirs.make("natesclaw-session-sandbox-project-");
   const workspace = await initializeRepository(root, "workspace");
   const outside = await initializeRepository(root, "outside");
   testState.agentConfig = { workspace, sandbox: { mode: "all" } };

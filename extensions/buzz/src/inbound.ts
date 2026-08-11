@@ -1,10 +1,10 @@
 import {
   buildChannelInboundEventContext,
   resolveChannelInboundRouteEnvelope,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/logging-core";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { resolveStableChannelMessageIngress } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/logging-core";
 import type { BuzzBus } from "./buzz-bus.js";
 import {
   BUZZ_DIFF_MESSAGE_KIND,
@@ -19,7 +19,7 @@ const log = createSubsystemLogger("buzz/inbound");
 
 export async function handleBuzzInbound(params: {
   account: ResolvedBuzzAccount;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   bus: BuzzBus;
   message: BuzzInboundMessage;
   signal: AbortSignal;

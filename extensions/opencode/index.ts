@@ -1,14 +1,14 @@
-// Opencode plugin entrypoint registers its OpenClaw integration.
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
+// Opencode plugin entrypoint registers its Natesclaw integration.
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
 import {
   buildProviderReplayFamilyHooks,
   matchesExactOrPrefix,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { createOpenAICompatibleCompletionsThinkingOffWrapper } from "openclaw/plugin-sdk/provider-stream-shared";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-model-shared";
+import { createOpenAICompatibleCompletionsThinkingOffWrapper } from "natesclaw/plugin-sdk/provider-stream-shared";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { opencodeMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { applyOpencodeZenProviderConfig, OPENCODE_ZEN_DEFAULT_MODEL_REF } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import {
   buildOpencodeZenLiveProviderConfig,
   buildStaticOpencodeZenProviderConfig,

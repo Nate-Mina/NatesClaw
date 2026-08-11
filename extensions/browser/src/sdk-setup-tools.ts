@@ -5,30 +5,30 @@ export {
   callGatewayTool,
   listNodes,
   resolveNodeIdFromList,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-export type { AnyAgentTool } from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+export type { AnyAgentTool } from "natesclaw/plugin-sdk/agent-harness-runtime";
 export {
   imageResultFromFile,
   jsonResult,
   readPositiveIntegerParam,
   readStringParam,
-} from "openclaw/plugin-sdk/channel-actions";
+} from "natesclaw/plugin-sdk/channel-actions";
 export {
   formatCliCommand,
   formatHelpExamples,
   inheritOptionFromParent,
   note,
   theme,
-} from "openclaw/plugin-sdk/cli-runtime";
-export { danger, info } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/cli-runtime";
+export { danger, info } from "natesclaw/plugin-sdk/runtime-env";
 export {
   IMAGE_REDUCE_QUALITY_STEPS,
   buildImageResizeSideGrid,
   getImageMetadata,
   isImageProcessorUnavailableError,
   resizeToJpeg,
-} from "openclaw/plugin-sdk/media-runtime";
-export { detectMime } from "openclaw/plugin-sdk/media-mime";
-export { ensureMediaDir, saveMediaBuffer } from "openclaw/plugin-sdk/media-runtime";
-export { describeImageFile } from "openclaw/plugin-sdk/media-understanding-runtime";
-export { formatDocsLink } from "openclaw/plugin-sdk/setup-tools";
+} from "natesclaw/plugin-sdk/media-runtime";
+export { detectMime } from "natesclaw/plugin-sdk/media-mime";
+export { ensureMediaDir, saveMediaBuffer } from "natesclaw/plugin-sdk/media-runtime";
+export { describeImageFile } from "natesclaw/plugin-sdk/media-understanding-runtime";
+export { formatDocsLink } from "natesclaw/plugin-sdk/setup-tools";

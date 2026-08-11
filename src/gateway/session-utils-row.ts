@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { SessionCreatedActor } from "../../packages/gateway-protocol/src/index.js";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveContextTokensForModel } from "../agents/context.js";
@@ -24,7 +24,7 @@ import {
   type SessionEntry,
 } from "../config/sessions.js";
 import { sessionEntryForkedFromParent } from "../config/sessions/session-entry-lineage.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { projectPluginSessionExtensionsSync } from "../plugins/host-hook-state.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
 import { classifySessionKind } from "../sessions/classify-session-kind.js";
@@ -92,7 +92,7 @@ export function projectSessionActor(
 }
 
 export function buildGatewaySessionRow(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   storePath: string;
   store: Record<string, SessionEntry>;
   key: string;

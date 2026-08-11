@@ -1,14 +1,14 @@
-# OpenClaw Voyage Provider
+# Natesclaw Voyage Provider
 
-Official OpenClaw memory embedding provider plugin for Voyage AI.
+Official Natesclaw memory embedding provider plugin for Voyage AI.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/voyage-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/voyage-provider
+natesclaw gateway restart
 ```
 
 Set `VOYAGE_API_KEY`, then configure memory search with `provider: "voyage"`.
-See <https://docs.openclaw.ai/reference/memory-config> for setup and
+See <https://docs.natesclaw.ai/reference/memory-config> for setup and
 configuration.

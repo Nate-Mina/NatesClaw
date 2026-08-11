@@ -4,17 +4,17 @@
  */
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Duplex } from "node:stream";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 import type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginSecurityAuditCollector,
-  OpenClawPluginService,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createSubsystemLogger, isTruthyEnvValue } from "openclaw/plugin-sdk/runtime-env";
+  NatesclawPluginApi,
+  NatesclawPluginNodeHostCommand,
+  NatesclawPluginSecurityAuditCollector,
+  NatesclawPluginService,
+  NatesclawPluginToolContext,
+  NatesclawPluginToolFactory,
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { createSubsystemLogger, isTruthyEnvValue } from "natesclaw/plugin-sdk/runtime-env";
 import { isBrowserMachineOutput } from "./cli-output-mode.js";
 import {
   BROWSER_REQUEST_GATEWAY_METHOD,
@@ -33,7 +33,7 @@ import {
   type SystemProfileImportState,
 } from "./src/browser/system-profile-import-state.js";
 
-const EAGER_BROWSER_CONTROL_SERVICE_ENV = "OPENCLAW_EAGER_BROWSER_CONTROL_SERVER";
+const EAGER_BROWSER_CONTROL_SERVICE_ENV = "NATESCLAW_EAGER_BROWSER_CONTROL_SERVER";
 const logger = createSubsystemLogger("browser");
 
 const loadBrowserRegistrationRuntimeModule = createLazyRuntimeModule(
@@ -58,7 +58,7 @@ function deriveChatTypeFromSessionKey(
 
 const BROWSER_CLI_DESCRIPTOR = {
   name: "browser",
-  description: "Manage OpenClaw's dedicated browser (Chrome/Chromium)",
+  description: "Manage Natesclaw's dedicated browser (Chrome/Chromium)",
   hasSubcommands: true,
   machineOutput: isBrowserMachineOutput,
 };
@@ -107,7 +107,7 @@ function createLazyBrowserTool(opts?: {
   };
 }
 
-function createBrowserToolOptions(ctx: OpenClawPluginToolContext): {
+function createBrowserToolOptions(ctx: NatesclawPluginToolContext): {
   sandboxBridgeUrl?: string;
   allowHostControl?: boolean;
   agentSessionKey?: string;
@@ -164,7 +164,7 @@ export const browserPluginReload = {
 };
 
 /** Node-host command descriptors exposed by the Browser plugin. */
-function createBrowserProxyNodeHostCommand(command: string): OpenClawPluginNodeHostCommand {
+function createBrowserProxyNodeHostCommand(command: string): NatesclawPluginNodeHostCommand {
   return {
     command,
     cap: "browser",
@@ -188,21 +188,21 @@ function createBrowserProxyNodeHostCommand(command: string): OpenClawPluginNodeH
   };
 }
 
-export const browserPluginNodeHostCommands: OpenClawPluginNodeHostCommand[] = [
+export const browserPluginNodeHostCommands: NatesclawPluginNodeHostCommand[] = [
   createBrowserProxyNodeHostCommand(BROWSER_PROXY_COMMAND),
   createBrowserProxyNodeHostCommand(BROWSER_PROXY_UPLOAD_COMMAND),
 ];
 
 /** Security audit collectors contributed by the Browser plugin. */
-export const browserSecurityAuditCollectors: OpenClawPluginSecurityAuditCollector[] = [
+export const browserSecurityAuditCollectors: NatesclawPluginSecurityAuditCollector[] = [
   async (ctx) => {
     const { collectBrowserSecurityAuditFindings } = await loadBrowserRegistrationRuntimeModule();
     return collectBrowserSecurityAuditFindings(ctx);
   },
 ];
 
-function createLazyBrowserPluginService(): OpenClawPluginService {
-  let service: OpenClawPluginService | null = null;
+function createLazyBrowserPluginService(): NatesclawPluginService {
+  let service: NatesclawPluginService | null = null;
   const loadService = async () => {
     if (!service) {
       const { createBrowserPluginService } = await loadBrowserRegistrationRuntimeModule();
@@ -231,7 +231,7 @@ function createLazyBrowserPluginService(): OpenClawPluginService {
 }
 
 /** Register Browser tool factories, CLI, gateway methods, services, and audits. */
-export function registerBrowserPlugin(api: OpenClawPluginApi) {
+export function registerBrowserPlugin(api: NatesclawPluginApi) {
   initializeBrowserSessionTabStore(api.runtime);
   configureSystemProfileImportStateStore(
     api.runtime.state.openKeyedStore<SystemProfileImportState>({
@@ -239,8 +239,8 @@ export function registerBrowserPlugin(api: OpenClawPluginApi) {
       maxEntries: 1,
     }),
   );
-  api.registerTool(((ctx: OpenClawPluginToolContext) =>
-    createLazyBrowserTool(createBrowserToolOptions(ctx))) as OpenClawPluginToolFactory);
+  api.registerTool(((ctx: NatesclawPluginToolContext) =>
+    createLazyBrowserTool(createBrowserToolOptions(ctx))) as NatesclawPluginToolFactory);
   api.registerCli(
     async ({ program }) => {
       const { registerBrowserCli } = await import("./src/cli/browser-cli.js");
@@ -269,7 +269,7 @@ export function registerBrowserPlugin(api: OpenClawPluginApi) {
     match: "exact",
     handler: (_req: IncomingMessage, res: ServerResponse) => {
       res.writeHead(426, { "Content-Type": "text/plain" });
-      res.end("Upgrade Required: connect the OpenClaw Chrome extension over WebSocket.");
+      res.end("Upgrade Required: connect the Natesclaw Chrome extension over WebSocket.");
     },
     handleUpgrade: async (req: IncomingMessage, socket: Duplex, head: Buffer) => {
       const { handleGatewayExtensionUpgrade } =

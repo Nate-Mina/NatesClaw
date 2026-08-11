@@ -2,15 +2,15 @@
 import {
   formatMediaPlaceholderText,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { fanInChannelIngressLifecycles } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { resolveChannelContextVisibilityMode } from "openclaw/plugin-sdk/context-visibility-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { fanInChannelIngressLifecycles } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { resolveChannelContextVisibilityMode } from "natesclaw/plugin-sdk/context-visibility-runtime";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   createChannelHistoryWindow,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/reply-history";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { formatUnknownError } from "../errors.js";
 import { normalizeMSTeamsConversationId, parseMSTeamsActivityTimestamp } from "../inbound.js";
 import type { MSTeamsMessageHandlerDeps } from "../monitor-handler.types.js";

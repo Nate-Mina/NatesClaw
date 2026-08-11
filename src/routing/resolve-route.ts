@@ -1,9 +1,9 @@
 // Route resolution helpers map user targets to configured channel routes.
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { listAgentEntries, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import type { ChatType } from "../channels/chat-type.js";
 import { normalizeChatType } from "../channels/chat-type.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { shouldLogVerbose } from "../globals.js";
 import { logDebug } from "../logger.js";
 import {
@@ -32,7 +32,7 @@ export type RoutePeer = {
 };
 
 export type ResolveAgentRouteInput = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
   accountId?: string | null;
   peer?: RoutePeer | null;
@@ -109,14 +109,14 @@ export function buildAgentSessionKey(params: {
 }
 
 type AgentLookupCache = {
-  agentsRef: OpenClawConfig["agents"] | undefined;
+  agentsRef: NatesclawConfig["agents"] | undefined;
   byNormalizedId: Map<string, string>;
   fallbackDefaultAgentId: string;
 };
 
-const agentLookupCacheByCfg = new WeakMap<OpenClawConfig, AgentLookupCache>();
+const agentLookupCacheByCfg = new WeakMap<NatesclawConfig, AgentLookupCache>();
 
-function resolveAgentLookupCache(cfg: OpenClawConfig): AgentLookupCache {
+function resolveAgentLookupCache(cfg: NatesclawConfig): AgentLookupCache {
   const agentsRef = cfg.agents;
   const existing = agentLookupCacheByCfg.get(cfg);
   if (existing && existing.agentsRef === agentsRef) {
@@ -140,7 +140,7 @@ function resolveAgentLookupCache(cfg: OpenClawConfig): AgentLookupCache {
   return next;
 }
 
-export function pickFirstExistingAgentId(cfg: OpenClawConfig, agentId: string): string {
+export function pickFirstExistingAgentId(cfg: NatesclawConfig, agentId: string): string {
   const lookup = resolveAgentLookupCache(cfg);
   const trimmed = (agentId ?? "").trim();
   if (!trimmed) {
@@ -188,20 +188,20 @@ type BindingScope = {
 };
 
 type EvaluatedBindingsCache = {
-  bindingsRef: OpenClawConfig["bindings"];
+  bindingsRef: NatesclawConfig["bindings"];
   byChannel: Map<string, EvaluatedBindingsByChannel>;
   byChannelAccount: Map<string, EvaluatedBinding[]>;
   byChannelAccountIndex: Map<string, EvaluatedBindingsIndex>;
 };
 
-const evaluatedBindingsCacheByCfg = new WeakMap<OpenClawConfig, EvaluatedBindingsCache>();
+const evaluatedBindingsCacheByCfg = new WeakMap<NatesclawConfig, EvaluatedBindingsCache>();
 const MAX_EVALUATED_BINDINGS_CACHE_KEYS = 2000;
 const resolvedRouteCacheByCfg = new WeakMap<
-  OpenClawConfig,
+  NatesclawConfig,
   {
-    bindingsRef: OpenClawConfig["bindings"];
-    agentsRef: OpenClawConfig["agents"];
-    sessionRef: OpenClawConfig["session"];
+    bindingsRef: NatesclawConfig["bindings"];
+    agentsRef: NatesclawConfig["agents"];
+    sessionRef: NatesclawConfig["session"];
     byKey: Map<string, ResolvedAgentRoute>;
   }
 >();
@@ -223,7 +223,7 @@ type EvaluatedBindingsByChannel = {
 };
 
 function buildEvaluatedBindingsByChannel(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): Map<string, EvaluatedBindingsByChannel> {
   const byChannel = new Map<string, EvaluatedBindingsByChannel>();
   let order = 0;
@@ -407,7 +407,7 @@ function buildEvaluatedBindingsIndex(bindings: EvaluatedBinding[]): EvaluatedBin
 }
 
 function getEvaluatedBindingsForChannelAccount(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   channel: string,
   accountId: string,
 ): EvaluatedBinding[] {
@@ -450,7 +450,7 @@ function getEvaluatedBindingsForChannelAccount(
 }
 
 function getEvaluatedBindingIndexForChannelAccount(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   channel: string,
   accountId: string,
 ): EvaluatedBindingsIndex {
@@ -518,7 +518,7 @@ function normalizeBindingMatch(
   };
 }
 
-function resolveRouteCacheForConfig(cfg: OpenClawConfig): Map<string, ResolvedAgentRoute> {
+function resolveRouteCacheForConfig(cfg: NatesclawConfig): Map<string, ResolvedAgentRoute> {
   const existing = resolvedRouteCacheByCfg.get(cfg);
   if (
     existing &&

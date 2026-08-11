@@ -20,7 +20,7 @@ function childEnv(): NodeJS.ProcessEnv {
     // ::error annotations that the parent CI job renders as its own failures.
     if (
       key.startsWith("VITEST") ||
-      key.startsWith("OPENCLAW_VITEST") ||
+      key.startsWith("NATESCLAW_VITEST") ||
       key === "GITHUB_ACTIONS" ||
       key === "FORCE_COLOR"
     ) {
@@ -35,7 +35,7 @@ function childEnv(): NodeJS.ProcessEnv {
 }
 
 it("applies vi.mock factories after a sibling file fails during collection", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-non-isolated-runner-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-non-isolated-runner-"));
   try {
     const write = (name: string, content: string) =>
       fs.writeFile(path.join(root, name), content, "utf-8");
@@ -120,7 +120,7 @@ it("applies vi.mock factories after a sibling file fails during collection", asy
 });
 
 it("clears named plugin runtime slots between files", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-runtime-store-runner-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-runtime-store-runner-"));
   try {
     const write = (name: string, content: string) =>
       fs.writeFile(path.join(root, name), content, "utf-8");
@@ -197,7 +197,7 @@ it("clears named plugin runtime slots between files", async () => {
 });
 
 it("clears session suspension state between files", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-suspension-runner-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-session-suspension-runner-"));
   try {
     const write = (name: string, content: string) =>
       fs.writeFile(path.join(root, name), content, "utf-8");
@@ -282,7 +282,7 @@ it("clears session suspension state between files", async () => {
 });
 
 it("clears agent run registry state between files", async () => {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-run-registry-runner-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-run-registry-runner-"));
   try {
     const write = (name: string, content: string) =>
       fs.writeFile(path.join(root, name), content, "utf-8");

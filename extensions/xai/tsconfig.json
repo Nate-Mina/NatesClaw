@@ -2,890 +2,890 @@
   "extends": "../tsconfig.package-boundary.base.json",
   "compilerOptions": {
     "paths": {
-      "openclaw/plugin-sdk/*": [
+      "natesclaw/plugin-sdk/*": [
         "../../dist/plugin-sdk/*.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-setup": [
+      "natesclaw/plugin-sdk/provider-setup": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-setup.d.ts"
       ],
-      "openclaw/plugin-sdk/sandbox": [
+      "natesclaw/plugin-sdk/sandbox": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/sandbox.d.ts"
       ],
-      "openclaw/plugin-sdk/runtime-doctor-migrations": [
+      "natesclaw/plugin-sdk/runtime-doctor-migrations": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/runtime-doctor-migrations.d.ts"
       ],
-      "openclaw/plugin-sdk/runtime-doctor": [
+      "natesclaw/plugin-sdk/runtime-doctor": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/runtime-doctor.d.ts"
       ],
-      "openclaw/plugin-sdk/approval-reference-runtime": [
+      "natesclaw/plugin-sdk/approval-reference-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/approval-reference-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/approval-reaction-runtime": [
+      "natesclaw/plugin-sdk/approval-reaction-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/approval-reaction-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/cron-store-runtime": [
+      "natesclaw/plugin-sdk/cron-store-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/cron-store-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/json-schema-runtime": [
+      "natesclaw/plugin-sdk/json-schema-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/json-schema-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/json-unsafe-integers": [
+      "natesclaw/plugin-sdk/json-unsafe-integers": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/json-unsafe-integers.d.ts"
       ],
-      "openclaw/plugin-sdk/reply-reference": [
+      "natesclaw/plugin-sdk/reply-reference": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/reply-reference.d.ts"
       ],
-      "openclaw/plugin-sdk/reply-payload-testing": [
+      "natesclaw/plugin-sdk/reply-payload-testing": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/reply-payload-testing.d.ts"
       ],
-      "openclaw/plugin-sdk/outbound-media": [
+      "natesclaw/plugin-sdk/outbound-media": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/outbound-media.d.ts"
       ],
-      "openclaw/plugin-sdk/pair-loop-guard-runtime": [
+      "natesclaw/plugin-sdk/pair-loop-guard-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/pair-loop-guard-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/poll-runtime": [
+      "natesclaw/plugin-sdk/poll-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/poll-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/async-lock-runtime": [
+      "natesclaw/plugin-sdk/async-lock-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/async-lock-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-activity-runtime": [
+      "natesclaw/plugin-sdk/channel-activity-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-activity-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/concurrency-runtime": [
+      "natesclaw/plugin-sdk/concurrency-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/concurrency-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/delivery-queue-runtime": [
+      "natesclaw/plugin-sdk/delivery-queue-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/delivery-queue-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/file-access-runtime": [
+      "natesclaw/plugin-sdk/file-access-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/file-access-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/heartbeat-runtime": [
+      "natesclaw/plugin-sdk/heartbeat-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/heartbeat-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/expect-runtime": [
+      "natesclaw/plugin-sdk/expect-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/expect-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/number-runtime": [
+      "natesclaw/plugin-sdk/number-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/number-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/secure-random-runtime": [
+      "natesclaw/plugin-sdk/secure-random-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/secure-random-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/system-event-runtime": [
+      "natesclaw/plugin-sdk/system-event-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/system-event-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/transport-ready-runtime": [
+      "natesclaw/plugin-sdk/transport-ready-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/transport-ready-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/exec-approvals-runtime": [
+      "natesclaw/plugin-sdk/exec-approvals-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/exec-approvals-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/talk-config-runtime": [
+      "natesclaw/plugin-sdk/talk-config-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/talk-config-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/ssrf-runtime-internal": [
+      "natesclaw/plugin-sdk/ssrf-runtime-internal": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/ssrf-runtime-internal.d.ts"
       ],
-      "openclaw/plugin-sdk/embedding-providers": [
+      "natesclaw/plugin-sdk/embedding-providers": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/embedding-providers.d.ts"
       ],
-      "openclaw/plugin-sdk/media-generation-runtime": [
+      "natesclaw/plugin-sdk/media-generation-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/media-generation-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/conversation-binding-runtime": [
+      "natesclaw/plugin-sdk/conversation-binding-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/conversation-binding-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/thread-bindings-runtime": [
+      "natesclaw/plugin-sdk/thread-bindings-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/thread-bindings-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/thread-bindings-session-runtime": [
+      "natesclaw/plugin-sdk/thread-bindings-session-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/thread-bindings-session-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/simple-completion-runtime": [
+      "natesclaw/plugin-sdk/simple-completion-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/simple-completion-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/speech-core": [
+      "natesclaw/plugin-sdk/speech-core": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/speech-core.d.ts"
       ],
-      "openclaw/plugin-sdk/tts-runtime": [
+      "natesclaw/plugin-sdk/tts-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/tts-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/secret-file-runtime": [
+      "natesclaw/plugin-sdk/secret-file-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/secret-file-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/cli-runtime": [
+      "natesclaw/plugin-sdk/cli-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/cli-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/cli-backend": [
+      "natesclaw/plugin-sdk/cli-backend": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/cli-backend.d.ts"
       ],
-      "openclaw/plugin-sdk/codex-mcp-projection": [
+      "natesclaw/plugin-sdk/codex-mcp-projection": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/codex-mcp-projection.d.ts"
       ],
-      "openclaw/plugin-sdk/codex-session-transcript-runtime": [
+      "natesclaw/plugin-sdk/codex-session-transcript-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/codex-session-transcript-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/agent-harness-task-runtime": [
+      "natesclaw/plugin-sdk/agent-harness-task-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/agent-harness-task-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/agent-harness-exec-review-runtime": [
+      "natesclaw/plugin-sdk/agent-harness-exec-review-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/agent-harness-exec-review-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/agent-harness-tool-runtime": [
+      "natesclaw/plugin-sdk/agent-harness-tool-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/agent-harness-tool-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/html-entity-runtime": [
+      "natesclaw/plugin-sdk/html-entity-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/html-entity-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/host-runtime": [
+      "natesclaw/plugin-sdk/host-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/host-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/types": [
+      "natesclaw/plugin-sdk/types": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/types.d.ts"
       ],
-      "openclaw/plugin-sdk/process-runtime": [
+      "natesclaw/plugin-sdk/process-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/process-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/windows-spawn": [
+      "natesclaw/plugin-sdk/windows-spawn": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/windows-spawn.d.ts"
       ],
-      "openclaw/plugin-sdk/acp-runtime": [
+      "natesclaw/plugin-sdk/acp-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/acp-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/acp-runtime-backend": [
+      "natesclaw/plugin-sdk/acp-runtime-backend": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/acp-runtime-backend.d.ts"
       ],
-      "openclaw/plugin-sdk/acp-binding-runtime": [
+      "natesclaw/plugin-sdk/acp-binding-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/acp-binding-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/acp-binding-resolve-runtime": [
+      "natesclaw/plugin-sdk/acp-binding-resolve-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/acp-binding-resolve-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/agent-runtime-test-contracts": [
+      "natesclaw/plugin-sdk/agent-runtime-test-contracts": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/agent-runtime-test-contracts.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-target-testing": [
+      "natesclaw/plugin-sdk/channel-target-testing": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-target-testing.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-test-helpers": [
+      "natesclaw/plugin-sdk/channel-test-helpers": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-test-helpers.d.ts"
       ],
-      "openclaw/plugin-sdk/plugin-test-api": [
+      "natesclaw/plugin-sdk/plugin-test-api": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/plugin-test-api.d.ts"
       ],
-      "openclaw/plugin-sdk/plugin-test-contracts": [
+      "natesclaw/plugin-sdk/plugin-test-contracts": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/plugin-test-contracts.d.ts"
       ],
-      "openclaw/plugin-sdk/plugin-test-runtime": [
+      "natesclaw/plugin-sdk/plugin-test-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/plugin-test-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-http-test-mocks": [
+      "natesclaw/plugin-sdk/provider-http-test-mocks": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-http-test-mocks.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-test-contracts": [
+      "natesclaw/plugin-sdk/provider-test-contracts": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-test-contracts.d.ts"
       ],
-      "openclaw/plugin-sdk/test-env": [
+      "natesclaw/plugin-sdk/test-env": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-env.d.ts"
       ],
-      "openclaw/plugin-sdk/test-fixtures": [
+      "natesclaw/plugin-sdk/test-fixtures": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-fixtures.d.ts"
       ],
-      "openclaw/plugin-sdk/test-live": [
+      "natesclaw/plugin-sdk/test-live": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-live.d.ts"
       ],
-      "openclaw/plugin-sdk/test-live-auth": [
+      "natesclaw/plugin-sdk/test-live-auth": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-live-auth.d.ts"
       ],
-      "openclaw/plugin-sdk/test-media-generation": [
+      "natesclaw/plugin-sdk/test-media-generation": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-media-generation.d.ts"
       ],
-      "openclaw/plugin-sdk/test-media-understanding": [
+      "natesclaw/plugin-sdk/test-media-understanding": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-media-understanding.d.ts"
       ],
-      "openclaw/plugin-sdk/test-node-mocks": [
+      "natesclaw/plugin-sdk/test-node-mocks": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-node-mocks.d.ts"
       ],
-      "openclaw/plugin-sdk/test-state": [
+      "natesclaw/plugin-sdk/test-state": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/test-state.d.ts"
       ],
-      "openclaw/plugin-sdk/time-runtime": [
+      "natesclaw/plugin-sdk/time-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/time-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/migration": [
+      "natesclaw/plugin-sdk/migration": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/migration.d.ts"
       ],
-      "openclaw/plugin-sdk/migration-runtime": [
+      "natesclaw/plugin-sdk/migration-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/migration-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/plugin-state-runtime": [
+      "natesclaw/plugin-sdk/plugin-state-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/plugin-state-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/plugin-state-test-runtime": [
+      "natesclaw/plugin-sdk/plugin-state-test-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/plugin-state-test-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/markdown-table-runtime": [
+      "natesclaw/plugin-sdk/markdown-table-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/markdown-table-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/account-resolution-runtime": [
+      "natesclaw/plugin-sdk/account-resolution-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/account-resolution-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/access-groups": [
+      "natesclaw/plugin-sdk/access-groups": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/access-groups.d.ts"
       ],
-      "openclaw/plugin-sdk/browser-config": [
+      "natesclaw/plugin-sdk/browser-config": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/browser-config.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-contract-testing": [
+      "natesclaw/plugin-sdk/channel-contract-testing": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-contract-testing.d.ts"
       ],
-      "openclaw/plugin-sdk/dangerous-name-runtime": [
+      "natesclaw/plugin-sdk/dangerous-name-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/dangerous-name-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/command-status-runtime": [
+      "natesclaw/plugin-sdk/command-status-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/command-status-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/command-surface": [
+      "natesclaw/plugin-sdk/command-surface": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/command-surface.d.ts"
       ],
-      "openclaw/plugin-sdk/direct-dm-guard-policy": [
+      "natesclaw/plugin-sdk/direct-dm-guard-policy": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/direct-dm-guard-policy.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-config-writes": [
+      "natesclaw/plugin-sdk/channel-config-writes": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-config-writes.d.ts"
       ],
-      "openclaw/plugin-sdk/bundled-channel-config-schema": [
+      "natesclaw/plugin-sdk/bundled-channel-config-schema": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/bundled-channel-config-schema.d.ts"
       ],
-      "openclaw/plugin-sdk/chat-channel-ids": [
+      "natesclaw/plugin-sdk/chat-channel-ids": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/chat-channel-ids.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-mention-gating": [
+      "natesclaw/plugin-sdk/channel-mention-gating": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-mention-gating.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-route": [
+      "natesclaw/plugin-sdk/channel-route": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-route.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-targets": [
+      "natesclaw/plugin-sdk/channel-targets": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/channel-targets.d.ts"
       ],
-      "openclaw/plugin-sdk/context-visibility-runtime": [
+      "natesclaw/plugin-sdk/context-visibility-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/context-visibility-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/file-lock": [
+      "natesclaw/plugin-sdk/file-lock": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/file-lock.d.ts"
       ],
-      "openclaw/plugin-sdk/fetch-runtime": [
+      "natesclaw/plugin-sdk/fetch-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/fetch-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/runtime-fetch": [
+      "natesclaw/plugin-sdk/runtime-fetch": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/runtime-fetch.d.ts"
       ],
-      "openclaw/plugin-sdk/inline-image-data-url-runtime": [
+      "natesclaw/plugin-sdk/inline-image-data-url-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/inline-image-data-url-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/node-host": [
+      "natesclaw/plugin-sdk/node-host": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/node-host.d.ts"
       ],
-      "openclaw/plugin-sdk/response-limit-runtime": [
+      "natesclaw/plugin-sdk/response-limit-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/response-limit-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/session-binding-runtime": [
+      "natesclaw/plugin-sdk/session-binding-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/session-binding-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/session-catalog-runtime": [
+      "natesclaw/plugin-sdk/session-catalog-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/session-catalog-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/session-key-runtime": [
+      "natesclaw/plugin-sdk/session-key-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/session-key-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/session-transcript-runtime": [
+      "natesclaw/plugin-sdk/session-transcript-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/session-transcript-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/sqlite-runtime": [
+      "natesclaw/plugin-sdk/sqlite-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/sqlite-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/sqlite-runtime-testing": [
+      "natesclaw/plugin-sdk/sqlite-runtime-testing": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/sqlite-runtime-testing.d.ts"
       ],
-      "openclaw/plugin-sdk/session-transcript-hit": [
+      "natesclaw/plugin-sdk/session-transcript-hit": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/session-transcript-hit.d.ts"
       ],
-      "openclaw/plugin-sdk/session-visibility": [
+      "natesclaw/plugin-sdk/session-visibility": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/session-visibility.d.ts"
       ],
-      "openclaw/plugin-sdk/ssrf-dispatcher": [
+      "natesclaw/plugin-sdk/ssrf-dispatcher": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/ssrf-dispatcher.d.ts"
       ],
-      "openclaw/plugin-sdk/group-activation": [
+      "natesclaw/plugin-sdk/group-activation": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/group-activation.d.ts"
       ],
-      "openclaw/plugin-sdk/global-singleton": [
+      "natesclaw/plugin-sdk/global-singleton": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/global-singleton.d.ts"
       ],
-      "openclaw/plugin-sdk/directory-config-runtime": [
+      "natesclaw/plugin-sdk/directory-config-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/directory-config-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/image-generation": [
+      "natesclaw/plugin-sdk/image-generation": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/image-generation.d.ts"
       ],
-      "openclaw/plugin-sdk/image-generation-runtime": [
+      "natesclaw/plugin-sdk/image-generation-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/image-generation-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/image-generation-core": [
+      "natesclaw/plugin-sdk/image-generation-core": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/image-generation-core.d.ts"
       ],
-      "openclaw/plugin-sdk/music-generation": [
+      "natesclaw/plugin-sdk/music-generation": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/music-generation.d.ts"
       ],
-      "openclaw/plugin-sdk/video-generation": [
+      "natesclaw/plugin-sdk/video-generation": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/video-generation.d.ts"
       ],
-      "openclaw/plugin-sdk/video-generation-runtime": [
+      "natesclaw/plugin-sdk/video-generation-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/video-generation-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/video-generation-core": [
+      "natesclaw/plugin-sdk/video-generation-core": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/video-generation-core.d.ts"
       ],
-      "openclaw/plugin-sdk/realtime-transcription": [
+      "natesclaw/plugin-sdk/realtime-transcription": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/realtime-transcription.d.ts"
       ],
-      "openclaw/plugin-sdk/realtime-bootstrap-context": [
+      "natesclaw/plugin-sdk/realtime-bootstrap-context": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/realtime-bootstrap-context.d.ts"
       ],
-      "openclaw/plugin-sdk/realtime-voice-audio-queue": [
+      "natesclaw/plugin-sdk/realtime-voice-audio-queue": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/realtime-voice-audio-queue.d.ts"
       ],
-      "openclaw/plugin-sdk/realtime-voice-activation": [
+      "natesclaw/plugin-sdk/realtime-voice-activation": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/realtime-voice-activation.d.ts"
       ],
-      "openclaw/plugin-sdk/realtime-voice": [
+      "natesclaw/plugin-sdk/realtime-voice": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/realtime-voice.d.ts"
       ],
-      "openclaw/plugin-sdk/transcripts": [
+      "natesclaw/plugin-sdk/transcripts": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/transcripts.d.ts"
       ],
-      "openclaw/plugin-sdk/request-url": [
+      "natesclaw/plugin-sdk/request-url": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/request-url.d.ts"
       ],
-      "openclaw/plugin-sdk/keyed-async-queue": [
+      "natesclaw/plugin-sdk/keyed-async-queue": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/keyed-async-queue.d.ts"
       ],
-      "openclaw/plugin-sdk/qa-runner-runtime": [
+      "natesclaw/plugin-sdk/qa-runner-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/qa-runner-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-embedding-registry": [
+      "natesclaw/plugin-sdk/memory-core-host-embedding-registry": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-embedding-registry.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-engine-curated": [
+      "natesclaw/plugin-sdk/memory-core-host-engine-curated": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-engine-curated.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-engine-embeddings": [
+      "natesclaw/plugin-sdk/memory-core-host-engine-embeddings": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-engine-embeddings.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-engine-fs": [
+      "natesclaw/plugin-sdk/memory-core-host-engine-fs": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-engine-fs.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-engine-sessions": [
+      "natesclaw/plugin-sdk/memory-core-host-engine-sessions": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-engine-sessions.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-engine-schema": [
+      "natesclaw/plugin-sdk/memory-core-host-engine-schema": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-engine-schema.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-engine-storage": [
+      "natesclaw/plugin-sdk/memory-core-host-engine-storage": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-engine-storage.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-secret": [
+      "natesclaw/plugin-sdk/memory-core-host-secret": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-secret.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-status": [
+      "natesclaw/plugin-sdk/memory-core-host-status": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-status.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-runtime-cli": [
+      "natesclaw/plugin-sdk/memory-core-host-runtime-cli": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-runtime-cli.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-runtime-core": [
+      "natesclaw/plugin-sdk/memory-core-host-runtime-core": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-runtime-core.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-core-host-runtime-files": [
+      "natesclaw/plugin-sdk/memory-core-host-runtime-files": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-core-host-runtime-files.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-host-events": [
+      "natesclaw/plugin-sdk/memory-host-events": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-host-events.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-host-markdown": [
+      "natesclaw/plugin-sdk/memory-host-markdown": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-host-markdown.d.ts"
       ],
-      "openclaw/plugin-sdk/memory-host-search": [
+      "natesclaw/plugin-sdk/memory-host-search": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/memory-host-search.d.ts"
       ],
-      "openclaw/plugin-sdk/message-tool-delivery-hints": [
+      "natesclaw/plugin-sdk/message-tool-delivery-hints": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/message-tool-delivery-hints.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-oauth-runtime": [
+      "natesclaw/plugin-sdk/provider-oauth-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-oauth-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-auth-runtime": [
+      "natesclaw/plugin-sdk/provider-auth-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-auth-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-auth-login-flow-runtime": [
+      "natesclaw/plugin-sdk/provider-auth-login-flow-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-auth-login-flow-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-auth-api-key": [
+      "natesclaw/plugin-sdk/provider-auth-api-key": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-auth-api-key.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-auth-result": [
+      "natesclaw/plugin-sdk/provider-auth-result": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-auth-result.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-selection-runtime": [
+      "natesclaw/plugin-sdk/provider-selection-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-selection-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-catalog-live-runtime": [
+      "natesclaw/plugin-sdk/provider-catalog-live-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-catalog-live-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-catalog-shared": [
+      "natesclaw/plugin-sdk/provider-catalog-shared": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-catalog-shared.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-entry": [
+      "natesclaw/plugin-sdk/provider-entry": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-entry.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-env-vars": [
+      "natesclaw/plugin-sdk/provider-env-vars": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-env-vars.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-http": [
+      "natesclaw/plugin-sdk/provider-http": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-http.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-model-types": [
+      "natesclaw/plugin-sdk/provider-model-types": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-model-types.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-model-shared": [
+      "natesclaw/plugin-sdk/provider-model-shared": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-model-shared.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-onboard": [
+      "natesclaw/plugin-sdk/provider-onboard": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-onboard.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-stream-family": [
+      "natesclaw/plugin-sdk/provider-stream-family": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-stream-family.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-stream-shared": [
+      "natesclaw/plugin-sdk/provider-stream-shared": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-stream-shared.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-transport-runtime": [
+      "natesclaw/plugin-sdk/provider-transport-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-transport-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-stream": [
+      "natesclaw/plugin-sdk/provider-stream": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-stream.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-tools": [
+      "natesclaw/plugin-sdk/provider-tools": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-tools.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-usage": [
+      "natesclaw/plugin-sdk/provider-usage": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-usage.d.ts"
       ],
-      "openclaw/plugin-sdk/document-extractor": [
+      "natesclaw/plugin-sdk/document-extractor": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/document-extractor.d.ts"
       ],
-      "openclaw/plugin-sdk/web-content-extractor": [
+      "natesclaw/plugin-sdk/web-content-extractor": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/web-content-extractor.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-web-fetch-contract": [
+      "natesclaw/plugin-sdk/provider-web-fetch-contract": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-web-fetch-contract.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-web-fetch": [
+      "natesclaw/plugin-sdk/provider-web-fetch": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-web-fetch.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-web-search-config-contract": [
+      "natesclaw/plugin-sdk/provider-web-search-config-contract": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-web-search-config-contract.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-web-search-contract": [
+      "natesclaw/plugin-sdk/provider-web-search-contract": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-web-search-contract.d.ts"
       ],
-      "openclaw/plugin-sdk/provider-web-search": [
+      "natesclaw/plugin-sdk/provider-web-search": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/provider-web-search.d.ts"
       ],
-      "openclaw/plugin-sdk/retry-runtime": [
+      "natesclaw/plugin-sdk/retry-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/retry-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/speech": [
+      "natesclaw/plugin-sdk/speech": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/speech.d.ts"
       ],
-      "openclaw/plugin-sdk/string-normalization-runtime": [
+      "natesclaw/plugin-sdk/string-normalization-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/string-normalization-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/target-resolver-runtime": [
+      "natesclaw/plugin-sdk/target-resolver-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/target-resolver-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/text-autolink-runtime": [
+      "natesclaw/plugin-sdk/text-autolink-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/text-autolink-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/text-utility-runtime": [
+      "natesclaw/plugin-sdk/text-utility-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/text-utility-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/tool-payload": [
+      "natesclaw/plugin-sdk/tool-payload": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/tool-payload.d.ts"
       ],
-      "openclaw/plugin-sdk/webhook-targets": [
+      "natesclaw/plugin-sdk/webhook-targets": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/webhook-targets.d.ts"
       ],
-      "openclaw/plugin-sdk/agent-core": [
+      "natesclaw/plugin-sdk/agent-core": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/agent-core.d.ts"
       ],
-      "openclaw/plugin-sdk/agent-sessions": [
+      "natesclaw/plugin-sdk/agent-sessions": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/agent-sessions.d.ts"
       ],
-      "openclaw/plugin-sdk/llm": [
+      "natesclaw/plugin-sdk/llm": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/llm.d.ts"
       ],
-      "openclaw/plugin-sdk/account-id": [
+      "natesclaw/plugin-sdk/account-id": [
         "../../dist/plugin-sdk/account-id.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-entry-contract": [
+      "natesclaw/plugin-sdk/channel-entry-contract": [
         "../../dist/plugin-sdk/channel-entry-contract.d.ts"
       ],
-      "openclaw/plugin-sdk/browser-maintenance": [
+      "natesclaw/plugin-sdk/browser-maintenance": [
         "../../dist/plugin-sdk/src/plugin-sdk/browser-maintenance.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-secret-runtime": [
+      "natesclaw/plugin-sdk/channel-secret-runtime": [
         "../../dist/plugin-sdk/channel-secret-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/channel-streaming": [
+      "natesclaw/plugin-sdk/channel-streaming": [
         "../../dist/plugin-sdk/channel-streaming.d.ts"
       ],
-      "openclaw/plugin-sdk/error-runtime": [
+      "natesclaw/plugin-sdk/error-runtime": [
         "../../dist/plugin-sdk/error-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/secret-ref-runtime": [
+      "natesclaw/plugin-sdk/secret-ref-runtime": [
         "../../dist/plugin-sdk/secret-ref-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/ssrf-runtime": [
+      "natesclaw/plugin-sdk/ssrf-runtime": [
         "../../dist/plugin-sdk/ssrf-runtime.d.ts"
       ],
-      "@openclaw/qa-channel/api.js": [
+      "@natesclaw/qa-channel/api.js": [
         "../../dist/plugin-sdk/extensions/qa-channel/api.d.ts"
       ],
-      "@openclaw/memory-core/api.js": [
+      "@natesclaw/memory-core/api.js": [
         "../../dist/plugin-sdk/extensions/memory-core/api.d.ts"
       ],
-      "@openclaw/ai": [
+      "@natesclaw/ai": [
         "../../dist/plugin-sdk/packages/ai/src/index.d.ts"
       ],
-      "@openclaw/ai/diagnostics": [
+      "@natesclaw/ai/diagnostics": [
         "../../dist/plugin-sdk/packages/ai/src/utils/diagnostics.d.ts"
       ],
-      "@openclaw/ai/event-stream": [
+      "@natesclaw/ai/event-stream": [
         "../../dist/plugin-sdk/packages/ai/src/utils/event-stream.d.ts"
       ],
-      "@openclaw/ai/providers": [
+      "@natesclaw/ai/providers": [
         "../../dist/plugin-sdk/packages/ai/src/providers.d.ts"
       ],
-      "@openclaw/ai/transports": [
+      "@natesclaw/ai/transports": [
         "../../dist/plugin-sdk/packages/ai/src/transports.d.ts"
       ],
-      "@openclaw/ai/types": [
+      "@natesclaw/ai/types": [
         "../../dist/plugin-sdk/packages/ai/src/types.d.ts"
       ],
-      "@openclaw/ai/validation": [
+      "@natesclaw/ai/validation": [
         "../../dist/plugin-sdk/packages/ai/src/validation.d.ts"
       ],
-      "@openclaw/ai/internal/anthropic": [
+      "@natesclaw/ai/internal/anthropic": [
         "../../dist/plugin-sdk/packages/ai/src/internal/anthropic.d.ts"
       ],
-      "@openclaw/ai/internal/openai": [
+      "@natesclaw/ai/internal/openai": [
         "../../dist/plugin-sdk/packages/ai/src/internal/openai.d.ts"
       ],
-      "@openclaw/ai/internal/retry-after": [
+      "@natesclaw/ai/internal/retry-after": [
         "../../dist/plugin-sdk/packages/ai/src/internal/retry-after.d.ts"
       ],
-      "@openclaw/ai/internal/runtime": [
+      "@natesclaw/ai/internal/runtime": [
         "../../dist/plugin-sdk/packages/ai/src/internal/runtime.d.ts"
       ],
-      "@openclaw/ai/internal/shared": [
+      "@natesclaw/ai/internal/shared": [
         "../../dist/plugin-sdk/packages/ai/src/internal/shared.d.ts"
       ],
-      "@openclaw/llm-core": [
+      "@natesclaw/llm-core": [
         "../../dist/plugin-sdk/packages/llm-core/src/index.d.ts"
       ],
-      "@openclaw/llm-core/diagnostics": [
+      "@natesclaw/llm-core/diagnostics": [
         "../../dist/plugin-sdk/packages/llm-core/src/utils/diagnostics.d.ts"
       ],
-      "@openclaw/llm-core/event-stream": [
+      "@natesclaw/llm-core/event-stream": [
         "../../dist/plugin-sdk/packages/llm-core/src/utils/event-stream.d.ts"
       ],
-      "@openclaw/llm-core/types": [
+      "@natesclaw/llm-core/types": [
         "../../dist/plugin-sdk/packages/llm-core/src/types.d.ts"
       ],
-      "@openclaw/llm-core/validation": [
+      "@natesclaw/llm-core/validation": [
         "../../dist/plugin-sdk/packages/llm-core/src/validation.d.ts"
       ],
-      "@openclaw/llm-core/*": [
+      "@natesclaw/llm-core/*": [
         "../../dist/plugin-sdk/packages/llm-core/src/*.d.ts"
       ],
-      "@openclaw/model-catalog-core": [
+      "@natesclaw/model-catalog-core": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/index.d.ts"
       ],
-      "@openclaw/model-catalog-core/configured-model-refs": [
+      "@natesclaw/model-catalog-core/configured-model-refs": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/configured-model-refs.d.ts"
       ],
-      "@openclaw/model-catalog-core/model-catalog-refs": [
+      "@natesclaw/model-catalog-core/model-catalog-refs": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/model-catalog-refs.d.ts"
       ],
-      "@openclaw/model-catalog-core/model-catalog-normalize": [
+      "@natesclaw/model-catalog-core/model-catalog-normalize": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/model-catalog-normalize.d.ts"
       ],
-      "@openclaw/model-catalog-core/model-catalog-types": [
+      "@natesclaw/model-catalog-core/model-catalog-types": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/model-catalog-types.d.ts"
       ],
-      "@openclaw/model-catalog-core/provider-id": [
+      "@natesclaw/model-catalog-core/provider-id": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/provider-id.d.ts"
       ],
-      "@openclaw/model-catalog-core/provider-model-id-normalization": [
+      "@natesclaw/model-catalog-core/provider-model-id-normalization": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/provider-model-id-normalization.d.ts"
       ],
-      "@openclaw/model-catalog-core/provider-model-id-normalize": [
+      "@natesclaw/model-catalog-core/provider-model-id-normalize": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/provider-model-id-normalize.d.ts"
       ],
-      "@openclaw/model-catalog-core/*": [
+      "@natesclaw/model-catalog-core/*": [
         "../../dist/plugin-sdk/packages/model-catalog-core/src/*.d.ts"
       ],
-      "@openclaw/markdown-core": [
+      "@natesclaw/markdown-core": [
         "../../dist/plugin-sdk/packages/markdown-core/src/index.d.ts"
       ],
-      "@openclaw/markdown-core/code-spans": [
+      "@natesclaw/markdown-core/code-spans": [
         "../../dist/plugin-sdk/packages/markdown-core/src/code-spans.d.ts"
       ],
-      "@openclaw/markdown-core/fences": [
+      "@natesclaw/markdown-core/fences": [
         "../../dist/plugin-sdk/packages/markdown-core/src/fences.d.ts"
       ],
-      "@openclaw/markdown-core/frontmatter": [
+      "@natesclaw/markdown-core/frontmatter": [
         "../../dist/plugin-sdk/packages/markdown-core/src/frontmatter.d.ts"
       ],
-      "@openclaw/markdown-core/ir": [
+      "@natesclaw/markdown-core/ir": [
         "../../dist/plugin-sdk/packages/markdown-core/src/ir.d.ts"
       ],
-      "@openclaw/markdown-core/render": [
+      "@natesclaw/markdown-core/render": [
         "../../dist/plugin-sdk/packages/markdown-core/src/render.d.ts"
       ],
-      "@openclaw/markdown-core/render-aware-chunking": [
+      "@natesclaw/markdown-core/render-aware-chunking": [
         "../../dist/plugin-sdk/packages/markdown-core/src/render-aware-chunking.d.ts"
       ],
-      "@openclaw/markdown-core/tables": [
+      "@natesclaw/markdown-core/tables": [
         "../../dist/plugin-sdk/packages/markdown-core/src/tables.d.ts"
       ],
-      "@openclaw/markdown-core/types": [
+      "@natesclaw/markdown-core/types": [
         "../../dist/plugin-sdk/packages/markdown-core/src/types.d.ts"
       ],
-      "@openclaw/markdown-core/*": [
+      "@natesclaw/markdown-core/*": [
         "../../dist/plugin-sdk/packages/markdown-core/src/*.d.ts"
       ],
-      "@openclaw/media-generation-core": [
+      "@natesclaw/media-generation-core": [
         "../../dist/plugin-sdk/packages/media-generation-core/src/index.d.ts"
       ],
-      "@openclaw/media-generation-core/capability-model-ref": [
+      "@natesclaw/media-generation-core/capability-model-ref": [
         "../../dist/plugin-sdk/packages/media-generation-core/src/capability-model-ref.d.ts"
       ],
-      "@openclaw/media-generation-core/catalog": [
+      "@natesclaw/media-generation-core/catalog": [
         "../../dist/plugin-sdk/packages/media-generation-core/src/catalog.d.ts"
       ],
-      "@openclaw/media-generation-core/model-ref": [
+      "@natesclaw/media-generation-core/model-ref": [
         "../../dist/plugin-sdk/packages/media-generation-core/src/model-ref.d.ts"
       ],
-      "@openclaw/media-generation-core/normalization": [
+      "@natesclaw/media-generation-core/normalization": [
         "../../dist/plugin-sdk/packages/media-generation-core/src/normalization.d.ts"
       ],
-      "@openclaw/media-generation-core/*": [
+      "@natesclaw/media-generation-core/*": [
         "../../dist/plugin-sdk/packages/media-generation-core/src/*.d.ts"
       ],
-      "@openclaw/media-core": [
+      "@natesclaw/media-core": [
         "../../dist/plugin-sdk/packages/media-core/src/index.d.ts"
       ],
-      "@openclaw/media-core/attachment-classify": [
+      "@natesclaw/media-core/attachment-classify": [
         "../../dist/plugin-sdk/packages/media-core/src/attachment-classify.d.ts"
       ],
-      "@openclaw/media-core/base64": [
+      "@natesclaw/media-core/base64": [
         "../../dist/plugin-sdk/packages/media-core/src/base64.d.ts"
       ],
-      "@openclaw/media-core/constants": [
+      "@natesclaw/media-core/constants": [
         "../../dist/plugin-sdk/packages/media-core/src/constants.d.ts"
       ],
-      "@openclaw/media-core/content-length": [
+      "@natesclaw/media-core/content-length": [
         "../../dist/plugin-sdk/packages/media-core/src/content-length.d.ts"
       ],
-      "@openclaw/media-core/file-name": [
+      "@natesclaw/media-core/file-name": [
         "../../dist/plugin-sdk/packages/media-core/src/file-name.d.ts"
       ],
-      "@openclaw/media-core/inbound-path-policy": [
+      "@natesclaw/media-core/inbound-path-policy": [
         "../../dist/plugin-sdk/packages/media-core/src/inbound-path-policy.d.ts"
       ],
-      "@openclaw/media-core/inline-image-data-url": [
+      "@natesclaw/media-core/inline-image-data-url": [
         "../../dist/plugin-sdk/packages/media-core/src/inline-image-data-url.d.ts"
       ],
-      "@openclaw/media-core/media-source-url": [
+      "@natesclaw/media-core/media-source-url": [
         "../../dist/plugin-sdk/packages/media-core/src/media-source-url.d.ts"
       ],
-      "@openclaw/media-core/mime": [
+      "@natesclaw/media-core/mime": [
         "../../dist/plugin-sdk/packages/media-core/src/mime.d.ts"
       ],
-      "@openclaw/media-core/read-byte-stream-with-limit": [
+      "@natesclaw/media-core/read-byte-stream-with-limit": [
         "../../dist/plugin-sdk/packages/media-core/src/read-byte-stream-with-limit.d.ts"
       ],
-      "@openclaw/media-core/*": [
+      "@natesclaw/media-core/*": [
         "../../dist/plugin-sdk/packages/media-core/src/*.d.ts"
       ],
-      "@openclaw/normalization-core/record-coerce": [
+      "@natesclaw/normalization-core/record-coerce": [
         "../../dist/plugin-sdk/packages/normalization-core/src/record-coerce.d.ts"
       ],
-      "@openclaw/normalization-core/string-coerce": [
+      "@natesclaw/normalization-core/string-coerce": [
         "../../dist/plugin-sdk/packages/normalization-core/src/string-coerce.d.ts"
       ],
-      "@openclaw/normalization-core/*": [
+      "@natesclaw/normalization-core/*": [
         "../../dist/plugin-sdk/packages/normalization-core/src/*.d.ts"
       ],
-      "@openclaw/retry": [
+      "@natesclaw/retry": [
         "../../dist/plugin-sdk/packages/retry/src/index.d.ts"
       ],
-      "@openclaw/workboard-contract": [
+      "@natesclaw/workboard-contract": [
         "../../packages/workboard-contract/src/index.ts"
       ],
-      "@openclaw/acp-core": [
+      "@natesclaw/acp-core": [
         "../../dist/plugin-sdk/packages/acp-core/src/index.d.ts"
       ],
-      "@openclaw/acp-core/meta": [
+      "@natesclaw/acp-core/meta": [
         "../../dist/plugin-sdk/packages/acp-core/src/meta.d.ts"
       ],
-      "@openclaw/acp-core/session": [
+      "@natesclaw/acp-core/session": [
         "../../dist/plugin-sdk/packages/acp-core/src/session.d.ts"
       ],
-      "@openclaw/acp-core/session-interaction-mode": [
+      "@natesclaw/acp-core/session-interaction-mode": [
         "../../dist/plugin-sdk/packages/acp-core/src/session-interaction-mode.d.ts"
       ],
-      "@openclaw/acp-core/session-lineage-meta": [
+      "@natesclaw/acp-core/session-lineage-meta": [
         "../../dist/plugin-sdk/packages/acp-core/src/session-lineage-meta.d.ts"
       ],
-      "@openclaw/acp-core/types": [
+      "@natesclaw/acp-core/types": [
         "../../dist/plugin-sdk/packages/acp-core/src/types.d.ts"
       ],
-      "@openclaw/acp-core/runtime/error-text": [
+      "@natesclaw/acp-core/runtime/error-text": [
         "../../dist/plugin-sdk/packages/acp-core/src/runtime/error-text.d.ts"
       ],
-      "@openclaw/acp-core/runtime/errors": [
+      "@natesclaw/acp-core/runtime/errors": [
         "../../dist/plugin-sdk/packages/acp-core/src/runtime/errors.d.ts"
       ],
-      "@openclaw/acp-core/runtime/session-identifiers": [
+      "@natesclaw/acp-core/runtime/session-identifiers": [
         "../../dist/plugin-sdk/packages/acp-core/src/runtime/session-identifiers.d.ts"
       ],
-      "@openclaw/acp-core/runtime/session-identity": [
+      "@natesclaw/acp-core/runtime/session-identity": [
         "../../dist/plugin-sdk/packages/acp-core/src/runtime/session-identity.d.ts"
       ],
-      "@openclaw/acp-core/runtime/types": [
+      "@natesclaw/acp-core/runtime/types": [
         "../../dist/plugin-sdk/packages/acp-core/src/runtime/types.d.ts"
       ],
-      "@openclaw/acp-core/*": [
+      "@natesclaw/acp-core/*": [
         "../../dist/plugin-sdk/packages/acp-core/src/*.d.ts"
       ],
-      "@openclaw/terminal-core": [
+      "@natesclaw/terminal-core": [
         "../../dist/plugin-sdk/packages/terminal-core/src/index.d.ts"
       ],
-      "@openclaw/terminal-core/ansi": [
+      "@natesclaw/terminal-core/ansi": [
         "../../dist/plugin-sdk/packages/terminal-core/src/ansi.d.ts"
       ],
-      "@openclaw/terminal-core/decorative-emoji": [
+      "@natesclaw/terminal-core/decorative-emoji": [
         "../../dist/plugin-sdk/packages/terminal-core/src/decorative-emoji.d.ts"
       ],
-      "@openclaw/terminal-core/health-style": [
+      "@natesclaw/terminal-core/health-style": [
         "../../dist/plugin-sdk/packages/terminal-core/src/health-style.d.ts"
       ],
-      "@openclaw/terminal-core/links": [
+      "@natesclaw/terminal-core/links": [
         "../../dist/plugin-sdk/packages/terminal-core/src/links.d.ts"
       ],
-      "@openclaw/terminal-core/note": [
+      "@natesclaw/terminal-core/note": [
         "../../dist/plugin-sdk/packages/terminal-core/src/note.d.ts"
       ],
-      "@openclaw/terminal-core/osc-progress": [
+      "@natesclaw/terminal-core/osc-progress": [
         "../../dist/plugin-sdk/packages/terminal-core/src/osc-progress.d.ts"
       ],
-      "@openclaw/terminal-core/palette": [
+      "@natesclaw/terminal-core/palette": [
         "../../dist/plugin-sdk/packages/terminal-core/src/palette.d.ts"
       ],
-      "@openclaw/terminal-core/progress-line": [
+      "@natesclaw/terminal-core/progress-line": [
         "../../dist/plugin-sdk/packages/terminal-core/src/progress-line.d.ts"
       ],
-      "@openclaw/terminal-core/prompt-select-styled": [
+      "@natesclaw/terminal-core/prompt-select-styled": [
         "../../dist/plugin-sdk/packages/terminal-core/src/prompt-select-styled.d.ts"
       ],
-      "@openclaw/terminal-core/prompt-select-styled-params": [
+      "@natesclaw/terminal-core/prompt-select-styled-params": [
         "../../dist/plugin-sdk/packages/terminal-core/src/prompt-select-styled-params.d.ts"
       ],
-      "@openclaw/terminal-core/prompt-style": [
+      "@natesclaw/terminal-core/prompt-style": [
         "../../dist/plugin-sdk/packages/terminal-core/src/prompt-style.d.ts"
       ],
-      "@openclaw/terminal-core/restore": [
+      "@natesclaw/terminal-core/restore": [
         "../../dist/plugin-sdk/packages/terminal-core/src/restore.d.ts"
       ],
-      "@openclaw/terminal-core/safe-text": [
+      "@natesclaw/terminal-core/safe-text": [
         "../../dist/plugin-sdk/packages/terminal-core/src/safe-text.d.ts"
       ],
-      "@openclaw/terminal-core/stream-writer": [
+      "@natesclaw/terminal-core/stream-writer": [
         "../../dist/plugin-sdk/packages/terminal-core/src/stream-writer.d.ts"
       ],
-      "@openclaw/terminal-core/table": [
+      "@natesclaw/terminal-core/table": [
         "../../dist/plugin-sdk/packages/terminal-core/src/table.d.ts"
       ],
-      "@openclaw/terminal-core/terminal-link": [
+      "@natesclaw/terminal-core/terminal-link": [
         "../../dist/plugin-sdk/packages/terminal-core/src/terminal-link.d.ts"
       ],
-      "@openclaw/terminal-core/theme": [
+      "@natesclaw/terminal-core/theme": [
         "../../dist/plugin-sdk/packages/terminal-core/src/theme.d.ts"
       ],
-      "@openclaw/terminal-core/*": [
+      "@natesclaw/terminal-core/*": [
         "../../dist/plugin-sdk/packages/terminal-core/src/*.d.ts"
       ],
-      "@openclaw/*.js": [
+      "@natesclaw/*.js": [
         "../../packages/plugin-sdk/dist/extensions/*.d.ts",
         "../*"
       ],
-      "@openclaw/*": [
+      "@natesclaw/*": [
         "../*"
       ],
-      "openclaw/plugin-sdk/qa-channel": [
+      "natesclaw/plugin-sdk/qa-channel": [
         "../../dist/plugin-sdk/src/plugin-sdk/qa-channel.d.ts"
       ],
-      "openclaw/plugin-sdk/qa-channel-protocol": [
+      "natesclaw/plugin-sdk/qa-channel-protocol": [
         "../../dist/plugin-sdk/src/plugin-sdk/qa-channel-protocol.d.ts"
       ],
-      "openclaw/plugin-sdk/qa-runtime": [
+      "natesclaw/plugin-sdk/qa-runtime": [
         "../../dist/plugin-sdk/src/plugin-sdk/qa-runtime.d.ts"
       ],
-      "@openclaw/plugin-sdk/*": [
+      "@natesclaw/plugin-sdk/*": [
         "../../dist/plugin-sdk/*.d.ts"
       ],
-      "@openclaw/anthropic-vertex/api.js": [
+      "@natesclaw/anthropic-vertex/api.js": [
         "./.boundary-stubs/anthropic-vertex-api.d.ts"
       ],
-      "@openclaw/ollama/api.js": [
+      "@natesclaw/ollama/api.js": [
         "./.boundary-stubs/ollama-api.d.ts"
       ],
-      "@openclaw/ollama/runtime-api.js": [
+      "@natesclaw/ollama/runtime-api.js": [
         "./.boundary-stubs/ollama-runtime-api.d.ts"
       ],
-      "openclaw/plugin-sdk/doctor-repair-runtime": [
+      "natesclaw/plugin-sdk/doctor-repair-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/doctor-repair-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/plugin-state-store-runtime": [
+      "natesclaw/plugin-sdk/plugin-state-store-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/plugin-state-store-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/model-ref-parse": [
+      "natesclaw/plugin-sdk/model-ref-parse": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/model-ref-parse.d.ts"
       ],
-      "openclaw/plugin-sdk/outbound-echo-runtime": [
+      "natesclaw/plugin-sdk/outbound-echo-runtime": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/outbound-echo-runtime.d.ts"
       ],
-      "openclaw/plugin-sdk/secret-provider-alias": [
+      "natesclaw/plugin-sdk/secret-provider-alias": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/secret-provider-alias.d.ts"
       ],
-      "openclaw/plugin-sdk/session-store-paths": [
+      "natesclaw/plugin-sdk/session-store-paths": [
         "../../packages/plugin-sdk/dist/src/plugin-sdk/session-store-paths.d.ts"
       ]
     }

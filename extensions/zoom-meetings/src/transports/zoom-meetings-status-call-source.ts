@@ -1,14 +1,14 @@
-import { MeetingPlatformAdapter } from "openclaw/plugin-sdk/meeting-runtime";
+import { MeetingPlatformAdapter } from "natesclaw/plugin-sdk/meeting-runtime";
 
 export function zoomMeetingStatusCallSource(): string {
   return MeetingPlatformAdapter.createStatusCallSource({
     platform: {
-      audioOutputElementIdPrefix: "openclaw-zoom-audio-output-",
+      audioOutputElementIdPrefix: "natesclaw-zoom-audio-output-",
       displayName: "Zoom",
       globals: {
-        audioOutputs: "__openclawZoomAudioOutputs",
-        captions: "__openclawZoomCaptions",
-        meeting: "__openclawZoomMeeting",
+        audioOutputs: "__natesclawZoomAudioOutputs",
+        captions: "__natesclawZoomCaptions",
+        meeting: "__natesclawZoomMeeting",
       },
       manualActionReasonPrefix: "zoom",
     },

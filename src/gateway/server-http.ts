@@ -13,7 +13,7 @@ import { isCoreCanvasHostEnabled } from "../canvas/config.js";
 import { isCanvasDocumentHttpPath } from "../canvas/constants.js";
 import { resolveBundledChannelGatewayAuthBypassPaths } from "../channels/plugins/gateway-auth-bypass.js";
 import { getRuntimeConfig } from "../config/io.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   createDiagnosticTraceContext,
   runWithDiagnosticTraceContext,
@@ -135,12 +135,12 @@ const getPluginRouteRuntimeScopesModule = createLazyRuntimeModule(
 );
 
 const pluginGatewayAuthBypassPathsCache = new WeakMap<
-  OpenClawConfig,
+  NatesclawConfig,
   Promise<ReadonlySet<string>>
 >();
 
 async function resolvePluginGatewayAuthBypassPaths(
-  configSnapshot: OpenClawConfig,
+  configSnapshot: NatesclawConfig,
 ): Promise<Set<string>> {
   const paths = new Set<string>();
   const configuredChannels = configSnapshot.channels;
@@ -159,7 +159,7 @@ async function resolvePluginGatewayAuthBypassPaths(
 }
 
 function getCachedPluginGatewayAuthBypassPaths(
-  configSnapshot: OpenClawConfig,
+  configSnapshot: NatesclawConfig,
 ): Promise<ReadonlySet<string>> {
   const cached = pluginGatewayAuthBypassPathsCache.get(configSnapshot);
   if (cached) {
@@ -342,7 +342,7 @@ export function createGatewayHttpServer(opts: {
   /** Optional rate limiter for auth brute-force protection. */
   rateLimiter?: AuthRateLimiter;
   getReadiness?: ReadinessChecker;
-  getRuntimeConfig?: () => OpenClawConfig;
+  getRuntimeConfig?: () => NatesclawConfig;
   isStartupPluginRuntimeReady?: () => boolean;
   isTerminalEnabled?: () => boolean;
   tlsOptions?: TlsOptions;
@@ -538,7 +538,7 @@ export function createGatewayHttpServer(opts: {
       );
       addAdmittedStage(
         "board-widget",
-        scopedRequestPath.startsWith("/__openclaw__/board/"),
+        scopedRequestPath.startsWith("/__natesclaw__/board/"),
         async () => (await getBoardHttpModule()).handleBoardHttpRequest(req, res),
       );
       const userProfileAvatarPath = canonicalizeUserProfileAvatarPath(
@@ -810,10 +810,10 @@ function handleBudgetedGatewayWebSocketUpgrade(params: {
   try {
     wss.handleUpgrade(req, socket, head, (ws) => {
       const ingressSocket = ws as GatewayIngressWebSocket;
-      ingressSocket["__openclawPreauthBudgetKey"] = preauthBudgetKey;
+      ingressSocket["__natesclawPreauthBudgetKey"] = preauthBudgetKey;
       params.prepareSocket?.(ingressSocket);
       wss.emit("connection", ws, req);
-      if (ingressSocket["__openclawPreauthBudgetClaimed"]) {
+      if (ingressSocket["__natesclawPreauthBudgetClaimed"]) {
         budgetTransferred = true;
         socket.off("close", releaseUpgradeBudget);
       }

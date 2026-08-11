@@ -1,5 +1,5 @@
-/** Attach OpenClaw metadata to a transcript message without dropping existing metadata. */
-export function attachOpenClawTranscriptMeta(
+/** Attach Natesclaw metadata to a transcript message without dropping existing metadata. */
+export function attachNatesclawTranscriptMeta(
   message: unknown,
   meta: Record<string, unknown>,
 ): unknown {
@@ -8,14 +8,14 @@ export function attachOpenClawTranscriptMeta(
   }
   const record = message as Record<string, unknown>;
   const existing =
-    record["__openclaw"] &&
-    typeof record["__openclaw"] === "object" &&
-    !Array.isArray(record["__openclaw"])
-      ? (record["__openclaw"] as Record<string, unknown>)
+    record["__natesclaw"] &&
+    typeof record["__natesclaw"] === "object" &&
+    !Array.isArray(record["__natesclaw"])
+      ? (record["__natesclaw"] as Record<string, unknown>)
       : {};
   return {
     ...record,
-    __openclaw: {
+    __natesclaw: {
       ...existing,
       ...meta,
     },
@@ -44,7 +44,7 @@ export function projectTranscriptEntryMessage(entry: unknown, seq: number): unkn
           ? record.timestamp
           : Number.NaN;
     const idempotencyKey = readTranscriptMessageIdempotencyKey(record.message);
-    return attachOpenClawTranscriptMeta(record.message, {
+    return attachNatesclawTranscriptMeta(record.message, {
       ...(typeof record.id === "string" ? { id: record.id } : {}),
       ...(idempotencyKey ? { idempotencyKey } : {}),
       ...(Number.isFinite(recordTimestampMs) ? { recordTimestampMs } : {}),
@@ -61,7 +61,7 @@ export function projectTranscriptEntryMessage(entry: unknown, seq: number): unkn
     role: "system",
     content: [{ type: "text", text: kind === "compaction" ? "Compaction" : "Reset" }],
     timestamp: Number.isFinite(parsedTimestamp) ? parsedTimestamp : Date.now(),
-    __openclaw: {
+    __natesclaw: {
       kind,
       id: typeof record.id === "string" ? record.id : undefined,
       seq,

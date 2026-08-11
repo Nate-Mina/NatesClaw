@@ -1,6 +1,6 @@
 import path from "node:path";
-import { disposeRegisteredAgentHarnesses } from "openclaw/plugin-sdk/agent-harness";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { disposeRegisteredAgentHarnesses } from "natesclaw/plugin-sdk/agent-harness";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { startQaGatewayChild } from "./gateway-child.js";
 import type { QaLabLatestReport, QaLabScenarioOutcome } from "./lab-server.types.js";
 import { sanitizeQaProgressValue as sanitizeQaSuiteProgressValue } from "./progress-format.js";
@@ -125,7 +125,7 @@ export async function runQaFlowSuiteStandard(
     writeQaSuiteProgress(progressEnabled, "gateway start");
     const activeGateway = await startQaGatewayChild({
       repoRoot,
-      command: params?.sutOpenClawCommand,
+      command: params?.sutNatesclawCommand,
       providerBaseUrl: activeMock ? `${activeMock.baseUrl}/v1` : undefined,
       transport,
       transportBaseUrl: lab.listenUrl,
@@ -145,7 +145,7 @@ export async function runQaFlowSuiteStandard(
         gatewayConfigPatch || params?.mutateConfig
           ? (cfg) => {
               const patchedConfig = gatewayConfigPatch
-                ? (applyQaMergePatch(cfg, gatewayConfigPatch) as OpenClawConfig)
+                ? (applyQaMergePatch(cfg, gatewayConfigPatch) as NatesclawConfig)
                 : cfg;
               return params?.mutateConfig ? params.mutateConfig(patchedConfig) : patchedConfig;
             }
@@ -171,7 +171,7 @@ export async function runQaFlowSuiteStandard(
       lab,
       mock: activeMock,
       gateway: activeGateway,
-      runtimeId: params?.forcedRuntime ?? "openclaw",
+      runtimeId: params?.forcedRuntime ?? "natesclaw",
       outputDir,
       // YAML scenarios should see the full staged gateway config, not just
       // the transport fragment. Routing/session/plugin assertions depend on it.
@@ -441,7 +441,7 @@ export async function runQaFlowSuiteStandard(
     throw error;
   } finally {
     const activeEnv = env;
-    const keepTemp = process.env.OPENCLAW_QA_KEEP_TEMP === "1" || false;
+    const keepTemp = process.env.NATESCLAW_QA_KEEP_TEMP === "1" || false;
     const activeGateway = gateway;
     const activeMock = mock;
     const cleanupFailures = await runQaFlowSuiteCleanupPlan({

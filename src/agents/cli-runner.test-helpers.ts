@@ -14,7 +14,7 @@ import { saveExecApprovals } from "../infra/exec-approvals-store.js";
 import { testing as execApprovalsStoreTesting } from "../infra/exec-approvals-store.test-support.js";
 import type { CliBackendPlugin } from "../plugins/cli-backend.types.js";
 import type { RunExit } from "../process/supervisor/types.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { createTestAdmittedRunContext } from "./admitted-run-context.test-support.js";
 import type { PreparedCliRunContext } from "./cli-runner/types.js";
@@ -36,7 +36,7 @@ export type TestCliBackendParams = {
 };
 
 export function wrappedPluginSystemContext(text: string) {
-  return `---\n\nOpenClaw plugin-injected system context. This block is not workspace file content.\n\n${text}\n\n---`;
+  return `---\n\nNatesclaw plugin-injected system context. This block is not workspace file content.\n\n${text}\n\n---`;
 }
 
 export function captureModelCallDiagnostics(runId: string) {
@@ -67,13 +67,13 @@ export function expectModelCallTypes(
 export function createTestMcpLoopbackServerConfig(port: number) {
   return {
     mcpServers: {
-      openclaw: {
+      natesclaw: {
         type: "http",
         url: `http://127.0.0.1:${port}/mcp`,
         alwaysLoad: true,
         headers: {
-          Authorization: "Bearer ${OPENCLAW_MCP_TOKEN}",
-          "x-openclaw-cli-capture-key": "${OPENCLAW_MCP_CLI_CAPTURE_KEY}",
+          Authorization: "Bearer ${NATESCLAW_MCP_TOKEN}",
+          "x-natesclaw-cli-capture-key": "${NATESCLAW_MCP_CLI_CAPTURE_KEY}",
         },
       },
     },
@@ -356,25 +356,25 @@ export async function withTempExecApprovalsState(
   file: Record<string, unknown>,
   run: () => Promise<void>,
 ) {
-  const home = await fs.promises.mkdtemp(path.join(os.tmpdir(), "openclaw-cli-exec-approvals-"));
-  const stateDir = path.join(home, ".openclaw");
+  const home = await fs.promises.mkdtemp(path.join(os.tmpdir(), "natesclaw-cli-exec-approvals-"));
+  const stateDir = path.join(home, ".natesclaw");
   try {
-    await withEnvAsync({ HOME: home, OPENCLAW_STATE_DIR: stateDir }, async () => {
+    await withEnvAsync({ HOME: home, NATESCLAW_STATE_DIR: stateDir }, async () => {
       execApprovalsStoreTesting.reset();
       saveExecApprovals(file as ExecApprovalsFile);
       await run();
     });
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     execApprovalsStoreTesting.reset();
     await fs.promises.rm(home, { recursive: true, force: true });
   }
 }
 
-export async function withTempOpenClawHome(run: (home: string) => Promise<void>) {
-  const home = await fs.promises.mkdtemp(path.join(os.tmpdir(), "openclaw-cli-home-"));
+export async function withTempNatesclawHome(run: (home: string) => Promise<void>) {
+  const home = await fs.promises.mkdtemp(path.join(os.tmpdir(), "natesclaw-cli-home-"));
   try {
-    await withEnvAsync({ OPENCLAW_HOME: home }, async () => run(home));
+    await withEnvAsync({ NATESCLAW_HOME: home }, async () => run(home));
   } finally {
     await fs.promises.rm(home, { recursive: true, force: true });
   }
@@ -384,14 +384,14 @@ type PrepareCliRun = (params: RunCliAgentParams) => Promise<PreparedCliRunContex
 
 export function createCliRunnerPrepareFixture(prepareCliRun: PrepareCliRun) {
   const tempDirs = new Set<string>();
-  const hadStateDir = Object.hasOwn(process.env, "OPENCLAW_STATE_DIR");
-  const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+  const hadStateDir = Object.hasOwn(process.env, "NATESCLAW_STATE_DIR");
+  const originalStateDir = process.env.NATESCLAW_STATE_DIR;
   let defaultSession: { dir: string; sessionFile: string } | undefined;
 
   const createSession = () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-prepare-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-cli-prepare-"));
     tempDirs.add(dir);
-    process.env.OPENCLAW_STATE_DIR = dir;
+    process.env.NATESCLAW_STATE_DIR = dir;
     const sessionFile = path.join(dir, "agents", "main", "sessions", "session-test.jsonl");
     fs.mkdirSync(path.dirname(sessionFile), { recursive: true });
     fs.writeFileSync(
@@ -451,9 +451,9 @@ export function createCliRunnerPrepareFixture(prepareCliRun: PrepareCliRun) {
       tempDirs.clear();
       defaultSession = undefined;
       if (hadStateDir) {
-        process.env.OPENCLAW_STATE_DIR = originalStateDir;
+        process.env.NATESCLAW_STATE_DIR = originalStateDir;
       } else {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.NATESCLAW_STATE_DIR;
       }
     },
   };

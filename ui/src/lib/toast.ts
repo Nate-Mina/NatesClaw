@@ -1,7 +1,7 @@
 import { html, nothing, type TemplateResult } from "lit";
 import { state } from "lit/decorators.js";
 import { t } from "../i18n/index.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomContentsElement } from "../lit/natesclaw-element.ts";
 
 type ToastDismissReason = "action" | "dismiss" | "disconnected" | "replaced" | "timeout";
 
@@ -18,7 +18,7 @@ export type ToastOptions = {
 const DEFAULT_TOAST_DURATION_MS = 6_000;
 
 function activeModalToastLayer() {
-  return [...(document.openClawModalToastLayers ?? [])].findLast(
+  return [...(document.NatesclawModalToastLayers ?? [])].findLast(
     (candidate) => candidate.isConnected,
   );
 }
@@ -28,7 +28,7 @@ function activeModalToastLayer() {
 // dropping it, so no caller's message disappears because it arrived too early.
 let queuedToast: ToastOptions | null = null;
 
-class OpenClawToastHost extends OpenClawLightDomContentsElement {
+class NatesclawToastHost extends NatesclawLightDomContentsElement {
   @state() private toast: ToastOptions | null = null;
   private dismissTimer: ReturnType<typeof globalThis.setTimeout> | null = null;
 
@@ -43,7 +43,7 @@ class OpenClawToastHost extends OpenClawLightDomContentsElement {
 
   override disconnectedCallback() {
     const target = activeModalToastLayer() ?? document.querySelector(".shell");
-    if (!this.isConnected && this.parentElement?.localName === "openclaw-modal-dialog" && target) {
+    if (!this.isConnected && this.parentElement?.localName === "natesclaw-modal-dialog" && target) {
       target.append(this);
     } else {
       this.dismiss("disconnected");
@@ -113,7 +113,7 @@ class OpenClawToastHost extends OpenClawLightDomContentsElement {
 }
 
 export function showToast(options: ToastOptions): boolean {
-  const host = document.querySelector<OpenClawToastHost>("openclaw-toast-host");
+  const host = document.querySelector<NatesclawToastHost>("natesclaw-toast-host");
   if (!host) {
     queuedToast = options;
     return false;
@@ -136,12 +136,12 @@ export function showToast(options: ToastOptions): boolean {
   return true;
 }
 
-if (!customElements.get("openclaw-toast-host")) {
-  customElements.define("openclaw-toast-host", OpenClawToastHost);
+if (!customElements.get("natesclaw-toast-host")) {
+  customElements.define("natesclaw-toast-host", NatesclawToastHost);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-toast-host": OpenClawToastHost;
+    "natesclaw-toast-host": NatesclawToastHost;
   }
 }

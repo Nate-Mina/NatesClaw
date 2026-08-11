@@ -1,12 +1,12 @@
 // Cron validation tests cover channel target validation against plugin
 // prefixes/aliases and runtime config for cron delivery destinations.
 
-import { expectDefined } from "@openclaw/normalization-core";
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createOperationalRunInstanceRef } from "../../agents/admitted-run-context.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { CronRuntimeAuthority } from "../../cron/runtime-authority.js";
 import type { CronDelivery, CronJob } from "../../cron/types.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../../plugins/runtime.js";
@@ -24,7 +24,7 @@ import { getGatewayProcessInstanceId } from "../process-instance.js";
 import type { GatewayClient, GatewayRequestContext } from "./types.js";
 
 const getRuntimeConfig = vi.hoisted(() =>
-  vi.fn<() => OpenClawConfig>(() => ({}) as OpenClawConfig),
+  vi.fn<() => NatesclawConfig>(() => ({}) as NatesclawConfig),
 );
 const loadGatewaySessionEntry = vi.hoisted(() =>
   vi.fn(
@@ -400,17 +400,17 @@ function telegramDeliveryWithSlackFailure(overrides: Partial<CronDelivery> = {})
   };
 }
 
-function setRuntimeConfig(config: OpenClawConfig): void {
+function setRuntimeConfig(config: NatesclawConfig): void {
   getRuntimeConfig.mockReturnValue(config);
 }
 
-function pluginEntries(...ids: string[]): OpenClawConfig["plugins"] {
+function pluginEntries(...ids: string[]): NatesclawConfig["plugins"] {
   return {
     entries: Object.fromEntries(ids.map((id) => [id, { enabled: true }])),
   };
 }
 
-function telegramConfig(): OpenClawConfig {
+function telegramConfig(): NatesclawConfig {
   return {
     channels: {
       telegram: {
@@ -418,10 +418,10 @@ function telegramConfig(): OpenClawConfig {
       },
     },
     plugins: pluginEntries("telegram"),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function telegramSlackConfig(params: { includeMainSession?: boolean } = {}): OpenClawConfig {
+function telegramSlackConfig(params: { includeMainSession?: boolean } = {}): NatesclawConfig {
   return {
     ...(params.includeMainSession ? { session: { mainKey: "main" } } : {}),
     channels: {
@@ -434,10 +434,10 @@ function telegramSlackConfig(params: { includeMainSession?: boolean } = {}): Ope
       },
     },
     plugins: pluginEntries("telegram", "slack"),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function telegramDisabledAccountConfig(): OpenClawConfig {
+function telegramDisabledAccountConfig(): NatesclawConfig {
   return {
     channels: {
       telegram: {
@@ -448,10 +448,10 @@ function telegramDisabledAccountConfig(): OpenClawConfig {
       },
     },
     plugins: pluginEntries("telegram"),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function msteamsConfig(): OpenClawConfig {
+function msteamsConfig(): NatesclawConfig {
   return {
     channels: {
       msteams: {
@@ -459,10 +459,10 @@ function msteamsConfig(): OpenClawConfig {
       },
     },
     plugins: pluginEntries("msteams"),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function slackSynologyConfig(): OpenClawConfig {
+function slackSynologyConfig(): NatesclawConfig {
   return {
     channels: {
       slack: {
@@ -474,10 +474,10 @@ function slackSynologyConfig(): OpenClawConfig {
       },
     },
     plugins: pluginEntries("slack", "synology-chat"),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function slackConfig(params: { includeMainSession?: boolean } = {}): OpenClawConfig {
+function slackConfig(params: { includeMainSession?: boolean } = {}): NatesclawConfig {
   return {
     ...(params.includeMainSession ? { session: { mainKey: "main" } } : {}),
     channels: {
@@ -487,7 +487,7 @@ function slackConfig(params: { includeMainSession?: boolean } = {}): OpenClawCon
       },
     },
     plugins: pluginEntries("slack"),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function agentTurnCronParams(overrides: Record<string, unknown> = {}) {
@@ -575,7 +575,7 @@ function expectInvalidCronPatternError(respond: ReturnType<typeof vi.fn>): void 
 
 describe("cron method validation", () => {
   beforeEach(() => {
-    getRuntimeConfig.mockReset().mockReturnValue({} as OpenClawConfig);
+    getRuntimeConfig.mockReset().mockReturnValue({} as NatesclawConfig);
     loadGatewaySessionEntry
       .mockReset()
       .mockImplementation((sessionKey: string) => ({ canonicalKey: sessionKey, entry: undefined }));
@@ -2437,7 +2437,7 @@ describe("cron method validation", () => {
         },
       },
       plugins: pluginEntries("slack"),
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const { context, respond } = await invokeCronAdd(
       agentTurnCronParams({
@@ -2462,7 +2462,7 @@ describe("cron method validation", () => {
         },
       },
       plugins: pluginEntries("slack"),
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const { context, respond } = await invokeCronAdd(
       agentTurnCronParams({
@@ -2483,7 +2483,7 @@ describe("cron method validation", () => {
         },
       },
       plugins: pluginEntries(),
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const { context, respond } = await invokeCronAdd(
       agentTurnCronParams({
@@ -2566,7 +2566,7 @@ describe("cron method validation", () => {
     setRuntimeConfig({
       channels: { twitch: { accounts: { main: { accessToken: "t" } } } },
       plugins: pluginEntries("twitch"),
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const { respond } = await invokeCronAdd(
       agentTurnCronParams({
@@ -2597,7 +2597,7 @@ describe("cron method validation", () => {
         twitch: { enabled: false, accounts: { main: { accessToken: "t" } } },
       },
       plugins: pluginEntries("twitch"),
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const { respond } = await invokeCronAdd(
       agentTurnCronParams({
@@ -2630,7 +2630,7 @@ describe("cron method validation", () => {
         },
       },
       plugins: pluginEntries("telegram"),
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const { context, respond } = await invokeCronAdd(
       agentTurnCronParams({
@@ -2663,7 +2663,7 @@ describe("cron method validation", () => {
         },
       },
       plugins: pluginEntries("msteams"),
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const { context, respond } = await invokeCronAdd(
       agentTurnCronParams({
@@ -2826,9 +2826,9 @@ describe("cron method validation", () => {
   } as const;
 
   function globalFailureAlertConfig(
-    config: OpenClawConfig,
-    failureAlert: NonNullable<OpenClawConfig["cron"]>["failureAlert"],
-  ): OpenClawConfig {
+    config: NatesclawConfig,
+    failureAlert: NonNullable<NatesclawConfig["cron"]>["failureAlert"],
+  ): NatesclawConfig {
     return { ...config, cron: { failureAlert } };
   }
 
@@ -2844,7 +2844,7 @@ describe("cron method validation", () => {
     title: string,
     patch: Record<string, unknown>,
     currentJob: CronJob = createCronJob(),
-    config: OpenClawConfig = telegramSlackConfig(),
+    config: NatesclawConfig = telegramSlackConfig(),
   ): void {
     it(title, async () => {
       setRuntimeConfig(config);
@@ -2858,7 +2858,7 @@ describe("cron method validation", () => {
     title: string,
     patch: Record<string, unknown>,
     currentJob: CronJob = createCronJob(),
-    config: OpenClawConfig = telegramSlackConfig(),
+    config: NatesclawConfig = telegramSlackConfig(),
   ): void {
     it(title, async () => {
       setRuntimeConfig(config);
@@ -2871,7 +2871,7 @@ describe("cron method validation", () => {
   function failureAlertAddAccepted(
     title: string,
     params: Record<string, unknown>,
-    config: OpenClawConfig = telegramSlackConfig(),
+    config: NatesclawConfig = telegramSlackConfig(),
   ): void {
     it(title, async () => {
       setRuntimeConfig(config);
@@ -2884,7 +2884,7 @@ describe("cron method validation", () => {
   function failureAlertAddRejected(
     title: string,
     params: Record<string, unknown>,
-    config: OpenClawConfig,
+    config: NatesclawConfig,
   ): void {
     it(title, async () => {
       setRuntimeConfig(config);
@@ -3458,7 +3458,7 @@ describe("cron method validation", () => {
           slack: { enabled: true },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     const context = createCronContext(createCronJob());
     context.cron.getJob.mockReturnValue(undefined);

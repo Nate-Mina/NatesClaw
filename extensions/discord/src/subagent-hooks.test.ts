@@ -2,8 +2,8 @@
 import {
   getRequiredHookHandler,
   registerHookHandlersForTest,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { handleDiscordSubagentSpawning } from "./subagent-hooks.js";
 
@@ -91,7 +91,7 @@ function registerHandlersForTest(
     },
   },
 ) {
-  return registerHookHandlersForTest<OpenClawPluginApi>({
+  return registerHookHandlersForTest<NatesclawPluginApi>({
     config,
     register: (api) => {
       registerDiscordSubagentHooks(api);

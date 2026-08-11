@@ -3,13 +3,13 @@ import {
   decodeNodePtyResumeParams,
   resolveNodeHostExecutable,
   runNodePtyCommand,
-} from "openclaw/plugin-sdk/node-host";
-import type { OpenClawPluginNodeHostCommand } from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
+} from "natesclaw/plugin-sdk/node-host";
+import type { NatesclawPluginNodeHostCommand } from "natesclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
 import type {
   SessionCatalogSession,
   SessionCatalogTerminalPlan,
-} from "openclaw/plugin-sdk/session-catalog";
+} from "natesclaw/plugin-sdk/session-catalog";
 import {
   OPENCODE_LOCAL_SESSION_HOST_ID,
   OPENCODE_NODE_INVOKE_TIMEOUT_MS,
@@ -46,8 +46,8 @@ async function requireLocalOpenCodeSession(threadId: string): Promise<SessionCat
 }
 
 export function createOpenCodeTerminalNodeHostCommand(
-  isAvailable: NonNullable<OpenClawPluginNodeHostCommand["isAvailable"]>,
-): OpenClawPluginNodeHostCommand {
+  isAvailable: NonNullable<NatesclawPluginNodeHostCommand["isAvailable"]>,
+): NatesclawPluginNodeHostCommand {
   return {
     command: OPENCODE_TERMINAL_RESUME_COMMAND,
     cap: OPENCODE_SESSIONS_CAPABILITY,

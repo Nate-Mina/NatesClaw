@@ -1,12 +1,12 @@
 /**
  * Gateway loop for polling ClickClack backlog events, opening the realtime
- * websocket, and dispatching user messages into OpenClaw.
+ * websocket, and dispatching user messages into Natesclaw.
  */
-import type { ChannelGatewayContext } from "openclaw/plugin-sdk/channel-contract";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { channelReadyPatch, channelStoppedPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
-import { rawDataToString } from "openclaw/plugin-sdk/webhook-ingress";
+import type { ChannelGatewayContext } from "natesclaw/plugin-sdk/channel-contract";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { channelReadyPatch, channelStoppedPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
+import { rawDataToString } from "natesclaw/plugin-sdk/webhook-ingress";
 import type { RawData } from "ws";
 import { resolveClickClackInboundAccess } from "./access.js";
 import { resolveClickClackAccount } from "./accounts.js";

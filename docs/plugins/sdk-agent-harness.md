@@ -8,7 +8,7 @@ read_when:
   - You need to understand how the Codex plugin relates to model providers
 ---
 
-An **agent harness** is the low level executor for one prepared OpenClaw agent
+An **agent harness** is the low level executor for one prepared Natesclaw agent
 turn. It is not a model provider, not a channel, and not a tool registry. For
 the user-facing mental model, see [Agent runtimes](/concepts/agent-runtimes).
 
@@ -19,11 +19,11 @@ current embedded runner.
 ## When to use a harness
 
 Register an agent harness when a model family has its own native session
-runtime and the normal OpenClaw provider transport is the wrong abstraction:
+runtime and the normal Natesclaw provider transport is the wrong abstraction:
 
 - a native coding-agent server that owns threads and compaction
 - a local CLI or daemon that must stream native plan/reasoning/tool events
-- a model runtime that needs its own resume id in addition to the OpenClaw
+- a model runtime that needs its own resume id in addition to the Natesclaw
   session transcript
 
 Do **not** register a harness just to add a new LLM API. For normal HTTP or
@@ -31,12 +31,12 @@ WebSocket model APIs, build a [provider plugin](/plugins/sdk-provider-plugins).
 
 ## What core still owns
 
-Before a harness is selected, OpenClaw has already resolved:
+Before a harness is selected, Natesclaw has already resolved:
 
 - provider and model
 - runtime auth state, unless the harness declares that it owns auth bootstrap
 - thinking level and context budget
-- the OpenClaw transcript/session file
+- the Natesclaw transcript/session file
 - workspace, sandbox, and tool policy
 - channel reply callbacks and streaming callbacks
 - model fallback and live model switching policy
@@ -47,14 +47,14 @@ delivery, or silently switch models.
 ### Native tool-policy enforcement
 
 Set `conversationToolPolicySupport: "exact"` only when `runAttempt` enforces every
-explicit OpenClaw tool-policy layer across native and built-in tools, OpenClaw
+explicit Natesclaw tool-policy layer across native and built-in tools, Natesclaw
 tools, requester and configured MCP servers, apps, delegation, and resumed
 threads. Core passes `params.pluginHarnessToolPolicyRestricted` as the prepared
 decision that the native surface must be isolated. Default tool-profile narrowing
 does not set this flag.
 
 Omit the declaration when any native capability can bypass those layers.
-OpenClaw then visibly rejects explicitly restricted turns before invoking the
+Natesclaw then visibly rejects explicitly restricted turns before invoking the
 harness. The operator can switch the session to the embedded runtime or upgrade
 the harness. Channel `/btw` side questions with a restrictive direct policy are
 rejected by core and are not covered by this declaration.
@@ -67,7 +67,7 @@ trusted harness that can authenticate through its own native runtime may set
 skips its generic provider credential bootstrap and missing-credential failure
 for every attempt claimed by that harness.
 
-Core still forwards a compatible, explicitly selected or ordered OpenClaw auth
+Core still forwards a compatible, explicitly selected or ordered Natesclaw auth
 profile and its scoped store when one exists. The harness must resolve that
 profile or its native credentials before issuing model requests, keep secrets
 scoped to the attempt, and surface actionable authentication failures. Do not
@@ -82,15 +82,15 @@ implementation that completed the probe. When
 matching `runtimeArtifact.validate(...)` capability that rechecks that binding
 without loading a different harness or scanning unrelated plugins.
 
-Verified OpenClaw continuations also pass `params.expectedRuntimeArtifact`.
+Verified Natesclaw continuations also pass `params.expectedRuntimeArtifact`.
 The harness must compare it with the exact native process it acquired and fail
 before starting or resuming a native thread if they differ. Ordinary agent
 turns omit both fields, so content hashing stays out of the normal request hot
 path. Remote/WebSocket harnesses need a server attestation contract before
 they can participate; a version string alone is not an artifact identity.
 
-The prepared attempt also includes `params.runtimePlan`, an OpenClaw-owned
-policy bundle for runtime decisions that must stay shared across OpenClaw and
+The prepared attempt also includes `params.runtimePlan`, an Natesclaw-owned
+policy bundle for runtime decisions that must stay shared across Natesclaw and
 native harnesses:
 
 - `runtimePlan.tools.normalize(...)` and `runtimePlan.tools.logDiagnostics(...)`
@@ -103,7 +103,7 @@ native harnesses:
   classification
 - `runtimePlan.observability` for resolved provider/model/harness metadata
 
-Harnesses may use the plan for decisions that need to match OpenClaw behavior,
+Harnesses may use the plan for decisions that need to match Natesclaw behavior,
 but treat it as host-owned attempt state: do not mutate it or use it to switch
 providers/models inside a turn.
 
@@ -123,16 +123,16 @@ Two secret-free provider-owned facts describe the selected route:
 Return `{ supported: false, reason }` when the harness cannot reproduce the
 prepared transport. Do not infer support by reading raw config after selection.
 When auth preparation yields multiple retry routes, one harness must support
-all of them before dispatch. Implicit selection uses OpenClaw if no plugin can
+all of them before dispatch. Implicit selection uses Natesclaw if no plugin can
 own the full set; an explicit or persisted plugin selection fails closed.
 
 ## Register a harness
 
-**Import:** `openclaw/plugin-sdk/agent-harness`
+**Import:** `natesclaw/plugin-sdk/agent-harness`
 
 ```typescript
-import type { AgentHarnessV2 } from "openclaw/plugin-sdk/agent-harness";
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import type { AgentHarnessV2 } from "natesclaw/plugin-sdk/agent-harness";
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 
 const myHarness: AgentHarnessV2 = {
   id: "my-harness",
@@ -181,13 +181,13 @@ Return `{ assistant: AssistantMessage }`. Core accepts only terminal text/thinki
 content with a `stop` or `length` stop reason; tool calls, failed stops, and empty
 output are rejected. If the harness cannot prove these semantics, omit the capability.
 Callers that require isolated completion then fail closed before invoking that
-harness; OpenClaw does not replay the request through another runtime.
+harness; Natesclaw does not replay the request through another runtime.
 Plugin callers select this behavior through
 `api.runtime.llm.complete({ execution: { mode: "isolated-agent-runtime" } })`;
 the harness callback is the provider-side enforcement SPI, not a second caller
 API.
 
-Native agent servers often have ambient built-in tools even when OpenClaw sends
+Native agent servers often have ambient built-in tools even when Natesclaw sends
 an empty tool list. In that case, use a separate provider transport that can
 serialize a true zero-tool request, or leave the capability unsupported.
 
@@ -198,7 +198,7 @@ plugins that need to execute an existing model-locked session, such as a voice
 transport continuing a Codex-backed conversation. This is static owner consent,
 not a core allowlist. Keep it narrow.
 
-Delegates receive only work admission and embedded execution. OpenClaw requires
+Delegates receive only work admission and embedded execution. Natesclaw requires
 the exact stored session key, store path, and session id; `modelSelectionLocked:
 true`; and matching `agentHarnessId` and `agentHarnessRuntimeOverride` values.
 The run is then scoped through the harness owner. Session creation, patching,
@@ -206,26 +206,26 @@ reset, deletion, archive, and Gateway mutation remain owner-only.
 
 ## Selection policy
 
-OpenClaw chooses a harness after provider/model resolution:
+Natesclaw chooses a harness after provider/model resolution:
 
 1. Model-scoped runtime policy wins.
 2. Provider-scoped runtime policy comes next.
 3. `auto` asks registered harnesses if they support the resolved effective
    route. Provider/model prefixes alone never select a harness.
-4. If no registered harness matches, OpenClaw uses its embedded runtime.
+4. If no registered harness matches, Natesclaw uses its embedded runtime.
 
 Plugin harness failures surface as run failures. In `auto` mode, embedded
 fallback only applies when no registered plugin harness supports the resolved
-provider/model. Once a plugin harness has claimed a run, OpenClaw does not
+provider/model. Once a plugin harness has claimed a run, Natesclaw does not
 replay that same turn through another runtime, because that can change
 auth/runtime semantics or duplicate side effects.
 
 A failure that occurs before the harness starts any model work may use
 `AgentHarnessPreflightError` from
-`openclaw/plugin-sdk/agent-harness-runtime`. The default error remains terminal
+`natesclaw/plugin-sdk/agent-harness-runtime`. The default error remains terminal
 for the whole model-fallback chain. Pass `{ scope: "harness" }` only when the
 failure is local to the selected harness and retrying another model on that same
-harness would repeat it. OpenClaw records the actual selected harness at the
+harness would repeat it. Natesclaw records the actual selected harness at the
 attempt boundary, skips only later candidates proven to use that harness, and
 runs any differently owned candidate through its normal runtime and policy
 checks. Plugins opt into the scope but never name the harness owner on the
@@ -259,7 +259,7 @@ or operator config, not in the shared runtime selector.
 
 Most harnesses should also register a provider. The provider makes model refs,
 auth status, model metadata, and `/model` selection visible to the rest of
-OpenClaw. The harness then claims that provider in `supports(...)`.
+Natesclaw. The harness then claims that provider in `supports(...)`.
 
 The bundled Codex plugin follows this pattern:
 
@@ -269,7 +269,7 @@ The bundled Codex plugin follows this pattern:
 - harness id: `codex`
 - auth: synthetic provider availability, because the Codex harness owns the
   native Codex login/session
-- app-server request: OpenClaw sends the bare model id to Codex and lets the
+- app-server request: Natesclaw sends the bare model id to Codex and lets the
   harness talk to the native app-server protocol
 
 The Codex plugin is additive. With runtime policy unset or `auto`, OpenAI may
@@ -277,7 +277,7 @@ select Codex only when its provider-owned route contract declares `codex`
 compatible: an exact official HTTPS Platform Responses or ChatGPT Responses
 route with no authored request override. The `openai/*` prefix alone never
 selects Codex. Custom endpoints, Completions adapters, and authored request
-behavior stay on OpenClaw. Plaintext official HTTP endpoints are rejected. Older `codex/gpt-*`
+behavior stay on Natesclaw. Plaintext official HTTP endpoints are rejected. Older `codex/gpt-*`
 refs remain compatibility inputs. See
 [OpenAI implicit agent runtime](/providers/openai#implicit-agent-runtime).
 
@@ -286,7 +286,7 @@ For operator setup, model prefix examples, and Codex-only configs, see
 
 The Codex plugin enforces the minimum app-server version documented in
 [Codex Harness](/plugins/codex-harness). It checks the initialize handshake and
-blocks older or unversioned servers, so OpenClaw only runs against the protocol
+blocks older or unversioned servers, so Natesclaw only runs against the protocol
 surface it has tested.
 
 ### Tool-result middleware
@@ -295,13 +295,13 @@ Bundled plugins and explicitly enabled installed plugins with matching
 manifest contracts can attach runtime-neutral tool-result middleware through
 `api.registerAgentToolResultMiddleware(...)` when their manifest declares the
 targeted runtime ids in `contracts.agentToolResultMiddleware`. This trusted
-seam is for async tool-result transforms that must run before OpenClaw or
+seam is for async tool-result transforms that must run before Natesclaw or
 Codex feeds tool output back into the model.
 
 Middleware options may combine `runtimes` with a `matcher` tool-name list.
 Each registration keeps that pair intact, so registering the same handler for
 different runtimes does not broaden either matcher. Matchers use non-empty
-canonical OpenClaw tool ids; omit `matcher` to match all tools.
+canonical Natesclaw tool ids; omit `matcher` to match all tools.
 
 Legacy bundled plugins can still use
 `api.registerCodexAppServerExtensionFactory(...)` for Codex app-server-only
@@ -313,19 +313,19 @@ removed; embedded tool-result transforms must use runtime-neutral middleware.
 
 Native harnesses that own their own protocol projection can use
 `classifyAgentHarnessTerminalOutcome(...)` from
-`openclaw/plugin-sdk/agent-harness-runtime` when a completed turn produced no
+`natesclaw/plugin-sdk/agent-harness-runtime` when a completed turn produced no
 visible assistant text. The helper returns `empty`, `reasoning-only`, or
-`planning-only` so OpenClaw's fallback policy can decide whether to retry on a
+`planning-only` so Natesclaw's fallback policy can decide whether to retry on a
 different model. `planning-only` requires the harness's explicit `planText`
-field; OpenClaw does not infer it from assistant prose. The helper
+field; Natesclaw does not infer it from assistant prose. The helper
 intentionally leaves prompt errors, in-flight turns, and intentional silent
 replies such as `NO_REPLY` unclassified.
 
 ### Agent-end side effects
 
 Native harnesses must call `runAgentEndSideEffects(...)` from
-`openclaw/plugin-sdk/agent-harness-runtime` after they finalize an attempt. It
-dispatches the portable `agent_end` hook and OpenClaw's research capture
+`natesclaw/plugin-sdk/agent-harness-runtime` after they finalize an attempt. It
+dispatches the portable `agent_end` hook and Natesclaw's research capture
 without delaying interactive replies. Use `awaitAgentEndSideEffects(...)` for
 local, non-interactive runs where the attempt must not resolve until those
 side effects finish. Both helpers accept the same `{ event, ctx }` payload as
@@ -335,14 +335,14 @@ attempt result.
 ### User input and tool surfaces
 
 Native harnesses that expose a runtime-level user-input request should use the
-user-input helpers from `openclaw/plugin-sdk/agent-harness-runtime` to format
-the prompt, deliver it through OpenClaw's blocking reply path, and normalize
+user-input helpers from `natesclaw/plugin-sdk/agent-harness-runtime` to format
+the prompt, deliver it through Natesclaw's blocking reply path, and normalize
 choice/free-form answers back into the runtime's native response shape. The
 helper keeps channel/TUI presentation consistent while each harness keeps its
 own protocol parsing and pending-request lifecycle.
 
 Each prepared attempt also receives a versioned `params.hostCapabilities`
-object. Use `bindToolSurface(...)` before exposing plugin-built OpenClaw tools,
+object. Use `bindToolSurface(...)` before exposing plugin-built Natesclaw tools,
 and use its policy and approval operations for native actions. A native action
 whose working directory differs from the attempt may pass
 `nativeOperation: { cwd }` to `runBeforeToolCall(...)`; the host normalizes that
@@ -355,7 +355,7 @@ New harnesses should implement `AgentHarnessV2` and type prepared attempts as
 `AgentHarnessAttemptParamsV2`, `EmbeddedRunAttemptParamsV2`, and
 `AgentHarnessSideQuestionParamsV2`; those contracts require
 `hostCapabilities`. Packages adopting V2 must declare
-`openclaw.compat.pluginApi: ">=2026.8.1"` (or a newer floor) so older hosts
+`natesclaw.compat.pluginApi: ">=2026.8.1"` (or a newer floor) so older hosts
 reject them before load. Import the parameter types from the runtime subpath:
 
 ```typescript
@@ -363,7 +363,7 @@ import type {
   AgentHarnessAttemptParamsV2,
   AgentHarnessSideQuestionParamsV2,
   EmbeddedRunAttemptParamsV2,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 ```
 
 The older `AgentHarness`,
@@ -378,7 +378,7 @@ host capability.
 
 Native harnesses that need PI-like compact tool routing should use
 `createAgentHarnessToolSurfaceRuntime(...)` from
-`openclaw/plugin-sdk/agent-harness-tool-runtime`. It owns
+`natesclaw/plugin-sdk/agent-harness-tool-runtime`. It owns
 tool-search/code-mode control selection, local-model lean defaults,
 runtime-compatible schema filtering, hidden catalog execution, directory
 hydration, and catalog cleanup. Harnesses still own their SDK-specific tool
@@ -386,12 +386,12 @@ conversion and native execution callback.
 
 ### Native MCP inventory
 
-A harness that owns MCP connections outside OpenClaw's in-process MCP runtime
+A harness that owns MCP connections outside Natesclaw's in-process MCP runtime
 can implement `loadMcpToolCatalog(params)`. The callback is used by read-only
 control surfaces such as the composer Tool access view. It receives the
 authoritative session identity, runtime config, workspace, and sparse session
-MCP overrides. `mcpServerNames` is the bounded set of OpenClaw-configured
-servers whose session policy the harness may represent. Return OpenClaw's
+MCP overrides. `mcpServerNames` is the bounded set of Natesclaw-configured
+servers whose session policy the harness may represent. Return Natesclaw's
 `McpToolCatalog` shape for only that set.
 
 Use only an already-bound native process and thread. Returning `undefined`
@@ -399,7 +399,7 @@ means no live catalog is available; do not start a new harness process merely
 to answer inventory. Preserve raw server/tool names, assign collision-safe
 server names with `assignMcpCatalogSafeServerNames(...)`, and retain tools
 hidden only by a session denial in `sessionDeniedTools`. Core still applies the
-final OpenClaw tool policy and schema compatibility checks before exposing the
+final Natesclaw tool policy and schema compatibility checks before exposing the
 rows.
 
 Harnesses that forward embedded attempt params should pass
@@ -409,16 +409,16 @@ tool surface instead of engaging code mode or a tool-search catalog.
 
 ### Native Codex harness mode
 
-The bundled `codex` harness is the native Codex mode for embedded OpenClaw
+The bundled `codex` harness is the native Codex mode for embedded Natesclaw
 agent turns. Enable the bundled `codex` plugin first, and include `codex` in
 `plugins.allow` if your config uses a restrictive allowlist. Native app-server
 configs should use `openai/gpt-*`; OpenAI agent turns select the Codex harness
 only when the effective route declares Codex compatibility. Legacy Codex model
-refs should be repaired with `openclaw doctor --fix`, and legacy `codex/*`
+refs should be repaired with `natesclaw doctor --fix`, and legacy `codex/*`
 model refs remain compatibility aliases for the native harness.
 
 When this mode runs, Codex owns the native thread id, resume behavior,
-compaction, and app-server execution. OpenClaw still owns the chat channel,
+compaction, and app-server execution. Natesclaw still owns the chat channel,
 visible transcript mirror, tool policy, approvals, media delivery, and session
 selection. Use provider/model `agentRuntime.id: "codex"` when you need to
 prove that only the Codex app-server path can claim the run. Explicit plugin
@@ -427,7 +427,7 @@ are not retried through another runtime.
 
 ## Runtime strictness
 
-By default, OpenClaw uses `auto` provider/model runtime policy: registered
+By default, Natesclaw uses `auto` provider/model runtime policy: registered
 plugin harnesses can claim compatible effective routes, and the embedded
 runtime handles the turn when none match. A provider/model prefix alone never
 selects a harness. Use an explicit provider/model plugin runtime such as
@@ -435,7 +435,7 @@ selects a harness. Use an explicit provider/model plugin runtime such as
 of routing through the embedded runtime. Explicit selection does not make an
 incompatible route compatible. Selected plugin harness failures always fail
 hard. This does not block an explicit provider/model
-`agentRuntime.id: "openclaw"`.
+`agentRuntime.id: "natesclaw"`.
 
 For Codex-only embedded runs:
 
@@ -524,41 +524,41 @@ image, video, music, TTS, PDF, or other provider-specific model routing.
 ## Native sessions and transcript mirror
 
 A harness may keep a native session id, thread id, or daemon-side resume
-token. Keep that binding explicitly associated with the OpenClaw session, and
-keep mirroring user-visible assistant/tool output into the OpenClaw
+token. Keep that binding explicitly associated with the Natesclaw session, and
+keep mirroring user-visible assistant/tool output into the Natesclaw
 transcript.
 
-The OpenClaw transcript remains the compatibility layer for:
+The Natesclaw transcript remains the compatibility layer for:
 
 - channel-visible session history
 - transcript search and indexing
-- switching back to the built-in OpenClaw harness on a later turn
+- switching back to the built-in Natesclaw harness on a later turn
 - generic `/new`, `/reset`, and session deletion behavior
 
-If your harness stores a sidecar binding, implement `reset(...)` so OpenClaw
-can clear it when the owning OpenClaw session is reset.
+If your harness stores a sidecar binding, implement `reset(...)` so Natesclaw
+can clear it when the owning Natesclaw session is reset.
 
 ## Tool and media results
 
-Core constructs the OpenClaw tool list and passes it into the prepared
+Core constructs the Natesclaw tool list and passes it into the prepared
 attempt. When a harness executes a dynamic tool call, return the tool result
 back through the harness result shape instead of sending channel media
 yourself.
 
 This keeps text, image, video, music, TTS, approval, and messaging-tool
-outputs on the same delivery path as OpenClaw-backed runs.
+outputs on the same delivery path as Natesclaw-backed runs.
 
 Set `AgentHarnessAttemptResult.hostOwnedToolMediaUrls` only for native artifacts
 that the trusted harness runtime created and persisted itself. Every entry must
 also appear in `toolMediaUrls`. Never include model-selected dynamic-tool or
-OpenClaw-tool media. On `message_tool_only` routes, this narrow provenance lets
+Natesclaw-tool media. On `message_tool_only` routes, this narrow provenance lets
 native runtime artifacts survive source-reply suppression; normal send policy
 and ambient-room admission still apply.
 
 ### Terminal tool outcomes
 
 `AgentHarnessAttemptParams.observeToolTerminal` is the host-owned terminal
-outcome accumulator. A harness that executes OpenClaw dynamic tools or native
+outcome accumulator. A harness that executes Natesclaw dynamic tools or native
 tools must call it when each tool reaches one terminal outcome, before the
 attempt result is finalized. Harnesses that do not execute tools do not need to
 call it.
@@ -573,9 +573,9 @@ Report facts from the execution boundary:
 - Report `outcome: "success"` or `outcome: "failure"`. Include the structured
   failure fields available from the runtime instead of inferring failure from
   display text.
-- Use `nativeMutation` only for native tools that do not use an OpenClaw tool
+- Use `nativeMutation` only for native tools that do not use an Natesclaw tool
   definition. Supply protocol-owned mutation and replay facts there; do not
-  copy OpenClaw's mutation classifier into the harness.
+  copy Natesclaw's mutation classifier into the harness.
 
 The callback returns the canonical resolution for that call. Carry its
 `lastToolError` into `AgentHarnessAttemptResult` and use its execution,
@@ -585,12 +585,12 @@ successful tools and clears it only after the matching action succeeds.
 
 The callback remains optional for source compatibility with older experimental
 harnesses. Optional does not mean ignorable for a harness that executes tools:
-without terminal reports, OpenClaw cannot preserve mutating-tool failure truth
+without terminal reports, Natesclaw cannot preserve mutating-tool failure truth
 across later tool calls, including quiet heartbeat completion.
 
 ### Settled tool finalization
 
-OpenClaw may need one final visible answer after a harness has completed every
+Natesclaw may need one final visible answer after a harness has completed every
 tool call but its native turn ended without assistant text. A harness can opt
 into that recovery by implementing `finalizeSettledTurn({ attempt,
 settledAttempt })`.
@@ -605,7 +605,7 @@ The callback is a separate capability, not another ordinary attempt. It must:
 - fail closed if its selected transcript/isolation strategy cannot enforce
   those restrictions.
 
-OpenClaw invokes the callback once as a terminal sub-operation, outside the
+Natesclaw invokes the callback once as a terminal sub-operation, outside the
 ordinary attempt and retry loop. A failure ends the run with the
 side-effect-aware incomplete-turn warning; it cannot enter ordinary
 auth/profile rotation, model fallback, context recovery, compaction
@@ -628,7 +628,7 @@ not a substitute for removing the native capability surface.
 
 A projection-backed harness must put the complete context on
 `settledAttempt.settledTurnFinalizationContext` with
-`source: "openclaw-transcript"`. It must capture the active branch after the
+`source: "natesclaw-transcript"`. It must capture the active branch after the
 settled turn is mirrored, prove that the current prompt and every current tool
 call/result are present through that boundary, and freeze the resulting message
 array before returning the attempt. The finalizer must reject a missing,
@@ -639,11 +639,11 @@ projection field.
 
 Do not implement this callback by calling `runAttempt` with a best-effort
 `disableTools` hint. The harness owner must enforce the complete native
-capability boundary. OpenClaw does not provide a generic fallback because it
+capability boundary. Natesclaw does not provide a generic fallback because it
 cannot attest that an arbitrary native runtime honored those restrictions.
 
 The callback remains optional for experimental third-party harness
-compatibility. When the selected harness omits it, OpenClaw preserves the
+compatibility. When the selected harness omits it, Natesclaw preserves the
 existing incomplete-turn error instead of risking repeated side effects.
 
 ## Current limitations

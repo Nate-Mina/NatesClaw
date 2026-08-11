@@ -1,18 +1,18 @@
 <?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>OpenClaw</title>
+        <title>Natesclaw</title>
         <item>
             <title>2026.7.1</title>
             <pubDate>Tue, 14 Jul 2026 01:57:48 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/natesclaw/natesclaw/main/appcast.xml</link>
             <sparkle:version>2607000190</sparkle:version>
             <sparkle:shortVersionString>2026.7.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.7.1</h2>
+            <description><![CDATA[<h2>Natesclaw 2026.7.1</h2>
 <h3>Highlights</h3>
 <ul>
-<li><strong>New models and providers:</strong> add Featherless, Claude Sonnet 5 and Mythos 5, Meta Muse Spark 1.1, and ClawRouter; make GPT-5.6 the new-setup default with <code>/think ultra</code> for Sol and Terra plus <code>max</code> for Luna, honor Z.AI <code>max</code>, and refresh model availability after OAuth renewal. (#101092, #98254, #101238, #102873, #103070, #103163, #99658, #99759, #98333, #103581, #98021, #104778, #102289) Thanks @vincentkoc, @vortexopenclaw, @HamidShojanazeri, @davemorin, @Solvely-Colin, @jalehman, @steipete-oai, @bdjben, @obviyus, @sallyom, @anyech, @100yenadmin, and @fuller-stack-dev.</li>
+<li><strong>New models and providers:</strong> add Featherless, Claude Sonnet 5 and Mythos 5, Meta Muse Spark 1.1, and ClawRouter; make GPT-5.6 the new-setup default with <code>/think ultra</code> for Sol and Terra plus <code>max</code> for Luna, honor Z.AI <code>max</code>, and refresh model availability after OAuth renewal. (#101092, #98254, #101238, #102873, #103070, #103163, #99658, #99759, #98333, #103581, #98021, #104778, #102289) Thanks @vincentkoc, @vortexnatesclaw, @HamidShojanazeri, @davemorin, @Solvely-Colin, @jalehman, @steipete-oai, @bdjben, @obviyus, @sallyom, @anyech, @100yenadmin, and @fuller-stack-dev.</li>
 <li><strong>Control UI and native macOS chat:</strong> make sessions primary with a minimal searchable sidebar, compact context ring, reasoning-effort slider, cleaner dashboard chrome, and a native macOS session browser with model and thinking pickers, slash commands, transcript export, and context usage. (#99289, #99838, #100386, #101103, #101497)</li>
 <li><strong>Conversational onboarding:</strong> Crestodian now runs a real agent-loop setup across the CLI, web install, and macOS app, with AI-guided provider setup, model-judged approvals bound to exact operations, masked credential prompts, and deterministic fallback when no model is available. (#99935, #100029, #100656, #101887) Thanks @fuller-stack-dev.</li>
 <li><strong>Offline and spoken mobile chat:</strong> iOS and Android now pre-paint bounded per-gateway session and transcript caches offline; Apple Watch gains full voice turns, and iOS can speak replies through configured Gateway TTS with on-device fallback. (#100219, #100227, #100283, #100770, #100771)</li>
@@ -22,7 +22,7 @@
 </ul>
 <h3>Changes</h3>
 <ul>
-<li><strong>Meta provider:</strong> add bundled <code>muse-spark-1.1</code> Responses API support with streaming, tool calls, encrypted reasoning replay, onboarding, exact-model live validation, and standalone npm/ClawHub distribution as <code>@openclaw/meta-provider</code>. (#102873, #103070, #103163) Thanks @HamidShojanazeri, @davemorin, @Solvely-Colin, @jalehman, and @vincentkoc.</li>
+<li><strong>Meta provider:</strong> add bundled <code>muse-spark-1.1</code> Responses API support with streaming, tool calls, encrypted reasoning replay, onboarding, exact-model live validation, and standalone npm/ClawHub distribution as <code>@natesclaw/meta-provider</code>. (#102873, #103070, #103163) Thanks @HamidShojanazeri, @davemorin, @Solvely-Colin, @jalehman, and @vincentkoc.</li>
 <li><strong>Android chat agent selector:</strong> switch the active agent directly from the live chat screen while keeping chat, Talk mode, and home canvas on the same canonical session. (#80422) Thanks @bcperry and @joshavant.</li>
 <li><strong>Gateway host status:</strong> show the connected Gateway's host, network address, OS, runtime, uptime, CPU, memory, and disk details in Control UI Settings. (#100478)</li>
 <li><strong>Gateway crash-loop recovery:</strong> persist boot outcomes, enter control-plane-safe mode after repeated unclean starts, hold transport and provider activation until recovery, and exit with <code>EX_CONFIG</code> for fatal configuration errors so systemd and launchd stop restart flapping. Thanks @obviyus.</li>
@@ -41,16 +41,16 @@
 </ul>
 <ul>
 <li><strong>Control UI context usage:</strong> show context-window progress, latest-run input/output tokens, and the active model when the chat context ring is opened.</li>
-<li><strong>Apple Watch voice turns:</strong> dictate a message from the Watch chat and hear the new OpenClaw reply spoken on the Watch, with explicit silent-message and stop-speaking controls. (#100224) Thanks @vincentkoc.</li>
+<li><strong>Apple Watch voice turns:</strong> dictate a message from the Watch chat and hear the new Natesclaw reply spoken on the Watch, with explicit silent-message and stop-speaking controls. (#100224) Thanks @vincentkoc.</li>
 <li><strong>Conversational onboarding:</strong> add a real agent-loop Crestodian setup flow across the CLI, Gateway, web install, and macOS app, with typed operations, exact approval binding, masked credential prompts, isolated session transcripts, and safe handoff to the normal agent. Thanks @vincentkoc.</li>
 <li><strong>Generated session titles:</strong> name new Control UI sessions from their first message, and add default/per-agent <code>utilityModel</code> routing for lower-cost session, topic, and thread title generation. Thanks @Juliangsm, @zhangguiping-xydt, and @vincentkoc.</li>
-<li><strong>ClawRouter routing and quotas:</strong> add the bundled ClawRouter provider plugin with credential-scoped dynamic model discovery, OpenAI-compatible and native Anthropic/Gemini transports, and managed budget reporting across OpenClaw usage surfaces. (#99658)</li>
+<li><strong>ClawRouter routing and quotas:</strong> add the bundled ClawRouter provider plugin with credential-scoped dynamic model discovery, OpenAI-compatible and native Anthropic/Gemini transports, and managed budget reporting across Natesclaw usage surfaces. (#99658)</li>
 <li><strong>Model and provider coverage:</strong> add GPT-5.6 support, use Nemotron Super's 1M context window, and preserve explicit OpenRouter authentication headers. (#98333, #98726, #98187) Thanks @steipete-oai, @eleqtrizit, @sunlit-deng, @laurencebrown, and @shakkernerd.</li>
-<li><strong>CLI and node workflows:</strong> add <code>openclaw attach</code>, node context-path support, actionable device-approval recovery guidance, soft-resume CLI sessions when prompt metadata changes, and clearer plugin install exit diagnostics. (#96454, #97679, #98115, #98146, #98497, #99822) Thanks @anagnorisis2peripeteia, @obviyus, @wm0018, @welfo-beo, @RomneyDa, @Sanjays2402, and @vincentkoc.</li>
+<li><strong>CLI and node workflows:</strong> add <code>natesclaw attach</code>, node context-path support, actionable device-approval recovery guidance, soft-resume CLI sessions when prompt metadata changes, and clearer plugin install exit diagnostics. (#96454, #97679, #98115, #98146, #98497, #99822) Thanks @anagnorisis2peripeteia, @obviyus, @wm0018, @welfo-beo, @RomneyDa, @Sanjays2402, and @vincentkoc.</li>
 <li><strong>Cron and usage:</strong> add exit-triggered schedules, detached session-targeted runs, and an in-flight job doctor warning, while making the existing usage footer easier to wrap on Telegram. (#92037, #98755, #98620, #92877) Thanks @anagnorisis2peripeteia, @obviyus, @EthanSK, @masatohoshino, @Marvinthebored, and @vincentkoc.</li>
 <li><strong>Native apps and localization:</strong> modernize iOS presentation, Chat, Talk, onboarding, and reconnect flows; add Gateway speech providers; improve QR onboarding and protocol recovery; install the local Gateway from macOS; localize core Apple and Android surfaces; and add Swedish mobile localization. (#98452, #98736, #99243, #98376, #98302, #98385, #99767, #97110, #97111, #97112, #97113, #98043) Thanks @jcooley8, @Tony-ooo, @joelnishanth, @cursoragent, @joshavant, @vincentkoc, and @yeager.</li>
 <li><strong>Messaging capabilities:</strong> add native iMessage polls, Telegram Codex pairing and steering, Telegram multi-lane progress summaries, and Signal target aliases. (#98421, #98006, #98126, #98907, #95738) Thanks @omarshahine, @lobster, @100yenadmin, @Kyzcreig, @Marvinthebored, and @jesse-merhi.</li>
-<li><strong>Local inference and chat controls:</strong> auto-discover Ollama inference nodes, add Control UI session-first navigation, reasoning controls, and command picking, and keep OpenClaw control tools available when deferred tool search selects the wrong tool family. (#99234, #99289, #99426, #99838, #99561) Thanks @100yenadmin, @joshavant, @VicZhang6, @Solvely-Colin, and @vincentkoc.</li>
+<li><strong>Local inference and chat controls:</strong> auto-discover Ollama inference nodes, add Control UI session-first navigation, reasoning controls, and command picking, and keep Natesclaw control tools available when deferred tool search selects the wrong tool family. (#99234, #99289, #99426, #99838, #99561) Thanks @100yenadmin, @joshavant, @VicZhang6, @Solvely-Colin, and @vincentkoc.</li>
 <li><strong>Doctor and diagnostics:</strong> expose auth-profile, workspace, device-pairing, channel-plugin, memory-provider, systemd exhaustion, and Windows LAN firewall findings. (#97125, #97358, #97366, #97496, #97968, #98291, #98666) Thanks @giodl73-repo, @masatohoshino, and @joshavant.</li>
 <li><strong>Policy repair previews:</strong> show review-required Gateway bind and denied node-command changes during <code>doctor --fix</code> without applying them or counting the findings as repaired. (#99776) Thanks @giodl73-repo.</li>
 <li><strong>Conversation and review controls:</strong> prepare scoped conversation capability profiles and add Cursor Agent as an autoreview engine. (#98536, #97348) Thanks @hxy91819.</li>
@@ -140,11 +140,11 @@
 <li><strong>Docker sandbox command output:</strong> fail and terminate Docker sandbox operations when stdout/stderr capture breaks instead of returning success with incomplete output. (#100523) Thanks @cxbAsDev and @vincentkoc.</li>
 <li><strong>Android push-to-talk lifecycle:</strong> serialize gateway PTT preparation with app foreground and Manual Mic ownership so delayed work cannot restart, replace, or tear down a newer capture. (#100552) Thanks @xialonglee.</li>
 <li><strong>Lean local-model tools:</strong> trim media generation, TTS, and PDF tools from lean agent surfaces while preserving explicit config and runtime opt-ins. (#88881) Thanks @vincentkoc.</li>
-<li><strong>iOS development app identity:</strong> keep the development app labeled OpenClaw while using its distinct debug icon to differentiate it from release builds.</li>
+<li><strong>iOS development app identity:</strong> keep the development app labeled Natesclaw while using its distinct debug icon to differentiate it from release builds.</li>
 <li><strong>Android chat recovery:</strong> preserve optimistic user messages and locally owned runs while reconnect and sequence-gap history snapshots catch up, preventing sent messages from disappearing or stale runs from taking ownership. (#100197)</li>
 <li><strong>iOS QR gateway handoff:</strong> stop VisionKit before delivering scanned setup codes, and keep deferred auth, approval, Watch, and foreground-node work bound to its originating gateway across reconnects. (#99572) Thanks @PollyBot13.</li>
 <li><strong>Agent terminal failures:</strong> surface a safe interactive reply when an agent run ends without visible output, while preserving completed message-tool delivery and heartbeat-specific guidance. (#99304) Thanks @moeedahmed and @maweibin.</li>
-<li><strong>MCP loopback tool results:</strong> preserve schema-valid text, image, and embedded-resource content through HTTP tool calls while rendering malformed or protocol-incompatible blocks as safe text. (#100336) Thanks @tzy-17, @OpenClawKobian99, @vincentkoc, @shakkernerd, and @maweibin.</li>
+<li><strong>MCP loopback tool results:</strong> preserve schema-valid text, image, and embedded-resource content through HTTP tool calls while rendering malformed or protocol-incompatible blocks as safe text. (#100336) Thanks @tzy-17, @NatesclawKobian99, @vincentkoc, @shakkernerd, and @maweibin.</li>
 <li><strong>Control UI tool-result images:</strong> render direct image content blocks from Gateway history and make the delayed-send scroll E2E setup deterministic. (#100295) Thanks @lzyyzznl, @Pandah97, @rquinones84, and @maweibin.</li>
 <li><strong>Control UI live tool ordering:</strong> keep assistant stream text before its matching tool card when browser and Gateway timestamps disagree. (#93184) Thanks @Pick-cat and @lileilei-camera.</li>
 <li><strong>IRC Unicode messages:</strong> split outbound PRIVMSG payloads on UTF-16 code-point boundaries so emoji cannot be cut into lone surrogates. (#96572) Thanks @WeeLi-009, @vincentkoc, @mushuiyu886, and @cursoragent.</li>
@@ -162,7 +162,7 @@
 <li><strong>WhatsApp reconnect catch-up:</strong> admit recently missed Baileys <code>append</code> messages during a bounded reconnect window while preserving startup stale-history guards. (#80642) Thanks @VishalJ99.</li>
 <li><strong>WhatsApp restart recovery:</strong> stop automatic restart loops after logged-out or connection-replaced disconnects until the account reconnects. (#78511) Thanks @openperf and @rutherlesdev.</li>
 <li><strong>Local Gateway CLI auth:</strong> keep loopback CLI token/password calls off durable device scopes so read probes cannot block later write/admin commands behind a stale pairing baseline. (#95997) Thanks @vincentkoc.</li>
-<li><strong>Plugin module identity:</strong> keep OpenClaw package chunks on Node's native module graph when jiti transforms plugin entries, preventing duplicate evaluation and class identity drift. (#88384) Thanks @vincentkoc and @ScientificProgrammer.</li>
+<li><strong>Plugin module identity:</strong> keep Natesclaw package chunks on Node's native module graph when jiti transforms plugin entries, preventing duplicate evaluation and class identity drift. (#88384) Thanks @vincentkoc and @ScientificProgrammer.</li>
 <li><strong>Shell completion repair:</strong> generate core-only caches during doctor and update repair while preserving full plugin command completion for onboarding and explicit user rebuilds. (#76235) Thanks @joshavant.</li>
 <li><strong>MCP schema diagnostics:</strong> attribute draft-2020-12 compiler failures to the external MCP schema so malformed patterns produce actionable setup errors. Thanks @vincentkoc.</li>
 <li><strong>Windows Scheduled Task recovery:</strong> keep clean early exits inside the existing bounded launch poll, falling back only when neither the task process nor Gateway listener becomes observable.</li>
@@ -184,7 +184,7 @@
 <li><strong>Control UI terminal cursor:</strong> hide the browser-native contenteditable caret so the integrated terminal shows only its canvas-rendered cursor.</li>
 <li><strong>macOS SSH tunnels:</strong> resolve user-installed SSH <code>ProxyCommand</code> helpers through the app's managed PATH while preserving inherited connection environment, so remote aliases work after Finder and sanitized-script launches.</li>
 <li><strong>Control UI OpenAI speed picker:</strong> show only Standard and Fast choices for OpenAI models.</li>
-<li><strong>Control UI terminal rendering:</strong> adopt the shared <code>@openclaw/libterminal</code> browser lifecycle and add Nerd Font fallbacks so icon-enabled shell listings render their glyphs when a compatible local font is installed.</li>
+<li><strong>Control UI terminal rendering:</strong> adopt the shared <code>@natesclaw/libterminal</code> browser lifecycle and add Nerd Font fallbacks so icon-enabled shell listings render their glyphs when a compatible local font is installed.</li>
 <li><strong>Slack transcript history:</strong> let Codex app-server own its persisted assistant replies so Slack does not append redundant delivery-mirror rows, while the Control UI keeps legacy duplicate mirrors hidden. Thanks @bek91.</li>
 <li><strong>Control UI chat history:</strong> hide redundant channel-final delivery mirrors when the preceding app-server assistant reply already shows the same text.</li>
 <li><strong>Control UI chat spacing:</strong> keep the first message comfortably clear of the topbar with a responsive minimum transcript inset.</li>
@@ -404,12 +404,12 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #92274</strong> fix(agents): classify embedded prompt lock error as permanent announce failure. Related #91527. Thanks @fsdwen and @zackchiutw.</li>
 <li><strong>PR #98102</strong> fix(telegram): durably retry inbound media dropped during restart (#98076). Thanks @luoyanglang and @DaveArcher18.</li>
 <li><strong>PR #98755</strong> fix(cron): detach session-targeted runs. Related #98121. Thanks @obviyus and @EthanSK.</li>
-<li><strong>PR #96065</strong> fix(install): manage config-secretref env refs via OPENCLAW_SERVICE_MANAGED_ENV_KEYS. Thanks @Darren2030 and @obviyus.</li>
+<li><strong>PR #96065</strong> fix(install): manage config-secretref env refs via NATESCLAW_SERVICE_MANAGED_ENV_KEYS. Thanks @Darren2030 and @obviyus.</li>
 <li><strong>PR #98666</strong> fix: diagnose Windows LAN Gateway firewall blocks. Thanks @joshavant.</li>
 <li><strong>PR #98501</strong> fix(codex): rename destructive approval mode to ask. Related #98499. Thanks @kevinslin.</li>
 <li><strong>PR #98775</strong> fix(telegram): survive transient getUpdates errors and stop per-send cache rewrites. Related #98772, #98773. Thanks @obviyus.</li>
 <li><strong>PR #98776</strong> fix(telegram): back off, dead-letter, and tombstone spooled updates so poison messages cannot block or duplicate. Related #98774. Thanks @obviyus.</li>
-<li><strong>PR #96454</strong> feat(cli): openclaw attach — launch an external harness bound to a gateway session. Thanks @anagnorisis2peripeteia and @obviyus.</li>
+<li><strong>PR #96454</strong> feat(cli): natesclaw attach — launch an external harness bound to a gateway session. Thanks @anagnorisis2peripeteia and @obviyus.</li>
 <li><strong>PR #98786</strong> fix(telegram): final replies no longer drop on rejected rich entities, captions, quotes, or long flood waits. Related #98778. Thanks @obviyus.</li>
 <li><strong>PR #97496</strong> Doctor: expose channel plugin blocker findings. Thanks @giodl73-repo.</li>
 <li><strong>PR #98792</strong> fix(ci): restore docs and test type checks.</li>
@@ -623,7 +623,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #99658</strong> feat(providers): add ClawRouter routing and quotas. Related #99657.</li>
 <li><strong>PR #99238</strong> Expose channel preview warning doctor findings. Thanks @giodl73-repo.</li>
 <li><strong>PR #99759</strong> fix(providers): resolve ClawRouter auth-profile models.</li>
-<li><strong>PR #99561</strong> fix: keep OpenClaw control tools available when tool_search misroutes. Related #99464. Thanks @100yenadmin and @joshavant.</li>
+<li><strong>PR #99561</strong> fix: keep Natesclaw control tools available when tool_search misroutes. Related #99464. Thanks @100yenadmin and @joshavant.</li>
 <li><strong>PR #99750</strong> refactor: consolidate exact boolean coercion. Thanks @RomneyDa.</li>
 <li><strong>PR #99753</strong> refactor: consolidate abort primitives. Thanks @RomneyDa.</li>
 <li><strong>PR #99426</strong> feat: add slash command picker in chat composer. Thanks @VicZhang6 and @Solvely-Colin.</li>
@@ -753,7 +753,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #100128</strong> feat(ui): adopt shared libterminal runtime. Related #100126.</li>
 <li><strong>PR #95447</strong> fix(agents): use CJK-aware token estimation for tool results. Thanks @moguangyu5-design and @vincentkoc.</li>
 <li><strong>PR #100123</strong> fix(tui): queue prompts while the agent is busy. Related #89059, #90012. Thanks @SebTardif and @kevinlp.</li>
-<li><strong>PR #91584</strong> Fail closed when Slack mention detection is unavailable. Thanks @hiragram and @openclaw-agent.</li>
+<li><strong>PR #91584</strong> Fail closed when Slack mention detection is unavailable. Thanks @hiragram and @natesclaw-agent.</li>
 <li><strong>PR #100059</strong> [AI-assisted] fix(android): polish home overview layout. Thanks @IWhatsskill.</li>
 <li><strong>PR #100013</strong> fix: keep subagent truncation within max length. Related #99979. Thanks @qingminglong.</li>
 <li><strong>PR #100122</strong> chore: enable array fill lint rule.</li>
@@ -808,7 +808,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #100029</strong> feat(crestodian): run CLI harnesses on the agent loop via a ring-zero MCP server.</li>
 <li><strong>PR #100222</strong> feat(ios): distinguish debug app builds.</li>
 <li><strong>PR #100220</strong> docs: default agent validation to remote runners.</li>
-<li><strong>PR #100243</strong> fix: stabilize OpenClawKit contract and chat tests.</li>
+<li><strong>PR #100243</strong> fix: stabilize NatesclawKit contract and chat tests.</li>
 <li><strong>PR #99806</strong> fix(subagents): killed subagent runs stay running in the task list. Thanks @masatohoshino.</li>
 <li><strong>PR #100249</strong> fix(build): restore package artifact declarations. Thanks @vincentkoc.</li>
 <li><strong>PR #100252</strong> fix(ui): hide idle composer scrollbar.</li>
@@ -849,7 +849,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #100318</strong> fix(ui): simplify grouped tool activity.</li>
 <li><strong>PR #100288</strong> feat: verify AI access during macOS onboarding before the first chat. Related #100286.</li>
 <li><strong>PR #83000</strong> fix(tui): render delta-only assistant streams. Related #82988. Thanks @flashosophy.</li>
-<li><strong>PR #88384</strong> fix(plugins): keep openclaw chunks native in jiti. Related #85057. Thanks @vincentkoc and @ScientificProgrammer.</li>
+<li><strong>PR #88384</strong> fix(plugins): keep natesclaw chunks native in jiti. Related #85057. Thanks @vincentkoc and @ScientificProgrammer.</li>
 <li><strong>PR #99928</strong> fix(outbound): report honest message delivery status. Thanks @masatohoshino.</li>
 <li><strong>PR #100346</strong> docs(changelog): record WhatsApp delivery fixes.</li>
 <li><strong>PR #100344</strong> fix(plugins): preserve jiti native module config.</li>
@@ -871,7 +871,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #100370</strong> fix(ios): avoid inactive Voice Wake audio startup.</li>
 <li><strong>PR #100221</strong> fix(test): unit-fast tests inherit live host config.</li>
 <li><strong>PR #100340</strong> fix(tui): suppress unhandled rejection from editor submit handlers. Thanks @cxbAsDev.</li>
-<li><strong>PR #100105</strong> docs: tailor imsg skill for OpenClaw agents. Thanks @omarshahine.</li>
+<li><strong>PR #100105</strong> docs: tailor imsg skill for Natesclaw agents. Thanks @omarshahine.</li>
 <li><strong>PR #155</strong> docs: clarify personal vs private in README. Related #125. Thanks @mbelinky and @omarshahine and @olinorwell.</li>
 <li><strong>PR #100276</strong> feat(ui): scroll truncated sidebar session names on hover.</li>
 <li><strong>PR #100391</strong> fix(ui): reveal message context on timestamp hover. Thanks @steipete-oai.</li>
@@ -884,7 +884,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #99797</strong> fix(voice-call): resolve completed calls from the persisted store on status misses. Related #96586. Thanks @Darren2030 and @NiTeCoMM-code.</li>
 <li><strong>PR #100418</strong> fix(gateway): clarify URL override auth recovery. Thanks @gmays.</li>
 <li><strong>PR #93636</strong> fix(infra): tolerate deleted cwd across startup, PATH, home-dir, and TUI [AI-assisted]. Related #73676. Thanks @ml12580 and @oldsix-cell.</li>
-<li><strong>PR #100336</strong> fix(gateway): preserve non-text MCP content blocks through loopback normalizer. Related #100329. Thanks @tzy-17 and @OpenClawKobian99.</li>
+<li><strong>PR #100336</strong> fix(gateway): preserve non-text MCP content blocks through loopback normalizer. Related #100329. Thanks @tzy-17 and @NatesclawKobian99.</li>
 <li><strong>PR #96572</strong> fix(irc): chunk PRIVMSG on UTF-16 boundary to avoid lone surrogates. Thanks @WeeLi-009.</li>
 <li><strong>PR #100437</strong> fix(test): bound local full-suite RAM. Related #100429.</li>
 <li><strong>PR #100201</strong> chore(ios): add deterministic streaming replay test harness for the shared chat pipeline.</li>
@@ -1107,7 +1107,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #99842</strong> improve(health): surface dead-lettered delivery queue entries. Thanks @masatohoshino.</li>
 <li><strong>PR #99845</strong> fix: reject Telegram topic sessions_send targets before dispatch. Related #99835. Thanks @NianJiuZst and @qingminglong.</li>
 <li><strong>PR #99598</strong> improve(status): show why plugins are disabled in /status plugins. Thanks @masatohoshino.</li>
-<li><strong>PR #99577</strong> fix(discord): preserve text after oversized uploads. Related #99021. Thanks @lin-hongkuan and @NOVA-Openclaw.</li>
+<li><strong>PR #99577</strong> fix(discord): preserve text after oversized uploads. Related #99021. Thanks @lin-hongkuan and @NOVA-Natesclaw.</li>
 <li><strong>PR #100731</strong> fix(link-understanding): honor global or largest model timeout for link fetches. Related #100660. Thanks @cxbAsDev and @aniruddhaadak80.</li>
 <li><strong>PR #99456</strong> fix(hooks): flag hook event names that no core trigger emits. Thanks @masatohoshino.</li>
 <li><strong>PR #99986</strong> fix(android): serialize PTT microphone ownership. Thanks @NianJiuZst.</li>
@@ -1341,7 +1341,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #100896</strong> fix(discord): messages sent during gateway reconnect are silently dropped. Related #56610. Thanks @tiffanychum and @Godecule.</li>
 <li><strong>PR #101181</strong> fix(agents): preserve preflight overflow token counts into recovery budgeting. Thanks @jalehman.</li>
 <li><strong>PR #101102</strong> feat(android): server-backed session search with offline fallback.</li>
-<li><strong>PR #98254</strong> feat(models): add Claude Sonnet 5 support. Thanks @vortexopenclaw.</li>
+<li><strong>PR #98254</strong> feat(models): add Claude Sonnet 5 support. Thanks @vortexnatesclaw.</li>
 <li><strong>PR #101206</strong> fix: npm upgrade install fails with InstalledDistScanLimitError as packaged dist grows.</li>
 <li><strong>PR #101213</strong> fix(windows): repair legacy gateway fallback updates. Related #87156. Thanks @vincentkoc and @igormf.</li>
 <li><strong>PR #100946</strong> feat(ios): record and send voice notes from the chat composer.</li>
@@ -1440,7 +1440,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #101177</strong> fix(usage): preserve provider-billed zero totals. Thanks @snowzlmbot.</li>
 <li><strong>PR #101372</strong> fix(tests): reorder initializer arguments so the shared-kit test module compiles.</li>
 <li><strong>PR #101360</strong> fix(android): handle hardware Enter without breaking IME input. Related #101239. Thanks @joshavant and @3ninyt3nin-creator.</li>
-<li><strong>PR #101246</strong> fix(security): route temp workspaces through private OpenClaw temp root (#101224). Thanks @yangxiansheng and @ch3ch2cho2021.</li>
+<li><strong>PR #101246</strong> fix(security): route temp workspaces through private Natesclaw temp root (#101224). Thanks @yangxiansheng and @ch3ch2cho2021.</li>
 <li><strong>PR #99888</strong> fix(ios): full-row Settings toggles on iOS 26. Thanks @ly85206559 and @cursoragent.</li>
 <li><strong>PR #101366</strong> fix(windows): remove findstr from restart probe. Related #84600. Thanks @deepujain and @13884379776l.</li>
 <li><strong>PR #93862</strong> fix: avoid reminder-guard false positives for plain memory promises (#47586). Thanks @arkyu2077 and @moltpill.</li>
@@ -1468,7 +1468,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #101293</strong> fix(ui): clear stale sidebar run state after chat final. Thanks @fuller-stack-dev.</li>
 <li><strong>PR #101392</strong> fix(process): fall back when Windows taskkill cannot spawn. Related #101381. Thanks @ZengWen-DT and @aniruddhaadak80.</li>
 <li><strong>PR #101377</strong> fix(ui): keep microphone input settings usable on narrow screens. Thanks @fuller-stack-dev.</li>
-<li><strong>PR #100236</strong> feat(cli): add openclaw promos to discover and claim ClawHub promotional model offers. Related #100234. Thanks @fuller-stack-dev.</li>
+<li><strong>PR #100236</strong> feat(cli): add natesclaw promos to discover and claim ClawHub promotional model offers. Related #100234. Thanks @fuller-stack-dev.</li>
 <li><strong>PR #101443</strong> fix(llm): preserve schema tools across OpenAI failover. Related #97020. Thanks @chrisbaker2000.</li>
 <li><strong>PR #101371</strong> fix: show exported tool results in trace viewers. Thanks @amknight.</li>
 <li><strong>PR #101440</strong> refactor(opencode-go): localize stream internals. Thanks @vincentkoc.</li>
@@ -1487,7 +1487,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #101449</strong> fix(backup): isolate retry temp archives. Related #101382. Thanks @LiLan0125 and @vincentkoc and @aniruddhaadak80.</li>
 <li><strong>PR #101481</strong> fix(ios): skip onboarding for configured gateways. Related #98570. Thanks @siebej.</li>
 <li><strong>PR #99366</strong> fix(mattermost): reject oversized websocket events. Thanks @sunlit-deng.</li>
-<li><strong>PR #99745</strong> fix(telegram): harden rich send fallback and typing breaker. Related #99471. Thanks @snowzlmbot and @Veda-openclaw.</li>
+<li><strong>PR #99745</strong> fix(telegram): harden rich send fallback and typing breaker. Related #99471. Thanks @snowzlmbot and @Veda-natesclaw.</li>
 <li><strong>PR #94431</strong> fix(cli): accept parent options placed after lazy subcommands (#55563 regression 1) [AI-assisted]. Thanks @ml12580 and @Owlock.</li>
 <li><strong>PR #101508</strong> refactor(memory): localize unused host SDK exports. Thanks @vincentkoc.</li>
 <li><strong>PR #101464</strong> fix(backup): close archive stream before retry cleanup. Related #101382. Thanks @ZOOWH and @aniruddhaadak80.</li>
@@ -1579,7 +1579,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #101319</strong> perf(ui): add virtual scrolling to file preview modal code viewer. Related #99062. Thanks @xianshishan.</li>
 <li><strong>PR #101699</strong> refactor(sessions): move parent-session forking behind the accessor boundary. Thanks @jalehman.</li>
 <li><strong>PR #101589</strong> fix(gateway): bound all-agent usage cache concurrency. Related #101552. Thanks @zw-xysk and @vincentkoc and @aniruddhaadak80.</li>
-<li><strong>PR #101779</strong> fix(shared): skip app-group identity migration when OPENCLAW_STATE_DIR is overridden.</li>
+<li><strong>PR #101779</strong> fix(shared): skip app-group identity migration when NATESCLAW_STATE_DIR is overridden.</li>
 <li><strong>PR #101799</strong> fix(android): keep cold-start gateway auto-connect from overriding explicit intents.</li>
 <li><strong>PR #101812</strong> feat(ui): redesign gateway connection-lost banner as floating pill.</li>
 <li><strong>PR #101195</strong> feat(cron): event triggers — polled condition-watcher scripts via code mode. Related #101194.</li>
@@ -1597,12 +1597,12 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #101886</strong> refactor(deadcode): trim private helper exports. Thanks @vincentkoc.</li>
 <li><strong>PR #101807</strong> fix(agents): avoid false unscheduled note after shell cron add. Related #52972. Thanks @BryanTegomoh and @vincentkoc and @vitobotta.</li>
 <li><strong>PR #101889</strong> refactor(deadcode): localize Parallels helpers. Thanks @vincentkoc.</li>
-<li><strong>PR #101834</strong> improve(google): identify OpenClaw Gemini API traffic. Thanks @vishal-dharm.</li>
+<li><strong>PR #101834</strong> improve(google): identify Natesclaw Gemini API traffic. Thanks @vishal-dharm.</li>
 <li><strong>PR #101888</strong> fix(slack): unbounded thread pagination, process-wide write serialization, serialized inbound lookups. Thanks @obviyus.</li>
 <li><strong>PR #101892</strong> refactor(deadcode): localize script constants. Thanks @vincentkoc.</li>
 <li><strong>PR #101894</strong> refactor(deadcode): localize control ui declarations. Thanks @vincentkoc.</li>
 <li><strong>PR #101898</strong> refactor(deadcode): localize browser plugin declarations. Thanks @vincentkoc.</li>
-<li><strong>PR #101896</strong> fix: plugin tests fail on hosts with a usable /tmp/openclaw or a source checkout. Related #101876.</li>
+<li><strong>PR #101896</strong> fix: plugin tests fail on hosts with a usable /tmp/natesclaw or a source checkout. Related #101876.</li>
 <li><strong>PR #101903</strong> refactor(deadcode): localize msteams declarations. Thanks @vincentkoc.</li>
 <li><strong>PR #101904</strong> refactor(deadcode): localize release tooling declarations. Thanks @vincentkoc.</li>
 <li><strong>PR #101907</strong> refactor(deadcode): localize AI provider declarations. Thanks @vincentkoc.</li>
@@ -1657,7 +1657,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #102030</strong> fix: restrict non-owner gateway tool inventory [AI]. Thanks @pgondhi987.</li>
 <li><strong>PR #102031</strong> fix: gate Gateway message action requester provenance [AI]. Thanks @pgondhi987.</li>
 <li><strong>PR #102033</strong> fix: harden web fetch HTML conversion [AI]. Thanks @pgondhi987.</li>
-<li><strong>PR #101017</strong> improve(ui): bring back openclaw brand, remove desktop topbar + breadcrumbs. Thanks @vyctorbrzezowski.</li>
+<li><strong>PR #101017</strong> improve(ui): bring back natesclaw brand, remove desktop topbar + breadcrumbs. Thanks @vyctorbrzezowski.</li>
 <li><strong>PR #102210</strong> fix: focus chat composer when typing. Thanks @shakkernerd.</li>
 <li><strong>PR #101757</strong> feat(release): preflight all extended-stable npm packages. Thanks @kevinslin.</li>
 <li><strong>PR #102158</strong> fix(skills): correct invalid install kinds in xurl and github [AI]. Thanks @not-stbenjam.</li>
@@ -1728,7 +1728,7 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #104504</strong> fix(codex): bound app-server binding fingerprints. Related #104503. Thanks @100yenadmin.</li>
 <li><strong>PR #104778</strong> fix(zai): honor max thinking through gateway. Related #104716. Thanks @vincentkoc and @100yenadmin.</li>
 <li><strong>PR #104848</strong> fix(codex): preserve MCP bindings after beta5 upgrades. Thanks @vincentkoc.</li>
-<li><strong>PR #98021</strong> feat: support GPT-5.6 Ultra across OpenClaw and Codex runtimes. Thanks @anyech.</li>
+<li><strong>PR #98021</strong> feat: support GPT-5.6 Ultra across Natesclaw and Codex runtimes. Thanks @anyech.</li>
 <li><strong>PR #102980</strong> fix(ci): retry known live tool nonce misses.</li>
 <li><strong>PR #104905</strong> test(live): retry GPT-5.6 nonce mismatches.</li>
 <li><strong>PR #104956</strong> ci: harden current and frozen release checks.</li>
@@ -1748,22 +1748,22 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #106065</strong> fix(sqlite): reject runtimes vulnerable to WAL corruption. Thanks @vincentkoc.</li>
 <li><strong>PR #103725</strong> fix(install-cli): track mktemp paths and clean up on EXIT. Thanks @SebTardif.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.7.1/OpenClaw-2026.7.1.zip" length="59038535" type="application/octet-stream" sparkle:edSignature="a7K+wq4Fgg44Fg/Mt1XseUcICLiPShPz023twbvVHSlus+gQZjkE33aV4pwRKAOA2VlzZYkdRkEOX+3sE8h2BA=="/>
+            <enclosure url="https://github.com/natesclaw/natesclaw/releases/download/v2026.7.1/Natesclaw-2026.7.1.zip" length="59038535" type="application/octet-stream" sparkle:edSignature="a7K+wq4Fgg44Fg/Mt1XseUcICLiPShPz023twbvVHSlus+gQZjkE33aV4pwRKAOA2VlzZYkdRkEOX+3sE8h2BA=="/>
         </item>
         <item>
             <title>2026.6.11</title>
             <pubDate>Tue, 30 Jun 2026 17:39:25 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/natesclaw/natesclaw/main/appcast.xml</link>
             <sparkle:version>2606001190</sparkle:version>
             <sparkle:shortVersionString>2026.6.11</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.6.11</h2>
+            <description><![CDATA[<h2>Natesclaw 2026.6.11</h2>
 <h3>Highlights</h3>
 <ul>
 <li><strong>More capable channel control:</strong> Slack relay mode, native Mattermost <code>/oc_queue</code>, and per-DM model overrides make channel operations easier to automate and tune. (#94707, #95546, #95120) Thanks @sjf-oa, @amknight, @xydigit-zt, @thomaszta, and @gandalf-at-lerian.</li>
-<li><strong>Richer operator workflows:</strong> <code>openclaw agent --message-file</code> and the RAFT CLI wake bridge add practical file-driven and remote wake-up paths. (#93351, #95497) Thanks @ooiuuii and @vincentkoc.</li>
+<li><strong>Richer operator workflows:</strong> <code>natesclaw agent --message-file</code> and the RAFT CLI wake bridge add practical file-driven and remote wake-up paths. (#93351, #95497) Thanks @ooiuuii and @vincentkoc.</li>
 <li><strong>Safer plugin distribution:</strong> additional official plugins are externalized cleanly, with bundled plugin icon metadata available to installed clients. (#95683, #95845) Thanks @vincentkoc and @Patrick-Erichsen.</li>
 <li><strong>Stronger mobile operations:</strong> Android settings detail panels improve configuration visibility and control on mobile. (#95148) Thanks @Tosko4.</li>
 <li><strong>More reliable agent turns:</strong> Codex partial deltas, harness activation, and long-context prompt-cache stability reduce lost progress and inconsistent runs. (#95404, #95652, #95624) Thanks @agonza1 and @vincentkoc.</li>
@@ -1803,7 +1803,7 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #94977</strong> fix(telegram): honor outbound reaction directives. Related #71140. Thanks @hugenshen and @Cuttingwater.</li>
 <li><strong>PR #95069</strong> fix(telegram): skip mirror write when primary reply already exists (#94930). Thanks @heichaowo.</li>
 <li><strong>PR #95550</strong> Preserve inherited channel account policies during migration. Thanks @amknight.</li>
-<li><strong>PR #95390</strong> fix #95378: https://github.com/openclaw/openclaw/issues/95378. Thanks @mikasa0818 and @obviyus and @MaiDuy708.</li>
+<li><strong>PR #95390</strong> fix #95378: https://github.com/natesclaw/natesclaw/issues/95378. Thanks @mikasa0818 and @obviyus and @MaiDuy708.</li>
 <li><strong>PR #93143</strong> fix(imessage): keep split-send coalescing opt-in. Thanks @omarshahine.</li>
 <li><strong>PR #95008</strong> fix(claude-cli): also disable native background Bash and Monitor in --print runs. Thanks @anagnorisis2peripeteia.</li>
 <li><strong>PR #94545</strong> fix: keep trusted policies with hook registry. Thanks @jesse-merhi.</li>
@@ -1825,7 +1825,7 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #95102</strong> fix(config): add stdio to McpServerSchema transport union. Related #95082. Thanks @lzyyzznl and @ken-jo.</li>
 <li><strong>PR #95465</strong> fix(sdk): type-narrow manifest.files in pack staging root helper. Thanks @wangmiao0668000666.</li>
 <li><strong>PR #95664</strong> refactor(plugins): move owner skills into plugins. Thanks @vincentkoc.</li>
-<li><strong>PR #95299</strong> fix #95248: OpenClaw release_lane is a no-op when claim is held by a live worker; stuck Telegram inbound events block agent response until gateway restart. Thanks @mikasa0818 and @kriegerbangerz-ship-it.</li>
+<li><strong>PR #95299</strong> fix #95248: Natesclaw release_lane is a no-op when claim is held by a live worker; stuck Telegram inbound events block agent response until gateway restart. Thanks @mikasa0818 and @kriegerbangerz-ship-it.</li>
 <li><strong>PR #94687</strong> fix(gateway): accept port for health and probe. Related #79100. Thanks @BryanTegomoh and @ozthedivine.</li>
 <li><strong>PR #95649</strong> fix(ci): bundle test shards and right-size runners. Thanks @vincentkoc.</li>
 <li><strong>PR #95243</strong> fix(docs): show inline read_when hints in docs:list. Thanks @hugenshen and @vincentkoc.</li>
@@ -1858,7 +1858,7 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #92178</strong> fix(gateway): normalize malformed paired access lists. Related #90654. Thanks @wangmiao0668000666 and @ly-wang19 and @EmilioNicolas.</li>
 <li><strong>PR #83041</strong> Fix config patch restart-required notices. Related #46797. Thanks @xuruiray and @Stache73.</li>
 <li><strong>PR #95754</strong> fix(cron): preserve no-config delivery validation. Thanks @vincentkoc.</li>
-<li><strong>PR #93351</strong> feat(cli): add --message-file to openclaw agent. Thanks @ooiuuii.</li>
+<li><strong>PR #93351</strong> feat(cli): add --message-file to natesclaw agent. Thanks @ooiuuii.</li>
 <li><strong>PR #95485</strong> fix(ui): roll values near 1M over from k to M in compact token format. Thanks @NarahariRaghava and @vincentkoc.</li>
 <li><strong>PR #94622</strong> fix(build): allow tsdown heap override. Thanks @tayoun.</li>
 <li><strong>PR #76668</strong> meta(issue-template): add dedicated docs bug report form. Related #76664. Thanks @WadydX.</li>
@@ -1893,7 +1893,7 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #91049</strong> fix: handle terminal chat send acknowledgements. Related #91048. Thanks @nxmxbbd.</li>
 <li><strong>PR #95081</strong> fix: keep text transform runtime imports hashed. Related #95057. Thanks @849261680 and @YvesLaRose.</li>
 <li><strong>PR #93356</strong> fix(plugins): cache plugin setup registry to kill the /models CPU storm. Thanks @obuchowski.</li>
-<li><strong>PR #85341</strong> refactor: internalize OpenClaw agent runtime.</li>
+<li><strong>PR #85341</strong> refactor: internalize Natesclaw agent runtime.</li>
 <li><strong>PR #94233</strong> fix(model-fallback): coalesce auth decision logs. Related #56979. Thanks @goutamadwant and @yanan1991.</li>
 <li><strong>PR #92399</strong> fix(llm): collapse cumulative openai-responses message snapshots instead of concatenating [AI-assisted]. Related #91959. Thanks @amersheeny and @phoenixyy.</li>
 <li><strong>PR #94811</strong> fix(ollama): honor memory embedding output dimensionality. Thanks @mushuiyu886.</li>
@@ -2058,7 +2058,7 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #95475</strong> test(cli): isolate service env in run and update suites. Thanks @kklouzal.</li>
 <li><strong>PR #95226</strong> fix(infra): bound ClawHub fetchJson and error response bodies. Thanks @Alix-007.</li>
 <li><strong>PR #95240</strong> fix(matrix): bound non-raw JSON response body in transport. Thanks @Alix-007.</li>
-<li><strong>PR #91742</strong> fix(memory): abort orphaned embedding work when memory_search times out. Related #91718. Thanks @dreamhunter2333 and @NOVA-Openclaw.</li>
+<li><strong>PR #91742</strong> fix(memory): abort orphaned embedding work when memory_search times out. Related #91718. Thanks @dreamhunter2333 and @NOVA-Natesclaw.</li>
 <li><strong>PR #93394</strong> fix(memory): abort orphaned qmd search subprocess when memory_search times out. Thanks @Alix-007.</li>
 <li><strong>PR #89911</strong> refactor: migrate bundled transcript target lookups. Thanks @jalehman.</li>
 <li><strong>PR #96191</strong> refactor: route plugin host hook state through accessor. Thanks @jalehman.</li>
@@ -2096,21 +2096,21 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #97543</strong> fix(telegram): recover stalled ingress spool claims. Thanks @vincentkoc.</li>
 <li><strong>PR #97122</strong> ci(docker): publish releases to Docker Hub. Thanks @vincentkoc.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.6.11/OpenClaw-2026.6.11.zip" length="53768361" type="application/octet-stream" sparkle:edSignature="OXkfRdvWubTkAb+76PsrirKIz3E2TXu5h8apLubWr6wrRhef1K4eZwsqcg5+qoVG3xuCg6r5kdAQ45G2USBYDw=="/>
+            <enclosure url="https://github.com/natesclaw/natesclaw/releases/download/v2026.6.11/Natesclaw-2026.6.11.zip" length="53768361" type="application/octet-stream" sparkle:edSignature="OXkfRdvWubTkAb+76PsrirKIz3E2TXu5h8apLubWr6wrRhef1K4eZwsqcg5+qoVG3xuCg6r5kdAQ45G2USBYDw=="/>
         </item>
         <item>
             <title>2026.6.10</title>
             <pubDate>Fri, 26 Jun 2026 23:37:36 +0000</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/natesclaw/natesclaw/main/appcast.xml</link>
             <sparkle:version>2606001090</sparkle:version>
             <sparkle:shortVersionString>2026.6.10</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.6.10</h2>
+            <description><![CDATA[<h2>Natesclaw 2026.6.10</h2>
 <h3>Highlights</h3>
 <ul>
-<li><strong>Automatic fast mode for talks:</strong> OpenClaw can enable fast mode for short conversational turns, then return to normal mode for longer runs with bounded fallback and delivery behavior. (#85104) Thanks @alexph-dev and @vincentkoc.</li>
+<li><strong>Automatic fast mode for talks:</strong> Natesclaw can enable fast mode for short conversational turns, then return to normal mode for longer runs with bounded fallback and delivery behavior. (#85104) Thanks @alexph-dev and @vincentkoc.</li>
 <li><strong>More reliable model routing:</strong> Zai model synthesis, GLM overload failover, and native reasoning-level selection now follow the active model catalog more consistently. (#94461, #93241, #94067, #94136) Thanks @Pandah97, @chrysb, @0xghost42, @zhengli0922, @openperf, @civiltox, and @BorClaw.</li>
 <li><strong>Safer session and channel state:</strong> channel switches reset stale origin fields, and cron delivery awareness stays attached to the target session. (#95328, #93580) Thanks @ZengWen-DT, @jalehman, @gorkem2020, and @scotthuang.</li>
 <li><strong>Trusted policies survive hook composition:</strong> composed hook registries keep the trusted tool policies required by approval-sensitive flows. (#94545) Thanks @jesse-merhi.</li>
@@ -2143,9 +2143,9 @@ This audited record covers the complete v2026.6.9..HEAD history: 12 merged PRs. 
 <li><strong>PR #94545</strong> fix: keep trusted policies with hook registry. Thanks @jesse-merhi.</li>
 <li><strong>PR #95792</strong> fix(onboard): refresh provider plugin registry after setup installs. Related #95765. Thanks @snowzlmbot.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.6.10/OpenClaw-2026.6.10.zip" length="56115790" type="application/octet-stream" sparkle:edSignature="MEeGG8+WePhUg9uDShznmdhhAgy/WWe7bAwr4XRTauNdrM441iziQYIlwhfNrtHDHX+uE1/tkRtIMcELfuekAg=="/>
+            <enclosure url="https://github.com/natesclaw/natesclaw/releases/download/v2026.6.10/Natesclaw-2026.6.10.zip" length="56115790" type="application/octet-stream" sparkle:edSignature="MEeGG8+WePhUg9uDShznmdhhAgy/WWe7bAwr4XRTauNdrM441iziQYIlwhfNrtHDHX+uE1/tkRtIMcELfuekAg=="/>
         </item>
     </channel>
 </rss>

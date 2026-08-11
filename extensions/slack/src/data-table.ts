@@ -3,8 +3,8 @@ import type { Block } from "@slack/web-api";
 import {
   renderMessagePresentationTableFallbackText,
   type MessagePresentationTableBlock,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { asOptionalRecord, hasNonEmptyString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/interactive-runtime";
+import { asOptionalRecord, hasNonEmptyString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { escapeSlackMrkdwn } from "./monitor/mrkdwn.js";
 import { renderSlackMessagePresentationTableFallbackText } from "./presentation-fallback.js";
 

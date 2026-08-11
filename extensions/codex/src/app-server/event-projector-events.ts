@@ -1,11 +1,11 @@
 import type {
   EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
   ToolProgressDetailMode,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   asFiniteNumber,
   readStringField as readString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   isNonSuccessItemStatus,
   itemKind,

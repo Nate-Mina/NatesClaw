@@ -1,8 +1,8 @@
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
+import type { FastMode } from "@natesclaw/normalization-core/string-coerce";
 import type { AutoFallbackPrimaryProbe } from "../../agents/agent-scope.js";
 import type { ExecToolDefaults } from "../../agents/bash-tools.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ExtractedFileImage } from "../../media-understanding/extracted-file-images.js";
 import type { MsgContext, TemplateContext } from "../templating.js";
 import type { ElevatedLevel, ReasoningLevel, ThinkLevel, VerboseLevel } from "../thinking.js";
@@ -34,7 +34,7 @@ export type InternalGetReplyOptions = BaseInternalGetReplyOptions & {
   extractedFileImages?: ExtractedFileImage[];
 };
 
-type AgentDefaults = NonNullable<OpenClawConfig["agents"]>["defaults"];
+type AgentDefaults = NonNullable<NatesclawConfig["agents"]>["defaults"];
 export type ExecOverrides = Pick<
   ExecToolDefaults,
   "host" | "security" | "ask" | "node" | "nodeCwd"
@@ -43,11 +43,11 @@ export type ExecOverrides = Pick<
 export type RunPreparedReplyParams = {
   ctx: MsgContext;
   sessionCtx: TemplateContext;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   agentDir: string;
   agentCfg: AgentDefaults;
-  sessionCfg: OpenClawConfig["session"];
+  sessionCfg: NatesclawConfig["session"];
   commandAuthorized: boolean;
   command: ReturnType<typeof buildCommandContext>;
   commandSource?: string;

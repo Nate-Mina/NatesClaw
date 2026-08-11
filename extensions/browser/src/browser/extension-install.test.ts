@@ -34,11 +34,11 @@ async function predictedId(candidate: string, platform: NodeJS.Platform = proces
 
 async function fixture(platform: NodeJS.Platform = "linux") {
   const root = await fs.realpath(
-    await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-extension-install-")),
+    await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-extension-install-")),
   );
   tempRoots.push(root);
   const homeDir = path.join(root, "home");
-  const stateDir = path.join(homeDir, ".openclaw");
+  const stateDir = path.join(homeDir, ".natesclaw");
   const bundledDir = path.join(root, "package", "extensions", "browser", "chrome-extension");
   const pluginRoot = path.dirname(bundledDir);
   const nativeHostPath = path.join(root, "package", "native-host-entry.js");
@@ -112,7 +112,7 @@ function statsWithUid<T extends Awaited<ReturnType<typeof fs.lstat>>>(info: T, u
 
 describe.runIf(process.platform !== "win32")("extension install ownership policy", () => {
   it("allows only explicit read-only root-owned inputs", async () => {
-    const target = "/opt/openclaw/native-host-entry.js";
+    const target = "/opt/natesclaw/native-host-entry.js";
     const getuidSpy = vi.spyOn(process, "getuid").mockReturnValue(1000);
     const lstatSpy = vi.spyOn(fs, "lstat").mockResolvedValue({
       isDirectory: () => false,
@@ -140,7 +140,7 @@ describe.runIf(process.platform !== "win32")("extension install ownership policy
     { label: "root-owned group-writable input", uid: 0, mode: 0o100660, allowRootOwner: true },
     { label: "user-owned world-writable input", uid: 1000, mode: 0o100602, allowRootOwner: false },
   ])("rejects $label", async ({ uid, mode, allowRootOwner }) => {
-    const target = "/opt/openclaw/unsafe";
+    const target = "/opt/natesclaw/unsafe";
     const getuidSpy = vi.spyOn(process, "getuid").mockReturnValue(1000);
     const lstatSpy = vi.spyOn(fs, "lstat").mockResolvedValue({
       isDirectory: () => false,
@@ -217,8 +217,8 @@ describe("stable extension copy", () => {
     await installStableChromeExtension(value.bundledDir, value.deps);
 
     expect(await fs.readFile(path.join(installed, "background.js"), "utf8")).toContain("updated");
-    expect(await fs.readFile(path.join(installed, ".openclaw-owned.json"), "utf8")).toContain(
-      '"owner":"openclaw"',
+    expect(await fs.readFile(path.join(installed, ".natesclaw-owned.json"), "utf8")).toContain(
+      '"owner":"natesclaw"',
     );
     expect(await fs.readdir(path.join(installed, "modules"))).toEqual(["runtime.js"]);
     expect(await fs.readdir(installed)).not.toContain("sidepanel.html");
@@ -270,8 +270,8 @@ describe("deterministic unpacked extension ID", () => {
   });
 
   it("normalizes only a lowercase Windows drive letter", () => {
-    expect(generateChromeExtensionIdForPath("c:\\OpenClaw\\extension", "win32")).toBe(
-      generateChromeExtensionIdForPath("C:\\OpenClaw\\extension", "win32"),
+    expect(generateChromeExtensionIdForPath("c:\\Natesclaw\\extension", "win32")).toBe(
+      generateChromeExtensionIdForPath("C:\\Natesclaw\\extension", "win32"),
     );
   });
 });
@@ -290,8 +290,8 @@ describe("Secure Preferences discovery", () => {
       userDataDir: chrome.userDataDir,
       profile: "Default",
       entries: {
-        [installedId]: { location: 4, path: installed, manifest: { name: "Not OpenClaw" } },
-        ["p".repeat(32)]: { location: 1, path: installed, manifest: { name: "OpenClaw" } },
+        [installedId]: { location: 4, path: installed, manifest: { name: "Not Natesclaw" } },
+        ["p".repeat(32)]: { location: 1, path: installed, manifest: { name: "Natesclaw" } },
       },
     });
     await writeSecurePreferences({
@@ -407,7 +407,7 @@ describe("Secure Preferences discovery", () => {
 
     expect(status.discovered).toEqual([]);
     expect(status.manualSetupRequired).toBe(true);
-    expect(status.issues.join("\n")).toContain("not OpenClaw-owned");
+    expect(status.issues.join("\n")).toContain("not Natesclaw-owned");
   });
 });
 
@@ -417,7 +417,7 @@ describe("native host registration", () => {
     async () => {
       const value = await fixture();
       const stateDir = path.join(value.root, "custom state's dir");
-      const configPath = path.join(value.root, "custom config's dir", "openclaw.json");
+      const configPath = path.join(value.root, "custom config's dir", "natesclaw.json");
       const nativeHostPath = BUILT_NATIVE_HOST_PATH;
       await makeTestFilePrivate(nativeHostPath);
       const relayPort = 19_031;
@@ -428,8 +428,8 @@ describe("native host registration", () => {
         nativeHostPath,
         env: {
           ...value.deps.env,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_CONFIG_PATH: configPath,
         },
       };
       await fs.mkdir(path.join(stateDir, "credentials"), { recursive: true, mode: 0o700 });
@@ -518,7 +518,7 @@ describe("native host registration", () => {
           if (!wroteProfile) {
             const manifestPath = path.join(
               chromium.nativeManifestDir,
-              "ai.openclaw.browser_bootstrap.json",
+              "ai.natesclaw.browser_bootstrap.json",
             );
             const preRegistration = JSON.parse(await fs.readFile(manifestPath, "utf8")) as {
               allowed_origins: string[];
@@ -578,11 +578,11 @@ describe("native host registration", () => {
       entries: { [extensionId]: { location: 4, path: installed } },
     });
     await fs.mkdir(chrome.nativeManifestDir, { recursive: true, mode: 0o700 });
-    const manifestPath = path.join(chrome.nativeManifestDir, "ai.openclaw.browser_bootstrap.json");
+    const manifestPath = path.join(chrome.nativeManifestDir, "ai.natesclaw.browser_bootstrap.json");
     await fs.writeFile(
       manifestPath,
       JSON.stringify({
-        name: "ai.openclaw.browser_bootstrap",
+        name: "ai.natesclaw.browser_bootstrap",
         path: "/foreign/host",
         allowed_origins: [`chrome-extension://${extensionId}/`],
       }),
@@ -622,7 +622,7 @@ describe("native host registration", () => {
     await fs.mkdir(chrome.userDataDir, { recursive: true, mode: 0o700 });
     await fs.mkdir(chrome.nativeManifestDir, { recursive: true, mode: 0o700 });
     await fs.writeFile(
-      path.join(chrome.nativeManifestDir, "ai.openclaw.browser_bootstrap.json"),
+      path.join(chrome.nativeManifestDir, "ai.natesclaw.browser_bootstrap.json"),
       JSON.stringify({ name: "foreign", path: "/foreign/host", allowed_origins: [] }),
       { mode: 0o600 },
     );
@@ -832,7 +832,7 @@ describe("native host registration", () => {
     });
 
     expect(repair).toEqual({
-      changes: ["Repaired Google Chrome OpenClaw native messaging registration."],
+      changes: ["Repaired Google Chrome Natesclaw native messaging registration."],
       warnings: [],
     });
     await expect(fs.readFile(manifest.path, "utf8")).resolves.toContain(movedNativeHost);

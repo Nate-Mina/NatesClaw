@@ -2,10 +2,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   installQQBotRuntimeForStateTests,
@@ -16,7 +16,7 @@ import type { RefIndexEntry } from "./types.js";
 const tempWorkspaces: TempWorkspaceSync[] = [];
 
 function refIndexFile(homeDir: string): string {
-  return path.join(homeDir, ".openclaw", "qqbot", "data", "ref-index.jsonl");
+  return path.join(homeDir, ".natesclaw", "qqbot", "data", "ref-index.jsonl");
 }
 
 async function useMockHome(homeDir: string): Promise<void> {
@@ -44,17 +44,17 @@ describe("engine/ref/store", () => {
   beforeEach(async () => {
     vi.resetModules();
     const stateWorkspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-state-",
     });
     const homeWorkspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-home-",
     });
     tempWorkspaces.push(stateWorkspace, homeWorkspace);
     const stateDir = stateWorkspace.dir;
     const homeDir = homeWorkspace.dir;
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
     vi.stubEnv("HOME", homeDir);
     await useMockHome(homeDir);
     installQQBotRuntimeForStateTests(stateDir);

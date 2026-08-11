@@ -1,11 +1,11 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { sql } from "kysely";
 import { executeSqliteQuerySync } from "../../infra/kysely-sync.js";
 import { getChildLogger } from "../../logging/logger.js";
 import {
-  runOpenClawAgentWriteTransaction,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  runNatesclawAgentWriteTransaction,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import {
   materializeSessionStateDeletePlans,
   type SessionStateDeletePlan,
@@ -66,7 +66,7 @@ function collectSqliteSessionMaintenanceBaseKeys(
 }
 
 function hasStaleSqliteSessionEntryCandidate(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   pruneAfterMs: number,
   preserveKeys: ReadonlySet<string> | undefined,
 ): boolean {
@@ -98,7 +98,7 @@ function hasStaleSqliteSessionEntryCandidate(
 }
 
 export function applySessionEntryMaintenance(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   params: {
     activeSessionKey: string;
     archiveDirectory: string;
@@ -274,7 +274,7 @@ async function finalizeSqliteSessionEntryMaintenancePlansWithCommit(
     const materializedPlans = await materializeSessionStateDeletePlans(stateDeletePlans);
     const archivedTranscripts = await commit(() => {
       let committed: SessionLifecycleArchivedTranscript[] = [];
-      runOpenClawAgentWriteTransaction((database) => {
+      runNatesclawAgentWriteTransaction((database) => {
         assertPlannedLifecycleArtifactEntriesUnchanged(database, entryRemovals);
         committed = deleteMaterializedSessionStatePlans(
           database,

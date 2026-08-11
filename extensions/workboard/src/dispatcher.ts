@@ -4,11 +4,11 @@ import type {
   WorkboardCard,
   WorkboardExecution,
   WorkboardWorkspace,
-} from "@openclaw/workboard-contract";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { isFutureDateTimestampMs } from "openclaw/plugin-sdk/number-runtime";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { canonicalPathFromExistingAncestor } from "openclaw/plugin-sdk/security-runtime";
+} from "@natesclaw/workboard-contract";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { isFutureDateTimestampMs } from "natesclaw/plugin-sdk/number-runtime";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
+import { canonicalPathFromExistingAncestor } from "natesclaw/plugin-sdk/security-runtime";
 import {
   assertRestrictedWorkboardTarget,
   managedWorktreeName,
@@ -207,7 +207,7 @@ function buildWorkerPrompt(params: {
   token: string;
 }): string {
   return [
-    `Work on this OpenClaw Workboard card: ${params.card.title}`,
+    `Work on this Natesclaw Workboard card: ${params.card.title}`,
     "",
     "## Worker protocol",
     `Card id: ${params.card.id}`,

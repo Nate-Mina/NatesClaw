@@ -1,16 +1,16 @@
 ---
-summary: "Deploy OpenClaw Gateway to a Kubernetes cluster with Kustomize"
+summary: "Deploy Natesclaw Gateway to a Kubernetes cluster with Kustomize"
 read_when:
-  - You want to run OpenClaw on a Kubernetes cluster
-  - You want to test OpenClaw in a Kubernetes environment
+  - You want to run Natesclaw on a Kubernetes cluster
+  - You want to test Natesclaw in a Kubernetes environment
 title: "Kubernetes"
 ---
 
-A minimal starting point for running OpenClaw on Kubernetes, not a production-ready deployment. It covers the core resources and is meant to be adapted to your environment.
+A minimal starting point for running Natesclaw on Kubernetes, not a production-ready deployment. It covers the core resources and is meant to be adapted to your environment.
 
 ## Why not Helm
 
-OpenClaw is a single container with some config files. The interesting customization is in agent content (Markdown files, skills, config overrides), not infrastructure templating. Kustomize handles overlays without the overhead of a Helm chart. Layer a Helm chart on top of these manifests if your deployment grows more complex.
+Natesclaw is a single container with some config files. The interesting customization is in agent content (Markdown files, skills, config overrides), not infrastructure templating. Kustomize handles overlays without the overhead of a Helm chart. Layer a Helm chart on top of these manifests if your deployment grows more complex.
 
 ## What you need
 
@@ -25,14 +25,14 @@ OpenClaw is a single container with some config files. The interesting customiza
 export <PROVIDER>_API_KEY="..."
 ./scripts/k8s/deploy.sh
 
-kubectl port-forward svc/openclaw 18789:18789 -n openclaw
+kubectl port-forward svc/natesclaw 18789:18789 -n natesclaw
 open http://localhost:18789
 ```
 
 `deploy.sh` creates token auth by default. Retrieve the generated gateway token for the Control UI:
 
 ```bash
-kubectl get secret openclaw-secrets -n openclaw -o jsonpath='{.data.OPENCLAW_GATEWAY_TOKEN}' | base64 -d
+kubectl get secret natesclaw-secrets -n natesclaw -o jsonpath='{.data.NATESCLAW_GATEWAY_TOKEN}' | base64 -d
 ```
 
 For local debugging, `./scripts/k8s/deploy.sh --show-token` prints the token after deploy.
@@ -75,19 +75,19 @@ Add `--show-token` to either command to print the token to stdout for local test
 ### 2) Access the gateway
 
 ```bash
-kubectl port-forward svc/openclaw 18789:18789 -n openclaw
+kubectl port-forward svc/natesclaw 18789:18789 -n natesclaw
 open http://localhost:18789
 ```
 
 ## What gets deployed
 
 ```text
-Namespace: openclaw (configurable via OPENCLAW_NAMESPACE)
-├── Deployment/openclaw        # Single pod, init container + gateway
-├── Service/openclaw           # ClusterIP on port 18789
+Namespace: natesclaw (configurable via NATESCLAW_NAMESPACE)
+├── Deployment/natesclaw        # Single pod, init container + gateway
+├── Service/natesclaw           # ClusterIP on port 18789
 ├── PersistentVolumeClaim      # 10Gi for agent state and config
-├── ConfigMap/openclaw-config  # openclaw.json + AGENTS.md
-└── Secret/openclaw-secrets    # Gateway token + API keys
+├── ConfigMap/natesclaw-config  # natesclaw.json + AGENTS.md
+└── Secret/natesclaw-secrets    # Gateway token + API keys
 ```
 
 ## Customization
@@ -102,7 +102,7 @@ Edit the `AGENTS.md` in `scripts/k8s/manifests/configmap.yaml` and redeploy:
 
 ### Gateway config
 
-Edit `openclaw.json` in `scripts/k8s/manifests/configmap.yaml`. See [Gateway configuration](/gateway/configuration) for the full reference.
+Edit `natesclaw.json` in `scripts/k8s/manifests/configmap.yaml`. See [Gateway configuration](/gateway/configuration) for the full reference.
 
 ### Add providers
 
@@ -120,15 +120,15 @@ Existing provider keys stay in the Secret unless you overwrite them.
 Or patch the Secret directly:
 
 ```bash
-kubectl patch secret openclaw-secrets -n openclaw \
+kubectl patch secret natesclaw-secrets -n natesclaw \
   -p '{"stringData":{"<PROVIDER>_API_KEY":"..."}}'
-kubectl rollout restart deployment/openclaw -n openclaw
+kubectl rollout restart deployment/natesclaw -n natesclaw
 ```
 
 ### Custom namespace
 
 ```bash
-OPENCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh
+NATESCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh
 ```
 
 ### Custom image
@@ -136,7 +136,7 @@ OPENCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh
 Edit the `image` field in `scripts/k8s/manifests/deployment.yaml`:
 
 ```yaml
-image: ghcr.io/openclaw/openclaw:slim # primary; official Docker Hub mirror: openclaw/openclaw
+image: ghcr.io/natesclaw/natesclaw:slim # primary; official Docker Hub mirror: natesclaw/natesclaw
 ```
 
 ### Expose beyond port-forward
@@ -163,20 +163,20 @@ This applies all manifests and restarts the pod to pick up any config or secret 
 ./scripts/k8s/deploy.sh --delete
 ```
 
-For the default `openclaw` namespace, this deletes the namespace and everything in it, including the PVC.
+For the default `natesclaw` namespace, this deletes the namespace and everything in it, including the PVC.
 
-For a custom namespace, `--delete` removes only OpenClaw resources and preserves the namespace and unrelated workloads:
+For a custom namespace, `--delete` removes only Natesclaw resources and preserves the namespace and unrelated workloads:
 
 ```bash
-OPENCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh --delete
+NATESCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh --delete
 ```
 
-Use `--delete-resources` to request this scoped teardown explicitly in any namespace. Both scoped modes delete the OpenClaw Deployment, Service, PVC, ConfigMap, and generated Secret. Deleting the PVC removes OpenClaw's claim and access to its persisted data; whether the backing volume and data are deleted depends on the PersistentVolume or StorageClass reclaim policy (`Delete` or `Retain`).
+Use `--delete-resources` to request this scoped teardown explicitly in any namespace. Both scoped modes delete the Natesclaw Deployment, Service, PVC, ConfigMap, and generated Secret. Deleting the PVC removes Natesclaw's claim and access to its persisted data; whether the backing volume and data are deleted depends on the PersistentVolume or StorageClass reclaim policy (`Delete` or `Retain`).
 
 To delete a custom namespace and every workload in it, explicitly opt in:
 
 ```bash
-OPENCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh --delete-namespace
+NATESCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh --delete-namespace
 ```
 
 This also deletes unrelated workloads and the PVC.
@@ -198,7 +198,7 @@ scripts/k8s/
 ├── create-kind.sh              # Local Kind cluster (auto-detects docker/podman)
 └── manifests/
     ├── kustomization.yaml      # Kustomize base
-    ├── configmap.yaml          # openclaw.json + AGENTS.md
+    ├── configmap.yaml          # natesclaw.json + AGENTS.md
     ├── deployment.yaml         # Pod spec with security hardening
     ├── pvc.yaml                # 10Gi persistent storage
     └── service.yaml            # ClusterIP on 18789

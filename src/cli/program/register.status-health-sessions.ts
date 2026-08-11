@@ -122,24 +122,24 @@ function registerSessionsLifecycleCommand(
   const destructive = operation === "delete";
   const examples: Array<[string, string]> = destructive
     ? [
-        ['openclaw sessions delete "agent:main:scratch-1"', "Delete with confirmation."],
+        ['natesclaw sessions delete "agent:main:scratch-1"', "Delete with confirmation."],
         [
-          'openclaw sessions delete "agent:main:scratch-1" "agent:main:scratch-2" --yes',
+          'natesclaw sessions delete "agent:main:scratch-1" "agent:main:scratch-2" --yes',
           "Delete several sessions non-interactively.",
         ],
         [
-          'openclaw sessions delete "agent:work:scratch-1" --agent work --dry-run',
+          'natesclaw sessions delete "agent:work:scratch-1" --agent work --dry-run',
           "Preview an agent-scoped delete.",
         ],
       ]
     : [
-        ['openclaw sessions archive "agent:main:scratch-1"', "Archive one session."],
+        ['natesclaw sessions archive "agent:main:scratch-1"', "Archive one session."],
         [
-          'openclaw sessions archive "agent:main:scratch-1" "agent:main:scratch-2"',
+          'natesclaw sessions archive "agent:main:scratch-1" "agent:main:scratch-2"',
           "Archive several sessions.",
         ],
         [
-          'openclaw sessions archive "agent:work:scratch-1" --agent work --dry-run',
+          'natesclaw sessions archive "agent:work:scratch-1" --agent work --dry-run',
           "Preview an agent-scoped archive.",
         ],
       ];
@@ -258,21 +258,21 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw status", "Show channel health + session summary."],
-          ["openclaw status --all", "Full diagnosis (read-only)."],
-          ["openclaw status --json", "Machine-readable output."],
-          ["openclaw status --usage", "Show model provider usage/quota snapshots."],
+          ["natesclaw status", "Show channel health + session summary."],
+          ["natesclaw status --all", "Full diagnosis (read-only)."],
+          ["natesclaw status --json", "Machine-readable output."],
+          ["natesclaw status --usage", "Show model provider usage/quota snapshots."],
           [
-            "openclaw status --deep",
+            "natesclaw status --deep",
             "Run channel probes (WA + Telegram + Discord + Slack + Signal).",
           ],
-          ["openclaw status --deep --timeout 5000", "Tighten probe timeout."],
+          ["natesclaw status --deep --timeout 5000", "Tighten probe timeout."],
         ])}`,
     )
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/status", "docs.openclaw.ai/cli/status")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/status", "docs.natesclaw.ai/cli/status")}\n`,
     )
     .action(async (opts) => {
       await runWithVerboseAndTimeout(opts, async ({ verbose, timeoutMs }) => {
@@ -301,7 +301,7 @@ export function registerStatusHealthSessionsCommands(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/health", "docs.openclaw.ai/cli/health")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/health", "docs.natesclaw.ai/cli/health")}\n`,
     )
     .action(async (opts) => {
       await runWithVerboseAndTimeout(opts, async ({ verbose, timeoutMs }) => {
@@ -324,13 +324,13 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw sessions", "List all sessions."],
-          ["openclaw sessions --agent work", "List sessions for one agent."],
-          ["openclaw sessions --all-agents", "Aggregate sessions across agents."],
-          ["openclaw sessions --active 120", "Only last 2 hours."],
-          ["openclaw sessions --limit 25", "Show the newest 25 sessions."],
-          ["openclaw sessions --json", "Machine-readable output."],
-          ["openclaw sessions --store ./tmp/sessions.json", "Use a specific session store."],
+          ["natesclaw sessions", "List all sessions."],
+          ["natesclaw sessions --agent work", "List sessions for one agent."],
+          ["natesclaw sessions --all-agents", "Aggregate sessions across agents."],
+          ["natesclaw sessions --active 120", "Only last 2 hours."],
+          ["natesclaw sessions --limit 25", "Show the newest 25 sessions."],
+          ["natesclaw sessions --json", "Machine-readable output."],
+          ["natesclaw sessions --store ./tmp/sessions.json", "Use a specific session store."],
         ])}\n\n${theme.muted(
           "Shows token usage per session when the agent reports it; set agents.defaults.contextTokens to cap the window and show %.",
         )}`,
@@ -338,7 +338,7 @@ export function registerStatusHealthSessionsCommands(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sessions", "docs.openclaw.ai/cli/sessions")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sessions", "docs.natesclaw.ai/cli/sessions")}\n`,
     )
     .action(async (opts) => {
       await runSessionsListCli(opts as SessionsListCliOptions);
@@ -376,20 +376,20 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw sessions cleanup --dry-run", "Preview stale/cap cleanup."],
+          ["natesclaw sessions cleanup --dry-run", "Preview stale/cap cleanup."],
           [
-            "openclaw sessions cleanup --dry-run --fix-missing",
+            "natesclaw sessions cleanup --dry-run --fix-missing",
             "Also preview pruning entries with missing transcript files.",
           ],
           [
-            "openclaw sessions cleanup --dry-run --fix-dm-scope",
+            "natesclaw sessions cleanup --dry-run --fix-dm-scope",
             "Preview stale direct-DM rows after returning dmScope to main.",
           ],
-          ["openclaw sessions cleanup --enforce", "Apply maintenance now."],
-          ["openclaw sessions cleanup --agent work --dry-run", "Preview one agent store."],
-          ["openclaw sessions cleanup --all-agents --dry-run", "Preview all agent stores."],
+          ["natesclaw sessions cleanup --enforce", "Apply maintenance now."],
+          ["natesclaw sessions cleanup --agent work --dry-run", "Preview one agent store."],
+          ["natesclaw sessions cleanup --all-agents --dry-run", "Preview all agent stores."],
           [
-            "openclaw sessions cleanup --enforce --store ./tmp/sessions.json",
+            "natesclaw sessions cleanup --enforce --store ./tmp/sessions.json",
             "Use a specific store.",
           ],
         ])}`,
@@ -466,7 +466,7 @@ export function registerStatusHealthSessionsCommands(program: Command) {
     .command("export-trajectory")
     .description("Export a redacted trajectory bundle for a stored session")
     .option("--session-key <key>", "Session key to export")
-    .option("--output <path>", "Output directory name inside .openclaw/trajectory-exports")
+    .option("--output <path>", "Output directory name inside .natesclaw/trajectory-exports")
     .option("--workspace <path>", "Workspace root for the export (default: current directory)")
     .option("--store <path>", "Path to session store (default: resolved from config)")
     .option("--agent <id>", "Agent id for resolving the default session store")
@@ -515,15 +515,15 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
           [
-            'openclaw sessions compact "agent:main:main"',
+            'natesclaw sessions compact "agent:main:main"',
             "LLM-summarize a session to reclaim context budget.",
           ],
           [
-            'openclaw sessions compact "agent:main:main" --max-lines 200',
+            'natesclaw sessions compact "agent:main:main" --max-lines 200',
             "Truncate to the last 200 transcript lines instead.",
           ],
           [
-            'openclaw sessions compact "agent:work:main" --agent work --json',
+            'natesclaw sessions compact "agent:work:main" --agent work --json',
             "Target one agent's session and emit JSON.",
           ],
         ])}\n\n${theme.muted(
@@ -533,7 +533,7 @@ export function registerStatusHealthSessionsCommands(program: Command) {
     .action(async (key: string, opts, command) => {
       // Sibling `sessions` subcommands inherit parent options (see list/cleanup
       // above): `--agent`/`--json` may be supplied on the parent `sessions`
-      // command, e.g. `openclaw sessions --agent work compact <key>`. Merge those
+      // command, e.g. `natesclaw sessions --agent work compact <key>`. Merge those
       // so a parent `--agent` is not silently dropped and the wrong agent's
       // session compacted.
       //

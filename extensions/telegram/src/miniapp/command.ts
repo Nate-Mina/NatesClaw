@@ -1,28 +1,28 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "natesclaw/plugin-sdk/account-id";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
+  NatesclawPluginApi,
+  NatesclawPluginCommandDefinition,
   PluginCommandContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import type { TelegramMiniAppLaunchTickets } from "./launch-ticket.js";
 import { isTelegramMiniAppOwner } from "./owner.js";
 import { resolveTelegramMiniAppUrls, TELEGRAM_MINIAPP_URL_ERROR } from "./url.js";
 
 export function registerTelegramMiniAppCommand(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   launchTickets: TelegramMiniAppLaunchTickets,
 ): void {
   api.registerCommand(createTelegramMiniAppDashboardCommand(api, launchTickets));
 }
 
 function createTelegramMiniAppDashboardCommand(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   launchTickets: TelegramMiniAppLaunchTickets,
-): OpenClawPluginCommandDefinition {
+): NatesclawPluginCommandDefinition {
   return {
     name: "dashboard",
-    description: "Open the OpenClaw dashboard",
+    description: "Open the Natesclaw dashboard",
     channels: ["telegram"],
     requireAuth: true,
     exposeSenderIsOwner: true,
@@ -47,7 +47,7 @@ function createTelegramMiniAppDashboardCommand(
         launchTicket: launchTickets.issue({ accountId, userId }),
       }).toString();
       return {
-        text: "Open OpenClaw dashboard.",
+        text: "Open Natesclaw dashboard.",
         presentation: {
           blocks: [
             {
@@ -61,8 +61,8 @@ function createTelegramMiniAppDashboardCommand(
   };
 }
 
-function currentConfig(api: OpenClawPluginApi): OpenClawConfig {
-  return (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+function currentConfig(api: NatesclawPluginApi): NatesclawConfig {
+  return (api.runtime.config?.current?.() ?? api.config) as NatesclawConfig;
 }
 
 function isTelegramDirectCommand(ctx: PluginCommandContext): boolean {

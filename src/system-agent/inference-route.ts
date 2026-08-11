@@ -1,7 +1,7 @@
-// Resolves the configured default agent route shared by OpenClaw inference calls.
+// Resolves the configured default agent route shared by Natesclaw inference calls.
 import { isDeepStrictEqual } from "node:util";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   listAgentEntries,
   resolveDefaultAgentId,
@@ -11,13 +11,13 @@ import {
   cliBackendAcceptsAuthProfileForwarding,
   resolveCliExecutionAuthProfileId,
 } from "../agents/cli-execution-auth.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.types.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { SYSTEM_AGENT_ID } from "./agent-id.js";
 
 export type SystemAgentConfiguredRoute = {
-  runConfig: OpenClawConfig;
+  runConfig: NatesclawConfig;
   modelLabel: string;
   provider: string;
   model: string;
@@ -33,7 +33,7 @@ export type SystemAgentConfiguredRoute = {
 );
 
 export function resolveSystemAgentTargetAgentId(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   requestedAgentId?: string,
 ): string {
   const configuredAgentId =
@@ -65,16 +65,16 @@ export type DefaultInferenceRouteProjection = {
   defaults: unknown;
   agent?: unknown;
   executionAgent?: unknown;
-  env: OpenClawConfig["env"];
-  secrets: OpenClawConfig["secrets"];
-  plugins: OpenClawConfig["plugins"];
-  tools: OpenClawConfig["tools"];
+  env: NatesclawConfig["env"];
+  secrets: NatesclawConfig["secrets"];
+  plugins: NatesclawConfig["plugins"];
+  tools: NatesclawConfig["tools"];
 };
 
 function projectSystemAgentExecutionConfig(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   routeAgentId: string,
-): OpenClawConfig {
+): NatesclawConfig {
   const agents = listAgentEntries(config);
   const routeAgent = agents.find((agent) => normalizeAgentId(agent.id) === routeAgentId);
   const retainedAgents = agents.filter((agent) => normalizeAgentId(agent.id) !== SYSTEM_AGENT_ID);
@@ -97,7 +97,7 @@ function projectSystemAgentExecutionConfig(
 }
 
 export async function resolveSystemAgentConfiguredRouteFromConfig(
-  runConfig: OpenClawConfig,
+  runConfig: NatesclawConfig,
   requestedAgentId?: string,
   deps: SystemAgentRouteProjectionDeps = {},
 ): Promise<SystemAgentConfiguredRoute | null> {
@@ -213,7 +213,7 @@ function projectRelevantModelMap(params: {
 
 /** Project every config input that can change the configured default-agent route. */
 export async function projectDefaultInferenceRoute(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   deps: SystemAgentRouteProjectionDeps = {},
 ): Promise<DefaultInferenceRouteProjection> {
   return await projectInferenceRoute(config, undefined, deps);
@@ -221,7 +221,7 @@ export async function projectDefaultInferenceRoute(
 
 /** Project every config input that can change one configured agent route. */
 export async function projectInferenceRoute(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   requestedAgentId?: string,
   deps: SystemAgentRouteProjectionDeps = {},
 ): Promise<DefaultInferenceRouteProjection> {

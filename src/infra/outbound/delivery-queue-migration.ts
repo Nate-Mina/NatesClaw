@@ -1,7 +1,7 @@
 // One-time pre-D4 queue migration. Normal recovery reads only prepared rows.
 import { randomUUID } from "node:crypto";
 import { createRenderedMessageBatchPlan } from "../../channels/message/rendered-batch.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveOutboundMediaMaxBytes } from "../../media/configured-max-bytes.js";
 import { getOrCreatePromise } from "../../shared/lazy-promise.js";
 import {
@@ -71,7 +71,7 @@ function hasActiveLegacyPreparationLease(
   );
 }
 
-function buildLegacyPreparationParams(entry: LegacyQueuedDelivery, cfg: OpenClawConfig) {
+function buildLegacyPreparationParams(entry: LegacyQueuedDelivery, cfg: NatesclawConfig) {
   return {
     cfg,
     channel: entry.channel,
@@ -104,7 +104,7 @@ function buildLegacyPreparationParams(entry: LegacyQueuedDelivery, cfg: OpenClaw
 async function prepareLegacyEntryCheckpoint(params: {
   entry: LegacyQueuedDeliveryPreparation;
   ownerId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   log: RecoveryLogger;
   stateDir?: string;
 }): Promise<"checkpointed" | "skipped"> {
@@ -379,7 +379,7 @@ function reclaimLegacyPreparation(params: {
 
 async function finalizePreparedMigration(params: {
   entry: QueuedDelivery;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   log: RecoveryLogger;
   stateDir?: string;
 }): Promise<"moved" | "skipped"> {
@@ -476,7 +476,7 @@ const activeLegacyMigrations = new Map<string, Promise<{ moved: number; skipped:
 
 /** Migrates every unchanged pre-D4 pending row before canonical recovery scans. */
 export async function migrateLegacyPendingOutboundDeliveries(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   log: RecoveryLogger;
   stateDir?: string;
 }): Promise<{ moved: number; skipped: number }> {
@@ -490,7 +490,7 @@ export async function migrateLegacyPendingOutboundDeliveries(params: {
 }
 
 async function migrateLegacyPendingOutboundDeliveriesOwned(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   log: RecoveryLogger;
   stateDir?: string;
 }): Promise<{ moved: number; skipped: number }> {

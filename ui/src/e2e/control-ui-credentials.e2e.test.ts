@@ -16,11 +16,11 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 const artifactDir = path.resolve(
   process.cwd(),
-  process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim() ||
+  process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim() ||
     ".artifacts/control-ui-e2e/control-ui-credentials",
 );
 const viewport = { height: 900, width: 1280 };
@@ -89,7 +89,7 @@ async function rejectInitialConnect(
     details: { code },
     message,
   });
-  await page.locator("openclaw-login-gate").waitFor();
+  await page.locator("natesclaw-login-gate").waitFor();
 }
 
 describeControlUiE2e("Control UI token and password credentials E2E", () => {
@@ -137,8 +137,8 @@ describeControlUiE2e("Control UI token and password credentials E2E", () => {
     });
     expect(readConnectAuth(tokenConnect)?.password).toBeUndefined();
     await tokenFlow.gateway.resolveDeferred("connect");
-    await tokenFlow.page.locator("openclaw-app-shell").waitFor();
-    expect(await tokenFlow.page.locator("openclaw-login-gate").count()).toBe(0);
+    await tokenFlow.page.locator("natesclaw-app-shell").waitFor();
+    expect(await tokenFlow.page.locator("natesclaw-login-gate").count()).toBe(0);
     await tokenFlow.page.screenshot({
       fullPage: true,
       path: path.join(artifactDir, "01-token-connected.png"),
@@ -181,7 +181,7 @@ describeControlUiE2e("Control UI token and password credentials E2E", () => {
       (await failure.locator(".login-gate__failure-raw").textContent())?.toLowerCase(),
     ).toContain("gateway password mismatch");
     expect(await failure.locator(".login-gate__failure-steps").isVisible()).toBe(true);
-    expect(await passwordFlow.page.locator("openclaw-app-shell").count()).toBe(0);
+    expect(await passwordFlow.page.locator("natesclaw-app-shell").count()).toBe(0);
     await passwordFlow.page.screenshot({
       fullPage: true,
       path: path.join(artifactDir, "02-password-rejected.png"),
@@ -198,8 +198,8 @@ describeControlUiE2e("Control UI token and password credentials E2E", () => {
     });
     expect(readConnectAuth(recoveredConnect)?.token).toBeUndefined();
     await passwordFlow.gateway.resolveDeferred("connect");
-    await passwordFlow.page.locator("openclaw-app-shell").waitFor();
-    expect(await passwordFlow.page.locator("openclaw-login-gate").count()).toBe(0);
+    await passwordFlow.page.locator("natesclaw-app-shell").waitFor();
+    expect(await passwordFlow.page.locator("natesclaw-login-gate").count()).toBe(0);
     await passwordFlow.page.screenshot({
       fullPage: true,
       path: path.join(artifactDir, "03-password-recovered.png"),

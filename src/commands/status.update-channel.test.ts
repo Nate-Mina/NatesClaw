@@ -21,7 +21,7 @@ describe("resolveStatusRegistryUpdateChannel", () => {
       resolveStatusRegistryUpdateChannel({
         installKind: "git",
         git: {
-          root: "/tmp/openclaw",
+          root: "/tmp/natesclaw",
           sha: null,
           tag: null,
           branch: "main",

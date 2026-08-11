@@ -9,22 +9,22 @@ import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 const execFileAsync = promisify(execFile);
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
-async function runOpenClaw(
+async function runNatesclaw(
   args: string[],
   options?: { expectFailure?: boolean; stateDir?: string },
 ) {
-  const stateDir = options?.stateDir ?? tempDirs.make("openclaw-claws-lifecycle-e2e-");
+  const stateDir = options?.stateDir ?? tempDirs.make("natesclaw-claws-lifecycle-e2e-");
   const env = {
     ...process.env,
     HOME: stateDir,
     USERPROFILE: stateDir,
-    OPENCLAW_CONFIG_PATH: join(stateDir, "openclaw.json"),
-    OPENCLAW_EXPERIMENTAL_CLAWS: "1",
-    OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-    OPENCLAW_HOME: stateDir,
-    OPENCLAW_STATE_DIR: stateDir,
-    OPENCLAW_TEST_FAST: "1",
-    OPENCLAW_TEST_RUNTIME_LOG: "1",
+    NATESCLAW_CONFIG_PATH: join(stateDir, "natesclaw.json"),
+    NATESCLAW_EXPERIMENTAL_CLAWS: "1",
+    NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+    NATESCLAW_HOME: stateDir,
+    NATESCLAW_STATE_DIR: stateDir,
+    NATESCLAW_TEST_FAST: "1",
+    NATESCLAW_TEST_RUNTIME_LOG: "1",
     VITEST: "",
   };
   try {
@@ -67,11 +67,11 @@ describe("claws lifecycle cli e2e", () => {
 
   it("inspects a grouped development manifest", async () => {
     const inspect = parseJson(
-      (await runOpenClaw(["claws", "inspect", manifestPath, "--json"])).stdout,
+      (await runNatesclaw(["claws", "inspect", manifestPath, "--json"])).stdout,
     );
 
     expect(inspect).toMatchObject({
-      schemaVersion: "openclaw.clawInspect.v1",
+      schemaVersion: "natesclaw.clawInspect.v1",
       stability: "experimental",
       valid: true,
       source: { kind: "development", version: "0.0.0-development" },
@@ -80,7 +80,7 @@ describe("claws lifecycle cli e2e", () => {
         agent: { id: "incident-response" },
         packages: expect.any(Array),
       },
-      openClawProfile: {
+      NatesclawProfile: {
         schemaVersion: 1,
         agent: {
           tools: { allow: ["read", "write", "web_fetch"], deny: ["exec", "browser"] },
@@ -91,7 +91,7 @@ describe("claws lifecycle cli e2e", () => {
   });
 
   it("builds a complete package-free read-only plan without network access", async () => {
-    const result = await runOpenClaw([
+    const result = await runNatesclaw([
       "claws",
       "add",
       "src/claws/fixtures/workspace-agent.claw.json",
@@ -101,7 +101,7 @@ describe("claws lifecycle cli e2e", () => {
     const add = parseJson(result.stdout);
 
     expect(add).toMatchObject({
-      schemaVersion: "openclaw.clawAddPlan.v1",
+      schemaVersion: "natesclaw.clawAddPlan.v1",
       stability: "experimental",
       dryRun: true,
       mutationAllowed: false,
@@ -121,7 +121,7 @@ describe("claws lifecycle cli e2e", () => {
   });
 
   it("preserves implicit main and creates exactly one agent after explicit consent", async () => {
-    const preview = await runOpenClaw([
+    const preview = await runNatesclaw([
       "claws",
       "add",
       "src/claws/fixtures/minimal-agent.claw.json",
@@ -129,7 +129,7 @@ describe("claws lifecycle cli e2e", () => {
       "--json",
     ]);
     const plan = parseJson(preview.stdout) as { planIntegrity: string };
-    const result = await runOpenClaw(
+    const result = await runNatesclaw(
       [
         "claws",
         "add",
@@ -143,7 +143,7 @@ describe("claws lifecycle cli e2e", () => {
     );
 
     expect(parseJson(result.stdout)).toMatchObject({
-      schemaVersion: "openclaw.clawAddResult.v1",
+      schemaVersion: "natesclaw.clawAddResult.v1",
       stability: "experimental",
       status: "complete",
       agent: { finalId: "internal-triage" },
@@ -151,7 +151,7 @@ describe("claws lifecycle cli e2e", () => {
       configCommitted: true,
       installRecord: { agentId: "internal-triage", status: "complete" },
     });
-    const config = JSON.parse(await readFile(join(result.stateDir, "openclaw.json"), "utf8"));
+    const config = JSON.parse(await readFile(join(result.stateDir, "natesclaw.json"), "utf8"));
     const canonicalStateDir = await realpath(result.stateDir);
     expect(config.agents.entries).toEqual({
       main: { default: true },
@@ -159,13 +159,13 @@ describe("claws lifecycle cli e2e", () => {
         name: "Internal Triage",
         tools: { deny: ["exec", "browser"] },
         humanDelay: { mode: "natural" },
-        workspace: join(canonicalStateDir, ".openclaw", "workspace-internal-triage"),
+        workspace: join(canonicalStateDir, ".natesclaw", "workspace-internal-triage"),
       }),
     });
   });
 
   it("creates declared bootstrap and supporting files in the new workspace", async () => {
-    const preview = await runOpenClaw([
+    const preview = await runNatesclaw([
       "claws",
       "add",
       "src/claws/fixtures/workspace-agent.claw.json",
@@ -173,7 +173,7 @@ describe("claws lifecycle cli e2e", () => {
       "--json",
     ]);
     const plan = parseJson(preview.stdout) as { planIntegrity: string };
-    const result = await runOpenClaw(
+    const result = await runNatesclaw(
       [
         "claws",
         "add",
@@ -188,12 +188,12 @@ describe("claws lifecycle cli e2e", () => {
     const payload = parseJson(result.stdout);
     const workspace = join(
       await realpath(result.stateDir),
-      ".openclaw",
+      ".natesclaw",
       "workspace-workspace-agent",
     );
 
     expect(payload).toMatchObject({
-      schemaVersion: "openclaw.clawAddResult.v1",
+      schemaVersion: "natesclaw.clawAddResult.v1",
       status: "complete",
       agent: { finalId: "workspace-agent", workspace },
       workspaceFiles: [
@@ -215,7 +215,7 @@ describe("claws lifecycle cli e2e", () => {
   });
 
   it("reports and removes a Claw-created agent through plan-first lifecycle commands", async () => {
-    const addPreview = await runOpenClaw([
+    const addPreview = await runNatesclaw([
       "claws",
       "add",
       "src/claws/fixtures/workspace-agent.claw.json",
@@ -223,7 +223,7 @@ describe("claws lifecycle cli e2e", () => {
       "--json",
     ]);
     const addPlan = parseJson(addPreview.stdout) as { planIntegrity: string };
-    const added = await runOpenClaw(
+    const added = await runNatesclaw(
       [
         "claws",
         "add",
@@ -235,28 +235,28 @@ describe("claws lifecycle cli e2e", () => {
       ],
       { stateDir: addPreview.stateDir },
     );
-    const status = await runOpenClaw(["claws", "status", "workspace-agent", "--json"], {
+    const status = await runNatesclaw(["claws", "status", "workspace-agent", "--json"], {
       stateDir: added.stateDir,
     });
     expect(parseJson(status.stdout)).toMatchObject({
-      schemaVersion: "openclaw.clawStatus.v1",
+      schemaVersion: "natesclaw.clawStatus.v1",
       summary: { claws: 1, driftedFiles: 0 },
       records: [{ install: { agentId: "workspace-agent" }, agentState: "present" }],
     });
 
-    const preview = await runOpenClaw(
+    const preview = await runNatesclaw(
       ["claws", "remove", "workspace-agent", "--dry-run", "--json"],
       { stateDir: added.stateDir },
     );
     const removePlan = parseJson(preview.stdout) as { planIntegrity: string };
     expect(removePlan).toMatchObject({
-      schemaVersion: "openclaw.clawRemovePlan.v1",
+      schemaVersion: "natesclaw.clawRemovePlan.v1",
       mutationAllowed: false,
       agentId: "workspace-agent",
       blockers: [],
     });
 
-    const removed = await runOpenClaw(
+    const removed = await runNatesclaw(
       [
         "claws",
         "remove",
@@ -269,30 +269,30 @@ describe("claws lifecycle cli e2e", () => {
       { stateDir: added.stateDir },
     );
     expect(parseJson(removed.stdout)).toMatchObject({
-      schemaVersion: "openclaw.clawRemoveResult.v1",
+      schemaVersion: "natesclaw.clawRemoveResult.v1",
       status: "complete",
       agentId: "workspace-agent",
       agentRemoved: true,
     });
-    const config = JSON.parse(await readFile(join(added.stateDir, "openclaw.json"), "utf8"));
+    const config = JSON.parse(await readFile(join(added.stateDir, "natesclaw.json"), "utf8"));
     expect(config.agents).toEqual({ entries: { main: { default: true } } });
   });
 
   it("exports an installed agent as a self-contained grouped package", async () => {
     const source = "src/claws/fixtures/workspace-agent.claw.json";
-    const addPreview = await runOpenClaw(["claws", "add", source, "--dry-run", "--json"]);
+    const addPreview = await runNatesclaw(["claws", "add", source, "--dry-run", "--json"]);
     const addPlan = parseJson(addPreview.stdout) as { planIntegrity: string };
-    const added = await runOpenClaw(
+    const added = await runNatesclaw(
       ["claws", "add", source, "--yes", "--plan-integrity", addPlan.planIntegrity, "--json"],
       { stateDir: addPreview.stateDir },
     );
     const outputDirectory = join(added.stateDir, "exported-claw");
-    const exported = await runOpenClaw(
+    const exported = await runNatesclaw(
       ["claws", "export", "workspace-agent", "--out", outputDirectory, "--json"],
       { stateDir: added.stateDir },
     );
     expect(parseJson(exported.stdout)).toMatchObject({
-      schemaVersion: "openclaw.clawExportResult.v1",
+      schemaVersion: "natesclaw.clawExportResult.v1",
       stability: "experimental",
       agentId: "workspace-agent",
       outputDirectory,
@@ -314,7 +314,7 @@ describe("claws lifecycle cli e2e", () => {
     });
     expect(JSON.parse(await readFile(join(outputDirectory, "package.json"), "utf8"))).toMatchObject(
       {
-        name: "openclaw-claw-workspace-agent",
+        name: "natesclaw-claw-workspace-agent",
         version: expect.stringMatching(/^0\.0\.0-export\.[0-9a-f]{64}$/),
         type: "module",
       },
@@ -322,13 +322,13 @@ describe("claws lifecycle cli e2e", () => {
     await expect(readFile(join(outputDirectory, "CLAW.md"), "utf8")).resolves.toContain(
       "Incident Response",
     );
-    const inspected = await runOpenClaw(["claws", "inspect", outputDirectory, "--json"]);
+    const inspected = await runNatesclaw(["claws", "inspect", outputDirectory, "--json"]);
     expect(parseJson(inspected.stdout)).toMatchObject({
       valid: true,
       source: { kind: "package" },
       manifest: { agent: { id: "workspace-agent" } },
     });
-    const roundTripPreview = await runOpenClaw([
+    const roundTripPreview = await runNatesclaw([
       "claws",
       "add",
       outputDirectory,
@@ -336,7 +336,7 @@ describe("claws lifecycle cli e2e", () => {
       "--json",
     ]);
     const roundTripPlan = parseJson(roundTripPreview.stdout) as { planIntegrity: string };
-    const roundTrip = await runOpenClaw(
+    const roundTrip = await runNatesclaw(
       [
         "claws",
         "add",
@@ -361,7 +361,7 @@ describe("claws lifecycle cli e2e", () => {
   });
 
   it("blocks mutation when declared components need later lifecycle slices", async () => {
-    const root = tempDirs.make("openclaw-claws-deferred-components-");
+    const root = tempDirs.make("natesclaw-claws-deferred-components-");
     const deferredManifestPath = join(root, "deferred.claw.json");
     await writeFile(
       deferredManifestPath,
@@ -380,7 +380,7 @@ describe("claws lifecycle cli e2e", () => {
       }),
       "utf8",
     );
-    const preview = await runOpenClaw([
+    const preview = await runNatesclaw([
       "claws",
       "add",
       deferredManifestPath,
@@ -388,7 +388,7 @@ describe("claws lifecycle cli e2e", () => {
       "--json",
     ]);
     const plan = parseJson(preview.stdout) as { planIntegrity: string };
-    const result = await runOpenClaw(
+    const result = await runNatesclaw(
       [
         "claws",
         "add",
@@ -406,7 +406,7 @@ describe("claws lifecycle cli e2e", () => {
 
     expect(result.code).toBe(1);
     expect(parseJson(result.stdout)).toMatchObject({
-      schemaVersion: "openclaw.clawAddResult.v1",
+      schemaVersion: "natesclaw.clawAddResult.v1",
       status: "partial",
       configCommitted: true,
       error: { code: "cron_install_failed" },
@@ -415,7 +415,7 @@ describe("claws lifecycle cli e2e", () => {
   });
 
   it("fails closed when add is invoked without dry-run or consent", async () => {
-    const result = await runOpenClaw(["claws", "add", manifestPath], {
+    const result = await runNatesclaw(["claws", "add", manifestPath], {
       expectFailure: true,
     });
 

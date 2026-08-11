@@ -1,5 +1,5 @@
 ---
-summary: "Install and use the OpenClaw macOS menu bar app"
+summary: "Install and use the Natesclaw macOS menu bar app"
 read_when:
   - Installing the macOS app
   - Deciding between local and remote Gateway mode on macOS
@@ -7,7 +7,7 @@ read_when:
 title: "macOS app"
 ---
 
-The macOS app is the OpenClaw **menu bar companion**: native tray UI, macOS
+The macOS app is the Natesclaw **menu bar companion**: native tray UI, macOS
 permission prompts, notifications, WebChat, voice input, Canvas, and
 Mac-hosted node tools such as `system.run`.
 
@@ -22,11 +22,11 @@ Only need the CLI and Gateway? Start with [Getting started](/start/getting-start
 
 ## Download
 
-Get macOS app builds from [OpenClaw GitHub releases](https://github.com/openclaw/openclaw/releases).
+Get macOS app builds from [Natesclaw GitHub releases](https://github.com/natesclaw/natesclaw/releases).
 When a release ships macOS app assets, look for:
 
-- `OpenClaw-<version>.dmg` (preferred)
-- `OpenClaw-<version>.zip`
+- `Natesclaw-<version>.dmg` (preferred)
+- `Natesclaw-<version>.zip`
 
 Some releases only ship CLI, evidence, or Windows assets. If the newest release
 has no macOS app asset, use the newest one that does, or build from source with
@@ -34,20 +34,20 @@ has no macOS app asset, use the newest one that does, or build from source with
 
 ## First run
 
-1. Install and launch **OpenClaw.app**.
+1. Install and launch **Natesclaw.app**.
 2. Pick **This Mac** for a local Gateway, or connect to a remote Gateway.
 3. Wait while the app installs the matching CLI runtime. In local mode it also
    installs and starts the Gateway.
 4. Establish inference with a live model check. If the app reused a login you
    did not want, **Choose a different AI** on the success banner reopens the
    picker, including the API-key option.
-5. Finish. The app opens the dashboard, where OpenClaw guides the rest of the
+5. Finish. The app opens the dashboard, where Natesclaw guides the rest of the
    setup (memory import, channels, permissions) in one conversation. Grant
    macOS permissions any time from **Settings → Permissions**.
 
 If the app reaches an existing Gateway whose default agent has a configured
 model, it treats that Gateway as already set up, skips provider onboarding and
-OpenClaw, and opens the dashboard. If the Gateway cannot connect or its
+Natesclaw, and opens the dashboard. If the Gateway cannot connect or its
 default agent has no model, inference onboarding remains available for
 recovery.
 
@@ -105,7 +105,7 @@ The first time the browser sidebar opens while the app runs against a local Gate
 | Local  | This Mac should run the Gateway and keep it alive with launchd.                | [Gateway on macOS](/platforms/mac/bundled-gateway) |
 | Remote | Another host runs the Gateway; this Mac controls it over SSH, LAN, or Tailnet. | [Remote control](/platforms/mac/remote)            |
 
-Both modes need an installed `openclaw` CLI because the app reuses its node-host
+Both modes need an installed `natesclaw` CLI because the app reuses its node-host
 runtime. On a fresh Mac, the app installs the matching CLI automatically; local
 mode then starts the Gateway wizard, while remote mode connects to the selected
 Gateway without starting a second local Gateway.

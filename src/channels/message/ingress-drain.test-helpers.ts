@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredOpenClawTmpDir } from "../../infra/tmp-openclaw-dir.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { resolvePreferredNatesclawTmpDir } from "../../infra/tmp-natesclaw-dir.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import { createChannelIngressQueue } from "./ingress-queue.js";
 
 export type IngressDrainTestPayload = { text: string };
@@ -23,12 +23,12 @@ export function createTestIngressQueue(
 
 export async function withTempState<T>(fn: (stateDir: string) => Promise<T>): Promise<T> {
   const stateDir = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-ingress-drain-"),
+    path.join(resolvePreferredNatesclawTmpDir(), "natesclaw-ingress-drain-"),
   );
   try {
     return await fn(stateDir);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }

@@ -1,6 +1,6 @@
 // Gmail hook tests cover Gmail hook configuration and setup helpers.
 import { describe, expect, it } from "vitest";
-import { type OpenClawConfig, DEFAULT_GATEWAY_PORT } from "../config/config.js";
+import { type NatesclawConfig, DEFAULT_GATEWAY_PORT } from "../config/config.js";
 import {
   buildDefaultHookUrl,
   buildGogWatchServeArgs,
@@ -14,23 +14,23 @@ const baseConfig = {
   hooks: {
     token: "hook-token",
     gmail: {
-      account: "openclaw@gmail.com",
+      account: "natesclaw@gmail.com",
       topic: "projects/demo/topics/gog-gmail-watch",
       pushToken: "push-token",
     },
   },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 describe("gmail hook config", () => {
   function resolveWithGmailOverrides(
-    overrides: Partial<NonNullable<OpenClawConfig["hooks"]>["gmail"]>,
+    overrides: Partial<NonNullable<NatesclawConfig["hooks"]>["gmail"]>,
   ) {
     return resolveGmailHookRuntimeConfig(
       {
         hooks: {
           token: "hook-token",
           gmail: {
-            account: "openclaw@gmail.com",
+            account: "natesclaw@gmail.com",
             topic: "projects/demo/topics/gog-gmail-watch",
             pushToken: "push-token",
             ...overrides,
@@ -74,7 +74,7 @@ describe("gmail hook config", () => {
     const result = resolveGmailHookRuntimeConfig(baseConfig, {});
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value.account).toBe("openclaw@gmail.com");
+      expect(result.value.account).toBe("natesclaw@gmail.com");
       expect(result.value.label).toBe("INBOX");
       expect(result.value.includeBody).toBe(true);
       expect(result.value.serve.port).toBe(8788);
@@ -104,7 +104,7 @@ describe("gmail hook config", () => {
       "watch",
       "serve",
       "--account",
-      "openclaw@gmail.com",
+      "natesclaw@gmail.com",
       "--bind",
       "127.0.0.1",
       "--port",
@@ -124,7 +124,7 @@ describe("gmail hook config", () => {
       {
         hooks: {
           gmail: {
-            account: "openclaw@gmail.com",
+            account: "natesclaw@gmail.com",
             topic: "projects/demo/topics/gog-gmail-watch",
             pushToken: "push-token",
           },

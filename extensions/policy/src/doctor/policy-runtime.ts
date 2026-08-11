@@ -3,10 +3,10 @@ import JSON5 from "json5";
 import {
   readExecApprovalsSnapshot,
   resolveExecApprovalsDisplayPath,
-} from "openclaw/plugin-sdk/exec-approvals-runtime";
-import type { HealthCheckContext, HealthFinding } from "openclaw/plugin-sdk/health";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/exec-approvals-runtime";
+import type { HealthCheckContext, HealthFinding } from "natesclaw/plugin-sdk/health";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { EXEC_APPROVALS_POLICY_DOCUMENT_NAME } from "../exec-approvals-uri.js";
 import type { PolicyAuthProfileEvidence } from "../policy-state.js";
 import { CHECK_IDS } from "./check-ids.js";
@@ -205,7 +205,7 @@ export function channelIdsFromFindings(findings: readonly HealthFinding[]): read
     ...new Set(
       findings
         .filter((finding) => finding.checkId === CHECK_IDS.policyDeniedChannelProvider)
-        .map((finding) => finding.ocPath?.match(/^oc:\/\/openclaw\.config\/channels\/(.+)$/)?.[1])
+        .map((finding) => finding.ocPath?.match(/^oc:\/\/natesclaw\.config\/channels\/(.+)$/)?.[1])
         .filter((id): id is string => id !== undefined && id !== ""),
     ),
   ];

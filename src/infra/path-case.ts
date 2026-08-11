@@ -51,7 +51,7 @@ function probeDirectoryContents(dir: string): boolean | undefined {
 }
 
 function probeDirectoryWithTemporaryEntry(dir: string): boolean | undefined {
-  const name = `.openclaw-case-probe-${randomUUID()}`;
+  const name = `.natesclaw-case-probe-${randomUUID()}`;
   const probePath = path.join(dir, name);
   let created = false;
   let result: boolean | undefined;

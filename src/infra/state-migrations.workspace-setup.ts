@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { TextDecoder } from "node:util";
-import { root, type Root } from "@openclaw/fs-safe";
+import { root, type Root } from "@natesclaw/fs-safe";
 import { listAgentWorkspaceDirs } from "../agents/workspace-dirs.js";
 import {
   LEGACY_WORKSPACE_ATTESTATION_DIRNAME,
@@ -16,7 +16,7 @@ import {
 } from "../agents/workspace-legacy-state.js";
 import { resolveWorkspaceStateIdentity } from "../agents/workspace-state-store.js";
 import { resolveLegacyStateDirs } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "./errors.js";
 import { withLegacyMigrationStateLock } from "./state-migrations.lock.js";
 import {
@@ -306,7 +306,7 @@ function addLegacyWorkspaceSources(params: {
 
 /** Detect retired workspace files only when an explicit Doctor flow opts in. */
 export function detectLegacyWorkspaceState(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   stateDir: string;
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
@@ -315,7 +315,7 @@ export function detectLegacyWorkspaceState(params: {
   if (params.doctorOnlyStateMigrations !== true) {
     return { sources: [], hasLegacy: false };
   }
-  const env = { ...(params.env ?? process.env), OPENCLAW_STATE_DIR: params.stateDir };
+  const env = { ...(params.env ?? process.env), NATESCLAW_STATE_DIR: params.stateDir };
   const homedir = params.homedir ?? os.homedir;
   const byPath = new Map<string, LegacyWorkspaceStateSource>();
   const add = (source: LegacyWorkspaceStateSource) => {

@@ -1,6 +1,6 @@
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 // Discord plugin module implements message handlerm preflight behavior.
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { resolveDiscordConversationIdentity } from "../conversation-identity.js";
 import type { User } from "../internal/discord.js";
 import { resolveDiscordDmCommandAccess, type DiscordDmPolicy } from "./dm-command-auth.js";
@@ -12,7 +12,7 @@ import type {
 } from "./message-handler.preflight.types.js";
 
 const loadConversationRuntime = createLazyRuntimeModule(
-  () => import("openclaw/plugin-sdk/conversation-binding-runtime"),
+  () => import("natesclaw/plugin-sdk/conversation-binding-runtime"),
 );
 
 const loadDiscordSendRuntime = createLazyRuntimeModule(() => import("../send.js"));

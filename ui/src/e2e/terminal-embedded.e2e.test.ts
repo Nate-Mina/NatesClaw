@@ -6,11 +6,11 @@ const suite = createControlUiE2eSuite({
   name: "embedded terminal document",
   startServerBeforeBrowser: true,
   unavailableMessage: (executablePath) =>
-    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
 });
 
-const deadSessionScreenshotPath = process.env.OPENCLAW_TERMINAL_DEAD_SESSION_SCREENSHOT?.trim();
-const deadSessionVideoDir = process.env.OPENCLAW_TERMINAL_DEAD_SESSION_VIDEO_DIR?.trim();
+const deadSessionScreenshotPath = process.env.NATESCLAW_TERMINAL_DEAD_SESSION_SCREENSHOT?.trim();
+const deadSessionVideoDir = process.env.NATESCLAW_TERMINAL_DEAD_SESSION_VIDEO_DIR?.trim();
 
 suite.define(() => {
   it("renders only the terminal with a tab-attached close control while native auth connects", async () => {
@@ -18,12 +18,12 @@ suite.define(() => {
       await page.addInitScript(() => {
         (
           window as Window & {
-            ["__OPENCLAW_NATIVE_CONTROL_AUTH__"]?: {
+            ["__NATESCLAW_NATIVE_CONTROL_AUTH__"]?: {
               gatewayUrl: string;
               token: string;
             };
           }
-        )["__OPENCLAW_NATIVE_CONTROL_AUTH__"] = {
+        )["__NATESCLAW_NATIVE_CONTROL_AUTH__"] = {
           gatewayUrl: "ws://gateway.example.test",
           token: "native-terminal-token",
         };
@@ -49,8 +49,8 @@ suite.define(() => {
       const connect = await gateway.waitForRequest("connect");
 
       expect(connect.params).toMatchObject({ auth: { token: "native-terminal-token" } });
-      expect(await page.locator("openclaw-login-gate").count()).toBe(0);
-      expect(await page.locator("openclaw-terminal-panel").count()).toBe(1);
+      expect(await page.locator("natesclaw-login-gate").count()).toBe(0);
+      expect(await page.locator("natesclaw-terminal-panel").count()).toBe(1);
 
       await gateway.resolveDeferred("connect");
       const terminalOpen = await gateway.waitForRequest("terminal.open");
@@ -75,10 +75,10 @@ suite.define(() => {
           data: "\u001b]11;rgb:f7f7/f8f8/fafa\u001b\\",
         },
       ]);
-      expect(await page.locator("openclaw-login-gate").count()).toBe(0);
-      expect(await page.locator("openclaw-terminal-panel").count()).toBe(1);
+      expect(await page.locator("natesclaw-login-gate").count()).toBe(0);
+      expect(await page.locator("natesclaw-terminal-panel").count()).toBe(1);
       const closeControlMetrics = await page
-        .locator("openclaw-terminal-panel")
+        .locator("natesclaw-terminal-panel")
         .locator(".tabstrip-tab__close")
         .evaluate((close) => {
           const header = close.closest<HTMLElement>(".tp-header");
@@ -100,7 +100,7 @@ suite.define(() => {
       expect(closeControlMetrics.width).toBe(24);
       expect(closeControlMetrics.height).toBe(36);
       expect(closeControlMetrics.centerOffset).toBeLessThanOrEqual(0.5);
-      const closeControl = page.locator("openclaw-terminal-panel").locator(".tabstrip-tab__close");
+      const closeControl = page.locator("natesclaw-terminal-panel").locator(".tabstrip-tab__close");
       expect(await closeControl.getAttribute("aria-label")).toBe("Close terminal session: bash");
       await closeControl.click();
       const terminalClose = await gateway.waitForRequest("terminal.close");
@@ -121,17 +121,17 @@ suite.define(() => {
         await page.addInitScript(() => {
           (
             window as Window & {
-              ["__OPENCLAW_NATIVE_CONTROL_AUTH__"]?: {
+              ["__NATESCLAW_NATIVE_CONTROL_AUTH__"]?: {
                 gatewayUrl: string;
                 token: string;
               };
             }
-          )["__OPENCLAW_NATIVE_CONTROL_AUTH__"] = {
+          )["__NATESCLAW_NATIVE_CONTROL_AUTH__"] = {
             gatewayUrl: "ws://gateway.example.test",
             token: "test",
           };
           window.sessionStorage.setItem(
-            "openclaw.terminal.sessions.v1",
+            "natesclaw.terminal.sessions.v1",
             JSON.stringify(["terminal-dead-after-restart"]),
           );
         });
@@ -161,14 +161,14 @@ suite.define(() => {
         if (deadSessionScreenshotPath) {
           await page.screenshot({ path: deadSessionScreenshotPath, fullPage: true });
         }
-        const status = page.locator("openclaw-terminal-panel .tabstrip-tab__status");
+        const status = page.locator("natesclaw-terminal-panel .tabstrip-tab__status");
         await expect
           .poll(async () => await status.textContent(), { timeout: 5_000 })
           .toBe("exited");
         expect(await gateway.getRequests("terminal.attach")).toHaveLength(0);
         expect(await gateway.getRequests("terminal.open")).toHaveLength(0);
         expect(
-          await page.evaluate(() => window.sessionStorage.getItem("openclaw.terminal.sessions.v1")),
+          await page.evaluate(() => window.sessionStorage.getItem("natesclaw.terminal.sessions.v1")),
         ).toBe("[]");
       },
     );

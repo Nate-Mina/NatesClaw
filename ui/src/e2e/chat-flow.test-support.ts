@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import type { Page } from "playwright";
 import { expect } from "vitest";
 import { SESSION_DRAG_MIME } from "../lib/sessions/drag.ts";
@@ -34,7 +34,7 @@ export const channelStopProofDir = path.join(
   "control-ui-e2e",
   "channel-stop",
 );
-export const captureUiProofEnabled = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
+export const captureUiProofEnabled = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
 const sessionAccessibilityProofDir = path.join(
   process.cwd(),
   ".artifacts",
@@ -47,7 +47,7 @@ export function createChatFlowE2eSuite() {
     name: "Control UI mocked Gateway E2E",
     trackBrowserContexts: true,
     unavailableMessage: (executablePath) =>
-      `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH to a compatible browser, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+      `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH to a compatible browser, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
   });
 }
 
@@ -171,7 +171,7 @@ export async function captureSessionAccessibilityProof(page: Page, name: string)
     return;
   }
   await mkdir(sessionAccessibilityProofDir, { recursive: true });
-  const sidebar = page.locator("openclaw-app-sidebar");
+  const sidebar = page.locator("natesclaw-app-sidebar");
   await page.screenshot({
     fullPage: true,
     path: path.join(sessionAccessibilityProofDir, `${name}.png`),

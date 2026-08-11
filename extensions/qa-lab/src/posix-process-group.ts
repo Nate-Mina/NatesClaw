@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
-import { sliceUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { sliceUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 
 function parseLinuxProcessStat(raw: string) {
   const commandStart = raw.indexOf("(");

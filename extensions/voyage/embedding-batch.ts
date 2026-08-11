@@ -21,13 +21,13 @@ import {
   type ProviderBatchOutputLine,
   uploadBatchJsonlFile,
   withRemoteHttpResponse,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   assertOkOrThrowProviderError,
   readProviderJsonResponse,
-} from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
+import { normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { VoyageEmbeddingClient } from "./embedding-provider.js";
 
 /**

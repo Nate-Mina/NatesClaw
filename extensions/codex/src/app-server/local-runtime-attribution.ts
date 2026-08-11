@@ -2,7 +2,7 @@
  * Resolves the provider/api attribution used when a local Codex runtime is
  * backed by OpenAI auth but should still report Codex Responses semantics.
  */
-import type { AgentHarnessAttemptParamsV2 } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { AgentHarnessAttemptParamsV2 } from "natesclaw/plugin-sdk/agent-harness-runtime";
 
 export type CodexLocalRuntimeAttributionParams = Pick<
   AgentHarnessAttemptParamsV2,

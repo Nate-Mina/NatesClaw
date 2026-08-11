@@ -1,6 +1,6 @@
 // Imported by dispatch-from-config.test.ts to keep its mocked suite in one Vitest module graph.
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import type { MsgContext } from "../templating.js";
 import type { GetReplyOptions, ReplyPayload } from "../types.js";
 import {
@@ -49,7 +49,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       _opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       activeDuringRun = isActive?.();
       return { text: "done" } satisfies ReplyPayload;
@@ -108,7 +108,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onItemEvent?.({
         itemId: "commentary-1",
@@ -169,7 +169,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onToolStart?.({ name: "exec", phase: "start" });
       await opts?.onItemEvent?.({ itemId: "1", kind: "tool", progressText: "running exec" });
@@ -303,7 +303,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       commentaryEnabled = opts?.commentaryProgressEnabled;
       await opts?.onToolStart?.({ name: "exec", phase: "start" });
@@ -387,7 +387,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       commentaryEnabled = opts?.commentaryProgressEnabled;
       await opts?.onToolStart?.({ name: "exec", phase: "start" });
@@ -485,7 +485,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       commentaryEnabled = opts?.commentaryProgressEnabled;
       await opts?.onToolStart?.({ name: "exec", phase: "start" });
@@ -538,7 +538,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onToolResult?.({
         text: "NO_REPLY",
@@ -572,7 +572,7 @@ describe("dispatchReplyFromConfig", () => {
           verboseDefault: "on",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -584,7 +584,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onToolResult?.({ text: "🔧 exec: ls" });
       return { text: "done" } satisfies ReplyPayload;
@@ -608,7 +608,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onToolResult?.({
         text: "Approval required.\n\n```txt\n/approve 117ba06d allow-once\n```",
@@ -645,7 +645,7 @@ describe("dispatchReplyFromConfig", () => {
     const cfg = {
       ...emptyConfig,
       agents: { defaults: { verboseDefault: "on" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -655,7 +655,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       // Simulate tool result emission
       await opts?.onToolResult?.({ text: "🔧 exec: ls" });
@@ -672,7 +672,7 @@ describe("dispatchReplyFromConfig", () => {
     const cfg = {
       ...emptyConfig,
       agents: { defaults: { verboseDefault: "on" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -683,7 +683,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       const onToolResult = requireToolResultHandler(opts?.onToolResult);
       await onToolResult({ text: "🔧 tools/sessions_send" });
@@ -742,7 +742,7 @@ describe("dispatchReplyFromConfig", () => {
           verboseDefault: "on",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -752,7 +752,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onPlanUpdate?.({
         phase: "update",
@@ -786,7 +786,7 @@ describe("dispatchReplyFromConfig", () => {
     const cfg = {
       ...emptyConfig,
       agents: { defaults: { verboseDefault: "on" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -796,7 +796,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onPlanUpdate?.({
         phase: "update",
@@ -831,7 +831,7 @@ describe("dispatchReplyFromConfig", () => {
           verboseDefault: "on",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -841,7 +841,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onPatchSummary?.({
         phase: "end",
@@ -867,7 +867,7 @@ describe("dispatchReplyFromConfig", () => {
           verboseDefault: "on",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "slack",
@@ -878,7 +878,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onPlanUpdate?.({
         phase: "update",
@@ -921,7 +921,7 @@ describe("dispatchReplyFromConfig", () => {
           verboseDefault: "on",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -932,7 +932,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onPlanUpdate?.({
         phase: "update",
@@ -975,7 +975,7 @@ describe("dispatchReplyFromConfig", () => {
           verboseDefault: "on",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
       Provider: "telegram",
@@ -986,7 +986,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       sessionStoreMocks.loadSessionStore.mockClear();
       sessionStoreMocks.resolveSessionStoreEntry.mockClear();
@@ -1038,7 +1038,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onToolResult?.({ text: "🔧 exec: ls" });
       return { text: "done" } satisfies ReplyPayload;
@@ -1077,7 +1077,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onCommandOutput?.({
         phase: "end",
@@ -1137,7 +1137,7 @@ describe("dispatchReplyFromConfig", () => {
         messages: {
           suppressToolErrors: true,
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       dispatcher,
       replyResolver,
       replyOptions: { onToolResult },
@@ -1168,7 +1168,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onCommandOutput?.({
         phase: "end",
@@ -1275,7 +1275,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onToolResult?.(failedOutput);
       return { text: "done" } satisfies ReplyPayload;
@@ -1521,7 +1521,7 @@ describe("dispatchReplyFromConfig", () => {
 
     await dispatchReplyFromConfig({
       ctx,
-      cfg: { diagnostics: { enabled: false } } as OpenClawConfig,
+      cfg: { diagnostics: { enabled: false } } as NatesclawConfig,
       dispatcher,
       replyResolver,
     });
@@ -1578,7 +1578,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onToolResult?.({ text: "🔧 exec: ls" });
       return { text: "done" } satisfies ReplyPayload;
@@ -1606,7 +1606,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => {
       await opts?.onItemEvent?.({
         kind: "preamble",
@@ -1616,7 +1616,7 @@ describe("dispatchReplyFromConfig", () => {
       await opts?.onToolResult?.({ text: "🔧 exec: ls" });
       await opts?.onToolResult?.({
         text: "💨Fast: auto-off(75s>=60s)",
-        channelData: { openclawProgressKind: "fast-mode-auto" },
+        channelData: { natesclawProgressKind: "fast-mode-auto" },
       });
       await opts?.onToolResult?.({ text: "Command failed", isError: true });
       await opts?.onPlanUpdate?.({

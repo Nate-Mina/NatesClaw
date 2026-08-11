@@ -1,12 +1,12 @@
-# OpenClaw Qwen Cloud Provider
+# Natesclaw Qwen Cloud Provider
 
-Official OpenClaw provider plugin for Qwen Cloud.
+Official Natesclaw provider plugin for Qwen Cloud.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/qwen-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/qwen-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/qwen> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/qwen> for setup and configuration.

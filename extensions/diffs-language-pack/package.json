@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/diffs-language-pack",
+  "name": "@natesclaw/diffs-language-pack",
   "version": "2026.8.1",
-  "description": "OpenClaw diffs viewer syntax highlighting language pack",
+  "description": "Natesclaw diffs viewer syntax highlighting language pack",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/diffs-language-pack",
-      "clawhubSpec": "clawhub:@openclaw/diffs-language-pack",
+      "npmSpec": "@natesclaw/diffs-language-pack",
+      "clawhubSpec": "clawhub:@natesclaw/diffs-language-pack",
       "localPath": "extensions/diffs-language-pack",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.27"
@@ -28,7 +28,7 @@
       "build": "node --import tsx ../../scripts/build-diffs-viewer-runtime.mts full"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "staticAssets": [
         {
           "source": "./assets/viewer-runtime.js",

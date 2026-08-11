@@ -1,5 +1,5 @@
-import { normalizeCodexResponsesBaseUrlForOpenAISdk } from "@openclaw/ai/transports";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeCodexResponsesBaseUrlForOpenAISdk } from "@natesclaw/ai/transports";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { TSchema } from "typebox";
 import type {
   WorkerInferenceContext,
@@ -49,7 +49,7 @@ import { bindSimpleCompletionModelResolverWorkspace } from "../../agents/simple-
 import { normalizeUsage, hasNonzeroUsage } from "../../agents/usage.js";
 import { getRuntimeConfig } from "../../config/config.js";
 import { resolveSessionAuthProfileOverrideSource } from "../../config/sessions/auth-profile-override-provenance.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { emitTrustedDiagnosticEvent, isDiagnosticsEnabled } from "../../infra/diagnostic-events.js";
 import { resolveDiagnosticModelContentCapturePolicy } from "../../infra/diagnostic-llm-content.js";
 import {
@@ -87,7 +87,7 @@ type WorkerInferenceSessionTarget = Pick<
 > & { agentId: string };
 
 type WorkerInferenceUsageParams = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   target: WorkerInferenceSessionTarget;
   request: WorkerInferenceStartParams;
   model: Model;
@@ -99,7 +99,7 @@ type WorkerInferenceUsageParams = {
 type WorkerInferenceRuntimeDependencies = {
   now: () => number;
   resolveSessionTarget: (
-    config: OpenClawConfig,
+    config: NatesclawConfig,
     sessionId: string,
   ) => WorkerInferenceSessionTarget | undefined;
   acquireRuntimeLease: typeof acquireAgentRunPreparedModelRuntime;
@@ -117,7 +117,7 @@ type WorkerInferenceRuntimeDependencies = {
 };
 
 function resolveWorkerInferenceAuthProfileMode(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentDir: string;
   profileId: string;
 }): string | undefined {
@@ -372,7 +372,7 @@ function resolveReturnedProfileSource(
 }
 
 async function resolveApprovedModel(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   target: WorkerInferenceSessionTarget;
   request: WorkerInferenceStartParams;
   dependencies: WorkerInferenceRuntimeDependencies;
@@ -380,7 +380,7 @@ async function resolveApprovedModel(params: {
   | {
       provider: string;
       model: string;
-      config: OpenClawConfig;
+      config: NatesclawConfig;
       agentDir: string;
       workspaceDir: string;
       prepared: PreparedSimpleCompletionModel;

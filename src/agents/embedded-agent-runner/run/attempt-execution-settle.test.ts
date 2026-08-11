@@ -128,7 +128,7 @@ function createFixture() {
       role: "user",
       content: "hello",
       timestamp: 100,
-      __openclaw: { senderName: "Alice" },
+      __natesclaw: { senderName: "Alice" },
     },
     sessionManager,
     sessionPromptState,
@@ -294,7 +294,7 @@ describe("runEmbeddedAttemptSettledPhase", () => {
           preparedUserTurnMessage: expect.objectContaining({
             content: "hello",
             timestamp: 100,
-            __openclaw: { senderName: "Alice" },
+            __natesclaw: { senderName: "Alice" },
           }),
         }),
         toolPolicy: expect.objectContaining({

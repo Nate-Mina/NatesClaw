@@ -3,7 +3,7 @@ export type {
   UpdateHoldResult,
   UpdateScheduleState,
 } from "../../../packages/gateway-protocol/src/index.js";
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
+import type { FastMode } from "@natesclaw/normalization-core/string-coerce";
 import type { AgentsListResult as ProtocolAgentsListResult } from "../../../packages/gateway-protocol/src/schema/agents-models-skills.js";
 import type { ChannelsStatusResult } from "../../../packages/gateway-protocol/src/schema/channels.js";
 import type { QueueMode } from "../../../packages/gateway-protocol/src/schema/logs-chat.js";
@@ -24,7 +24,7 @@ import type {
 } from "../../../src/shared/session-types.js";
 export type { ConfigUiHint, ConfigUiHints } from "../../../src/shared/config-ui-hints-types.js";
 export type { SessionGoal } from "../../../src/config/sessions/types.js";
-export type { FastMode } from "@openclaw/normalization-core/string-coerce";
+export type { FastMode } from "@natesclaw/normalization-core/string-coerce";
 export type ChannelsPairingAccount =
   import("../../../packages/gateway-protocol/src/index.js").ChannelsPairingAccount;
 export type ChannelsPairingApproveResult =

@@ -189,7 +189,7 @@ describe("chat transcript row measurement", () => {
         {
           role: "assistant",
           content: "Preview\n...(truncated)...",
-          __openclaw: { id: "assistant-full-1" },
+          __natesclaw: { id: "assistant-full-1" },
           timestamp: 1_000,
         },
       ]),
@@ -229,7 +229,7 @@ describe("chat transcript row measurement", () => {
         {
           role: "assistant",
           content: "Preview\n...(truncated)...",
-          __openclaw: { id: "assistant-retry-1" },
+          __natesclaw: { id: "assistant-retry-1" },
           timestamp: 1_000,
         },
       ]),
@@ -599,11 +599,11 @@ describe("chat transcript row measurement", () => {
     state.hello = {
       auth: { deviceToken: "old-token" },
     } as typeof state.hello;
-    state.localMediaPreviewRoots = ["/tmp/openclaw"];
+    state.localMediaPreviewRoots = ["/tmp/natesclaw"];
     state.embedSandboxMode = "scripts";
     state.allowExternalEmbedUrls = false;
 
-    const source = `/tmp/openclaw/${crypto.randomUUID()}.pdf`;
+    const source = `/tmp/natesclaw/${crypto.randomUUID()}.pdf`;
     const messages = [
       {
         role: "assistant",
@@ -660,7 +660,7 @@ describe("chat transcript row measurement", () => {
 
     configPane.applyApplicationConfig({
       ...config,
-      localMediaPreviewRoots: ["/tmp/openclaw"],
+      localMediaPreviewRoots: ["/tmp/natesclaw"],
     });
     await flushDeferredRowPrune();
 

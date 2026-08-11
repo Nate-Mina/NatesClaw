@@ -1,17 +1,17 @@
 import type { Message } from "grammy/types";
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import { formatMediaPlaceholderText } from "openclaw/plugin-sdk/channel-inbound";
-import { resolveStoredModelOverride } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig, TelegramAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { DEFAULT_GROUP_HISTORY_LIMIT } from "openclaw/plugin-sdk/reply-history";
-import { resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
+import { formatMediaPlaceholderText } from "natesclaw/plugin-sdk/channel-inbound";
+import { resolveStoredModelOverride } from "natesclaw/plugin-sdk/command-auth-native";
+import type { NatesclawConfig, TelegramAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { DEFAULT_GROUP_HISTORY_LIMIT } from "natesclaw/plugin-sdk/reply-history";
+import { resolveThreadSessionKeys } from "natesclaw/plugin-sdk/routing";
 import {
   getSessionEntry,
   readAmbientTranscriptWatermark,
   resolveAmbientTranscriptWatermarkKey,
   type SessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { stripInlineDirectiveTagsForDelivery } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { stripInlineDirectiveTagsForDelivery } from "natesclaw/plugin-sdk/text-chunking";
 import { resolveDefaultModelForAgent } from "./bot-handlers.agent.runtime.js";
 import type { RegisterTelegramHandlerParams } from "./bot-handlers.types.js";
 import type { TelegramMediaRef } from "./bot-message-context.js";
@@ -59,8 +59,8 @@ function legacyAssistantTextKey(node: TelegramCachedMessageNode, botUserId?: num
     return undefined;
   }
   const timestamp = (
-    node.sourceMessage as Message & { openclaw_prompt_context_timestamp_ms?: unknown }
-  ).openclaw_prompt_context_timestamp_ms;
+    node.sourceMessage as Message & { natesclaw_prompt_context_timestamp_ms?: unknown }
+  ).natesclaw_prompt_context_timestamp_ms;
   const legacySelf =
     isTelegramMessageFromCurrentBot(node.sourceMessage, botUserId) ||
     (node.sourceMessage.from?.id === 0 && node.sourceMessage.from.is_bot);
@@ -88,7 +88,7 @@ export type ResolveTelegramSessionStateParams = {
   resolvedThreadId?: number;
   botHasTopicsEnabled?: boolean;
   senderId?: string | number;
-  runtimeCfg: OpenClawConfig;
+  runtimeCfg: NatesclawConfig;
 };
 
 export type ResolvePromptContextAmbientWatermarkParams = {
@@ -449,7 +449,7 @@ export function createTelegramMessageContextRuntime({
     ctx: TelegramContext,
     msg: Message,
     replyChainNodes: TelegramCachedMessageNode[],
-    runtimeCfg: OpenClawConfig,
+    runtimeCfg: NatesclawConfig,
     runtimeTelegramCfg: TelegramAccountConfig,
     options?: TelegramMessageContextOptions,
     mediaByMessageId?: ReadonlyMap<string, TelegramMediaRef>,

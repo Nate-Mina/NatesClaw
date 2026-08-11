@@ -1,4 +1,4 @@
-import { createSimpleChannelSecretContract } from "openclaw/plugin-sdk/channel-secret-basic-runtime";
+import { createSimpleChannelSecretContract } from "natesclaw/plugin-sdk/channel-secret-basic-runtime";
 
 export const channelSecrets = createSimpleChannelSecretContract({
   channelKey: "buzz",

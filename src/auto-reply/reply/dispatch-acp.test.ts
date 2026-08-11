@@ -1,14 +1,14 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { detectMime } from "@openclaw/media-core/mime";
+import { detectMime } from "@natesclaw/media-core/mime";
 // Tests ACP dispatch wiring, command bypass, and runtime event handling.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MediaUnderstandingSkipError } from "../../../packages/media-understanding-common/src/errors.js";
 import { AcpRuntimeError } from "../../acp/runtime/errors.js";
 import type { AcpSessionStoreEntry } from "../../acp/runtime/session-meta.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import type { SessionBindingRecord } from "../../infra/outbound/session-binding-service.js";
 import type { ApplyMediaUnderstandingResult } from "../../media-understanding/apply.js";
 import { isImageAttachment } from "../../media-understanding/attachments.normalize.js";
@@ -45,8 +45,8 @@ const auditMocks = vi.hoisted(() => ({
 }));
 
 const policyMocks = vi.hoisted(() => ({
-  resolveAcpDispatchPolicyError: vi.fn<(cfg: OpenClawConfig) => AcpRuntimeError | null>(() => null),
-  resolveAcpAgentPolicyError: vi.fn<(cfg: OpenClawConfig, agent: string) => AcpRuntimeError | null>(
+  resolveAcpDispatchPolicyError: vi.fn<(cfg: NatesclawConfig) => AcpRuntimeError | null>(() => null),
+  resolveAcpAgentPolicyError: vi.fn<(cfg: NatesclawConfig, agent: string) => AcpRuntimeError | null>(
     () => null,
   ),
 }));
@@ -95,7 +95,7 @@ const ttsMocks = vi.hoisted(() => ({
     const params = paramsUnknown as { payload: unknown };
     return params.payload;
   }),
-  resolveTtsConfig: vi.fn((_cfg: OpenClawConfig) => ({ mode: "final" })),
+  resolveTtsConfig: vi.fn((_cfg: NatesclawConfig) => ({ mode: "final" })),
 }));
 
 const ttsCapabilityMocks = vi.hoisted(() => ({ captionedFinalText: false }));
@@ -121,7 +121,7 @@ const diagnosticMocks = vi.hoisted(() => ({
 
 const sessionMetaMocks = vi.hoisted(() => ({
   readAcpSessionEntry: vi.fn<
-    (params: { sessionKey: string; cfg?: OpenClawConfig }) => AcpSessionStoreEntry | null
+    (params: { sessionKey: string; cfg?: NatesclawConfig }) => AcpSessionStoreEntry | null
   >(() => null),
 }));
 
@@ -136,7 +136,7 @@ const bindingServiceMocks = vi.hoisted(() => ({
 
 vi.mock("./dispatch-acp-manager.runtime.js", () => ({
   getAcpSessionManager: () => managerMocks,
-  readAcpSessionEntry: (params: { sessionKey: string; cfg?: OpenClawConfig }) =>
+  readAcpSessionEntry: (params: { sessionKey: string; cfg?: NatesclawConfig }) =>
     sessionMetaMocks.readAcpSessionEntry(params),
   getSessionBindingService: () => ({
     listBySession: (targetSessionKey: string) =>
@@ -158,9 +158,9 @@ vi.mock("../../agents/command/attempt-execution.runtime.js", () => ({
 }));
 
 vi.mock("../../acp/policy.js", () => ({
-  resolveAcpDispatchPolicyError: (cfg: OpenClawConfig) =>
+  resolveAcpDispatchPolicyError: (cfg: NatesclawConfig) =>
     policyMocks.resolveAcpDispatchPolicyError(cfg),
-  resolveAcpAgentPolicyError: (cfg: OpenClawConfig, agent: string) =>
+  resolveAcpAgentPolicyError: (cfg: NatesclawConfig, agent: string) =>
     policyMocks.resolveAcpAgentPolicyError(cfg, agent),
 }));
 
@@ -332,7 +332,7 @@ function setReadyAcpResolution() {
   });
 }
 
-function createAcpConfigWithVisibleToolTags(): OpenClawConfig {
+function createAcpConfigWithVisibleToolTags(): NatesclawConfig {
   return createAcpTestConfig({
     acp: {
       enabled: true,
@@ -349,7 +349,7 @@ function createAcpConfigWithVisibleToolTags(): OpenClawConfig {
 async function runDispatch(params: {
   bodyForAgent: string;
   runId?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   dispatcher?: ReplyDispatcher;
   shouldRouteToOriginating?: boolean;
   originatingChannel?: string;
@@ -1354,8 +1354,8 @@ describe("tryDispatchAcpReplyCore", () => {
 
   it("preserves authoritative history image kinds, order, and per-message deduplication", () => {
     const now = 1_700_000_000_000;
-    const imagePath = "/tmp/openclaw-history-upload.bin";
-    const stickerPath = "/tmp/openclaw-history-sticker";
+    const imagePath = "/tmp/natesclaw-history-upload.bin";
+    const stickerPath = "/tmp/natesclaw-history-sticker";
     const ctx = buildTestCtx({
       Timestamp: now,
       InboundHistory: [
@@ -1381,7 +1381,7 @@ describe("tryDispatchAcpReplyCore", () => {
           body: "<media:document>",
           timestamp: now,
           messageId: "document-message",
-          media: [{ path: "/tmp/openclaw-history-document.bin", kind: "document" }],
+          media: [{ path: "/tmp/natesclaw-history-document.bin", kind: "document" }],
         },
       ],
     });
@@ -1420,7 +1420,7 @@ describe("tryDispatchAcpReplyCore", () => {
             sender: "@alice",
             body: "<media:document>",
             timestamp: now,
-            media: [{ path: "/tmp/openclaw-history-document.png", contentType, kind: "document" }],
+            media: [{ path: "/tmp/natesclaw-history-document.png", contentType, kind: "document" }],
           },
         ],
       });
@@ -1438,7 +1438,7 @@ describe("tryDispatchAcpReplyCore", () => {
           sender: "@alice",
           body: "<media:document>",
           timestamp: now,
-          media: [{ path: "/tmp/openclaw-history-diagram.svg" }],
+          media: [{ path: "/tmp/natesclaw-history-diagram.svg" }],
         },
       ],
     });
@@ -1457,7 +1457,7 @@ describe("tryDispatchAcpReplyCore", () => {
             sender: "@alice",
             body: "<media:document>",
             timestamp: now,
-            media: [{ path: "/tmp/openclaw-history-report.png", contentType, kind: "unknown" }],
+            media: [{ path: "/tmp/natesclaw-history-report.png", contentType, kind: "unknown" }],
           },
         ],
       });
@@ -1842,7 +1842,7 @@ describe("tryDispatchAcpReplyCore", () => {
   it.each([
     {
       name: "generic Telegram image bytes under a .bin path",
-      imagePath: "/tmp/openclaw-acp-image-upload.bin",
+      imagePath: "/tmp/natesclaw-acp-image-upload.bin",
       contentType: "application/octet-stream",
       kind: "image" as const,
       imageBytes: ACP_PNG_IMAGE_BYTES,
@@ -1850,7 +1850,7 @@ describe("tryDispatchAcpReplyCore", () => {
     },
     {
       name: "an extensionless image without transport MIME",
-      imagePath: "/tmp/openclaw-acp-image-upload",
+      imagePath: "/tmp/natesclaw-acp-image-upload",
       contentType: undefined,
       kind: "image" as const,
       imageBytes: ACP_JPEG_IMAGE_BYTES,
@@ -1858,7 +1858,7 @@ describe("tryDispatchAcpReplyCore", () => {
     },
     {
       name: "a sticker with generic transport MIME",
-      imagePath: "/tmp/openclaw-acp-sticker.bin",
+      imagePath: "/tmp/natesclaw-acp-sticker.bin",
       contentType: "application/octet-stream",
       kind: "sticker" as const,
       imageBytes: ACP_PNG_IMAGE_BYTES,
@@ -1913,8 +1913,8 @@ describe("tryDispatchAcpReplyCore", () => {
     },
   ])("never forwards $name or substitutes unrelated history for a document", async (testCase) => {
     setReadyAcpResolution();
-    const documentPath = "/tmp/openclaw-acp-authoritative-document.png";
-    const historyPath = "/tmp/openclaw-acp-unrelated-history.png";
+    const documentPath = "/tmp/natesclaw-acp-authoritative-document.png";
+    const historyPath = "/tmp/natesclaw-acp-unrelated-history.png";
     acpAttachmentBuffers.set(documentPath, testCase.bytes);
     acpAttachmentBuffers.set(historyPath, ACP_PNG_IMAGE_BYTES);
 
@@ -1942,8 +1942,8 @@ describe("tryDispatchAcpReplyCore", () => {
     "never forwards unknown-kind PNG bytes with MIME %s or substitutes history",
     async (contentType) => {
       setReadyAcpResolution();
-      const documentPath = "/tmp/openclaw-acp-unknown-document.png";
-      const historyPath = "/tmp/openclaw-acp-unrelated-history.png";
+      const documentPath = "/tmp/natesclaw-acp-unknown-document.png";
+      const historyPath = "/tmp/natesclaw-acp-unrelated-history.png";
       acpAttachmentBuffers.set(documentPath, ACP_PNG_IMAGE_BYTES);
       acpAttachmentBuffers.set(historyPath, ACP_PNG_IMAGE_BYTES);
 
@@ -1970,7 +1970,7 @@ describe("tryDispatchAcpReplyCore", () => {
 
   it("never forwards filename-only SVG history into an ACP runtime turn", async () => {
     setReadyAcpResolution();
-    const svgPath = "/tmp/openclaw-acp-history-diagram.svg";
+    const svgPath = "/tmp/natesclaw-acp-history-diagram.svg";
     acpAttachmentBuffers.set(svgPath, Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>'));
 
     await runDispatch({
@@ -1999,7 +1999,7 @@ describe("tryDispatchAcpReplyCore", () => {
     "never forwards $name bytes with a spoofed image kind, MIME, and filename",
     async (testCase) => {
       setReadyAcpResolution();
-      const imagePath = `/tmp/openclaw-acp-spoofed-${testCase.name.toLowerCase()}.png`;
+      const imagePath = `/tmp/natesclaw-acp-spoofed-${testCase.name.toLowerCase()}.png`;
       acpAttachmentBuffers.set(imagePath, testCase.bytes);
 
       await runDispatch({
@@ -2015,8 +2015,8 @@ describe("tryDispatchAcpReplyCore", () => {
 
   it("falls back to history when an authoritative current image contains document bytes", async () => {
     setReadyAcpResolution();
-    const currentPath = "/tmp/openclaw-acp-current-spoofed.bin";
-    const historyPath = "/tmp/openclaw-acp-history-valid.bin";
+    const currentPath = "/tmp/natesclaw-acp-current-spoofed.bin";
+    const historyPath = "/tmp/natesclaw-acp-history-valid.bin";
     acpAttachmentBuffers.set(currentPath, ACP_PDF_BYTES);
     acpAttachmentBuffers.set(historyPath, ACP_PNG_IMAGE_BYTES);
 
@@ -2046,8 +2046,8 @@ describe("tryDispatchAcpReplyCore", () => {
 
   it("does not substitute history for an authoritative current document", async () => {
     setReadyAcpResolution();
-    const documentPath = "/tmp/openclaw-acp-current-document.bin";
-    const historyPath = "/tmp/openclaw-acp-history-image.png";
+    const documentPath = "/tmp/natesclaw-acp-current-document.bin";
+    const historyPath = "/tmp/natesclaw-acp-history-image.png";
     acpAttachmentBuffers.set(documentPath, ACP_PDF_BYTES);
     acpAttachmentBuffers.set(historyPath, ACP_PNG_IMAGE_BYTES);
 
@@ -2073,7 +2073,7 @@ describe("tryDispatchAcpReplyCore", () => {
   it.each([
     {
       name: "a historical Telegram .bin image with generic MIME",
-      imagePath: "/tmp/openclaw-acp-history-upload.bin",
+      imagePath: "/tmp/natesclaw-acp-history-upload.bin",
       contentType: "application/octet-stream",
       kind: "image" as const,
       imageBytes: ACP_PNG_IMAGE_BYTES,
@@ -2081,7 +2081,7 @@ describe("tryDispatchAcpReplyCore", () => {
     },
     {
       name: "an extensionless historical image without MIME",
-      imagePath: "/tmp/openclaw-acp-history-upload",
+      imagePath: "/tmp/natesclaw-acp-history-upload",
       contentType: undefined,
       kind: "image" as const,
       imageBytes: ACP_JPEG_IMAGE_BYTES,
@@ -2089,7 +2089,7 @@ describe("tryDispatchAcpReplyCore", () => {
     },
     {
       name: "a historical sticker with generic MIME",
-      imagePath: "/tmp/openclaw-acp-history-sticker.bin",
+      imagePath: "/tmp/natesclaw-acp-history-sticker.bin",
       contentType: "application/octet-stream",
       kind: "sticker" as const,
       imageBytes: ACP_PNG_IMAGE_BYTES,
@@ -2134,7 +2134,7 @@ describe("tryDispatchAcpReplyCore", () => {
     { name: "ZIP", bytes: ACP_ZIP_BYTES },
   ])("does not forward historical $name bytes disguised as image media", async (testCase) => {
     setReadyAcpResolution();
-    const imagePath = `/tmp/openclaw-acp-history-spoofed-${testCase.name.toLowerCase()}.png`;
+    const imagePath = `/tmp/natesclaw-acp-history-spoofed-${testCase.name.toLowerCase()}.png`;
     acpAttachmentBuffers.set(imagePath, testCase.bytes);
 
     await runDispatch({
@@ -2157,7 +2157,7 @@ describe("tryDispatchAcpReplyCore", () => {
 
   it("annotates recent history images with sent time and available history position", async () => {
     setReadyAcpResolution();
-    const historyPath = "/tmp/openclaw-history-metadata.png";
+    const historyPath = "/tmp/natesclaw-history-metadata.png";
     const historyImage = Buffer.from("history-image");
     acpAttachmentBuffers.set(historyPath, historyImage);
 
@@ -2205,7 +2205,7 @@ describe("tryDispatchAcpReplyCore", () => {
 
   it("forwards media-understanding PDF page images alongside current image attachments", async () => {
     setReadyAcpResolution();
-    const currentPath = "/tmp/openclaw-current-image.png";
+    const currentPath = "/tmp/natesclaw-current-image.png";
     const currentImage = Buffer.from("current-image");
     const pdfPage = {
       type: "image" as const,
@@ -2249,7 +2249,7 @@ describe("tryDispatchAcpReplyCore", () => {
       mimeType: "image/png",
       data: Buffer.from("inline-image").toString("base64"),
     };
-    const historyPath = "/tmp/openclaw-history-inline.png";
+    const historyPath = "/tmp/natesclaw-history-inline.png";
     acpAttachmentBuffers.set(historyPath, Buffer.from("history-image"));
 
     await runDispatch({
@@ -2661,11 +2661,11 @@ describe("tryDispatchAcpReplyCore", () => {
         : [],
     );
     sessionMetaMocks.readAcpSessionEntry.mockImplementation(
-      (params: { sessionKey: string; cfg?: OpenClawConfig }) =>
+      (params: { sessionKey: string; cfg?: NatesclawConfig }) =>
         params.sessionKey === canonicalSessionKey
           ? {
               cfg: params.cfg ?? createAcpTestConfig(),
-              storePath: "/tmp/openclaw-session-store.json",
+              storePath: "/tmp/natesclaw-session-store.json",
               sessionKey: canonicalSessionKey,
               storeSessionKey: canonicalSessionKey,
               acp: createAcpSessionMeta({
@@ -2728,11 +2728,11 @@ describe("tryDispatchAcpReplyCore", () => {
         : [],
     );
     sessionMetaMocks.readAcpSessionEntry.mockImplementation(
-      (params: { sessionKey: string; cfg?: OpenClawConfig }) =>
+      (params: { sessionKey: string; cfg?: NatesclawConfig }) =>
         params.sessionKey === canonicalSessionKey
           ? {
               cfg: params.cfg ?? createAcpTestConfig(),
-              storePath: "/tmp/openclaw-session-store.json",
+              storePath: "/tmp/natesclaw-session-store.json",
               sessionKey: canonicalSessionKey,
               storeSessionKey: canonicalSessionKey,
               acp: createAcpSessionMeta({
@@ -2967,7 +2967,7 @@ describe("tryDispatchAcpReplyCore", () => {
     setReadyAcpResolution();
     ttsMocks.resolveTtsConfig.mockReturnValue({ mode: "final" });
     queueTtsReplies({
-      mediaUrl: "/tmp/openclaw-media/acp-tts.ogg",
+      mediaUrl: "/tmp/natesclaw-media/acp-tts.ogg",
       audioAsVoice: true,
     } as MockTtsReply);
     mockVisibleTextTurn("WebChat ACP block reply.");
@@ -2992,7 +2992,7 @@ describe("tryDispatchAcpReplyCore", () => {
     });
 
     const finalPayload = dispatcherCall(dispatcher.sendFinalReply);
-    expect(finalPayload.mediaUrl).toBe("/tmp/openclaw-media/acp-tts.ogg");
+    expect(finalPayload.mediaUrl).toBe("/tmp/natesclaw-media/acp-tts.ogg");
     expect(finalPayload.audioAsVoice).toBe(true);
     expect(finalPayload.spokenText).toBe("WebChat ACP block reply.");
     expect(finalPayload.trustedLocalMedia).toBe(true);
@@ -3004,7 +3004,7 @@ describe("tryDispatchAcpReplyCore", () => {
     ttsCapabilityMocks.captionedFinalText = true;
     queueTtsReplies({
       text: "Captioned ACP reply.",
-      mediaUrl: "/tmp/openclaw-media/acp-tts.ogg",
+      mediaUrl: "/tmp/natesclaw-media/acp-tts.ogg",
       audioAsVoice: true,
       spokenText: "Captioned ACP reply.",
       ttsSupplement: { spokenText: "Captioned ACP reply." },
@@ -3021,7 +3021,7 @@ describe("tryDispatchAcpReplyCore", () => {
     expect(dispatcher.sendBlockReply).not.toHaveBeenCalled();
     expect(dispatcherCall(dispatcher.sendFinalReply)).toMatchObject({
       text: "Captioned ACP reply.",
-      mediaUrl: "/tmp/openclaw-media/acp-tts.ogg",
+      mediaUrl: "/tmp/natesclaw-media/acp-tts.ogg",
       audioAsVoice: true,
     });
   });
@@ -3030,7 +3030,7 @@ describe("tryDispatchAcpReplyCore", () => {
     setReadyAcpResolution();
     ttsCapabilityMocks.captionedFinalText = true;
     queueTtsReplies({
-      mediaUrl: "/tmp/openclaw-media/acp-tts.ogg",
+      mediaUrl: "/tmp/natesclaw-media/acp-tts.ogg",
       audioAsVoice: true,
     } as MockTtsReply);
     mockVisibleTextTurn("[[tts:text]]Private speech.[[/tts:text]]");
@@ -3053,7 +3053,7 @@ describe("tryDispatchAcpReplyCore", () => {
     setReadyAcpResolution();
     ttsCapabilityMocks.captionedFinalText = true;
     queueTtsReplies({
-      mediaUrl: "/tmp/openclaw-media/acp-tts.ogg",
+      mediaUrl: "/tmp/natesclaw-media/acp-tts.ogg",
       audioAsVoice: true,
     } as MockTtsReply);
     managerMocks.runTurn.mockImplementationOnce(
@@ -3091,7 +3091,7 @@ describe("tryDispatchAcpReplyCore", () => {
     ttsCapabilityMocks.captionedFinalText = true;
     queueTtsReplies({
       text: "Visible ACP fallback.",
-      mediaUrl: "/tmp/openclaw-media/acp-tts.ogg",
+      mediaUrl: "/tmp/natesclaw-media/acp-tts.ogg",
       audioAsVoice: true,
       spokenText: "Visible ACP fallback.",
       ttsSupplement: { spokenText: "Visible ACP fallback." },
@@ -3111,7 +3111,7 @@ describe("tryDispatchAcpReplyCore", () => {
     expect(routeMocks.routeReply).toHaveBeenCalledTimes(2);
     expect(routePayload(0)).toMatchObject({
       text: "Visible ACP fallback.",
-      mediaUrl: "/tmp/openclaw-media/acp-tts.ogg",
+      mediaUrl: "/tmp/natesclaw-media/acp-tts.ogg",
     });
     expect(routePayload(1)).toEqual({ text: "Visible ACP fallback." });
   });

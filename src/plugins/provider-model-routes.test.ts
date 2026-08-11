@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { ModelApi } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ProviderResolveModelRoutesContext } from "../plugin-sdk/provider-model-types.js";
 import {
   createProviderModelRoutesResolver,
@@ -56,7 +56,7 @@ describe("provider model route adapter", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     expect(
       resolveProviderModelRoutes({
@@ -132,7 +132,7 @@ describe("provider model route adapter", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     expect(resolveProviderModelCatalogId({ provider, modelId })).toBeNull();
     expect(resolveProviderModelRoutes({ provider, modelId, config, env: {} })).toBeNull();
@@ -156,7 +156,7 @@ describe("provider model route adapter", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     resolveProviderModelRoutes({
       provider: "openai",
@@ -198,7 +198,7 @@ describe("provider model route adapter", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     expect(
       resolveProviderModelRoutes({
@@ -211,14 +211,14 @@ describe("provider model route adapter", () => {
       }),
     ).toEqual({
       kind: "routes",
-      defaultRuntimeId: "openclaw",
+      defaultRuntimeId: "natesclaw",
       routes: [
         {
           api: "openai-responses",
           baseUrl: "https://model.example.test/v1",
           authRequirement: "api-key",
           requestTransportOverrides: "none",
-          runtimePolicy: { compatibleIds: ["openclaw"] },
+          runtimePolicy: { compatibleIds: ["natesclaw"] },
         },
       ],
     });
@@ -249,7 +249,7 @@ describe("provider model route adapter", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     resolveProviderModelRoutes({
       provider: "openai",
@@ -326,7 +326,7 @@ describe("provider model route adapter", () => {
     };
     const config = {
       models: { providers: { openai: configuredProvider } },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const env = { OPENAI_BASE_URL: "https://env-one.example.test/v1" };
     const resolveRoutes = createProviderModelRoutesResolver({
       provider: "openai",
@@ -381,7 +381,7 @@ describe("provider model route adapter", () => {
           " openai ": { api: "openai-completions" },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     resolveProviderModelRoutes({
       provider: "openai",
@@ -424,7 +424,7 @@ describe("provider model route adapter", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     resolveProviderModelRoutes({
       provider: "openai",
@@ -475,7 +475,7 @@ describe("provider model route adapter", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     resolveProviderModelRoutes({
       provider: "openai",

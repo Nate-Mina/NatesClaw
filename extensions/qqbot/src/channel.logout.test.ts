@@ -1,7 +1,7 @@
 // QQBot logout tests cover gateway-level credential cleanup behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { PluginRuntime } from "openclaw/plugin-sdk/core";
-import { createRuntimeEnv } from "openclaw/plugin-sdk/plugin-test-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/core";
+import { createRuntimeEnv } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { setQQBotRuntime } from "./bridge/runtime.js";
 import { qqbotPlugin } from "./channel.js";
@@ -22,7 +22,7 @@ function createRuntime(): { runtime: PluginRuntime; mocks: QQBotRuntimeMocks } {
   return { runtime, mocks: { replaceConfigFile } };
 }
 
-async function runLogoutScenario(params: { cfg: OpenClawConfig; accountId: string }): Promise<{
+async function runLogoutScenario(params: { cfg: NatesclawConfig; accountId: string }): Promise<{
   result: Awaited<ReturnType<QQBotLogoutAccount>>;
   account: ResolvedQQBotAccount;
   mocks: QQBotRuntimeMocks;
@@ -64,7 +64,7 @@ describe("qqbotPlugin gateway.logoutAccount", () => {
           accounts,
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const { result, account, mocks } = await runLogoutScenario({ cfg, accountId: "bot2" });
 
@@ -93,7 +93,7 @@ describe("qqbotPlugin gateway.logoutAccount", () => {
       },
     };
     const qqbot = Object.create({ accounts: inheritedAccounts }) as Record<string, unknown>;
-    const cfg = { channels: { qqbot } } as unknown as OpenClawConfig;
+    const cfg = { channels: { qqbot } } as unknown as NatesclawConfig;
 
     const { result, account, mocks } = await runLogoutScenario({ cfg, accountId: "bot2" });
 
@@ -128,7 +128,7 @@ describe("qqbotPlugin gateway.logoutAccount", () => {
           accounts: { bot2: ownAccount },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const { result, account, mocks } = await runLogoutScenario({ cfg, accountId: "bot2" });
 
@@ -157,7 +157,7 @@ describe("qqbotPlugin gateway.logoutAccount", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const { result, account, mocks } = await runLogoutScenario({ cfg, accountId: "bot2" });
 

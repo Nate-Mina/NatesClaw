@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/amazon-bedrock-mantle-provider",
+  "name": "@natesclaw/amazon-bedrock-mantle-provider",
   "version": "2026.8.1",
-  "description": "OpenClaw Amazon Bedrock Mantle provider plugin for OpenAI-compatible model routing.",
+  "description": "Natesclaw Amazon Bedrock Mantle provider plugin for OpenAI-compatible model routing.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,14 +12,14 @@
     "@aws/bedrock-token-generator": "1.1.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/amazon-bedrock-mantle-provider",
+      "npmSpec": "@natesclaw/amazon-bedrock-mantle-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.12-beta.1"
     },
@@ -27,7 +27,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {

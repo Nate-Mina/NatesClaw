@@ -1,2 +1,2 @@
 // Telegram plugin module implements bot.agent behavior.
-export { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
+export { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";

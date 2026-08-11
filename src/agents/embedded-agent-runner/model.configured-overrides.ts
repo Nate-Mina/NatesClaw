@@ -1,7 +1,7 @@
-import { asOptionalRecord as readModelParams } from "@openclaw/normalization-core/record-coerce";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { asOptionalRecord as readModelParams } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import type { ModelCompatConfig, ModelMediaInputConfig } from "../../config/types.models.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { Api, Model } from "../../llm/types.js";
 import type { PluginMetadataSnapshotOwnerMaps } from "../../plugins/plugin-metadata-snapshot.types.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";
@@ -53,7 +53,7 @@ export type StaticCatalogFallbackModel = Model & {
 export function shouldSuppressConfiguredModel(params: {
   provider: string;
   modelId: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   baseUrl?: string;
 }): boolean {
@@ -85,7 +85,7 @@ export function shouldSuppressConfiguredModel(params: {
 export function resolveConfiguredProviderDefaultApi(params: {
   provider: string;
   providerConfig: InlineProviderConfig | undefined;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   runtimeHooks?: ProviderRuntimeHooks;
 }): Api | undefined {
@@ -156,7 +156,7 @@ export function findInlineModelMatch(params: {
 }
 
 export function resolveConfiguredProviderConfig(
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
   provider: string,
 ): InlineProviderConfig | undefined {
   const configuredProviders = cfg?.models?.providers;
@@ -240,7 +240,7 @@ function mergeModelParams(
 }
 
 function findConfiguredAgentModelParams(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   provider: string;
   modelId: string;
 }): Record<string, unknown> | undefined {
@@ -282,7 +282,7 @@ function findConfiguredAgentModelParams(params: {
 }
 
 export function mergeConfiguredRuntimeModelParams(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   provider: string;
   modelId: string;
   discoveredParams?: unknown;
@@ -325,7 +325,7 @@ export function applyConfiguredProviderOverrides(params: {
   discoveredModel: ProviderRuntimeModel;
   providerConfig?: InlineProviderConfig;
   modelId: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   manifestAlias: ManifestModelCatalogProviderAliasMetadata;
   providerMetadataOwners?: PluginMetadataSnapshotOwnerMaps;
   runtimeHooks?: ProviderRuntimeHooks;

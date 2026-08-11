@@ -1,5 +1,5 @@
-import type { MediaKind } from "@openclaw/media-core/constants";
-import { normalizeMimeType } from "@openclaw/media-core/mime";
+import type { MediaKind } from "@natesclaw/media-core/constants";
+import { normalizeMimeType } from "@natesclaw/media-core/mime";
 import type { PlaybackMediaProbeResult } from "./media-probe.js";
 
 type PlaybackMediaKind = Extract<MediaKind, "audio" | "video">;

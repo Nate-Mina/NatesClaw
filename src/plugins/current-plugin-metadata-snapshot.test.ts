@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { normalizeConfiguredProviderCatalogModelId } from "@openclaw/model-catalog-core/provider-model-id-normalization";
+import { normalizeConfiguredProviderCatalogModelId } from "@natesclaw/model-catalog-core/provider-model-id-normalization";
 import { describe, expect, it } from "vitest";
 import {
   getCurrentPluginMetadataSnapshot,
@@ -38,7 +38,7 @@ function createSnapshot(
           origin: "config",
           rootDir: "/fixture",
           source: "test",
-          manifestPath: "/fixture/openclaw.plugin.json",
+          manifestPath: "/fixture/natesclaw.plugin.json",
           modelIdNormalization: {
             providers: {
               fixture: {
@@ -395,11 +395,11 @@ describe("current plugin metadata snapshot", () => {
     const snapshot = createSnapshot({ config });
     const snapshotEnv = {
       HOME: "/home/snapshot",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     const requestedEnv = {
       HOME: "/home/requested",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     setCurrentPluginMetadataSnapshot(snapshot, { config, env: snapshotEnv });
 
@@ -412,11 +412,11 @@ describe("current plugin metadata snapshot", () => {
     const snapshot = createSnapshot({ config });
     const snapshotEnv = {
       HOME: "/home/snapshot",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     const requestedEnv = {
       HOME: "/home/requested",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     setCurrentPluginMetadataSnapshot(snapshot, { config, env: snapshotEnv });
 
@@ -453,7 +453,7 @@ describe("current plugin metadata snapshot", () => {
     const snapshot = createSnapshot({ config });
     const env = {
       HOME: "/home/snapshot",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     setCurrentPluginMetadataSnapshot(snapshot, { config, env });
 
@@ -545,11 +545,11 @@ describe("current plugin metadata snapshot", () => {
     const snapshot = createSnapshot({ config });
     const originalEnv = {
       HOME: "/home/original-snapshot",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     const changedEnv = {
       HOME: "/home/changed-snapshot",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     setCurrentPluginMetadataSnapshot(snapshot, { config, env: originalEnv });
 
@@ -625,7 +625,7 @@ describe("current plugin metadata snapshot", () => {
     const temporary = createSnapshot({ normalizationAlias: "temporary" });
     const env = {
       HOME: "/home/original-snapshot",
-      OPENCLAW_HOME: undefined,
+      NATESCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     setCurrentPluginMetadataSnapshot(original, { env });
     expect(normalizeConfiguredProviderCatalogModelId("fixture", "raw")).toBe("original");
@@ -638,7 +638,7 @@ describe("current plugin metadata snapshot", () => {
   });
 
   it("clears the current snapshot when the persisted installed index changes", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-metadata-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-plugin-metadata-"));
     try {
       setCurrentPluginMetadataSnapshot(createSnapshot());
 

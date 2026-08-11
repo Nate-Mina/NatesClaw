@@ -1,18 +1,18 @@
 {
-  "name": "@openclaw/fireworks-provider",
+  "name": "@natesclaw/fireworks-provider",
   "version": "2026.8.1",
-  "description": "OpenClaw Fireworks provider plugin",
+  "description": "Natesclaw Fireworks provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/fireworks-provider",
-      "npmSpec": "@openclaw/fireworks-provider",
+      "clawhubSpec": "clawhub:@natesclaw/fireworks-provider",
+      "npmSpec": "@natesclaw/fireworks-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9"
     },
@@ -20,7 +20,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {
@@ -30,6 +30,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   }
 }

@@ -1,12 +1,12 @@
-import type { OpenClawPluginApi, OpenClawPluginService } from "openclaw/plugin-sdk/plugin-entry";
-import { registerSandboxBackend } from "openclaw/plugin-sdk/sandbox";
+import type { NatesclawPluginApi, NatesclawPluginService } from "natesclaw/plugin-sdk/plugin-entry";
+import { registerSandboxBackend } from "natesclaw/plugin-sdk/sandbox";
 import { resolveMxcBinaryPath } from "./binary-resolver.js";
 import { resolveConfig } from "./config.js";
 import { createMxcSandboxBackendFactory } from "./mxc-backend-factory.js";
 import { mxcSandboxBackendManager } from "./mxc-backend.js";
 import { assertMxcReadiness, warnMxcHostPrepIfNeeded } from "./readiness.js";
 
-export function registerMxcPlugin(api: OpenClawPluginApi): void {
+export function registerMxcPlugin(api: NatesclawPluginApi): void {
   if (api.registrationMode !== "full") {
     return;
   }
@@ -44,7 +44,7 @@ export function registerMxcPlugin(api: OpenClawPluginApi): void {
   });
 
   // Cleanup service unregisters backend on shutdown.
-  const cleanupService: OpenClawPluginService = {
+  const cleanupService: NatesclawPluginService = {
     id: "mxc-sandbox-cleanup",
     start() {
       /* no-op */

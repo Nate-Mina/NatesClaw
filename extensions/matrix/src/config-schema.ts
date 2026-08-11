@@ -9,8 +9,8 @@ import {
   GroupPolicySchema,
   MarkdownConfigSchema,
   MentionPatternsPolicySchema,
-} from "openclaw/plugin-sdk/channel-config-schema";
-import { buildSecretInputSchema } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/channel-config-schema";
+import { buildSecretInputSchema } from "natesclaw/plugin-sdk/secret-input";
 import { z } from "zod";
 import { matrixChannelConfigUiHints } from "./config-ui-hints.js";
 
@@ -139,7 +139,7 @@ const MatrixConfigSchema = z.object({
       z.string(),
       z.unknown().refine(hasCanonicalMatrixAccountStreaming, {
         message:
-          'flat or scalar streaming values are no longer supported; use streaming.* and run "openclaw doctor --fix"',
+          'flat or scalar streaming values are no longer supported; use streaming.* and run "natesclaw doctor --fix"',
       }),
     )
     .optional(),

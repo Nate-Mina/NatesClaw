@@ -1,7 +1,7 @@
 // Covers conservative stale recovery for retired MCP OAuth lock sidecars.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { root } from "@openclaw/fs-safe";
+import { root } from "@natesclaw/fs-safe";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { isDefinitelyStaleLegacyMcpOAuthLock } from "./state-migrations.mcp-oauth-lock-stale.js";
@@ -74,7 +74,7 @@ describe("legacy MCP OAuth lock recovery", () => {
   });
 
   it("reports a stale sidecar without unlinking a replacement-prone path", async () => {
-    const stateDir = tempDirs.make("openclaw-mcp-oauth-stale-lock-");
+    const stateDir = tempDirs.make("natesclaw-mcp-oauth-stale-lock-");
     const targetRelativePath = path.join("mcp-oauth", "server-0123456789abcdef.json");
     const lockPath = path.join(stateDir, `${targetRelativePath}.lock`);
     await fs.mkdir(path.dirname(lockPath), { recursive: true });

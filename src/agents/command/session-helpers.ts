@@ -1,10 +1,10 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type {
   ChannelOutboundTargetMode,
   ChannelPlugin,
 } from "../../channels/plugins/types.public.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   resolveAgentDeliveryPlanWithSessionRoute,
   resolveAgentOutboundTarget,
@@ -39,7 +39,7 @@ type PreparedCurrentRunDelivery = {
 };
 
 export async function prepareCurrentRunDelivery(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   opts: AgentCommandOpts;
   agentId: string;
   currentSessionKey?: string;

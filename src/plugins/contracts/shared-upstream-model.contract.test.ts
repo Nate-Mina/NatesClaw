@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { listGitTrackedFiles } from "../../test-utils/repo-files.js";
 
 const repoRoot = path.resolve(import.meta.dirname, "../../..");
-const MANIFEST_BASENAME = "openclaw.plugin.json";
+const MANIFEST_BASENAME = "natesclaw.plugin.json";
 const CODE_MODE_TIER_LITERAL = /codeMode:\s*"(?:preferred|capable)"/;
 // Catalogs still built in plugin source instead of `modelCatalog` manifest rows,
 // so the manifest scan below cannot see their tiers. Moving them is not free:

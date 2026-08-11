@@ -4,7 +4,7 @@ import { createServer } from "node:net";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { expect } from "vitest";
-import { resolvePreferredOpenClawTmpDir } from "./infra/tmp-openclaw-dir.js";
+import { resolvePreferredNatesclawTmpDir } from "./infra/tmp-natesclaw-dir.js";
 import { createSuiteTempRootTracker } from "./test-helpers/temp-dir.js";
 
 export const repoRoot = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
@@ -17,8 +17,8 @@ export type DockerSetupSandbox = {
 };
 
 const sandboxRootTracker = createSuiteTempRootTracker({
-  prefix: "openclaw-docker-setup-",
-  parentDir: resolvePreferredOpenClawTmpDir(),
+  prefix: "natesclaw-docker-setup-",
+  parentDir: resolvePreferredNatesclawTmpDir(),
 });
 
 export async function setupDockerSetupSandboxRoot(): Promise<void> {
@@ -113,7 +113,7 @@ if [[ "\${1:-}" == "compose" ]]; then
   for ((i = 0; i + 4 < \${#args[@]}; i++)); do
     if [[ "\${args[$i]}" == "--entrypoint" &&
       "\${args[$((i + 1))]}" == "node" &&
-      "\${args[$((i + 2))]}" == "openclaw-gateway" &&
+      "\${args[$((i + 2))]}" == "natesclaw-gateway" &&
       "\${args[$((i + 3))]}" == "-e" ]]; then
       node -e "\${args[$((i + 4))]}" "\${args[@]:$((i + 5))}"
       exit $?
@@ -193,7 +193,7 @@ export async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
   await writeFile(dockerfilePath, "FROM scratch\n");
   await writeFile(
     composePath,
-    "services:\n  openclaw-gateway:\n    image: noop\n  openclaw-cli:\n    image: noop\n",
+    "services:\n  natesclaw-gateway:\n    image: noop\n  natesclaw-cli:\n    image: noop\n",
   );
   await writeDockerStub(binDir, logPath);
 
@@ -202,11 +202,11 @@ export async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
 
 export const prestartContainerEnvFlags = [
   "-e HOME=/home/node",
-  "-e OPENCLAW_HOME=/home/node",
-  "-e OPENCLAW_STATE_DIR=/home/node/.openclaw",
-  "-e OPENCLAW_CONFIG_PATH=/home/node/.openclaw/openclaw.json",
-  "-e OPENCLAW_CONFIG_DIR=/home/node/.openclaw",
-  "-e OPENCLAW_WORKSPACE_DIR=/home/node/.openclaw/workspace",
+  "-e NATESCLAW_HOME=/home/node",
+  "-e NATESCLAW_STATE_DIR=/home/node/.natesclaw",
+  "-e NATESCLAW_CONFIG_PATH=/home/node/.natesclaw/natesclaw.json",
+  "-e NATESCLAW_CONFIG_DIR=/home/node/.natesclaw",
+  "-e NATESCLAW_WORKSPACE_DIR=/home/node/.natesclaw/workspace",
 ].join(" ");
 
 export const noFollowOwnershipRepair = (root: string) =>
@@ -252,7 +252,7 @@ export function collectMatchingLines(
 }
 
 export function isGatewayStartLine(line: string) {
-  return line.includes("compose") && line.includes(" up -d") && line.includes("openclaw-gateway");
+  return line.includes("compose") && line.includes(" up -d") && line.includes("natesclaw-gateway");
 }
 
 export function findGatewayStartLineIndex(lines: string[]) {

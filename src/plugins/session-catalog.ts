@@ -8,7 +8,7 @@ import type {
 } from "../../packages/gateway-protocol/src/schema/sessions-catalog.js";
 import { listAgentIds, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginRuntime } from "./runtime/types.js";
 
 export type SessionCatalogListProviderParams = {
@@ -173,7 +173,7 @@ type SessionCatalogAdoptedSource = { hostId: string; threadId: string };
 type SessionCatalogEntry = SessionCatalogEntrySummary["entry"];
 
 export function listSessionCatalogEntries(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   runtime: PluginRuntime;
   sessionEntries?: SessionCatalogEntrySnapshot;
 }): SessionCatalogAgentEntry[] {
@@ -205,7 +205,7 @@ export function sessionCatalogAdoptedSessionKey(prefix: string, source: string):
 }
 
 export function listAdoptedSessionCatalogSessions(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginId: string;
   runtime: PluginRuntime;
   sessionEntries?: SessionCatalogEntrySnapshot;

@@ -1,18 +1,18 @@
 import {
   isProviderAuthProfileConfigured,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/provider-auth";
+  type NatesclawConfig,
+} from "natesclaw/plugin-sdk/provider-auth";
 import type {
   RealtimeVoiceBridgeCreateRequest,
   RealtimeVoiceProviderConfig,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/realtime-voice";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
 import {
   asFiniteNumber,
   asRecord,
   normalizeOptionalString,
   parseBooleanValue,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { XAI_BASE_URL } from "./model-definitions.js";
 
 type XaiRealtimeVoice = "eve" | "ara" | "rex" | "sal" | "leo";
@@ -243,7 +243,7 @@ export function toXaiRealtimeWsUrl(
 
 export function hasXaiRealtimeApiKeyInput(
   configApiKey: string | undefined,
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
 ): boolean {
   if (normalizeOptionalString(configApiKey) || normalizeOptionalString(process.env.XAI_API_KEY)) {
     return true;

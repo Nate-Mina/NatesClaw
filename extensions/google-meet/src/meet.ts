@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { exportGoogleDriveDocumentText, extractGoogleDriveDocumentId } from "./drive.js";
 import {
   createGoogleMeetSpace,
@@ -406,4 +406,4 @@ export function buildGoogleMeetPreflightReport(params: {
     blockers,
   };
 }
-import { parseDateStringTimestampMs as parseGoogleMeetTimestamp } from "openclaw/plugin-sdk/number-runtime";
+import { parseDateStringTimestampMs as parseGoogleMeetTimestamp } from "natesclaw/plugin-sdk/number-runtime";

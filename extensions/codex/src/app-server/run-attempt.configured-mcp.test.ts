@@ -1,5 +1,5 @@
 import path from "node:path";
-import { openFileBackedSessionManagerForTest } from "openclaw/plugin-sdk/agent-runtime-test-contracts";
+import { openFileBackedSessionManagerForTest } from "natesclaw/plugin-sdk/agent-runtime-test-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mcpMocks = vi.hoisted(() => ({
@@ -31,8 +31,8 @@ const mcpMocks = vi.hoisted(() => ({
   threadConfigCalls: [] as Array<Record<string, unknown>>,
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-harness-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/agent-harness-runtime")>();
+vi.mock("natesclaw/plugin-sdk/agent-harness-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/agent-harness-runtime")>();
   return {
     ...actual,
     materializeRequesterScopedMcpToolsForHarnessRun: async (
@@ -65,8 +65,8 @@ vi.mock("openclaw/plugin-sdk/agent-harness-runtime", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/codex-mcp-projection", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/codex-mcp-projection")>();
+vi.mock("natesclaw/plugin-sdk/codex-mcp-projection", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/codex-mcp-projection")>();
   return {
     ...actual,
     runWithCronCreatorAuthorityCapabilityResolver: (
@@ -371,7 +371,7 @@ describe("runCodexAppServerAttempt configured MCP ownership", () => {
       (turnStart?.params as { input?: Array<{ text?: string }> } | undefined)?.input?.[0]?.text ??
       "";
     expect(inputText.length).toBeLessThanOrEqual(1 << 20);
-    expect(inputText).toContain("OpenClaw assembled context for this turn:");
+    expect(inputText).toContain("Natesclaw assembled context for this turn:");
     expect(inputText).toContain("new scheduled ownership question");
     expect(inputText).toContain("recent scheduled ownership answer");
     expect(inputText).toContain("Current user request:");

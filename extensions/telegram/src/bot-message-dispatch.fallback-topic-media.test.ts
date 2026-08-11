@@ -1,7 +1,7 @@
 import {
   createOutboundPayloadPlan,
   projectOutboundPayloadPlanForDelivery,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import { describe, expect, it, vi } from "vitest";
 import {
   describeTelegramDispatch,

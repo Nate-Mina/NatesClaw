@@ -1,7 +1,7 @@
 // System-agent TUI operation tests cover handoff and return-to-shell behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
+import { withTempHome } from "natesclaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import { executeSystemAgentOperation, isPersistentSystemAgentOperation } from "./operations.js";
 import { createSystemAgentTestRuntime } from "./system-agent.runtime.test-support.js";
@@ -20,16 +20,16 @@ describe("system-agent TUI operations", () => {
       expect(result).toEqual({ applied: false });
       expect(isPersistentSystemAgentOperation({ kind: "doctor-fix" })).toBe(false);
       expect(runDoctor).not.toHaveBeenCalled();
-      expect(lines.join("\n")).toContain("with OpenClaw stopped");
-      expect(lines.join("\n")).toContain("openclaw doctor --fix");
-      expect(lines.join("\n")).not.toContain("[openclaw] running: doctor.fix");
+      expect(lines.join("\n")).toContain("with Natesclaw stopped");
+      expect(lines.join("\n")).toContain("natesclaw doctor --fix");
+      expect(lines.join("\n")).not.toContain("[natesclaw] running: doctor.fix");
       await expect(
-        fs.access(path.join(home, ".openclaw", "audit", "system-agent.jsonl")),
+        fs.access(path.join(home, ".natesclaw", "audit", "system-agent.jsonl")),
       ).rejects.toThrow();
     });
   });
 
-  it("returns from the agent TUI back to OpenClaw", async () => {
+  it("returns from the agent TUI back to Natesclaw", async () => {
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runTui = vi.fn(async () => ({
       exitReason: "return-to-system-agent" as const,
@@ -54,7 +54,7 @@ describe("system-agent TUI operations", () => {
       nextInput: "restart gateway",
     });
     expect(lines.join("\n")).toContain(
-      "[openclaw] returned from agent with request: restart gateway",
+      "[natesclaw] returned from agent with request: restart gateway",
     );
   });
 
@@ -77,7 +77,7 @@ describe("system-agent TUI operations", () => {
     });
   });
 
-  it("re-enters the OpenClaw shell when the agent TUI returns without a request", async () => {
+  it("re-enters the Natesclaw shell when the agent TUI returns without a request", async () => {
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runTui = vi.fn(async () => ({
       exitReason: "return-to-system-agent" as const,
@@ -92,6 +92,6 @@ describe("system-agent TUI operations", () => {
       returnToShell: true,
     });
     expect((result as { nextInput?: string }).nextInput).toBeUndefined();
-    expect(lines.join("\n")).toContain("[openclaw] returned from agent");
+    expect(lines.join("\n")).toContain("[natesclaw] returned from agent");
   });
 });

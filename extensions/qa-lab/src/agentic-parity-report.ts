@@ -169,7 +169,7 @@ function scenarioHasRuntimeToolCallEvidence(scenario: QaParityReportScenario): b
   return (
     scenario.status === "pass" &&
     isRuntimeParityResultPass(parity) &&
-    parity.cells.openclaw.toolCalls.length > 0 &&
+    parity.cells.natesclaw.toolCalls.length > 0 &&
     parity.cells.codex.toolCalls.length > 0
   );
 }
@@ -258,9 +258,9 @@ function isLiveProviderMode(providerMode: string | undefined) {
 
 function describeLiveUsageFailure(scenarioName: string, scenario: QaRuntimeParityScenarioReport) {
   const missing = [
-    scenario.openclawTokens > 0
+    scenario.natesclawTokens > 0
       ? undefined
-      : `${scenario.openclawStatus === "pass" ? "openclaw" : "openclaw failed"}=0`,
+      : `${scenario.natesclawStatus === "pass" ? "natesclaw" : "natesclaw failed"}=0`,
     scenario.codexTokens > 0
       ? undefined
       : `${scenario.codexStatus === "pass" ? "codex" : "codex failed"}=0`,
@@ -277,7 +277,7 @@ function normalizeRuntimePair(
   if (pair?.[0] && pair?.[1]) {
     return pair;
   }
-  return ["openclaw", "codex"];
+  return ["natesclaw", "codex"];
 }
 
 function requiredCoverageStatus(
@@ -574,7 +574,7 @@ export function renderQaAgenticParityMarkdownReport(comparison: QaAgenticParityC
   // openai/gpt-5.6-luna vs anthropic/claude-opus-4-8, but the helper works for
   // any parity comparison a caller configures.
   const lines = [
-    `# OpenClaw Agentic Parity Report — ${comparison.candidateLabel} vs ${comparison.baselineLabel}`,
+    `# Natesclaw Agentic Parity Report — ${comparison.candidateLabel} vs ${comparison.baselineLabel}`,
     "",
     `- Compared at: ${comparison.comparedAt}`,
     `- Candidate: ${comparison.candidateLabel}`,
@@ -642,24 +642,24 @@ export function buildQaRuntimeParityReport(params: {
         runtimeParityUsage: resolveRuntimeParityUsagePolicy(undefined),
         drift: "missing",
         driftDetails: scenario.details,
-        openclawStatus: "missing",
+        natesclawStatus: "missing",
         codexStatus: "missing",
-        openclawTokens: 0,
+        natesclawTokens: 0,
         codexTokens: 0,
-        openclawUsage: null,
+        natesclawUsage: null,
         codexUsage: null,
-        openclawToolCalls: 0,
+        natesclawToolCalls: 0,
         codexToolCalls: 0,
-        openclawWallClockMs: null,
+        natesclawWallClockMs: null,
         codexWallClockMs: null,
         fasterRuntime: null,
         speedupPercent: null,
       } satisfies QaRuntimeParityScenarioReport;
     }
     driftCounts[parity.drift] += 1;
-    const openclawCell = parity.cells.openclaw;
+    const natesclawCell = parity.cells.natesclaw;
     const codexCell = parity.cells.codex;
-    const openclawStatus = runtimeParityCellStatus(openclawCell);
+    const natesclawStatus = runtimeParityCellStatus(natesclawCell);
     const codexStatus = runtimeParityCellStatus(codexCell);
     const parityStatus = isRuntimeParityResultPass(parity) ? "pass" : "fail";
     const runtimeParityUsage = resolveRuntimeParityUsagePolicy(parity.runtimeParityUsage);
@@ -669,35 +669,35 @@ export function buildQaRuntimeParityReport(params: {
       runtimeParityUsage,
       drift: parity.drift,
       driftDetails: parity.driftDetails,
-      openclawStatus,
+      natesclawStatus,
       codexStatus,
-      openclawTokens: openclawCell.usage.totalTokens,
+      natesclawTokens: natesclawCell.usage.totalTokens,
       codexTokens: codexCell.usage.totalTokens,
-      openclawUsage:
+      natesclawUsage:
         runtimeParityUsage.expectation === "not-applicable"
           ? null
-          : summarizeRuntimeParityCacheUsage(openclawCell.usage),
+          : summarizeRuntimeParityCacheUsage(natesclawCell.usage),
       codexUsage:
         runtimeParityUsage.expectation === "not-applicable"
           ? null
           : summarizeRuntimeParityCacheUsage(codexCell.usage),
-      ...(openclawCell.cacheDiagnostics === undefined
+      ...(natesclawCell.cacheDiagnostics === undefined
         ? {}
-        : { openclawCacheDiagnostics: openclawCell.cacheDiagnostics }),
+        : { natesclawCacheDiagnostics: natesclawCell.cacheDiagnostics }),
       ...(codexCell.cacheDiagnostics === undefined
         ? {}
         : { codexCacheDiagnostics: codexCell.cacheDiagnostics }),
-      openclawToolCalls: openclawCell.toolCalls.length,
+      natesclawToolCalls: natesclawCell.toolCalls.length,
       codexToolCalls: codexCell.toolCalls.length,
-      openclawWallClockMs: openclawCell.wallClockMs,
+      natesclawWallClockMs: natesclawCell.wallClockMs,
       codexWallClockMs: codexCell.wallClockMs,
-      ...(openclawCell.bootstrapWallClockMs === undefined
+      ...(natesclawCell.bootstrapWallClockMs === undefined
         ? {}
-        : { openclawBootstrapWallClockMs: openclawCell.bootstrapWallClockMs }),
+        : { natesclawBootstrapWallClockMs: natesclawCell.bootstrapWallClockMs }),
       ...(codexCell.bootstrapWallClockMs === undefined
         ? {}
         : { codexBootstrapWallClockMs: codexCell.bootstrapWallClockMs }),
-      ...compareRuntimeWallClockMs(openclawCell.wallClockMs, codexCell.wallClockMs),
+      ...compareRuntimeWallClockMs(natesclawCell.wallClockMs, codexCell.wallClockMs),
     } satisfies QaRuntimeParityScenarioReport;
     if (parityStatus === "fail") {
       failures.push(
@@ -733,7 +733,7 @@ export function buildQaRuntimeParityReport(params: {
     scenarios,
     timing: summarizeRuntimeParityTiming(scenarios),
     usage: {
-      openclaw: aggregateRuntimeParityCacheUsage(scenarios, "openclaw"),
+      natesclaw: aggregateRuntimeParityCacheUsage(scenarios, "natesclaw"),
       codex: aggregateRuntimeParityCacheUsage(scenarios, "codex"),
     },
     pass: failures.length === 0 && failedScenarios === 0,

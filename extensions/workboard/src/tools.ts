@@ -1,15 +1,15 @@
-import type { WorkboardCard } from "@openclaw/workboard-contract";
+import type { WorkboardCard } from "@natesclaw/workboard-contract";
 // Workboard plugin module implements tools behavior.
-import { jsonResult, readStringParam } from "openclaw/plugin-sdk/core";
-import type { AnyAgentTool, OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
-import { safeEqualSecret } from "openclaw/plugin-sdk/security-runtime";
+import { jsonResult, readStringParam } from "natesclaw/plugin-sdk/core";
+import type { AnyAgentTool, NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import type { NatesclawPluginToolContext } from "natesclaw/plugin-sdk/plugin-entry";
+import { safeEqualSecret } from "natesclaw/plugin-sdk/security-runtime";
 import { Type } from "typebox";
 import { redactClaimToken } from "./card-redaction.js";
 import { WorkboardStore } from "./store.js";
 import { cardIdField, claimTokenField, createWorkboardMoveTool } from "./tools-card-mutations.js";
 
-function contextOwner(ctx: OpenClawPluginToolContext | undefined): string {
+function contextOwner(ctx: NatesclawPluginToolContext | undefined): string {
   const record = (ctx ?? {}) as Record<string, unknown>;
   return (
     (typeof record.agentId === "string" && record.agentId) ||
@@ -172,8 +172,8 @@ const CardIdSchema = Type.Object(
 );
 
 export function createWorkboardTools(params: {
-  api: OpenClawPluginApi;
-  context?: OpenClawPluginToolContext;
+  api: NatesclawPluginApi;
+  context?: NatesclawPluginToolContext;
   store?: WorkboardStore;
 }): AnyAgentTool[] {
   const store = params.store ?? WorkboardStore.openSqlite();
@@ -1033,4 +1033,4 @@ export function createWorkboardTools(params: {
   ];
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */
-import { asNonArrayRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { asNonArrayRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";

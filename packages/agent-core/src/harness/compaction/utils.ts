@@ -1,6 +1,6 @@
-import type { AssistantMessage, Message } from "@openclaw/llm-core";
+import type { AssistantMessage, Message } from "@natesclaw/llm-core";
 // Agent Core helper module supports utils behavior.
-import { sliceUtf16Safe, truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { sliceUtf16Safe, truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import type { AgentMessage } from "../../types.js";
 import type { FileOperations } from "../types.js";
 

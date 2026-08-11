@@ -1,5 +1,5 @@
 // Verifies queue ownership and reentrancy across separately loaded runtime chunks.
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "natesclaw/plugin-sdk/test-fixtures";
 import { expect, it } from "vitest";
 import type { StoreWriterQueue } from "./store-writer-queue.js";
 

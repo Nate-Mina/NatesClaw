@@ -1,10 +1,10 @@
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { formatErrorMessage } from "../infra/errors.js";
 
 type SystemAgentInferenceStage = "agent-turn" | "planner" | "conversation";
 
 const INFERENCE_UNAVAILABLE_MESSAGE =
-  "OpenClaw could not reach working inference. Run `openclaw onboard` on the machine running OpenClaw to reconnect — it live-tests the route before saving it. Then try again.";
+  "Natesclaw could not reach working inference. Run `natesclaw onboard` on the machine running Natesclaw to reconnect — it live-tests the route before saving it. Then try again.";
 const INFERENCE_FAILURE_SUMMARY_MAX_CHARS = 300;
 
 function inferenceUnavailableMessage(failures: readonly unknown[]): string {
@@ -19,7 +19,7 @@ function inferenceUnavailableMessage(failures: readonly unknown[]): string {
   return `${INFERENCE_UNAVAILABLE_MESSAGE} Cause: ${summary}`;
 }
 
-/** Safe public error for an OpenClaw turn that could not complete with intelligence. */
+/** Safe public error for an Natesclaw turn that could not complete with intelligence. */
 export class SystemAgentInferenceUnavailableError extends Error {
   readonly code = "SYSTEM_AGENT_INFERENCE_UNAVAILABLE";
 

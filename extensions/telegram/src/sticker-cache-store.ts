@@ -1,6 +1,6 @@
 // Telegram plugin module implements sticker cache store behavior.
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import type { PluginStateSyncKeyedStore } from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { getTelegramRuntime } from "./runtime.js";
 import {
   normalizeCachedStickerForStore,

@@ -3,12 +3,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import {
   isCrablineServerChannel,
-  OPENCLAW_CRABLINE_DEFAULT_CHANNEL,
-  resolveOpenClawCrablineChannelDriverSelection,
-} from "@openclaw/crabline";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+  NATESCLAW_CRABLINE_DEFAULT_CHANNEL,
+  resolveNatesclawCrablineChannelDriverSelection,
+} from "@natesclaw/crabline";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildQaAgenticParityComparison,
   buildQaRuntimeParityReport,
@@ -119,7 +119,7 @@ import {
   type QaToolCoverageSuiteSummary,
 } from "./tool-coverage-report.js";
 
-const QA_CREDENTIAL_PAYLOAD_MAX_BYTES_ENV = "OPENCLAW_QA_CREDENTIAL_PAYLOAD_MAX_BYTES";
+const QA_CREDENTIAL_PAYLOAD_MAX_BYTES_ENV = "NATESCLAW_QA_CREDENTIAL_PAYLOAD_MAX_BYTES";
 const DEFAULT_QA_CREDENTIAL_PAYLOAD_MAX_BYTES = 64 * 1024 * 1024;
 type InterruptibleServer = {
   baseUrl: string;
@@ -270,8 +270,8 @@ function normalizeQaOptionalModelRef(input: string | undefined) {
 }
 
 function normalizeQaRuntimeId(value: string): RuntimeId | undefined {
-  if (value === "openclaw" || value === "pi") {
-    return "openclaw";
+  if (value === "natesclaw" || value === "pi") {
+    return "natesclaw";
   }
   if (value === "codex") {
     return "codex";
@@ -285,11 +285,11 @@ function parseQaRuntimePair(value: string | undefined): [RuntimeId, RuntimeId] |
   }
   const runtimeNames = value.split(",");
   if (runtimeNames.length !== 2) {
-    throw new Error('--runtime-pair must use exactly two runtimes, e.g. "openclaw,codex".');
+    throw new Error('--runtime-pair must use exactly two runtimes, e.g. "natesclaw,codex".');
   }
   const [left, right] = runtimeNames.map((part) => normalizeQaRuntimeId(part.trim().toLowerCase()));
   if (!left || !right) {
-    throw new Error('--runtime-pair only supports "openclaw" and "codex".');
+    throw new Error('--runtime-pair only supports "natesclaw" and "codex".');
   }
   if (left === right) {
     throw new Error("--runtime-pair must compare two different runtimes.");
@@ -673,7 +673,7 @@ export async function runQaProfileCommand(opts: QaProfileCommandOptions) {
     primaryModel,
     channelDriver: profileReport.channelDriver,
     defaultChannel:
-      profileReport.channelDriver === "crabline" ? OPENCLAW_CRABLINE_DEFAULT_CHANNEL : undefined,
+      profileReport.channelDriver === "crabline" ? NATESCLAW_CRABLINE_DEFAULT_CHANNEL : undefined,
     supportsChannel:
       profileReport.channelDriver === "crabline" ? isCrablineServerChannel : undefined,
     resolveModuleFlowSupport:
@@ -827,15 +827,15 @@ function formatQaRunProfileFilterList(
 }
 
 async function withTemporaryQaProfileEnv<T>(profile: string, run: () => Promise<T>): Promise<T> {
-  const previousProfile = process.env.OPENCLAW_QA_PROFILE;
-  process.env.OPENCLAW_QA_PROFILE = profile;
+  const previousProfile = process.env.NATESCLAW_QA_PROFILE;
+  process.env.NATESCLAW_QA_PROFILE = profile;
   try {
     return await run();
   } finally {
     if (previousProfile === undefined) {
-      delete process.env.OPENCLAW_QA_PROFILE;
+      delete process.env.NATESCLAW_QA_PROFILE;
     } else {
-      process.env.OPENCLAW_QA_PROFILE = previousProfile;
+      process.env.NATESCLAW_QA_PROFILE = previousProfile;
     }
   }
 }
@@ -884,7 +884,7 @@ export async function runQaSuiteCommand(opts: QaSuiteCommandOptions) {
     channel: opts.channel,
     channelDriver,
     claudeCliAuthMode,
-    defaultChannel: channelDriver === "crabline" ? OPENCLAW_CRABLINE_DEFAULT_CHANNEL : undefined,
+    defaultChannel: channelDriver === "crabline" ? NATESCLAW_CRABLINE_DEFAULT_CHANNEL : undefined,
     primaryModel: primaryModel ?? defaultQaModelForMode(providerMode),
     providerMode,
     scenarioIds: explicitScenarioIds,
@@ -938,14 +938,14 @@ export async function runQaSuiteCommand(opts: QaSuiteCommandOptions) {
   const channelDriverChannels =
     channelDriver === "crabline"
       ? resolveQaSuiteScenarioChannels({
-          defaultChannel: OPENCLAW_CRABLINE_DEFAULT_CHANNEL,
+          defaultChannel: NATESCLAW_CRABLINE_DEFAULT_CHANNEL,
           explicitChannel: opts.channel,
           scenarios: channelDriverScenarios,
         })
       : [];
   if (runner === "multipass" && channelDriverChannels.length > 1) {
     resolveQaSuiteScenarioChannel({
-      defaultChannel: OPENCLAW_CRABLINE_DEFAULT_CHANNEL,
+      defaultChannel: NATESCLAW_CRABLINE_DEFAULT_CHANNEL,
       explicitChannel: opts.channel,
       scenarios: channelDriverScenarios,
     });
@@ -953,7 +953,7 @@ export async function runQaSuiteCommand(opts: QaSuiteCommandOptions) {
   const [singleChannelDriverChannel] = channelDriverChannels;
   const channelDriverSelection =
     channelDriver === "crabline" && channelDriverChannels.length === 1 && singleChannelDriverChannel
-      ? resolveOpenClawCrablineChannelDriverSelection({
+      ? resolveNatesclawCrablineChannelDriverSelection({
           channel: singleChannelDriverChannel,
         })
       : undefined;
@@ -1347,9 +1347,9 @@ export async function runQaJsonlReplayCommand(opts: {
   providerMode?: QaProviderModeInput;
 }) {
   const repoRoot = path.resolve(opts.repoRoot ?? process.cwd());
-  const runtimePair = parseQaRuntimePair(opts.runtimePair) ?? ["openclaw", "codex"];
-  if (runtimePair[0] !== "openclaw" || runtimePair[1] !== "codex") {
-    throw new Error('--runtime-pair for jsonl-replay must be "openclaw,codex".');
+  const runtimePair = parseQaRuntimePair(opts.runtimePair) ?? ["natesclaw", "codex"];
+  if (runtimePair[0] !== "natesclaw" || runtimePair[1] !== "codex") {
+    throw new Error('--runtime-pair for jsonl-replay must be "natesclaw,codex".');
   }
   const providerMode = normalizeQaProviderMode(opts.providerMode ?? "mock-openai");
   if (providerMode !== "mock-openai") {
@@ -1650,7 +1650,7 @@ export async function runQaLabUiCommand(opts: {
     advertiseHost: opts.advertiseHost,
     advertisePort: Number.isFinite(opts.advertisePort) ? opts.advertisePort : undefined,
     controlUiUrl: opts.controlUiUrl,
-    controlUiProxyToken: process.env.OPENCLAW_QA_CONTROL_UI_PROXY_TOKEN,
+    controlUiProxyToken: process.env.NATESCLAW_QA_CONTROL_UI_PROXY_TOKEN,
     controlUiProxyTarget: opts.controlUiProxyTarget,
     uiDistDir: opts.uiDistDir,
     autoKickoffTarget: opts.autoKickoffTarget,

@@ -25,7 +25,7 @@ type MergeScenario = {
 };
 
 function runMerge(scenario: MergeScenario = {}) {
-  const root = tempDirs.make("openclaw-pr-merge-");
+  const root = tempDirs.make("natesclaw-pr-merge-");
   const localDir = join(root, ".local");
   const calls = join(root, "gh-calls.log");
   const autoCalled = join(root, "auto-called");
@@ -42,7 +42,7 @@ function runMerge(scenario: MergeScenario = {}) {
     `#!/usr/bin/env node
 const { appendFileSync, readFileSync } = require("node:fs");
 const args = process.argv.slice(2);
-appendFileSync(process.env.OPENCLAW_TEST_RG_CALLS, JSON.stringify(args) + "\\n");
+appendFileSync(process.env.NATESCLAW_TEST_RG_CALLS, JSON.stringify(args) + "\\n");
 const pattern = args.at(-2);
 const file = args.at(-1);
 const flags = args.includes("-i") ? "i" : "";
@@ -89,18 +89,18 @@ process.exit(new RegExp(pattern, flags).test(readFileSync(file, "utf8")) ? 0 : 1
 
   const shell = `
 set -euo pipefail
-source "$OPENCLAW_TEST_MERGE_SCRIPT"
-script_parent_dir="$OPENCLAW_TEST_SCRIPTS_DIR"
+source "$NATESCLAW_TEST_MERGE_SCRIPT"
+script_parent_dir="$NATESCLAW_TEST_SCRIPTS_DIR"
 enter_worktree() { :; }
 require_artifact() { :; }
 validate_review_artifact_data() {
-  if [ "$OPENCLAW_TEST_REVIEW_ARTIFACTS" != "valid" ]; then
+  if [ "$NATESCLAW_TEST_REVIEW_ARTIFACTS" != "valid" ]; then
     echo 'review artifact validation failed' >&2
     return 1
   fi
 }
 require_ready_review_recommendation() {
-  if [ "$OPENCLAW_TEST_REVIEW_RECOMMENDATION" != "ready" ]; then
+  if [ "$NATESCLAW_TEST_REVIEW_RECOMMENDATION" != "ready" ]; then
     echo 'review recommendation is not ready' >&2
     return 1
   fi
@@ -109,16 +109,16 @@ verify_prep_branch_matches_prepared_head() { :; }
 mark_pr_operation_side_effects_started() { :; }
 mainline_drift_requires_sync() { return 1; }
 print_relevant_log_excerpt() { cat "$1"; }
-repo_root() { printf '%s\\n' "$OPENCLAW_TEST_ROOT"; }
-remove_worktree_if_present() { printf 'worktree-cleanup %s\\n' "$*" >> "$OPENCLAW_TEST_LIFECYCLE"; }
-delete_local_branch_if_safe() { printf 'branch-cleanup %s\\n' "$*" >> "$OPENCLAW_TEST_LIFECYCLE"; }
+repo_root() { printf '%s\\n' "$NATESCLAW_TEST_ROOT"; }
+remove_worktree_if_present() { printf 'worktree-cleanup %s\\n' "$*" >> "$NATESCLAW_TEST_LIFECYCLE"; }
+delete_local_branch_if_safe() { printf 'branch-cleanup %s\\n' "$*" >> "$NATESCLAW_TEST_LIFECYCLE"; }
 sleep() { :; }
 pr_meta_json() {
   printf '%s\\n' '{"state":"OPEN","isDraft":false,"headRefOid":"${headSha}"}'
 }
 git() {
   if [ "\${1-}" = "merge-base" ]; then
-    if [ "$OPENCLAW_TEST_MERGE_STATE_STATUS" = "BEHIND" ]; then
+    if [ "$NATESCLAW_TEST_MERGE_STATE_STATUS" = "BEHIND" ]; then
       return 1
     fi
     return 0
@@ -127,7 +127,7 @@ git() {
 }
 node() {
   if [[ "\${1-}" = */scripts/watch-pr-ci.mjs ]]; then
-    printf 'watch %s\\n' "$*" >> "$OPENCLAW_TEST_GH_CALLS"
+    printf 'watch %s\\n' "$*" >> "$NATESCLAW_TEST_GH_CALLS"
     return 0
   fi
   command node "$@"
@@ -135,13 +135,13 @@ node() {
 gh_route() {
   local route="$1"
   shift
-  printf '%s %s\\n' "$route" "$*" >> "$OPENCLAW_TEST_GH_CALLS"
+  printf '%s %s\\n' "$route" "$*" >> "$NATESCLAW_TEST_GH_CALLS"
   case "$1 $2" in
     "pr checks")
       case " $* " in
         *" --json "*)
-          printf '%s\\n' "$OPENCLAW_TEST_CHECKS_JSON"
-          return "$OPENCLAW_TEST_CHECKS_EXIT_STATUS"
+          printf '%s\\n' "$NATESCLAW_TEST_CHECKS_JSON"
+          return "$NATESCLAW_TEST_CHECKS_EXIT_STATUS"
           ;;
       esac
       ;;
@@ -151,51 +151,51 @@ gh_route() {
           printf '%s\\n' '{"state":"OPEN","isDraft":false}'
           ;;
         *"--json state,headRefOid,mergeable,mergeStateStatus,autoMergeRequest"*)
-          if [ -e "$OPENCLAW_TEST_AUTO_STATE" ] && [ "$(cat "$OPENCLAW_TEST_AUTO_STATE")" = "enabled" ]; then
-            printf '%s\\n' "$OPENCLAW_TEST_POST_AUTO_META"
-          elif [ -e "$OPENCLAW_TEST_AUTO_STATE" ]; then
-            printf '%s\\n' "$OPENCLAW_TEST_DISABLED_AUTO_META"
+          if [ -e "$NATESCLAW_TEST_AUTO_STATE" ] && [ "$(cat "$NATESCLAW_TEST_AUTO_STATE")" = "enabled" ]; then
+            printf '%s\\n' "$NATESCLAW_TEST_POST_AUTO_META"
+          elif [ -e "$NATESCLAW_TEST_AUTO_STATE" ]; then
+            printf '%s\\n' "$NATESCLAW_TEST_DISABLED_AUTO_META"
           else
-            printf '%s\\n' "$OPENCLAW_TEST_PRE_AUTO_META"
+            printf '%s\\n' "$NATESCLAW_TEST_PRE_AUTO_META"
           fi
           ;;
         *"--json state,headRefOid,autoMergeRequest"*)
-          if [ -e "$OPENCLAW_TEST_AUTO_STATE" ] && [ "$(cat "$OPENCLAW_TEST_AUTO_STATE")" = "disabled" ]; then
-            printf '%s\\n' "$OPENCLAW_TEST_DISABLED_AUTO_META"
+          if [ -e "$NATESCLAW_TEST_AUTO_STATE" ] && [ "$(cat "$NATESCLAW_TEST_AUTO_STATE")" = "disabled" ]; then
+            printf '%s\\n' "$NATESCLAW_TEST_DISABLED_AUTO_META"
           else
-            printf '%s\\n' "$OPENCLAW_TEST_POST_AUTO_META"
+            printf '%s\\n' "$NATESCLAW_TEST_POST_AUTO_META"
           fi
           ;;
         *"--json state --jq .state"*) printf 'MERGED\\n' ;;
-        *"--json mergeCommit"*) printf '%s\\n' "$OPENCLAW_TEST_LANDED_SHA" ;;
+        *"--json mergeCommit"*) printf '%s\\n' "$NATESCLAW_TEST_LANDED_SHA" ;;
         *"--json commits"*) printf '1\\n' ;;
         *"--json headRefName,headRepository"*)
-          printf '%s\\n' '{"headRefName":"feature","headRepository":{"name":"openclaw"},"headRepositoryOwner":{"login":"openclaw"},"isCrossRepository":false,"maintainerCanModify":true}'
+          printf '%s\\n' '{"headRefName":"feature","headRepository":{"name":"natesclaw"},"headRepositoryOwner":{"login":"natesclaw"},"isCrossRepository":false,"maintainerCanModify":true}'
           ;;
-        *"--json url"*) printf 'https://github.com/openclaw/openclaw/pull/123\\n' ;;
+        *"--json url"*) printf 'https://github.com/natesclaw/natesclaw/pull/123\\n' ;;
         *) printf '%s\\n' '{"state":"OPEN"}' ;;
       esac
       ;;
     "pr merge")
       case " $* " in
         *" --disable-auto "*)
-          printf 'disabled\\n' > "$OPENCLAW_TEST_AUTO_STATE"
+          printf 'disabled\\n' > "$NATESCLAW_TEST_AUTO_STATE"
           ;;
         *" --auto "*)
-          : > "$OPENCLAW_TEST_AUTO_CALLED"
-          printf 'enabled\\n' > "$OPENCLAW_TEST_AUTO_STATE"
-          if [ "$OPENCLAW_TEST_AUTO_RESULT" = "unavailable" ]; then
-            echo "$OPENCLAW_TEST_AUTO_ERROR" >&2
+          : > "$NATESCLAW_TEST_AUTO_CALLED"
+          printf 'enabled\\n' > "$NATESCLAW_TEST_AUTO_STATE"
+          if [ "$NATESCLAW_TEST_AUTO_RESULT" = "unavailable" ]; then
+            echo "$NATESCLAW_TEST_AUTO_ERROR" >&2
             return 1
           fi
-          if [ "$OPENCLAW_TEST_AUTO_RESULT" = "inconclusive" ]; then
+          if [ "$NATESCLAW_TEST_AUTO_RESULT" = "inconclusive" ]; then
             echo 'transport closed after mutation' >&2
             return 1
           fi
           ;;
       esac
       ;;
-    "repo view") printf 'openclaw/openclaw\\n' ;;
+    "repo view") printf 'natesclaw/natesclaw\\n' ;;
     "api "*)
       local api_arg
       for api_arg in "$@"; do
@@ -211,26 +211,26 @@ gh_route() {
           local arg
           for arg in "$@"; do
             case "$arg" in
-              body=*) printf '%s' "\${arg#body=}" > "$OPENCLAW_TEST_COMMENT_BODY" ;;
+              body=*) printf '%s' "\${arg#body=}" > "$NATESCLAW_TEST_COMMENT_BODY" ;;
             esac
           done
           local attempts=0
-          if [ -e "$OPENCLAW_TEST_COMMENT_ATTEMPTS" ]; then
-            attempts=$(cat "$OPENCLAW_TEST_COMMENT_ATTEMPTS")
+          if [ -e "$NATESCLAW_TEST_COMMENT_ATTEMPTS" ]; then
+            attempts=$(cat "$NATESCLAW_TEST_COMMENT_ATTEMPTS")
           fi
           attempts=$((attempts + 1))
-          printf '%s\\n' "$attempts" > "$OPENCLAW_TEST_COMMENT_ATTEMPTS"
-          printf 'comment\\n' >> "$OPENCLAW_TEST_LIFECYCLE"
-          if [ "$attempts" -le "$OPENCLAW_TEST_COMMENT_FAILURES" ]; then
+          printf '%s\\n' "$attempts" > "$NATESCLAW_TEST_COMMENT_ATTEMPTS"
+          printf 'comment\\n' >> "$NATESCLAW_TEST_LIFECYCLE"
+          if [ "$attempts" -le "$NATESCLAW_TEST_COMMENT_FAILURES" ]; then
             echo 'transient comment failure' >&2
             return 1
           fi
-          if [ "$OPENCLAW_TEST_COMMENT_EMPTY" = "true" ]; then
+          if [ "$NATESCLAW_TEST_COMMENT_EMPTY" = "true" ]; then
             return 0
           fi
-          printf 'https://github.com/openclaw/openclaw/pull/123#issuecomment-1\\n'
+          printf 'https://github.com/natesclaw/natesclaw/pull/123#issuecomment-1\\n'
           ;;
-        *"git/refs/"*) printf 'remote-cleanup\\n' >> "$OPENCLAW_TEST_LIFECYCLE" ;;
+        *"git/refs/"*) printf 'remote-cleanup\\n' >> "$NATESCLAW_TEST_LIFECYCLE" ;;
         *) : ;;
       esac
       ;;
@@ -239,7 +239,7 @@ gh_route() {
 }
 gh() { gh_route path "$@"; }
 gh_plain() { gh_route plain "$@"; }
-merge_run 123 "$OPENCLAW_TEST_AUTO_REQUESTED"
+merge_run 123 "$NATESCLAW_TEST_AUTO_REQUESTED"
 `;
 
   const result = spawnSync("bash", ["-c", shell], {
@@ -247,31 +247,31 @@ merge_run 123 "$OPENCLAW_TEST_AUTO_REQUESTED"
     encoding: "utf8",
     env: {
       ...process.env,
-      OPENCLAW_TEST_AUTO_CALLED: autoCalled,
-      OPENCLAW_TEST_AUTO_ERROR:
+      NATESCLAW_TEST_AUTO_CALLED: autoCalled,
+      NATESCLAW_TEST_AUTO_ERROR:
         scenario.autoError ?? "GraphQL: Pull request auto merge is not allowed for this repository",
-      OPENCLAW_TEST_AUTO_REQUESTED: scenario.auto ? "true" : "false",
-      OPENCLAW_TEST_AUTO_RESULT: scenario.autoResult ?? "enabled",
-      OPENCLAW_TEST_AUTO_STATE: autoState,
-      OPENCLAW_TEST_CHECKS_EXIT_STATUS: scenario.checks === "pending" ? "8" : "0",
-      OPENCLAW_TEST_CHECKS_JSON: JSON.stringify(checks),
-      OPENCLAW_TEST_COMMENT_ATTEMPTS: commentAttempts,
-      OPENCLAW_TEST_COMMENT_BODY: commentBody,
-      OPENCLAW_TEST_COMMENT_EMPTY: scenario.commentEmpty ? "true" : "false",
-      OPENCLAW_TEST_COMMENT_FAILURES: String(scenario.commentFailures ?? 0),
-      OPENCLAW_TEST_DISABLED_AUTO_META: disabledAutoMeta,
-      OPENCLAW_TEST_GH_CALLS: calls,
-      OPENCLAW_TEST_LANDED_SHA: landedSha,
-      OPENCLAW_TEST_LIFECYCLE: lifecycle,
-      OPENCLAW_TEST_MERGE_SCRIPT: mergeScript,
-      OPENCLAW_TEST_MERGE_STATE_STATUS: scenario.mergeStateStatus ?? "BEHIND",
-      OPENCLAW_TEST_POST_AUTO_META: postAutoMeta,
-      OPENCLAW_TEST_PRE_AUTO_META: preAutoMeta,
-      OPENCLAW_TEST_REVIEW_ARTIFACTS: scenario.reviewArtifacts ?? "valid",
-      OPENCLAW_TEST_REVIEW_RECOMMENDATION: scenario.recommendation ?? "ready",
-      OPENCLAW_TEST_RG_CALLS: rgCalls,
-      OPENCLAW_TEST_ROOT: root,
-      OPENCLAW_TEST_SCRIPTS_DIR: join(process.cwd(), "scripts"),
+      NATESCLAW_TEST_AUTO_REQUESTED: scenario.auto ? "true" : "false",
+      NATESCLAW_TEST_AUTO_RESULT: scenario.autoResult ?? "enabled",
+      NATESCLAW_TEST_AUTO_STATE: autoState,
+      NATESCLAW_TEST_CHECKS_EXIT_STATUS: scenario.checks === "pending" ? "8" : "0",
+      NATESCLAW_TEST_CHECKS_JSON: JSON.stringify(checks),
+      NATESCLAW_TEST_COMMENT_ATTEMPTS: commentAttempts,
+      NATESCLAW_TEST_COMMENT_BODY: commentBody,
+      NATESCLAW_TEST_COMMENT_EMPTY: scenario.commentEmpty ? "true" : "false",
+      NATESCLAW_TEST_COMMENT_FAILURES: String(scenario.commentFailures ?? 0),
+      NATESCLAW_TEST_DISABLED_AUTO_META: disabledAutoMeta,
+      NATESCLAW_TEST_GH_CALLS: calls,
+      NATESCLAW_TEST_LANDED_SHA: landedSha,
+      NATESCLAW_TEST_LIFECYCLE: lifecycle,
+      NATESCLAW_TEST_MERGE_SCRIPT: mergeScript,
+      NATESCLAW_TEST_MERGE_STATE_STATUS: scenario.mergeStateStatus ?? "BEHIND",
+      NATESCLAW_TEST_POST_AUTO_META: postAutoMeta,
+      NATESCLAW_TEST_PRE_AUTO_META: preAutoMeta,
+      NATESCLAW_TEST_REVIEW_ARTIFACTS: scenario.reviewArtifacts ?? "valid",
+      NATESCLAW_TEST_REVIEW_RECOMMENDATION: scenario.recommendation ?? "ready",
+      NATESCLAW_TEST_RG_CALLS: rgCalls,
+      NATESCLAW_TEST_ROOT: root,
+      NATESCLAW_TEST_SCRIPTS_DIR: join(process.cwd(), "scripts"),
       PATH: `${bin}${delimiter}${process.env.PATH ?? ""}`,
     },
   });
@@ -347,10 +347,10 @@ describePosix("scripts/pr merge-run", () => {
     expect(result.calls).not.toContain("--json commits");
     expect(result.stdout).toContain("merge-run complete for PR #123");
     expect(result.stdout).toContain(
-      "completion comment: https://github.com/openclaw/openclaw/pull/123#issuecomment-1",
+      "completion comment: https://github.com/natesclaw/natesclaw/pull/123#issuecomment-1",
     );
     expect(result.commentBody).toBe(
-      `Merged via squash.\n\n- Prepared head SHA: [${headSha}](https://github.com/openclaw/openclaw/pull/123/commits/${headSha})\n- Landed commit: [${landedSha}](https://github.com/openclaw/openclaw/commit/${landedSha})`,
+      `Merged via squash.\n\n- Prepared head SHA: [${headSha}](https://github.com/natesclaw/natesclaw/pull/123/commits/${headSha})\n- Landed commit: [${landedSha}](https://github.com/natesclaw/natesclaw/commit/${landedSha})`,
     );
     expect(result.rgCalls).toBe("");
     expect(result.lifecycle).toBe(

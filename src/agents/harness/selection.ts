@@ -1,7 +1,7 @@
 /**
  * Selects and invokes native agent harnesses for embedded run attempts.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   createChildDiagnosticTraceContext,
   createDiagnosticTraceContext,
@@ -38,7 +38,7 @@ import {
 } from "../tool-policy.js";
 import type { SystemAgentToolOptions } from "../tools/system-agent-tool.js";
 import { resolveAgentHarnessAutoSelectionHint } from "./auto-selection.js";
-import { createOpenClawAgentHarness, isBuiltInOpenClawAgentHarness } from "./builtin-openclaw.js";
+import { createNatesclawAgentHarness, isBuiltInNatesclawAgentHarness } from "./builtin-natesclaw.js";
 import { selectContextEngineForTranscriptHost } from "./context-engine-logical-turn.js";
 import { drainPendingContextEngineTurnsBeforeRun } from "./context-engine-turn-attempt.js";
 import { AgentHarnessPreflightError, MissingAgentHarnessError } from "./errors.js";
@@ -71,7 +71,7 @@ type AgentHarnessAvailabilityParams = {
   provider?: string;
   modelId?: string;
   modelProvider?: AgentHarnessSupportContext["modelProvider"];
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   sessionKey?: string;
   env?: NodeJS.ProcessEnv;
@@ -82,7 +82,7 @@ type AgentHarnessSelectionParams = {
   provider: string;
   modelId?: string;
   modelProvider?: AgentHarnessSupportContext["modelProvider"];
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   sessionKey?: string;
   agentHarnessId?: string;
@@ -127,18 +127,18 @@ type AgentHarnessSelectionDecision = {
   policy: AgentHarnessPolicy;
   selectedHarnessId: string;
   selectedReason:
-    | "forced_openclaw"
+    | "forced_natesclaw"
     | "forced_plugin"
-    // Implicit Codex preference found no registered Codex harness, so OpenClaw handled the run.
-    | "implicit_plugin_unavailable_openclaw"
-    // Implicit Codex preference cannot reproduce the prepared transport, so OpenClaw handled it.
-    | "implicit_plugin_unsupported_openclaw"
+    // Implicit Codex preference found no registered Codex harness, so Natesclaw handled the run.
+    | "implicit_plugin_unavailable_natesclaw"
+    // Implicit Codex preference cannot reproduce the prepared transport, so Natesclaw handled it.
+    | "implicit_plugin_unsupported_natesclaw"
     // Provider-owned CLI runtime aliases have no agent harness plugin counterpart.
-    | "cli_runtime_passthrough_openclaw"
+    | "cli_runtime_passthrough_natesclaw"
     // Auto mode chose a registered plugin harness that supports the provider/model.
     | "auto_plugin"
-    // Auto mode found no supporting plugin harness, so OpenClaw handled the run.
-    | "auto_openclaw";
+    // Auto mode found no supporting plugin harness, so Natesclaw handled the run.
+    | "auto_natesclaw";
   candidates: AgentHarnessSelectionCandidate[];
 };
 
@@ -205,7 +205,7 @@ function resolveAgentHarnessAvailabilityDecision(
   if (!codexHarness) {
     return {
       kind: "implicit-unavailable",
-      policy: { ...policy, runtime: "openclaw" },
+      policy: { ...policy, runtime: "natesclaw" },
     };
   }
   const provider = params.provider?.trim();
@@ -229,7 +229,7 @@ function resolveAgentHarnessAvailabilityDecision(
   }
   return {
     kind: "implicit-unsupported",
-    policy: { ...policy, runtime: "openclaw" },
+    policy: { ...policy, runtime: "natesclaw" },
   };
 }
 
@@ -264,19 +264,19 @@ export function selectAgentHarnessForPreparedModelProviders(
   // Only implicit/auto selection can produce different supported harnesses. One embedded
   // runtime owns the complete retry set; explicit and pinned plugins fail during probing above.
   return (
-    decisions.find((decision) => decision.selectedHarnessId === "openclaw")?.harness ??
-    createOpenClawAgentHarness()
+    decisions.find((decision) => decision.selectedHarnessId === "natesclaw")?.harness ??
+    createNatesclawAgentHarness()
   );
 }
 
-/** Returns whether a plugin harness constructs OpenClaw tools inside its runtime. */
-export function agentHarnessBuildsOpenClawTools(harnessId: string): boolean {
+/** Returns whether a plugin harness constructs Natesclaw tools inside its runtime. */
+export function agentHarnessBuildsNatesclawTools(harnessId: string): boolean {
   return harnessId === "codex" || harnessId === "copilot";
 }
 
-/** Returns whether the selected harness exposes OpenClaw's agent-tool surface. */
-export function agentHarnessExposesOpenClawTools(harnessId: string): boolean {
-  return harnessId === "openclaw" || agentHarnessBuildsOpenClawTools(harnessId);
+/** Returns whether the selected harness exposes Natesclaw's agent-tool surface. */
+export function agentHarnessExposesNatesclawTools(harnessId: string): boolean {
+  return harnessId === "natesclaw" || agentHarnessBuildsNatesclawTools(harnessId);
 }
 
 function selectAgentHarnessDecision(
@@ -310,21 +310,21 @@ function selectAgentHarnessDecision(
         runtimeSource: "model",
       } as AgentHarnessPolicy)
     : resolvedPolicy;
-  // OpenClaw's built-in harness is intentionally not part of the plugin candidate list. Explicit plugin
-  // runtimes fail closed; only `auto` may route an unmatched turn to OpenClaw.
+  // Natesclaw's built-in harness is intentionally not part of the plugin candidate list. Explicit plugin
+  // runtimes fail closed; only `auto` may route an unmatched turn to Natesclaw.
   const pluginHarnesses = listPluginAgentHarnesses();
-  const openClawHarness = createOpenClawAgentHarness();
+  const NatesclawHarness = createNatesclawAgentHarness();
   const runtime = policy.runtime;
-  if (runtime === "openclaw") {
+  if (runtime === "natesclaw") {
     const selectedReason = selectedRuntimeOverride
-      ? "forced_openclaw"
+      ? "forced_natesclaw"
       : availability.kind === "implicit-unavailable"
-        ? "implicit_plugin_unavailable_openclaw"
+        ? "implicit_plugin_unavailable_natesclaw"
         : availability.kind === "implicit-unsupported"
-          ? "implicit_plugin_unsupported_openclaw"
-          : "forced_openclaw";
+          ? "implicit_plugin_unsupported_natesclaw"
+          : "forced_natesclaw";
     return buildSelectionDecision({
-      harness: openClawHarness,
+      harness: NatesclawHarness,
       policy,
       selectedReason,
       candidates: listHarnessCandidates(pluginHarnesses),
@@ -368,12 +368,12 @@ function selectAgentHarnessDecision(
       }
       if (isCliRuntimeAliasForProvider({ runtime, provider: params.provider })) {
         return buildSelectionDecision({
-          harness: openClawHarness,
+          harness: NatesclawHarness,
           policy: {
             ...policy,
-            runtime: "openclaw",
+            runtime: "natesclaw",
           },
-          selectedReason: "cli_runtime_passthrough_openclaw",
+          selectedReason: "cli_runtime_passthrough_natesclaw",
           candidates: listHarnessCandidates(pluginHarnesses),
         });
       }
@@ -385,12 +385,12 @@ function selectAgentHarnessDecision(
     }
     if (runtime === "codex" && policy.runtimeSource === "implicit") {
       return buildSelectionDecision({
-        harness: openClawHarness,
+        harness: NatesclawHarness,
         policy: {
           ...policy,
-          runtime: "openclaw",
+          runtime: "natesclaw",
         },
-        selectedReason: "implicit_plugin_unavailable_openclaw",
+        selectedReason: "implicit_plugin_unavailable_natesclaw",
         candidates: listHarnessCandidates(pluginHarnesses),
       });
     }
@@ -402,12 +402,12 @@ function selectAgentHarnessDecision(
       })
     ) {
       return buildSelectionDecision({
-        harness: openClawHarness,
+        harness: NatesclawHarness,
         policy: {
           ...policy,
-          runtime: "openclaw",
+          runtime: "natesclaw",
         },
-        selectedReason: "cli_runtime_passthrough_openclaw",
+        selectedReason: "cli_runtime_passthrough_natesclaw",
         candidates: listHarnessCandidates(pluginHarnesses),
       });
     }
@@ -464,9 +464,9 @@ function selectAgentHarnessDecision(
     });
   }
   return buildSelectionDecision({
-    harness: openClawHarness,
+    harness: NatesclawHarness,
     policy,
-    selectedReason: "auto_openclaw",
+    selectedReason: "auto_natesclaw",
     candidates: candidates.map(toSelectionCandidate),
   });
 }
@@ -491,14 +491,14 @@ export async function runAgentHarnessSettledTurnFinalization(
     throw new Error(`Agent harness ${harness.id} cannot safely finalize a settled tool turn.`);
   }
   if (internalParams.systemAgentTool && !isSystemAgentOnlyAllowlist(internalParams.toolsAllow)) {
-    throw new Error('OpenClaw host authority requires toolsAllow: ["openclaw"]');
+    throw new Error('Natesclaw host authority requires toolsAllow: ["natesclaw"]');
   }
   const attemptParams = prepareHarnessFinalizationParams(
     {
       ...internalParams,
       operation: "settled-tool-finalization",
     },
-    isBuiltInOpenClawAgentHarness(harness),
+    isBuiltInNatesclawAgentHarness(harness),
   );
   return await runAgentHarnessOperation(harness, params, () =>
     runWithAgentRingZeroTools([], () =>
@@ -542,7 +542,7 @@ async function runSelectedAgentHarnessAttempt(
     };
   }
   if (internalParams.systemAgentTool && !isSystemAgentOnlyAllowlist(internalParams.toolsAllow)) {
-    throw new Error('OpenClaw host authority requires toolsAllow: ["openclaw"]');
+    throw new Error('Natesclaw host authority requires toolsAllow: ["natesclaw"]');
   }
   const ringZeroTools = internalParams.systemAgentTool
     ? [
@@ -570,14 +570,14 @@ async function runSelectedAgentHarnessAttempt(
       runWithAgentRingZeroTools(ringZeroTools, () => {
         // Resolve plugin policy after entering the host scope. Ring-zero tools are
         // trusted setup authority and must survive ordinary deny-all policy.
-        const hostOpenClawAuthority =
-          isHostScopedAgentToolActive("openclaw") &&
+        const hostNatesclawAuthority =
+          isHostScopedAgentToolActive("natesclaw") &&
           isSystemAgentOnlyAllowlist(pluginAttempt.params.toolsAllow);
         const preparedParams = selection.builtIn
           ? pluginAttempt.params
           : preparePluginHarnessParams(pluginAttempt.params);
         const effectiveAttemptParams =
-          hostOpenClawAuthority && preparedParams.pluginHarnessToolPolicyRestricted
+          hostNatesclawAuthority && preparedParams.pluginHarnessToolPolicyRestricted
             ? { ...preparedParams, pluginHarnessToolPolicyRestricted: false }
             : preparedParams;
         assertPluginHarnessConversationToolPolicySupport(
@@ -663,14 +663,14 @@ async function runAgentHarnessOperation<T>(
   const harnessTrace = freezeDiagnosticTraceContext(
     activeTrace ? createChildDiagnosticTraceContext(activeTrace) : createDiagnosticTraceContext(),
   );
-  if (isBuiltInOpenClawAgentHarness(harness)) {
+  if (isBuiltInNatesclawAgentHarness(harness)) {
     return await runWithDiagnosticTraceContext(harnessTrace, execute);
   }
 
   try {
     return await runWithDiagnosticTraceContext(harnessTrace, execute);
   } catch (error) {
-    log.warn(`${harness.label} failed; not falling back to embedded OpenClaw backend`, {
+    log.warn(`${harness.label} failed; not falling back to embedded Natesclaw backend`, {
       harnessId: harness.id,
       provider: params.provider,
       modelId: params.modelId,
@@ -681,7 +681,7 @@ async function runAgentHarnessOperation<T>(
 }
 
 function isSystemAgentOnlyAllowlist(toolsAllow: readonly string[] | undefined): boolean {
-  return toolsAllow?.length === 1 && normalizeToolPolicyName(toolsAllow[0] ?? "") === "openclaw";
+  return toolsAllow?.length === 1 && normalizeToolPolicyName(toolsAllow[0] ?? "") === "natesclaw";
 }
 
 function withoutHarnessSetupAuthority(
@@ -763,10 +763,10 @@ function withoutPluginHarnessPrivateState(
     hostCapabilities: _hostCapabilities,
     onContextEngineTurnCandidate: _onContextEngineTurnCandidate,
     trajectoryRecorder: _trajectoryRecorder,
-    __openclawSourceReplyDeliveryRuntime: _sourceReplyDeliveryRuntime,
+    __natesclawSourceReplyDeliveryRuntime: _sourceReplyDeliveryRuntime,
     ...pluginParams
   } = params as EmbeddedRunAttemptParams & {
-    __openclawSourceReplyDeliveryRuntime?: unknown;
+    __natesclawSourceReplyDeliveryRuntime?: unknown;
   };
   return pluginParams;
 }
@@ -798,7 +798,7 @@ function assertPluginHarnessConversationToolPolicySupport(
   restricted: boolean,
 ): void {
   if (
-    harness.id !== "openclaw" &&
+    harness.id !== "natesclaw" &&
     restricted &&
     harness.conversationToolPolicySupport !== "exact"
   ) {
@@ -814,9 +814,9 @@ function applyPluginHarnessDenyAllToolPolicy(
   policies: ResolvedPluginHarnessToolPolicies,
 ): import("./types.js").AgentHarnessAttemptParamsV2 {
   if (
-    isHostScopedAgentToolActive("openclaw") &&
+    isHostScopedAgentToolActive("natesclaw") &&
     params.toolsAllow?.length === 1 &&
-    normalizeToolPolicyName(params.toolsAllow[0] ?? "") === "openclaw"
+    normalizeToolPolicyName(params.toolsAllow[0] ?? "") === "natesclaw"
   ) {
     return params;
   }
@@ -1016,7 +1016,7 @@ function buildSelectionDecision(params: {
   selectedReason: AgentHarnessSelectionDecision["selectedReason"];
   candidates: AgentHarnessSelectionCandidate[];
 }): AgentHarnessSelectionDecision {
-  const builtIn = isBuiltInOpenClawAgentHarness(params.harness);
+  const builtIn = isBuiltInNatesclawAgentHarness(params.harness);
   return {
     harness: params.harness,
     builtIn,

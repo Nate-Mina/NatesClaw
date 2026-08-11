@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { GatewayRequestContext } from "./server-methods/types.js";
 
 const mocks = vi.hoisted(() => ({
@@ -37,7 +37,7 @@ const { createGatewayChatMetadataLifecycle } = await import("./server-chat-metad
 const { ChatMetadataSnapshotUnavailableError } =
   await import("./server-methods/chat-metadata-runtime.js");
 
-const config = {} as OpenClawConfig;
+const config = {} as NatesclawConfig;
 const context = {} as GatewayRequestContext;
 
 beforeEach(() => {

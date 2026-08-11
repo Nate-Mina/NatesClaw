@@ -14,11 +14,11 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 
 const NOW = Date.now();
-const recordVisuals = process.env.OPENCLAW_UI_E2E_RECORD === "1";
+const recordVisuals = process.env.NATESCLAW_UI_E2E_RECORD === "1";
 const artifactDir = path.resolve(".artifacts/control-ui-e2e/model-providers");
 const readinessArtifactDir = path.resolve(".artifacts/control-ui-e2e/models-provider-readiness");
 const redactedConfigValue = "[redacted]";
@@ -68,7 +68,7 @@ describeControlUiE2e("Control UI Models mocked Gateway E2E", () => {
     const page = await context.newPage();
     const config = { auth: { profiles: { "openai:chatgpt": { provider: "openai" } } } };
     await installMockGateway(page, {
-      featureMethods: ["chat.metadata", "chat.startup", "models.probe", "openclaw.setup.detect"],
+      featureMethods: ["chat.metadata", "chat.startup", "models.probe", "natesclaw.setup.detect"],
       methodResponses: {
         "config.get": {
           config,
@@ -101,10 +101,10 @@ describeControlUiE2e("Control UI Models mocked Gateway E2E", () => {
             },
           ],
         },
-        "openclaw.setup.detect": {
+        "natesclaw.setup.detect": {
           candidates: [],
           manualProviders: [{ id: "openai", label: "OpenAI" }],
-          workspace: "/tmp/openclaw-e2e",
+          workspace: "/tmp/natesclaw-e2e",
           setupComplete: false,
         },
         "usage.status": { updatedAt: NOW, providers: [] },

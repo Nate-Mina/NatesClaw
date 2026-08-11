@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 // Covers CLI-backed attempt execution and session-binding persistence.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SessionEntry } from "../../config/sessions.js";
 import {
@@ -17,14 +17,14 @@ import {
   replaceSessionEntry,
 } from "../../config/sessions/session-accessor.js";
 import { clearSessionStoreCacheForTest } from "../../config/sessions/store-writer-state.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createUserTurnTranscriptRecorder } from "../../sessions/user-turn-transcript.js";
 import { createTestUserTurnTranscriptTarget } from "../../sessions/user-turn-transcript.test-support.js";
 import {
-  disposeOpenClawAgentDatabaseByPath,
-  listOpenClawAgentDatabasesForTest,
-  runOpenClawAgentWriteTransaction,
-} from "../../state/openclaw-agent-db.js";
+  disposeNatesclawAgentDatabaseByPath,
+  listNatesclawAgentDatabasesForTest,
+  runNatesclawAgentWriteTransaction,
+} from "../../state/natesclaw-agent-db.js";
 import { registerGeneratedMediaTaskActivity } from "../../tasks/generated-media-task-activity.js";
 import { resetGeneratedMediaTaskActivityForTests } from "../../tasks/task-runtime.test-helpers.js";
 import { createSuiteTempRootTracker } from "../../test-helpers/temp-dir.js";
@@ -114,7 +114,7 @@ type SubagentAnnounceDeliveryCase = {
   inheritedToolAllow?: readonly string[];
   inheritedToolDeny?: readonly string[];
   runtimeToolsAllow?: string[];
-  operatorTools?: OpenClawConfig["tools"];
+  operatorTools?: NatesclawConfig["tools"];
   sandboxMode?: "off" | "non-main" | "all";
   trustedInternalHandoff?: boolean;
   expectedDisableTools: boolean;
@@ -301,7 +301,7 @@ function makeRunAgentAttemptParams(overrides: RunAgentAttemptOverrides): RunAgen
     providerOverride: provider,
     originalProvider: provider,
     modelOverride: "gpt-5.4",
-    cfg: {} as OpenClawConfig,
+    cfg: {} as NatesclawConfig,
     sessionId: overrides.sessionEntry.sessionId,
     sessionAgentId: "main",
     sessionFile: path.join(overrides.workspaceDir, "session.jsonl"),
@@ -360,7 +360,7 @@ vi.mock("../cli-runner/claude-live-registry.js", () => ({
 }));
 
 vi.mock("../model-selection.js", () => ({
-  isCliProvider: (provider: string, _cfg?: OpenClawConfig) => {
+  isCliProvider: (provider: string, _cfg?: NatesclawConfig) => {
     const normalized = provider.trim().toLowerCase();
     return (
       normalized === "claude-cli" ||
@@ -388,7 +388,7 @@ vi.mock("../model-runtime-aliases.js", async () => {
       modelId,
     }: {
       provider?: string;
-      cfg?: OpenClawConfig;
+      cfg?: NatesclawConfig;
       modelId?: string;
     }) => {
       const key = provider && modelId ? `${provider}/${modelId}` : undefined;
@@ -541,11 +541,11 @@ function firstRunCliAgentArg(callIndex = 0) {
 }
 
 function firstEmbeddedAgentArg(callIndex = 0) {
-  return requireMockArg(runEmbeddedAgentMock, callIndex, "embedded OpenClaw agent argument");
+  return requireMockArg(runEmbeddedAgentMock, callIndex, "embedded Natesclaw agent argument");
 }
 
 describe("CLI attempt execution", () => {
-  const fixtureRoot = createSuiteTempRootTracker({ prefix: "openclaw-cli-attempt-suite-" });
+  const fixtureRoot = createSuiteTempRootTracker({ prefix: "natesclaw-cli-attempt-suite-" });
   let suiteRoot: string;
   let agentDir: string;
   let tmpDir: string;
@@ -559,9 +559,9 @@ describe("CLI attempt execution", () => {
     await fs.mkdir(agentDir, { recursive: true });
   });
 
-  async function runOpenClawEmbeddedAttemptForTest(overrides?: {
+  async function runNatesclawEmbeddedAttemptForTest(overrides?: {
     opts?: Partial<RunAgentAttemptParams["opts"]>;
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     subagentAnnounceEnvelope?: Pick<
       SubagentAnnounceDeliveryCase,
       "inheritedToolAllow" | "inheritedToolDeny"
@@ -615,7 +615,7 @@ describe("CLI attempt execution", () => {
       originalProvider: "openai",
       modelOverride: overrides?.modelOverride ?? "gpt-5.4",
       configuredAuthProfileId: overrides?.configuredAuthProfileId,
-      cfg: overrides?.config ?? ({ session: { store: storePath } } as OpenClawConfig),
+      cfg: overrides?.config ?? ({ session: { store: storePath } } as NatesclawConfig),
       sessionEntry,
       sessionKey,
       sessionFile: path.join(tmpDir, `${runId}.jsonl`),
@@ -643,8 +643,8 @@ describe("CLI attempt execution", () => {
   }
 
   beforeEach(async () => {
-    homeEnvSnapshot = captureEnv(["HOME", "OPENCLAW_STATE_DIR"]);
-    setTestEnvValue("OPENCLAW_STATE_DIR", suiteRoot);
+    homeEnvSnapshot = captureEnv(["HOME", "NATESCLAW_STATE_DIR"]);
+    setTestEnvValue("NATESCLAW_STATE_DIR", suiteRoot);
     tmpDir = await fixtureRoot.make();
     runCliAgentMock.mockReset();
     runEmbeddedAgentMock.mockReset();
@@ -719,11 +719,11 @@ describe("CLI attempt execution", () => {
     cliBackendsTesting.resetDepsForTest();
     clearRuntimeAuthProfileStoreSnapshots();
     clearSessionStoreCacheForTest();
-    for (const database of listOpenClawAgentDatabasesForTest()) {
+    for (const database of listNatesclawAgentDatabasesForTest()) {
       if (!database.path.startsWith(`${suiteRoot}${path.sep}`)) {
         continue;
       }
-      runOpenClawAgentWriteTransaction(
+      runNatesclawAgentWriteTransaction(
         (fixture) => {
           fixture.db.exec(`
             DELETE FROM session_transcript_fts;
@@ -745,10 +745,10 @@ describe("CLI attempt execution", () => {
   });
 
   afterAll(async () => {
-    for (const database of listOpenClawAgentDatabasesForTest()) {
+    for (const database of listNatesclawAgentDatabasesForTest()) {
       if (database.path.startsWith(`${suiteRoot}${path.sep}`)) {
-        disposeOpenClawAgentDatabaseByPath(database.path, {
-          env: { OPENCLAW_STATE_DIR: suiteRoot },
+        disposeNatesclawAgentDatabaseByPath(database.path, {
+          env: { NATESCLAW_STATE_DIR: suiteRoot },
         });
       }
     }
@@ -757,7 +757,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards explicit local-agent timeouts while preserving the default when omitted", async () => {
     const explicitTimeoutMs = 21_600_000;
-    const explicit = await runOpenClawEmbeddedAttemptForTest({
+    const explicit = await runNatesclawEmbeddedAttemptForTest({
       runId: "explicit-local-timeout",
       timeoutMs: explicitTimeoutMs,
       runTimeoutOverrideMs: explicitTimeoutMs,
@@ -766,7 +766,7 @@ describe("CLI attempt execution", () => {
     expect(explicit.runTimeoutOverrideMs).toBe(explicitTimeoutMs);
 
     const configuredDefaultMs = 600_000;
-    const inherited = await runOpenClawEmbeddedAttemptForTest({
+    const inherited = await runNatesclawEmbeddedAttemptForTest({
       runId: "inherited-local-timeout",
       timeoutMs: configuredDefaultMs,
     });
@@ -776,7 +776,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards execution admission callbacks to the embedded runtime", async () => {
     const onExecutionStarted = vi.fn();
-    const embedded = await runOpenClawEmbeddedAttemptForTest({
+    const embedded = await runNatesclawEmbeddedAttemptForTest({
       runId: "embedded-execution-started",
       opts: { onExecutionStarted },
     });
@@ -790,7 +790,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("forwards authoritative channel type to embedded runs with opaque session keys", async () => {
-    const embedded = await runOpenClawEmbeddedAttemptForTest({
+    const embedded = await runNatesclawEmbeddedAttemptForTest({
       runId: "embedded-opaque-channel",
       sessionKey: "agent:main:opaque:binding",
       sessionEntry: { chatType: "channel" },
@@ -891,11 +891,11 @@ describe("CLI attempt execution", () => {
   }
 
   function makeClaudeCliSessionEntry(
-    openclawSessionId: string,
+    natesclawSessionId: string,
     cliSessionId: string,
   ): SessionEntry {
     return {
-      sessionId: openclawSessionId,
+      sessionId: natesclawSessionId,
       updatedAt: Date.now(),
       cliSessionBindings: {
         "claude-cli": {
@@ -1397,7 +1397,7 @@ describe("CLI attempt execution", () => {
     const homeDir = path.join(tmpDir, "home");
     setTestEnvValue("HOME", homeDir);
     const sessionEntry: SessionEntry = {
-      sessionId: "openclaw-session-123",
+      sessionId: "natesclaw-session-123",
       updatedAt: Date.now(),
       cliSessionBindings: {
         "claude-cli": {
@@ -1453,7 +1453,7 @@ describe("CLI attempt execution", () => {
     setTestEnvValue("HOME", homeDir);
     await fs.mkdir(projectsDir, { recursive: true });
     // Intentionally do NOT write `${cliSessionId}.jsonl` (no native transcript).
-    const sessionEntry = makeClaudeCliSessionEntry("openclaw-sid", cliSessionId);
+    const sessionEntry = makeClaudeCliSessionEntry("natesclaw-sid", cliSessionId);
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await fs.writeFile(storePath, JSON.stringify(sessionStore, null, 2), "utf-8");
     hasClaudeSessionMock.mockReturnValue(true);
@@ -1480,7 +1480,7 @@ describe("CLI attempt execution", () => {
       agentAccountId: undefined,
       agentId: "main",
       authProfileId: "anthropic:claude-cli",
-      sessionId: "openclaw-sid",
+      sessionId: "natesclaw-sid",
       sessionKey,
     });
     expect(sessionStore[sessionKey]?.cliSessionBindings?.["claude-cli"]?.sessionId).toBe(
@@ -1515,7 +1515,7 @@ describe("CLI attempt execution", () => {
       "utf-8",
     );
     const sessionEntry: SessionEntry = {
-      sessionId: "openclaw-session-456",
+      sessionId: "natesclaw-session-456",
       updatedAt: Date.now(),
       cliSessionBindings: {
         "claude-cli": {
@@ -1570,7 +1570,7 @@ describe("CLI attempt execution", () => {
       })}\n`,
       "utf-8",
     );
-    const sessionEntry = makeClaudeCliSessionEntry("openclaw-session-cwd", cliSessionId);
+    const sessionEntry = makeClaudeCliSessionEntry("natesclaw-session-cwd", cliSessionId);
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("resumed cli response"));
@@ -1592,7 +1592,7 @@ describe("CLI attempt execution", () => {
 
   it("passes session-bound OpenAI Codex auth profile to codex-cli aliases", async () => {
     const sessionKey = "agent:main:direct:codex-cli-auth-alias";
-    const sessionEntry = makeSessionEntry("openclaw-session-codex", {
+    const sessionEntry = makeSessionEntry("natesclaw-session-codex", {
       authProfileOverride: "openai:work",
       authProfileOverrideSource: "user",
     });
@@ -1615,9 +1615,9 @@ describe("CLI attempt execution", () => {
 
   it("skips auto auth-profile resolution for CLI-owned transport", async () => {
     const sessionKey = "agent:main:direct:codex-cli-owned-transport";
-    const sessionEntry = makeSessionEntry("openclaw-session-codex-owned");
+    const sessionEntry = makeSessionEntry("natesclaw-session-codex-owned");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: {
           agentRuntime: { id: "codex" },
@@ -1644,7 +1644,7 @@ describe("CLI attempt execution", () => {
 
   it("selects a google-gemini-cli auth profile for canonical Google models routed through Gemini CLI", async () => {
     const sessionKey = "agent:main:direct:gemini-cli-auth-bridge";
-    const sessionEntry = makeSessionEntry("openclaw-session-gemini");
+    const sessionEntry = makeSessionEntry("natesclaw-session-gemini");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     saveAuthProfileStore(
       {
@@ -1683,7 +1683,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       runId: "run-gemini-cli-auth-bridge",
@@ -1697,7 +1697,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards pinned canonical Google API-key profiles to Google models routed through Gemini CLI", async () => {
     const sessionKey = "agent:main:direct:gemini-cli-google-api-key";
-    const sessionEntry = makeSessionEntry("openclaw-session-gemini-api-key", {
+    const sessionEntry = makeSessionEntry("natesclaw-session-gemini-api-key", {
       authProfileOverride: "google:api-key",
       authProfileOverrideSource: "user",
     });
@@ -1731,7 +1731,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       runId: "run-gemini-cli-google-api-key",
@@ -1745,7 +1745,7 @@ describe("CLI attempt execution", () => {
 
   it("rejects incompatible pinned profiles before selecting another CLI identity", async () => {
     const sessionKey = "agent:main:direct:gemini-cli-incompatible-auth";
-    const sessionEntry = makeSessionEntry("openclaw-session-gemini-incompatible-auth", {
+    const sessionEntry = makeSessionEntry("natesclaw-session-gemini-incompatible-auth", {
       authProfileOverride: "vercel-ai-gateway:default",
       authProfileOverrideSource: "user",
     });
@@ -1778,7 +1778,7 @@ describe("CLI attempt execution", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         sessionEntry,
         sessionKey,
         runId: "run-gemini-cli-incompatible-auth",
@@ -1791,7 +1791,7 @@ describe("CLI attempt execution", () => {
 
   it("ignores stale auto-selected profiles when resolving Gemini CLI auth order", async () => {
     const sessionKey = "agent:main:direct:gemini-cli-stale-auto-auth";
-    const sessionEntry = makeSessionEntry("openclaw-session-gemini-stale-auto-auth", {
+    const sessionEntry = makeSessionEntry("natesclaw-session-gemini-stale-auto-auth", {
       authProfileOverride: "openai:work",
       authProfileOverrideSource: "auto",
     });
@@ -1837,7 +1837,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       runId: "run-gemini-cli-stale-auto-auth",
@@ -1851,7 +1851,7 @@ describe("CLI attempt execution", () => {
 
   it("selects canonical Google API-key auth order for Google models routed through Gemini CLI", async () => {
     const sessionKey = "agent:main:direct:gemini-cli-google-api-key-order";
-    const sessionEntry = makeSessionEntry("openclaw-session-gemini-api-key-order");
+    const sessionEntry = makeSessionEntry("natesclaw-session-gemini-api-key-order");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     saveAuthProfileStore(
       {
@@ -1887,7 +1887,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       runId: "run-gemini-cli-google-api-key-order",
@@ -1906,7 +1906,7 @@ describe("CLI attempt execution", () => {
       const sessionId = `internal-${visibleSessionId}`;
       const sessionKey = `agent:main:internal-session-effects:${visibleSessionId}`;
       setTestEnvValue("HOME", tmpDir);
-      setTestEnvValue("OPENCLAW_STATE_DIR", path.join(tmpDir, "state"));
+      setTestEnvValue("NATESCLAW_STATE_DIR", path.join(tmpDir, "state"));
       const internalStorePath = storePath;
       const internalSessionFile = formatSqliteSessionFileMarker({
         agentId: "main",
@@ -2236,7 +2236,7 @@ describe("CLI attempt execution", () => {
       expect.objectContaining({
         role: "user",
         content: "",
-        __openclaw: {
+        __natesclaw: {
           media: [
             expect.objectContaining({
               path: "/media/inbound/image-1.png",
@@ -2338,7 +2338,7 @@ describe("CLI attempt execution", () => {
     expect(messages).toHaveLength(1);
   });
 
-  it("embedded assistant gap-fill skips trailing openclaw.cache-ttl custom entries (regression for #83427)", async () => {
+  it("embedded assistant gap-fill skips trailing natesclaw.cache-ttl custom entries (regression for #83427)", async () => {
     const sessionKey = "agent:main:subagent:embedded-gap-fill-cache-ttl";
     const sessionEntry = makeSessionEntry("session-embedded-gap-fill-cache-ttl");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
@@ -2369,7 +2369,7 @@ describe("CLI attempt execution", () => {
       { agentId: "main", sessionId: sessionEntry.sessionId, sessionKey, storePath },
       {
         type: "custom",
-        customType: "openclaw.cache-ttl",
+        customType: "natesclaw.cache-ttl",
         timestamp: new Date().toISOString(),
         data: {
           provider: "anthropic",
@@ -2481,9 +2481,9 @@ describe("CLI attempt execution", () => {
 
     await persistCliTranscriptEntry({
       body: [
-        "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+        "<<<BEGIN_NATESCLAW_INTERNAL_CONTEXT>>>",
         "secret runtime context",
-        "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+        "<<<END_NATESCLAW_INTERNAL_CONTEXT>>>",
         "",
         "visible ask",
       ].join("\n"),
@@ -2513,7 +2513,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards separate user trigger, channel, and provider context to CLI runs", async () => {
     const sessionKey = "agent:main:direct:claude-channel-context";
-    const sessionEntry = makeSessionEntry("openclaw-session-channel");
+    const sessionEntry = makeSessionEntry("natesclaw-session-channel");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("channel aware"));
@@ -2556,7 +2556,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards message-tool-only policy and requires explicit subagent targets", async () => {
     const sessionKey = "agent:main:subagent:claude-message-policy";
-    const sessionEntry = makeSessionEntry("openclaw-session-cli-message-policy");
+    const sessionEntry = makeSessionEntry("natesclaw-session-cli-message-policy");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("sent"));
@@ -2581,7 +2581,7 @@ describe("CLI attempt execution", () => {
 
   it("does not pass auth-order profiles to CLI backends that do not stage them", async () => {
     const sessionKey = "agent:main:direct:claude-auth-order";
-    const sessionEntry = makeSessionEntry("openclaw-session-claude-auth-order");
+    const sessionEntry = makeSessionEntry("natesclaw-session-claude-auth-order");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("ambient claude cli"));
@@ -2595,7 +2595,7 @@ describe("CLI attempt execution", () => {
             "claude-cli": ["claude-cli:work"],
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "use ambient cli auth",
@@ -2609,7 +2609,7 @@ describe("CLI attempt execution", () => {
 
   it("does not pass auth-order profiles to configured CLI runtimes that do not stage them", async () => {
     const sessionKey = "agent:main:direct:anthropic-claude-runtime-auth-order";
-    const sessionEntry = makeSessionEntry("openclaw-session-anthropic-claude-runtime-auth-order");
+    const sessionEntry = makeSessionEntry("natesclaw-session-anthropic-claude-runtime-auth-order");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     saveAuthProfileStore(
       {
@@ -2643,7 +2643,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "use ambient cli auth",
@@ -2690,7 +2690,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards runtime toolsAllow into CLI attempts so the CLI harness can fail closed", async () => {
     const sessionKey = "agent:main:direct:claude-tools-allow";
-    const sessionEntry = makeSessionEntry("openclaw-session-cli-tools-allow");
+    const sessionEntry = makeSessionEntry("natesclaw-session-cli-tools-allow");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("restricted cli"));
@@ -2729,7 +2729,7 @@ describe("CLI attempt execution", () => {
       expectedToolsAllow,
     }) => {
       const sessionKey = "agent:main:direct:claude-announce";
-      const sessionEntry = makeSessionEntry("openclaw-session-cli-announce");
+      const sessionEntry = makeSessionEntry("natesclaw-session-cli-announce");
       const sessionStore = createSubagentAnnounceSessionStore(sessionKey, sessionEntry, {
         inheritedToolAllow,
         inheritedToolDeny,
@@ -2796,7 +2796,7 @@ describe("CLI attempt execution", () => {
       const runId = `embedded-announce-${sourceReplyDeliveryMode}-${disableMessageTool}`;
       const sessionKey = `agent:main:direct:${runId}`;
       const sessionId = `session-${runId}`;
-      const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+      const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
         runId,
         body: "A background task finished. Process the completion update now.",
         config: {
@@ -2837,8 +2837,8 @@ describe("CLI attempt execution", () => {
 
   it("keeps trusted CLI completion handoffs tool-free when inherited policy is restricted", async () => {
     const sessionKey = "agent:main:direct:claude-trusted-announce";
-    const childSessionKey = "agent:openclaw:subagent:child";
-    const sessionEntry = makeSessionEntry("openclaw-session-cli-trusted-announce");
+    const childSessionKey = "agent:natesclaw:subagent:child";
+    const sessionEntry = makeSessionEntry("natesclaw-session-cli-trusted-announce");
     const sessionStore: Record<string, SessionEntry> = {
       [sessionKey]: sessionEntry,
       [childSessionKey]: {
@@ -2858,7 +2858,7 @@ describe("CLI attempt execution", () => {
     await runStoredAttempt({
       providerOverride: "claude-cli",
       modelOverride: "opus",
-      cfg: { session: { store: storePath } } as OpenClawConfig,
+      cfg: { session: { store: storePath } } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "A background task finished. Process the completion update now.",
@@ -2910,7 +2910,7 @@ describe("CLI attempt execution", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2024-06-05T15:30:00Z"));
     const sessionKey = "agent:main:direct:claude-timestamp";
-    const sessionEntry = makeSessionEntry("openclaw-session-cli-timestamp");
+    const sessionEntry = makeSessionEntry("natesclaw-session-cli-timestamp");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("timestamped cli"));
@@ -2934,7 +2934,7 @@ describe("CLI attempt execution", () => {
     await runStoredAttempt({
       providerOverride: "claude-cli",
       modelOverride: "opus",
-      cfg: { agents: { defaults: { userTimezone: "UTC" } } } as OpenClawConfig,
+      cfg: { agents: { defaults: { userTimezone: "UTC" } } } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "what time is it?",
@@ -2958,7 +2958,7 @@ describe("CLI attempt execution", () => {
 
   it("routes canonical Anthropic models through the configured Claude CLI runtime", async () => {
     const sessionKey = "agent:main:direct:canonical-claude-cli";
-    const sessionEntry = makeSessionEntry("openclaw-session-canonical-cli");
+    const sessionEntry = makeSessionEntry("natesclaw-session-canonical-cli");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("canonical cli"));
@@ -2977,7 +2977,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "route this",
@@ -2999,7 +2999,7 @@ describe("CLI attempt execution", () => {
     });
     expect(fallbackRuntimeState.originRuntime).toBe("cli");
 
-    const fallbackArg = await runOpenClawEmbeddedAttemptForTest({
+    const fallbackArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "run-canonical-claude-cli-fallback",
       isFallbackRetry: true,
       fallbackRuntimeState,
@@ -3010,7 +3010,7 @@ describe("CLI attempt execution", () => {
 
   it("routes provider-qualified Anthropic shorthand through the configured Claude CLI runtime", async () => {
     const sessionKey = "agent:main:direct:shorthand-claude-cli";
-    const sessionEntry = makeSessionEntry("openclaw-session-shorthand-cli");
+    const sessionEntry = makeSessionEntry("natesclaw-session-shorthand-cli");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("shorthand cli"));
@@ -3026,7 +3026,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "route this",
@@ -3044,7 +3044,7 @@ describe("CLI attempt execution", () => {
 
   it("routes canonical OpenAI models through the configured embedded Codex runtime", async () => {
     const sessionKey = "agent:main:direct:canonical-codex-cli";
-    const sessionEntry = makeSessionEntry("openclaw-session-canonical-codex-cli");
+    const sessionEntry = makeSessionEntry("natesclaw-session-canonical-codex-cli");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runEmbeddedAgentMock.mockResolvedValueOnce({
@@ -3052,7 +3052,7 @@ describe("CLI attempt execution", () => {
       meta: {
         durationMs: 5,
         finalAssistantVisibleText: "canonical codex embedded",
-        executionTrace: { runner: "openclaw" },
+        executionTrace: { runner: "natesclaw" },
       },
     });
 
@@ -3065,7 +3065,7 @@ describe("CLI attempt execution", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "route this",
@@ -3096,7 +3096,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("keeps live stream output for visible subagent lane runs", async () => {
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       opts: { lane: "subagent" },
       runId: "visible-subagent-stream",
     });
@@ -3111,7 +3111,7 @@ describe("CLI attempt execution", () => {
       throw new Error("expected cron creator authority capability");
     }
 
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId,
       opts: { cronCreatorAuthorityCapability: capability },
     });
@@ -3120,7 +3120,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("forwards Gateway plugin runtime binding to embedded runs", async () => {
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       opts: { allowGatewaySubagentBinding: true },
       runId: "gateway-plugin-runtime-binding",
     });
@@ -3129,7 +3129,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("suppresses live stream output for hidden internal runs", async () => {
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       opts: { lane: "subagent", sessionEffects: "internal" },
       runId: "internal-subagent-stream",
     });
@@ -3152,7 +3152,7 @@ describe("CLI attempt execution", () => {
       model: "glm-4.5",
     };
 
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId,
       modelOverride: "glm-4.5",
       additionalSessionEntries: {
@@ -3209,7 +3209,7 @@ describe("CLI attempt execution", () => {
       model: "glm-4.5",
     };
 
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId,
       sessionKey: requesterSessionKey,
       modelOverride: "glm-4.5",
@@ -3278,7 +3278,7 @@ describe("CLI attempt execution", () => {
       result: "child output",
       replyInstruction: "Review and continue.",
     };
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId,
       modelOverride: "glm-4.5",
       additionalSessionEntries: {
@@ -3319,7 +3319,7 @@ describe("CLI attempt execution", () => {
     const childSessionKey = "agent:main:subagent:missing";
     const sessionKey = `agent:main:direct:${runId}`;
     const sessionId = `session-${runId}`;
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId,
       modelOverride: "glm-4.5",
       opts: {
@@ -3367,7 +3367,7 @@ describe("CLI attempt execution", () => {
       }),
     });
     const images = [{ type: "image" as const, data: "aGVsbG8=", mimeType: "image/png" }];
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "embedded-image-turn",
       body: "runtime image prompt",
       transcriptBody: "canonical image caption",
@@ -3393,7 +3393,7 @@ describe("CLI attempt execution", () => {
     async ({ originRuntime, retry, expectedImages }) => {
       const images = [{ type: "image" as const, data: "aGVsbG8=", mimeType: "image/png" }];
       const imageOrder = ["inline" as const];
-      const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+      const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
         runId: `embedded-image-fallback-${originRuntime ?? "unset"}-${retry}`,
         isFallbackRetry: retry,
         fallbackRuntimeState: originRuntime === undefined ? undefined : { originRuntime },
@@ -3409,7 +3409,7 @@ describe("CLI attempt execution", () => {
     const images = [{ type: "image" as const, data: "aGVsbG8=", mimeType: "image/png" }];
     const fallbackRuntimeState: NonNullable<RunAgentAttemptParams["fallbackRuntimeState"]> = {};
 
-    const firstArg = await runOpenClawEmbeddedAttemptForTest({
+    const firstArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "raw-cli-shaped-origin",
       providerOverride: "claude-cli",
       modelOverride: "claude-opus-4-7",
@@ -3419,7 +3419,7 @@ describe("CLI attempt execution", () => {
     expect(fallbackRuntimeState.originRuntime).toBe("embedded");
     expect(firstArg.images).toEqual(images);
 
-    const retryArg = await runOpenClawEmbeddedAttemptForTest({
+    const retryArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "raw-cli-shaped-origin-retry",
       providerOverride: "claude-cli",
       modelOverride: "claude-opus-4-7",
@@ -3432,7 +3432,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards selected auth profiles through metadata-scoped provider aliases", async () => {
     const sessionKey = "agent:main:direct:metadata-auth-alias";
-    const sessionEntry = makeSessionEntry("openclaw-session-metadata-auth-alias", {
+    const sessionEntry = makeSessionEntry("natesclaw-session-metadata-auth-alias", {
       authProfileOverride: "openai:work",
       authProfileOverrideSource: "user",
     });
@@ -3488,7 +3488,7 @@ describe("CLI attempt execution", () => {
   it("forwards user-pinned OpenAI API-key backup profiles to Codex harness runs", async () => {
     const { clearAgentHarnesses, registerAgentHarness } = await import("../harness/registry.js");
     const sessionKey = "agent:main:direct:openai-chatgpt-api-key";
-    const sessionEntry = makeSessionEntry("openclaw-session-openai-chatgpt-api-key", {
+    const sessionEntry = makeSessionEntry("natesclaw-session-openai-chatgpt-api-key", {
       authProfileOverride: "openai:backup",
       authProfileOverrideSource: "user",
     });
@@ -3540,7 +3540,7 @@ describe("CLI attempt execution", () => {
 
   it("keeps one-shot model runs on the raw embedded provider path", async () => {
     const sessionKey = "agent:main:direct:model-run-raw";
-    const sessionEntry = makeSessionEntry("openclaw-session-model-run-raw");
+    const sessionEntry = makeSessionEntry("natesclaw-session-model-run-raw");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runEmbeddedAgentMock.mockResolvedValueOnce({
@@ -3556,7 +3556,7 @@ describe("CLI attempt execution", () => {
             agentRuntime: { id: "claude-cli" },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       sessionKey,
       body: "raw prompt",
@@ -3580,7 +3580,7 @@ describe("CLI attempt execution", () => {
     expectMockArgFields(runEmbeddedAgentMock, {
       provider: "anthropic",
       model: "claude-opus-4-7",
-      agentHarnessId: "openclaw",
+      agentHarnessId: "natesclaw",
       prompt: "raw prompt",
       messageChannel: "discord",
       messageProvider: "discord-voice",
@@ -3593,7 +3593,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards trusted elevated defaults to embedded agent runs", async () => {
     const sessionKey = "agent:main:telegram:direct:123";
-    const sessionEntry = makeSessionEntry("openclaw-session-elevated-followup");
+    const sessionEntry = makeSessionEntry("natesclaw-session-elevated-followup");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     const bashElevated = {
       enabled: true,
@@ -3624,7 +3624,7 @@ describe("CLI attempt execution", () => {
 
   it("forwards one-shot CLI cleanup to CLI providers", async () => {
     const sessionKey = "agent:main:direct:cleanup-claude-cli";
-    const sessionEntry = makeSessionEntry("openclaw-session-cleanup-cli");
+    const sessionEntry = makeSessionEntry("natesclaw-session-cleanup-cli");
     const sessionStore: Record<string, SessionEntry> = { [sessionKey]: sessionEntry };
     await writeSessionStoreSeed(sessionStore);
     runCliAgentMock.mockResolvedValueOnce(makeCliResult("cleanup cli"));
@@ -3651,7 +3651,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("replaces a stale automatic session profile with the configured model profile", async () => {
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "configured-auth-replaces-auto",
       configuredAuthProfileId: "openai:verified",
       sessionEntry: {
@@ -3667,7 +3667,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("replaces a legacy marker-backed automatic profile with the configured model profile", async () => {
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "configured-auth-replaces-legacy-auto",
       configuredAuthProfileId: "openai:verified",
       sessionEntry: {
@@ -3683,7 +3683,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("preserves an explicit session profile over the configured model profile", async () => {
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "session-auth-over-configured",
       configuredAuthProfileId: "openai:verified",
       sessionEntry: {
@@ -3699,7 +3699,7 @@ describe("CLI attempt execution", () => {
   });
 
   it("preserves a legacy source-less user profile over the configured model profile", async () => {
-    const embeddedArg = await runOpenClawEmbeddedAttemptForTest({
+    const embeddedArg = await runNatesclawEmbeddedAttemptForTest({
       runId: "legacy-session-auth-over-configured",
       configuredAuthProfileId: "openai:verified",
       sessionEntry: {
@@ -3718,7 +3718,7 @@ describe("embedded attempt harness pinning", () => {
   let tmpDir: string;
 
   beforeEach(async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-embedded-attempt-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-embedded-attempt-"));
     runCliAgentMock.mockReset();
     runEmbeddedAgentMock.mockReset();
   });
@@ -3781,7 +3781,7 @@ describe("embedded attempt harness pinning", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       agentHarnessRuntimeOverride: "codex",
       body: "switch to minimax",
@@ -3876,7 +3876,7 @@ describe("embedded attempt harness pinning", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       runId: "run-codex-no-runtime-pin",
       sessionHasHistory: true,
@@ -3947,9 +3947,9 @@ describe("embedded attempt harness pinning", () => {
     expectMockArgFields(runEmbeddedAgentMock, { agentHarnessId: undefined });
   });
 
-  it("honors a resolved persisted OpenClaw harness", async () => {
+  it("honors a resolved persisted Natesclaw harness", async () => {
     const sessionEntry = makeSessionEntry("stale-agent-session", {
-      agentHarnessId: "openclaw",
+      agentHarnessId: "natesclaw",
     });
     runEmbeddedAgentMock.mockResolvedValueOnce({
       meta: { durationMs: 1 },
@@ -3957,21 +3957,21 @@ describe("embedded attempt harness pinning", () => {
 
     await runHarnessAttempt({
       sessionEntry,
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessRuntimeOverride: "natesclaw",
       runId: "run-stale-openai-runtime-pin",
       sessionHasHistory: true,
     });
 
     expectMockArgFields(runEmbeddedAgentMock, {
       provider: "openai",
-      agentHarnessId: "openclaw",
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessId: "natesclaw",
+      agentHarnessRuntimeOverride: "natesclaw",
     });
   });
 
-  it("honors an explicit OpenClaw session runtime override", async () => {
-    const sessionEntry = makeSessionEntry("explicit-openclaw-session", {
-      agentRuntimeOverride: "openclaw",
+  it("honors an explicit Natesclaw session runtime override", async () => {
+    const sessionEntry = makeSessionEntry("explicit-natesclaw-session", {
+      agentRuntimeOverride: "natesclaw",
       agentHarnessId: "codex",
     });
     runEmbeddedAgentMock.mockResolvedValueOnce({
@@ -3981,22 +3981,22 @@ describe("embedded attempt harness pinning", () => {
     await runHarnessAttempt({
       modelOverride: "gpt-5.6-luna",
       sessionEntry,
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessRuntimeOverride: "natesclaw",
       resolvedThinkLevel: "ultra",
-      runId: "run-explicit-openclaw-runtime",
+      runId: "run-explicit-natesclaw-runtime",
       sessionHasHistory: true,
     });
 
     expectMockArgFields(runEmbeddedAgentMock, {
       provider: "openai",
       model: "gpt-5.6-luna",
-      agentHarnessId: "openclaw",
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessId: "natesclaw",
+      agentHarnessRuntimeOverride: "natesclaw",
       thinkLevel: "ultra",
     });
   });
 
-  it("routes explicit OpenAI native runs with legacy Codex OAuth through OpenClaw", async () => {
+  it("routes explicit OpenAI native runs with legacy Codex OAuth through Natesclaw", async () => {
     const sessionEntry = makeSessionEntry("explicit-agent-codex-oauth-session", {
       authProfileOverride: "openai:work",
       authProfileOverrideSource: "user",
@@ -4011,12 +4011,12 @@ describe("embedded attempt harness pinning", () => {
           providers: {
             openai: {
               baseUrl: "https://api.openai.com/v1",
-              agentRuntime: { id: "openclaw" },
+              agentRuntime: { id: "natesclaw" },
               models: [],
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       runId: "run-openai-agent-codex-oauth",
     });
@@ -4024,8 +4024,8 @@ describe("embedded attempt harness pinning", () => {
     expectMockArgFields(runEmbeddedAgentMock, {
       provider: "openai",
       model: "gpt-5.4",
-      agentHarnessId: "openclaw",
-      agentHarnessRuntimeOverride: "openclaw",
+      agentHarnessId: "natesclaw",
+      agentHarnessRuntimeOverride: "natesclaw",
       authProfileId: "openai:work",
       authProfileIdSource: "user",
     });
@@ -4045,7 +4045,7 @@ describe("embedded attempt harness pinning", () => {
             agentRuntime: { id: "claude-cli" },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionEntry,
       body: "fallback",
       isFallbackRetry: true,

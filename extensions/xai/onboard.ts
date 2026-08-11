@@ -1,8 +1,8 @@
 // Xai setup module handles plugin onboarding behavior.
 import {
   createModelCatalogPresetAppliers,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/provider-onboard";
+  type NatesclawConfig,
+} from "natesclaw/plugin-sdk/provider-onboard";
 import {
   buildXaiCatalogModels,
   isLegacyXaiBuiltinModel,
@@ -19,7 +19,7 @@ export const XAI_OAUTH_DEFAULT_MODEL_REF = `xai/${XAI_OAUTH_AUTO_MODEL_ID}`;
 function createXaiPresetAppliers(primaryModelRef: string) {
   return createModelCatalogPresetAppliers<["openai-completions" | "openai-responses"]>({
     primaryModelRef,
-    resolveParams: (_cfg: OpenClawConfig, api) => ({
+    resolveParams: (_cfg: NatesclawConfig, api) => ({
       providerId: "xai",
       api,
       baseUrl: XAI_BASE_URL,
@@ -32,7 +32,7 @@ function createXaiPresetAppliers(primaryModelRef: string) {
 const xaiPresetAppliers = createXaiPresetAppliers(XAI_DEFAULT_MODEL_REF);
 const xaiOAuthPresetAppliers = createXaiPresetAppliers(XAI_OAUTH_DEFAULT_MODEL_REF);
 
-function pruneRetiredXaiBuiltinModels(cfg: OpenClawConfig): OpenClawConfig {
+function pruneRetiredXaiBuiltinModels(cfg: NatesclawConfig): NatesclawConfig {
   const provider = cfg.models?.providers?.xai;
   if (!provider || !Array.isArray(provider.models)) {
     return cfg;
@@ -56,17 +56,17 @@ function pruneRetiredXaiBuiltinModels(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyXaiProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXaiProviderConfig(cfg: NatesclawConfig): NatesclawConfig {
   return xaiPresetAppliers.applyProviderConfig(
     pruneRetiredXaiBuiltinModels(cfg),
     "openai-responses",
   );
 }
 
-export function applyXaiConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXaiConfig(cfg: NatesclawConfig): NatesclawConfig {
   return xaiPresetAppliers.applyConfig(pruneRetiredXaiBuiltinModels(cfg), "openai-responses");
 }
 
-export function applyXaiOAuthConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXaiOAuthConfig(cfg: NatesclawConfig): NatesclawConfig {
   return xaiOAuthPresetAppliers.applyConfig(pruneRetiredXaiBuiltinModels(cfg), "openai-responses");
 }

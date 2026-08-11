@@ -12,11 +12,11 @@ import {
   upsertSessionEntryCore,
 } from "../../config/sessions/session-accessor.js";
 import { waitForSessionTranscriptIndexReconcile } from "../../config/sessions/session-transcript-reconcile.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resetAgentEventsForTest } from "../../infra/agent-events.js";
 import { clearAgentRunContext, registerAgentRunContext } from "../../infra/agent-run-registry.js";
-import { openOpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import { openNatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
+import { withNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import type { GatewaySessionRow } from "../session-utils.types.js";
 import type { GatewayClient, GatewayRequestContext, RespondFn } from "./types.js";
 
@@ -59,7 +59,7 @@ function identifiedClient(profileId: string): GatewayClient {
     connect: {
       minProtocol: 1,
       maxProtocol: 1,
-      client: { id: "openclaw-control-ui", version: "test", platform: "test", mode: "webchat" },
+      client: { id: "natesclaw-control-ui", version: "test", platform: "test", mode: "webchat" },
       role: "operator",
       scopes: ["operator.read", "operator.write"],
     },
@@ -72,7 +72,7 @@ function identifiedClient(profileId: string): GatewayClient {
   };
 }
 
-function requestContext(config: OpenClawConfig): GatewayRequestContext {
+function requestContext(config: NatesclawConfig): GatewayRequestContext {
   return {
     chatAbortControllers: new Map(),
     getRuntimeConfig: () => config,
@@ -104,8 +104,8 @@ async function listSessions(params: {
   };
 }
 
-async function seedSessions(): Promise<OpenClawConfig> {
-  const config: OpenClawConfig = {
+async function seedSessions(): Promise<NatesclawConfig> {
+  const config: NatesclawConfig = {
     agents: { list: [{ id: "main", default: true }, { id: "work" }] },
   };
   await upsertSessionEntryCore(
@@ -187,7 +187,7 @@ describe("sessions.list single-flight", () => {
     { agentId: "work", archived: "all" as const, limit: 10 },
     { archived: "all" as const, limit: 2 },
   ])("preserves output for filters and pagination: %j", async (request) => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       vi.spyOn(Date, "now").mockReturnValue(1_800_000_000_000);
       const config = await seedSessions();
       const client = identifiedClient("owner@example.com");
@@ -207,7 +207,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("collapses concurrent identical requests to one combined store load", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -225,7 +225,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("reuses a completed result until the session mutation version advances", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -245,7 +245,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("does not cache title rows degraded during projection rebuild", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async (state) => {
+    await withNatesclawTestState({ scenario: "minimal" }, async (state) => {
       const config = await seedSessions();
       const sessionKey = "agent:main:active";
       const sessionId = "main-active";
@@ -259,7 +259,7 @@ describe("sessions.list single-flight", () => {
           touchSessionEntry: false,
         },
       );
-      const database = openOpenClawAgentDatabase({ agentId: "main", env: state.env });
+      const database = openNatesclawAgentDatabase({ agentId: "main", env: state.env });
       database.db
         .prepare("UPDATE session_transcript_index_state SET needs_rebuild = 1 WHERE session_id = ?")
         .run(sessionId);
@@ -292,7 +292,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("invalidates a completed result after an external session identity mutation", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -317,7 +317,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("expires completed rows at the earliest projected agent-status deadline", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const clock = vi.spyOn(Date, "now").mockReturnValue(1_000);
       const config = await seedSessions();
       for (const [name, expiresAt] of [
@@ -376,7 +376,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("expires retained child links when the child is outside the visible page", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const { clock, config } = await seedSessionsWithActivityTimes();
       const parentSessionKey = "agent:main:active";
       const childSessionKey = "agent:main:zzz-child";
@@ -410,7 +410,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("refreshes live subagent runtimes while retaining concurrent single-flight", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const now = 1_800_000_000_000;
       const clock = vi.spyOn(Date, "now").mockReturnValue(now);
       const config = await seedSessions();
@@ -477,7 +477,7 @@ describe("sessions.list single-flight", () => {
       after: { keys: ["agent:main:active"], totalCount: 2 },
     },
   ])("refreshes activity-filtered results when $description", async (scenario) => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const { clock, config } = await seedSessionsWithActivityTimes();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -502,7 +502,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("collapses concurrent activity-filtered requests into one projection", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const { clock, config } = await seedSessionsWithActivityTimes();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -520,7 +520,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("expires completed children from parent-filtered listings at the retention boundary", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const { clock, config } = await seedSessionsWithActivityTimes();
       const parentSessionKey = "agent:main:active";
       const childSessionKey = "agent:main:child";
@@ -552,7 +552,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("rejects a zero-minute activity window without loading the session store", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const respond = vi.fn();
 
@@ -573,7 +573,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("rebuilds a completed result when a projected run ends without a store mutation", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -613,7 +613,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("does not cache a reply-owned active projection past turn completion", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -643,7 +643,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("does not share filtered results across client identities", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const context = requestContext(config);
 
@@ -667,7 +667,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("refills a page from the loaded store when a selected row becomes hidden", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       for (const [name, updatedAt] of [
         ["third", 500],
@@ -724,7 +724,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("rejects followers and retries after an underlying store failure", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       const context = requestContext(config);
       const client = identifiedClient("owner@example.com");
@@ -743,7 +743,7 @@ describe("sessions.list single-flight", () => {
   });
 
   it("does not share work that started before an intervening session mutation", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const config = await seedSessions();
       let releaseRows!: () => void;
       loader.rowGate = new Promise<void>((resolve) => {

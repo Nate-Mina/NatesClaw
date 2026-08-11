@@ -5,8 +5,8 @@
  */
 
 import { Buffer } from "node:buffer";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { getPlatformAdapter } from "../adapter/index.js";
 import type { SsrfPolicyConfig } from "../adapter/types.js";
 import { debugLog } from "./log.js";

@@ -1,29 +1,29 @@
 // Memory Core plugin module implements session search visibility behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import type { MemorySearchResult } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
-import { resolveSessionAgentId } from "openclaw/plugin-sdk/memory-host-core";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
-import { sessionDeliveryOrigin } from "openclaw/plugin-sdk/session-store-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
+import type { MemorySearchResult } from "natesclaw/plugin-sdk/memory-core-host-runtime-files";
+import { resolveSessionAgentId } from "natesclaw/plugin-sdk/memory-host-core";
+import type { NatesclawPluginToolContext } from "natesclaw/plugin-sdk/plugin-entry";
+import { sessionDeliveryOrigin } from "natesclaw/plugin-sdk/session-store-runtime";
 import {
   extractTranscriptIdentityFromSessionsMemoryHit,
   loadCombinedSessionStoreForGateway,
   resolveTranscriptStemToSessionKeys,
-} from "openclaw/plugin-sdk/session-transcript-hit";
+} from "natesclaw/plugin-sdk/session-transcript-hit";
 import {
   createAgentToAgentPolicy,
   createSessionVisibilityGuard,
   resolveEffectiveSessionToolsVisibility,
-} from "openclaw/plugin-sdk/session-visibility";
+} from "natesclaw/plugin-sdk/session-visibility";
 
 function normalizeAgentIdForCompare(value: string | undefined): string | undefined {
   return value?.trim().toLowerCase() || undefined;
 }
 
-function isGlobalSessionKeyForSharedScope(cfg: OpenClawConfig, key: string): boolean {
+function isGlobalSessionKeyForSharedScope(cfg: NatesclawConfig, key: string): boolean {
   return cfg.session?.scope === "global" && key.trim().toLowerCase() === "global";
 }
 
-type ConversationRecallContext = NonNullable<OpenClawPluginToolContext["conversationRecall"]>;
+type ConversationRecallContext = NonNullable<NatesclawPluginToolContext["conversationRecall"]>;
 
 type SessionStore = ReturnType<typeof loadCombinedSessionStoreForGateway>["store"];
 
@@ -135,7 +135,7 @@ function isTrustedRecallRequester(params: {
 }
 
 function filterSessionKeysByScopedAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   keys: string[];
   scopedAgentId: string | undefined;
 }): string[] {
@@ -156,7 +156,7 @@ function filterSessionKeysByScopedAgent(params: {
 }
 
 export async function filterMemorySearchHitsBySessionVisibility(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
   requesterSessionKey: string | undefined;
   sandboxed: boolean;

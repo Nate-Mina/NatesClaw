@@ -2,10 +2,10 @@ import { createHash } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import { REQUEST, seedActivePlacement } from "./placement-dispatch-test-fixtures.js";
 import { FORCED_WORKER_ABANDONMENT_ERROR } from "./placement-force-abandon.js";
 import {
@@ -17,17 +17,17 @@ const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 describe("worker placement workspace journal", () => {
   let root: string;
-  let database: OpenClawStateDatabase;
+  let database: NatesclawStateDatabase;
   let store: WorkerSessionPlacementStore;
 
   beforeEach(() => {
-    root = tempDirs.make("openclaw-journal-");
-    database = openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: root } });
+    root = tempDirs.make("natesclaw-journal-");
+    database = openNatesclawStateDatabase({ env: { NATESCLAW_STATE_DIR: root } });
     store = createWorkerSessionPlacementStore({ database, now: () => 1_000 });
   });
 
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
   });
 
   const prune = () =>

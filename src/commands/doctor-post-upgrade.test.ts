@@ -52,7 +52,7 @@ async function writePluginFixture(
       "utf-8",
     );
   }
-  const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+  const manifestPath = path.join(pluginDir, "natesclaw.plugin.json");
   if (params.manifest !== false) {
     await fs.writeFile(manifestPath, JSON.stringify(params.manifest ?? { id: params.id }), "utf-8");
   }
@@ -177,7 +177,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           code: "plugin.entry_unresolved",
           plugin: "broken",
           entry: "missing-package.json",
-          message: expect.stringContaining("openclaw plugins registry --refresh"),
+          message: expect.stringContaining("natesclaw plugins registry --refresh"),
         }),
       ]);
       const line = stderrSpy.mock.calls.map(([value]) => String(value)).join("");
@@ -207,7 +207,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           code: "plugin.entry_unresolved",
           plugin: "broken",
           entry: "package.json",
-          message: expect.stringContaining("openclaw plugins registry --refresh"),
+          message: expect.stringContaining("natesclaw plugins registry --refresh"),
         }),
       ]);
       expect(stderrSpy).toHaveBeenCalled();
@@ -248,32 +248,32 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
   it.each([
     {
       label: "non-object metadata",
-      openclaw: "invalid",
-      reason: "package.json openclaw must be an object",
+      natesclaw: "invalid",
+      reason: "package.json natesclaw must be an object",
     },
     {
       label: "non-array entries",
-      openclaw: { extensions: "./dist/index.js" },
-      reason: "package.json openclaw.extensions must be an array",
+      natesclaw: { extensions: "./dist/index.js" },
+      reason: "package.json natesclaw.extensions must be an array",
     },
     {
       label: "blank entries",
-      openclaw: { extensions: ["  "] },
-      reason: "package.json openclaw.extensions[0] must be a non-empty string",
+      natesclaw: { extensions: ["  "] },
+      reason: "package.json natesclaw.extensions[0] must be a non-empty string",
     },
     {
       label: "non-string entries",
-      openclaw: { extensions: [42] },
-      reason: "package.json openclaw.extensions[0] must be a non-empty string",
+      natesclaw: { extensions: [42] },
+      reason: "package.json natesclaw.extensions[0] must be a non-empty string",
     },
   ])(
     "reports $label through the canonical package contract",
-    async ({ label, openclaw, reason }) => {
+    async ({ label, natesclaw, reason }) => {
       const root = await makeFixtureRoot(`entry-invalid-${label.replaceAll(" ", "-")}`);
       try {
         const installsPath = await writeDeclaredPackageFixture(
           root,
-          JSON.stringify({ name: "broken", openclaw }),
+          JSON.stringify({ name: "broken", natesclaw }),
         );
         const report = await runPostUpgradeProbes({ installsPath });
 
@@ -302,11 +302,11 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "sqlite-ghost",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./dist/index.js"] },
+          natesclaw: { extensions: ["./dist/index.js"] },
         }),
         "utf-8",
       );
-      const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+      const manifestPath = path.join(pluginDir, "natesclaw.plugin.json");
       await fs.writeFile(manifestPath, JSON.stringify({ id: "sqlite-ghost" }), "utf-8");
       const index: InstalledPluginIndex = {
         version: 1,
@@ -356,7 +356,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "ghost",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./dist/index.js"] },
+          natesclaw: { extensions: ["./dist/index.js"] },
         },
       });
 
@@ -377,7 +377,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "good",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./dist/index.js"] },
+          natesclaw: { extensions: ["./dist/index.js"] },
         },
         files: { "dist/index.js": "export default {};" },
       });
@@ -409,7 +409,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "legacy-package",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./src/index.ts"] },
+          natesclaw: { extensions: ["./src/index.ts"] },
         },
         files: { "src/index.ts": "export default {};" },
         includePackageJsonRecord: false,
@@ -435,7 +435,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "escape",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["../outside/leak.js"] },
+          natesclaw: { extensions: ["../outside/leak.js"] },
         },
       });
 
@@ -457,7 +457,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "ts-dist",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./src/index.ts"] },
+          natesclaw: { extensions: ["./src/index.ts"] },
         },
         files: {
           "src/index.ts": "export default {};",
@@ -479,7 +479,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "ts-only",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./src/index.ts"] },
+          natesclaw: { extensions: ["./src/index.ts"] },
         },
         files: { "src/index.ts": "export default {};" },
       });
@@ -506,7 +506,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "ts-source",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./src/index.ts"] },
+          natesclaw: { extensions: ["./src/index.ts"] },
         },
         files: { "src/index.ts": "export default {};" },
       });
@@ -526,7 +526,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "ts-packaged",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./src/index.ts"] },
+          natesclaw: { extensions: ["./src/index.ts"] },
         },
         files: { "src/index.ts": "export default {};" },
       });
@@ -547,7 +547,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "len-mismatch",
           version: "0.0.1",
           type: "module",
-          openclaw: {
+          natesclaw: {
             extensions: ["./dist/a.js", "./dist/b.js"],
             runtimeExtensions: ["./dist/a.js"],
           },
@@ -577,7 +577,7 @@ describe("runPostUpgradeProbes — plugin.entry_unresolved", () => {
           name: "runtime-only",
           version: "0.0.1",
           type: "module",
-          openclaw: {
+          natesclaw: {
             extensions: ["./src/index.ts"],
             runtimeExtensions: ["./dist/index.js"],
           },
@@ -603,7 +603,7 @@ describe("runPostUpgradeProbes — plugin.manifest_drift", () => {
           name: "drifted",
           version: "0.0.1",
           type: "module",
-          openclaw: { extensions: ["./dist/index.js"] },
+          natesclaw: { extensions: ["./dist/index.js"] },
         },
         files: { "dist/index.js": "export default {};" },
         manifest: { id: "drifted", version: 2 },

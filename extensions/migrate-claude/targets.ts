@@ -2,4 +2,4 @@
 export {
   resolvePlannedMigrationTargets as resolveTargets,
   type PlannedMigrationTargets as PlannedTargets,
-} from "openclaw/plugin-sdk/migration-runtime";
+} from "natesclaw/plugin-sdk/migration-runtime";

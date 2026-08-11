@@ -1,15 +1,15 @@
 // Discord plugin module implements setup core behavior.
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { createChannelDmPolicy } from "openclaw/plugin-sdk/channel-dm-policy";
-import type { DiscordGuildEntry, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ChannelSetupDmPolicy, ChannelSetupWizard } from "openclaw/plugin-sdk/setup-runtime";
+import { DEFAULT_ACCOUNT_ID } from "natesclaw/plugin-sdk/account-id";
+import { createChannelDmPolicy } from "natesclaw/plugin-sdk/channel-dm-policy";
+import type { DiscordGuildEntry, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ChannelSetupDmPolicy, ChannelSetupWizard } from "natesclaw/plugin-sdk/setup-runtime";
 import {
   createSetupTranslator,
   createStandardChannelSetupStatus,
   defineTokenCredential,
-} from "openclaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "openclaw/plugin-sdk/setup-tools";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "natesclaw/plugin-sdk/setup-tools";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   inspectDiscordSetupAccount,
   resolveDiscordSetupAccountConfig,
@@ -68,10 +68,10 @@ function mapDiscordSetupAllowlistEntries(resolved: unknown): DiscordGuildChannel
 }
 
 function setDiscordGuildChannelAllowlist(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   accountId: string,
   entries: DiscordGuildChannelAllowlistEntry[],
-): OpenClawConfig {
+): NatesclawConfig {
   const baseGuilds =
     accountId === DEFAULT_ACCOUNT_ID
       ? (cfg.channels?.discord?.guilds ?? {})
@@ -169,9 +169,9 @@ export function createDiscordSetupWizardBase(handlers: {
       channel,
       label: t("wizard.discord.channelsLabel"),
       placeholder: "My Server/#general, guildId/channelId, #support",
-      currentPolicy: ({ cfg, accountId }: { cfg: OpenClawConfig; accountId: string }) =>
+      currentPolicy: ({ cfg, accountId }: { cfg: NatesclawConfig; accountId: string }) =>
         resolveDiscordSetupAccountConfig({ cfg, accountId }).config.groupPolicy ?? "allowlist",
-      currentEntries: ({ cfg, accountId }: { cfg: OpenClawConfig; accountId: string }) =>
+      currentEntries: ({ cfg, accountId }: { cfg: NatesclawConfig; accountId: string }) =>
         Object.entries(
           resolveDiscordSetupAccountConfig({ cfg, accountId }).config.guilds ?? {},
         ).flatMap(([guildKey, value]) => {
@@ -183,7 +183,7 @@ export function createDiscordSetupWizardBase(handlers: {
           }
           return channelKeys.map((channelKey) => `${guildKey}/${channelKey}`);
         }),
-      updatePrompt: ({ cfg, accountId }: { cfg: OpenClawConfig; accountId: string }) =>
+      updatePrompt: ({ cfg, accountId }: { cfg: NatesclawConfig; accountId: string }) =>
         Boolean(resolveDiscordSetupAccountConfig({ cfg, accountId }).config.guilds),
       resolveAllowlist: handlers.resolveGroupAllowlist,
       fallbackResolved: (entries) => entries.map((input) => ({ input, resolved: false })),
@@ -192,7 +192,7 @@ export function createDiscordSetupWizardBase(handlers: {
         accountId,
         resolved,
       }: {
-        cfg: OpenClawConfig;
+        cfg: NatesclawConfig;
         accountId: string;
         resolved: unknown;
       }) =>
@@ -218,6 +218,6 @@ export function createDiscordSetupWizardBase(handlers: {
       resolveEntries: handlers.resolveAllowFromEntries,
     }),
     dmPolicy: discordDmPolicy,
-    disable: (cfg: OpenClawConfig) => setSetupChannelEnabled(cfg, channel, false),
+    disable: (cfg: NatesclawConfig) => setSetupChannelEnabled(cfg, channel, false),
   } satisfies ChannelSetupWizard;
 }

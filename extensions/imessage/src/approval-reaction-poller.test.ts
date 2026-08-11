@@ -17,10 +17,10 @@ const registerIMessageApprovalReactionTarget = (
   params: Omit<IMessageTargetParams, "approvalKind">,
 ) => registerIMessageApprovalReactionTargetRaw({ ...params, approvalKind: "exec" });
 
-vi.mock("openclaw/plugin-sdk/approval-gateway-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/approval-gateway-runtime", () => ({
   resolveApprovalOverGateway: resolverMocks.resolveApprovalOverGateway,
 }));
-vi.mock("openclaw/plugin-sdk/error-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/error-runtime", () => ({
   isApprovalNotFoundError: resolverMocks.isApprovalNotFoundError,
 }));
 

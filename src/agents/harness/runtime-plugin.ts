@@ -1,12 +1,12 @@
 /** Resolves the selected native harness from a run-owned plugin registry. */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ProviderRouteOverridePresence } from "../../plugin-sdk/provider-model-types.js";
 import type { PluginRegistry } from "../../plugins/registry-types.js";
 import {
   pluginInstallPathMatchesRoot,
   type PluginVerificationFailureReason,
 } from "../../plugins/runtime-degraded-state.js";
-import { isDefaultAgentRuntimeId, OPENCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
+import { isDefaultAgentRuntimeId, NATESCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
 import { normalizeOptionalAgentRuntimeId } from "../agent-runtime-id.js";
 import { isCliRuntimeAliasForProvider } from "../model-runtime-aliases.js";
 import { resolveAgentHarnessPolicy } from "./policy.js";
@@ -39,7 +39,7 @@ type AgentHarnessRuntimePayloadFailure = {
 export function resolveAgentHarnessRuntimeAvailability(params: {
   runtime: string;
   provider: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir: string;
   payloadFailures: readonly AgentHarnessRuntimePayloadFailure[];
   payloadCheckedPluginIds: readonly string[];
@@ -94,7 +94,7 @@ export function resolveAgentHarnessRuntimeAvailability(params: {
 export async function ensureSelectedAgentHarnessPlugin(params: {
   provider: string;
   modelId: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   sessionKey?: string;
   agentHarnessId?: string;
@@ -120,7 +120,7 @@ export async function ensureSelectedAgentHarnessPlugin(params: {
       : policy.runtime;
   if (
     isDefaultAgentRuntimeId(runtime) ||
-    runtime === OPENCLAW_AGENT_RUNTIME_ID ||
+    runtime === NATESCLAW_AGENT_RUNTIME_ID ||
     isCliRuntimeAliasForProvider({
       runtime,
       provider: params.provider,

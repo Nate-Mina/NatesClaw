@@ -1,19 +1,19 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   normalizeSessionDeliveryState,
   upsertSessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import type { SessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
-import { closeOpenClawAgentDatabasesForTest } from "openclaw/plugin-sdk/sqlite-runtime-testing";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import type { SessionEntry } from "natesclaw/plugin-sdk/session-store-runtime";
+import { closeNatesclawAgentDatabasesForTest } from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 import { afterEach, describe, expect, it } from "vitest";
 import { telegramApprovalCapability } from "./approval-native.js";
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>>,
-): OpenClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<NatesclawConfig["channels"]>["telegram"]>>,
+): NatesclawConfig {
   return {
     channels: {
       telegram: {
@@ -26,20 +26,20 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 const tempDirs: string[] = [];
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
 
 function createTempStorePath(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-telegram-approval-native-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-telegram-approval-native-"));
   tempDirs.push(dir);
   return path.join(dir, "sessions.json");
 }

@@ -26,7 +26,7 @@ function runGit(cwd: string, args: string[]): string {
 }
 
 function createDispatchFixture(options: { workflowSource?: string } = {}) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-release-dispatch-"));
+  const root = mkdtempSync(join(tmpdir(), "natesclaw-release-dispatch-"));
   const origin = join(root, "origin.git");
   const checkout = join(root, "checkout");
   const binDir = join(root, "bin");
@@ -40,8 +40,8 @@ function createDispatchFixture(options: { workflowSource?: string } = {}) {
 
   execFileSync("git", ["init", "--bare", origin], { stdio: "ignore" });
   execFileSync("git", ["init", "-b", "main"], { cwd: checkout, stdio: "ignore" });
-  runGit(checkout, ["config", "user.email", "release-test@openclaw.invalid"]);
-  runGit(checkout, ["config", "user.name", "OpenClaw Release Test"]);
+  runGit(checkout, ["config", "user.email", "release-test@natesclaw.invalid"]);
+  runGit(checkout, ["config", "user.name", "Natesclaw Release Test"]);
   mkdirSync(join(checkout, ".github", "workflows"), { recursive: true });
   mkdirSync(join(checkout, "scripts"), { recursive: true });
   writeFileSync(join(checkout, "package.json"), '{"version":"2026.8.1"}\n');
@@ -98,7 +98,7 @@ const fs = require("node:fs");
 const args = process.argv.slice(2);
 fs.appendFileSync(process.env.MOCK_GH_CALLS, JSON.stringify(args) + "\\n");
 if (args[0] === "workflow" && args[1] === "run") {
-  console.log("https://github.com/openclaw/openclaw/actions/runs/123");
+  console.log("https://github.com/natesclaw/natesclaw/actions/runs/123");
 } else if (args[0] === "api" && args.at(-1).endsWith("/actions/runs/123")) {
   console.log(JSON.stringify({ status: "completed", conclusion: "success", head_sha: process.env.MOCK_WORKFLOW_SHA }));
 } else {
@@ -227,7 +227,7 @@ describe("full-release-validation-at-sha", () => {
     expect(parseArgs(["--target-ref", "v2026.7.1-beta.5"]).targetRef).toBe("v2026.7.1-beta.5");
     expect(parseArgs(["--target-ref", "v2026.7.1"]).targetRef).toBe("v2026.7.1");
     expect(() => parseArgs(["--target-ref", "feature/not-release"])).toThrow(
-      "canonical OpenClaw release branch or tag",
+      "canonical Natesclaw release branch or tag",
     );
   });
 
@@ -433,7 +433,7 @@ describe("full-release-validation-at-sha", () => {
       expect(result.stdout).toContain(`Validation SHA: ${fixture.targetSha}`);
       expect(result.stdout).toContain(`Tooling SHA: ${fixture.workflowSha}`);
       expect(result.stdout).toContain(
-        "Parent run: https://github.com/openclaw/openclaw/actions/runs/123",
+        "Parent run: https://github.com/natesclaw/natesclaw/actions/runs/123",
       );
       expect(result.stdout.indexOf("Parent run:")).toBeLessThan(
         result.stdout.indexOf("Parent run status:"),
@@ -537,13 +537,13 @@ describe("full-release-validation-at-sha", () => {
   });
 
   it("supports current and legacy verifier locations in trusted workflow checkouts", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-release-verifier-path-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-release-verifier-path-"));
     try {
       const legacy = join(
         root,
         ".agents",
         "skills",
-        "release-openclaw-ci",
+        "release-natesclaw-ci",
         "scripts",
         "release-ci-summary.mjs",
       );

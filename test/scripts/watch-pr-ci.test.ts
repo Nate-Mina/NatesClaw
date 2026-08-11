@@ -18,7 +18,7 @@ describe("watch-pr-ci", () => {
     expect(parseArgs(["42", sha])).toEqual({
       pr: 42,
       headSha: sha,
-      repo: "openclaw/openclaw",
+      repo: "natesclaw/natesclaw",
       attachTimeout: 900,
       timeout: 3600,
       interval: 120,
@@ -67,11 +67,11 @@ describe("watch-pr-ci", () => {
   });
 
   it("builds a pull-request-only run attachment query", () => {
-    expect(buildFindRunArgs("openclaw/openclaw", sha)).toEqual([
+    expect(buildFindRunArgs("natesclaw/natesclaw", sha)).toEqual([
       "run",
       "list",
       "--repo",
-      "openclaw/openclaw",
+      "natesclaw/natesclaw",
       "--commit",
       sha,
       "--workflow",

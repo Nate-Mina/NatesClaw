@@ -45,8 +45,8 @@ import {
   type WorkboardWorkerLog,
   type WorkboardWorkerProtocol,
   type WorkboardWorkspace,
-} from "@openclaw/workboard-contract";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "@natesclaw/workboard-contract";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   MAX_ATTACHMENT_BYTES,
   MAX_CARD_ARTIFACTS,

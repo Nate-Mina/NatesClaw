@@ -1,6 +1,6 @@
 // Buzz tests cover inbound room admission, mention gating, and reply delivery.
-import { createPluginRuntimeMock } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { createPluginRuntimeMock } from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { BuzzBus } from "./buzz-bus.js";
 import { BuzzDirectoryState } from "./directory-state.js";
@@ -23,7 +23,7 @@ function createAccount(
 ): ResolvedBuzzAccount {
   return {
     accountId: "default",
-    name: "OpenClaw",
+    name: "Natesclaw",
     enabled: true,
     configured: true,
     relayUrl: "ws://127.0.0.1:3000",
@@ -64,7 +64,7 @@ function createBus(): BuzzBus {
     publicKey: BOT_PUBLIC_KEY,
     directory: new BuzzDirectoryState({
       publicKey: BOT_PUBLIC_KEY,
-      fallbackProfileName: "OpenClaw",
+      fallbackProfileName: "Natesclaw",
       channelIds: [ROOM_ID],
     }),
     refreshDirectory: vi.fn(async () => {}),
@@ -96,7 +96,7 @@ describe("handleBuzzInbound", () => {
 
     await handleBuzzInbound({
       account: createAccount(),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage({ mentionedPubkeys: [BOT_PUBLIC_KEY] }),
       signal,
@@ -164,7 +164,7 @@ describe("handleBuzzInbound", () => {
         groupAllowFrom: [SENDER_PUBLIC_KEY],
         groups: { [ROOM_ID]: { requireMention: false } },
       }),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus,
       message: createMessage(),
       signal: createSignal(),
@@ -182,14 +182,14 @@ describe("handleBuzzInbound", () => {
 
   it("accepts a configured text mention when no native p tag is present", async () => {
     const runtime = createPluginRuntimeMock();
-    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/@openclaw/i]);
+    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/@natesclaw/i]);
     setBuzzRuntime(runtime);
 
     await handleBuzzInbound({
       account: createAccount(),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
-      message: createMessage({ text: "@openclaw status" }),
+      message: createMessage({ text: "@natesclaw status" }),
       signal: createSignal(),
     });
 
@@ -203,7 +203,7 @@ describe("handleBuzzInbound", () => {
 
     await handleBuzzInbound({
       account: createAccount(),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage(),
       signal: createSignal(),
@@ -221,7 +221,7 @@ describe("handleBuzzInbound", () => {
         groupPolicy: "allowlist",
         groupAllowFrom: [OTHER_PUBLIC_KEY],
       }),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage({ mentionedPubkeys: [BOT_PUBLIC_KEY] }),
       signal: createSignal(),
@@ -241,7 +241,7 @@ describe("handleBuzzInbound", () => {
         groupPolicy: "allowlist",
         groupAllowFrom: [SENDER_PUBLIC_KEY],
       }),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage({
         text: "/status",
@@ -264,7 +264,7 @@ describe("handleBuzzInbound", () => {
 
     await handleBuzzInbound({
       account: createAccount(),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage({ text: "/status" }),
       signal: createSignal(),
@@ -280,7 +280,7 @@ describe("handleBuzzInbound", () => {
 
     await handleBuzzInbound({
       account: createAccount(),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus,
       message: createMessage({
         id: "event-reply",
@@ -333,13 +333,13 @@ describe("handleBuzzInbound", () => {
           },
         },
       }),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage({
         kind: BUZZ_DIFF_MESSAGE_KIND,
         text: diffText,
         diff: {
-          repoUrl: "https://github.com/openclaw/openclaw",
+          repoUrl: "https://github.com/natesclaw/natesclaw",
           commitSha: "abcdef1",
           description: `line one\n${"x".repeat(1_100)}`,
           truncated: true,
@@ -358,7 +358,7 @@ describe("handleBuzzInbound", () => {
     });
     const bodyForAgent = context.BodyForAgent ?? "";
     expect(bodyForAgent).toContain("[Buzz structured diff]");
-    expect(bodyForAgent).toContain("Repository: https://github.com/openclaw/openclaw");
+    expect(bodyForAgent).toContain("Repository: https://github.com/natesclaw/natesclaw");
     expect(bodyForAgent).toContain("Description: line one ");
     expect(bodyForAgent).toContain("Truncated: yes");
     expect(bodyForAgent).toContain("Unified diff:\n/status\n@@ -1 +1 @@\n-old\n+new");
@@ -373,13 +373,13 @@ describe("handleBuzzInbound", () => {
 
     await handleBuzzInbound({
       account: createAccount(),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage({
         kind: BUZZ_DIFF_MESSAGE_KIND,
-        text: "+const owner = '@OpenClaw';",
+        text: "+const owner = '@Natesclaw';",
         diff: {
-          repoUrl: "https://github.com/openclaw/openclaw",
+          repoUrl: "https://github.com/natesclaw/natesclaw",
           commitSha: "abcdef1",
           truncated: false,
         },
@@ -397,7 +397,7 @@ describe("handleBuzzInbound", () => {
 
     await handleBuzzInbound({
       account: createAccount(),
-      cfg: {} satisfies OpenClawConfig,
+      cfg: {} satisfies NatesclawConfig,
       bus: createBus(),
       message: createMessage({ mentionedPubkeys: [BOT_PUBLIC_KEY] }),
       signal: createSignal(),

@@ -10,42 +10,42 @@ import {
   loadPreparedModelCatalog,
   resolveAgentDir,
   resolveDefaultModelForAgent,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "natesclaw/plugin-sdk/agent-runtime";
 import {
   formatCommandArgMenuTitle,
   resolveEffectiveAgentRuntime,
   resolveStoredModelOverride,
   type ChatCommandDefinition,
-} from "openclaw/plugin-sdk/command-auth-native";
+} from "natesclaw/plugin-sdk/command-auth-native";
 import {
   type CommandArgs,
   resolveNativeCommandSessionTargets,
-} from "openclaw/plugin-sdk/command-auth-native";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+} from "natesclaw/plugin-sdk/command-auth-native";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 import {
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
-} from "openclaw/plugin-sdk/native-command-config-runtime";
+} from "natesclaw/plugin-sdk/native-command-config-runtime";
 import {
   mergeNativeCommandSpecs,
   type NativeCommandSpec,
-} from "openclaw/plugin-sdk/native-command-registry";
+} from "natesclaw/plugin-sdk/native-command-registry";
 import type {
   PluginCommandCatalogDecision,
   PluginCommandNativeCandidate,
   PluginCommandReplyOptions,
-} from "openclaw/plugin-sdk/plugin-command-runtime";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
-import { getRuntimeConfigSnapshot } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, logVerbose, warn } from "openclaw/plugin-sdk/runtime-env";
-import { getSessionEntry, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+} from "natesclaw/plugin-sdk/plugin-command-runtime";
+import type { ResolvedAgentRoute } from "natesclaw/plugin-sdk/routing";
+import { getRuntimeConfigSnapshot } from "natesclaw/plugin-sdk/runtime-config-snapshot";
+import { danger, logVerbose, warn } from "natesclaw/plugin-sdk/runtime-env";
+import { getSessionEntry, resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { chunkItems } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { chunkItems } from "natesclaw/plugin-sdk/text-chunking";
 import type { ResolvedSlackAccount } from "../accounts.js";
 import { SLACK_MAX_BLOCKS } from "../blocks-input.js";
 import { formatSlackError } from "../errors.js";
@@ -71,8 +71,8 @@ import {
 } from "./response-url-budget.js";
 import { resolveSlackRoomContextHints } from "./room-context.js";
 
-const SLACK_COMMAND_ARG_ACTION_ID = "openclaw_cmdarg";
-const SLACK_COMMAND_ARG_ACTION_LISTENER = /^openclaw_cmdarg/;
+const SLACK_COMMAND_ARG_ACTION_ID = "natesclaw_cmdarg";
+const SLACK_COMMAND_ARG_ACTION_LISTENER = /^natesclaw_cmdarg/;
 const SLACK_COMMAND_ARG_VALUE_PREFIX = "cmdarg";
 const SLACK_COMMAND_ARG_BUTTON_ROW_SIZE = 5;
 const SLACK_COMMAND_ARG_OVERFLOW_MIN = 3;
@@ -106,7 +106,7 @@ const loadSlashSkillCommandsRuntime = createLazyRuntimeModule(
   () => import("./slash-skill-commands.runtime.js"),
 );
 const loadPluginCommandRuntime = createLazyRuntimeModule(
-  () => import("openclaw/plugin-sdk/plugin-command-runtime"),
+  () => import("natesclaw/plugin-sdk/plugin-command-runtime"),
 );
 
 function resolveSlackCommandMenuModelContext(params: {
@@ -938,10 +938,10 @@ export async function registerSlackMonitorSlashCommands(params: {
   let nativeCommands: SlackNativeCommandSpec[] = [];
   let slashCommandsRuntime: typeof import("./slash-commands.runtime.js") | null = null;
   let pluginCommandRuntimeModule:
-    | typeof import("openclaw/plugin-sdk/plugin-command-runtime")
+    | typeof import("natesclaw/plugin-sdk/plugin-command-runtime")
     | null = null;
   let pluginCommandRuntime:
-    | import("openclaw/plugin-sdk/plugin-command-runtime").PluginCommandRuntime
+    | import("natesclaw/plugin-sdk/plugin-command-runtime").PluginCommandRuntime
     | null = null;
   if (
     registration.mode === "disabled" &&

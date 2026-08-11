@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import type { RouteLoaderOptions, RouteLocation } from "@openclaw/uirouter";
+import type { RouteLoaderOptions, RouteLocation } from "@natesclaw/uirouter";
 import { render } from "lit";
 import { afterEach, describe, expect, it } from "vitest";
 import type {
@@ -82,7 +82,7 @@ describe("custodian route", () => {
 
     render(renderCustodianRoute({ onboarding: false, intent: null }), provider);
     const normalPage = provider.querySelector<HTMLElement & { updateComplete: Promise<boolean> }>(
-      "openclaw-custodian-page",
+      "natesclaw-custodian-page",
     );
     await normalPage?.updateComplete;
     expect(normalPage?.querySelector(".custodian__header .btn")).toBeNull();
@@ -93,7 +93,7 @@ describe("custodian route", () => {
     render(renderCustodianRoute({ onboarding: true, intent: null }), provider);
     const onboardingPage = provider.querySelector<
       HTMLElement & { updateComplete: Promise<boolean> }
-    >("openclaw-custodian-page");
+    >("natesclaw-custodian-page");
     await onboardingPage?.updateComplete;
     expect(onboardingPage?.querySelector(".custodian__header .btn")).not.toBeNull();
     // Onboarding renders the minimal header: actions only, no identity block.

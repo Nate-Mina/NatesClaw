@@ -11,12 +11,12 @@ import {
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import {
   closeOrphanedOperatorApprovals,
   consumeOperatorApprovalAllowOnce,
@@ -31,7 +31,7 @@ import {
   resolveOperatorApproval,
 } from "./operator-approval-store.js";
 
-type OperatorApprovalDatabase = Pick<OpenClawStateKyselyDatabase, "operator_approvals">;
+type OperatorApprovalDatabase = Pick<NatesclawStateKyselyDatabase, "operator_approvals">;
 type NewOperatorApproval = Parameters<typeof insertOperatorApproval>[0]["approval"];
 const OPERATOR_APPROVAL_TERMINAL_RETENTION_MS = 30 * 24 * 60 * 60_000;
 
@@ -42,12 +42,12 @@ function getOperatorApproval(params: Parameters<typeof getOperatorApprovalDetail
 
 const tempDirs: string[] = [];
 
-function createDatabaseOptions(): OpenClawStateDatabaseOptions {
+function createDatabaseOptions(): NatesclawStateDatabaseOptions {
   const stateDir = fs.realpathSync(
-    fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-operator-approval-")),
+    fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-operator-approval-")),
   );
   tempDirs.push(stateDir);
-  return { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } };
+  return { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } };
 }
 
 function approval(id: string, overrides: Partial<NewOperatorApproval> = {}): NewOperatorApproval {
@@ -101,8 +101,8 @@ function approval(id: string, overrides: Partial<NewOperatorApproval> = {}): New
   };
 }
 
-function rawApprovalRow(options: OpenClawStateDatabaseOptions, id: string) {
-  const database = openOpenClawStateDatabase(options);
+function rawApprovalRow(options: NatesclawStateDatabaseOptions, id: string) {
+  const database = openNatesclawStateDatabase(options);
   const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
   return executeSqliteQueryTakeFirstSync(
     database.db,
@@ -112,7 +112,7 @@ function rawApprovalRow(options: OpenClawStateDatabaseOptions, id: string) {
 
 describe("operator approval store", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     for (const dir of tempDirs.splice(0)) {
       fs.rmSync(dir, { force: true, recursive: true });
     }
@@ -167,7 +167,7 @@ describe("operator approval store", () => {
       }),
     ).toMatchObject({ outcome: "inserted", record: { id: "plugin", kind: "plugin" } });
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
 
     expect(getOperatorApproval({ id: "round-trip", nowMs: 2_000, databaseOptions })).toEqual(
       inserted.record,
@@ -365,7 +365,7 @@ describe("operator approval store", () => {
       approval: approval("lock-delayed-clock", { createdAtMs, expiresAtMs }),
       databaseOptions,
     });
-    const databasePath = openOpenClawStateDatabase(databaseOptions).path;
+    const databasePath = openNatesclawStateDatabase(databaseOptions).path;
     const releaseAtMs = expiresAtMs + 200;
     const child = spawn(
       process.execPath,
@@ -839,7 +839,7 @@ describe("operator approval store", () => {
       approval: approval("current", { runtimeEpoch: "runtime-b" }),
       databaseOptions,
     });
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
 
     const result = closeOrphanedOperatorApprovals({
       runtimeEpoch: "runtime-b",
@@ -871,7 +871,7 @@ describe("operator approval store", () => {
       approval: approval("corrupt", { createdAtMs: 5_000 }),
       databaseOptions,
     });
-    const database = openOpenClawStateDatabase(databaseOptions);
+    const database = openNatesclawStateDatabase(databaseOptions);
     const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
     executeSqliteQuerySync(
       database.db,
@@ -913,7 +913,7 @@ describe("operator approval store", () => {
       nowMs: 2_000,
       databaseOptions,
     });
-    const database = openOpenClawStateDatabase(databaseOptions);
+    const database = openNatesclawStateDatabase(databaseOptions);
     const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
     // Simulate external corruption that bypassed SQLite CHECK constraints; the
     // decoder must independently reject these approval-granting tuples.

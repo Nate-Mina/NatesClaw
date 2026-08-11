@@ -1,6 +1,6 @@
-// Plugin state SQLite helpers persist plugin state in the OpenClaw state database.
+// Plugin state SQLite helpers persist plugin state in the Natesclaw state database.
 import type { DatabaseSync } from "node:sqlite";
-import { resolveExpiresAtMsFromDurationMs } from "@openclaw/normalization-core/number-coercion";
+import { resolveExpiresAtMsFromDurationMs } from "@natesclaw/normalization-core/number-coercion";
 import type { Insertable, Selectable } from "kysely";
 import {
   executeSqliteQuerySync,
@@ -9,16 +9,16 @@ import {
 } from "../infra/kysely-sync.js";
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
 import { normalizeSqliteNumber } from "../infra/sqlite-number.js";
-import { withExistingOpenClawStateDatabaseReadOnly } from "../state/openclaw-state-db-readonly.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import { withExistingNatesclawStateDatabaseReadOnly } from "../state/natesclaw-state-db-readonly.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabase,
-  isOpenClawStateDatabaseOpen,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  closeNatesclawStateDatabase,
+  isNatesclawStateDatabaseOpen,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabaseOptions,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import {
   PluginStateStoreError,
   type PluginStateEntry,
@@ -34,8 +34,8 @@ export const MAX_PLUGIN_STATE_VALUE_BYTES = 65_536;
 export const MAX_PLUGIN_STATE_ENTRIES_PER_PLUGIN = 50_000;
 let maxPluginStateEntriesPerPluginForTests: number | undefined;
 
-type PluginStateEntriesTable = OpenClawStateKyselyDatabase["plugin_state_entries"];
-type PluginStateStoreDatabase = Pick<OpenClawStateKyselyDatabase, "plugin_state_entries">;
+type PluginStateEntriesTable = NatesclawStateKyselyDatabase["plugin_state_entries"];
+type PluginStateStoreDatabase = Pick<NatesclawStateKyselyDatabase, "plugin_state_entries">;
 
 type PluginStateRow = Selectable<PluginStateEntriesTable>;
 
@@ -100,7 +100,7 @@ function wrapPluginStateError(
   operation: PluginStateStoreOperation,
   fallbackCode: PluginStateStoreErrorCode,
   message: string,
-  pathname = resolveOpenClawStateSqlitePath(process.env),
+  pathname = resolveNatesclawStateSqlitePath(process.env),
 ): PluginStateStoreError {
   if (error instanceof PluginStateStoreError) {
     return error;
@@ -122,7 +122,7 @@ function parseStoredJson(raw: string, operation: PluginStateStoreOperation): unk
       code: "PLUGIN_STATE_CORRUPT",
       operation,
       message: "Plugin state entry contains corrupt JSON.",
-      path: resolveOpenClawStateSqlitePath(process.env),
+      path: resolveNatesclawStateSqlitePath(process.env),
       cause: error,
     });
   }
@@ -370,10 +370,10 @@ function sweepExpiredPluginStateEntriesFromDatabase(db: DatabaseSync, now: numbe
 
 function openPluginStateDatabase(
   operation: PluginStateStoreOperation = "open",
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): PluginStateDatabase {
   const env = options.env ?? process.env;
-  const pathname = resolveOpenClawStateSqlitePath(env);
+  const pathname = resolveNatesclawStateSqlitePath(env);
   if (cachedDatabase && cachedDatabase.path === pathname && cachedDatabase.db.isOpen) {
     return cachedDatabase;
   }
@@ -382,7 +382,7 @@ function openPluginStateDatabase(
   }
 
   try {
-    const database = openOpenClawStateDatabase(options);
+    const database = openNatesclawStateDatabase(options);
     cachedDatabase = {
       db: database.db,
       path: database.path,
@@ -421,12 +421,12 @@ function hasStateTablesBeyondStartupCheckpoint(db: DatabaseSync): boolean {
 function withPluginStateDatabaseReadOnly<T>(
   operationName: PluginStateStoreOperation,
   operation: (store: PluginStateDatabase) => T,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): T | undefined {
-  const pathname = resolveOpenClawStateSqlitePath(options.env ?? process.env);
+  const pathname = resolveNatesclawStateSqlitePath(options.env ?? process.env);
   let operationStarted = false;
   try {
-    return withExistingOpenClawStateDatabaseReadOnly(({ db, path }) => {
+    return withExistingNatesclawStateDatabaseReadOnly(({ db, path }) => {
       operationStarted = true;
       try {
         return operation({ db, path });
@@ -460,17 +460,17 @@ function countRow(row: CountRow | undefined): number {
   return typeof raw === "bigint" ? Number(raw) : raw;
 }
 
-function envOptions(env?: NodeJS.ProcessEnv): OpenClawStateDatabaseOptions {
+function envOptions(env?: NodeJS.ProcessEnv): NatesclawStateDatabaseOptions {
   return env ? { env } : {};
 }
 
 function runWriteTransaction<T>(
   operation: PluginStateStoreOperation,
   write: (store: PluginStateDatabase) => T,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): T {
   const store = openPluginStateDatabase(operation, options);
-  return runOpenClawStateWriteTransaction(() => {
+  return runNatesclawStateWriteTransaction(() => {
     const result = write(store);
     return result;
   }, options);
@@ -964,7 +964,7 @@ export function pluginStateLookup(params: {
   key: string;
   env?: NodeJS.ProcessEnv;
 }): unknown {
-  const pathname = resolveOpenClawStateSqlitePath(params.env ?? process.env);
+  const pathname = resolveNatesclawStateSqlitePath(params.env ?? process.env);
   try {
     return withPluginStateDatabaseReadOnly(
       "lookup",
@@ -1087,7 +1087,7 @@ export function pluginStateEntries(params: {
   namespace: string;
   env?: NodeJS.ProcessEnv;
 }): PluginStateEntry<unknown>[] {
-  const pathname = resolveOpenClawStateSqlitePath(params.env ?? process.env);
+  const pathname = resolveNatesclawStateSqlitePath(params.env ?? process.env);
   try {
     return (
       withPluginStateDatabaseReadOnly(
@@ -1138,7 +1138,7 @@ export function pluginStateEntriesInKeyRange(params: {
       message: "Plugin state key range must have an increasing exclusive upper bound.",
     });
   }
-  const pathname = resolveOpenClawStateSqlitePath(params.env ?? process.env);
+  const pathname = resolveNatesclawStateSqlitePath(params.env ?? process.env);
   try {
     return (
       withPluginStateDatabaseReadOnly(
@@ -1228,7 +1228,7 @@ function setMaxPluginStateEntriesPerPluginForTests(value?: number): void {
 }
 
 export function countPluginStateLiveEntries(pluginId: string, env?: NodeJS.ProcessEnv): number {
-  const pathname = resolveOpenClawStateSqlitePath(env ?? process.env);
+  const pathname = resolveNatesclawStateSqlitePath(env ?? process.env);
   try {
     return (
       withPluginStateDatabaseReadOnly(
@@ -1284,10 +1284,10 @@ function seedPluginStateDatabaseEntriesForTests(
 }
 
 function probePluginStateStore(): PluginStateStoreProbeResult {
-  const databasePath = resolveOpenClawStateSqlitePath(process.env);
+  const databasePath = resolveNatesclawStateSqlitePath(process.env);
   const steps: PluginStateStoreProbeStep[] = [];
   const wasOpen = cachedDatabase !== null;
-  const stateWasOpen = isOpenClawStateDatabaseOpen();
+  const stateWasOpen = isNatesclawStateDatabaseOpen();
 
   const pushOk = (name: string) => steps.push({ name, ok: true });
   const pushFailure = (name: string, error: unknown) => {
@@ -1357,7 +1357,7 @@ function probePluginStateStore(): PluginStateStoreProbeResult {
       });
     });
     pushOk("write-read-delete");
-    openOpenClawStateDatabase().walMaintenance.checkpoint();
+    openNatesclawStateDatabase().walMaintenance.checkpoint();
     pushOk("checkpoint");
   } catch (error) {
     pushFailure("probe", error);
@@ -1372,11 +1372,11 @@ function probePluginStateStore(): PluginStateStoreProbeResult {
 
 export function closePluginStateDatabase(): void {
   cachedDatabase = null;
-  closeOpenClawStateDatabase();
+  closeNatesclawStateDatabase();
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.pluginStateSqliteTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.pluginStateSqliteTestApi")] = {
     probePluginStateStore,
     seedPluginStateDatabaseEntriesForTests,
     setMaxPluginStateEntriesPerPluginForTests,

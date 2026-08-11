@@ -463,11 +463,11 @@ export function runCoercionHelperDeclarationGuard(
   }
   writeLine(
     io.stderr,
-    "Core/package/UI/workspace-script code: use the matching @openclaw/normalization-core coercion subpath.",
+    "Core/package/UI/workspace-script code: use the matching @natesclaw/normalization-core coercion subpath.",
   );
   writeLine(
     io.stderr,
-    "Plugin production code: use openclaw/plugin-sdk/string-coerce-runtime, number-runtime, or error-runtime.",
+    "Plugin production code: use natesclaw/plugin-sdk/string-coerce-runtime, number-runtime, or error-runtime.",
   );
   writeLine(
     io.stderr,

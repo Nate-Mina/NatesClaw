@@ -132,8 +132,8 @@ describe("plugin compatibility registry", () => {
       removeAfter: undefined,
     });
     expect(records.get("agent-harness-sdk-alias")?.surfaces).toEqual([
-      "openclaw/plugin-sdk/agent-harness",
-      "openclaw/plugin-sdk/agent-harness-runtime",
+      "natesclaw/plugin-sdk/agent-harness",
+      "natesclaw/plugin-sdk/agent-harness-runtime",
     ]);
   });
 
@@ -154,24 +154,24 @@ describe("plugin compatibility registry", () => {
     }
     expect(records.get("plugin-sdk-broad-runtime-barrels")?.surfaces).toEqual(
       expect.arrayContaining([
-        "openclaw/plugin-sdk/agent-runtime",
-        "openclaw/plugin-sdk/agent-runtime loadModelCatalog params.useCache",
-        "openclaw/plugin-sdk/agent-runtime loadModelCatalog params.cacheOnly",
-        "openclaw/plugin-sdk/agent-runtime loadModelCatalog params.metadataSnapshot",
-        "openclaw/plugin-sdk/agent-runtime loadModelCatalog",
-        "openclaw/plugin-sdk/cli-runtime",
-        "openclaw/plugin-sdk/conversation-runtime",
-        "openclaw/plugin-sdk/hook-runtime",
-        "openclaw/plugin-sdk/media-runtime",
-        "openclaw/plugin-sdk/media-runtime buildAgentMediaPayload",
-        "openclaw/plugin-sdk/plugin-runtime",
-        "openclaw/plugin-sdk/security-runtime",
+        "natesclaw/plugin-sdk/agent-runtime",
+        "natesclaw/plugin-sdk/agent-runtime loadModelCatalog params.useCache",
+        "natesclaw/plugin-sdk/agent-runtime loadModelCatalog params.cacheOnly",
+        "natesclaw/plugin-sdk/agent-runtime loadModelCatalog params.metadataSnapshot",
+        "natesclaw/plugin-sdk/agent-runtime loadModelCatalog",
+        "natesclaw/plugin-sdk/cli-runtime",
+        "natesclaw/plugin-sdk/conversation-runtime",
+        "natesclaw/plugin-sdk/hook-runtime",
+        "natesclaw/plugin-sdk/media-runtime",
+        "natesclaw/plugin-sdk/media-runtime buildAgentMediaPayload",
+        "natesclaw/plugin-sdk/plugin-runtime",
+        "natesclaw/plugin-sdk/security-runtime",
       ]),
     );
     expect(records.get("deprecated-session-store-beta5-api")?.surfaces).toEqual(
       expect.arrayContaining([
-        "openclaw package root loadSessionStore",
-        "openclaw package root saveSessionStore",
+        "natesclaw package root loadSessionStore",
+        "natesclaw package root saveSessionStore",
       ]),
     );
   });

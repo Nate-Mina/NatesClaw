@@ -1,5 +1,5 @@
 // Defines agent default configuration types shared by runtime schemas.
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
+import type { FastMode } from "@natesclaw/normalization-core/string-coerce";
 import type { SilentReplyPolicyShape } from "../shared/silent-reply-policy.js";
 import type {
   AgentModelConfig,
@@ -211,17 +211,17 @@ export type AgentDefaultsConfig = {
   contextPruning?: AgentContextPruningConfig;
   /** Compaction tuning and pre-compaction memory flush behavior. */
   compaction?: AgentCompactionConfig;
-  /** Embedded OpenClaw runner hardening and compatibility controls. */
+  /** Embedded Natesclaw runner hardening and compatibility controls. */
   embeddedAgent?: {
     /**
-     * How embedded OpenClaw should trust workspace-local `.openclaw/settings.json`.
+     * How embedded Natesclaw should trust workspace-local `.natesclaw/settings.json`.
      * - sanitize (default): apply project settings except shellPath/shellCommandPrefix
      * - ignore: ignore project settings entirely
      * - trusted: trust project settings as-is
      */
     projectSettingsPolicy?: "trusted" | "sanitize" | "ignore";
     /**
-     * Embedded OpenClaw execution contract:
+     * Embedded Natesclaw execution contract:
      * - default: keep the standard runner behavior
      * - strict-agentic: enable structured plan tracking and non-visible turn recovery on supported GPT-5 runs
      */
@@ -320,7 +320,7 @@ export type AgentDefaultsConfig = {
      */
     isolatedSession?: boolean;
   };
-  /** Owner for ambient OpenClaw system-agent/Custodian inference. */
+  /** Owner for ambient Natesclaw system-agent/Custodian inference. */
   systemAgent?: {
     agentId?: string;
   };
@@ -378,9 +378,9 @@ export type AgentCompactionConfig = {
   enabled?: boolean;
   /** Compaction summarization mode. */
   mode?: AgentCompactionMode;
-  /** Override the session thinking level for embedded OpenClaw compaction summaries. */
+  /** Override the session thinking level for embedded Natesclaw compaction summaries. */
   thinkingLevel?: AgentThinkingLevel;
-  /** Embedded OpenClaw keepRecentTokens budget used for cut-point selection. */
+  /** Embedded Natesclaw keepRecentTokens budget used for cut-point selection. */
   keepRecentTokens?: number;
   /** Preserve this many most-recent user/assistant turns verbatim in compaction summary context. */
   recentTurnsPreserve?: number;

@@ -1,6 +1,6 @@
 // Shared startup tracing for the entry wrapper and CLI dispatcher.
 import process from "node:process";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 
 type GatewayStartupTraceSource = "entry" | "cli.main";
@@ -25,7 +25,7 @@ type PendingTimelineEvent =
 const CLI_STARTUP_TIMELINE_PHASE = "cli.startup";
 
 function hasDiagnosticsTimelinePath(env: NodeJS.ProcessEnv): boolean {
-  return Boolean(env.OPENCLAW_DIAGNOSTICS_TIMELINE_PATH?.trim());
+  return Boolean(env.NATESCLAW_DIAGNOSTICS_TIMELINE_PATH?.trim());
 }
 
 export function createGatewayDispatchStartupTrace(
@@ -34,7 +34,7 @@ export function createGatewayDispatchStartupTrace(
 ): {
   enabled: boolean;
   requiresDiagnosticsConfig(): Promise<boolean>;
-  configureDiagnosticsTimeline(config: OpenClawConfig): Promise<void>;
+  configureDiagnosticsTimeline(config: NatesclawConfig): Promise<void>;
   setLineFormatter(formatter: GatewayStartupTraceLineFormatter): void;
   mark(name: string): void;
   measure<T>(
@@ -44,7 +44,7 @@ export function createGatewayDispatchStartupTrace(
   ): Promise<T>;
 } {
   const enabled =
-    isTruthyEnvValue(process.env.OPENCLAW_GATEWAY_STARTUP_TRACE) &&
+    isTruthyEnvValue(process.env.NATESCLAW_GATEWAY_STARTUP_TRACE) &&
     argv.slice(2).includes("gateway");
   const started = performance.now();
   let last = started;
@@ -56,7 +56,7 @@ export function createGatewayDispatchStartupTrace(
   let timelineActivation: "unknown" | "enabled" | "disabled" = timelineModule
     ? "unknown"
     : "disabled";
-  let timelineConfig: OpenClawConfig | undefined;
+  let timelineConfig: NatesclawConfig | undefined;
   let timelineConfigResolved = false;
   const pendingTimelineEvents: PendingTimelineEvent[] = [];
   let pendingTimelineWrites = Promise.resolve();

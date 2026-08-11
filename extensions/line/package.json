@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/line",
+  "name": "@natesclaw/line",
   "version": "2026.8.1",
-  "description": "OpenClaw LINE channel plugin for LINE Bot API chats.",
+  "description": "Natesclaw LINE channel plugin for LINE Bot API chats.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,18 +12,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -106,7 +106,7 @@
       }
     },
     "install": {
-      "npmSpec": "@openclaw/line",
+      "npmSpec": "@natesclaw/line",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -114,7 +114,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1"
+      "natesclawVersion": "2026.8.1"
     },
     "release": {
       "publishToClawHub": true,

@@ -13,11 +13,11 @@ export {
 export {
   createTerminalPresentationContractTool,
   installCodexToolResultMiddleware,
-  installOpenClawOwnedToolHooks,
+  installNatesclawOwnedToolHooks,
   mediaToolResult,
-  resetOpenClawOwnedToolHooks,
+  resetNatesclawOwnedToolHooks,
   textToolResult,
-} from "./test-helpers/agents/openclaw-owned-tool-runtime-contract.js";
+} from "./test-helpers/agents/natesclaw-owned-tool-runtime-contract.js";
 export {
   createContractFallbackConfig,
   createContractRunResult,

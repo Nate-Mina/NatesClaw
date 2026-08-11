@@ -33,12 +33,12 @@ export {
   sendVoice,
 } from "./outbound-media-send.js";
 
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { qqbotNotConfiguredMessage } from "../config/setup-guidance.js";
 import type { GatewayAccount } from "../types.js";
 import type { EngineLogger } from "../types.js";

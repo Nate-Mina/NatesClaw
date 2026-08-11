@@ -2,22 +2,22 @@
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/approval-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   shouldSuppressLocalSignalExecApprovalPrompt,
   signalApprovalCapability,
 } from "./approval-native.js";
 
-type SignalConfig = NonNullable<NonNullable<OpenClawConfig["channels"]>["signal"]>;
+type SignalConfig = NonNullable<NonNullable<NatesclawConfig["channels"]>["signal"]>;
 
 function buildConfig(
   params: {
     signal?: Partial<SignalConfig>;
-    approvals?: OpenClawConfig["approvals"];
+    approvals?: NatesclawConfig["approvals"];
   } = {},
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     channels: {
       signal: {
@@ -26,7 +26,7 @@ function buildConfig(
       },
     },
     approvals: params.approvals,
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function buildExecRequest(
@@ -71,7 +71,7 @@ function buildPluginRequest(
 }
 
 function nativeShouldHandle(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   approvalKind: "exec" | "plugin";
   request: ExecApprovalRequest | PluginApprovalRequest;
   accountId?: string | null;

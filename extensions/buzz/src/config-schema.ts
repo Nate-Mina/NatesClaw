@@ -2,8 +2,8 @@ import {
   buildChannelConfigSchema,
   GroupPolicySchema,
   MarkdownConfigSchema,
-} from "openclaw/plugin-sdk/channel-config-schema";
-import { buildSecretInputSchema } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/channel-config-schema";
+import { buildSecretInputSchema } from "natesclaw/plugin-sdk/secret-input";
 import { z } from "zod";
 import { BUZZ_CHANNEL_ID_PATTERN } from "./target.js";
 

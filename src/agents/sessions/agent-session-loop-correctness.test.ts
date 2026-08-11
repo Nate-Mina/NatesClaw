@@ -2,7 +2,7 @@ import {
   createAssistantMessageEventStream,
   type Context,
   type Model,
-} from "openclaw/plugin-sdk/llm";
+} from "natesclaw/plugin-sdk/llm";
 import { Type } from "typebox";
 import { describe, expect, it, vi } from "vitest";
 import { steerActiveSessionWithOptionalDeliveryWait } from "../embedded-agent-runner/run/attempt-queue-message.js";
@@ -180,7 +180,7 @@ describe("AgentSession loop correctness", () => {
         expect(new Set(identities).size).toBe(waiterCount);
         for (const message of originalMessages) {
           const identitySymbol = Object.getOwnPropertySymbols(message).find(
-            (symbol) => symbol === Symbol.for("openclaw.steeringMessageIdentity"),
+            (symbol) => symbol === Symbol.for("natesclaw.steeringMessageIdentity"),
           );
           expect(identitySymbol).toBeDefined();
           if (identitySymbol) {

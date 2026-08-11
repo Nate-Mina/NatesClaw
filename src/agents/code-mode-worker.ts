@@ -3,7 +3,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { Worker } from "node:worker_threads";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { formatErrorMessage } from "../infra/errors.js";
 import type { CodeModeFailureCode, CodeModeWorkerResult } from "./code-mode-runtime.js";
 

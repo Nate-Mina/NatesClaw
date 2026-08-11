@@ -1,9 +1,9 @@
-import type { CliBackendParseJsonlEvent } from "openclaw/plugin-sdk/cli-backend";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { findCodeRegions, type CodeRegion } from "openclaw/plugin-sdk/text-chunking";
+import type { CliBackendParseJsonlEvent } from "natesclaw/plugin-sdk/cli-backend";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { findCodeRegions, type CodeRegion } from "natesclaw/plugin-sdk/text-chunking";
 
 const CLAUDE_RAW_TOOL_OUTPUT_ERROR =
-  "Claude CLI returned malformed tool output (invalid request format): raw tool protocol appeared as assistant text. OpenClaw refused to persist or deliver it.";
+  "Claude CLI returned malformed tool output (invalid request format): raw tool protocol appeared as assistant text. Natesclaw refused to persist or deliver it.";
 
 const RAW_INVOKE_TAG_RE = /<invoke(?=[ \t>])[^<>\r\n]*>/gu;
 const RAW_PARAMETER_TAG_RE = /<parameter(?=[ \t>])[^<>\r\n]*>/gu;

@@ -306,14 +306,14 @@ export function renderRecentSession(params: {
               >${icons.layoutDashboard}</span
             >`
           : nothing}
-        <openclaw-viewer-facepile
+        <natesclaw-viewer-facepile
           .presencePayload=${host.sessionData.presencePayload}
           .selfUserId=${host.sessionDataContext?.gateway.snapshot.selfUser?.id}
           .selfInstanceId=${host.sessionData.presenceInstanceId}
           .sessionKey=${session.key}
           .maxVisible=${3}
           variant="session"
-        ></openclaw-viewer-facepile>
+        ></natesclaw-viewer-facepile>
         ${renderSessionRowBadges({
           ...session,
           hasComposerDraft: session.hasComposerDraft === true && !session.visuallyActive,
@@ -366,14 +366,14 @@ export function renderRecentSession(params: {
           ? html`<span class="session-row-trail" id=${metaId}
               >${session.runtimeMs != null
                 ? session.hasActiveRun
-                  ? html`<openclaw-elapsed-time
+                  ? html`<natesclaw-elapsed-time
                       .startMs=${session.runtimeSampledAt! - session.runtimeMs}
-                    ></openclaw-elapsed-time>`
+                    ></natesclaw-elapsed-time>`
                   : (formatDurationCompact(session.runtimeMs) ?? "0ms")
-                : html`<openclaw-elapsed-time
+                : html`<natesclaw-elapsed-time
                     .startMs=${session.startedAt!}
                     .endMs=${session.endedAt ?? null}
-                  ></openclaw-elapsed-time>`}</span
+                  ></natesclaw-elapsed-time>`}</span
             >`
           : nothing}
         ${session.isChild

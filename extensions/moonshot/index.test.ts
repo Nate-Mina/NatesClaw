@@ -1,8 +1,8 @@
 // Moonshot tests cover index plugin behavior.
 import fs from "node:fs";
-import type { Context, Model } from "openclaw/plugin-sdk/llm";
-import { registerSingleProviderPlugin } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { createCapturedThinkingConfigStream } from "openclaw/plugin-sdk/provider-test-contracts";
+import type { Context, Model } from "natesclaw/plugin-sdk/llm";
+import { registerSingleProviderPlugin } from "natesclaw/plugin-sdk/plugin-test-runtime";
+import { createCapturedThinkingConfigStream } from "natesclaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { createKimiWebSearchProvider } from "./src/kimi-web-search-provider.js";
@@ -19,7 +19,7 @@ type MoonshotManifest = {
 
 function readManifest(): MoonshotManifest {
   return JSON.parse(
-    fs.readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf8"),
+    fs.readFileSync(new URL("./natesclaw.plugin.json", import.meta.url), "utf8"),
   ) as MoonshotManifest;
 }
 

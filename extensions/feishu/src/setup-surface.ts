@@ -1,5 +1,5 @@
-import { createChannelDmPolicy } from "openclaw/plugin-sdk/channel-dm-policy";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createChannelDmPolicy } from "natesclaw/plugin-sdk/channel-dm-policy";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 // Feishu plugin module implements setup surface behavior.
 import {
   DEFAULT_ACCOUNT_ID,
@@ -14,10 +14,10 @@ import {
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
   type DmPolicy,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type SecretInput,
-} from "openclaw/plugin-sdk/setup";
-import { normalizeOptionalString as normalizeString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/setup";
+import { normalizeOptionalString as normalizeString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveDefaultFeishuAccountId, resolveFeishuAccount } from "./accounts.js";
 import type { AppRegistrationResult } from "./app-registration.js";
 import type { FeishuConfig, FeishuDomain } from "./types.js";
@@ -32,7 +32,7 @@ const FEISHU_SETUP_FLOW_KEY = "_flow";
 // Helpers
 // ---------------------------------------------------------------------------
 
-function isFeishuConfigured(cfg: OpenClawConfig): boolean {
+function isFeishuConfigured(cfg: NatesclawConfig): boolean {
   const feishuCfg = cfg.channels?.feishu as FeishuConfig | undefined;
 
   const isAppIdConfigured = (value: unknown): boolean => {
@@ -86,10 +86,10 @@ function formatFeishuStatusLine(status: "configured-unverified" | "needs-credent
  * - named account → writes to channels.feishu.accounts[accountId]
  */
 function patchFeishuConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   accountId: string,
   patch: Record<string, unknown>,
-): OpenClawConfig {
+): NatesclawConfig {
   return patchScopedAccountConfig({
     cfg,
     channelKey: channel,
@@ -99,10 +99,10 @@ function patchFeishuConfig(
 }
 
 async function promptFeishuAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string;
   prompter: Parameters<NonNullable<ChannelSetupDmPolicy["promptAllowFrom"]>>[0]["prompter"];
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   const feishuCfg = params.cfg.channels?.feishu as FeishuConfig | undefined;
   const resolvedAccountId = params.accountId ?? resolveDefaultFeishuAccountId(params.cfg);
   const account =
@@ -195,11 +195,11 @@ type FeishuSetupMethod = "manual" | "scan";
 // ---------------------------------------------------------------------------
 
 function applyNewAppSecurityPolicy(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   accountId: string,
   openId: string | undefined,
   groupPolicy: "allowlist" | "open" | "disabled",
-): OpenClawConfig {
+): NatesclawConfig {
   let next = cfg;
 
   if (openId) {
@@ -299,10 +299,10 @@ async function runScanToCreate(
 // ---------------------------------------------------------------------------
 
 async function runNewAppFlow(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   prompter: WizardPrompter;
   options: Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["options"];
-}): Promise<{ cfg: OpenClawConfig }> {
+}): Promise<{ cfg: NatesclawConfig }> {
   const { prompter, options } = params;
   let next = params.cfg;
 
@@ -412,10 +412,10 @@ async function runNewAppFlow(params: {
 // ---------------------------------------------------------------------------
 
 async function runEditFlow(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   prompter: WizardPrompter;
   options: Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["options"];
-}): Promise<{ cfg: OpenClawConfig } | null> {
+}): Promise<{ cfg: NatesclawConfig } | null> {
   const { prompter, options } = params;
   const next = params.cfg;
   const feishuCfg = next.channels?.feishu as FeishuConfig | undefined;
@@ -475,9 +475,9 @@ async function runEditFlow(params: {
 // ---------------------------------------------------------------------------
 
 export async function runFeishuLogin(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   prompter: WizardPrompter;
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   const { cfg, prompter } = params;
   const options = {};
   const alreadyConfigured = isFeishuConfigured(cfg);

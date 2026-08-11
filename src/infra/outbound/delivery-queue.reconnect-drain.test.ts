@@ -1,10 +1,10 @@
 // Covers reconnect-triggered queue drain selection, active claims, backoff
 // bypass, and concurrent drain suppression.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { controlNextRecoverySleep } from "../../../test/helpers/infra/delivery-recovery.js";
-import type { OpenClawConfig } from "../../config/config.js";
-import { openOpenClawStateDatabase } from "../../state/openclaw-state-db.js";
+import type { NatesclawConfig } from "../../config/config.js";
+import { openNatesclawStateDatabase } from "../../state/natesclaw-state-db.js";
 import { OUTBOUND_DELIVERY_QUEUE_NAME } from "./delivery-queue-media-staging.js";
 import {
   loadPendingDeliveries,
@@ -30,7 +30,7 @@ import {
 
 const RECOVERY_REPLAY_SPACING_MS = 250;
 const MAX_RETRIES = 5;
-const stubCfg = {} as OpenClawConfig;
+const stubCfg = {} as NatesclawConfig;
 const NO_LISTENER_ERROR = "No active DirectChat listener";
 const sleepMock = vi.hoisted(() => vi.fn<(ms: number) => Promise<void>>());
 const resolveOutboundChannelMessageAdapterMock = vi.hoisted(() => vi.fn());
@@ -73,8 +73,8 @@ function expectLogMessageWith(logFn: ReturnType<typeof vi.fn>, text: string): vo
 }
 
 function readOutboundQueueStatus(tmpDir: string, id: string): string | undefined {
-  const { db } = openOpenClawStateDatabase({
-    env: { ...process.env, OPENCLAW_STATE_DIR: tmpDir },
+  const { db } = openNatesclawStateDatabase({
+    env: { ...process.env, NATESCLAW_STATE_DIR: tmpDir },
   });
   const row = db
     .prepare("SELECT status FROM delivery_queue_entries WHERE queue_name = ? AND id = ?")
@@ -255,8 +255,8 @@ describe("drainPendingDeliveriesCore for reconnect", () => {
       retryCount: 1,
       lastAttemptAt: Date.now() - 5_000,
     });
-    const cfg: OpenClawConfig = { channels: { discord: { enabled: false } } };
-    const admitDeferredDelivery = vi.fn(({ cfg: currentConfig }: { cfg: OpenClawConfig }) =>
+    const cfg: NatesclawConfig = { channels: { discord: { enabled: false } } };
+    const admitDeferredDelivery = vi.fn(({ cfg: currentConfig }: { cfg: NatesclawConfig }) =>
       currentConfig.channels?.discord?.enabled === false
         ? { status: "permanent_rejection" as const, reason: "Discord account disabled" }
         : { status: "allowed" as const },
@@ -675,7 +675,7 @@ describe("drainPendingDeliveriesCore for reconnect", () => {
   });
 
   it("skips entries that an in-flight live delivery has actively claimed", async () => {
-    // Regression for openclaw/openclaw#70386: a reconnect drain that runs
+    // Regression for natesclaw/natesclaw#70386: a reconnect drain that runs
     // while the live send is still writing to the adapter must not re-drive
     // the same entry. The live delivery path holds an in-memory active claim
     // for `queueId` across its send; drain honors that claim via the same

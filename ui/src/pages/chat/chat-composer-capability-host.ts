@@ -1,4 +1,4 @@
-import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
 import { html, nothing } from "lit";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import type {
@@ -496,7 +496,7 @@ export class ChatComposerCapabilityHost {
         : "chat.composer.menu.scopeEverywhereHint",
     );
     return html`
-      <openclaw-modal-dialog
+      <natesclaw-modal-dialog
         label=${title}
         description=${description}
         @modal-cancel=${(event: Event) => {
@@ -546,7 +546,7 @@ export class ChatComposerCapabilityHost {
               </div>`
             : nothing}
         </div>
-      </openclaw-modal-dialog>
+      </natesclaw-modal-dialog>
     `;
   }
 

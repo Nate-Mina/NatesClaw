@@ -4,7 +4,7 @@ import { MANIFEST_KEY } from "../compat/legacy-names.js";
 import { isRecord } from "../utils.js";
 import type { PluginManifestChannelCommandDefaults } from "./manifest-types.js";
 
-/** package.json OpenClaw metadata used for plugin setup and catalog discovery. */
+/** package.json Natesclaw metadata used for plugin setup and catalog discovery. */
 type PluginPackageChannelApprovalFlag = "native";
 
 export type PluginPackageChannel = {
@@ -79,41 +79,41 @@ export type PluginPackageInstall = {
   requiredPlatformPackages?: string[];
 };
 
-type OpenClawPackageSetupFeatures = {
+type NatesclawPackageSetupFeatures = {
   configPromotion?: boolean;
   /**
-   * @deprecated Declare doctorContract.stateMigrations in openclaw.plugin.json instead.
+   * @deprecated Declare doctorContract.stateMigrations in natesclaw.plugin.json instead.
    * Removal plan: remove the setup-entry adapter after the 2027.1 external-plugin migration window.
    */
   legacyStateMigrations?: boolean;
   legacySessionSurfaces?: boolean;
 };
 
-type OpenClawPackageCompat = {
+type NatesclawPackageCompat = {
   pluginApi?: string;
   minGatewayVersion?: string;
 };
 
-export type OpenClawPackageBuild = {
+export type NatesclawPackageBuild = {
   bundledDist?: boolean;
-  openclawVersion?: string;
+  natesclawVersion?: string;
   pluginSdkVersion?: string;
 };
 
-export type OpenClawPackageManifest = {
+export type NatesclawPackageManifest = {
   extensions?: string[];
   runtimeExtensions?: string[];
   setupEntry?: string;
   runtimeSetupEntry?: string;
-  setupFeatures?: OpenClawPackageSetupFeatures;
+  setupFeatures?: NatesclawPackageSetupFeatures;
   plugin?: {
     id?: string;
     label?: string;
   };
   channel?: PluginPackageChannel;
-  compat?: OpenClawPackageCompat;
+  compat?: NatesclawPackageCompat;
   install?: PluginPackageInstall;
-  build?: OpenClawPackageBuild;
+  build?: NatesclawPackageBuild;
 };
 
 export const DEFAULT_PLUGIN_ENTRY_CANDIDATES = [
@@ -137,11 +137,11 @@ export type PackageManifest = {
   description?: string;
   dependencies?: Record<string, string>;
   optionalDependencies?: Record<string, string>;
-} & Partial<Record<ManifestKey, OpenClawPackageManifest>>;
+} & Partial<Record<ManifestKey, NatesclawPackageManifest>>;
 
 export function getPackageManifestMetadata(
   manifest: PackageManifest | undefined,
-): OpenClawPackageManifest | undefined {
+): NatesclawPackageManifest | undefined {
   if (!manifest) {
     return undefined;
   }
@@ -151,18 +151,18 @@ export function getPackageManifestMetadata(
 export function resolvePackageExtensionEntries(
   manifest: PackageManifest | undefined,
 ): PackageExtensionResolution {
-  const rawOpenClaw = manifest?.[MANIFEST_KEY] as unknown;
-  if (rawOpenClaw === undefined || rawOpenClaw === null) {
+  const rawNatesclaw = manifest?.[MANIFEST_KEY] as unknown;
+  if (rawNatesclaw === undefined || rawNatesclaw === null) {
     return { status: "missing", entries: [] };
   }
-  if (!isRecord(rawOpenClaw)) {
+  if (!isRecord(rawNatesclaw)) {
     return {
       status: "invalid",
       entries: [],
-      error: "package.json openclaw must be an object",
+      error: "package.json natesclaw must be an object",
     };
   }
-  const raw = rawOpenClaw.extensions;
+  const raw = rawNatesclaw.extensions;
   if (raw === undefined || raw === null) {
     return { status: "missing", entries: [] };
   }
@@ -170,7 +170,7 @@ export function resolvePackageExtensionEntries(
     return {
       status: "invalid",
       entries: [],
-      error: "package.json openclaw.extensions must be an array",
+      error: "package.json natesclaw.extensions must be an array",
     };
   }
   const entries: string[] = [];
@@ -180,7 +180,7 @@ export function resolvePackageExtensionEntries(
       return {
         status: "invalid",
         entries: [],
-        error: `package.json openclaw.extensions[${index}] must be a non-empty string`,
+        error: `package.json natesclaw.extensions[${index}] must be a non-empty string`,
       };
     }
     entries.push(normalized);

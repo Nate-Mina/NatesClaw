@@ -5,18 +5,18 @@ import type { Selectable } from "kysely";
 import { listAgentIds, resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
 import { insideGitCheckout, runGit } from "../agents/worktrees/git.js";
 import { slugifyWorktreeTitle } from "../agents/worktrees/name.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 
 type ProjectRegistryRecord = {
   id: string;
@@ -27,8 +27,8 @@ type ProjectRegistryRecord = {
   agentId?: string;
 };
 
-type ProjectsDatabase = Pick<OpenClawStateKyselyDatabase, "projects">;
-type ProjectRow = Selectable<OpenClawStateKyselyDatabase["projects"]>;
+type ProjectsDatabase = Pick<NatesclawStateKyselyDatabase, "projects">;
+type ProjectRow = Selectable<NatesclawStateKyselyDatabase["projects"]>;
 
 const ensuredDatabases = new WeakSet<DatabaseSync>();
 const PROJECT_ID_MAX_LENGTH = 64;
@@ -51,12 +51,12 @@ export class ProjectCheckoutError extends Error {
   }
 }
 
-function ensureProjectRegistrySchema(options: OpenClawStateDatabaseOptions = {}): void {
-  const database = openOpenClawStateDatabase(options);
+function ensureProjectRegistrySchema(options: NatesclawStateDatabaseOptions = {}): void {
+  const database = openNatesclawStateDatabase(options);
   if (ensuredDatabases.has(database.db)) {
     return;
   }
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       // sqlite-allow-raw -- feature-local additive schema DDL; project rows use Kysely below.
       db.exec(PROJECTS_SCHEMA_SQL);
@@ -67,9 +67,9 @@ function ensureProjectRegistrySchema(options: OpenClawStateDatabaseOptions = {})
   ensuredDatabases.add(database.db);
 }
 
-function openProjectsDatabase(options: OpenClawStateDatabaseOptions = {}) {
+function openProjectsDatabase(options: NatesclawStateDatabaseOptions = {}) {
   ensureProjectRegistrySchema(options);
-  const state = openOpenClawStateDatabase(options);
+  const state = openNatesclawStateDatabase(options);
   return { sqlite: state.db, kysely: getNodeSqliteKysely<ProjectsDatabase>(state.db) };
 }
 
@@ -83,7 +83,7 @@ function rowToProject(row: ProjectRow): ProjectRegistryRecord {
   };
 }
 
-function workspaceProject(cfg: OpenClawConfig, agentId: string): ProjectRegistryRecord {
+function workspaceProject(cfg: NatesclawConfig, agentId: string): ProjectRegistryRecord {
   const repoRoot = resolveAgentWorkspaceDir(cfg, agentId);
   return {
     id: `workspace:${agentId}`,
@@ -146,13 +146,13 @@ export async function resolveProjectCheckout(projectPath: string): Promise<{
 
 export async function registerProjectRegistry(
   input: { path: string; name?: string },
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): Promise<ProjectRegistryRecord> {
   const checkout = await resolveProjectCheckout(input.path);
   const displayName = input.name?.trim() || path.basename(checkout.repoRoot) || "Project";
   const baseId = slugifyWorktreeTitle(displayName) ?? "project";
   ensureProjectRegistrySchema(options);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db: sqlite }) => {
       const db = getNodeSqliteKysely<ProjectsDatabase>(sqlite);
       const existing = new Set(
@@ -180,8 +180,8 @@ export async function registerProjectRegistry(
 }
 
 export function listProjectRegistry(
-  cfg: OpenClawConfig,
-  options: OpenClawStateDatabaseOptions = {},
+  cfg: NatesclawConfig,
+  options: NatesclawStateDatabaseOptions = {},
 ): ProjectRegistryRecord[] {
   const { sqlite, kysely } = openProjectsDatabase(options);
   const stored = executeSqliteQuerySync(sqlite, kysely.selectFrom("projects").selectAll()).rows.map(
@@ -192,9 +192,9 @@ export function listProjectRegistry(
 }
 
 export function resolveProjectRegistry(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   id: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): ProjectRegistryRecord | undefined {
   if (id.startsWith("workspace:")) {
     const agentId = id.slice("workspace:".length);
@@ -210,7 +210,7 @@ export function resolveProjectRegistry(
 
 export async function resolveRecordedProjectRoot(
   projectPath: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): Promise<string | undefined> {
   const repoRoot = await fs.realpath(projectPath).catch(() => undefined);
   if (!repoRoot) {
@@ -226,10 +226,10 @@ export async function resolveRecordedProjectRoot(
 
 export function removeProjectRegistry(
   id: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): boolean {
   ensureProjectRegistrySchema(options);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db: sqlite }) => {
       const db = getNodeSqliteKysely<ProjectsDatabase>(sqlite);
       return (

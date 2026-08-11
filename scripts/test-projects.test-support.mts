@@ -395,7 +395,7 @@ const TOOLING_DOCKER_VITEST_CONFIG = "test/vitest/vitest.tooling-docker.config.t
 const TOOLING_ISOLATED_VITEST_CONFIG = "test/vitest/vitest.tooling-isolated.config.ts";
 const TOOLING_VITEST_CONFIG = "test/vitest/vitest.tooling.config.ts";
 const PACKAGE_DOCKER_TEST_TARGET =
-  "test/e2e/qa-lab/runtime/package-openclaw-for-docker.e2e.test.ts";
+  "test/e2e/qa-lab/runtime/package-natesclaw-for-docker.e2e.test.ts";
 const TOOLING_DOCKER_TEST_TARGET = "test/scripts/docker-build-helper.test.ts";
 const BROAD_TOOLING_SCRIPT_TEST_PATTERNS = new Set([
   "test/scripts/**/*.test.ts",
@@ -412,8 +412,8 @@ const UI_E2E_VITEST_CONFIG = "test/vitest/vitest.ui-e2e.config.ts";
 const UI_ISOLATED_VITEST_CONFIG = "test/vitest/vitest.ui-isolated.config.ts";
 const UTILS_VITEST_CONFIG = "test/vitest/vitest.utils.config.ts";
 const WIZARD_VITEST_CONFIG = "test/vitest/vitest.wizard.config.ts";
-const INCLUDE_FILE_ENV_KEY = "OPENCLAW_VITEST_INCLUDE_FILE";
-const FS_MODULE_CACHE_PATH_ENV_KEY = "OPENCLAW_VITEST_FS_MODULE_CACHE_PATH";
+const INCLUDE_FILE_ENV_KEY = "NATESCLAW_VITEST_INCLUDE_FILE";
+const FS_MODULE_CACHE_PATH_ENV_KEY = "NATESCLAW_VITEST_FS_MODULE_CACHE_PATH";
 const FAILED_SHARD_DIGEST_LIMIT = 12;
 const CHANGED_ARGS_PATTERN = /^--changed(?:=(.+))?$/u;
 const VITEST_CONFIG_BY_KIND: Record<string, string> = {
@@ -517,7 +517,7 @@ const VITEST_CONFIG_BY_KIND: Record<string, string> = {
 const BROAD_CHANGED_FALLBACK_PATTERNS = [
   /^package\.json$/u,
   /^pnpm-lock\.yaml$/u,
-  /^test\/setup(?:\.shared|\.extensions|-openclaw-runtime)?\.ts$/u,
+  /^test\/setup(?:\.shared|\.extensions|-natesclaw-runtime)?\.ts$/u,
   /^vitest(?:\..+)?\.(?:config\.ts|paths\.mjs)$/u,
   /^test\/vitest\/vitest\.(?:config|shared\.config|scoped-config|performance-config)\.ts$/u,
   /^test\/helpers\//u,
@@ -548,7 +548,7 @@ const RUNTIME_SIDECAR_PATH_CONSUMER_TEST_TARGETS = [
   ...RUNTIME_SIDECAR_BASELINE_OWNER_TEST_TARGETS,
   "src/infra/update-global.test.ts",
   "src/infra/update-runner.test.ts",
-  "test/openclaw-npm-postpublish-verify.test.ts",
+  "test/natesclaw-npm-postpublish-verify.test.ts",
 ];
 const GITHUB_YAML_PINNING_GUARD_TEST_TARGETS = ["test/scripts/ci-workflow-guards.test.ts"];
 const GROUP_VISIBLE_REPLY_TEST_TARGETS = [
@@ -592,7 +592,7 @@ const SOURCE_TEST_TARGETS = new Map([
   ...PRECISE_SOURCE_TEST_TARGETS,
   ["extensions/codex/package.json", CODEX_VERSION_CONTRACT_TEST_TARGETS],
   ["extensions/codex/src/app-server/version.ts", CODEX_VERSION_CONTRACT_TEST_TARGETS],
-  ["src/test-utils/openclaw-test-state.ts", ["src/test-utils/openclaw-test-state.test.ts"]],
+  ["src/test-utils/natesclaw-test-state.ts", ["src/test-utils/natesclaw-test-state.test.ts"]],
   [
     "src/channels/plugins/contracts/test-helpers/manifest.ts",
     [
@@ -765,10 +765,10 @@ const IMPORT_SPECIFIER_PATTERN =
   /\b(?:import|export)\s+(?:type\s+)?(?:[^'"]*?\s+from\s+)?["']([^"']+)["']|\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu;
 const REEXPORT_SPECIFIER_PATTERN =
   /\bexport\s+(?:type\s+)?(?:\*\s+(?:as\s+\w+\s+)?from\s+|[^"']+?\s+from\s+)["']([^"']+)["']/gu;
-const BROAD_CHANGED_ENV_KEY = "OPENCLAW_TEST_CHANGED_BROAD";
-const VITEST_NO_OUTPUT_TIMEOUT_ENV_KEY = "OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS";
-const VITEST_NO_OUTPUT_HEARTBEAT_ENV_KEY = "OPENCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS";
-const VITEST_NO_OUTPUT_RETRY_ENV_KEY = "OPENCLAW_VITEST_NO_OUTPUT_RETRY";
+const BROAD_CHANGED_ENV_KEY = "NATESCLAW_TEST_CHANGED_BROAD";
+const VITEST_NO_OUTPUT_TIMEOUT_ENV_KEY = "NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS";
+const VITEST_NO_OUTPUT_HEARTBEAT_ENV_KEY = "NATESCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS";
+const VITEST_NO_OUTPUT_RETRY_ENV_KEY = "NATESCLAW_VITEST_NO_OUTPUT_RETRY";
 /** Default no-output timeout applied to test-projects Vitest children. */
 export const DEFAULT_TEST_PROJECTS_VITEST_NO_OUTPUT_TIMEOUT_MS = String(900_000);
 /** Default heartbeat interval applied to test-projects Vitest children. */
@@ -787,7 +787,7 @@ export function formatNoChangedTestTargetLines(skippedBroadFallbackPaths: string
       skippedBroadFallbackPaths.length === 1 ? "" : "s"
     } require broad Vitest fallback:`,
     ...skippedBroadFallbackPaths.map((changedPath) => `[test]   ${changedPath}`),
-    "[test] run `OPENCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` for broad coverage.",
+    "[test] run `NATESCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` for broad coverage.",
   ];
 }
 
@@ -1954,8 +1954,8 @@ const changedScopeTests = [
 const dockerCache = "src/docker-build-cache.test.ts";
 const dockerDigests = "src/docker-image-digests.test.ts";
 const openaiChatToolsE2e = "test/e2e/qa-lab/runtime/openai-compatible-chat-tools.e2e.test.ts";
-const npmPostpublish = "test/openclaw-npm-postpublish-verify.test.ts";
-const crossOsReleaseChecks = "openclaw-cross-os-release-checks";
+const npmPostpublish = "test/natesclaw-npm-postpublish-verify.test.ts";
+const crossOsReleaseChecks = "natesclaw-cross-os-release-checks";
 const runNode = "src/infra/run-node.test.ts";
 const pluginSdkEntryOwners = [
   "src/plugins/contracts/plugin-sdk-index.bundle.test.ts",
@@ -1978,7 +1978,7 @@ const EXACT_TOOLING_TARGETS = new Map<string, string[]>([
     ["mantis-telegram-desktop-proof-workflow", packageAcceptance, workflowGuards],
   ],
   [
-    ".github/workflows/openclaw-live-and-e2e-checks-reusable.yml",
+    ".github/workflows/natesclaw-live-and-e2e-checks-reusable.yml",
     [packageAcceptance, workflowGuards, "release-workflow-matrix-plan", installDocker],
   ],
   [
@@ -2009,7 +2009,7 @@ const EXACT_TOOLING_TARGETS = new Map<string, string[]>([
     [
       "test/release-version.test.ts",
       "test/npm-publish-plan.test.ts",
-      "test/openclaw-npm-release-check.test.ts",
+      "test/natesclaw-npm-release-check.test.ts",
       npmPostpublish,
       "test/plugin-npm-release.test.ts",
       "test/plugin-clawhub-release.test.ts",
@@ -2017,8 +2017,8 @@ const EXACT_TOOLING_TARGETS = new Map<string, string[]>([
       "android-pin-version",
       "docker-release-policy",
       "ios-version",
-      "openclaw-npm-extended-stable-release",
-      "openclaw-npm-publish",
+      "natesclaw-npm-extended-stable-release",
+      "natesclaw-npm-publish",
       "release-preflight",
       "release-prepare",
       "release-upgrade-baseline",
@@ -2047,9 +2047,9 @@ const EXACT_TOOLING_TARGETS = new Map<string, string[]>([
   ["scripts/run-oxlint-shards.mts", ["run-oxlint"]],
   ["scripts/lib/failed-trailer.mts", ["run-oxlint", "run-tsgo", "run-vitest", "changed-lanes"]],
   ["scripts/docker-e2e-rerun.mts", ["docker-e2e-helper-cli"]],
-  ["scripts/openclaw-postpack.mjs", [TOOLING_VITEST_CONFIG]],
-  ["scripts/package-manifest.mjs", ["test/openclaw-prepack.test.ts"]],
-  ["scripts/openclaw-npm-prepublish-verify.ts", ["test/openclaw-npm-prepublish-verify.test.ts"]],
+  ["scripts/natesclaw-postpack.mjs", [TOOLING_VITEST_CONFIG]],
+  ["scripts/package-manifest.mjs", ["test/natesclaw-prepack.test.ts"]],
+  ["scripts/natesclaw-npm-prepublish-verify.ts", ["test/natesclaw-npm-prepublish-verify.test.ts"]],
   ["scripts/lib/docker-e2e-scenarios.mts", [dockerE2e, pluginPrerelease]],
   ["scripts/e2e/kitchen-sink-rpc-walk.mts", ["kitchen-sink-rpc-walk", pluginPrerelease]],
   [
@@ -2083,7 +2083,7 @@ const EXACT_TOOLING_TARGETS = new Map<string, string[]>([
       packageAcceptance,
       "upgrade-survivor-probe-gateway",
       "upgrade-survivor-assertions",
-      "openclaw-test-state",
+      "natesclaw-test-state",
     ],
   ],
   [
@@ -2159,20 +2159,20 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
     ["src/dockerfile.test.ts", packageAcceptance, pluginPrerelease],
   ],
   [
-    /^\.github\/workflows\/openclaw-release-checks\.yml$/u,
+    /^\.github\/workflows\/natesclaw-release-checks\.yml$/u,
     [packageAcceptance, crossOsReleaseChecks, pluginPrerelease, installDocker],
   ],
   [/^\.github\/workflows\/docker-release\.yml$/u, ["src/dockerfile.test.ts"]],
   [/^\.github\/workflows\/install-smoke\.yml$/u, ["install-smoke-no-push-workflow", installDocker]],
-  [/^\.github\/workflows\/openclaw-performance\.yml$/u, ["openclaw-performance-workflow"]],
+  [/^\.github\/workflows\/natesclaw-performance\.yml$/u, ["natesclaw-performance-workflow"]],
   [/^\.github\/workflows\/plugin-prerelease\.yml$/u, [pluginPrerelease]],
   [/^\.github\/workflows\/tui-pty\.yml$/u, [packageAcceptance]],
   [
-    /^\.github\/workflows\/openclaw-cross-os-release-checks-reusable\.yml$/u,
-    [crossOsReleaseChecks, "openclaw-cross-os-release-workflow", packageAcceptance],
+    /^\.github\/workflows\/natesclaw-cross-os-release-checks-reusable\.yml$/u,
+    [crossOsReleaseChecks, "natesclaw-cross-os-release-workflow", packageAcceptance],
   ],
   [
-    /^\.github\/workflows\/(?:openclaw-release-publish|package-acceptance)\.yml$/u,
+    /^\.github\/workflows\/(?:natesclaw-release-publish|package-acceptance)\.yml$/u,
     [packageAcceptance],
   ],
   [
@@ -2180,8 +2180,8 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
     [packageAcceptance, "plugin-clawhub-new-workflow"],
   ],
   [
-    /^\.github\/workflows\/openclaw-npm-release\.yml$/u,
-    [npmPostpublish, "openclaw-npm-extended-stable-workflow", packageAcceptance],
+    /^\.github\/workflows\/natesclaw-npm-release\.yml$/u,
+    [npmPostpublish, "natesclaw-npm-extended-stable-workflow", packageAcceptance],
   ],
   [
     new RegExp(
@@ -2232,14 +2232,14 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
   ],
   [/^scripts\/e2e\/npm-telegram-live-docker\.sh$/u, ["npm-telegram-live"]],
   [
-    /^scripts\/package-openclaw-for-docker\.m[jt]s$/u,
-    ["test/e2e/qa-lab/runtime/package-openclaw-for-docker.e2e.test.ts"],
+    /^scripts\/package-natesclaw-for-docker\.m[jt]s$/u,
+    ["test/e2e/qa-lab/runtime/package-natesclaw-for-docker.e2e.test.ts"],
   ],
   [/^scripts\/run-node\.(?:mjs|mts)$/u, [runNode]],
   [/^scripts\/ios-write-swift-filelist\.m[jt]s$/u, ["ios-run"]],
   [/^scripts\/pr-lib\/merge\.sh$/u, ["pr-merge"]],
   [/^scripts\/plugin-clawhub-publish\.sh$/u, ["test/plugin-clawhub-release.test.ts"]],
-  [/^scripts\/openclaw-npm-postpublish-verify\.ts$/u, [npmPostpublish]],
+  [/^scripts\/natesclaw-npm-postpublish-verify\.ts$/u, [npmPostpublish]],
   [
     /^scripts\/install\.ps1$/u,
     ["install-ps1", "website-installer-sync-workflow", crossOsReleaseChecks, changedScope],
@@ -2254,8 +2254,8 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
     ["src/plugins/copy-bundled-plugin-metadata.test.ts", runNode],
   ],
   [
-    /^scripts\/github\/run-openclaw-cross-os-release-checks\.sh$/u,
-    ["openclaw-cross-os-release-workflow"],
+    /^scripts\/github\/run-natesclaw-cross-os-release-checks\.sh$/u,
+    ["natesclaw-cross-os-release-workflow"],
   ],
   [
     /^scripts\/write-plugin-sdk-entry-dts\.ts$/u,
@@ -2270,7 +2270,7 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
       [
         "^scripts\\/(?:auth-monitor|mobile-reauth|setup-auth-system|",
         "termux-(?:auth-widget|quick-auth|sync-widget))\\.sh$|",
-        "^scripts\\/systemd\\/openclaw-auth-monitor\\.(?:service|timer)$",
+        "^scripts\\/systemd\\/natesclaw-auth-monitor\\.(?:service|timer)$",
       ].join(""),
       "u",
     ),
@@ -2362,7 +2362,7 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
   ],
   [
     /^scripts\/lib\/workspace-bootstrap-smoke\.mts$/u,
-    [releaseCheck, "test/openclaw-npm-release-check.test.ts"],
+    [releaseCheck, "test/natesclaw-npm-release-check.test.ts"],
   ],
   [/^scripts\/lib\/extension-test-plan\.(?:mjs|mts)$/u, ["test-extension"]],
   [
@@ -2378,9 +2378,9 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
       runNode,
       "src/infra/package-dist-inventory.test.ts",
       releaseCheck,
-      "test/openclaw-npm-release-check.test.ts",
+      "test/natesclaw-npm-release-check.test.ts",
       "check-gateway-watch-regression",
-      "check-openclaw-package-tarball",
+      "check-natesclaw-package-tarball",
       crossOsReleaseChecks,
     ],
   ],
@@ -2388,7 +2388,7 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
     /^scripts\/lib\/package-dist-imports\.mjs$/u,
     [
       "check-package-dist-imports",
-      "check-openclaw-package-tarball",
+      "check-natesclaw-package-tarball",
       "postinstall-bundled-plugins",
       releaseCheck,
     ],
@@ -2409,7 +2409,7 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
     /^scripts\/lib\/npm-publish-plan\.mjs$/u,
     [
       "test/npm-publish-plan.test.ts",
-      "test/openclaw-npm-release-check.test.ts",
+      "test/natesclaw-npm-release-check.test.ts",
       npmPostpublish,
       "test/plugin-npm-release.test.ts",
       "test/plugin-clawhub-release.test.ts",
@@ -2432,7 +2432,7 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
   ],
   [/^scripts\/lib\/run-node\.(?:mjs|mts)$/u, [runNode]],
   [
-    /^\.agents\/skills\/openclaw-changelog-update\/scripts\/verify-release-notes\.mjs$/u,
+    /^\.agents\/skills\/natesclaw-changelog-update\/scripts\/verify-release-notes\.mjs$/u,
     ["release-notes-ledger", "verify-release-notes"],
   ],
   [
@@ -2547,7 +2547,7 @@ const SEMANTIC_TOOLING_TARGET_PATTERNS: Array<[RegExp, string[]]> = [
   ],
   [/^scripts\/e2e\/codex-media-path-docker\.sh$/u, ["codex-media-path-client"]],
   [/^scripts\/e2e\/live-plugin-tool-docker\.sh$/u, ["live-plugin-tool-assertions"]],
-  [/^scripts\/e2e\/onboard-docker\.sh$/u, [dockerBuild, "openclaw-test-state"]],
+  [/^scripts\/e2e\/onboard-docker\.sh$/u, [dockerBuild, "natesclaw-test-state"]],
   [
     new RegExp(
       [
@@ -2842,9 +2842,9 @@ function resolveToolingTestTargets(changedPath: string, cwd = process.cwd()) {
     return null;
   }
   const crossOsReleaseTargets =
-    implementationPath === "scripts/openclaw-cross-os-release-checks.ts" ||
+    implementationPath === "scripts/natesclaw-cross-os-release-checks.ts" ||
     implementationPath.startsWith("scripts/lib/cross-os-release-checks/")
-      ? ["test/scripts/openclaw-cross-os-release-checks.test.ts"]
+      ? ["test/scripts/natesclaw-cross-os-release-checks.test.ts"]
       : null;
   const explicitTargets =
     (changedPath === "Dockerfile"
@@ -2956,7 +2956,7 @@ function resolvePreciseChangedTestTargets(
   const cwd = options.cwd ?? process.cwd();
   const mappedTargets =
     SOURCE_TEST_TARGETS.get(changedPath) ??
-    (/^extensions\/[^/]+\/openclaw\.plugin\.json$/u.test(changedPath)
+    (/^extensions\/[^/]+\/natesclaw\.plugin\.json$/u.test(changedPath)
       ? [changedPath, DOCS_CONFIG_EXAMPLES_TEST_TARGET]
       : null) ??
     resolveToolingTestTargets(changedPath, cwd) ??
@@ -3722,16 +3722,16 @@ export function buildFullSuiteVitestRunPlans(args: string[], cwd = process.cwd()
     ];
   }
   const parallelShardCount = parsePositiveInt(
-    process.env.OPENCLAW_TEST_PROJECTS_PARALLEL,
-    "OPENCLAW_TEST_PROJECTS_PARALLEL",
+    process.env.NATESCLAW_TEST_PROJECTS_PARALLEL,
+    "NATESCLAW_TEST_PROJECTS_PARALLEL",
   );
   const expandToProjectConfigs =
-    process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS === "1" ||
+    process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS === "1" ||
     (parallelShardCount !== null && parallelShardCount > 1) ||
     shouldExpandLocalFullSuiteShardsByDefault(process.env);
   return fullSuiteVitestShards.flatMap((shard) => {
     if (
-      process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD === "1" &&
+      process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD === "1" &&
       shard.config === FULL_EXTENSIONS_VITEST_CONFIG
     ) {
       return [];
@@ -3740,7 +3740,7 @@ export function buildFullSuiteVitestRunPlans(args: string[], cwd = process.cwd()
     // Bound project and worker lifetimes before either aggregate reaches V8's heap limit.
     const expandShard =
       expandToProjectConfigs ||
-      (process.env.OPENCLAW_TESTBOX_REMOTE_RUN === "1" &&
+      (process.env.NATESCLAW_TESTBOX_REMOTE_RUN === "1" &&
         (shard.config === FULL_AGENTIC_VITEST_CONFIG ||
           shard.config === FULL_EXTENSIONS_VITEST_CONFIG));
     const configs = expandShard ? shard.projects : [shard.config];
@@ -3803,7 +3803,7 @@ function shouldUseLocalFullSuiteParallelByDefault(env = process.env) {
   if (hasConservativeVitestWorkerBudget(env)) {
     return false;
   }
-  return env.OPENCLAW_TEST_PROJECTS_SERIAL !== "1" && !isCiLikeEnv(env);
+  return env.NATESCLAW_TEST_PROJECTS_SERIAL !== "1" && !isCiLikeEnv(env);
 }
 
 function shouldExpandLocalFullSuiteShardsByDefault(env = process.env) {
@@ -3827,10 +3827,10 @@ function parsePositiveInt(value: string | undefined, label: string) {
 
 function hasConservativeVitestWorkerBudget(env: NodeJS.ProcessEnv) {
   const workerBudget = parsePositiveInt(
-    env.OPENCLAW_VITEST_MAX_WORKERS ?? env.OPENCLAW_TEST_WORKERS,
-    env.OPENCLAW_VITEST_MAX_WORKERS === undefined
-      ? "OPENCLAW_TEST_WORKERS"
-      : "OPENCLAW_VITEST_MAX_WORKERS",
+    env.NATESCLAW_VITEST_MAX_WORKERS ?? env.NATESCLAW_TEST_WORKERS,
+    env.NATESCLAW_VITEST_MAX_WORKERS === undefined
+      ? "NATESCLAW_TEST_WORKERS"
+      : "NATESCLAW_VITEST_MAX_WORKERS",
   );
   return workerBudget !== null && workerBudget <= 1;
 }
@@ -3885,13 +3885,13 @@ export function resolveParallelFullSuiteConcurrency(
   let env = envInput;
   env ??= process.env;
   const override = parsePositiveInt(
-    env.OPENCLAW_TEST_PROJECTS_PARALLEL,
-    "OPENCLAW_TEST_PROJECTS_PARALLEL",
+    env.NATESCLAW_TEST_PROJECTS_PARALLEL,
+    "NATESCLAW_TEST_PROJECTS_PARALLEL",
   );
   if (override !== null) {
     return Math.min(override, specCount);
   }
-  if (env.OPENCLAW_TEST_PROJECTS_SERIAL === "1") {
+  if (env.NATESCLAW_TEST_PROJECTS_SERIAL === "1") {
     return 1;
   }
   if (isCiLikeEnv(env)) {
@@ -3901,7 +3901,7 @@ export function resolveParallelFullSuiteConcurrency(
     return 1;
   }
   if (
-    env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS !== "1" &&
+    env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS !== "1" &&
     !shouldUseLocalFullSuiteParallelByDefault(env)
   ) {
     return 1;
@@ -4037,7 +4037,7 @@ export function createVitestRunSpecs(
     const includeFilePath = plan.includePatterns
       ? path.join(
           params.tempDir ?? os.tmpdir(),
-          `openclaw-vitest-include-${randomUUID()}-${index}.json`,
+          `natesclaw-vitest-include-${randomUUID()}-${index}.json`,
         )
       : null;
     return {
@@ -4095,11 +4095,11 @@ export function shouldAcquireLocalHeavyCheckLock(
   runSpecs: Array<Pick<VitestRunSpec, "config" | "includePatterns" | "watchMode">>,
   env = process.env,
 ) {
-  if (env.OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD === "1") {
+  if (env.NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD === "1") {
     return false;
   }
 
-  if (env.OPENCLAW_TEST_PROJECTS_FORCE_LOCK === "1") {
+  if (env.NATESCLAW_TEST_PROJECTS_FORCE_LOCK === "1") {
     return true;
   }
 

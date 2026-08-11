@@ -1,9 +1,9 @@
 /**
- * Bridges OpenClaw runtime tools into Codex app-server dynamic tool specs and
+ * Bridges Natesclaw runtime tools into Codex app-server dynamic tool specs and
  * tool-call responses.
  */
 import { createHash } from "node:crypto";
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
+import type { AgentToolResult } from "natesclaw/plugin-sdk/agent-core";
 import {
   consumeAdjustedParamsForToolCall,
   consumePreExecutionBlockedToolCall,
@@ -40,22 +40,22 @@ import {
   type MessagingToolSend,
   type MessagingToolSourceReplyPayload,
   wrapToolWithBeforeToolCallHook,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { emitTrustedDiagnosticEvent } from "openclaw/plugin-sdk/diagnostic-runtime";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import type { ImageContent, TextContent } from "openclaw/plugin-sdk/llm";
-import { normalizeOpenAIToolSchemas } from "openclaw/plugin-sdk/provider-tools";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { emitTrustedDiagnosticEvent } from "natesclaw/plugin-sdk/diagnostic-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import type { ImageContent, TextContent } from "natesclaw/plugin-sdk/llm";
+import { normalizeOpenAIToolSchemas } from "natesclaw/plugin-sdk/provider-tools";
 import {
   asOptionalRecord,
   isRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   DEFAULT_MAX_LIVE_TOOL_RESULT_CHARS,
   estimateToolResultTextChars,
   resolveLiveToolResultMaxChars,
   sliceToolResultTextToBudget,
-} from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { CodexDynamicToolsLoading } from "./config.js";
 import {
   createFailedDynamicToolResponse,
@@ -65,7 +65,7 @@ import {
 } from "./dynamic-tool-response-state.js";
 import { invalidInlineImageText, sanitizeInlineImageDataUrl } from "./image-payload-sanitizer.js";
 import {
-  CODEX_OPENCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
+  CODEX_NATESCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
   type CodexDynamicToolCallOutputContentItem,
   type CodexDynamicToolCallParams,
   type CodexDynamicToolCallResponse,
@@ -397,10 +397,10 @@ function normalizeAcceptedSessionSpawn(result: unknown): {
   return runId && childSessionKey ? { runId, childSessionKey } : null;
 }
 
-/** Namespace attached to OpenClaw-owned dynamic tools exposed to Codex. */
-const CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE = "openclaw";
+/** Namespace attached to Natesclaw-owned dynamic tools exposed to Codex. */
+const CODEX_NATESCLAW_DYNAMIC_TOOL_NAMESPACE = "natesclaw";
 
-// Keep OpenClaw control-path tools directly callable even when Codex tool_search
+// Keep Natesclaw control-path tools directly callable even when Codex tool_search
 // is unavailable or resolves a connector-only universe. Developer instructions
 // still steer normal Codex subagents to native spawn_agent.
 // sessions_yield is normally routed by its catalogMode "direct-only" before
@@ -443,7 +443,7 @@ function invalidateComputerFrame(contextEpoch: {
 }
 
 /**
- * Creates dynamic tool specs and a call handler that executes OpenClaw tools,
+ * Creates dynamic tool specs and a call handler that executes Natesclaw tools,
  * applies hooks/middleware, and records delivery/media telemetry.
  */
 export function createCodexDynamicToolBridge(params: {
@@ -559,8 +559,8 @@ export function createCodexDynamicToolBridge(params: {
       if (!toolEntry) {
         const executedArguments = jsonObjectToRecord(call.arguments);
         const message = registeredToolNames.has(call.tool)
-          ? `OpenClaw tool is not available for this turn: ${call.tool}`
-          : `Unknown OpenClaw tool: ${call.tool}`;
+          ? `Natesclaw tool is not available for this turn: ${call.tool}`
+          : `Unknown Natesclaw tool: ${call.tool}`;
         finalizeToolTerminalPresentation({
           toolCallId: call.callId,
           runId: toolResultHookContext.runId,
@@ -839,7 +839,7 @@ export function createCodexDynamicToolBridge(params: {
             : resolveToolExecutionErrorKind(error));
         const errorMessage = formatToolExecutionErrorMessage(
           error,
-          "OpenClaw dynamic tool call failed.",
+          "Natesclaw dynamic tool call failed.",
         );
         executionPrevented =
           executionPrevented ||
@@ -1021,8 +1021,8 @@ function createCodexDynamicToolSpecs(params: {
       : params.entries.toSorted((left, right) => left.name.localeCompare(right.name));
   for (const entry of entries) {
     const functionSpec = createCodexDynamicToolFunctionSpec({ entry });
-    if (entry.name === "openclaw" && params.directToolNames.has(entry.name)) {
-      // OpenClaw is ring-zero and its whole turn surface. Keep its canonical
+    if (entry.name === "natesclaw" && params.directToolNames.has(entry.name)) {
+      // Natesclaw is ring-zero and its whole turn surface. Keep its canonical
       // root name even though generic direct-only tools use a model namespace.
       specs.push(functionSpec);
       continue;
@@ -1040,7 +1040,7 @@ function createCodexDynamicToolSpecs(params: {
   if (namespaceTools.length > 0) {
     specs.push({
       type: "namespace",
-      name: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+      name: CODEX_NATESCLAW_DYNAMIC_TOOL_NAMESPACE,
       description: "",
       tools: namespaceTools,
     });
@@ -1048,7 +1048,7 @@ function createCodexDynamicToolSpecs(params: {
   if (directOnlyNamespaceTools.length > 0) {
     specs.push({
       type: "namespace",
-      name: CODEX_OPENCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
+      name: CODEX_NATESCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
       description: "",
       tools: directOnlyNamespaceTools,
     });
@@ -1476,7 +1476,7 @@ function convertToolContents(
   if (totalTextBudget <= maxChars) {
     return content.flatMap(convertToolContent);
   }
-  const noticeText = `...(OpenClaw truncated dynamic tool result: original ${totalTextChars} chars, weighted budget ${maxChars}; rerun with narrower args.)`;
+  const noticeText = `...(Natesclaw truncated dynamic tool result: original ${totalTextChars} chars, weighted budget ${maxChars}; rerun with narrower args.)`;
   const notice = `\n${noticeText}`;
   const noticeChars = estimateToolResultTextChars(notice);
   const textBudget = Math.max(0, maxChars - noticeChars);

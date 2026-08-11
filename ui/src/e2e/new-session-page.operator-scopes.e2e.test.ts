@@ -73,7 +73,7 @@ suite.define(() => {
   it("lets write-scoped operators browse and restore only workspace-contained folders", async () => {
     const context = await suite.browser.newContext({ locale: "en-US", serviceWorkers: "block" });
     const page = await context.newPage();
-    const workspace = "/home/peter/openclaw";
+    const workspace = "/home/peter/natesclaw";
     const contained = `${workspace}/packages/app`;
     const gateway = await installMockGateway(page, {
       workspace,
@@ -133,8 +133,8 @@ suite.define(() => {
   it("keeps a canonical browser selection submittable for a symlinked workspace alias", async () => {
     const context = await suite.browser.newContext({ locale: "en-US", serviceWorkers: "block" });
     const page = await context.newPage();
-    const workspaceAlias = "/var/folders/openclaw/workspace-alias";
-    const canonicalWorkspace = "/private/var/folders/openclaw/workspace";
+    const workspaceAlias = "/var/folders/natesclaw/workspace-alias";
+    const canonicalWorkspace = "/private/var/folders/natesclaw/workspace";
     const canonicalFolder = `${canonicalWorkspace}/packages`;
     const gateway = await installMockGateway(page, {
       workspace: workspaceAlias,
@@ -200,7 +200,7 @@ suite.define(() => {
   it("submits an unvalidated typed folder so the Gateway error stays actionable", async () => {
     const context = await suite.browser.newContext({ locale: "en-US", serviceWorkers: "block" });
     const page = await context.newPage();
-    const workspace = "/home/peter/openclaw";
+    const workspace = "/home/peter/natesclaw";
     const typedFolder = "/private/repo";
     const gateway = await installMockGateway(page, {
       workspace,
@@ -298,7 +298,7 @@ suite.define(() => {
       await expect
         .poll(() =>
           page.evaluate(() => {
-            const app = document.querySelector("openclaw-app") as HTMLElement & {
+            const app = document.querySelector("natesclaw-app") as HTMLElement & {
               runtime?: { context: { gateway: { snapshot: { phase: string } } } };
             };
             return app.runtime?.context.gateway.snapshot.phase;

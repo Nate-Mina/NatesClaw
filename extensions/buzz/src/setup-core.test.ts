@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { buzzSetupContract } from "./setup-core.js";
 
@@ -17,7 +17,7 @@ describe("buzzSetupContract", () => {
           privateKey: "11".repeat(32),
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = buzzSetupContract.applyAccountConfig({
       cfg,
@@ -39,7 +39,7 @@ describe("buzzSetupContract", () => {
 
     expect(
       buzzSetupContract.validateInput({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NatesclawConfig,
         accountId: "default",
         input: { relayUrl: "wss://buzz.example.com", useEnv: true },
       }),
@@ -55,7 +55,7 @@ describe("buzzSetupContract", () => {
           authTag: '["auth","owner","kind=9","signature"]',
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = buzzSetupContract.applyAccountConfig({
       cfg,
@@ -77,7 +77,7 @@ describe("buzzSetupContract", () => {
           authTag: '["auth","owner","kind=9","signature"]',
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = buzzSetupContract.applyAccountConfig({
       cfg,

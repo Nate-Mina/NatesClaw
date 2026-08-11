@@ -34,22 +34,22 @@ describe("gh-read helpers", () => {
     }
 
     expect(stderr).toContain("usage: scripts/gh-read <gh args...>");
-    expect(stderr).toContain("OPENCLAW_GH_READ_APP_ID");
+    expect(stderr).toContain("NATESCLAW_GH_READ_APP_ID");
   });
 
   it("finds repo from gh args", () => {
-    expect(parseRepoArg(["pr", "view", "42", "-R", "openclaw/openclaw"])).toBe("openclaw/openclaw");
-    expect(parseRepoArg(["run", "list", "--repo=openclaw/docs"])).toBe("openclaw/docs");
+    expect(parseRepoArg(["pr", "view", "42", "-R", "natesclaw/natesclaw"])).toBe("natesclaw/natesclaw");
+    expect(parseRepoArg(["run", "list", "--repo=natesclaw/docs"])).toBe("natesclaw/docs");
     expect(parseRepoArg(["pr", "view", "42"])).toBeNull();
   });
 
   it("normalizes repo strings from common git formats", () => {
-    expect(normalizeRepo("openclaw/openclaw")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("github.com/openclaw/openclaw")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("github:openclaw/openclaw")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("https://github.com/openclaw/openclaw.git")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("git@github.com:openclaw/openclaw.git")).toBe("openclaw/openclaw");
-    expect(normalizeRepo("https://gitlab.com/openclaw/openclaw.git")).toBeNull();
+    expect(normalizeRepo("natesclaw/natesclaw")).toBe("natesclaw/natesclaw");
+    expect(normalizeRepo("github.com/natesclaw/natesclaw")).toBe("natesclaw/natesclaw");
+    expect(normalizeRepo("github:natesclaw/natesclaw")).toBe("natesclaw/natesclaw");
+    expect(normalizeRepo("https://github.com/natesclaw/natesclaw.git")).toBe("natesclaw/natesclaw");
+    expect(normalizeRepo("git@github.com:natesclaw/natesclaw.git")).toBe("natesclaw/natesclaw");
+    expect(normalizeRepo("https://gitlab.com/natesclaw/natesclaw.git")).toBeNull();
     expect(normalizeRepo("invalid")).toBeNull();
   });
 
@@ -83,7 +83,7 @@ describe("gh-read helpers", () => {
   });
 
   it("bounds GitHub App private key files", () => {
-    const tempDir = mkdtempSync(path.join(os.tmpdir(), "openclaw-gh-read-key-"));
+    const tempDir = mkdtempSync(path.join(os.tmpdir(), "natesclaw-gh-read-key-"));
     const privateKeyPath = path.join(tempDir, "app.pem");
     try {
       writeFileSync(privateKeyPath, "x".repeat(64 * 1024));
@@ -243,7 +243,7 @@ describe("gh-read helpers", () => {
   it("rejects invalid GitHub API timeout values", () => {
     expect(resolveGitHubFetchTimeoutMs("1000")).toBe(1000);
     expect(() => resolveGitHubFetchTimeoutMs("1s")).toThrow(
-      /OPENCLAW_GH_READ_FETCH_TIMEOUT_MS must be an integer/u,
+      /NATESCLAW_GH_READ_FETCH_TIMEOUT_MS must be an integer/u,
     );
   });
 });

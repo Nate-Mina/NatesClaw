@@ -1,7 +1,7 @@
 // Collects configured startup channels, slots, paths, and validation references.
-import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { collectConfiguredModelRefs } from "@natesclaw/model-catalog-core/configured-model-refs";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 import { listAgentEntries } from "../agents/agent-scope-config.js";
 import { splitTrailingAuthProfile } from "../agents/model-ref-profile.js";
 import {
@@ -9,7 +9,7 @@ import {
   listPotentialConfiguredChannelIds,
   type AmbientEnvTriggerPolicy,
 } from "../channels/config-presence.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   DEFAULT_MEMORY_DREAMING_PLUGIN_ID,
   resolveMemoryDreamingConfig,
@@ -43,7 +43,7 @@ import type { PluginManifestRecord, PluginManifestRegistry } from "./manifest-re
 import { normalizePluginsConfigWithRegistry } from "./plugin-registry-contributions.js";
 
 export function readStartupBundledDiscoveryMode(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   env: NodeJS.ProcessEnv,
 ): "compat" | "allowlist" | undefined {
   const stateMode = readBundledDiscoveryMode({ env });
@@ -60,7 +60,7 @@ export function readStartupBundledDiscoveryMode(
   return undefined;
 }
 export function normalizePluginsConfigForInstalledIndex(
-  config: OpenClawConfig["plugins"] | undefined,
+  config: NatesclawConfig["plugins"] | undefined,
   lookup: InstalledPluginIndexScopeLookup,
 ) {
   return normalizePluginsConfigWithResolverCore(config, lookup.normalizePluginId);
@@ -77,7 +77,7 @@ function isConfigActivationValueEnabled(value: unknown): boolean {
 }
 
 export function listPotentialEnabledChannelIds(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   env: NodeJS.ProcessEnv,
   ambientEnvTriggers: AmbientEnvTriggerPolicy = "allow",
 ): string[] {
@@ -97,7 +97,7 @@ function isGatewayStartupMemoryPlugin(plugin: InstalledPluginIndexRecord): boole
   return plugin.startup.memory;
 }
 
-function resolveGatewayStartupDreamingEngineId(config: OpenClawConfig): string | undefined {
+function resolveGatewayStartupDreamingEngineId(config: NatesclawConfig): string | undefined {
   const dreamingConfig = resolveMemoryDreamingConfig({
     pluginConfig: resolveMemoryDreamingPluginConfig(config),
     cfg: config,
@@ -111,7 +111,7 @@ function resolveGatewayStartupDreamingEngineId(config: OpenClawConfig): string |
   return DEFAULT_MEMORY_DREAMING_PLUGIN_ID;
 }
 
-function resolveGatewayStartupDreamingSelectedPluginId(config: OpenClawConfig): string | undefined {
+function resolveGatewayStartupDreamingSelectedPluginId(config: NatesclawConfig): string | undefined {
   const selectedPluginId = normalizeOptionalLowercaseString(resolveMemoryDreamingPluginId(config));
   return selectedPluginId && selectedPluginId !== DEFAULT_MEMORY_DREAMING_PLUGIN_ID
     ? selectedPluginId
@@ -132,11 +132,11 @@ export function blocksPluginStartup(params: {
 }
 
 export function resolveAuthorizedGatewayStartupDreamingPluginIds(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginsConfig: NormalizedPluginsConfig;
   activationSource: {
     plugins: NormalizedPluginsConfig;
-    rootConfig?: OpenClawConfig;
+    rootConfig?: NatesclawConfig;
   };
   activationSourcePlugins: NormalizedPluginsConfig;
   selectedMemoryPluginId?: string;
@@ -179,7 +179,7 @@ export function resolveAuthorizedGatewayStartupDreamingPluginIds(params: {
 }
 
 export function resolveMemorySlotStartupPluginId(params: {
-  activationSourceConfig: OpenClawConfig;
+  activationSourceConfig: NatesclawConfig;
   activationSourcePlugins: ReturnType<typeof normalizePluginsConfigWithRegistry>;
   normalizePluginId: (pluginId: string) => string;
 }): string | undefined {
@@ -205,7 +205,7 @@ export function resolveMemorySlotStartupPluginId(params: {
 }
 
 export function resolveContextEngineSlotStartupPluginId(params: {
-  activationSourceConfig: OpenClawConfig;
+  activationSourceConfig: NatesclawConfig;
   activationSourcePlugins: ReturnType<typeof normalizePluginsConfigWithRegistry>;
   normalizePluginId: (pluginId: string) => string;
 }): string | undefined {
@@ -274,7 +274,7 @@ export function findManifestPlugin(
 
 export function hasConfiguredActivationPath(params: {
   manifest: PluginManifestRecord | undefined;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): boolean {
   return hasConfiguredActivationPathPatterns({
     paths: params.manifest?.activation?.onConfigPaths,
@@ -284,7 +284,7 @@ export function hasConfiguredActivationPath(params: {
 
 function hasConfiguredActivationPathPatterns(params: {
   paths: readonly string[] | undefined;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): boolean {
   const paths = params.paths;
   if (!paths?.length) {
@@ -301,7 +301,7 @@ function hasConfiguredActivationPathPatterns(params: {
 export function addConfiguredActivationPathPluginIds(
   target: Set<string>,
   params: {
-    activationSourceConfig: OpenClawConfig;
+    activationSourceConfig: NatesclawConfig;
     index: InstalledPluginIndex;
   },
 ): void {
@@ -334,7 +334,7 @@ export function addPluginConfigEntryIds(
 export function addConfiguredSlotPluginIds(
   target: Set<string>,
   params: {
-    activationSourceConfig: OpenClawConfig;
+    activationSourceConfig: NatesclawConfig;
     activationSourcePlugins: ReturnType<typeof normalizePluginsConfigForInstalledIndex>;
     lookup: InstalledPluginIndexScopeLookup;
   },
@@ -358,8 +358,8 @@ export function addConfiguredSlotPluginIds(
 }
 
 export function collectConfiguredStartupChannelIds(params: {
-  activationSourceConfig: OpenClawConfig;
-  config: OpenClawConfig;
+  activationSourceConfig: NatesclawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   ambientEnvTriggers?: AmbientEnvTriggerPolicy;
 }): string[] {
@@ -373,7 +373,7 @@ export function collectConfiguredStartupChannelIds(params: {
   ]);
 }
 
-function collectValidationHeartbeatTargetChannelIds(config: OpenClawConfig): string[] {
+function collectValidationHeartbeatTargetChannelIds(config: NatesclawConfig): string[] {
   const channelIds: string[] = [];
   const pushTarget = (target: unknown) => {
     if (typeof target !== "string") {
@@ -392,7 +392,7 @@ function collectValidationHeartbeatTargetChannelIds(config: OpenClawConfig): str
   return sortUniquePluginIds(channelIds);
 }
 
-function collectValidationChannelConfigIds(config: OpenClawConfig): string[] {
+function collectValidationChannelConfigIds(config: NatesclawConfig): string[] {
   const channels = isRecord(config.channels) ? config.channels : null;
   if (!channels) {
     return [];
@@ -405,7 +405,7 @@ function collectValidationChannelConfigIds(config: OpenClawConfig): string[] {
 }
 
 export function collectConfigValidationChannelIds(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv;
 }): string[] {
   return sortUniquePluginIds([
@@ -419,7 +419,7 @@ export function collectConfigValidationChannelIds(params: {
   ]);
 }
 
-export function collectConfiguredProviderIds(config: OpenClawConfig): string[] {
+export function collectConfiguredProviderIds(config: NatesclawConfig): string[] {
   const configuredWebSearchProviderIds = collectConfiguredWebSearchProviderIds(config);
   const configuredGenerationProviderIds = collectConfiguredGenerationProviderIds(config);
   const configuredVoiceProviderIds = collectConfiguredVoiceProviderIds(config);
@@ -436,7 +436,7 @@ export function collectConfiguredProviderIds(config: OpenClawConfig): string[] {
   ]);
 }
 
-export function collectValidationConfiguredProviderIds(config: OpenClawConfig): string[] {
+export function collectValidationConfiguredProviderIds(config: NatesclawConfig): string[] {
   const providerIds: string[] = [];
   const pushProviderId = (value: unknown) => {
     if (typeof value !== "string") {
@@ -472,7 +472,7 @@ export function collectValidationConfiguredProviderIds(config: OpenClawConfig): 
   return sortUniquePluginIds(providerIds);
 }
 
-export function collectValidationConfiguredShorthandModelIds(config: OpenClawConfig): string[] {
+export function collectValidationConfiguredShorthandModelIds(config: NatesclawConfig): string[] {
   return sortUniquePluginIds(
     collectConfiguredModelRefs(config)
       .map((ref) => ref.value)

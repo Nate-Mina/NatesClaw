@@ -3,12 +3,12 @@ import {
   logAckFailure,
   removeAckReactionHandleAfterReply,
   type AckReactionHandle,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "natesclaw/plugin-sdk/channel-feedback";
 import {
   formatMediaPlaceholderText,
   runChannelInboundEvent,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { bindIngressLifecycleToReplyOptions } from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { bindIngressLifecycleToReplyOptions } from "natesclaw/plugin-sdk/channel-outbound";
 import {
   createInternalHookEvent,
   deriveInboundMessageHookContext,
@@ -17,9 +17,9 @@ import {
   toPluginMessageContext,
   toPluginMessageReceivedEvent,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolveBatchedReplyThreadingPolicy } from "openclaw/plugin-sdk/reply-reference";
+} from "natesclaw/plugin-sdk/hook-runtime";
+import { getGlobalHookRunner } from "natesclaw/plugin-sdk/plugin-runtime";
+import { resolveBatchedReplyThreadingPolicy } from "natesclaw/plugin-sdk/reply-reference";
 import { getPrimaryIdentityId, getSelfIdentity, getSenderIdentity } from "../../identity.js";
 import {
   resolveWhatsAppCommandAuthorized,

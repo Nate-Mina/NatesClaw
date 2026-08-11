@@ -1,12 +1,12 @@
-# OpenClaw StepFun Provider
+# Natesclaw StepFun Provider
 
-Official OpenClaw provider plugin for StepFun.
+Official Natesclaw provider plugin for StepFun.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/stepfun-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/stepfun-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/stepfun> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/stepfun> for setup and configuration.

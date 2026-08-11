@@ -1,6 +1,6 @@
 // Agents provider tests cover provider status index construction for configured agents.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { OfficialExternalPluginRepairHint } from "../plugins/official-external-plugin-repair-hints.js";
 import {
   buildProviderStatusIndex,
@@ -84,7 +84,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
     mocks.getChannelPlugin.mockReturnValue(plugin);
 
-    const map = await buildProviderStatusIndex({} as OpenClawConfig);
+    const map = await buildProviderStatusIndex({} as NatesclawConfig);
 
     expect(mocks.listReadOnlyChannelPluginsForConfig).toHaveBeenCalledWith(
       {},
@@ -117,7 +117,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
     mocks.getChannelPlugin.mockReturnValue(plugin);
 
-    await expect(buildProviderStatusIndex({} as OpenClawConfig)).resolves.toEqual(
+    await expect(buildProviderStatusIndex({} as NatesclawConfig)).resolves.toEqual(
       new Map([
         [
           "quietchat:default",
@@ -132,14 +132,14 @@ describe("buildProviderStatusIndex", () => {
         ],
       ]),
     );
-    const statuses = await buildProviderStatusIndex({} as OpenClawConfig);
+    const statuses = await buildProviderStatusIndex({} as NatesclawConfig);
     expect(
       listProvidersForAgent({
         summaryIsDefault: true,
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NatesclawConfig,
         bindings: [],
         providerStatus: statuses,
-        providerMetadata: buildProviderSummaryMetadataIndex({} as OpenClawConfig),
+        providerMetadata: buildProviderSummaryMetadataIndex({} as NatesclawConfig),
       }),
     ).toEqual(["QuietChat default: configured unavailable"]);
     expect(JSON.stringify([...statuses.values()])).not.toContain("PRIVATE_PROVIDER_TOKEN");
@@ -176,7 +176,7 @@ describe("buildProviderStatusIndex", () => {
           tokenFile: "/nonexistent/token",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
 
     const statuses = await buildProviderStatusIndex(cfg);
@@ -220,7 +220,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
 
     expect(
-      (await buildProviderStatusIndex({} as OpenClawConfig)).get("slack:default"),
+      (await buildProviderStatusIndex({} as NatesclawConfig)).get("slack:default"),
     ).toMatchObject({ configured: true, state: "configured" });
   });
 
@@ -248,7 +248,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
 
     expect(
-      (await buildProviderStatusIndex({} as OpenClawConfig)).get("slack:default"),
+      (await buildProviderStatusIndex({} as NatesclawConfig)).get("slack:default"),
     ).toMatchObject({ configured: false, state: "not configured" });
   });
 
@@ -276,7 +276,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
 
     expect(
-      (await buildProviderStatusIndex({} as OpenClawConfig)).get("slack:default"),
+      (await buildProviderStatusIndex({} as NatesclawConfig)).get("slack:default"),
     ).toMatchObject({ configured: true, state: "configured unavailable" });
   });
 
@@ -296,7 +296,7 @@ describe("buildProviderStatusIndex", () => {
     } as never;
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
 
-    const status = (await buildProviderStatusIndex({} as OpenClawConfig)).get("quietchat:default");
+    const status = (await buildProviderStatusIndex({} as NatesclawConfig)).get("quietchat:default");
 
     expect(status?.state).toBe("not configured");
     expect(isLinked).not.toHaveBeenCalled();
@@ -316,7 +316,7 @@ describe("buildProviderStatusIndex", () => {
     } as never;
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
 
-    const status = (await buildProviderStatusIndex({} as OpenClawConfig)).get("legacychat:default");
+    const status = (await buildProviderStatusIndex({} as NatesclawConfig)).get("legacychat:default");
 
     expect(status?.state).toBe("enabled");
     expect(resolveAccountState).toHaveBeenCalledOnce();
@@ -338,7 +338,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
     mocks.getChannelPlugin.mockReturnValue(plugin);
 
-    await expect(buildProviderStatusIndex({} as OpenClawConfig)).rejects.toThrow("plugin crash");
+    await expect(buildProviderStatusIndex({} as NatesclawConfig)).rejects.toThrow("plugin crash");
   });
 
   it("keeps configured missing external channels in provider metadata", () => {
@@ -349,11 +349,11 @@ describe("buildProviderStatusIndex", () => {
         channelId: "feishu",
         pluginId: "feishu",
         label: "Feishu",
-        installSpec: "@openclaw/feishu",
-        installCommand: "openclaw plugins install @openclaw/feishu",
-        doctorFixCommand: "openclaw doctor --fix",
+        installSpec: "@natesclaw/feishu",
+        installCommand: "natesclaw plugins install @natesclaw/feishu",
+        doctorFixCommand: "natesclaw doctor --fix",
         repairHint:
-          "Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+          "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
       },
     ]);
 
@@ -368,7 +368,7 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
@@ -410,14 +410,14 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
     });
 
     expect(lines).toEqual([
-      "Feishu default: missing plugin - Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
     ]);
   });
 
@@ -437,14 +437,14 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
     });
 
     expect(lines).toEqual([
-      "Feishu default: missing plugin - Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
     ]);
   });
 
@@ -462,14 +462,14 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
     });
 
     expect(lines).toEqual([
-      "Feishu default: missing plugin - Install the official external plugin with: openclaw plugins install @openclaw/feishu, or run: openclaw doctor --fix.",
+      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
     ]);
   });
 

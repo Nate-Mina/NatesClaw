@@ -1,12 +1,12 @@
-# OpenClaw Gradium Plugin
+# Natesclaw Gradium Plugin
 
-Official OpenClaw plugin for Gradium.
+Official Natesclaw plugin for Gradium.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/gradium-speech
-openclaw gateway restart
+natesclaw plugins install @natesclaw/gradium-speech
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/gradium> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/gradium> for setup and configuration.

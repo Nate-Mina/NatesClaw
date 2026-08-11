@@ -118,7 +118,7 @@ type CodeModeTestApi = {
 };
 
 function getTestApi(): CodeModeTestApi {
-  const api = (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.codeModeTestApi")];
+  const api = (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.codeModeTestApi")];
   if (!api) {
     throw new Error("code mode test API is unavailable");
   }

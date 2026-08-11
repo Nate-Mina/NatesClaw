@@ -1,6 +1,6 @@
 import type { probeGatewayMemoryStatus } from "../commands/doctor-gateway-health.js";
 import type { DoctorOptions, DoctorPrompter } from "../commands/doctor-prompter.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { buildGatewayConnectionDetails } from "../gateway/call.js";
 import type { UpdatePostInstallDoctorResult } from "../infra/update-doctor-result.js";
 import type { PluginMetadataSnapshotScopeRunner } from "../plugins/current-plugin-metadata-snapshot.js";
@@ -10,7 +10,7 @@ import type { HealthCheck, HealthCheckContext } from "./health-checks.js";
 import type { FlowContribution } from "./types.js";
 
 type DoctorConfigResult = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   path?: string;
   shouldWriteConfig?: boolean;
   sourceConfigValid?: boolean;
@@ -33,8 +33,8 @@ export type DoctorHealthFlowContext = {
   options: DoctorOptions;
   prompter: DoctorPrompter;
   configResult: DoctorConfigResult;
-  cfg: OpenClawConfig;
-  cfgForPersistence: OpenClawConfig;
+  cfg: NatesclawConfig;
+  cfgForPersistence: NatesclawConfig;
   /** The finalized config-flow candidate crossed the atomic writer boundary. */
   configResultWriteCommitted?: boolean;
   /** One-shot repairs that require a durable config write have completed. */

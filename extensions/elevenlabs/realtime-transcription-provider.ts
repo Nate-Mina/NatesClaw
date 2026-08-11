@@ -6,13 +6,13 @@ import {
   type RealtimeTranscriptionSession,
   type RealtimeTranscriptionSessionCreateRequest,
   type RealtimeTranscriptionWebSocketTransport,
-} from "openclaw/plugin-sdk/realtime-transcription";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/realtime-transcription";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
 import {
   asOptionalRecord as readRecord,
   normalizeOptionalString,
   parseFiniteNumber as readFiniteNumber,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveElevenLabsApiKeyWithProfileFallback } from "./config-api.js";
 import { normalizeElevenLabsRealtimeBaseUrl } from "./shared.js";
 

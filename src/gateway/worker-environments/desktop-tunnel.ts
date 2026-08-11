@@ -190,7 +190,7 @@ export function createWorkerDesktopTunnels(deps: {
       ssh: request.ssh,
       pinnedHostKey: request.ssh.hostKey,
       resolveIdentity: request.resolveIdentity,
-      temporaryDirectoryPrefix: "openclaw-worker-desktop-",
+      temporaryDirectoryPrefix: "natesclaw-worker-desktop-",
     });
     entry.prepared = prepared;
     if (!isCurrent(entry)) {
@@ -369,7 +369,7 @@ export function createWorkerDesktopTunnels(deps: {
         ssh: request.ssh,
         pinnedHostKey: request.ssh.hostKey,
         resolveIdentity: request.resolveIdentity,
-        temporaryDirectoryPrefix: "openclaw-worker-desktop-app-",
+        temporaryDirectoryPrefix: "natesclaw-worker-desktop-app-",
       });
       try {
         abortController.signal.throwIfAborted();

@@ -12,7 +12,7 @@ import { describeFailoverError } from "../agents/failover-error.js";
 import { splitTrailingAuthProfile } from "../agents/model-ref-profile.js";
 import { SessionManager } from "../agents/sessions/index.js";
 import { applyMergePatch } from "../config/merge-patch.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { enablePluginInConfig } from "../plugins/enable.js";
@@ -45,9 +45,9 @@ export async function cleanupSetupInferenceTempDir(params: {
 }): Promise<void> {
   try {
     const disposeDatabase =
-      params.deps.disposeOpenClawAgentDatabaseByPath ??
-      (await import("../state/openclaw-agent-db.js")).disposeOpenClawAgentDatabaseByPath;
-    disposeDatabase(path.join(params.tempDir, "agent", "openclaw-agent.sqlite"));
+      params.deps.disposeNatesclawAgentDatabaseByPath ??
+      (await import("../state/natesclaw-agent-db.js")).disposeNatesclawAgentDatabaseByPath;
+    disposeDatabase(path.join(params.tempDir, "agent", "natesclaw-agent.sqlite"));
   } catch {
     // Windows cannot remove an open SQLite file. Keep cleanup nonfatal, but
     // always try the directory removal so callers do not retain probe secrets.
@@ -104,7 +104,7 @@ export async function retainUnownedCodexInstall(params: {
     const marked = await markRetained({
       packageDir: params.record.installPath,
       pluginId: "codex",
-      reason: "openclaw-inference-activation-not-committed",
+      reason: "natesclaw-inference-activation-not-committed",
     });
     if (!marked) {
       setupInferenceLog.warn("Could not retain the uncommitted Codex runtime package generation.");
@@ -172,11 +172,11 @@ export async function reloadCodexRegistryAfterActivation(params: {
   const runtimeConfig =
     snapshot.exists && snapshot.valid
       ? (snapshot.runtimeConfig ?? snapshot.config)
-      : ({} satisfies OpenClawConfig);
+      : ({} satisfies NatesclawConfig);
   const sourceConfig =
     snapshot.exists && snapshot.valid
       ? (snapshot.sourceConfig ?? snapshot.config)
-      : ({} satisfies OpenClawConfig);
+      : ({} satisfies NatesclawConfig);
   try {
     const refreshPluginRegistry =
       params.deps.refreshPluginRegistryAfterConfigMutation ??
@@ -235,11 +235,11 @@ function mergePatchConflicts(base: unknown, current: unknown, patch: unknown): b
 }
 
 export function applyManualAuthConfig(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   manualAuth: NonNullable<SetupInferenceTestPlan["manualAuth"]>,
   configKind: "runtime" | "source",
   enablePlugin: typeof enablePluginInConfig = enablePluginInConfig,
-): OpenClawConfig {
+): NatesclawConfig {
   let enabledConfig = config;
   if (manualAuth.pluginId) {
     const enableResult = enablePlugin(config, manualAuth.pluginId);
@@ -257,7 +257,7 @@ export function applyManualAuthConfig(
       "Provider configuration changed during the live inference test, so the verified credential was not saved. Review the current provider settings and retry.",
     );
   }
-  return applyMergePatch(enabledConfig, manualAuth.configPatch) as OpenClawConfig;
+  return applyMergePatch(enabledConfig, manualAuth.configPatch) as NatesclawConfig;
 }
 
 export type ManualAuthPersistenceReceipt = {
@@ -295,7 +295,7 @@ function modelSelectionReferencesProfile(value: unknown, profileIds: ReadonlySet
 }
 
 export function configReferencesManualAuthProfiles(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   receipt: ManualAuthPersistenceReceipt,
 ): boolean {
   const profileIds = new Set(receipt.profiles.map((profile) => profile.profileId));
@@ -483,7 +483,7 @@ export async function runSetupInferenceTest(params: {
   const sessionId = runId;
   const sessionFile = `in-memory:${sessionId}`;
   const sessionManager = SessionManager.inMemory(tempDir);
-  const effectiveAgentId = plan.routeAgentId ?? plan.agentId ?? "openclaw";
+  const effectiveAgentId = plan.routeAgentId ?? plan.agentId ?? "natesclaw";
   const sessionKey = `agent:${effectiveAgentId}:setup-inference:incognito-${runId}`;
   const timeoutMs = deps.timeoutMs ?? SETUP_INFERENCE_TEST_TIMEOUT_MS;
   const started = Date.now();
@@ -530,8 +530,8 @@ export async function runSetupInferenceTest(params: {
         ...(plan.authProfileId ? { authProfileId: plan.authProfileId } : {}),
         timeoutMs,
         runId,
-        messageChannel: "openclaw",
-        messageProvider: "openclaw",
+        messageChannel: "natesclaw",
+        messageProvider: "natesclaw",
         executionMode: "side-question",
         disableTools: true,
         cleanupCliLiveSessionOnRunEnd: true,
@@ -582,8 +582,8 @@ export async function runSetupInferenceTest(params: {
           : {}),
         disableTools: true,
         modelRun: true,
-        messageChannel: "openclaw",
-        messageProvider: "openclaw",
+        messageChannel: "natesclaw",
+        messageProvider: "natesclaw",
         onSuccessfulAuthBinding: (binding) => {
           successfulAuth = binding;
         },
@@ -619,7 +619,7 @@ export async function runSetupInferenceTest(params: {
         ok: false,
         status: "unknown",
         error:
-          "Inference succeeded, but its runtime did not report an owner that OpenClaw can safely reuse.",
+          "Inference succeeded, but its runtime did not report an owner that Natesclaw can safely reuse.",
       };
     }
     return {

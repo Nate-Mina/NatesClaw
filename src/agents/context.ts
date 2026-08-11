@@ -3,7 +3,7 @@
 
 import { getRuntimeConfig } from "../config/config.js";
 import { projectConfigOntoRuntimeSourceSnapshot } from "../config/runtime-source-projection.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { computeBackoff, type BackoffPolicy } from "../infra/backoff.js";
 import { resolveAgentDir, resolveDefaultAgentId } from "./agent-scope.js";
 import {
@@ -44,7 +44,7 @@ export {
   applyDiscoveredContextWindows,
 } from "./context-cache-projection.js";
 type ContextWindowCatalogOwner = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   modelCatalog: ContextWindowCatalog;
 };
 const CONFIG_LOAD_RETRY_POLICY: BackoffPolicy = {
@@ -55,7 +55,7 @@ const CONFIG_LOAD_RETRY_POLICY: BackoffPolicy = {
 };
 const loadPreparedModelCatalogRuntime = () => import("./prepared-model-catalog.js");
 
-function primeConfiguredContextWindowsFromConfig(cfg: OpenClawConfig): OpenClawConfig {
+function primeConfiguredContextWindowsFromConfig(cfg: NatesclawConfig): NatesclawConfig {
   const caches = getContextWindowCaches();
   applyConfiguredContextWindows({
     cache: caches.configuredTokenCache,
@@ -68,7 +68,7 @@ function primeConfiguredContextWindowsFromConfig(cfg: OpenClawConfig): OpenClawC
   return cfg;
 }
 
-function primeConfiguredContextWindows(): OpenClawConfig | undefined {
+function primeConfiguredContextWindows(): NatesclawConfig | undefined {
   if (CONTEXT_WINDOW_RUNTIME_STATE.configuredConfig) {
     return primeConfiguredContextWindowsFromConfig(CONTEXT_WINDOW_RUNTIME_STATE.configuredConfig);
   }
@@ -90,7 +90,7 @@ function primeConfiguredContextWindows(): OpenClawConfig | undefined {
 }
 
 function ensureContextWindowCacheLoadedFromOwner(params: {
-  cfgOverride?: OpenClawConfig;
+  cfgOverride?: NatesclawConfig;
   catalogOwner?: ContextWindowCatalogOwner;
 }): Promise<void> {
   const generation = CONTEXT_WINDOW_RUNTIME_STATE.generation;
@@ -160,7 +160,7 @@ function ensureContextWindowCacheLoadedFromOwner(params: {
   return CONTEXT_WINDOW_RUNTIME_STATE.loadPromise;
 }
 
-export function ensureContextWindowCacheLoaded(cfgOverride?: OpenClawConfig): Promise<void> {
+export function ensureContextWindowCacheLoaded(cfgOverride?: NatesclawConfig): Promise<void> {
   return ensureContextWindowCacheLoadedFromOwner({ cfgOverride });
 }
 
@@ -169,7 +169,7 @@ export function ensureContextWindowCacheLoaded(cfgOverride?: OpenClawConfig): Pr
  * falls through to a read-only owner whose key hashes the full model config.
  */
 export async function prewarmContextWindowCacheAfterReady(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   isCancelled?: () => boolean;
 }): Promise<void> {
   // Post-ready warmup owns a published-owner generation. Do not reuse a request-time
@@ -273,7 +273,7 @@ export async function waitForContextWindowCacheLoad(options?: {
 }
 
 /** Replace cached model context metadata for the active runtime configuration. */
-export async function refreshContextWindowCache(cfg: OpenClawConfig): Promise<void> {
+export async function refreshContextWindowCache(cfg: NatesclawConfig): Promise<void> {
   beginContextWindowCacheRefresh();
   const caches = getContextWindowCaches();
   caches.configuredTokenCache.clear();

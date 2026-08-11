@@ -1,7 +1,7 @@
 // QQBot durable ingress tests cover raw admission, recovery, and twin parity.
-import type { ChannelIngressQueue } from "openclaw/plugin-sdk/channel-outbound";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { closeOpenClawStateDatabaseForTest } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import type { ChannelIngressQueue } from "natesclaw/plugin-sdk/channel-outbound";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { closeNatesclawStateDatabaseForTest } from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GatewayEvent } from "./constants.js";
 import { createQQBotIngressMonitor } from "./ingress.js";
@@ -28,7 +28,7 @@ function startMonitor(
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   vi.restoreAllMocks();
 });
 

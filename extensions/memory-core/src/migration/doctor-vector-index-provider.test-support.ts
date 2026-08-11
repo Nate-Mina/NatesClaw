@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import "./doctor-vector-index-provider.js";
 
 type TestApi = {
   setInspectConfiguredProviderForTest(
     inspect: (params: {
-      config: OpenClawConfig;
+      config: NatesclawConfig;
       agentId: string;
       env: NodeJS.ProcessEnv;
       agentDatabasePath: string;
@@ -15,7 +15,7 @@ type TestApi = {
 
 function getTestApi(): TestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.memoryCoreVectorIndexProviderDiagnosticTestApi")
+    Symbol.for("natesclaw.memoryCoreVectorIndexProviderDiagnosticTestApi")
   ] as TestApi;
 }
 

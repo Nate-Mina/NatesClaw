@@ -8,7 +8,7 @@ import {
   installDialogPolyfill,
   nextFrame,
 } from "../test-helpers/modal-dialog.ts";
-import { OpenClawModalDialog } from "./modal-dialog.ts";
+import { NatesclawModalDialog } from "./modal-dialog.ts";
 
 let container: HTMLDivElement;
 let restoreDialogPolyfill: () => void;
@@ -16,7 +16,7 @@ let restoreDialogPolyfill: () => void;
 async function renderModal() {
   render(
     html`
-      <openclaw-modal-dialog
+      <natesclaw-modal-dialog
         label="Confirm action"
         description="Review the operation before continuing."
       >
@@ -26,14 +26,14 @@ async function renderModal() {
           <button id="first-action">First</button>
           <button id="last-action">Last</button>
         </section>
-      </openclaw-modal-dialog>
+      </natesclaw-modal-dialog>
     `,
     container,
   );
   return await getRenderedModalDialog(container);
 }
 
-describe("openclaw-modal-dialog", () => {
+describe("natesclaw-modal-dialog", () => {
   beforeEach(() => {
     restoreDialogPolyfill = installDialogPolyfill();
     container = document.createElement("div");
@@ -68,9 +68,9 @@ describe("openclaw-modal-dialog", () => {
 
   it("focuses slotted autofocus content", async () => {
     render(
-      html`<openclaw-modal-dialog label="Edit">
+      html`<natesclaw-modal-dialog label="Edit">
         <textarea id="autofocus-target" autofocus></textarea>
-      </openclaw-modal-dialog>`,
+      </natesclaw-modal-dialog>`,
       container,
     );
     await getRenderedModalDialog(container);
@@ -80,10 +80,10 @@ describe("openclaw-modal-dialog", () => {
 
   it("keeps focus on a field the user selected when the show animation settles", async () => {
     render(
-      html`<openclaw-modal-dialog label="Edit">
+      html`<natesclaw-modal-dialog label="Edit">
         <input id="autofocus-target" autofocus />
         <textarea id="notes-field"></textarea>
-      </openclaw-modal-dialog>`,
+      </natesclaw-modal-dialog>`,
       container,
     );
     const { webAwesomeDialog } = await getRenderedModalDialog(container);
@@ -107,7 +107,7 @@ describe("openclaw-modal-dialog", () => {
   it("hands an active toast back to the app layer when it closes", async () => {
     const shell = document.createElement("div");
     shell.className = "shell";
-    const appHost = document.createElement("openclaw-toast-host");
+    const appHost = document.createElement("natesclaw-toast-host");
     shell.append(appHost);
     document.body.append(shell);
     try {
@@ -129,7 +129,7 @@ describe("openclaw-modal-dialog", () => {
   });
 
   it("keeps the navigation drawer sidebar in a full-height, shrinkable flex column", () => {
-    const styles = OpenClawModalDialog.styles.cssText;
+    const styles = NatesclawModalDialog.styles.cssText;
 
     expect(styles).toMatch(
       /:host\(\.nav-drawer\)\s+wa-dialog::part\(body\)\s*\{[^}]*display:\s*flex;[^}]*flex-direction:\s*column;[^}]*min-height:\s*0;/u,
@@ -140,16 +140,16 @@ describe("openclaw-modal-dialog", () => {
   });
 
   it("keeps responsive width and maximum-width limits owned by the same variant", () => {
-    const styles = OpenClawModalDialog.styles.cssText;
+    const styles = NatesclawModalDialog.styles.cssText;
 
     expect(styles).toMatch(
       /:host\(\.fullscreen\)\s+wa-dialog::part\(dialog\)\s*\{[^}]*max-width:\s*calc\(100vw\s*-\s*20px\);/u,
     );
     expect(styles).toMatch(
-      /@media\s*\(max-width:\s*640px\)\s*\{[\s\S]*?wa-dialog\s*\{[^}]*--width:\s*min\(var\(--openclaw-modal-width,\s*540px\),\s*calc\(100vw\s*-\s*24px\)\);[\s\S]*?wa-dialog::part\(dialog\)\s*\{[^}]*max-width:\s*var\(--openclaw-modal-max-width,\s*calc\(100vw\s*-\s*24px\)\);/u,
+      /@media\s*\(max-width:\s*640px\)\s*\{[\s\S]*?wa-dialog\s*\{[^}]*--width:\s*min\(var\(--natesclaw-modal-width,\s*540px\),\s*calc\(100vw\s*-\s*24px\)\);[\s\S]*?wa-dialog::part\(dialog\)\s*\{[^}]*max-width:\s*var\(--natesclaw-modal-max-width,\s*calc\(100vw\s*-\s*24px\)\);/u,
     );
     expect(styles).toMatch(
-      /:host\(\.drawer\)\s+wa-dialog\s*\{[^}]*--width:\s*min\(var\(--openclaw-modal-width,\s*100vw\),\s*100vw\);/u,
+      /:host\(\.drawer\)\s+wa-dialog\s*\{[^}]*--width:\s*min\(var\(--natesclaw-modal-width,\s*100vw\),\s*100vw\);/u,
     );
     expect(styles).toMatch(
       /:host\(\.drawer\)\s+wa-dialog::part\(dialog\)\s*\{[^}]*max-width:\s*100vw;/u,

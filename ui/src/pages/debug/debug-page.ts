@@ -10,14 +10,14 @@ import { applicationContext, type ApplicationContext } from "../../app/context.t
 import { renderSettingsWorkspace } from "../../components/settings-workspace.ts";
 import { loadGatewayDiagnostics } from "../../lib/gateway-diagnostics.ts";
 import { GatewayPageController } from "../../lit/gateway-page-controller.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { PollController } from "../../lit/poll-controller.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderDebug } from "./view.ts";
 
 const DEBUG_POLL_INTERVAL_MS = 3000;
 
-class DebugPage extends OpenClawLightDomElement {
+class DebugPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -186,6 +186,6 @@ class DebugPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-debug-page")) {
-  customElements.define("openclaw-debug-page", DebugPage);
+if (!customElements.get("natesclaw-debug-page")) {
+  customElements.define("natesclaw-debug-page", DebugPage);
 }

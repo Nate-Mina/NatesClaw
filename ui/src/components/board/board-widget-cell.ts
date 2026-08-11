@@ -19,7 +19,7 @@ import {
   pluginIdForWidgetKind,
   type PluginBoardWidgetRenderer,
 } from "../../lib/board/widgets/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { renderBoardMcpAppContent } from "./board-mcp-app-content.ts";
 import { BoardMcpAppLifecycle } from "./board-mcp-app-lifecycle.ts";
 import { renderBoardGrantedCapabilities } from "./board-widget-capabilities.ts";
@@ -56,7 +56,7 @@ export type BoardWidgetCellCallbacks = {
   refreshWidgetAppView: (name: string, revision: number) => Promise<BoardWidgetAppViewState>;
 };
 
-class OpenClawBoardWidgetCell extends OpenClawLightDomElement {
+class NatesclawBoardWidgetCell extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context?: ApplicationContext;
 
@@ -467,12 +467,12 @@ class OpenClawBoardWidgetCell extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-board-widget-cell")) {
-  customElements.define("openclaw-board-widget-cell", OpenClawBoardWidgetCell);
+if (!customElements.get("natesclaw-board-widget-cell")) {
+  customElements.define("natesclaw-board-widget-cell", NatesclawBoardWidgetCell);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-board-widget-cell": OpenClawBoardWidgetCell;
+    "natesclaw-board-widget-cell": NatesclawBoardWidgetCell;
   }
 }

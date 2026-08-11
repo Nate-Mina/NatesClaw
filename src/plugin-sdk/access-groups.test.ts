@@ -2,7 +2,7 @@
  * Tests access group helper behavior exposed through the SDK.
  */
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   expandAllowFromWithAccessGroups,
   resolveAccessGroupAllowFromState,
@@ -15,7 +15,7 @@ describe("access group allowlists", () => {
         admins: { type: "message.senders", members: { "*": ["global"], test: ["local"] } },
         audience: { type: "discord.channelAudience", guildId: "guild-1", channelId: "channel-1" },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const staticState = await resolveAccessGroupAllowFromState({
       accessGroups: cfg.accessGroups,

@@ -2,10 +2,10 @@
 import {
   downloadGeneratedVideoAsset,
   resolveGeneratedMediaMaxBytes,
-} from "openclaw/plugin-sdk/media-generation-runtime";
-import { extensionForMime, type MediaKind } from "openclaw/plugin-sdk/media-mime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "natesclaw/plugin-sdk/media-generation-runtime";
+import { extensionForMime, type MediaKind } from "natesclaw/plugin-sdk/media-mime";
+import { isProviderApiKeyConfigured } from "natesclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "natesclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -20,13 +20,13 @@ import {
   resolveProviderHttpRequestConfig,
   sanitizeConfiguredModelProviderRequest,
   type ProviderOperationTimeoutMs,
-} from "openclaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
-} from "openclaw/plugin-sdk/video-generation";
+} from "natesclaw/plugin-sdk/video-generation";
 import { resolveConfiguredOpenAIBaseUrl } from "./shared.js";
 
 const DEFAULT_OPENAI_VIDEO_BASE_URL = "https://api.openai.com/v1";

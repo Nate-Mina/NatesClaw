@@ -76,10 +76,10 @@ describe("installScheduledTask", () => {
   async function withUserProfileDir(
     run: (tmpDir: string, env: Record<string, string>) => Promise<void>,
   ) {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-schtasks-install-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-schtasks-install-"));
     const env = {
       USERPROFILE: tmpDir,
-      OPENCLAW_PROFILE: "default",
+      NATESCLAW_PROFILE: "default",
     };
     try {
       await run(tmpDir, env);
@@ -97,12 +97,12 @@ describe("installScheduledTask", () => {
     });
   }
 
-  function expectInitialTaskQueries(taskName = "OpenClaw Gateway"): void {
+  function expectInitialTaskQueries(taskName = "Natesclaw Gateway"): void {
     expect(schtasksCalls[0]).toEqual(["/Query"]);
     expect(schtasksCalls[1]).toEqual(["/Query", "/TN", taskName]);
   }
 
-  function expectTaskRunCall(index: number, taskName = "OpenClaw Gateway"): void {
+  function expectTaskRunCall(index: number, taskName = "Natesclaw Gateway"): void {
     expect(schtasksCalls[index]).toEqual(["/Run", "/TN", taskName]);
   }
 
@@ -112,30 +112,30 @@ describe("installScheduledTask", () => {
       const gatewayScript = decodeWindowsLauncherScript({
         buffer: await fs.readFile(gateway.scriptPath),
       });
-      expect(gatewayScript).toContain("rem OpenClaw Gateway");
-      expect(gatewayScript).not.toContain("OPENCLAW_SERVICE_VERSION");
+      expect(gatewayScript).toContain("rem Natesclaw Gateway");
+      expect(gatewayScript).not.toContain("NATESCLAW_SERVICE_VERSION");
       expect(xmlPayloadCaptures.at(-1)?.xml).toContain(
-        "<Description>OpenClaw Gateway</Description>",
+        "<Description>Natesclaw Gateway</Description>",
       );
 
       const node = await installScheduledTask({
         env: {
           ...env,
-          OPENCLAW_WINDOWS_TASK_NAME: "OpenClaw Node",
-          OPENCLAW_TASK_SCRIPT_NAME: "node.cmd",
+          NATESCLAW_WINDOWS_TASK_NAME: "Natesclaw Node",
+          NATESCLAW_TASK_SCRIPT_NAME: "node.cmd",
         },
         stdout: new PassThrough(),
         programArguments: ["node", "node-host.js"],
-        description: "OpenClaw Node Host",
+        description: "Natesclaw Node Host",
         environment: {},
       });
       const nodeScript = decodeWindowsLauncherScript({
         buffer: await fs.readFile(node.scriptPath),
       });
-      expect(nodeScript).toContain("rem OpenClaw Node Host");
-      expect(nodeScript).not.toContain("OPENCLAW_SERVICE_VERSION");
+      expect(nodeScript).toContain("rem Natesclaw Node Host");
+      expect(nodeScript).not.toContain("NATESCLAW_SERVICE_VERSION");
       expect(xmlPayloadCaptures.at(-1)?.xml).toContain(
-        "<Description>OpenClaw Node Host</Description>",
+        "<Description>Natesclaw Node Host</Description>",
       );
     });
   });
@@ -210,17 +210,17 @@ describe("installScheduledTask", () => {
       });
 
       expect(schtasksCalls[0]).toEqual(["/Query"]);
-      expect(schtasksCalls[1]).toEqual(["/Query", "/TN", "OpenClaw Gateway"]);
+      expect(schtasksCalls[1]).toEqual(["/Query", "/TN", "Natesclaw Gateway"]);
       expect(schtasksCalls[2]?.[0]).toBe("/Change");
       // Battery-flag XML re-apply runs between /Change and /Run on upgrades.
       expect(schtasksCalls[3]?.slice(0, 5)).toEqual([
         "/Create",
         "/F",
         "/TN",
-        "OpenClaw Gateway",
+        "Natesclaw Gateway",
         "/XML",
       ]);
-      expect(schtasksCalls[4]).toEqual(["/Run", "/TN", "OpenClaw Gateway"]);
+      expect(schtasksCalls[4]).toEqual(["/Run", "/TN", "Natesclaw Gateway"]);
     });
   });
 
@@ -276,7 +276,7 @@ describe("installScheduledTask", () => {
         ...env,
         USERDOMAIN: "WORKSTATION",
         USERNAME: "alice",
-        OPENCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "1",
+        NATESCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "1",
       });
       const launcherPath = scriptPath.replace(/\.cmd$/i, ".vbs");
       const rawLauncher = await fs.readFile(launcherPath);
@@ -291,7 +291,7 @@ describe("installScheduledTask", () => {
         "/Create",
         "/F",
         "/TN",
-        "OpenClaw Gateway",
+        "Natesclaw Gateway",
         "/XML",
       ]);
       expect(schtasksCalls[2]?.slice(6)).toEqual(["/RU", "WORKSTATION\\alice", "/NP"]);
@@ -310,8 +310,8 @@ describe("installScheduledTask", () => {
 
       const { scriptPath } = await installDefaultGatewayTask({
         USERPROFILE: cjkProfileDir,
-        OPENCLAW_PROFILE: "default",
-        OPENCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "1",
+        NATESCLAW_PROFILE: "default",
+        NATESCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "1",
       });
       const launcherPath = scriptPath.replace(/\.cmd$/i, ".vbs");
       const rawLauncher = await fs.readFile(launcherPath);
@@ -349,7 +349,7 @@ describe("installScheduledTask", () => {
         HOME: env.USERPROFILE,
         USERDOMAIN: "WORKSTATION",
         USERNAME: "alice",
-        OPENCLAW_WINDOWS_TASK_NAME: "OpenClaw Custom Gateway",
+        NATESCLAW_WINDOWS_TASK_NAME: "Natesclaw Custom Gateway",
       };
       const gatewayEnv = buildServiceEnvironment({
         env: callerEnv,
@@ -357,9 +357,9 @@ describe("installScheduledTask", () => {
         platform: "win32",
       });
 
-      expect(callerEnv.OPENCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER).toBeUndefined();
-      expect(gatewayEnv.OPENCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER).toBe("1");
-      expect(gatewayEnv.OPENCLAW_WINDOWS_TASK_NAME).toBe("OpenClaw Gateway");
+      expect(callerEnv.NATESCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER).toBeUndefined();
+      expect(gatewayEnv.NATESCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER).toBe("1");
+      expect(gatewayEnv.NATESCLAW_WINDOWS_TASK_NAME).toBe("Natesclaw Gateway");
 
       const { scriptPath } = await installScheduledTask({
         env: callerEnv,
@@ -379,16 +379,16 @@ describe("installScheduledTask", () => {
         "/Create",
         "/F",
         "/TN",
-        "OpenClaw Custom Gateway",
+        "Natesclaw Custom Gateway",
         "/XML",
       ]);
       expect(schtasksCalls[2]?.slice(6)).toEqual(["/RU", "WORKSTATION\\alice", "/NP"]);
       const captured = xmlPayloadCaptures.find((entry) => entry.index === 2);
       expect(captured?.xml).toContain("gateway.vbs</Command>");
-      expect(script).toContain('set "OPENCLAW_WINDOWS_TASK_NAME=OpenClaw Custom Gateway"');
+      expect(script).toContain('set "NATESCLAW_WINDOWS_TASK_NAME=Natesclaw Custom Gateway"');
       expect(launcher).toContain("WScript.Shell");
       expect(launcher).toContain(`Run """${scriptPath}""", 0, False`);
-      expectTaskRunCall(3, "OpenClaw Custom Gateway");
+      expectTaskRunCall(3, "Natesclaw Custom Gateway");
     });
   });
 
@@ -474,7 +474,7 @@ describe("installScheduledTask", () => {
 
       expectInitialTaskQueries();
       const createCall = schtasksCalls[2];
-      expect(createCall?.slice(0, 5)).toEqual(["/Create", "/F", "/TN", "OpenClaw Gateway", "/XML"]);
+      expect(createCall?.slice(0, 5)).toEqual(["/Create", "/F", "/TN", "Natesclaw Gateway", "/XML"]);
       expect(createCall).not.toContain("/RU");
       const captured = xmlPayloadCaptures.find((entry) => entry.index === 2);
       expect(captured?.xml).toContain("<UserId>alice</UserId>");
@@ -502,7 +502,7 @@ describe("installScheduledTask", () => {
         "/Create",
         "/F",
         "/TN",
-        "OpenClaw Gateway",
+        "Natesclaw Gateway",
         "/XML",
       ]);
       const upgradeCapture = xmlPayloadCaptures.find((entry) => entry.index === 3);
@@ -531,7 +531,7 @@ describe("installScheduledTask", () => {
         ...env,
         USERDOMAIN: "WORKSTATION",
         USERNAME: "alice",
-        OPENCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "true",
+        NATESCLAW_WINDOWS_TASK_HIDDEN_LAUNCHER: "true",
       });
       const launcherPath = scriptPath.replace(/\.cmd$/i, ".vbs");
 
@@ -539,7 +539,7 @@ describe("installScheduledTask", () => {
       expect(schtasksCalls[2]).toEqual([
         "/Change",
         "/TN",
-        "OpenClaw Gateway",
+        "Natesclaw Gateway",
         "/TR",
         expect.stringContaining("gateway.vbs"),
       ]);
@@ -549,7 +549,7 @@ describe("installScheduledTask", () => {
         "/Create",
         "/F",
         "/TN",
-        "OpenClaw Gateway",
+        "Natesclaw Gateway",
         "/XML",
       ]);
       expectTaskRunCall(4);
@@ -618,13 +618,13 @@ describe("installScheduledTask", () => {
         programArguments: ["node", "gateway.js"],
         environment: {
           PATH: "C:\\Windows\\System32;C:\\Program Files\\Docker\\Docker\\resources\\bin",
-          OPENCLAW_GATEWAY_PORT: "18789",
+          NATESCLAW_GATEWAY_PORT: "18789",
         },
       });
 
       const script = decodeWindowsLauncherScript({ buffer: await fs.readFile(scriptPath) });
       expect(script).not.toContain('set "PATH=');
-      expect(script).toContain('set "OPENCLAW_GATEWAY_PORT=18789"');
+      expect(script).toContain('set "NATESCLAW_GATEWAY_PORT=18789"');
     });
   });
 
@@ -635,7 +635,7 @@ describe("installScheduledTask", () => {
         stdout: new PassThrough(),
         programArguments: ["node", "gateway.js"],
         environment: {
-          OPENCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
+          NATESCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
           TAVILY_API_KEY: "old-inline-value",
         },
       });
@@ -644,11 +644,11 @@ describe("installScheduledTask", () => {
       expect(command).toStrictEqual({
         programArguments: ["node", "gateway.js"],
         environment: {
-          OPENCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
+          NATESCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
           TAVILY_API_KEY: "old-inline-value",
         },
         environmentValueSources: {
-          OPENCLAW_SERVICE_MANAGED_ENV_KEYS: "inline",
+          NATESCLAW_SERVICE_MANAGED_ENV_KEYS: "inline",
           TAVILY_API_KEY: "inline",
         },
         sourcePath: scriptPath,

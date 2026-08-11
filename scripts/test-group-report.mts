@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import pMap from "p-map";
 import { coerceErrorMessage as formatSpawnError } from "./lib/error-format.mts";
 import { parsePositiveInt } from "./lib/numeric-options.mjs";
@@ -676,7 +676,7 @@ async function runVitestJsonReport(params: RunVitestParams) {
       ...params.env,
       // The JSON reporter can stay silent for the entire config. The profiler
       // owns the wall-clock timeout and process-group cleanup for this child.
-      OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0",
+      NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0",
       NODE_OPTIONS: [
         (params.env?.NODE_OPTIONS ?? process.env.NODE_OPTIONS)?.trim(),
         ...resolveVitestNodeArgs({ ...process.env, ...params.env }).filter(
@@ -938,15 +938,15 @@ function withUniqueLabels<Plan extends { label: string }>(plans: Plan[]) {
 }
 
 function buildFullSuiteLeafRunPlans() {
-  const previousLeafShards = process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-  process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = "1";
+  const previousLeafShards = process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+  process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = "1";
   try {
     return buildFullSuiteVitestRunPlans([], process.cwd());
   } finally {
     if (previousLeafShards === undefined) {
-      delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+      delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
     } else {
-      process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
+      process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
     }
   }
 }
@@ -985,14 +985,14 @@ export function resolveFullSuiteVitestEnv(
 ): NodeJS.ProcessEnv {
   if (
     !args.fullSuite ||
-    env.OPENCLAW_VITEST_MAX_WORKERS?.trim() ||
-    env.OPENCLAW_TEST_WORKERS?.trim()
+    env.NATESCLAW_VITEST_MAX_WORKERS?.trim() ||
+    env.NATESCLAW_TEST_WORKERS?.trim()
   ) {
     return {};
   }
 
   return {
-    OPENCLAW_VITEST_MAX_WORKERS: label === "commands" ? "1" : "2",
+    NATESCLAW_VITEST_MAX_WORKERS: label === "commands" ? "1" : "2",
   };
 }
 

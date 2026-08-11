@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { sessionClassificationForRow } from "./session-classification.js";
 
 function entry(overrides: Partial<SessionEntry> = {}): SessionEntry {
@@ -16,7 +16,7 @@ function classification(params: {
   const cfg = {
     agents: { list: [{ id: "main", default: true }] },
     ...(params.isMain ? {} : { session: { mainKey: "not-main" } }),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
   return sessionClassificationForRow(cfg, params.key, params.agentId ?? "main", params.entry);
 }
 
@@ -57,7 +57,7 @@ describe("sessionClassificationForRow", () => {
     ).toMatchObject({ classification: "direct", accountId: "main", peerKind: "direct" });
     expect(
       sessionClassificationForRow(
-        { session: { scope: "global" } } as OpenClawConfig,
+        { session: { scope: "global" } } as NatesclawConfig,
         "GLOBAL",
         "main",
         entry(),

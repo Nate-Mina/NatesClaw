@@ -5,9 +5,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { MAX_WORKSPACE_BOOTSTRAP_FILE_BYTES } from "../agents/workspace-bootstrap-read.js";
 import type { McpServerConfig } from "../config/types.mcp.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { PLUGIN_ARTIFACT_ADAPTER_IDENTITY } from "../plugins/install-artifact-inspection.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { applyClawAddPlan } from "./add.js";
 import { exportClawAgent } from "./export.js";
 import { buildClawAddPlan } from "./lifecycle.js";
@@ -15,7 +15,7 @@ import { installClawMcpServers } from "./mcp.js";
 import { persistClawPackageRef, updateClawInstallRecordStatus } from "./provenance.js";
 import { readClawManifestFile } from "./reader.js";
 import { parseClawManifest } from "./schema.js";
-import type { ClawOpenClawProfile, ClawSourceIdentity } from "./types.js";
+import type { ClawNatesclawProfile, ClawSourceIdentity } from "./types.js";
 
 const lifecycleStateTestControl = vi.hoisted(() => ({
   afterRead: undefined as (() => Promise<void>) | undefined,
@@ -36,7 +36,7 @@ vi.mock("./lifecycle-state.js", async (importOriginal) => {
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   lifecycleStateTestControl.afterRead = undefined;
   vi.unstubAllEnvs();
 });
@@ -52,7 +52,7 @@ async function installedFixture(
     withPackage?: boolean;
   } = {},
 ) {
-  const root = tempDirs.make("openclaw-claw-export-");
+  const root = tempDirs.make("natesclaw-claw-export-");
   await mkdir(join(root, "source", "reference"), { recursive: true });
   const content = (label: string) => `managed ${label}\n`;
   await writeFile(join(root, "source", "SOUL.md"), options.soulContent ?? content("soul"));
@@ -99,7 +99,7 @@ async function installedFixture(
   if (!parsed.ok) {
     throw new Error(JSON.stringify(parsed.diagnostics));
   }
-  const openClawProfile: ClawOpenClawProfile = {
+  const NatesclawProfile: ClawNatesclawProfile = {
     schemaVersion: 1,
     agent: {
       tools: {
@@ -122,7 +122,7 @@ async function installedFixture(
     name: "@acme/worker",
     version: "1.2.3",
     packageRoot: root,
-    manifestPath: join(root, "openclaw.claw.json"),
+    manifestPath: join(root, "natesclaw.claw.json"),
     integrityKind: "artifact",
     integrity: "sha256:manifest",
     byteLength: 100,
@@ -147,13 +147,13 @@ async function installedFixture(
           },
         }
       : {}),
-    openClawProfile,
+    NatesclawProfile,
     context: { workspace: join(root, "workspace-worker") },
   });
-  let config: OpenClawConfig = {};
+  let config: NatesclawConfig = {};
   await applyClawAddPlan(plan, {
     consentPlanIntegrity: plan.planIntegrity,
-    env: { OPENCLAW_STATE_DIR: join(root, "state") },
+    env: { NATESCLAW_STATE_DIR: join(root, "state") },
     commitConfig: async (transform) => {
       config = transform(config);
     },
@@ -178,14 +178,14 @@ async function installedFixture(
         version: "2.0.0",
         integrity: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       },
-      { env: { OPENCLAW_STATE_DIR: join(root, "state") } },
+      { env: { NATESCLAW_STATE_DIR: join(root, "state") } },
     );
   }
   return {
     root,
     plan,
     config,
-    env: { OPENCLAW_STATE_DIR: join(root, "state") },
+    env: { NATESCLAW_STATE_DIR: join(root, "state") },
     packageDeps: {
       planSkill: async () => ({
         ok: true as const,
@@ -233,7 +233,7 @@ describe("exportClawAgent", () => {
     });
 
     expect(result).toMatchObject({
-      schemaVersion: "openclaw.clawExportResult.v1",
+      schemaVersion: "natesclaw.clawExportResult.v1",
       stability: "experimental",
       agentId: "worker",
       manifest: {
@@ -272,7 +272,7 @@ describe("exportClawAgent", () => {
           },
         ],
       },
-      openClawProfile: {
+      NatesclawProfile: {
         schemaVersion: 1,
         agent: {
           tools: {
@@ -293,8 +293,8 @@ describe("exportClawAgent", () => {
     });
     const packageJson = JSON.parse(await readFile(join(out, "package.json"), "utf8"));
     expect(packageJson).toMatchObject({
-      name: "openclaw-claw-worker",
-      openclaw: { claw: "CLAW.md" },
+      name: "natesclaw-claw-worker",
+      natesclaw: { claw: "CLAW.md" },
     });
     expect(packageJson.version).toMatch(/^0\.0\.0-export\.[0-9a-f]{64}$/);
     const clawMarkdown = await readFile(join(out, "CLAW.md"), "utf8");
@@ -307,12 +307,12 @@ describe("exportClawAgent", () => {
     }
     expect(exported.clawMarkdownBody?.toString("utf8")).toBe("managed soul\n");
     expect(exported.manifest.metadata).toEqual({});
-    expect(exported.openClawProfile).toMatchObject({
+    expect(exported.NatesclawProfile).toMatchObject({
       schemaVersion: 1,
       agent: { tools: { profile: "coding" } },
     });
     expect(exported.manifest.workspace.bootstrapFiles).not.toHaveProperty("SOUL.md");
-    await expect(readFile(join(out, "profiles", "openclaw.yml"), "utf8")).resolves.toContain(
+    await expect(readFile(join(out, "profiles", "natesclaw.yml"), "utf8")).resolves.toContain(
       "profile: coding",
     );
     await expect(readFile(join(out, "workspace", "SOUL.md"), "utf8")).rejects.toThrow();
@@ -360,7 +360,7 @@ describe("exportClawAgent", () => {
     expect(result.manifest.workspace.files).toContainEqual(
       expect.objectContaining({ path: "reference/policy.md" }),
     );
-    expect(result.openClawProfile).toMatchObject({
+    expect(result.NatesclawProfile).toMatchObject({
       schemaVersion: 1,
       extensions: [
         {

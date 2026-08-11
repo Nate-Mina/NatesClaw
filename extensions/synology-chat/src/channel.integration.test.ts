@@ -1,5 +1,5 @@
 // Synology Chat tests cover channel.integration plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildChannelInboundEventContextMock,

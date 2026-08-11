@@ -1,7 +1,7 @@
-import { resolveAgentModelPrimaryValue } from "openclaw/plugin-sdk/provider-onboard";
+import { resolveAgentModelPrimaryValue } from "natesclaw/plugin-sdk/provider-onboard";
 import { describe, expect, it } from "vitest";
 import { applyDeepSeekConfig } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 
 const DEEPSEEK_DEFAULT_MODEL_REF = `deepseek/${manifest.modelCatalog.providers.deepseek.defaultModel}`;
 

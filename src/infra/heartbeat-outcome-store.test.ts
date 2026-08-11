@@ -4,10 +4,10 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { upsertSessionEntryCore } from "../config/sessions/session-accessor.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
   buildHeartbeatOutcomeContext,
   claimHeartbeatOutcomeForRun,
@@ -17,9 +17,9 @@ import {
 const tempDirs: string[] = [];
 
 async function createEnv(): Promise<NodeJS.ProcessEnv> {
-  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-heartbeat-outcome-"));
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-heartbeat-outcome-"));
   tempDirs.push(stateDir);
-  const env = { OPENCLAW_STATE_DIR: stateDir };
+  const env = { NATESCLAW_STATE_DIR: stateDir };
   await upsertSessionEntryCore(
     { agentId: "main", env, sessionKey: "agent:main:main" },
     { sessionId: "heartbeat-outcome-test", updatedAt: 1 },
@@ -28,8 +28,8 @@ async function createEnv(): Promise<NodeJS.ProcessEnv> {
 }
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -119,7 +119,7 @@ describe("heartbeat outcome store", () => {
       }),
     ).toMatchObject({ outcome: "blocked", summary: "Waiting for build", occurredAt: 200 });
     expect(
-      openOpenClawAgentDatabase({ agentId: "main", env })
+      openNatesclawAgentDatabase({ agentId: "main", env })
         .db.prepare("SELECT COUNT(*) AS count FROM heartbeat_outcomes")
         .get(),
     ).toEqual({ count: 1 });

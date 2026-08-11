@@ -1,20 +1,20 @@
 // Telegram plugin module implements exec approvals behavior.
-import { resolveApprovalApprovers } from "openclaw/plugin-sdk/approval-auth-runtime";
+import { resolveApprovalApprovers } from "natesclaw/plugin-sdk/approval-auth-runtime";
 import {
   createChannelExecApprovalProfile,
   isChannelExecApprovalClientEnabledFromConfig,
   isChannelExecApprovalTargetRecipient,
   matchesApprovalRequestFilters,
-} from "openclaw/plugin-sdk/approval-client-runtime";
-import { doesApprovalRequestSelectChannelAccount } from "openclaw/plugin-sdk/approval-native-runtime";
+} from "natesclaw/plugin-sdk/approval-client-runtime";
+import { doesApprovalRequestSelectChannelAccount } from "natesclaw/plugin-sdk/approval-native-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { TelegramExecApprovalConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/approval-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { TelegramExecApprovalConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveDefaultTelegramAccountId, resolveTelegramAccount } from "./accounts.js";
 import { normalizeTelegramChatId, resolveTelegramTargetChatType } from "./targets.js";
 
@@ -31,13 +31,13 @@ function normalizeTelegramDirectApproverId(value: string | number): string | und
   return chatId;
 }
 
-function resolveTelegramOwnerApprovers(cfg: OpenClawConfig): Array<string | number> {
+function resolveTelegramOwnerApprovers(cfg: NatesclawConfig): Array<string | number> {
   const ownerAllowFrom = cfg.commands?.ownerAllowFrom;
   return Array.isArray(ownerAllowFrom) ? ownerAllowFrom : [];
 }
 
 export function resolveTelegramExecApprovalConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
 }): TelegramExecApprovalConfig | undefined {
   const account = resolveTelegramAccount(params);
@@ -51,7 +51,7 @@ export function resolveTelegramExecApprovalConfig(params: {
 }
 
 export function getTelegramExecApprovalApprovers(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
 }): string[] {
   return resolveApprovalApprovers({
@@ -62,7 +62,7 @@ export function getTelegramExecApprovalApprovers(params: {
 }
 
 export function isTelegramExecApprovalTargetRecipient(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   senderId?: string | null;
   accountId?: string | null;
 }): boolean {
@@ -80,7 +80,7 @@ export function isTelegramExecApprovalTargetRecipient(params: {
 }
 
 function isTelegramExecApprovalAccountEligible(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -104,7 +104,7 @@ function isTelegramExecApprovalAccountEligible(params: {
 }
 
 function matchesTelegramRequestAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -138,7 +138,7 @@ export const shouldHandleTelegramExecApprovalRequest =
   telegramExecApprovalProfile.shouldHandleRequest;
 
 export function shouldInjectTelegramExecApprovalButtons(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   to: string;
 }): boolean {
@@ -157,7 +157,7 @@ export function shouldInjectTelegramExecApprovalButtons(params: {
 }
 
 export function shouldSuppressLocalTelegramExecApprovalPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   payload: ReplyPayload;
 }): boolean {
@@ -165,7 +165,7 @@ export function shouldSuppressLocalTelegramExecApprovalPrompt(params: {
 }
 
 export function isTelegramExecApprovalHandlerConfigured(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
 }): boolean {
   return isChannelExecApprovalClientEnabledFromConfig({

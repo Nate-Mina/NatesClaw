@@ -2,17 +2,17 @@
 import {
   createPreviewMessageReceipt,
   type MessageReceipt,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   isPotentialTruncatedFinal,
   selectLongerFinalText,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   buildTtsSupplementMediaPayload,
   getReplyPayloadTtsSupplement,
   resolveSendableOutboundReplyParts,
   type ReplyPayload,
-} from "openclaw/plugin-sdk/reply-payload";
+} from "natesclaw/plugin-sdk/reply-payload";
 import type { TelegramInlineButtons } from "./button-types.js";
 import type { TelegramDraftStream } from "./draft-stream.js";
 import type { TelegramPromptContextProjectionSequence } from "./prompt-context-projection.js";
@@ -534,4 +534,4 @@ export function createLaneTextDeliverer(params: CreateLaneTextDelivererParams): 
     return delivered ? result("sent") : result("skipped");
   };
 }
-import { asNonArrayRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { asNonArrayRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";

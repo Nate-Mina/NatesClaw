@@ -1,7 +1,7 @@
-import { formatErrorMessage, toErrorObject } from "openclaw/plugin-sdk/error-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import type { WizardPrompter } from "openclaw/plugin-sdk/setup";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import { formatErrorMessage, toErrorObject } from "natesclaw/plugin-sdk/error-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+import type { WizardPrompter } from "natesclaw/plugin-sdk/setup";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { buildOllamaBaseUrlSsrFPolicy, resolveOllamaApiBase } from "./provider-models.js";
 import { normalizeOllamaModelName } from "./setup-model-selection.js";
 import { checkNdjsonRecordCap } from "./stream-ndjson-cap.js";

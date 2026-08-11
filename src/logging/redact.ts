@@ -1,9 +1,9 @@
-import { findStructuredAuthParamRanges, redactStructuredAuthHeaders } from "@openclaw/acp-core";
-import { isSensitiveUrlQueryParamName } from "@openclaw/net-policy/redact-sensitive-url";
-import { expectDefined } from "@openclaw/normalization-core";
+import { findStructuredAuthParamRanges, redactStructuredAuthHeaders } from "@natesclaw/acp-core";
+import { isSensitiveUrlQueryParamName } from "@natesclaw/net-policy/redact-sensitive-url";
+import { expectDefined } from "@natesclaw/normalization-core";
 // Redaction helpers scrub secrets and sensitive identifiers from log output.
-import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { compileConfigRegex } from "../security/config-regex.js";
 import { readLoggingConfig } from "./config.js";
 import { replacePatternBounded } from "./redact-bounded.js";
@@ -27,7 +27,7 @@ import { redactRegisteredSecretValues } from "./secret-redaction-registry.js";
 
 export type RedactSensitiveMode = "off" | "tools";
 export type RedactPattern = string | RegExp;
-type LoggingConfig = OpenClawConfig["logging"];
+type LoggingConfig = NatesclawConfig["logging"];
 
 const DEFAULT_REDACT_MODE: RedactSensitiveMode = "tools";
 const DEFAULT_REDACT_MIN_LENGTH = 18;

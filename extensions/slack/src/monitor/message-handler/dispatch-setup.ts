@@ -4,20 +4,20 @@ import {
   logAckFailure,
   logTypingFailure,
   type StatusReactionAdapter,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "natesclaw/plugin-sdk/channel-feedback";
 import {
   createChannelMessageReplyPipeline,
   resolveAgentOutboundIdentity,
   resolveChannelMessageSourceReplyDeliveryMode,
   resolveChannelStreamingBlockEnabled,
   resolveChannelStreamingNativeTransport,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { getGlobalHookRunner } from "natesclaw/plugin-sdk/plugin-runtime";
+import { resolveInboundLastRouteSessionKey } from "natesclaw/plugin-sdk/routing";
+import { danger, logVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "natesclaw/plugin-sdk/security-runtime";
+import { normalizeOptionalLowercaseString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { reactSlackMessage, removeSlackReaction } from "../../actions.js";
 import { formatSlackError } from "../../errors.js";
 import { resolveSlackStreamingConfig } from "../../stream-mode.js";

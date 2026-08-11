@@ -95,11 +95,11 @@ export function pickProbeHostForBind(
 }
 
 const SAFE_DAEMON_ENV_KEYS = [
-  "OPENCLAW_PROFILE",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_PORT",
-  "OPENCLAW_NIX_MODE",
+  "NATESCLAW_PROFILE",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_GATEWAY_PORT",
+  "NATESCLAW_NIX_MODE",
 ];
 
 /** Keep only daemon env keys safe to print in diagnostics. */
@@ -154,7 +154,7 @@ export function renderRuntimeHints(
   const hints: string[] = [];
   const fileLog = logFile ?? null;
   if (runtime.missingUnit) {
-    hints.push(`Service not installed. Run: ${formatCliCommand("openclaw gateway install", env)}`);
+    hints.push(`Service not installed. Run: ${formatCliCommand("natesclaw gateway install", env)}`);
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
     }
@@ -165,7 +165,7 @@ export function renderRuntimeHints(
       "LaunchAgent requires a logged-in macOS GUI session; SSH/headless/sudo shells cannot bootstrap gui/$UID.",
     );
     hints.push(
-      `Sign in to the macOS desktop as this user, then run: ${formatCliCommand("openclaw gateway restart", env)}`,
+      `Sign in to the macOS desktop as this user, then run: ${formatCliCommand("natesclaw gateway restart", env)}`,
     );
     hints.push(
       "For headless VM setups, enable auto-login for the target user or use a custom LaunchDaemon (not shipped).",
@@ -177,7 +177,7 @@ export function renderRuntimeHints(
   }
   if (runtime.missingSupervision) {
     hints.push(
-      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("openclaw gateway restart", env)}`,
+      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("natesclaw gateway restart", env)}`,
     );
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
@@ -191,8 +191,8 @@ export function renderRuntimeHints(
     hints.push(
       ...buildPlatformRuntimeLogHints({
         env,
-        systemdServiceName: resolveGatewaySystemdServiceName(env.OPENCLAW_PROFILE),
-        windowsTaskName: resolveGatewayWindowsTaskName(env.OPENCLAW_PROFILE),
+        systemdServiceName: resolveGatewaySystemdServiceName(env.NATESCLAW_PROFILE),
+        windowsTaskName: resolveGatewayWindowsTaskName(env.NATESCLAW_PROFILE),
       }),
     );
   }
@@ -201,11 +201,11 @@ export function renderRuntimeHints(
 
 /** Render install/start hints for the current service platform/container context. */
 export function renderGatewayServiceStartHints(env: NodeJS.ProcessEnv = process.env): string[] {
-  const profile = env.OPENCLAW_PROFILE;
+  const profile = env.NATESCLAW_PROFILE;
   const container = resolveDaemonContainerContext(env);
   const hints = buildPlatformServiceStartHints({
-    installCommand: formatCliCommand("openclaw gateway install", env),
-    startCommand: formatCliCommand("openclaw gateway", env),
+    installCommand: formatCliCommand("natesclaw gateway install", env),
+    startCommand: formatCliCommand("natesclaw gateway", env),
     launchAgentPlistPath: `~/Library/LaunchAgents/${resolveGatewayLaunchAgentLabel(profile)}.plist`,
     systemdServiceName: resolveGatewaySystemdServiceName(profile),
     windowsTaskName: resolveGatewayWindowsTaskName(profile),

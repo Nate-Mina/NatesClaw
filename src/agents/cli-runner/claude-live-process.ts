@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
-import { stripSystemPromptCacheBoundary } from "@openclaw/ai/internal/shared";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { stripSystemPromptCacheBoundary } from "@natesclaw/ai/internal/shared";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { formatErrorMessage } from "../../infra/errors.js";
 import type {
   CliOutput,
@@ -252,7 +252,7 @@ function acceptControlRequest(
       toolInput,
       decision: {
         behavior: "deny",
-        message: `OpenClaw exec policy denied Claude native tool use (security=${turn.execPermission.security}, ask=${turn.execPermission.ask}).`,
+        message: `Natesclaw exec policy denied Claude native tool use (security=${turn.execPermission.security}, ask=${turn.execPermission.ask}).`,
       },
     });
     return;
@@ -291,10 +291,10 @@ function acceptControlRequest(
               behavior: "deny",
               message:
                 outcome.kind === "deny" && outcome.reason === "policy-oversized"
-                  ? "OpenClaw denied Claude native tool use (Bash): the command is too large to display for out-of-band approval. Split it into smaller commands and retry."
+                  ? "Natesclaw denied Claude native tool use (Bash): the command is too large to display for out-of-band approval. Split it into smaller commands and retry."
                   : outcome.kind === "deny" && outcome.reason === "user" && !runAborted
-                    ? `OpenClaw user denied Claude native tool use (${toolName}).`
-                    : `OpenClaw approval was not granted for Claude native tool use (${toolName}).`,
+                    ? `Natesclaw user denied Claude native tool use (${toolName}).`
+                    : `Natesclaw approval was not granted for Claude native tool use (${toolName}).`,
             },
       });
     } catch {
@@ -326,7 +326,7 @@ function acceptSessionRequirement(
   session.close(
     "abort",
     new FailoverError(
-      `The running Claude Code build${versionDetail} did not advertise the required ${requirement.capability} capability. Claude Code ${requirement.minimumVersion} is the first known compatible release. Run \`${requirement.updateCommand}\`, restart OpenClaw, and retry.`,
+      `The running Claude Code build${versionDetail} did not advertise the required ${requirement.capability} capability. Claude Code ${requirement.minimumVersion} is the first known compatible release. Run \`${requirement.updateCommand}\`, restart Natesclaw, and retry.`,
       {
         reason: "format",
         provider: session.providerId,

@@ -8,15 +8,15 @@
  * validation, fetch, and structured response formatting.
  */
 
-import { resolveChannelGroupPolicy } from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { resolveChannelGroupPolicy } from "natesclaw/plugin-sdk/channel-policy";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   readProviderTextResponse,
   readResponseTextLimited,
-} from "openclaw/plugin-sdk/provider-http";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
-import { jsonResult as json } from "openclaw/plugin-sdk/tool-results";
+} from "natesclaw/plugin-sdk/provider-http";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { jsonResult as json } from "natesclaw/plugin-sdk/tool-results";
 import { debugLog, debugError } from "../utils/log.js";
 
 const API_BASE = "https://api.sgroup.qq.com";
@@ -248,7 +248,7 @@ function validateDeleteConfirmation(params: ChannelApiParams): string | null {
  */
 interface ChannelApiExecuteOptions {
   accessToken: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   accountId?: string | null;
 }
 

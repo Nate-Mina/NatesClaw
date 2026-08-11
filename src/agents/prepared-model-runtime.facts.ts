@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
-import type { ConfiguredModelRef } from "@openclaw/model-catalog-core/configured-model-refs";
+import type { ConfiguredModelRef } from "@natesclaw/model-catalog-core/configured-model-refs";
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@openclaw/model-catalog-core/provider-id";
-import { stableStringify } from "@openclaw/normalization-core";
+} from "@natesclaw/model-catalog-core/provider-id";
+import { stableStringify } from "@natesclaw/normalization-core";
 import { sha256Base64Url } from "../infra/crypto-digest.js";
 import { prepareMediaCapabilityProviders } from "../plugins/capability-provider-runtime.js";
 import {
@@ -37,7 +37,7 @@ import { createStaticModelIdMatcher } from "./embedded-agent-runner/model.static
 import { buildPreparedModelCatalogSnapshot } from "./model-catalog.js";
 import type { ModelCatalogSnapshot } from "./model-catalog.types.js";
 import { buildConfiguredModelCatalog } from "./model-selection-shared.js";
-import { ensureOpenClawModelsJson, planOpenClawModelsJsonSource } from "./models-config.js";
+import { ensureNatesclawModelsJson, planNatesclawModelsJsonSource } from "./models-config.js";
 import { prepareImplicitProviderStaticCatalog } from "./models-config.providers.implicit.js";
 import {
   loadPersistedPluginModelCatalogsReadOnly,
@@ -681,7 +681,7 @@ export async function prepareAgentCatalogSource(
         }),
   };
   if (!persist) {
-    const source = await planOpenClawModelsJsonSource(input.config, input.agentDir, {
+    const source = await planNatesclawModelsJsonSource(input.config, input.agentDir, {
       ...options,
       ...(catalogMode === "live" ? { onProviderCatalogOutcome: recordProviderOutcome } : {}),
     });
@@ -692,7 +692,7 @@ export async function prepareAgentCatalogSource(
     };
   }
   if (!input.readOnly) {
-    await ensureOpenClawModelsJson(input.config, input.agentDir, {
+    await ensureNatesclawModelsJson(input.config, input.agentDir, {
       ...options,
       ...(catalogMode === "live" ? { onProviderCatalogOutcome: recordProviderOutcome } : {}),
     });

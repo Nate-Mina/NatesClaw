@@ -1,6 +1,6 @@
-import { asOptionalRecord, stableStringify } from "@openclaw/normalization-core";
-import { normalizeStringifiedOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { asOptionalRecord, stableStringify } from "@natesclaw/normalization-core";
+import { normalizeStringifiedOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { projectDiagnosticValue, redactDiagnosticText } from "./credential-redaction.js";
 
 const MAX_ERROR_BODY_LENGTH = 4000;

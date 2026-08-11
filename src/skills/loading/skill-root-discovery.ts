@@ -1,8 +1,8 @@
 // Skill root discovery validates bounded filesystem candidates before loading skill records.
 import fs from "node:fs";
 import path from "node:path";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { walkDirectorySync } from "../../infra/fs-safe.js";
 import { isPathInside } from "../../infra/path-guards.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
@@ -52,7 +52,7 @@ type SkillDiscoveryBudget = {
   truncated: boolean;
 };
 
-export function resolveSkillDiscoveryLimits(config?: OpenClawConfig): ResolvedSkillDiscoveryLimits {
+export function resolveSkillDiscoveryLimits(config?: NatesclawConfig): ResolvedSkillDiscoveryLimits {
   const limits = config?.skills?.limits;
   return {
     maxCandidatesPerRoot: limits?.maxCandidatesPerRoot ?? DEFAULT_MAX_CANDIDATES_PER_ROOT,
@@ -245,7 +245,7 @@ function buildEscapedSkillPathReason(params: { source: string; candidatePath: st
   consoleHint: string;
 } {
   const candidateIsSymlink = isSymlinkPath(params.candidatePath);
-  if (params.source === "openclaw-bundled" && candidateIsSymlink) {
+  if (params.source === "natesclaw-bundled" && candidateIsSymlink) {
     return {
       reason: "bundled-symlink-escape",
       consoleHint:
@@ -255,7 +255,7 @@ function buildEscapedSkillPathReason(params: { source: string; candidatePath: st
   if (candidateIsSymlink) {
     return { reason: "symlink-escape", consoleHint: "reason=symlink-escape" };
   }
-  if (params.source === "openclaw-bundled") {
+  if (params.source === "natesclaw-bundled") {
     return {
       reason: "bundled-root-escape",
       consoleHint:
@@ -382,13 +382,13 @@ function resolveNestedSkillsRoot(
 }
 
 function shouldEnforceConfiguredSkillRootContainment(source: string): boolean {
-  return source !== "openclaw-managed" && source !== "agents-skills-personal";
+  return source !== "natesclaw-managed" && source !== "agents-skills-personal";
 }
 
 function shouldUseConfiguredSymlinkTargets(source: string): boolean {
   return (
-    source === "openclaw-workspace" ||
-    source === "openclaw-extra" ||
+    source === "natesclaw-workspace" ||
+    source === "natesclaw-extra" ||
     source === "agents-skills-project"
   );
 }
@@ -572,7 +572,7 @@ export function discoverSkillCandidates(params: {
 
     const candidatePath = path.resolve(candidate.skillDir);
     const maxGroupedDepth =
-      params.source === "openclaw-extra" &&
+      params.source === "natesclaw-extra" &&
       !baseDirIsNestedSkillsRoot &&
       !baseDirLooksLikeSkillsRoot &&
       candidatePath !== nestedSkillsRootPath &&

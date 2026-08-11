@@ -1,17 +1,17 @@
 // Persists gateway boot outcomes for supervisor crash-loop decisions.
 import { randomUUID } from "node:crypto";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { createSubsystemLogger } from "../logging/subsystem.js";
-import { OPENCLAW_AGENT_SCHEMA_VERSION } from "../state/openclaw-agent-db-contract.js";
+import { NATESCLAW_AGENT_SCHEMA_VERSION } from "../state/natesclaw-agent-db-contract.js";
 import {
   formatLegacyAgentMediaMigrationRequiredMessage,
   GATEWAY_AGENT_MEDIA_MIGRATION_REQUIRED_REASON,
-} from "../state/openclaw-agent-db-migration-required.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+} from "../state/natesclaw-agent-db-migration-required.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
@@ -44,12 +44,12 @@ export function formatGatewayCrashLoopManualChannelStartHint(target?: {
         ...(target.accountId ? { accountId: target.accountId } : {}),
       })
     : `{"channel":"<id>"}`;
-  return `Start a channel manually with: openclaw gateway call channels.start --params '${params}'`;
+  return `Start a channel manually with: natesclaw gateway call channels.start --params '${params}'`;
 }
 
 const gatewayLifecycleLog = createSubsystemLogger("gateway/lifecycle");
 
-type GatewayBootLifecycleDatabase = Pick<OpenClawStateKyselyDatabase, "gateway_boot_lifecycle">;
+type GatewayBootLifecycleDatabase = Pick<NatesclawStateKyselyDatabase, "gateway_boot_lifecycle">;
 
 type GatewayBootLifecycleOutcome =
   | "clean_stop"
@@ -101,7 +101,7 @@ export function inspectGatewayCrashLoopBreaker(
   nowMs = Date.now(),
 ): GatewayCrashLoopBreakerDecision {
   try {
-    const { db } = openOpenClawStateDatabase({ env });
+    const { db } = openNatesclawStateDatabase({ env });
     const kysely = getNodeSqliteKysely<GatewayBootLifecycleDatabase>(db);
     const windowStartMs = nowMs - GATEWAY_BOOT_LOOP_WINDOW_MS;
     // Unclean means startup_failed by completion time, or an open boot row
@@ -158,7 +158,7 @@ export function recordGatewayBootStart(
 ): string | undefined {
   const bootId = randomUUID();
   try {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const kysely = getNodeSqliteKysely<GatewayBootLifecycleDatabase>(db);
         executeSqliteQuerySync(
@@ -201,7 +201,7 @@ export function recordGatewayCrashLoopRecovery(
 ): string | undefined {
   const recoveredBootId = randomUUID();
   try {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const kysely = getNodeSqliteKysely<GatewayBootLifecycleDatabase>(db);
         if (bootId) {
@@ -251,7 +251,7 @@ export function completeGatewayBootLifecycle(
     return;
   }
   try {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const kysely = getNodeSqliteKysely<GatewayBootLifecycleDatabase>(db);
         executeSqliteQuerySync(
@@ -282,13 +282,13 @@ export function repairGatewayAgentMediaMigrationStartupFailures(params: {
     return 0;
   }
   try {
-    return runOpenClawStateWriteTransaction(
+    return runNatesclawStateWriteTransaction(
       ({ db }) => {
         const kysely = getNodeSqliteKysely<GatewayBootLifecycleDatabase>(db);
         const legacyMessages = [
           ...new Set(
             params.databasePaths.flatMap((pathname) =>
-              Array.from({ length: OPENCLAW_AGENT_SCHEMA_VERSION }, (_, schemaVersion) => {
+              Array.from({ length: NATESCLAW_AGENT_SCHEMA_VERSION }, (_, schemaVersion) => {
                 const message = formatLegacyAgentMediaMigrationRequiredMessage(
                   pathname,
                   schemaVersion,

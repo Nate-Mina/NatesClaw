@@ -1,10 +1,10 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveChannelAccountEnabled } from "../../channels/account-summary.js";
 import { resolveChannelDefaultAccountId } from "../../channels/plugins/helpers.js";
 import { getChannelPlugin, listChannelPlugins } from "../../channels/plugins/index.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
 import type { ChannelId } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { normalizeOptionalAccountId } from "../../routing/account-id.js";
 import { resolveAccountEntry } from "../../routing/account-lookup.js";
 import { isDeliverableMessageChannel } from "../../utils/message-channel.js";
@@ -19,7 +19,7 @@ export type MessageBroadcastAccountPlan = {
 
 function resolveListedAccountId(params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
 }): string | undefined {
   const listedAccountId = params.plugin.config
@@ -38,7 +38,7 @@ function resolveListedAccountId(params: {
 }
 
 function isExplicitAccountDisabled(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
   listedAccountId: string;
 }): boolean {
@@ -63,7 +63,7 @@ function isExplicitAccountDisabled(params: {
  * Host-derived defaults and binding accounts bypass this helper by design.
  */
 export function validateExplicitMessageAccountSelection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel?: string | null;
   accountId?: unknown;
   plugin?: ChannelPlugin;
@@ -109,9 +109,9 @@ export function validateExplicitMessageAccountSelection(params: {
 
 /** Selects configured, enabled, deliverable plugins without bootstrap or config mutation. */
 export function isPotentialConfiguredMessageChannel(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   plugin: ChannelPlugin;
-}): params is { cfg: OpenClawConfig; plugin: ChannelPlugin & { id: ChannelId } } {
+}): params is { cfg: NatesclawConfig; plugin: ChannelPlugin & { id: ChannelId } } {
   if (!isDeliverableMessageChannel(params.plugin.id)) {
     return false;
   }
@@ -144,7 +144,7 @@ export function isPotentialConfiguredMessageChannel(params: {
  * Host-derived binding/default accounts do not use this explicit-account plan.
  */
 export function resolveMessageBroadcastAccountPlan(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: unknown;
 }): MessageBroadcastAccountPlan | undefined {
   const accountId = validateExplicitMessageAccountSelection({

@@ -393,7 +393,7 @@ export function resolveContextWindowTokens(model?: ExtensionContext["model"]): n
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.compactionTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.compactionTestApi")] = {
     buildCompactionSummarizationInstructions,
     summarizeWithFallback,
   };

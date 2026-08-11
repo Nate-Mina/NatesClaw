@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/slack",
+  "name": "@natesclaw/slack",
   "version": "2026.8.1",
-  "description": "OpenClaw Slack channel plugin for channels, DMs, commands, and app events.",
+  "description": "Natesclaw Slack channel plugin for channels, DMs, commands, and app events.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -20,18 +20,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -145,7 +145,7 @@
       }
     },
     "install": {
-      "npmSpec": "@openclaw/slack",
+      "npmSpec": "@natesclaw/slack",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.28",
       "allowInvalidConfigRecovery": true
@@ -154,7 +154,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {

@@ -293,7 +293,7 @@ describe("runEmbeddedAgent incomplete-turn safety", () => {
       agentId: "main",
       sessionId: overflowBaseRunParams.sessionId,
       sessionKey: overflowBaseRunParams.sessionKey,
-      storePath: "/tmp/openclaw-transcript.jsonl",
+      storePath: "/tmp/natesclaw-transcript.jsonl",
       generation: "generation-1",
       entryId: "msg-user-delayed",
       rawSeq: 1,
@@ -367,7 +367,7 @@ describe("runEmbeddedAgent incomplete-turn safety", () => {
 
     resolvePersistApproved?.({
       admission,
-      sessionFile: "/tmp/openclaw-transcript.jsonl",
+      sessionFile: "/tmp/natesclaw-transcript.jsonl",
       sessionEntry: undefined,
       messageId: "msg-user-delayed",
       message: persistedMessage,

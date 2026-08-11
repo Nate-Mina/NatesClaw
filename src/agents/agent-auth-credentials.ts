@@ -1,8 +1,8 @@
 /** Converts auth-profile credentials into agent runtime credential maps. */
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { asDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { asDateTimestampMs } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
 import { resolveAuthProfileOrder } from "./auth-profiles/order.js";
 import type { AuthProfileCredential, AuthProfileStore } from "./auth-profiles/types.js";
@@ -26,10 +26,10 @@ export type PreparedAgentCredentialModes = Readonly<Record<string, "api_key" | "
 
 type ResolveAgentCredentialMapOptions = {
   includeSecretRefPlaceholders?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
 };
 
-const AGENT_SECRET_REF_CONFIGURED_MARKER = "openclaw-secret-ref-configured";
+const AGENT_SECRET_REF_CONFIGURED_MARKER = "natesclaw-secret-ref-configured";
 
 /** Records only credential modes whose secret material is usable by a prepared runtime owner. */
 export function resolveUsableAgentCredentialModes(

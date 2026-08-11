@@ -3,7 +3,7 @@ import { property } from "lit/decorators.js";
 import type { PresenceEntry } from "../api/types.ts";
 import { CONTROL_UI_BUILD_INFO, type ControlUiBuildInfo } from "../build-info.ts";
 import { t } from "../i18n/index.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomContentsElement } from "../lit/natesclaw-element.ts";
 import {
   identityAvatarClass,
   renderIdentityAvatarImage,
@@ -142,7 +142,7 @@ function renderViewerAvatar(view: IdentityAvatarView) {
 
 export type ViewerAvatarVariant = "session" | "footer" | "profile";
 
-class ViewerAvatar extends OpenClawLightDomContentsElement {
+class ViewerAvatar extends NatesclawLightDomContentsElement {
   @property({ attribute: false }) user: PresenceViewer | null = null;
   @property() variant: ViewerAvatarVariant = "session";
 
@@ -174,7 +174,7 @@ function renderPresenceCardRow(user: PresenceViewer) {
   // as a subtitle would just echo the same line.
   const subtitle = user.email && user.email !== label ? user.email : undefined;
   return html`<div class="sidebar-hover-card__person" data-viewer-id=${user.id}>
-    <openclaw-viewer-avatar .user=${user} variant="footer"></openclaw-viewer-avatar>
+    <natesclaw-viewer-avatar .user=${user} variant="footer"></natesclaw-viewer-avatar>
     <span class="sidebar-hover-card__person-text">
       <span class="sidebar-hover-card__person-name">${label}</span>
       ${subtitle
@@ -184,7 +184,7 @@ function renderPresenceCardRow(user: PresenceViewer) {
   </div>`;
 }
 
-class ViewerFacepile extends OpenClawLightDomContentsElement {
+class ViewerFacepile extends NatesclawLightDomContentsElement {
   @property({ attribute: false }) presencePayload: unknown;
   @property({ attribute: false }) selfUserId?: string;
   @property({ attribute: false }) selfInstanceId?: string;
@@ -220,12 +220,12 @@ class ViewerFacepile extends OpenClawLightDomContentsElement {
     >
       ${visible.map((user) =>
         this.variant === "footer"
-          ? html`<openclaw-viewer-avatar .user=${user} variant="footer"></openclaw-viewer-avatar>`
-          : html`<openclaw-tooltip .content=${presenceViewerLabel(user)}>
+          ? html`<natesclaw-viewer-avatar .user=${user} variant="footer"></natesclaw-viewer-avatar>`
+          : html`<natesclaw-tooltip .content=${presenceViewerLabel(user)}>
               <span class="viewer-facepile__tooltip-anchor">
-                <openclaw-viewer-avatar .user=${user} variant="session"></openclaw-viewer-avatar>
+                <natesclaw-viewer-avatar .user=${user} variant="session"></natesclaw-viewer-avatar>
               </span>
-            </openclaw-tooltip>`,
+            </natesclaw-tooltip>`,
       )}
       ${overflow.length > 0
         ? this.variant === "footer"
@@ -234,13 +234,13 @@ class ViewerFacepile extends OpenClawLightDomContentsElement {
               aria-label=${overflow.map(presenceViewerLabel).join(", ")}
               >+${overflow.length}</span
             >`
-          : html`<openclaw-tooltip .content=${overflow.map(presenceViewerLabel).join("\n")}>
+          : html`<natesclaw-tooltip .content=${overflow.map(presenceViewerLabel).join("\n")}>
               <span
                 class="viewer-avatar viewer-avatar--overflow"
                 aria-label=${overflow.map(presenceViewerLabel).join(", ")}
                 >+${overflow.length}</span
               >
-            </openclaw-tooltip>`
+            </natesclaw-tooltip>`
         : nothing}
     </span>`;
     if (this.variant !== "footer") {
@@ -248,7 +248,7 @@ class ViewerFacepile extends OpenClawLightDomContentsElement {
     }
     const roster = projection.users.filter((user) => user.id !== projection.selfUserId);
     return html`
-      <openclaw-tooltip class="sidebar-hover-tooltip">
+      <natesclaw-tooltip class="sidebar-hover-tooltip">
         <span
           class="viewer-facepile-trigger"
           role="group"
@@ -276,23 +276,23 @@ class ViewerFacepile extends OpenClawLightDomContentsElement {
             ${renderSidebarServerDetails(this.buildInfo, this.gatewayVersion)}
           </section>
         </div>
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
     `;
   }
 }
 
 if (globalThis.customElements) {
-  if (!customElements.get("openclaw-viewer-avatar")) {
-    customElements.define("openclaw-viewer-avatar", ViewerAvatar);
+  if (!customElements.get("natesclaw-viewer-avatar")) {
+    customElements.define("natesclaw-viewer-avatar", ViewerAvatar);
   }
-  if (!customElements.get("openclaw-viewer-facepile")) {
-    customElements.define("openclaw-viewer-facepile", ViewerFacepile);
+  if (!customElements.get("natesclaw-viewer-facepile")) {
+    customElements.define("natesclaw-viewer-facepile", ViewerFacepile);
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-viewer-avatar": ViewerAvatar;
-    "openclaw-viewer-facepile": ViewerFacepile;
+    "natesclaw-viewer-avatar": ViewerAvatar;
+    "natesclaw-viewer-facepile": ViewerFacepile;
   }
 }

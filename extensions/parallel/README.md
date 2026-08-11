@@ -1,12 +1,12 @@
-# OpenClaw Parallel Plugin
+# Natesclaw Parallel Plugin
 
-Official OpenClaw plugin for Parallel.
+Official Natesclaw plugin for Parallel.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/parallel-plugin
-openclaw gateway restart
+natesclaw plugins install @natesclaw/parallel-plugin
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/tools/parallel-search> for setup and configuration.
+See <https://docs.natesclaw.ai/tools/parallel-search> for setup and configuration.

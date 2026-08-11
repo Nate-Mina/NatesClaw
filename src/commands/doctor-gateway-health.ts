@@ -3,7 +3,7 @@ import { note } from "../../packages/terminal-core/src/note.js";
 import { sanitizeTerminalText } from "../../packages/terminal-core/src/safe-text.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { probeGatewayStatus } from "../cli/daemon-cli/probe.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   buildGatewayConnectionDetails,
   buildGatewayProbeConnectionDetails,
@@ -62,11 +62,11 @@ function noteCliGatewayVersionSkew(status: StatusSummary | undefined): void {
   }
   note(
     [
-      `This command is OpenClaw ${VERSION}; the running Gateway is OpenClaw ${gatewayVersion}.`,
-      "Check `openclaw --version`, `which openclaw`, and `openclaw gateway status --deep`.",
-      "If this mismatch is unexpected, update PATH so `openclaw` points to the version you want, or reinstall the Gateway service from that same OpenClaw install.",
+      `This command is Natesclaw ${VERSION}; the running Gateway is Natesclaw ${gatewayVersion}.`,
+      "Check `natesclaw --version`, `which natesclaw`, and `natesclaw gateway status --deep`.",
+      "If this mismatch is unexpected, update PATH so `natesclaw` points to the version you want, or reinstall the Gateway service from that same Natesclaw install.",
     ].join("\n"),
-    "OpenClaw version mismatch",
+    "Natesclaw version mismatch",
   );
 }
 
@@ -78,7 +78,7 @@ function noteCliGatewayVersionSkew(status: StatusSummary | undefined): void {
  */
 export async function checkGatewayHealth(params: {
   runtime: RuntimeEnv;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   timeoutMs?: number;
 }): Promise<{ healthOk: boolean; authenticated: boolean; status?: StatusSummary }> {
   const timeoutMs =
@@ -100,7 +100,7 @@ export async function checkGatewayHealth(params: {
           .map(
             (owner) =>
               `- ${owner.degradationState ?? "cold"} ${owner.ownerKind}:${owner.ownerId} (${owner.paths.join(", ")}): ${redactSecretDegradationReason(owner.reason)}` +
-              "\n  Retry: openclaw secrets reload",
+              "\n  Retry: natesclaw secrets reload",
           )
           .join("\n"),
         "Secret runtime degradation",
@@ -150,7 +150,7 @@ export async function checkGatewayHealth(params: {
       note(
         [
           `Channel status probe failed: ${sanitizeTerminalText(formatErrorMessage(channelsResult.reason))}`,
-          `Retry: ${formatCliCommand("openclaw channels status --probe")}`,
+          `Retry: ${formatCliCommand("natesclaw channels status --probe")}`,
         ].join("\n"),
         "Channel warnings",
       );
@@ -210,7 +210,7 @@ export async function checkGatewayHealth(params: {
 
 /** Probes gateway memory readiness without forcing deep embedding checks. */
 export async function probeGatewayMemoryStatus(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   timeoutMs?: number;
 }): Promise<GatewayMemoryProbe> {
   const timeoutMs =

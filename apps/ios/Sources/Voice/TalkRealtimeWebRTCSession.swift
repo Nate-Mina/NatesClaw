@@ -1,8 +1,8 @@
 import AVFAudio
 import Foundation
-import OpenClawChatUI
-import OpenClawKit
-import OpenClawProtocol
+import NatesclawChatUI
+import NatesclawKit
+import NatesclawProtocol
 import OSLog
 @preconcurrency import WebRTC
 
@@ -132,12 +132,12 @@ final class TalkRealtimeTranscriptStore {
 
 @MainActor
 final class TalkRealtimeWebRTCSession: NSObject {
-    private static let logger = Logger(subsystem: "ai.openclawfoundation.app", category: "TalkRealtimeWebRTC")
-    private static let consultToolName = "openclaw_agent_consult"
-    private static let controlToolName = "openclaw_agent_control"
+    private static let logger = Logger(subsystem: "ai.natesclawfoundation.app", category: "TalkRealtimeWebRTC")
+    private static let consultToolName = "natesclaw_agent_consult"
+    private static let controlToolName = "natesclaw_agent_control"
     private static let defaultOfferURL = "https://api.openai.com/v1/realtime/calls"
-    private static let mediaStreamID = "openclaw-ios-realtime"
-    private static let audioTrackID = "openclaw-ios-audio"
+    private static let mediaStreamID = "natesclaw-ios-realtime"
+    private static let audioTrackID = "natesclaw-ios-audio"
     private static let dataChannelLabel = "oai-events"
     private static let toolCallTimeoutSeconds = 12
     private static let toolResultTimeoutSeconds = 45
@@ -412,7 +412,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         self.activeToolRunIds.removeAll()
         for runId in runIds {
             Task { [gateway, sessionKey] in
-                let request = OpenClawChatGatewayRequests.abortRun(
+                let request = NatesclawChatGatewayRequests.abortRun(
                     sessionKey: sessionKey,
                     agentID: nil,
                     runID: runId,
@@ -602,7 +602,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         self.assistantAudioFinishTask = nil
         self.delegate?.realtimeSession(
             self,
-            didChangeStatus: name == Self.controlToolName ? "Updating OpenClaw" : "Asking OpenClaw")
+            didChangeStatus: name == Self.controlToolName ? "Updating Natesclaw" : "Asking Natesclaw")
         let task = Task { @MainActor [weak self] in
             guard let self else { return }
             if name == Self.controlToolName {
@@ -623,7 +623,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         let statusTask = Task { @MainActor [weak self] in
             try? await Task.sleep(nanoseconds: UInt64(Self.stillWorkingDelaySeconds) * 1_000_000_000)
             guard let self, !Task.isCancelled, !self.stopped else { return }
-            self.delegate?.realtimeSession(self, didChangeStatus: "Still asking OpenClaw")
+            self.delegate?.realtimeSession(self, didChangeStatus: "Still asking Natesclaw")
         }
         defer {
             statusTask.cancel()
@@ -691,11 +691,11 @@ final class TalkRealtimeWebRTCSession: NSObject {
             let confirmationInstruction = Self.voiceConfirmationInstruction(from: error)
             self.delegate?.realtimeSession(
                 self,
-                didChangeStatus: confirmationInstruction == nil ? "OpenClaw unavailable" : "Confirmation needed")
+                didChangeStatus: confirmationInstruction == nil ? "Natesclaw unavailable" : "Confirmation needed")
             let fallbackMessage = confirmationInstruction ?? [
-                "OpenClaw consult did not finish quickly enough.",
+                "Natesclaw consult did not finish quickly enough.",
                 "Give a brief spoken fallback from the realtime conversation",
-                "and ask the user to try again if they need OpenClaw-specific context.",
+                "and ask the user to try again if they need Natesclaw-specific context.",
             ].joined(separator: " ")
             self.submitToolResult(callId: callId, result: [
                 "error": fallbackMessage,
@@ -722,7 +722,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
                 method: "talk.client.steer",
                 paramsJSON: json,
                 timeoutSeconds: Self.toolCallTimeoutSeconds)
-            let message = Self.controlResultMessage(from: res) ?? "OpenClaw updated the active run."
+            let message = Self.controlResultMessage(from: res) ?? "Natesclaw updated the active run."
             self.trace("control tool gateway request done callId=\(callId) messageBytes=\(message.utf8.count)")
             self.submitToolResult(callId: callId, result: ["result": message])
         } catch is CancellationError {
@@ -732,7 +732,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
             Self.logger.error("realtime control tool failed: \(error.localizedDescription, privacy: .public)")
             self.trace("control tool failed callId=\(callId) error=\(error.localizedDescription)")
             self.submitToolResult(callId: callId, result: [
-                "error": "OpenClaw could not update the active run.",
+                "error": "Natesclaw could not update the active run.",
             ])
         }
         guard !Task.isCancelled, !self.stopped else { return }
@@ -750,7 +750,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
             ?? Self.nonEmptyString(record["query"])
         guard let text else {
             throw NSError(domain: "TalkRealtimeWebRTC", code: 20, userInfo: [
-                NSLocalizedDescriptionKey: "OpenClaw control tool call missing text",
+                NSLocalizedDescriptionKey: "Natesclaw control tool call missing text",
             ])
         }
         var params: [String: Any] = [
@@ -784,7 +784,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
             else { continue }
             return [
                 "\(marker)\(confirmationId) The requested action was not executed.",
-                "Ask the user for explicit spoken confirmation, then call openclaw_agent_consult again",
+                "Ask the user for explicit spoken confirmation, then call natesclaw_agent_consult again",
                 "with confirmationId \(confirmationId).",
             ].joined(separator: " ")
         }
@@ -799,7 +799,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
     }
 
     private func abortChatRun(runId: String) async {
-        let request = OpenClawChatGatewayRequests.abortRun(
+        let request = NatesclawChatGatewayRequests.abortRun(
             sessionKey: self.sessionKey,
             agentID: nil,
             runID: runId,
@@ -827,7 +827,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
                     guard evt.event == "chat", let payload = evt.payload else { continue }
                     guard let chatEvent = try? GatewayPayloadDecoding.decode(
                         payload,
-                        as: OpenClawChatEventPayload.self)
+                        as: NatesclawChatEventPayload.self)
                     else {
                         continue
                     }
@@ -841,21 +841,21 @@ final class TalkRealtimeWebRTCSession: NSObject {
                         self.trace("chat event runId=\(runId) state=\(chatEvent.state ?? "unknown")")
                     }
                     if chatEvent.state == "final" {
-                        return OpenClawChatEventText.assistantText(from: chatEvent) ?? "OpenClaw finished with no text."
+                        return NatesclawChatEventText.assistantText(from: chatEvent) ?? "Natesclaw finished with no text."
                     }
                     if chatEvent.state == "aborted" {
                         throw NSError(domain: "TalkRealtimeWebRTC", code: 9, userInfo: [
-                            NSLocalizedDescriptionKey: "OpenClaw realtime tool call aborted",
+                            NSLocalizedDescriptionKey: "Natesclaw realtime tool call aborted",
                         ])
                     }
                     if chatEvent.state == "error" {
                         throw NSError(domain: "TalkRealtimeWebRTC", code: 10, userInfo: [
-                            NSLocalizedDescriptionKey: "OpenClaw realtime tool call failed",
+                            NSLocalizedDescriptionKey: "Natesclaw realtime tool call failed",
                         ])
                     }
                 }
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 11, userInfo: [
-                    NSLocalizedDescriptionKey: "OpenClaw realtime tool event stream ended",
+                    NSLocalizedDescriptionKey: "Natesclaw realtime tool event stream ended",
                 ])
             }
             group.addTask { [gateway, sessionKey] in
@@ -869,12 +869,12 @@ final class TalkRealtimeWebRTCSession: NSObject {
             group.addTask {
                 try await Task.sleep(nanoseconds: UInt64(timeoutSeconds) * 1_000_000_000)
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 12, userInfo: [
-                    NSLocalizedDescriptionKey: "OpenClaw realtime tool call timed out",
+                    NSLocalizedDescriptionKey: "Natesclaw realtime tool call timed out",
                 ])
             }
             guard let result = try await group.next() else {
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 13, userInfo: [
-                    NSLocalizedDescriptionKey: "OpenClaw realtime tool call did not finish",
+                    NSLocalizedDescriptionKey: "Natesclaw realtime tool call did not finish",
                 ])
             }
             group.cancelAll()
@@ -928,11 +928,11 @@ final class TalkRealtimeWebRTCSession: NSObject {
                 }
             case "error":
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 14, userInfo: [
-                    NSLocalizedDescriptionKey: wait.error ?? "OpenClaw realtime tool call failed",
+                    NSLocalizedDescriptionKey: wait.error ?? "Natesclaw realtime tool call failed",
                 ])
             case "aborted", "cancelled", "canceled":
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 15, userInfo: [
-                    NSLocalizedDescriptionKey: wait.stopReason ?? "OpenClaw realtime tool call aborted",
+                    NSLocalizedDescriptionKey: wait.stopReason ?? "Natesclaw realtime tool call aborted",
                 ])
             case "timeout":
                 break
@@ -942,7 +942,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         }
         let phase = sawProviderStart ? "provider" : "queue"
         throw NSError(domain: "TalkRealtimeWebRTC", code: 16, userInfo: [
-            NSLocalizedDescriptionKey: "OpenClaw realtime tool call timed out in \(phase)",
+            NSLocalizedDescriptionKey: "Natesclaw realtime tool call timed out in \(phase)",
         ])
     }
 
@@ -952,7 +952,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         timeoutSeconds: Int) async throws -> AgentWaitResponse
     {
         let timeoutMs = max(1, timeoutSeconds) * 1000
-        let request = OpenClawChatGatewayRequests.agentWait(
+        let request = NatesclawChatGatewayRequests.agentWait(
             runID: runId,
             timeoutMs: timeoutMs,
             requestGraceMs: Self.agentWaitRequestGraceSeconds * 1000)
@@ -985,13 +985,13 @@ final class TalkRealtimeWebRTCSession: NSObject {
         sessionKey: String,
         since: Double) async throws -> String?
     {
-        let request = OpenClawChatGatewayRequests.history(sessionKey: sessionKey, agentID: nil)
+        let request = NatesclawChatGatewayRequests.history(sessionKey: sessionKey, agentID: nil)
         let response = try await gateway.request(request)
-        let history = try JSONDecoder().decode(OpenClawChatHistoryPayload.self, from: response)
+        let history = try JSONDecoder().decode(NatesclawChatHistoryPayload.self, from: response)
         let messages = history.messages ?? []
-        let decoded: [OpenClawChatMessage] = messages.compactMap { item in
+        let decoded: [NatesclawChatMessage] = messages.compactMap { item in
             guard let data = try? JSONEncoder().encode(item) else { return nil }
-            return try? JSONDecoder().decode(OpenClawChatMessage.self, from: data)
+            return try? JSONDecoder().decode(NatesclawChatMessage.self, from: data)
         }
         let assistant = decoded.last { message in
             guard message.role == "assistant" else { return false }

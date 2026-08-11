@@ -1,20 +1,20 @@
 // Discord plugin module implements native command agent reply behavior.
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveHumanDelayConfig } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   hasVisibleInboundReplyDispatch,
   isChannelPartialDeliveryError,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelStreamingBlockEnabled } from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { resolveChannelStreamingBlockEnabled } from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { getAgentScopedMediaLocalRoots } from "natesclaw/plugin-sdk/media-runtime";
 import {
   PLUGIN_COMMAND_DISPATCH,
   type PluginCommandCatalogDecision,
-} from "openclaw/plugin-sdk/plugin-command-runtime";
-import { resolveChunkMode, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import type { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/plugin-command-runtime";
+import { resolveChunkMode, resolveTextChunkLimit } from "natesclaw/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-dispatch-runtime";
+import type { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import type {
   ButtonInteraction,
@@ -44,7 +44,7 @@ type DispatchDiscordNativeAgentReplyResult = {
 };
 
 export async function dispatchDiscordNativeAgentReply(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   interaction: CommandInteraction | ButtonInteraction | StringSelectMenuInteraction;

@@ -6,7 +6,7 @@ import {
   type PublishFileExclusiveFailureDetails,
   type PublishFileExclusiveFailurePhase,
   type PublishFileExclusiveResult,
-} from "@openclaw/fs-safe/durability";
+} from "@natesclaw/fs-safe/durability";
 import { sameFileIdentity } from "./fs-safe-advanced.js";
 import { FsSafeError } from "./fs-safe.js";
 
@@ -22,7 +22,7 @@ export {
   type DirectoryReceipt,
   type DurableDirectoryReceipt,
   type PinnedDirectory,
-} from "@openclaw/fs-safe/durability";
+} from "@natesclaw/fs-safe/durability";
 
 type DirectoryDurabilityOutcome = DirectorySyncOutcome | { status: "not-needed" };
 
@@ -90,7 +90,7 @@ function postPublicationFailure(params: {
   );
 }
 
-/** Publish one file without replacement under OpenClaw's durability policy. */
+/** Publish one file without replacement under Natesclaw's durability policy. */
 export async function publishFileNoClobber(
   sourcePath: string,
   targetPath: string,

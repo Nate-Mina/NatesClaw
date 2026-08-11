@@ -1,4 +1,4 @@
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
 import type {
   SessionCatalog,
   SessionsCatalogHostEvent,

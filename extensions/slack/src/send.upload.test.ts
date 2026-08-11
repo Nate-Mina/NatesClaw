@@ -2,10 +2,10 @@ import type { WebClient } from "@slack/web-api";
 import {
   formatErrorMessage,
   PlatformMessageNotDispatchedError,
-} from "openclaw/plugin-sdk/error-runtime";
-import type { LookupFn } from "openclaw/plugin-sdk/ssrf-runtime";
-import { withServer } from "openclaw/plugin-sdk/test-env";
-import type { WebMediaResult } from "openclaw/plugin-sdk/web-media";
+} from "natesclaw/plugin-sdk/error-runtime";
+import type { LookupFn } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { withServer } from "natesclaw/plugin-sdk/test-env";
+import type { WebMediaResult } from "natesclaw/plugin-sdk/web-media";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "./blocks.test-helpers.js";
 import {
@@ -48,7 +48,7 @@ const buildTimeoutAbortSignal = vi.hoisted(() =>
 );
 const fetchWithSsrFGuard = vi.fn(
   async (
-    params: Parameters<typeof import("openclaw/plugin-sdk/ssrf-runtime").fetchWithSsrFGuard>[0],
+    params: Parameters<typeof import("natesclaw/plugin-sdk/ssrf-runtime").fetchWithSsrFGuard>[0],
   ) => {
     const signal = params.signal;
     if (!signal) {
@@ -65,9 +65,9 @@ const fetchWithSsrFGuard = vi.fn(
   },
 );
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/ssrf-runtime")>(
-    "openclaw/plugin-sdk/ssrf-runtime",
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/ssrf-runtime")>(
+    "natesclaw/plugin-sdk/ssrf-runtime",
   );
   return {
     ...actual,
@@ -76,9 +76,9 @@ vi.mock("openclaw/plugin-sdk/ssrf-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/extension-shared", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/extension-shared")>(
-    "openclaw/plugin-sdk/extension-shared",
+vi.mock("natesclaw/plugin-sdk/extension-shared", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/extension-shared")>(
+    "natesclaw/plugin-sdk/extension-shared",
   );
   return {
     ...actual,
@@ -87,9 +87,9 @@ vi.mock("openclaw/plugin-sdk/extension-shared", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/fetch-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/fetch-runtime")>(
-    "openclaw/plugin-sdk/fetch-runtime",
+vi.mock("natesclaw/plugin-sdk/fetch-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/fetch-runtime")>(
+    "natesclaw/plugin-sdk/fetch-runtime",
   );
   return {
     ...actual,
@@ -238,8 +238,8 @@ function mockUploadDestination(client: UploadTestClient, uploadUrl: string) {
 }
 
 async function useRealUploadGuard(networkFetch: typeof fetch, lookupAddress?: string) {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/ssrf-runtime")>(
-    "openclaw/plugin-sdk/ssrf-runtime",
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/ssrf-runtime")>(
+    "natesclaw/plugin-sdk/ssrf-runtime",
   );
   const lookupFn = lookupAddress
     ? ((async () => [{ address: lookupAddress, family: 4 }]) as unknown as LookupFn)
@@ -496,8 +496,8 @@ describe("sendMessageSlack file upload with user IDs", () => {
   });
 
   it("preserves HTTP upload URLs on an alternate Slack API origin", async () => {
-    const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/ssrf-runtime")>(
-      "openclaw/plugin-sdk/ssrf-runtime",
+    const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/ssrf-runtime")>(
+      "natesclaw/plugin-sdk/ssrf-runtime",
     );
     await withServer(
       (req, res) => {
@@ -678,7 +678,7 @@ describe("sendMessageSlack file upload with user IDs", () => {
         expect(error).toBeInstanceOf(PlatformMessageNotDispatchedError);
         expect(error).toMatchObject({
           name: "PlatformMessageNotDispatchedError",
-          code: "OPENCLAW_PLATFORM_MESSAGE_NOT_DISPATCHED",
+          code: "NATESCLAW_PLATFORM_MESSAGE_NOT_DISPATCHED",
           cause: expect.objectContaining({ name: "TimeoutError" }),
         });
 

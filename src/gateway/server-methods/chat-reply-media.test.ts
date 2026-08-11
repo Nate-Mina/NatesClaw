@@ -5,12 +5,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { consumePendingToolMediaIntoReply } from "../../agents/embedded-agent-subscribe.handlers.messages.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { getAgentScopedMediaLocalRoots } from "../../media/local-roots.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import { createManagedOutgoingMediaBlocks as createManagedOutgoingImageBlocks } from "../managed-image-attachments.js";
 import { buildAssistantDisplayContentFromReplyPayloads } from "./chat-assistant-content.js";
 import { normalizeWebchatReplyMediaPathsForDisplay } from "./chat-reply-media.js";
@@ -30,16 +30,16 @@ type MediaTestContext = {
   stateDir: string;
   agentDir: string;
   workspaceDir: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 };
 
 describe("normalizeWebchatReplyMediaPathsForDisplay", () => {
-  let testState: OpenClawTestState;
+  let testState: NatesclawTestState;
 
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-webchat-reply-media-",
+      prefix: "natesclaw-webchat-reply-media-",
     });
   });
 
@@ -51,7 +51,7 @@ describe("normalizeWebchatReplyMediaPathsForDisplay", () => {
     agentDir: string;
     workspaceDir: string;
     allowRead: boolean;
-  }): OpenClawConfig {
+  }): NatesclawConfig {
     return {
       tools: params.allowRead ? { allow: ["read"] } : { fs: { workspaceOnly: true } },
       agents: {
@@ -102,7 +102,7 @@ describe("normalizeWebchatReplyMediaPathsForDisplay", () => {
   }
 
   async function normalizeReplyMedia(params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     payloads: ReplyMediaPayloads;
   }) {
     const [payload] = await normalizeWebchatReplyMediaPathsForDisplay({
@@ -128,7 +128,7 @@ describe("normalizeWebchatReplyMediaPathsForDisplay", () => {
   }
 
   async function createManagedImageBlocks(params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     mediaUrls: string[] | undefined;
   }) {
     return createManagedOutgoingImageBlocks({

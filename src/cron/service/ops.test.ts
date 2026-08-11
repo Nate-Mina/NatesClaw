@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AgentDeletionCommitUncertainError } from "../../agents/agent-lifecycle-registry.js";
-import { runOpenClawStateWriteTransaction } from "../../state/openclaw-state-db.js";
+import { runNatesclawStateWriteTransaction } from "../../state/natesclaw-state-db.js";
 import * as taskExecutor from "../../tasks/task-executor.js";
 import { findTaskByRunId, listTaskRecordsUnsorted } from "../../tasks/task-registry.js";
 import { resetTaskRegistryForTests } from "../../tasks/task-runtime.test-helpers.js";
@@ -291,7 +291,7 @@ describe("scheduled tool policy provenance", () => {
     );
     expect(persistedNonToolRuntime?.runtimeAuthority).toBeUndefined();
     expect(persistedNonToolRuntime?.runtimeAuthorityRecoveryRequired).toBeUndefined();
-    const persistedAuthorityRow = runOpenClawStateWriteTransaction(({ db }) =>
+    const persistedAuthorityRow = runNatesclawStateWriteTransaction(({ db }) =>
       db
         .prepare("SELECT job_id FROM cron_job_runtime_authorities WHERE job_id = ?")
         .get(triggeredTransport.id),
@@ -466,7 +466,7 @@ async function withStateDirForStorePath<T>(
   const stateRoot = path.dirname(path.dirname(storePath));
   resetTaskRegistryForTests();
   try {
-    return await withEnvAsync({ OPENCLAW_STATE_DIR: stateRoot }, runWithStateDir);
+    return await withEnvAsync({ NATESCLAW_STATE_DIR: stateRoot }, runWithStateDir);
   } finally {
     resetTaskRegistryForTests();
   }
@@ -573,7 +573,7 @@ async function writeLegacyCronArraySnapshot(storePath: string, jobs: CronJob[]) 
 }
 
 function insertCronJobRow(storePath: string, job: CronJob) {
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     db.prepare(
       `INSERT INTO cron_jobs (
         store_key, job_id, declaration_key, name, description, enabled, created_at_ms, schedule_kind,
@@ -653,7 +653,7 @@ describe("cron stale job-family adoption", () => {
 
     await expect(removeStaleJobFamily(state, family)).resolves.toBe(1);
 
-    const remaining = runOpenClawStateWriteTransaction(({ db }) =>
+    const remaining = runNatesclawStateWriteTransaction(({ db }) =>
       db
         .prepare("SELECT store_key, job_id FROM cron_jobs WHERE name = ? ORDER BY job_id")
         .all(family.name),

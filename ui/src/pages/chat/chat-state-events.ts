@@ -1,7 +1,7 @@
 import {
   readSessionMessageIdentity,
   readSessionMessageSequence,
-} from "@openclaw/gateway-client/browser";
+} from "@natesclaw/gateway-client/browser";
 import type { SessionObserverDigest } from "../../../../packages/gateway-protocol/src/schema/sessions.js";
 import type { GatewayEventFrame } from "../../api/gateway.ts";
 import { fireFirstReplyConfetti } from "../../components/confetti.ts";
@@ -92,14 +92,14 @@ function applyLiveUserMessage(
     return;
   }
   const sourceRecord = sourceMessage as Record<string, unknown>;
-  const marker = sourceRecord["__openclaw"];
+  const marker = sourceRecord["__natesclaw"];
   const sourceMetadata =
     marker && typeof marker === "object" && !Array.isArray(marker)
       ? (marker as Record<string, unknown>)
       : {};
   const message = {
     ...sourceRecord,
-    __openclaw: {
+    __natesclaw: {
       ...sourceMetadata,
       ...(incoming.id ? { id: incoming.id } : {}),
       ...(incoming.idempotencyKey ? { idempotencyKey: incoming.idempotencyKey } : {}),

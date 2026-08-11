@@ -1,9 +1,9 @@
 // Gateway methods expose session files and workspace browsing.
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { detectMime } from "@openclaw/media-core/mime";
-import { asOptionalObjectRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { detectMime } from "@natesclaw/media-core/mime";
+import { asOptionalObjectRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

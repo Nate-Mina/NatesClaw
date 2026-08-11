@@ -65,34 +65,34 @@ const workboardCommandAliasRegistry: PluginManifestCommandAliasRegistry = {
 
 describe("isGatewayRunFastPathArgv", () => {
   it("matches only plain gateway foreground starts without root options or help", () => {
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway"])).toBe(true);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--force"])).toBe(true);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--port", "18789"])).toBe(true);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--auth=none"])).toBe(true);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway"])).toBe(true);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--force"])).toBe(true);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--port", "18789"])).toBe(true);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--auth=none"])).toBe(true);
     expect(
-      isGatewayRunFastPathArgv(["node", "openclaw", "--no-color", "gateway", "--bind", "loopback"]),
+      isGatewayRunFastPathArgv(["node", "natesclaw", "--no-color", "gateway", "--bind", "loopback"]),
     ).toBe(true);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "run"])).toBe(true);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "run"])).toBe(true);
     expect(
-      isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--log-level", "debug", "run"]),
-    ).toBe(true);
-    expect(
-      isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--log-level=debug", "run"]),
+      isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--log-level", "debug", "run"]),
     ).toBe(true);
     expect(
-      isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "run", "--raw-stream-path", "x"]),
+      isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--log-level=debug", "run"]),
     ).toBe(true);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "call", "health"])).toBe(false);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--help"])).toBe(false);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--port"])).toBe(false);
-    expect(isGatewayRunFastPathArgv(["node", "openclaw", "gateway", "--unknown"])).toBe(false);
+    expect(
+      isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "run", "--raw-stream-path", "x"]),
+    ).toBe(true);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "call", "health"])).toBe(false);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--help"])).toBe(false);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--port"])).toBe(false);
+    expect(isGatewayRunFastPathArgv(["node", "natesclaw", "gateway", "--unknown"])).toBe(false);
   });
 
   it("keeps post-root log levels out of the gateway command path", () => {
     expect(
       resolveGatewayCatalogCommandPath([
         "node",
-        "openclaw",
+        "natesclaw",
         "gateway",
         "--log-level",
         "debug",
@@ -102,7 +102,7 @@ describe("isGatewayRunFastPathArgv", () => {
     expect(
       resolveGatewayCatalogCommandPath([
         "node",
-        "openclaw",
+        "natesclaw",
         "gateway",
         "--log-level=debug",
         "restart-handoff",
@@ -115,12 +115,12 @@ describe("isGatewayRunFastPathArgv", () => {
 describe("resolveGatewayRunPreBootstrapOptions", () => {
   it("resolves destructive gateway flags across fast and full Commander paths", () => {
     expect(
-      resolveGatewayRunPreBootstrapOptions(["node", "openclaw", "gateway", "run", "--force"]),
+      resolveGatewayRunPreBootstrapOptions(["node", "natesclaw", "gateway", "run", "--force"]),
     ).toEqual({ force: true, reset: false });
     expect(
       resolveGatewayRunPreBootstrapOptions([
         "node",
-        "openclaw",
+        "natesclaw",
         "--log-level",
         "debug",
         "gateway",
@@ -133,7 +133,7 @@ describe("resolveGatewayRunPreBootstrapOptions", () => {
 
   it("does not treat malformed required option values as destructive flags", () => {
     expect(
-      resolveGatewayRunPreBootstrapOptions(["node", "openclaw", "gateway", "--token", "--force"]),
+      resolveGatewayRunPreBootstrapOptions(["node", "natesclaw", "gateway", "--token", "--force"]),
     ).toEqual({ force: false, reset: false });
   });
 });
@@ -213,99 +213,99 @@ describe("rewriteUpdateFlagArgv", () => {
 
 describe("shouldEnsureCliPath", () => {
   it("skips path bootstrap for help/version invocations", () => {
-    expect(shouldEnsureCliPath(["node", "openclaw", "--help"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "-V"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "-v"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "--help"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "-V"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "-v"])).toBe(false);
   });
 
   it("skips path bootstrap for read-only fast paths", () => {
-    expect(shouldEnsureCliPath(["node", "openclaw"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "--profile", "work"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "approvals"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "channels"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "cron"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "devices"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "plugins"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "mcp"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "status"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "--log-level", "debug", "status"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "sessions", "--json"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "config", "get", "update"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "models", "status", "--json"])).toBe(false);
-    expect(shouldEnsureCliPath(["node", "openclaw", "tools", "effective"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "--profile", "work"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "approvals"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "channels"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "cron"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "devices"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "plugins"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "mcp"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "status"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "--log-level", "debug", "status"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "sessions", "--json"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "config", "get", "update"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "models", "status", "--json"])).toBe(false);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "tools", "effective"])).toBe(false);
   });
 
   it("keeps path bootstrap for mutating or unknown commands", () => {
-    expect(shouldEnsureCliPath(["node", "openclaw", "message", "send"])).toBe(true);
-    expect(shouldEnsureCliPath(["node", "openclaw", "voicecall", "status"])).toBe(true);
-    expect(shouldEnsureCliPath(["node", "openclaw", "acp", "-v"])).toBe(true);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "message", "send"])).toBe(true);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "voicecall", "status"])).toBe(true);
+    expect(shouldEnsureCliPath(["node", "natesclaw", "acp", "-v"])).toBe(true);
   });
 });
 
 describe("shouldHandleBareRoot", () => {
   it("handles bare root invocations", () => {
-    expect(shouldHandleBareRoot(["node", "openclaw"])).toBe(true);
-    expect(shouldHandleBareRoot(["node", "openclaw", "--profile", "work"])).toBe(true);
-    expect(shouldHandleBareRoot(["node", "openclaw", "--dev"])).toBe(true);
+    expect(shouldHandleBareRoot(["node", "natesclaw"])).toBe(true);
+    expect(shouldHandleBareRoot(["node", "natesclaw", "--profile", "work"])).toBe(true);
+    expect(shouldHandleBareRoot(["node", "natesclaw", "--dev"])).toBe(true);
   });
 
   it("does not handle help, version, or commands", () => {
-    expect(shouldHandleBareRoot(["node", "openclaw", "--help"])).toBe(false);
-    expect(shouldHandleBareRoot(["node", "openclaw", "-V"])).toBe(false);
-    expect(shouldHandleBareRoot(["node", "openclaw", "status"])).toBe(false);
+    expect(shouldHandleBareRoot(["node", "natesclaw", "--help"])).toBe(false);
+    expect(shouldHandleBareRoot(["node", "natesclaw", "-V"])).toBe(false);
+    expect(shouldHandleBareRoot(["node", "natesclaw", "status"])).toBe(false);
   });
 });
 
 describe("shouldStartProxyForCli", () => {
   it("starts managed proxy routing for the --update shorthand", () => {
-    expect(shouldStartProxyForCli(["node", "openclaw", "--update"])).toBe(true);
-    expect(shouldStartProxyForCli(["node", "openclaw", "--profile", "p", "--update"])).toBe(true);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "--update"])).toBe(true);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "--profile", "p", "--update"])).toBe(true);
   });
 
   it("skips managed proxy routing for bare parent default help", () => {
-    expect(shouldStartProxyForCli(["node", "openclaw", "qa", "suite"])).toBe(false);
-    expect(shouldStartProxyForCli(["node", "openclaw", "plugins"])).toBe(false);
-    expect(shouldStartProxyForCli(["node", "openclaw", "channels"])).toBe(false);
-    expect(shouldStartProxyForCli(["node", "openclaw", "cron"])).toBe(false);
-    expect(shouldStartProxyForCli(["node", "openclaw", "devices"])).toBe(false);
-    expect(shouldStartProxyForCli(["node", "openclaw", "mcp"])).toBe(false);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "qa", "suite"])).toBe(false);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "plugins"])).toBe(false);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "channels"])).toBe(false);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "cron"])).toBe(false);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "devices"])).toBe(false);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "mcp"])).toBe(false);
   });
 
   it("skips managed proxy routing before shared-state SQLite maintenance", () => {
     expect(
-      shouldStartProxyForCli(["node", "openclaw", "doctor", "--state-sqlite", "compact", "--json"]),
+      shouldStartProxyForCli(["node", "natesclaw", "doctor", "--state-sqlite", "compact", "--json"]),
     ).toBe(false);
     expect(
-      shouldStartProxyForCli(["node", "openclaw", "doctor", "--state-sqlite=compact", "--json"]),
+      shouldStartProxyForCli(["node", "natesclaw", "doctor", "--state-sqlite=compact", "--json"]),
     ).toBe(false);
-    expect(shouldStartProxyForCli(["node", "openclaw", "doctor", "--lint"])).toBe(true);
+    expect(shouldStartProxyForCli(["node", "natesclaw", "doctor", "--lint"])).toBe(true);
   });
 });
 
 describe("shouldUseRootHelpFastPath", () => {
   it("uses the fast path for root help only", () => {
-    expect(shouldUseRootHelpFastPath(["node", "openclaw", "--help"])).toBe(true);
-    expect(shouldUseRootHelpFastPath(["node", "openclaw", "--profile", "work", "-h"])).toBe(true);
-    expect(shouldUseRootHelpFastPath(["node", "openclaw", "help", "--help"])).toBe(true);
-    expect(shouldUseRootHelpFastPath(["node", "openclaw", "tools", "--help"])).toBe(true);
-    expect(shouldUseRootHelpFastPath(["node", "openclaw", "status", "--help"])).toBe(false);
-    expect(shouldUseRootHelpFastPath(["node", "openclaw", "--help", "status"])).toBe(false);
-    expect(shouldUseRootHelpFastPath(["node", "openclaw", "help", "gateway"])).toBe(false);
+    expect(shouldUseRootHelpFastPath(["node", "natesclaw", "--help"])).toBe(true);
+    expect(shouldUseRootHelpFastPath(["node", "natesclaw", "--profile", "work", "-h"])).toBe(true);
+    expect(shouldUseRootHelpFastPath(["node", "natesclaw", "help", "--help"])).toBe(true);
+    expect(shouldUseRootHelpFastPath(["node", "natesclaw", "tools", "--help"])).toBe(true);
+    expect(shouldUseRootHelpFastPath(["node", "natesclaw", "status", "--help"])).toBe(false);
+    expect(shouldUseRootHelpFastPath(["node", "natesclaw", "--help", "status"])).toBe(false);
+    expect(shouldUseRootHelpFastPath(["node", "natesclaw", "help", "gateway"])).toBe(false);
   });
 });
 
 describe("shouldUseSetupOnboardConfigureHelpFastPath", () => {
   it("uses the fast path only for setup, onboard, and configure help", () => {
     expect(
-      shouldUseSetupOnboardConfigureHelpFastPath(["node", "openclaw", "setup", "--help"]),
+      shouldUseSetupOnboardConfigureHelpFastPath(["node", "natesclaw", "setup", "--help"]),
     ).toBe(true);
-    expect(shouldUseSetupOnboardConfigureHelpFastPath(["node", "openclaw", "onboard", "-h"])).toBe(
+    expect(shouldUseSetupOnboardConfigureHelpFastPath(["node", "natesclaw", "onboard", "-h"])).toBe(
       true,
     );
     expect(
       shouldUseSetupOnboardConfigureHelpFastPath([
         "node",
-        "openclaw",
+        "natesclaw",
         "--profile",
         "work",
         "configure",
@@ -315,19 +315,19 @@ describe("shouldUseSetupOnboardConfigureHelpFastPath", () => {
     expect(
       shouldUseSetupOnboardConfigureHelpFastPath([
         "node",
-        "openclaw",
+        "natesclaw",
         "onboard",
         "status",
         "--help",
       ]),
     ).toBe(false);
     expect(
-      shouldUseSetupOnboardConfigureHelpFastPath(["node", "openclaw", "status", "--help"]),
+      shouldUseSetupOnboardConfigureHelpFastPath(["node", "natesclaw", "status", "--help"]),
     ).toBe(false);
     expect(
       shouldUseSetupOnboardConfigureHelpFastPath([
         "node",
-        "openclaw",
+        "natesclaw",
         "onboard",
         "--gateway-port",
         "--help",
@@ -397,7 +397,7 @@ describe("resolveMissingPluginCommandMessage", () => {
     expect(message).toContain("runtime slash command");
     expect(message).toContain("/dreaming");
     expect(message).toContain("memory-core");
-    expect(message).toContain("openclaw memory");
+    expect(message).toContain("natesclaw memory");
   });
 
   it("returns the runtime command message even when plugins.allow is set", () => {
@@ -451,7 +451,7 @@ describe("resolveMissingPluginCommandMessage", () => {
 
     expect(message).toContain('"voice-call" plugin');
     expect(message).toContain("disabled by default");
-    expect(message).toContain("openclaw plugins enable voice-call");
+    expect(message).toContain("natesclaw plugins enable voice-call");
   });
 
   it("prefers CLI ownership for plugins that also register a slash command", () => {
@@ -463,7 +463,7 @@ describe("resolveMissingPluginCommandMessage", () => {
 
     expect(message).toContain('"workboard" plugin');
     expect(message).toContain("disabled by default");
-    expect(message).toContain("openclaw plugins enable workboard");
+    expect(message).toContain("natesclaw plugins enable workboard");
     expect(message).not.toContain("runtime slash command");
   });
 

@@ -4,7 +4,7 @@ import path from "node:path";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   resolveGatewayLaunchAgentLabel,
   resolveGatewaySystemdServiceName,
@@ -81,7 +81,7 @@ function resolveProfileStateDir(
   homedir: () => string,
 ): string {
   const suffix = normalizeLowercaseStringOrEmpty(profile) === "default" ? "" : `-${profile}`;
-  return path.join(resolveRequiredHomeDir(env as NodeJS.ProcessEnv, homedir), `.openclaw${suffix}`);
+  return path.join(resolveRequiredHomeDir(env as NodeJS.ProcessEnv, homedir), `.natesclaw${suffix}`);
 }
 
 export function applyCliProfileEnv(params: {
@@ -96,9 +96,9 @@ export function applyCliProfileEnv(params: {
     return;
   }
 
-  const inheritedProfile = normalizeOptionalString(env.OPENCLAW_PROFILE) ?? "default";
-  const existingStateDir = normalizeOptionalString(env.OPENCLAW_STATE_DIR);
-  const existingConfigPath = normalizeOptionalString(env.OPENCLAW_CONFIG_PATH);
+  const inheritedProfile = normalizeOptionalString(env.NATESCLAW_PROFILE) ?? "default";
+  const existingStateDir = normalizeOptionalString(env.NATESCLAW_STATE_DIR);
+  const existingConfigPath = normalizeOptionalString(env.NATESCLAW_CONFIG_PATH);
   const inheritedProfileStateDir = resolveProfileStateDir(inheritedProfile, env, homedir);
   const selectedProfileStateDir = resolveProfileStateDir(profile, env, homedir);
   const switchesInheritedProfile = inheritedProfileStateDir !== selectedProfileStateDir;
@@ -117,32 +117,32 @@ export function applyCliProfileEnv(params: {
     resolveHomeRelativePath(existingConfigPath, {
       env: env as NodeJS.ProcessEnv,
       homedir,
-    }) === path.join(inheritedProfileStateDir, "openclaw.json"),
+    }) === path.join(inheritedProfileStateDir, "natesclaw.json"),
   );
 
   // A service's canonical profile paths are inherited defaults, not custom overrides.
   // Switch them together so an explicit profile cannot mutate the service's profile.
-  env.OPENCLAW_PROFILE = profile;
+  env.NATESCLAW_PROFILE = profile;
 
   const stateDir =
     existingStateDir && !switchesInheritedProfileState ? existingStateDir : selectedProfileStateDir;
   if (!existingStateDir || switchesInheritedProfileState) {
-    env.OPENCLAW_STATE_DIR = stateDir;
+    env.NATESCLAW_STATE_DIR = stateDir;
   }
 
   if (!existingConfigPath || replacesInheritedProfileConfig) {
-    env.OPENCLAW_CONFIG_PATH = path.join(stateDir, "openclaw.json");
+    env.NATESCLAW_CONFIG_PATH = path.join(stateDir, "natesclaw.json");
   }
 
   if (switchesInheritedProfile) {
     const inheritedSystemdServiceName = resolveGatewaySystemdServiceName(inheritedProfile);
     const inheritedServiceIdentities = {
-      OPENCLAW_LAUNCHD_LABEL: [resolveGatewayLaunchAgentLabel(inheritedProfile)],
-      OPENCLAW_SYSTEMD_UNIT: [
+      NATESCLAW_LAUNCHD_LABEL: [resolveGatewayLaunchAgentLabel(inheritedProfile)],
+      NATESCLAW_SYSTEMD_UNIT: [
         inheritedSystemdServiceName,
         `${inheritedSystemdServiceName}.service`,
       ],
-      OPENCLAW_WINDOWS_TASK_NAME: [resolveGatewayWindowsTaskName(inheritedProfile)],
+      NATESCLAW_WINDOWS_TASK_NAME: [resolveGatewayWindowsTaskName(inheritedProfile)],
     };
     for (const [key, inheritedValues] of Object.entries(inheritedServiceIdentities)) {
       const activeValue = normalizeOptionalString(env[key]);
@@ -152,7 +152,7 @@ export function applyCliProfileEnv(params: {
     }
   }
 
-  if (profile === "dev" && !env.OPENCLAW_GATEWAY_PORT?.trim()) {
-    env.OPENCLAW_GATEWAY_PORT = "19001";
+  if (profile === "dev" && !env.NATESCLAW_GATEWAY_PORT?.trim()) {
+    env.NATESCLAW_GATEWAY_PORT = "19001";
   }
 }

@@ -5,17 +5,17 @@
 import { randomUUID } from "node:crypto";
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { extensionForMime, type MediaKind } from "openclaw/plugin-sdk/media-mime";
-import { loadOutboundMediaFromUrl } from "openclaw/plugin-sdk/outbound-media";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { extensionForMime, type MediaKind } from "natesclaw/plugin-sdk/media-mime";
+import { loadOutboundMediaFromUrl } from "natesclaw/plugin-sdk/outbound-media";
 import {
   pathExistsSync,
   resolveLocalPathFromRootsSync,
   sanitizeUntrustedFileName,
   writeExternalFileWithinRoot,
-} from "openclaw/plugin-sdk/security-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/security-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { GatewayAccount } from "../types.js";
 import { MediaFileType } from "../types.js";
 import {

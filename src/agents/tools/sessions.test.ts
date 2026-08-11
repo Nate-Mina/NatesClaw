@@ -1,9 +1,9 @@
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
 // Sessions tool tests cover list/send helpers, announce-target resolution,
 // and assistant-visible text sanitization.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelMessagingAdapter } from "../../channels/plugins/types.public.js";
 import { clearRuntimeConfigSnapshot, setRuntimeConfigSnapshot } from "../../config/io.js";
@@ -13,7 +13,7 @@ import {
   getOwnedSessionTranscriptWriterFence,
   withOwnedSessionTranscriptWrites,
 } from "../../config/sessions/transcript-write-context.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { withTestDir } from "../../test-helpers/temp-dir.js";
 import { createTestRegistry } from "../../test-utils/channel-plugins.js";
 import { extractStoredAssistantText, sanitizeTextContent } from "./chat-history-text.js";
@@ -71,8 +71,8 @@ vi.mock("../../plugin-sdk/facade-runtime.js", async () => {
 });
 
 type SessionsToolTestConfig = {
-  agents?: OpenClawConfig["agents"];
-  bindings?: OpenClawConfig["bindings"];
+  agents?: NatesclawConfig["agents"];
+  bindings?: NatesclawConfig["bindings"];
   session: {
     scope: "per-sender";
     mainKey: string;
@@ -868,7 +868,7 @@ describe("sessions_send gating", () => {
   });
 
   it("keeps an exact-incarnation send synchronous to its scoped lifecycle grant", async () => {
-    await withTestDir({ prefix: "openclaw-exact-session-send-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-exact-session-send-" }, async (dir) => {
       const { runSessionsSendA2AFlow } = await import("./sessions-send-tool.a2a.js");
       vi.mocked(runSessionsSendA2AFlow).mockClear();
       const storePath = path.join(dir, "sessions.json");
@@ -1667,7 +1667,7 @@ describe("sessions_send agent-main materialization provenance", () => {
       }
       return {};
     });
-    // Mirror production assembly (openclaw-tools.ts): no callGateway override, so
+    // Mirror production assembly (natesclaw-tools.ts): no callGateway override, so
     // ensureConfiguredAgentMainSession takes the trusted in-process branch.
     const tool = createSessionsSendTool({
       agentSessionKey: "agent:main:dashboard:req-provenance",

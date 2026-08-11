@@ -570,7 +570,7 @@ describe("qa confidence report", () => {
             scenarioId: "plugin-hook-health-sentinel",
             drift: "none",
             cells: {
-              openclaw: { status: "pass", sentinelFindings: [] },
+              natesclaw: { status: "pass", sentinelFindings: [] },
               codex: {
                 status: "pass",
                 sentinelFindings: [

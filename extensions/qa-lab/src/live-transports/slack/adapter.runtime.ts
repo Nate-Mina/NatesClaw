@@ -5,11 +5,11 @@ import {
   createSlackWebClient,
   createSlackWriteClient,
   resolveSlackWebClientOptions,
-} from "@openclaw/slack/api.js";
+} from "@natesclaw/slack/api.js";
 import type { FetchFunction } from "@slack/web-api";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { acquireDebugProxyCaptureStore } from "openclaw/plugin-sdk/proxy-capture";
-import type { QaRunnerCliRegistration } from "openclaw/plugin-sdk/qa-runner-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { acquireDebugProxyCaptureStore } from "natesclaw/plugin-sdk/proxy-capture";
+import type { QaRunnerCliRegistration } from "natesclaw/plugin-sdk/qa-runner-runtime";
 import {
   acquireQaCredentialLease,
   startQaCredentialLeaseHeartbeat,
@@ -269,7 +269,7 @@ export async function createSlackQaTransportAdapter(
     async sendInbound(input) {
       heartbeat.throwIfFailed();
       logicalConversationId = input.conversation.id;
-      const text = input.text.replaceAll("@openclaw", `<@${sutIdentity.userId}>`);
+      const text = input.text.replaceAll("@natesclaw", `<@${sutIdentity.userId}>`);
       const nativeThreadTs = input.threadId ? nativeMessageIds.get(input.threadId) : undefined;
       const sent = await sendSlackChannelMessage({
         channelId: runtimeEnv.channelId,
@@ -297,7 +297,7 @@ export async function createSlackQaTransportAdapter(
       activeThreadRoots.clear();
     },
     createGatewayConfig: () =>
-      buildSlackQaConfig({} as OpenClawConfig, {
+      buildSlackQaConfig({} as NatesclawConfig, {
         channelId: runtimeEnv.channelId,
         driverBotUserId: driverIdentity.userId,
         sutAccountId: accountId,
@@ -305,8 +305,8 @@ export async function createSlackQaTransportAdapter(
         sutBotToken: runtimeEnv.sutBotToken,
       }),
     createRuntimeEnvPatch: () => ({
-      OPENCLAW_DEBUG_PROXY_ENABLED: "1",
-      OPENCLAW_DEBUG_PROXY_SESSION_ID: captureSessionId,
+      NATESCLAW_DEBUG_PROXY_ENABLED: "1",
+      NATESCLAW_DEBUG_PROXY_SESSION_ID: captureSessionId,
     }),
     prepareFlow: async (input) => {
       captureStoreLease ??= acquireDebugProxyCaptureStore({

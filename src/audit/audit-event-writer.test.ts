@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../state/natesclaw-state-db.js";
 import { listAuditEvents, recordAuditEvent } from "./audit-event-store.js";
 import type { AuditEventInput } from "./audit-event-types.js";
 import { createAuditEventWriter } from "./audit-event-writer.js";
@@ -73,14 +73,14 @@ function captureWork(envelope: ExecutionIdentityAdmissionEnvelope) {
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 describe("audit event worker", () => {
   it("keeps first-use identity storage absent during maintenance without admission", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
     const errors: string[] = [];
     const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
 
@@ -89,17 +89,17 @@ describe("audit event worker", () => {
 
     expect(errors).toEqual([]);
     expect(
-      openOpenClawStateDatabase(database)
+      openNatesclawStateDatabase(database)
         .db.prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name = ?")
         .get("execution_identity_contexts"),
     ).toBeUndefined();
   });
 
   it("keeps an established current store identity-free during maintenance", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
     recordAuditEvent(input(), database);
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     const errors: string[] = [];
     const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
 
@@ -109,19 +109,19 @@ describe("audit event worker", () => {
     expect(errors).toEqual([]);
     expect(listAuditEvents({ database, limit: 10 }).events).toHaveLength(1);
     expect(
-      openOpenClawStateDatabase(database)
+      openNatesclawStateDatabase(database)
         .db.prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name = ?")
         .get("execution_identity_contexts"),
     ).toBeUndefined();
   });
 
   it("returns immediately under SQLite contention and flushes before stop", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
     const errors: string[] = [];
     const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
     await writer.ready;
-    const { db } = openOpenClawStateDatabase(database);
+    const { db } = openNatesclawStateDatabase(database);
     db.exec("BEGIN IMMEDIATE");
     const startedAt = performance.now();
     expect(writer.record(input())).toBe(true);
@@ -134,9 +134,9 @@ describe("audit event worker", () => {
   });
 
   it("keeps first-use identity admission prompt under a held write lock", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
-    const { db } = openOpenClawStateDatabase(database);
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
+    const { db } = openNatesclawStateDatabase(database);
     db.exec("DELETE FROM audit_identity_keys;");
     db.exec("BEGIN IMMEDIATE");
     const errors: string[] = [];
@@ -213,8 +213,8 @@ describe("audit event worker", () => {
   });
 
   it("prunes expired identity contexts at startup without a new run", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
     persistExecutionIdentityAdmissionEnvelope(
       captureExecutionIdentityAdmissionEnvelope(
         {
@@ -227,14 +227,14 @@ describe("audit event worker", () => {
       ),
       { ...database, now: 0 },
     );
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
 
     const errors: string[] = [];
     const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
     await writer.ready;
 
     expect(
-      openOpenClawStateDatabase(database)
+      openNatesclawStateDatabase(database)
         .db.prepare("SELECT COUNT(*) AS count FROM execution_identity_contexts")
         .get(),
     ).toEqual({ count: 0 });
@@ -243,9 +243,9 @@ describe("audit event worker", () => {
   });
 
   it("uses one pending limit across audit events and identity envelopes", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
-    const { db } = openOpenClawStateDatabase(database);
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
+    const { db } = openNatesclawStateDatabase(database);
     db.exec("BEGIN IMMEDIATE");
     const errors: string[] = [];
     const writer = createAuditEventWriter({
@@ -276,8 +276,8 @@ describe("audit event worker", () => {
   });
 
   it("preserves exact-envelope idempotency and safely reports every canonical conflict", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
     const errors: string[] = [];
     const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
     const admittedAt = Date.now();
@@ -354,7 +354,7 @@ describe("audit event worker", () => {
         },
       },
     });
-    const persisted = openOpenClawStateDatabase(database)
+    const persisted = openNatesclawStateDatabase(database)
       .db.prepare("SELECT context_json FROM execution_identity_contexts WHERE run_id = ?")
       .get("ordered-run") as { context_json: string };
     for (const raw of ["raw-conflict-source", "raw-conflict-principal"]) {
@@ -364,7 +364,7 @@ describe("audit event worker", () => {
   });
 
   it("reports a lost durable recovery reference safely without blocking the caller", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
     const errors: string[] = [];
     const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
     const token = createExecutionIdentityAdmissionToken("raw-run-not-a-secret", {
@@ -383,7 +383,7 @@ describe("audit event worker", () => {
     expect(JSON.stringify(errors)).not.toContain(token.executionId);
     expect(JSON.stringify(errors)).not.toContain(token.runId);
     expect(
-      openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } })
+      openNatesclawStateDatabase({ env: { NATESCLAW_STATE_DIR: stateDir } })
         .db.prepare("SELECT name FROM sqlite_schema WHERE type = 'table' AND name = ?")
         .get("execution_identity_contexts"),
     ).toBeUndefined();
@@ -412,14 +412,14 @@ describe("audit event worker", () => {
     await unavailableWriter.stop();
     expect(unavailableErrors).toContain("audit event writer is unavailable; dropping metadata");
 
-    const schemaStateDir = tempDirs.make("openclaw-audit-writer-");
-    const schemaDatabase = { env: { OPENCLAW_STATE_DIR: schemaStateDir } };
-    openOpenClawStateDatabase(schemaDatabase).db.exec(`
+    const schemaStateDir = tempDirs.make("natesclaw-audit-writer-");
+    const schemaDatabase = { env: { NATESCLAW_STATE_DIR: schemaStateDir } };
+    openNatesclawStateDatabase(schemaDatabase).db.exec(`
       CREATE VIEW execution_identity_contexts AS
       SELECT 'context' AS context_id, 'run' AS run_id, 0 AS created_at,
              'unattributed' AS coverage_state, 2 AS context_bytes, '{}' AS context_json;
     `);
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     const schemaErrors: string[] = [];
     const schemaWriter = createAuditEventWriter({
       stateDir: schemaStateDir,
@@ -431,8 +431,8 @@ describe("audit event worker", () => {
     await schemaWriter.stop();
     expect(schemaErrors).toContain("audit execution identity persistence failed");
 
-    const insertStateDir = tempDirs.make("openclaw-audit-writer-");
-    const insertDatabase = { env: { OPENCLAW_STATE_DIR: insertStateDir } };
+    const insertStateDir = tempDirs.make("natesclaw-audit-writer-");
+    const insertDatabase = { env: { NATESCLAW_STATE_DIR: insertStateDir } };
     persistExecutionIdentityAdmissionEnvelope(
       captureExecutionIdentityAdmissionEnvelope(
         {
@@ -445,7 +445,7 @@ describe("audit event worker", () => {
       ),
       insertDatabase,
     );
-    const insertDb = openOpenClawStateDatabase(insertDatabase).db;
+    const insertDb = openNatesclawStateDatabase(insertDatabase).db;
     insertDb.exec(`
       CREATE TRIGGER reject_identity_insert
       BEFORE INSERT ON execution_identity_contexts
@@ -471,8 +471,8 @@ describe("audit event worker", () => {
   });
 
   it("keeps malformed, serialization, key, and persistence failures nonblocking and redaction-safe", async () => {
-    const stateDir = tempDirs.make("openclaw-audit-writer-");
-    const database = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const stateDir = tempDirs.make("natesclaw-audit-writer-");
+    const database = { env: { NATESCLAW_STATE_DIR: stateDir } };
     const errors: string[] = [];
     const writer = createAuditEventWriter({ stateDir, onError: (error) => errors.push(error) });
     const rawSecret = "raw-worker-message-secret";
@@ -508,7 +508,7 @@ describe("audit event worker", () => {
     expect(malformedErrors).toContain("audit execution identity envelope rejected");
     expect(JSON.stringify(malformedErrors)).not.toContain(rawSecret);
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     persistExecutionIdentityAdmissionEnvelope(
       captureExecutionIdentityAdmissionEnvelope(
         {
@@ -521,8 +521,8 @@ describe("audit event worker", () => {
       ),
       database,
     );
-    openOpenClawStateDatabase(database).db.exec("DELETE FROM audit_identity_keys;");
-    closeOpenClawStateDatabaseForTest();
+    openNatesclawStateDatabase(database).db.exec("DELETE FROM audit_identity_keys;");
+    closeNatesclawStateDatabaseForTest();
     const keyErrors: string[] = [];
     const keyWriter = createAuditEventWriter({
       stateDir,

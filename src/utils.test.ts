@@ -21,7 +21,7 @@ import {
 
 describe("ensureDir", () => {
   it("creates nested directory", async () => {
-    await withTestDir({ prefix: "openclaw-test-" }, async (tmp) => {
+    await withTestDir({ prefix: "natesclaw-test-" }, async (tmp) => {
       const target = path.join(tmp, "nested", "dir");
       await ensureDir(target);
       expect(fs.existsSync(target)).toBe(true);
@@ -134,78 +134,78 @@ describe("normalizeE164", () => {
 });
 
 describe("resolveConfigDir", () => {
-  it("prefers ~/.openclaw when legacy dir is missing", async () => {
-    await withTestDir({ prefix: "openclaw-config-dir-" }, async (root) => {
-      const newDir = path.join(root, ".openclaw");
+  it("prefers ~/.natesclaw when legacy dir is missing", async () => {
+    await withTestDir({ prefix: "natesclaw-config-dir-" }, async (root) => {
+      const newDir = path.join(root, ".natesclaw");
       await fs.promises.mkdir(newDir, { recursive: true });
       const resolved = resolveConfigDir({} as NodeJS.ProcessEnv, () => root);
       expect(resolved).toBe(newDir);
     });
   });
 
-  it("expands OPENCLAW_STATE_DIR using the provided env", () => {
+  it("expands NATESCLAW_STATE_DIR using the provided env", () => {
     const env = {
-      HOME: "/tmp/openclaw-home",
-      OPENCLAW_STATE_DIR: "~/state",
+      HOME: "/tmp/natesclaw-home",
+      NATESCLAW_STATE_DIR: "~/state",
     } as NodeJS.ProcessEnv;
 
-    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/openclaw-home", "state"));
+    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/natesclaw-home", "state"));
   });
 
-  it("falls back to the config file directory when only OPENCLAW_CONFIG_PATH is set", () => {
+  it("falls back to the config file directory when only NATESCLAW_CONFIG_PATH is set", () => {
     const env = {
-      HOME: "/tmp/openclaw-home",
-      OPENCLAW_CONFIG_PATH: "~/profiles/dev/openclaw.json",
+      HOME: "/tmp/natesclaw-home",
+      NATESCLAW_CONFIG_PATH: "~/profiles/dev/natesclaw.json",
     } as NodeJS.ProcessEnv;
 
-    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/openclaw-home", "profiles", "dev"));
+    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/natesclaw-home", "profiles", "dev"));
   });
 
   it("re-pins the exported configuration root after startup environment selection", () => {
     const originalConfigDir = CONFIG_DIR;
-    const selectedConfigDir = path.resolve("/tmp/openclaw-selected-config-root");
+    const selectedConfigDir = path.resolve("/tmp/natesclaw-selected-config-root");
     try {
       expect(
         pinConfigDir({
-          OPENCLAW_STATE_DIR: selectedConfigDir,
-          OPENCLAW_TEST_FAST: "1",
+          NATESCLAW_STATE_DIR: selectedConfigDir,
+          NATESCLAW_TEST_FAST: "1",
         }),
       ).toBe(selectedConfigDir);
       expect(CONFIG_DIR).toBe(selectedConfigDir);
     } finally {
       pinConfigDir({
-        OPENCLAW_STATE_DIR: originalConfigDir,
-        OPENCLAW_TEST_FAST: "1",
+        NATESCLAW_STATE_DIR: originalConfigDir,
+        NATESCLAW_TEST_FAST: "1",
       });
     }
   });
 });
 
 describe("resolveHomeDir", () => {
-  it("prefers OPENCLAW_HOME over HOME", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
-      expect(resolveHomeDir()).toBe(path.resolve("/srv/openclaw-home"));
+  it("prefers NATESCLAW_HOME over HOME", () => {
+    withEnv({ NATESCLAW_HOME: "/srv/natesclaw-home", HOME: "/home/other" }, () => {
+      expect(resolveHomeDir()).toBe(path.resolve("/srv/natesclaw-home"));
     });
   });
 });
 
 describe("shortenHomePath", () => {
-  it("uses $OPENCLAW_HOME prefix when OPENCLAW_HOME is set", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
-      expect(shortenHomePath(`${path.resolve("/srv/openclaw-home")}/.openclaw/openclaw.json`)).toBe(
-        "$OPENCLAW_HOME/.openclaw/openclaw.json",
+  it("uses $NATESCLAW_HOME prefix when NATESCLAW_HOME is set", () => {
+    withEnv({ NATESCLAW_HOME: "/srv/natesclaw-home", HOME: "/home/other" }, () => {
+      expect(shortenHomePath(`${path.resolve("/srv/natesclaw-home")}/.natesclaw/natesclaw.json`)).toBe(
+        "$NATESCLAW_HOME/.natesclaw/natesclaw.json",
       );
     });
   });
 
   it.skipIf(process.platform === "win32")("keeps POSIX home matching case-sensitive", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/OpenClaw-Home", HOME: "/home/other" }, () => {
-      expect(shortenHomePath("/srv/openclaw-home/workspace")).toBe("/srv/openclaw-home/workspace");
+    withEnv({ NATESCLAW_HOME: "/srv/Natesclaw-Home", HOME: "/home/other" }, () => {
+      expect(shortenHomePath("/srv/natesclaw-home/workspace")).toBe("/srv/natesclaw-home/workspace");
     });
   });
 
   it.skipIf(process.platform !== "win32")("keeps relative Windows paths relative", () => {
-    withEnv({ OPENCLAW_HOME: process.cwd() }, () => {
+    withEnv({ NATESCLAW_HOME: process.cwd() }, () => {
       expect(shortenHomePath(`relative${path.sep}workspace`)).toBe(`relative${path.sep}workspace`);
     });
   });
@@ -213,15 +213,15 @@ describe("shortenHomePath", () => {
   it.skipIf(process.platform !== "win32")(
     "shortens real extended-length Windows home aliases without exposing the absolute path",
     async () => {
-      await withTestDir({ prefix: "openclaw-home-display-" }, async (home) => {
+      await withTestDir({ prefix: "natesclaw-home-display-" }, async (home) => {
         const workspace = path.join(home, "workspace");
         await fs.promises.mkdir(workspace);
         const extendedAlias = `\\\\?\\${workspace.toUpperCase()}`;
         expect(fs.statSync(extendedAlias).isDirectory()).toBe(true);
 
-        withEnv({ OPENCLAW_HOME: home }, () => {
+        withEnv({ NATESCLAW_HOME: home }, () => {
           const display = shortenHomePath(extendedAlias);
-          expect(display).toBe(`$OPENCLAW_HOME${path.sep}WORKSPACE`);
+          expect(display).toBe(`$NATESCLAW_HOME${path.sep}WORKSPACE`);
           expect(display).not.toContain(home.toUpperCase());
         });
       });
@@ -230,22 +230,22 @@ describe("shortenHomePath", () => {
 });
 
 describe("shortenHomeInString", () => {
-  it("uses $OPENCLAW_HOME replacement when OPENCLAW_HOME is set", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
+  it("uses $NATESCLAW_HOME replacement when NATESCLAW_HOME is set", () => {
+    withEnv({ NATESCLAW_HOME: "/srv/natesclaw-home", HOME: "/home/other" }, () => {
       expect(
         shortenHomeInString(
-          `config: ${path.resolve("/srv/openclaw-home")}/.openclaw/openclaw.json`,
+          `config: ${path.resolve("/srv/natesclaw-home")}/.natesclaw/natesclaw.json`,
         ),
-      ).toBe("config: $OPENCLAW_HOME/.openclaw/openclaw.json");
+      ).toBe("config: $NATESCLAW_HOME/.natesclaw/natesclaw.json");
     });
   });
 
   it.skipIf(process.platform === "win32")(
     "keeps embedded POSIX home matching case-sensitive",
     () => {
-      withEnv({ OPENCLAW_HOME: "/srv/OpenClaw-Home", HOME: "/home/other" }, () => {
-        expect(shortenHomeInString("config: /srv/openclaw-home/openclaw.json")).toBe(
-          "config: /srv/openclaw-home/openclaw.json",
+      withEnv({ NATESCLAW_HOME: "/srv/Natesclaw-Home", HOME: "/home/other" }, () => {
+        expect(shortenHomeInString("config: /srv/natesclaw-home/natesclaw.json")).toBe(
+          "config: /srv/natesclaw-home/natesclaw.json",
         );
       });
     },
@@ -254,13 +254,13 @@ describe("shortenHomeInString", () => {
   it.skipIf(process.platform !== "win32")(
     "shortens real Windows home casing aliases inside diagnostic text",
     async () => {
-      await withTestDir({ prefix: "openclaw-home-display-" }, async (home) => {
+      await withTestDir({ prefix: "natesclaw-home-display-" }, async (home) => {
         const homeAlias = home.toUpperCase();
         expect(fs.statSync(homeAlias).isDirectory()).toBe(true);
 
-        withEnv({ OPENCLAW_HOME: home }, () => {
-          expect(shortenHomeInString(`config: ${homeAlias}\\openclaw.json`)).toBe(
-            "config: $OPENCLAW_HOME\\openclaw.json",
+        withEnv({ NATESCLAW_HOME: home }, () => {
+          expect(shortenHomeInString(`config: ${homeAlias}\\natesclaw.json`)).toBe(
+            "config: $NATESCLAW_HOME\\natesclaw.json",
           );
         });
       });
@@ -274,8 +274,8 @@ describe("resolveUserPath", () => {
   });
 
   it("expands ~/ to home dir", () => {
-    expect(resolveUserPath("~/openclaw", {}, () => "/Users/thoffman")).toBe(
-      path.resolve("/Users/thoffman", "openclaw"),
+    expect(resolveUserPath("~/natesclaw", {}, () => "/Users/thoffman")).toBe(
+      path.resolve("/Users/thoffman", "natesclaw"),
     );
   });
 
@@ -283,19 +283,19 @@ describe("resolveUserPath", () => {
     expect(resolveUserPath("tmp/dir")).toBe(path.resolve("tmp/dir"));
   });
 
-  it("prefers OPENCLAW_HOME for tilde expansion", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
-      expect(resolveUserPath("~/openclaw")).toBe(path.resolve("/srv/openclaw-home", "openclaw"));
+  it("prefers NATESCLAW_HOME for tilde expansion", () => {
+    withEnv({ NATESCLAW_HOME: "/srv/natesclaw-home", HOME: "/home/other" }, () => {
+      expect(resolveUserPath("~/natesclaw")).toBe(path.resolve("/srv/natesclaw-home", "natesclaw"));
     });
   });
 
   it("uses the provided env for tilde expansion", () => {
     const env = {
-      HOME: "/tmp/openclaw-home",
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      HOME: "/tmp/natesclaw-home",
+      NATESCLAW_HOME: "/srv/natesclaw-home",
     } as NodeJS.ProcessEnv;
 
-    expect(resolveUserPath("~/openclaw", env)).toBe(path.resolve("/srv/openclaw-home", "openclaw"));
+    expect(resolveUserPath("~/natesclaw", env)).toBe(path.resolve("/srv/natesclaw-home", "natesclaw"));
   });
 
   it("keeps blank paths blank", () => {

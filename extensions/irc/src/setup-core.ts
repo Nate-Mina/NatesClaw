@@ -3,17 +3,17 @@ import {
   defineChannelSetupContract,
   type ChannelSetupAdapter,
   type ChannelSetupInput,
-} from "openclaw/plugin-sdk/channel-setup";
-import type { DmPolicy } from "openclaw/plugin-sdk/config-contracts";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/channel-setup";
+import type { DmPolicy } from "natesclaw/plugin-sdk/config-contracts";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { normalizeAccountId } from "natesclaw/plugin-sdk/routing";
 import {
   applyAccountNameToChannelSection,
   createSetupInputPresenceValidator,
   createTopLevelChannelAllowFromSetter,
   createTopLevelChannelDmPolicySetter,
   patchScopedAccountConfig,
-} from "openclaw/plugin-sdk/setup";
+} from "natesclaw/plugin-sdk/setup";
 import type { CoreConfig, IrcAccountConfig, IrcNickServConfig } from "./types.js";
 
 const channel = "irc" as const;

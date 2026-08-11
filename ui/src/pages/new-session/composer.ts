@@ -53,7 +53,7 @@ function renderStartControl(options: NewSessionComposerOptions) {
   const startLabel = options.submitting ? t("newSession.starting") : t("newSession.start");
   if (!options.terminalAction) {
     return html`
-      <openclaw-tooltip content=${options.submitDisabledReason ?? t("newSession.start")}>
+      <natesclaw-tooltip content=${options.submitDisabledReason ?? t("newSession.start")}>
         <button
           type="button"
           class="chat-send-btn"
@@ -63,13 +63,13 @@ function renderStartControl(options: NewSessionComposerOptions) {
         >
           ${options.submitting ? icons.loader : icons.arrowUp}
         </button>
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
     `;
   }
   const terminalLabel = t("newSession.startInTerminal");
   return html`
     <div class="new-session-page__start-split">
-      <openclaw-tooltip content=${options.submitDisabledReason ?? t("newSession.start")}>
+      <natesclaw-tooltip content=${options.submitDisabledReason ?? t("newSession.start")}>
         <button
           type="button"
           class="chat-send-btn new-session-page__start-primary"
@@ -79,8 +79,8 @@ function renderStartControl(options: NewSessionComposerOptions) {
         >
           ${options.submitting ? icons.loader : icons.arrowUp}
         </button>
-      </openclaw-tooltip>
-      <openclaw-tooltip content=${options.terminalAction.disabledReason ?? terminalLabel}>
+      </natesclaw-tooltip>
+      <natesclaw-tooltip content=${options.terminalAction.disabledReason ?? terminalLabel}>
         <wa-dropdown class="new-session-page__start-menu" placement="top-end">
           <button
             slot="trigger"
@@ -103,7 +103,7 @@ function renderStartControl(options: NewSessionComposerOptions) {
             ${terminalLabel}
           </wa-dropdown-item>
         </wa-dropdown>
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
     </div>
   `;
 }

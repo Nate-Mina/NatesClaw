@@ -1,8 +1,8 @@
 // Dispatches final reply payloads through visible senders and message tools.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { TypingCallbacks } from "../../channels/typing.js";
 import type { HumanDelayConfig } from "../../config/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   findPlatformMessageRejectedError,
   isProvenDeliveryNotSentError,
@@ -306,7 +306,7 @@ function getHumanDelayMax(config: HumanDelayConfig | undefined): number {
 export type ReplyDispatcherOptions = {
   deliver: ReplyDispatchDeliverer;
   silentReplyContext?: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     sessionKey?: string;
     surface?: string;
     conversationType?: SilentReplyConversationType;

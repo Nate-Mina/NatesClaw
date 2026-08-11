@@ -1,5 +1,5 @@
 // Telegram tests cover bot.fetch abort plugin behavior.
-import { toErrorObject as toLintErrorObject } from "openclaw/plugin-sdk/error-runtime";
+import { toErrorObject as toLintErrorObject } from "natesclaw/plugin-sdk/error-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { isTelegramPollingNetworkError } from "./network-errors.js";
 
@@ -14,7 +14,7 @@ const createTelegramBot = (opts: import("./bot.types.js").TelegramBotOptions) =>
 
 function createWrappedTelegramClientFetch(
   proxyFetch: typeof fetch,
-  config?: import("openclaw/plugin-sdk/config-contracts").OpenClawConfig,
+  config?: import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig,
 ) {
   const shutdown = new AbortController();
   botCtorSpy.mockClear();

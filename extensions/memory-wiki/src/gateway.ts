@@ -1,8 +1,8 @@
 // Memory Wiki plugin module implements gateway behavior.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/memory-host-core";
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import type { OpenClawConfig, OpenClawPluginApi } from "../api.js";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/memory-host-core";
+import { readPositiveIntegerParam } from "natesclaw/plugin-sdk/param-readers";
+import type { NatesclawConfig, NatesclawPluginApi } from "../api.js";
 import { applyMemoryWikiMutation, normalizeMemoryWikiMutationInput } from "./apply.js";
 import { compileMemoryWikiVault } from "./compile.js";
 import {
@@ -33,7 +33,7 @@ const WRITE_SCOPE = "operator.write" as const;
 const ADMIN_SCOPE = "operator.admin" as const;
 const LOCAL_FILE_INGEST_SCOPE = ADMIN_SCOPE;
 type GatewayMethodContext = Parameters<
-  Parameters<OpenClawPluginApi["registerGatewayMethod"]>[1]
+  Parameters<NatesclawPluginApi["registerGatewayMethod"]>[1]
 >[0];
 type GatewayRespond = GatewayMethodContext["respond"];
 
@@ -80,17 +80,17 @@ function respondError(respond: GatewayRespond, error: unknown) {
 
 async function syncImportedSourcesIfNeeded(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
 ) {
   await syncMemoryWikiImportedSources({ config, appConfig });
 }
 
 export function registerMemoryWikiGatewayMethods(params: {
-  api: OpenClawPluginApi;
+  api: NatesclawPluginApi;
   config: ResolvedMemoryWikiConfig;
-  appConfig?: OpenClawConfig;
-  getAppConfig?: () => OpenClawConfig | undefined;
-  resolveConfig?: (agentId?: string, appConfig?: OpenClawConfig) => ResolvedMemoryWikiConfig;
+  appConfig?: NatesclawConfig;
+  getAppConfig?: () => NatesclawConfig | undefined;
+  resolveConfig?: (agentId?: string, appConfig?: NatesclawConfig) => ResolvedMemoryWikiConfig;
 }) {
   const { api, config: baseConfig } = params;
 
@@ -99,7 +99,7 @@ export function registerMemoryWikiGatewayMethods(params: {
       return params.getAppConfig();
     }
     if (typeof api.runtime.config?.current === "function") {
-      return api.runtime.config.current() as OpenClawConfig;
+      return api.runtime.config.current() as NatesclawConfig;
     }
     return params.appConfig;
   };

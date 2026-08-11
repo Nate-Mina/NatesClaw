@@ -20,7 +20,7 @@ describe("prepareEmbeddedAttemptTranscriptLifecycle", () => {
           expectedWriterRunId: "run-a",
           sessionId: "session-a",
           sessionKey: "agent:main:test",
-          storePath: "/tmp/openclaw.sqlite",
+          storePath: "/tmp/natesclaw.sqlite",
         },
       },
       externalAbortController,

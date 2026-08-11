@@ -1,4 +1,4 @@
-import type { RealtimeVoiceProviderPlugin } from "openclaw/plugin-sdk/realtime-voice";
+import type { RealtimeVoiceProviderPlugin } from "natesclaw/plugin-sdk/realtime-voice";
 import {
   assertXaiRealtimeVoiceRequestSupported,
   createXaiRealtimeVoiceProviderMetadata,

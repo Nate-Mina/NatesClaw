@@ -1,7 +1,7 @@
 // Gateway auxiliary method handlers.
 // Wires reload, secrets, exec approval, and plugin approval RPC handlers.
 import { randomUUID } from "node:crypto";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { registerAgentRunDelegatedAuthorityClosedHandler } from "../infra/agent-run-registry.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { createExecApprovalForwarder } from "../infra/exec-approval-forwarder.js";
@@ -120,7 +120,7 @@ export function createGatewayAuxHandlers(params: {
   activateRuntimeSecrets: ActivateRuntimeSecrets;
   buildReloadPlan?: (changedPaths: string[]) => GatewayReloadPlan;
   sharedGatewaySessionGenerationState: SharedGatewaySessionGenerationState;
-  resolveSharedGatewaySessionGenerationForConfig: (config: OpenClawConfig) => string | undefined;
+  resolveSharedGatewaySessionGenerationForConfig: (config: NatesclawConfig) => string | undefined;
   clients: Iterable<SharedGatewayAuthClient>;
   startChannel: (name: ChannelKind) => Promise<void>;
   stopChannel: (name: ChannelKind) => Promise<void>;
@@ -512,8 +512,8 @@ export function createGatewayAuxHandlers(params: {
                 if (channelsToRestart.size > 0) {
                   const restartChannels = [...channelsToRestart];
                   if (
-                    isTruthyEnvValue(process.env.OPENCLAW_SKIP_CHANNELS) ||
-                    isTruthyEnvValue(process.env.OPENCLAW_SKIP_PROVIDERS)
+                    isTruthyEnvValue(process.env.NATESCLAW_SKIP_CHANNELS) ||
+                    isTruthyEnvValue(process.env.NATESCLAW_SKIP_PROVIDERS)
                   ) {
                     throw new Error(
                       `secrets.reload requires restarting channels: ${restartChannels.join(", ")}`,

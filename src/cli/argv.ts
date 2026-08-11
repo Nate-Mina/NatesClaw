@@ -511,11 +511,11 @@ export function getPrimaryCommand(argv: string[]): string | null {
 
 export { getCommandPositionalsWithRootOptions } from "../infra/cli-root-options.js";
 
-export function buildParseArgv(rawArgs: string[], programName = "openclaw"): string[] {
+export function buildParseArgv(rawArgs: string[], programName = "natesclaw"): string[] {
   const normalizedArgv =
     rawArgs[0] === programName
       ? rawArgs.slice(1)
-      : rawArgs[0]?.endsWith("openclaw")
+      : rawArgs[0]?.endsWith("natesclaw")
         ? rawArgs.slice(1)
         : rawArgs;
   const looksLikeNode =

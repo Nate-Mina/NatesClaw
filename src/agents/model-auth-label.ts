@@ -1,10 +1,10 @@
 /**
  * Formats user-facing auth labels for resolved provider/model credentials.
  */
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import type { SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   externalCliDiscoveryForProviderAuth,
   ensureAuthProfileStore,
@@ -29,7 +29,7 @@ import {
 /** Resolve the display label that describes how a provider is authenticated. */
 export function resolveModelAuthLabel(params: {
   provider?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   sessionEntry?: Partial<Pick<SessionEntry, "authProfileOverride">>;
   agentDir?: string;
   workspaceDir?: string;

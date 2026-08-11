@@ -14,12 +14,12 @@
  * config-write-parity contract test enforces that classification.
  */
 export const SYSTEM_AGENT_CONFIG_WRITE_DENYLIST: Readonly<Record<string, string>> = {
-  $include: "alternate-config inclusion; edit openclaw.json in a trusted shell",
-  auth: "provider auth; `openclaw onboard` on the machine running OpenClaw",
-  env: "environment/credential injection; edit openclaw.json in a trusted shell",
+  $include: "alternate-config inclusion; edit natesclaw.json in a trusted shell",
+  auth: "provider auth; `natesclaw onboard` on the machine running Natesclaw",
+  env: "environment/credential injection; edit natesclaw.json in a trusted shell",
   models:
-    "provider/catalog definitions feed routing; use `set_default_model` or `openclaw onboard`",
-  secrets: "secret providers; edit openclaw.json in a trusted shell",
+    "provider/catalog definitions feed routing; use `set_default_model` or `natesclaw onboard`",
+  secrets: "secret providers; edit natesclaw.json in a trusted shell",
 };
 
 export type InferenceRoutePathVerdict = "allowed" | "blocked" | "agent-route" | "plugin-entry";

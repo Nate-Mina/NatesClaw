@@ -7,5 +7,5 @@ export {
   optimizeImageToJpeg,
   optimizeImageToPng,
   type WebMediaResult,
-} from "openclaw/plugin-sdk/web-media";
-export type { LocalMediaAccessErrorCode } from "openclaw/plugin-sdk/web-media";
+} from "natesclaw/plugin-sdk/web-media";
+export type { LocalMediaAccessErrorCode } from "natesclaw/plugin-sdk/web-media";

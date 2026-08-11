@@ -2,7 +2,7 @@ import {
   type MarkdownIR,
   type MarkdownLinkSpan,
   renderMarkdownWithMarkers,
-} from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/text-chunking";
 
 type TelegramRenderLink = {
   start: number;

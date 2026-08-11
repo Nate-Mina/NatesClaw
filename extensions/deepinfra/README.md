@@ -1,12 +1,12 @@
-# OpenClaw DeepInfra Provider
+# Natesclaw DeepInfra Provider
 
-Official OpenClaw provider plugin for DeepInfra.
+Official Natesclaw provider plugin for DeepInfra.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/deepinfra-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/deepinfra-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/deepinfra> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/deepinfra> for setup and configuration.

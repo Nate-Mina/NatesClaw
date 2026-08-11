@@ -2,7 +2,7 @@
 import type {
   ApprovalActionView,
   ApprovalMetadataView,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
+} from "natesclaw/plugin-sdk/approval-handler-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { decodeSlackApprovalAction } from "./approval-actions.js";
 import { slackApprovalNativeRuntime } from "./approval-handler.runtime.js";
@@ -358,7 +358,7 @@ describe("slackApprovalNativeRuntime", () => {
     expect(labels).toEqual(["Allow Once", "Deny"]);
     expect(JSON.stringify(payload.blocks)).not.toContain("Allow Always");
     expect(JSON.stringify(payload.blocks)).not.toContain("/approve");
-    expect(JSON.stringify(payload.blocks)).toContain("openclaw:approval_button");
+    expect(JSON.stringify(payload.blocks)).toContain("natesclaw:approval_button");
     expect(decodeSlackApprovalElements(actionsBlock)).toEqual([
       expect.objectContaining({ approvalKind: "exec", decision: "allow-once" }),
       expect.objectContaining({ approvalKind: "exec", decision: "deny" }),

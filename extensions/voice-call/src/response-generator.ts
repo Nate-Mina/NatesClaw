@@ -1,20 +1,20 @@
 /**
- * Voice call response generator - uses the embedded OpenClaw agent for tool support.
+ * Voice call response generator - uses the embedded Natesclaw agent for tool support.
  * Routes voice responses through the same agent infrastructure as messaging.
  */
 
 import crypto from "node:crypto";
-import { resolveDefaultModelForAgent } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveDefaultModelForAgent } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   applyModelOverrideWithAuthProfileCompatibility,
   ModelSelectionLockedError,
   resolvePersistedSessionRuntimeId,
-} from "openclaw/plugin-sdk/model-session-runtime";
+} from "natesclaw/plugin-sdk/model-session-runtime";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveVoiceCallSessionKey, type VoiceCallConfig } from "./config.js";
 import type { CoreAgentDeps, CoreConfig } from "./core-bridge.js";
 import { resolveCallAgentId } from "./resolve-call-agent-id.js";
@@ -23,7 +23,7 @@ import { resolveVoiceResponseModel } from "./response-model.js";
 type VoiceResponseParams = {
   /** Voice call config */
   voiceConfig: VoiceCallConfig;
-  /** Core OpenClaw config */
+  /** Core Natesclaw config */
   coreConfig: CoreConfig;
   /** Injected host agent runtime */
   agentRuntime: CoreAgentDeps;
@@ -235,7 +235,7 @@ function resolveVoiceSandboxSessionKey(agentId: string, sessionKey: string): str
 }
 
 /**
- * Generate a voice response using the embedded OpenClaw agent with full tool support.
+ * Generate a voice response using the embedded Natesclaw agent with full tool support.
  * Uses the same agent infrastructure as messaging for consistent behavior.
  */
 export async function generateVoiceResponse(

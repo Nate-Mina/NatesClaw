@@ -5,7 +5,7 @@
  */
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { capArrayByJsonBytes } from "../../gateway/session-transcript-readers.js";
 import { jsonUtf8Bytes } from "../../infra/json-utf8-bytes.js";
 import { redactToolPayloadText } from "../../logging/redact.js";
@@ -211,7 +211,7 @@ function readHistoryMessageSeq(message: unknown): number | undefined {
   if (!message || typeof message !== "object" || Array.isArray(message)) {
     return undefined;
   }
-  const meta = (message as Record<string, unknown>)["__openclaw"];
+  const meta = (message as Record<string, unknown>)["__natesclaw"];
   if (!meta || typeof meta !== "object" || Array.isArray(meta)) {
     return undefined;
   }
@@ -223,7 +223,7 @@ function readHistoryMessageId(message: unknown): string | undefined {
   if (!message || typeof message !== "object" || Array.isArray(message)) {
     return undefined;
   }
-  const meta = (message as Record<string, unknown>)["__openclaw"];
+  const meta = (message as Record<string, unknown>)["__natesclaw"];
   if (!meta || typeof meta !== "object" || Array.isArray(meta)) {
     return undefined;
   }
@@ -285,7 +285,7 @@ function buildSessionsHistoryOmittedPlaceholder(source: unknown): Record<string,
     content: "[sessions_history omitted: message too large]",
     ...(seq !== undefined || id !== undefined
       ? {
-          __openclaw: {
+          __natesclaw: {
             ...(seq !== undefined ? { seq } : {}),
             ...(id !== undefined ? { id } : {}),
           },
@@ -352,7 +352,7 @@ function resolveSessionsHistoryPaginationMetadata(params: {
 export function createSessionsHistoryTool(opts?: {
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   callGateway?: GatewayCaller;
 }): AnyAgentTool {
   return {

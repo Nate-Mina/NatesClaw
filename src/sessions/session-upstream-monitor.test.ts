@@ -8,9 +8,9 @@ import {
 import { importSessionCatalogHistory } from "../plugins/session-catalog-history-import.js";
 import type { SessionCatalogProvider, SessionUpstreamProbe } from "../plugins/session-catalog.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../state/natesclaw-state-db.js";
 import { listSessionStateEventsSince, registerSessionStateWatch } from "./session-state-events.js";
 import {
   deleteSessionUpstreamLink,
@@ -28,9 +28,9 @@ function createMissingCounts() {
 }
 
 function createDatabaseOptions() {
-  const stateDir = makeTempDir(tempDirs, "openclaw-session-upstream-monitor-");
-  vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
-  return { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } };
+  const stateDir = makeTempDir(tempDirs, "natesclaw-session-upstream-monitor-");
+  vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
+  return { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } };
 }
 
 function createLink(
@@ -72,7 +72,7 @@ function provider(
 
 afterEach(() => {
   vi.useRealTimers();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   vi.unstubAllEnvs();
 });
 
@@ -132,7 +132,7 @@ describe("session upstream monitor", () => {
       }),
     );
     expect(events[0]?.payload).toBeUndefined();
-    const dedupeRow = openOpenClawStateDatabase(database)
+    const dedupeRow = openNatesclawStateDatabase(database)
       .db.prepare("SELECT dedupe_key FROM session_state_events WHERE session_key = ?")
       .get(watched) as { dedupe_key: string };
     // Source identity is hashed into the dedupe key so a rebased source cannot
@@ -482,7 +482,7 @@ describe("session upstream monitor", () => {
     // Event time is clamped into [now - 24h, now]; cursor rows keep the local clock
     // so a skewed upstream timestamp cannot age watch state into retention pruning.
     expect(events[0]?.occurredAt).toBe(now - 24 * 60 * 60_000);
-    const cursor = openOpenClawStateDatabase(database)
+    const cursor = openNatesclawStateDatabase(database)
       .db.prepare("SELECT updated_at FROM session_watch_cursors WHERE target_session_key = ?")
       .get(watched) as { updated_at: number };
     expect(cursor.updated_at).toBe(now);
@@ -526,7 +526,7 @@ describe("session upstream monitor", () => {
     });
 
     expect(listSessionStateEventsSince(watched, "main", 0, 20, database).events).toHaveLength(0);
-    const row = openOpenClawStateDatabase(database)
+    const row = openNatesclawStateDatabase(database)
       .db.prepare("SELECT last_marker_json FROM session_upstream_links WHERE session_key = ?")
       .get(watched) as { last_marker_json: string };
     expect(JSON.parse(row.last_marker_json)).toEqual({ offset: 999 });
@@ -797,7 +797,7 @@ describe("session upstream monitor", () => {
         message: {
           role: "user",
           content: "visible prompt",
-          __openclaw: {
+          __natesclaw: {
             mirrorOrigin: "codex-app-server",
             upstreamUserText: " exact   decorated prompt ",
           },
@@ -871,7 +871,7 @@ describe("session upstream monitor", () => {
     ]);
   });
 
-  it("records an external prompt five seconds after OpenClaw activity", async () => {
+  it("records an external prompt five seconds after Natesclaw activity", async () => {
     const database = createDatabaseOptions();
     const sessionKey = "agent:main:adopted:recent-external";
     createLink(sessionKey, "claude", database);
@@ -892,7 +892,7 @@ describe("session upstream monitor", () => {
       ],
       loadEntry: () => ({ sessionId: "session-external", lastActivityAt: 5_000 }) as never,
       isRunActive: () => false,
-      loadOwnRecentUserTexts: async () => ["OpenClaw prompt"],
+      loadOwnRecentUserTexts: async () => ["Natesclaw prompt"],
     });
 
     expect(listSessionStateEventsSince(sessionKey, "main", 0, 20, database).events).toHaveLength(1);

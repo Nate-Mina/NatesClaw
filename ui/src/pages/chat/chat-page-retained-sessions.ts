@@ -124,7 +124,7 @@ export class ChatPageRetainedSessions {
   };
 
   private findPane(paneId: string, sessionKey: string): ChatPaneElement | undefined {
-    return [...this.host.querySelectorAll<ChatPaneElement>("openclaw-chat-pane")].find(
+    return [...this.host.querySelectorAll<ChatPaneElement>("natesclaw-chat-pane")].find(
       (pane) =>
         pane.paneId === paneId && areUiSessionKeysEquivalent(pane.sessionKey ?? "", sessionKey),
     );
@@ -183,7 +183,7 @@ export class ChatPageRetainedSessions {
   };
 
   private present(paneId: string, sessionKey: string, preview = false): void {
-    for (const pane of this.host.querySelectorAll<ChatPaneElement>("openclaw-chat-pane")) {
+    for (const pane of this.host.querySelectorAll<ChatPaneElement>("natesclaw-chat-pane")) {
       if (pane.paneId !== paneId) {
         continue;
       }

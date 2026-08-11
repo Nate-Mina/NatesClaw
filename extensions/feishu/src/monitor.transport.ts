@@ -2,8 +2,8 @@
 import crypto from "node:crypto";
 import * as http from "node:http";
 import * as Lark from "@larksuiteoapi/node-sdk";
-import { channelBlockedPatch, channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { channelBlockedPatch, channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { waitForAbortableDelay } from "./async.js";
 import { createFeishuWSClient } from "./client.js";
 import type { FeishuWebhookInvoker } from "./feishu-ingress.js";
@@ -46,7 +46,7 @@ type MonitorTransportParams = {
   statusSink?: FeishuStatusSink;
 };
 
-const FEISHU_WEBHOOK_ACCEPTED_HEADER = "x-openclaw-delivery-accepted";
+const FEISHU_WEBHOOK_ACCEPTED_HEADER = "x-natesclaw-delivery-accepted";
 const FEISHU_WEBHOOK_ACCEPTED_VALUE = "durable";
 const FEISHU_WS_RECONNECT_INITIAL_DELAY_MS = 1_000;
 const FEISHU_WS_RECONNECT_MAX_DELAY_MS = 30_000;
@@ -375,7 +375,7 @@ export async function monitorWebhook({
   if (normalizeFeishuWebhookPath(path) !== path) {
     throw new Error(
       `Feishu account "${accountId}" webhookPath must be a canonical HTTP request path; ` +
-        'run "openclaw doctor --fix" to repair it',
+        'run "natesclaw doctor --fix" to repair it',
     );
   }
   const host = account.config.webhookHost ?? "127.0.0.1";

@@ -1,12 +1,12 @@
-import { ensureSystemPromptCacheBoundary } from "@openclaw/ai/internal/shared";
+import { ensureSystemPromptCacheBoundary } from "@natesclaw/ai/internal/shared";
 /**
  * Prepares CLI backend run context: backend config, prompts, bootstrap context,
  * MCP, auth epoch, and reusable session metadata.
  */
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { messageToolOwnsVisibleReply } from "../../auto-reply/source-reply-delivery-mode.js";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   assertContextEngineHostSupport,
   buildGenericCliContextEngineHostSupport,
@@ -29,7 +29,7 @@ import {
   resolveMcpLoopbackPolicyTools,
   resolveMcpLoopbackScopedTools,
 } from "../../gateway/mcp-http.runtime.js";
-import { buildSystemAgentToolsMcpServerConfig } from "../../mcp/openclaw-tools-serve-config.js";
+import { buildSystemAgentToolsMcpServerConfig } from "../../mcp/natesclaw-tools-serve-config.js";
 import { CliBackendAuthProfilePreparationError } from "../../plugins/cli-backend-errors.js";
 import type { CliBackendConfig } from "../../plugins/cli-backend.types.js";
 import type {
@@ -154,7 +154,7 @@ type PrivateCliBackendPreparedExecution = CliBackendPreparedExecution & {
 
 function unsupportedIsolatedCompletionError(backendId: string): Error & { code: "unsupported" } {
   const error = new Error(
-    `CLI backend "${backendId}" does not support isolated completion; OpenClaw did not start the run.`,
+    `CLI backend "${backendId}" does not support isolated completion; Natesclaw did not start the run.`,
   ) as Error & { code: "unsupported" };
   error.name = "IsolatedCompletionUnsupportedError";
   error.code = "unsupported";
@@ -167,7 +167,7 @@ function resolveClaudeCliContextModelId(modelId: string): string {
   return CLAUDE_CLI_CONTEXT_MODEL_ALIASES[lower] ?? trimmed;
 }
 type RunCliAgentPrepareParams = RunCliAgentParams & {
-  /** Ring-zero tool transport supplied only by the OpenClaw orchestrator. */
+  /** Ring-zero tool transport supplied only by the Natesclaw orchestrator. */
   systemAgentTool?: import("../tools/system-agent-tool.js").SystemAgentToolOptions;
 };
 
@@ -185,9 +185,9 @@ const prepareDeps = {
   revokeMcpLoopbackClientGrant,
   resolveMcpLoopbackPolicyTools,
   resolveMcpLoopbackScopedTools,
-  resolveOpenClawReferencePaths: async (
-    params: Parameters<typeof import("../docs-path.js").resolveOpenClawReferencePaths>[0],
-  ) => (await import("../docs-path.js")).resolveOpenClawReferencePaths(params),
+  resolveNatesclawReferencePaths: async (
+    params: Parameters<typeof import("../docs-path.js").resolveNatesclawReferencePaths>[0],
+  ) => (await import("../docs-path.js")).resolveNatesclawReferencePaths(params),
   prepareClaudeCliSkillsPlugin,
   claudeCliSessionTranscriptHasContent,
   claudeCliSessionTranscriptHasOrphanedToolUse,
@@ -225,7 +225,7 @@ function buildCliSessionDriftUserContext(
   if (reusableCliSession.mode !== "reuse-with-drift") {
     return undefined;
   }
-  return `OpenClaw resumed this CLI session after prompt content changed. Follow the current turn's instructions; changed=${reusableCliSession.drift.reasons.join(",")}.`;
+  return `Natesclaw resumed this CLI session after prompt content changed. Follow the current turn's instructions; changed=${reusableCliSession.drift.reasons.join(",")}.`;
 }
 
 function prependCliSessionDriftUserContext(
@@ -336,7 +336,7 @@ function shouldSkipLocalCliCredentialEpoch(params: {
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.cliRunnerPrepareTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.cliRunnerPrepareTestApi")] = {
     setCliRunnerPrepareTestDeps: (overrides: Record<string, unknown>) => {
       setCliRunnerPrepareTestDeps(overrides as Partial<typeof prepareDeps>);
     },
@@ -392,7 +392,7 @@ function buildCliAuthProfileResolutionError(params: {
   });
   const reason = describeCliAuthProfileResolutionFailure(params.profileId, params.failure);
   return new CliAuthProfilePreparationError({
-    message: `CLI backend "${params.backendId}" ${reason}. Re-authenticate with: ${loginCommand}. OpenClaw did not start the run.`,
+    message: `CLI backend "${params.backendId}" ${reason}. Re-authenticate with: ${loginCommand}. Natesclaw did not start the run.`,
     profileId: params.profileId,
     provider: params.provider,
     agentDir: params.agentDir,
@@ -421,7 +421,7 @@ export async function prepareCliRunContext(
           ...runConfig.agents,
           entries: { [selectedOwner]: { default: true } },
         },
-      } satisfies OpenClawConfig);
+      } satisfies NatesclawConfig);
   const started = Date.now();
   const executionMode = params.executionMode ?? "agent";
   const isSideQuestion = executionMode === "side-question";
@@ -483,16 +483,16 @@ export async function prepareCliRunContext(
       params = { ...params, toolsAllow: undefined };
     } else {
       runtimeToolsAllowPolicy = [...params.toolsAllow];
-      const fallbackOpenClawTools = uniqueStrings(
+      const fallbackNatesclawTools = uniqueStrings(
         expandToolGroups(params.toolsAllow)
           .map((toolName) => normalizeToolPolicyName(toolName))
           .filter(Boolean),
       );
       if (
-        fallbackOpenClawTools.includes("write") &&
-        !fallbackOpenClawTools.includes("apply_patch")
+        fallbackNatesclawTools.includes("write") &&
+        !fallbackNatesclawTools.includes("apply_patch")
       ) {
-        fallbackOpenClawTools.push("apply_patch");
+        fallbackNatesclawTools.push("apply_patch");
       }
       params = {
         ...params,
@@ -501,7 +501,7 @@ export async function prepareCliRunContext(
           native: [],
           // Preserve the prior normalized fallback for modes without a catalog;
           // catalog-backed paths replace it with exact names below.
-          openClaw: fallbackOpenClawTools,
+          Natesclaw: fallbackNatesclawTools,
         },
       };
     }
@@ -513,7 +513,7 @@ export async function prepareCliRunContext(
     params = {
       ...params,
       toolsAllow: undefined,
-      cliToolAvailability: { native: [], openClaw: [] },
+      cliToolAvailability: { native: [], Natesclaw: [] },
     };
   }
   const internalParams = params as RunCliAgentPrepareParams;
@@ -529,7 +529,7 @@ export async function prepareCliRunContext(
       ...params,
       cliToolAvailability: {
         native: params.cliToolAvailability.native,
-        openClaw: [],
+        Natesclaw: [],
       },
     };
   }
@@ -537,7 +537,7 @@ export async function prepareCliRunContext(
     // Cron persists this verbatim and failure alerts truncate at 200 characters,
     // so keep the upgrade recovery and fail-closed outcome compact.
     throw new Error(
-      `CLI backend "${backendResolved.id}" cannot enforce this run's tool cap. Upgrade its plugin and retry; if current, ask its maintainer to add exact-cap support. OpenClaw did not start the run.`,
+      `CLI backend "${backendResolved.id}" cannot enforce this run's tool cap. Upgrade its plugin and retry; if current, ask its maintainer to add exact-cap support. Natesclaw did not start the run.`,
     );
   }
   const sideQuestionDisablesNativeTools =
@@ -745,16 +745,16 @@ export async function prepareCliRunContext(
     params.provider;
   const normalizedModel = normalizeCliModel(modelId, backendResolved.config);
   const modelDisplay = `${params.provider}/${modelId}`;
-  let openClawHistoryMessages: unknown[] | undefined;
-  const loadOpenClawHistoryMessages = async () => {
-    openClawHistoryMessages ??= await loadCliSessionHistoryMessages({
+  let NatesclawHistoryMessages: unknown[] | undefined;
+  const loadNatesclawHistoryMessages = async () => {
+    NatesclawHistoryMessages ??= await loadCliSessionHistoryMessages({
       sessionId: params.sessionId,
       sessionFile: params.sessionFile,
       sessionKey: params.sessionKey,
       agentId: params.agentId,
       config: params.config,
     });
-    return openClawHistoryMessages;
+    return NatesclawHistoryMessages;
   };
   const promptBuildHookResult = await (async () => {
     if (isSideQuestion) {
@@ -765,7 +765,7 @@ export async function prepareCliRunContext(
       return await resolvePromptBuildHookResult({
         config: params.config ?? getRuntimeConfig(),
         prompt: params.prompt,
-        messages: await loadOpenClawHistoryMessages(),
+        messages: await loadNatesclawHistoryMessages(),
         hookCtx: {
           runId: params.runId,
           agentId: sessionAgentId,
@@ -874,7 +874,7 @@ export async function prepareCliRunContext(
         }),
       });
   // Mirror the embedded runner's bootstrap routing for backends that transport
-  // OpenClaw's system prompt. Only a declared native-tool backend can complete
+  // Natesclaw's system prompt. Only a declared native-tool backend can complete
   // the file-based ritual; other backends receive limited guidance.
   const canonicalWorkspace = resolveUserPath(
     resolveAgentWorkspaceDir(params.config ?? {}, workspaceResolution.agentId),
@@ -924,9 +924,9 @@ export async function prepareCliRunContext(
     seenSignatures: params.bootstrapPromptWarningSignaturesSeen,
     previousSignature: params.bootstrapPromptWarningSignature,
   });
-  // Ring-zero OpenClaw runs replace the bundle MCP surface entirely: no
+  // Ring-zero Natesclaw runs replace the bundle MCP surface entirely: no
   // loopback server, no plugin/user servers. A selectable backend also removes
-  // its native tools, leaving only this openclaw stdio server.
+  // its native tools, leaving only this natesclaw stdio server.
   const systemAgentMcpConfig = internalParams.systemAgentTool
     ? buildSystemAgentToolsMcpServerConfig(internalParams.systemAgentTool)
     : undefined;
@@ -942,7 +942,7 @@ export async function prepareCliRunContext(
       await prepareDeps.ensureMcpLoopbackServer();
     } catch (error) {
       throw new Error(
-        `Bundled MCP is enabled, but the OpenClaw MCP loopback server failed to start: ${String(error)}`,
+        `Bundled MCP is enabled, but the Natesclaw MCP loopback server failed to start: ${String(error)}`,
         { cause: error },
       );
     }
@@ -950,7 +950,7 @@ export async function prepareCliRunContext(
   }
   if (bundleMcpEnabled && !mcpLoopbackRuntime) {
     throw new Error(
-      "Bundled MCP is enabled, but the OpenClaw MCP loopback server did not publish a runtime after startup.",
+      "Bundled MCP is enabled, but the Natesclaw MCP loopback server did not publish a runtime after startup.",
     );
   }
   const mcpDeliveryCaptureEnabled = bundleMcpEnabled && Boolean(mcpLoopbackRuntime);
@@ -982,7 +982,7 @@ export async function prepareCliRunContext(
       }
     : undefined;
   const requestedLoopbackToolsAllow =
-    runtimeToolsAllowPolicy ?? params.cliToolAvailability?.openClaw;
+    runtimeToolsAllowPolicy ?? params.cliToolAvailability?.Natesclaw;
   const mcpProjectionContext =
     mcpContextBase && requestedLoopbackToolsAllow !== undefined
       ? { ...mcpContextBase, toolsAllow: [...requestedLoopbackToolsAllow] }
@@ -1010,7 +1010,7 @@ export async function prepareCliRunContext(
       (backendResolved.nativeToolMode === "selectable" && !canEnforceExactToolAvailability))
   ) {
     throw new Error(
-      `CLI backend "${backendResolved.id}" cannot enforce before_prompt_build tool restrictions. Use a backend with exact tool availability or remove the hook restriction. OpenClaw did not start the run.`,
+      `CLI backend "${backendResolved.id}" cannot enforce before_prompt_build tool restrictions. Use a backend with exact tool availability or remove the hook restriction. Natesclaw did not start the run.`,
     );
   }
   if (promptBuildRestrictsTools && params.cliToolAvailability === undefined) {
@@ -1019,7 +1019,7 @@ export async function prepareCliRunContext(
         ...params,
         cliToolAvailability: {
           native: [],
-          openClaw: hookFilteredProjectedTools.map((tool) => tool.name),
+          Natesclaw: hookFilteredProjectedTools.map((tool) => tool.name),
         },
       };
     }
@@ -1029,7 +1029,7 @@ export async function prepareCliRunContext(
       ...params,
       cliToolAvailability: {
         native: [],
-        openClaw: hookFilteredProjectedTools.map((tool) => tool.name),
+        Natesclaw: hookFilteredProjectedTools.map((tool) => tool.name),
       },
     };
   }
@@ -1043,14 +1043,14 @@ export async function prepareCliRunContext(
       ...params,
       cliToolAvailability: {
         native: filterToolNames(params.cliToolAvailability.native),
-        openClaw: filterToolNames(params.cliToolAvailability.openClaw),
+        Natesclaw: filterToolNames(params.cliToolAvailability.Natesclaw),
       },
     };
   }
   const projectedTools = params.cliToolAvailability
     ? applyEmbeddedAttemptToolsAllow(
         hookFilteredProjectedTools,
-        params.cliToolAvailability.openClaw,
+        params.cliToolAvailability.Natesclaw,
       )
     : hookFilteredProjectedTools;
   const promptTools = bundleMcpEnabled ? projectedTools : [];
@@ -1068,7 +1068,7 @@ export async function prepareCliRunContext(
   // The loopback server (scoped by the grant allowlist) becomes the complete
   // tool universe for the run.
   const restrictedLoopbackToolsAllow =
-    params.cliToolAvailability?.openClaw ??
+    params.cliToolAvailability?.Natesclaw ??
     (promptBuildRestrictsTools ? projectedTools.map((tool) => tool.name) : undefined);
   const mcpGrantContext =
     mcpContextBase && restrictedLoopbackToolsAllow !== undefined
@@ -1079,7 +1079,7 @@ export async function prepareCliRunContext(
         JSON.stringify([
           baseExtraSystemPromptHash ?? null,
           params.cliToolAvailability.native.toSorted(),
-          params.cliToolAvailability.openClaw.toSorted(),
+          params.cliToolAvailability.Natesclaw.toSorted(),
         ]),
       )
     : baseExtraSystemPromptHash;
@@ -1171,8 +1171,8 @@ export async function prepareCliRunContext(
       env:
         mcpLoopbackRuntime && mcpClientGrant
           ? {
-              OPENCLAW_MCP_TOKEN: mcpClientGrant.token,
-              OPENCLAW_MCP_CLI_CAPTURE_KEY: "",
+              NATESCLAW_MCP_TOKEN: mcpClientGrant.token,
+              NATESCLAW_MCP_CLI_CAPTURE_KEY: "",
             }
           : undefined,
       warn: (message) => cliBackendLog.warn(message),
@@ -1443,9 +1443,9 @@ export async function prepareCliRunContext(
           agentId: sessionAgentId,
           defaultAgentId,
         });
-    const openClawReferences = isSideQuestion
+    const NatesclawReferences = isSideQuestion
       ? { docsPath: null, sourcePath: null }
-      : await prepareDeps.resolveOpenClawReferencePaths({
+      : await prepareDeps.resolveNatesclawReferencePaths({
           workspaceDir,
           argv1: process.argv[1],
           cwd,
@@ -1487,8 +1487,8 @@ export async function prepareCliRunContext(
           runtimeCapabilities,
           ownerNumbers: params.ownerNumbers,
           heartbeatPrompt,
-          docsPath: openClawReferences.docsPath ?? undefined,
-          sourcePath: openClawReferences.sourcePath ?? undefined,
+          docsPath: NatesclawReferences.docsPath ?? undefined,
+          sourcePath: NatesclawReferences.sourcePath ?? undefined,
           skillsPrompt: systemPromptSkillsPrompt,
           tools: promptTools,
           contextFiles,
@@ -1581,11 +1581,11 @@ export async function prepareCliRunContext(
       backendResolved.config.reseedFromRawTranscriptWhenUncompacted === true;
     const rawTranscriptReseedReason = reusableCliSessionId ? "session-expired" : invalidatedReason;
     // Node placement keeps this: the history prompt is built from the
-    // gateway-side OpenClaw transcript, so a fresh remote CLI session still
+    // gateway-side Natesclaw transcript, so a fresh remote CLI session still
     // receives prior conversation context via stdin.
-    const shouldPrepareOpenClawHistoryPrompt =
+    const shouldPrepareNatesclawHistoryPrompt =
       !isSideQuestion && (!reusableCliSessionId || allowRawTranscriptReseed);
-    const openClawHistoryPrompt = shouldPrepareOpenClawHistoryPrompt
+    const NatesclawHistoryPrompt = shouldPrepareNatesclawHistoryPrompt
       ? buildCliSessionHistoryPrompt({
           messages: await loadCliSessionReseedMessages({
             sessionId: params.sessionId,
@@ -1774,7 +1774,7 @@ export async function prepareCliRunContext(
       systemPromptReport,
       claudeSkillsPluginArgs: claudeSkillsPlugin.args,
       bootstrapPromptWarningLines: bootstrapPromptWarning.lines,
-      ...(openClawHistoryPrompt ? { openClawHistoryPrompt } : {}),
+      ...(NatesclawHistoryPrompt ? { NatesclawHistoryPrompt } : {}),
       heartbeatPrompt,
       authEpoch,
       authBindingFingerprint,

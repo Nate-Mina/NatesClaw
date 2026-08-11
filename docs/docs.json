@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "OpenClaw",
+  "name": "Natesclaw",
   "description": "Self-hosted gateway that connects Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more to AI coding agents. Run one Gateway process on your own machine and message your AI assistant from anywhere.",
   "theme": "mint",
   "icons": {
@@ -36,12 +36,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/openclaw/openclaw",
+        "href": "https://github.com/natesclaw/natesclaw",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/openclaw/openclaw/releases",
+        "href": "https://github.com/natesclaw/natesclaw/releases",
         "icon": "package"
       },
       {
@@ -58,7 +58,7 @@
     },
     {
       "source": "/cli/crestodian",
-      "destination": "/cli/openclaw"
+      "destination": "/cli/natesclaw"
     },
     {
       "source": "/channels/bluebubbles",
@@ -81,11 +81,11 @@
       "destination": "/plugins/reference/fish-audio-speech"
     },
     {
-      "source": "/concepts/openclaw-sdk",
+      "source": "/concepts/natesclaw-sdk",
       "destination": "/gateway/external-apps"
     },
     {
-      "source": "/reference/openclaw-sdk-api-design",
+      "source": "/reference/natesclaw-sdk-api-design",
       "destination": "/gateway/external-apps"
     },
     {
@@ -122,7 +122,7 @@
     },
     {
       "source": "/pi-dev",
-      "destination": "/openclaw-agent-runtime"
+      "destination": "/natesclaw-agent-runtime"
     },
     {
       "source": "/providers/modelstudio",
@@ -357,7 +357,7 @@
       "destination": "/channels/zalo"
     },
     {
-      "source": "/channels/openclaw-zaloclawbot",
+      "source": "/channels/natesclaw-zaloclawbot",
       "destination": "/channels/zaloclawbot"
     },
     {
@@ -454,15 +454,15 @@
     },
     {
       "source": "/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/natesclaw"
     },
     {
       "source": "/start/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/natesclaw"
     },
     {
       "source": "/start/clawd/",
-      "destination": "/start/openclaw"
+      "destination": "/start/natesclaw"
     },
     {
       "source": "/start/pairing",
@@ -561,7 +561,7 @@
       "destination": "/channels/telegram"
     },
     {
-      "source": "/channels/openclaw-weixin",
+      "source": "/channels/natesclaw-weixin",
       "destination": "/channels/wechat"
     },
     {
@@ -1065,7 +1065,7 @@
               {
                 "group": "Guides",
                 "pages": [
-                  "start/openclaw",
+                  "start/natesclaw",
                   "start/wizard-cli-reference",
                   "start/wizard-cli-automation"
                 ]
@@ -1138,7 +1138,7 @@
                 "group": "Advanced setup",
                 "pages": [
                   "start/setup",
-                  "openclaw-agent-runtime"
+                  "natesclaw-agent-runtime"
                 ]
               }
             ]
@@ -1803,7 +1803,7 @@
                     "group": "Gateway and service",
                     "pages": [
                       "cli/backup",
-                      "cli/openclaw",
+                      "cli/natesclaw",
                       "cli/daemon",
                       "cli/doctor",
                       "cli/fleet",
@@ -1975,7 +1975,7 @@
                   "reference/wizard",
                   "reference/token-use",
                   "reference/secretref-credential-surface",
-                  "reference/openclaw-ai",
+                  "reference/natesclaw-ai",
                   "reference/prompt-caching",
                   "reference/api-usage-costs",
                   "reference/transcript-hygiene",

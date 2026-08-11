@@ -34,29 +34,29 @@ describe("groupCatalogSessionsByProject", () => {
 
   it("uses a custom group before the session project", () => {
     const result = groupCatalogSessionsByProject([
-      { ...session("grouped", "/work/openclaw"), customGroup: "Release" },
-      session("project", "/work/openclaw"),
+      { ...session("grouped", "/work/natesclaw"), customGroup: "Release" },
+      session("project", "/work/natesclaw"),
     ]);
 
     expect(result.groups).toMatchObject([
       { key: "custom:Release", label: "Release", sessions: [{ threadId: "grouped" }] },
-      { key: "/work/openclaw", label: "openclaw", sessions: [{ threadId: "project" }] },
+      { key: "/work/natesclaw", label: "natesclaw", sessions: [{ threadId: "project" }] },
     ]);
   });
 
   it("sorts custom groups ahead of project groups regardless of session order", () => {
     const result = groupCatalogSessionsByProject([
-      session("project", "/work/openclaw"),
-      { ...session("grouped", "/work/openclaw"), customGroup: "Release" },
+      session("project", "/work/natesclaw"),
+      { ...session("grouped", "/work/natesclaw"), customGroup: "Release" },
     ]);
 
-    expect(result.groups.map((group) => group.key)).toEqual(["custom:Release", "/work/openclaw"]);
+    expect(result.groups.map((group) => group.key)).toEqual(["custom:Release", "/work/natesclaw"]);
   });
 
   it.each([
-    ["/Users/dev/openclaw/.claude/worktrees/fix-1", "/Users/dev/openclaw"],
-    ["/Users/dev/openclaw/.claude/worktrees/fix-1/ui/src", "/Users/dev/openclaw"],
-    ["C:\\Users\\dev\\openclaw\\.claude\\worktrees\\fix-1", "C:\\Users\\dev\\openclaw"],
+    ["/Users/dev/natesclaw/.claude/worktrees/fix-1", "/Users/dev/natesclaw"],
+    ["/Users/dev/natesclaw/.claude/worktrees/fix-1/ui/src", "/Users/dev/natesclaw"],
+    ["C:\\Users\\dev\\natesclaw\\.claude\\worktrees\\fix-1", "C:\\Users\\dev\\natesclaw"],
   ])("folds worktree cwd %s into %s", (worktreeCwd, expectedProject) => {
     const result = groupCatalogSessionsByProject([
       session("direct", expectedProject),
@@ -79,8 +79,8 @@ describe("groupCatalogSessionsByProject", () => {
   });
 
   it.each([
-    [" /Users/dev/openclaw/// ", "/Users/dev/openclaw", "openclaw"],
-    ["C:\\Users\\dev\\openclaw\\", "C:\\Users\\dev\\openclaw", "openclaw"],
+    [" /Users/dev/natesclaw/// ", "/Users/dev/natesclaw", "natesclaw"],
+    ["C:\\Users\\dev\\natesclaw\\", "C:\\Users\\dev\\natesclaw", "natesclaw"],
   ])("normalizes %s to key %s with label %s", (cwd, expectedKey, expectedLabel) => {
     const result = groupCatalogSessionsByProject([session("one", cwd)]);
 

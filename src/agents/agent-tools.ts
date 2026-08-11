@@ -1,6 +1,6 @@
 /**
- * Builds the effective OpenClaw agent tool surface.
- * Assembles core, shell, channel, OpenClaw, plugin, and Tool Search tools, then
+ * Builds the effective Natesclaw agent tool surface.
+ * Assembles core, shell, channel, Natesclaw, plugin, and Tool Search tools, then
  * applies sandbox, profile, provider, sender, group, and sub-agent policy.
  */
 import type {
@@ -12,7 +12,7 @@ import { messageToolOwnsVisibleReply } from "../auto-reply/source-reply-delivery
 import type { ChatType } from "../channels/chat-type.js";
 import type { InboundEventKind } from "../channels/inbound-event/kind.js";
 import type { ModelCompatConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { GroupToolPolicyConfig } from "../config/types.tools.js";
 import type { DiagnosticTraceContext } from "../infra/diagnostic-trace-context.js";
 import { resolveEventSessionRoutingPolicy } from "../infra/event-session-routing.js";
@@ -55,7 +55,7 @@ import {
   resolveConversationToolPolicies,
 } from "./conversation-tool-policy-pipeline.js";
 import { createCoreCodingTools } from "./core-coding-tools.js";
-import type { OpenClawCodingToolConstructionPlan } from "./core-tool-factory-descriptors.js";
+import type { NatesclawCodingToolConstructionPlan } from "./core-tool-factory-descriptors.js";
 import { bindActiveCronCreatorAuthorityResolver } from "./cron-creator-authority-context.js";
 import { applyDelegationCapability, type DelegationCapability } from "./delegation-capability.js";
 import { resolveImageSanitizationLimits } from "./image-sanitization.js";
@@ -66,8 +66,8 @@ import {
 } from "./local-model-lean.js";
 import { createMemoryWriteProvenanceObserver } from "./memory-write-provenance.js";
 import type { ModelAuthMode } from "./model-auth.js";
-import { resolveOpenClawPluginToolsForOptions } from "./openclaw-plugin-tools.js";
-import { createOpenClawTools, filterToolsByClientCaps } from "./openclaw-tools.js";
+import { resolveNatesclawPluginToolsForOptions } from "./natesclaw-plugin-tools.js";
+import { createNatesclawTools, filterToolsByClientCaps } from "./natesclaw-tools.js";
 import type { PreparedModelRuntimeSnapshot } from "./prepared-model-runtime.js";
 import type { SandboxContext } from "./sandbox.js";
 import type { ScheduledToolPolicyContext } from "./scheduled-tool-policy.js";
@@ -136,7 +136,7 @@ export function resolveProcessToolScopeKey(params: {
 function applyModelProviderToolPolicy(
   toolsInput: AnyAgentTool[],
   params?: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     modelProvider?: string;
     modelApi?: string;
     modelId?: string;
@@ -179,7 +179,7 @@ function applyModelProviderToolPolicy(
 export { resolveToolLoopDetectionConfig } from "./tool-loop-detection-config.js";
 
 /** Public options for building one plugin-owned agent tool surface. */
-type OpenClawCodingToolsOptions = {
+type NatesclawCodingToolsOptions = {
   agentId?: string;
   exec?: ExecToolDefaults & ProcessToolDefaults;
   messageProvider?: string;
@@ -240,7 +240,7 @@ type OpenClawCodingToolsOptions = {
    * Defaults to workspaceDir when not set.
    */
   spawnWorkspaceDir?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   abortSignal?: AbortSignal;
   /** Disable hook-owned diagnostics when an outer runtime owns tool diagnostics. */
   emitBeforeToolCallDiagnostics?: boolean;
@@ -263,7 +263,7 @@ type OpenClawCodingToolsOptions = {
   modelContextWindowTokens?: number;
   /** Resolved runtime model compatibility hints. */
   modelCompat?: ModelCompatConfig;
-  /** If false, keep OpenClaw web_search even when a provider-native search tool is active. */
+  /** If false, keep Natesclaw web_search even when a provider-native search tool is active. */
   suppressManagedWebSearch?: boolean;
   webSearchEnabled?: boolean;
   /**
@@ -351,8 +351,8 @@ type OpenClawCodingToolsOptions = {
   /** Runtime-local Tool Search catalog ref shared with attempt compaction. */
   toolSearchCatalogRef?: ToolSearchCatalogRef;
   /** Limits which tool families are materialized before the shared policy pipeline runs. */
-  toolConstructionPlan?: OpenClawCodingToolConstructionPlan;
-  /** Ring-zero OpenClaw tool; set only by the OpenClaw agent runner. */
+  toolConstructionPlan?: NatesclawCodingToolConstructionPlan;
+  /** Ring-zero Natesclaw tool; set only by the Natesclaw agent runner. */
   systemAgentTool?: import("./tools/system-agent-tool.js").SystemAgentToolOptions;
   /** Trusted sender identity bit for command/channel-action auth and owner-gated plugin tools. */
   senderIsOwner?: boolean;
@@ -385,7 +385,7 @@ type OpenClawCodingToolsOptions = {
   scheduledToolPolicy?: ScheduledToolPolicyContext;
 };
 
-function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions): AnyAgentTool[] {
+function createNatesclawCodingToolsInternal(options?: NatesclawCodingToolsOptions): AnyAgentTool[] {
   const sandbox = options?.sandbox?.enabled ? options.sandbox : undefined;
   const isMemoryFlushRun = options?.trigger === "memory";
   if (isMemoryFlushRun && !options?.memoryFlushWritePath) {
@@ -541,12 +541,12 @@ function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions)
     includeBaseCodingTools: includeCoreTools,
     includeShellTools: includeCoreTools,
     includeChannelTools: includeCoreTools,
-    includeOpenClawTools: includeCoreTools,
+    includeNatesclawTools: includeCoreTools,
     includePluginTools: true,
   };
   const includeBaseCodingTools = includeCoreTools && toolConstructionPlan.includeBaseCodingTools;
   const includeShellTools = includeCoreTools && toolConstructionPlan.includeShellTools;
-  const includeOpenClawTools = includeCoreTools && toolConstructionPlan.includeOpenClawTools;
+  const includeNatesclawTools = includeCoreTools && toolConstructionPlan.includeNatesclawTools;
   const includeChannelTools = toolConstructionPlan.includeChannelTools;
   const includePluginTools = toolConstructionPlan.includePluginTools;
   const workspaceOnly = fsPolicy.workspaceOnly;
@@ -670,7 +670,7 @@ function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions)
   const cronCreatorToolAllowlistCaptureRef = options?.cronCreatorToolAllowlistCaptureRef;
   const gatewayCallerAccountId =
     options?.scheduledToolPolicy?.ownerAccountId ?? options?.agentAccountId;
-  // Plugin-only plans bypass createOpenClawTools, so the capability gate must
+  // Plugin-only plans bypass createNatesclawTools, so the capability gate must
   // apply here too or narrow allowlists leak gated tools onto capless surfaces.
   const pluginToolCallerIdentity =
     agentId && options?.sessionKey?.trim()
@@ -687,9 +687,9 @@ function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions)
         }
       : undefined;
   const pluginToolsOnly = filterToolsByClientCaps(
-    includeOpenClawTools || !includePluginTools
+    includeNatesclawTools || !includePluginTools
       ? []
-      : resolveOpenClawPluginToolsForOptions({
+      : resolveNatesclawPluginToolsForOptions({
           options: {
             agentSessionKey: options?.sessionKey,
             agentChannel: resolveGatewayMessageChannel(
@@ -733,7 +733,7 @@ function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions)
         }),
     options?.clientCaps,
   ).map((tool) => wrapToolWithGatewayCallerIdentity(tool, pluginToolCallerIdentity));
-  const ringZeroTools = includeOpenClawTools ? getActiveAgentRingZeroTools() : [];
+  const ringZeroTools = includeNatesclawTools ? getActiveAgentRingZeroTools() : [];
   const toolSearchTools =
     toolSearchControlsEnabled && ringZeroTools.length === 0
       ? createToolSearchTools({
@@ -752,10 +752,10 @@ function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions)
     ...coreTools,
     // Channel docking: include channel-defined agent tools (login, etc.).
     ...(includeChannelTools ? listChannelAgentTools({ cfg: options?.config }) : []),
-    ...(includeOpenClawTools
+    ...(includeNatesclawTools
       ? mergeAgentRingZeroTools(
           ringZeroTools,
-          createOpenClawTools({
+          createNatesclawTools({
             ...(options?.systemAgentTool ? { systemAgentTool: options.systemAgentTool } : {}),
             sandboxBrowserBridgeUrl: sandbox?.browser?.bridgeUrl,
             allowHostBrowserControl: sandbox ? sandbox.browserAllowHostControl : true,
@@ -842,7 +842,7 @@ function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions)
       : pluginToolsOnly),
     ...toolSearchTools,
   ];
-  options?.recordToolPrepStage?.("openclaw-tools");
+  options?.recordToolPrepStage?.("natesclaw-tools");
   const swarmStructuredOutputTool =
     options?.swarmCollector && options.swarmOutputSchema
       ? tools.find((tool) => tool.name === "structured_output")
@@ -999,7 +999,7 @@ function createOpenClawCodingToolsInternal(options?: OpenClawCodingToolsOptions)
 }
 
 /** Build the runtime tool list exposed through the public agent harness SDK. */
-export function createOpenClawCodingTools(options?: OpenClawCodingToolsOptions): AnyAgentTool[] {
-  return createOpenClawCodingToolsInternal(options);
+export function createNatesclawCodingTools(options?: NatesclawCodingToolsOptions): AnyAgentTool[] {
+  return createNatesclawCodingToolsInternal(options);
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

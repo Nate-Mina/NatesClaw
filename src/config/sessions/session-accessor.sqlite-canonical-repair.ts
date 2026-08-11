@@ -1,15 +1,15 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import type { Selectable } from "kysely";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
 } from "../../infra/kysely-sync.js";
-import { withOpenClawAgentDatabaseReadOnly } from "../../state/openclaw-agent-db-readonly.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
+import { withNatesclawAgentDatabaseReadOnly } from "../../state/natesclaw-agent-db-readonly.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
 import {
-  openOpenClawAgentDatabase,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  openNatesclawAgentDatabase,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import { normalizeSessionDeliveryState } from "../../utils/delivery-context.shared.js";
 import type { SessionEntrySummary } from "./session-accessor.sqlite-contract.js";
 import { publishSessionEntryCacheInvalidation } from "./session-accessor.sqlite-entry-cache.js";
@@ -55,7 +55,7 @@ function resolveSqliteCanonicalRepairLookupKeys(
 
 /** Doctor probes only the exact staged target and may replace a malformed partial row. */
 export function readExactSessionEntryRowForCanonicalRepair(
-  database: Pick<OpenClawAgentDatabase, "db">,
+  database: Pick<NatesclawAgentDatabase, "db">,
   sessionKey: string,
   options: { allowMalformedRowRepair?: boolean } = {},
 ) {
@@ -98,7 +98,7 @@ export function readExactSessionEntryRowForCanonicalRepair(
 /** Doctor-only cross-store copy; the source node remains until lifecycle archival succeeds. */
 export function copySqliteSessionOwnedStateForCanonicalRepair(params: {
   canonicalKey: string;
-  destinationDatabase: OpenClawAgentDatabase;
+  destinationDatabase: NatesclawAgentDatabase;
   preferredEntry?: SessionEntry;
   preferredSessionKey?: string;
   source: { agentId: string; storePath: string };
@@ -108,7 +108,7 @@ export function copySqliteSessionOwnedStateForCanonicalRepair(params: {
   const source = resolveSqliteStoreScope(params.source.storePath, {
     agentId: params.source.agentId,
   });
-  const sourceDatabase = openOpenClawAgentDatabase(toDatabaseOptions(source));
+  const sourceDatabase = openNatesclawAgentDatabase(toDatabaseOptions(source));
   copySqliteSessionOwnedStateForRepair({
     canonicalKey: params.canonicalKey,
     destination: params.destinationDatabase,
@@ -128,7 +128,7 @@ export function listSqliteSessionGenerationIdsForCanonicalRepair(params: {
   storePath: string;
 }): string[] {
   const source = resolveSqliteStoreScope(params.storePath, { agentId: params.agentId });
-  const database = openOpenClawAgentDatabase(toDatabaseOptions(source));
+  const database = openNatesclawAgentDatabase(toDatabaseOptions(source));
   return readSessionGenerationIdsForKeys(database, uniqueStrings(params.sourceKeys), {
     exactStoredKeys: true,
   });
@@ -136,7 +136,7 @@ export function listSqliteSessionGenerationIdsForCanonicalRepair(params: {
 
 /** Doctor-only same-store rewrite for delivery attribution owned by removed aliases. */
 export function rehomeSqliteSessionDeliveryReferencesForCanonicalRepair(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   canonicalKey: string,
   previousKeys: readonly string[],
 ): void {
@@ -147,7 +147,7 @@ export function rehomeSqliteSessionDeliveryReferencesForCanonicalRepair(
 
 /** Doctor-only batched delivery rewrite with one session identity inventory per database. */
 export function rehomeSqliteSessionDeliveryReferencesForCanonicalRepairBatch(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   repairs: readonly { canonicalKey: string; previousKeys: readonly string[] }[],
 ): void {
   if (repairs.length === 0) {
@@ -200,7 +200,7 @@ export function rehomeSqliteSessionDeliveryReferencesForCanonicalRepairBatch(
   }
 }
 
-type CanonicalRepairRow = Selectable<OpenClawAgentKyselyDatabase["session_nodes"]> & {
+type CanonicalRepairRow = Selectable<NatesclawAgentKyselyDatabase["session_nodes"]> & {
   current_agent_harness_id: string | null;
   current_chat_type: string | null;
   current_ended_at: number | null;
@@ -292,7 +292,7 @@ export function listSqliteSessionEntriesForCanonicalRepair(
 ): Array<SessionEntrySummary & { rawEntryJson?: string }> {
   const resolved = resolveSqliteScope({ ...scope, sessionKey: "" });
   const databaseOptions = toDatabaseOptions(resolved);
-  const result = withOpenClawAgentDatabaseReadOnly((database) => {
+  const result = withNatesclawAgentDatabaseReadOnly((database) => {
     const db = getSessionKysely(database.db);
     return executeSqliteQuerySync(
       database.db,
@@ -354,10 +354,10 @@ export function listSqliteSessionEntriesForCanonicalRepair(
 
 function copySqliteSessionOwnedStateForRepair(params: {
   canonicalKey: string;
-  destination: OpenClawAgentDatabase;
+  destination: NatesclawAgentDatabase;
   preferredEntry?: SessionEntry;
   preferredSessionKey?: string;
-  source: OpenClawAgentDatabase;
+  source: NatesclawAgentDatabase;
   sourceEntries: readonly SessionEntry[];
   sourceKeys: readonly string[];
 }): void {
@@ -601,9 +601,9 @@ function copySqliteSessionOwnedStateForRepair(params: {
 }
 
 function copySqliteSessionGenerationRows(params: {
-  destination: OpenClawAgentDatabase;
+  destination: NatesclawAgentDatabase;
   sessionId: string;
-  source: OpenClawAgentDatabase;
+  source: NatesclawAgentDatabase;
   sourceWindowPresent: boolean;
 }): boolean {
   const sourceDb = getSessionKysely(params.source.db);

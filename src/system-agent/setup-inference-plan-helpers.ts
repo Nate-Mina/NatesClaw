@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { listAgentEntries, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { loadAuthProfileStoreForRuntime } from "../agents/auth-profiles/store.js";
 import { resolveCliBackendConfig } from "../agents/cli-backends.js";
@@ -14,7 +14,7 @@ import {
 import { resolveProviderIdForAuth } from "../agents/provider-auth-aliases.js";
 import { buildAgentRuntimeAuthPlan } from "../agents/runtime-plan/auth.js";
 import { GEMINI_CLI_DEFAULT_MODEL_REF } from "../commands/onboard-inference.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ProviderAuthResult } from "../plugins/types.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import {
@@ -30,10 +30,10 @@ export type SetupInferenceTestPlan = {
   model: string;
   modelRef: string;
   /** Authored/staged config used for route, auth, and persistence decisions. */
-  config: OpenClawConfig;
-  /** Execution-only projection that admits the reserved OpenClaw agent. */
-  executionConfig?: OpenClawConfig;
-  /** Execution identity used by the real OpenClaw turn. */
+  config: NatesclawConfig;
+  /** Execution-only projection that admits the reserved Natesclaw agent. */
+  executionConfig?: NatesclawConfig;
+  /** Execution identity used by the real Natesclaw turn. */
   agentId?: string;
   /** Default-agent owner whose model/runtime config is being selected. */
   routeAgentId?: string;
@@ -45,14 +45,14 @@ export type SetupInferenceTestPlan = {
   persistModelRef?: string;
   manualAuth?: {
     profiles: ProviderAuthResult["profiles"];
-    runtimeConfigBase: OpenClawConfig;
-    sourceConfigBase: OpenClawConfig;
+    runtimeConfigBase: NatesclawConfig;
+    sourceConfigBase: NatesclawConfig;
     configPatch: unknown;
     pluginId?: string;
   };
 };
 
-export function configureCodexCliPreparedAuth(cfg: OpenClawConfig): OpenClawConfig {
+export function configureCodexCliPreparedAuth(cfg: NatesclawConfig): NatesclawConfig {
   const entry = cfg.plugins?.entries?.codex;
   const pluginConfig = entry?.config ?? {};
   const appServer =
@@ -230,7 +230,7 @@ export function parseRef(modelRef: string): { provider: string; model: string } 
     : { provider: modelRef.slice(0, slash), model: modelRef.slice(slash + 1) };
 }
 
-export function projectSetupTargetModelMetadata(config: OpenClawConfig, modelRef: string): unknown {
+export function projectSetupTargetModelMetadata(config: NatesclawConfig, modelRef: string): unknown {
   const target = parseRef(modelRef);
   const canonicalKey = modelKey(target.provider, target.model);
   const keys = new Set(
@@ -273,7 +273,7 @@ export function resolveSetupAgentRuntimeId(
     kind === "provider-auth" ||
     parseProviderAutoSetupChoiceId(kind) !== undefined
   ) {
-    return "openclaw";
+    return "natesclaw";
   }
   return undefined;
 }
@@ -306,15 +306,15 @@ export function mapFailoverReasonToSetupStatus(
 }
 
 export function prepareManualAuthForActivation(params: {
-  baseConfig: OpenClawConfig;
-  preparedConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
+  preparedConfig: NatesclawConfig;
   profiles: ProviderAuthResult["profiles"];
   selectedProfileId: string;
   modelRef: string;
   providerId: string;
   pluginId?: string;
 }): {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   profiles: ProviderAuthResult["profiles"];
   selectedProfileId: string;
 } {
@@ -340,8 +340,8 @@ export function prepareManualAuthForActivation(params: {
 }
 
 function copySelectedModelMetadata(params: {
-  target: OpenClawConfig;
-  prepared: OpenClawConfig;
+  target: NatesclawConfig;
+  prepared: NatesclawConfig;
   modelRef: string;
 }): void {
   const preparedDefaultModels = params.prepared.agents?.defaults?.models;
@@ -388,7 +388,7 @@ function copySelectedModelMetadata(params: {
 }
 
 function findSelectedProviderConfigKey(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   providerId: string,
 ): string | undefined {
   const providers = config.models?.providers;
@@ -406,18 +406,18 @@ function findSelectedProviderConfigKey(
 
 /**
  * Provider auth hooks are untrusted setup input. Carry only the selected
- * inference route's config into the probe; OpenClaw owns every other setup
+ * inference route's config into the probe; Natesclaw owns every other setup
  * surface after intelligence exists.
  */
 export function projectManualInferenceConfig(params: {
-  baseConfig: OpenClawConfig;
-  preparedConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
+  preparedConfig: NatesclawConfig;
   selectedProfile?: ProviderAuthResult["profiles"][number];
   selectedProfileId?: string;
   modelRef: string;
   providerId: string;
   pluginId?: string;
-}): OpenClawConfig {
+}): NatesclawConfig {
   const config = structuredClone(params.baseConfig);
   if (params.selectedProfile && params.selectedProfileId) {
     const metadata = params.preparedConfig.auth?.profiles?.[params.selectedProfile.profileId] ?? {
@@ -469,7 +469,7 @@ export function projectManualInferenceConfig(params: {
 }
 
 export function canonicalizeSetupModelRef(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   raw: string;
   defaultProvider: string;
 }): string {

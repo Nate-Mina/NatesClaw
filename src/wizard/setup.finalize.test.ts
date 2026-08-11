@@ -1,10 +1,10 @@
 // Setup finalize tests cover writing final onboarding config and artifacts.
 import fs from "node:fs/promises";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createWizardPrompter as buildWizardPrompter } from "../../test/helpers/wizard-prompter.js";
 import type * as AuthChoiceModelCheck from "../commands/auth-choice.model-check.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import type { GatewayTlsConfig } from "../config/types.gateway.js";
 import type { PluginWebSearchProviderEntry } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
@@ -24,7 +24,7 @@ const waitForGatewayReachable = vi.hoisted(() =>
   vi.fn<() => Promise<{ ok: boolean; detail?: string }>>(async () => ({ ok: true })),
 );
 const resolveControlUiHandoffTarget = vi.hoisted(() =>
-  vi.fn(async (params: { config: OpenClawConfig }) => ({
+  vi.fn(async (params: { config: NatesclawConfig }) => ({
     documentUrl: "http://127.0.0.1:18789/",
     tlsConfig: params.config.gateway?.tls,
   })),
@@ -101,16 +101,16 @@ const resolveSetupSecretInputString = vi.hoisted(() =>
   vi.fn<() => Promise<string | undefined>>(async () => undefined),
 );
 const resolveExistingKey = vi.hoisted(() =>
-  vi.fn<(config: OpenClawConfig, provider: string) => string | undefined>(() => undefined),
+  vi.fn<(config: NatesclawConfig, provider: string) => string | undefined>(() => undefined),
 );
 const hasExistingKey = vi.hoisted(() =>
-  vi.fn<(config: OpenClawConfig, provider: string) => boolean>(() => false),
+  vi.fn<(config: NatesclawConfig, provider: string) => boolean>(() => false),
 );
 const hasKeyInEnv = vi.hoisted(() =>
   vi.fn<(entry: Pick<PluginWebSearchProviderEntry, "envVars">) => boolean>(() => false),
 );
 const listConfiguredWebSearchProviders = vi.hoisted(() =>
-  vi.fn<(params?: { config?: OpenClawConfig }) => PluginWebSearchProviderEntry[]>(() => []),
+  vi.fn<(params?: { config?: NatesclawConfig }) => PluginWebSearchProviderEntry[]>(() => []),
 );
 const hasAuthProfileForProvider = vi.hoisted(() =>
   vi.fn<
@@ -168,7 +168,7 @@ vi.mock("../infra/windows-gateway-firewall-diagnostics.js", () => ({
   formatWindowsGatewayFirewallGuidance: (params: { bind?: string }) =>
     params.bind === "lan"
       ? [
-          "Windows firewall: if another device cannot connect to the LAN URL, run `openclaw gateway status --deep` from this Windows host.",
+          "Windows firewall: if another device cannot connect to the LAN URL, run `natesclaw gateway status --deep` from this Windows host.",
         ]
       : [],
 }));
@@ -328,7 +328,7 @@ function expectFirstOnboardingInstallPlanCallOmitsToken() {
 }
 
 type AdvancedFinalizeArgs = {
-  nextConfig?: OpenClawConfig;
+  nextConfig?: NatesclawConfig;
   prompter?: ReturnType<typeof buildWizardPrompter>;
   runtime?: RuntimeEnv;
   installDaemon?: boolean;
@@ -336,7 +336,7 @@ type AdvancedFinalizeArgs = {
 
 function createModelAuthFinalizeArgs(params: {
   prompter: ReturnType<typeof buildWizardPrompter>;
-  nextConfig?: OpenClawConfig;
+  nextConfig?: NatesclawConfig;
 }) {
   return {
     flow: "quickstart" as const,
@@ -370,7 +370,7 @@ function createLaterPrompter() {
   });
 }
 
-function createEnabledFirecrawlSearchConfig(): OpenClawConfig {
+function createEnabledFirecrawlSearchConfig(): NatesclawConfig {
   return {
     tools: {
       web: {
@@ -536,8 +536,8 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("resolves gateway password SecretRef for probe but omits auth from TUI hatch", async () => {
-    const previous = process.env.OPENCLAW_GATEWAY_PASSWORD;
-    process.env.OPENCLAW_GATEWAY_PASSWORD = "resolved-gateway-password"; // pragma: allowlist secret
+    const previous = process.env.NATESCLAW_GATEWAY_PASSWORD;
+    process.env.NATESCLAW_GATEWAY_PASSWORD = "resolved-gateway-password"; // pragma: allowlist secret
     resolveSetupSecretInputString.mockResolvedValueOnce("resolved-gateway-password");
     const select = vi.fn(async (params: { message: string }) => {
       if (params.message === "How do you want to hatch your agent?") {
@@ -569,7 +569,7 @@ describe("finalizeSetupWizard", () => {
               password: {
                 source: "env",
                 provider: "default",
-                id: "OPENCLAW_GATEWAY_PASSWORD",
+                id: "NATESCLAW_GATEWAY_PASSWORD",
               },
             },
           },
@@ -588,9 +588,9 @@ describe("finalizeSetupWizard", () => {
       });
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+        delete process.env.NATESCLAW_GATEWAY_PASSWORD;
       } else {
-        process.env.OPENCLAW_GATEWAY_PASSWORD = previous;
+        process.env.NATESCLAW_GATEWAY_PASSWORD = previous;
       }
     }
 
@@ -656,7 +656,7 @@ describe("finalizeSetupWizard", () => {
     expectNoteNotContains(prompter, "Web UI:");
     expectNoteNotContains(prompter, gatewayToken);
     expect(prompter.outro).toHaveBeenCalledWith(
-      "OpenClaw is ready. When you're ready: openclaw dashboard",
+      "Natesclaw is ready. When you're ready: natesclaw dashboard",
     );
     expect(runTui).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -702,7 +702,7 @@ describe("finalizeSetupWizard", () => {
       expectNoteNotContains(prompter, gatewayToken);
     }
     if (!enabled) {
-      expect(prompter.outro).toHaveBeenCalledWith("OpenClaw is ready.");
+      expect(prompter.outro).toHaveBeenCalledWith("Natesclaw is ready.");
     }
   });
 
@@ -713,7 +713,7 @@ describe("finalizeSetupWizard", () => {
       documentUrl: "https://127.0.0.1:19876/dashboard/",
       tlsConfig,
     });
-    const nextConfig: OpenClawConfig = {
+    const nextConfig: NatesclawConfig = {
       gateway: {
         port: 18789,
         bind: "loopback",
@@ -744,7 +744,7 @@ describe("finalizeSetupWizard", () => {
             tls: tlsConfig,
           }),
         }),
-        env: expect.objectContaining({ OPENCLAW_GATEWAY_PORT: "19876" }),
+        env: expect.objectContaining({ NATESCLAW_GATEWAY_PORT: "19876" }),
       }),
     );
     expect(waitForControlUiDocument).toHaveBeenCalledWith(
@@ -901,7 +901,7 @@ describe("finalizeSetupWizard", () => {
         defaults: { model: "openai/gpt-5.4-nano" },
         list: [{ id: "main", agentDir: "/tmp/custom-agent" }],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     await finalizeSetupWizard(createModelAuthFinalizeArgs({ prompter, nextConfig }));
 
@@ -971,7 +971,7 @@ describe("finalizeSetupWizard", () => {
     expect(runTui).toHaveBeenCalledWith(expect.objectContaining({ message: undefined }));
     expectNoteTitleNotCalled(prompter, "Model auth missing");
     expectNoteNotContains(prompter, "No credentials are configured");
-    expectNoteNotContains(prompter, "openclaw configure --section model");
+    expectNoteNotContains(prompter, "natesclaw configure --section model");
   });
 
   it("hatches without a seed and omits setup advice for an incompatible model route", async () => {
@@ -993,7 +993,7 @@ describe("finalizeSetupWizard", () => {
     expect(runTui).toHaveBeenCalledWith(expect.objectContaining({ message: undefined }));
     expectNoteTitleNotCalled(prompter, "Model auth missing");
     expectNoteNotContains(prompter, "No credentials are configured");
-    expectNoteNotContains(prompter, "openclaw configure --section model");
+    expectNoteNotContains(prompter, "natesclaw configure --section model");
   });
 
   it("does not resend the bootstrap hatch message on setup reruns", async () => {
@@ -1037,8 +1037,8 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("localizes the bootstrap hatch TUI seed message", async () => {
-    const previousLocale = process.env.OPENCLAW_LOCALE;
-    process.env.OPENCLAW_LOCALE = "zh-CN";
+    const previousLocale = process.env.NATESCLAW_LOCALE;
+    process.env.NATESCLAW_LOCALE = "zh-CN";
     vi.spyOn(fs, "access").mockResolvedValueOnce(undefined);
     const select = vi.fn(async (params: { message: string }) => {
       if (params.message === "你想如何启动 agent？") {
@@ -1085,9 +1085,9 @@ describe("finalizeSetupWizard", () => {
       });
     } finally {
       if (previousLocale === undefined) {
-        delete process.env.OPENCLAW_LOCALE;
+        delete process.env.NATESCLAW_LOCALE;
       } else {
-        process.env.OPENCLAW_LOCALE = previousLocale;
+        process.env.NATESCLAW_LOCALE = previousLocale;
       }
     }
   });
@@ -1121,7 +1121,7 @@ describe("finalizeSetupWizard", () => {
     });
 
     expect(prompter.outro).toHaveBeenCalledWith(
-      "Onboarding complete. Use the dashboard link above to control OpenClaw.",
+      "Onboarding complete. Use the dashboard link above to control Natesclaw.",
     );
     expect(runTui).toHaveBeenCalledOnce();
     expect(vi.mocked(prompter.outro).mock.invocationCallOrder[0]).toBeLessThan(
@@ -1210,7 +1210,7 @@ describe("finalizeSetupWizard", () => {
             token: {
               source: "env",
               provider: "default",
-              id: "OPENCLAW_GATEWAY_TOKEN",
+              id: "NATESCLAW_GATEWAY_TOKEN",
             },
           },
         },
@@ -1306,7 +1306,7 @@ describe("finalizeSetupWizard", () => {
     expectNoteContains(prompter, "service install exploded", "Gateway");
     expectNoteContains(prompter, "Gateway: not detected (service install exploded)", "Control UI");
     expect(prompter.outro).toHaveBeenCalledWith(
-      "Gateway not detected yet. Start now: openclaw gateway run",
+      "Gateway not detected yet. Start now: natesclaw gateway run",
     );
   });
 
@@ -1329,7 +1329,7 @@ describe("finalizeSetupWizard", () => {
 
   it("recognizes external supervision before probing Linux systemd", async () => {
     await withPlatform("linux", async () => {
-      await withEnvAsync({ OPENCLAW_SUPERVISOR_MODE: "external" }, async () => {
+      await withEnvAsync({ NATESCLAW_SUPERVISOR_MODE: "external" }, async () => {
         isSystemdUserServiceAvailable.mockResolvedValue(false);
         isContainerEnvironment.mockReturnValue(true);
         const prompter = createLaterPrompter();
@@ -1351,7 +1351,7 @@ describe("finalizeSetupWizard", () => {
         expect(isContainerEnvironment).not.toHaveBeenCalled();
         expectNoteContains(
           prompter,
-          "OpenClaw gateway lifecycle is managed by an external supervisor",
+          "Natesclaw gateway lifecycle is managed by an external supervisor",
           "Gateway",
         );
         expectNoteNotContains(prompter, "Systemd user services are not available");
@@ -1362,7 +1362,7 @@ describe("finalizeSetupWizard", () => {
 
   it("preserves external supervision through unreachable container recovery", async () => {
     await withPlatform("linux", async () => {
-      await withEnvAsync({ OPENCLAW_SUPERVISOR_MODE: "external" }, async () => {
+      await withEnvAsync({ NATESCLAW_SUPERVISOR_MODE: "external" }, async () => {
         isSystemdUserServiceAvailable.mockResolvedValue(false);
         isContainerEnvironment.mockReturnValue(true);
         waitForGatewayReachable.mockResolvedValue({
@@ -1385,11 +1385,11 @@ describe("finalizeSetupWizard", () => {
         expect(isContainerEnvironment).not.toHaveBeenCalled();
         expect(startGatewayServer).not.toHaveBeenCalled();
         expectNoteContains(prompter, "Use that supervisor to start the gateway.", "Gateway");
-        expectNoteNotContains(prompter, "openclaw gateway run");
-        expectNoteNotContains(prompter, "openclaw onboard --install-daemon");
+        expectNoteNotContains(prompter, "natesclaw gateway run");
+        expectNoteNotContains(prompter, "natesclaw onboard --install-daemon");
         expect(prompter.outro).toHaveBeenCalledWith(
-          "Gateway not detected yet. OpenClaw gateway lifecycle is managed by an external " +
-            "supervisor (OPENCLAW_SUPERVISOR_MODE=external). Use that supervisor to start the " +
+          "Gateway not detected yet. Natesclaw gateway lifecycle is managed by an external " +
+            "supervisor (NATESCLAW_SUPERVISOR_MODE=external). Use that supervisor to start the " +
             "gateway.",
         );
       });
@@ -1433,7 +1433,7 @@ describe("finalizeSetupWizard", () => {
         loaded: true,
         running: true,
         env: process.env,
-        command: { programArguments: ["openclaw", "gateway"] },
+        command: { programArguments: ["natesclaw", "gateway"] },
       },
       issues: [],
     });
@@ -1460,7 +1460,7 @@ describe("finalizeSetupWizard", () => {
       loaded: true,
       running: false,
       env: process.env,
-      command: { programArguments: ["openclaw", "gateway"] },
+      command: { programArguments: ["natesclaw", "gateway"] },
     };
     startGatewayService.mockResolvedValueOnce({
       outcome: "started",
@@ -1601,17 +1601,17 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("localizes finalize non-prompt notes", async () => {
-    const previousLocale = process.env.OPENCLAW_LOCALE;
-    process.env.OPENCLAW_LOCALE = "zh-CN";
+    const previousLocale = process.env.NATESCLAW_LOCALE;
+    process.env.NATESCLAW_LOCALE = "zh-CN";
     const prompter = createLaterPrompter();
 
     try {
       await finalizeSetupWizard(createAdvancedFinalizeArgs({ prompter }));
     } finally {
       if (previousLocale === undefined) {
-        delete process.env.OPENCLAW_LOCALE;
+        delete process.env.NATESCLAW_LOCALE;
       } else {
-        process.env.OPENCLAW_LOCALE = previousLocale;
+        process.env.NATESCLAW_LOCALE = previousLocale;
       }
     }
 
@@ -1804,7 +1804,7 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("uses the setup token for health checks to avoid local env token drift", async () => {
-    vi.stubEnv("OPENCLAW_GATEWAY_TOKEN", "env-token");
+    vi.stubEnv("NATESCLAW_GATEWAY_TOKEN", "env-token");
     const prompter = createLaterPrompter();
 
     await finalizeSetupWizard({
@@ -1842,7 +1842,7 @@ describe("finalizeSetupWizard", () => {
       json?: boolean;
       timeoutMs?: number;
       token?: string;
-      config?: OpenClawConfig;
+      config?: NatesclawConfig;
     };
     expect(healthArgs.json).toBe(false);
     expect(healthArgs.timeoutMs).toBe(10_000);
@@ -1984,7 +1984,7 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("uses the resolved setup password for health checks", async () => {
-    vi.stubEnv("OPENCLAW_GATEWAY_PASSWORD", "env-password");
+    vi.stubEnv("NATESCLAW_GATEWAY_PASSWORD", "env-password");
     resolveSetupSecretInputString.mockResolvedValueOnce("session-password");
     const prompter = createLaterPrompter();
 
@@ -2005,7 +2005,7 @@ describe("finalizeSetupWizard", () => {
             password: {
               source: "env",
               provider: "default",
-              id: "OPENCLAW_GATEWAY_PASSWORD",
+              id: "NATESCLAW_GATEWAY_PASSWORD",
             },
           },
         },
@@ -2036,7 +2036,7 @@ describe("finalizeSetupWizard", () => {
       timeoutMs?: number;
       token?: string;
       password?: string;
-      config?: OpenClawConfig;
+      config?: NatesclawConfig;
     };
     expect(healthArgs.json).toBe(false);
     expect(healthArgs.timeoutMs).toBe(10_000);
@@ -2086,7 +2086,7 @@ describe("finalizeSetupWizard", () => {
     expectNoteContains(prompter, "Setup was run without Gateway service install", "Gateway");
     expectNoteTitleNotCalled(prompter, "Dashboard ready");
     expect(prompter.outro).toHaveBeenCalledWith(
-      "Gateway not detected yet. Start now: openclaw gateway run",
+      "Gateway not detected yet. Start now: natesclaw gateway run",
     );
   });
 

@@ -1,7 +1,7 @@
 // Hook command tests cover metadata config keys and missing-hook exit status.
 import { Command } from "commander";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveConfiguredInternalHookNames } from "../hooks/configured.js";
 import type { HookStatusEntry, HookStatusReport } from "../hooks/hooks-status.js";
 import { createEmptyInstallChecks } from "./requirements-test-fixtures.js";
@@ -24,7 +24,7 @@ vi.mock("../state/config-machine-state.js", () => ({
 }));
 
 vi.mock("../agents/agent-scope.js", () => ({
-  resolveAgentWorkspaceDir: () => "/tmp/openclaw-hook-workspace",
+  resolveAgentWorkspaceDir: () => "/tmp/natesclaw-hook-workspace",
   resolveDefaultAgentId: () => "main",
 }));
 
@@ -97,10 +97,10 @@ const sourceConfig = {
 const hook: HookStatusEntry = {
   name: "display-name",
   description: "Hook with a metadata config-key override",
-  source: "openclaw-workspace",
-  filePath: "/tmp/openclaw-hook-workspace/HOOK.md",
-  baseDir: "/tmp/openclaw-hook-workspace",
-  handlerPath: "/tmp/openclaw-hook-workspace/handler.js",
+  source: "natesclaw-workspace",
+  filePath: "/tmp/natesclaw-hook-workspace/HOOK.md",
+  baseDir: "/tmp/natesclaw-hook-workspace",
+  handlerPath: "/tmp/natesclaw-hook-workspace/handler.js",
   hookKey: "metadata-key",
   events: [],
   unknownEvents: [],
@@ -113,8 +113,8 @@ const hook: HookStatusEntry = {
 };
 
 const report: HookStatusReport = {
-  workspaceDir: "/tmp/openclaw-hook-workspace",
-  managedHooksDir: "/tmp/openclaw-managed-hooks",
+  workspaceDir: "/tmp/natesclaw-hook-workspace",
+  managedHooksDir: "/tmp/natesclaw-managed-hooks",
   hooks: [hook],
 };
 
@@ -164,7 +164,7 @@ describe("hooks CLI metadata config keys", () => {
       },
       baseHash: "config-hash",
     });
-    const writtenConfig = mocks.replaceConfigFile.mock.calls[0]?.[0]?.nextConfig as OpenClawConfig;
+    const writtenConfig = mocks.replaceConfigFile.mock.calls[0]?.[0]?.nextConfig as NatesclawConfig;
     expect(resolveConfiguredInternalHookNames(writtenConfig)).toEqual(
       new Set(testCase.enabled ? ["metadata-key"] : []),
     );

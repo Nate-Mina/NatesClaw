@@ -1,18 +1,18 @@
 // Policy automatic repairs apply only deterministic narrowing config changes.
-import { isRecord } from "openclaw/plugin-sdk/channel-secret-basic-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/channel-secret-basic-runtime";
 import type {
   HealthFinding,
   HealthRepairContext,
   HealthRepairResult,
-  OpenClawConfig,
-} from "openclaw/plugin-sdk/health";
+  NatesclawConfig,
+} from "natesclaw/plugin-sdk/health";
 import { CHECK_IDS, type POLICY_CHECK_IDS } from "./check-ids.js";
 import { POLICY_FIX_METADATA_BY_CHECK_ID } from "./fix-metadata.js";
 
 type PolicyCheckId = (typeof POLICY_CHECK_IDS)[number];
 type ConfigRecord = Record<string, unknown>;
 type RepairPatch = {
-  readonly config: OpenClawConfig;
+  readonly config: NatesclawConfig;
   readonly changes: readonly string[];
   readonly warnings?: readonly string[];
 };
@@ -77,7 +77,7 @@ export function repairPolicyAutomaticNarrower(
 }
 
 function applyAutomaticPatch(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   findings: readonly HealthFinding[],
   checkId: PolicyCheckId,
 ): RepairPatch {
@@ -118,7 +118,7 @@ function applyAutomaticPatch(
 }
 
 function mergeRequiredDenyTools(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   findings: readonly HealthFinding[],
 ): RepairPatch {
   const next = cloneConfig(cfg);
@@ -131,7 +131,7 @@ function mergeRequiredDenyTools(
     }
     if (
       hasScopedPolicyRequirement([finding]) &&
-      finding.ocPath === "oc://openclaw.config/tools/deny"
+      finding.ocPath === "oc://natesclaw.config/tools/deny"
     ) {
       warnings.push(
         `Skipped scoped deny repair for ${tool}. The finding reports inherited root tools.deny, so changing it would affect more than the scoped policy target.`,
@@ -143,16 +143,16 @@ function mergeRequiredDenyTools(
     }
   }
   return changes.length > 0
-    ? { config: next as OpenClawConfig, changes: uniqueStrings(changes), warnings }
+    ? { config: next as NatesclawConfig, changes: uniqueStrings(changes), warnings }
     : { config: cfg, changes, warnings: uniqueStrings(warnings) };
 }
 
 function disableElevatedTools(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   findings: readonly HealthFinding[],
 ): RepairPatch {
   if (
-    !findings.some((finding) => finding.ocPath === "oc://openclaw.config/tools/elevated/enabled")
+    !findings.some((finding) => finding.ocPath === "oc://natesclaw.config/tools/elevated/enabled")
   ) {
     return { config: cfg, changes: [] };
   }
@@ -164,13 +164,13 @@ function disableElevatedTools(
   }
   elevated.enabled = false;
   return {
-    config: next as OpenClawConfig,
+    config: next as NatesclawConfig,
     changes: ["Set tools.elevated.enabled=false for policy conformance."],
   };
 }
 
 function disableInsecureControlUi(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   findings: readonly HealthFinding[],
 ): RepairPatch {
   const next = cloneConfig(cfg);
@@ -180,11 +180,11 @@ function disableInsecureControlUi(
   const fields = [
     [
       "dangerouslyDisableDeviceAuth",
-      "oc://openclaw.config/gateway/controlUi/dangerouslyDisableDeviceAuth",
+      "oc://natesclaw.config/gateway/controlUi/dangerouslyDisableDeviceAuth",
     ],
     [
       "dangerouslyAllowHostHeaderOriginFallback",
-      "oc://openclaw.config/gateway/controlUi/dangerouslyAllowHostHeaderOriginFallback",
+      "oc://natesclaw.config/gateway/controlUi/dangerouslyAllowHostHeaderOriginFallback",
     ],
   ] as const;
   const findingPaths = new Set(findings.map((finding) => finding.ocPath));
@@ -195,15 +195,15 @@ function disableInsecureControlUi(
     }
   }
   return changes.length > 0
-    ? { config: next as OpenClawConfig, changes }
+    ? { config: next as NatesclawConfig, changes }
     : { config: cfg, changes };
 }
 
 function disableRemoteGatewayMode(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   findings: readonly HealthFinding[],
 ): RepairPatch {
-  if (!findings.some((finding) => finding.ocPath === "oc://openclaw.config/gateway/mode")) {
+  if (!findings.some((finding) => finding.ocPath === "oc://natesclaw.config/gateway/mode")) {
     return { config: cfg, changes: [] };
   }
   const next = cloneConfig(cfg);
@@ -214,11 +214,11 @@ function disableRemoteGatewayMode(
     changes.push("Set gateway.mode=local for policy conformance.");
   }
   return changes.length > 0
-    ? { config: next as OpenClawConfig, changes }
+    ? { config: next as NatesclawConfig, changes }
     : { config: cfg, changes };
 }
 
-function disableTelemetryContentCapture(cfg: OpenClawConfig): RepairPatch {
+function disableTelemetryContentCapture(cfg: NatesclawConfig): RepairPatch {
   const next = cloneConfig(cfg);
   const diagnostics = ensureRecord(next, "diagnostics");
   const otel = ensureRecord(diagnostics, "otel");
@@ -227,13 +227,13 @@ function disableTelemetryContentCapture(cfg: OpenClawConfig): RepairPatch {
   }
   otel.captureContent = false;
   return {
-    config: next as OpenClawConfig,
+    config: next as NatesclawConfig,
     changes: ["Set diagnostics.otel.captureContent=false for policy conformance."],
   };
 }
 
 function setFindingConfigValues(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   findings: readonly HealthFinding[],
   fieldName: string,
   value: unknown,
@@ -258,11 +258,11 @@ function setFindingConfigValues(
     changes.push(`Set ${configPathLabel(finding.ocPath)}=${String(value)} for policy conformance.`);
   }
   return changes.length > 0
-    ? { config: next as OpenClawConfig, changes: uniqueStrings(changes), warnings }
+    ? { config: next as NatesclawConfig, changes: uniqueStrings(changes), warnings }
     : { config: cfg, changes, warnings: uniqueStrings(warnings) };
 }
 
-function cloneConfig(cfg: OpenClawConfig): ConfigRecord {
+function cloneConfig(cfg: NatesclawConfig): ConfigRecord {
   return structuredClone(cfg) as ConfigRecord;
 }
 
@@ -311,7 +311,7 @@ function mergeStringArrayAtOcPath(cfg: ConfigRecord, ocPath: string, entry: stri
 }
 
 function configPathSegments(ocPath: string): readonly string[] {
-  const prefix = "oc://openclaw.config/";
+  const prefix = "oc://natesclaw.config/";
   if (!ocPath.startsWith(prefix)) {
     return [];
   }
@@ -425,14 +425,14 @@ function hasScopedPolicyRequirement(findings: readonly HealthFinding[]): boolean
   return findings.some((finding) => finding.requirement?.includes("/scopes/") === true);
 }
 
-function skippedUnsafeScopedRepair(cfg: OpenClawConfig, warning: string): RepairPatch {
+function skippedUnsafeScopedRepair(cfg: NatesclawConfig, warning: string): RepairPatch {
   return { config: cfg, changes: [], warnings: [warning] };
 }
 
 function isScopedInheritedChannelDefaultFinding(finding: HealthFinding): boolean {
   return (
     hasScopedPolicyRequirement([finding]) &&
-    finding.ocPath?.startsWith("oc://openclaw.config/channels/defaults/") === true
+    finding.ocPath?.startsWith("oc://natesclaw.config/channels/defaults/") === true
   );
 }
 

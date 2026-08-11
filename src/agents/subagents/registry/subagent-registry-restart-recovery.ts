@@ -407,7 +407,7 @@ export async function recoverInterruptedSubagentRow(
       ? formatSubagentRecoveryWedgedReason(sessionEntry)
       : attempts >= MAX_RECOVERY_ATTEMPTS
         ? `subagent orphan recovery blocked after ${attempts} rapid accepted resume attempts; ` +
-          `run "openclaw tasks maintenance --apply" or "openclaw doctor --fix" to reconcile it`
+          `run "natesclaw tasks maintenance --apply" or "natesclaw doctor --fix" to reconcile it`
         : undefined;
     if (blockedReason) {
       if (!alreadyWedged) {
@@ -485,7 +485,7 @@ export async function recoverInterruptedSubagentRow(
     const configChanged = messages.some(
       (message) =>
         extractMessageRole(message) === "assistant" &&
-        /openclaw\.json|openclaw gateway restart|config\.patch/i.test(
+        /natesclaw\.json|natesclaw gateway restart|config\.patch/i.test(
           extractSessionTranscriptText(message) ?? "",
         ),
     );
@@ -554,7 +554,7 @@ export async function recoverInterruptedSubagentRow(
                   lastHumanMessage ?? undefined,
                 ) +
                 (configChanged
-                  ? "\n\n[config changes from your previous run were already applied — do not re-modify openclaw.json or restart the gateway]"
+                  ? "\n\n[config changes from your previous run were already applied — do not re-modify natesclaw.json or restart the gateway]"
                   : ""),
               sessionKey: childSessionKey,
               expectedExistingSessionId: sessionId,

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveNpmSpecMetadata } from "../infra/install-source-utils.js";
 import { parseRegistryNpmSpec } from "../infra/npm-registry-spec.js";
 import {
@@ -22,7 +22,7 @@ import {
   resolveTrustedSourceLinkedOfficialClawHubInstall as resolveOfficialClawHubInstall,
   resolveTrustedSourceLinkedOfficialNpmInstall as resolveOfficialNpmInstall,
 } from "./official-external-install-records.js";
-import { auditDeclaredOpenClawHostDependency } from "./plugin-peer-link.js";
+import { auditDeclaredNatesclawHostDependency } from "./plugin-peer-link.js";
 import {
   buildClawHubTrustSkippedOutcome,
   buildDryRunPluginUpdateOutcome,
@@ -50,8 +50,8 @@ import {
   disablePluginAfterUpdateFailure,
   hasRunnableInstalledNpmPayload,
   migratePluginConfigId,
-  repairOpenClawPeerLinksForNpmInstalls,
-  repairRegisteredOpenClawHostLink,
+  repairNatesclawPeerLinksForNpmInstalls,
+  repairRegisteredNatesclawHostLink,
   resolveRecordedExtensionsDir,
   withoutPluginInstallRecord,
 } from "./update-config.js";
@@ -79,7 +79,7 @@ import {
 } from "./update-source.js";
 
 export async function updateNpmInstalledPlugins(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   logger?: PluginUpdateLogger;
   pluginIds?: string[];
   skipIds?: Set<string>;
@@ -132,7 +132,7 @@ export async function updateNpmInstalledPlugins(params: {
       options.installedPayloadRunnable === true;
     if (params.disableOnFailure && !params.dryRun && !preserveInstalledPayload) {
       const disabledMessage =
-        `Disabled "${pluginId}" after plugin update failure; OpenClaw will continue without it. ` +
+        `Disabled "${pluginId}" after plugin update failure; Natesclaw will continue without it. ` +
         message;
       logger.warn?.(disabledMessage);
       next = disablePluginAfterUpdateFailure(next, pluginId);
@@ -352,7 +352,7 @@ export async function updateNpmInstalledPlugins(params: {
       continue;
     }
     if (!params.dryRun && record.source === "npm" && currentVersion) {
-      changed = (await repairRegisteredOpenClawHostLink({ pluginId, record, logger })) || changed;
+      changed = (await repairRegisteredNatesclawHostLink({ pluginId, record, logger })) || changed;
     }
     // Payload validation is filesystem work needed only to preserve state after metadata failures.
     // Every failure path below ends this plugin iteration, so the result cannot be reused.
@@ -419,7 +419,7 @@ export async function updateNpmInstalledPlugins(params: {
           currentVersion &&
           !bypassTrustedOfficialUnchangedNpmCheck &&
           isNpmMetadataCompatibleWithCurrentHost(metadataResult.metadata) &&
-          !(await auditDeclaredOpenClawHostDependency({
+          !(await auditDeclaredNatesclawHostDependency({
             packageDir: installPath,
             packageName: pluginId,
           })) &&
@@ -712,7 +712,7 @@ export async function updateNpmInstalledPlugins(params: {
   }
 
   if (ranNpmInstaller) {
-    const repairedPeerLinks = await repairOpenClawPeerLinksForNpmInstalls({ config: next, logger });
+    const repairedPeerLinks = await repairNatesclawPeerLinksForNpmInstalls({ config: next, logger });
     changed = repairedPeerLinks || changed;
   }
 

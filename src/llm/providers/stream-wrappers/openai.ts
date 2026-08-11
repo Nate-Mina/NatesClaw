@@ -1,28 +1,28 @@
 import {
   resolveOpenAIReasoningEffortForModel,
   supportsOpenAIReasoningEffort,
-} from "@openclaw/ai/internal/openai";
+} from "@natesclaw/ai/internal/openai";
 import {
   filterCodeModePayloadTools,
   isCodeModeModelVisibleToolName,
   readCodeModePayloadToolName,
-} from "@openclaw/ai/transports";
+} from "@natesclaw/ai/transports";
 import {
   flattenCompletionMessagesToStringContent,
   stripCompletionMessagesToRoleContent,
-} from "@openclaw/ai/transports";
+} from "@natesclaw/ai/transports";
 import {
   applyOpenAIResponsesPayloadPolicy,
   resolveOpenAIResponsesPayloadPolicy,
-} from "@openclaw/ai/transports";
-import { isPromiseLike } from "@openclaw/normalization-core/promise-like";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+} from "@natesclaw/ai/transports";
+import { isPromiseLike } from "@natesclaw/normalization-core/promise-like";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 // OpenAI stream wrapper normalizes OpenAI-compatible streamed tool and text events.
 import {
   normalizeFastMode,
   normalizeOptionalLowercaseString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   patchCodexNativeWebSearchPayload,
   resolveCodexNativeSearchActivation,
@@ -36,7 +36,7 @@ import { resolveProviderRequestPolicyConfig } from "../../../agents/provider-req
 import type { StreamFn } from "../../../agents/runtime/index.js";
 import type { SandboxToolPolicy } from "../../../agents/sandbox.js";
 import type { ThinkLevel } from "../../../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { createSubsystemLogger } from "../../../logging/subsystem.js";
 import { streamSimple } from "../../stream.js";
 import type { SimpleStreamOptions } from "../../types.js";
@@ -47,9 +47,9 @@ const log = createSubsystemLogger("llm/providers/stream-wrappers");
 
 type OpenAIServiceTier = "auto" | "default" | "flex" | "priority";
 type DynamicFastMode = boolean | (() => boolean | undefined);
-type OpenClawSimpleStreamOptions = SimpleStreamOptions & {
-  openclawCodeModeToolSurface?: boolean;
-  openclawCodeModeAllowedHostedToolTypes?: Set<string>;
+type NatesclawSimpleStreamOptions = SimpleStreamOptions & {
+  natesclawCodeModeToolSurface?: boolean;
+  natesclawCodeModeAllowedHostedToolTypes?: Set<string>;
 };
 type OpenAIResponsesReplayOptions = Parameters<StreamFn>[2] & {
   replayResponsesItemIds?: boolean;
@@ -119,7 +119,7 @@ function shouldApplyOpenAIServiceTier(model: {
   return resolveOpenAIResponsesPayloadPolicy(model, { storeMode: "disable" }).allowsServiceTier;
 }
 
-function isCodeModeEnabled(config?: OpenClawConfig): boolean {
+function isCodeModeEnabled(config?: NatesclawConfig): boolean {
   const tools = config?.tools;
   if (!tools || typeof tools !== "object") {
     return false;
@@ -615,7 +615,7 @@ export function createOpenAITextVerbosityWrapper(
 export function createCodexNativeWebSearchWrapper(
   baseStreamFn: StreamFn | undefined,
   params: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     agentDir?: string;
     agentId?: string;
     sessionKey?: string;
@@ -640,7 +640,7 @@ export function createCodexNativeWebSearchWrapper(
     // surface; the run-level wrapper passes it down via stream options so the
     // provider-family wrapper stays aligned for the same request.
     const codeModeSurfaceFromOptions =
-      (options as OpenClawSimpleStreamOptions | undefined)?.openclawCodeModeToolSurface === true;
+      (options as NatesclawSimpleStreamOptions | undefined)?.natesclawCodeModeToolSurface === true;
     const codeModeVisibleToolNames = resolveCodeModeVisibleToolNames(context);
     const resolveNativeSearchActivation = () =>
       resolveCodexNativeSearchActivation({
@@ -672,8 +672,8 @@ export function createCodexNativeWebSearchWrapper(
       // Every spread below must retain this request-scoped Set so the provider policy owner
       // and final Responses egress agree on the same hosted-tool authorization fact.
       const allowedHostedToolTypes =
-        (options as OpenClawSimpleStreamOptions | undefined)
-          ?.openclawCodeModeAllowedHostedToolTypes ?? new Set<string>();
+        (options as NatesclawSimpleStreamOptions | undefined)
+          ?.natesclawCodeModeAllowedHostedToolTypes ?? new Set<string>();
       const activation =
         params.nativeWebSearchAllowedByToolPolicy === false
           ? undefined
@@ -691,10 +691,10 @@ export function createCodexNativeWebSearchWrapper(
         );
       }
       const originalOnPayload = options?.onPayload;
-      const codeModeOptions: OpenClawSimpleStreamOptions = {
+      const codeModeOptions: NatesclawSimpleStreamOptions = {
         ...options,
-        openclawCodeModeToolSurface: true,
-        openclawCodeModeAllowedHostedToolTypes: allowedHostedToolTypes,
+        natesclawCodeModeToolSurface: true,
+        natesclawCodeModeAllowedHostedToolTypes: allowedHostedToolTypes,
         onPayload: (payload) => {
           if (activation?.state === "native_active") {
             patchCodexNativeWebSearchPayload({ payload, config: params.config });

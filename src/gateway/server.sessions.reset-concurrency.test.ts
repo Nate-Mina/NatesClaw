@@ -3,7 +3,7 @@ import { afterEach, expect, test } from "vitest";
 import { listRegisteredAgentHarnesses, registerAgentHarness } from "../agents/harness/registry.js";
 import { restoreRegisteredAgentHarnesses } from "../agents/harness/registry.test-support.js";
 import { loadTranscriptEvents } from "../config/sessions/session-accessor.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { writeSessionStore } from "./test-helpers.js";
 import {
   sessionLifecycleHookMocks,
@@ -16,7 +16,7 @@ import {
 const { createSessionStoreDir } = setupGatewaySessionsHandlerTestHarness();
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 test("sessions.reset preserves a concurrent same-id lifecycle replacement", async () => {

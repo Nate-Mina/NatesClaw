@@ -4,8 +4,8 @@ import { resolveCliArgvInvocation } from "./argv-invocation.js";
 
 describe("argv-invocation", () => {
   it("resolves root help and empty command path", () => {
-    expect(resolveCliArgvInvocation(["node", "openclaw", "--help"])).toEqual({
-      argv: ["node", "openclaw", "--help"],
+    expect(resolveCliArgvInvocation(["node", "natesclaw", "--help"])).toEqual({
+      argv: ["node", "natesclaw", "--help"],
       commandPath: [],
       primary: null,
       hasHelpOrVersion: true,
@@ -15,9 +15,9 @@ describe("argv-invocation", () => {
 
   it("resolves command path and primary with root options", () => {
     expect(
-      resolveCliArgvInvocation(["node", "openclaw", "--profile", "work", "gateway", "status"]),
+      resolveCliArgvInvocation(["node", "natesclaw", "--profile", "work", "gateway", "status"]),
     ).toEqual({
-      argv: ["node", "openclaw", "--profile", "work", "gateway", "status"],
+      argv: ["node", "natesclaw", "--profile", "work", "gateway", "status"],
       commandPath: ["gateway", "status"],
       primary: "gateway",
       hasHelpOrVersion: false,
@@ -28,24 +28,24 @@ describe("argv-invocation", () => {
   it.each([
     {
       name: "version-pinned install",
-      argv: ["node", "openclaw", "skills", "install", "@owner/weather", "--version", "1.2.3"],
+      argv: ["node", "natesclaw", "skills", "install", "@owner/weather", "--version", "1.2.3"],
       commandPath: ["skills", "install"],
     },
     {
       name: "version-pinned verification",
-      argv: ["node", "openclaw", "skills", "verify", "@owner/weather", "--version", "1.2.3"],
+      argv: ["node", "natesclaw", "skills", "verify", "@owner/weather", "--version", "1.2.3"],
       commandPath: ["skills", "verify"],
     },
     {
       name: "equals-form version-pinned install",
-      argv: ["node", "openclaw", "skills", "install", "@owner/weather", "--version=1.2.3"],
+      argv: ["node", "natesclaw", "skills", "install", "@owner/weather", "--version=1.2.3"],
       commandPath: ["skills", "install"],
     },
     {
       name: "profiled version-pinned verification",
       argv: [
         "node",
-        "openclaw",
+        "natesclaw",
         "--profile",
         "work",
         "skills",
@@ -70,7 +70,7 @@ describe("argv-invocation", () => {
     expect(
       resolveCliArgvInvocation([
         "node",
-        "openclaw",
+        "natesclaw",
         "agent",
         "--model",
         "openai/gpt-5.6-sol",
@@ -82,7 +82,7 @@ describe("argv-invocation", () => {
 
   it("does not treat an exec-valued parent option as the subcommand", () => {
     expect(
-      resolveCliArgvInvocation(["node", "openclaw", "agent", "--message", "exec"]).commandPath,
+      resolveCliArgvInvocation(["node", "natesclaw", "agent", "--message", "exec"]).commandPath,
     ).toEqual(["agent"]);
   });
 
@@ -90,7 +90,7 @@ describe("argv-invocation", () => {
     expect(
       resolveCliArgvInvocation([
         "node",
-        "openclaw",
+        "natesclaw",
         "agent",
         "--no-color",
         "--model",
@@ -106,12 +106,12 @@ describe("argv-invocation", () => {
     ["inline agent value", ["models", "--agent=main", "--status-json"]],
     ["status alias before agent", ["models", "--status-json", "--agent", "main"]],
   ])("keeps models parent status options on the parent path: %s", (_name, args) => {
-    expect(resolveCliArgvInvocation(["node", "openclaw", ...args]).commandPath).toEqual(["models"]);
+    expect(resolveCliArgvInvocation(["node", "natesclaw", ...args]).commandPath).toEqual(["models"]);
   });
 
   it("still resolves a models child after parent options", () => {
     expect(
-      resolveCliArgvInvocation(["node", "openclaw", "models", "--agent", "main", "status"])
+      resolveCliArgvInvocation(["node", "natesclaw", "models", "--agent", "main", "status"])
         .commandPath,
     ).toEqual(["models", "status"]);
   });

@@ -5,10 +5,10 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeEach, expect, it, vi } from "vitest";
 import type { ChannelPluginCatalogEntry } from "../channels/plugins/catalog.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 const testState = vi.hoisted(() => ({
-  config: {} as OpenClawConfig,
+  config: {} as NatesclawConfig,
   json: [] as unknown[],
   catalogEntries: [] as ChannelPluginCatalogEntry[],
   manifestRegistryRebuilds: 0,
@@ -65,7 +65,7 @@ vi.mock("../runtime.js", () => ({
 
 import { tryRouteCli } from "./route.js";
 
-const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-channels-list-catalog-rows-"));
+const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-channels-list-catalog-rows-"));
 
 // Official external channels whose owner plugin is not installed. Each one is
 // configured, so `channels list` renders it as a catalog-only row and resolves a
@@ -76,7 +76,7 @@ function officialExternalCatalogEntry(channelId: string): ChannelPluginCatalogEn
   return {
     id: channelId,
     meta: { label: channelId },
-    install: { npmSpec: `@openclaw/${channelId}` },
+    install: { npmSpec: `@natesclaw/${channelId}` },
   } as ChannelPluginCatalogEntry;
 }
 
@@ -87,10 +87,10 @@ async function runChannelsListJson(channelIds: readonly string[]): Promise<{
   testState.catalogEntries = channelIds.map(officialExternalCatalogEntry);
   testState.config = {
     channels: Object.fromEntries(channelIds.map((channelId) => [channelId, { enabled: true }])),
-  } as OpenClawConfig;
+  } as NatesclawConfig;
   testState.json = [];
   testState.manifestRegistryRebuilds = 0;
-  await expect(tryRouteCli(["node", "openclaw", "channels", "list", "--json"])).resolves.toBe(true);
+  await expect(tryRouteCli(["node", "natesclaw", "channels", "list", "--json"])).resolves.toBe(true);
   return {
     rebuilds: testState.manifestRegistryRebuilds,
     chat: (testState.json[0] as { chat: unknown }).chat,
@@ -98,9 +98,9 @@ async function runChannelsListJson(channelIds: readonly string[]): Promise<{
 }
 
 beforeEach(() => {
-  vi.stubEnv("OPENCLAW_DISABLE_BUNDLED_PLUGINS", "1");
-  vi.stubEnv("OPENCLAW_HOME", path.join(tempRoot, "home"));
-  vi.stubEnv("OPENCLAW_STATE_DIR", path.join(tempRoot, "state"));
+  vi.stubEnv("NATESCLAW_DISABLE_BUNDLED_PLUGINS", "1");
+  vi.stubEnv("NATESCLAW_HOME", path.join(tempRoot, "home"));
+  vi.stubEnv("NATESCLAW_STATE_DIR", path.join(tempRoot, "state"));
 });
 
 afterAll(() => {

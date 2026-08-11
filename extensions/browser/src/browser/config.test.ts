@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { createOpenClawTestState, type OpenClawTestState } from "openclaw/plugin-sdk/test-state";
+import { createNatesclawTestState, type NatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { BrowserConfig, BrowserProfileConfig } from "../config/config.js";
 import { resolveUserPath } from "../utils.js";
@@ -14,21 +14,21 @@ import {
 } from "./config.js";
 import { getBrowserProfileCapabilities } from "./profile-capabilities.js";
 
-const BROWSER_HEADLESS_ENV_KEY = "OPENCLAW_BROWSER_HEADLESS";
+const BROWSER_HEADLESS_ENV_KEY = "NATESCLAW_BROWSER_HEADLESS";
 
 // Isolate the extension relay secret (read from stateDir/credentials) so the
 // extension-token assertions do not pick up a developer's real secret file.
 let isolatedStateDir = "";
-let openClawState: OpenClawTestState;
+let NatesclawState: NatesclawTestState;
 beforeEach(async () => {
-  openClawState = await createOpenClawTestState({
+  NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-cfg-",
+    prefix: "natesclaw-cfg-",
   });
-  isolatedStateDir = openClawState.stateDir;
+  isolatedStateDir = NatesclawState.stateDir;
 });
 afterEach(async () => {
-  await openClawState.cleanup();
+  await NatesclawState.cleanup();
 });
 
 /** Write a relay secret into the isolated state dir's credentials directory. */
@@ -90,15 +90,15 @@ describe("browser config", () => {
     expect(resolved.cdpHost).toBe("127.0.0.1");
     expect(resolved.cdpProtocol).toBe("http");
     const profile = resolveProfile(resolved, resolved.defaultProfile);
-    expect(profile?.name).toBe("openclaw");
-    expect(profile?.driver).toBe("openclaw");
+    expect(profile?.name).toBe("natesclaw");
+    expect(profile?.driver).toBe("natesclaw");
     expect(profile?.cdpPort).toBe(18800);
     expect(profile?.cdpUrl).toBe("http://127.0.0.1:18800");
 
-    const openclaw = resolveProfile(resolved, "openclaw");
-    expect(openclaw?.driver).toBe("openclaw");
-    expect(openclaw?.cdpPort).toBe(18800);
-    expect(openclaw?.cdpUrl).toBe("http://127.0.0.1:18800");
+    const natesclaw = resolveProfile(resolved, "natesclaw");
+    expect(natesclaw?.driver).toBe("natesclaw");
+    expect(natesclaw?.cdpPort).toBe(18800);
+    expect(natesclaw?.cdpUrl).toBe("http://127.0.0.1:18800");
     const user = resolveProfile(resolved, "user");
     expect(user?.driver).toBe("existing-session");
     expect(user?.cdpPort).toBe(0);
@@ -202,7 +202,7 @@ describe("browser config", () => {
     resolved.extensionRelayInternalTokens.chrome = "process-only-token";
     expect(resolveProfile(resolved, "chrome")?.cdpUrl).toBe(
       [
-        "http://openclaw-internal:",
+        "http://natesclaw-internal:",
         "process-only-token",
         `@127.0.0.1:${resolved.extensionRelayDefaultPort}`,
       ].join(""),
@@ -217,27 +217,27 @@ describe("browser config", () => {
     ).toBe(false);
   });
 
-  it("derives default ports from OPENCLAW_GATEWAY_PORT when unset", () => {
-    withEnv({ OPENCLAW_GATEWAY_PORT: "19001" }, () => {
+  it("derives default ports from NATESCLAW_GATEWAY_PORT when unset", () => {
+    withEnv({ NATESCLAW_GATEWAY_PORT: "19001" }, () => {
       const resolved = resolveBrowserConfig(undefined);
       expect(resolved.controlPort).toBe(19003);
       expect(resolveProfile(resolved, "chrome-relay")).toBe(null);
 
-      const openclaw = resolveProfile(resolved, "openclaw");
-      expect(openclaw?.cdpPort).toBe(19012);
-      expect(openclaw?.cdpUrl).toBe("http://127.0.0.1:19012");
+      const natesclaw = resolveProfile(resolved, "natesclaw");
+      expect(natesclaw?.cdpPort).toBe(19012);
+      expect(natesclaw?.cdpUrl).toBe("http://127.0.0.1:19012");
     });
   });
 
   it("derives default ports from gateway.port when env is unset", () => {
-    withEnv({ OPENCLAW_GATEWAY_PORT: undefined }, () => {
+    withEnv({ NATESCLAW_GATEWAY_PORT: undefined }, () => {
       const resolved = resolveBrowserConfig(undefined, { gateway: { port: 19011 } });
       expect(resolved.controlPort).toBe(19013);
       expect(resolveProfile(resolved, "chrome-relay")).toBe(null);
 
-      const openclaw = resolveProfile(resolved, "openclaw");
-      expect(openclaw?.cdpPort).toBe(19022);
-      expect(openclaw?.cdpUrl).toBe("http://127.0.0.1:19022");
+      const natesclaw = resolveProfile(resolved, "natesclaw");
+      expect(natesclaw?.cdpPort).toBe(19022);
+      expect(natesclaw?.cdpUrl).toBe("http://127.0.0.1:19022");
     });
   });
 
@@ -292,7 +292,7 @@ describe("browser config", () => {
     const resolved = resolveBrowserConfig({
       cdpUrl: "http://example.com:9222",
     });
-    const profile = resolveProfile(resolved, "openclaw");
+    const profile = resolveProfile(resolved, "natesclaw");
     expect(profile?.cdpPort).toBe(9222);
     expect(profile?.cdpUrl).toBe("http://example.com:9222");
     expect(profile?.cdpIsLoopback).toBe(false);
@@ -385,7 +385,7 @@ describe("browser config", () => {
       {
         name: "falls back to headless for local managed Linux profiles without display",
         config: {},
-        profileName: "openclaw",
+        profileName: "natesclaw",
         expected: { headless: true, source: "linux-display-fallback" },
       },
       {
@@ -396,27 +396,27 @@ describe("browser config", () => {
       },
       {
         name: "lets explicit profile headless=false beat the Linux no-display fallback",
-        config: withProfile("openclaw", { cdpPort: 18800, headless: false }, { headless: true }),
-        profileName: "openclaw",
+        config: withProfile("natesclaw", { cdpPort: 18800, headless: false }, { headless: true }),
+        profileName: "natesclaw",
         expected: { headless: false, source: "profile" },
       },
       {
         name: "lets explicit global headless=false beat the Linux no-display fallback",
         config: { headless: false },
-        profileName: "openclaw",
+        profileName: "natesclaw",
         expected: { headless: false, source: "config" },
       },
       {
-        name: "lets OPENCLAW_BROWSER_HEADLESS override profile/global config",
-        config: withProfile("openclaw", { cdpPort: 18800, headless: false }),
-        profileName: "openclaw",
+        name: "lets NATESCLAW_BROWSER_HEADLESS override profile/global config",
+        config: withProfile("natesclaw", { cdpPort: 18800, headless: false }),
+        profileName: "natesclaw",
         headlessEnv: "1",
         expected: { headless: true, source: "env" },
       },
       {
         name: "lets request-local headless override beat env and profile/global config",
-        config: withProfile("openclaw", { cdpPort: 18800, headless: false }, { headless: false }),
-        profileName: "openclaw",
+        config: withProfile("natesclaw", { cdpPort: 18800, headless: false }, { headless: false }),
+        profileName: "natesclaw",
         headlessEnv: "0",
         headlessOverride: true,
         expected: { headless: true, source: "request" },
@@ -435,7 +435,7 @@ describe("browser config", () => {
 
     it("returns an actionable error only when headed mode is explicitly selected", () => {
       const defaultResolved = resolveBrowserConfig({});
-      const defaultProfile = resolveProfile(defaultResolved, "openclaw")!;
+      const defaultProfile = resolveProfile(defaultResolved, "natesclaw")!;
       expect(
         getManagedBrowserMissingDisplayError(defaultResolved, defaultProfile, {
           platform: "linux",
@@ -445,17 +445,17 @@ describe("browser config", () => {
 
       const profileResolved = resolveBrowserConfig({
         profiles: {
-          openclaw: { cdpPort: 18800, color: "#FF4500", headless: false },
+          natesclaw: { cdpPort: 18800, color: "#FF4500", headless: false },
         },
       });
-      const profile = resolveProfile(profileResolved, "openclaw")!;
+      const profile = resolveProfile(profileResolved, "natesclaw")!;
       expect(
         getManagedBrowserMissingDisplayError(profileResolved, profile, {
           platform: "linux",
           env: noDisplayEnv,
         }),
       ).toMatchObject({
-        message: expect.stringContaining("browser.profiles.openclaw.headless=false"),
+        message: expect.stringContaining("browser.profiles.natesclaw.headless=false"),
         headlessSource: "profile",
       });
 
@@ -491,7 +491,7 @@ describe("browser config", () => {
     {
       name: "preserves wss:// cdpUrl with query params for the default profile",
       config: { cdpUrl: "wss://connect.browserbase.com?apiKey=test-key" },
-      profileName: "openclaw",
+      profileName: "natesclaw",
       expected: {
         cdpUrl: "wss://connect.browserbase.com/?apiKey=test-key",
         cdpHost: "connect.browserbase.com",
@@ -513,38 +513,38 @@ describe("browser config", () => {
     },
     {
       name: "URL with non-default port wins over cdpPort",
-      config: withProfile("openclaw", { cdpPort: 18800, cdpUrl: "http://127.0.0.1:9222" }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpPort: 18800, cdpUrl: "http://127.0.0.1:9222" }),
+      profileName: "natesclaw",
       expected: { cdpPort: 9222, cdpUrl: "http://127.0.0.1:9222" },
     },
     {
       name: "URL with explicit default port :80 wins over cdpPort",
-      config: withProfile("openclaw", { cdpPort: 18800, cdpUrl: "http://127.0.0.1:80" }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpPort: 18800, cdpUrl: "http://127.0.0.1:80" }),
+      profileName: "natesclaw",
       expected: { cdpPort: 80, cdpUrl: "http://127.0.0.1:80" },
     },
     {
       name: "URL without port defers to cdpPort",
-      config: withProfile("openclaw", { cdpPort: 18800, cdpUrl: "http://127.0.0.1" }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpPort: 18800, cdpUrl: "http://127.0.0.1" }),
+      profileName: "natesclaw",
       expected: { cdpPort: 18800, cdpUrl: "http://127.0.0.1:18800" },
     },
     {
       name: "URL with non-default port, no cdpPort configured",
-      config: withProfile("openclaw", { cdpUrl: "http://127.0.0.1:9222" }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpUrl: "http://127.0.0.1:9222" }),
+      profileName: "natesclaw",
       expected: { cdpPort: 9222, cdpUrl: "http://127.0.0.1:9222" },
     },
     {
       name: "URL without port and no cdpPort falls back to protocol default",
-      config: withProfile("openclaw", { cdpUrl: "https://remote-browser.example.com" }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpUrl: "https://remote-browser.example.com" }),
+      profileName: "natesclaw",
       expected: { cdpPort: 443, cdpUrl: "https://remote-browser.example.com" },
     },
     {
       name: "no URL + cdpPort constructs URL from defaults",
-      config: withProfile("openclaw", { cdpPort: 9222 }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpPort: 9222 }),
+      profileName: "natesclaw",
       expected: { cdpPort: 9222, cdpUrl: "http://127.0.0.1:9222" },
     },
     {
@@ -564,14 +564,14 @@ describe("browser config", () => {
     },
     {
       name: "IPv6 URL without port defers to cdpPort",
-      config: withProfile("openclaw", { cdpPort: 18800, cdpUrl: "http://[::1]" }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpPort: 18800, cdpUrl: "http://[::1]" }),
+      profileName: "natesclaw",
       expected: { cdpPort: 18800, cdpUrl: "http://[::1]:18800" },
     },
     {
       name: "IPv6 URL with explicit port wins over cdpPort",
-      config: withProfile("openclaw", { cdpPort: 18800, cdpUrl: "http://[::1]:9222" }),
-      profileName: "openclaw",
+      config: withProfile("natesclaw", { cdpPort: 18800, cdpUrl: "http://[::1]:9222" }),
+      profileName: "natesclaw",
       expected: { cdpPort: 9222, cdpUrl: "http://[::1]:9222" },
     },
     {
@@ -601,19 +601,19 @@ describe("browser config", () => {
             cdpPort: 18800,
             cdpUrl: "https://user:pass@remote-browser.example.com:443/json/version?token=abc#frag",
             color: "#0066CC",
-            driver: "openclaw",
+            driver: "natesclaw",
           },
           websocket: {
             cdpPort: 18800,
             cdpUrl: "wss://remote-browser.example.com:443/json/version?token=abc",
             color: "#0066CC",
-            driver: "openclaw",
+            driver: "natesclaw",
           },
           ipv6: {
             cdpPort: 18800,
             cdpUrl: "http://[::1]:80/json/version?token=abc",
             color: "#0066CC",
-            driver: "openclaw",
+            driver: "natesclaw",
           },
         },
       });
@@ -636,22 +636,22 @@ describe("browser config", () => {
     it("userinfo colons without a URL port defer to cdpPort", () => {
       const resolved = resolveBrowserConfig({
         profiles: {
-          openclaw: {
+          natesclaw: {
             cdpPort: 18800,
             cdpUrl: "http://user:pass@127.0.0.1/json/version",
             color: "#FF4500",
-            driver: "openclaw",
+            driver: "natesclaw",
           },
         },
       });
-      const profile = resolveProfile(resolved, "openclaw");
+      const profile = resolveProfile(resolved, "natesclaw");
       expect(profile?.cdpPort).toBe(18800);
       expect(profile?.cdpUrl).toBe("http://user:pass@127.0.0.1:18800/json/version");
     });
   });
 
-  it("rejects openclaw profiles without cdpPort or cdpUrl", () => {
-    const resolved = resolveBrowserConfig(withProfile("bad", { driver: "openclaw" }));
+  it("rejects natesclaw profiles without cdpPort or cdpUrl", () => {
+    const resolved = resolveBrowserConfig(withProfile("bad", { driver: "natesclaw" }));
     expect(() => resolveProfile(resolved, "bad")).toThrow("must define cdpPort or cdpUrl");
   });
 
@@ -880,7 +880,7 @@ describe("browser config", () => {
     const existingSession = resolveProfile(resolved, "chrome-live")!;
     expect(getBrowserProfileCapabilities(existingSession).usesChromeMcp).toBe(true);
 
-    const managed = resolveProfile(resolved, "openclaw")!;
+    const managed = resolveProfile(resolved, "natesclaw")!;
     expect(getBrowserProfileCapabilities(managed).usesChromeMcp).toBe(false);
 
     const work = resolveProfile(resolved, "work")!;

@@ -304,7 +304,7 @@ async function resolveTranscriptTurnTarget(
     sessionEntry?: SessionEntry;
     sessionStore?: Record<string, SessionEntry>;
   },
-  config?: import("../types.openclaw.js").OpenClawConfig,
+  config?: import("../types.natesclaw.js").NatesclawConfig,
 ): Promise<
   SessionTranscriptTurnWriteContext & {
     sessionEntry: SessionEntry | undefined;

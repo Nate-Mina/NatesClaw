@@ -1,4 +1,4 @@
-import { definePage } from "@openclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 
@@ -36,8 +36,8 @@ export const page = definePage({
       header: true,
       render: (data: unknown) => {
         const ref = (data ?? { pluginId: "", id: "" }) as PluginTabRef;
-        return html`<openclaw-plugin-page .pluginId=${ref.pluginId} .tabId=${ref.id}>
-        </openclaw-plugin-page>`;
+        return html`<natesclaw-plugin-page .pluginId=${ref.pluginId} .tabId=${ref.id}>
+        </natesclaw-plugin-page>`;
       },
     })),
 });

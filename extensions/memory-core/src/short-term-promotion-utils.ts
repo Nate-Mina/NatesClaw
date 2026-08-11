@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
-import type { MemoryEntryProvenance } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { MemoryEntryProvenance } from "natesclaw/plugin-sdk/memory-core-host-runtime-files";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { deriveConceptTags, MAX_CONCEPT_TAGS } from "./concept-vocabulary.js";
 import type {
   PromotionWeights,
@@ -164,7 +164,7 @@ export function isContaminatedDreamingSnippet(
     return false;
   }
   if (
-    /<!--\s*openclaw-memory-promotion:/i.test(snippet) ||
+    /<!--\s*natesclaw-memory-promotion:/i.test(snippet) ||
     DREAMING_TRANSCRIPT_PROMPT_LINE_RE.test(snippet) ||
     RAW_SESSION_METADATA_RE.test(snippet) ||
     RAW_CONVERSATION_SUMMARY_RE.test(snippet) ||
@@ -602,4 +602,4 @@ export function parseEntryRangeFromKey(
   }
   return { startLine: 1, endLine: 1 };
 }
-import { parseDateStringTimestampMs } from "openclaw/plugin-sdk/number-runtime";
+import { parseDateStringTimestampMs } from "natesclaw/plugin-sdk/number-runtime";

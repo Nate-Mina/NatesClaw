@@ -8,11 +8,11 @@ import {
   normalizeDeviceAuthRole,
   normalizeDeviceAuthScopes,
 } from "../shared/device-auth.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
@@ -20,7 +20,7 @@ import {
 } from "./kysely-sync.js";
 
 type DeviceAuthDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "device_auth_tokens" | "gateway_origin_device_tokens"
 >;
 // The Gateway lock makes state-directory contents process-stable. Cache both
@@ -43,11 +43,11 @@ CREATE TABLE IF NOT EXISTS gateway_origin_device_tokens (
 function ensureOriginDeviceAuthSchema(env?: NodeJS.ProcessEnv): void {
   assertNoLegacyDeviceAuth(env);
   const options = env ? { env } : {};
-  const database = openOpenClawStateDatabase(options);
+  const database = openNatesclawStateDatabase(options);
   if (ensuredOriginDatabases.has(database.db)) {
     return;
   }
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       // sqlite-allow-raw -- Feature-local additive schema DDL; token rows use Kysely.
       db.exec(ORIGIN_DEVICE_AUTH_SCHEMA_SQL);
@@ -67,7 +67,7 @@ function assertNoLegacyDeviceAuth(env: NodeJS.ProcessEnv | undefined): void {
   }
   if (hasLegacy) {
     throw new Error(
-      "Legacy device auth requires migration; stop the Gateway and run `openclaw doctor --fix`.",
+      "Legacy device auth requires migration; stop the Gateway and run `natesclaw doctor --fix`.",
     );
   }
 }
@@ -119,7 +119,7 @@ export function loadDeviceAuthToken(params: {
   env?: NodeJS.ProcessEnv;
 }): DeviceAuthEntry | null {
   assertNoLegacyDeviceAuth(params.env);
-  const { db } = openOpenClawStateDatabase({ env: params.env });
+  const { db } = openNatesclawStateDatabase({ env: params.env });
   const row = executeSqliteQueryTakeFirstSync(
     db,
     getNodeSqliteKysely<DeviceAuthDatabase>(db)
@@ -137,7 +137,7 @@ export function loadDeviceAuthTokens(params: {
   env?: NodeJS.ProcessEnv;
 }): DeviceAuthEntry[] {
   assertNoLegacyDeviceAuth(params.env);
-  const { db } = openOpenClawStateDatabase({ env: params.env });
+  const { db } = openNatesclawStateDatabase({ env: params.env });
   return executeSqliteQuerySync(
     db,
     getNodeSqliteKysely<DeviceAuthDatabase>(db)
@@ -161,7 +161,7 @@ export function storeDeviceAuthToken(params: {
 }): DeviceAuthEntry {
   assertNoLegacyDeviceAuth(params.env);
   const entry = createDeviceAuthEntry(params);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       executeSqliteQuerySync(
         db,
@@ -195,7 +195,7 @@ export function clearDeviceAuthToken(params: {
   env?: NodeJS.ProcessEnv;
 }): void {
   assertNoLegacyDeviceAuth(params.env);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       executeSqliteQuerySync(
         db,
@@ -217,7 +217,7 @@ export function loadOriginDeviceToken(params: {
   env?: NodeJS.ProcessEnv;
 }): DeviceAuthEntry | null {
   ensureOriginDeviceAuthSchema(params.env);
-  const { db } = openOpenClawStateDatabase({ env: params.env });
+  const { db } = openNatesclawStateDatabase({ env: params.env });
   const row = executeSqliteQueryTakeFirstSync(
     db,
     getNodeSqliteKysely<DeviceAuthDatabase>(db)
@@ -241,7 +241,7 @@ export function storeOriginDeviceToken(params: {
 }): DeviceAuthEntry {
   ensureOriginDeviceAuthSchema(params.env);
   const entry = createDeviceAuthEntry(params);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       executeSqliteQuerySync(
         db,
@@ -277,7 +277,7 @@ export function clearOriginDeviceToken(params: {
   env?: NodeJS.ProcessEnv;
 }): void {
   ensureOriginDeviceAuthSchema(params.env);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       executeSqliteQuerySync(
         db,

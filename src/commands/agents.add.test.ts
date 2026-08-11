@@ -8,8 +8,8 @@ import { loadPersistedAuthProfileStore } from "../agents/auth-profiles/persisted
 import { resolveAuthProfileDatabasePath } from "../agents/auth-profiles/sqlite.js";
 import { saveAuthProfileStore } from "../agents/auth-profiles/store.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { createSuiteTempRootTracker } from "../test-helpers/temp-dir.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { baseConfigSnapshot, createTestRuntime } from "./test-runtime-config-helpers.js";
@@ -53,7 +53,7 @@ const transformConfigWithPendingPluginInstallsMock = vi.hoisted(() =>
       });
       await writeConfigFileMock(transformed.nextConfig);
       return {
-        path: snapshot.path ?? "/tmp/openclaw.json",
+        path: snapshot.path ?? "/tmp/natesclaw.json",
         previousHash: snapshot.hash ?? null,
         persistedHash: "persisted-hash",
         snapshot,
@@ -119,18 +119,18 @@ import { WizardCancelledError } from "../wizard/prompts.js";
 import { agentsAddCommand } from "./agents.commands.add.js";
 
 const runtime = createTestRuntime();
-const RESERVED_SYSTEM_AGENT_IDS_FOR_TEST = ["openclaw", "crestodian"] as const; // reserved ids
+const RESERVED_SYSTEM_AGENT_IDS_FOR_TEST = ["natesclaw", "crestodian"] as const; // reserved ids
 
 describe("agents add command", () => {
-  const suiteTempDirs = createSuiteTempRootTracker({ prefix: "openclaw-agents-add-" });
+  const suiteTempDirs = createSuiteTempRootTracker({ prefix: "natesclaw-agents-add-" });
 
   beforeAll(async () => {
     await suiteTempDirs.setup();
   });
 
   afterAll(async () => {
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     await suiteTempDirs.cleanup();
   });
 
@@ -144,7 +144,7 @@ describe("agents add command", () => {
     createAgentMock.mockImplementation(
       async (params: { name: string; workspace: string; bindingSpecs?: string[] }) => {
         const agentId = params.name.toLowerCase();
-        if (agentId === "openclaw" || agentId === "crestodian") {
+        if (agentId === "natesclaw" || agentId === "crestodian") {
           return { status: "error", reason: "reserved-id", agentId };
         }
         const binding = params.bindingSpecs?.[0]
@@ -190,7 +190,7 @@ describe("agents add command", () => {
     run: (root: string) => Promise<void>,
   ): Promise<void> {
     const root = await suiteTempDirs.make(prefix);
-    await withEnvAsync({ OPENCLAW_STATE_DIR: root }, async () => await run(root));
+    await withEnvAsync({ NATESCLAW_STATE_DIR: root }, async () => await run(root));
   }
 
   it("requires --workspace when flags are present", async () => {
@@ -200,7 +200,7 @@ describe("agents add command", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("openclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
+      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("natesclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(writeConfigFileMock).not.toHaveBeenCalled();
@@ -215,7 +215,7 @@ describe("agents add command", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("openclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
+      `Non-interactive agent creation requires --workspace. Re-run ${formatCliCommand("natesclaw agents add <id> --workspace <path>")} or omit flags to use the wizard.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(writeConfigFileMock).not.toHaveBeenCalled();
@@ -229,7 +229,7 @@ describe("agents add command", () => {
       await agentsAddCommand({ name, workspace: "/tmp/reserved" }, runtime, { hasFlags: true });
 
       expect(runtime.error).toHaveBeenCalledWith(
-        `"${name}" is reserved. Choose another name, or run ${formatCliCommand("openclaw agents list")} to inspect configured agents.`,
+        `"${name}" is reserved. Choose another name, or run ${formatCliCommand("natesclaw agents list")} to inspect configured agents.`,
       );
       expect(runtime.exit).toHaveBeenCalledWith(1);
       expect(writeConfigFileMock).not.toHaveBeenCalled();
@@ -281,7 +281,7 @@ describe("agents add command", () => {
     });
     wizardMocks.createClackPrompter.mockReturnValue({
       intro: vi.fn(),
-      text: vi.fn().mockResolvedValueOnce("Jon").mockResolvedValueOnce("/tmp/openclaw-jon"),
+      text: vi.fn().mockResolvedValueOnce("Jon").mockResolvedValueOnce("/tmp/natesclaw-jon"),
       confirm: vi.fn().mockResolvedValue(false),
       note: vi.fn(),
       outro: vi.fn(),
@@ -299,14 +299,14 @@ describe("agents add command", () => {
       }),
     );
     expect(onboardHelpersMocks.ensureWorkspaceAndSessions).toHaveBeenCalledWith(
-      "/tmp/openclaw-jon",
+      "/tmp/natesclaw-jon",
       runtime,
       expect.objectContaining({ agentId: "jon" }),
     );
   });
 
   it("reports only auth profiles persisted to the new agent store", async () => {
-    await withAgentsAddStateRoot("openclaw-agents-add-auth-copy-", async (root) => {
+    await withAgentsAddStateRoot("natesclaw-agents-add-auth-copy-", async (root) => {
       const sourceAgentDir = path.join(root, "agents", "main", "agent");
       const destAgentDir = path.join(root, "agents", "work", "agent");
       const workspaceDir = path.join(root, "workspace-work");
@@ -359,7 +359,7 @@ describe("agents add command", () => {
   });
 
   it("fails before config mutation when the source auth store is unreadable", async () => {
-    await withAgentsAddStateRoot("openclaw-agents-add-auth-unreadable-", async (root) => {
+    await withAgentsAddStateRoot("natesclaw-agents-add-auth-unreadable-", async (root) => {
       const sourceAgentDir = path.join(root, "agents", "main", "agent");
       const workspaceDir = path.join(root, "workspace-work");
       await fs.mkdir(sourceAgentDir, { recursive: true });

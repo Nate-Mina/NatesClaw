@@ -29,7 +29,7 @@ import {
 } from "../../auto-reply/reply/source-turn-id.js";
 import type { SessionEntry } from "../../config/sessions.js";
 import { resolveAgentIdFromSessionKey } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { MediaFact } from "../../media/media-facts.js";
 import type { PromptImageOrderEntry } from "../../media/prompt-image-order.js";
 import { retainGatewayRootWorkAdmissionContinuation } from "../../process/gateway-work-admission.js";
@@ -72,8 +72,8 @@ export function startAgentRunExecution(params: {
   prepared: PreparedAgentRunDispatch;
   mainRestartRecoveryOwnerLease?: MainSessionRecoveryOwnerLease;
   request: AgentRunRequest;
-  cfg: OpenClawConfig;
-  cfgForAgent?: OpenClawConfig;
+  cfg: NatesclawConfig;
+  cfgForAgent?: NatesclawConfig;
   sessionEntry?: SessionEntry;
   resolvedSessionKey?: string;
   requestedSessionKey?: string;

@@ -1,12 +1,12 @@
 ---
-summary: "Use OpenCode Zen and Go catalogs with OpenClaw"
+summary: "Use OpenCode Zen and Go catalogs with Natesclaw"
 read_when:
   - You want OpenCode-hosted model access
   - You want to pick between the Zen and Go catalogs
 title: "OpenCode"
 ---
 
-OpenCode exposes two hosted catalogs in OpenClaw:
+OpenCode exposes two hosted catalogs in Natesclaw:
 
 | Catalog | Prefix            | Runtime provider |
 | ------- | ----------------- | ---------------- |
@@ -15,7 +15,7 @@ OpenCode exposes two hosted catalogs in OpenClaw:
 
 Both catalogs use the same OpenCode API key infrastructure (`OPENCODE_API_KEY`,
 alias `OPENCODE_ZEN_API_KEY`). Go still requires its own paid subscription;
-having a Zen key does not by itself grant Go access. OpenClaw keeps the runtime
+having a Zen key does not by itself grant Go access. Natesclaw keeps the runtime
 provider ids split so upstream per-model routing stays correct.
 
 ## Getting started
@@ -28,23 +28,23 @@ provider ids split so upstream per-model routing stays correct.
     <Steps>
       <Step title="Run onboarding">
         ```bash
-        openclaw onboard --auth-choice opencode-zen
+        natesclaw onboard --auth-choice opencode-zen
         ```
 
         Or pass the key directly:
 
         ```bash
-        openclaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
+        natesclaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
         ```
       </Step>
       <Step title="Set a Zen model as the default">
         ```bash
-        openclaw config set agents.defaults.model.primary "opencode/gpt-5.6-sol"
+        natesclaw config set agents.defaults.model.primary "opencode/gpt-5.6-sol"
         ```
       </Step>
       <Step title="Verify models are available">
         ```bash
-        openclaw models list --provider opencode
+        natesclaw models list --provider opencode
         ```
       </Step>
     </Steps>
@@ -57,28 +57,28 @@ provider ids split so upstream per-model routing stays correct.
 
     <Steps>
       <Step title="Use the bundled Go catalog">
-        OpenCode Go is included with OpenClaw for this release, so no separate
+        OpenCode Go is included with Natesclaw for this release, so no separate
         plugin installation or Gateway restart is required.
       </Step>
       <Step title="Run onboarding">
         ```bash
-        openclaw onboard --auth-choice opencode-go
+        natesclaw onboard --auth-choice opencode-go
         ```
 
         Or pass the key directly:
 
         ```bash
-        openclaw onboard --opencode-go-api-key "$OPENCODE_API_KEY"
+        natesclaw onboard --opencode-go-api-key "$OPENCODE_API_KEY"
         ```
       </Step>
       <Step title="Set a Go model as the default">
         ```bash
-        openclaw config set agents.defaults.model.primary "opencode-go/kimi-k3"
+        natesclaw config set agents.defaults.model.primary "opencode-go/kimi-k3"
         ```
       </Step>
       <Step title="Verify models are available">
         ```bash
-        openclaw models list --provider opencode-go
+        natesclaw models list --provider opencode-go
         ```
       </Step>
     </Steps>
@@ -104,14 +104,14 @@ provider ids split so upstream per-model routing stays correct.
 | Runtime provider | `opencode`                                                                                                            |
 | Example models   | `opencode/gpt-5.6-sol`, `opencode/kimi-k3`, `opencode/gemini-3.6-flash`, `opencode/minimax-m3`, `opencode/big-pickle` |
 
-Run `openclaw models list --provider opencode` for the current active list,
+Run `natesclaw models list --provider opencode` for the current active list,
 which also includes the promoted free-tier rows `opencode/big-pickle`,
 `opencode/deepseek-v4-flash-free`, `opencode/laguna-s-2.1-free`,
 `opencode/ling-3.0-tiny-free`, `opencode/longcat-2.0-free`,
 `opencode/mimo-v2.5-free`,
 `opencode/nemotron-3-ultra-free`, and `opencode/north-mini-code-free`.
 
-Live discovery safely intersects OpenCode's returned IDs with trusted OpenClaw
+Live discovery safely intersects OpenCode's returned IDs with trusted Natesclaw
 metadata. A key-scoped response can omit models that are unavailable to that
 workspace; that absence does not retire the offline definition. Deprecated
 explicit refs remain resolvable for existing configurations but are not shown
@@ -146,7 +146,7 @@ See [OpenCode Go](/providers/opencode-go) for the full Go model table.
   </Accordion>
 
   <Accordion title="Gemini replay behavior">
-    Gemini-backed OpenCode refs stay on the proxy-Gemini path, so OpenClaw keeps
+    Gemini-backed OpenCode refs stay on the proxy-Gemini path, so Natesclaw keeps
     Gemini thought-signature sanitation there without enabling native Gemini
     replay validation or bootstrap rewrites.
   </Accordion>

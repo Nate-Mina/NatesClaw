@@ -3,9 +3,9 @@ import { fork, type ChildProcess } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { toErrorObject } from "@openclaw/normalization-core/error-coercion";
-import { stableHomebrewNodePathCandidates } from "@openclaw/normalization-core/stable-node-path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { toErrorObject } from "@natesclaw/normalization-core/error-coercion";
+import { stableHomebrewNodePathCandidates } from "@natesclaw/normalization-core/stable-node-path";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { DEFAULT_LOCAL_MODEL } from "./embedding-defaults.js";
 import {
   createLocalEmbeddingWorkerFailureError,

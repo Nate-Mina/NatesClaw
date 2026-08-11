@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { clearRuntimeConfigSnapshot, setRuntimeConfigSnapshot } from "../config/io.js";
 import { formatSqliteSessionFileMarker } from "../config/sessions/legacy-sqlite-marker.js";
 import { upsertSessionEntryCore } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveAgentRunSessionTarget as resolveAgentRunSessionTargetImpl } from "./run-session-target.js";
 
 type ResolveTargetParams = Omit<
@@ -24,7 +24,7 @@ describe("agent run session target", () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-run-session-target-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-run-session-target-"));
   });
 
   afterEach(() => {
@@ -37,7 +37,7 @@ describe("agent run session target", () => {
 
     const target = await resolveAgentRunSessionTarget({
       agentId: "helper",
-      config: { session: { store: storePath } } as OpenClawConfig,
+      config: { session: { store: storePath } } as NatesclawConfig,
       sessionId: "test-run",
       sessionKey,
     });
@@ -55,7 +55,7 @@ describe("agent run session target", () => {
     const sessionKey = "agent:helper:main";
 
     const target = await resolveAgentRunSessionTarget({
-      config: { session: { store: storeRoot } } as OpenClawConfig,
+      config: { session: { store: storeRoot } } as NatesclawConfig,
       sessionId: "helper-session",
       sessionKey,
     });
@@ -75,7 +75,7 @@ describe("agent run session target", () => {
     await expect(
       resolveAgentRunSessionTarget(
         {
-          config: { session: { store: storePath } } as OpenClawConfig,
+          config: { session: { store: storePath } } as NatesclawConfig,
           sessionId: "compat-session",
         },
         "create",
@@ -100,7 +100,7 @@ describe("agent run session target", () => {
     await expect(
       resolveAgentRunSessionTarget({
         agentId: "main",
-        config: { session: { store: storePath } } as OpenClawConfig,
+        config: { session: { store: storePath } } as NatesclawConfig,
         sessionId,
       }),
     ).resolves.toMatchObject({ sessionId, sessionKey, storePath });
@@ -130,7 +130,7 @@ describe("agent run session target", () => {
     await expect(
       resolveAgentRunSessionTarget({
         agentId: "main",
-        config: { session: { store: storePath } } as OpenClawConfig,
+        config: { session: { store: storePath } } as NatesclawConfig,
         sessionId: "missing-session",
       }),
     ).rejects.toMatchObject({
@@ -145,7 +145,7 @@ describe("agent run session target", () => {
     await expect(
       resolveAgentRunSessionTarget(
         {
-          config: { session: { store: storePath } } as OpenClawConfig,
+          config: { session: { store: storePath } } as NatesclawConfig,
           sessionId: "compat-session",
           sessionFile: "compat-session",
         },
@@ -164,7 +164,7 @@ describe("agent run session target", () => {
 
     await expect(
       resolveAgentRunSessionTarget({
-        config: { session: { store: storePath } } as OpenClawConfig,
+        config: { session: { store: storePath } } as NatesclawConfig,
         sessionId: "compat-session",
         sessionFile: "custom-key",
         sessionKey: " custom-key ",
@@ -177,7 +177,7 @@ describe("agent run session target", () => {
 
     await expect(
       resolveAgentRunSessionTarget({
-        config: { session: { store: storePath } } as OpenClawConfig,
+        config: { session: { store: storePath } } as NatesclawConfig,
         sessionId: "compat-session",
         sessionFile: "custom-key",
         sessionTarget: {
@@ -194,7 +194,7 @@ describe("agent run session target", () => {
 
     await expect(
       resolveAgentRunSessionTarget({
-        config: { session: { store: storePath } } as OpenClawConfig,
+        config: { session: { store: storePath } } as NatesclawConfig,
         sessionId: "compat-session",
         sessionFile: "agent:helper:compat-session",
       }),
@@ -427,7 +427,7 @@ describe("agent run session target", () => {
       agentId: "main",
       config: {
         session: { store: path.join(tempDir, "fallback", "sessions.json") },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       sessionId: "legacy-session",
       sessionKey: "agent:main:legacy-session",
       sessionTarget: {

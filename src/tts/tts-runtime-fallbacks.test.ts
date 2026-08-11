@@ -31,7 +31,7 @@ import {
   synthesizeSpeech,
   testApi,
   transcodeAudioBufferMock,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type ReplyPayload,
 } from "./tts-runtime.test-support.js";
 
@@ -124,9 +124,9 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
         tts: {
           enabled: true,
           provider: "openai",
-          prefsPath: "/tmp/openclaw-speech-core-realtime-voice-model-ignored-test.json",
+          prefsPath: "/tmp/natesclaw-speech-core-realtime-voice-model-ignored-test.json",
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       disableFallback: true,
     });
 
@@ -165,9 +165,9 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
         },
         tts: {
           enabled: true,
-          prefsPath: "/tmp/openclaw-speech-core-supported-voice-model-provider-test.json",
+          prefsPath: "/tmp/natesclaw-speech-core-supported-voice-model-provider-test.json",
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
     });
 
     expect(result.success).toBe(true);
@@ -193,7 +193,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       disableFallback: true,
     });
 
@@ -230,7 +230,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
             mimo: { apiKey: "fake" },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       disableFallback: true,
     });
 
@@ -257,7 +257,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       disableFallback: true,
     });
 
@@ -277,7 +277,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
       expect(testApi.supportsTranscodedVoiceNoteTts(channel)).toBe(true);
       await expectTtsPayloadResult({
         channel,
-        prefsName: `openclaw-speech-core-tts-${channel}-mp3-test`,
+        prefsName: `natesclaw-speech-core-tts-${channel}-mp3-test`,
         text: `This ${channel} reply should be transcoded by the channel.`,
         target: "voice-note",
         audioAsVoice: true,
@@ -295,7 +295,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
   it("keeps non-native voice-note channels as regular audio files", async () => {
     await expectTtsPayloadResult({
       channel: "slack",
-      prefsName: "openclaw-speech-core-tts-slack-test",
+      prefsName: "natesclaw-speech-core-tts-slack-test",
       text: "Slack replies should be delivered as regular audio attachments.",
       target: "audio-file",
       audioAsVoice: undefined,
@@ -307,7 +307,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
     const result = await maybeApplyTtsToPayloadCore(
       {
         payload,
-        cfg: createTtsConfig("openclaw-speech-core-auto-persistence-failure-test"),
+        cfg: createTtsConfig("natesclaw-speech-core-auto-persistence-failure-test"),
         channel: "slack",
         kind: "final",
       },
@@ -334,7 +334,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
           text: `[[tts:text]]  ${answer}  [[/tts:text]]`,
           audioAsVoice: true,
         },
-        cfg: createTtsConfig(`openclaw-speech-core-hidden-tts-failure-${failProvider}`),
+        cfg: createTtsConfig(`natesclaw-speech-core-hidden-tts-failure-${failProvider}`),
         channel: "telegram",
         kind: "final",
       },
@@ -396,7 +396,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
       try {
         const answer = "Your important answer is ready.";
         const cfg = createTtsConfig(
-          `openclaw-speech-core-hidden-tts-router-${failProvider}-${structured}-${loaded}`,
+          `natesclaw-speech-core-hidden-tts-router-${failProvider}-${structured}-${loaded}`,
         );
         const channelData = structured
           ? {
@@ -480,7 +480,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
         payload: {
           text: "Visible answer [[tts:text]]Hidden expressive answer[[/tts:text]]",
         },
-        cfg: createTtsConfig("openclaw-speech-core-visible-hidden-tts-provider-failure"),
+        cfg: createTtsConfig("natesclaw-speech-core-visible-hidden-tts-provider-failure"),
         channel: "telegram",
         kind: "final",
       },
@@ -497,7 +497,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
           text: "[[tts:text]]This must remain audio-only.[[/tts:text]]",
           mediaUrl: "https://example.invalid/already-attached.png",
         },
-        cfg: createTtsConfig("openclaw-speech-core-hidden-tts-existing-attachment"),
+        cfg: createTtsConfig("natesclaw-speech-core-hidden-tts-existing-attachment"),
         channel: "telegram",
         kind: "final",
       },
@@ -541,7 +541,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
             text: "[[tts:text]]This detail must remain audio-only.[[/tts:text]]",
             ...content,
           },
-          cfg: createTtsConfig("openclaw-speech-core-hidden-tts-existing-rich-content"),
+          cfg: createTtsConfig("natesclaw-speech-core-hidden-tts-existing-rich-content"),
           channel: "telegram",
           kind: "final",
         },
@@ -560,7 +560,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
     try {
       const result = await maybeApplyTtsToPayload({
         payload: { text },
-        cfg: createTtsConfig("openclaw-speech-core-once-normalized-markdown-test"),
+        cfg: createTtsConfig("natesclaw-speech-core-once-normalized-markdown-test"),
         channel: "telegram",
         kind: "final",
       });
@@ -582,7 +582,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
     const text = "```ts\nexport function answer() {\n  return 42;\n}\n```";
     const result = await maybeApplyTtsToPayload({
       payload: { text },
-      cfg: createTtsConfig("openclaw-speech-core-code-heavy-voice-note-test"),
+      cfg: createTtsConfig("natesclaw-speech-core-code-heavy-voice-note-test"),
       channel: "telegram",
       kind: "final",
     });
@@ -592,7 +592,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
   });
 
   it("synthesizes code-heavy explicitly tagged hidden TTS text", async () => {
-    const cfg = createTtsConfig("openclaw-speech-core-code-heavy-hidden-tts-test");
+    const cfg = createTtsConfig("natesclaw-speech-core-code-heavy-hidden-tts-test");
     let mediaDir: string | undefined;
     try {
       const result = await maybeApplyTtsToPayload({
@@ -618,7 +618,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
   });
 
   it("synthesizes explicitly tagged short hidden TTS text", async () => {
-    const cfg = createTtsConfig("openclaw-speech-core-short-hidden-tts-test");
+    const cfg = createTtsConfig("natesclaw-speech-core-short-hidden-tts-test");
     let mediaDir: string | undefined;
     try {
       const result = await maybeApplyTtsToPayload({
@@ -647,7 +647,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
   });
 
   it("truncates long TTS text on a UTF-16 boundary", async () => {
-    const prefsName = "openclaw-speech-core-utf16-truncate-test";
+    const prefsName = "natesclaw-speech-core-utf16-truncate-test";
     const prefsPath = prefsPathFor(prefsName);
     const cfg = createTtsConfig(prefsName);
     setTtsMaxLength(prefsPath, 11);
@@ -677,7 +677,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
 
   it("skips block delivery kind in final mode (accumulated final tail synthesizes instead)", async () => {
     synthesizeMock.mockClear();
-    const cfg = createTtsConfig("openclaw-speech-core-block-kind-tts-test");
+    const cfg = createTtsConfig("natesclaw-speech-core-block-kind-tts-test");
     const result = await maybeApplyTtsToPayload({
       payload: { text: "WebChat block stream chunks defer TTS to the final tail." },
       cfg,
@@ -692,7 +692,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
 
   it("skips tool delivery kind in final mode", async () => {
     synthesizeMock.mockClear();
-    const cfg = createTtsConfig("openclaw-speech-core-tool-kind-tts-test");
+    const cfg = createTtsConfig("natesclaw-speech-core-tool-kind-tts-test");
     const result = await maybeApplyTtsToPayload({
       payload: { text: "Intermediate tool output should not be spoken." },
       cfg,
@@ -706,7 +706,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
   });
 
   it("keeps skipping untagged short TTS text", async () => {
-    const cfg = createTtsConfig("openclaw-speech-core-short-plain-tts-test");
+    const cfg = createTtsConfig("natesclaw-speech-core-short-plain-tts-test");
     const result = await maybeApplyTtsToPayload({
       payload: {
         text: "hello",
@@ -726,7 +726,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
 
   it("skips auto TTS for legacy final media directives", async () => {
     synthesizeMock.mockClear();
-    const cfg = createTtsConfig("openclaw-speech-core-media-directive-tts-test");
+    const cfg = createTtsConfig("natesclaw-speech-core-media-directive-tts-test");
     const result = await maybeApplyTtsToPayload({
       payload: { text: "Here is the render.\nMEDIA:/tmp/render.png" },
       cfg,
@@ -739,7 +739,7 @@ describe("TTS runtime provider fallback and delivery behavior", () => {
   });
 
   it("keeps skipping explicit tagged TTS text that strips to empty markdown", async () => {
-    const cfg = createTtsConfig("openclaw-speech-core-empty-hidden-tts-test");
+    const cfg = createTtsConfig("natesclaw-speech-core-empty-hidden-tts-test");
     const result = await maybeApplyTtsToPayload({
       payload: {
         text: "[[tts:text]]***[[/tts:text]]",

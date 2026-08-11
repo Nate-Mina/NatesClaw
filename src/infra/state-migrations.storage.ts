@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { DatabaseSync, SQLInputValue } from "node:sqlite";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   copyPluginInstallRecordMap,
   createPluginInstallRecordMap,
@@ -17,7 +17,7 @@ import {
   INSTALLED_PLUGIN_INDEX_VERSION,
   type InstalledPluginIndex,
 } from "../plugins/installed-plugin-index.js";
-import { runOpenClawStateWriteTransaction } from "../state/openclaw-state-db.js";
+import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 import { openNodeSqliteDatabase } from "./node-sqlite.js";
 import { parseRegistryNpmSpec } from "./npm-registry-spec.js";
 import { migrationFileExists, safeReadDir } from "./state-migrations.fs.js";
@@ -659,7 +659,7 @@ async function migrateLegacyTaskRunsSidecar(params: {
     let importedTasks = 0;
     let importedDeliveryStates = 0;
     let skippedOrphanDeliveryStates = 0;
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const taskColumns = [
           "runtime",
@@ -730,7 +730,7 @@ async function migrateLegacyTaskRunsSidecar(params: {
           throw new LegacyTaskStateSidecarConflictError(conflicts);
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } },
     );
     if (importedTasks > 0) {
       changes.push(
@@ -793,7 +793,7 @@ async function migrateLegacyFlowRunsSidecar(params: {
   try {
     const conflicts: string[] = [];
     let imported = 0;
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const columns = [
           "shape",
@@ -833,7 +833,7 @@ async function migrateLegacyFlowRunsSidecar(params: {
           throw new LegacyTaskStateSidecarConflictError(conflicts);
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } },
     );
     if (imported > 0) {
       changes.push(
@@ -1058,7 +1058,7 @@ export async function migrateLegacyDeliveryQueues(params: {
     let skipped = 0;
     const conflicts: string[] = [];
     try {
-      runOpenClawStateWriteTransaction(
+      runNatesclawStateWriteTransaction(
         ({ db }) => {
           const insert = db.prepare(
             `
@@ -1110,7 +1110,7 @@ export async function migrateLegacyDeliveryQueues(params: {
             imported++;
           }
         },
-        { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+        { env: { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } },
       );
     } catch (err) {
       warnings.push(`Failed migrating ${queue.label} ${queueDir}: ${String(err)}`);

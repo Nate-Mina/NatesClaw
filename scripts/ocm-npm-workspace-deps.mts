@@ -6,11 +6,11 @@ import { tmpdir } from "node:os";
 import { delimiter, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const WORKSPACE_DIRS_ENV = "OPENCLAW_OCM_WORKSPACE_DEPENDENCY_DIRS";
-const REAL_NPM_ENV = "OPENCLAW_OCM_REAL_NPM_BIN";
+const WORKSPACE_DIRS_ENV = "NATESCLAW_OCM_WORKSPACE_DEPENDENCY_DIRS";
+const REAL_NPM_ENV = "NATESCLAW_OCM_REAL_NPM_BIN";
 const INTERNAL_NPM_BIN_ENV = "OCM_INTERNAL_NPM_BIN";
-const ALLOW_UNRELEASED_CHANGELOG_ENV = "OPENCLAW_PREPACK_ALLOW_UNRELEASED_CHANGELOG";
-const RUNTIME_BUILD_PROFILE_ENV = "OPENCLAW_OCM_RUNTIME_BUILD_PROFILE";
+const ALLOW_UNRELEASED_CHANGELOG_ENV = "NATESCLAW_PREPACK_ALLOW_UNRELEASED_CHANGELOG";
+const RUNTIME_BUILD_PROFILE_ENV = "NATESCLAW_OCM_RUNTIME_BUILD_PROFILE";
 const supportedRuntimeBuildProfiles = new Set(["sourcePerformance"]);
 const fullGitCommitPattern = /^[0-9a-f]{40}$/iu;
 
@@ -59,7 +59,7 @@ export function buildInstallManifest(
   return {
     private: true,
     dependencies: {
-      openclaw: pathToFileURL(rootArchive).href,
+      natesclaw: pathToFileURL(rootArchive).href,
       ...Object.fromEntries(
         workspacePackages.map(({ name, tarball }) => [name, pathToFileURL(tarball).href]),
       ),
@@ -117,7 +117,7 @@ export function resolveRuntimePackEnvironment(
     return result.status === 0 ? result.stdout.trim() : null;
   },
 ) {
-  const explicitTimestamp = env.OPENCLAW_BUILD_TIMESTAMP?.trim();
+  const explicitTimestamp = env.NATESCLAW_BUILD_TIMESTAMP?.trim();
   const explicitCommit = env.GIT_COMMIT?.trim() || env.GIT_SHA?.trim();
   const checkedOutCommit = explicitCommit ? null : readGitCommit()?.trim();
   const commit = explicitCommit || checkedOutCommit || env.GITHUB_SHA?.trim();
@@ -126,7 +126,7 @@ export function resolveRuntimePackEnvironment(
   }
   return {
     ...env,
-    OPENCLAW_BUILD_TIMESTAMP: explicitTimestamp || now().toISOString(),
+    NATESCLAW_BUILD_TIMESTAMP: explicitTimestamp || now().toISOString(),
     ...(commit ? { GIT_COMMIT: commit.toLowerCase() } : {}),
   };
 }
@@ -153,7 +153,7 @@ function runChecked(command: string, args: string[], options: SpawnSyncOptions =
 
 function supportsPreparedRuntimePack(env: NodeJS.ProcessEnv) {
   const script = `
-    const mod = await import("./scripts/openclaw-prepack.ts");
+    const mod = await import("./scripts/natesclaw-prepack.ts");
     process.exit(typeof mod.preparePrepackArtifacts === "function" ? 0 : 1);
   `;
   const result = runNpm(
@@ -177,7 +177,7 @@ function prepareRuntimePack(profile: string, env: NodeJS.ProcessEnv) {
     stdio: "inherit",
   });
   const script = `
-    const mod = await import("./scripts/openclaw-prepack.ts");
+    const mod = await import("./scripts/natesclaw-prepack.ts");
     await mod.preparePrepackArtifacts();
   `;
   runChecked(process.execPath, ["--import", "tsx", "--input-type=module", "--eval", script], {
@@ -189,8 +189,8 @@ function prepareRuntimePack(profile: string, env: NodeJS.ProcessEnv) {
 export function restoreRuntimePack(env: NodeJS.ProcessEnv, cwd: string = process.cwd()) {
   const script = `
     const { existsSync } = await import("node:fs");
-    if (existsSync("./scripts/openclaw-postpack.mjs")) {
-      const mod = await import("./scripts/openclaw-postpack.mjs");
+    if (existsSync("./scripts/natesclaw-postpack.mjs")) {
+      const mod = await import("./scripts/natesclaw-postpack.mjs");
       await mod.restorePrepackArtifacts();
     } else {
       // Historical source refs predate the composite lifecycle and only mutate CHANGELOG.md.
@@ -303,7 +303,7 @@ function patchRootArchiveWorkspaceDependencies(
   }
 
   writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
-  const patchedArchive = join(outputDir, "openclaw-root-patched.tgz");
+  const patchedArchive = join(outputDir, "natesclaw-root-patched.tgz");
   runTar(["-czf", patchedArchive, "-C", unpackDir, "package"]);
   return patchedArchive;
 }
@@ -339,7 +339,7 @@ function main(): number {
     return result.status ?? 1;
   }
 
-  const packDir = mkdtempSync(join(tmpdir(), "openclaw-ocm-workspace-deps-"));
+  const packDir = mkdtempSync(join(tmpdir(), "natesclaw-ocm-workspace-deps-"));
   try {
     const workspacePackages = packWorkspaceDependencies(npm, workspaceDirs, packDir);
     const rootArchive = patchRootArchiveWorkspaceDependencies(

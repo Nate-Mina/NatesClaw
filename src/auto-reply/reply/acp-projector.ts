@@ -1,14 +1,14 @@
-// Projects ACP runtime events into OpenClaw-visible session update records.
-import type { AcpRuntimeEvent, AcpSessionUpdateTag } from "@openclaw/acp-core/runtime/types";
+// Projects ACP runtime events into Natesclaw-visible session update records.
+import type { AcpRuntimeEvent, AcpSessionUpdateTag } from "@natesclaw/acp-core/runtime/types";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe, truncateWithMarker } from "@openclaw/normalization-core/utf16-slice";
+} from "@natesclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe, truncateWithMarker } from "@natesclaw/normalization-core/utf16-slice";
 import { resolveAcpToolTerminalOutcome } from "../../acp/tool-status.js";
 import { EmbeddedBlockChunker } from "../../agents/embedded-agent-block-chunker.js";
 import { formatToolSummary, resolveToolDisplay } from "../../agents/tool-display.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { prefixSystemMessage } from "../../infra/system-message.js";
 import type { ReplyPayload } from "../types.js";
 import {
@@ -174,7 +174,7 @@ type AcpReplyProjector = {
 };
 
 export function createAcpReplyProjector(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   shouldSendToolSummaries: boolean;
   shouldSendToolSummariesNow?: () => boolean;
   shouldSendFullToolDetails: boolean;

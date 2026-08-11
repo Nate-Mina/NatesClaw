@@ -5,11 +5,11 @@ import type { AnyMessageContent, MiscMessageGenerationOptions, WAMessage } from 
 import {
   createChannelPartialDeliveryError,
   isChannelPartialDeliveryError,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { listMessageReceiptPlatformIds } from "openclaw/plugin-sdk/channel-outbound";
-import { PlatformMessageNotDispatchedError } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { listMessageReceiptPlatformIds } from "natesclaw/plugin-sdk/channel-outbound";
+import { PlatformMessageNotDispatchedError } from "natesclaw/plugin-sdk/error-runtime";
 // Whatsapp tests cover send api plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { prepareWhatsAppOutboundMedia } from "../outbound-media-contract.js";
 import { resolveWhatsAppOutboundMentions } from "./outbound-mentions.js";
@@ -22,19 +22,19 @@ const imageOps = vi.hoisted(() => ({
   resizeToJpeg: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-activity-runtime", async () => {
+vi.mock("natesclaw/plugin-sdk/channel-activity-runtime", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/channel-activity-runtime")
-  >("openclaw/plugin-sdk/channel-activity-runtime");
+    typeof import("natesclaw/plugin-sdk/channel-activity-runtime")
+  >("natesclaw/plugin-sdk/channel-activity-runtime");
   return {
     ...actual,
     recordChannelActivity: (...args: unknown[]) => recordChannelActivity(...args),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/media-runtime")>(
-    "openclaw/plugin-sdk/media-runtime",
+vi.mock("natesclaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/media-runtime")>(
+    "natesclaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,
@@ -850,7 +850,7 @@ describe("createWebSendApi LID resolution (issue #67378)", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    authDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-wa-lid-"));
+    authDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-wa-lid-"));
     fs.writeFileSync(path.join(authDir, "lid-mapping-15555550000.json"), JSON.stringify("987654"));
   });
 

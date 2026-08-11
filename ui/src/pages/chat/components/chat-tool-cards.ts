@@ -1,5 +1,5 @@
 // Control UI chat module implements tool cards behavior.
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { html, nothing } from "lit";
 import { icons, type IconName } from "../../../components/icons.ts";
 import { isMarkdownBlockArtText } from "../../../components/markdown-text.ts";
@@ -705,7 +705,7 @@ export function renderExpandedToolCardContent(
   const sidebarAction = canOpenSidebar
     ? html`
         <div class="chat-tool-card__actions">
-          <openclaw-tooltip content=${t("chat.toolCards.openDetails")}>
+          <natesclaw-tooltip content=${t("chat.toolCards.openDetails")}>
             <button
               class="chat-tool-card__action-btn"
               type="button"
@@ -714,7 +714,7 @@ export function renderExpandedToolCardContent(
             >
               <span class="chat-tool-card__action-icon">${icons.panelRightOpen}</span>
             </button>
-          </openclaw-tooltip>
+          </natesclaw-tooltip>
         </div>
       `
     : nothing;

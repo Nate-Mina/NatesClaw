@@ -1,16 +1,16 @@
-# OpenCode Zen OpenClaw provider
+# OpenCode Zen Natesclaw provider
 
-Official OpenClaw provider plugin for the OpenCode Zen model catalog, image
+Official Natesclaw provider plugin for the OpenCode Zen model catalog, image
 understanding, and native OpenCode session browsing.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/opencode-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/opencode-provider
+natesclaw gateway restart
 ```
 
 ## Docs
 
-See `docs/providers/opencode.md` in the OpenClaw repository, or the published
-docs at `https://docs.openclaw.ai/providers/opencode`.
+See `docs/providers/opencode.md` in the Natesclaw repository, or the published
+docs at `https://docs.natesclaw.ai/providers/opencode`.

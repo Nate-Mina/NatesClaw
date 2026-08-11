@@ -1,24 +1,24 @@
-import { jsonResult } from "openclaw/plugin-sdk/channel-actions";
-import { formatErrorMessage as errorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { jsonResult } from "natesclaw/plugin-sdk/channel-actions";
+import { formatErrorMessage as errorMessage } from "natesclaw/plugin-sdk/error-runtime";
 // Ollama node inference exposes local models to agents through paired node hosts.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
 import {
   readFiniteNumberParam,
   readPositiveIntegerParam,
   readStringParam,
-} from "openclaw/plugin-sdk/param-readers";
+} from "natesclaw/plugin-sdk/param-readers";
 import type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-} from "openclaw/plugin-sdk/plugin-entry";
+  NatesclawPluginApi,
+  NatesclawPluginNodeHostCommand,
+  NatesclawPluginNodeInvokePolicy,
+} from "natesclaw/plugin-sdk/plugin-entry";
 import {
   readProviderJsonResponse,
   readResponseTextLimited,
-} from "openclaw/plugin-sdk/provider-http";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { asNullableRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { asNullableRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { OLLAMA_DEFAULT_BASE_URL } from "./defaults.js";
 import {
   DEFAULT_INFERENCE_TIMEOUT_MS,
@@ -80,7 +80,7 @@ type OllamaChatPayload = {
 };
 
 type NodeSummary = Awaited<
-  ReturnType<OpenClawPluginApi["runtime"]["nodes"]["list"]>
+  ReturnType<NatesclawPluginApi["runtime"]["nodes"]["list"]>
 >["nodes"][number];
 
 function readNodeCommandParams(paramsJSON?: string | null): Record<string, unknown> {
@@ -317,7 +317,7 @@ async function runOllamaNodeChat(params: {
 
 export function createOllamaNodeHostCommands(options?: {
   baseUrl?: string;
-}): OpenClawPluginNodeHostCommand[] {
+}): NatesclawPluginNodeHostCommand[] {
   const baseUrl = options?.baseUrl ?? OLLAMA_DEFAULT_BASE_URL;
   return [
     {
@@ -372,7 +372,7 @@ export function createOllamaNodeHostCommands(options?: {
   ];
 }
 
-export function createOllamaNodeInvokePolicy(): OpenClawPluginNodeInvokePolicy {
+export function createOllamaNodeInvokePolicy(): NatesclawPluginNodeInvokePolicy {
   return {
     commands: [...OLLAMA_NODE_INFERENCE_COMMANDS],
     defaultPlatforms: [...OLLAMA_NODE_INFERENCE_DEFAULT_PLATFORMS],
@@ -408,7 +408,7 @@ function parseInvokePayload(raw: unknown): Record<string, unknown> {
 }
 
 async function invokeNode(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   nodeId: string,
   command: string,
   params: Record<string, unknown>,
@@ -427,7 +427,7 @@ async function invokeNode(
   return parseInvokePayload(raw);
 }
 
-export function createOllamaNodeInferenceTool(api: OpenClawPluginApi): AnyAgentTool {
+export function createOllamaNodeInferenceTool(api: NatesclawPluginApi): AnyAgentTool {
   return {
     ...ollamaNodeInferenceToolDefinition,
     execute: async (_toolCallId, args, signal) => {
@@ -475,7 +475,7 @@ export function createOllamaNodeInferenceTool(api: OpenClawPluginApi): AnyAgentT
         return jsonResult({
           nodes,
           ...(modelNodes.length === 0 && {
-            hint: "No connected node advertises Ollama inference. Start Ollama and `openclaw node run` on the target machine, then approve any request shown by `openclaw nodes pending`.",
+            hint: "No connected node advertises Ollama inference. Start Ollama and `natesclaw node run` on the target machine, then approve any request shown by `natesclaw nodes pending`.",
           }),
         });
       }

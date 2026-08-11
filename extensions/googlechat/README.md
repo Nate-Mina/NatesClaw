@@ -1,11 +1,11 @@
-# OpenClaw Google Chat
+# Natesclaw Google Chat
 
-Official OpenClaw channel plugin for Google Chat spaces and direct messages.
+Official Natesclaw channel plugin for Google Chat spaces and direct messages.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/googlechat
+natesclaw plugins install @natesclaw/googlechat
 ```
 
-Configure the Google Chat app credentials and allowed spaces in OpenClaw. The plugin lets agents receive Google Chat events and reply through the configured app.
+Configure the Google Chat app credentials and allowed spaces in Natesclaw. The plugin lets agents receive Google Chat events and reply through the configured app.

@@ -3,11 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
 import { requireNodeSqlite } from "../../infra/node-sqlite.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-  runOpenClawAgentWriteTransaction,
-} from "../../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+  runNatesclawAgentWriteTransaction,
+} from "../../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import { appendTranscriptEvent, persistSessionTranscriptTurn } from "./session-accessor.js";
 import {
   readRecentSessionTranscriptMessageEvents,
@@ -57,18 +57,18 @@ describe("SQLite active transcript event projection", () => {
 
   beforeEach(() => {
     queuedSessionWrite.mockReset();
-    stateDir = tempDirs.make("openclaw-active-transcript-");
+    stateDir = tempDirs.make("natesclaw-active-transcript-");
     scope = {
       agentId: "main",
-      env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+      env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
       sessionId: "active-transcript-test",
       sessionKey: "agent:main:active-transcript-test",
     };
   });
 
   afterEach(() => {
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
   });
 
   it("defers branch rewind rebuilds off history and writer stacks", async () => {
@@ -92,7 +92,7 @@ describe("SQLite active transcript event projection", () => {
       ],
       touchSessionEntry: false,
     });
-    const database = openOpenClawAgentDatabase({ agentId: scope.agentId, env: scope.env });
+    const database = openNatesclawAgentDatabase({ agentId: scope.agentId, env: scope.env });
 
     expect(
       database.db
@@ -166,7 +166,7 @@ describe("SQLite active transcript event projection", () => {
       ],
       touchSessionEntry: false,
     });
-    const database = openOpenClawAgentDatabase({ agentId: scope.agentId, env: scope.env });
+    const database = openNatesclawAgentDatabase({ agentId: scope.agentId, env: scope.env });
 
     await appendTranscriptEvent(scope, {
       id: "legacy-child",
@@ -238,7 +238,7 @@ describe("SQLite active transcript event projection", () => {
       ],
       touchSessionEntry: false,
     });
-    const database = openOpenClawAgentDatabase({ agentId: scope.agentId, env: scope.env });
+    const database = openNatesclawAgentDatabase({ agentId: scope.agentId, env: scope.env });
     database.db
       .prepare("UPDATE session_transcript_index_state SET needs_rebuild = 1 WHERE session_id = ?")
       .run(scope.sessionId);
@@ -423,7 +423,7 @@ describe("SQLite active transcript event projection", () => {
       });
     }
     const databaseOptions = { agentId: scope.agentId, env: scope.env };
-    const database = openOpenClawAgentDatabase(databaseOptions);
+    const database = openNatesclawAgentDatabase(databaseOptions);
     const markDirty = (sessionId: string) =>
       database.db
         .prepare("UPDATE session_transcript_index_state SET needs_rebuild = 1 WHERE session_id = ?")
@@ -472,7 +472,7 @@ describe("SQLite active transcript event projection", () => {
       touchSessionEntry: false,
     });
     const databaseOptions = { agentId: scope.agentId, env: scope.env };
-    const database = openOpenClawAgentDatabase(databaseOptions);
+    const database = openNatesclawAgentDatabase(databaseOptions);
     const markDirty = database.db.prepare(
       "UPDATE session_transcript_index_state SET needs_rebuild = 1 WHERE session_id = ?",
     );
@@ -512,7 +512,7 @@ describe("SQLite active transcript event projection", () => {
     });
     expect(readSessionTranscriptMessageEventCount(scope)).toBe(1);
 
-    const database = openOpenClawAgentDatabase({ agentId: scope.agentId, env: scope.env });
+    const database = openNatesclawAgentDatabase({ agentId: scope.agentId, env: scope.env });
     const state = database.db
       .prepare(
         `
@@ -675,7 +675,7 @@ describe("SQLite active transcript event projection", () => {
       touchSessionEntry: false,
     });
     const databaseOptions = { agentId: scope.agentId, env: scope.env };
-    const database = openOpenClawAgentDatabase(databaseOptions);
+    const database = openNatesclawAgentDatabase(databaseOptions);
     const original = database.db
       .prepare("SELECT event_json FROM transcript_events WHERE session_id = ? AND seq = 1")
       .get(scope.sessionId) as { event_json: string };
@@ -683,7 +683,7 @@ describe("SQLite active transcript event projection", () => {
       .prepare("UPDATE transcript_events SET event_json = '{' WHERE session_id = ? AND seq = 1")
       .run(scope.sessionId);
 
-    runOpenClawAgentWriteTransaction((writeDatabase) => {
+    runNatesclawAgentWriteTransaction((writeDatabase) => {
       expect(
         appendTranscriptEventsInTransaction(writeDatabase, scope, [
           { type: "leaf", id: "batch-leaf", parentId: "root", targetId: "root" },
@@ -713,7 +713,7 @@ describe("SQLite active transcript event projection", () => {
       ],
       touchSessionEntry: false,
     });
-    const database = openOpenClawAgentDatabase({ agentId: scope.agentId, env: scope.env });
+    const database = openNatesclawAgentDatabase({ agentId: scope.agentId, env: scope.env });
     const insertEvent = database.db.prepare(`
       INSERT INTO transcript_events (session_id, seq, event_json, created_at)
       VALUES (?, ?, ?, ?)

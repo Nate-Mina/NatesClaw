@@ -1,8 +1,8 @@
 // Imessage plugin module implements monitor reply cache behavior.
 import { createHash } from "node:crypto";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { PluginStateSyncKeyedStore } from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   isPositiveIMessageChatMatch,
   resolveIMessageChatMatch,

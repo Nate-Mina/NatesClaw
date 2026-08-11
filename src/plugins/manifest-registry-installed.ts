@@ -1,14 +1,14 @@
 /** Builds manifest registry records from installed plugin index snapshots. */
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeOptionalTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
 import {
   resolveChannelSetupFieldCliAttributeName,
   type ChannelSetupFieldMetadata,
 } from "../channels/plugins/setup-contract.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
 import { pruneMapToMaxSize } from "../infra/map-size.js";
 import type { PluginCandidate } from "./discovery.js";
@@ -25,7 +25,7 @@ import {
   DEFAULT_PLUGIN_ENTRY_CANDIDATES,
   getPackageManifestMetadata,
   normalizeManifestChannelCommandDefaults,
-  type OpenClawPackageManifest,
+  type NatesclawPackageManifest,
   type PackageManifest,
   type PluginPackageChannel,
   type PluginPackageChannelCliOption,
@@ -43,7 +43,7 @@ const installedPackageMetadataCache = new Map<string, InstalledPackageMetadata>(
 const MAX_INSTALLED_PACKAGE_METADATA_CACHE_ENTRIES = 256;
 
 type InstalledPackageMetadata = {
-  packageManifest?: OpenClawPackageManifest;
+  packageManifest?: NatesclawPackageManifest;
   packageDependencies?: PluginDependencySpecMap;
   packageOptionalDependencies?: PluginDependencySpecMap;
 };
@@ -533,7 +533,7 @@ function toPluginCandidate(
 export function loadPluginManifestRegistryForInstalledIndex(params: {
   index: InstalledPluginIndex;
   manifestRegistry?: PluginManifestRegistry;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];

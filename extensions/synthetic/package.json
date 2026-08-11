@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/synthetic-provider",
+  "name": "@natesclaw/synthetic-provider",
   "version": "2026.8.1",
-  "description": "OpenClaw Synthetic provider plugin.",
+  "description": "Natesclaw Synthetic provider plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/synthetic-provider",
-      "npmSpec": "@openclaw/synthetic-provider",
+      "clawhubSpec": "clawhub:@natesclaw/synthetic-provider",
+      "npmSpec": "@natesclaw/synthetic-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {

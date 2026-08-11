@@ -27,9 +27,9 @@ import {
 } from "../../lib/sessions/route-navigation.ts";
 import { createManagedWorktree } from "../../lib/worktrees/create-worktree.ts";
 import { GatewayPageController } from "../../lit/gateway-page-controller.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 
-const WORKTREES_DOCS_URL = "https://docs.openclaw.ai/concepts/managed-worktrees";
+const WORKTREES_DOCS_URL = "https://docs.natesclaw.ai/concepts/managed-worktrees";
 
 type WorktreesListResult = { worktrees: WorktreeRecord[] };
 type WorktreesRemoveResult = { removed: boolean; snapshotError?: string };
@@ -39,7 +39,7 @@ type WorktreeBranchesResult = {
   headBranch?: string;
 };
 
-class WorktreesPage extends OpenClawLightDomElement {
+class WorktreesPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -465,6 +465,6 @@ class WorktreesPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-worktrees-page")) {
-  customElements.define("openclaw-worktrees-page", WorktreesPage);
+if (!customElements.get("natesclaw-worktrees-page")) {
+  customElements.define("natesclaw-worktrees-page", WorktreesPage);
 }

@@ -2,24 +2,24 @@
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { createTempDirTracker } from "../../../test/helpers/temp-dir.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import { writePluginWithSkill } from "../test-support/skill-plugin-fixtures.test-support.js";
 import { resolveEmbeddedRunSkillEntries } from "./embedded-run-entries.js";
 
 const tempDirs = createTempDirTracker();
-const originalBundledDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+const originalBundledDir = process.env.NATESCLAW_BUNDLED_PLUGINS_DIR;
 
 function restoreBundledPluginsDir() {
   if (originalBundledDir === undefined) {
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.NATESCLAW_BUNDLED_PLUGINS_DIR;
     return;
   }
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = originalBundledDir;
+  process.env.NATESCLAW_BUNDLED_PLUGINS_DIR = originalBundledDir;
 }
 
 async function setupBundledDiffsPlugin() {
-  const bundledPluginsDir = tempDirs.make("openclaw-bundled-");
-  const workspaceDir = tempDirs.make("openclaw-workspace-");
+  const bundledPluginsDir = tempDirs.make("natesclaw-bundled-");
+  const workspaceDir = tempDirs.make("natesclaw-workspace-");
   const pluginRoot = path.join(bundledPluginsDir, "diffs");
 
   await writePluginWithSkill({
@@ -32,9 +32,9 @@ async function setupBundledDiffsPlugin() {
   return { bundledPluginsDir, workspaceDir };
 }
 
-async function resolveBundledDiffsSkillEntries(config?: OpenClawConfig) {
+async function resolveBundledDiffsSkillEntries(config?: NatesclawConfig) {
   const { bundledPluginsDir, workspaceDir } = await setupBundledDiffsPlugin();
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+  process.env.NATESCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
 
   return resolveEmbeddedRunSkillEntries({ workspaceDir, ...(config ? { config } : {}) });
 }
@@ -46,7 +46,7 @@ afterEach(() => {
 
 describe("resolveEmbeddedRunSkillEntries (integration)", () => {
   it("loads bundled diffs skill when explicitly enabled in config", async () => {
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       plugins: {
         entries: {
           diffs: { enabled: true },

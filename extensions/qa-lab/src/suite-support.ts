@@ -1,4 +1,4 @@
-import type { OpenClawCrablineChannelDriverSelection } from "@openclaw/crabline";
+import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
 import type { QaSuiteChannelDriverSelection } from "./crabline-artifacts.js";
 import type { QaProviderMode } from "./model-selection.js";
 import { parseQaProgressBooleanEnv as parseQaSuiteBooleanEnv } from "./progress-format.js";
@@ -10,7 +10,7 @@ import type { QaScorecardChannelDriver } from "./scorecard-taxonomy.js";
 import { scenarioRequiresControlUi, splitModelRef } from "./suite-planning.js";
 import type { QaSuiteRunParams, QaSuiteScenarioResult, QaSuiteStartLabFn } from "./suite-types.js";
 
-type QaCrablineRuntime = typeof import("@openclaw/crabline");
+type QaCrablineRuntime = typeof import("@natesclaw/crabline");
 
 /**
  * One bounded retry for live-model flake: flow scenarios time out under model
@@ -48,13 +48,13 @@ export function createQaSuiteReportNotes(params: {
   fastMode: boolean;
   concurrency: number;
   isolatedWorkers?: boolean;
-  createCrablineChannelReportNotes?: QaCrablineRuntime["createOpenClawCrablineChannelReportNotes"];
+  createCrablineChannelReportNotes?: QaCrablineRuntime["createNatesclawCrablineChannelReportNotes"];
 }) {
   return [
     ...params.transport.createReportNotes(params),
     // Crabline reports completed generation paths through this filename-narrowed selection.
     ...(params.createCrablineChannelReportNotes?.(
-      params.channelDriverSelection as OpenClawCrablineChannelDriverSelection | null | undefined,
+      params.channelDriverSelection as NatesclawCrablineChannelDriverSelection | null | undefined,
     ) ?? []),
   ];
 }
@@ -65,7 +65,7 @@ export function buildQaIsolatedScenarioWorkerParams(params: {
   providerMode: QaProviderMode;
   transportId: QaTransportId;
   channelDriver?: QaScorecardChannelDriver;
-  channelDriverSelection?: OpenClawCrablineChannelDriverSelection | null;
+  channelDriverSelection?: NatesclawCrablineChannelDriverSelection | null;
   primaryModel: string;
   alternateModel: string;
   fastMode: boolean;
@@ -78,7 +78,7 @@ export function buildQaIsolatedScenarioWorkerParams(params: {
     adapterOptions: params.input?.adapterOptions,
     channelId: params.input?.channelId,
     repoRoot: params.repoRoot,
-    sutOpenClawCommand: params.input?.sutOpenClawCommand,
+    sutNatesclawCommand: params.input?.sutNatesclawCommand,
     mutateConfig: params.input?.mutateConfig,
     outputDir: params.outputDir,
     providerMode: params.providerMode,
@@ -127,7 +127,7 @@ export function appendNodeOption(raw: string | undefined, option: string) {
 }
 
 export function shouldCaptureGatewayHeapCheckpoints(env: NodeJS.ProcessEnv = process.env) {
-  return parseQaSuiteBooleanEnv(env.OPENCLAW_QA_GATEWAY_HEAP_CHECKPOINTS) === true;
+  return parseQaSuiteBooleanEnv(env.NATESCLAW_QA_GATEWAY_HEAP_CHECKPOINTS) === true;
 }
 
 export function buildQaGatewayHeapCheckpointRuntimeEnvPatch(

@@ -1,9 +1,9 @@
 // Diffs tests cover tool render output plugin behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawPluginApi } from "../api.js";
+import type { NatesclawPluginApi } from "../api.js";
 import type { DiffScreenshotter } from "./browser.js";
 import { resolveDiffsPluginDefaults } from "./config.js";
 import { createDiffStoreHarness } from "./test-helpers.js";
@@ -35,7 +35,7 @@ describe("diffs tool rendered output guards", () => {
   beforeEach(async () => {
     renderDiffDocumentMock.mockReset();
     ({ store, cleanup: cleanupRootDir } = await createDiffStoreHarness(
-      "openclaw-diffs-tool-render-output-",
+      "natesclaw-diffs-tool-render-output-",
     ));
   });
 
@@ -75,7 +75,7 @@ describe("diffs tool rendered output guards", () => {
   });
 });
 
-function createApi(): OpenClawPluginApi {
+function createApi(): NatesclawPluginApi {
   return createTestPluginApi({
     id: "diffs",
     name: "Diffs",
@@ -87,7 +87,7 @@ function createApi(): OpenClawPluginApi {
         bind: "loopback",
       },
     },
-    runtime: {} as OpenClawPluginApi["runtime"],
+    runtime: {} as NatesclawPluginApi["runtime"],
   });
 }
 

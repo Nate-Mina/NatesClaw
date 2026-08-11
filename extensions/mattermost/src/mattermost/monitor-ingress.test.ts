@@ -2,12 +2,12 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { fanInChannelIngressLifecycles } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
+import { fanInChannelIngressLifecycles } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
 import {
-  closeOpenClawStateDatabaseForTest,
+  closeNatesclawStateDatabaseForTest,
   createChannelIngressQueueForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createMattermostIngressMonitor,
@@ -63,12 +63,12 @@ function createQueue(stateDir: string, accountId: string): MattermostIngressQueu
 }
 
 async function withStateDir<T>(fn: (stateDir: string) => Promise<T>): Promise<T> {
-  const created = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-mattermost-ingress-"));
+  const created = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-mattermost-ingress-"));
   const stateDir = await fs.realpath(created);
   try {
     return await fn(stateDir);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }
@@ -95,7 +95,7 @@ function testLifecycle() {
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   vi.restoreAllMocks();
 });
 

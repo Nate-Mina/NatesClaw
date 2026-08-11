@@ -155,7 +155,7 @@ describe("memory embedding provider runtime resolution", () => {
     const embed = vi.fn(async () => [1, 2]);
     const embedBatch = vi.fn(async (inputs: unknown[]) => inputs.map(() => [3, 4]));
     const runtime = { id: "generic", inlineQueryTimeoutMs: 1234 };
-    const runtimeFactsKey = Symbol.for("openclaw.localEmbeddingRuntimeFacts");
+    const runtimeFactsKey = Symbol.for("natesclaw.localEmbeddingRuntimeFacts");
     const provider = {
       id: "generic",
       model: "generic-model",

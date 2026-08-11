@@ -6,7 +6,7 @@ import {
   GATEWAY_CLIENT_IDS,
   GATEWAY_CLIENT_MODES,
 } from "../../packages/gateway-protocol/src/client-info.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
 import {
@@ -56,7 +56,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("allows declared push-to-talk commands on trusted talk-capable nodes", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     for (const platform of ["ios", "android", "macos", "other"]) {
       const allowlist = resolveNodeCommandAllowlist(cfg, { platform, caps: ["talk"] });
       expect(allowlist.has("talk.ptt.start")).toBe(true);
@@ -74,7 +74,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("does not allow push-to-talk commands from platform label alone", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const allowlist = resolveNodeCommandAllowlist(cfg, {
       platform: "android",
       caps: ["device"],
@@ -85,7 +85,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("allows push-to-talk commands when the node declares talk command support", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const allowlist = resolveNodeCommandAllowlist(cfg, {
       platform: "custom",
       commands: ["talk.ptt.start"],
@@ -95,7 +95,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("keeps canvas commands out of core defaults when the canvas plugin is not active", () => {
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       platform: "windows",
       deviceFamily: "Windows",
     });
@@ -109,12 +109,12 @@ describe("gateway/node-command-policy", () => {
       deviceFamily: "Mac",
       commands: ["camera.ptz.status", "camera.ptz.control"],
     };
-    const defaultAllowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, macNode);
+    const defaultAllowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, macNode);
     expect(defaultAllowlist.has("camera.ptz.status")).toBe(true);
     expect(defaultAllowlist.has("camera.ptz.control")).toBe(false);
 
     for (const platform of ["ios", "android", "windows", "linux", "unknown"]) {
-      const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, { platform });
+      const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, { platform });
       expect(allowlist.has("camera.ptz.status")).toBe(false);
       expect(allowlist.has("camera.ptz.control")).toBe(false);
     }
@@ -122,7 +122,7 @@ describe("gateway/node-command-policy", () => {
     const explicitAllow = resolveNodeCommandAllowlist(
       {
         gateway: { nodes: { commands: { allow: ["camera.ptz.control"] } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       macNode,
     );
     expect(explicitAllow.has("camera.ptz.control")).toBe(true);
@@ -137,7 +137,7 @@ describe("gateway/node-command-policy", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       macNode,
     );
     expect(denied.has("camera.ptz.control")).toBe(false);
@@ -146,7 +146,7 @@ describe("gateway/node-command-policy", () => {
   it("adds canvas commands from the active canvas plugin node policy", () => {
     installCanvasPluginDefaults();
 
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       platform: "windows",
       deviceFamily: "Windows",
     });
@@ -237,7 +237,7 @@ describe("gateway/node-command-policy", () => {
     });
     expect(normalized).toMatchObject({ platform: expected, deviceFamily: family });
     expect(
-      resolveNodeCommandAllowlist({} as OpenClawConfig, {
+      resolveNodeCommandAllowlist({} as NatesclawConfig, {
         ...normalized,
         approvedCommands: ["system.run"],
       }).has("system.run"),
@@ -349,7 +349,7 @@ describe("gateway/node-command-policy", () => {
     );
     setActivePluginRegistry(registry);
 
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       platform: "linux",
       deviceFamily: "Linux",
     });
@@ -366,7 +366,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("does not allow connected node plugin tools without a registry default or config allowlist", () => {
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       platform: "macos",
       deviceFamily: "Mac",
       commands: ["remote.echo"],
@@ -383,7 +383,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("does not grant host command defaults for platform prefix aliases", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const cases = [
       { platform: "darwin", deviceFamily: "iPhone" },
       { platform: "darwin", deviceFamily: "Mac" },
@@ -424,7 +424,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("allows exec approval commands only through desktop node pairing approval", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const desktopNode = { platform: "windows", deviceFamily: "Windows" };
 
     const pairingAllowlist = resolveNodePairingCommandAllowlist(cfg, desktopNode);
@@ -444,7 +444,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("keeps defaults for first-party native platform labels with matching families", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
 
     const iosAllowlist = resolveNodeCommandAllowlist(cfg, {
       platform: "iOS 18.4.0",
@@ -489,7 +489,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("requires matching watchOS platform and device-family metadata", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const mismatch = resolveNodeCommandAllowlist(cfg, {
       platform: "watchOS 11.5.0",
       deviceFamily: "iPhone",
@@ -504,7 +504,7 @@ describe("gateway/node-command-policy", () => {
   it("keeps plugin defaults out of the fixed watchOS command surface", () => {
     installCanvasPluginDefaults();
 
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       platform: "watchOS 11.5.0",
       deviceFamily: "Apple Watch",
     });
@@ -515,7 +515,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("keeps explicitly approved host commands for desktop platforms", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const cases = [
       { platform: "macos", deviceFamily: "Mac" },
       { platform: "windows", deviceFamily: "Windows" },
@@ -533,7 +533,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("keeps approved host commands on live desktop node sessions", () => {
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       nodeId: "node-1",
       connId: "conn-1",
       platform: "linux",
@@ -552,12 +552,12 @@ describe("gateway/node-command-policy", () => {
       deviceFamily: "Mac",
       commands: ["device.apps"],
     };
-    expect(resolveNodeCommandAllowlist({} as OpenClawConfig, macNode).has("device.apps")).toBe(
+    expect(resolveNodeCommandAllowlist({} as NatesclawConfig, macNode).has("device.apps")).toBe(
       true,
     );
     expect(
       resolveNodeCommandAllowlist(
-        { wizard: { appRecommendations: false } } as OpenClawConfig,
+        { wizard: { appRecommendations: false } } as NatesclawConfig,
         macNode,
       ).has("device.apps"),
     ).toBe(false);
@@ -570,9 +570,9 @@ describe("gateway/node-command-policy", () => {
       commands: ["mcp.tools.call.v1"],
       approvedCommands: ["mcp.tools.call.v1"],
     };
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, node);
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, node);
     expect(
-      resolveNodePairingCommandAllowlist({} as OpenClawConfig, node).has("mcp.tools.call.v1"),
+      resolveNodePairingCommandAllowlist({} as NatesclawConfig, node).has("mcp.tools.call.v1"),
     ).toBe(true);
     expect(allowlist.has("mcp.tools.call.v1")).toBe(true);
     expect(
@@ -584,14 +584,14 @@ describe("gateway/node-command-policy", () => {
     ).toEqual({ ok: true });
 
     const denied = resolveNodeCommandAllowlist(
-      { gateway: { nodes: { commands: { deny: ["mcp.tools.call.v1"] } } } } as OpenClawConfig,
+      { gateway: { nodes: { commands: { deny: ["mcp.tools.call.v1"] } } } } as NatesclawConfig,
       node,
     );
     expect(denied.has("mcp.tools.call.v1")).toBe(false);
   });
 
   it("does not treat unconnected declared host commands as approved", () => {
-    const allowlist = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       platform: "linux",
       deviceFamily: "Linux",
       commands: ["browser.proxy", "system.run"],
@@ -602,7 +602,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("does not grandfather approved non-default commands after config removal", () => {
-    const staleApproval = resolveNodeCommandAllowlist({} as OpenClawConfig, {
+    const staleApproval = resolveNodeCommandAllowlist({} as NatesclawConfig, {
       platform: "macos",
       deviceFamily: "Mac",
       approvedCommands: ["screen.record"],
@@ -616,7 +616,7 @@ describe("gateway/node-command-policy", () => {
             commands: { allow: ["screen.record"] },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       {
         platform: "macos",
         deviceFamily: "Mac",
@@ -639,7 +639,7 @@ describe("gateway/node-command-policy", () => {
         commands: ["computer.act", "screen.snapshot"],
         approvedCommands: ["computer.act", "screen.snapshot"],
       };
-      const enabled = resolveNodeCommandAllowlist({} as OpenClawConfig, desktopNode);
+      const enabled = resolveNodeCommandAllowlist({} as NatesclawConfig, desktopNode);
       expect(enabled.has("computer.act")).toBe(true);
       expect(
         isNodeCommandAllowed({
@@ -654,7 +654,7 @@ describe("gateway/node-command-policy", () => {
           gateway: {
             nodes: { commands: { allow: ["computer.act"], deny: ["computer.act"] } },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         desktopNode,
       );
       expect(denied.has("computer.act")).toBe(false);
@@ -667,7 +667,7 @@ describe("gateway/node-command-policy", () => {
       ["windows", "Windows"],
       ["linux", "Linux"],
     ]) {
-      const pairing = resolveNodePairingCommandAllowlist({} as OpenClawConfig, {
+      const pairing = resolveNodePairingCommandAllowlist({} as NatesclawConfig, {
         platform,
         deviceFamily,
         commands: ["computer.act", "screen.snapshot"],
@@ -680,7 +680,7 @@ describe("gateway/node-command-policy", () => {
       ["ios", "iPhone"],
       ["android", "Android"],
     ]) {
-      const pairing = resolveNodePairingCommandAllowlist({} as OpenClawConfig, {
+      const pairing = resolveNodePairingCommandAllowlist({} as NatesclawConfig, {
         platform,
         deviceFamily,
         commands: ["computer.act"],
@@ -688,7 +688,7 @@ describe("gateway/node-command-policy", () => {
       expect(pairing.has("computer.act")).toBe(false);
     }
 
-    const windowsPairing = resolveNodePairingCommandAllowlist({} as OpenClawConfig, {
+    const windowsPairing = resolveNodePairingCommandAllowlist({} as NatesclawConfig, {
       platform: "windows",
       deviceFamily: "Windows",
       commands: ["screen.record"],
@@ -702,7 +702,7 @@ describe("gateway/node-command-policy", () => {
       gateway: {
         nodes: { commands: { deny: ["computer.act"] } },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const macNode = { platform: "macos", deviceFamily: "Mac", commands: ["computer.act"] };
     expect(resolveNodePairingCommandAllowlist(cfg, macNode).has("computer.act")).toBe(false);
     expect(resolveNodeCommandAllowlist(cfg, macNode).has("computer.act")).toBe(false);
@@ -742,14 +742,14 @@ describe("gateway/node-command-policy", () => {
       commands: ["computer.act"],
       approvedCommands: ["computer.act"],
     };
-    expect(resolveNodeCommandAllowlist({} as OpenClawConfig, node).has("computer.act")).toBe(false);
+    expect(resolveNodeCommandAllowlist({} as NatesclawConfig, node).has("computer.act")).toBe(false);
 
     const allowlist = resolveNodeCommandAllowlist(
       {
         gateway: {
           nodes: { commands: { allow: ["computer.act"] } },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       node,
     );
     expect(
@@ -768,7 +768,7 @@ describe("gateway/node-command-policy", () => {
       commands: ["mobile.ui.observe", "mobile.ui.act"],
       approvedCommands: ["mobile.ui.observe", "mobile.ui.act"],
     };
-    const enabled = resolveNodeCommandAllowlist({} as OpenClawConfig, node);
+    const enabled = resolveNodeCommandAllowlist({} as NatesclawConfig, node);
     expect(enabled.has("mobile.ui.observe")).toBe(true);
     expect(enabled.has("mobile.ui.act")).toBe(true);
     expect(
@@ -789,7 +789,7 @@ describe("gateway/node-command-policy", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       node,
     );
     expect(denied.has("mobile.ui.observe")).toBe(true);
@@ -801,7 +801,7 @@ describe("gateway/node-command-policy", () => {
       gateway: {
         nodes: { denyCommands: ["mobile.ui.observe", "mobile.ui.act"] },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const androidPairing = resolveNodePairingCommandAllowlist(freshSetup, {
       platform: "android",
       deviceFamily: "Android",
@@ -810,7 +810,7 @@ describe("gateway/node-command-policy", () => {
     expect(androidPairing.has("mobile.ui.observe")).toBe(true);
     expect(androidPairing.has("mobile.ui.act")).toBe(true);
 
-    const iosPairing = resolveNodePairingCommandAllowlist({} as OpenClawConfig, {
+    const iosPairing = resolveNodePairingCommandAllowlist({} as NatesclawConfig, {
       platform: "ios",
       deviceFamily: "iPhone",
       commands: ["mobile.ui.observe", "mobile.ui.act"],
@@ -825,13 +825,13 @@ describe("gateway/node-command-policy", () => {
       deviceFamily: "iPhone",
       commands: ["health.summary"],
     };
-    expect(resolveNodeCommandAllowlist({} as OpenClawConfig, node).has("health.summary")).toBe(
+    expect(resolveNodeCommandAllowlist({} as NatesclawConfig, node).has("health.summary")).toBe(
       false,
     );
 
     const enabled = {
       gateway: { nodes: { commands: { allow: ["health.summary"] } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveNodePairingCommandAllowlist(enabled, node).has("health.summary")).toBe(true);
     expect(resolveNodeCommandAllowlist(enabled, node).has("health.summary")).toBe(true);
 
@@ -841,7 +841,7 @@ describe("gateway/node-command-policy", () => {
           commands: { allow: ["health.summary"], deny: ["health.summary"] },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveNodeCommandAllowlist(denied, node).has("health.summary")).toBe(false);
   });
 
@@ -852,18 +852,18 @@ describe("gateway/node-command-policy", () => {
       commands: ["sms.send"],
       approvedCommands: ["sms.send"],
     };
-    expect(resolveNodeCommandAllowlist({} as OpenClawConfig, node).has("sms.send")).toBe(false);
+    expect(resolveNodeCommandAllowlist({} as NatesclawConfig, node).has("sms.send")).toBe(false);
 
     const enabled = {
       gateway: { nodes: { commands: { allow: ["sms.send"] } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveNodeCommandAllowlist(enabled, node).has("sms.send")).toBe(true);
 
     const denied = {
       gateway: {
         nodes: { commands: { allow: ["sms.send"], deny: ["sms.send"] } },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveNodeCommandAllowlist(denied, node).has("sms.send")).toBe(false);
   });
 

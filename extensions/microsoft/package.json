@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/microsoft-speech",
+  "name": "@natesclaw/microsoft-speech",
   "version": "2026.8.1",
   "private": true,
-  "description": "OpenClaw Microsoft speech plugin",
+  "description": "Natesclaw Microsoft speech plugin",
   "type": "module",
   "dependencies": {
     "node-edge-tts": "1.2.10"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

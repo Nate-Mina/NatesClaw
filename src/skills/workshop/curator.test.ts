@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import {
   clearCuratedSkillLifecycle,
   getArchivedSkillFiles,
@@ -16,24 +16,24 @@ import {
   unpinCuratedSkill,
 } from "./curator.js";
 
-let testState: OpenClawTestState;
+let testState: NatesclawTestState;
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-legacy-skill-curator-",
+    prefix: "natesclaw-legacy-skill-curator-",
   });
 });
 
 afterEach(async () => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   await testState.cleanup();
 });
 
 describe("legacy skill curator state", () => {
   it("keeps shipped status controls while collection review clears their state", () => {
     const skillFile = "/workspace/skills/daily-brief/SKILL.md";
-    const database = openOpenClawStateDatabase({ env: testState.env });
+    const database = openNatesclawStateDatabase({ env: testState.env });
     database.db
       .prepare(
         `INSERT INTO skill_lifecycle (

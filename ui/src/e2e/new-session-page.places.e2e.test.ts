@@ -179,7 +179,7 @@ suite.define(() => {
       const placeSelect = page.locator("wa-popover.new-session-page__place-popover");
       const placeTrigger = page.locator("#new-session-place-trigger");
       await pollLocatorText(placeTrigger.locator(".new-session-page__trigger-label")).toBe(
-        "openclaw",
+        "natesclaw",
       );
 
       // Browse from the workspace, descend one level, then adopt the folder.
@@ -362,15 +362,15 @@ suite.define(() => {
           projects: [
             {
               id: "workspace:main",
-              displayName: "openclaw",
+              displayName: "natesclaw",
               repoRoot: WORKSPACE,
               source: "workspace",
               agentId: "main",
             },
             {
-              id: "recorded-openclaw",
-              displayName: "Recorded OpenClaw",
-              repoRoot: "/recorded/openclaw",
+              id: "recorded-natesclaw",
+              displayName: "Recorded Natesclaw",
+              repoRoot: "/recorded/natesclaw",
               source: "registered",
             },
           ],
@@ -391,14 +391,14 @@ suite.define(() => {
       const place = page.locator("wa-popover.new-session-page__place-popover");
       await trigger.click();
       await place.getByText("Projects", { exact: true }).waitFor();
-      await place.getByRole("button", { name: "Recorded OpenClaw", exact: true }).click();
+      await place.getByRole("button", { name: "Recorded Natesclaw", exact: true }).click();
       await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe(
-        "Recorded OpenClaw",
+        "Recorded Natesclaw",
       );
-      expect(await trigger.getAttribute("data-project-id")).toBe("recorded-openclaw");
+      expect(await trigger.getAttribute("data-project-id")).toBe("recorded-natesclaw");
       await expect
         .poll(async () => (await gateway.getRequests("worktrees.branches")).at(-1)?.params)
-        .toEqual({ repoRoot: "/recorded/openclaw", includeRepositoryStatus: true });
+        .toEqual({ repoRoot: "/recorded/natesclaw", includeRepositoryStatus: true });
 
       await trigger.click();
       await place.getByRole("button", { name: "Worktree" }).click();
@@ -411,7 +411,7 @@ suite.define(() => {
       expect(create.params).toMatchObject({
         agentId: "main",
         message: "inspect the project",
-        projectId: "recorded-openclaw",
+        projectId: "recorded-natesclaw",
         worktree: true,
         worktreeBaseRef: "main",
       });
@@ -426,12 +426,12 @@ suite.define(() => {
     await prepareProjectUiProof();
     const context = await suite.browser.newContext({ locale: "en-US", serviceWorkers: "block" });
     const page = await context.newPage();
-    const repoRoot = "/recorded/openclaw";
+    const repoRoot = "/recorded/natesclaw";
     const registeredProject = {
-      id: "recorded-openclaw",
-      displayName: "openclaw",
+      id: "recorded-natesclaw",
+      displayName: "natesclaw",
       repoRoot,
-      originUrl: "https://github.com/openclaw/openclaw.git",
+      originUrl: "https://github.com/natesclaw/natesclaw.git",
       source: "registered",
     };
     const gateway = await installMockGateway(page, {
@@ -489,8 +489,8 @@ suite.define(() => {
       const request = await gateway.waitForRequest("projects.register");
       expect(request.params).toEqual({ path: repoRoot });
       await expect.poll(async () => (await gateway.getRequests("projects.list")).length).toBe(2);
-      await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe("openclaw");
-      expect(await trigger.getAttribute("data-project-id")).toBe("recorded-openclaw");
+      await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe("natesclaw");
+      expect(await trigger.getAttribute("data-project-id")).toBe("recorded-natesclaw");
     } finally {
       await context.close();
     }
@@ -538,7 +538,7 @@ suite.define(() => {
       await page.goto(`${suite.server.baseUrl}new`);
       await gateway.waitForRequest("node.list");
       const trigger = page.locator("#new-session-place-trigger");
-      await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe("openclaw");
+      await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe("natesclaw");
       await trigger.click();
       const place = page.locator("wa-popover.new-session-page__place-popover");
       expect(await place.getByText("Places", { exact: true }).count()).toBe(0);
@@ -580,7 +580,7 @@ suite.define(() => {
       await gateway.waitForRequest("system.info");
       const trigger = page.locator("#new-session-place-trigger");
       await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe(
-        "openclaw · Gateway · Peters-Mac-Studio",
+        "natesclaw · Gateway · Peters-Mac-Studio",
       );
       await trigger.click();
       const place = page.locator("wa-popover.new-session-page__place-popover");
@@ -598,7 +598,7 @@ suite.define(() => {
       await expect
         .poll(async () => (await gateway.getRequests("node.list")).length)
         .toBeGreaterThan(nodeRequests);
-      await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe("openclaw");
+      await pollLocatorText(trigger.locator(".new-session-page__trigger-label")).toBe("natesclaw");
       await trigger.click();
       await place.getByText("Runs on Gateway · Peters-Mac-Studio", { exact: true }).waitFor();
     } finally {
@@ -690,8 +690,8 @@ suite.define(() => {
           defaults: SESSION_LIST_DEFAULTS,
           path: "",
           sessions: [
-            { key: "agent:main:a", kind: "direct", updatedAt: 2, execCwd: "/a/openclaw" },
-            { key: "agent:main:b", kind: "direct", updatedAt: 1, execCwd: "/b/openclaw" },
+            { key: "agent:main:a", kind: "direct", updatedAt: 2, execCwd: "/a/natesclaw" },
+            { key: "agent:main:b", kind: "direct", updatedAt: 1, execCwd: "/b/natesclaw" },
           ],
           ts: Date.now(),
         },
@@ -704,8 +704,8 @@ suite.define(() => {
       await gateway.waitForRequest("node.list");
       const trigger = page.locator("#new-session-place-trigger");
       await trigger.click();
-      const first = page.locator('[data-value="recent::/a/openclaw"]');
-      const second = page.locator('[data-value="recent::/b/openclaw"]');
+      const first = page.locator('[data-value="recent::/a/natesclaw"]');
+      const second = page.locator('[data-value="recent::/b/natesclaw"]');
       await pollLocatorText(first.locator(".session-menu__sub")).toBe("a");
       await pollLocatorText(second.locator(".session-menu__sub")).toBe("b");
       await second.click();
@@ -713,7 +713,7 @@ suite.define(() => {
       await page.getByRole("button", { name: "Start session" }).click();
       const create = await gateway.waitForRequest("sessions.create");
       expect(create.params).toMatchObject({
-        cwd: "/b/openclaw",
+        cwd: "/b/natesclaw",
         message: "continue in work checkout",
       });
     } finally {
@@ -954,7 +954,7 @@ suite.define(() => {
 
       // Destination selection stays in Places; browsing is fixed to the current target.
       await placeSelect.getByRole("button", { name: "Gateway · local" }).click();
-      await pollLocatorText(placeLabel).toBe("openclaw · Gateway · local");
+      await pollLocatorText(placeLabel).toBe("natesclaw · Gateway · local");
       await placeTrigger.click();
       expect(await placeSelect.getByRole("button", { name: "Offline node" }).count()).toBe(0);
       await placeSelect.getByRole("button", { name: "MacBook" }).click();
@@ -968,7 +968,7 @@ suite.define(() => {
 
       // A node cwd belongs to the selected agent's draft and must not leak
       // across an agent change, even though the execution node stays selected.
-      const agentPicker = page.locator(".new-session-page__select--agent openclaw-agent-select");
+      const agentPicker = page.locator(".new-session-page__select--agent natesclaw-agent-select");
       await agentPicker.locator(".agent-select__trigger").click();
       await agentPicker
         .locator("wa-dropdown-item[data-agent-option]")

@@ -1,9 +1,9 @@
-import { registerSingleProviderPlugin } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { resolveAgentModelPrimaryValue } from "openclaw/plugin-sdk/provider-onboard";
+import { registerSingleProviderPlugin } from "natesclaw/plugin-sdk/plugin-test-runtime";
+import { resolveAgentModelPrimaryValue } from "natesclaw/plugin-sdk/provider-onboard";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
 import { applyCerebrasConfig, CEREBRAS_DEFAULT_MODEL_REF } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 
 const ssrfRuntimeMocks = vi.hoisted(() => ({
   fetchWithSsrFGuard: vi.fn(),
@@ -12,7 +12,7 @@ const ssrfRuntimeMocks = vi.hoisted(() => ({
   })),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ssrfRuntimeMocks);
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", () => ssrfRuntimeMocks);
 
 afterEach(() => {
   ssrfRuntimeMocks.fetchWithSsrFGuard.mockReset();

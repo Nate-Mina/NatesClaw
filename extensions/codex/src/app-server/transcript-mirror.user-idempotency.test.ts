@@ -1,23 +1,23 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { CodexSessionTranscriptMirrorWriteLockContext } from "openclaw/plugin-sdk/codex-session-transcript-runtime";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { CodexSessionTranscriptMirrorWriteLockContext } from "natesclaw/plugin-sdk/codex-session-transcript-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { upsertSessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
+} from "natesclaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "natesclaw/plugin-sdk/plugin-test-runtime";
+import { upsertSessionEntry } from "natesclaw/plugin-sdk/session-store-runtime";
 import {
   readSessionTranscriptEvents,
   type TranscriptEntryAnchor,
-} from "openclaw/plugin-sdk/session-transcript-runtime";
+} from "natesclaw/plugin-sdk/session-transcript-runtime";
 import {
   castAgentMessage,
   makeAgentAssistantMessage,
   makeAgentUserMessage,
-} from "openclaw/plugin-sdk/test-fixtures";
+} from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, expect, it, vi } from "vitest";
 import {
   attachCodexMirrorAttestation,
@@ -33,18 +33,18 @@ const transcriptRace = vi.hoisted(() => ({
   userAnchor: undefined as TranscriptEntryAnchor | undefined,
 }));
 
-vi.mock("openclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
+vi.mock("natesclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/session-transcript-runtime")>();
+    await importOriginal<typeof import("natesclaw/plugin-sdk/session-transcript-runtime")>();
   return {
     ...actual,
     publishSessionTranscriptUpdateByIdentity: transcriptRace.publish,
   };
 });
 
-vi.mock("openclaw/plugin-sdk/codex-session-transcript-runtime", async (importOriginal) => {
+vi.mock("natesclaw/plugin-sdk/codex-session-transcript-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/codex-session-transcript-runtime")>();
+    await importOriginal<typeof import("natesclaw/plugin-sdk/codex-session-transcript-runtime")>();
   return {
     ...actual,
     withCodexSessionTranscriptMirrorWriteLock: async (
@@ -98,7 +98,7 @@ it("adopts a competing indexed user without duplicating writes or slowing assist
       agentId: "main",
       sessionId: "user-race",
       sessionKey: "agent:main:user-race",
-      storePath: path.join(root, "openclaw-agent.sqlite"),
+      storePath: path.join(root, "natesclaw-agent.sqlite"),
     };
     await upsertSessionEntry({
       agentId: target.agentId,
@@ -182,7 +182,7 @@ it("adopts a competing indexed user without duplicating writes or slowing assist
         role: "user",
         content: [{ type: "text", text: "[redacted by hook]" }],
         idempotencyKey: "codex-user-race:prompt",
-        __openclaw: expect.objectContaining({
+        __natesclaw: expect.objectContaining({
           mirrorOrigin: "codex-app-server",
           mirrorSourceFingerprint: userFingerprint,
         }),

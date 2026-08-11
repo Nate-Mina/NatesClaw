@@ -2,7 +2,7 @@
 import { html, nothing } from "lit";
 import { property } from "lit/decorators.js";
 import { t } from "../i18n/index.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomContentsElement } from "../lit/natesclaw-element.ts";
 import "./update-banner.ts";
 
 type DeviceAuthMigrationBannerProps = {
@@ -10,7 +10,7 @@ type DeviceAuthMigrationBannerProps = {
   onSecure: () => void;
 };
 
-class DeviceAuthMigrationBanner extends OpenClawLightDomContentsElement {
+class DeviceAuthMigrationBanner extends NatesclawLightDomContentsElement {
   @property({ attribute: false }) props?: DeviceAuthMigrationBannerProps;
 
   override render() {
@@ -18,7 +18,7 @@ class DeviceAuthMigrationBanner extends OpenClawLightDomContentsElement {
     if (!props) {
       return nothing;
     }
-    return html`<openclaw-update-banner
+    return html`<natesclaw-update-banner
       .props=${{
         statusBanner: {
           tone: props.state.error ? "danger" : "warn",
@@ -29,10 +29,10 @@ class DeviceAuthMigrationBanner extends OpenClawLightDomContentsElement {
             ? { label: t("login.deviceAuthMigration.action"), onClick: props.onSecure }
             : undefined,
       }}
-    ></openclaw-update-banner>`;
+    ></natesclaw-update-banner>`;
   }
 }
 
-if (!customElements.get("openclaw-device-auth-migration-banner")) {
-  customElements.define("openclaw-device-auth-migration-banner", DeviceAuthMigrationBanner);
+if (!customElements.get("natesclaw-device-auth-migration-banner")) {
+  customElements.define("natesclaw-device-auth-migration-banner", DeviceAuthMigrationBanner);
 }

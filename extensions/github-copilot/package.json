@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/github-copilot-provider",
+  "name": "@natesclaw/github-copilot-provider",
   "version": "2026.8.1",
   "private": true,
-  "description": "OpenClaw GitHub Copilot provider plugin",
+  "description": "Natesclaw GitHub Copilot provider plugin",
   "type": "module",
   "dependencies": {
     "@clack/prompts": "1.7.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

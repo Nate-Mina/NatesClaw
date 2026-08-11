@@ -3,7 +3,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../test/helpers/promise.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveSystemEventOptionsOwnerAgentId } from "../../infra/system-event-ownership.js";
 import {
   getActiveGatewayRootWorkCount,
@@ -16,7 +16,7 @@ const enqueueSystemEventMock = vi.fn();
 const requestHeartbeatMock = vi.fn();
 const runCronIsolatedAgentTurnMock = vi.fn();
 const resolveMainSessionKeyMock = vi.fn(() => "main-session");
-const mainRosterConfig = (): OpenClawConfig => ({
+const mainRosterConfig = (): NatesclawConfig => ({
   agents: { entries: { main: { default: true } } },
 });
 const loadConfigMock = vi.fn(mainRosterConfig);

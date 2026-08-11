@@ -1,14 +1,14 @@
 import path from "node:path";
-import { redactSensitiveText } from "openclaw/plugin-sdk/logging-core";
+import { redactSensitiveText } from "natesclaw/plugin-sdk/logging-core";
 import {
   WorkerProviderError,
   type WorkerLease,
   type WorkerLeaseStatus,
   type WorkerProfile,
   type WorkerProvider,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { runCommandWithTimeout, type SpawnResult } from "openclaw/plugin-sdk/process-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { runCommandWithTimeout, type SpawnResult } from "natesclaw/plugin-sdk/process-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import {
   crabboxCommandError,
   permanentCrabboxCommandError,
@@ -34,7 +34,7 @@ import {
   resolveCrabboxProvisionCallTimeoutMs,
 } from "./crabbox-worker-timeouts.js";
 
-export { resolveOpenClawRoot } from "./crabbox-worker-profile.js";
+export { resolveNatesclawRoot } from "./crabbox-worker-profile.js";
 
 const CRABBOX_WORKER_PROVIDER_ID = "crabbox";
 const CRABBOX_KEY_REF_PROVIDER = "crabbox";
@@ -78,7 +78,7 @@ type InspectCommandResult = { status: "found"; inspect: ParsedInspect } | { stat
 
 type CrabboxWorkerProviderDependencies = {
   isExecutable?: (candidate: string) => boolean;
-  openclawRoot?: string;
+  natesclawRoot?: string;
   pathEnv?: string;
   platform?: NodeJS.Platform;
   runCommand?: CrabboxCommandRunner;
@@ -559,7 +559,7 @@ export function createCrabboxWorkerProvider(
       new Promise((resolve) => {
         setTimeout(resolve, milliseconds);
       }));
-  const openclawRoot = dependencies.openclawRoot ?? process.cwd();
+  const natesclawRoot = dependencies.natesclawRoot ?? process.cwd();
   let defaultBinary: string | undefined;
   const resolveBinary = (explicit?: string) => {
     if (explicit) {
@@ -568,7 +568,7 @@ export function createCrabboxWorkerProvider(
     defaultBinary ??= resolveCrabboxBinary({
       explicit,
       isExecutable: dependencies.isExecutable,
-      openclawRoot,
+      natesclawRoot,
       pathEnv: dependencies.pathEnv ?? process.env.PATH,
       platform: dependencies.platform,
     });

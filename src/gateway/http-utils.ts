@@ -5,7 +5,7 @@ import type { IncomingMessage } from "node:http";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { listAgentIds, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { modelKey, parseModelRef, resolveDefaultModelForAgent } from "../agents/model-selection.js";
 import { createModelVisibilityPolicy } from "../agents/model-visibility-policy.js";
@@ -47,9 +47,9 @@ export {
   type AuthorizedGatewayHttpRequest,
 } from "./http-auth-utils.js";
 
-export const OPENCLAW_MODEL_ID = "openclaw";
-/** Default OpenAI-compatible model alias that targets the default OpenClaw agent. */
-export const OPENCLAW_DEFAULT_MODEL_ID = "openclaw/default";
+export const NATESCLAW_MODEL_ID = "natesclaw";
+/** Default OpenAI-compatible model alias that targets the default Natesclaw agent. */
+export const NATESCLAW_DEFAULT_MODEL_ID = "natesclaw/default";
 
 class UnknownGatewayAgentError extends Error {
   constructor(readonly agentId: string) {
@@ -60,7 +60,7 @@ class UnknownGatewayAgentError extends Error {
 
 class GatewaySessionKeyOverrideError extends Error {
   constructor() {
-    super("`x-openclaw-session-key` cannot use reserved internal session namespaces.");
+    super("`x-natesclaw-session-key` cannot use reserved internal session namespaces.");
     this.name = "GatewaySessionKeyOverrideError";
   }
 }
@@ -83,8 +83,8 @@ function assertKnownAgentId(agentId: string, cfg = getRuntimeConfig()): void {
 
 function resolveAgentIdFromHeader(req: IncomingMessage): string | undefined {
   const raw =
-    normalizeOptionalString(getHeader(req, "x-openclaw-agent-id")) ||
-    normalizeOptionalString(getHeader(req, "x-openclaw-agent")) ||
+    normalizeOptionalString(getHeader(req, "x-natesclaw-agent-id")) ||
+    normalizeOptionalString(getHeader(req, "x-natesclaw-agent")) ||
     "";
   if (!raw) {
     return undefined;
@@ -105,12 +105,12 @@ export function resolveAgentIdFromModel(
     return undefined;
   }
   const lowered = normalizeLowercaseStringOrEmpty(raw);
-  if (lowered === OPENCLAW_MODEL_ID || lowered === OPENCLAW_DEFAULT_MODEL_ID) {
+  if (lowered === NATESCLAW_MODEL_ID || lowered === NATESCLAW_DEFAULT_MODEL_ID) {
     return resolveDefaultAgentId(cfg);
   }
 
   const m =
-    raw.match(/^openclaw[:/](?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i) ??
+    raw.match(/^natesclaw[:/](?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i) ??
     raw.match(/^agent:(?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i);
   const agentId = m?.groups?.agentId;
   if (!agentId) {
@@ -119,7 +119,7 @@ export function resolveAgentIdFromModel(
   return normalizeAgentId(agentId);
 }
 
-/** Validates and resolves the `x-openclaw-model` override for OpenAI-compatible requests. */
+/** Validates and resolves the `x-natesclaw-model` override for OpenAI-compatible requests. */
 export async function resolveOpenAiCompatModelOverride(params: {
   req: IncomingMessage;
   agentId: string;
@@ -128,11 +128,11 @@ export async function resolveOpenAiCompatModelOverride(params: {
   const requestModel = params.model?.trim();
   if (requestModel && !resolveAgentIdFromModel(requestModel)) {
     return {
-      errorMessage: "Invalid `model`. Use `openclaw` or `openclaw/<agentId>`.",
+      errorMessage: "Invalid `model`. Use `natesclaw` or `natesclaw/<agentId>`.",
     };
   }
 
-  const raw = getHeader(params.req, "x-openclaw-model")?.trim();
+  const raw = getHeader(params.req, "x-natesclaw-model")?.trim();
   if (!raw) {
     return {};
   }
@@ -155,7 +155,7 @@ export async function resolveOpenAiCompatModelOverride(params: {
     ...modelManifestContext,
   });
   if (!parsed) {
-    return { errorMessage: "Invalid `x-openclaw-model`." };
+    return { errorMessage: "Invalid `x-natesclaw-model`." };
   }
 
   // Overrides must pass the same visibility policy as model picker surfaces;
@@ -207,7 +207,7 @@ function resolveSessionKey(params: {
   user?: string | undefined;
   prefix: string;
 }): string {
-  const explicit = getHeader(params.req, "x-openclaw-session-key")?.trim();
+  const explicit = getHeader(params.req, "x-natesclaw-session-key")?.trim();
   if (explicit) {
     if (isReservedSessionKeyOverride(explicit, params.agentId)) {
       throw new GatewaySessionKeyOverrideError();
@@ -263,7 +263,7 @@ export function resolveGatewayRequestContext(params: {
   });
 
   const messageChannel = params.useMessageChannelHeader
-    ? (normalizeMessageChannel(getHeader(params.req, "x-openclaw-message-channel")) ??
+    ? (normalizeMessageChannel(getHeader(params.req, "x-natesclaw-message-channel")) ??
       params.defaultMessageChannel)
     : params.defaultMessageChannel;
 

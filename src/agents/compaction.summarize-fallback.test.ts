@@ -1,7 +1,7 @@
 // Covers final fallback behavior when model-backed summarization fails.
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
-import type { ExtensionContext } from "openclaw/plugin-sdk/agent-sessions";
-import type { UserMessage } from "openclaw/plugin-sdk/llm";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
+import type { ExtensionContext } from "natesclaw/plugin-sdk/agent-sessions";
+import type { UserMessage } from "natesclaw/plugin-sdk/llm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CompactionError } from "../../packages/agent-core/src/harness/types.js";
 import { summarizeWithFallback } from "./compaction.test-support.js";
@@ -11,9 +11,9 @@ const agentSessionMocks = vi.hoisted(() => ({
   estimateTokens: vi.fn((_message: unknown) => 100),
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-sessions", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/agent-sessions")>(
-    "openclaw/plugin-sdk/agent-sessions",
+vi.mock("natesclaw/plugin-sdk/agent-sessions", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/agent-sessions")>(
+    "natesclaw/plugin-sdk/agent-sessions",
   );
   return {
     ...actual,

@@ -1,6 +1,6 @@
 // Sms plugin module implements status behavior.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { withTimeout } from "openclaw/plugin-sdk/text-utility-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { withTimeout } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { SmsDeliveryRecord } from "./delivery-observations.js";
 import {
   listTwilioIncomingPhoneNumbers,

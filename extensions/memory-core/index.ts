@@ -1,19 +1,19 @@
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-// Memory Core plugin entrypoint registers its OpenClaw integration.
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+// Memory Core plugin entrypoint registers its Natesclaw integration.
 import {
   jsonResult,
   resolveMemorySearchConfig,
   resolveSessionAgentIds,
   type MemoryPluginRuntime,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import { resolveMemoryBackendConfig } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+  type NatesclawConfig,
+} from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
+import { resolveMemoryBackendConfig } from "natesclaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   definePluginEntry,
   type AnyAgentTool,
-  type OpenClawPluginToolContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
+  type NatesclawPluginToolContext,
+} from "natesclaw/plugin-sdk/plugin-entry";
+import type { OpenKeyedStoreOptions } from "natesclaw/plugin-sdk/plugin-state-runtime";
 import type { TSchema } from "typebox";
 import { configureMemoryCoreDreamingState } from "./src/dreaming-state.js";
 import { registerShortTermPromotionDreaming } from "./src/dreaming.js";
@@ -27,13 +27,13 @@ type MemoryToolsModule = typeof import("./src/tools.js");
 type StandingIntentToolModule = typeof import("./src/standing-intents-tool.js");
 
 type MemoryToolOptions = {
-  config?: OpenClawConfig;
-  getConfig?: () => OpenClawConfig | undefined;
+  config?: NatesclawConfig;
+  getConfig?: () => NatesclawConfig | undefined;
   agentId?: string;
   agentSessionKey?: string;
   sandboxed?: boolean;
   oneShotCliRun?: boolean;
-  conversationRecall?: OpenClawPluginToolContext["conversationRecall"];
+  conversationRecall?: NatesclawPluginToolContext["conversationRecall"];
   activeProjectKeys?: readonly string[];
   acquireLocalService?: MemoryCoreAcquireLocalService;
 };
@@ -50,7 +50,7 @@ const loadRuntimeProviderModule = createLazyRuntimeModule(
   () => import("./src/runtime-provider.js"),
 );
 
-function getToolConfig(options: MemoryToolOptions): OpenClawConfig | undefined {
+function getToolConfig(options: MemoryToolOptions): NatesclawConfig | undefined {
   return options.getConfig?.() ?? options.config;
 }
 
@@ -152,7 +152,7 @@ function createLazyMemoryGetTool(options: MemoryToolOptions): AnyAgentTool | nul
   });
 }
 
-function createLazyStandingIntentTool(ctx: OpenClawPluginToolContext): AnyAgentTool | null {
+function createLazyStandingIntentTool(ctx: NatesclawPluginToolContext): AnyAgentTool | null {
   if (ctx.senderIsOwner !== true) {
     return null;
   }
@@ -222,7 +222,7 @@ function createLazyStandingIntentTool(ctx: OpenClawPluginToolContext): AnyAgentT
 }
 
 function resolveMemoryToolOptions(
-  ctx: OpenClawPluginToolContext,
+  ctx: NatesclawPluginToolContext,
   host: MemoryCoreRuntimeHost,
 ): MemoryToolOptions {
   const getConfig = () => ctx.getRuntimeConfig?.() ?? ctx.runtimeConfig ?? ctx.config;
@@ -269,7 +269,7 @@ function createLazyMemoryRuntime(host: MemoryCoreRuntimeHost): MemoryPluginRunti
 
 export default definePluginEntry({
   id: "memory-core",
-  name: "OpenClaw Memory",
+  name: "Natesclaw Memory",
   description: "File-backed memory search tools and CLI",
   kind: "memory",
   register(api) {
@@ -315,7 +315,7 @@ export default definePluginEntry({
         if (!module.isEligibleStandingIntentTurn(ctx)) {
           return undefined;
         }
-        const config = (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+        const config = (api.runtime.config?.current?.() ?? api.config) as NatesclawConfig;
         const { sessionAgentId: agentId } = resolveSessionAgentIds({
           sessionKey: ctx.sessionKey,
           config,
@@ -351,7 +351,7 @@ export default definePluginEntry({
         }
         try {
           const module = await loadStandingIntentsModule();
-          const config = (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+          const config = (api.runtime.config?.current?.() ?? api.config) as NatesclawConfig;
           const { sessionAgentId: agentId } = resolveSessionAgentIds({
             sessionKey: ctx.sessionKey,
             config,

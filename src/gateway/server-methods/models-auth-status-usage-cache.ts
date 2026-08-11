@@ -12,7 +12,7 @@ import {
 } from "../../agents/execution-auth-binding.js";
 import { resolveEnvApiKey } from "../../agents/model-auth-env.js";
 import { resolveUsableCustomProviderApiKey } from "../../agents/model-auth.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { loadProviderUsageSummary } from "../../infra/provider-usage.load.js";
 import type {
   ProviderUsageSnapshot,
@@ -58,7 +58,7 @@ function sortedRecordEntries<T>(value: Record<string, T> | undefined) {
 }
 
 export function fingerprintProviderUsageCredentials(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   directApiKeys: ReadonlyMap<string, { source: "config" | "env"; envVar?: string } | undefined>;
   store: AuthProfileStore;
 }): string {
@@ -299,7 +299,7 @@ async function loadProviderUsageSummaryStaleWhileRevalidate(
 
 /** Shares the models.authStatus cache contract with the unscoped usage.status RPC. */
 export async function loadUsageStatusStaleWhileRevalidate(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   now?: number;
 }): Promise<UsageSummary> {
   const agentId = resolveDefaultAgentId(params.config);

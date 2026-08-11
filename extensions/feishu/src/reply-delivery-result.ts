@@ -1,10 +1,10 @@
-import { createChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { createChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createMessageReceiptFromOutboundResults,
   type MessageReceipt,
   type MessageReceiptPartKind,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 
 export type FeishuReplyDeliverySource = {
   messageId?: string;

@@ -4,7 +4,7 @@ import {
   embeddedAgentLog,
   formatErrorMessage,
   setActiveEmbeddedRun,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import { retireCodexAppServerClientAfterTimedOutTurn } from "./attempt-client-cleanup.js";
 import { isTerminalTurnStatus } from "./attempt-notifications.js";
 import {

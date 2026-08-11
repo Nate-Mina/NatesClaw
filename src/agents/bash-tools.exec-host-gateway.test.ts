@@ -942,7 +942,7 @@ describe("processGatewayAllowlist", () => {
   });
 
   it("reviews and executes the same PATH-resolved executable", async () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-auto-review-path-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-auto-review-path-"));
     const shadowGit = path.join(tempDir, "git");
     fs.writeFileSync(shadowGit, "#!/bin/sh\nexit 0\n", { mode: 0o755 });
     try {
@@ -1587,7 +1587,7 @@ describe("processGatewayAllowlist", () => {
   });
 
   it("requests human approval when auto-review cannot resolve the executable", async () => {
-    const command = "openclaw-definitely-missing-executable --version";
+    const command = "natesclaw-definitely-missing-executable --version";
     const { resolvedPath } = await configurePlanBackedCommand({ command });
     expect(resolvedPath).toBeUndefined();
 
@@ -1711,7 +1711,7 @@ describe("processGatewayAllowlist", () => {
     });
 
     const result = await runGatewayAllowlist({
-      command: "openclaw config set security.audit.suppressions '[]'",
+      command: "natesclaw config set security.audit.suppressions '[]'",
       security: "full",
       ask: "on-miss",
     });
@@ -1730,7 +1730,7 @@ describe("processGatewayAllowlist", () => {
     });
 
     const result = await runGatewayAllowlist({
-      command: "openclaw config set security.audit.suppressions '[]'",
+      command: "natesclaw config set security.audit.suppressions '[]'",
       security: "full",
       ask: "on-miss",
       autoReview: true,
@@ -1752,7 +1752,7 @@ describe("processGatewayAllowlist", () => {
     });
 
     await runGatewayAllowlist({
-      command: "openclaw config set security.audit.suppressions '[]'",
+      command: "natesclaw config set security.audit.suppressions '[]'",
       security: "full",
       ask: "off",
     });
@@ -1766,7 +1766,7 @@ describe("processGatewayAllowlist", () => {
       analysisOk: true,
       allowlistSatisfied: true,
       segments: [
-        { resolution: null, argv: ["openclaw", "config", "get", "security.audit.suppressions"] },
+        { resolution: null, argv: ["natesclaw", "config", "get", "security.audit.suppressions"] },
       ],
       segmentAllowlistEntries: [],
       segmentSatisfiedBy: [null],
@@ -1779,7 +1779,7 @@ describe("processGatewayAllowlist", () => {
     });
 
     await runGatewayAllowlist({
-      command: "openclaw config get security.audit.suppressions",
+      command: "natesclaw config get security.audit.suppressions",
       security: "full",
       ask: "on-miss",
     });
@@ -1795,7 +1795,7 @@ describe("processGatewayAllowlist", () => {
       segments: [
         {
           resolution: null,
-          argv: ["openclaw", "--profile", "rescue", "config", "get", "security.audit.suppressions"],
+          argv: ["natesclaw", "--profile", "rescue", "config", "get", "security.audit.suppressions"],
         },
       ],
       segmentAllowlistEntries: [],
@@ -1809,7 +1809,7 @@ describe("processGatewayAllowlist", () => {
     });
 
     await runGatewayAllowlist({
-      command: "openclaw --profile rescue config get security.audit.suppressions",
+      command: "natesclaw --profile rescue config get security.audit.suppressions",
       security: "full",
       ask: "on-miss",
     });
@@ -1823,10 +1823,10 @@ describe("processGatewayAllowlist", () => {
       analysisOk: true,
       allowlistSatisfied: true,
       segments: [
-        { resolution: null, argv: ["openclaw", "config", "get", "security.audit.suppressions"] },
+        { resolution: null, argv: ["natesclaw", "config", "get", "security.audit.suppressions"] },
         {
           resolution: null,
-          argv: ["openclaw", "config", "set", "security.audit.suppressions", "[]"],
+          argv: ["natesclaw", "config", "set", "security.audit.suppressions", "[]"],
         },
       ],
       segmentAllowlistEntries: [],
@@ -1840,7 +1840,7 @@ describe("processGatewayAllowlist", () => {
 
     const result = await runGatewayAllowlist({
       command:
-        "openclaw config get security.audit.suppressions; openclaw config set security.audit.suppressions '[]'",
+        "natesclaw config get security.audit.suppressions; natesclaw config set security.audit.suppressions '[]'",
       security: "full",
       ask: "on-miss",
     });
@@ -1855,7 +1855,7 @@ describe("processGatewayAllowlist", () => {
       analysisOk: true,
       allowlistSatisfied: false,
       segments: [
-        { resolution: null, argv: ["openclaw", "config", "get", "security.audit.suppressions"] },
+        { resolution: null, argv: ["natesclaw", "config", "get", "security.audit.suppressions"] },
       ],
       segmentAllowlistEntries: [],
     });
@@ -1868,7 +1868,7 @@ describe("processGatewayAllowlist", () => {
 
     const result = await runGatewayAllowlist({
       command:
-        "openclaw config get security.audit.suppressions; openclaw config set security.audit.suppressions '[]'",
+        "natesclaw config get security.audit.suppressions; natesclaw config set security.audit.suppressions '[]'",
       security: "full",
       ask: "on-miss",
     });
@@ -1884,14 +1884,14 @@ describe("processGatewayAllowlist", () => {
       allowlistSatisfied: false,
       segments: [
         {
-          raw: "openclaw config get security.audit.suppressions",
+          raw: "natesclaw config get security.audit.suppressions",
           resolution: null,
-          argv: ["openclaw", "config", "get", "security.audit.suppressions"],
+          argv: ["natesclaw", "config", "get", "security.audit.suppressions"],
         },
         {
-          raw: "openclaw config patch --stdin <<'EOF'",
+          raw: "natesclaw config patch --stdin <<'EOF'",
           resolution: null,
-          argv: ["openclaw", "config", "patch", "--stdin"],
+          argv: ["natesclaw", "config", "patch", "--stdin"],
         },
       ],
       segmentAllowlistEntries: [],
@@ -1904,7 +1904,7 @@ describe("processGatewayAllowlist", () => {
     });
 
     const result = await runGatewayAllowlist({
-      command: `openclaw config get security.audit.suppressions; openclaw config patch --stdin <<'EOF'
+      command: `natesclaw config get security.audit.suppressions; natesclaw config patch --stdin <<'EOF'
 {"security":{"audit":{"suppressions":[]}}}
 EOF`,
       security: "full",
@@ -1995,11 +1995,11 @@ EOF`,
       durationMs: 12,
       timedOut: false,
       aggregated: JSON.stringify({
-        path: "/tmp/openclaw-diagnostics.zip",
+        path: "/tmp/natesclaw-diagnostics.zip",
         bytes: 1234,
         manifest: {
           generatedAt: "2026-04-28T20:58:29.311Z",
-          openclawVersion: "2026.4.27",
+          natesclawVersion: "2026.4.27",
           contents: [
             { path: "diagnostics.json", bytes: 100 },
             { path: "summary.md", bytes: 200 },
@@ -2024,13 +2024,13 @@ EOF`,
         "Codex diagnostics sent to OpenAI servers:",
         "Session 1",
         "Channel: telegram",
-        "OpenClaw session id: `session-1`",
+        "Natesclaw session id: `session-1`",
         "Codex thread id: `thread-1`",
       ].join("\n"),
     );
 
     const result = await runGatewayAllowlist({
-      command: "openclaw gateway diagnostics export --json",
+      command: "natesclaw gateway diagnostics export --json",
       trigger: "diagnostics",
       approvalFollowupMode: "direct",
       approvalFollowup,
@@ -2047,7 +2047,7 @@ EOF`,
     expect(followupTarget?.direct).toBe(true);
     const followupText = requireSentFollowupText(0);
     expect(followupText).toContain("Diagnostics export created.");
-    expect(followupText).toContain("Path: /tmp/openclaw-diagnostics.zip");
+    expect(followupText).toContain("Path: /tmp/natesclaw-diagnostics.zip");
     expect(followupText).toContain("Contents (2 files):");
     expect(followupText).toContain("OpenAI Codex harness:");
     expect(followupText).toContain("Codex diagnostics sent to OpenAI servers:");
@@ -2077,10 +2077,10 @@ EOF`,
     });
 
     const result = await runGatewayAllowlist({
-      command: "openclaw sessions export-trajectory --json",
+      command: "natesclaw sessions export-trajectory --json",
       approvalFollowupMode: "agent",
       sessionId: "approval-session",
-      sessionStore: "/tmp/openclaw-sessions.json",
+      sessionStore: "/tmp/natesclaw-sessions.json",
       turnSourceChannel: "webchat",
     });
 
@@ -2091,7 +2091,7 @@ EOF`,
     expect(requireBuildFollowupTargetInput(0)).toMatchObject({
       direct: false,
       expectedSessionId: "approval-session",
-      sessionStore: "/tmp/openclaw-sessions.json",
+      sessionStore: "/tmp/natesclaw-sessions.json",
     });
     expect(requireSentFollowupTarget(0)?.direct).toBe(false);
     expect(requireSentFollowupText(0)).toContain("done");
@@ -2115,10 +2115,10 @@ EOF`,
     });
 
     const result = await runGatewayAllowlist({
-      command: "openclaw sessions export-trajectory --json",
+      command: "natesclaw sessions export-trajectory --json",
       approvalFollowupMode: "agent",
       sessionId: "approval-session",
-      sessionStore: "/tmp/openclaw-sessions.json",
+      sessionStore: "/tmp/natesclaw-sessions.json",
       turnSourceChannel: "webchat",
     });
 

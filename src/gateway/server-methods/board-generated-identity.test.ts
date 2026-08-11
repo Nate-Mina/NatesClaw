@@ -4,23 +4,23 @@ import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js"
 import { SqliteBoardStore } from "../../boards/sqlite-board-store.js";
 import { replaceSessionEntrySync } from "../../config/sessions/session-accessor.entry.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import { createBoardHarness } from "./board.test-support.js";
 
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 it("serializes in-flight generated-name collisions and reuses both names after reload", async () => {
-  const env = { OPENCLAW_STATE_DIR: tempDirs.make("openclaw-board-generated-race-") };
+  const env = { NATESCLAW_STATE_DIR: tempDirs.make("natesclaw-board-generated-race-") };
   const sessionKey = "agent:main:generated-race";
-  const database = openOpenClawAgentDatabase({ agentId: "main", env });
+  const database = openNatesclawAgentDatabase({ agentId: "main", env });
   replaceSessionEntrySync(
     { agentId: "main", sessionKey, storePath: database.path },
     { sessionId: "generated-race", updatedAt: Date.now() },
@@ -85,8 +85,8 @@ it("serializes in-flight generated-name collisions and reuses both names after r
     broadcast.mock.calls.map(([, event]) => (event as { widget?: string }).widget).filter(Boolean),
   ).toEqual(expect.arrayContaining(committedNames));
 
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
   const reloaded = createBoardHarness(undefined, {}, new SqliteBoardStore(options));
   const get = await reloaded.invoke("board.get", { sessionKey });
   const snapshot = get.mock.calls[0]?.[1] as BoardSnapshot;

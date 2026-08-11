@@ -1,4 +1,4 @@
-// Extension Package Boundary script supports OpenClaw repository automation.
+// Extension Package Boundary script supports Natesclaw repository automation.
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, posix, resolve } from "node:path";
 import { privateLocalOnlyPluginSdkEntrypoints } from "./plugin-sdk-entries.mts";
@@ -16,7 +16,7 @@ export const EXTENSION_PACKAGE_BOUNDARY_EXCLUDE = [
 
 const privateLocalOnlyPluginSdkPackageDtsPaths = Object.fromEntries(
   privateLocalOnlyPluginSdkEntrypoints.map((entrypoint) => [
-    `openclaw/plugin-sdk/${entrypoint}`,
+    `natesclaw/plugin-sdk/${entrypoint}`,
     [`../packages/plugin-sdk/dist/src/plugin-sdk/${entrypoint}.d.ts`],
   ]),
 ) as Record<string, readonly string[]>;
@@ -54,194 +54,194 @@ function buildPackageBoundaryDtsPaths(params: {
 }
 
 export const EXTENSION_PACKAGE_BOUNDARY_BASE_PATHS = {
-  "openclaw/plugin-sdk/*": ["../dist/plugin-sdk/*.d.ts"],
+  "natesclaw/plugin-sdk/*": ["../dist/plugin-sdk/*.d.ts"],
   ...privateLocalOnlyPluginSdkPackageDtsPaths,
-  "openclaw/plugin-sdk/account-id": ["../dist/plugin-sdk/account-id.d.ts"],
-  "openclaw/plugin-sdk/channel-entry-contract": ["../dist/plugin-sdk/channel-entry-contract.d.ts"],
-  "openclaw/plugin-sdk/browser-maintenance": [
+  "natesclaw/plugin-sdk/account-id": ["../dist/plugin-sdk/account-id.d.ts"],
+  "natesclaw/plugin-sdk/channel-entry-contract": ["../dist/plugin-sdk/channel-entry-contract.d.ts"],
+  "natesclaw/plugin-sdk/browser-maintenance": [
     "../packages/plugin-sdk/dist/extensions/browser/browser-maintenance.d.ts",
   ],
-  "openclaw/plugin-sdk/channel-secret-basic-runtime": [
+  "natesclaw/plugin-sdk/channel-secret-basic-runtime": [
     "../dist/plugin-sdk/channel-secret-basic-runtime.d.ts",
   ],
-  "openclaw/plugin-sdk/channel-secret-runtime": ["../dist/plugin-sdk/channel-secret-runtime.d.ts"],
-  "openclaw/plugin-sdk/channel-streaming": ["../dist/plugin-sdk/channel-streaming.d.ts"],
-  "openclaw/plugin-sdk/error-runtime": ["../dist/plugin-sdk/error-runtime.d.ts"],
-  "openclaw/plugin-sdk/secret-ref-runtime": ["../dist/plugin-sdk/secret-ref-runtime.d.ts"],
-  "openclaw/plugin-sdk/ssrf-runtime": ["../dist/plugin-sdk/ssrf-runtime.d.ts"],
-  "@openclaw/qa-channel/api.js": ["../dist/plugin-sdk/extensions/qa-channel/api.d.ts"],
-  "@openclaw/memory-core/api.js": ["../dist/plugin-sdk/extensions/memory-core/api.d.ts"],
-  "@openclaw/matrix/test-api.js": ["../dist/plugin-sdk/extensions/matrix/test-api.d.ts"],
-  "@openclaw/discord/api.js": ["../dist/plugin-sdk/extensions/discord/api.d.ts"],
-  "@openclaw/slack/api.js": ["../dist/plugin-sdk/extensions/slack/api.d.ts"],
-  "@openclaw/telegram/api.js": ["../dist/plugin-sdk/extensions/telegram/api.d.ts"],
-  "@openclaw/whatsapp/api.js": ["../dist/plugin-sdk/extensions/whatsapp/api.d.ts"],
-  "@openclaw/ai": ["../dist/plugin-sdk/packages/ai/src/index.d.ts"],
-  "@openclaw/ai/diagnostics": ["../dist/plugin-sdk/packages/ai/src/utils/diagnostics.d.ts"],
-  "@openclaw/ai/event-stream": ["../dist/plugin-sdk/packages/ai/src/utils/event-stream.d.ts"],
-  "@openclaw/ai/providers": ["../dist/plugin-sdk/packages/ai/src/providers.d.ts"],
-  "@openclaw/ai/transports": ["../dist/plugin-sdk/packages/ai/src/transports.d.ts"],
-  "@openclaw/ai/types": ["../dist/plugin-sdk/packages/ai/src/types.d.ts"],
-  "@openclaw/ai/validation": ["../dist/plugin-sdk/packages/ai/src/validation.d.ts"],
-  "@openclaw/ai/internal/anthropic": ["../dist/plugin-sdk/packages/ai/src/internal/anthropic.d.ts"],
-  "@openclaw/ai/internal/openai": ["../dist/plugin-sdk/packages/ai/src/internal/openai.d.ts"],
-  "@openclaw/ai/internal/retry-after": [
+  "natesclaw/plugin-sdk/channel-secret-runtime": ["../dist/plugin-sdk/channel-secret-runtime.d.ts"],
+  "natesclaw/plugin-sdk/channel-streaming": ["../dist/plugin-sdk/channel-streaming.d.ts"],
+  "natesclaw/plugin-sdk/error-runtime": ["../dist/plugin-sdk/error-runtime.d.ts"],
+  "natesclaw/plugin-sdk/secret-ref-runtime": ["../dist/plugin-sdk/secret-ref-runtime.d.ts"],
+  "natesclaw/plugin-sdk/ssrf-runtime": ["../dist/plugin-sdk/ssrf-runtime.d.ts"],
+  "@natesclaw/qa-channel/api.js": ["../dist/plugin-sdk/extensions/qa-channel/api.d.ts"],
+  "@natesclaw/memory-core/api.js": ["../dist/plugin-sdk/extensions/memory-core/api.d.ts"],
+  "@natesclaw/matrix/test-api.js": ["../dist/plugin-sdk/extensions/matrix/test-api.d.ts"],
+  "@natesclaw/discord/api.js": ["../dist/plugin-sdk/extensions/discord/api.d.ts"],
+  "@natesclaw/slack/api.js": ["../dist/plugin-sdk/extensions/slack/api.d.ts"],
+  "@natesclaw/telegram/api.js": ["../dist/plugin-sdk/extensions/telegram/api.d.ts"],
+  "@natesclaw/whatsapp/api.js": ["../dist/plugin-sdk/extensions/whatsapp/api.d.ts"],
+  "@natesclaw/ai": ["../dist/plugin-sdk/packages/ai/src/index.d.ts"],
+  "@natesclaw/ai/diagnostics": ["../dist/plugin-sdk/packages/ai/src/utils/diagnostics.d.ts"],
+  "@natesclaw/ai/event-stream": ["../dist/plugin-sdk/packages/ai/src/utils/event-stream.d.ts"],
+  "@natesclaw/ai/providers": ["../dist/plugin-sdk/packages/ai/src/providers.d.ts"],
+  "@natesclaw/ai/transports": ["../dist/plugin-sdk/packages/ai/src/transports.d.ts"],
+  "@natesclaw/ai/types": ["../dist/plugin-sdk/packages/ai/src/types.d.ts"],
+  "@natesclaw/ai/validation": ["../dist/plugin-sdk/packages/ai/src/validation.d.ts"],
+  "@natesclaw/ai/internal/anthropic": ["../dist/plugin-sdk/packages/ai/src/internal/anthropic.d.ts"],
+  "@natesclaw/ai/internal/openai": ["../dist/plugin-sdk/packages/ai/src/internal/openai.d.ts"],
+  "@natesclaw/ai/internal/retry-after": [
     "../dist/plugin-sdk/packages/ai/src/internal/retry-after.d.ts",
   ],
-  "@openclaw/ai/internal/runtime": ["../dist/plugin-sdk/packages/ai/src/internal/runtime.d.ts"],
-  "@openclaw/ai/internal/shared": ["../dist/plugin-sdk/packages/ai/src/internal/shared.d.ts"],
-  "@openclaw/llm-core": ["../dist/plugin-sdk/packages/llm-core/src/index.d.ts"],
-  "@openclaw/llm-core/diagnostics": [
+  "@natesclaw/ai/internal/runtime": ["../dist/plugin-sdk/packages/ai/src/internal/runtime.d.ts"],
+  "@natesclaw/ai/internal/shared": ["../dist/plugin-sdk/packages/ai/src/internal/shared.d.ts"],
+  "@natesclaw/llm-core": ["../dist/plugin-sdk/packages/llm-core/src/index.d.ts"],
+  "@natesclaw/llm-core/diagnostics": [
     "../dist/plugin-sdk/packages/llm-core/src/utils/diagnostics.d.ts",
   ],
-  "@openclaw/llm-core/event-stream": [
+  "@natesclaw/llm-core/event-stream": [
     "../dist/plugin-sdk/packages/llm-core/src/utils/event-stream.d.ts",
   ],
-  "@openclaw/llm-core/types": ["../dist/plugin-sdk/packages/llm-core/src/types.d.ts"],
-  "@openclaw/llm-core/validation": ["../dist/plugin-sdk/packages/llm-core/src/validation.d.ts"],
-  "@openclaw/llm-core/*": ["../dist/plugin-sdk/packages/llm-core/src/*.d.ts"],
-  "@openclaw/model-catalog-core": ["../dist/plugin-sdk/packages/model-catalog-core/src/index.d.ts"],
-  "@openclaw/model-catalog-core/configured-model-refs": [
+  "@natesclaw/llm-core/types": ["../dist/plugin-sdk/packages/llm-core/src/types.d.ts"],
+  "@natesclaw/llm-core/validation": ["../dist/plugin-sdk/packages/llm-core/src/validation.d.ts"],
+  "@natesclaw/llm-core/*": ["../dist/plugin-sdk/packages/llm-core/src/*.d.ts"],
+  "@natesclaw/model-catalog-core": ["../dist/plugin-sdk/packages/model-catalog-core/src/index.d.ts"],
+  "@natesclaw/model-catalog-core/configured-model-refs": [
     "../dist/plugin-sdk/packages/model-catalog-core/src/configured-model-refs.d.ts",
   ],
-  "@openclaw/model-catalog-core/model-catalog-refs": [
+  "@natesclaw/model-catalog-core/model-catalog-refs": [
     "../dist/plugin-sdk/packages/model-catalog-core/src/model-catalog-refs.d.ts",
   ],
-  "@openclaw/model-catalog-core/model-catalog-normalize": [
+  "@natesclaw/model-catalog-core/model-catalog-normalize": [
     "../dist/plugin-sdk/packages/model-catalog-core/src/model-catalog-normalize.d.ts",
   ],
-  "@openclaw/model-catalog-core/model-catalog-types": [
+  "@natesclaw/model-catalog-core/model-catalog-types": [
     "../dist/plugin-sdk/packages/model-catalog-core/src/model-catalog-types.d.ts",
   ],
-  "@openclaw/model-catalog-core/provider-id": [
+  "@natesclaw/model-catalog-core/provider-id": [
     "../dist/plugin-sdk/packages/model-catalog-core/src/provider-id.d.ts",
   ],
-  "@openclaw/model-catalog-core/provider-model-id-normalization": [
+  "@natesclaw/model-catalog-core/provider-model-id-normalization": [
     "../dist/plugin-sdk/packages/model-catalog-core/src/provider-model-id-normalization.d.ts",
   ],
-  "@openclaw/model-catalog-core/provider-model-id-normalize": [
+  "@natesclaw/model-catalog-core/provider-model-id-normalize": [
     "../dist/plugin-sdk/packages/model-catalog-core/src/provider-model-id-normalize.d.ts",
   ],
-  "@openclaw/model-catalog-core/*": ["../dist/plugin-sdk/packages/model-catalog-core/src/*.d.ts"],
-  "@openclaw/markdown-core": ["../dist/plugin-sdk/packages/markdown-core/src/index.d.ts"],
-  "@openclaw/markdown-core/code-spans": [
+  "@natesclaw/model-catalog-core/*": ["../dist/plugin-sdk/packages/model-catalog-core/src/*.d.ts"],
+  "@natesclaw/markdown-core": ["../dist/plugin-sdk/packages/markdown-core/src/index.d.ts"],
+  "@natesclaw/markdown-core/code-spans": [
     "../dist/plugin-sdk/packages/markdown-core/src/code-spans.d.ts",
   ],
-  "@openclaw/markdown-core/fences": ["../dist/plugin-sdk/packages/markdown-core/src/fences.d.ts"],
-  "@openclaw/markdown-core/frontmatter": [
+  "@natesclaw/markdown-core/fences": ["../dist/plugin-sdk/packages/markdown-core/src/fences.d.ts"],
+  "@natesclaw/markdown-core/frontmatter": [
     "../dist/plugin-sdk/packages/markdown-core/src/frontmatter.d.ts",
   ],
-  "@openclaw/markdown-core/ir": ["../dist/plugin-sdk/packages/markdown-core/src/ir.d.ts"],
-  "@openclaw/markdown-core/render": ["../dist/plugin-sdk/packages/markdown-core/src/render.d.ts"],
-  "@openclaw/markdown-core/render-aware-chunking": [
+  "@natesclaw/markdown-core/ir": ["../dist/plugin-sdk/packages/markdown-core/src/ir.d.ts"],
+  "@natesclaw/markdown-core/render": ["../dist/plugin-sdk/packages/markdown-core/src/render.d.ts"],
+  "@natesclaw/markdown-core/render-aware-chunking": [
     "../dist/plugin-sdk/packages/markdown-core/src/render-aware-chunking.d.ts",
   ],
-  "@openclaw/markdown-core/tables": ["../dist/plugin-sdk/packages/markdown-core/src/tables.d.ts"],
-  "@openclaw/markdown-core/types": ["../dist/plugin-sdk/packages/markdown-core/src/types.d.ts"],
-  "@openclaw/markdown-core/*": ["../dist/plugin-sdk/packages/markdown-core/src/*.d.ts"],
-  "@openclaw/media-generation-core": [
+  "@natesclaw/markdown-core/tables": ["../dist/plugin-sdk/packages/markdown-core/src/tables.d.ts"],
+  "@natesclaw/markdown-core/types": ["../dist/plugin-sdk/packages/markdown-core/src/types.d.ts"],
+  "@natesclaw/markdown-core/*": ["../dist/plugin-sdk/packages/markdown-core/src/*.d.ts"],
+  "@natesclaw/media-generation-core": [
     "../dist/plugin-sdk/packages/media-generation-core/src/index.d.ts",
   ],
-  "@openclaw/media-generation-core/capability-model-ref": [
+  "@natesclaw/media-generation-core/capability-model-ref": [
     "../dist/plugin-sdk/packages/media-generation-core/src/capability-model-ref.d.ts",
   ],
-  "@openclaw/media-generation-core/catalog": [
+  "@natesclaw/media-generation-core/catalog": [
     "../dist/plugin-sdk/packages/media-generation-core/src/catalog.d.ts",
   ],
-  "@openclaw/media-generation-core/model-ref": [
+  "@natesclaw/media-generation-core/model-ref": [
     "../dist/plugin-sdk/packages/media-generation-core/src/model-ref.d.ts",
   ],
-  "@openclaw/media-generation-core/normalization": [
+  "@natesclaw/media-generation-core/normalization": [
     "../dist/plugin-sdk/packages/media-generation-core/src/normalization.d.ts",
   ],
-  "@openclaw/media-generation-core/*": [
+  "@natesclaw/media-generation-core/*": [
     "../dist/plugin-sdk/packages/media-generation-core/src/*.d.ts",
   ],
-  "@openclaw/media-core": ["../dist/plugin-sdk/packages/media-core/src/index.d.ts"],
-  "@openclaw/media-core/attachment-classify": [
+  "@natesclaw/media-core": ["../dist/plugin-sdk/packages/media-core/src/index.d.ts"],
+  "@natesclaw/media-core/attachment-classify": [
     "../dist/plugin-sdk/packages/media-core/src/attachment-classify.d.ts",
   ],
-  "@openclaw/media-core/base64": ["../dist/plugin-sdk/packages/media-core/src/base64.d.ts"],
-  "@openclaw/media-core/constants": ["../dist/plugin-sdk/packages/media-core/src/constants.d.ts"],
-  "@openclaw/media-core/content-length": [
+  "@natesclaw/media-core/base64": ["../dist/plugin-sdk/packages/media-core/src/base64.d.ts"],
+  "@natesclaw/media-core/constants": ["../dist/plugin-sdk/packages/media-core/src/constants.d.ts"],
+  "@natesclaw/media-core/content-length": [
     "../dist/plugin-sdk/packages/media-core/src/content-length.d.ts",
   ],
-  "@openclaw/media-core/file-name": ["../dist/plugin-sdk/packages/media-core/src/file-name.d.ts"],
-  "@openclaw/media-core/inbound-path-policy": [
+  "@natesclaw/media-core/file-name": ["../dist/plugin-sdk/packages/media-core/src/file-name.d.ts"],
+  "@natesclaw/media-core/inbound-path-policy": [
     "../dist/plugin-sdk/packages/media-core/src/inbound-path-policy.d.ts",
   ],
-  "@openclaw/media-core/inline-image-data-url": [
+  "@natesclaw/media-core/inline-image-data-url": [
     "../dist/plugin-sdk/packages/media-core/src/inline-image-data-url.d.ts",
   ],
-  "@openclaw/media-core/media-source-url": [
+  "@natesclaw/media-core/media-source-url": [
     "../dist/plugin-sdk/packages/media-core/src/media-source-url.d.ts",
   ],
-  "@openclaw/media-core/mime": ["../dist/plugin-sdk/packages/media-core/src/mime.d.ts"],
-  "@openclaw/media-core/read-byte-stream-with-limit": [
+  "@natesclaw/media-core/mime": ["../dist/plugin-sdk/packages/media-core/src/mime.d.ts"],
+  "@natesclaw/media-core/read-byte-stream-with-limit": [
     "../dist/plugin-sdk/packages/media-core/src/read-byte-stream-with-limit.d.ts",
   ],
-  "@openclaw/media-core/*": ["../dist/plugin-sdk/packages/media-core/src/*.d.ts"],
-  "@openclaw/normalization-core/record-coerce": [
+  "@natesclaw/media-core/*": ["../dist/plugin-sdk/packages/media-core/src/*.d.ts"],
+  "@natesclaw/normalization-core/record-coerce": [
     "../dist/plugin-sdk/packages/normalization-core/src/record-coerce.d.ts",
   ],
-  "@openclaw/normalization-core/string-coerce": [
+  "@natesclaw/normalization-core/string-coerce": [
     "../dist/plugin-sdk/packages/normalization-core/src/string-coerce.d.ts",
   ],
-  "@openclaw/normalization-core/*": ["../dist/plugin-sdk/packages/normalization-core/src/*.d.ts"],
-  "@openclaw/retry": ["../dist/plugin-sdk/packages/retry/src/index.d.ts"],
-  "@openclaw/workboard-contract": ["../packages/workboard-contract/src/index.ts"],
+  "@natesclaw/normalization-core/*": ["../dist/plugin-sdk/packages/normalization-core/src/*.d.ts"],
+  "@natesclaw/retry": ["../dist/plugin-sdk/packages/retry/src/index.d.ts"],
+  "@natesclaw/workboard-contract": ["../packages/workboard-contract/src/index.ts"],
   ...buildPackageBoundaryDtsPaths({
-    packageName: "@openclaw/acp-core",
+    packageName: "@natesclaw/acp-core",
     packageDir: "acp-core",
   }),
-  "@openclaw/acp-core/*": ["../dist/plugin-sdk/packages/acp-core/src/*.d.ts"],
-  "@openclaw/terminal-core": ["../dist/plugin-sdk/packages/terminal-core/src/index.d.ts"],
-  "@openclaw/terminal-core/ansi": ["../dist/plugin-sdk/packages/terminal-core/src/ansi.d.ts"],
-  "@openclaw/terminal-core/decorative-emoji": [
+  "@natesclaw/acp-core/*": ["../dist/plugin-sdk/packages/acp-core/src/*.d.ts"],
+  "@natesclaw/terminal-core": ["../dist/plugin-sdk/packages/terminal-core/src/index.d.ts"],
+  "@natesclaw/terminal-core/ansi": ["../dist/plugin-sdk/packages/terminal-core/src/ansi.d.ts"],
+  "@natesclaw/terminal-core/decorative-emoji": [
     "../dist/plugin-sdk/packages/terminal-core/src/decorative-emoji.d.ts",
   ],
-  "@openclaw/terminal-core/health-style": [
+  "@natesclaw/terminal-core/health-style": [
     "../dist/plugin-sdk/packages/terminal-core/src/health-style.d.ts",
   ],
-  "@openclaw/terminal-core/links": ["../dist/plugin-sdk/packages/terminal-core/src/links.d.ts"],
-  "@openclaw/terminal-core/note": ["../dist/plugin-sdk/packages/terminal-core/src/note.d.ts"],
-  "@openclaw/terminal-core/osc-progress": [
+  "@natesclaw/terminal-core/links": ["../dist/plugin-sdk/packages/terminal-core/src/links.d.ts"],
+  "@natesclaw/terminal-core/note": ["../dist/plugin-sdk/packages/terminal-core/src/note.d.ts"],
+  "@natesclaw/terminal-core/osc-progress": [
     "../dist/plugin-sdk/packages/terminal-core/src/osc-progress.d.ts",
   ],
-  "@openclaw/terminal-core/palette": ["../dist/plugin-sdk/packages/terminal-core/src/palette.d.ts"],
-  "@openclaw/terminal-core/progress-line": [
+  "@natesclaw/terminal-core/palette": ["../dist/plugin-sdk/packages/terminal-core/src/palette.d.ts"],
+  "@natesclaw/terminal-core/progress-line": [
     "../dist/plugin-sdk/packages/terminal-core/src/progress-line.d.ts",
   ],
-  "@openclaw/terminal-core/prompt-select-styled": [
+  "@natesclaw/terminal-core/prompt-select-styled": [
     "../dist/plugin-sdk/packages/terminal-core/src/prompt-select-styled.d.ts",
   ],
-  "@openclaw/terminal-core/prompt-select-styled-params": [
+  "@natesclaw/terminal-core/prompt-select-styled-params": [
     "../dist/plugin-sdk/packages/terminal-core/src/prompt-select-styled-params.d.ts",
   ],
-  "@openclaw/terminal-core/prompt-style": [
+  "@natesclaw/terminal-core/prompt-style": [
     "../dist/plugin-sdk/packages/terminal-core/src/prompt-style.d.ts",
   ],
-  "@openclaw/terminal-core/restore": ["../dist/plugin-sdk/packages/terminal-core/src/restore.d.ts"],
-  "@openclaw/terminal-core/safe-text": [
+  "@natesclaw/terminal-core/restore": ["../dist/plugin-sdk/packages/terminal-core/src/restore.d.ts"],
+  "@natesclaw/terminal-core/safe-text": [
     "../dist/plugin-sdk/packages/terminal-core/src/safe-text.d.ts",
   ],
-  "@openclaw/terminal-core/stream-writer": [
+  "@natesclaw/terminal-core/stream-writer": [
     "../dist/plugin-sdk/packages/terminal-core/src/stream-writer.d.ts",
   ],
-  "@openclaw/terminal-core/table": ["../dist/plugin-sdk/packages/terminal-core/src/table.d.ts"],
-  "@openclaw/terminal-core/terminal-link": [
+  "@natesclaw/terminal-core/table": ["../dist/plugin-sdk/packages/terminal-core/src/table.d.ts"],
+  "@natesclaw/terminal-core/terminal-link": [
     "../dist/plugin-sdk/packages/terminal-core/src/terminal-link.d.ts",
   ],
-  "@openclaw/terminal-core/theme": ["../dist/plugin-sdk/packages/terminal-core/src/theme.d.ts"],
-  "@openclaw/terminal-core/*": ["../dist/plugin-sdk/packages/terminal-core/src/*.d.ts"],
-  "@openclaw/*.js": ["../packages/plugin-sdk/dist/extensions/*.d.ts", "../extensions/*"],
-  "@openclaw/*": ["../packages/plugin-sdk/dist/extensions/*", "../extensions/*"],
-  "openclaw/plugin-sdk/qa-channel": ["../dist/plugin-sdk/src/plugin-sdk/qa-channel.d.ts"],
-  "openclaw/plugin-sdk/qa-channel-protocol": [
+  "@natesclaw/terminal-core/theme": ["../dist/plugin-sdk/packages/terminal-core/src/theme.d.ts"],
+  "@natesclaw/terminal-core/*": ["../dist/plugin-sdk/packages/terminal-core/src/*.d.ts"],
+  "@natesclaw/*.js": ["../packages/plugin-sdk/dist/extensions/*.d.ts", "../extensions/*"],
+  "@natesclaw/*": ["../packages/plugin-sdk/dist/extensions/*", "../extensions/*"],
+  "natesclaw/plugin-sdk/qa-channel": ["../dist/plugin-sdk/src/plugin-sdk/qa-channel.d.ts"],
+  "natesclaw/plugin-sdk/qa-channel-protocol": [
     "../dist/plugin-sdk/src/plugin-sdk/qa-channel-protocol.d.ts",
   ],
-  "openclaw/plugin-sdk/qa-runtime": ["../dist/plugin-sdk/src/plugin-sdk/qa-runtime.d.ts"],
-  "@openclaw/plugin-sdk/*": ["../dist/plugin-sdk/*.d.ts"],
+  "natesclaw/plugin-sdk/qa-runtime": ["../dist/plugin-sdk/src/plugin-sdk/qa-runtime.d.ts"],
+  "@natesclaw/plugin-sdk/*": ["../dist/plugin-sdk/*.d.ts"],
 } as const;
 
 function prefixExtensionPackageBoundaryPaths(
@@ -267,29 +267,29 @@ function omitExtensionPackageBoundaryPaths(
 export const EXTENSION_PACKAGE_BOUNDARY_XAI_PATHS = {
   ...prefixExtensionPackageBoundaryPaths(
     omitExtensionPackageBoundaryPaths(EXTENSION_PACKAGE_BOUNDARY_BASE_PATHS, [
-      "openclaw/plugin-sdk/channel-secret-basic-runtime",
-      "openclaw/plugin-sdk/channel-secret-tts-runtime",
-      "@openclaw/matrix/test-api.js",
-      "@openclaw/discord/api.js",
-      "@openclaw/slack/api.js",
-      "@openclaw/telegram/api.js",
-      "@openclaw/whatsapp/api.js",
+      "natesclaw/plugin-sdk/channel-secret-basic-runtime",
+      "natesclaw/plugin-sdk/channel-secret-tts-runtime",
+      "@natesclaw/matrix/test-api.js",
+      "@natesclaw/discord/api.js",
+      "@natesclaw/slack/api.js",
+      "@natesclaw/telegram/api.js",
+      "@natesclaw/whatsapp/api.js",
     ]),
     "../",
   ),
-  "openclaw/plugin-sdk/channel-entry-contract": [
+  "natesclaw/plugin-sdk/channel-entry-contract": [
     "../../dist/plugin-sdk/channel-entry-contract.d.ts",
   ],
-  "openclaw/plugin-sdk/browser-maintenance": [
+  "natesclaw/plugin-sdk/browser-maintenance": [
     "../../dist/plugin-sdk/src/plugin-sdk/browser-maintenance.d.ts",
   ],
-  "@openclaw/qa-channel/api.js": ["../../dist/plugin-sdk/extensions/qa-channel/api.d.ts"],
-  "@openclaw/*.js": ["../../packages/plugin-sdk/dist/extensions/*.d.ts", "../*"],
-  "@openclaw/*": ["../*"],
-  "@openclaw/plugin-sdk/*": ["../../dist/plugin-sdk/*.d.ts"],
-  "@openclaw/anthropic-vertex/api.js": ["./.boundary-stubs/anthropic-vertex-api.d.ts"],
-  "@openclaw/ollama/api.js": ["./.boundary-stubs/ollama-api.d.ts"],
-  "@openclaw/ollama/runtime-api.js": ["./.boundary-stubs/ollama-runtime-api.d.ts"],
+  "@natesclaw/qa-channel/api.js": ["../../dist/plugin-sdk/extensions/qa-channel/api.d.ts"],
+  "@natesclaw/*.js": ["../../packages/plugin-sdk/dist/extensions/*.d.ts", "../*"],
+  "@natesclaw/*": ["../*"],
+  "@natesclaw/plugin-sdk/*": ["../../dist/plugin-sdk/*.d.ts"],
+  "@natesclaw/anthropic-vertex/api.js": ["./.boundary-stubs/anthropic-vertex-api.d.ts"],
+  "@natesclaw/ollama/api.js": ["./.boundary-stubs/ollama-api.d.ts"],
+  "@natesclaw/ollama/runtime-api.js": ["./.boundary-stubs/ollama-runtime-api.d.ts"],
 } as const;
 
 type ExtensionPackageBoundaryTsConfigJson = {

@@ -15,13 +15,13 @@ import type {
   WorkboardProof,
   WorkboardRunAttempt,
   WorkboardWorkerLog,
-} from "@openclaw/workboard-contract";
+} from "@natesclaw/workboard-contract";
 import {
   configureSqliteConnectionPragmas,
   migrateSqliteSchemaToStrict,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
-import { openNodeSqliteDatabase } from "openclaw/plugin-sdk/sqlite-runtime";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
+} from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { openNodeSqliteDatabase } from "natesclaw/plugin-sdk/sqlite-runtime";
+import { resolveStateDir } from "natesclaw/plugin-sdk/state-paths";
 import type {
   PersistedWorkboardAttachment,
   PersistedWorkboardBoard,

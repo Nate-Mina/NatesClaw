@@ -1,4 +1,4 @@
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "natesclaw/plugin-sdk/reply-payload";
 import { describe, expect, it } from "vitest";
 import { sanitizeUserFacingText } from "../../agents/embedded-agent-helpers/sanitize-user-facing-text.js";
 import { stripHeartbeatToken } from "../heartbeat.js";

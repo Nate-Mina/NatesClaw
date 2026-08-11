@@ -1,4 +1,4 @@
-import { safeParseJson } from "@openclaw/normalization-core";
+import { safeParseJson } from "@natesclaw/normalization-core";
 import { normalizeSqliteNumber } from "../../infra/sqlite-number.js";
 
 /** Normalizes SQLite number/bigint columns into JavaScript numbers. */

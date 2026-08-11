@@ -1,5 +1,5 @@
 // QQBot plugin module validates raw gateway envelopes for durable ingress.
-import { normalizeNullableString as nonEmptyString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeNullableString as nonEmptyString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { GatewayEvent, GatewayOp } from "./constants.js";
 import type { WSPayload } from "./types.js";
 

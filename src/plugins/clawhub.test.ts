@@ -89,7 +89,7 @@ function sha256Hex(value: string): string {
 }
 
 async function createClawHubArchive(entries: Record<string, string>) {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-clawhub-archive-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-clawhub-archive-"));
   tempDirs.push(dir);
   const archivePath = path.join(dir, "archive.zip");
   const zip = new JSZip();
@@ -440,7 +440,7 @@ describe("installPluginFromClawHub", () => {
     installPluginFromArchiveMock.mockResolvedValue({
       ok: true,
       pluginId: "demo",
-      targetDir: "/tmp/openclaw/plugins/demo",
+      targetDir: "/tmp/natesclaw/plugins/demo",
       version: "2026.3.22",
     });
   });
@@ -486,7 +486,7 @@ describe("installPluginFromClawHub", () => {
     installPluginFromArchiveMock.mockResolvedValueOnce({
       ok: true,
       pluginId: "demo-runtime",
-      targetDir: "/tmp/openclaw/plugins/demo-runtime",
+      targetDir: "/tmp/natesclaw/plugins/demo-runtime",
       version: "2026.3.22",
     });
 
@@ -681,7 +681,7 @@ describe("installPluginFromClawHub", () => {
     expect(failure.code).toBe(CLAWHUB_INSTALL_ERROR_CODE.CLAWHUB_DOWNLOAD_BLOCKED);
     const warning = logger.warn.mock.calls[0]?.[0] ?? "";
     expect(warning).toContain(
-      "Latest plugin version is marked malicious; OpenClaw will not download it.",
+      "Latest plugin version is marked malicious; Natesclaw will not download it.",
     );
     expect(warning).toContain(
       "Uninstall the installed plugin unless you have independently reviewed it.",
@@ -997,7 +997,7 @@ describe("installPluginFromClawHub", () => {
         updatedAt: 0,
         verification: {
           tier: "source-linked",
-          sourceRepo: "openclaw/openclaw",
+          sourceRepo: "natesclaw/natesclaw",
         },
       },
     });
@@ -1754,7 +1754,7 @@ describe("installPluginFromClawHub", () => {
     const failure = expectInstallFailure(result);
     expect(failure.code).toBe(CLAWHUB_INSTALL_ERROR_CODE.INCOMPATIBLE_PLUGIN_API);
     expect(failure.error).toBe(
-      'Plugin "demo" requires plugin API *, but this OpenClaw runtime exposes invalid.',
+      'Plugin "demo" requires plugin API *, but this Natesclaw runtime exposes invalid.',
     );
     expect(downloadClawHubPackageArchiveMock).not.toHaveBeenCalled();
     expect(installPluginFromArchiveMock).not.toHaveBeenCalled();
@@ -1821,13 +1821,13 @@ describe("installPluginFromClawHub", () => {
   it("falls back to strict files[] verification when sha256hash is missing", async () => {
     await mockClawHubFallbackArchive({
       entries: {
-        "openclaw.plugin.json": '{"id":"demo"}',
+        "natesclaw.plugin.json": '{"id":"demo"}',
         "dist/index.js": 'export const demo = "ok";',
         "_meta.json": '{"slug":"demo","version":"2026.3.22"}',
       },
       files: [
         clawHubArchiveFile("dist/index.js", 'export const demo = "ok";'),
-        clawHubArchiveFile("openclaw.plugin.json", '{"id":"demo"}'),
+        clawHubArchiveFile("natesclaw.plugin.json", '{"id":"demo"}'),
       ],
       version: { sha256hash: null },
     });
@@ -1841,7 +1841,7 @@ describe("installPluginFromClawHub", () => {
     const success = expectInstallSuccess(result);
     expect(success.pluginId).toBe("demo");
     expect(logger.warn).toHaveBeenCalledWith(
-      'ClawHub package "demo@2026.3.22" is missing sha256hash; falling back to files[] verification. Validated files: dist/index.js, openclaw.plugin.json. Validated generated metadata files present in archive: _meta.json (JSON parse plus slug/version match only).',
+      'ClawHub package "demo@2026.3.22" is missing sha256hash; falling back to files[] verification. Validated files: dist/index.js, natesclaw.plugin.json. Validated generated metadata files present in archive: _meta.json (JSON parse plus slug/version match only).',
     );
   });
 
@@ -1864,7 +1864,7 @@ describe("installPluginFromClawHub", () => {
     });
     await mockClawHubFallbackArchive({
       entries: {
-        "openclaw.plugin.json": '{"id":"demo"}',
+        "natesclaw.plugin.json": '{"id":"demo"}',
         "_meta.json": '{"slug":"demo","version":"2026.3.22"}',
       },
       version: { sha256hash: null },
@@ -1887,14 +1887,14 @@ describe("installPluginFromClawHub", () => {
     expect(success.packageName).toBe("demo");
     expect(success.clawhub?.clawhubPackage).toBe("demo");
     expect(logger.warn).toHaveBeenCalledWith(
-      'ClawHub package "demo@2026.3.22" is missing sha256hash; falling back to files[] verification. Validated files: openclaw.plugin.json. Validated generated metadata files present in archive: _meta.json (JSON parse plus slug/version match only).',
+      'ClawHub package "demo@2026.3.22" is missing sha256hash; falling back to files[] verification. Validated files: natesclaw.plugin.json. Validated generated metadata files present in archive: _meta.json (JSON parse plus slug/version match only).',
     );
   });
 
   it("fails closed when sha256hash is present but unrecognized instead of silently falling back", async () => {
     mockClawHubVersionMetadata({
       sha256hash: "definitely-not-a-sha256",
-      files: [clawHubArchiveFile("openclaw.plugin.json", '{"id":"demo"}')],
+      files: [clawHubArchiveFile("natesclaw.plugin.json", '{"id":"demo"}')],
     });
 
     const result = await installPluginFromClawHub({
@@ -1981,7 +1981,7 @@ describe("installPluginFromClawHub", () => {
 
   it("fails closed when files[] contains an invalid sha256", async () => {
     mockClawHubVersionMetadata({
-      files: [{ path: "openclaw.plugin.json", size: 13, sha256: "not-a-digest" }],
+      files: [{ path: "natesclaw.plugin.json", size: 13, sha256: "not-a-digest" }],
     });
 
     const result = await installPluginFromClawHub({
@@ -2023,7 +2023,7 @@ describe("installPluginFromClawHub", () => {
   });
 
   it("returns a typed install failure when fallback archive verification cannot read the zip", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-clawhub-archive-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-clawhub-archive-"));
     tempDirs.push(dir);
     const archivePath = path.join(dir, "archive.zip");
     await fs.writeFile(archivePath, "not-a-zip", "utf8");
@@ -2034,7 +2034,7 @@ describe("installPluginFromClawHub", () => {
         changelog: "",
         files: [
           {
-            path: "openclaw.plugin.json",
+            path: "natesclaw.plugin.json",
             size: 13,
             sha256: sha256Hex('{"id":"demo"}'),
           },
@@ -2097,9 +2097,9 @@ describe("installPluginFromClawHub", () => {
 
   it("rejects fallback verification when an expected file is missing from the archive", async () => {
     await mockClawHubFallbackArchive({
-      entries: { "openclaw.plugin.json": '{"id":"demo"}' },
+      entries: { "natesclaw.plugin.json": '{"id":"demo"}' },
       files: [
-        clawHubArchiveFile("openclaw.plugin.json", '{"id":"demo"}'),
+        clawHubArchiveFile("natesclaw.plugin.json", '{"id":"demo"}'),
         clawHubArchiveFile("dist/index.js", 'export const demo = "ok";'),
       ],
     });
@@ -2119,12 +2119,12 @@ describe("installPluginFromClawHub", () => {
   it("rejects fallback verification when the archive includes an unexpected file", async () => {
     await mockClawHubFallbackArchive({
       entries: {
-        "openclaw.plugin.json": '{"id":"demo"}',
+        "natesclaw.plugin.json": '{"id":"demo"}',
         "dist/index.js": 'export const demo = "ok";',
         "extra.txt": "surprise",
       },
       files: [
-        clawHubArchiveFile("openclaw.plugin.json", '{"id":"demo"}'),
+        clawHubArchiveFile("natesclaw.plugin.json", '{"id":"demo"}'),
         clawHubArchiveFile("dist/index.js", 'export const demo = "ok";'),
       ],
     });
@@ -2142,7 +2142,7 @@ describe("installPluginFromClawHub", () => {
   });
 
   it("accepts root-level files[] paths and allows _meta.json as an unvalidated generated file", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-clawhub-archive-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-clawhub-archive-"));
     tempDirs.push(dir);
     const archivePath = path.join(dir, "archive.zip");
     const zip = new JSZip();
@@ -2194,7 +2194,7 @@ describe("installPluginFromClawHub", () => {
 
   it("omits the skipped-files suffix when no generated extras are present", async () => {
     await mockClawHubFallbackArchive({
-      entries: { "openclaw.plugin.json": '{"id":"demo"}' },
+      entries: { "natesclaw.plugin.json": '{"id":"demo"}' },
     });
     const logger = createLoggerSpies();
 
@@ -2205,14 +2205,14 @@ describe("installPluginFromClawHub", () => {
 
     expect(expectInstallSuccess(result).pluginId).toBe("demo");
     expect(logger.warn).toHaveBeenCalledWith(
-      'ClawHub package "demo@2026.3.22" is missing sha256hash; falling back to files[] verification. Validated files: openclaw.plugin.json.',
+      'ClawHub package "demo@2026.3.22" is missing sha256hash; falling back to files[] verification. Validated files: natesclaw.plugin.json.',
     );
   });
 
   it("rejects fallback verification when _meta.json is not valid JSON", async () => {
     await mockClawHubFallbackArchive({
       entries: {
-        "openclaw.plugin.json": '{"id":"demo"}',
+        "natesclaw.plugin.json": '{"id":"demo"}',
         "_meta.json": "{not-json",
       },
     });
@@ -2232,7 +2232,7 @@ describe("installPluginFromClawHub", () => {
   it("rejects fallback verification when _meta.json slug does not match the package name", async () => {
     await mockClawHubFallbackArchive({
       entries: {
-        "openclaw.plugin.json": '{"id":"demo"}',
+        "natesclaw.plugin.json": '{"id":"demo"}',
         "_meta.json": '{"slug":"wrong","version":"2026.3.22"}',
       },
     });
@@ -2250,7 +2250,7 @@ describe("installPluginFromClawHub", () => {
   });
 
   it("rejects fallback verification when _meta.json exceeds the per-file size limit", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-clawhub-archive-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-clawhub-archive-"));
     tempDirs.push(dir);
     const archivePath = path.join(dir, "archive.zip");
     await fs.writeFile(archivePath, "placeholder", "utf8");
@@ -2261,7 +2261,7 @@ describe("installPluginFromClawHub", () => {
       nodeStream: vi.fn(),
     } as unknown as JSZip.JSZipObject;
     const listedFileEntry = {
-      name: "openclaw.plugin.json",
+      name: "natesclaw.plugin.json",
       dir: false,
       _data: { uncompressedSize: 13 },
       nodeStream: () => Readable.from([Buffer.from('{"id":"demo"}')]),
@@ -2269,7 +2269,7 @@ describe("installPluginFromClawHub", () => {
     const loadAsyncSpy = vi.spyOn(JSZip, "loadAsync").mockResolvedValueOnce({
       files: {
         "_meta.json": oversizedMetaEntry,
-        "openclaw.plugin.json": listedFileEntry,
+        "natesclaw.plugin.json": listedFileEntry,
       },
     } as unknown as JSZip);
     fetchClawHubPackageVersionMock.mockResolvedValueOnce({
@@ -2279,7 +2279,7 @@ describe("installPluginFromClawHub", () => {
         changelog: "",
         files: [
           {
-            path: "openclaw.plugin.json",
+            path: "natesclaw.plugin.json",
             size: 13,
             sha256: sha256Hex('{"id":"demo"}'),
           },
@@ -2310,7 +2310,7 @@ describe("installPluginFromClawHub", () => {
   });
 
   it("rejects fallback verification when archive directories alone exceed the entry limit", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-clawhub-archive-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-clawhub-archive-"));
     tempDirs.push(dir);
     const archivePath = path.join(dir, "archive.zip");
     await fs.writeFile(archivePath, "placeholder", "utf8");
@@ -2333,7 +2333,7 @@ describe("installPluginFromClawHub", () => {
         changelog: "",
         files: [
           {
-            path: "openclaw.plugin.json",
+            path: "natesclaw.plugin.json",
             size: 13,
             sha256: sha256Hex('{"id":"demo"}'),
           },
@@ -2364,7 +2364,7 @@ describe("installPluginFromClawHub", () => {
   });
 
   it("rejects fallback verification when the actual ZIP central directory exceeds the entry limit", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-clawhub-archive-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-clawhub-archive-"));
     tempDirs.push(dir);
     const archivePath = path.join(dir, "archive.zip");
     await fs.writeFile(
@@ -2383,7 +2383,7 @@ describe("installPluginFromClawHub", () => {
         changelog: "",
         files: [
           {
-            path: "openclaw.plugin.json",
+            path: "natesclaw.plugin.json",
             size: 13,
             sha256: sha256Hex('{"id":"demo"}'),
           },
@@ -2415,7 +2415,7 @@ describe("installPluginFromClawHub", () => {
   });
 
   it("rejects fallback verification when the downloaded archive exceeds the ZIP size limit", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-clawhub-archive-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-clawhub-archive-"));
     tempDirs.push(dir);
     const archivePath = path.join(dir, "archive.zip");
     await fs.writeFile(archivePath, "placeholder", "utf8");
@@ -2435,7 +2435,7 @@ describe("installPluginFromClawHub", () => {
         changelog: "",
         files: [
           {
-            path: "openclaw.plugin.json",
+            path: "natesclaw.plugin.json",
             size: 13,
             sha256: sha256Hex('{"id":"demo"}'),
           },
@@ -2467,8 +2467,8 @@ describe("installPluginFromClawHub", () => {
 
   it("rejects fallback verification when a file hash drifts from files[] metadata", async () => {
     await mockClawHubFallbackArchive({
-      entries: { "openclaw.plugin.json": '{"id":"demo"}' },
-      files: [{ path: "openclaw.plugin.json", size: 13, sha256: "1".repeat(64) }],
+      entries: { "natesclaw.plugin.json": '{"id":"demo"}' },
+      files: [{ path: "natesclaw.plugin.json", size: 13, sha256: "1".repeat(64) }],
     });
 
     const result = await installPluginFromClawHub({
@@ -2478,7 +2478,7 @@ describe("installPluginFromClawHub", () => {
     expectInstallFailureFields(
       result,
       CLAWHUB_INSTALL_ERROR_CODE.ARCHIVE_INTEGRITY_MISMATCH,
-      `ClawHub archive contents do not match files[] metadata for "demo@2026.3.22": expected openclaw.plugin.json to hash to ${"1".repeat(64)}, got ${sha256Hex('{"id":"demo"}')}.`,
+      `ClawHub archive contents do not match files[] metadata for "demo@2026.3.22": expected natesclaw.plugin.json to hash to ${"1".repeat(64)}, got ${sha256Hex('{"id":"demo"}')}.`,
     );
     expect(installPluginFromArchiveMock).not.toHaveBeenCalled();
   });
@@ -2504,8 +2504,8 @@ describe("installPluginFromClawHub", () => {
     mockClawHubVersionMetadata({
       files: [
         {
-          ...clawHubArchiveFile("openclaw.plugin.json", '{"id":"demo"}'),
-          path: "openclaw.plugin.json ",
+          ...clawHubArchiveFile("natesclaw.plugin.json", '{"id":"demo"}'),
+          path: "natesclaw.plugin.json ",
         },
       ],
     });
@@ -2517,7 +2517,7 @@ describe("installPluginFromClawHub", () => {
     expectInstallFailureFields(
       result,
       CLAWHUB_INSTALL_ERROR_CODE.MISSING_ARCHIVE_INTEGRITY,
-      'ClawHub version metadata for "demo@2026.3.22" has an invalid files[0].path (path "openclaw.plugin.json " has leading or trailing whitespace).',
+      'ClawHub version metadata for "demo@2026.3.22" has an invalid files[0].path (path "natesclaw.plugin.json " has leading or trailing whitespace).',
     );
     expect(downloadClawHubPackageArchiveMock).not.toHaveBeenCalled();
   });
@@ -2525,10 +2525,10 @@ describe("installPluginFromClawHub", () => {
   it("rejects fallback verification when the archive includes a whitespace-suffixed file path", async () => {
     await mockClawHubFallbackArchive({
       entries: {
-        "openclaw.plugin.json": '{"id":"demo"}',
-        "openclaw.plugin.json ": '{"id":"demo"}',
+        "natesclaw.plugin.json": '{"id":"demo"}',
+        "natesclaw.plugin.json ": '{"id":"demo"}',
       },
-      files: [clawHubArchiveFile("openclaw.plugin.json", '{"id":"demo"}')],
+      files: [clawHubArchiveFile("natesclaw.plugin.json", '{"id":"demo"}')],
     });
 
     const result = await installPluginFromClawHub({
@@ -2538,13 +2538,13 @@ describe("installPluginFromClawHub", () => {
     expectInstallFailureFields(
       result,
       CLAWHUB_INSTALL_ERROR_CODE.ARCHIVE_INTEGRITY_MISMATCH,
-      'ClawHub archive contents do not match files[] metadata for "demo@2026.3.22": invalid package file path "openclaw.plugin.json " (path "openclaw.plugin.json " has leading or trailing whitespace).',
+      'ClawHub archive contents do not match files[] metadata for "demo@2026.3.22": invalid package file path "natesclaw.plugin.json " (path "natesclaw.plugin.json " has leading or trailing whitespace).',
     );
     expect(installPluginFromArchiveMock).not.toHaveBeenCalled();
   });
 
   it("rejects fallback metadata with duplicate files[] paths", async () => {
-    const file = clawHubArchiveFile("openclaw.plugin.json", '{"id":"demo"}');
+    const file = clawHubArchiveFile("natesclaw.plugin.json", '{"id":"demo"}');
     mockClawHubVersionMetadata({ files: [file, file] });
 
     const result = await installPluginFromClawHub({
@@ -2554,7 +2554,7 @@ describe("installPluginFromClawHub", () => {
     expectInstallFailureFields(
       result,
       CLAWHUB_INSTALL_ERROR_CODE.MISSING_ARCHIVE_INTEGRITY,
-      'ClawHub version metadata for "demo@2026.3.22" has duplicate files[] path "openclaw.plugin.json".',
+      'ClawHub version metadata for "demo@2026.3.22" has duplicate files[] path "natesclaw.plugin.json".',
     );
     expect(downloadClawHubPackageArchiveMock).not.toHaveBeenCalled();
   });
@@ -2592,7 +2592,7 @@ describe("installPluginFromClawHub", () => {
         ok: false,
         code: CLAWHUB_INSTALL_ERROR_CODE.INCOMPATIBLE_PLUGIN_API,
         error:
-          'Plugin "demo" requires plugin API >=2026.3.22, but this OpenClaw runtime exposes 2026.3.21.',
+          'Plugin "demo" requires plugin API >=2026.3.22, but this Natesclaw runtime exposes 2026.3.21.',
       },
     },
     {
@@ -2605,7 +2605,7 @@ describe("installPluginFromClawHub", () => {
             family: "skill",
             channel: "official",
             isOfficial: true,
-            ownerHandle: "openclaw",
+            ownerHandle: "natesclaw",
             createdAt: 0,
             updatedAt: 0,
           },
@@ -2615,7 +2615,7 @@ describe("installPluginFromClawHub", () => {
       expected: {
         ok: false,
         code: CLAWHUB_INSTALL_ERROR_CODE.SKILL_PACKAGE,
-        error: '"calendar" is a skill. Use "openclaw skills install @openclaw/calendar" instead.',
+        error: '"calendar" is a skill. Use "natesclaw skills install @natesclaw/calendar" instead.',
       },
     },
     {
@@ -2628,7 +2628,7 @@ describe("installPluginFromClawHub", () => {
             family: "skill",
             channel: "official",
             isOfficial: true,
-            ownerHandle: "openclaw",
+            ownerHandle: "natesclaw",
             createdAt: 0,
             updatedAt: 0,
           },
@@ -2645,7 +2645,7 @@ describe("installPluginFromClawHub", () => {
       expected: {
         ok: false,
         code: CLAWHUB_INSTALL_ERROR_CODE.SKILL_PACKAGE,
-        error: '"calendar" is a skill. Use "openclaw skills install @openclaw/calendar" instead.',
+        error: '"calendar" is a skill. Use "natesclaw skills install @natesclaw/calendar" instead.',
       },
     },
     {

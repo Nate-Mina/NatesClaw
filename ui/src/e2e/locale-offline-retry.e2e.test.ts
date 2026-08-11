@@ -14,7 +14,7 @@ const suite = createControlUiE2eSuite({
   startServer: () => startControlUiE2eServer(undefined, { source: true }),
   startServerBeforeBrowser: true,
   unavailableMessage: (executablePath) =>
-    `Playwright Chromium is not available at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+    `Playwright Chromium is not available at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
 });
 
 const frenchLocaleModule = /\/src\/i18n\/locales\/fr\.ts(?:\?.*)?$/;
@@ -29,7 +29,7 @@ async function createContext(): Promise<BrowserContext> {
 
 async function gatewayPhase(page: Page): Promise<string | undefined> {
   return page.evaluate(() => {
-    const app = document.querySelector("openclaw-app") as HTMLElement & {
+    const app = document.querySelector("natesclaw-app") as HTMLElement & {
       runtime?: { context: { gateway: { snapshot: { phase: string } } } };
     };
     return app.runtime?.context.gateway.snapshot.phase;
@@ -137,7 +137,7 @@ suite.define(() => {
       expect(navigationCount).toBe(1);
       expect(
         await page.evaluate(() =>
-          sessionStorage.getItem("openclaw.controlUi.staleChunkReloadBuildId"),
+          sessionStorage.getItem("natesclaw.controlUi.staleChunkReloadBuildId"),
         ),
       ).toBe("e2e");
       await page.waitForTimeout(500);

@@ -1,13 +1,13 @@
 import {
   buildManifestModelDefinition,
   readManifestProviderDefaultModelRef,
-} from "openclaw/plugin-sdk/provider-catalog-shared";
+} from "natesclaw/plugin-sdk/provider-catalog-shared";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+} from "natesclaw/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 
 const VENICE_MANIFEST_CATALOG = manifest.modelCatalog.providers.venice;
 

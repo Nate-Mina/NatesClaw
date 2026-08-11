@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { listAgentIds, resolveAgentWorkspaceDir } from "../../agents/agent-scope.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { isNotFoundPathError, isPathInside } from "../../infra/path-guards.js";
 
 async function resolveRequestedRealPath(
@@ -37,7 +37,7 @@ async function resolveRequestedRealPath(
 /** Resolves a Gateway path against the real roots of configured agent workspaces. */
 export async function resolveWorkspacePathContainment(
   requestedPath: string | undefined,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options: { allowMissing?: boolean } = {},
 ): Promise<{ path: string; workspaceRoot: string } | null> {
   const workspaceRoots = await Promise.all(

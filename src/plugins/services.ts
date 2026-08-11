@@ -1,6 +1,6 @@
 /** Starts, stops, and inspects plugin service registrations. */
 import { STATE_DIR } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { GatewayPluginEventBroadcastFn } from "../gateway/server-broadcast-types.js";
 import {
   emitTrustedDiagnosticEventWithPrivateData,
@@ -20,11 +20,11 @@ import { withPluginHttpRouteRegistry } from "./http-registry.js";
 import type { PluginServiceRegistration } from "./registry-types.js";
 import type { PluginRegistry } from "./registry.js";
 import { encodeStartupTraceSegment } from "./startup-trace-segment.js";
-import type { OpenClawPluginServiceContext, PluginLogger } from "./types.js";
+import type { NatesclawPluginServiceContext, PluginLogger } from "./types.js";
 
 const log = createSubsystemLogger("plugins");
 type TrustedExporterInternalDiagnostics = NonNullable<
-  OpenClawPluginServiceContext["internalDiagnostics"]
+  NatesclawPluginServiceContext["internalDiagnostics"]
 > & {
   reportExporterHealth: (update: DiagnosticExporterHealthUpdate) => void;
 };
@@ -39,12 +39,12 @@ function createPluginLogger(): PluginLogger {
 }
 
 function createServiceContext(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   startupTrace?: PluginServiceStartupTrace;
   workspaceDir?: string;
   service: PluginServiceRegistration;
-  gatewayEvents?: OpenClawPluginServiceContext["gatewayEvents"];
-}): OpenClawPluginServiceContext {
+  gatewayEvents?: NatesclawPluginServiceContext["gatewayEvents"];
+}): NatesclawPluginServiceContext {
   const isDiagnosticsExporter =
     params.service?.pluginId === params.service?.service.id &&
     (params.service?.service.id === "diagnostics-otel" ||
@@ -89,7 +89,7 @@ function createScopedGatewayEvents(params: {
   pluginId: string;
   broadcast?: GatewayPluginEventBroadcastFn;
 }): {
-  gatewayEvents?: OpenClawPluginServiceContext["gatewayEvents"];
+  gatewayEvents?: NatesclawPluginServiceContext["gatewayEvents"];
   revoke: () => void;
 } {
   // No broadcaster means no gateway events at all: emits have nowhere to go and
@@ -184,7 +184,7 @@ type PluginServiceStartupTrace = {
 
 export async function startPluginServices(params: {
   registry: PluginRegistry;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   workspaceDir?: string;
   startupTrace?: PluginServiceStartupTrace;
   broadcastPluginEvent?: GatewayPluginEventBroadcastFn;

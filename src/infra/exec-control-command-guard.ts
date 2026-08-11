@@ -1,6 +1,6 @@
-import { expectDefined } from "@openclaw/normalization-core";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
 import { splitShellArgs } from "../utils/shell-argv.js";
 import { buildCommandPayloadCandidates } from "./command-analysis/risks.js";
 import { explainShellCommand } from "./command-explainer/extract.js";
@@ -37,21 +37,21 @@ function normalizeCommandBaseName(token: string | undefined): string {
   return base.replace(/\.(?:cmd|exe)$/u, "");
 }
 
-function stripOpenClawPackageRunner(argv: string[]): string[] {
+function stripNatesclawPackageRunner(argv: string[]): string[] {
   const commandName = normalizeCommandBaseName(argv[0]);
-  if (commandName === "openclaw") {
+  if (commandName === "natesclaw") {
     return argv;
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
-    normalizeCommandBaseName(argv[1]) === "openclaw"
+    normalizeCommandBaseName(argv[1]) === "natesclaw"
   ) {
     return argv.slice(1);
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
     (argv[1] === "exec" || argv[1] === "dlx" || argv[1] === "run") &&
-    normalizeCommandBaseName(argv[2]) === "openclaw"
+    normalizeCommandBaseName(argv[2]) === "natesclaw"
   ) {
     return argv.slice(2);
   }
@@ -71,23 +71,23 @@ function stripOpenClawPackageRunner(argv: string[]): string[] {
         idx += 1;
       }
     }
-    if (normalizeCommandBaseName(argv[idx]) === "openclaw") {
+    if (normalizeCommandBaseName(argv[idx]) === "natesclaw") {
       return argv.slice(idx);
     }
   }
   return argv;
 }
 
-function parseOpenClawChannelsLoginShellCommand(raw: string): boolean {
+function parseNatesclawChannelsLoginShellCommand(raw: string): boolean {
   const argv = splitShellArgs(raw);
   if (!argv) {
     return false;
   }
-  const openclawArgv = stripOpenClawPackageRunner(argv);
+  const natesclawArgv = stripNatesclawPackageRunner(argv);
   return (
-    normalizeCommandBaseName(openclawArgv[0]) === "openclaw" &&
-    (openclawArgv[1] === "channels" || openclawArgv[1] === "channel") &&
-    openclawArgv[2] === "login"
+    normalizeCommandBaseName(natesclawArgv[0]) === "natesclaw" &&
+    (natesclawArgv[1] === "channels" || natesclawArgv[1] === "channel") &&
+    natesclawArgv[2] === "login"
   );
 }
 
@@ -114,7 +114,7 @@ export async function detectUnsafeExecControlShellCommand(
     if (parseExecApprovalShellCommand(candidate)) {
       return "approve";
     }
-    if (parseOpenClawChannelsLoginShellCommand(candidate)) {
+    if (parseNatesclawChannelsLoginShellCommand(candidate)) {
       return "channel-login";
     }
   }
@@ -134,8 +134,8 @@ export async function rejectUnsafeExecControlShellCommand(command: string): Prom
   if (unsafeKind === "channel-login") {
     throw new Error(
       [
-        "exec cannot run interactive OpenClaw channel login commands.",
-        "Run `openclaw channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
+        "exec cannot run interactive Natesclaw channel login commands.",
+        "Run `natesclaw channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
       ].join(" "),
     );
   }

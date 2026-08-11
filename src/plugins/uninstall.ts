@@ -2,10 +2,10 @@
 import { lstatSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { formatErrorMessage } from "../infra/errors.js";
-import { readOpenClawManagedNpmRootOverrides } from "../infra/npm-managed-root.js";
+import { readNatesclawManagedNpmRootOverrides } from "../infra/npm-managed-root.js";
 import { createSafeNpmInstallEnv } from "../infra/safe-package-install.js";
 import { runCommandWithTimeout } from "../process/exec.js";
 import {
@@ -14,7 +14,7 @@ import {
   resolvePluginInstallDir,
   resolvePluginNpmProjectsDir,
 } from "./install-paths.js";
-import { relinkOpenClawPeerDependenciesInManagedNpmRoot } from "./plugin-peer-link.js";
+import { relinkNatesclawPeerDependenciesInManagedNpmRoot } from "./plugin-peer-link.js";
 import { defaultSlotIdForKey } from "./slots.js";
 import {
   isUninstallPathInsideOrEqual,
@@ -62,9 +62,9 @@ export function formatUninstallActionLabels(actions: UninstallActions): string[]
 
 /** Keep a staged plugin disabled until its managed directory is removed. */
 export function prepareConfigForPendingPluginDirectoryRemoval(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   pluginId: string,
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     ...config,
     plugins: {
@@ -106,7 +106,7 @@ export type PluginUninstallDirectoryRemoval = {
 type PluginUninstallPlanResult =
   | {
       ok: true;
-      config: OpenClawConfig;
+      config: NatesclawConfig;
       pluginId: string;
       actions: UninstallActions;
       directoryRemoval: PluginUninstallDirectoryRemoval | null;
@@ -320,7 +320,7 @@ function isLinkedPathInstallRecord(installRecord: PluginInstallRecord | undefine
 }
 
 type UninstallPluginParams = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginId: string;
   channelIds?: string[];
   deleteFiles?: boolean;
@@ -477,7 +477,7 @@ export async function applyPluginUninstallDirectoryRemoval(
       );
     }
     try {
-      const managedOverrides = await readOpenClawManagedNpmRootOverrides();
+      const managedOverrides = await readNatesclawManagedNpmRootOverrides();
       const warning = await pruneManagedNpmPeerDependenciesAfterUninstall({
         npmRoot: removal.cleanup.npmRoot,
         packageName: removal.cleanup.packageName,
@@ -492,7 +492,7 @@ export async function applyPluginUninstallDirectoryRemoval(
       );
     }
     try {
-      await relinkOpenClawPeerDependenciesInManagedNpmRoot({
+      await relinkNatesclawPeerDependenciesInManagedNpmRoot({
         npmRoot: removal.cleanup.npmRoot,
         logger: {
           warn: (message) => warnings.push(message),

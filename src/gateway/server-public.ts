@@ -61,7 +61,7 @@ export type GatewayServerOptions = {
   startupStartedAt?: number;
   /**
    * Config snapshot already read by the CLI gateway preflight. Passing it avoids
-   * reparsing openclaw.json during server startup.
+   * reparsing natesclaw.json during server startup.
    */
   startupConfigSnapshotRead?: import("../config/io.js").ReadConfigFileSnapshotWithPluginMetadataResult;
   /** Restart request override; direct servers fail closed on restart-required reloads. */

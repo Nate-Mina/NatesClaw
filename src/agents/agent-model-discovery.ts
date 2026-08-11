@@ -1,7 +1,7 @@
 /** Discovers agent models and auth storage with provider/plugin normalization hooks. */
 import path from "node:path";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { Model } from "../llm/types.js";
 import type { PluginMetadataSnapshotOwnerMaps } from "../plugins/plugin-metadata-snapshot.types.js";
 import { normalizeModelCompat } from "../plugins/provider-model-compat.js";
@@ -35,7 +35,7 @@ type DiscoveredProviderRuntimeModelLike = Omit<ProviderRuntimeModelLike, "api"> 
 const CAPTURED_MODELS_JSON_SOURCE_PATH = "captured:models.json";
 
 type DiscoverModelsOptions = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   includePluginCatalogs?: boolean;
   modelsJsonContents?: string | null;
   pluginCatalogs?: readonly PersistedPluginModelCatalog[];
@@ -114,7 +114,7 @@ export function normalizeDiscoveredAgentModel<T>(
   return normalizeModelCompat(transportNormalized as Model, options?.providerMetadataOwners) as T;
 }
 
-function createOpenClawModelRegistry(
+function createNatesclawModelRegistry(
   authStorage: AgentAuthStorage,
   modelsJsonPath: string,
   agentDir: string | undefined,
@@ -208,7 +208,7 @@ export function discoverModels(
   agentDir: string,
   options?: DiscoverModelsOptions,
 ): AgentModelRegistry {
-  return createOpenClawModelRegistry(
+  return createNatesclawModelRegistry(
     authStorage,
     path.join(agentDir, "models.json"),
     agentDir,
@@ -224,7 +224,7 @@ export function discoverModelsFromCapturedSources(
   authStorage: AgentAuthStorage,
   options: DiscoverCapturedModelsOptions,
 ): AgentModelRegistry {
-  return createOpenClawModelRegistry(authStorage, CAPTURED_MODELS_JSON_SOURCE_PATH, undefined, {
+  return createNatesclawModelRegistry(authStorage, CAPTURED_MODELS_JSON_SOURCE_PATH, undefined, {
     ...options,
     normalizeModels: false,
   });

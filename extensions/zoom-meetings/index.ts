@@ -1,5 +1,5 @@
-import { MeetingPlatformAdapter } from "openclaw/plugin-sdk/meeting-runtime";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+import { MeetingPlatformAdapter } from "natesclaw/plugin-sdk/meeting-runtime";
+import { normalizeAgentId } from "natesclaw/plugin-sdk/routing";
 import { Type } from "typebox";
 import { zoomMeetingsConfig } from "./src/config.js";
 import { ZoomMeetingsInvalidRequestError, zoomMeetingsInvalidRequest } from "./src/errors.js";

@@ -1,16 +1,16 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 // Hook install record helpers read and write installed hook metadata.
 import type { HookInstallRecord } from "../config/types.hooks.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { readConfigMachineState, updateConfigMachineState } from "../state/config-machine-state.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 
 /** Install record plus the hook pack id being updated in config. */
 export type HookInstallUpdate = HookInstallRecord & { hookId: string };
 
 /** Read canonical hook install records from machine state. */
 export function readHookInstalls(
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): Record<string, HookInstallRecord> {
   return (
     readConfigMachineState<Record<string, HookInstallRecord>>("hooks.internal.installs", options) ??
@@ -20,10 +20,10 @@ export function readHookInstalls(
 
 /** Persist one hook install record in machine state. */
 export function recordHookInstall(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   update: HookInstallUpdate,
-  options: OpenClawStateDatabaseOptions = {},
-): OpenClawConfig {
+  options: NatesclawStateDatabaseOptions = {},
+): NatesclawConfig {
   const { hookId, ...record } = update;
   updateConfigMachineState<Record<string, HookInstallRecord>>(
     "hooks.internal.installs",

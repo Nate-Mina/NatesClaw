@@ -5,24 +5,24 @@ import path from "node:path";
 import {
   asDateTimestampMs,
   timestampMsToIsoString,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import type {
   UpdateAvailable,
   UpdateScheduleState,
 } from "../../packages/gateway-protocol/src/index.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   refreshRemoteModelCatalog,
   REMOTE_MODEL_CATALOG_TTL_MS,
 } from "../model-catalog/remote-refresh.js";
 import { runCommandWithTimeout } from "../process/exec.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import { VERSION } from "../version.js";
 import { isTruthyEnvValue } from "./env.js";
 import type { GatewayActiveWorkInspectors } from "./gateway-active-work.js";
@@ -35,7 +35,7 @@ import {
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "./kysely-sync.js";
-import { resolveOpenClawPackageRoot } from "./openclaw-root.js";
+import { resolveNatesclawPackageRoot } from "./natesclaw-root.js";
 import { readVerifiedGitUpdateReceipt, type VerifiedGitUpdateReceipt } from "./restart-sentinel.js";
 import {
   resolveGatewayRestartDeferralTimeoutMs,
@@ -144,7 +144,7 @@ const DEV_COMMIT_LIMIT = 5;
 const DEV_COMMIT_SUBJECT_MAX_LENGTH = 120;
 const DEV_COMMIT_LOG_MAX_OUTPUT_BYTES = 8 * 1024;
 
-type UpdateCheckStateDatabase = Pick<OpenClawStateKyselyDatabase, "update_check_state">;
+type UpdateCheckStateDatabase = Pick<NatesclawStateKyselyDatabase, "update_check_state">;
 
 function shouldSkipCheck(allowInTests: boolean): boolean {
   if (allowInTests) {
@@ -156,7 +156,7 @@ function shouldSkipCheck(allowInTests: boolean): boolean {
   return false;
 }
 
-function resolveAutoUpdatePolicy(cfg: OpenClawConfig): AutoUpdatePolicy {
+function resolveAutoUpdatePolicy(cfg: NatesclawConfig): AutoUpdatePolicy {
   const auto = cfg.update?.auto;
   return {
     enabled: Boolean(auto?.enabled),
@@ -167,7 +167,7 @@ function resolveAutoUpdatePolicy(cfg: OpenClawConfig): AutoUpdatePolicy {
 }
 
 function resolveCheckIntervalMs(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   installKind?: "package" | "git" | "unknown",
 ): number {
   const channel = normalizeUpdateChannel(cfg.update?.channel) ?? DEFAULT_PACKAGE_CHANNEL;
@@ -192,7 +192,7 @@ function presentString(value: string | null): string | undefined {
 }
 
 async function readState(): Promise<UpdateCheckState> {
-  const database = openOpenClawStateDatabase();
+  const database = openNatesclawStateDatabase();
   const stateDb = getNodeSqliteKysely<UpdateCheckStateDatabase>(database.db);
   const row = executeSqliteQueryTakeFirstSync(
     database.db,
@@ -223,7 +223,7 @@ async function readState(): Promise<UpdateCheckState> {
 
 async function writeState(state: UpdateCheckState): Promise<void> {
   const updatedAtMs = Date.now();
-  runOpenClawStateWriteTransaction(({ db }) => {
+  runNatesclawStateWriteTransaction(({ db }) => {
     const stateDb = getNodeSqliteKysely<UpdateCheckStateDatabase>(db);
     executeSqliteQuerySync(
       db,
@@ -486,7 +486,7 @@ async function runAutoUpdateCommand(params: AutoUpdateRunParams): Promise<AutoUp
     };
   }
   const supervisor = detectRespawnSupervisor(process.env, process.platform, {
-    includeLinuxOpenClawGatewayServiceMarker: true,
+    includeLinuxNatesclawGatewayServiceMarker: true,
   });
   if (supervisor) {
     return await startManagedServiceAutoUpdateHandoff({
@@ -537,7 +537,7 @@ async function runAutoUpdateCommand(params: AutoUpdateRunParams): Promise<AutoUp
     }
   }
   if (argv.length === 0) {
-    argv.push("openclaw", ...baseArgs);
+    argv.push("natesclaw", ...baseArgs);
   }
 
   try {
@@ -569,7 +569,7 @@ function clearAutoState(nextState: UpdateCheckState): void {
 
 async function resolveStartupInstallStatus(fetchGit: boolean) {
   const [root, installReceipt] = await Promise.all([
-    resolveOpenClawPackageRoot({
+    resolveNatesclawPackageRoot({
       moduleUrl: import.meta.url,
       argv1: process.argv[1],
       cwd: process.cwd(),
@@ -683,7 +683,7 @@ function withInstallStatus(
 }
 
 /** Refreshes the read-only Dev checkout comparison used by update.status. */
-export async function refreshGatewayUpdateStatus(cfg: OpenClawConfig): Promise<void> {
+export async function refreshGatewayUpdateStatus(cfg: NatesclawConfig): Promise<void> {
   const channel = normalizeUpdateChannel(cfg.update?.channel) ?? DEFAULT_PACKAGE_CHANNEL;
   if (channel !== "dev") {
     return;
@@ -799,7 +799,7 @@ async function runCampaignUpdate(params: {
 }
 
 export async function runGatewayUpdateCheck(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   log: { info: (msg: string, meta?: Record<string, unknown>) => void };
   isNixMode: boolean;
   allowInTests?: boolean;
@@ -818,7 +818,7 @@ export async function runGatewayUpdateCheck(params: {
   const configChannel = normalizeUpdateChannel(params.cfg.update?.channel);
   const updateCampaign = params.updateCampaign ?? gatewayUpdateCampaign;
   const auto = resolveAutoUpdatePolicy(params.cfg);
-  const autoDisabledByEnv = isTruthyEnvValue(process.env.OPENCLAW_NO_AUTO_UPDATE);
+  const autoDisabledByEnv = isTruthyEnvValue(process.env.NATESCLAW_NO_AUTO_UPDATE);
   const autoDisabledByExternalSupervisor = isGatewayExternallySupervised();
   const shouldRunUpdateHints = params.cfg.update?.checkOnStart !== false;
   const potentialChannel = resolveEffectiveUpdateChannel({
@@ -1109,7 +1109,7 @@ export async function runGatewayUpdateCheck(params: {
     });
 
     if (auto.enabled && autoDisabledByEnv) {
-      params.log.info("auto-update disabled by OPENCLAW_NO_AUTO_UPDATE", {
+      params.log.info("auto-update disabled by NATESCLAW_NO_AUTO_UPDATE", {
         version: upstreamSha,
         tag: "dev",
       });
@@ -1226,14 +1226,14 @@ export async function runGatewayUpdateCheck(params: {
       state.lastNotifiedVersion !== resolved.version || state.lastNotifiedTag !== tag;
     if (shouldRunUpdateHints && shouldNotify) {
       params.log.info(
-        `update available (${tag}): v${resolved.version} (current v${VERSION}). Run: ${formatCliCommand("openclaw update")}`,
+        `update available (${tag}): v${resolved.version} (current v${VERSION}). Run: ${formatCliCommand("natesclaw update")}`,
       );
       nextState.lastNotifiedVersion = resolved.version;
       nextState.lastNotifiedTag = tag;
     }
 
     if (channel !== "extended-stable" && auto.enabled && autoDisabledByEnv) {
-      params.log.info("auto-update disabled by OPENCLAW_NO_AUTO_UPDATE", {
+      params.log.info("auto-update disabled by NATESCLAW_NO_AUTO_UPDATE", {
         version: resolved.version,
         tag,
       });
@@ -1329,7 +1329,7 @@ export async function runGatewayUpdateCheck(params: {
 }
 
 export function scheduleGatewayUpdateCheck(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   log: { info: (msg: string, meta?: Record<string, unknown>) => void };
   isNixMode: boolean;
   onUpdateAvailableChange?: (updateAvailable: UpdateAvailable | null) => void;
@@ -1383,7 +1383,7 @@ export function scheduleGatewayUpdateCheck(params: {
 }
 
 function scheduleRemoteModelCatalogRefresh(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   log: { info: (msg: string, meta?: Record<string, unknown>) => void };
 }): () => void {
   let stopped = false;

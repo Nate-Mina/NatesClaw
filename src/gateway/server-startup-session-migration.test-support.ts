@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { EMPTY_LEGACY_SESSION_SURFACES } from "../plugins/legacy-session-surfaces.types.js";
-import { resolveOpenClawAgentSqlitePath } from "../state/openclaw-agent-db.paths.js";
+import { resolveNatesclawAgentSqlitePath } from "../state/natesclaw-agent-db.paths.js";
 import { runStartupSessionMigration } from "./server-startup-session-migration.js";
 
 type StartupMigrationDeps = NonNullable<Parameters<typeof runStartupSessionMigration>[0]["deps"]>;
@@ -103,8 +103,8 @@ describe("runStartupSessionMigration", () => {
     const migrate = vi.fn<MigrateSessionKeys>().mockResolvedValue({ changes: [], warnings: [] });
     const deps = makeDeps(migrate);
     deps.sessionSqliteDatabaseExists.mockReturnValue(false);
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-empty-session-startup-"));
-    const env = { OPENCLAW_STATE_DIR: path.join(stateDir, "missing") };
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-empty-session-startup-"));
+    const env = { NATESCLAW_STATE_DIR: path.join(stateDir, "missing") };
 
     try {
       await runStartupSessionMigration({ cfg: { session: {} }, env, log, deps });
@@ -216,7 +216,7 @@ describe("runStartupSessionMigration", () => {
   it("imports legacy session metadata and transcripts into SQLite during startup", async () => {
     const log = makeLog();
     const cfg = makeCfg();
-    const env = { OPENCLAW_STATE_DIR: "/tmp/openclaw-state" };
+    const env = { NATESCLAW_STATE_DIR: "/tmp/natesclaw-state" };
     const migrate = vi.fn<MigrateSessionKeys>().mockResolvedValue({ changes: [], warnings: [] });
     const runDoctorSessionSqlite = makeSessionSqliteImport({
       totals: {
@@ -286,8 +286,8 @@ describe("runStartupSessionMigration", () => {
       .mockResolvedValue({ reconciledSessions: 0 });
     const deps = makeDeps(migrate, 0, makeSessionSqliteImport(), reconcile);
     const defaultDeps = useDefaultDatabaseExists(deps);
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-startup-"));
-    const env = { OPENCLAW_STATE_DIR: stateDir };
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-session-startup-"));
+    const env = { NATESCLAW_STATE_DIR: stateDir };
     try {
       await runStartupSessionMigration({
         cfg: {
@@ -300,8 +300,8 @@ describe("runStartupSessionMigration", () => {
       });
 
       expect(reconcile).not.toHaveBeenCalled();
-      expect(fs.existsSync(resolveOpenClawAgentSqlitePath({ agentId: "main", env }))).toBe(false);
-      expect(fs.existsSync(resolveOpenClawAgentSqlitePath({ agentId: "ops", env }))).toBe(false);
+      expect(fs.existsSync(resolveNatesclawAgentSqlitePath({ agentId: "main", env }))).toBe(false);
+      expect(fs.existsSync(resolveNatesclawAgentSqlitePath({ agentId: "ops", env }))).toBe(false);
     } finally {
       fs.rmSync(stateDir, { force: true, recursive: true });
     }
@@ -315,9 +315,9 @@ describe("runStartupSessionMigration", () => {
       .mockResolvedValue({ reconciledSessions: 1 });
     const deps = makeDeps(migrate, 0, makeSessionSqliteImport(), reconcile);
     const defaultDeps = useDefaultDatabaseExists(deps);
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-startup-"));
-    const env = { OPENCLAW_STATE_DIR: stateDir };
-    const databasePath = resolveOpenClawAgentSqlitePath({ agentId: "ops", env });
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-session-startup-"));
+    const env = { NATESCLAW_STATE_DIR: stateDir };
+    const databasePath = resolveNatesclawAgentSqlitePath({ agentId: "ops", env });
     fs.mkdirSync(path.dirname(databasePath), { recursive: true });
     fs.writeFileSync(databasePath, "");
     try {
@@ -343,9 +343,9 @@ describe("runStartupSessionMigration", () => {
     const migrate = vi.fn<MigrateSessionKeys>().mockResolvedValue({ changes: [], warnings: [] });
     const events: string[] = [];
     const importSessionSqlite = makeSessionSqliteImport();
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-startup-"));
-    const env = { OPENCLAW_STATE_DIR: stateDir };
-    const databasePath = resolveOpenClawAgentSqlitePath({ agentId: "main", env });
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-session-startup-"));
+    const env = { NATESCLAW_STATE_DIR: stateDir };
+    const databasePath = resolveNatesclawAgentSqlitePath({ agentId: "main", env });
     const runDoctorSessionSqlite = vi.fn<RunDoctorSessionSqlite>().mockImplementation(async () => {
       events.push("import");
       fs.mkdirSync(path.dirname(databasePath), { recursive: true });
@@ -403,7 +403,7 @@ describe("runStartupSessionMigration", () => {
           legacyEntries: 1,
           referencedTranscriptFiles: 1,
           sqliteEntries: 0,
-          sqlitePath: "/tmp/openclaw-agent.sqlite",
+          sqlitePath: "/tmp/natesclaw-agent.sqlite",
           storePath: "/tmp/sessions.json",
           unreferencedJsonlFiles: [],
           validatedEntries: 0,
@@ -447,7 +447,7 @@ describe("runStartupSessionMigration", () => {
         log,
         deps: makeDeps(migrate, 0, runDoctorSessionSqlite),
       }),
-    ).rejects.toThrow("openclaw doctor --session-sqlite recover --session-sqlite-all-agents");
+    ).rejects.toThrow("natesclaw doctor --session-sqlite recover --session-sqlite-all-agents");
   });
 
   it("auto-restores the current failed session SQLite migration run after files moved", async () => {
@@ -485,7 +485,7 @@ describe("runStartupSessionMigration", () => {
           legacyEntries: 1,
           referencedTranscriptFiles: 1,
           sqliteEntries: 1,
-          sqlitePath: "/tmp/openclaw-agent.sqlite",
+          sqlitePath: "/tmp/natesclaw-agent.sqlite",
           storePath: "/tmp/sessions.json",
           unreferencedJsonlFiles: [],
           validatedEntries: 1,
@@ -524,7 +524,7 @@ describe("runStartupSessionMigration", () => {
       trustedTargets: [
         {
           agentId: "main",
-          sqlitePath: "/tmp/openclaw-agent.sqlite",
+          sqlitePath: "/tmp/natesclaw-agent.sqlite",
           storePath: "/tmp/sessions.json",
         },
       ],
@@ -556,7 +556,7 @@ describe("runStartupSessionMigration", () => {
           legacyEntries: 1,
           referencedTranscriptFiles: 1,
           sqliteEntries: 1,
-          sqlitePath: "/tmp/openclaw-agent.sqlite",
+          sqlitePath: "/tmp/natesclaw-agent.sqlite",
           storePath: "/tmp/sessions.json",
           unreferencedJsonlFiles: [],
           validatedEntries: 0,
@@ -609,7 +609,7 @@ describe("runStartupSessionMigration", () => {
           legacyEntries: 1,
           referencedTranscriptFiles: 1,
           sqliteEntries: 1,
-          sqlitePath: "/tmp/openclaw-agent.sqlite",
+          sqlitePath: "/tmp/natesclaw-agent.sqlite",
           storePath: "/tmp/sessions.json",
           unreferencedJsonlFiles: ["/tmp/orphan.jsonl"],
           validatedEntries: 0,

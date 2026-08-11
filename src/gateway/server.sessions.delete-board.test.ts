@@ -1,8 +1,8 @@
 import { afterEach, expect, test } from "vitest";
 import { SqliteBoardStore } from "../boards/sqlite-board-store.js";
 import { resolveSqliteTargetFromSessionStorePath } from "../config/sessions/session-sqlite-target.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { testState, writeSessionStore } from "./test-helpers.js";
 import {
   directSessionReq,
@@ -14,8 +14,8 @@ import {
 const { createSessionStoreDir } = setupGatewaySessionsHandlerTestHarness();
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 test("sessions.delete removes the session board from its agent database", async () => {

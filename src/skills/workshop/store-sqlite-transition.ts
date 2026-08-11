@@ -1,5 +1,5 @@
 import { executeSqliteQueryTakeFirstSync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import { runOpenClawStateWriteTransaction } from "../../state/openclaw-state-db.js";
+import { runNatesclawStateWriteTransaction } from "../../state/natesclaw-state-db.js";
 import {
   appendSkillProposalEvent,
   readStoredSkillProposalEvent,
@@ -30,7 +30,7 @@ export function commitPendingSkillProposalTransition(params: {
   operationLabel: string;
 }): PendingSkillProposalTransitionCommit {
   ensureSkillWorkshopSchema(params.store);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = getNodeSqliteKysely<SkillWorkshopDatabase>(db);
       const current = executeSqliteQueryTakeFirstSync(

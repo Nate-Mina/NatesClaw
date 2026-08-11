@@ -2,8 +2,8 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveDefaultAgentWorkspaceDir } from "../agents/workspace.js";
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import { normalizeOpenClawVersionBase } from "../config/version.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
+import { normalizeNatesclawVersionBase } from "../config/version.js";
 import { listImportedBundledPluginFacadeIds } from "../plugin-sdk/facade-runtime.js";
 import { resolveCompatibilityHostVersion } from "../version.js";
 import { inspectBundleLspRuntimeSupport } from "./bundle-lsp.js";
@@ -194,14 +194,14 @@ function resolveReportedPluginVersion(
     return plugin.version;
   }
   return (
-    normalizeOpenClawVersionBase(resolveCompatibilityHostVersion(env)) ??
-    normalizeOpenClawVersionBase(plugin.version) ??
+    normalizeNatesclawVersionBase(resolveCompatibilityHostVersion(env)) ??
+    normalizeNatesclawVersionBase(plugin.version) ??
     plugin.version
   );
 }
 
 type PluginReportParams = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   effectiveOnly?: boolean;
   onlyPluginIds?: readonly string[];
   workspaceDir?: string;
@@ -349,12 +349,12 @@ export function buildPluginDiagnosticsReport(params?: PluginReportParams): Plugi
 
 export function buildPluginInspectReport(params: {
   id: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   logger?: PluginLogger;
   report?: PluginStatusReport;
-  resolvedConfig?: OpenClawConfig;
+  resolvedConfig?: NatesclawConfig;
 }): PluginInspectReport | null {
   const rawConfig = params.config ?? getRuntimeConfig();
   const config =
@@ -503,7 +503,7 @@ export function buildPluginInspectReport(params: {
 }
 
 export function buildAllPluginInspectReports(params?: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   logger?: PluginLogger;
@@ -541,7 +541,7 @@ export function buildAllPluginInspectReports(params?: {
 }
 
 export function buildPluginCompatibilityWarnings(params?: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   logger?: PluginLogger;
@@ -551,7 +551,7 @@ export function buildPluginCompatibilityWarnings(params?: {
 }
 
 export function buildPluginCompatibilityNotices(params?: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   logger?: PluginLogger;
@@ -561,7 +561,7 @@ export function buildPluginCompatibilityNotices(params?: {
 }
 
 export function buildPluginCompatibilitySnapshotNotices(params?: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): PluginCompatibilityNotice[] {

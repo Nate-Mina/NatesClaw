@@ -9,7 +9,7 @@ import {
   fingerprintResolvedAuthProfileCredential,
   fingerprintResolvedProviderAuth,
 } from "../agents/execution-auth-binding.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginOrigin } from "../plugins/types.js";
 import { resolveSystemAgentConfiguredRouteFromConfig } from "./inference-route.js";
 import { resolvePersistentApplyInference } from "./setup-inference.js";
@@ -116,10 +116,10 @@ function pluginRecord(
     pluginId,
     origin: "global",
     rootDir,
-    manifestPath: `${rootDir}/openclaw.plugin.json`,
+    manifestPath: `${rootDir}/natesclaw.plugin.json`,
     manifestHash: `${pluginId}-manifest-v1`,
     source: `${rootDir}/index.js`,
-    packageName: `@openclaw/${pluginId}`,
+    packageName: `@natesclaw/${pluginId}`,
     packageVersion: "1.0.0",
     installRecordHash: `${pluginId}-install-v1`,
     packageJson: { path: `${rootDir}/package.json`, hash: `${pluginId}-package-v1` },
@@ -184,7 +184,7 @@ const codexRuntimeArtifactAuth = {
   runtimeArtifactId: "codex-app-server",
 } as const;
 
-function config(model = "openai/gpt-5.5@openai:verified"): OpenClawConfig {
+function config(model = "openai/gpt-5.5@openai:verified"): NatesclawConfig {
   return {
     agents: { defaults: { model } },
     auth: {
@@ -211,7 +211,7 @@ function requireFingerprint(value: string | undefined): string {
 }
 
 async function bindingFor(
-  baseConfig: OpenClawConfig,
+  baseConfig: NatesclawConfig,
   deps: SystemAgentVerifiedInferenceDeps = { ...authDeps(), ...pluginArtifactDeps() },
 ) {
   const route = await requireRoute(baseConfig);
@@ -221,7 +221,7 @@ async function bindingFor(
   const agentHarnessId =
     route.runner === "embedded"
       ? route.agentHarnessRuntimeOverride === "auto"
-        ? "openclaw"
+        ? "natesclaw"
         : (route.agentHarnessRuntimeOverride ?? "codex")
       : undefined;
   return createBinding(
@@ -234,7 +234,7 @@ async function bindingFor(
       ...(agentHarnessId
         ? {
             agentHarnessId,
-            ...(agentHarnessId === "openclaw"
+            ...(agentHarnessId === "natesclaw"
               ? {}
               : {
                   runtimeOwnerKind: "plugin-harness" as const,
@@ -254,10 +254,10 @@ type ConfiguredRoute = NonNullable<
 type EmbeddedRoute = Extract<ConfiguredRoute, { runner: "embedded" }>;
 type CliRoute = Extract<ConfiguredRoute, { runner: "cli" }>;
 
-async function requireRoute(baseConfig: OpenClawConfig): Promise<ConfiguredRoute>;
-async function requireRoute(baseConfig: OpenClawConfig, runner: "embedded"): Promise<EmbeddedRoute>;
-async function requireRoute(baseConfig: OpenClawConfig, runner: "cli"): Promise<CliRoute>;
-async function requireRoute(baseConfig: OpenClawConfig, runner?: ConfiguredRoute["runner"]) {
+async function requireRoute(baseConfig: NatesclawConfig): Promise<ConfiguredRoute>;
+async function requireRoute(baseConfig: NatesclawConfig, runner: "embedded"): Promise<EmbeddedRoute>;
+async function requireRoute(baseConfig: NatesclawConfig, runner: "cli"): Promise<CliRoute>;
+async function requireRoute(baseConfig: NatesclawConfig, runner?: ConfiguredRoute["runner"]) {
   const route = await resolveSystemAgentConfiguredRouteFromConfig(baseConfig);
   if (!route || (runner && route.runner !== runner)) {
     throw new Error("missing test route");
@@ -278,15 +278,15 @@ function createBinding(
   });
 }
 
-function configSnapshot(baseConfig: OpenClawConfig) {
+function configSnapshot(baseConfig: NatesclawConfig) {
   const snapshot = { exists: true, valid: true, config: baseConfig };
   return { readConfigFileSnapshot: vi.fn(async () => snapshot) as never };
 }
 
 function codexHarnessConfig(
   profileId?: string,
-  plugins?: OpenClawConfig["plugins"],
-): OpenClawConfig {
+  plugins?: NatesclawConfig["plugins"],
+): NatesclawConfig {
   return {
     agents: {
       list: [
@@ -325,7 +325,7 @@ function opaqueHarnessAuth(route: ConfiguredRoute, backendId = "codex") {
 }
 
 async function opaqueHarnessBinding(
-  baseConfig: OpenClawConfig,
+  baseConfig: NatesclawConfig,
   options: { configuredAuto?: boolean; backendId?: string } = {},
 ) {
   const route = await requireRoute(baseConfig, "embedded");
@@ -342,7 +342,7 @@ async function opaqueHarnessBinding(
 
 async function revalidate(
   binding: Awaited<ReturnType<typeof bindingFor>>,
-  baseConfig: OpenClawConfig,
+  baseConfig: NatesclawConfig,
   deps: SystemAgentVerifiedInferenceDeps = {},
 ) {
   return resolveSystemAgentVerifiedInferenceRoute(binding, {
@@ -356,10 +356,10 @@ async function envAuthFixture() {
     agents: {
       defaults: {
         model: "openai/gpt-5.6",
-        models: { "openai/gpt-5.6": { agentRuntime: { id: "openclaw" } } },
+        models: { "openai/gpt-5.6": { agentRuntime: { id: "natesclaw" } } },
       },
     },
-  } satisfies OpenClawConfig;
+  } satisfies NatesclawConfig;
   const route = await requireRoute(baseConfig);
   const resolvedAuth = {
     apiKey: "env-key",
@@ -373,12 +373,12 @@ async function envAuthFixture() {
   };
 }
 
-describe("verified OpenClaw inference binding", () => {
+describe("verified Natesclaw inference binding", () => {
   it("invalidates an identity-less OAuth binding when its grant changes", async () => {
     const oauthConfig = {
       agents: { defaults: { model: "anthropic/claude-opus-4-8@anthropic:oauth" } },
       auth: { profiles: { "anthropic:oauth": { provider: "anthropic", mode: "oauth" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const route = await requireRoute(oauthConfig);
     const credential = {
       type: "oauth" as const,
@@ -395,7 +395,7 @@ describe("verified OpenClaw inference binding", () => {
       {
         authProfileId: "anthropic:oauth",
         authFingerprint,
-        agentHarnessId: "openclaw",
+        agentHarnessId: "natesclaw",
       },
       {
         ...pluginArtifactDeps(),
@@ -452,7 +452,7 @@ describe("verified OpenClaw inference binding", () => {
       route,
       {
         authFingerprint,
-        agentHarnessId: "openclaw",
+        agentHarnessId: "natesclaw",
         modelId: "gpt-5.6",
         modelApi: "openai-responses",
       },
@@ -474,7 +474,7 @@ describe("verified OpenClaw inference binding", () => {
     await expect(
       createBinding(
         route,
-        { authFingerprint, agentHarnessId: "openclaw" },
+        { authFingerprint, agentHarnessId: "natesclaw" },
         {
           ...pluginArtifactDeps(),
           resolveApiKeyForProvider: resolveAuth as never,
@@ -489,7 +489,7 @@ describe("verified OpenClaw inference binding", () => {
       agents: {
         entries: { ops: { default: true, model: "claude-cli/claude-opus-5" } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const route = await requireRoute(cliConfig, "cli");
     const resolveOwner = vi.fn(async () => "opaque-cli-owner");
     const deps = {
@@ -521,7 +521,7 @@ describe("verified OpenClaw inference binding", () => {
   it("invalidates a strict CLI credential when its package artifact changes", async () => {
     const cliConfig = {
       agents: { defaults: { model: "claude-cli/claude-opus-4-8" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const route = await requireRoute(cliConfig, "cli");
     const resolveAuth = vi.fn(() => "strict-cli-credential");
     const resolveArtifact = vi.fn(async () => "claude-cli-artifact-v1");
@@ -560,7 +560,7 @@ describe("verified OpenClaw inference binding", () => {
         ],
       },
       auth: { profiles: { [profileId]: { provider: "claude-cli", mode: "api_key" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const credential = {
       type: "api_key" as const,
       provider: "claude-cli",
@@ -686,13 +686,13 @@ describe("verified OpenClaw inference binding", () => {
       agents: {
         defaults: {
           model: "openai/gpt-5.5@openai:verified",
-          models: { "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } } },
+          models: { "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } } },
         },
       },
       auth: {
         profiles: { "openai:verified": { provider: "openai", mode: "api_key" } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const resolved = await requireRoute(harnessConfig, "embedded");
     const configuredRoute = {
       ...resolved,
@@ -715,15 +715,15 @@ describe("verified OpenClaw inference binding", () => {
       {
         authProfileId: "openai:verified",
         authFingerprint,
-        agentHarnessId: "openclaw",
+        agentHarnessId: "natesclaw",
         modelId: configuredRoute.model,
         modelApi: "openai-responses",
       },
       { ...authDeps(), ...pluginArtifactDeps() },
     );
 
-    expect(binding.execution).toMatchObject({ agentHarnessRuntimeOverride: "openclaw" });
-    expect(binding.auth.agentHarnessId).toBe("openclaw");
+    expect(binding.execution).toMatchObject({ agentHarnessRuntimeOverride: "natesclaw" });
+    expect(binding.auth.agentHarnessId).toBe("natesclaw");
   });
 
   it("rejects an opaque harness with no trusted manifest owner", async () => {
@@ -862,13 +862,13 @@ describe("verified OpenClaw inference binding", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const route = await requireRoute(bedrockConfig, "embedded");
     const auth = { source: "aws-sdk default chain", mode: "aws-sdk" as const };
     const fingerprint = () =>
       fingerprintAwsSdkRuntimeOwner({
         provider: route.provider,
-        backendId: route.agentHarnessRuntimeOverride ?? "openclaw",
+        backendId: route.agentHarnessRuntimeOverride ?? "natesclaw",
         auth,
       });
     try {
@@ -933,7 +933,7 @@ describe("verified OpenClaw inference binding", () => {
       replacement: {
         rootDir: "/replacement/provider-owner",
         source: "/replacement/provider-owner/index.js",
-        manifestPath: "/replacement/provider-owner/openclaw.plugin.json",
+        manifestPath: "/replacement/provider-owner/natesclaw.plugin.json",
       },
     },
     { name: "package version", replacement: { packageVersion: "2.0.0" } },
@@ -968,11 +968,11 @@ describe("verified OpenClaw inference binding", () => {
     "invalidates a strict credential after an in-place $name change with stable registry identity",
     async ({ origin, sourcePath, installRecordHash }) => {
       const runtimePath = "dist/index.js";
-      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-openclaw-plugin-"));
+      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-natesclaw-plugin-"));
       try {
         const rootDir = path.join(tempDir, "provider-owner");
         const source = path.join(rootDir, sourcePath);
-        const manifestPath = path.join(rootDir, "openclaw.plugin.json");
+        const manifestPath = path.join(rootDir, "natesclaw.plugin.json");
         const packageJsonPath = path.join(rootDir, "package.json");
         fs.mkdirSync(path.dirname(source), { recursive: true });
         fs.writeFileSync(source, "export const sourceRevision = 1;\n", "utf8");
@@ -980,7 +980,7 @@ describe("verified OpenClaw inference binding", () => {
         fs.mkdirSync(path.dirname(runtimeSource), { recursive: true });
         fs.writeFileSync(runtimeSource, "export const runtimeRevision = 1;\n", "utf8");
         fs.writeFileSync(manifestPath, '{"id":"provider-owner"}\n', "utf8");
-        fs.writeFileSync(packageJsonPath, '{"name":"@openclaw/provider-owner"}\n', "utf8");
+        fs.writeFileSync(packageJsonPath, '{"name":"@natesclaw/provider-owner"}\n', "utf8");
 
         const record = pluginRecord("provider-owner", {
           origin,
@@ -992,12 +992,12 @@ describe("verified OpenClaw inference binding", () => {
         });
         const codexRootDir = path.join(tempDir, "codex");
         const codexSource = path.join(codexRootDir, "index.js");
-        const codexManifestPath = path.join(codexRootDir, "openclaw.plugin.json");
+        const codexManifestPath = path.join(codexRootDir, "natesclaw.plugin.json");
         const codexPackageJsonPath = path.join(codexRootDir, "package.json");
         fs.mkdirSync(codexRootDir, { recursive: true });
         fs.writeFileSync(codexSource, "export const runtime = 'codex';\n", "utf8");
         fs.writeFileSync(codexManifestPath, '{"id":"codex"}\n', "utf8");
-        fs.writeFileSync(codexPackageJsonPath, '{"name":"@openclaw/codex"}\n', "utf8");
+        fs.writeFileSync(codexPackageJsonPath, '{"name":"@natesclaw/codex"}\n', "utf8");
         const codexRecord = pluginRecord("codex", {
           rootDir: codexRootDir,
           manifestPath: codexManifestPath,
@@ -1042,13 +1042,13 @@ describe("verified OpenClaw inference binding", () => {
       ...baseConfig,
       channels: { discord: { enabled: true } },
       plugins: { entries: { discord: { enabled: true } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const route = await revalidate(binding, changed, authDeps());
 
     expect(route).toBe(binding.execution);
     expect(route?.runConfig).toMatchObject(baseConfig);
-    expect(route?.runConfig.agents?.entries).toEqual({ openclaw: {} });
+    expect(route?.runConfig.agents?.entries).toEqual({ natesclaw: {} });
     expect(route?.runConfig).not.toBe(baseConfig);
   });
 
@@ -1085,9 +1085,9 @@ describe("verified OpenClaw inference binding", () => {
       remainsValid: false,
     },
   ])("projects the provider-owner policy when $name", async ({ plugins, remainsValid }) => {
-    const baseConfig = { ...config(), plugins: { allow: [] } } satisfies OpenClawConfig;
+    const baseConfig = { ...config(), plugins: { allow: [] } } satisfies NatesclawConfig;
     const binding = await bindingFor(baseConfig);
-    const changed = { ...config(), plugins } satisfies OpenClawConfig;
+    const changed = { ...config(), plugins } satisfies NatesclawConfig;
 
     const route = await revalidate(binding, changed, authDeps());
 

@@ -3,7 +3,7 @@
 // page, because native window.confirm/window.prompt silently answer in webviews with no
 // dialog bridge and would end the action with no outcome and no recorded reason.
 import { getPublicKeyAsync, signAsync, utils } from "@noble/ed25519";
-import { gatewayCredentialScope } from "@openclaw/gateway-client/browser";
+import { gatewayCredentialScope } from "@natesclaw/gateway-client/browser";
 import {
   type DeviceAuthEntry,
   type DeviceAuthStore,
@@ -178,9 +178,9 @@ type DeviceIdentity = {
   privateKey: string;
 };
 
-const LEGACY_DEVICE_AUTH_STORAGE_KEY = "openclaw.device.auth.v1";
+const LEGACY_DEVICE_AUTH_STORAGE_KEY = "natesclaw.device.auth.v1";
 const DEVICE_AUTH_STORAGE_KEY_PREFIX = `${LEGACY_DEVICE_AUTH_STORAGE_KEY}:`;
-const DEVICE_IDENTITY_STORAGE_KEY = "openclaw-device-identity-v1";
+const DEVICE_IDENTITY_STORAGE_KEY = "natesclaw-device-identity-v1";
 
 export function createInitialDevicesState(
   snapshot: Partial<NodesGatewaySnapshot> = {},

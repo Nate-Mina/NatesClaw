@@ -1,10 +1,10 @@
 // Qqbot tests cover framework registration plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
+  NatesclawPluginApi,
+  NatesclawPluginCommandDefinition,
   PluginCommandContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import { describe, expect, it } from "vitest";
 import {
   getWrittenQQBotConfig,
@@ -13,7 +13,7 @@ import {
 import { ensurePlatformAdapter } from "../bootstrap.js";
 import { registerQQBotFrameworkCommands } from "./framework-registration.js";
 
-function createConfig(): OpenClawConfig {
+function createConfig(): NatesclawConfig {
   return {
     channels: {
       qqbot: {
@@ -31,24 +31,24 @@ function createConfig(): OpenClawConfig {
   };
 }
 
-function registerCommands(): OpenClawPluginCommandDefinition[] {
+function registerCommands(): NatesclawPluginCommandDefinition[] {
   ensurePlatformAdapter();
-  const commands: OpenClawPluginCommandDefinition[] = [];
+  const commands: NatesclawPluginCommandDefinition[] = [];
   const api = {
     logger: {},
-    registerCommand: (command: OpenClawPluginCommandDefinition) => {
+    registerCommand: (command: NatesclawPluginCommandDefinition) => {
       commands.push(command);
     },
-  } as unknown as OpenClawPluginApi;
+  } as unknown as NatesclawPluginApi;
 
   registerQQBotFrameworkCommands(api);
   return commands;
 }
 
 function findCommand(
-  commands: OpenClawPluginCommandDefinition[],
+  commands: NatesclawPluginCommandDefinition[],
   name: string,
-): OpenClawPluginCommandDefinition {
+): NatesclawPluginCommandDefinition {
   const command = commands.find((entry) => entry.name === name);
   if (!command) {
     throw new Error(`expected QQBot command ${name}`);
@@ -57,7 +57,7 @@ function findCommand(
 }
 
 function createCommandContext(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   from: string | undefined,
 ): PluginCommandContext {
   return {
@@ -84,7 +84,7 @@ describe("registerQQBotFrameworkCommands", () => {
 
   it("preserves the private-chat guard for bot-streaming on generic framework calls", async () => {
     const config = createConfig();
-    const writes: OpenClawConfig[] = [];
+    const writes: NatesclawConfig[] = [];
     installCommandRuntime(config, writes);
     const command = findCommand(registerCommands(), "bot-streaming");
 
@@ -106,7 +106,7 @@ describe("registerQQBotFrameworkCommands", () => {
     qqbot.groups = {
       GROUP_OPENID: { commandLevel: "all" },
     };
-    const writes: OpenClawConfig[] = [];
+    const writes: NatesclawConfig[] = [];
     installCommandRuntime(config, writes);
     const command = findCommand(registerCommands(), "bot-streaming");
 
@@ -118,7 +118,7 @@ describe("registerQQBotFrameworkCommands", () => {
 
   it("allows bot-streaming on explicit QQBot private-chat framework calls", async () => {
     const config = createConfig();
-    const writes: OpenClawConfig[] = [];
+    const writes: NatesclawConfig[] = [];
     installCommandRuntime(config, writes);
     const command = findCommand(registerCommands(), "bot-streaming");
 

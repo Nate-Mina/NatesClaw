@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
+import { NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
 import { buildContextEngineRuntimeSettings } from "../../context-engine/runtime-settings.js";
 import type { ContextEngine } from "../../context-engine/types.js";
 import { createTestAdmittedRunContext } from "../admitted-run-context.test-support.js";
@@ -92,14 +92,14 @@ describe("compactEmbeddedRunForRecovery", () => {
         workspaceDir: "/tmp/workspace",
         provider: "openai",
         modelId: "gpt-5.5",
-        harnessRuntime: "openclaw",
+        harnessRuntime: "natesclaw",
         thinkLevel: "ultra",
         authProfileId: "openai:work",
         authProfileIdSource: "user",
         resolveContextEnginePluginId: () => undefined,
         buildRuntimeSettings: ({ tokenBudget, degradedReason }) =>
           buildContextEngineRuntimeSettings({
-            contextEngineHost: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+            contextEngineHost: NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
             provider: "openai",
             requestedModel: "gpt-5.5",
             resolvedModel: "gpt-5.5",
@@ -167,7 +167,7 @@ describe("createEmbeddedRunCompactionRuntime", () => {
         agentId: "main",
         sessionId: "session-1",
         sessionKey: "agent:main:session-1",
-        storePath: "/tmp/openclaw.sqlite",
+        storePath: "/tmp/natesclaw.sqlite",
       },
       adoptSessionId: vi.fn((sessionId?: string) => {
         if (sessionId) {

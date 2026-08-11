@@ -1,6 +1,6 @@
 /** Request-isolated registry views forked from lifecycle-owned model generations. */
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { Model } from "../llm/types.js";
 import { normalizeDiscoveredAgentModel } from "./agent-model-discovery.js";
 import {
@@ -35,7 +35,7 @@ function usesCredentialFreeRegistry(options: LoadPreparedAgentModelRegistryOptio
 function createRegistryView(params: {
   registry: ModelRegistry;
   agentDir: string;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   providerFilter?: string;
   normalizeModels?: boolean;
   workspaceDir?: string;
@@ -117,7 +117,7 @@ async function loadReadSnapshot(
 }
 
 function resolveInput(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   options: LoadPreparedAgentModelRegistryOptions = {},
 ): PreparedModelRuntimeInput {
   const agentId = options.agentId ?? resolveDefaultAgentId(config);
@@ -135,9 +135,9 @@ function resolveInput(
 
 /** Loads and forks one registry from the owning command lifecycle generation. */
 export async function loadPreparedAgentModelRegistry(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   options: LoadPreparedAgentModelRegistryOptions = {},
-): Promise<{ agentDir: string; config: OpenClawConfig; registry: ModelRegistry }> {
+): Promise<{ agentDir: string; config: NatesclawConfig; registry: ModelRegistry }> {
   const input = resolveInput(config, options);
   const lease = await loadReadSnapshot(input, options.workspaceDir === undefined);
   try {

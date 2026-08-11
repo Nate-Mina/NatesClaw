@@ -1,4 +1,4 @@
-import { buildControlUiCatalogSessionUrl } from "@openclaw/session-url-contract";
+import { buildControlUiCatalogSessionUrl } from "@natesclaw/session-url-contract";
 import { describe, expect, it } from "vitest";
 import type { ApplicationContext } from "../../app/context.ts";
 import { buildCatalogSessionKey } from "./catalog-key.ts";
@@ -54,14 +54,14 @@ describe("sessionNavigationTarget", () => {
       face: "dashboard",
       sessionKey: buildCatalogSessionKey(catalogKey),
       fallbackAgentId: "research",
-      basePath: "/admin/openclaw/",
+      basePath: "/admin/natesclaw/",
       mainKey: "workspace",
     });
 
     const canonicalHref = buildControlUiCatalogSessionUrl({
       namespace: "dashboard",
       agentId: "research",
-      basePath: "/admin/openclaw/",
+      basePath: "/admin/natesclaw/",
       catalog: catalogKey.catalogId,
       host: catalogKey.hostId,
       thread: catalogKey.threadId,
@@ -69,9 +69,9 @@ describe("sessionNavigationTarget", () => {
     expect(canonicalHref).not.toBeNull();
     expect(target.href).toBe(canonicalHref);
     expect(target).toEqual({
-      href: "/admin/openclaw/dashboard/research?catalog=claude&host=gateway%3Alocal&thread=thread-1",
+      href: "/admin/natesclaw/dashboard/research?catalog=claude&host=gateway%3Alocal&thread=thread-1",
       options: {
-        pathname: "/admin/openclaw/dashboard/research",
+        pathname: "/admin/natesclaw/dashboard/research",
         search: "?catalog=claude&host=gateway%3Alocal&thread=thread-1",
       },
     });

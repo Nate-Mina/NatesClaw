@@ -51,7 +51,7 @@ type SecretsStoreViewProps = {
   onDelete: (entry: SecretStoreEntry) => void;
 };
 
-const DOCS_URL = "https://docs.openclaw.ai/gateway/secrets#shared-secret-store";
+const DOCS_URL = "https://docs.natesclaw.ai/gateway/secrets#shared-secret-store";
 const SECRET_MASK = "••••••••";
 
 function updatedLabel(entry: SecretStoreEntry): string {
@@ -169,7 +169,7 @@ function renderEntryDialog(props: SecretsStoreViewProps): TemplateResult | typeo
   }
   const editing = props.dialogMode === "edit";
   return html`
-    <openclaw-modal-dialog
+    <natesclaw-modal-dialog
       label=${editing ? t("secretsStore.edit") : t("secretsStore.add")}
       description=${t("secretsStore.hint")}
       @modal-cancel=${props.onCloseDialog}
@@ -238,7 +238,7 @@ function renderEntryDialog(props: SecretsStoreViewProps): TemplateResult | typeo
           </button>
         </div>
       </form>
-    </openclaw-modal-dialog>
+    </natesclaw-modal-dialog>
   `;
 }
 
@@ -247,7 +247,7 @@ function renderBulkDialog(props: SecretsStoreViewProps): TemplateResult | typeof
     return nothing;
   }
   return html`
-    <openclaw-modal-dialog label=${t("secretsStore.bulk")} @modal-cancel=${props.onCloseBulk}>
+    <natesclaw-modal-dialog label=${t("secretsStore.bulk")} @modal-cancel=${props.onCloseBulk}>
       <form
         class="secrets-store-dialog"
         aria-busy=${props.busy ? "true" : "false"}
@@ -311,7 +311,7 @@ function renderBulkDialog(props: SecretsStoreViewProps): TemplateResult | typeof
           </button>
         </div>
       </form>
-    </openclaw-modal-dialog>
+    </natesclaw-modal-dialog>
   `;
 }
 

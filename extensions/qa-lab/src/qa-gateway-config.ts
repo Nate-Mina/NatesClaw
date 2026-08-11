@@ -1,8 +1,8 @@
 // Qa Lab helper module supports qa gateway config behavior.
-import { OPENCLAW_VERSION } from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ModelProviderConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { NATESCLAW_VERSION } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ModelProviderConfig } from "natesclaw/plugin-sdk/provider-model-shared";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   normalizeQaProviderMode,
   splitQaModelRef,
@@ -68,7 +68,7 @@ export function buildQaGatewayConfig(params: {
   fastMode?: boolean;
   thinkingDefault?: QaThinkingLevel;
   forcedRuntime?: RuntimeId;
-}): OpenClawConfig {
+}): NatesclawConfig {
   const providerBaseUrl = params.providerBaseUrl ?? "http://127.0.0.1:44080/v1";
   const providerMode = normalizeQaProviderMode(params.providerMode ?? DEFAULT_QA_PROVIDER_MODE);
   const provider = getQaProvider(providerMode);
@@ -156,7 +156,7 @@ export function buildQaGatewayConfig(params: {
     ]),
   ];
   const resolveModelEntry = (modelRef: string) => {
-    // Codex owns its app-server transport. OpenClaw provider params would make
+    // Codex owns its app-server transport. Natesclaw provider params would make
     // the forced parity cell an authored route that Codex correctly rejects.
     if (params.forcedRuntime === "codex") {
       return {};
@@ -208,7 +208,7 @@ export function buildQaGatewayConfig(params: {
 
   return {
     meta: {
-      lastTouchedVersion: OPENCLAW_VERSION,
+      lastTouchedVersion: NATESCLAW_VERSION,
     },
     memory: {
       search: {
@@ -225,7 +225,7 @@ export function buildQaGatewayConfig(params: {
           enabled: true,
           config: {
             pluginToolsMcpBridge: true,
-            openClawToolsMcpBridge: true,
+            NatesclawToolsMcpBridge: true,
           },
         },
         "memory-core": {
@@ -322,5 +322,5 @@ export function buildQaGatewayConfig(params: {
     },
     ...(params.transportConfig?.channels ? { channels: params.transportConfig.channels } : {}),
     ...(params.transportConfig?.messages ? { messages: params.transportConfig.messages } : {}),
-  } satisfies OpenClawConfig;
+  } satisfies NatesclawConfig;
 }

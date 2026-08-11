@@ -8,9 +8,9 @@ import {
 import { readConfigFileSnapshot } from "../config/config.js";
 import { createMergePatch } from "../config/merge-patch.js";
 import { applyMergePatch } from "../config/merge-patch.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
-function isInjectedMainRoster(config: OpenClawConfig): boolean {
+function isInjectedMainRoster(config: NatesclawConfig): boolean {
   const roster = listAgentEntries(config);
   const entry = roster[0];
   return (
@@ -22,14 +22,14 @@ function isInjectedMainRoster(config: OpenClawConfig): boolean {
 }
 
 function mergeOnboardingCandidate(params: {
-  base: OpenClawConfig;
-  candidate: OpenClawConfig;
-  currentRuntime: OpenClawConfig;
-}): OpenClawConfig {
+  base: NatesclawConfig;
+  candidate: NatesclawConfig;
+  currentRuntime: NatesclawConfig;
+}): NatesclawConfig {
   const proposalPatch = createMergePatch(params.base, params.candidate);
   // Keep this runtime-shaped. The canonical config writer projects only this
   // patch onto snapshot.parsed, preserving include ownership and env refs.
-  const merged = applyMergePatch(params.currentRuntime, proposalPatch) as OpenClawConfig;
+  const merged = applyMergePatch(params.currentRuntime, proposalPatch) as NatesclawConfig;
   const { list: _legacyList, ...agents } = merged.agents ?? {};
   return {
     ...merged,
@@ -41,12 +41,12 @@ function mergeOnboardingCandidate(params: {
 }
 
 export async function ensureOnboardingAgent(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   workspace: string;
   preserveCandidateRoster?: boolean;
-  baseConfig?: OpenClawConfig;
+  baseConfig?: NatesclawConfig;
 }): Promise<{
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId: string;
   bootstrapPending: boolean;
   /**
@@ -70,7 +70,7 @@ export async function ensureOnboardingAgent(params: {
   }
   const before = await readConfigFileSnapshot();
   if (before.exists && !before.valid) {
-    throw new Error("Cannot create the first agent from an invalid OpenClaw config.");
+    throw new Error("Cannot create the first agent from an invalid Natesclaw config.");
   }
   const effective = before.config;
   const candidateBase = params.baseConfig ?? effective;
@@ -100,7 +100,7 @@ export async function ensureOnboardingAgent(params: {
   }
   const after = await readConfigFileSnapshot();
   if (!after.valid) {
-    throw new Error("Agent creation wrote an invalid OpenClaw config.");
+    throw new Error("Agent creation wrote an invalid Natesclaw config.");
   }
   return {
     config: mergeOnboardingCandidate({
@@ -115,10 +115,10 @@ export async function ensureOnboardingAgent(params: {
 }
 
 export function ensureOnboardingConfig(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   workspace: string,
   preserveCandidateRoster = false,
-  baseConfig?: OpenClawConfig,
+  baseConfig?: NatesclawConfig,
 ) {
   return ensureOnboardingAgent({ config, workspace, preserveCandidateRoster, baseConfig });
 }

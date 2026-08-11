@@ -1,11 +1,11 @@
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 /**
  * Skill Workshop built-in tool.
  *
  * Exposes proposal create/update/review/apply actions while the workshop service owns persistence.
  */
 import { Type } from "typebox";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { sha256Hex } from "../../infra/crypto-digest.js";
 import { hasRunWorkspaceSkillUsage } from "../../skills/runtime/run-usage.js";
 import {
@@ -246,7 +246,7 @@ function buildSkillWorkshopToolSchema(
 }
 type SkillWorkshopToolOptions = {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   agentId?: string;
   origin?: SkillProposalOrigin;

@@ -2,15 +2,15 @@
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/approval-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   imessageApprovalCapability,
   shouldSuppressLocalIMessageExecApprovalPrompt,
 } from "./approval-native.js";
 
-type IMessageConfig = NonNullable<NonNullable<OpenClawConfig["channels"]>["imessage"]>;
+type IMessageConfig = NonNullable<NonNullable<NatesclawConfig["channels"]>["imessage"]>;
 
 const DEFAULT_ACCOUNT_ID = "default";
 const DIRECT_TARGET = "+15551230000";
@@ -19,9 +19,9 @@ const GROUP_TARGET = "chat_guid:iMessage;+;chat42";
 function buildConfig(
   params: {
     imessage?: Partial<IMessageConfig>;
-    approvals?: OpenClawConfig["approvals"];
+    approvals?: NatesclawConfig["approvals"];
   } = {},
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     channels: {
       imessage: {
@@ -30,7 +30,7 @@ function buildConfig(
       },
     },
     approvals: params.approvals,
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function buildTargetModeConfig(
@@ -92,7 +92,7 @@ function buildPluginRequest(
 }
 
 function nativeShouldHandle(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   approvalKind: "exec" | "plugin";
   request: ExecApprovalRequest | PluginApprovalRequest;
   accountId?: string | null;
@@ -107,7 +107,7 @@ function nativeShouldHandle(params: {
 }
 
 function getAvailability(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   accountId = DEFAULT_ACCOUNT_ID,
   approvalKind: "exec" | "plugin" = "exec",
 ) {
@@ -120,7 +120,7 @@ function getAvailability(
 }
 
 function describeDelivery(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   request: ExecApprovalRequest | PluginApprovalRequest,
   approvalKind: "exec" | "plugin" = "exec",
 ) {
@@ -132,7 +132,7 @@ function describeDelivery(
   });
 }
 
-function resolveExecOrigin(cfg: OpenClawConfig, request: ExecApprovalRequest) {
+function resolveExecOrigin(cfg: NatesclawConfig, request: ExecApprovalRequest) {
   return imessageApprovalCapability.native?.resolveOriginTarget?.({
     cfg,
     accountId: DEFAULT_ACCOUNT_ID,
@@ -152,7 +152,7 @@ function suppressForwardingFallback(params: ForwardingSuppressionParams) {
 }
 
 function suppressTargetForwarding(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   to: string,
   request = buildExecRequest(DIRECT_TARGET),
 ) {
@@ -205,7 +205,7 @@ function suppressLocalPrompt(
 }
 
 function suppressLocalSessionPrompt(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   sessionKey: string,
   params: { accountId?: string; agentId?: string | null } = {},
 ) {

@@ -5,12 +5,12 @@
  */
 import { AsyncLocalStorage } from "node:async_hooks";
 import { isDeepStrictEqual } from "node:util";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { isSecretRef } from "../../config/types.secrets.js";
 import {
-  deferOpenClawAgentPostCommitPublication,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  deferNatesclawAgentPostCommitPublication,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import { isRecord } from "../../utils.js";
 import { cloneAuthProfileStore } from "./clone.js";
 import { AUTH_STORE_VERSION, authProfilesLog } from "./constants.js";
@@ -72,8 +72,8 @@ const resolveAuthStorePath = resolveAuthProfileDatabasePath;
 
 type LoadAuthProfileStoreOptions = {
   allowKeychainPrompt?: boolean;
-  config?: OpenClawConfig;
-  database?: OpenClawAgentDatabase;
+  config?: NatesclawConfig;
+  database?: NatesclawAgentDatabase;
   externalCli?: ExternalCliAuthDiscovery;
   inheritedAuthDir?: string;
   readOnly?: boolean;
@@ -185,7 +185,7 @@ function preserveLegacyOAuthRefsOnSave(params: {
 
 type ResolvedExternalCliOverlayOptions = {
   allowKeychainPrompt?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   externalCliProviderIds?: Iterable<string>;
   externalCliProfileIds?: Iterable<string>;
 };
@@ -227,13 +227,13 @@ const testing = {
   },
 };
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.authProfileStoreTestApi")] =
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.authProfileStoreTestApi")] =
     testing;
 }
 
 function resolvePersistedLoadOptions(
   options: Pick<LoadAuthProfileStoreOptions, "allowKeychainPrompt" | "database"> | undefined,
-): { allowKeychainPrompt?: boolean; database?: OpenClawAgentDatabase } {
+): { allowKeychainPrompt?: boolean; database?: NatesclawAgentDatabase } {
   return {
     ...(options?.allowKeychainPrompt !== undefined
       ? { allowKeychainPrompt: options.allowKeychainPrompt }
@@ -244,7 +244,7 @@ function resolvePersistedLoadOptions(
 
 function loadPersistedAuthProfileStores(
   agentDir?: string,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): PersistedAuthProfileStores {
   const localStore = loadPersistedAuthProfileStore(agentDir, database ? { database } : undefined);
   const isMainStore = resolveAuthStorePath(agentDir) === resolveAuthStorePath();
@@ -380,7 +380,7 @@ function maybeSyncPersistedExternalCliAuthProfiles(params: {
   if (
     params.options?.readOnly === true ||
     params.options?.syncExternalCli === false ||
-    process.env.OPENCLAW_AUTH_STORE_READONLY === "1"
+    process.env.NATESCLAW_AUTH_STORE_READONLY === "1"
   ) {
     return { store: params.store, cacheable: true };
   }
@@ -1133,7 +1133,7 @@ export function ensureAuthProfileStore(
   agentDir?: string,
   options?: {
     allowKeychainPrompt?: boolean;
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     externalCli?: ExternalCliAuthDiscovery;
     externalCliProviderIds?: Iterable<string>;
     externalCliProfileIds?: Iterable<string>;
@@ -1339,7 +1339,7 @@ function saveAuthProfileStoreInTransaction(
   store: AuthProfileStore,
   agentDir: string | undefined,
   options: SaveAuthProfileStoreOptions | undefined,
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   publishFromSuppliedStore = false,
 ): () => void {
   const savedAuthPath = resolveAuthStorePath(agentDir);
@@ -1458,7 +1458,7 @@ export function saveAuthProfileStore(
   store: AuthProfileStore,
   agentDir?: string,
   options?: SaveAuthProfileStoreOptions,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): void {
   const effectiveAgentDir = resolveRuntimeAuthProfileAgentDir(agentDir);
   if (database) {
@@ -1472,7 +1472,7 @@ export function saveAuthProfileStore(
     const publishAfterCommit = () => {
       publishRuntimeSnapshotsAfterCommit(publishRuntimeSnapshots);
     };
-    if (!deferOpenClawAgentPostCommitPublication(database, publishAfterCommit)) {
+    if (!deferNatesclawAgentPostCommitPublication(database, publishAfterCommit)) {
       // A supplied connection outside the transaction wrapper autocommits each write.
       publishAfterCommit();
     }

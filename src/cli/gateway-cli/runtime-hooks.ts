@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 
 export type GatewayRunRuntimeHooks = {
   releaseManagedProxy?: () => Promise<void> | void;
-  refreshManagedProxy?: (config: OpenClawConfig["proxy"]) => Promise<void> | void;
+  refreshManagedProxy?: (config: NatesclawConfig["proxy"]) => Promise<void> | void;
 };
 
 let activeGatewayRunRuntimeHooks: GatewayRunRuntimeHooks = {};

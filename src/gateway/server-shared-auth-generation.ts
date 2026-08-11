@@ -1,6 +1,6 @@
 // Gateway shared-auth generation enforcement.
 // Disconnects clients when config writes invalidate shared credentials.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveGatewayReloadSettings } from "./config-reload-settings.js";
 
 /** Gateway client subset relevant to shared auth generation enforcement. */
@@ -195,7 +195,7 @@ export function finalizeOwnedSharedGatewaySessionGeneration(
 /** Enforce shared auth generation behavior after a config write. */
 export function enforceSharedGatewaySessionGenerationForConfigWrite(params: {
   state: SharedGatewaySessionGenerationState;
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   resolveRuntimeSnapshotGeneration: () => string | undefined;
   clients: Iterable<SharedGatewayAuthClient>;
 }): void {

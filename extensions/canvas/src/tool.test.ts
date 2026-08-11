@@ -36,20 +36,20 @@ const canvasToolInvocationActions = [
 const mocks = vi.hoisted(() => ({
   callGatewayTool: vi.fn(),
   imageResultFromFile: vi.fn<
-    typeof import("openclaw/plugin-sdk/channel-actions").imageResultFromFile
+    typeof import("natesclaw/plugin-sdk/channel-actions").imageResultFromFile
   >(async (params) => ({ content: [], details: params })),
   listNodes: vi.fn(async () => []),
   resolveNodeIdFromList: vi.fn(() => "node-1"),
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-harness-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/agent-harness-runtime", () => ({
   callGatewayTool: mocks.callGatewayTool,
   listNodes: mocks.listNodes,
   resolveNodeIdFromList: mocks.resolveNodeIdFromList,
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-actions", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/channel-actions")>()),
+vi.mock("natesclaw/plugin-sdk/channel-actions", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/channel-actions")>()),
   imageResultFromFile: mocks.imageResultFromFile,
 }));
 
@@ -127,7 +127,7 @@ describe("Canvas tool", () => {
   it.skipIf(process.platform === "win32")(
     "rejects jsonlPath symlinks that resolve outside the workspace",
     async () => {
-      tempRoot = await mkdtemp(path.join(os.tmpdir(), "openclaw-canvas-tool-"));
+      tempRoot = await mkdtemp(path.join(os.tmpdir(), "natesclaw-canvas-tool-"));
       const workspaceDir = path.join(tempRoot, "workspace");
       await mkdir(workspaceDir);
       const outsidePath = path.join(tempRoot, "outside.jsonl");
@@ -148,7 +148,7 @@ describe("Canvas tool", () => {
   );
 
   it("rejects jsonlPath files above the shared bounded-read limit", async () => {
-    tempRoot = await mkdtemp(path.join(os.tmpdir(), "openclaw-canvas-tool-"));
+    tempRoot = await mkdtemp(path.join(os.tmpdir(), "natesclaw-canvas-tool-"));
     const workspaceDir = path.join(tempRoot, "workspace");
     await mkdir(workspaceDir);
     await writeFile(
@@ -195,7 +195,7 @@ describe("Canvas tool", () => {
         }
       | undefined;
     expect(imageResultParams?.label).toBe("canvas:snapshot");
-    expect(imageResultParams?.path).toMatch(/openclaw-canvas-snapshot-.*\.png$/);
+    expect(imageResultParams?.path).toMatch(/natesclaw-canvas-snapshot-.*\.png$/);
     expect(imageResultParams?.details).toEqual({ format: "png", media: { outbound: false } });
     expect(imageResultParams?.imageSanitization).toEqual({ maxDimensionPx: 1600 });
   });
@@ -203,11 +203,11 @@ describe("Canvas tool", () => {
   it("keeps private Canvas snapshots visible to the model but out of channel delivery", async () => {
     const [{ imageResultFromFile }, { extractToolResultMediaArtifact, filterToolResultMediaUrls }] =
       await Promise.all([
-        vi.importActual<typeof import("openclaw/plugin-sdk/channel-actions")>(
-          "openclaw/plugin-sdk/channel-actions",
+        vi.importActual<typeof import("natesclaw/plugin-sdk/channel-actions")>(
+          "natesclaw/plugin-sdk/channel-actions",
         ),
-        vi.importActual<typeof import("openclaw/plugin-sdk/agent-harness-runtime")>(
-          "openclaw/plugin-sdk/agent-harness-runtime",
+        vi.importActual<typeof import("natesclaw/plugin-sdk/agent-harness-runtime")>(
+          "natesclaw/plugin-sdk/agent-harness-runtime",
         ),
       ]);
     mocks.imageResultFromFile.mockImplementationOnce(imageResultFromFile);
@@ -219,7 +219,7 @@ describe("Canvas tool", () => {
     const snapshotPath = (result.details as { path?: string }).path;
 
     try {
-      expect(snapshotPath).toMatch(/openclaw-canvas-snapshot-.*\.png$/);
+      expect(snapshotPath).toMatch(/natesclaw-canvas-snapshot-.*\.png$/);
       expect(result.content).toContainEqual(
         expect.objectContaining({ type: "image", mimeType: "image/png" }),
       );
@@ -397,17 +397,17 @@ describe("Canvas tool", () => {
           catalogId: "https://a2ui.org/specification/v0_9/catalogs/basic/catalog.json",
         },
       }),
-      /OpenClaw currently supports v0\.8 only/,
+      /Natesclaw currently supports v0\.8 only/,
     ],
     [
       "legacy createSurface JSONL",
       JSON.stringify({ createSurface: { surfaceId: "main", root: "root" } }),
-      /OpenClaw currently supports v0\.8 only/,
+      /Natesclaw currently supports v0\.8 only/,
     ],
     [
       "A2UI v0.9 deleteSurface JSONL",
       JSON.stringify({ version: "v0.9", deleteSurface: { surfaceId: "main" } }),
-      /OpenClaw currently supports v0\.8 only/,
+      /Natesclaw currently supports v0\.8 only/,
     ],
     [
       "an unsupported explicit A2UI version",

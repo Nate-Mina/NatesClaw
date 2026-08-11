@@ -135,7 +135,7 @@ function presentInputDialog(options: InputDialogOptions): Promise<string | null>
     function paint() {
       render(
         html`
-          <openclaw-modal-dialog
+          <natesclaw-modal-dialog
             label=${options.title}
             description=${label}
             @modal-cancel=${handleCancel}
@@ -175,7 +175,7 @@ function presentInputDialog(options: InputDialogOptions): Promise<string | null>
                 </button>
               </div>
             </form>
-          </openclaw-modal-dialog>
+          </natesclaw-modal-dialog>
         `,
         host,
       );

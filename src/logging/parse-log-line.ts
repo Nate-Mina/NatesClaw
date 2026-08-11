@@ -1,8 +1,8 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 // Log line parsing helpers convert text log entries into structured records.
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 
-// Parser for JSON LogTape lines emitted by the OpenClaw logger.
+// Parser for JSON LogTape lines emitted by the Natesclaw logger.
 type ParsedLogLine = {
   time?: string;
   level?: string;

@@ -1,4 +1,4 @@
-import { normalizeUsage } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { normalizeUsage } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   describe,
   registerCodexEventProjectorTestLifecycle,

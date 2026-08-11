@@ -21,20 +21,20 @@ const GATEWAY_E2E_TIMEOUT_MS = 90_000;
 const ENV_KEYS = [
   "HOME",
   ...GATEWAY_STARTUP_MUTATED_ENV_KEYS,
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_TEST_GATEWAY_OVERRIDE_TOKEN",
-  "OPENCLAW_TEST_RUNTIME_OVERRIDE_TOKEN",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_GATEWAY_TOKEN",
+  "NATESCLAW_TEST_GATEWAY_OVERRIDE_TOKEN",
+  "NATESCLAW_TEST_RUNTIME_OVERRIDE_TOKEN",
+  "NATESCLAW_SKIP_CHANNELS",
+  "NATESCLAW_SKIP_GMAIL_WATCHER",
+  "NATESCLAW_SKIP_CRON",
+  "NATESCLAW_SKIP_CANVAS_HOST",
+  "NATESCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "NATESCLAW_SKIP_PROVIDERS",
+  "NATESCLAW_BUNDLED_PLUGINS_DIR",
+  "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NATESCLAW_TEST_MINIMAL_GATEWAY",
 ];
 
 function resetGatewayTestState(): void {
@@ -55,8 +55,8 @@ describe("gateway wizard cancellation lifecycle", () => {
     { timeout: GATEWAY_E2E_TIMEOUT_MS },
     async () => {
       const envSnapshot = captureEnv(ENV_KEYS);
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-wizard-cancel-home-"));
-      const stateDir = path.join(tempHome, ".openclaw");
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-wizard-cancel-home-"));
+      const stateDir = path.join(tempHome, ".natesclaw");
       const bundledPluginsDir = path.join(tempHome, "empty-bundled-plugins");
       const token = `wizard-cancel-${process.pid}-${process.env.VITEST_POOL_ID ?? "0"}`;
       const runnerSettled = [createDeferred(), createDeferred()] as const;
@@ -65,17 +65,17 @@ describe("gateway wizard cancellation lifecycle", () => {
       try {
         await fs.mkdir(bundledPluginsDir, { recursive: true });
         setTestEnvValue("HOME", tempHome);
-        setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
-        deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
-        setTestEnvValue("OPENCLAW_SKIP_CHANNELS", "1");
-        setTestEnvValue("OPENCLAW_SKIP_GMAIL_WATCHER", "1");
-        setTestEnvValue("OPENCLAW_SKIP_CRON", "1");
-        setTestEnvValue("OPENCLAW_SKIP_CANVAS_HOST", "1");
-        setTestEnvValue("OPENCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
-        setTestEnvValue("OPENCLAW_SKIP_PROVIDERS", "1");
-        setTestEnvValue("OPENCLAW_BUNDLED_PLUGINS_DIR", bundledPluginsDir);
-        setTestEnvValue("OPENCLAW_DISABLE_BUNDLED_PLUGINS", "1");
-        setTestEnvValue("OPENCLAW_TEST_MINIMAL_GATEWAY", "1");
+        setTestEnvValue("NATESCLAW_STATE_DIR", stateDir);
+        deleteTestEnvValue("NATESCLAW_CONFIG_PATH");
+        setTestEnvValue("NATESCLAW_SKIP_CHANNELS", "1");
+        setTestEnvValue("NATESCLAW_SKIP_GMAIL_WATCHER", "1");
+        setTestEnvValue("NATESCLAW_SKIP_CRON", "1");
+        setTestEnvValue("NATESCLAW_SKIP_CANVAS_HOST", "1");
+        setTestEnvValue("NATESCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
+        setTestEnvValue("NATESCLAW_SKIP_PROVIDERS", "1");
+        setTestEnvValue("NATESCLAW_BUNDLED_PLUGINS_DIR", bundledPluginsDir);
+        setTestEnvValue("NATESCLAW_DISABLE_BUNDLED_PLUGINS", "1");
+        setTestEnvValue("NATESCLAW_TEST_MINIMAL_GATEWAY", "1");
 
         const port = await getGatewayE2ePortBlock();
         const server = await startGatewayServer(port, {

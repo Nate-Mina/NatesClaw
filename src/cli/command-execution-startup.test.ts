@@ -41,13 +41,13 @@ describe("command-execution-startup", () => {
   it("resolves startup context from argv and mode", () => {
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "openclaw", "status", "--json"],
+        argv: ["node", "natesclaw", "status", "--json"],
         jsonOutputMode: true,
         env: {},
       }),
     ).toEqual({
       invocation: {
-        argv: ["node", "openclaw", "status", "--json"],
+        argv: ["node", "natesclaw", "status", "--json"],
         commandPath: ["status"],
         primary: "status",
         hasHelpOrVersion: false,
@@ -65,28 +65,28 @@ describe("command-execution-startup", () => {
   });
 
   it("uses process env banner suppression when startup env is omitted", () => {
-    const originalHideBanner = process.env.OPENCLAW_HIDE_BANNER;
+    const originalHideBanner = process.env.NATESCLAW_HIDE_BANNER;
     try {
-      process.env.OPENCLAW_HIDE_BANNER = "1";
+      process.env.NATESCLAW_HIDE_BANNER = "1";
 
       expect(
         mod.resolveCliExecutionStartupContext({
-          argv: ["node", "openclaw", "status"],
+          argv: ["node", "natesclaw", "status"],
           jsonOutputMode: false,
         }).startupPolicy.hideBanner,
       ).toBe(true);
       expect(
         mod.resolveCliExecutionStartupContext({
-          argv: ["node", "openclaw", "status"],
+          argv: ["node", "natesclaw", "status"],
           jsonOutputMode: false,
           env: {},
         }).startupPolicy.hideBanner,
       ).toBe(false);
     } finally {
       if (originalHideBanner === undefined) {
-        delete process.env.OPENCLAW_HIDE_BANNER;
+        delete process.env.NATESCLAW_HIDE_BANNER;
       } else {
-        process.env.OPENCLAW_HIDE_BANNER = originalHideBanner;
+        process.env.NATESCLAW_HIDE_BANNER = originalHideBanner;
       }
     }
   });
@@ -94,7 +94,7 @@ describe("command-execution-startup", () => {
   it("skips local plugin bootstrap for JSON gateway agent calls", () => {
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "openclaw", "agent", "--agent", "main", "--message", "hi", "--json"],
+        argv: ["node", "natesclaw", "agent", "--agent", "main", "--message", "hi", "--json"],
         jsonOutputMode: true,
       }).startupPolicy.loadPlugins,
     ).toBe(false);
@@ -102,7 +102,7 @@ describe("command-execution-startup", () => {
       mod.resolveCliExecutionStartupContext({
         argv: [
           "node",
-          "openclaw",
+          "natesclaw",
           "agent",
           "--agent",
           "main",
@@ -116,7 +116,7 @@ describe("command-execution-startup", () => {
     ).toBe(true);
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "openclaw", "agent", "--agent", "main", "--message", "hi"],
+        argv: ["node", "natesclaw", "agent", "--agent", "main", "--message", "hi"],
         jsonOutputMode: false,
       }).startupPolicy.loadPlugins,
     ).toBe(false);
@@ -124,7 +124,7 @@ describe("command-execution-startup", () => {
 
   it("uses the resolved action command path for every execution startup decision", () => {
     const context = mod.resolveCliExecutionStartupContext({
-      argv: ["node", "openclaw", "gateway", "--token", "secret", "call", "health"],
+      argv: ["node", "natesclaw", "gateway", "--token", "secret", "call", "health"],
       commandPath: ["gateway", "call"],
       jsonOutputMode: false,
       env: {},
@@ -135,7 +135,7 @@ describe("command-execution-startup", () => {
 
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "openclaw", "acp", "--token", "-secret"],
+        argv: ["node", "natesclaw", "acp", "--token", "-secret"],
         commandPath: ["acp"],
         jsonOutputMode: false,
         env: {},
@@ -143,7 +143,7 @@ describe("command-execution-startup", () => {
     ).toBe(true);
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "openclaw", "acp", "--verbose", "client"],
+        argv: ["node", "natesclaw", "acp", "--verbose", "client"],
         commandPath: ["acp", "client"],
         jsonOutputMode: false,
         env: {},
@@ -161,12 +161,12 @@ describe("command-execution-startup", () => {
         pluginRegistry: { scope: "all" },
       },
       version: "1.2.3",
-      argv: ["node", "openclaw", "status"],
+      argv: ["node", "natesclaw", "status"],
     });
 
     expect(routeLogsToStderrMock).toHaveBeenCalledTimes(1);
     expect(emitCliBannerMock).toHaveBeenCalledWith("1.2.3", {
-      argv: ["node", "openclaw", "status"],
+      argv: ["node", "natesclaw", "status"],
     });
 
     await mod.applyCliExecutionStartupPresentation({
@@ -194,7 +194,7 @@ describe("command-execution-startup", () => {
         pluginRegistry: { scope: "channels" },
       },
       version: "1.2.3",
-      argv: ["node", "openclaw", "status", "--json"],
+      argv: ["node", "natesclaw", "status", "--json"],
     });
 
     expect(routeLogsToStderrMock).toHaveBeenCalledTimes(1);

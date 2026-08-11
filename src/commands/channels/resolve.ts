@@ -1,9 +1,9 @@
-// Implements `openclaw channels resolve` for provider-specific user/group target resolution.
+// Implements `natesclaw channels resolve` for provider-specific user/group target resolution.
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+} from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
 import type {
   ChannelResolveKind,
   ChannelResolveResult,
@@ -130,7 +130,7 @@ export async function channelsResolveCommand(opts: ChannelsResolveOptions, runti
   const entries = normalizeStringEntries(opts.entries);
   if (entries.length === 0) {
     throw new Error(
-      `At least one entry is required. Example: ${formatCliCommand("openclaw channels resolve --channel discord <name-or-id>")}.`,
+      `At least one entry is required. Example: ${formatCliCommand("natesclaw channels resolve --channel discord <name-or-id>")}.`,
     );
   }
 
@@ -146,7 +146,7 @@ export async function channelsResolveCommand(opts: ChannelsResolveOptions, runti
     : null;
   if (explicitChannel && resolvedExplicit?.catalogEntry && !resolvedExplicit.plugin) {
     throw new Error(
-      `Channel plugin "${resolvedExplicit.catalogEntry.id}" is not installed. Run ${formatCliCommand(`openclaw channels add --channel ${resolvedExplicit.catalogEntry.id}`)} first.`,
+      `Channel plugin "${resolvedExplicit.catalogEntry.id}" is not installed. Run ${formatCliCommand(`natesclaw channels add --channel ${resolvedExplicit.catalogEntry.id}`)} first.`,
     );
   }
   if (resolvedExplicit?.configChanged) {

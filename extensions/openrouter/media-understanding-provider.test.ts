@@ -2,7 +2,7 @@
 import {
   describeImageWithModel,
   describeImagesWithModel,
-} from "openclaw/plugin-sdk/media-understanding";
+} from "natesclaw/plugin-sdk/media-understanding";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { openrouterMediaUnderstandingProvider } from "./media-understanding-provider.js";
 
@@ -23,7 +23,7 @@ const { assertOkOrThrowHttpErrorMock, postJsonRequestMock, resolveProviderHttpRe
     })),
   }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", () => ({
+vi.mock("natesclaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   postJsonRequest: postJsonRequestMock,
   // Pass-through: bounded-reader enforcement is tested via bounded-reader unit tests.
@@ -97,8 +97,8 @@ describe("openrouter media understanding provider", () => {
       defaultHeaders: {
         Authorization: "Bearer sk-openrouter",
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://openclaw.ai",
-        "X-OpenRouter-Title": "OpenClaw",
+        "HTTP-Referer": "https://natesclaw.ai",
+        "X-OpenRouter-Title": "Natesclaw",
       },
       provider: "openrouter",
       api: "openrouter-stt",
@@ -127,8 +127,8 @@ describe("openrouter media understanding provider", () => {
       throw new Error("expected OpenRouter request headers");
     }
     expect(headers.get("authorization")).toBe("Bearer sk-openrouter");
-    expect(headers.get("http-referer")).toBe("https://openclaw.ai");
-    expect(headers.get("x-openrouter-title")).toBe("OpenClaw");
+    expect(headers.get("http-referer")).toBe("https://natesclaw.ai");
+    expect(headers.get("x-openrouter-title")).toBe("Natesclaw");
     expect(release).toHaveBeenCalledOnce();
   });
 

@@ -12,12 +12,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as kyselySync from "../infra/kysely-sync.js";
 import * as nodeSqlite from "../infra/node-sqlite.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  OPENCLAW_AGENT_SCHEMA_VERSION,
-  openOpenClawAgentDatabase,
-} from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  closeNatesclawAgentDatabasesForTest,
+  NATESCLAW_AGENT_SCHEMA_VERSION,
+  openNatesclawAgentDatabase,
+} from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { resolveAgentDir } from "./agent-scope.js";
 import { loadPersistedAuthProfileStore } from "./auth-profiles/persisted.js";
@@ -77,15 +77,15 @@ async function withAgentDirEnv(prefix: string, run: (agentDir: string) => void |
     fs.mkdirSync(agentDir, { recursive: true });
     await withEnvAsync(
       {
-        OPENCLAW_STATE_DIR: root,
-        OPENCLAW_AGENT_DIR: agentDir,
+        NATESCLAW_STATE_DIR: root,
+        NATESCLAW_AGENT_DIR: agentDir,
       },
       async () => await run(agentDir),
     );
   } finally {
     clearRuntimeAuthProfileStoreSnapshots();
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     fs.rmSync(root, { recursive: true, force: true });
   }
 }
@@ -102,7 +102,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("persists auth profiles and runtime scheduling state in the agent sqlite database", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-", (agentDir) => {
       saveAuthProfileStore(
         {
           ...apiKeyStore("sk-test"),
@@ -121,12 +121,12 @@ describe("auth profile sqlite store", () => {
       expect(loaded.usageStats?.["openai:default"]?.lastUsed).toBe(123);
       expect(fs.existsSync(path.join(agentDir, "auth-profiles.json"))).toBe(false);
       expect(fs.existsSync(path.join(agentDir, "auth-state.json"))).toBe(false);
-      expect(fs.existsSync(path.join(agentDir, "openclaw-agent.sqlite"))).toBe(true);
+      expect(fs.existsSync(path.join(agentDir, "natesclaw-agent.sqlite"))).toBe(true);
     });
   });
 
   it("does not read legacy auth-profiles.json at runtime", async () => {
-    await withAgentDirEnv("openclaw-auth-no-json-fallback-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-no-json-fallback-", (agentDir) => {
       fs.writeFileSync(
         path.join(agentDir, "auth-profiles.json"),
         `${JSON.stringify(apiKeyStore("sk-json"))}\n`,
@@ -140,7 +140,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("fails closed when a credential source appears during a successful SQLite read", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-late-legacy-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-late-legacy-", (agentDir) => {
       saveAuthProfileStore(apiKeyStore("not-a-real"), agentDir);
       const legacyPath = path.join(agentDir, "auth.json");
       const existsSync = fs.existsSync.bind(fs);
@@ -168,14 +168,14 @@ describe("auth profile sqlite store", () => {
   });
 
   it("does not create sqlite files for missing-store reads", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-no-create-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-no-create-", (agentDir) => {
       expect(loadPersistedAuthProfileStore(agentDir)).toBeNull();
-      expect(fs.existsSync(path.join(agentDir, "openclaw-agent.sqlite"))).toBe(false);
+      expect(fs.existsSync(path.join(agentDir, "natesclaw-agent.sqlite"))).toBe(false);
     });
   });
 
   it("treats a legacy agent database without auth tables as a missing store", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-legacy-schema-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-legacy-schema-", (agentDir) => {
       const database = new DatabaseSync(resolveAuthProfileDatabasePath(agentDir));
       database.exec("CREATE TABLE legacy_state (id INTEGER PRIMARY KEY);");
       database.close();
@@ -188,7 +188,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("classifies each missing auth table through an existing database handle", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-partial-schema-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-partial-schema-", (agentDir) => {
       const database = new DatabaseSync(resolveAuthProfileDatabasePath(agentDir));
       database.exec(`
         CREATE TABLE auth_profile_store (
@@ -213,9 +213,9 @@ describe("auth profile sqlite store", () => {
   });
 
   it("rejects a newer agent database that has no current auth table", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-newer-schema-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-newer-schema-", (agentDir) => {
       const database = new DatabaseSync(resolveAuthProfileDatabasePath(agentDir));
-      database.exec(`PRAGMA user_version = ${OPENCLAW_AGENT_SCHEMA_VERSION + 1};`);
+      database.exec(`PRAGMA user_version = ${NATESCLAW_AGENT_SCHEMA_VERSION + 1};`);
       database.close();
 
       expect(inspectPersistedAuthProfileStoreRaw(agentDir)).toEqual({ status: "unreadable" });
@@ -223,7 +223,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("treats a non-table auth schema object as unreadable", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-invalid-schema-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-invalid-schema-", (agentDir) => {
       const database = new DatabaseSync(resolveAuthProfileDatabasePath(agentDir));
       database.exec(
         "CREATE VIEW auth_profile_store AS SELECT 'primary' AS store_key, '{}' AS store_json;",
@@ -235,11 +235,11 @@ describe("auth profile sqlite store", () => {
   });
 
   it("reads existing sqlite auth stores without registering shared state", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-readonly-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-readonly-", (agentDir) => {
       saveAuthProfileStore(apiKeyStore("sk-test"), agentDir);
-      closeOpenClawAgentDatabasesForTest();
-      closeOpenClawStateDatabaseForTest();
-      const stateDbPath = resolveOpenClawStateSqlitePath();
+      closeNatesclawAgentDatabasesForTest();
+      closeNatesclawStateDatabaseForTest();
+      const stateDbPath = resolveNatesclawStateSqlitePath();
       fs.rmSync(path.dirname(stateDbPath), { recursive: true, force: true });
 
       const loaded = loadPersistedAuthProfileStore(agentDir);
@@ -250,7 +250,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("reuses path-keyed read handles until the runtime snapshot revision changes", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-read-reuse-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-read-reuse-", (agentDir) => {
       const secondaryAgentDir = path.join(
         path.dirname(path.dirname(agentDir)),
         "secondary",
@@ -258,7 +258,7 @@ describe("auth profile sqlite store", () => {
       );
       saveAuthProfileStore(apiKeyStore("sk-test"), agentDir);
       saveAuthProfileStore(apiKeyStore("sk-secondary"), secondaryAgentDir);
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
       clearRuntimeAuthProfileStoreSnapshots();
       const openSpy = vi.spyOn(nodeSqlite, "openNodeSqliteDatabase");
       const statementCacheSpy = vi.spyOn(kyselySync, "enableNodeSqliteKyselyStatementCache");
@@ -297,7 +297,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("reuses the transaction database while filtering multiple inherited OAuth profiles", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-save-reuse-", (mainAgentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-save-reuse-", (mainAgentDir) => {
       const customAgentDir = path.join(path.dirname(path.dirname(mainAgentDir)), "custom", "agent");
       const profiles = Object.fromEntries(
         Array.from({ length: 3 }, (_, index) => [
@@ -313,7 +313,7 @@ describe("auth profile sqlite store", () => {
       );
       const store: AuthProfileStore = { version: 1, profiles };
       saveAuthProfileStore(store, mainAgentDir);
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
       const openSpy = vi.spyOn(nodeSqlite, "openNodeSqliteDatabase");
       try {
         saveAuthProfileStore(store, customAgentDir);
@@ -331,9 +331,9 @@ describe("auth profile sqlite store", () => {
   });
 
   it("waits for brief rollback-journal contention before reading persisted auth", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-contention-", async (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-contention-", async (agentDir) => {
       saveAuthProfileStore(apiKeyStore("sk-test"), agentDir);
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
 
       const databasePath = resolveAuthProfileDatabasePath(agentDir);
       const setup = new DatabaseSync(databasePath);
@@ -393,7 +393,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("uses the configured agent id for custom agentDir databases", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-custom-agent-", (envAgentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-custom-agent-", (envAgentDir) => {
       const customAgentDir = path.join(path.dirname(path.dirname(envAgentDir)), "custom-coder");
       const cfg = {
         agents: {
@@ -404,7 +404,7 @@ describe("auth profile sqlite store", () => {
 
       saveAuthProfileStore(apiKeyStore("sk-test"), agentDir);
 
-      const database = openOpenClawAgentDatabase({
+      const database = openNatesclawAgentDatabase({
         agentId: "coder",
         path: resolveAuthProfileDatabasePath(agentDir),
       });
@@ -413,7 +413,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("keeps SecretRef-backed credentials from persisting duplicate plaintext", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-secret-ref-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-secret-ref-", (agentDir) => {
       saveAuthProfileStore(
         {
           version: 1,
@@ -451,7 +451,7 @@ describe("auth profile sqlite store", () => {
   });
 
   it("recomputes runtime-only external auth overlays from the sqlite base store", async () => {
-    await withAgentDirEnv("openclaw-auth-sqlite-overlay-", (agentDir) => {
+    await withAgentDirEnv("natesclaw-auth-sqlite-overlay-", (agentDir) => {
       saveAuthProfileStore(apiKeyStore("sk-test"), agentDir);
       mocks.resolveExternalCliAuthProfiles
         .mockReturnValueOnce([

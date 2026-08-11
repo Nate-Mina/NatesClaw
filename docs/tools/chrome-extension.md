@@ -2,14 +2,14 @@
 summary: "Chrome extension: securely automate signed-in tabs with automatic local pairing"
 read_when:
   - You want an agent to drive your signed-in Chrome without remote-debugging prompts
-  - You are installing, pairing, disabling, or troubleshooting the OpenClaw Chrome extension
+  - You are installing, pairing, disabling, or troubleshooting the Natesclaw Chrome extension
   - You need the Chrome native bootstrap security and platform support model
 title: "Chrome Extension"
 ---
 
 # Chrome extension
 
-The OpenClaw Chrome extension lets the browser tool automate eligible tabs in
+The Natesclaw Chrome extension lets the browser tool automate eligible tabs in
 your signed-in Chrome profile. It uses `chrome.debugger`, so it does not require
 Chrome's blocking remote-debugging consent prompt.
 
@@ -21,13 +21,13 @@ a Settings link.
 ## Requirements
 
 - Google Chrome, Chrome for Testing, or Chromium
-- OpenClaw installed on the same machine as Chrome, or an OpenClaw browser node
+- Natesclaw installed on the same machine as Chrome, or an Natesclaw browser node
   on that machine
 - macOS or Linux for automatic native bootstrap
 - Chrome launched at least once so its user-data directory exists
 
 Windows keeps manual pairing. Current Chromium launches native hosts directly
-only when the registered host is a Windows executable; OpenClaw does not install
+only when the registered host is a Windows executable; Natesclaw does not install
 a script launcher or registry key without a proven binary framing path.
 
 ## Install
@@ -35,11 +35,11 @@ a script launcher or registry key without a proven binary framing path.
 Launch Chrome, then run this command before loading the extension:
 
 ```bash
-openclaw browser extension install
+natesclaw browser extension install
 ```
 
 Keep the command running. It copies the bundled extension to a stable
-OpenClaw-owned directory, predicts the unpacked extension ID from that exact
+Natesclaw-owned directory, predicts the unpacked extension ID from that exact
 path, and pre-registers an origin-locked native host in existing Chrome-family
 user-data roots. Only after pre-registration succeeds does it print the stable
 path to load.
@@ -63,17 +63,17 @@ The installer accepts an ID only when all of these are true:
 - the ID matches Chrome's 32-character extension ID format;
 - Chrome records the install location as unpacked;
 - the recorded extension path resolves exactly to the installed or bundled
-  OpenClaw extension directory;
+  Natesclaw extension directory;
 - the recorded ID equals Chromium's deterministic path ID for that exact
   canonical realpath.
 
 The extension name is not trusted. Existing native-host files with the same
-host name are not overwritten unless they are verifiably OpenClaw-owned.
+host name are not overwritten unless they are verifiably Natesclaw-owned.
 
 Use a different bounded wait when needed:
 
 ```bash
-openclaw browser extension install --wait-ms 60000
+natesclaw browser extension install --wait-ms 60000
 ```
 
 For automation, use `--json`. The result includes the stable copy, discovered
@@ -85,7 +85,7 @@ required. It never includes a relay key or pairing string.
 Select the built-in `chrome` profile, or make it the default:
 
 ```bash
-openclaw config set browser.defaultProfile chrome
+natesclaw config set browser.defaultProfile chrome
 ```
 
 ```json5
@@ -106,13 +106,13 @@ overwritten, and older pairings keep their stored access mode.
 - **All tabs** exposes every eligible ordinary tab in that Chrome profile,
   except tabs paused for the current browser session. Use **Pause on this tab**
   and **Allow on this tab** in the popup.
-- **Selected tabs** uses the **OpenClaw** tab group as the access-control
+- **Selected tabs** uses the **Natesclaw** tab group as the access-control
   boundary. Moving a tab into the group grants access; moving it out revokes
   access.
 
 Open the extension's Settings page to change the access mode. Switching to
 Selected tabs immediately detaches ungrouped tabs, including attaches already
-in flight. Agent-created tabs stay in the OpenClaw group in either mode.
+in flight. Agent-created tabs stay in the Natesclaw group in either mode.
 
 The extension excludes incognito tabs, internal pages such as `chrome://` and
 `chrome-extension://`, and tabs without a usable current URL. `file://` access
@@ -127,7 +127,7 @@ local setup** switch.
   new native bootstrap attempts.
 - **Disconnect and disable automatic setup** revokes the pairing immediately,
   detaches debugger sessions, and persists the opt-out.
-- **Use local OpenClaw** clears the opt-out and retries the native host.
+- **Use local Natesclaw** clears the opt-out and retries the native host.
 - Saving an explicit manual pairing also clears the opt-out.
 
 ### Upgrades from the retired tab copilot
@@ -135,7 +135,7 @@ local setup** switch.
 If Settings says automation is paused to protect a pre-upgrade copilot
 session, confirm that old runs are finished. Then click **Disconnect and
 disable automatic setup** to discard the retired recovery state, followed by
-**Use local OpenClaw** to reconnect. Until that explicit disconnect succeeds,
+**Use local Natesclaw** to reconnect. Until that explicit disconnect succeeds,
 the extension preserves the retired state and blocks relay connections, native
 setup, manual pairing, tab access changes, and debugger attachment.
 
@@ -150,21 +150,21 @@ Normal setup avoids it by pre-registering the host before **Load unpacked**.
 Inspect the installation without printing credentials:
 
 ```bash
-openclaw browser extension status
-openclaw browser extension status --json
+natesclaw browser extension status
+natesclaw browser extension status --json
 ```
 
-Remove only OpenClaw-owned native-host manifests and launchers:
+Remove only Natesclaw-owned native-host manifests and launchers:
 
 ```bash
-openclaw browser extension uninstall-host
+natesclaw browser extension uninstall-host
 ```
 
 This does not remove the unpacked extension from Chrome. Use
 `chrome://extensions` for that. It also does not delete the stable extension
 copy or an existing relay key.
 
-`openclaw browser extension path` is read-only. It prints the stable installed
+`natesclaw browser extension path` is read-only. It prints the stable installed
 copy when present and the bundled source directory otherwise.
 
 ## Advanced manual pairing
@@ -172,17 +172,17 @@ copy when present and the bundled source directory otherwise.
 The Settings page owns manual pairing. Generate a host-local pairing string:
 
 ```bash
-openclaw browser extension pair
+natesclaw browser extension pair
 ```
 
 Manual pairing remains useful on Windows and for recovery. Treat the complete
 pairing string as a password.
 
-For a laptop that has Chrome but does not run OpenClaw or a browser node, pair
+For a laptop that has Chrome but does not run Natesclaw or a browser node, pair
 directly to a remote Gateway:
 
 ```bash
-openclaw browser extension pair \
+natesclaw browser extension pair \
   --gateway-url wss://gateway.example.com
 ```
 
@@ -198,8 +198,8 @@ The relay supports Browser Relay Authentication v2 clients such as mcporter.
 Print non-secret endpoint metadata:
 
 ```bash
-openclaw browser extension cdp
-openclaw browser extension cdp --json
+natesclaw browser extension cdp
+natesclaw browser extension cdp --json
 ```
 
 The output includes the loopback endpoint, protocol version, key ID, and fixed
@@ -224,7 +224,7 @@ It does not request `activeTab`, `contextMenus`, `scripting`, or `sidePanel`.
 
 ## Native bootstrap security
 
-The native host is `ai.openclaw.browser_bootstrap`. Each
+The native host is `ai.natesclaw.browser_bootstrap`. Each
 `chrome.runtime.sendNativeMessage` call starts one process, reads one request,
 writes one response, and exits.
 
@@ -236,7 +236,7 @@ The response is below Chrome's 1 MiB native-message limit. Pairing keys never
 appear in launcher arguments, manifests, status JSON, or diagnostics.
 
 The POSIX launcher and manifest use absolute canonical paths under an
-OpenClaw-owned mode-`0700` directory. Manifests are mode `0600`; the launcher is
+Natesclaw-owned mode-`0700` directory. Manifests are mode `0600`; the launcher is
 owner-executable. Symlinks, foreign ownership, unsafe modes, path traversal,
 wildcard origins, and foreign same-name registrations fail closed.
 
@@ -246,7 +246,7 @@ bytes with SHA-256 (native UTF-16LE path bytes on Windows, with only a lowercase
 drive letter uppercased), keep the first 16 digest bytes, then map hexadecimal
 digits `0` through `f` to letters `a` through `p`. The extension manifest has no
 `key`; registration authorizes only exact IDs derived from approved
-OpenClaw-owned realpaths.
+Natesclaw-owned realpaths.
 
 The relay itself uses connection-bound HMAC proofs. The persistent per-host key
 is not sent in a URL, header, WebSocket subprotocol, or application frame.
@@ -254,9 +254,9 @@ is not sent in a URL, header, WebSocket subprotocol, or application frame.
 ## Troubleshooting
 
 ```bash
-openclaw browser extension status --json
-openclaw browser doctor --browser-profile chrome
-openclaw doctor
+natesclaw browser extension status --json
+natesclaw browser doctor --browser-profile chrome
+natesclaw doctor
 ```
 
 - **No extension ID detected:** keep Chrome running, rerun `extension install`,
@@ -264,14 +264,14 @@ openclaw doctor
   ready and prints the stable path.
 - **Extension was loaded before native setup:** restart Chrome once to clear its
   cached native-host miss, then rerun the ordered install flow.
-- **Waiting for local OpenClaw:** run `extension status`; install or repair the
+- **Waiting for local Natesclaw:** run `extension status`; install or repair the
   owned native host.
 - **Automatic setup disabled:** enable it in Settings or click **Use local
-  OpenClaw**.
+  Natesclaw**.
 - **Manual setup required:** use Settings for the advanced pairing flow. This
   is expected on Windows and direct extension-only remote Gateway setups.
 - **Relay unavailable:** confirm the Gateway or browser node is running, then
   run browser doctor.
 
 See [Browser](/tools/browser) for the full profile model and the managed
-`openclaw` and Chrome MCP `user` profiles.
+`natesclaw` and Chrome MCP `user` profiles.

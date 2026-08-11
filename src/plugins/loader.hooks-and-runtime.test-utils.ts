@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { withEnv } from "../test-utils/env.js";
 import { createHookRunner } from "./hooks.js";
-import { loadOpenClawPlugins } from "./loader.js";
+import { loadNatesclawPlugins } from "./loader.js";
 import {
   EMPTY_PLUGIN_SCHEMA,
   makePluginLoaderTempDir,
@@ -81,15 +81,15 @@ function createSetupFailureFixture(params: {
 }) {
   const pluginDir = makePluginLoaderTempDir();
   writeFixtureJson(pluginDir, "package.json", {
-    name: `@openclaw/${params.id}`,
-    openclaw: {
+    name: `@natesclaw/${params.id}`,
+    natesclaw: {
       extensions: ["./index.cjs"],
       setupEntry: "./setup-entry.cjs",
     },
   });
   writeFixtureJson(
     pluginDir,
-    "openclaw.plugin.json",
+    "natesclaw.plugin.json",
     pluginManifest(params.id, [params.channelId ?? params.id]),
   );
   writeFixtureText(
@@ -107,7 +107,7 @@ const THROWING_SETUP_ENTRY_SOURCE = `module.exports = {
 };`;
 
 function loadSetupPlugins(params: { paths: string[]; ids: string[]; enabled?: boolean }) {
-  return loadOpenClawPlugins({
+  return loadNatesclawPlugins({
     cache: false,
     channelPluginLoadIntent: "setup",
     config: {
@@ -157,12 +157,12 @@ function loadBuiltArtifactScenario(scenario: BuiltArtifactScenario) {
       ? path.join(repoRoot, "extensions", scenario.id)
       : makePluginLoaderTempDir();
   const packageManifest = scenario.packageEntry
-    ? { openclaw: { extensions: [scenario.packageEntry] } }
+    ? { natesclaw: { extensions: [scenario.packageEntry] } }
     : undefined;
   if (scenario.packageBeforeManifest && packageManifest) {
     writeFixtureJson(pluginDir, "package.json", packageManifest);
   }
-  writeFixtureJson(pluginDir, "openclaw.plugin.json", pluginManifest(scenario.id));
+  writeFixtureJson(pluginDir, "natesclaw.plugin.json", pluginManifest(scenario.id));
   if (!scenario.packageBeforeManifest && packageManifest) {
     writeFixtureJson(pluginDir, "package.json", packageManifest);
   }
@@ -174,7 +174,7 @@ function loadBuiltArtifactScenario(scenario: BuiltArtifactScenario) {
   writeFixtureText(artifactDir, scenario.artifactEntry, scenario.artifactBody);
 
   const load = () =>
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       cache: false,
       preferBuiltPluginArtifacts: true,
       ...(scenario.origin === "bundled" ? { onlyPluginIds: [scenario.id] } : {}),
@@ -190,9 +190,9 @@ function loadBuiltArtifactScenario(scenario: BuiltArtifactScenario) {
     scenario.origin === "bundled"
       ? withEnv(
           {
-            OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
-            OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
-            OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+            NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
+            NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+            NATESCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
           },
           load,
         )
@@ -200,7 +200,7 @@ function loadBuiltArtifactScenario(scenario: BuiltArtifactScenario) {
   return registry.plugins.find((entry) => entry.id === scenario.id)?.status;
 }
 
-describe("loadOpenClawPlugins", () => {
+describe("loadNatesclawPlugins", () => {
   it("setup-loads a trusted global channel plugin when the caller scopes to it", () => {
     useNoBundledPlugins();
     const marker = path.join(makePluginLoaderTempDir(), "trusted-global-channel-imported.txt");
@@ -220,19 +220,19 @@ ${channelPluginSource({
       );
       writeFixtureJson(
         globalDir,
-        "openclaw.plugin.json",
+        "natesclaw.plugin.json",
         pluginManifest("trusted-global-channel", ["trusted-global-channel"]),
       );
       writeFixtureJson(globalDir, "package.json", {
-        name: "@openclaw/trusted-global-channel",
+        name: "@natesclaw/trusted-global-channel",
         version: "0.0.0-test",
         main: "./index.cjs",
-        openclaw: {
+        natesclaw: {
           extensions: ["./index.cjs"],
         },
       });
 
-      const scopedSetupRegistry = loadOpenClawPlugins({
+      const scopedSetupRegistry = loadNatesclawPlugins({
         cache: false,
         config: {
           plugins: {
@@ -274,7 +274,7 @@ ${channelPluginSource({
 })}`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "natesclaw.plugin.json"),
       JSON.stringify(
         {
           id: "auto-enabled-load-path-channel",
@@ -287,7 +287,7 @@ ${channelPluginSource({
       "utf-8",
     );
 
-    const scopedSetupRegistry = loadOpenClawPlugins({
+    const scopedSetupRegistry = loadNatesclawPlugins({
       cache: false,
       config: {
         channels: {
@@ -318,7 +318,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-entry-test",
         label: "Setup Entry Test",
-        packageName: "@openclaw/setup-entry-test",
+        packageName: "@natesclaw/setup-entry-test",
         fullBlurb: "full entry should not run in setup-only mode",
         setupBlurb: "setup entry",
         configured: false,
@@ -339,7 +339,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-only-bundled-contract-test",
         label: "Setup Only Bundled Contract Test",
-        packageName: "@openclaw/setup-only-bundled-contract-test",
+        packageName: "@natesclaw/setup-only-bundled-contract-test",
         fullBlurb: "full entry should not run in setup-only mode",
         setupBlurb: "setup-only bundled contract",
         configured: false,
@@ -361,7 +361,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-test",
         label: "Setup Runtime Test",
-        packageName: "@openclaw/setup-runtime-test",
+        packageName: "@natesclaw/setup-runtime-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime",
         configured: false,
@@ -376,7 +376,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-contract-test",
         label: "Setup Runtime Bundled Contract Test",
-        packageName: "@openclaw/setup-runtime-bundled-contract-test",
+        packageName: "@natesclaw/setup-runtime-bundled-contract-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime bundled contract",
         configured: false,
@@ -392,7 +392,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-contract-secrets-test",
         label: "Setup Runtime Bundled Contract Secrets Test",
-        packageName: "@openclaw/setup-runtime-bundled-contract-secrets-test",
+        packageName: "@natesclaw/setup-runtime-bundled-contract-secrets-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime bundled contract secrets",
         configured: false,
@@ -410,7 +410,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-contract-runtime-test",
         label: "Setup Runtime Bundled Contract Runtime Test",
-        packageName: "@openclaw/setup-runtime-bundled-contract-runtime-test",
+        packageName: "@natesclaw/setup-runtime-bundled-contract-runtime-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime bundled contract runtime",
         configured: false,
@@ -431,7 +431,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-runtime-merge-test",
         label: "Setup Runtime Bundled Runtime Merge Test",
-        packageName: "@openclaw/setup-runtime-bundled-runtime-merge-test",
+        packageName: "@natesclaw/setup-runtime-bundled-runtime-merge-test",
         fullBlurb: "full runtime plugin",
         setupBlurb: "setup runtime override",
         configured: false,
@@ -453,7 +453,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-default-full-test",
         label: "Setup Runtime Default Full Test",
-        packageName: "@openclaw/setup-runtime-default-full-test",
+        packageName: "@natesclaw/setup-runtime-default-full-test",
         fullBlurb: "ordinary full runtime",
         setupBlurb: "setup runtime should not load by default",
         configured: false,
@@ -476,7 +476,7 @@ ${channelPluginSource({
       expectBundledFullRuntimeLoaded,
     }: SetupEntryScenario) => {
       const built = createSetupEntryChannelPluginFixture(fixture);
-      const registry = loadOpenClawPlugins({
+      const registry = loadNatesclawPlugins({
         cache: false,
         ...(loadOptions?.setupIntent ? { channelPluginLoadIntent: "setup" as const } : {}),
         config: {
@@ -524,7 +524,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-order-test",
       label: "Setup Runtime Order Test",
-      packageName: "@openclaw/setup-runtime-order-test",
+      packageName: "@natesclaw/setup-runtime-order-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,
@@ -549,7 +549,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-error-test",
       label: "Setup Runtime Error Test",
-      packageName: "@openclaw/setup-runtime-error-test",
+      packageName: "@natesclaw/setup-runtime-error-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,
@@ -582,7 +582,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-route-error-test",
       label: "Setup Runtime Route Error Test",
-      packageName: "@openclaw/setup-runtime-route-error-test",
+      packageName: "@natesclaw/setup-runtime-route-error-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime route",
       configured: false,
@@ -619,7 +619,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-late-route-test",
       label: "Setup Runtime Late Route Test",
-      packageName: "@openclaw/setup-runtime-late-route-test",
+      packageName: "@natesclaw/setup-runtime-late-route-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime route",
       configured: false,
@@ -649,7 +649,7 @@ ${channelPluginSource({
       id: "setup-runtime-mismatch-test",
       bundledFullEntryId: "wrong-runtime-id",
       label: "Setup Runtime Mismatch Test",
-      packageName: "@openclaw/setup-runtime-mismatch-test",
+      packageName: "@natesclaw/setup-runtime-mismatch-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,
@@ -679,7 +679,7 @@ ${channelPluginSource({
       id: "setup-export-mismatch-test",
       bundledSetupEntryId: "wrong-setup-id",
       label: "Setup Export Mismatch Test",
-      packageName: "@openclaw/setup-export-mismatch-test",
+      packageName: "@natesclaw/setup-export-mismatch-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,
@@ -872,11 +872,11 @@ ${channelPluginSource({
     writeFixtureText(repoRoot, "pnpm-workspace.yaml", "packages: []\n");
     writeFixtureJson(
       sourceDir,
-      "openclaw.plugin.json",
+      "natesclaw.plugin.json",
       pluginManifest("source-only-artifact-test"),
     );
     writeFixtureJson(sourceDir, "package.json", {
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         build: { bundledDist: false },
       },
@@ -893,11 +893,11 @@ ${channelPluginSource({
     );
     mkdirSafe(builtPluginDir);
     fs.copyFileSync(
-      path.join(sourceDir, "openclaw.plugin.json"),
-      path.join(builtPluginDir, "openclaw.plugin.json"),
+      path.join(sourceDir, "natesclaw.plugin.json"),
+      path.join(builtPluginDir, "natesclaw.plugin.json"),
     );
     writeFixtureJson(builtPluginDir, "package.json", {
-      openclaw: { extensions: ["./index.js"] },
+      natesclaw: { extensions: ["./index.js"] },
     });
     writeFixtureText(
       builtPluginDir,
@@ -918,13 +918,13 @@ ${channelPluginSource({
     };
     const registry = withEnv(
       {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "dist", "extensions"),
-        OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "dist", "extensions"),
+        NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+        NATESCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
       () => {
         const manifestRegistry = loadPluginManifestRegistryCore({ config });
-        return loadOpenClawPlugins({
+        return loadNatesclawPlugins({
           cache: false,
           preferBuiltPluginArtifacts: true,
           onlyPluginIds: ["source-only-artifact-test"],
@@ -998,11 +998,11 @@ ${channelPluginSource({
     const pluginDir = makePluginLoaderTempDir();
     const outsideDistDir = makePluginLoaderTempDir();
     writeFixtureJson(pluginDir, "package.json", {
-      openclaw: { extensions: ["./src/index.mts"] },
+      natesclaw: { extensions: ["./src/index.mts"] },
     });
     writeFixtureJson(
       pluginDir,
-      "openclaw.plugin.json",
+      "natesclaw.plugin.json",
       pluginManifest("workspace-artifact-symlink-test"),
     );
     writeFixtureText(
@@ -1021,7 +1021,7 @@ ${channelPluginSource({
       return;
     }
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       preferBuiltPluginArtifacts: true,
       config: {
@@ -1211,12 +1211,12 @@ ${channelPluginSource({
       filename: `${pluginId}.cjs`,
       body: `module.exports = { id: ${JSON.stringify(pluginId)}, register(api) {
     api.registerAgentToolResultMiddleware(() => new Promise(() => {}), {
-      runtimes: ["openclaw"],
+      runtimes: ["natesclaw"],
     });
   } };`,
     });
     updatePluginManifest(plugin, {
-      contracts: { agentToolResultMiddleware: ["openclaw"] },
+      contracts: { agentToolResultMiddleware: ["natesclaw"] },
     });
 
     const registry = loadRegistryFromSinglePlugin({
@@ -1244,7 +1244,7 @@ ${channelPluginSource({
           args: {},
           result: { content: [{ type: "text", text: "raw" }], details: {} },
         },
-        { runtime: "openclaw" },
+        { runtime: "natesclaw" },
       );
       const outcome = Promise.resolve(middlewareRun).then(
         () => ({ status: "resolved" as const }),
@@ -1271,12 +1271,12 @@ ${channelPluginSource({
       filename: "tool-result-middleware-no-timeout.cjs",
       body: `module.exports = { id: "tool-result-middleware-no-timeout", register(api) {
     api.registerAgentToolResultMiddleware(() => new Promise(() => {}), {
-      runtimes: ["openclaw"],
+      runtimes: ["natesclaw"],
     });
   } };`,
     });
     updatePluginManifest(plugin, {
-      contracts: { agentToolResultMiddleware: ["openclaw"] },
+      contracts: { agentToolResultMiddleware: ["natesclaw"] },
     });
     const registry = loadRegistryFromSinglePlugin({
       plugin,
@@ -1298,7 +1298,7 @@ ${channelPluginSource({
             args: {},
             result: { content: [{ type: "text", text: "raw" }], details: {} },
           },
-          { runtime: "openclaw" },
+          { runtime: "natesclaw" },
         ),
       ).finally(() => {
         settled = true;

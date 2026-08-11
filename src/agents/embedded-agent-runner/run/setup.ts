@@ -2,7 +2,7 @@
  * Resolves hook-selected model state and pre-model attachments for a run.
  */
 import type { SessionEntry } from "../../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import type { ProviderRuntimeModel } from "../../../plugins/provider-runtime-model.types.js";
 import type {
   PluginHookBeforeModelResolveAttachment,
@@ -18,7 +18,7 @@ import {
 import {
   isDefaultAgentRuntimeId,
   normalizeOptionalAgentRuntimeId,
-  OPENCLAW_AGENT_RUNTIME_ID,
+  NATESCLAW_AGENT_RUNTIME_ID,
 } from "../../agent-runtime-id.js";
 import {
   evaluateContextWindowGuard,
@@ -171,7 +171,7 @@ export function resolveNativeModelOwnedHarnessId(params: {
   if (
     !requestedHarnessId ||
     isDefaultAgentRuntimeId(requestedHarnessId) ||
-    requestedHarnessId === OPENCLAW_AGENT_RUNTIME_ID ||
+    requestedHarnessId === NATESCLAW_AGENT_RUNTIME_ID ||
     requestedHarnessId !== selectedHarnessId
   ) {
     return undefined;
@@ -205,7 +205,7 @@ export function createNativeModelOwnedRuntimeModel(params: {
  * limit as the guard.
  */
 function resolveEffectiveRuntimeModel(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: NatesclawConfig | undefined;
   provider: string;
   contextConfigProvider?: string;
   modelId: string;
@@ -267,9 +267,9 @@ function resolveEffectiveRuntimeModel(params: {
   };
 }
 
-/** Resolves only OpenClaw-owned context policy; native model owners keep that policy private. */
+/** Resolves only Natesclaw-owned context policy; native model owners keep that policy private. */
 export function resolveEmbeddedRuntimeModelPolicy(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: NatesclawConfig | undefined;
   provider: string;
   contextConfigProvider?: string;
   modelId: string;

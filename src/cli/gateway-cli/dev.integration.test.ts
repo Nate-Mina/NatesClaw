@@ -16,17 +16,17 @@ describe("ensureDevGatewayConfig integration", () => {
   });
 
   it("writes the dedicated dev roster into a fresh state directory", async () => {
-    const root = await mkdtemp(path.join(os.tmpdir(), "openclaw-dev-config-integration-"));
+    const root = await mkdtemp(path.join(os.tmpdir(), "natesclaw-dev-config-integration-"));
     tempDirs.push(root);
     const stateDir = path.join(root, "state");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "natesclaw.json");
     const workspace = path.join(root, "workspace");
 
     await withEnvAsync(
       {
-        OPENCLAW_CONFIG_PATH: configPath,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_WORKSPACE_DIR: workspace,
+        NATESCLAW_CONFIG_PATH: configPath,
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_WORKSPACE_DIR: workspace,
       },
       async () => {
         resetConfigRuntimeState();

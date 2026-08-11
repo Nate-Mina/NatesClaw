@@ -14,17 +14,17 @@ import { captureEnv, setTestEnvValue } from "../src/test-utils/env.js";
 
 const envKeys = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_GATEWAY_TOKEN",
+  "NATESCLAW_SKIP_CHANNELS",
+  "NATESCLAW_SKIP_GMAIL_WATCHER",
+  "NATESCLAW_SKIP_CRON",
+  "NATESCLAW_SKIP_CANVAS_HOST",
+  "NATESCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "NATESCLAW_SKIP_PROVIDERS",
+  "NATESCLAW_BUNDLED_PLUGINS_DIR",
+  "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 describe("PR #119473 real gateway proof", () => {
@@ -47,10 +47,10 @@ describe("PR #119473 real gateway proof", () => {
       let second: Awaited<ReturnType<typeof startGatewayWithClient>> | undefined;
 
       try {
-        tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-pr119473-proof-"));
-        const stateDir = path.join(tempHome, ".openclaw");
+        tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-pr119473-proof-"));
+        const stateDir = path.join(tempHome, ".natesclaw");
         const workspaceDir = path.join(tempHome, "workspace");
-        const configPath = path.join(stateDir, "openclaw.json");
+        const configPath = path.join(stateDir, "natesclaw.json");
         const bundledPluginsDir = path.join(tempHome, "bundled-plugins");
         await Promise.all([
           fs.mkdir(workspaceDir, { recursive: true }),
@@ -59,17 +59,17 @@ describe("PR #119473 real gateway proof", () => {
         ]);
         for (const [key, value] of Object.entries({
           HOME: tempHome,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_GATEWAY_TOKEN: "pr119473-proof-token",
-          OPENCLAW_SKIP_CHANNELS: "1",
-          OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-          OPENCLAW_SKIP_CRON: "1",
-          OPENCLAW_SKIP_CANVAS_HOST: "1",
-          OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-          OPENCLAW_SKIP_PROVIDERS: "1",
-          OPENCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_GATEWAY_TOKEN: "pr119473-proof-token",
+          NATESCLAW_SKIP_CHANNELS: "1",
+          NATESCLAW_SKIP_GMAIL_WATCHER: "1",
+          NATESCLAW_SKIP_CRON: "1",
+          NATESCLAW_SKIP_CANVAS_HOST: "1",
+          NATESCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+          NATESCLAW_SKIP_PROVIDERS: "1",
+          NATESCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
         })) {
           setTestEnvValue(key, value);
         }

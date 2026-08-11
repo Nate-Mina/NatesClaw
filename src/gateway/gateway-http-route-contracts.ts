@@ -5,7 +5,7 @@ const GATEWAY_PROBE_ROUTES = new Map<string, "live" | "ready">([
   ["/readyz", "ready"],
 ]);
 
-export const MCP_APP_STANDALONE_PATH = "/__openclaw__/mcp-app";
+export const MCP_APP_STANDALONE_PATH = "/__natesclaw__/mcp-app";
 export const MCP_APP_STANDALONE_VIEW_PATH = `${MCP_APP_STANDALONE_PATH}/view`;
 
 export function classifyGatewayProbePath(

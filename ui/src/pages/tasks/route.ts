@@ -1,4 +1,4 @@
-import { definePage } from "@openclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 
@@ -7,6 +7,6 @@ export const page = definePage({
   component: () =>
     import("./tasks-page.ts").then(() => ({
       header: true,
-      render: () => html`<openclaw-tasks-page></openclaw-tasks-page>`,
+      render: () => html`<natesclaw-tasks-page></natesclaw-tasks-page>`,
     })),
 });

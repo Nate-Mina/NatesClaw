@@ -64,26 +64,26 @@ describe("runCommandWithRuntime", () => {
 
 describe("shouldSkipRespawnForArgv", () => {
   it.each([
-    { argv: ["node", "openclaw", "--help"] },
-    { argv: ["node", "openclaw", "-V"] },
-    { argv: ["node", "openclaw", "tui"] },
-    { argv: ["node", "openclaw", "terminal"] },
-    { argv: ["node", "openclaw", "chat"] },
-    { argv: ["node", "openclaw", "hooks", "relay", "--relay-id", "relay-1"] },
-    { argv: ["node", "openclaw", "gateway"] },
-    { argv: ["node", "openclaw", "gateway", "--port", "14720", "--bind", "loopback"] },
-    { argv: ["node", "openclaw", "gateway", "run", "--port=14720", "--bind", "loopback"] },
+    { argv: ["node", "natesclaw", "--help"] },
+    { argv: ["node", "natesclaw", "-V"] },
+    { argv: ["node", "natesclaw", "tui"] },
+    { argv: ["node", "natesclaw", "terminal"] },
+    { argv: ["node", "natesclaw", "chat"] },
+    { argv: ["node", "natesclaw", "hooks", "relay", "--relay-id", "relay-1"] },
+    { argv: ["node", "natesclaw", "gateway"] },
+    { argv: ["node", "natesclaw", "gateway", "--port", "14720", "--bind", "loopback"] },
+    { argv: ["node", "natesclaw", "gateway", "run", "--port=14720", "--bind", "loopback"] },
     {
-      argv: ["node", "openclaw", "--profile", "server", "gateway", "run", "--allow-unconfigured"],
+      argv: ["node", "natesclaw", "--profile", "server", "gateway", "run", "--allow-unconfigured"],
     },
   ] as const)("skips respawn for argv %j", ({ argv }) => {
     expect(shouldSkipRespawnForArgv([...argv]), argv.join(" ")).toBe(true);
   });
 
   it.each([
-    { argv: ["node", "openclaw", "status"] },
-    { argv: ["node", "openclaw", "gateway", "status"] },
-    { argv: ["node", "openclaw", "gateway", "call", "health"] },
+    { argv: ["node", "natesclaw", "status"] },
+    { argv: ["node", "natesclaw", "gateway", "status"] },
+    { argv: ["node", "natesclaw", "gateway", "call", "health"] },
   ] as const)("keeps respawn path for argv %j", ({ argv }) => {
     expect(shouldSkipRespawnForArgv([...argv]), argv.join(" ")).toBe(false);
   });
@@ -91,7 +91,7 @@ describe("shouldSkipRespawnForArgv", () => {
   it("keeps native hook relay respawn behavior unchanged on Windows", () => {
     expect(
       shouldSkipRespawnForArgv(
-        ["node", "openclaw", "hooks", "relay", "--relay-id", "relay-1"],
+        ["node", "natesclaw", "hooks", "relay", "--relay-id", "relay-1"],
         "win32",
       ),
     ).toBe(false);
@@ -100,19 +100,19 @@ describe("shouldSkipRespawnForArgv", () => {
 
 describe("shouldSkipStartupEnvironmentRespawnForArgv", () => {
   it.each([
-    { argv: ["node", "openclaw", "--help"] },
-    { argv: ["node", "openclaw", "hooks", "relay", "--relay-id", "relay-1"] },
-    { argv: ["node", "openclaw", "gateway"] },
-    { argv: ["node", "openclaw", "gateway", "run", "--port=14720"] },
+    { argv: ["node", "natesclaw", "--help"] },
+    { argv: ["node", "natesclaw", "hooks", "relay", "--relay-id", "relay-1"] },
+    { argv: ["node", "natesclaw", "gateway"] },
+    { argv: ["node", "natesclaw", "gateway", "run", "--port=14720"] },
   ] as const)("skips startup env respawn for argv %j", ({ argv }) => {
     expect(shouldSkipStartupEnvironmentRespawnForArgv([...argv]), argv.join(" ")).toBe(true);
   });
 
   it.each([
-    { argv: ["node", "openclaw", "tui"] },
-    { argv: ["node", "openclaw", "terminal"] },
-    { argv: ["node", "openclaw", "chat"] },
-    { argv: ["node", "openclaw", "status"] },
+    { argv: ["node", "natesclaw", "tui"] },
+    { argv: ["node", "natesclaw", "terminal"] },
+    { argv: ["node", "natesclaw", "chat"] },
+    { argv: ["node", "natesclaw", "status"] },
   ] as const)("allows startup env respawn for argv %j", ({ argv }) => {
     expect(shouldSkipStartupEnvironmentRespawnForArgv([...argv]), argv.join(" ")).toBe(false);
   });
@@ -120,7 +120,7 @@ describe("shouldSkipStartupEnvironmentRespawnForArgv", () => {
   it("keeps native hook relay startup environment respawn on Windows", () => {
     expect(
       shouldSkipStartupEnvironmentRespawnForArgv(
-        ["node", "openclaw", "hooks", "relay", "--relay-id", "relay-1"],
+        ["node", "natesclaw", "hooks", "relay", "--relay-id", "relay-1"],
         "win32",
       ),
     ).toBe(false);
@@ -134,13 +134,13 @@ describe("dns cli", () => {
     try {
       const program = new Command();
       registerDnsCli(program);
-      await program.parseAsync(["dns", "setup", "--domain", "openclaw.internal"], { from: "user" });
+      await program.parseAsync(["dns", "setup", "--domain", "natesclaw.internal"], { from: "user" });
       const output = log.mock.calls.map((call) => call.join(" ")).join("\\n");
       expect(output).toContain("DNS setup");
-      expect(output).toContain("openclaw.internal");
+      expect(output).toContain("natesclaw.internal");
       expect(writeJson).toHaveBeenCalledWith({
         gateway: { bind: "auto" },
-        discovery: { wideArea: { domain: "openclaw.internal." } },
+        discovery: { wideArea: { domain: "natesclaw.internal." } },
       });
     } finally {
       writeJson.mockRestore();

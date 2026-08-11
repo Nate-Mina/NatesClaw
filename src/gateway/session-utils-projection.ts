@@ -1,4 +1,4 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveContextTokensForModel } from "../agents/context.js";
 import { normalizeStoredOverrideModel } from "../agents/model-selection.js";
@@ -6,7 +6,7 @@ import { resolveSessionModelRef } from "../agents/session-model-ref.js";
 import { buildSubagentSessionListReadIndex } from "../agents/subagents/registry/subagent-registry-read.js";
 import { resolveSessionStorePathCore, type SessionEntry } from "../config/sessions.js";
 import { resolveConcreteSessionStorePath } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
 import { readRecentSessionUsageFromTranscript as readScopedRecentSessionUsageFromTranscript } from "./session-transcript-readers.js";
 import type {
@@ -82,7 +82,7 @@ export function buildSingleRowStoreChildSessionsByKey(params: {
 }
 
 export function resolveSessionSelectedModelRef(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry?: SessionEntry;
   agentId: string;
   rowContext?: SessionListRowContext;
@@ -147,7 +147,7 @@ export function resolveChildSessionKeys(
 }
 
 export function resolveTranscriptUsageFallback(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string;
   entry?: SessionEntry;
   storePath: string;

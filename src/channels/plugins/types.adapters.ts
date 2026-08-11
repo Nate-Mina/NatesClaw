@@ -7,7 +7,7 @@ import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
 import type { LegacyConfigRule } from "../../config/legacy.shared.js";
 import type { AgentBinding } from "../../config/types.agents.js";
 import type { DmScope } from "../../config/types.base.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { GroupToolPolicyConfig } from "../../config/types.tools.js";
 import type { ChannelApprovalNativeRuntimeAdapter } from "../../infra/approval-handler-runtime-types.js";
 import type { ChannelApprovalKind } from "../../infra/approval-types.js";
@@ -78,51 +78,51 @@ type ChannelAdapterCallback<T extends (...args: never[]) => unknown> = T;
 export type ChannelAccountLinkState = "linked" | "not-linked" | "unknown";
 
 export type ChannelConfigAdapter<ResolvedAccount> = {
-  listAccountIds: (cfg: OpenClawConfig) => string[];
-  resolveAccount: (cfg: OpenClawConfig, accountId?: string | null) => ResolvedAccount;
-  inspectAccount?: (cfg: OpenClawConfig, accountId?: string | null) => unknown;
-  defaultAccountId?: (cfg: OpenClawConfig) => string;
+  listAccountIds: (cfg: NatesclawConfig) => string[];
+  resolveAccount: (cfg: NatesclawConfig, accountId?: string | null) => ResolvedAccount;
+  inspectAccount?: (cfg: NatesclawConfig, accountId?: string | null) => unknown;
+  defaultAccountId?: (cfg: NatesclawConfig) => string;
   setAccountEnabled?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     enabled: boolean;
-  }) => OpenClawConfig;
-  deleteAccount?: (params: { cfg: OpenClawConfig; accountId: string }) => OpenClawConfig;
-  isEnabled?: ChannelAdapterCallback<(account: ResolvedAccount, cfg: OpenClawConfig) => boolean>;
+  }) => NatesclawConfig;
+  deleteAccount?: (params: { cfg: NatesclawConfig; accountId: string }) => NatesclawConfig;
+  isEnabled?: ChannelAdapterCallback<(account: ResolvedAccount, cfg: NatesclawConfig) => boolean>;
   disabledReason?: ChannelAdapterCallback<
-    (account: ResolvedAccount, cfg: OpenClawConfig) => string
+    (account: ResolvedAccount, cfg: NatesclawConfig) => string
   >;
   isConfigured?: ChannelAdapterCallback<
-    (account: ResolvedAccount, cfg: OpenClawConfig) => boolean | Promise<boolean>
+    (account: ResolvedAccount, cfg: NatesclawConfig) => boolean | Promise<boolean>
   >;
   isLinked?: ChannelAdapterCallback<
     (
       account: ResolvedAccount,
-      cfg: OpenClawConfig,
+      cfg: NatesclawConfig,
     ) => ChannelAccountLinkState | Promise<ChannelAccountLinkState>
   >;
   unconfiguredReason?: ChannelAdapterCallback<
-    (account: ResolvedAccount, cfg: OpenClawConfig) => string
+    (account: ResolvedAccount, cfg: NatesclawConfig) => string
   >;
   unlinkedReason?: ChannelAdapterCallback<
-    (account: ResolvedAccount, cfg: OpenClawConfig) => string
+    (account: ResolvedAccount, cfg: NatesclawConfig) => string
   >;
   describeAccount?: ChannelAdapterCallback<
-    (account: ResolvedAccount, cfg: OpenClawConfig) => ChannelAccountSnapshot
+    (account: ResolvedAccount, cfg: NatesclawConfig) => ChannelAccountSnapshot
   >;
   resolveAllowFrom?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
   }) => Array<string | number> | undefined;
   formatAllowFrom?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     allowFrom: Array<string | number>;
   }) => string[];
-  hasConfiguredState?: (params: { cfg: OpenClawConfig; env?: NodeJS.ProcessEnv }) => boolean;
-  hasPersistedAuthState?: (params: { cfg: OpenClawConfig; env?: NodeJS.ProcessEnv }) => boolean;
+  hasConfiguredState?: (params: { cfg: NatesclawConfig; env?: NodeJS.ProcessEnv }) => boolean;
+  hasPersistedAuthState?: (params: { cfg: NatesclawConfig; env?: NodeJS.ProcessEnv }) => boolean;
   resolveDefaultTo?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
   }) => string | undefined;
 };
@@ -135,7 +135,7 @@ export type ChannelSecretsAdapter = {
     value: unknown;
   }>;
   collectRuntimeConfigAssignments?: (params: {
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     defaults: SecretDefaults | undefined;
     context: ResolverContext;
   }) => void;
@@ -150,13 +150,13 @@ export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unkno
   buildChannelSummary?: ChannelAdapterCallback<
     (params: {
       account: ResolvedAccount;
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       defaultAccountId: string;
       snapshot: ChannelAccountSnapshot;
     }) => Record<string, unknown> | Promise<Record<string, unknown>>
   >;
   probeAccount?: ChannelAdapterCallback<
-    (params: { account: ResolvedAccount; timeoutMs: number; cfg: OpenClawConfig }) => Promise<Probe>
+    (params: { account: ResolvedAccount; timeoutMs: number; cfg: NatesclawConfig }) => Promise<Probe>
   >;
   formatCapabilitiesProbe?: ChannelAdapterCallback<
     (params: { probe: Probe }) => ChannelCapabilitiesDisplayLine[]
@@ -165,7 +165,7 @@ export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unkno
     (params: {
       account: ResolvedAccount;
       timeoutMs: number;
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       probe?: Probe;
     }) => Promise<Audit>
   >;
@@ -173,7 +173,7 @@ export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unkno
     (params: {
       account: ResolvedAccount;
       timeoutMs: number;
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       probe?: Probe;
       audit?: Audit;
       target?: string;
@@ -182,7 +182,7 @@ export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unkno
   buildAccountSnapshot?: ChannelAdapterCallback<
     (params: {
       account: ResolvedAccount;
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       runtime?: ChannelAccountSnapshot;
       probe?: Probe;
       audit?: Audit;
@@ -191,7 +191,7 @@ export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unkno
   logSelfId?: ChannelAdapterCallback<
     (params: {
       account: ResolvedAccount;
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       runtime: RuntimeEnv;
       includeChannelPrefix?: boolean;
     }) => void
@@ -199,7 +199,7 @@ export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unkno
   resolveAccountState?: ChannelAdapterCallback<
     (params: {
       account: ResolvedAccount;
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       configured: boolean;
       enabled: boolean;
     }) => ChannelAccountState
@@ -208,7 +208,7 @@ export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unkno
 };
 
 export type ChannelGatewayContext<ResolvedAccount = unknown> = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   account: ResolvedAccount;
   runtime: RuntimeEnv;
@@ -276,7 +276,7 @@ export type ChannelGatewayContext<ResolvedAccount = unknown> = {
    * - External plugins should check for undefined before using
    *
    * @since Plugin SDK 2026.2.19
-   * @see {@link https://docs.openclaw.ai/plugins/building-plugins | Plugin SDK documentation}
+   * @see {@link https://docs.natesclaw.ai/plugins/building-plugins | Plugin SDK documentation}
    */
   channelRuntime?: ChannelRuntimeSurface;
 };
@@ -300,7 +300,7 @@ type ChannelLoginWithQrWaitResult = {
 };
 
 type ChannelLogoutContext<ResolvedAccount = unknown> = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   account: ResolvedAccount;
   runtime: RuntimeEnv;
@@ -311,7 +311,7 @@ export type ChannelGatewayAdapter<ResolvedAccount = unknown> = {
   startAccount?: (ctx: ChannelGatewayContext<ResolvedAccount>) => Promise<unknown>;
   stopAccount?: (ctx: ChannelGatewayContext<ResolvedAccount>) => Promise<void>;
   /** Keep gateway auth bypass resolution mirrored through a lightweight top-level `gateway-auth-api.ts` artifact. */
-  resolveGatewayAuthBypassPaths?: (params: { cfg: OpenClawConfig }) => string[];
+  resolveGatewayAuthBypassPaths?: (params: { cfg: NatesclawConfig }) => string[];
   loginWithQrStart?: (params: {
     accountId?: string;
     force?: boolean;
@@ -328,7 +328,7 @@ export type ChannelGatewayAdapter<ResolvedAccount = unknown> = {
 
 export type ChannelAuthAdapter = {
   login?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     runtime: RuntimeEnv;
     verbose?: boolean;
@@ -338,19 +338,19 @@ export type ChannelAuthAdapter = {
 
 export type ChannelHeartbeatAdapter = {
   checkReady?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     deps?: ChannelHeartbeatDeps;
   }) => Promise<{ ok: boolean; reason: string }>;
   sendTyping?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     to: string;
     accountId?: string | null;
     threadId?: string | number | null;
     deps?: ChannelHeartbeatDeps;
   }) => Promise<void> | void;
   clearTyping?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     to: string;
     accountId?: string | null;
     threadId?: string | number | null;
@@ -359,13 +359,13 @@ export type ChannelHeartbeatAdapter = {
 };
 
 type ChannelDirectorySelfParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   runtime: RuntimeEnv;
 };
 
 type ChannelDirectoryListParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   query?: string | null;
   limit?: number | null;
@@ -373,7 +373,7 @@ type ChannelDirectoryListParams = {
 };
 
 type ChannelDirectoryListGroupMembersParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   groupId: string;
   limit?: number | null;
@@ -403,7 +403,7 @@ export type ChannelResolveResult = {
 
 export type ChannelResolverAdapter = {
   resolveTargets: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     inputs: string[];
     kind: ChannelResolveKind;
@@ -413,7 +413,7 @@ export type ChannelResolverAdapter = {
 
 export type ChannelElevatedAdapter = {
   allowFromFallback?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
   }) => Array<string | number> | undefined;
 };
@@ -455,7 +455,7 @@ export type ChannelCommandAdapter = {
 };
 
 export type ChannelDoctorConfigMutation = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   changes: string[];
   warnings?: string[];
 };
@@ -482,27 +482,27 @@ export type ChannelDoctorAdapter = {
   groupAllowFromFallbackToAllowFrom?: boolean;
   warnOnEmptyGroupSenderAllowlist?: boolean;
   legacyConfigRules?: LegacyConfigRule[];
-  normalizeCompatibilityConfig?: (params: { cfg: OpenClawConfig }) => ChannelDoctorConfigMutation;
+  normalizeCompatibilityConfig?: (params: { cfg: NatesclawConfig }) => ChannelDoctorConfigMutation;
   collectPreviewWarnings?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     doctorFixCommand: string;
     env?: NodeJS.ProcessEnv;
   }) => string[] | Promise<string[]>;
   collectMutableAllowlistWarnings?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
   }) => string[] | Promise<string[]>;
   repairConfig?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     doctorFixCommand: string;
     env?: NodeJS.ProcessEnv;
   }) => ChannelDoctorConfigMutation | Promise<ChannelDoctorConfigMutation>;
   runConfigSequence?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     env: NodeJS.ProcessEnv;
     shouldRepair: boolean;
   }) => ChannelDoctorSequenceResult | Promise<ChannelDoctorSequenceResult>;
   cleanStaleConfig?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
   }) => ChannelDoctorConfigMutation | Promise<ChannelDoctorConfigMutation>;
   collectEmptyAllowlistExtraWarnings?: (
     params: ChannelDoctorEmptyAllowlistAccountContext,
@@ -514,18 +514,18 @@ export type ChannelDoctorAdapter = {
 
 export type ChannelLifecycleAdapter = {
   onAccountConfigChanged?: (params: {
-    prevCfg: OpenClawConfig;
-    nextCfg: OpenClawConfig;
+    prevCfg: NatesclawConfig;
+    nextCfg: NatesclawConfig;
     accountId: string;
     runtime: RuntimeEnv;
   }) => Promise<void> | void;
   onAccountRemoved?: (params: {
-    prevCfg: OpenClawConfig;
+    prevCfg: NatesclawConfig;
     accountId: string;
     runtime: RuntimeEnv;
   }) => Promise<void> | void;
   runStartupMaintenance?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     env?: NodeJS.ProcessEnv;
     log: {
       info?: (message: string) => void;
@@ -539,7 +539,7 @@ export type ChannelLifecycleAdapter = {
    * Removal plan: remove the lifecycle adapter after the 2027.1 external-plugin migration window.
    */
   detectLegacyStateMigrations?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     env: NodeJS.ProcessEnv;
     stateDir: string;
     oauthDir: string;
@@ -547,9 +547,9 @@ export type ChannelLifecycleAdapter = {
 };
 
 type ChannelApprovalDeliveryAdapter = {
-  hasConfiguredDmRoute?: (params: { cfg: OpenClawConfig }) => boolean;
+  hasConfiguredDmRoute?: (params: { cfg: NatesclawConfig }) => boolean;
   shouldSuppressForwardingFallback?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     approvalKind: ChannelApprovalKind;
     target: ChannelApprovalForwardTarget;
     request: ExecApprovalRequest | PluginApprovalRequest;
@@ -565,26 +565,26 @@ export type { ChannelApprovalNativeAdapter } from "./approval-native.types.js";
 type ChannelApprovalRenderAdapter = {
   exec?: {
     buildPendingPayload?: (params: {
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       request: ExecApprovalRequest;
       target: ChannelApprovalForwardTarget;
       nowMs: number;
     }) => ReplyPayload | null;
     buildResolvedPayload?: (params: {
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       resolved: ExecApprovalResolved;
       target: ChannelApprovalForwardTarget;
     }) => ReplyPayload | null;
   };
   plugin?: {
     buildPendingPayload?: (params: {
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       request: PluginApprovalRequest;
       target: ChannelApprovalForwardTarget;
       nowMs: number;
     }) => ReplyPayload | null;
     buildResolvedPayload?: (params: {
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       resolved: PluginApprovalResolved;
       target: ChannelApprovalForwardTarget;
     }) => ReplyPayload | null;
@@ -610,7 +610,7 @@ export type ChannelApprovalAdapter = {
 
 export type ChannelApprovalCapability = ChannelApprovalAdapter & {
   authorizeActorAction?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     senderId?: string | null;
     action: "approve";
@@ -620,19 +620,19 @@ export type ChannelApprovalCapability = ChannelApprovalAdapter & {
     reason?: string;
   };
   getActionAvailabilityState?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     action: "approve";
     approvalKind?: ChannelApprovalKind;
   }) => ChannelActionAvailabilityState;
   /** Exec-native client availability for the initiating surface; distinct from same-chat auth. */
   getExecInitiatingSurfaceState?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     action: "approve";
   }) => ChannelActionAvailabilityState;
   resolveApproveCommandBehavior?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     senderId?: string | null;
     approvalKind: ChannelApprovalKind;
@@ -641,7 +641,7 @@ export type ChannelApprovalCapability = ChannelApprovalAdapter & {
 
 export type ChannelAllowlistAdapter = {
   applyConfigEdit?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     parsedConfig: Record<string, unknown>;
     accountId?: string | null;
     scope: "dm" | "group";
@@ -669,7 +669,7 @@ export type ChannelAllowlistAdapter = {
           }
       >
     | null;
-  readConfig?: (params: { cfg: OpenClawConfig; accountId?: string | null }) =>
+  readConfig?: (params: { cfg: NatesclawConfig; accountId?: string | null }) =>
     | {
         dmAllowFrom?: Array<string | number>;
         groupAllowFrom?: Array<string | number>;
@@ -685,7 +685,7 @@ export type ChannelAllowlistAdapter = {
         groupOverrides?: Array<{ label: string; entries: Array<string | number> }>;
       }>;
   resolveNames?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
     scope: "dm" | "group";
     entries: string[];
@@ -803,7 +803,7 @@ export type ChannelConversationBindingSupport = {
     idleTimeoutMs?: number;
     maxAgeMs?: number;
   }>;
-  createManager?: (params: { cfg: OpenClawConfig; accountId?: string | null }) =>
+  createManager?: (params: { cfg: NatesclawConfig; accountId?: string | null }) =>
     | {
         stop: () => void | Promise<void>;
       }
@@ -819,7 +819,7 @@ type ChannelSecurityDmRouteContext<ResolvedAccount> = ChannelSecurityContext<Res
 
 export type ChannelSecurityAdapter<ResolvedAccount = unknown> = {
   applyConfigFixes?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     env: NodeJS.ProcessEnv;
   }) => ChannelDoctorConfigMutation | Promise<ChannelDoctorConfigMutation>;
   resolveDmPolicy?: ChannelAdapterCallback<
@@ -837,7 +837,7 @@ export type ChannelSecurityAdapter<ResolvedAccount = unknown> = {
   collectAuditFindings?: ChannelAdapterCallback<
     (
       ctx: ChannelSecurityContext<ResolvedAccount> & {
-        sourceConfig: OpenClawConfig;
+        sourceConfig: NatesclawConfig;
         orderedAccountIds: string[];
         hasExplicitAccountPath: boolean;
       },

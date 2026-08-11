@@ -1,6 +1,6 @@
 // Irc tests cover send plugin behavior.
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-outbound";
-import { createSendCfgThreadingRuntime } from "openclaw/plugin-sdk/channel-test-helpers";
+import { verifyChannelMessageAdapterCapabilityProofs } from "natesclaw/plugin-sdk/channel-outbound";
+import { createSendCfgThreadingRuntime } from "natesclaw/plugin-sdk/channel-test-helpers";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { IrcClient } from "./client.js";
 import { setIrcRuntime } from "./runtime.js";
@@ -44,16 +44,16 @@ vi.mock("./protocol.js", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/plugin-config-runtime", async () => {
-  const original = (await vi.importActual("openclaw/plugin-sdk/plugin-config-runtime")) as Record<
+vi.mock("natesclaw/plugin-sdk/plugin-config-runtime", async () => {
+  const original = (await vi.importActual("natesclaw/plugin-sdk/plugin-config-runtime")) as Record<
     string,
     unknown
   >;
   return original;
 });
 
-vi.mock("openclaw/plugin-sdk/markdown-table-runtime", async () => {
-  const original = (await vi.importActual("openclaw/plugin-sdk/markdown-table-runtime")) as Record<
+vi.mock("natesclaw/plugin-sdk/markdown-table-runtime", async () => {
+  const original = (await vi.importActual("natesclaw/plugin-sdk/markdown-table-runtime")) as Record<
     string,
     unknown
   >;
@@ -63,8 +63,8 @@ vi.mock("openclaw/plugin-sdk/markdown-table-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/text-chunking", async () => {
-  const original = (await vi.importActual("openclaw/plugin-sdk/text-chunking")) as Record<
+vi.mock("natesclaw/plugin-sdk/text-chunking", async () => {
+  const original = (await vi.importActual("natesclaw/plugin-sdk/text-chunking")) as Record<
     string,
     unknown
   >;
@@ -96,9 +96,9 @@ afterAll(() => {
   vi.doUnmock("./client.js");
   vi.doUnmock("./connect-options.js");
   vi.doUnmock("./protocol.js");
-  vi.doUnmock("openclaw/plugin-sdk/plugin-config-runtime");
-  vi.doUnmock("openclaw/plugin-sdk/markdown-table-runtime");
-  vi.doUnmock("openclaw/plugin-sdk/text-chunking");
+  vi.doUnmock("natesclaw/plugin-sdk/plugin-config-runtime");
+  vi.doUnmock("natesclaw/plugin-sdk/markdown-table-runtime");
+  vi.doUnmock("natesclaw/plugin-sdk/text-chunking");
   vi.resetModules();
 });
 
@@ -113,7 +113,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "openclaw",
+          nick: "natesclaw",
           accounts: {
             work: {
               host: "irc.example.com",
@@ -177,7 +177,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "openclaw",
+          nick: "natesclaw",
         },
       },
     } as unknown as CoreConfig;
@@ -225,7 +225,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "openclaw",
+          nick: "natesclaw",
         },
       },
     } as unknown as CoreConfig;
@@ -254,7 +254,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "openclaw",
+          nick: "natesclaw",
         },
       },
     } as unknown as CoreConfig;
@@ -305,7 +305,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "openclaw",
+          nick: "natesclaw",
         },
       },
     } as unknown as CoreConfig;
@@ -332,7 +332,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "openclaw",
+          nick: "natesclaw",
         },
       },
     } as unknown as CoreConfig;

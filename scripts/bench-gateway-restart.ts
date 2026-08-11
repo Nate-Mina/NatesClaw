@@ -1,4 +1,4 @@
-// Bench Gateway Restart script supports OpenClaw repository automation.
+// Bench Gateway Restart script supports Natesclaw repository automation.
 import { spawn, spawnSync, type ChildProcessWithoutNullStreams } from "node:child_process";
 import fs from "node:fs";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -210,19 +210,19 @@ const GATEWAY_CASES: readonly GatewayBenchCase[] = [
   {
     id: "skipChannels",
     name: "gateway restart, skip channels",
-    env: { OPENCLAW_SKIP_CHANNELS: "1" },
+    env: { NATESCLAW_SKIP_CHANNELS: "1" },
     config: BASE_CONFIG,
   },
   {
     id: "skipChannelsAcpxProbe",
     name: "gateway restart, skip channels, ACPX startup probe on",
-    env: { OPENCLAW_ACPX_RUNTIME_STARTUP_PROBE: "1", OPENCLAW_SKIP_CHANNELS: "1" },
+    env: { NATESCLAW_ACPX_RUNTIME_STARTUP_PROBE: "1", NATESCLAW_SKIP_CHANNELS: "1" },
     config: BASE_CONFIG,
   },
   {
     id: "skipChannelsNoAcpxProbe",
     name: "gateway restart, skip channels, ACPX startup probe off",
-    env: { OPENCLAW_ACPX_RUNTIME_STARTUP_PROBE: "0", OPENCLAW_SKIP_CHANNELS: "1" },
+    env: { NATESCLAW_ACPX_RUNTIME_STARTUP_PROBE: "0", NATESCLAW_SKIP_CHANNELS: "1" },
     config: BASE_CONFIG,
   },
   {
@@ -233,7 +233,7 @@ const GATEWAY_CASES: readonly GatewayBenchCase[] = [
   {
     id: "fiftyPlugins",
     name: "gateway restart, 50 manifest plugins",
-    env: { OPENCLAW_SKIP_CHANNELS: "1" },
+    env: { NATESCLAW_SKIP_CHANNELS: "1" },
     pluginActivationOnStartup: true,
     pluginCount: 50,
     config: BASE_CONFIG,
@@ -289,7 +289,7 @@ function parseOptions(argv: string[] = process.argv.slice(2)): CliOptions {
 }
 
 function printUsage(): void {
-  console.log(`OpenClaw Gateway restart benchmark
+  console.log(`Natesclaw Gateway restart benchmark
 
 Usage:
   pnpm test:restart:gateway -- [options]
@@ -811,7 +811,7 @@ async function runGatewaySample(options: {
   timeoutMs: number;
 }): Promise<GatewayRestartSample> {
   ensureSupportedRestartPlatform();
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-gateway-restart-bench-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-gateway-restart-bench-"));
   const port = await getFreePort();
   const configPath = writeConfig(root, options.benchCase);
   const env = sanitizedEnv(root, configPath, options.benchCase);

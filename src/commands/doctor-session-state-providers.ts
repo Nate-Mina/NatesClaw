@@ -1,6 +1,6 @@
 /** Doctor repair for stale plugin-owned routing state persisted in session entries. */
-import { normalizeOptionalString as normalizeString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntriesLower } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalString as normalizeString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStringEntriesLower } from "@natesclaw/normalization-core/string-normalization";
 import { note } from "../../packages/terminal-core/src/note.js";
 import {
   resolveAgentModelFallbacksOverride,
@@ -15,7 +15,7 @@ import {
 } from "../agents/model-selection.js";
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
 import type { SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { updateLegacySessionStore } from "../infra/state-migrations.legacy-session-store.js";
 import { listPluginDoctorSessionRouteStateOwners } from "../plugins/doctor-contract-registry.js";
 import type { DoctorSessionRouteStateOwner } from "../plugins/doctor-session-route-state-owner-types.js";
@@ -56,13 +56,13 @@ function repairExample(repair: DoctorSessionRouteStateRepair): string {
   return `${repair.key} (${repair.reasons.join(", ")})`;
 }
 
-function resolveSessionAgentId(cfg: OpenClawConfig, sessionKey: string): string | undefined {
+function resolveSessionAgentId(cfg: NatesclawConfig, sessionKey: string): string | undefined {
   return parseAgentSessionKey(sessionKey)?.agentId ?? tryResolveDefaultAgentId(cfg);
 }
 
 /** Resolves the currently configured provider/model/runtime route for a session key. */
 function resolveConfiguredDoctorSessionStateRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   env?: NodeJS.ProcessEnv;
 }): DoctorSessionRouteState | undefined {
@@ -103,7 +103,7 @@ function resolveConfiguredDoctorSessionStateRoute(params: {
 }
 
 function resolvePluginDoctorSessionRouteStateOwners(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): DoctorSessionRouteStateOwner[] {
   return listPluginDoctorSessionRouteStateOwners({ config: params.cfg, env: params.env });
@@ -461,7 +461,7 @@ function groupRepairsByOwner(
 
 /** Prompts for and applies plugin-owned session route state repairs to the session store. */
 export async function runPluginSessionStateDoctorRepairs(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   store: Record<string, SessionEntry>;
   absoluteStorePath: string;
   prompter: DoctorPrompterLike;

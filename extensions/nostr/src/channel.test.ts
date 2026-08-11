@@ -3,10 +3,10 @@ import {
   createPluginSetupWizardConfigure,
   createTestWizardPrompter,
   runSetupWizardConfigure,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { NatesclawConfig } from "../runtime-api.js";
 import { nostrPlugin } from "./channel.js";
 import { normalizePubkey } from "./nostr-key-utils.js";
 import { nostrSetupWizard } from "./setup-surface.js";
@@ -38,7 +38,7 @@ function normalizeNostrTestEntry(entry: string): string {
 }
 
 function resolveNostrTestDmPolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ReturnType<typeof resolveNostrAccount>;
 }) {
   return {
@@ -63,7 +63,7 @@ const nostrTestPlugin = {
   },
   config: {
     listAccountIds: listNostrAccountIds,
-    resolveAccount: (cfg: OpenClawConfig, accountId?: string | null) =>
+    resolveAccount: (cfg: NatesclawConfig, accountId?: string | null) =>
       resolveNostrAccount({ cfg, accountId }),
   },
   messaging: {
@@ -101,7 +101,7 @@ const nostrTestPlugin = {
       cfg,
       accountId,
     }: {
-      cfg: OpenClawConfig;
+      cfg: NatesclawConfig;
       accountId?: string;
       input: unknown;
     }) => accountId?.trim() || resolveDefaultNostrAccountId(cfg),
@@ -219,7 +219,7 @@ describe("nostrPlugin", () => {
     it("normalizes prefixed npub allowlist entries", () => {
       const npub = "npub140x77qfrg4ncn27dauqjx3t83x4ummcpydzk0zdtehhszg69v7ystddknj";
       const formatted = nostrPlugin.config.formatAllowFrom?.({
-        cfg: createConfiguredNostrCfg() as OpenClawConfig,
+        cfg: createConfiguredNostrCfg() as NatesclawConfig,
         allowFrom: [`nostr:${npub}`],
       });
 
@@ -228,7 +228,7 @@ describe("nostrPlugin", () => {
 
     it("preserves invalid prefixed allowlist entries instead of promoting them to wildcards", () => {
       const formatted = nostrPlugin.config.formatAllowFrom?.({
-        cfg: createConfiguredNostrCfg() as OpenClawConfig,
+        cfg: createConfiguredNostrCfg() as NatesclawConfig,
         allowFrom: ["nostr:*"],
       });
 
@@ -278,7 +278,7 @@ describe("nostrPlugin", () => {
       },
     ])("normalizes prefixed $name targets for direct outbound sends", ({ target }) => {
       const result = nostrPlugin.outbound?.resolveTarget?.({
-        cfg: createConfiguredNostrCfg() as OpenClawConfig,
+        cfg: createConfiguredNostrCfg() as NatesclawConfig,
         to: `nostr:${target}`,
         mode: "explicit",
       });
@@ -288,7 +288,7 @@ describe("nostrPlugin", () => {
 
     it("preserves the missing-target hint when no outbound target is supplied", () => {
       const result = nostrPlugin.outbound?.resolveTarget?.({
-        cfg: createConfiguredNostrCfg() as OpenClawConfig,
+        cfg: createConfiguredNostrCfg() as NatesclawConfig,
         mode: "explicit",
       });
 
@@ -379,7 +379,7 @@ describe("nostr setup wizard", () => {
 
     const result = await runSetupWizardConfigure({
       configure: nostrConfigure,
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       prompter,
       options: {},
     });
@@ -405,7 +405,7 @@ describe("nostr setup wizard", () => {
 
     const result = await runSetupWizardConfigure({
       configure: nostrConfigure,
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       prompter,
       options: {},
       accountOverrides: {
@@ -421,7 +421,7 @@ describe("nostr setup wizard", () => {
   it("uses configured defaultAccount when setup accountId is omitted", () => {
     expect(
       nostrTestPlugin.setup?.resolveAccountId?.({
-        cfg: createConfiguredNostrCfg({ defaultAccount: "work" }) as OpenClawConfig,
+        cfg: createConfiguredNostrCfg({ defaultAccount: "work" }) as NatesclawConfig,
         accountId: undefined,
         input: {},
       } as never),

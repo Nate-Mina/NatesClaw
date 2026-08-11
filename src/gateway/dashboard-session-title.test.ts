@@ -12,7 +12,7 @@ vi.mock("../auto-reply/reply/conversation-label-generator.js", () => ({
 vi.mock("../config/sessions/session-accessor.js", () => ({ updateSessionEntry }));
 
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ChatAttachment } from "./chat-attachments.js";
 import {
   generateDashboardSessionTitle,
@@ -21,7 +21,7 @@ import {
 
 const cfg = {
   agents: { defaults: { model: { primary: "openai/gpt-5.5" } } },
-} as OpenClawConfig;
+} as NatesclawConfig;
 const baseEntry: SessionEntry = {
   sessionId: "session-1",
   updatedAt: 1,
@@ -34,7 +34,7 @@ function titleParams(entry: SessionEntry | undefined = baseEntry) {
     entry,
     sessionId: "session-1",
     sessionKey: "agent:main:dashboard:chat-1",
-    storePath: "/tmp/openclaw/sessions.json",
+    storePath: "/tmp/natesclaw/sessions.json",
     userMessage: "Help me plan the release",
   };
 }
@@ -80,7 +80,7 @@ describe("maybeGenerateDashboardSessionTitle", () => {
       {
         agentId: "main",
         sessionKey: "agent:main:dashboard:chat-1",
-        storePath: "/tmp/openclaw/sessions.json",
+        storePath: "/tmp/natesclaw/sessions.json",
       },
       expect.any(Function),
       { requireWriteSuccess: true },
@@ -124,7 +124,7 @@ describe("maybeGenerateDashboardSessionTitle", () => {
           utilityModel: "openai/gpt-5.6-luna",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     resolveUtilityModelRefForAgent.mockReturnValue("openai/gpt-5.6-luna");
 
     await expect(

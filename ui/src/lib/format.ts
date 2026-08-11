@@ -1,14 +1,14 @@
-import { bucketRelativeTimeMs, type RelativeTimeUnit } from "@openclaw/normalization-core";
+import { bucketRelativeTimeMs, type RelativeTimeUnit } from "@natesclaw/normalization-core";
 // Control UI module implements format behavior.
-import { asDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { asDateTimestampMs } from "@natesclaw/normalization-core/number-coercion";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import {
   formatDurationCompact as formatDurationCompactCore,
   formatDurationHuman as formatDurationHumanCore,
 } from "../../../src/infra/format-time/format-duration.ts";
 import { i18n, t } from "../i18n/index.ts";
 
-export { formatByteSize } from "@openclaw/normalization-core";
+export { formatByteSize } from "@natesclaw/normalization-core";
 
 type FormatTimeAgoOptions = {
   suffix?: boolean;

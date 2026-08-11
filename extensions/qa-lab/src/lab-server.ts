@@ -2,12 +2,12 @@
 import fs from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   acquireDebugProxyCaptureStore,
   resolveDebugProxySettings,
-} from "openclaw/plugin-sdk/proxy-capture";
+} from "natesclaw/plugin-sdk/proxy-capture";
 import {
   closeQaHttpServer,
   handleQaBusRequest,
@@ -216,7 +216,7 @@ function sanitizeControlUiPublicUrl(url: string | null): string | null {
   return stripSensitiveQueryParams(withoutFragment);
 }
 
-function createQaLabConfig(baseUrl: string): OpenClawConfig {
+function createQaLabConfig(baseUrl: string): NatesclawConfig {
   return createQaChannelGatewayConfig({ baseUrl });
 }
 
@@ -257,7 +257,7 @@ function detectQaEvidenceArtifactContentType(filePath: string): string {
 }
 
 async function startQaGatewayLoop(params: { state: QaBusState; baseUrl: string }) {
-  const { qaChannelPlugin, setQaChannelRuntime } = await import("openclaw/plugin-sdk/qa-channel");
+  const { qaChannelPlugin, setQaChannelRuntime } = await import("natesclaw/plugin-sdk/qa-channel");
   const runtime = createQaRunnerRuntime();
   setQaChannelRuntime(runtime);
   const cfg = createQaLabConfig(params.baseUrl);
@@ -326,19 +326,19 @@ export async function startQaLabServer(
     adapterFactories?: readonly QaTransportAdapterFactory[],
   ) => {
     const crabline =
-      selection.channelDriver === "crabline" ? await import("@openclaw/crabline") : undefined;
+      selection.channelDriver === "crabline" ? await import("@natesclaw/crabline") : undefined;
     return resolveQaLabRunPlan({
       selection,
       scenarios: scenarioCatalog.scenarios,
       scorecardReport,
       defaultChannel:
-        crabline?.OPENCLAW_CRABLINE_DEFAULT_CHANNEL ??
+        crabline?.NATESCLAW_CRABLINE_DEFAULT_CHANNEL ??
         (selection.channelDriver === "qa-channel" ? "qa-channel" : undefined),
       ...(crabline
         ? {
             supportsChannel: (channel: string) => {
               try {
-                crabline.resolveOpenClawCrablineChannelDriverSelection({ channel });
+                crabline.resolveNatesclawCrablineChannelDriverSelection({ channel });
                 return true;
               } catch {
                 return false;
@@ -372,7 +372,7 @@ export async function startQaLabServer(
   let controlUiUrl = sanitizeControlUiPublicUrl(params?.controlUiUrl?.trim() || null);
   let gateway:
     | {
-        cfg: OpenClawConfig;
+        cfg: NatesclawConfig;
         stop: () => Promise<void>;
       }
     | undefined;
@@ -801,8 +801,8 @@ export async function startQaLabServer(
               const [{ runQaSuite }, channelDriverSelection] = await Promise.all([
                 import("./suite-launch.runtime.js"),
                 selection.channelDriver === "crabline" && selection.channel
-                  ? import("@openclaw/crabline").then((module) =>
-                      module.resolveOpenClawCrablineChannelDriverSelection({
+                  ? import("@natesclaw/crabline").then((module) =>
+                      module.resolveNatesclawCrablineChannelDriverSelection({
                         channel: selection.channel!,
                       }),
                     )

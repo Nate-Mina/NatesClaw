@@ -34,7 +34,7 @@ describe("generate-npm-package-lock", () => {
       {
         bundleDependencies: ["chalk"],
         bundledDependencies: ["chalk"],
-        dependencies: { "@openclaw/ai": "workspace:2026.6.11", chalk: "5.6.2" },
+        dependencies: { "@natesclaw/ai": "workspace:2026.6.11", chalk: "5.6.2" },
         devDependencies: { local: "workspace:*" },
         peerDependencies: { host: "workspace:^1.2.3" },
       },
@@ -92,11 +92,11 @@ describe("generate-npm-package-lock", () => {
   it("normalizes pnpm scoped override selectors for npm package locks", () => {
     expect(
       normalizeOverrides({
-        "openclaw@2026.5.28>undici": "8.5.0",
+        "natesclaw@2026.5.28>undici": "8.5.0",
         tar: 7.5,
       }),
     ).toEqual({
-      "openclaw@2026.5.28": {
+      "natesclaw@2026.5.28": {
         undici: "8.5.0",
       },
       tar: "7.5",
@@ -120,16 +120,16 @@ describe("generate-npm-package-lock", () => {
 
   it("validates npm-lock worker counts from flags and environment", () => {
     expect(resolveNpmLockJobs("3", {})).toBe(3);
-    expect(resolveNpmLockJobs(undefined, { OPENCLAW_NPM_LOCK_JOBS: "2" })).toBe(2);
-    expect(() => resolveNpmLockJobs("0", {})).toThrow("invalid OPENCLAW_NPM_LOCK_JOBS: 0");
+    expect(resolveNpmLockJobs(undefined, { NATESCLAW_NPM_LOCK_JOBS: "2" })).toBe(2);
+    expect(() => resolveNpmLockJobs("0", {})).toThrow("invalid NATESCLAW_NPM_LOCK_JOBS: 0");
     expect(() => resolveNpmLockJobs("17", {})).toThrow("maximum is 16");
   });
 
   it("accepts strict npm-lock command timeout and buffer overrides", () => {
     expect(
       createNpmLockExecOptions({ command: "npm", args: ["install"] }, "/tmp/package", {
-        OPENCLAW_NPM_LOCK_COMMAND_MAX_BUFFER_BYTES: "1048576",
-        OPENCLAW_NPM_LOCK_COMMAND_TIMEOUT_MS: "30000",
+        NATESCLAW_NPM_LOCK_COMMAND_MAX_BUFFER_BYTES: "1048576",
+        NATESCLAW_NPM_LOCK_COMMAND_TIMEOUT_MS: "30000",
       }),
     ).toMatchObject({
       maxBuffer: 1024 * 1024,
@@ -140,14 +140,14 @@ describe("generate-npm-package-lock", () => {
   it("rejects loose npm-lock command timeout and buffer overrides", () => {
     expect(() =>
       createNpmLockExecOptions({ command: "npm", args: ["install"] }, "/tmp/package", {
-        OPENCLAW_NPM_LOCK_COMMAND_TIMEOUT_MS: "30s",
+        NATESCLAW_NPM_LOCK_COMMAND_TIMEOUT_MS: "30s",
       }),
-    ).toThrow("invalid OPENCLAW_NPM_LOCK_COMMAND_TIMEOUT_MS: 30s");
+    ).toThrow("invalid NATESCLAW_NPM_LOCK_COMMAND_TIMEOUT_MS: 30s");
     expect(() =>
       createNpmLockExecOptions({ command: "npm", args: ["install"] }, "/tmp/package", {
-        OPENCLAW_NPM_LOCK_COMMAND_MAX_BUFFER_BYTES: "64mb",
+        NATESCLAW_NPM_LOCK_COMMAND_MAX_BUFFER_BYTES: "64mb",
       }),
-    ).toThrow("invalid OPENCLAW_NPM_LOCK_COMMAND_MAX_BUFFER_BYTES: 64mb");
+    ).toThrow("invalid NATESCLAW_NPM_LOCK_COMMAND_MAX_BUFFER_BYTES: 64mb");
   });
 
   it("extracts exact versions from npm override specs", () => {
@@ -203,15 +203,15 @@ describe("generate-npm-package-lock", () => {
 
   it("parses nested scoped package paths", () => {
     expect(
-      parseLockPackagePath("node_modules/@openclaw/codex/node_modules/@anthropic-ai/sdk"),
+      parseLockPackagePath("node_modules/@natesclaw/codex/node_modules/@anthropic-ai/sdk"),
     ).toEqual([
       {
-        name: "@openclaw/codex",
-        path: "node_modules/@openclaw/codex",
+        name: "@natesclaw/codex",
+        path: "node_modules/@natesclaw/codex",
       },
       {
         name: "@anthropic-ai/sdk",
-        path: "node_modules/@openclaw/codex/node_modules/@anthropic-ai/sdk",
+        path: "node_modules/@natesclaw/codex/node_modules/@anthropic-ai/sdk",
       },
     ]);
   });
@@ -236,17 +236,17 @@ describe("generate-npm-package-lock", () => {
             "lru-cache": "^11.5.0",
           },
         },
-        "node_modules/@openclaw/codex": {
+        "node_modules/@natesclaw/codex": {
           version: "0.75.4",
           hasShrinkwrap: true,
         },
-        "node_modules/@openclaw/codex/node_modules/protobufjs": {
+        "node_modules/@natesclaw/codex/node_modules/protobufjs": {
           version: "7.5.9",
         },
-        "node_modules/@openclaw/codex/node_modules/fetch-blob": {
+        "node_modules/@natesclaw/codex/node_modules/fetch-blob": {
           version: "4.0.0",
         },
-        "node_modules/@openclaw/codex/node_modules/fetch-blob/node_modules/node-domexception": {
+        "node_modules/@natesclaw/codex/node_modules/fetch-blob/node_modules/node-domexception": {
           version: "1.0.0",
         },
       },
@@ -258,11 +258,11 @@ describe("generate-npm-package-lock", () => {
 
     expect(collectOverrideViolations(lockfile, overrideRules)).toHaveLength(2);
     expect(disableDependencyShrinkwrapOverrideConflictSources(lockfile, overrideRules)).toEqual([
-      "node_modules/@openclaw/codex",
+      "node_modules/@natesclaw/codex",
     ]);
-    expect(lockfile.packages["node_modules/@openclaw/codex"]).not.toHaveProperty("hasShrinkwrap");
+    expect(lockfile.packages["node_modules/@natesclaw/codex"]).not.toHaveProperty("hasShrinkwrap");
     expect(
-      lockfile.packages["node_modules/@openclaw/codex/node_modules/protobufjs"],
+      lockfile.packages["node_modules/@natesclaw/codex/node_modules/protobufjs"],
     ).toBeUndefined();
   });
 
@@ -373,8 +373,8 @@ describe("generate-npm-package-lock", () => {
     expect(
       shouldUseLegacyPeerDepsForNpmLock({
         dependencies: { zod: "4.4.3" },
-        peerDependencies: { openclaw: ">=2026.5.30" },
-        peerDependenciesMeta: { openclaw: { optional: true } },
+        peerDependencies: { natesclaw: ">=2026.5.30" },
+        peerDependenciesMeta: { natesclaw: { optional: true } },
       }),
     ).toBe(true);
   });

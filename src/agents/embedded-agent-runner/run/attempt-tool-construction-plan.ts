@@ -4,7 +4,7 @@
 import { TOOL_NAME_SEPARATOR } from "../../agent-bundle-mcp-names.js";
 import {
   type CoreToolFactoryFamily,
-  type OpenClawCodingToolConstructionPlan,
+  type NatesclawCodingToolConstructionPlan,
   resolveCoreToolFactoryFamily,
 } from "../../core-tool-factory-descriptors.js";
 import { isToolAllowedByPolicyName } from "../../tool-policy-match.js";
@@ -18,25 +18,25 @@ import {
   readToolAllowlistIntersection,
 } from "../../tool-policy.js";
 
-const ALL_CODING_TOOL_CONSTRUCTION_PLAN: OpenClawCodingToolConstructionPlan = {
+const ALL_CODING_TOOL_CONSTRUCTION_PLAN: NatesclawCodingToolConstructionPlan = {
   includeBaseCodingTools: true,
   includeShellTools: true,
   includeChannelTools: true,
-  includeOpenClawTools: true,
+  includeNatesclawTools: true,
   includePluginTools: true,
 };
 
-const NO_CODING_TOOL_CONSTRUCTION_PLAN: OpenClawCodingToolConstructionPlan = {
+const NO_CODING_TOOL_CONSTRUCTION_PLAN: NatesclawCodingToolConstructionPlan = {
   includeBaseCodingTools: false,
   includeShellTools: false,
   includeChannelTools: false,
-  includeOpenClawTools: false,
+  includeNatesclawTools: false,
   includePluginTools: false,
 };
 
 function cloneCodingToolConstructionPlan(
-  plan: OpenClawCodingToolConstructionPlan,
-): OpenClawCodingToolConstructionPlan {
+  plan: NatesclawCodingToolConstructionPlan,
+): NatesclawCodingToolConstructionPlan {
   return { ...plan };
 }
 
@@ -121,7 +121,7 @@ export function mergeForcedEmbeddedAttemptToolsAllow(
 
 function resolveCodingToolConstructionPlanForAllowlist(
   toolsAllow?: string[],
-): OpenClawCodingToolConstructionPlan {
+): NatesclawCodingToolConstructionPlan {
   if (!toolsAllow) {
     return cloneCodingToolConstructionPlan(ALL_CODING_TOOL_CONSTRUCTION_PLAN);
   }
@@ -148,7 +148,7 @@ function resolveCodingToolConstructionPlanForAllowlist(
   }
   const includeBaseCodingTools = coreFamilies.has("base-coding");
   const includeShellTools = coreFamilies.has("shell");
-  const includeOpenClawTools = coreFamilies.has("openclaw");
+  const includeNatesclawTools = coreFamilies.has("natesclaw");
   // Channel delivery tools are constructed through plugin-capable runtime setup.
   const includeChannelTools = includePluginTools;
 
@@ -156,7 +156,7 @@ function resolveCodingToolConstructionPlanForAllowlist(
     includeBaseCodingTools,
     includeShellTools,
     includeChannelTools,
-    includeOpenClawTools,
+    includeNatesclawTools,
     includePluginTools,
   };
 }
@@ -176,7 +176,7 @@ export function resolveEmbeddedAttemptToolConstructionPlan(params: {
   constructTools: boolean;
   includeCoreTools: boolean;
   runtimeToolAllowlist?: string[];
-  codingToolConstructionPlan: OpenClawCodingToolConstructionPlan;
+  codingToolConstructionPlan: NatesclawCodingToolConstructionPlan;
 } {
   // Model capability is authoritative: forced delivery cannot materialize a
   // tool the selected model cannot call.
@@ -198,7 +198,7 @@ export function resolveEmbeddedAttemptToolConstructionPlan(params: {
   const includeCoreTools =
     codingToolConstructionPlan.includeBaseCodingTools ||
     codingToolConstructionPlan.includeShellTools ||
-    codingToolConstructionPlan.includeOpenClawTools;
+    codingToolConstructionPlan.includeNatesclawTools;
   const constructTools =
     includeCoreTools ||
     codingToolConstructionPlan.includeChannelTools ||

@@ -1,6 +1,6 @@
 // Memory Wiki plugin module: shared guarded write for vault pages.
-import { retryAsync } from "openclaw/plugin-sdk/retry-runtime";
-import { FsSafeError, root as fsRoot } from "openclaw/plugin-sdk/security-runtime";
+import { retryAsync } from "natesclaw/plugin-sdk/retry-runtime";
+import { FsSafeError, root as fsRoot } from "natesclaw/plugin-sdk/security-runtime";
 
 type VaultRoot = Awaited<ReturnType<typeof fsRoot>>;
 
@@ -23,7 +23,7 @@ export function isRegularFileStat(value: unknown): value is FileStatLike & { nli
 
 // A concurrent atomic rewrite (write-temp + rename) of the same vault page by
 // the memory bridge re-export makes fs-safe's opened-fd identity check fail with
-// `path-mismatch` (see @openclaw/fs-safe opened-realpath): the file we opened is
+// `path-mismatch` (see @natesclaw/fs-safe opened-realpath): the file we opened is
 // replaced under us mid-operation. It is transient (resolves sub-ms) and benign,
 // so a short retry closes the window. Symlink/path-alias swaps and persistent
 // guard failures (e.g. a directory collision) carry their own code and still

@@ -8,7 +8,7 @@ import type { ChannelPlugin } from "../channels/plugins/types.public.js";
 import type { HealthSummary } from "../gateway/health/types.js";
 import { createPluginRecord } from "../plugins/status.test-fixtures.js";
 import { MAX_TIMER_TIMEOUT_MS } from "../shared/number-coercion.js";
-import { createOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { createNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import {
   createLegacyHealthSnapshotCollector,
   type LegacyHealthSnapshotParams,
@@ -453,7 +453,7 @@ function createIMessageHealthPlugin(): HealthTestPlugin {
       probeAccount: async () => ({
         ok: false,
         error:
-          "imsg cannot access /Users/alice/Library/Messages/chat.db. Grant Full Disk Access to the Gateway/launcher process and restart Gateway. privateApi=/tmp/openclaw/private.sock",
+          "imsg cannot access /Users/alice/Library/Messages/chat.db. Grant Full Disk Access to the Gateway/launcher process and restart Gateway. privateApi=/tmp/natesclaw/private.sock",
         privateApi: {
           rpcCommand: "imsg rpc --json",
           diagnostics: "sensitive transport details",
@@ -564,9 +564,9 @@ describe("collectGatewayHealthSnapshot", () => {
     testConfig = { session: { store: "/tmp/x" } };
     testStore = {};
     setActivePluginRegistry(createTestRegistry([]));
-    const openClawState = await createOpenClawTestState({
+    const NatesclawState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-health-dq-",
+      prefix: "natesclaw-health-dq-",
     });
     try {
       const { moveDeliveryQueueEntryToFailed, upsertDeliveryQueueEntry } =
@@ -599,7 +599,7 @@ describe("collectGatewayHealthSnapshot", () => {
         ],
       });
     } finally {
-      await openClawState.cleanup();
+      await NatesclawState.cleanup();
     }
   });
 
@@ -660,7 +660,7 @@ describe("collectGatewayHealthSnapshot", () => {
     expect(calls.join("\n")).toContain("/getMe");
     expect(calls.join("\n")).toContain("/getWebhookInfo");
 
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-health-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-health-"));
     const tokenFile = path.join(tmpDir, "telegram-token");
     try {
       fs.writeFileSync(tokenFile, "t-file\n", "utf-8");

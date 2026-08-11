@@ -5,18 +5,18 @@
 
 import * as http from "node:http";
 import * as https from "node:https";
-import { collectErrorGraphCandidates, extractErrorCode } from "openclaw/plugin-sdk/error-runtime";
-import { safeParseJsonWithSchema, safeParseWithSchema } from "openclaw/plugin-sdk/extension-shared";
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
-import { readByteStreamWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { classifyTransientNetworkErrorCode } from "openclaw/plugin-sdk/retry-runtime";
-import { sleep } from "openclaw/plugin-sdk/runtime-env";
+import { collectErrorGraphCandidates, extractErrorCode } from "natesclaw/plugin-sdk/error-runtime";
+import { safeParseJsonWithSchema, safeParseWithSchema } from "natesclaw/plugin-sdk/extension-shared";
+import { parseStrictNonNegativeInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { readByteStreamWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
+import { classifyTransientNetworkErrorCode } from "natesclaw/plugin-sdk/retry-runtime";
+import { sleep } from "natesclaw/plugin-sdk/runtime-env";
 import {
   formatErrorMessage,
   resolvePinnedHostnameWithPolicy,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { chunkTextForOutbound } from "natesclaw/plugin-sdk/text-chunking";
 import { z } from "zod";
 
 const MIN_SEND_INTERVAL_MS = 500;

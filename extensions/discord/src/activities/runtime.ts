@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   isDiscordAccountEnabledForRuntime,
   listDiscordAccountIds,
@@ -21,12 +21,12 @@ export class DiscordActivitiesRuntime {
 
   constructor(
     readonly store: DiscordActivityStore,
-    private readonly startupConfig: OpenClawConfig,
-    private readonly getCurrentConfig?: () => OpenClawConfig | undefined,
+    private readonly startupConfig: NatesclawConfig,
+    private readonly getCurrentConfig?: () => NatesclawConfig | undefined,
     private readonly env: NodeJS.ProcessEnv = process.env,
   ) {}
 
-  currentConfig(): OpenClawConfig {
+  currentConfig(): NatesclawConfig {
     return this.getCurrentConfig?.() ?? this.startupConfig;
   }
 

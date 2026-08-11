@@ -1,9 +1,9 @@
 // Covers session binding adapter registration, generic current-conversation
 // fallback, capability errors, deduping, and duplicate graph teardown.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import { createTestRegistry } from "../../test-utils/channel-plugins.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 import {
@@ -119,20 +119,20 @@ describe("session binding service", () => {
   let testStateDir = "";
 
   beforeEach(async () => {
-    previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    testStateDir = await tempDirs.make("openclaw-session-binding-");
-    process.env.OPENCLAW_STATE_DIR = testStateDir;
+    previousStateDir = process.env.NATESCLAW_STATE_DIR;
+    testStateDir = await tempDirs.make("natesclaw-session-binding-");
+    process.env.NATESCLAW_STATE_DIR = testStateDir;
     testing.resetSessionBindingAdaptersForTests();
     setMinimalCurrentConversationRegistry();
   });
 
   afterEach(async () => {
     testing.resetSessionBindingAdaptersForTests();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     if (previousStateDir == null) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.NATESCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.NATESCLAW_STATE_DIR = previousStateDir;
     }
     await tempDirs.cleanup();
   });

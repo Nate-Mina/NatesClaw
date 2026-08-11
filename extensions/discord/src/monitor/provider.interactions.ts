@@ -1,9 +1,9 @@
 // Discord provider module implements model/runtime integration.
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
-import type { DiscordAccountConfig, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "natesclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelRuntimeSurface } from "natesclaw/plugin-sdk/channel-contract";
+import { registerChannelRuntimeContext } from "natesclaw/plugin-sdk/channel-runtime-context";
+import type { DiscordAccountConfig, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { createDiscordActivityButton } from "../activities/interaction.js";
 import {
   getDiscordExecApprovalApprovers,
@@ -33,7 +33,7 @@ import type { ThreadBindingManager } from "./thread-bindings.types.js";
 type DiscordVoiceManager = import("../voice/manager.js").DiscordVoiceManager;
 
 export function createDiscordProviderInteractionSurface(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   discordConfig: DiscordAccountConfig;
   accountId: string;
   applicationId?: string;

@@ -4,7 +4,7 @@ import {
   type HeartbeatToolResponse,
   type MessagingToolSend,
   type MessagingToolSourceReplyPayload,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   attemptTerminal,
   type AttemptFailureSource,
@@ -140,7 +140,7 @@ export function buildCodexAttemptResult(
   //   - Two distinct turns where the user repeats verbatim content →
   //     distinct turnIds → distinct identities → both kept.
   // Codex owns the canonical thread. These mirror records keep enough local
-  // context for OpenClaw history, search, and future harness switching.
+  // context for Natesclaw history, search, and future harness switching.
   const messagesSnapshot = buildCodexMessagesSnapshot({
     runParams: input.runParams,
     turnId: input.turnId,

@@ -1,5 +1,5 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import type { SessionUpstreamProbe } from "openclaw/plugin-sdk/session-catalog";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import type { SessionUpstreamProbe } from "natesclaw/plugin-sdk/session-catalog";
 import { describe, expect, it, vi } from "vitest";
 import { CodexAppServerRpcError } from "./app-server/client.js";
 import type { CodexTurn } from "./app-server/protocol.js";
@@ -67,7 +67,7 @@ function createActivityChecker(params: {
         },
       },
     },
-  } as unknown as OpenClawPluginApi;
+  } as unknown as NatesclawPluginApi;
   const bindingStore = {
     read: vi.fn(async () => params.binding),
   } as unknown as CodexAppServerBindingStore;
@@ -292,7 +292,7 @@ describe("Codex upstream activity", () => {
     ]);
   });
 
-  it("filters OpenClaw-authored user items by normalized transcript text", async () => {
+  it("filters Natesclaw-authored user items by normalized transcript text", async () => {
     await expect(
       checkTurns({
         probe: probe({
@@ -323,7 +323,7 @@ describe("Codex upstream activity", () => {
     ]);
   });
 
-  it("filters a batched OpenClaw steer by its component transcript texts", async () => {
+  it("filters a batched Natesclaw steer by its component transcript texts", async () => {
     await expect(
       checkTurns({
         probe: probe({

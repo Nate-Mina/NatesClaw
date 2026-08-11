@@ -6,8 +6,8 @@
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString as parseString } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString as parseString } from "@natesclaw/normalization-core/string-coerce";
 import { isApprovalNotFoundError } from "../infra/approval-errors.js";
 import type {
   ExecApprovalCommandSpan,

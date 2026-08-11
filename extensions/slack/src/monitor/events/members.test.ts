@@ -9,7 +9,7 @@ let registerSlackMemberEvents: typeof import("./members.js").registerSlackMember
 let initSlackHarness: typeof import("./system-event-test-harness.js").createSlackSystemEventTestHarness;
 type MemberOverrides = import("./system-event-test-harness.js").SlackSystemEventTestOverrides;
 
-vi.mock("openclaw/plugin-sdk/system-event-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/system-event-runtime", () => ({
   enqueueSystemEvent: (...args: unknown[]) => memberMocks.enqueue(...args),
 }));
 type MemberHandler = import("./system-event-test-harness.js").SlackSystemEventHandler;

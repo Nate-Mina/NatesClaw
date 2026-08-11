@@ -1,7 +1,7 @@
 import { isAbsolute } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeSortedUniqueTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeSortedUniqueTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
 import type { Insertable, Selectable, Updateable } from "kysely";
 import {
   type WorkerAdmissionHandshake,
@@ -26,12 +26,12 @@ import type {
   WorkerEnvironmentCredentials,
   WorkerEnvironmentSshFallbackPorts,
   WorkerEnvironments,
-} from "../../state/openclaw-state-db.generated.js";
+} from "../../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import type { WorkerCredentialRecord } from "./credential.js";
 import {
   canTransitionWorkerEnvironment,
@@ -172,7 +172,7 @@ function teardownTerminalStateFrom(
 }
 function normalizeBootstrapReceipt(value: {
   bundleHash: unknown;
-  openclawVersion: unknown;
+  natesclawVersion: unknown;
   protocolFeatures: unknown;
 }): WorkerEnvironmentBootstrapReceipt {
   const bundleHash = required(value.bundleHash, "bootstrap bundle hash");
@@ -193,7 +193,7 @@ function normalizeBootstrapReceipt(value: {
   }
   return {
     bundleHash,
-    openclawVersion: required(value.openclawVersion, "bootstrap OpenClaw version"),
+    natesclawVersion: required(value.natesclawVersion, "bootstrap Natesclaw version"),
     protocolFeatures: normalizeSortedUniqueTrimmedStringList(value.protocolFeatures),
   };
 }
@@ -379,18 +379,18 @@ function desktopFrom(row: Row): WorkerDesktopEndpoint | null {
 function bootstrapReceiptFrom(row: Row): WorkerEnvironmentBootstrapReceipt | null {
   const {
     bootstrap_bundle_hash: bundleHash,
-    bootstrap_openclaw_version: openclawVersion,
+    bootstrap_natesclaw_version: natesclawVersion,
     bootstrap_protocol_features_json: encodedFeatures,
   } = row;
-  if (bundleHash === null && openclawVersion === null && encodedFeatures === null) {
+  if (bundleHash === null && natesclawVersion === null && encodedFeatures === null) {
     return null;
   }
-  if (bundleHash === null || openclawVersion === null || encodedFeatures === null) {
+  if (bundleHash === null || natesclawVersion === null || encodedFeatures === null) {
     throw new Error("Worker environment bootstrap receipt is incomplete");
   }
   return normalizeBootstrapReceipt({
     bundleHash,
-    openclawVersion,
+    natesclawVersion,
     protocolFeatures: JSON.parse(encodedFeatures) as unknown,
   });
 }
@@ -722,11 +722,11 @@ function reconcileAttachedSessionOwners(db: DatabaseSync, nowMs: number): void {
 }
 
 export function createWorkerEnvironmentStore(
-  options: { database?: OpenClawStateDatabase; now?: () => number } = {},
+  options: { database?: NatesclawStateDatabase; now?: () => number } = {},
 ) {
-  const database = options.database ?? openOpenClawStateDatabase();
+  const database = options.database ?? openNatesclawStateDatabase();
   if (!ensuredWorkerEnvironmentDatabases.has(database.db)) {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         // sqlite-allow-raw -- feature-local additive schema DDL; rows use Kysely below.
         db.exec(WORKER_ENVIRONMENT_SSH_FALLBACK_PORTS_SCHEMA_SQL);
@@ -738,9 +738,9 @@ export function createWorkerEnvironmentStore(
   }
   const path = database.path;
   const now = options.now ?? Date.now;
-  const read = () => openOpenClawStateDatabase({ path }).db;
+  const read = () => openNatesclawStateDatabase({ path }).db;
   const write = <T>(operation: (db: DatabaseSync) => T): T =>
-    runOpenClawStateWriteTransaction(({ db }) => operation(db), { path });
+    runNatesclawStateWriteTransaction(({ db }) => operation(db), { path });
   write((db) => reconcileAttachedSessionOwners(db, now()));
   const writeCredential = (
     input: CredentialInput & {
@@ -816,7 +816,7 @@ export function createWorkerEnvironmentStore(
               ssh_key_ref_json: null,
               desktop_json: null,
               bootstrap_bundle_hash: null,
-              bootstrap_openclaw_version: null,
+              bootstrap_natesclaw_version: null,
               bootstrap_protocol_features_json: null,
               owner_epoch: 0,
               teardown_terminal_state: null,
@@ -1038,7 +1038,7 @@ export function createWorkerEnvironmentStore(
           ssh_key_ref_json: sshEndpoint ? json(sshEndpoint.keyRef) : null,
           desktop_json: desktop ? json(desktop) : null,
           bootstrap_bundle_hash: bootstrapReceipt?.bundleHash ?? null,
-          bootstrap_openclaw_version: bootstrapReceipt?.openclawVersion ?? null,
+          bootstrap_natesclaw_version: bootstrapReceipt?.natesclawVersion ?? null,
           bootstrap_protocol_features_json: bootstrapReceipt
             ? json(bootstrapReceipt.protocolFeatures)
             : null,

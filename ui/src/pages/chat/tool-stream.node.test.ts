@@ -414,7 +414,7 @@ describe("app-tool-stream result blocks", () => {
       vi.advanceTimersByTime(80);
 
       expect(host.toolStreamById.get(identity)?.liveDiffStat).toEqual({ added: 12, removed: 3 });
-      expect(host.chatToolMessages[0]?.["__openclawToolStreamDiffStat"]).toEqual({
+      expect(host.chatToolMessages[0]?.["__natesclawToolStreamDiffStat"]).toEqual({
         added: 12,
         removed: 3,
       });
@@ -432,8 +432,8 @@ describe("app-tool-stream result blocks", () => {
       const resolved = host.toolStreamById.get(identity);
       expect(resolved?.liveDiffStat).toBeUndefined();
       expect(resolved?.details).toEqual({ diff: "-1 old\n+1 new" });
-      expect(resolved?.message).not.toHaveProperty("__openclawToolStreamDiffStat");
-      expect(host.chatToolMessages[0]).not.toHaveProperty("__openclawToolStreamDiffStat");
+      expect(resolved?.message).not.toHaveProperty("__natesclawToolStreamDiffStat");
+      expect(host.chatToolMessages[0]).not.toHaveProperty("__natesclawToolStreamDiffStat");
     } finally {
       vi.useRealTimers();
     }
@@ -465,7 +465,7 @@ describe("app-tool-stream result blocks", () => {
     ) as ToolStreamEntry;
     expect(entry.resultReceived).toBe(true);
     expect(entry.receivedAt).toBe(TOOL_STREAM_TEST_NOW);
-    expect(entry.message["__openclawToolStreamReceivedAt"]).toBe(TOOL_STREAM_TEST_NOW);
+    expect(entry.message["__natesclawToolStreamReceivedAt"]).toBe(TOOL_STREAM_TEST_NOW);
     const content = entry.message.content as Array<Record<string, unknown>>;
     // The empty-output result block marks the call as finished so the UI does
     // not keep it in a running state for the rest of the run.
@@ -630,7 +630,7 @@ describe("app-tool-stream result blocks", () => {
       message: {
         runId: "run-foreground",
         toolCallId,
-        __openclawToolStreamResultReceived: false,
+        __natesclawToolStreamResultReceived: false,
       },
     });
     expect(host.toolStreamById.get(backgroundIdentity)).toMatchObject({
@@ -644,7 +644,7 @@ describe("app-tool-stream result blocks", () => {
       message: {
         runId: "run-background",
         toolCallId,
-        __openclawToolStreamResultReceived: true,
+        __natesclawToolStreamResultReceived: true,
       },
     });
     expect(host.chatToolMessages.map((message) => message.runId)).toEqual([

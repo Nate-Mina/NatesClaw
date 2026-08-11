@@ -22,13 +22,13 @@ function runConfigureSigning(teamId: string, user = "localuser"): string {
     env: {
       ...process.env,
       IOS_DEVELOPMENT_TEAM: teamId,
-      OPENCLAW_IOS_APP_BUNDLE_ID: "",
-      OPENCLAW_IOS_BUNDLE_ID_BASE: "",
-      OPENCLAW_IOS_BUNDLE_SUFFIX: "",
-      OPENCLAW_IOS_APP_GROUP_ID: "",
-      OPENCLAW_IOS_SHARE_BUNDLE_ID: "",
-      OPENCLAW_IOS_ACTIVITY_WIDGET_BUNDLE_ID: "",
-      OPENCLAW_IOS_WATCH_APP_BUNDLE_ID: "",
+      NATESCLAW_IOS_APP_BUNDLE_ID: "",
+      NATESCLAW_IOS_BUNDLE_ID_BASE: "",
+      NATESCLAW_IOS_BUNDLE_SUFFIX: "",
+      NATESCLAW_IOS_APP_GROUP_ID: "",
+      NATESCLAW_IOS_SHARE_BUNDLE_ID: "",
+      NATESCLAW_IOS_ACTIVITY_WIDGET_BUNDLE_ID: "",
+      NATESCLAW_IOS_WATCH_APP_BUNDLE_ID: "",
       USER: user,
     },
     encoding: "utf8",
@@ -42,7 +42,7 @@ function readGeneratedSigning(): string {
 
 describe.sequential("scripts/ios-configure-signing.sh", () => {
   beforeAll(() => {
-    const fixtureRoot = makeTempDir(tempDirs, "openclaw-ios-configure-signing-");
+    const fixtureRoot = makeTempDir(tempDirs, "natesclaw-ios-configure-signing-");
     const scriptsDir = path.join(fixtureRoot, "scripts");
     const iosDir = path.join(fixtureRoot, "apps", "ios");
     mkdirSync(scriptsDir, { recursive: true });
@@ -58,17 +58,17 @@ describe.sequential("scripts/ios-configure-signing.sh", () => {
     cleanupTempDirs(tempDirs);
   });
 
-  it("uses the canonical app bundle ID for the canonical OpenClaw team", () => {
+  it("uses the canonical app bundle ID for the canonical Natesclaw team", () => {
     const stdout = runConfigureSigning("FWJYW4S8P8");
     const generated = readGeneratedSigning();
 
-    expect(stdout).toContain("team=FWJYW4S8P8 app=ai.openclawfoundation.app");
-    expect(generated).toContain("OPENCLAW_DEVELOPMENT_TEAM = FWJYW4S8P8");
-    expect(generated).toContain("OPENCLAW_CODE_SIGN_ENTITLEMENTS = Sources/OpenClaw.entitlements");
-    expect(generated).toContain("OPENCLAW_APP_BUNDLE_ID = ai.openclawfoundation.app");
-    expect(generated).toContain("OPENCLAW_SHARE_BUNDLE_ID = ai.openclawfoundation.app.share");
-    expect(generated).toContain("OPENCLAW_APP_GROUP_ID = group.ai.openclawfoundation.app.shared");
-    expect(generated).toContain("OPENCLAW_ACTIVITY_WIDGET_PROFILE = ");
+    expect(stdout).toContain("team=FWJYW4S8P8 app=ai.natesclawfoundation.app");
+    expect(generated).toContain("NATESCLAW_DEVELOPMENT_TEAM = FWJYW4S8P8");
+    expect(generated).toContain("NATESCLAW_CODE_SIGN_ENTITLEMENTS = Sources/Natesclaw.entitlements");
+    expect(generated).toContain("NATESCLAW_APP_BUNDLE_ID = ai.natesclawfoundation.app");
+    expect(generated).toContain("NATESCLAW_SHARE_BUNDLE_ID = ai.natesclawfoundation.app.share");
+    expect(generated).toContain("NATESCLAW_APP_GROUP_ID = group.ai.natesclawfoundation.app.shared");
+    expect(generated).toContain("NATESCLAW_ACTIVITY_WIDGET_PROFILE = ");
   });
 
   it("keeps unique local bundle IDs for non-canonical fallback teams", () => {
@@ -76,14 +76,14 @@ describe.sequential("scripts/ios-configure-signing.sh", () => {
     const generated = readGeneratedSigning();
 
     expect(stdout).toContain(
-      "canonical_team=FWJYW4S8P8 local_team=Y3YUZP442G app=ai.openclawfoundation.app.test.localuser-y3yuzp442g",
+      "canonical_team=FWJYW4S8P8 local_team=Y3YUZP442G app=ai.natesclawfoundation.app.test.localuser-y3yuzp442g",
     );
-    expect(generated).toContain("OPENCLAW_DEVELOPMENT_TEAM = Y3YUZP442G");
+    expect(generated).toContain("NATESCLAW_DEVELOPMENT_TEAM = Y3YUZP442G");
     expect(generated).toContain(
-      "OPENCLAW_APP_BUNDLE_ID = ai.openclawfoundation.app.test.localuser-y3yuzp442g",
+      "NATESCLAW_APP_BUNDLE_ID = ai.natesclawfoundation.app.test.localuser-y3yuzp442g",
     );
     expect(generated).toContain(
-      "OPENCLAW_APP_GROUP_ID = group.ai.openclawfoundation.app.test.localuser-y3yuzp442g.shared",
+      "NATESCLAW_APP_GROUP_ID = group.ai.natesclawfoundation.app.test.localuser-y3yuzp442g.shared",
     );
   });
 });

@@ -1,6 +1,6 @@
 // Verifies harness ownership, payload availability, and run-owned registry lookup.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createEmptyPluginRegistry } from "../../plugins/registry-empty.js";
 import { resolveAgentRuntimePluginLoadPlan } from "./runtime-plugin-load-plan.js";
 import {
@@ -88,7 +88,7 @@ describe("harness runtime plugins", () => {
 
   const memorySelectionCases: Array<{
     name: string;
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     expectedPluginIds: string[];
   }> = [
     {
@@ -305,7 +305,7 @@ describe("harness runtime plugins", () => {
   });
 
   it("keeps a restrictive allowlist authoritative", () => {
-    const config = { plugins: { allow: ["telegram"] } } as OpenClawConfig;
+    const config = { plugins: { allow: ["telegram"] } } as NatesclawConfig;
     mocks.resolveManifestActivationPlan.mockReturnValueOnce({ entries: [] });
     expect(
       resolveAgentHarnessRuntimeAvailability({

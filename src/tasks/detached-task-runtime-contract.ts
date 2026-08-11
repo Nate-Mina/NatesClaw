@@ -1,5 +1,5 @@
 // Defines the detached task runtime contract and spawn options.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type {
   JsonValue,
   TaskDeliveryState,
@@ -107,7 +107,7 @@ type DetachedTaskDeliveryStatusParams = {
 };
 
 type DetachedTaskCancelParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   taskId: string;
   reason?: string;
 };

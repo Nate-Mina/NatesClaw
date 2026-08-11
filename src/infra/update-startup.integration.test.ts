@@ -1,18 +1,18 @@
 // Proves startup update discovery through the real extended-stable registry resolver.
 import http from "node:http";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import type { UpdateCheckResult } from "./update-check.js";
 
-vi.mock("./openclaw-root.js", async () => {
-  const actual = await vi.importActual<typeof import("./openclaw-root.js")>("./openclaw-root.js");
+vi.mock("./natesclaw-root.js", async () => {
+  const actual = await vi.importActual<typeof import("./natesclaw-root.js")>("./natesclaw-root.js");
   return {
     ...actual,
-    resolveOpenClawPackageRoot: vi.fn(async () => "/opt/openclaw"),
+    resolveNatesclawPackageRoot: vi.fn(async () => "/opt/natesclaw"),
   };
 });
 
@@ -23,7 +23,7 @@ vi.mock("./update-check.js", async () => {
     checkUpdateStatus: vi.fn(
       async () =>
         ({
-          root: "/opt/openclaw",
+          root: "/opt/natesclaw",
           installKind: "package",
           packageManager: "npm",
         }) satisfies UpdateCheckResult,
@@ -36,18 +36,18 @@ vi.mock("../version.js", () => ({
 }));
 
 describe("extended-stable startup update integration", () => {
-  let testState: OpenClawTestState;
+  let testState: NatesclawTestState;
   let server: http.Server | undefined;
 
   beforeEach(async () => {
     server = undefined;
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-update-startup-integration-",
+      prefix: "natesclaw-update-startup-integration-",
       env: {
         NODE_ENV: "test",
         NPM_CONFIG_REGISTRY: undefined,
-        OPENCLAW_UPDATE_PACKAGE_SPEC: undefined,
+        NATESCLAW_UPDATE_PACKAGE_SPEC: undefined,
         VITEST: undefined,
       },
     });
@@ -60,7 +60,7 @@ describe("extended-stable startup update integration", () => {
         activeServer.close((error) => (error ? reject(error) : resolve()));
       });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await testState.cleanup();
   });
 
@@ -79,7 +79,7 @@ describe("extended-stable startup update integration", () => {
     if (!address || typeof address === "string") {
       throw new Error("expected loopback registry address");
     }
-    process.env.OPENCLAW_UPDATE_PACKAGE_SPEC = "openclaw";
+    process.env.NATESCLAW_UPDATE_PACKAGE_SPEC = "natesclaw";
     process.env.NPM_CONFIG_REGISTRY = `http://127.0.0.1:${address.port}/`;
 
     const { runGatewayUpdateCheck, resetUpdateAvailableStateForTest } =
@@ -98,14 +98,14 @@ describe("extended-stable startup update integration", () => {
       runAutoUpdate,
     });
 
-    expect(requests).toEqual(["/openclaw/extended-stable", "/openclaw/2.0.0"]);
+    expect(requests).toEqual(["/natesclaw/extended-stable", "/natesclaw/2.0.0"]);
     expect(onUpdateAvailableChange).toHaveBeenCalledWith({
       currentVersion: "1.0.0",
       latestVersion: "2.0.0",
       channel: "extended-stable",
     });
     expect(log.info).toHaveBeenCalledWith(
-      "update available (extended-stable): v2.0.0 (current v1.0.0). Run: openclaw update",
+      "update available (extended-stable): v2.0.0 (current v1.0.0). Run: natesclaw update",
     );
     expect(runAutoUpdate).not.toHaveBeenCalled();
   });

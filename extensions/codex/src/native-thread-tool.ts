@@ -6,13 +6,13 @@ import {
   readStringParam,
   type AnyAgentTool,
   type PluginRuntime,
-} from "openclaw/plugin-sdk/core";
+} from "natesclaw/plugin-sdk/core";
 import {
   isModelSelectionLocked,
   ModelSelectionLockedError,
-} from "openclaw/plugin-sdk/model-session-runtime";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
-import { asBoolean, asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/model-session-runtime";
+import type { NatesclawPluginToolContext } from "natesclaw/plugin-sdk/plugin-entry";
+import { asBoolean, asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { Type } from "typebox";
 import { resolveCodexBindingAppServerConnection } from "./app-server/binding-connection.js";
 import { CODEX_CONTROL_METHODS } from "./app-server/capabilities.js";
@@ -60,7 +60,7 @@ const ForkParamsSchema = Type.Object(
     attach: Type.Optional(
       Type.Boolean({
         default: true,
-        description: "Attach the fork to this OpenClaw session for its next turn.",
+        description: "Attach the fork to this Natesclaw session for its next turn.",
       }),
     ),
   },
@@ -106,7 +106,7 @@ const CodexThreadsParamsSchema = Type.Union([
 
 type CodexThreadsToolOptions = {
   bindingStore: CodexAppServerBindingStore;
-  context: OpenClawPluginToolContext;
+  context: NatesclawPluginToolContext;
   runtime: PluginRuntime;
   getPluginConfig: () => unknown;
   request?: typeof codexControlRequest;
@@ -119,7 +119,7 @@ function readLimit(value: unknown): number | undefined {
 }
 
 function resolveToolSession(
-  context: OpenClawPluginToolContext,
+  context: NatesclawPluginToolContext,
   runtime: PluginRuntime,
 ): { sessionId: string; modelSelectionLocked: boolean } | undefined {
   const sessionKey = context.sessionKey?.trim();
@@ -378,7 +378,7 @@ export function createCodexThreadsTool(options: CodexThreadsToolOptions): AnyAge
           assertThreadMayBeArchived(current, threadId);
           if (await options.bindingStore.hasOtherThreadOwner(threadId, identity)) {
             throw new Error(
-              "cannot archive a native Codex thread owned by another OpenClaw session",
+              "cannot archive a native Codex thread owned by another Natesclaw session",
             );
           }
           await assertCodexArchiveDescendantsUnowned({
@@ -422,7 +422,7 @@ export function createCodexThreadsTool(options: CodexThreadsToolOptions): AnyAge
 
       const attach = asBoolean(params.attach) ?? true;
       if (attach && !session) {
-        throw new Error("cannot attach a Codex fork without an active OpenClaw session");
+        throw new Error("cannot attach a Codex fork without an active Natesclaw session");
       }
       if (attach && session?.modelSelectionLocked) {
         throw new ModelSelectionLockedError();

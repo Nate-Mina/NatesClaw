@@ -2,14 +2,14 @@ import {
   WORKBOARD_STATUSES,
   type WorkboardCard,
   type WorkboardStatus,
-} from "@openclaw/workboard-contract";
+} from "@natesclaw/workboard-contract";
 // Workboard plugin module implements cli behavior.
 import type { Command } from "commander";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { addGatewayClientOptions, callGatewayFromCli } from "openclaw/plugin-sdk/gateway-runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { addGatewayClientOptions, callGatewayFromCli } from "natesclaw/plugin-sdk/gateway-runtime";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { getRuntimeConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveWorkboardCardByIdOrPrefix } from "./card-lookup.js";
 import { redactClaimToken } from "./card-redaction.js";
 import type { WorkboardDispatchResult, WorkboardStore } from "./store.js";
@@ -129,7 +129,7 @@ function hasExplicitGatewayTarget(options: GatewayOptions): boolean {
 }
 
 function hasConfiguredRemoteGatewayTarget(): boolean {
-  if (process.env.OPENCLAW_GATEWAY_URL?.trim()) {
+  if (process.env.NATESCLAW_GATEWAY_URL?.trim()) {
     return true;
   }
   try {

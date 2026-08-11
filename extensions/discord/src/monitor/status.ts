@@ -1,5 +1,5 @@
 // Discord plugin module implements status behavior.
-import { channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
+import { channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
 
 type DiscordMonitorStatusPatch = {
   connected?: boolean;

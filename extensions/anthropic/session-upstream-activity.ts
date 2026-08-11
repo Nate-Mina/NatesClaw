@@ -6,8 +6,8 @@ import {
   type SessionCatalogContinueProviderResult,
   type SessionUpstreamActivity,
   type SessionUpstreamProbe,
-} from "openclaw/plugin-sdk/session-catalog";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/session-catalog";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { ClaudeTranscriptItem } from "./session-catalog-transcript.js";
 
 const MAX_CLAUDE_UPSTREAM_SCAN_BYTES = 1024 * 1024;

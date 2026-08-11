@@ -6,21 +6,21 @@ import {
 import { createPopupMessageHandler } from "./modules/popup-background.js";
 import { createRelayCommandHandler } from "./modules/relay-command-handler.js";
 import { openAuthenticatedRelaySocket } from "./modules/relay-connection.js";
-// OpenClaw extension service worker.
+// Natesclaw extension service worker.
 //
-// Thin transport between the OpenClaw extension relay (loopback WebSocket) and
+// Thin transport between the Natesclaw extension relay (loopback WebSocket) and
 // chrome.debugger. All CDP target synthesis lives server-side in the relay
 // bridge; this worker owns tab eligibility/access and forwards allowed frames.
-// The OpenClaw tab group is the ACL in selected mode and an ownership marker
+// The Natesclaw tab group is the ACL in selected mode and an ownership marker
 // in all-tabs mode.
 import {
   ACCESS_MODE_SELECTED,
-  OPENCLAW_TAB_GROUP_TITLE,
+  NATESCLAW_TAB_GROUP_TITLE,
   createPairingConfigStore,
   reconnectDelayMs,
   toRelayTabInfo,
 } from "./modules/relay-core.js";
-import { findOpenClawGroups, isTabSelected } from "./modules/relay-tab-groups.js";
+import { findNatesclawGroups, isTabSelected } from "./modules/relay-tab-groups.js";
 import { registerTabAccessEvents } from "./modules/tab-access-events.js";
 import { createTabAccessPolicy } from "./modules/tab-access.js";
 
@@ -30,8 +30,8 @@ const BADGE = {
   on: { text: "ON", color: "#0F9D58" },
   error: { text: "!", color: "#B91C1C" },
 };
-const RELAY_WATCHDOG_ALARM = "openclaw-relay-watchdog";
-const RELAY_OPENING_DEADLINE_ALARM = "openclaw-relay-opening-deadline";
+const RELAY_WATCHDOG_ALARM = "natesclaw-relay-watchdog";
+const RELAY_OPENING_DEADLINE_ALARM = "natesclaw-relay-opening-deadline";
 const RELAY_AUTH_TIMEOUT_MS = 10_000;
 
 /** @type {WebSocket|null} */
@@ -149,9 +149,9 @@ function runAccessMutation(task) {
 // Tab group management (selected-mode ACL; all-mode ownership marker)
 // ---------------------------------------------------------------------------
 
-async function addTabToOpenClawGroup(tabId) {
+async function addTabToNatesclawGroup(tabId) {
   const tab = await chrome.tabs.get(tabId);
-  const groups = await findOpenClawGroups();
+  const groups = await findNatesclawGroups();
   const sameWindowGroup = groups.find((group) => group.windowId === tab.windowId);
   if (sameWindowGroup) {
     await chrome.tabs.group({ tabIds: [tabId], groupId: sameWindowGroup.id });
@@ -160,7 +160,7 @@ async function addTabToOpenClawGroup(tabId) {
   const { groupColor } = await getConfig();
   const groupId = await chrome.tabs.group({ tabIds: [tabId] });
   await chrome.tabGroups.update(groupId, {
-    title: OPENCLAW_TAB_GROUP_TITLE,
+    title: NATESCLAW_TAB_GROUP_TITLE,
     color: groupColor,
   });
 }
@@ -171,7 +171,7 @@ async function focusWindowForTab(tab) {
   }
 }
 
-async function removeTabFromOpenClawGroup(tabId) {
+async function removeTabFromNatesclawGroup(tabId) {
   try {
     await chrome.tabs.ungroup([tabId]);
   } catch {
@@ -403,7 +403,7 @@ function failRelayAuthentication(ws, error) {
     return;
   }
   relayStatusHint =
-    "Relay authentication v2 failed. Update OpenClaw, or re-pair after a relay key rotation.";
+    "Relay authentication v2 failed. Update Natesclaw, or re-pair after a relay key rotation.";
   try {
     ws.close(4001, error instanceof Error ? error.message.slice(0, 120) : "authentication failed");
   } catch {
@@ -417,7 +417,7 @@ const handleRelayCommand = createRelayCommandHandler({
   send,
   attachDebugger,
   detachDebugger,
-  addTabToOpenClawGroup,
+  addTabToNatesclawGroup,
   focusWindowForTab,
   scheduleTabsSync,
   captureAccess: (tabId) => tabAccessPolicy.capture(tabId),
@@ -503,7 +503,7 @@ async function connectRelay(isConnectionAllowed = () => true) {
           relayAuthenticatedSocket = null;
         } else if (!relayStatusHint) {
           relayStatusHint =
-            "Relay authentication v2 failed. Update OpenClaw, or re-pair after a relay key rotation.";
+            "Relay authentication v2 failed. Update Natesclaw, or re-pair after a relay key rotation.";
         }
         setBadge("error");
         scheduleReconnect();
@@ -552,7 +552,7 @@ function handleRelayOpeningDeadline() {
     // The socket may have changed state while the alarm event was queued.
   }
   setBadge("error");
-  relayStatusHint = "Relay authentication v2 timed out. Make sure OpenClaw is up to date.";
+  relayStatusHint = "Relay authentication v2 timed out. Make sure Natesclaw is up to date.";
   scheduleReconnect();
 }
 
@@ -627,8 +627,8 @@ const handlePopupMessage = createPopupMessageHandler({
   setBadge,
   attachingTabs,
   detachDebugger,
-  removeTabFromOpenClawGroup,
-  addTabToOpenClawGroup,
+  removeTabFromNatesclawGroup,
+  addTabToNatesclawGroup,
   scheduleTabsSync,
   pauseTab,
 });
@@ -648,7 +648,7 @@ registerTabAccessEvents({
   scheduleTabsSync,
   detachDebugger,
   pauseTab,
-  removeTabFromOpenClawGroup,
+  removeTabFromNatesclawGroup,
   runAccessMutation,
 });
 

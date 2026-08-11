@@ -2,15 +2,15 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { GPT5_BEHAVIOR_CONTRACT as CODEX_GPT5_BEHAVIOR_CONTRACT } from "openclaw/plugin-sdk/provider-model-shared";
+import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { GPT5_BEHAVIOR_CONTRACT as CODEX_GPT5_BEHAVIOR_CONTRACT } from "natesclaw/plugin-sdk/provider-model-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CodexAppServerRpcError } from "./client.js";
 import { createCodexTestHostCapabilities } from "./host-capability.test-support.js";
 import { buildCodexAppServerConnectionFingerprint } from "./plugin-app-cache-key.js";
 import type { CodexPluginThreadConfig } from "./plugin-thread-config.js";
 import {
-  CODEX_OPENCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
+  CODEX_NATESCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
   type CodexDynamicToolFunctionSpec,
 } from "./protocol.js";
 import {
@@ -158,7 +158,7 @@ describe("Codex ring-zero thread config", () => {
 
   it("applies the restriction to both thread start and resume", () => {
     const params = createAttemptParams({ provider: "openai" });
-    params.toolsAllow = ["openclaw"];
+    params.toolsAllow = ["natesclaw"];
     const appServer = createAppServerOptions() as never;
     const start = buildThreadStartParams(params, {
       appServer,
@@ -777,13 +777,13 @@ describe("Codex app-server native code mode config", () => {
     ).toBe(true);
   });
 
-  it("keeps Codex-native subagents primary while limiting OpenClaw spawn to OpenClaw delegation", () => {
+  it("keeps Codex-native subagents primary while limiting Natesclaw spawn to Natesclaw delegation", () => {
     const instructions = buildDeveloperInstructions(createAttemptParams({ provider: "openai" }), {
       dynamicTools: [
         {
           type: "function",
           name: "sessions_spawn",
-          description: "Start an OpenClaw session",
+          description: "Start an Natesclaw session",
           inputSchema: { type: "object" },
         },
       ],
@@ -799,7 +799,7 @@ describe("Codex app-server native code mode config", () => {
     );
     expect(instructions).toContain("call the matching entry through `tools`");
     expect(instructions).toContain(
-      "Use OpenClaw `sessions_spawn` only for OpenClaw or ACP delegation, never as a substitute for `spawn_agent`.",
+      "Use Natesclaw `sessions_spawn` only for Natesclaw or ACP delegation, never as a substitute for `spawn_agent`.",
     );
   });
 
@@ -808,7 +808,7 @@ describe("Codex app-server native code mode config", () => {
       Object.assign(createAttemptParams({ provider: "openai" }), {
         delegationCapability: "report_only" as const,
       }),
-      Object.assign(createAttemptParams({ provider: "openai" }), { toolsAllow: ["openclaw"] }),
+      Object.assign(createAttemptParams({ provider: "openai" }), { toolsAllow: ["natesclaw"] }),
       Object.assign(createAttemptParams({ provider: "openai" }), { modelId: "gpt-5.4-nano" }),
       Object.assign(createAttemptParams({ provider: "openai" }), { disableTools: true }),
     ];
@@ -834,7 +834,7 @@ describe("Codex app-server native code mode config", () => {
         dynamicTools: [
           {
             type: "namespace",
-            name: "openclaw_direct",
+            name: "natesclaw_direct",
             description: "",
             tools: [
               {
@@ -860,7 +860,7 @@ describe("Codex app-server native code mode config", () => {
         dynamicTools: [
           {
             type: "namespace",
-            name: "openclaw",
+            name: "natesclaw",
             description: "",
             tools: [
               {
@@ -876,21 +876,21 @@ describe("Codex app-server native code mode config", () => {
     );
 
     expect(withSessionsYield).toContain(
-      "end the current turn with `openclaw_direct.sessions_yield`",
+      "end the current turn with `natesclaw_direct.sessions_yield`",
     );
     expect(withSessionsYield).toContain(
       "Use native `wait_agent` only for an intentional same-turn wait",
     );
     expect(withSessionsYield).toContain("Never loop-poll for native child completion.");
-    expect(withoutSessionsYield).not.toContain("`openclaw_direct.sessions_yield`");
+    expect(withoutSessionsYield).not.toContain("`natesclaw_direct.sessions_yield`");
     expect(withoutSessionsYield).not.toContain("native `wait_agent`");
-    expect(withWrongNamespace).not.toContain("`openclaw_direct.sessions_yield`");
+    expect(withWrongNamespace).not.toContain("`natesclaw_direct.sessions_yield`");
     expect(withWrongNamespace).not.toContain("native `wait_agent`");
   });
 
   it.each([
-    { namespace: "openclaw_direct", exposesNativeYield: true },
-    { namespace: "openclaw", exposesNativeYield: false },
+    { namespace: "natesclaw_direct", exposesNativeYield: true },
+    { namespace: "natesclaw", exposesNativeYield: false },
   ])(
     "materializes the $namespace native-yield namespace exactly once",
     ({ namespace, exposesNativeYield }) => {
@@ -918,7 +918,7 @@ describe("Codex app-server native code mode config", () => {
       });
 
       expect(namespaceReads).toBe(1);
-      expect(instructions.includes("`openclaw_direct.sessions_yield`")).toBe(exposesNativeYield);
+      expect(instructions.includes("`natesclaw_direct.sessions_yield`")).toBe(exposesNativeYield);
       expect(instructions.includes("native `wait_agent`")).toBe(exposesNativeYield);
     },
   );
@@ -934,7 +934,7 @@ describe("Codex app-server native code mode config", () => {
         },
         {
           type: "namespace",
-          name: "openclaw",
+          name: "natesclaw",
           description: "",
           tools: [
             {
@@ -957,7 +957,7 @@ describe("Codex app-server native code mode config", () => {
     });
 
     expect(instructions).toContain(
-      "Deferred searchable OpenClaw dynamic tools available: image_generate, music_generate.",
+      "Deferred searchable Natesclaw dynamic tools available: image_generate, music_generate.",
     );
     expect(instructions).toContain("Use `tool_search` when directly callable");
     expect(instructions).toContain(
@@ -1005,7 +1005,7 @@ describe("Codex app-server native code mode config", () => {
       dynamicTools: [
         {
           type: "namespace",
-          name: "openclaw",
+          name: "natesclaw",
           description: "",
           get tools() {
             namespaceReads += 1;
@@ -1017,12 +1017,12 @@ describe("Codex app-server native code mode config", () => {
 
     expect(namespaceReads).toBe(1);
     expect(instructions).toContain(
-      "Deferred searchable OpenClaw dynamic tools available: alpha_tool, skill_workshop, zeta_tool.",
+      "Deferred searchable Natesclaw dynamic tools available: alpha_tool, skill_workshop, zeta_tool.",
     );
     expect(instructions).toContain("## Skill Workshop");
     expect(instructions).toContain("Visible source replies are not automatically delivered");
     expect(instructions).toContain("Use `message(action=send)`");
-    expect(instructions).not.toContain("`openclaw_direct.sessions_yield`");
+    expect(instructions).not.toContain("`natesclaw_direct.sessions_yield`");
   });
 
   it("uses the shared Skill Workshop guidance when skill_workshop is available", () => {
@@ -1030,7 +1030,7 @@ describe("Codex app-server native code mode config", () => {
       dynamicTools: [
         {
           type: "namespace",
-          name: "openclaw",
+          name: "natesclaw",
           description: "",
           tools: [
             {
@@ -1064,7 +1064,7 @@ describe("Codex app-server native code mode config", () => {
       ],
     });
 
-    expect(instructions).not.toContain("Deferred searchable OpenClaw dynamic tools available");
+    expect(instructions).not.toContain("Deferred searchable Natesclaw dynamic tools available");
   });
 
   it("instructs Codex to mark only completed message-tool-only source replies final", () => {
@@ -1106,7 +1106,7 @@ describe("Codex app-server native code mode config", () => {
     const searchableFingerprint = codexDynamicToolsFingerprint([
       {
         type: "namespace",
-        name: "openclaw",
+        name: "natesclaw",
         description: "",
         tools: [
           {
@@ -1153,7 +1153,7 @@ describe("Codex app-server native code mode config", () => {
     ).toBe(true);
   });
 
-  it("keeps OpenClaw skill catalogs out of developer instructions", () => {
+  it("keeps Natesclaw skill catalogs out of developer instructions", () => {
     const params = createAttemptParams({ provider: "openai" });
     params.skillsSnapshot = {
       prompt: "<available_skills><skill><name>demo</name></skill></available_skills>",
@@ -1357,11 +1357,11 @@ describe("Codex app-server native code mode config", () => {
     expect(request.personality).toBe("none");
   });
 
-  it("omits OpenClaw model selection when adopting a native Codex thread", () => {
+  it("omits Natesclaw model selection when adopting a native Codex thread", () => {
     const request = buildThreadResumeParams(createAttemptParams({ provider: "codex" }), {
       threadId: "thread-adopted",
-      model: "openclaw-model",
-      modelProvider: "openclaw-provider",
+      model: "natesclaw-model",
+      modelProvider: "natesclaw-provider",
       preserveNativeModel: true,
       appServer: createAppServerOptions() as never,
       developerInstructions: "test instructions",
@@ -1502,7 +1502,7 @@ describe("Codex app-server native code mode config", () => {
       const dynamicTools = [
         {
           type: "namespace" as const,
-          name: CODEX_OPENCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
+          name: CODEX_NATESCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
           description: "",
           tools: [],
         },
@@ -1530,7 +1530,7 @@ describe("Codex app-server native code mode config", () => {
       for (const request of [startRequest, resumeRequest]) {
         expect(request.config?.["code_mode.direct_only_tool_namespaces"]).toEqual([
           "vendor_direct",
-          CODEX_OPENCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
+          CODEX_NATESCLAW_DIRECT_DYNAMIC_TOOL_NAMESPACE,
         ]);
         expect(request.config?.["features.code_mode_only"]).toBe(nativeCodeModeOnlyEnabled);
       }
@@ -1810,7 +1810,7 @@ describe("Codex app-server turn input image sanitizing", () => {
 });
 
 describe("Codex app-server turn params", () => {
-  it("builds resume and turn params from the currently selected OpenClaw model", () => {
+  it("builds resume and turn params from the currently selected Natesclaw model", () => {
     const params = createAttemptParams({ provider: "codex" });
     params.modelId = "gpt-5.4-codex";
     params.thinkLevel = "medium";
@@ -1892,7 +1892,7 @@ describe("Codex app-server turn params", () => {
     expect(heartbeatCollaborationMode.settings.model).toBe("gpt-5.4-codex");
     expect(heartbeatCollaborationMode.settings.reasoning_effort).toBe("medium");
     expect(heartbeatCollaborationMode.settings.developer_instructions).toContain(
-      "This is an OpenClaw heartbeat turn. Apply these instructions only to this heartbeat wake",
+      "This is an Natesclaw heartbeat turn. Apply these instructions only to this heartbeat wake",
     );
     expect(heartbeatCollaborationMode.settings.developer_instructions).toContain(
       "Heartbeat = useful proactive progress",
@@ -1927,7 +1927,7 @@ describe("Codex app-server turn params", () => {
     expect(cronCollaborationMode.settings.model).toBe("gpt-5.4-codex");
     expect(cronCollaborationMode.settings.reasoning_effort).toBe("medium");
     expect(cronCollaborationMode.settings.developer_instructions).toContain(
-      "This is an OpenClaw cron automation turn",
+      "This is an Natesclaw cron automation turn",
     );
     expect(cronCollaborationMode.settings.developer_instructions).toContain(
       "If it asks you to run an exact command, run that command before doing any investigation",
@@ -2108,7 +2108,7 @@ describe("Codex app-server model provider selection", () => {
 
 describe("Codex plugin binding recovery", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-plugin-recovery-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-codex-plugin-recovery-"));
     resetCodexTestBindingStore();
   });
 
@@ -2416,7 +2416,7 @@ describe("Codex plugin binding recovery", () => {
 
 describe("Codex thread-effective app attestation", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-plugin-attestation-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-codex-plugin-attestation-"));
     resetCodexTestBindingStore();
   });
 
@@ -2816,7 +2816,7 @@ describe("Codex thread-effective app attestation", () => {
 
 describe("Codex app-server adopted thread lifecycle", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-thread-adoption-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-codex-thread-adoption-"));
     resetCodexTestBindingStore();
   });
 
@@ -2825,7 +2825,7 @@ describe("Codex app-server adopted thread lifecycle", () => {
     vi.restoreAllMocks();
   });
 
-  it("keeps OpenClaw from overriding App Server model selection across resumes", async () => {
+  it("keeps Natesclaw from overriding App Server model selection across resumes", async () => {
     const sessionFile = path.join(tempDir, "session.jsonl");
     const workspaceDir = path.join(tempDir, "workspace");
     const params = createThreadLifecycleParams(sessionFile, workspaceDir);
@@ -2923,7 +2923,7 @@ describe("Codex app-server adopted thread lifecycle", () => {
 
 describe("Codex app-server supervised branch lifecycle", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-supervision-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-codex-supervision-"));
     resetCodexTestBindingStore();
   });
 
@@ -3105,7 +3105,7 @@ describe("Codex app-server supervised branch lifecycle", () => {
     const workspaceDir = path.join(tempDir, "workspace");
     const attempt = createThreadLifecycleParams(path.join(tempDir, "session.jsonl"), workspaceDir);
     attempt.pluginHarnessToolPolicyRestricted = true;
-    attempt.toolsAllow = ["openclaw"];
+    attempt.toolsAllow = ["natesclaw"];
     const identity = await seedPendingSupervisionBinding({
       attempt,
       cwd: workspaceDir,
@@ -4538,7 +4538,7 @@ describe("Codex app-server supervised branch lifecycle", () => {
 
 describe("Codex app-server thread lifecycle timing", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-thread-lifecycle-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-codex-thread-lifecycle-"));
     // Bindings are keyed by session identity, not tempDir, so sibling tests
     // would otherwise leak resumable threads into fresh-start expectations.
     resetCodexTestBindingStore();

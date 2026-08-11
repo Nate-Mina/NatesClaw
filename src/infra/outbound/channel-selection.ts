@@ -1,9 +1,9 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 // Channel selection chooses a deliverable message channel from explicit input,
 // tool context fallback, or configured plugin accounts.
 import { listChannelPlugins } from "../../channels/plugins/index.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   type OfficialExternalPluginRepairHint,
   resolveMissingOfficialExternalChannelPluginRepairHint,
@@ -26,7 +26,7 @@ import {
 type MessageChannelSelectionSource = "explicit" | "tool-context-fallback" | "single-configured";
 
 function resolveAvailableKnownChannel(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   value?: string | null;
 }): { channel: string; plugin: ChannelPlugin } | undefined {
   const normalized = normalizeDeliverableOutboundChannel(params.value);
@@ -35,7 +35,7 @@ function resolveAvailableKnownChannel(params: {
   }
   // Pass `allowBootstrap: true` so the in-agent message tool path can resolve
   // outbound channels in processes where external channel adapters have not
-  // been eagerly loaded (e.g. `openclaw agent --local`). Already-loaded and
+  // been eagerly loaded (e.g. `natesclaw agent --local`). Already-loaded and
   // bundled plugins still resolve through side-effect-free fast paths first.
   // Without the bootstrap fallback, official external channels can surface as
   // the recurring "Channel is unavailable" error on `--local`-routed
@@ -51,7 +51,7 @@ function resolveAvailableKnownChannel(params: {
 }
 
 /** Checks whether a channel has a non-disabled config entry. */
-export function isConfiguredChannel(cfg: OpenClawConfig, channelId: string): boolean {
+export function isConfiguredChannel(cfg: NatesclawConfig, channelId: string): boolean {
   const channels = cfg.channels;
   if (!channels || typeof channels !== "object" || Array.isArray(channels)) {
     return false;
@@ -64,7 +64,7 @@ export function isConfiguredChannel(cfg: OpenClawConfig, channelId: string): boo
 }
 
 function listConfiguredOfficialExternalRepairHints(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): OfficialExternalPluginRepairHint[] {
   const channels = cfg.channels;
   if (!channels || typeof channels !== "object" || Array.isArray(channels)) {
@@ -88,14 +88,14 @@ function formatMissingOfficialExternalChannelsMessage(
   }
   const labels = hints.map((hint) => hint.label).join(", ");
   const installCommands = hints.map((hint) => hint.installCommand).join("; ");
-  return `Configured official external channels ${labels} are missing their plugins. Run: openclaw doctor --fix, or install individually: ${installCommands}.`;
+  return `Configured official external channels ${labels} are missing their plugins. Run: natesclaw doctor --fix, or install individually: ${installCommands}.`;
 }
 
 function formatNoConfiguredChannelsMessage(): string {
   return [
     "Channel is required (no configured channels detected).",
-    "Run openclaw channels add to configure one, or pass --channel <channel> after enabling a channel.",
-    "Use openclaw channels list --all to see available channel ids.",
+    "Run natesclaw channels add to configure one, or pass --channel <channel> after enabling a channel.",
+    "Use natesclaw channels list --all to see available channel ids.",
   ].join(" ");
 }
 
@@ -129,7 +129,7 @@ function logChannelSelectionError(params: {
   );
 }
 
-async function isPluginConfigured(plugin: ChannelPlugin, cfg: OpenClawConfig): Promise<boolean> {
+async function isPluginConfigured(plugin: ChannelPlugin, cfg: NatesclawConfig): Promise<boolean> {
   const accountIds = plugin.config.listAccountIds(cfg);
   if (accountIds.length === 0) {
     return false;
@@ -177,7 +177,7 @@ async function isPluginConfigured(plugin: ChannelPlugin, cfg: OpenClawConfig): P
   return false;
 }
 
-async function listConfiguredMessageChannelPlugins(cfg: OpenClawConfig): Promise<ChannelPlugin[]> {
+async function listConfiguredMessageChannelPlugins(cfg: NatesclawConfig): Promise<ChannelPlugin[]> {
   const plugins: ChannelPlugin[] = [];
   for (const plugin of listChannelPlugins()) {
     if (!isDeliverableMessageChannel(plugin.id)) {
@@ -191,13 +191,13 @@ async function listConfiguredMessageChannelPlugins(cfg: OpenClawConfig): Promise
 }
 
 /** Lists deliverable channels with at least one enabled, configured account. */
-export async function listConfiguredMessageChannels(cfg: OpenClawConfig): Promise<string[]> {
+export async function listConfiguredMessageChannels(cfg: NatesclawConfig): Promise<string[]> {
   return (await listConfiguredMessageChannelPlugins(cfg)).map((plugin) => plugin.id);
 }
 
 /** Resolves the message action channel from explicit input, context fallback, or config. */
 export async function resolveMessageChannelSelection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel?: string | null;
   fallbackChannel?: string | null;
 }): Promise<{

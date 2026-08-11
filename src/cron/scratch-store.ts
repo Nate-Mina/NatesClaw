@@ -3,10 +3,10 @@ import { createHash } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 import { executeSqliteQuerySync } from "../infra/kysely-sync.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import { assertCronJobScratchContent } from "./scratch-contract.js";
 import { cronStoreKey } from "./store/key.js";
 import { getCronStoreKysely } from "./store/schema.js";
@@ -73,9 +73,9 @@ function readScratchStateFromDatabase(
 export function readCronJobScratchState(
   storePath: string,
   jobId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): CronJobScratchState {
-  const { db } = openOpenClawStateDatabase(options);
+  const { db } = openNatesclawStateDatabase(options);
   return readScratchStateFromDatabase(db, cronStoreKey(storePath), jobId);
 }
 
@@ -83,9 +83,9 @@ export function readCronJobScratchState(
 export function readHeartbeatMonitorScratch(
   storePath: string,
   agentId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): { jobId: string; state: CronJobScratchState } | undefined {
-  const { db } = openOpenClawStateDatabase(options);
+  const { db } = openNatesclawStateDatabase(options);
   const storeKey = cronStoreKey(storePath);
   const cronDb = getCronStoreKysely(db);
   const row = executeSqliteQuerySync(
@@ -133,14 +133,14 @@ export function writeCronJobScratch(params: {
   expectedRevision?: number;
   sourceSha256?: string;
   nowMs?: number;
-  options?: OpenClawStateDatabaseOptions;
+  options?: NatesclawStateDatabaseOptions;
 }): CronJobScratchWriteResult {
   if (params.content !== null) {
     assertCronJobScratchContent(params.content);
   }
   const storeKey = cronStoreKey(params.storePath);
   const nowMs = params.nowMs ?? Date.now();
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const cronDb = getCronStoreKysely(db);
       const { currentRevision } = readScratchStateFromDatabase(db, storeKey, params.jobId);
@@ -214,10 +214,10 @@ export function writeCronJobScratch(params: {
 export function deleteCronJobScratch(
   storePath: string,
   jobId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
   guard?: { expectedRevision: number },
 ): boolean {
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const storeKey = cronStoreKey(storePath);
       if (guard) {

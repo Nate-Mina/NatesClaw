@@ -1,1 +1,1 @@
-export { default as vi } from "virtual:openclaw-control-ui-locale/vi";
+export { default as vi } from "virtual:natesclaw-control-ui-locale/vi";

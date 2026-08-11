@@ -7,7 +7,7 @@ import {
   hasModelPolicyAllowlistMigrationMarker,
   isExplicitModelPolicy,
 } from "./model-policy-allowlist-migration.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { NatesclawConfig } from "./types.natesclaw.js";
 
 /** Metadata keys automatically stamped on config writes. */
 const AUTO_MANAGED_CONFIG_META_FIELDS = {
@@ -38,7 +38,7 @@ function collectLegacyDefaultModelAllow(value: unknown): string[] | null {
   });
 }
 
-function withDefaultModelAllow(cfg: OpenClawConfig, allow: string[]): OpenClawConfig {
+function withDefaultModelAllow(cfg: NatesclawConfig, allow: string[]): NatesclawConfig {
   return {
     ...cfg,
     agents: {
@@ -55,11 +55,11 @@ function withDefaultModelAllow(cfg: OpenClawConfig, allow: string[]): OpenClawCo
 }
 
 function withModelPolicyAllowlistMigrationMarker(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   params: {
     defaultAllow?: string[];
   } = {},
-): OpenClawConfig {
+): NatesclawConfig {
   const withDefault = params.defaultAllow ? withDefaultModelAllow(cfg, params.defaultAllow) : cfg;
   return {
     ...withDefault,
@@ -74,9 +74,9 @@ function withModelPolicyAllowlistMigrationMarker(
 }
 
 function stampModelPolicyAllowlistMigrationForWrite(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   previousConfig: unknown,
-): OpenClawConfig {
+): NatesclawConfig {
   const previousDefaultAllow = collectLegacyDefaultModelAllow(previousConfig);
   const defaultAllow = isExplicitModelPolicy(cfg.agents?.defaults?.modelPolicy)
     ? undefined
@@ -93,11 +93,11 @@ function stampModelPolicyAllowlistMigrationForWrite(
 }
 
 export function stampConfigWriteMetadata(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   _now: string = new Date().toISOString(),
   version: string = VERSION,
   previousConfig?: unknown,
-): OpenClawConfig {
+): NatesclawConfig {
   const migrationStamped =
     previousConfig === undefined
       ? cfg

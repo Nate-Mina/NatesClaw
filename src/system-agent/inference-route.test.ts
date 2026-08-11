@@ -2,11 +2,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { clearAgentHarnesses, registerAgentHarness } from "../agents/harness/registry.js";
 import { selectAgentHarness } from "../agents/harness/selection.js";
 import { resolveRunWorkspaceDir } from "../agents/workspace-run.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { SYSTEM_AGENT_ID } from "./agent-id.js";
 import { resolveSystemAgentConfiguredRouteFromConfig } from "./inference-route.js";
 
-function devConfig(agentRuntime?: string): OpenClawConfig {
+function devConfig(agentRuntime?: string): NatesclawConfig {
   return {
     agents: {
       defaults: { model: "openai/gpt-5.5" },
@@ -87,7 +87,7 @@ describe("resolveSystemAgentConfiguredRouteFromConfig", () => {
             ? implicitRoute!.agentHarnessRuntimeOverride
             : undefined,
       }).id,
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
 
     const explicitRoute = await resolveSystemAgentConfiguredRouteFromConfig(devConfig("codex"));
     expect(explicitRoute).toMatchObject({

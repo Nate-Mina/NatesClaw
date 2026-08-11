@@ -1,9 +1,9 @@
 // Mattermost plugin module implements guarded channel-history reads.
-import { normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import type { ChannelMessageActionContext } from "openclaw/plugin-sdk/channel-contract";
-import { resolveAllowlistProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeAccountId } from "natesclaw/plugin-sdk/account-id";
+import type { ChannelMessageActionContext } from "natesclaw/plugin-sdk/channel-contract";
+import { resolveAllowlistProviderRuntimeGroupPolicy } from "natesclaw/plugin-sdk/runtime-group-policy";
+import { isPrivateNetworkOptInEnabled } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { normalizeMattermostMessagingTarget } from "../normalize.js";
 import { resolveMattermostAccount } from "./accounts.js";
 import {
@@ -13,7 +13,7 @@ import {
   type MattermostFetch,
   type MattermostPost,
 } from "./client.js";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { NatesclawConfig } from "./runtime-api.js";
 
 type ReadContext = Pick<
   ChannelMessageActionContext,
@@ -58,7 +58,7 @@ function isCurrentMattermostReadTarget(params: {
 }
 
 function isConfiguredMattermostReadTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ReturnType<typeof resolveMattermostAccount>;
   channelId: string;
 }): boolean {
@@ -80,7 +80,7 @@ function isConfiguredMattermostReadTarget(params: {
 }
 
 export async function readMattermostMessages(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channelId: string;
   limit?: number;
   before?: string;

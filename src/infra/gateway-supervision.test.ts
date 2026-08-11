@@ -11,7 +11,7 @@ import {
 // The env variable name is part of the observable contract the messages
 // reference; the mode resolver is internal and proven through the public
 // isGatewayExternallySupervised surface.
-const GATEWAY_SUPERVISOR_MODE_ENV = "OPENCLAW_SUPERVISOR_MODE";
+const GATEWAY_SUPERVISOR_MODE_ENV = "NATESCLAW_SUPERVISOR_MODE";
 
 describe("gateway supervision", () => {
   it.each([
@@ -32,14 +32,14 @@ describe("gateway supervision", () => {
         [GATEWAY_SUPERVISOR_MODE_ENV]: "external",
       }),
     ).toThrow(
-      "OpenClaw gateway lifecycle is managed by an external supervisor " +
-        "(OPENCLAW_SUPERVISOR_MODE=external). Use that supervisor to restart the gateway.",
+      "Natesclaw gateway lifecycle is managed by an external supervisor " +
+        "(NATESCLAW_SUPERVISOR_MODE=external). Use that supervisor to restart the gateway.",
     );
   });
 
   it.each([
-    { OPENCLAW_STATE_DIR: "/tmp/copied-state" },
-    { OPENCLAW_CONFIG_PATH: "/tmp/copied-openclaw.json" },
+    { NATESCLAW_STATE_DIR: "/tmp/copied-state" },
+    { NATESCLAW_CONFIG_PATH: "/tmp/copied-natesclaw.json" },
   ])("blocks native service mutation for non-default install identity %#", (override) => {
     expect(() =>
       assertGatewayServiceMutationAllowed("restart the gateway", {
@@ -47,7 +47,7 @@ describe("gateway supervision", () => {
         ...override,
       }),
     ).toThrow(
-      `${NON_DEFAULT_INSTALL_SERVICE_SKIP_REASON}. Rerun with HOME set to the OS account home, without OPENCLAW_HOME, and with OPENCLAW_STATE_DIR and OPENCLAW_CONFIG_PATH either unset or pointing at the canonical paths for that account home and profile to restart the gateway.`,
+      `${NON_DEFAULT_INSTALL_SERVICE_SKIP_REASON}. Rerun with HOME set to the OS account home, without NATESCLAW_HOME, and with NATESCLAW_STATE_DIR and NATESCLAW_CONFIG_PATH either unset or pointing at the canonical paths for that account home and profile to restart the gateway.`,
     );
   });
 
@@ -57,9 +57,9 @@ describe("gateway supervision", () => {
     expect(() =>
       assertGatewayServiceMutationAllowed("restart the gateway", {
         HOME: accountHome,
-        OPENCLAW_PROFILE: "work",
-        OPENCLAW_STATE_DIR: path.join(accountHome, ".openclaw-work"),
-        OPENCLAW_CONFIG_PATH: path.join(accountHome, ".openclaw-work", "openclaw.json"),
+        NATESCLAW_PROFILE: "work",
+        NATESCLAW_STATE_DIR: path.join(accountHome, ".natesclaw-work"),
+        NATESCLAW_CONFIG_PATH: path.join(accountHome, ".natesclaw-work", "natesclaw.json"),
       }),
     ).not.toThrow();
   });
@@ -68,20 +68,20 @@ describe("gateway supervision", () => {
     {
       platform: "darwin" as const,
       platformName: "macOS",
-      envKey: "OPENCLAW_LAUNCHD_LABEL",
-      value: "ai.openclaw.gateway",
+      envKey: "NATESCLAW_LAUNCHD_LABEL",
+      value: "ai.natesclaw.gateway",
     },
     {
       platform: "linux" as const,
       platformName: "Linux",
-      envKey: "OPENCLAW_SYSTEMD_UNIT",
-      value: "openclaw-gateway.service",
+      envKey: "NATESCLAW_SYSTEMD_UNIT",
+      value: "natesclaw-gateway.service",
     },
     {
       platform: "win32" as const,
       platformName: "Windows",
-      envKey: "OPENCLAW_WINDOWS_TASK_NAME",
-      value: "OpenClaw Gateway",
+      envKey: "NATESCLAW_WINDOWS_TASK_NAME",
+      value: "Natesclaw Gateway",
     },
   ])(
     "rejects named-profile $envKey overrides on $platformName",
@@ -92,9 +92,9 @@ describe("gateway supervision", () => {
         expect(() =>
           assertGatewayServiceMutationAllowed("restart the gateway", {
             HOME: accountHome,
-            OPENCLAW_PROFILE: "work",
-            OPENCLAW_STATE_DIR: path.join(accountHome, ".openclaw-work"),
-            OPENCLAW_CONFIG_PATH: path.join(accountHome, ".openclaw-work", "openclaw.json"),
+            NATESCLAW_PROFILE: "work",
+            NATESCLAW_STATE_DIR: path.join(accountHome, ".natesclaw-work"),
+            NATESCLAW_CONFIG_PATH: path.join(accountHome, ".natesclaw-work", "natesclaw.json"),
             [envKey]: value,
           }),
         ).toThrow(
@@ -111,7 +111,7 @@ describe("gateway supervision", () => {
     try {
       expect(() =>
         assertGatewayServiceMutationAllowed("restart the gateway", {
-          OPENCLAW_PROFILE: "gateway",
+          NATESCLAW_PROFILE: "gateway",
         }),
       ).toThrow('macOS profile "gateway" conflicts with a reserved LaunchAgent identity');
     } finally {
@@ -129,7 +129,7 @@ describe("gateway supervision", () => {
       try {
         expect(() =>
           assertGatewayServiceMutationAllowed("restart the gateway", {
-            OPENCLAW_PROFILE: "Main",
+            NATESCLAW_PROFILE: "Main",
           }),
         ).toThrow(
           `${platformName} profile "Main" is not lowercase-safe for case-insensitive state and native-service paths`,

@@ -1,8 +1,8 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveAgentDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import type { AuthProfileStore } from "../../agents/auth-profiles.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 
 const mocks = vi.hoisted(() => ({
   ensureAuthProfileStore: vi.fn(),
@@ -44,7 +44,7 @@ import { usageHandlers } from "./usage.js";
 
 const config = {
   agents: { list: [{ id: "main", default: true }] },
-} as OpenClawConfig;
+} as NatesclawConfig;
 
 function createStore(access = "access-one") {
   return {

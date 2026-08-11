@@ -19,7 +19,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 
 const GATEWAY_EVENTS_FILE = "src/gateway/server-methods-list.ts";
 const GATEWAY_EVENT_CONSTANTS_FILE = "src/gateway/events.ts";
@@ -28,14 +28,14 @@ const ALLOWLIST_FILE = "scripts/protocol-event-coverage.allowlist.json";
 // Scan roots per client. The sentinel files are the primary event dispatch
 // surfaces; if one moves, the check must fail loudly instead of silently
 // passing with an empty handled set. Apple event mapping is shared by iOS and
-// macOS, so the iOS coverage owner lives in OpenClawChatUI.
-const IOS_SCAN_ROOTS = ["apps/ios/Sources", "apps/shared/OpenClawKit/Sources"];
+// macOS, so the iOS coverage owner lives in NatesclawChatUI.
+const IOS_SCAN_ROOTS = ["apps/ios/Sources", "apps/shared/NatesclawKit/Sources"];
 const IOS_SENTINEL_FILE =
-  "apps/shared/OpenClawKit/Sources/OpenClawChatUI/ChatGatewayPayloadCodec.swift";
-const ANDROID_SCAN_ROOT = "apps/android/app/src/main/java/ai/openclaw/app";
+  "apps/shared/NatesclawKit/Sources/NatesclawChatUI/ChatGatewayPayloadCodec.swift";
+const ANDROID_SCAN_ROOT = "apps/android/app/src/main/java/ai/natesclaw/app";
 const ANDROID_SENTINEL_FILES = [
-  "apps/android/app/src/main/java/ai/openclaw/app/gateway/GatewaySession.kt",
-  "apps/android/app/src/main/java/ai/openclaw/app/chat/ChatController.kt",
+  "apps/android/app/src/main/java/ai/natesclaw/app/gateway/GatewaySession.kt",
+  "apps/android/app/src/main/java/ai/natesclaw/app/chat/ChatController.kt",
 ];
 
 // Minimum plausible catalog size; a partial parse below this means the

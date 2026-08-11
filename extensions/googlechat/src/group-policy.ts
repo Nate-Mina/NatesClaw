@@ -2,10 +2,10 @@ import {
   buildChannelGroupsScopeTree,
   resolveScopeRequireMention,
   type ScopeTree,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+} from "natesclaw/plugin-sdk/channel-policy";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/core";
 
-type GroupContext = { cfg: OpenClawConfig; accountId?: string | null; groupId?: string | null };
+type GroupContext = { cfg: NatesclawConfig; accountId?: string | null; groupId?: string | null };
 
 export function buildGoogleChatGroupPolicyScope(params: {
   tree: ScopeTree;

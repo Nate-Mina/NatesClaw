@@ -6,7 +6,7 @@ import { resolvePathFromInput } from "../agents/path-policy.js";
 import { resolveEffectiveToolFsRootExpansionAllowed } from "../agents/tool-fs-policy.js";
 import { isToolAllowedByPolicies } from "../agents/tool-policy-match.js";
 import { resolveWorkspaceRoot } from "../agents/workspace-dir.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createBoundedOutboundMediaReadFile } from "./bounded-read-file.js";
 import type { OutboundMediaAccess, OutboundMediaReadFile } from "./load-options.js";
 import { readLocalMediaFile } from "./local-media-access.js";
@@ -30,7 +30,7 @@ type OutboundHostMediaPolicyContext = {
 
 function isAgentScopedHostMediaReadAllowed(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId?: string;
   } & OutboundHostMediaPolicyContext,
 ): boolean {
@@ -65,7 +65,7 @@ function isAgentScopedHostMediaReadAllowed(
 /** Creates a host reader bound to the agent workspace and configured local-file safety checks. */
 function createAgentScopedHostMediaReadFile(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId?: string;
     localRoots: readonly string[];
     workspaceDir?: string;
@@ -106,7 +106,7 @@ function appendWorkspaceDirToLocalRoots(
 /** Resolves roots and optional host read capability for outbound media in an agent context. */
 export function resolveAgentScopedOutboundMediaAccess(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId?: string;
     mediaSources?: readonly string[];
     workspaceDir?: string;

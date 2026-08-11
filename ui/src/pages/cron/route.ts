@@ -1,4 +1,4 @@
-import { definePage } from "@openclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 
@@ -7,6 +7,6 @@ export const page = definePage({
   component: () =>
     import("./cron-page.ts").then(() => ({
       header: true,
-      render: () => html`<openclaw-cron-page></openclaw-cron-page>`,
+      render: () => html`<natesclaw-cron-page></natesclaw-cron-page>`,
     })),
 });

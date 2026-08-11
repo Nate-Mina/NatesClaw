@@ -424,7 +424,7 @@ export function renderAssistantAttachments(
             });
           }
           return html`
-            <openclaw-chat-audio-player
+            <natesclaw-chat-audio-player
               .src=${attachmentUrl}
               .sourceIdentity=${attachment.url}
               .label=${attachment.label}
@@ -434,7 +434,7 @@ export function renderAssistantAttachments(
               .serverDurationMs=${serverDurationMs}
               .voiceNote=${attachment.isVoiceNote === true}
               .onMediaLoaded=${onAssistantAttachmentLoaded}
-            ></openclaw-chat-audio-player>
+            ></natesclaw-chat-audio-player>
           `;
         }
         if (attachment.kind === "video") {
@@ -450,7 +450,7 @@ export function renderAssistantAttachments(
             });
           }
           return html`
-            <openclaw-chat-video-player
+            <natesclaw-chat-video-player
               .src=${attachmentUrl}
               .sourceIdentity=${attachment.url}
               .label=${attachment.label}
@@ -463,7 +463,7 @@ export function renderAssistantAttachments(
                 ? (assistantAvailability.height ?? attachment.height)
                 : attachment.height}
               .onMediaLoaded=${onAssistantAttachmentLoaded}
-            ></openclaw-chat-video-player>
+            ></natesclaw-chat-video-player>
           `;
         }
         if (!attachmentUrl) {

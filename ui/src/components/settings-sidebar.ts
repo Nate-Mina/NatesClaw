@@ -312,7 +312,7 @@ export function renderSettingsSidebar(props: SettingsSidebarProps) {
               `,
             )}
       </nav>
-      <openclaw-sidebar-update-card
+      <natesclaw-sidebar-update-card
         .updateAvailable=${props.updateAvailable}
         .updateSchedule=${props.updateSchedule ?? null}
         .heldUpdateCampaignId=${props.heldUpdateCampaignId ?? null}
@@ -325,7 +325,7 @@ export function renderSettingsSidebar(props: SettingsSidebarProps) {
         .refreshRequired=${props.refreshRequired}
         .onRefresh=${props.onRefresh}
         .onHoldUpdate=${props.onHoldUpdate ?? (async () => false)}
-      ></openclaw-sidebar-update-card>
+      ></natesclaw-sidebar-update-card>
       <footer class="settings-sidebar__footer">
         ${props.offline
           ? renderOfflineSidebarStatus({
@@ -334,15 +334,15 @@ export function renderSettingsSidebar(props: SettingsSidebarProps) {
               title: props.lastError ? redactLoginFailureError(props.lastError) : reconnecting,
               onRetry: props.onRetryConnect,
             })
-          : html`<openclaw-settings-save-indicator
+          : html`<natesclaw-settings-save-indicator
               .props=${props.saveIndicator}
-            ></openclaw-settings-save-indicator>`}
-        <openclaw-sidebar-build-chip
+            ></natesclaw-settings-save-indicator>`}
+        <natesclaw-sidebar-build-chip
           .basePath=${props.basePath}
           .gatewayVersion=${props.gatewayVersion || null}
           .variant=${"settings"}
           .onNavigate=${() => props.onNavigate("about")}
-        ></openclaw-sidebar-build-chip>
+        ></natesclaw-sidebar-build-chip>
       </footer>
     </aside>
   `;

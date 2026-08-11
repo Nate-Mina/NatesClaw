@@ -150,18 +150,18 @@ describe("openai transport stream", () => {
       emptyContext(),
       { sessionId: "session-123" } as never,
       {
-        openclaw_session_id: "session-123",
-        openclaw_turn_id: "turn-123",
-        openclaw_turn_attempt: "1",
-        openclaw_transport: "stream",
+        natesclaw_session_id: "session-123",
+        natesclaw_turn_id: "turn-123",
+        natesclaw_turn_attempt: "1",
+        natesclaw_transport: "stream",
       },
     ) as { metadata?: Record<string, string> };
 
     expectRecordFields(params.metadata, {
-      openclaw_session_id: "session-123",
-      openclaw_turn_id: "turn-123",
-      openclaw_turn_attempt: "1",
-      openclaw_transport: "stream",
+      natesclaw_session_id: "session-123",
+      natesclaw_turn_id: "turn-123",
+      natesclaw_turn_attempt: "1",
+      natesclaw_transport: "stream",
     });
   });
 

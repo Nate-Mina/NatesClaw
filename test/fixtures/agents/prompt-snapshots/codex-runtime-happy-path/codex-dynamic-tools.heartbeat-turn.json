@@ -1,9 +1,9 @@
 {
   "base": "codex-dynamic-tools.telegram-direct.json",
   "replace": {
-    "openclaw_direct": {
+    "natesclaw_direct": {
       "description": "",
-      "name": "openclaw_direct",
+      "name": "natesclaw_direct",
       "tools": [
         {
           "description": "Record heartbeat result. `notify=false` no visible send. `notify=true` needs concise notificationText. Scratch is monitor prose only; manage recurring tasks with cron.",

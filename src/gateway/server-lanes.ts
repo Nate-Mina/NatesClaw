@@ -7,7 +7,7 @@ import {
 // Pushes config-derived agent/cron limits into the process command queue.
 import { resolveAgentMaxConcurrent, resolveSubagentMaxConcurrent } from "../config/agent-limits.js";
 import { resolveCronMaxConcurrentRuns } from "../config/cron-limits.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   getCommandLaneSnapshot,
   publishLaneConfiguration,
@@ -35,7 +35,7 @@ const HOOK_DISPATCH_LANE_RESERVATION = 1;
 /** Group bounding cron inner work and hook dispatch to one shared budget. */
 const CRON_HOOK_LANE_GROUP = "cron-hooks";
 
-export function resolveGatewayLaneConcurrency(cfg: OpenClawConfig): GatewayLaneConcurrency {
+export function resolveGatewayLaneConcurrency(cfg: NatesclawConfig): GatewayLaneConcurrency {
   const cron = resolveCronMaxConcurrentRuns();
   return {
     cron,
@@ -74,7 +74,7 @@ export function applyGatewayLaneConcurrency(
   // bounds them. Applying them with the per-lane setter would drain each lane
   // the moment it went positive — before the group existed — so both could
   // dispatch up to their individual maxima and exceed the shared budget. That
-  // is precisely the additive-capacity behaviour openclaw#98813 was held for.
+  // is precisely the additive-capacity behaviour natesclaw#98813 was held for.
   const hooksEnabled = concurrency.hookDispatch > 0;
   const hookSnapshot = getCommandLaneSnapshot(CommandLane.HookDispatch);
   // Closing hooks must not detach already-running hook work from the shared

@@ -6,8 +6,8 @@ import {
   buildChannelConfigSchema,
   buildGroupEntrySchema,
   buildMultiAccountChannelSchema,
-} from "openclaw/plugin-sdk/channel-config-schema";
-import { buildSecretInputSchema } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/channel-config-schema";
+import { buildSecretInputSchema } from "natesclaw/plugin-sdk/secret-input";
 import { z } from "zod";
 
 const AudioFormatPolicySchema = z
@@ -30,7 +30,7 @@ const QQBotSttSchema = z
   .optional();
 
 // Nested streaming config. Legacy scalar booleans and the `c2cStreamApi` key
-// migrate to this shape via `openclaw doctor --fix`.
+// migrate to this shape via `natesclaw doctor --fix`.
 const QQBotStreamingSchema = z
   .object({
     /** "partial" (default) enables block streaming; "off" disables it. */

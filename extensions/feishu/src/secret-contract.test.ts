@@ -1,6 +1,6 @@
 // Feishu tests cover secret contract plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createResolverContext } from "openclaw/plugin-sdk/secret-ref-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createResolverContext } from "natesclaw/plugin-sdk/secret-ref-runtime";
 import { describe, expect, it } from "vitest";
 import { collectRuntimeConfigAssignments } from "./secret-contract.js";
 
@@ -17,7 +17,7 @@ describe("feishu secret contract", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const context = createResolverContext({ sourceConfig, env: {} });
 
     collectRuntimeConfigAssignments({
@@ -56,7 +56,7 @@ describe("feishu secret contract", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const context = createResolverContext({ sourceConfig, env: {} });
 
     collectRuntimeConfigAssignments({

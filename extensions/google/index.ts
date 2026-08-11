@@ -1,18 +1,18 @@
-// Google plugin entrypoint registers its OpenClaw integration.
-import type { ImageGenerationProvider } from "openclaw/plugin-sdk/image-generation";
-import type { MediaUnderstandingProvider } from "openclaw/plugin-sdk/media-understanding";
-import type { MusicGenerationProvider } from "openclaw/plugin-sdk/music-generation";
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+// Google plugin entrypoint registers its Natesclaw integration.
+import type { ImageGenerationProvider } from "natesclaw/plugin-sdk/image-generation";
+import type { MediaUnderstandingProvider } from "natesclaw/plugin-sdk/media-understanding";
+import type { MusicGenerationProvider } from "natesclaw/plugin-sdk/music-generation";
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 import type {
   RealtimeVoiceBridge,
   RealtimeVoiceBridgeCreateRequest,
   RealtimeVoiceProviderConfig,
   RealtimeVoiceProviderPlugin,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { createRealtimeVoiceAudioQueue } from "openclaw/plugin-sdk/realtime-voice-audio-queue";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import type { VideoGenerationProvider } from "openclaw/plugin-sdk/video-generation";
+} from "natesclaw/plugin-sdk/realtime-voice";
+import { createRealtimeVoiceAudioQueue } from "natesclaw/plugin-sdk/realtime-voice-audio-queue";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import type { VideoGenerationProvider } from "natesclaw/plugin-sdk/video-generation";
 import { buildGoogleGeminiCliBackend } from "./cli-backend.js";
 import { registerGoogleGeminiCliProvider } from "./gemini-cli-provider.js";
 import {

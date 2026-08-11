@@ -1,13 +1,13 @@
 {
   "entries": [
     {
-      "name": "@wecom/wecom-openclaw-plugin",
-      "description": "OpenClaw WeCom channel plugin by the Tencent WeCom team.",
+      "name": "@wecom/wecom-natesclaw-plugin",
+      "description": "Natesclaw WeCom channel plugin by the Tencent WeCom team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "wecom-openclaw-plugin",
+          "id": "wecom-natesclaw-plugin",
           "label": "WeCom"
         },
         "contracts": {
@@ -35,20 +35,20 @@
           }
         },
         "install": {
-          "npmSpec": "@wecom/wecom-openclaw-plugin@2026.5.7",
+          "npmSpec": "@wecom/wecom-natesclaw-plugin@2026.5.7",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-TCkP9as00WfEhgFWG8YL/rcmaWGIshAki2HQh83nTRccGfVBCoGjrEboTTqq3yDmK9koWTV11zi8u8A4dNtvug=="
         }
       }
     },
     {
-      "name": "openclaw-plugin-yuanbao",
-      "description": "OpenClaw Yuanbao channel plugin by the Tencent Yuanbao team.",
+      "name": "natesclaw-plugin-yuanbao",
+      "description": "Natesclaw Yuanbao channel plugin by the Tencent Yuanbao team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "openclaw-plugin-yuanbao",
+          "id": "natesclaw-plugin-yuanbao",
           "label": "Yuanbao"
         },
         "contracts": {
@@ -76,24 +76,24 @@
           }
         },
         "install": {
-          "npmSpec": "openclaw-plugin-yuanbao@2.15.0",
+          "npmSpec": "natesclaw-plugin-yuanbao@2.15.0",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-3GD+mf3EjTSUTOAREjTHAyp/deXdpgqB+q+xE0b19Qtat4ADhUV1mHDwFkVCRqTCBY5ATFKtKcipoDejqFj/+w=="
         }
       }
     },
     {
-      "name": "@tencent-weixin/openclaw-weixin",
-      "description": "OpenClaw Weixin channel plugin by the Tencent Weixin team.",
+      "name": "@tencent-weixin/natesclaw-weixin",
+      "description": "Natesclaw Weixin channel plugin by the Tencent Weixin team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "openclaw-weixin",
+          "id": "natesclaw-weixin",
           "label": "Weixin"
         },
         "channel": {
-          "id": "openclaw-weixin",
+          "id": "natesclaw-weixin",
           "label": "Weixin",
           "selectionLabel": "Weixin（微信）",
           "detailLabel": "Weixin",
@@ -104,7 +104,7 @@
           "order": 75
         },
         "channelConfigs": {
-          "openclaw-weixin": {
+          "natesclaw-weixin": {
             "label": "Weixin",
             "description": "Personal WeChat conversation channel.",
             "schema": {
@@ -114,7 +114,7 @@
           }
         },
         "install": {
-          "npmSpec": "@tencent-weixin/openclaw-weixin@2.4.6",
+          "npmSpec": "@tencent-weixin/natesclaw-weixin@2.4.6",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-qw9k3PLTiMWGNjjsknHgcTManH1w4j+Ji1ArWIaYLKCq3aFRsVwcqnPi127bvOoVMJGW4dbyJ8NECEMgoO+iRw==",
           "minHostVersion": ">=2026.5.12"
@@ -122,17 +122,17 @@
       }
     },
     {
-      "name": "@zalo-platforms/openclaw-zaloclawbot",
-      "description": "OpenClaw Zalo ClawBot channel plugin by the Zalo Platforms team.",
+      "name": "@zalo-platforms/natesclaw-zaloclawbot",
+      "description": "Natesclaw Zalo ClawBot channel plugin by the Zalo Platforms team.",
       "source": "external",
       "kind": "channel",
-      "openclaw": {
+      "natesclaw": {
         "plugin": {
-          "id": "openclaw-zaloclawbot",
+          "id": "natesclaw-zaloclawbot",
           "label": "Zalo ClawBot"
         },
         "channel": {
-          "id": "openclaw-zaloclawbot",
+          "id": "natesclaw-zaloclawbot",
           "label": "Zalo ClawBot",
           "selectionLabel": "Zalo ClawBot (QR)",
           "detailLabel": "Zalo ClawBot",
@@ -143,7 +143,7 @@
           "order": 82
         },
         "channelConfigs": {
-          "openclaw-zaloclawbot": {
+          "natesclaw-zaloclawbot": {
             "label": "Zalo ClawBot",
             "description": "Personal Zalo assistant — QR-onboarded, owner-bound.",
             "schema": {
@@ -153,7 +153,7 @@
           }
         },
         "install": {
-          "npmSpec": "@zalo-platforms/openclaw-zaloclawbot@0.1.4",
+          "npmSpec": "@zalo-platforms/natesclaw-zaloclawbot@0.1.4",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-5IxZriHJYACLLGqkCPPsTP9tas62kXEOFqTFAFMdunAM3SPhIJwVFRp0WvoP/m7L2PX85weD0g8LOtxM93VDYg==",
           "minHostVersion": ">=2026.4.10"

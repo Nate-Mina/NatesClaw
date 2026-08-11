@@ -1,4 +1,4 @@
-// Plugin Clawhub Release script supports OpenClaw repository automation.
+// Plugin Clawhub Release script supports Natesclaw repository automation.
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { truncateUtf16Safe } from "../../packages/normalization-core/src/utf16-slice.js";
@@ -36,7 +36,7 @@ type PluginPackageJson = {
   name?: string;
   version?: string;
   private?: boolean;
-  openclaw?: {
+  natesclaw?: {
     extensions?: string[];
     install?: {
       npmSpec?: string;
@@ -47,7 +47,7 @@ type PluginPackageJson = {
     };
     build?: {
       bundledDist?: boolean;
-      openclawVersion?: string;
+      natesclawVersion?: string;
       pluginSdkVersion?: string;
     };
     release?: {
@@ -108,8 +108,8 @@ const CLAWHUB_ERROR_BODY_MAX_CHARS = 400;
 // All-publishable releases query dozens of packages. Bound registry pressure while
 // allowing independent package state reads to leave the core publish critical path quickly.
 const CLAWHUB_RELEASE_PLAN_CONCURRENCY = 8;
-const OPENCLAW_PLUGIN_CLAWHUB_REPOSITORY = "openclaw/openclaw";
-const OPENCLAW_PLUGIN_CLAWHUB_WORKFLOW_FILENAME = "plugin-clawhub-release.yml";
+const NATESCLAW_PLUGIN_CLAWHUB_REPOSITORY = "natesclaw/natesclaw";
+const NATESCLAW_PLUGIN_CLAWHUB_WORKFLOW_FILENAME = "plugin-clawhub-release.yml";
 const SAFE_EXTENSION_ID_RE = /^[a-z0-9][a-z0-9._-]*$/;
 const CLAWHUB_SHARED_RELEASE_INPUT_PATHS = [
   ".github/workflows/plugin-clawhub-release.yml",
@@ -122,7 +122,7 @@ const CLAWHUB_SHARED_RELEASE_INPUT_PATHS = [
   "scripts/lib/release-version.mjs",
   "scripts/lib/plugin-npm-release.ts",
   "scripts/lib/plugin-clawhub-release.ts",
-  "scripts/openclaw-npm-release-check.ts",
+  "scripts/natesclaw-npm-release-check.ts",
   "scripts/plugin-clawhub-publish.sh",
   "scripts/plugin-clawhub-release-check.ts",
   "scripts/plugin-clawhub-release-plan.ts",
@@ -287,7 +287,7 @@ export function collectClawHubPublishablePluginPackages(
     if (isPluginExternalPublicationDeferred(packageJson)) {
       continue;
     }
-    if (packageJson.openclaw?.release?.publishToClawHub !== true) {
+    if (packageJson.natesclaw?.release?.publishToClawHub !== true) {
       continue;
     }
     if (!SAFE_EXTENSION_ID_RE.test(extensionId)) {
@@ -467,7 +467,7 @@ export function collectClawHubVersionGateErrors(params: {
       ref: params.gitRange.baseRef,
       packageDir: plugin.packageDir,
     });
-    if (baseManifest?.openclaw?.release?.publishToClawHub !== true) {
+    if (baseManifest?.natesclaw?.release?.publishToClawHub !== true) {
       continue;
     }
     const baseVersion =
@@ -587,20 +587,20 @@ async function hasClawHubTrustedPublisher(
       });
     }
 
-    return isOpenClawPluginTrustedPublisher(trustedPublisherDetail.trustedPublisher);
+    return isNatesclawPluginTrustedPublisher(trustedPublisherDetail.trustedPublisher);
   } finally {
     request.clearTimeout();
   }
 }
 
-function isOpenClawPluginTrustedPublisher(value: unknown): boolean {
+function isNatesclawPluginTrustedPublisher(value: unknown): boolean {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return false;
   }
   const trustedPublisher = value as ClawHubTrustedPublisherConfig;
   return (
-    trustedPublisher.repository === OPENCLAW_PLUGIN_CLAWHUB_REPOSITORY &&
-    trustedPublisher.workflowFilename === OPENCLAW_PLUGIN_CLAWHUB_WORKFLOW_FILENAME &&
+    trustedPublisher.repository === NATESCLAW_PLUGIN_CLAWHUB_REPOSITORY &&
+    trustedPublisher.workflowFilename === NATESCLAW_PLUGIN_CLAWHUB_WORKFLOW_FILENAME &&
     trustedPublisher.environment == null
   );
 }

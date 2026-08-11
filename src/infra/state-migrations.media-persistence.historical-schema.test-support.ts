@@ -1,4 +1,4 @@
-import { OPENCLAW_AGENT_SCHEMA_SQL } from "../state/openclaw-agent-schema.js";
+import { NATESCLAW_AGENT_SCHEMA_SQL } from "../state/natesclaw-agent-schema.js";
 
 const HISTORICAL_AGENT_LEASE_SCHEMA = `CREATE TABLE IF NOT EXISTS state_leases (
   scope TEXT NOT NULL,
@@ -40,7 +40,7 @@ function removeSchemaRange(sql: string, startMarker: string, endMarker: string):
 
 /** Exact schema bytes from 509a5f0373764, derived from current SQL with later additions removed. */
 export function historicalV15AgentSchemaSql(): string {
-  let sql = restoreHistoricalAgentLeaseSchema(OPENCLAW_AGENT_SCHEMA_SQL).replace(
+  let sql = restoreHistoricalAgentLeaseSchema(NATESCLAW_AGENT_SCHEMA_SQL).replace(
     "  entry_valid INTEGER NOT NULL DEFAULT 0 CHECK (entry_valid IN (-1, 0, 1)),\n",
     "",
   );

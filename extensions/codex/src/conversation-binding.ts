@@ -4,23 +4,23 @@ import {
   formatErrorMessage,
   resolveActiveEmbeddedRunSessionId,
   resolveSandboxContext,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveSessionAgentIds } from "openclaw/plugin-sdk/agent-runtime";
-import { getSessionBindingService } from "openclaw/plugin-sdk/conversation-binding-runtime";
-import { loadExecApprovals } from "openclaw/plugin-sdk/exec-approvals-runtime";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/keyed-async-queue";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { resolveSessionAgentIds } from "natesclaw/plugin-sdk/agent-runtime";
+import { getSessionBindingService } from "natesclaw/plugin-sdk/conversation-binding-runtime";
+import { loadExecApprovals } from "natesclaw/plugin-sdk/exec-approvals-runtime";
+import { KeyedAsyncQueue } from "natesclaw/plugin-sdk/keyed-async-queue";
 import type {
   PluginConversationBindingResolvedEvent,
   PluginHookInboundClaimContext,
   PluginHookInboundClaimEvent,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-payload";
 import {
   getSessionEntry,
   resolveStorePath,
   resolveTranscriptSessionKeyBySessionId,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { readVisibleSessionTranscriptMessageEntries } from "openclaw/plugin-sdk/session-transcript-runtime";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { readVisibleSessionTranscriptMessageEntries } from "natesclaw/plugin-sdk/session-transcript-runtime";
 import { resolveCodexAppServerForModelProvider } from "./app-server/app-server-policy.js";
 import {
   CODEX_APP_SERVER_UNSUBSCRIBE_TIMEOUT_MS,
@@ -45,11 +45,11 @@ import {
 import {
   canUseCodexModelBackedApprovalsReviewerForModel,
   codexSandboxPolicyForTurn,
-  resolveOpenClawExecPolicyForCodexAppServer,
+  resolveNatesclawExecPolicyForCodexAppServer,
   resolveCodexAppServerRuntimeOptions,
   type CodexAppServerApprovalPolicy,
   type CodexAppServerSandboxMode,
-  type OpenClawExecPolicyForCodexAppServer,
+  type NatesclawExecPolicyForCodexAppServer,
 } from "./app-server/config.js";
 import {
   buildDisabledAppsConfigPatch,
@@ -128,7 +128,7 @@ const INVALID_AGENT_ID_CHARS_PATTERN = /[^a-z0-9_-]+/g;
 const LEADING_DASH_PATTERN = /^-+/;
 const TRAILING_DASH_PATTERN = /-+$/;
 const NATIVE_CONVERSATION_INTERACTIVE_APPROVALS_UNAVAILABLE =
-  "OpenClaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.";
+  "Natesclaw native Codex conversation binding cannot route interactive approvals yet; use the Codex harness or explicit /acp spawn codex for that workflow.";
 
 type CodexConversationRunOptions = {
   bindingStore: CodexAppServerBindingStore;
@@ -183,7 +183,7 @@ async function resolveConversationAppServerRuntime(params: {
   modelProvider?: string;
   model?: string;
 }): Promise<{
-  execPolicy?: OpenClawExecPolicyForCodexAppServer;
+  execPolicy?: NatesclawExecPolicyForCodexAppServer;
   runtime: ReturnType<typeof resolveCodexAppServerRuntimeOptions>;
 }> {
   const execPolicy = resolveConversationExecPolicy({
@@ -206,14 +206,14 @@ async function resolveConversationAppServerRuntime(params: {
     model: params.model,
     config: params.config,
     agentDir: params.agentDir,
-    openClawSandboxActive: Boolean(sandboxForPolicy?.enabled),
+    NatesclawSandboxActive: Boolean(sandboxForPolicy?.enabled),
   });
   return { execPolicy, runtime };
 }
 
-const CODEX_CONVERSATION_GLOBAL_STATE = Symbol.for("openclaw.codex.conversationBinding");
+const CODEX_CONVERSATION_GLOBAL_STATE = Symbol.for("natesclaw.codex.conversationBinding");
 const CODEX_CONVERSATION_THREAD_DEVELOPER_INSTRUCTIONS =
-  "This Codex thread is bound to an OpenClaw conversation. Answer normally; OpenClaw will deliver your final response back to the conversation.";
+  "This Codex thread is bound to an Natesclaw conversation. Answer normally; Natesclaw will deliver your final response back to the conversation.";
 
 function getGlobalState(): CodexConversationGlobalState {
   const globalState = globalThis as typeof globalThis & {
@@ -1177,7 +1177,7 @@ async function runBoundTurn(params: {
 }
 
 function assertNativeConversationApprovalPolicySupported(params: {
-  execPolicy?: OpenClawExecPolicyForCodexAppServer;
+  execPolicy?: NatesclawExecPolicyForCodexAppServer;
   approvalPolicy: ReturnType<typeof resolveCodexAppServerRuntimeOptions>["approvalPolicy"];
   approvalsReviewer: ReturnType<typeof resolveCodexAppServerRuntimeOptions>["approvalsReviewer"];
   modelBackedApprovalsReviewerUnavailable: boolean;
@@ -1390,7 +1390,7 @@ function resolveConversationExecPolicy(params: {
           config: params.config,
         }).sessionAgentId
       : undefined);
-  return resolveOpenClawExecPolicyForCodexAppServer({
+  return resolveNatesclawExecPolicyForCodexAppServer({
     config: params.config,
     agentId,
     execOverrides: readSessionExecOverrides({

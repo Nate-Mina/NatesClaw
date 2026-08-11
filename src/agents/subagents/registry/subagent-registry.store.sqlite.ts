@@ -3,23 +3,23 @@
  * store preserves typed columns for hot delivery state while retaining the
  * normalized payload JSON for forward-compatible record hydration.
  */
-import { safeParseJson } from "@openclaw/normalization-core";
-import { asFiniteNumber as normalizeFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { safeParseJson } from "@natesclaw/normalization-core";
+import { asFiniteNumber as normalizeFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { sql, type Insertable, type Selectable, type Updateable } from "kysely";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../../../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabase,
-} from "../../../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabase,
+} from "../../../state/natesclaw-state-db.js";
 import { normalizeDeliveryContext } from "../../../utils/delivery-context.shared.js";
 import { normalizeSubagentRunState } from "./subagent-delivery-state.js";
 import type { SubagentRunReadRecord, SubagentRunRecord } from "./subagent-registry.types.js";
 
-type SubagentRunsTable = OpenClawStateKyselyDatabase["subagent_runs"];
-type SubagentRegistryDatabase = Pick<OpenClawStateKyselyDatabase, "subagent_runs">;
+type SubagentRunsTable = NatesclawStateKyselyDatabase["subagent_runs"];
+type SubagentRegistryDatabase = Pick<NatesclawStateKyselyDatabase, "subagent_runs">;
 type SubagentRunSqliteRow = Selectable<SubagentRunsTable>;
 type BoundSubagentRunRecord = Insertable<SubagentRunsTable>;
 type SubagentRunSqliteInsert = BoundSubagentRunRecord;
@@ -189,7 +189,7 @@ export function bindSubagentRunRecord(entry: SubagentRunRecord): BoundSubagentRu
 
 /** Upserts a prebound run on the exact supplied shared-state handle. */
 export function upsertSubagentRunRowInDatabase(
-  database: OpenClawStateDatabase,
+  database: NatesclawStateDatabase,
   row: BoundSubagentRunRecord,
 ): void {
   const stateDb = getNodeSqliteKysely<SubagentRegistryDatabase>(database.db);
@@ -217,7 +217,7 @@ function writeSubagentRunValues(
   if (values.length === 0 && deleteRunIds?.length === 0 && retainedRunIds === undefined) {
     return;
   }
-  runOpenClawStateWriteTransaction((database) => {
+  runNatesclawStateWriteTransaction((database) => {
     const { db } = database;
     const stateDb = getNodeSqliteKysely<SubagentRegistryDatabase>(db);
     for (const row of values) {
@@ -245,7 +245,7 @@ type SubagentRegistryReadScope =
   | { kind: "child"; sessionKey: string };
 
 function readSubagentRegistryRows(scope?: SubagentRegistryReadScope): SubagentRunSqliteRow[] {
-  const { db } = openOpenClawStateDatabase();
+  const { db } = openNatesclawStateDatabase();
   const stateDb = getNodeSqliteKysely<SubagentRegistryDatabase>(db);
   let query = stateDb.selectFrom("subagent_runs").selectAll();
   if (scope?.kind === "child") {
@@ -294,7 +294,7 @@ function canonicalSubagentPayloadFilter() {
 }
 
 function readSubagentSessionListRows(): SubagentRunReadSqliteRow[] {
-  const { db } = openOpenClawStateDatabase();
+  const { db } = openNatesclawStateDatabase();
   const stateDb = getNodeSqliteKysely<SubagentRegistryDatabase>(db);
   return executeSqliteQuerySync(
     db,

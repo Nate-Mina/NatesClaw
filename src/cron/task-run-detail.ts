@@ -4,8 +4,8 @@
 import {
   asSafeIntegerInRange,
   MAX_DATE_TIMESTAMP_MS,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   FAILOVER_REASONS,
   type FailoverReason,

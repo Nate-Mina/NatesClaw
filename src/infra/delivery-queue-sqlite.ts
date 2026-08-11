@@ -1,8 +1,8 @@
 // Stores durable delivery queue entries in SQLite.
 import {
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabase,
+} from "../state/natesclaw-state-db.js";
 import {
   bindDeliveryQueueEntry,
   inflateDeliveryQueueRow,
@@ -39,8 +39,8 @@ const BOUNDED_COMPLETION_RECOVERY_STATE = "completed_bounded";
 type FailPendingDeliveryQueueEntryResult = { status: "failed" } | { status: "not_pending" };
 
 function openStateDatabase(stateDir?: string) {
-  return openOpenClawStateDatabase({
-    env: stateDir ? { ...process.env, OPENCLAW_STATE_DIR: stateDir } : process.env,
+  return openNatesclawStateDatabase({
+    env: stateDir ? { ...process.env, NATESCLAW_STATE_DIR: stateDir } : process.env,
   });
 }
 
@@ -54,7 +54,7 @@ function enoent(queueName: string, id: string): Error & { code: string } {
 
 function upsertDeliveryQueueEntryInDatabase(
   params: UpsertDeliveryQueueEntryParams,
-  database: OpenClawStateDatabase,
+  database: NatesclawStateDatabase,
 ): boolean {
   return upsertBoundDeliveryQueueEntryInDatabase(bindDeliveryQueueEntry(params), database);
 }
@@ -121,7 +121,7 @@ function commitStagedDeliveryQueueEntryInternal(
       return "created";
     },
     {
-      databaseLabel: "openclaw-state",
+      databaseLabel: "natesclaw-state",
       operationLabel: "commit staged delivery queue entry",
     },
   );
@@ -191,7 +191,7 @@ export function expireStagingAndLoadDeliveryQueueEntries(params: {
       };
     },
     {
-      databaseLabel: "openclaw-state",
+      databaseLabel: "natesclaw-state",
       operationLabel: "expire delivery queue staging entries",
     },
   );
@@ -531,7 +531,7 @@ export function reserveDeliveryQueueEntryAttempt(params: {
       return { status: "reserved", attemptCount: reservedAttemptCount };
     },
     {
-      databaseLabel: "openclaw-state",
+      databaseLabel: "natesclaw-state",
       operationLabel: `reserve ${params.queueName} delivery attempt`,
     },
   );

@@ -14,7 +14,7 @@ import type { ConfigSnapshotReadMeasure } from "../config/io.js";
 import { formatConfigIssueLines } from "../config/issue-format.js";
 import { resolveCanonicalConfigPath } from "../config/paths.js";
 import type { ConfigFileSnapshot } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import type {
   MigrationCheckpointIdentity,
@@ -24,8 +24,8 @@ import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot
 import { setActiveDegradedPlugins } from "../plugins/runtime-degraded-state.js";
 import { ExitError } from "../runtime.js";
 import { createLazyRuntimeModule } from "../shared/lazy-runtime.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
-import { assertOpenClawStateWriteAllowed } from "../state/openclaw-state-ownership.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
+import { assertNatesclawStateWriteAllowed } from "../state/natesclaw-state-ownership.js";
 import { resolveHomeDir } from "../utils.js";
 import { noteIncludeConfinementWarning } from "./doctor-config-analysis.js";
 import {
@@ -57,9 +57,9 @@ const loadLegacyCronRepair = createLazyRuntimeModule(
 );
 
 function withLegacyCronWebhook(
-  config: OpenClawConfig,
-  legacyConfig: OpenClawConfig | undefined,
-): OpenClawConfig {
+  config: NatesclawConfig,
+  legacyConfig: NatesclawConfig | undefined,
+): NatesclawConfig {
   const legacyCron = legacyConfig?.cron as Record<string, unknown> | undefined;
   if (!legacyCron || !Object.hasOwn(legacyCron, "webhook")) {
     return config;
@@ -70,7 +70,7 @@ function withLegacyCronWebhook(
       ...config.cron,
       webhook: legacyCron.webhook,
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 async function maybeMigrateLegacyConfig(): Promise<string[]> {
@@ -118,7 +118,7 @@ async function maybeMigrateLegacyConfig(): Promise<string[]> {
 
 export type DoctorConfigPreflightResult = {
   snapshot: Awaited<ReturnType<typeof readConfigFileSnapshot>>;
-  baseConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
   pluginMetadataSnapshot?: PluginMetadataSnapshot;
   cronCodexRuntimePolicyTargets?: CronCodexRuntimePolicyTarget[];
 };
@@ -127,7 +127,7 @@ export type DoctorConfigPreflightResult = {
 export function shouldSkipPluginValidationForDoctorConfigPreflight(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
-  return isTruthyEnvValue(env.OPENCLAW_UPDATE_IN_PROGRESS);
+  return isTruthyEnvValue(env.NATESCLAW_UPDATE_IN_PROGRESS);
 }
 
 function noteStateMigrationResult(result: {
@@ -153,9 +153,9 @@ function formatStartupMigrationFailure(params: { warnings: string[]; blockers: s
     ...params.blockers.map((blocker) => `- ${blocker}`),
   ];
   return [
-    "OpenClaw startup migrations did not complete cleanly; refusing to report the gateway ready.",
+    "Natesclaw startup migrations did not complete cleanly; refusing to report the gateway ready.",
     ...details,
-    'Run "openclaw doctor --fix" against the same state/config, then restart the gateway.',
+    'Run "natesclaw doctor --fix" against the same state/config, then restart the gateway.',
   ].join("\n");
 }
 
@@ -167,13 +167,13 @@ function throwStartupMigrationRefusal(message: string): never {
 
 function throwStartupMigrationGuardRejected(): never {
   throw new Error(
-    "OpenClaw startup migrations were skipped because the selected config changed during startup; refusing to report the gateway ready. Retry startup so the new config can be validated.",
+    "Natesclaw startup migrations were skipped because the selected config changed during startup; refusing to report the gateway ready. Retry startup so the new config can be validated.",
   );
 }
 
 function throwStartupMigrationIdentityChanged(): never {
   throwStartupMigrationRefusal(
-    "OpenClaw plugin migration inputs changed during startup convergence; refusing to report the gateway ready. Restart OpenClaw so state migrations run against the final config and plugin inventory.",
+    "Natesclaw plugin migration inputs changed during startup convergence; refusing to report the gateway ready. Restart Natesclaw so state migrations run against the final config and plugin inventory.",
   );
 }
 
@@ -208,8 +208,8 @@ export async function runDoctorConfigPreflight(
 ): Promise<DoctorConfigPreflightResult> {
   const stateMigrationsRequested = options.migrateState !== false;
   if (stateMigrationsRequested) {
-    assertOpenClawStateWriteAllowed({
-      databasePath: resolveOpenClawStateSqlitePath(process.env),
+    assertNatesclawStateWriteAllowed({
+      databasePath: resolveNatesclawStateSqlitePath(process.env),
       env: process.env,
     });
   }
@@ -413,7 +413,7 @@ export async function runDoctorConfigPreflight(
     if (options.repairPrefixedConfig === true && snapshot.exists && !snapshot.valid) {
       if (await recoverConfigFromJsonRootSuffix(snapshot)) {
         note(
-          "Removed non-JSON prefix from openclaw.json; original saved as .clobbered.*.",
+          "Removed non-JSON prefix from natesclaw.json; original saved as .clobbered.*.",
           "Config",
         );
         configSnapshotRead = await readConfigSnapshotForPreflight();
@@ -422,7 +422,7 @@ export async function runDoctorConfigPreflight(
         await recoverConfigFromLastKnownGood({ snapshot, reason: "doctor-invalid-config" })
       ) {
         note(
-          "Restored openclaw.json from last-known-good; original saved as .clobbered.*.",
+          "Restored natesclaw.json from last-known-good; original saved as .clobbered.*.",
           "Config",
         );
         configSnapshotRead = await readConfigSnapshotForPreflight();
@@ -628,7 +628,7 @@ export async function runDoctorConfigPreflight(
           persistedIdentity.pluginDoctorConfigFingerprint
       ) {
         throw new Error(
-          'OpenClaw config identity changed while persisting the refreshed plugin registry; refusing to write the migration checkpoint. Run "openclaw doctor --fix" and retry.',
+          'Natesclaw config identity changed while persisting the refreshed plugin registry; refusing to write the migration checkpoint. Run "natesclaw doctor --fix" and retry.',
         );
       }
       // The persisted reread is the only inventory mutation in preflight. Replace both the
@@ -642,7 +642,7 @@ export async function runDoctorConfigPreflight(
     ) {
       throw startupMigrationHeartbeatError instanceof Error
         ? startupMigrationHeartbeatError
-        : new Error("OpenClaw startup migration lease heartbeat failed.");
+        : new Error("Natesclaw startup migration lease heartbeat failed.");
     }
     if (
       shouldRecordStateCheckpoint &&
@@ -652,7 +652,7 @@ export async function runDoctorConfigPreflight(
       snapshot.valid
     ) {
       if (!migrationCheckpoint) {
-        throw new Error("OpenClaw state migration checkpoint module was not loaded.");
+        throw new Error("Natesclaw state migration checkpoint module was not loaded.");
       }
       migrationCheckpoint.recordSuccessfulStateMigrations({
         env: startupMigrationEnv,
@@ -674,7 +674,7 @@ export async function runDoctorConfigPreflight(
           throwStartupMigrationRefusal(
             formatStartupMigrationFailure({
               warnings: [],
-              blockers: ['OpenClaw config is invalid; run "openclaw doctor --fix" before startup.'],
+              blockers: ['Natesclaw config is invalid; run "natesclaw doctor --fix" before startup.'],
             }),
           );
         }
@@ -720,7 +720,7 @@ export async function runDoctorConfigPreflight(
     }
     if (shouldRecordStartupCheckpoint) {
       if (!migrationCheckpoint) {
-        throw new Error("OpenClaw startup migration checkpoint module was not loaded.");
+        throw new Error("Natesclaw startup migration checkpoint module was not loaded.");
       }
       migrationCheckpoint.recordSuccessfulStartupMigrations({
         env: startupMigrationEnv,

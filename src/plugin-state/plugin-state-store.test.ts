@@ -2,24 +2,24 @@
 import { chmodSync, existsSync, rmSync, statSync } from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  clearOpenClawDatabaseQuarantine,
-  recordOpenClawDatabaseQuarantine,
-} from "../state/openclaw-quarantine-store.js";
+  clearNatesclawDatabaseQuarantine,
+  recordNatesclawDatabaseQuarantine,
+} from "../state/natesclaw-quarantine-store.js";
 import {
-  clearOpenClawStateDatabaseOpenFailure,
-  OPENCLAW_STATE_SCHEMA_VERSION,
-  openOpenClawStateDatabase,
-  recordOpenClawStateDatabaseOpenFailure,
-} from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  clearNatesclawStateDatabaseOpenFailure,
+  NATESCLAW_STATE_SCHEMA_VERSION,
+  openNatesclawStateDatabase,
+  recordNatesclawStateDatabaseOpenFailure,
+} from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import {
-  createOpenClawTestState,
-  withOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  withNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import {
   closePluginStateDatabase,
   countPluginStateLiveEntries,
@@ -40,11 +40,11 @@ import {
 } from "./plugin-state-store.test-helpers.js";
 import { PluginStateStoreError } from "./plugin-state-store.types.js";
 
-let testState: OpenClawTestState | undefined;
+let testState: NatesclawTestState | undefined;
 
 beforeAll(async () => {
-  testState = await createOpenClawTestState({ label: "plugin-state-store" });
-  rmSync(path.dirname(resolveOpenClawStateSqlitePath()), { recursive: true, force: true });
+  testState = await createNatesclawTestState({ label: "plugin-state-store" });
+  rmSync(path.dirname(resolveNatesclawStateSqlitePath()), { recursive: true, force: true });
 });
 
 beforeEach(() => {
@@ -178,10 +178,10 @@ describe("plugin state keyed store", () => {
   });
 
   it("honors explicit store env without mutating process state", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       { label: "plugin-state-explicit-env-a", applyEnv: false },
       async (stateA) => {
-        await withOpenClawTestState(
+        await withNatesclawTestState(
           { label: "plugin-state-explicit-env-b", applyEnv: false },
           async (stateB) => {
             const storeA = createPluginStateKeyedStore<{ owner: string }>("discord", {
@@ -200,8 +200,8 @@ describe("plugin state keyed store", () => {
 
             await expect(storeA.lookup("shared")).resolves.toEqual({ owner: "a" });
             await expect(storeB.lookup("shared")).resolves.toEqual({ owner: "b" });
-            expect(resolveOpenClawStateSqlitePath(stateA.env)).not.toBe(
-              resolveOpenClawStateSqlitePath(stateB.env),
+            expect(resolveNatesclawStateSqlitePath(stateA.env)).not.toBe(
+              resolveNatesclawStateSqlitePath(stateB.env),
             );
           },
         );
@@ -873,7 +873,7 @@ describe("plugin state keyed store", () => {
     await withPluginStateTestState(async () => {
       const store = createPluginStateKeyedStore("discord", { namespace: "close", maxEntries: 10 });
       await store.register("k", { ok: true });
-      const database = openOpenClawStateDatabase();
+      const database = openNatesclawStateDatabase();
       closePluginStateDatabase();
       expect(() => database.db.exec("SELECT 1")).toThrow();
       await expect(store.lookup("k")).resolves.toEqual({ ok: true });
@@ -907,7 +907,7 @@ describe("plugin state keyed store", () => {
   });
 
   it("treats a missing plugin-state database as empty without creating it", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       { label: "plugin-state-read-only-missing", applyEnv: false },
       async (state) => {
         const store = createPluginStateKeyedStore("discord", {
@@ -915,7 +915,7 @@ describe("plugin state keyed store", () => {
           maxEntries: 10,
           env: state.env,
         });
-        const databasePath = resolveOpenClawStateSqlitePath(state.env);
+        const databasePath = resolveNatesclawStateSqlitePath(state.env);
 
         expect(existsSync(databasePath)).toBe(false);
         await expect(store.lookup("k")).resolves.toBeUndefined();
@@ -933,18 +933,18 @@ describe("plugin state keyed store", () => {
         maxEntries: 10,
       });
       await store.register("k", { ok: true });
-      const databasePath = resolveOpenClawStateSqlitePath(testState?.env);
+      const databasePath = resolveNatesclawStateSqlitePath(testState?.env);
       closePluginStateDatabase();
 
-      recordOpenClawStateDatabaseOpenFailure(databasePath, new Error("latched failure"));
+      recordNatesclawStateDatabaseOpenFailure(databasePath, new Error("latched failure"));
       await expect(store.lookup("k")).rejects.toMatchObject({
         code: "PLUGIN_STATE_OPEN_FAILED",
         path: databasePath,
       });
-      clearOpenClawStateDatabaseOpenFailure(databasePath);
+      clearNatesclawStateDatabaseOpenFailure(databasePath);
 
       expect(
-        recordOpenClawDatabaseQuarantine({
+        recordNatesclawDatabaseQuarantine({
           env: testState?.env,
           kind: "state",
           path: databasePath,
@@ -955,7 +955,7 @@ describe("plugin state keyed store", () => {
         code: "PLUGIN_STATE_OPEN_FAILED",
         path: databasePath,
       });
-      expect(clearOpenClawDatabaseQuarantine(databasePath, { env: testState?.env })).toBe(true);
+      expect(clearNatesclawDatabaseQuarantine(databasePath, { env: testState?.env })).toBe(true);
     });
   });
 
@@ -966,9 +966,9 @@ describe("plugin state keyed store", () => {
         maxEntries: 10,
       });
       await store.register("k", { ok: true });
-      const databasePath = resolveOpenClawStateSqlitePath(testState?.env);
-      openOpenClawStateDatabase().db.exec(
-        `PRAGMA user_version = ${OPENCLAW_STATE_SCHEMA_VERSION + 1};`,
+      const databasePath = resolveNatesclawStateSqlitePath(testState?.env);
+      openNatesclawStateDatabase().db.exec(
+        `PRAGMA user_version = ${NATESCLAW_STATE_SCHEMA_VERSION + 1};`,
       );
       closePluginStateDatabase();
 
@@ -980,7 +980,7 @@ describe("plugin state keyed store", () => {
       } finally {
         const database = new DatabaseSync(databasePath);
         try {
-          database.exec(`PRAGMA user_version = ${OPENCLAW_STATE_SCHEMA_VERSION};`);
+          database.exec(`PRAGMA user_version = ${NATESCLAW_STATE_SCHEMA_VERSION};`);
         } finally {
           database.close();
         }
@@ -997,7 +997,7 @@ describe("plugin state keyed store", () => {
           maxEntries: 10,
         });
         await store.register("k", { ok: true });
-        const databasePath = resolveOpenClawStateSqlitePath(testState?.env);
+        const databasePath = resolveNatesclawStateSqlitePath(testState?.env);
         closePluginStateDatabase();
         chmodSync(testState?.stateDir ?? "", 0o000);
         try {
@@ -1021,7 +1021,7 @@ describe("plugin state keyed store", () => {
           maxEntries: 10,
         });
         await store.register("k", { ok: true });
-        const database = openOpenClawStateDatabase();
+        const database = openNatesclawStateDatabase();
         chmodSync(testState?.stateDir ?? "", 0o000);
         try {
           await expect(store.lookup("k")).resolves.toEqual({ ok: true });
@@ -1035,7 +1035,7 @@ describe("plugin state keyed store", () => {
 
   it("does not close a shared state database opened before the plugin-state probe", async () => {
     await withPluginStateTestState(async () => {
-      const database = openOpenClawStateDatabase();
+      const database = openNatesclawStateDatabase();
       const result = probePluginStateStore();
 
       expect(result.ok).toBe(true);
@@ -1051,12 +1051,12 @@ describe("plugin state keyed store", () => {
       });
       await store.register("k", { ok: true });
 
-      const secondary = await createOpenClawTestState({
+      const secondary = await createNatesclawTestState({
         label: "plugin-state-cache-secondary",
         applyEnv: false,
       });
       try {
-        openOpenClawStateDatabase({ env: secondary.env });
+        openNatesclawStateDatabase({ env: secondary.env });
         testState?.applyEnv();
         await expect(store.lookup("k")).resolves.toEqual({ ok: true });
       } finally {
@@ -1070,7 +1070,7 @@ describe("plugin state keyed store", () => {
       const store = createPluginStateKeyedStore("discord", { namespace: "perms", maxEntries: 10 });
       await store.register("k", { ok: true });
 
-      const databasePath = resolveOpenClawStateSqlitePath();
+      const databasePath = resolveNatesclawStateSqlitePath();
       expect(statSync(path.dirname(databasePath)).mode & 0o777).toBe(0o700);
       expect(statSync(databasePath).mode & 0o777).toBe(0o600);
     });

@@ -32,12 +32,12 @@ export function installMockGateway(
   });
 }
 
-export const WORKSPACE = "/home/peter/openclaw";
-export const PICKED = "/home/peter/openclaw/packages";
+export const WORKSPACE = "/home/peter/natesclaw";
+export const PICKED = "/home/peter/natesclaw/packages";
 export const SOURCE_REPO = "/tmp/source-repo";
 export const TARGET_REPO = "/tmp/target-repo";
 export const REFRESHED_RESEARCH_WORKSPACE = "/home/peter/research-next";
-export const MOVED_WORKSPACE = "/home/peter/openclaw-next";
+export const MOVED_WORKSPACE = "/home/peter/natesclaw-next";
 export const NODE_HOME = "/Users/peter";
 export const NODE_PICKED = "/Users/peter/Projects";
 export const NODE_UNC = "\\\\server\\share\\repo";
@@ -45,7 +45,7 @@ export const EXEC_ONLY_PICKED = "C:\\Users\\peter\\repo";
 const LOCATOR_TEXT_READ_TIMEOUT_MS = 500;
 const LOCATOR_TEXT_POLL_TIMEOUT_MS = 10_000;
 
-export const captureUiProofEnabled = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
+export const captureUiProofEnabled = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
 const uiProofArtifactDir = path.join(
   process.cwd(),
   ".artifacts",
@@ -177,11 +177,11 @@ export async function pastePng(target: Locator, count = 1) {
 
 export async function replaceGatewayClient(page: Page) {
   await page.evaluate(() => {
-    const app = document.querySelector("openclaw-app") as HTMLElement & {
+    const app = document.querySelector("natesclaw-app") as HTMLElement & {
       runtime?: { context: { gateway: { connect: () => void } } };
     };
     if (!app.runtime) {
-      throw new Error("OpenClaw application runtime is unavailable");
+      throw new Error("Natesclaw application runtime is unavailable");
     }
     app.runtime.context.gateway.connect();
   });
@@ -190,7 +190,7 @@ export async function replaceGatewayClient(page: Page) {
 export async function navigateInApp(page: Page, routeId: string, search = "") {
   await page.evaluate(
     ({ targetRouteId, targetSearch }) => {
-      const app = document.querySelector("openclaw-app") as HTMLElement & {
+      const app = document.querySelector("natesclaw-app") as HTMLElement & {
         runtime?: {
           context: {
             navigate: (routeId: string, options?: { search?: string }) => void;
@@ -198,7 +198,7 @@ export async function navigateInApp(page: Page, routeId: string, search = "") {
         };
       };
       if (!app.runtime) {
-        throw new Error("OpenClaw application runtime is unavailable");
+        throw new Error("Natesclaw application runtime is unavailable");
       }
       app.runtime.context.navigate(targetRouteId, { search: targetSearch });
     },

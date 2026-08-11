@@ -1,5 +1,5 @@
 // Command startup policy tests cover which CLI commands require startup side effects.
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cliCommandCatalog } from "./command-catalog.js";
 import { resolveCliExecutionStartupContext } from "./command-execution-startup.js";
@@ -54,13 +54,13 @@ describe("command-startup-policy", () => {
     }
     expect(
       resolvePolicy({
-        argv: ["node", "openclaw", "agent"],
+        argv: ["node", "natesclaw", "agent"],
         commandPath: ["agent"],
       }).skipConfigGuard,
     ).toBe(true);
     expect(
       resolvePolicy({
-        argv: ["node", "openclaw", "agent", "--local"],
+        argv: ["node", "natesclaw", "agent", "--local"],
         commandPath: ["agent"],
       }).skipConfigGuard,
     ).toBe(false);
@@ -68,7 +68,7 @@ describe("command-startup-policy", () => {
     for (const flag of ["--index", "--fix"]) {
       expect(
         resolvePolicy({
-          argv: ["node", "openclaw", "memory", "status", flag],
+          argv: ["node", "natesclaw", "memory", "status", flag],
           commandPath: ["memory", "status"],
         }).skipConfigGuard,
       ).toBe(false);
@@ -88,9 +88,9 @@ describe("command-startup-policy", () => {
 
   it("skips the config guard for exact root update dry-runs", () => {
     for (const argv of [
-      ["node", "openclaw", "update", "--dry-run"],
-      ["node", "openclaw", "--profile", "work", "update", "--dry-run"],
-      ["node", "openclaw", "--update", "--dry-run"],
+      ["node", "natesclaw", "update", "--dry-run"],
+      ["node", "natesclaw", "--profile", "work", "update", "--dry-run"],
+      ["node", "natesclaw", "--update", "--dry-run"],
     ]) {
       expect(
         resolvePolicy({
@@ -105,43 +105,43 @@ describe("command-startup-policy", () => {
   it("keeps the config guard for non-dry-run and descendant update invocations", () => {
     for (const testCase of [
       {
-        argv: ["node", "openclaw", "update"],
+        argv: ["node", "natesclaw", "update"],
         commandPath: ["update"],
       },
       {
-        argv: ["node", "openclaw", "update", "--tag", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "--tag", "--dry-run"],
         commandPath: ["update"],
       },
       {
-        argv: ["node", "openclaw", "update", "--channel", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "--channel", "--dry-run"],
         commandPath: ["update"],
       },
       {
-        argv: ["node", "openclaw", "update", "--timeout", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "--timeout", "--dry-run"],
         commandPath: ["update"],
       },
       {
-        argv: ["node", "openclaw", "update", "--tag=--dry-run"],
+        argv: ["node", "natesclaw", "update", "--tag=--dry-run"],
         commandPath: ["update"],
       },
       {
-        argv: ["node", "openclaw", "update", "--", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "--", "--dry-run"],
         commandPath: ["update"],
       },
       {
-        argv: ["node", "openclaw", "update", "status", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "status", "--dry-run"],
         commandPath: ["update", "status"],
       },
       {
-        argv: ["node", "openclaw", "update", "repair", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "repair", "--dry-run"],
         commandPath: ["update", "repair"],
       },
       {
-        argv: ["node", "openclaw", "update", "finalize", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "finalize", "--dry-run"],
         commandPath: ["update", "finalize"],
       },
       {
-        argv: ["node", "openclaw", "update", "wizard", "--dry-run"],
+        argv: ["node", "natesclaw", "update", "wizard", "--dry-run"],
         commandPath: ["update", "wizard"],
       },
     ]) {
@@ -153,7 +153,7 @@ describe("command-startup-policy", () => {
     for (const entry of cliCommandCatalog.filter((candidate) => candidate.route)) {
       expect(entry.policy?.configGuard, entry.commandPath.join(" ")).toBeDefined();
       for (const jsonOutputMode of [false, true]) {
-        const argv = ["node", "openclaw", ...entry.commandPath];
+        const argv = ["node", "natesclaw", ...entry.commandPath];
         const expectedSkip = entry.commandPath.join(" ") !== "config unset";
         const routed = resolveCliExecutionStartupContext({ argv, jsonOutputMode });
         const commander = resolveCliExecutionStartupContext({
@@ -254,27 +254,27 @@ describe("command-startup-policy", () => {
     ).toBe(false);
     expect(
       resolvePolicy({
-        argv: ["node", "openclaw", "agent", "--json"],
+        argv: ["node", "natesclaw", "agent", "--json"],
         commandPath: ["agent"],
         jsonOutputMode: true,
       }).loadPlugins,
     ).toBe(false);
     expect(
       resolvePolicy({
-        argv: ["node", "openclaw", "agent", "--json", "--local"],
+        argv: ["node", "natesclaw", "agent", "--json", "--local"],
         commandPath: ["agent"],
         jsonOutputMode: true,
       }).loadPlugins,
     ).toBe(true);
     expect(
       resolvePolicy({
-        argv: ["node", "openclaw", "agent", "exec", "fix it"],
+        argv: ["node", "natesclaw", "agent", "exec", "fix it"],
         commandPath: ["agent", "exec"],
       }).loadPlugins,
     ).toBe(false);
     expect(
       resolvePolicy({
-        argv: ["node", "openclaw", "agent"],
+        argv: ["node", "natesclaw", "agent"],
         commandPath: ["agent"],
       }).loadPlugins,
     ).toBe(false);
@@ -331,7 +331,7 @@ describe("command-startup-policy", () => {
         commandPath: ["status"],
         env: {
           ...process.env,
-          OPENCLAW_HIDE_BANNER: "1",
+          NATESCLAW_HIDE_BANNER: "1",
         },
       }).hideBanner,
     ).toBe(true);
@@ -339,9 +339,9 @@ describe("command-startup-policy", () => {
   });
 
   it("uses process env banner suppression when startup env is omitted", () => {
-    const originalHideBanner = process.env.OPENCLAW_HIDE_BANNER;
+    const originalHideBanner = process.env.NATESCLAW_HIDE_BANNER;
     try {
-      process.env.OPENCLAW_HIDE_BANNER = "1";
+      process.env.NATESCLAW_HIDE_BANNER = "1";
 
       expect(
         resolveCliStartupPolicy({
@@ -358,9 +358,9 @@ describe("command-startup-policy", () => {
       ).toBe(false);
     } finally {
       if (originalHideBanner === undefined) {
-        delete process.env.OPENCLAW_HIDE_BANNER;
+        delete process.env.NATESCLAW_HIDE_BANNER;
       } else {
-        process.env.OPENCLAW_HIDE_BANNER = originalHideBanner;
+        process.env.NATESCLAW_HIDE_BANNER = originalHideBanner;
       }
     }
   });

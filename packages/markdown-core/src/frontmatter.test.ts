@@ -1,5 +1,5 @@
 // Markdown Core tests cover frontmatter behavior.
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import JSON5 from "json5";
 import { describe, expect, it } from "vitest";
 import {
@@ -27,7 +27,7 @@ description: |
 name: session-memory
 metadata:
   {
-    "openclaw":
+    "natesclaw":
       {
         "emoji": "disk",
         "events": ["command:new"],
@@ -36,20 +36,20 @@ metadata:
 ---
 `;
     const result = parseFrontmatterBlock(content);
-    expect(result.metadata).toBe('{"openclaw":{"emoji":"disk","events":["command:new"]}}');
+    expect(result.metadata).toBe('{"natesclaw":{"emoji":"disk","events":["command:new"]}}');
 
     const parsed = JSON5.parse(expectDefined(result.metadata, "result.metadata test invariant"));
-    expect(parsed.openclaw?.emoji).toBe("disk");
+    expect(parsed.natesclaw?.emoji).toBe("disk");
   });
 
   it("preserves inline JSON values", () => {
     const content = `---
 name: inline-json
-metadata: {"openclaw": {"events": ["test"]}}
+metadata: {"natesclaw": {"events": ["test"]}}
 ---
 `;
     const result = parseFrontmatterBlock(content);
-    expect(result.metadata).toBe('{"openclaw": {"events": ["test"]}}');
+    expect(result.metadata).toBe('{"natesclaw": {"events": ["test"]}}');
   });
 
   it("stringifies YAML objects and arrays", () => {
@@ -61,7 +61,7 @@ tags:
   - alpha
   - beta
 metadata:
-  openclaw:
+  natesclaw:
     events:
       - command:new
 ---
@@ -71,7 +71,7 @@ metadata:
     expect(result.retries).toBe("3");
     expect(JSON.parse(result.tags ?? "[]")).toEqual(["alpha", "beta"]);
     const parsed = JSON5.parse(result.metadata ?? "");
-    expect(parsed.openclaw?.events).toEqual(["command:new"]);
+    expect(parsed.natesclaw?.events).toEqual(["command:new"]);
   });
 
   it("preserves inline description values containing colons", () => {
@@ -190,10 +190,10 @@ description: |-
     const content = `---
 name: sample-skill
 metadata:
-  openclaw: true
+  natesclaw: true
 ---`;
     const result = parseFrontmatterBlock(content);
-    expect(result.metadata).toBe('{"openclaw":true}');
+    expect(result.metadata).toBe('{"natesclaw":true}');
   });
 
   it("returns empty when frontmatter is missing", () => {

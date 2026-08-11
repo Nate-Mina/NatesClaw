@@ -49,7 +49,7 @@ type EmbeddedRunsTestApi = {
 
 function getTestApi(): EmbeddedRunsTestApi {
   const api = (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.embeddedRunsTestApi")
+    Symbol.for("natesclaw.embeddedRunsTestApi")
   ];
   if (!api) {
     throw new Error("embedded runs test API is unavailable");

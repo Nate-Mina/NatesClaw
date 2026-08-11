@@ -9,23 +9,23 @@ import {
   getPairedDevice,
   requestDevicePairing,
 } from "../infra/device-pairing.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { withStateDirEnv } from "../test-helpers/state-dir-env.js";
 import { READ_SCOPE } from "./operator-scopes.js";
 import { ensureStartupLocalCliPairing } from "./startup-local-cli-pairing.js";
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 describe("startup local CLI pairing", () => {
   it("does not report a limited existing operator token as admin-ready", async () => {
-    await withStateDirEnv("openclaw-startup-local-cli-pairing-", async () => {
+    await withStateDirEnv("natesclaw-startup-local-cli-pairing-", async () => {
       const identity = loadOrCreateDeviceIdentity();
       const request = await requestDevicePairing({
         deviceId: identity.deviceId,
         publicKey: publicKeyRawBase64UrlFromPem(identity.publicKeyPem),
-        clientId: "openclaw-cli",
+        clientId: "natesclaw-cli",
         clientMode: "cli",
         role: "operator",
         scopes: [READ_SCOPE],

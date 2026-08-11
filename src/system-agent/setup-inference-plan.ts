@@ -11,7 +11,7 @@ import {
 } from "../commands/onboard-inference.js";
 import { createMergePatch } from "../config/merge-patch.js";
 import { normalizeAgentModelRefForConfig } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { enablePluginInConfig } from "../plugins/enable.js";
 import {
@@ -52,8 +52,8 @@ export async function buildTestPlan(params: {
   modelRef?: string;
   authChoice?: string;
   apiKey?: string;
-  cfg: OpenClawConfig;
-  sourceCfg: OpenClawConfig;
+  cfg: NatesclawConfig;
+  sourceCfg: NatesclawConfig;
   workspaceDir: string;
   pluginWorkspaceDir: string;
   agentDir: string;
@@ -190,7 +190,7 @@ export async function buildTestPlan(params: {
         modelRef,
         agentDir: params.agentDir,
         config: prepared.config,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: resolveDefaultAgentId(prepared.config),
         ...(prepared.selectedProfileId ? { authProfileId: prepared.selectedProfileId } : {}),
         persistModelRef: modelRef,
@@ -244,7 +244,7 @@ export async function buildTestPlan(params: {
         modelRef: route.modelLabel,
         config: cfg,
         executionConfig: route.runConfig,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: route.agentId,
         agentDir: route.agentDir,
         ...(route.runner === "embedded" && route.agentHarnessRuntimeOverride
@@ -264,7 +264,7 @@ export async function buildTestPlan(params: {
         ...ref,
         modelRef,
         config: cfg,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: resolveDefaultAgentId(cfg),
         persistModelRef: modelRef,
       };
@@ -280,7 +280,7 @@ export async function buildTestPlan(params: {
         ...ref,
         modelRef,
         config: cfg,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: resolveDefaultAgentId(cfg),
         persistModelRef: modelRef,
       };
@@ -311,7 +311,7 @@ export async function buildTestPlan(params: {
           modelRef,
           agentHarnessRuntimeOverride: "codex",
           config: preparedAuth.config,
-          agentId: "openclaw",
+          agentId: "natesclaw",
           routeAgentId: resolveDefaultAgentId(preparedAuth.config),
           agentDir: params.agentDir,
           cleanupBundleMcpOnRunEnd: true,
@@ -331,7 +331,7 @@ export async function buildTestPlan(params: {
         modelRef,
         agentHarnessRuntimeOverride: "codex",
         config: cfg,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: resolveDefaultAgentId(cfg),
         agentDir: params.agentDir,
         cleanupBundleMcpOnRunEnd: true,
@@ -349,7 +349,7 @@ export async function buildTestPlan(params: {
         ...ref,
         modelRef,
         config: cfg,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: resolveDefaultAgentId(cfg),
         persistModelRef: modelRef,
       };
@@ -365,7 +365,7 @@ export async function buildTestPlan(params: {
         ...ref,
         modelRef,
         config: cfg,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: resolveDefaultAgentId(cfg),
         persistModelRef: modelRef,
       };
@@ -445,7 +445,7 @@ export async function buildTestPlan(params: {
         };
       }
       let result: ProviderAuthResult;
-      let preparedConfig: OpenClawConfig;
+      let preparedConfig: NatesclawConfig;
       try {
         if (interactive) {
           if (!params.prompter) {
@@ -589,7 +589,7 @@ export async function buildTestPlan(params: {
         modelRef,
         agentDir: params.agentDir,
         config: preparedAuth.config,
-        agentId: "openclaw",
+        agentId: "natesclaw",
         routeAgentId: resolveDefaultAgentId(preparedAuth.config),
         authProfileId: preparedAuth.selectedProfileId,
         persistModelRef: modelRef,

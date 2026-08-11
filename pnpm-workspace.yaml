@@ -8,11 +8,11 @@ packages:
 minimumReleaseAge: 2880
 
 minimumReleaseAgeExclude:
-  - "@openclaw/crabline@0.1.11"
-  - "@openclaw/fs-safe@0.5.4"
-  - "@openclaw/libterminal@0.3.2"
-  - "@openclaw/proxyline@0.3.4"
-  - "@openclaw/uirouter@0.1.1"
+  - "@natesclaw/crabline@0.1.11"
+  - "@natesclaw/fs-safe@0.5.4"
+  - "@natesclaw/libterminal@0.3.2"
+  - "@natesclaw/proxyline@0.3.4"
+  - "@natesclaw/uirouter@0.1.1"
   - "acpx"
   - "tokenjuice"
   - "@agentclientprotocol/sdk"
@@ -25,7 +25,7 @@ minimumReleaseAgeExclude:
   - "libopus-wasm@0.2.0"
   - "libsignal@6.0.0"
   - "nanoid@3.3.18"
-  - "openclaw"
+  - "natesclaw"
   - "protobufjs"
   - "vite"
   - "@cloudflare/workers-types"
@@ -156,7 +156,7 @@ overrides:
   uuid: 14.0.1
 
 allowBuilds:
-  "@openclaw/fs-safe": true
+  "@natesclaw/fs-safe": true
   "@google/genai": true
   "@lydell/node-pty": true
   "@matrix-org/matrix-sdk-crypto-nodejs": true
@@ -172,10 +172,10 @@ allowBuilds:
   protobufjs: true
   sharp: true
   tree-sitter-bash: false
-  openclaw: true
-  "@openclaw/proxyline": true
+  natesclaw: true
+  "@natesclaw/proxyline": true
   clawpdf: true
-  "@openclaw/crabline": true
+  "@natesclaw/crabline": true
   rastermill: true
   node-pty: true
 

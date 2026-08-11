@@ -18,7 +18,7 @@ export function notifyForegroundReplyFenceWaiters(state: ForegroundReplyFenceSta
 }
 
 export const foregroundReplyFenceByKey = resolveGlobalMap<string, ForegroundReplyFenceState>(
-  Symbol.for("openclaw.foregroundReplyFences"),
+  Symbol.for("natesclaw.foregroundReplyFences"),
   (fences) => {
     for (const state of fences.values()) {
       notifyForegroundReplyFenceWaiters(state);

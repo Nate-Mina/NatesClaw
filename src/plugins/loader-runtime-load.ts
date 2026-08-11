@@ -58,19 +58,19 @@ function createDeferredGatewayNodesRuntime(runtime: PluginRuntime): PluginRuntim
   };
 }
 
-export function loadOpenClawPlugins(options: PluginLoadOptions = {}): PluginRegistry {
-  return loadOpenClawPluginsInternal(options);
+export function loadNatesclawPlugins(options: PluginLoadOptions = {}): PluginRegistry {
+  return loadNatesclawPluginsInternal(options);
 }
 
 /** Internal entry for host-owned snapshots that need a narrow registration runtime. */
-export function loadOpenClawPluginsWithInternalOverrides(
+export function loadNatesclawPluginsWithInternalOverrides(
   options: PluginLoadOptions & { cache: false },
   overrides: InternalPluginLoadOverrides,
 ): PluginRegistry {
-  return loadOpenClawPluginsInternal(options, overrides);
+  return loadNatesclawPluginsInternal(options, overrides);
 }
 
-function loadOpenClawPluginsInternal(
+function loadNatesclawPluginsInternal(
   options: PluginLoadOptions,
   overrides?: InternalPluginLoadOverrides,
 ): PluginRegistry {
@@ -262,7 +262,7 @@ function loadOpenClawPluginsInternal(
         logger.warn(
           `[plugins] ${failedPlugins.length} plugin(s) failed to initialize (${formatPluginFailureSummary(
             failedPlugins,
-          )}). Run 'openclaw plugins inspect <id> --runtime --json' for runtime diagnostics, 'openclaw plugins list' for registry state, and restart the Gateway after plugin code or load-path changes.`,
+          )}). Run 'natesclaw plugins inspect <id> --runtime --json' for runtime diagnostics, 'natesclaw plugins list' for registry state, and restart the Gateway after plugin code or load-path changes.`,
         );
       }
     }

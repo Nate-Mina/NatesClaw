@@ -1,21 +1,21 @@
-import { AgentHarnessPreflightError } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { AgentHarnessPreflightError } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   resolveExecApprovalsFromFile,
   type ExecApprovalsFile,
-} from "openclaw/plugin-sdk/exec-approvals-runtime";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/exec-approvals-runtime";
+import { normalizeAgentId } from "natesclaw/plugin-sdk/routing";
 import type {
   CodexAppServerApprovalPolicy,
   CodexAppServerApprovalsReviewer,
   CodexAppServerDefaultPolicy,
   CodexAppServerPolicyMode,
   CodexAppServerSandboxMode,
-  OpenClawExecApprovalFloorsForCodexAppServer,
-  OpenClawExecAsk,
-  OpenClawExecMode,
-  OpenClawExecPolicy,
-  OpenClawExecPolicyForCodexAppServer,
-  OpenClawExecSecurity,
+  NatesclawExecApprovalFloorsForCodexAppServer,
+  NatesclawExecAsk,
+  NatesclawExecMode,
+  NatesclawExecPolicy,
+  NatesclawExecPolicyForCodexAppServer,
+  NatesclawExecSecurity,
 } from "./config-contracts.js";
 import { readExecAsk, readExecSecurity, readRecord } from "./config-utils.js";
 
@@ -32,13 +32,13 @@ export function selectForcedPromptingSandbox(params: {
 export function selectForcedDangerFullAccessSandbox(params: {
   configuredSandbox?: CodexAppServerSandboxMode;
   defaultPolicy: CodexAppServerDefaultPolicy | undefined;
-  openClawSandboxActive: boolean;
+  NatesclawSandboxActive: boolean;
 }): CodexAppServerSandboxMode {
   if (params.configuredSandbox === "read-only") {
     return "read-only";
   }
   if (params.defaultPolicy?.dangerFullAccessAllowed === false) {
-    if (params.openClawSandboxActive) {
+    if (params.NatesclawSandboxActive) {
       return params.defaultPolicy.sandbox ?? "workspace-write";
     }
     throw new Error(
@@ -84,13 +84,13 @@ export function resolveApprovalsReviewer(
     : undefined;
 }
 
-function resolveOpenClawExecPolicyFromConfig(params: {
+function resolveNatesclawExecPolicyFromConfig(params: {
   config?: unknown;
   agentId?: string;
-}): OpenClawExecPolicy {
+}): NatesclawExecPolicy {
   const root = readRecord(params.config);
   const globalExec = readRecord(readRecord(root?.tools)?.exec);
-  const globalPolicy = applyOpenClawExecPolicyLayer(createDefaultOpenClawExecPolicy(), globalExec);
+  const globalPolicy = applyNatesclawExecPolicyLayer(createDefaultNatesclawExecPolicy(), globalExec);
   const agentId = params.agentId?.trim();
   if (!agentId) {
     return globalPolicy;
@@ -103,10 +103,10 @@ function resolveOpenClawExecPolicyFromConfig(params: {
     return typeof id === "string" && normalizeAgentId(id) === normalizedAgentId;
   });
   const agentExec = readRecord(readRecord(readRecord(agentEntry)?.tools)?.exec);
-  return applyOpenClawExecPolicyLayer(globalPolicy, agentExec);
+  return applyNatesclawExecPolicyLayer(globalPolicy, agentExec);
 }
 
-export function resolveOpenClawExecPolicyForCodexAppServer(params: {
+export function resolveNatesclawExecPolicyForCodexAppServer(params: {
   execOverrides?: {
     security?: unknown;
     ask?: unknown;
@@ -114,32 +114,32 @@ export function resolveOpenClawExecPolicyForCodexAppServer(params: {
   approvals?: ExecApprovalsFile;
   config?: unknown;
   agentId?: string;
-}): OpenClawExecPolicyForCodexAppServer {
-  const basePolicy = resolveOpenClawExecPolicyFromConfig({
+}): NatesclawExecPolicyForCodexAppServer {
+  const basePolicy = resolveNatesclawExecPolicyFromConfig({
     config: params.config,
     agentId: params.agentId,
   });
-  const overridePolicy = applyOpenClawExecPolicyLayer(basePolicy, params.execOverrides);
-  const approvalFloors = resolveOpenClawExecApprovalFloorsForCodexAppServer({
+  const overridePolicy = applyNatesclawExecPolicyLayer(basePolicy, params.execOverrides);
+  const approvalFloors = resolveNatesclawExecApprovalFloorsForCodexAppServer({
     approvals: params.approvals,
     agentId: params.agentId,
     policy: overridePolicy,
   });
-  return applyOpenClawExecApprovalFloors(overridePolicy, approvalFloors);
+  return applyNatesclawExecApprovalFloors(overridePolicy, approvalFloors);
 }
 
-export function resolveEffectiveOpenClawExecModeForCodexAppServer(params: {
-  execMode?: OpenClawExecMode;
-  execPolicy?: OpenClawExecPolicyForCodexAppServer;
-}): OpenClawExecMode | undefined {
+export function resolveEffectiveNatesclawExecModeForCodexAppServer(params: {
+  execMode?: NatesclawExecMode;
+  execPolicy?: NatesclawExecPolicyForCodexAppServer;
+}): NatesclawExecMode | undefined {
   if (params.execPolicy?.touched === true) {
     return params.execPolicy.mode;
   }
   return params.execMode;
 }
 
-export function resolveCodexPolicyModeForOpenClawExecMode(
-  mode: OpenClawExecMode | undefined,
+export function resolveCodexPolicyModeForNatesclawExecMode(
+  mode: NatesclawExecMode | undefined,
 ): CodexAppServerPolicyMode | undefined {
   if (!mode || mode === "full") {
     return undefined;
@@ -147,19 +147,19 @@ export function resolveCodexPolicyModeForOpenClawExecMode(
   return "guardian";
 }
 
-export function assertCodexAppServerAllowedForOpenClawExecMode(
-  mode: OpenClawExecMode | undefined,
+export function assertCodexAppServerAllowedForNatesclawExecMode(
+  mode: NatesclawExecMode | undefined,
 ): void {
   if (mode === "deny" || mode === "allowlist") {
     throw new AgentHarnessPreflightError(
       `Codex app-server local execution is unavailable because effective tools.exec.mode=${mode}. ` +
-        "Execution-host approvals are authoritative. For gateway turns, inspect them with `openclaw approvals get --gateway` and update that same target with `openclaw approvals set --gateway --stdin`; for local `agent exec`, omit `--gateway`. Intentionally align that host policy before retrying.",
+        "Execution-host approvals are authoritative. For gateway turns, inspect them with `natesclaw approvals get --gateway` and update that same target with `natesclaw approvals set --gateway --stdin`; for local `agent exec`, omit `--gateway`. Intentionally align that host policy before retrying.",
       { scope: "harness" },
     );
   }
 }
 
-function createDefaultOpenClawExecPolicy(): OpenClawExecPolicy {
+function createDefaultNatesclawExecPolicy(): NatesclawExecPolicy {
   return {
     security: "full",
     ask: "off",
@@ -167,17 +167,17 @@ function createDefaultOpenClawExecPolicy(): OpenClawExecPolicy {
   };
 }
 
-function applyOpenClawExecPolicyLayer(
-  base: OpenClawExecPolicy,
+function applyNatesclawExecPolicyLayer(
+  base: NatesclawExecPolicy,
   exec?: { mode?: unknown; security?: unknown; ask?: unknown },
-): OpenClawExecPolicy {
+): NatesclawExecPolicy {
   if (!exec) {
     return base;
   }
   const mode = readExecMode(exec.mode);
   if (mode !== undefined) {
     return {
-      ...resolveOpenClawExecPolicyForMode(mode),
+      ...resolveNatesclawExecPolicyForMode(mode),
       touched: true,
     };
   }
@@ -189,18 +189,18 @@ function applyOpenClawExecPolicyLayer(
   const nextSecurity = security ?? base.security;
   const nextAsk = ask ?? base.ask;
   return {
-    mode: resolveOpenClawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
+    mode: resolveNatesclawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
     security: nextSecurity,
     ask: nextAsk,
     touched: true,
   };
 }
 
-function resolveOpenClawExecApprovalFloorsForCodexAppServer(params: {
+function resolveNatesclawExecApprovalFloorsForCodexAppServer(params: {
   approvals?: ExecApprovalsFile;
   agentId?: string;
-  policy: OpenClawExecPolicy;
-}): OpenClawExecApprovalFloorsForCodexAppServer | undefined {
+  policy: NatesclawExecPolicy;
+}): NatesclawExecApprovalFloorsForCodexAppServer | undefined {
   if (!params.approvals) {
     return undefined;
   }
@@ -214,31 +214,31 @@ function resolveOpenClawExecApprovalFloorsForCodexAppServer(params: {
   }).agent;
 }
 
-function applyOpenClawExecApprovalFloors(
-  base: OpenClawExecPolicy,
-  approvalFloors?: OpenClawExecApprovalFloorsForCodexAppServer,
-): OpenClawExecPolicy {
+function applyNatesclawExecApprovalFloors(
+  base: NatesclawExecPolicy,
+  approvalFloors?: NatesclawExecApprovalFloorsForCodexAppServer,
+): NatesclawExecPolicy {
   if (!approvalFloors) {
     return base;
   }
   const nextSecurity = approvalFloors.security
-    ? minOpenClawExecSecurity(base.security, approvalFloors.security)
+    ? minNatesclawExecSecurity(base.security, approvalFloors.security)
     : base.security;
-  const nextAsk = approvalFloors.ask ? maxOpenClawExecAsk(base.ask, approvalFloors.ask) : base.ask;
+  const nextAsk = approvalFloors.ask ? maxNatesclawExecAsk(base.ask, approvalFloors.ask) : base.ask;
   if (nextSecurity === base.security && nextAsk === base.ask) {
     return base;
   }
   return {
-    mode: resolveOpenClawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
+    mode: resolveNatesclawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
     security: nextSecurity,
     ask: nextAsk,
     touched: true,
   };
 }
 
-function resolveOpenClawExecPolicyForMode(
-  mode: OpenClawExecMode,
-): Omit<OpenClawExecPolicy, "touched"> {
+function resolveNatesclawExecPolicyForMode(
+  mode: NatesclawExecMode,
+): Omit<NatesclawExecPolicy, "touched"> {
   switch (mode) {
     case "deny":
       return { mode, security: "deny", ask: "off" };
@@ -254,10 +254,10 @@ function resolveOpenClawExecPolicyForMode(
   return exhaustiveMode;
 }
 
-function resolveOpenClawExecModeFromPolicy(params: {
-  security: OpenClawExecSecurity;
-  ask: OpenClawExecAsk;
-}): OpenClawExecMode {
+function resolveNatesclawExecModeFromPolicy(params: {
+  security: NatesclawExecSecurity;
+  ask: NatesclawExecAsk;
+}): NatesclawExecMode {
   if (params.security === "deny") {
     return "deny";
   }
@@ -270,20 +270,20 @@ function resolveOpenClawExecModeFromPolicy(params: {
   return "ask";
 }
 
-function minOpenClawExecSecurity(
-  left: OpenClawExecSecurity,
-  right: OpenClawExecSecurity,
-): OpenClawExecSecurity {
-  const order: Record<OpenClawExecSecurity, number> = { deny: 0, allowlist: 1, full: 2 };
+function minNatesclawExecSecurity(
+  left: NatesclawExecSecurity,
+  right: NatesclawExecSecurity,
+): NatesclawExecSecurity {
+  const order: Record<NatesclawExecSecurity, number> = { deny: 0, allowlist: 1, full: 2 };
   return order[left] <= order[right] ? left : right;
 }
 
-function maxOpenClawExecAsk(left: OpenClawExecAsk, right: OpenClawExecAsk): OpenClawExecAsk {
-  const order: Record<OpenClawExecAsk, number> = { off: 0, "on-miss": 1, always: 2 };
+function maxNatesclawExecAsk(left: NatesclawExecAsk, right: NatesclawExecAsk): NatesclawExecAsk {
+  const order: Record<NatesclawExecAsk, number> = { off: 0, "on-miss": 1, always: 2 };
   return order[left] >= order[right] ? left : right;
 }
 
-function readExecMode(value: unknown): OpenClawExecMode | undefined {
+function readExecMode(value: unknown): NatesclawExecMode | undefined {
   return value === "deny" ||
     value === "allowlist" ||
     value === "ask" ||

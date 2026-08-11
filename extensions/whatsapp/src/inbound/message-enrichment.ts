@@ -4,9 +4,9 @@ import {
   formatInboundMediaUnavailableText,
   formatLocationText,
   type MediaPlaceholderTextFact,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { createSubsystemLogger, redactToolPayloadText } from "openclaw/plugin-sdk/logging-core";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { createSubsystemLogger, redactToolPayloadText } from "natesclaw/plugin-sdk/logging-core";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { getStatusCode } from "../session-errors.js";
 import {
   describeReplyContext,

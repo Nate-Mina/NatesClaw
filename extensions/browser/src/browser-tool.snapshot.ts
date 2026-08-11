@@ -5,11 +5,11 @@
  * caps, dialog states) and attaches fresh page state to actions that changed
  * the page document so the model does not need a follow-up snapshot call.
  */
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
+import type { AgentToolResult } from "natesclaw/plugin-sdk/agent-core";
 import {
   readNonNegativeIntegerParam,
   readPositiveIntegerParam,
-} from "openclaw/plugin-sdk/param-readers";
+} from "natesclaw/plugin-sdk/param-readers";
 import {
   DEFAULT_AI_SNAPSHOT_MAX_CHARS,
   browserSnapshot,

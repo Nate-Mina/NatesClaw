@@ -1,12 +1,12 @@
-// Stepfun plugin entrypoint registers its OpenClaw integration.
+// Stepfun plugin entrypoint registers its Natesclaw integration.
 import {
   definePluginEntry,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type ProviderCatalogContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { buildOpenAICompatibleLiveModelProviderConfig } from "openclaw/plugin-sdk/provider-catalog-live-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "natesclaw/plugin-sdk/provider-auth-api-key";
+import { buildOpenAICompatibleLiveModelProviderConfig } from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   applyStepFunPlanConfig,
   applyStepFunPlanConfigCn,
@@ -137,7 +137,7 @@ function createStepFunApiKeyMethod(params: {
   choiceId: string;
   choiceLabel: string;
   choiceHint: string;
-  applyConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+  applyConfig: (cfg: NatesclawConfig) => NatesclawConfig;
 }) {
   return createProviderApiKeyAuthMethod({
     providerId: params.providerId,

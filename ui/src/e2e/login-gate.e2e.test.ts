@@ -9,7 +9,7 @@ const suite = createControlUiE2eSuite({
   name: "Control UI responsive login gate E2E",
   startServerBeforeBrowser: true,
   unavailableMessage: (executablePath) =>
-    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+    `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
 });
 
 async function renderLoginGate(page: Page): Promise<void> {
@@ -21,8 +21,8 @@ async function renderLoginGate(page: Page): Promise<void> {
 
 async function mountLoginGate(page: Page): Promise<void> {
   await page.evaluate(async () => {
-    await customElements.whenDefined("openclaw-login-gate");
-    const gate = document.createElement("openclaw-login-gate") as HTMLElement & {
+    await customElements.whenDefined("natesclaw-login-gate");
+    const gate = document.createElement("natesclaw-login-gate") as HTMLElement & {
       props: Record<string, unknown>;
       updateComplete: Promise<unknown>;
     };

@@ -2,8 +2,8 @@ import {
   formatErrorMessage,
   type NormalizedUsage,
   type AgentHarnessAttemptParamsV2,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { AssistantMessage, Usage } from "openclaw/plugin-sdk/llm";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { AssistantMessage, Usage } from "natesclaw/plugin-sdk/llm";
 import {
   resolveCodexLocalRuntimeAttribution,
   type CodexLocalRuntimeAttributionParams,
@@ -96,7 +96,7 @@ export function createAssistantCommentaryMessage(
     timestamp,
     // Keep this unphased: gateway history hides commentary-phase assistant rows.
     // The keyed fallback persists Control UI narration without channel delivery.
-    openclawStreamFallback: {
+    natesclawStreamFallback: {
       replacementText: text,
       source: "segment",
       itemId,

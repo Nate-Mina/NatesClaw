@@ -2,34 +2,34 @@
  * Anthropic provider runtime registration. It owns API-key/setup-token/Claude
  * CLI auth, dynamic model normalization, usage auth, media, and stream wrappers.
  */
-import { formatCliCommand, parseDurationMs } from "openclaw/plugin-sdk/cli-runtime";
-import { resolveExpiresAtMsFromDurationMs } from "openclaw/plugin-sdk/number-runtime";
+import { formatCliCommand, parseDurationMs } from "natesclaw/plugin-sdk/cli-runtime";
+import { resolveExpiresAtMsFromDurationMs } from "natesclaw/plugin-sdk/number-runtime";
 import type {
-  OpenClawPluginApi,
+  NatesclawPluginApi,
   ProviderAuthContext,
   ProviderAuthMethod,
   ProviderAuthMethodNonInteractiveContext,
   ProviderResolveDynamicModelContext,
   ProviderNormalizeResolvedModelContext,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import {
   applyAuthProfileConfig,
   type AuthProfileStore,
   buildTokenProfileId,
   createProviderApiKeyAuthMethod,
   listProfilesForProvider,
-  type OpenClawConfig as ProviderAuthConfig,
+  type NatesclawConfig as ProviderAuthConfig,
   type ProviderAuthResult,
   suggestOAuthProfileIdForLegacyDefault,
   validateAnthropicSetupToken,
-} from "openclaw/plugin-sdk/provider-auth";
-import { upsertAuthProfileWithLockOrThrow } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { buildOpenAICompatibleProviderCatalog } from "openclaw/plugin-sdk/provider-catalog-live-runtime";
+} from "natesclaw/plugin-sdk/provider-auth";
+import { upsertAuthProfileWithLockOrThrow } from "natesclaw/plugin-sdk/provider-auth-api-key";
+import { buildOpenAICompatibleProviderCatalog } from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
 import {
   buildManifestModelProviderConfig,
   type ProviderCatalogResult,
-} from "openclaw/plugin-sdk/provider-catalog-shared";
+} from "natesclaw/plugin-sdk/provider-catalog-shared";
 import {
   buildProviderReplayFamilyHooks,
   cloneFirstTemplateModel,
@@ -46,8 +46,8 @@ import {
   supportsClaudeAdaptiveThinking,
   supportsClaudeNativeMaxEffort,
   supportsClaudeNativeXhighEffort,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import * as claudeCliAuth from "./cli-auth-seam.js";
 import { buildAnthropicCliBackend } from "./cli-backend.js";
 import { buildClaudeCliCatalogEntries } from "./cli-catalog.js";
@@ -64,7 +64,7 @@ import {
 } from "./config-defaults.js";
 import { acceptsAnthropicLiveModelContract } from "./live-model-contract-gate.js";
 import { anthropicMediaUnderstandingProvider } from "./media-understanding-provider.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import { resolveClaudeCliSyntheticAuth } from "./provider-discovery.js";
 import {
   createClaudeSessionNodeInvokePolicies,
@@ -126,10 +126,10 @@ const ANTHROPIC_OPUS_47_TEMPLATE_MODEL_IDS = [
 const ANTHROPIC_SONNET_46_MODEL_ID = "claude-sonnet-4-6";
 const ANTHROPIC_SONNET_46_DOT_MODEL_ID = "claude-sonnet-4.6";
 const ANTHROPIC_SETUP_TOKEN_NOTE_LINES = [
-  "Anthropic setup-token auth is supported in OpenClaw.",
-  "OpenClaw prefers Claude CLI reuse when it is available on the host.",
-  "Anthropic staff told us this OpenClaw path is allowed again.",
-  `If you want a direct API billing path instead, use ${formatCliCommand("openclaw models auth login --provider anthropic --method api-key --set-default")} or ${formatCliCommand("openclaw models auth login --provider anthropic --method cli --set-default")}.`,
+  "Anthropic setup-token auth is supported in Natesclaw.",
+  "Natesclaw prefers Claude CLI reuse when it is available on the host.",
+  "Anthropic staff told us this Natesclaw path is allowed again.",
+  `If you want a direct API billing path instead, use ${formatCliCommand("natesclaw models auth login --provider anthropic --method api-key --set-default")} or ${formatCliCommand("natesclaw models auth login --provider anthropic --method cli --set-default")}.`,
 ] as const;
 
 function buildAnthropicCatalogProvider() {
@@ -434,7 +434,7 @@ function resolveAnthropicModelGeneration(
 
 /**
  * Claude ids from a generation newer than anything this plugin encodes. Request
- * shaping is selected by version predicates in `@openclaw/llm-core`, so such an
+ * shaping is selected by version predicates in `@natesclaw/llm-core`, so such an
  * id would otherwise fall through to pre-4.6 shaping — manual `budget_tokens`
  * plus caller sampling params — which current models reject outright.
  */
@@ -962,7 +962,7 @@ function buildAnthropicAuthDoctorHint(params: {
     }`,
     `- auth store oauth profiles: ${storeOauthProfiles || "(none)"}`,
     `- suggested profile: ${suggested}`,
-    `Fix: run "${formatCliCommand("openclaw doctor --yes")}"`,
+    `Fix: run "${formatCliCommand("natesclaw doctor --yes")}"`,
   ].join("\n");
 }
 
@@ -1192,7 +1192,7 @@ export function buildAnthropicProvider(): ProviderPlugin {
 }
 
 /** Register Anthropic provider, Claude CLI backend, and media understanding provider. */
-export function registerAnthropicPlugin(api: OpenClawPluginApi): void {
+export function registerAnthropicPlugin(api: NatesclawPluginApi): void {
   api.registerCliBackend(buildAnthropicCliBackend());
   api.registerProvider(buildAnthropicProvider());
   api.registerMediaUnderstandingProvider(anthropicMediaUnderstandingProvider);

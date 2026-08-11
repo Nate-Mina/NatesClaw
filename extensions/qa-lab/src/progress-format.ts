@@ -1,4 +1,4 @@
-import { parseBooleanValue } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { parseBooleanValue } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export function parseQaProgressBooleanEnv(value: string | undefined): boolean | undefined {
   return parseBooleanValue(value);

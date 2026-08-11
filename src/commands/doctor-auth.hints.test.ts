@@ -1,6 +1,6 @@
 // Doctor auth hint tests cover OAuth refresh failure formatting and auth repair guidance.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   collectAuthProfileHealthFindings,
   noteLegacyCodexProviderOverride,
@@ -25,8 +25,8 @@ vi.mock("../agents/auth-profiles.js", async () => {
   };
 });
 
-function doctorFixtureConfig(config: unknown): OpenClawConfig {
-  return config as OpenClawConfig;
+function doctorFixtureConfig(config: unknown): NatesclawConfig {
+  return config as NatesclawConfig;
 }
 
 describe("doctor auth hints", () => {

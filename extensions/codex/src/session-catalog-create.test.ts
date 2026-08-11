@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { resolveCodexCatalogCreateSession } from "./session-catalog-create.js";
 
-function configWithAllowedModels(models: string[], runtime?: string): OpenClawConfig {
+function configWithAllowedModels(models: string[], runtime?: string): NatesclawConfig {
   return {
     agents: {
       defaults: {
@@ -26,7 +26,7 @@ describe("resolveCodexCatalogCreateSession", () => {
   it("pins the Codex model even when ordinary chats use the direct runtime", () => {
     expect(
       resolveCodexCatalogCreateSession(
-        configWithAllowedModels(["openai/gpt-5.6-sol"], "openclaw"),
+        configWithAllowedModels(["openai/gpt-5.6-sol"], "natesclaw"),
         "main",
       ),
     ).toEqual({
@@ -58,7 +58,7 @@ describe("resolveCodexCatalogCreateSession", () => {
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     expect(resolveCodexCatalogCreateSession(config, "main")).toEqual({
       model: "openai/gpt-5.6-sol",

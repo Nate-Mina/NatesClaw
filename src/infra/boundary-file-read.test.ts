@@ -1,7 +1,7 @@
 // Tests safe boundary file reads against upstream fs-safe behavior.
 import fs from "node:fs";
 import path from "node:path";
-import * as upstream from "@openclaw/fs-safe/advanced";
+import * as upstream from "@natesclaw/fs-safe/advanced";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import * as shim from "./boundary-file-read.js";
@@ -60,7 +60,7 @@ describe("root file open shim", () => {
   });
 
   it("preserves the existing overflow error for fs-safe descriptor reads", async () => {
-    const dir = tempDirs.make("openclaw-boundary-file-read-");
+    const dir = tempDirs.make("natesclaw-boundary-file-read-");
     const filePath = path.join(dir, "oversized.txt");
     fs.writeFileSync(filePath, "oversized");
 

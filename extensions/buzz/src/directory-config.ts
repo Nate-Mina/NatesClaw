@@ -1,7 +1,7 @@
 import type {
   ChannelDirectoryEntry,
   DirectoryConfigParams,
-} from "openclaw/plugin-sdk/directory-runtime";
+} from "natesclaw/plugin-sdk/directory-runtime";
 import { buildBuzzTarget, parseBuzzTarget } from "./target.js";
 import { resolveBuzzAccount } from "./types.js";
 

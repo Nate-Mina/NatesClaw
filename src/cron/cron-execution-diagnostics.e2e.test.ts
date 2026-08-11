@@ -1,9 +1,9 @@
 import { createServer, type Server } from "node:net";
 import type { AddressInfo } from "node:net";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import { resetTaskRegistryForTests } from "../tasks/task-runtime.test-helpers.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import {
   loadRunCronIsolatedAgentTurn,
   mockRunCronFallbackPassthrough,
@@ -51,7 +51,7 @@ async function closeServer(server: Server): Promise<void> {
   });
 }
 
-function configFor(modelRef: ModelRef, localBaseUrl?: string): OpenClawConfig {
+function configFor(modelRef: ModelRef, localBaseUrl?: string): NatesclawConfig {
   return {
     agents: {
       defaults: {
@@ -75,12 +75,12 @@ function configFor(modelRef: ModelRef, localBaseUrl?: string): OpenClawConfig {
 }
 
 async function runPersistedDiagnosticCase(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   modelRef: ModelRef;
   name: string;
 }) {
-  return await withOpenClawTestState(
-    { layout: "state-only", prefix: "openclaw-cron-execution-diagnostics-" },
+  return await withNatesclawTestState(
+    { layout: "state-only", prefix: "natesclaw-cron-execution-diagnostics-" },
     async (state) => {
       resetTaskRegistryForTests();
       const events: CronEvent[] = [];

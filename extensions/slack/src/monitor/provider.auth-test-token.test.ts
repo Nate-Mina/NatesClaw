@@ -1,9 +1,9 @@
 // Slack tests cover auth.test token handling during provider boot.
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { createPluginStateSyncKeyedStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import type { OpenKeyedStoreOptions } from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { createPluginStateSyncKeyedStoreForTests } from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { assertSlackDetachedTargetAllowed } from "../detached-target-admission.js";
 import { getSlackInstallationKind } from "../installation-identity-state.js";
@@ -137,7 +137,7 @@ describe("auth.test boot call", () => {
       user_id: "UUSER",
       user: "human-installer",
       team_id: "T1",
-      team: "OpenClaw",
+      team: "Natesclaw",
       is_enterprise_install: false,
     });
 
@@ -177,7 +177,7 @@ describe("auth.test boot call", () => {
       user_id: "UUSER",
       user: "human-installer",
       team_id: "T1",
-      team: "OpenClaw",
+      team: "Natesclaw",
       is_enterprise_install: false,
     });
     client.conversations.info.mockResolvedValueOnce({
@@ -320,7 +320,7 @@ describe("auth.test boot call", () => {
         slack: {
           dmPolicy: "disabled",
           groupPolicy: "open",
-          slashCommand: { enabled: true, name: "openclaw" },
+          slashCommand: { enabled: true, name: "natesclaw" },
           channels: { C12345678: { allow: true, requireMention: true } },
         },
       },

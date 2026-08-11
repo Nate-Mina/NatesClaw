@@ -4,16 +4,16 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { App, type Receiver, type ReceiverEvent } from "@slack/bolt";
-import type { ChannelIngressQueue } from "openclaw/plugin-sdk/channel-outbound";
-import type { PluginJsonValue } from "openclaw/plugin-sdk/plugin-entry";
+import type { ChannelIngressQueue } from "natesclaw/plugin-sdk/channel-outbound";
+import type { PluginJsonValue } from "natesclaw/plugin-sdk/plugin-entry";
 import {
-  closeOpenClawStateDatabaseForTest,
+  closeNatesclawStateDatabaseForTest,
   createChannelIngressQueueForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import {
   peekSystemEventEntries,
   resetSystemEventsForTest,
-} from "openclaw/plugin-sdk/system-event-runtime";
+} from "natesclaw/plugin-sdk/system-event-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { registerSlackMemberEvents } from "./events/members.js";
 import { createSlackSystemEventTestHarness } from "./events/system-event-test-harness.js";
@@ -161,7 +161,7 @@ async function withQueue(
   fn: (queue: ChannelIngressQueue<SlackIngressPayload>) => Promise<void>,
 ): Promise<void> {
   const rawRoot = await fs.mkdtemp(
-    path.join(os.tmpdir(), `openclaw-slack-ingress-${crypto.randomUUID()}-`),
+    path.join(os.tmpdir(), `natesclaw-slack-ingress-${crypto.randomUUID()}-`),
   );
   const stateDir = await fs.realpath(rawRoot);
   const queue = createChannelIngressQueueForTests<SlackIngressPayload>({
@@ -172,14 +172,14 @@ async function withQueue(
   try {
     await fn(queue);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }
 
 describe("Slack durable ingress", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     resetSystemEventsForTest();
   });
 
@@ -504,7 +504,7 @@ describe("Slack durable ingress", () => {
 
 describe("Slack relay durable ingress", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
   });
 
   const relayMessage = {

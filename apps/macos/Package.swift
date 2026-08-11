@@ -1,18 +1,18 @@
 // swift-tools-version: 6.2
-// Package manifest for the OpenClaw macOS companion (menu bar app + IPC library).
+// Package manifest for the Natesclaw macOS companion (menu bar app + IPC library).
 
 import PackageDescription
 
 let package = Package(
-    name: "OpenClaw",
+    name: "Natesclaw",
     platforms: [
         .macOS(.v15),
     ],
     products: [
-        .library(name: "OpenClawIPC", targets: ["OpenClawIPC"]),
-        .library(name: "OpenClawDiscovery", targets: ["OpenClawDiscovery"]),
-        .executable(name: "OpenClaw", targets: ["OpenClaw"]),
-        .executable(name: "openclaw-mac", targets: ["OpenClawMacCLI"]),
+        .library(name: "NatesclawIPC", targets: ["NatesclawIPC"]),
+        .library(name: "NatesclawDiscovery", targets: ["NatesclawDiscovery"]),
+        .executable(name: "Natesclaw", targets: ["Natesclaw"]),
+        .executable(name: "natesclaw-mac", targets: ["NatesclawMacCLI"]),
     ],
     dependencies: [
         .package(url: "https://github.com/sindresorhus/KeyboardShortcuts", exact: "3.0.1"),
@@ -22,46 +22,46 @@ let package = Package(
         .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.9.0"),
         .package(url: "https://github.com/steipete/Peekaboo.git", exact: "3.9.8"),
         .package(url: "https://github.com/pointfreeco/swift-concurrency-extras", from: "1.3.1"),
-        .package(path: "../shared/OpenClawKit"),
-        .package(path: "../shared/OpenClawMLXTTSProtocol"),
+        .package(path: "../shared/NatesclawKit"),
+        .package(path: "../shared/NatesclawMLXTTSProtocol"),
         .package(path: "../swabble"),
     ],
     targets: [
         .target(
-            name: "OpenClawCameraPTZNative",
-            path: "Sources/OpenClawCameraPTZNative",
+            name: "NatesclawCameraPTZNative",
+            path: "Sources/NatesclawCameraPTZNative",
             publicHeadersPath: "include",
             linkerSettings: [
                 .linkedFramework("CoreFoundation"),
                 .linkedFramework("IOKit"),
             ]),
         .target(
-            name: "OpenClawIPC",
+            name: "NatesclawIPC",
             dependencies: [],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "OpenClawDiscovery",
+            name: "NatesclawDiscovery",
             dependencies: [
-                .product(name: "OpenClawKit", package: "OpenClawKit"),
+                .product(name: "NatesclawKit", package: "NatesclawKit"),
                 .product(name: "Subprocess", package: "swift-subprocess"),
             ],
-            path: "Sources/OpenClawDiscovery",
+            path: "Sources/NatesclawDiscovery",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .executableTarget(
-            name: "OpenClaw",
+            name: "Natesclaw",
             dependencies: [
-                "OpenClawIPC",
-                "OpenClawDiscovery",
-                "OpenClawCameraPTZNative",
-                .product(name: "OpenClawNativeState", package: "OpenClawKit"),
-                .product(name: "OpenClawKit", package: "OpenClawKit"),
-                .product(name: "OpenClawChatUI", package: "OpenClawKit"),
-                .product(name: "OpenClawMLXTTSProtocol", package: "OpenClawMLXTTSProtocol"),
-                .product(name: "OpenClawProtocol", package: "OpenClawKit"),
+                "NatesclawIPC",
+                "NatesclawDiscovery",
+                "NatesclawCameraPTZNative",
+                .product(name: "NatesclawNativeState", package: "NatesclawKit"),
+                .product(name: "NatesclawKit", package: "NatesclawKit"),
+                .product(name: "NatesclawChatUI", package: "NatesclawKit"),
+                .product(name: "NatesclawMLXTTSProtocol", package: "NatesclawMLXTTSProtocol"),
+                .product(name: "NatesclawProtocol", package: "NatesclawKit"),
                 .product(name: "SwabbleKit", package: "swabble"),
                 .product(name: "MenuBarExtraAccess", package: "MenuBarExtraAccess"),
                 .product(name: "Subprocess", package: "swift-subprocess"),
@@ -77,7 +77,7 @@ let package = Package(
                 "Resources/Localizable.xcstrings",
             ],
             resources: [
-                .copy("Resources/OpenClaw.icns"),
+                .copy("Resources/Natesclaw.icns"),
                 .copy("Resources/DeviceModels"),
                 .copy("Resources/ProviderIcons"),
             ],
@@ -85,27 +85,27 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .executableTarget(
-            name: "OpenClawMacCLI",
+            name: "NatesclawMacCLI",
             dependencies: [
-                "OpenClawDiscovery",
-                .product(name: "OpenClawKit", package: "OpenClawKit"),
-                .product(name: "OpenClawProtocol", package: "OpenClawKit"),
+                "NatesclawDiscovery",
+                .product(name: "NatesclawKit", package: "NatesclawKit"),
+                .product(name: "NatesclawProtocol", package: "NatesclawKit"),
             ],
-            path: "Sources/OpenClawMacCLI",
+            path: "Sources/NatesclawMacCLI",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .testTarget(
-            name: "OpenClawIPCTests",
+            name: "NatesclawIPCTests",
             dependencies: [
-                "OpenClawIPC",
-                "OpenClaw",
-                "OpenClawMacCLI",
-                "OpenClawDiscovery",
-                .product(name: "OpenClawChatUI", package: "OpenClawKit"),
-                .product(name: "OpenClawKit", package: "OpenClawKit"),
-                .product(name: "OpenClawMLXTTSProtocol", package: "OpenClawMLXTTSProtocol"),
-                .product(name: "OpenClawProtocol", package: "OpenClawKit"),
+                "NatesclawIPC",
+                "Natesclaw",
+                "NatesclawMacCLI",
+                "NatesclawDiscovery",
+                .product(name: "NatesclawChatUI", package: "NatesclawKit"),
+                .product(name: "NatesclawKit", package: "NatesclawKit"),
+                .product(name: "NatesclawMLXTTSProtocol", package: "NatesclawMLXTTSProtocol"),
+                .product(name: "NatesclawProtocol", package: "NatesclawKit"),
                 .product(name: "SwabbleKit", package: "swabble"),
             ],
             swiftSettings: [

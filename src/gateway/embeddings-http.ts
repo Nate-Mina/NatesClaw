@@ -1,17 +1,17 @@
 // OpenAI-compatible embeddings HTTP endpoint.
-// Bridges /v1/embeddings requests to configured OpenClaw memory providers.
+// Bridges /v1/embeddings requests to configured Natesclaw memory providers.
 import { Buffer } from "node:buffer";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { drainRetainedLocalEmbeddingWorkerClients } from "../../packages/memory-host-sdk/src/host/embeddings-worker.js";
 import { resolveAgentDir } from "../agents/agent-scope.js";
 import { resolveMemorySearchConfig } from "../agents/memory-search.js";
 import { createConfiguredProviderLocalServiceAcquirer } from "../agents/provider-local-service.js";
 import { getRuntimeConfig } from "../config/io.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { logWarn } from "../logger.js";
 import { getMemoryEmbeddingProvider } from "../plugins/memory-embedding-provider-runtime.js";
@@ -21,7 +21,7 @@ import type { ResolvedGatewayAuth } from "./auth.js";
 import { sendJson, sendMissingScopeForbidden, watchClientDisconnect } from "./http-common.js";
 import { handleGatewayPostJsonEndpoint } from "./http-endpoint-helpers.js";
 import {
-  OPENCLAW_MODEL_ID,
+  NATESCLAW_MODEL_ID,
   authorizeOpenAiCompatibleHttpModelOverride,
   getHeader,
   isUnknownGatewayAgentError,
@@ -30,7 +30,7 @@ import {
   resolveOpenAiCompatibleHttpOperatorScopes,
 } from "./http-utils.js";
 
-// OpenAI-compatible `/v1/embeddings` bridge. It maps OpenClaw agent/model
+// OpenAI-compatible `/v1/embeddings` bridge. It maps Natesclaw agent/model
 // routing onto configured memory embedding providers while preserving the
 // response shape expected by OpenAI SDK clients.
 type OpenAiEmbeddingsHttpOptions = {
@@ -232,7 +232,7 @@ function resolveEmbeddingProviderRemoteConfig(remote: MemorySearchEmbeddingConfi
 }
 
 function isLocalEmbeddingProvider(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: EmbeddingProviderRequest;
 }): boolean {
   const providerId =
@@ -241,7 +241,7 @@ function isLocalEmbeddingProvider(params: {
 }
 
 async function createConfiguredEmbeddingProvider(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentDir: string;
   provider: EmbeddingProviderRequest;
   model: string;
@@ -343,10 +343,10 @@ export async function handleOpenAiEmbeddingsHttpRequest(
   }
 
   const cfg = getRuntimeConfig();
-  if (requestModel !== OPENCLAW_MODEL_ID && !resolveAgentIdFromModel(requestModel, cfg)) {
+  if (requestModel !== NATESCLAW_MODEL_ID && !resolveAgentIdFromModel(requestModel, cfg)) {
     sendJson(res, 400, {
       error: {
-        message: "Invalid `model`. Use `openclaw` or `openclaw/<agentId>`.",
+        message: "Invalid `model`. Use `natesclaw` or `natesclaw/<agentId>`.",
         type: "invalid_request_error",
       },
     });
@@ -387,7 +387,7 @@ export async function handleOpenAiEmbeddingsHttpRequest(
   const memorySearch = resolveMemorySearchConfig(cfg, agentId);
   const configuredProvider = memorySearch?.provider ?? "openai";
   const overrideModel =
-    normalizeOptionalString(getHeader(req, "x-openclaw-model")) ||
+    normalizeOptionalString(getHeader(req, "x-natesclaw-model")) ||
     normalizeOptionalString(memorySearch?.model) ||
     "";
   const target = resolveEmbeddingsTarget({

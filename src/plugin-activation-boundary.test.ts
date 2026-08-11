@@ -53,9 +53,9 @@ const loadPluginManifestRegistryForPluginRegistry = vi.hoisted(() =>
         skills: [],
         hooks: [],
         origin: "bundled",
-        rootDir: "/tmp/openclaw-test-channel-fixture",
+        rootDir: "/tmp/natesclaw-test-channel-fixture",
         source: "bundled",
-        manifestPath: "/tmp/openclaw-test-channel-fixture/openclaw.plugin.json",
+        manifestPath: "/tmp/natesclaw-test-channel-fixture/natesclaw.plugin.json",
       },
     ],
   })),
@@ -133,7 +133,7 @@ describe("plugin activation boundary", () => {
     expect(
       isStaticallyChannelConfigured({}, "irc", {
         IRC_HOST: "irc.example.com",
-        IRC_NICK: "openclaw",
+        IRC_NICK: "natesclaw",
       }),
     ).toBe(true);
     expect(isStaticallyChannelConfigured({}, "whatsapp", {})).toBe(false);

@@ -22,14 +22,14 @@ function createTuiPtyVitestConfig(env?: Record<string, string | undefined>) {
   const baseTest = sharedVitestConfig.test ?? {};
   const exclude = (baseTest.exclude ?? []).filter((pattern) => pattern !== "**/*.e2e.test.ts");
   const configEnv = env ?? process.env;
-  const includeLocal = configEnv.OPENCLAW_TUI_PTY_INCLUDE_LOCAL === "1";
+  const includeLocal = configEnv.NATESCLAW_TUI_PTY_INCLUDE_LOCAL === "1";
   const include = [
     "tui/tui-pty-harness.e2e.test.ts",
     "tui/tui-reset-transition-pty.e2e.test.ts",
     ...(includeLocal ? ["tui/tui-pty-local.e2e.test.ts"] : []),
   ];
   const includeFromEnv = toTuiPtyIncludePatterns(
-    loadPatternListFromEnv("OPENCLAW_VITEST_INCLUDE_FILE", configEnv),
+    loadPatternListFromEnv("NATESCLAW_VITEST_INCLUDE_FILE", configEnv),
   );
   const includeFromArgv = toTuiPtyIncludePatterns(narrowIncludePatternsForCli(targetableIncludes));
   const baseSequence = (baseTest as { sequence?: { groupOrder?: number } }).sequence;
@@ -48,7 +48,7 @@ function createTuiPtyVitestConfig(env?: Record<string, string | undefined>) {
       reporters: ["verbose", ...(configEnv.GITHUB_ACTIONS === "true" ? ["github-actions"] : [])],
       setupFiles: [
         ...new Set(
-          [...(baseTest.setupFiles ?? []), "test/setup-openclaw-runtime.ts"].map(
+          [...(baseTest.setupFiles ?? []), "test/setup-natesclaw-runtime.ts"].map(
             resolveRepoRootPath,
           ),
         ),

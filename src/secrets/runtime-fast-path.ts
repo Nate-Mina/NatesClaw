@@ -1,6 +1,6 @@
 /** Detects when secrets runtime preparation can safely use a fast path. */
 import { existsSync } from "node:fs";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import {
   listAgentIds,
   resolveAgentDir,
@@ -10,7 +10,7 @@ import { getRuntimeAuthProfileStoreCredentialsRevision } from "../agents/auth-pr
 import { resolveSharedMainAuthAgentDir } from "../agents/auth-profiles/shared-main-dir.js";
 import { resolveAuthProfileDatabasePath } from "../agents/auth-profiles/sqlite.js";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import type { PluginOrigin } from "../plugins/plugin-origin.types.js";
 import { resolveUserPath } from "../utils.js";
@@ -27,10 +27,10 @@ const RUNTIME_PATH_ENV_KEYS = [
   "USERPROFILE",
   "HOMEDRIVE",
   "HOMEPATH",
-  "OPENCLAW_HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_AGENT_DIR",
+  "NATESCLAW_HOME",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_AGENT_DIR",
 ] as const;
 
 /**
@@ -57,7 +57,7 @@ export function mergeSecretsRuntimeEnv(
  * Collects default and named agent directories that may contain auth profile stores.
  */
 export function collectCandidateAgentDirs(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   env: NodeJS.ProcessEnv | Record<string, string | undefined> = process.env,
 ): string[] {
   const dirs = new Set<string>();
@@ -72,7 +72,7 @@ export function collectCandidateAgentDirs(
  * Combines explicit refresh agent dirs with config-derived dirs for runtime refresh.
  */
 export function resolveRefreshAgentDirs(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   context: SecretsRuntimeRefreshContext,
 ): string[] {
   const configDerived = collectCandidateAgentDirs(config, context.env);
@@ -83,7 +83,7 @@ export function resolveRefreshAgentDirs(
 }
 
 function resolveCandidateAgentDirs(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv | Record<string, string | undefined>;
   agentDirs?: string[];
 }): string[] {
@@ -100,7 +100,7 @@ function hasCandidateAuthProfileStoreSource(agentDir: string): boolean {
  * Returns whether canonical auth-profile databases exist for candidate agent dirs.
  */
 function hasCandidateAuthProfileStoreSources(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv | Record<string, string | undefined>;
   agentDirs?: string[];
 }): boolean {
@@ -146,7 +146,7 @@ function hasActiveRuntimeWebFetchProviderSurface(
   return hasCredentialBearingObjectValue(fetchConfig, defaults);
 }
 
-function hasRuntimeWebToolConfigSurface(config: OpenClawConfig): boolean {
+function hasRuntimeWebToolConfigSurface(config: NatesclawConfig): boolean {
   const web = config.tools?.web;
   const defaults = config.secrets?.defaults;
   const fetchExplicitlyDisabled =
@@ -190,7 +190,7 @@ function hasRuntimeWebToolConfigSurface(config: OpenClawConfig): boolean {
  */
 /** Returns whether current config/auth/plugin state allows skipping full secret preparation. */
 export function canUseSecretsRuntimeFastPath(params: {
-  sourceConfig: OpenClawConfig;
+  sourceConfig: NatesclawConfig;
   authStores: Array<{ agentDir: string; store: AuthProfileStore }>;
 }): boolean {
   if (hasRuntimeWebToolConfigSurface(params.sourceConfig)) {
@@ -207,7 +207,7 @@ export function canUseSecretsRuntimeFastPath(params: {
  * Prepares a runtime snapshot without resolving refs when config and auth stores contain none.
  */
 export function prepareSecretsRuntimeFastPathSnapshot(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   agentDirs?: string[];
   includeAuthStoreRefs?: boolean;

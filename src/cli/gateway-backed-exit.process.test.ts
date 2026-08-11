@@ -141,14 +141,14 @@ async function runIsolatedGatewayCli(params: {
           NODE_DISABLE_COMPILE_CACHE: "1",
           NODE_ENV: undefined,
           NODE_OPTIONS: undefined,
-          OPENCLAW_CONFIG_PATH: params.configPath,
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-          OPENCLAW_GATEWAY_PASSWORD: undefined,
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_GATEWAY_URL: undefined,
-          OPENCLAW_HOME: params.root,
-          OPENCLAW_NO_RESPAWN: "1",
-          OPENCLAW_STATE_DIR: params.stateDir,
+          NATESCLAW_CONFIG_PATH: params.configPath,
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_GATEWAY_PASSWORD: undefined,
+          NATESCLAW_GATEWAY_TOKEN: undefined,
+          NATESCLAW_GATEWAY_URL: undefined,
+          NATESCLAW_HOME: params.root,
+          NATESCLAW_NO_RESPAWN: "1",
+          NATESCLAW_STATE_DIR: params.stateDir,
           VITEST: undefined,
           ...params.env,
         },
@@ -179,16 +179,16 @@ async function runIsolatedGatewayCli(params: {
 
 describe("gateway-backed CLI process exit", () => {
   it("exits promptly after cron list emits complete output", async () => {
-    const root = tempDirs.make("openclaw-gateway-cli-exit-");
+    const root = tempDirs.make("natesclaw-gateway-cli-exit-");
     const stateDir = path.join(root, "state");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "natesclaw.json");
     const caTriggerPath = path.join(root, "load-default-ca.mjs");
     const token = "test-token";
     const gateway = await startCronListGateway(token);
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(
       caTriggerPath,
-      `if (process.env.OPENCLAW_NODE_OPTIONS_READY === "1") {
+      `if (process.env.NATESCLAW_NODE_OPTIONS_READY === "1") {
   const { getCACertificates } = await import("node:tls");
   getCACertificates("default");
 }
@@ -221,10 +221,10 @@ describe("gateway-backed CLI process exit", () => {
           NODE_ENV: undefined,
           NODE_OPTIONS: undefined,
           NODE_USE_SYSTEM_CA: "1",
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-          OPENCLAW_NODE_OPTIONS_READY: undefined,
-          OPENCLAW_STATE_DIR: stateDir,
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_NODE_OPTIONS_READY: undefined,
+          NATESCLAW_STATE_DIR: stateDir,
           VITEST: undefined,
         },
         stdio: ["pipe", "pipe", "pipe"],
@@ -266,9 +266,9 @@ describe("gateway-backed CLI process exit", () => {
   }, 20_000);
 
   it("keeps gateway auth failures machine-readable through the real health entry point", async () => {
-    const root = tempDirs.make("openclaw-gateway-auth-json-");
+    const root = tempDirs.make("natesclaw-gateway-auth-json-");
     const stateDir = path.join(root, "state");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "natesclaw.json");
     const port = await getFreePort();
     await fs.mkdir(stateDir, { recursive: true });
 
@@ -277,7 +277,7 @@ describe("gateway-backed CLI process exit", () => {
       root,
       stateDir,
       configPath,
-      env: { OPENCLAW_GATEWAY_PORT: String(port) },
+      env: { NATESCLAW_GATEWAY_PORT: String(port) },
     });
 
     expect(result, result.stderr).toMatchObject({ code: 1, signal: null, stderr: "" });
@@ -291,9 +291,9 @@ describe("gateway-backed CLI process exit", () => {
   }, 30_000);
 
   it("preserves pre-hello rate-limit details through the real health entry point", async () => {
-    const root = tempDirs.make("openclaw-gateway-rate-limit-json-");
+    const root = tempDirs.make("natesclaw-gateway-rate-limit-json-");
     const stateDir = path.join(root, "state");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "natesclaw.json");
     const gateway = await startRateLimitedGateway();
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(

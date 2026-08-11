@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
 import type {
   SessionCatalogProvider,
   SessionUpstreamActivity,
   SessionUpstreamProbe,
-} from "openclaw/plugin-sdk/session-catalog";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/session-catalog";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { CodexAppServerRpcError } from "./app-server/client.js";
 import type {
   CodexThread,
@@ -202,10 +202,10 @@ async function checkCodexUpstreamActivity(
 }
 
 export function createChecker(params: {
-  api: OpenClawPluginApi;
+  api: NatesclawPluginApi;
   bindingStore: CodexAppServerBindingStore;
   control: CodexSessionCatalogControl;
-  getRuntimeConfig: () => OpenClawConfig | undefined;
+  getRuntimeConfig: () => NatesclawConfig | undefined;
 }): NonNullable<SessionCatalogProvider["checkUpstreamActivity"]> {
   return async (probes) =>
     await checkCodexUpstreamActivity(probes, params.control, async (probe) => {

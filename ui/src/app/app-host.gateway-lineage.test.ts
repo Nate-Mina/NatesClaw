@@ -37,7 +37,7 @@ function createGatewayHarness() {
 }
 
 function renderGatewaySurface(gateway: ApplicationGateway): string {
-  const app = document.createElement("openclaw-app") as unknown as {
+  const app = document.createElement("natesclaw-app") as unknown as {
     runtime: { context: ApplicationContext };
     render: () => { strings: readonly string[] };
     synchronizeGateway: (gateway: ApplicationGateway) => void;
@@ -68,8 +68,8 @@ describe("Control UI Gateway target lineage", () => {
 
     const surface = renderGatewaySurface(gateway);
 
-    expect(surface).toContain("<openclaw-login-gate");
-    expect(surface).not.toContain("<openclaw-app-shell");
+    expect(surface).toContain("<natesclaw-login-gate");
+    expect(surface).not.toContain("<natesclaw-app-shell");
   });
 
   it("keeps an established Gateway's dashboard mounted during its own retry", () => {
@@ -80,8 +80,8 @@ describe("Control UI Gateway target lineage", () => {
 
     const surface = renderGatewaySurface(gateway);
 
-    expect(surface).toContain("<openclaw-app-shell");
-    expect(surface).not.toContain("<openclaw-login-gate");
+    expect(surface).toContain("<natesclaw-app-shell");
+    expect(surface).not.toContain("<natesclaw-login-gate");
   });
 
   it("retains a replacement Gateway's dashboard after its own successful hello", () => {
@@ -94,7 +94,7 @@ describe("Control UI Gateway target lineage", () => {
 
     const surface = renderGatewaySurface(gateway);
 
-    expect(surface).toContain("<openclaw-app-shell");
-    expect(surface).not.toContain("<openclaw-login-gate");
+    expect(surface).toContain("<natesclaw-app-shell");
+    expect(surface).not.toContain("<natesclaw-login-gate");
   });
 });

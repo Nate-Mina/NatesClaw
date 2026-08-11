@@ -19,7 +19,7 @@ advances a milestone).
 | 1a  | Naming: session copy revert                          | landed      | #120667 |
 | 1b  | Naming: devices consolidation                        | landed      | #120689 |
 | 1c  | Cleanup: node-pairing → device-pairing merge         | not started | —       |
-| 2   | `openclaw resume` + web Continue in terminal         | in progress | #120664 |
+| 2   | `natesclaw resume` + web Continue in terminal         | in progress | #120664 |
 | 3   | `oc-pair://` one-paste pairing                       | not started | —       |
 | 4   | Picker + enrichment + projects read model            | not started | —       |
 | 5   | Device runners                                       | not started | —       |
@@ -37,7 +37,7 @@ replace it.
 
 ## Problem
 
-OpenClaw has three disconnected answers to "where does work run":
+Natesclaw has three disconnected answers to "where does work run":
 
 - **Nodes** receive forwarded `exec host=node` calls only; the turn loop never
   leaves the gateway. A user's always-on Mac Studio is less capable as a
@@ -94,8 +94,8 @@ Naming rulings (operator-decided 2026-08-08):
 - **devices** is the user-facing word for paired hardware; "nodes" remains
   protocol/internal vocabulary only. The route/i18n debt (`nodes` route id,
   `/settings/devices` path, `nodes.*` i18n keys) consolidates on devices.
-- New CLI ergonomics ship as **verbs** (`openclaw resume`), never a second
-  noun command next to `openclaw sessions`.
+- New CLI ergonomics ship as **verbs** (`natesclaw resume`), never a second
+  noun command next to `natesclaw sessions`.
 - "runner" is an internal/docs concept; UI copy says "Runs on …".
 
 VISION.md gains one paragraph: the gateway is the coordinator and the default
@@ -117,12 +117,12 @@ attach to sessions, so where a session runs never changes how you talk to it.
   (`packages/gateway-protocol/src/schema/worker-admission.ts:32-34`) with
   minted per-dispatch credentials and exact bundle-hash admission
   (`src/gateway/worker-environments/admission.ts:80-104`). Devices become
-  runners only by running `openclaw worker` under that admission.
+  runners only by running `natesclaw worker` under that admission.
 - **No dispatch into a live checkout.** Workspace sync requires exclusive
   ownership of the remote dir (wiped every sync,
   `workspace-sync-setup-script.ts:29`); reconcile treats divergence from the
   base manifest as worker output. Device runners use the same private
-  per-session dir under `$HOME/.openclaw-worker/` that the qa-lab static-ssh
+  per-session dir under `$HOME/.natesclaw-worker/` that the qa-lab static-ssh
   provider proves today.
 - **No folding of `exec host=node`.** Per-call exec routing is ~5k LOC of
   four-layer fail-closed approval machinery (gateway TOCTOU re-checks, node
@@ -149,16 +149,16 @@ attach to sessions, so where a session runs never changes how you talk to it.
 
 Already true by construction: the transcript and placement live on the
 gateway, inference originates from the gateway in every placement, and the
-TUI is a full gateway client (`openclaw tui --session <key>`, Ctrl+P picker,
+TUI is a full gateway client (`natesclaw tui --session <key>`, Ctrl+P picker,
 last-session resume — `src/tui/tui-last-session.ts`). Start a session on the
 web running in the cloud; the TUI attaches and turns route to the worker.
 
 Delta is ergonomics only:
 
-- `openclaw resume [query]` — fuzzy-match recent sessions across agents by
+- `natesclaw resume [query]` — fuzzy-match recent sessions across agents by
   name/key; no query opens a picker; resolves to `tui --session <key>`.
 - Web UI "Continue in terminal" on session rows: shows the exact command
-  (`openclaw resume <key>`), mirroring the terminal-resume affordance the
+  (`natesclaw resume <key>`), mirroring the terminal-resume affordance the
   Codex/Claude session catalogs already have.
 - No new protocol surface; `sessions.list` already carries what the resolver
   needs.
@@ -176,7 +176,7 @@ bootstrapToken }` base64url blob (`src/pairing/setup-code.ts:40-44,406-410`),
 Gaps to close:
 
 - `oc-pair://<setupCode>` scheme wrapper (payload unchanged).
-- `openclaw node run --pair <code|url>` redeem path: decode blob, configure
+- `natesclaw node run --pair <code|url>` redeem path: decode blob, configure
   host/port/token, connect (today only `--host/--port/--tls-fingerprint`
   flags exist, `src/node-host/runner.ts:27-37`).
 - Add the TLS fingerprint to `PairingSetupPayload` (node host already accepts
@@ -202,7 +202,7 @@ ssh}`, `inspect`, `destroy`. The qa-lab static-ssh provider
   a persistent host with a no-op destroy, and sync/reconcile work unmodified
   because the remote workspace is a private per-session mirror.
 - Admission, placement state machine, SQLite stores, transcript CAS,
-  inference proxy, and the `openclaw worker` runtime need essentially no
+  inference proxy, and the `natesclaw worker` runtime need essentially no
   changes; admission is credential-based, not transport-based.
 - The seam is `WorkerTunnelHandle`
   (`src/gateway/worker-environments/tunnel-contract.ts:74`, 85 lines):
@@ -223,7 +223,7 @@ Work items:
   optimization decided by review.
 - **Pinned runtime with consent**: the gateway pushes its content-hashed
   bundle (existing bootstrap, `bootstrap.ts:26-104`) into
-  `$HOME/.openclaw-worker/` on the device. Installing a runtime on a personal
+  `$HOME/.natesclaw-worker/` on the device. Installing a runtime on a personal
   machine requires a one-time per-device operator approval, surfaced in the
   pairing/approval UI. Exact-version admission stays; version skew is solved
   by reinstalling the bundle, never by relaxing the check.
@@ -241,7 +241,7 @@ Work items:
 
 ### 3b. Projects (derived read model)
 
-OpenClaw already computes project identity twice without naming it: the
+Natesclaw already computes project identity twice without naming it: the
 worktree service derives `originUrl` + a 16-char repo fingerprint
 (`src/agents/worktrees/service.ts:199-205`), and the sessions catalog groups
 Codex/Claude rows by project folder, folding `.claude/worktrees/<name>` into
@@ -326,7 +326,7 @@ variant against reused machinery; component 5 deletes more than 3 adds.
 - **Tailscale auth keys**: one-shot short-lived pairing key vs long-lived
   device credential, separate revocation → copied in component 2.
 - **Claude Code teleport**: continuation re-materializes state because their
-  cloud session lives elsewhere; OpenClaw's gateway-owned sessions make
+  cloud session lives elsewhere; Natesclaw's gateway-owned sessions make
   continuation attach-only — simpler, no state movement. Their fork-not-move
   semantics inform our stop-and-continue framing.
 - **Cursor 3 location picker**: Local/Worktree/Cloud/SSH in one dropdown
@@ -342,7 +342,7 @@ Independently mergeable PR series, roughly in order; 1–3 can interleave.
 
 1. **Naming wave**: session copy revert + devices consolidation (UI/i18n/tests
    only; no protocol or CLI changes).
-2. **Continuation ergonomics**: `openclaw resume`, web "Continue in
+2. **Continuation ergonomics**: `natesclaw resume`, web "Continue in
    terminal".
 3. **Pairing**: `oc-pair://`, `node run --pair`, TLS pin in payload, node
    profile in the pairing UI.
@@ -369,13 +369,13 @@ Independently mergeable PR series, roughly in order; 1–3 can interleave.
   `runners.profiles` via doctor in milestone 5?
 - Device-runner transport (a) sshd vs (b) multiplexed gateway connection:
   ship (a) first; is (b) worth the protocol surface at all?
-- Should `openclaw resume` also start the gateway/TUI in local mode when no
+- Should `natesclaw resume` also start the gateway/TUI in local mode when no
   gateway is reachable, or fail with guidance?
 - Repo-owned setup contract (devcontainer.json) for worker profiles: this
   plan or a follow-up?
 - Forge integration (GitHub repo lists, clone-anywhere, PR status on session
   rows): explicitly out of this plan; follow-up once the derived project
   model has usage.
-- Project naming collision: `openclaw fleet` and multi-tenant docs use
+- Project naming collision: `natesclaw fleet` and multi-tenant docs use
   "project" loosely in places — sweep during the naming wave to keep
   "project" exclusively for repo identity.

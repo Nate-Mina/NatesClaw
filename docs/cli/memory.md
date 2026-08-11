@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `openclaw memory` (status/index/search/promote/promote-explain/rem-harness/rem-backfill/session-backfill)"
+summary: "CLI reference for `natesclaw memory` (status/index/search/promote/promote-explain/rem-harness/rem-backfill/session-backfill)"
 read_when:
   - You want to index or search semantic memory
   - You're debugging memory availability or indexing
@@ -7,7 +7,7 @@ read_when:
 title: "Memory"
 ---
 
-# `openclaw memory`
+# `natesclaw memory`
 
 Manage semantic memory indexing, search, and promotion into `MEMORY.md`.
 Provided by the bundled `memory-core` plugin, available when
@@ -21,7 +21,7 @@ Related: [Memory](/concepts/memory) concept, [Dreaming](/concepts/dreaming),
 ## `memory status`
 
 ```bash
-openclaw memory status [--agent <id>] [--deep] [--index] [--fix] [--json] [--verbose]
+natesclaw memory status [--agent <id>] [--deep] [--index] [--fix] [--json] [--verbose]
 ```
 
 Without `--agent`, runs for every agent in `agents.entries`; if no agent list is
@@ -45,7 +45,7 @@ Status also lists any extra search paths from `memory.search.extraPaths`.
 ## `memory index`
 
 ```bash
-openclaw memory index [--agent <id>] [--force] [--verbose]
+natesclaw memory index [--agent <id>] [--force] [--verbose]
 ```
 
 Same per-agent scoping as `status`. `--force` runs a full reindex instead of
@@ -55,7 +55,7 @@ extra-path details before showing indexing progress.
 ## `memory search`
 
 ```bash
-openclaw memory search [query] [--query <text>] [--agent <id>] [--max-results <n>] [--min-score <n>] [--json]
+natesclaw memory search [query] [--query <text>] [--agent <id>] [--max-results <n>] [--min-score <n>] [--json]
 ```
 
 - Query: positional `[query]` or `--query <text>`. If both are set, `--query`
@@ -76,7 +76,7 @@ Rank short-term candidates from `memory/YYYY-MM-DD.md` and optionally append
 top entries to `MEMORY.md`.
 
 ```bash
-openclaw memory promote [--agent <id>] [--limit <n>] [--min-score <n>] \
+natesclaw memory promote [--agent <id>] [--limit <n>] [--min-score <n>] \
   [--min-recall-count <n>] [--min-unique-queries <n>] [--apply] [--include-promoted] [--json]
 ```
 
@@ -105,7 +105,7 @@ since ranking are respected instead of promoting from a stale snapshot.
 Explain one promotion candidate's score breakdown.
 
 ```bash
-openclaw memory promote-explain <selector> [--agent <id>] [--include-promoted] [--json]
+natesclaw memory promote-explain <selector> [--agent <id>] [--include-promoted] [--json]
 ```
 
 `<selector>` matches a candidate's key (exact or substring), path, or snippet
@@ -117,7 +117,7 @@ Preview REM reflections, candidate truths, and deep-phase promotion output
 without writing anything.
 
 ```bash
-openclaw memory rem-harness [--agent <id>] [--path <file-or-dir>] [--grounded] [--include-promoted] [--json]
+natesclaw memory rem-harness [--agent <id>] [--path <file-or-dir>] [--grounded] [--include-promoted] [--json]
 ```
 
 - `--path <file-or-dir>`: seed the harness from historical `YYYY-MM-DD.md`
@@ -131,8 +131,8 @@ Write grounded historical REM summaries into `DREAMS.md` for UI review.
 Reversible.
 
 ```bash
-openclaw memory rem-backfill --path <file-or-dir> [--agent <id>] [--stage-short-term] [--json]
-openclaw memory rem-backfill --rollback [--rollback-short-term] [--json]
+natesclaw memory rem-backfill --path <file-or-dir> [--agent <id>] [--stage-short-term] [--json]
+natesclaw memory rem-backfill --rollback [--rollback-short-term] [--json]
 ```
 
 - `--path <file-or-dir>`: required unless `--rollback`/`--rollback-short-term`
@@ -151,9 +151,9 @@ staging pipeline used by dreaming. The default is a read-only preview, ordered
 from the oldest unprocessed day to the newest.
 
 ```bash
-openclaw memory session-backfill --agent <id> [--from YYYY-MM-DD] [--to YYYY-MM-DD] \
+natesclaw memory session-backfill --agent <id> [--from YYYY-MM-DD] [--to YYYY-MM-DD] \
   [--limit-days <n>] [--archive-files <path...>] [--rem | --apply] [--json]
-openclaw memory session-backfill --agent <id> --rollback [--json]
+natesclaw memory session-backfill --agent <id> --rollback [--json]
 ```
 
 | Flag                        | Default      | Effect                                                                                                        |
@@ -201,7 +201,7 @@ facts into `MEMORY.md`). Only deep writes to `MEMORY.md`.
 
 - Enable with `plugins.entries.memory-core.config.dreaming.enabled: true`
   (default `true`); `memory-core` auto-manages the sweep cron job, no manual
-  `openclaw cron add` required.
+  `natesclaw cron add` required.
 - Toggle from chat with `/dreaming on|off`; inspect with `/dreaming status`
   (or `/dreaming`/`/dreaming help`). `on`/`off` requires channel owner status
   or gateway `operator.admin`; `status` and help stay available to anyone who

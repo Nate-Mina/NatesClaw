@@ -1,11 +1,11 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { SkillProposalOrigin, SkillWorkshopRunOptions } from "../../skills/workshop/types.js";
 import { createSkillWorkshopTool } from "./skill-workshop-tool.js";
 
 export function createConfiguredSkillWorkshopTool(params: {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId: string;
   sessionKey?: string;
   runId?: string;

@@ -2,7 +2,7 @@
  * Gateway startup plugin bootstrap tests.
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import "./server-startup-bootstrap.test-support.js";
@@ -100,7 +100,7 @@ const loadPluginLookUpTable = vi.hoisted(() =>
     metrics: pluginLookUpTableMetrics,
   })),
 );
-const resolveOpenClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
+const resolveNatesclawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
 const runChannelPluginStartupMaintenance = vi.hoisted(() =>
   vi.fn(async (_params: unknown) => undefined),
 );
@@ -132,8 +132,8 @@ vi.mock("../config/plugin-auto-enable.js", () => ({
   applyPluginAutoEnable: (params: { config: unknown }) => applyPluginAutoEnable(params),
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRootSync: (params: unknown) => resolveOpenClawPackageRootSync(params),
+vi.mock("../infra/natesclaw-root.js", () => ({
+  resolveNatesclawPackageRootSync: (params: unknown) => resolveNatesclawPackageRootSync(params),
 }));
 
 vi.mock("../infra/device-pairing-migration.js", () => ({
@@ -192,16 +192,16 @@ function firstCallArg<T>(mock: { mock: { calls: unknown[][] } }, _type?: (value:
   return call[0] as T;
 }
 
-function slackConfig(): OpenClawConfig {
+function slackConfig(): NatesclawConfig {
   return {
     channels: {
       slack: { enabled: true, token: "token" },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 async function prepareBootstrapWithRuntimeConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options: {
     pluginMetadataSnapshot?: PluginMetadataSnapshot;
     workerProviderIds?: readonly string[];
@@ -309,7 +309,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       },
       metrics: pluginLookUpTableMetrics,
     });
-    resolveOpenClawPackageRootSync.mockClear().mockReturnValue("/package");
+    resolveNatesclawPackageRootSync.mockClear().mockReturnValue("/package");
     runChannelPluginStartupMaintenance.mockClear();
     runStartupSessionMigration.mockClear();
     migrateLegacyDevicePairingStore.mockClear();
@@ -334,7 +334,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       plugins: {
         allow: ["bench-plugin"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const activationConfig = {
       channels: {
         telegram: {
@@ -350,7 +350,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const runtimeConfig = {
       channels: {
         telegram: {
@@ -376,7 +376,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     applyPluginAutoEnable.mockReturnValueOnce({
       config: activationConfig,
       changes: [],
@@ -399,9 +399,9 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       manifestRegistry: pluginManifestRegistry,
     });
     const lookupInput = firstCallArg<{
-      activationSourceConfig?: OpenClawConfig;
+      activationSourceConfig?: NatesclawConfig;
       metadataSnapshot?: PluginMetadataSnapshot;
-      config?: OpenClawConfig;
+      config?: NatesclawConfig;
     }>(loadPluginLookUpTable);
     expect(lookupInput.activationSourceConfig).toBe(sourceConfig);
     expect(lookupInput.metadataSnapshot).toBe(pluginMetadataSnapshot);
@@ -428,7 +428,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
   });
 
   it("threads durable worker provider ids into startup lookup planning", async () => {
-    await prepareBootstrapWithRuntimeConfig({ channels: {} } as OpenClawConfig, {
+    await prepareBootstrapWithRuntimeConfig({ channels: {} } as NatesclawConfig, {
       workerProviderIds: ["static-ssh"],
     });
 
@@ -479,7 +479,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           telegram: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = await prepareBootstrapWithRuntimeConfig(cfg, {
       pluginMetadataSnapshot,
@@ -518,7 +518,7 @@ describe("loadGatewayStartupPluginRuntime", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       workspaceDir: "/workspace",
       log,
       baseMethods: ["ping"],
@@ -552,7 +552,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
         memory: { search: { provider: "openai" } },
 
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([]),
       log,
     });
@@ -569,7 +569,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
         memory: { search: { provider: "openai" } },
 
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry(["openai"]),
       log,
     });
@@ -585,7 +585,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
         memory: { search: { provider: "openai", fallback: "ollama" } },
 
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry(["openai"]),
       log,
     });
@@ -602,7 +602,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
         memory: { search: { provider: "openai", fallback: "ollama" } },
 
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry(["openai", "ollama"]),
       log,
     });
@@ -618,7 +618,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
         memory: { search: { provider: "generic-embed" } },
 
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([], { embeddingProviderIds: ["generic-embed"] }),
       log,
     });
@@ -634,7 +634,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
         memory: { search: { provider: "openai-compatible" } },
 
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([]),
       log,
     });
@@ -659,7 +659,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([]),
       log,
     });
@@ -675,7 +675,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
         memory: { search: { provider: "none", fallback: "openai" } },
 
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([]),
       log,
     });
@@ -692,14 +692,14 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
 
         agents: { defaults: {} },
         plugins: { slots: { memory: "none" } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([]),
       log,
     });
     expect(log.warn).not.toHaveBeenCalled();
   });
 
-  function customOllamaConfig(source: "provider" | "fallback" = "provider"): OpenClawConfig {
+  function customOllamaConfig(source: "provider" | "fallback" = "provider"): NatesclawConfig {
     const memorySearch =
       source === "provider"
         ? { provider: "ollama-5080" }
@@ -715,7 +715,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
   }
 
   it.each([
@@ -779,7 +779,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
             },
           ],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([]),
       log,
     });
@@ -801,7 +801,7 @@ describe("warnUnregisteredConfiguredMemoryEmbeddingProviders", () => {
             },
           ],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       pluginRegistry: registry([]),
       log,
     });

@@ -2,7 +2,7 @@
 // can avoid triggering channel discovery.
 import { getLoadedChannelPluginForRead } from "../../channels/plugins/registry-loaded.js";
 import type { ChannelOutboundTargetMode } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   resolveOutboundTargetWithPlugin,
   type OutboundTargetResolution,
@@ -13,7 +13,7 @@ export function tryResolveLoadedOutboundTarget(params: {
   channel: string;
   to?: string;
   allowFrom?: string[];
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   accountId?: string | null;
   mode?: ChannelOutboundTargetMode;
 }): OutboundTargetResolution | undefined {

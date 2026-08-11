@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { getActiveGatewayRootWorkCount } from "../process/gateway-work-admission.js";
 import { scheduleGatewayIdleTask } from "./server-idle-task.js";
 
@@ -14,7 +14,7 @@ type ContextCachePrewarmHandle = {
 };
 
 export function scheduleContextCachePrewarm(params: {
-  getConfig: () => OpenClawConfig;
+  getConfig: () => NatesclawConfig;
   startupTrace?: StartupTrace;
   log: { warn: (msg: string) => void };
 }): ContextCachePrewarmHandle {

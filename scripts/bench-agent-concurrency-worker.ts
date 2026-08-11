@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
-import { toErrorObject } from "@openclaw/normalization-core/error-coercion";
+import { toErrorObject } from "@natesclaw/normalization-core/error-coercion";
 import type { SubagentRunRecord } from "../src/agents/subagents/registry/subagent-registry.types.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../src/state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../src/state/natesclaw-state-db.generated.js";
 import {
   WORKER_RESULT_SENTINEL,
   type WorkerResult,
@@ -101,8 +101,8 @@ async function resetRuntime(persist: boolean): Promise<void> {
   const [subagents, tasks, stateDb, agentDb] = await Promise.all([
     import("../src/agents/subagents/registry/subagent-registry.test-helpers.js"),
     import("../src/tasks/task-runtime.test-helpers.js"),
-    import("../src/state/openclaw-state-db.js"),
-    import("../src/state/openclaw-agent-db.js"),
+    import("../src/state/natesclaw-state-db.js"),
+    import("../src/state/natesclaw-agent-db.js"),
   ]);
   subagents.resetSubagentRegistryForTests({ persist });
   subagents.testing.setDepsForTest();
@@ -111,8 +111,8 @@ async function resetRuntime(persist: boolean): Promise<void> {
   tasks.resetDetachedTaskLifecycleRuntimeForTests();
   tasks.resetTaskRegistryForTests({ persist });
   tasks.resetTaskFlowRegistryForTests({ persist });
-  stateDb.closeOpenClawStateDatabaseForTest();
-  agentDb.closeOpenClawAgentDatabasesForTest();
+  stateDb.closeNatesclawStateDatabaseForTest();
+  agentDb.closeNatesclawAgentDatabasesForTest();
 }
 
 function createTerminalWaitBarrier() {
@@ -248,14 +248,14 @@ async function configureSpawnRuntime(
   subagents.testing.setDepsForTest(sharedDeps);
 }
 
-type BenchmarkStateDatabase = Pick<OpenClawStateKyselyDatabase, "subagent_runs" | "task_runs">;
+type BenchmarkStateDatabase = Pick<NatesclawStateKyselyDatabase, "subagent_runs" | "task_runs">;
 
 async function readDurableRows() {
   const [{ executeSqliteQuerySync, getNodeSqliteKysely }, stateDb] = await Promise.all([
     import("../src/infra/kysely-sync.js"),
-    import("../src/state/openclaw-state-db.js"),
+    import("../src/state/natesclaw-state-db.js"),
   ]);
-  const database = stateDb.openOpenClawStateDatabase();
+  const database = stateDb.openNatesclawStateDatabase();
   const db = getNodeSqliteKysely<BenchmarkStateDatabase>(database.db);
   return {
     path: database.path,
@@ -770,12 +770,12 @@ async function runScenario(options: WorkerOptions, stateDir: string): Promise<Wo
 
 async function main(): Promise<void> {
   const options = parseOptions(process.argv.slice(2));
-  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-agent-concurrency-worker-"));
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-agent-concurrency-worker-"));
+  const previousStateDir = process.env.NATESCLAW_STATE_DIR;
   const previousNodeEnv = process.env.NODE_ENV;
   let result: WorkerResult | undefined;
   let failure: unknown;
-  process.env.OPENCLAW_STATE_DIR = stateDir;
+  process.env.NATESCLAW_STATE_DIR = stateDir;
   process.env.NODE_ENV = "test";
   try {
     const { pinRuntimePaths } = await import("../src/config/paths.js");
@@ -790,9 +790,9 @@ async function main(): Promise<void> {
       failure ??= error;
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.NATESCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.NATESCLAW_STATE_DIR = previousStateDir;
       }
       if (previousNodeEnv === undefined) {
         delete process.env.NODE_ENV;

@@ -1,5 +1,5 @@
-import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { sortUniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveVoiceModelRefs } from "../tts/voice-models.js";
 import {
   getLoadedRuntimePluginRegistry,
@@ -75,14 +75,14 @@ function shouldMergeManifestProvidersWhenActive(key: CapabilityProviderRegistryK
 
 function shouldSkipCapabilityResolution(params: {
   key: CapabilityProviderRegistryKey;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): boolean {
   return params.cfg?.plugins?.enabled === false && params.key !== "speechProviders";
 }
 
 /** Loads the manifest snapshot used to resolve capability-provider ownership. */
 export function loadCapabilityManifestSnapshot(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index" | "plugins">;
 }): Pick<PluginMetadataSnapshot, "index" | "plugins"> {
@@ -97,7 +97,7 @@ export function loadCapabilityManifestSnapshot(params: {
 
 function resolveCapabilityPluginIds(params: {
   key: CapabilityProviderRegistryKey;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   providerId?: string;
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index" | "plugins">;
@@ -131,7 +131,7 @@ function resolveCapabilityPluginIds(params: {
 }
 
 function createCapabilityProviderLoadOptions(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   resolution: CapabilityPluginResolution;
 }): PluginLoadOptions {
   const pluginIds = params.resolution.bundledCompatPluginIds;
@@ -257,7 +257,7 @@ function addModelConfigProviderIds(target: Set<string>, value: unknown): void {
 }
 
 function collectRequestedSpeechProviderIds(
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
   options: { includeVoiceModel: boolean },
 ): Set<string> {
   const requested = new Set<string>();
@@ -274,7 +274,7 @@ function collectRequestedSpeechProviderIds(
   return requested;
 }
 
-function collectRequestedVoiceModelProviderIds(cfg: OpenClawConfig | undefined): Set<string> {
+function collectRequestedVoiceModelProviderIds(cfg: NatesclawConfig | undefined): Set<string> {
   const requested = new Set<string>();
   addModelConfigProviderIds(requested, cfg?.agents?.defaults?.voiceModel);
   return requested;
@@ -292,7 +292,7 @@ function addMediaModelProviders(target: Set<string>, value: unknown): void {
 }
 
 function collectRequestedMediaUnderstandingProviderIds(
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
 ): Set<string> {
   const requested = new Set<string>();
   const media = cfg?.tools?.media;
@@ -302,7 +302,7 @@ function collectRequestedMediaUnderstandingProviderIds(
 
 function collectRequestedCapabilityProviderIds(params: {
   key: CapabilityProviderRegistryKey;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   includeVoiceModel?: boolean;
 }): Set<string> | undefined {
   switch (params.key) {
@@ -384,7 +384,7 @@ function filterLoadedProvidersForRequestedConfig<K extends CapabilityProviderReg
 
 function resolveRequestedCapabilityPluginIds(params: {
   key: CapabilityProviderRegistryKey;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   requested?: Set<string>;
   pluginMetadataSnapshot: Pick<PluginMetadataSnapshot, "index" | "plugins">;
 }): CapabilityPluginResolution | undefined {
@@ -418,7 +418,7 @@ function resolveRequestedCapabilityPluginIds(params: {
 function filterPolicyAllowedCapabilityProviders<K extends CapabilityProviderRegistryKey>(params: {
   entries: PluginRegistry[K];
   registry?: PluginRegistry;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   key: K;
   bundledPluginIds?: ReadonlySet<string>;
 }): PluginRegistry[K] {
@@ -494,7 +494,7 @@ function loadCapabilityProviderEntries<K extends CapabilityProviderRegistryKey>(
 export function resolvePluginCapabilityProvider<K extends CapabilityProviderRegistryKey>(params: {
   key: K;
   providerId: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): ProviderFor<K> | undefined {
   if (shouldSkipCapabilityResolution(params)) {
     return undefined;
@@ -548,7 +548,7 @@ export function resolvePluginCapabilityProvider<K extends CapabilityProviderRegi
 
 export function resolvePluginCapabilityProviders<K extends CapabilityProviderRegistryKey>(params: {
   key: K;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): ProviderFor<K>[] {
   if (shouldSkipCapabilityResolution(params)) {
     return [];
@@ -644,7 +644,7 @@ export function resolvePluginCapabilityProviders<K extends CapabilityProviderReg
 }
 
 export function prepareMediaCapabilityProviders(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   pluginMetadataSnapshot: Pick<PluginMetadataSnapshot, "index" | "plugins">;
   registry?: PluginRegistry;
 }) {

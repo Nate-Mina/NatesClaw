@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OutboundMediaAccess } from "openclaw/plugin-sdk/media-runtime";
-import { createOpenClawTestState, type OpenClawTestState } from "openclaw/plugin-sdk/test-state";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { OutboundMediaAccess } from "natesclaw/plugin-sdk/media-runtime";
+import { createNatesclawTestState, type NatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { clearSignalApprovalReactionTargetsForTest } from "./approval-reactions.js";
 import { signalPlugin } from "./channel.js";
@@ -16,7 +16,7 @@ const SIGNAL_IMAGE = Buffer.from(
 );
 
 type SignalMediaContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   to: string;
   text: string;
   mediaUrl: string;
@@ -75,15 +75,15 @@ const SIGNAL_MEDIA_ADAPTERS = [
 ] as const;
 
 describe("Signal host-owned outbound media access", () => {
-  let state: OpenClawTestState;
+  let state: NatesclawTestState;
   let server: http.Server;
-  let cfg: OpenClawConfig;
+  let cfg: NatesclawConfig;
   let requests: Array<{ envelope: SignalRpcEnvelope; attachment: Buffer | undefined }>;
 
   beforeEach(async () => {
-    state = await createOpenClawTestState({
+    state = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-signal-media-access-",
+      prefix: "natesclaw-signal-media-access-",
     });
     requests = [];
     server = http.createServer((request, response) => {

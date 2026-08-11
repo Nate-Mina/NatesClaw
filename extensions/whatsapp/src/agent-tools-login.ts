@@ -2,9 +2,9 @@
 import {
   optionalPositiveIntegerSchema,
   readPositiveIntegerParam,
-} from "openclaw/plugin-sdk/channel-actions";
-import type { ChannelAgentTool } from "openclaw/plugin-sdk/channel-contract";
-import { hasNonEmptyString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-actions";
+import type { ChannelAgentTool } from "natesclaw/plugin-sdk/channel-contract";
+import { hasNonEmptyString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { Type } from "typebox";
 import { startWebLoginWithQr, waitForWebLogin } from "../login-qr-api.js";
 

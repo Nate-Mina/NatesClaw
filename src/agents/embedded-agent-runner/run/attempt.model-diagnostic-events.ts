@@ -1,5 +1,5 @@
-import { isPromiseLike } from "@openclaw/normalization-core/promise-like";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isPromiseLike } from "@natesclaw/normalization-core/promise-like";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 /**
  * Emits diagnostic model-call events around embedded-agent stream functions.
  */

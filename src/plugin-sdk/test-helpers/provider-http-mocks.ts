@@ -129,7 +129,7 @@ const providerHttpMocks = vi.hoisted(() => ({
     if (params.provider === "google") {
       return {
         ...params.defaultHeaders,
-        "x-goog-api-client": "openclaw/test",
+        "x-goog-api-client": "natesclaw/test",
         ...params.callerHeaders,
       };
     }
@@ -277,15 +277,15 @@ providerHttpMocks.pollProviderOperationJsonMock.mockImplementation(
   },
 );
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: providerHttpMocks.resolveApiKeyForProviderMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", async (importActual) => ({
+vi.mock("natesclaw/plugin-sdk/provider-http", async (importActual) => ({
   assertOkOrThrowHttpError: providerHttpMocks.assertOkOrThrowHttpErrorMock,
   assertOkOrThrowProviderError: providerHttpMocks.assertOkOrThrowProviderErrorMock,
   assertProviderBinaryResponseContent: (
-    await importActual<typeof import("openclaw/plugin-sdk/provider-http")>()
+    await importActual<typeof import("natesclaw/plugin-sdk/provider-http")>()
   ).assertProviderBinaryResponseContent,
   createProviderOperationDeadline: ({
     label,

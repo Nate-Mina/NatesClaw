@@ -2,19 +2,19 @@ import fs from "node:fs";
 import {
   validateJsonSchemaValue,
   type JsonSchemaObject,
-} from "openclaw/plugin-sdk/json-schema-runtime";
+} from "natesclaw/plugin-sdk/json-schema-runtime";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-  OpenClawPluginNodeInvokePolicyContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+  NatesclawPluginApi,
+  NatesclawPluginNodeHostCommand,
+  NatesclawPluginNodeInvokePolicy,
+  NatesclawPluginNodeInvokePolicyContext,
+} from "natesclaw/plugin-sdk/plugin-entry";
 import { describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
 
 function validateManifestConfig(value: unknown) {
   const manifest = JSON.parse(
-    fs.readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf8"),
+    fs.readFileSync(new URL("./natesclaw.plugin.json", import.meta.url), "utf8"),
   ) as { configSchema: JsonSchemaObject };
   return validateJsonSchemaValue({
     cacheKey: "cua-computer.manifest.config.test",
@@ -25,13 +25,13 @@ function validateManifestConfig(value: unknown) {
 
 describe("cua-computer plugin registration", () => {
   it("registers the screen and dangerous computer node-host commands", () => {
-    const commands: OpenClawPluginNodeHostCommand[] = [];
-    const policies: OpenClawPluginNodeInvokePolicy[] = [];
+    const commands: NatesclawPluginNodeHostCommand[] = [];
+    const policies: NatesclawPluginNodeInvokePolicy[] = [];
     plugin.register({
       pluginConfig: {},
-      registerNodeHostCommand: (command: OpenClawPluginNodeHostCommand) => commands.push(command),
-      registerNodeInvokePolicy: (policy: OpenClawPluginNodeInvokePolicy) => policies.push(policy),
-    } as unknown as OpenClawPluginApi);
+      registerNodeHostCommand: (command: NatesclawPluginNodeHostCommand) => commands.push(command),
+      registerNodeInvokePolicy: (policy: NatesclawPluginNodeInvokePolicy) => policies.push(policy),
+    } as unknown as NatesclawPluginApi);
 
     expect(commands.map(({ command, cap, dangerous }) => ({ command, cap, dangerous }))).toEqual([
       { command: "screen.snapshot", cap: "screen", dangerous: false },
@@ -52,12 +52,12 @@ describe("cua-computer plugin registration", () => {
     expect(validateManifestConfig({ unexpected: true }).ok).toBe(false);
     expect(plugin.configSchema).not.toHaveProperty("uiHints");
 
-    const commands: OpenClawPluginNodeHostCommand[] = [];
+    const commands: NatesclawPluginNodeHostCommand[] = [];
     plugin.register({
       pluginConfig: config,
-      registerNodeHostCommand: (command: OpenClawPluginNodeHostCommand) => commands.push(command),
+      registerNodeHostCommand: (command: NatesclawPluginNodeHostCommand) => commands.push(command),
       registerNodeInvokePolicy: () => {},
-    } as unknown as OpenClawPluginApi);
+    } as unknown as NatesclawPluginApi);
 
     expect(commands.map(({ command, cap, dangerous }) => ({ command, cap, dangerous }))).toEqual([
       { command: "screen.snapshot", cap: "screen", dangerous: false },
@@ -66,12 +66,12 @@ describe("cua-computer plugin registration", () => {
   });
 
   it("forwards an explicitly armed computer action and preserves node refusals", async () => {
-    const policies: OpenClawPluginNodeInvokePolicy[] = [];
+    const policies: NatesclawPluginNodeInvokePolicy[] = [];
     plugin.register({
       pluginConfig: {},
       registerNodeHostCommand: () => {},
-      registerNodeInvokePolicy: (policy: OpenClawPluginNodeInvokePolicy) => policies.push(policy),
-    } as unknown as OpenClawPluginApi);
+      registerNodeInvokePolicy: (policy: NatesclawPluginNodeInvokePolicy) => policies.push(policy),
+    } as unknown as NatesclawPluginApi);
     const refusal = {
       ok: false as const,
       code: "INVALID_REQUEST",
@@ -80,7 +80,7 @@ describe("cua-computer plugin registration", () => {
     const invokeNode = vi.fn(async () => refusal);
 
     await expect(
-      policies[0]!.handle({ invokeNode } as unknown as OpenClawPluginNodeInvokePolicyContext),
+      policies[0]!.handle({ invokeNode } as unknown as NatesclawPluginNodeInvokePolicyContext),
     ).resolves.toEqual(refusal);
     expect(invokeNode).toHaveBeenCalledOnce();
   });

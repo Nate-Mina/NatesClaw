@@ -1,17 +1,17 @@
-import { isProviderAuthProfileConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+import { isProviderAuthProfileConfigured } from "natesclaw/plugin-sdk/provider-auth";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderOverrides,
   SpeechProviderPlugin,
   SpeechSynthesisTarget,
-} from "openclaw/plugin-sdk/speech";
+} from "natesclaw/plugin-sdk/speech";
 import {
   asFiniteNumberInRange,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { XAI_BASE_URL } from "./model-definitions.js";
 
 const XAI_SPEECH_RESPONSE_FORMATS = ["mp3", "wav", "pcm", "mulaw", "alaw"] as const;

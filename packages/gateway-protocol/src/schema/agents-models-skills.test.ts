@@ -61,7 +61,7 @@ const proposalRecord = (overrides: Record<string, unknown> = {}) => ({
   status: "pending",
   title: "weather-helper",
   description: "Improve weather checks",
-  schema: "openclaw.skill-workshop.proposal.v1",
+  schema: "natesclaw.skill-workshop.proposal.v1",
   createdAt: "2026-05-30T00:00:00.000Z",
   updatedAt: "2026-05-30T00:00:00.000Z",
   createdBy: "gateway",
@@ -218,7 +218,7 @@ describe("ModelsListResultSchema", () => {
       id: "gpt-image",
       name: "GPT Image",
       provider: "openai",
-      agentRuntime: { id: "codex", fallback: "openclaw", source: "model" },
+      agentRuntime: { id: "codex", fallback: "natesclaw", source: "model" },
       thinkingLevels: [
         { id: "off", label: "Off" },
         { id: "xhigh", label: "Extra high" },

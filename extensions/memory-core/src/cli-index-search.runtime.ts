@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
-import { resolveMemorySearchStaleness } from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { resolveMemoryDreamingConfig } from "openclaw/plugin-sdk/memory-core-host-status";
+import { resolveMemorySearchStaleness } from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
+import { resolveMemoryDreamingConfig } from "natesclaw/plugin-sdk/memory-core-host-status";
 import {
   buildCliMemorySearchSessionKey,
   formatAuditCounts,

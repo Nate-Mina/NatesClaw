@@ -1,10 +1,10 @@
 // Xai plugin module implements responses tool shared behavior.
-import { truncateSanitizedExternalContent } from "openclaw/plugin-sdk/security-runtime";
+import { truncateSanitizedExternalContent } from "natesclaw/plugin-sdk/security-runtime";
 import {
   isRecord,
   normalizeOptionalString as trimString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { XaiWebSearchResponse } from "./web-search-response.types.js";
 
 const XAI_CITATION_MAX_COUNT = 20;

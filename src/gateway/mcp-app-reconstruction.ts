@@ -1,6 +1,6 @@
 import { type CallToolResult, ContentBlockSchema } from "@modelcontextprotocol/sdk/types.js";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { BoardMcpAppDescriptor } from "../../packages/gateway-protocol/src/index.js";
 import { getOrCreateSessionMcpRuntime } from "../agents/agent-bundle-mcp-runtime.js";
 import type { SessionMcpRuntime } from "../agents/agent-bundle-mcp-types.js";
@@ -10,13 +10,13 @@ import {
   getMcpAppViewLease,
   type McpAppViewLease,
 } from "../agents/mcp-ui-resource.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveAgentIdFromSessionKey } from "../routing/session-key.js";
 import { getOrCreatePromise } from "../shared/lazy-promise.js";
 import { visitSessionMessagesAsync } from "./session-transcript-readers.js";
 import { loadSessionEntryReadOnly } from "./session-utils.js";
 
-const MCP_APP_RESTORE_IN_FLIGHT_KEY = Symbol.for("openclaw.mcpAppRestoreInFlight");
+const MCP_APP_RESTORE_IN_FLIGHT_KEY = Symbol.for("natesclaw.mcpAppRestoreInFlight");
 
 type McpAppDescriptor = {
   viewId: string;
@@ -243,7 +243,7 @@ function getRestoreInFlight(): Map<string, Promise<ReconstructionResult | undefi
 }
 
 async function reconstructMcpAppView(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   lookup: TranscriptLookup;
   allowedAppToolNames: ReadonlySet<string>;
@@ -304,7 +304,7 @@ async function reconstructMcpAppView(params: {
 }
 
 async function restoreMcpAppViewOnce(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   viewId: string;
 }): Promise<ReconstructionResult | undefined> {
@@ -322,7 +322,7 @@ async function restoreMcpAppViewOnce(params: {
 }
 
 export async function mintMcpAppViewFromTranscript(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   descriptor: BoardMcpAppDescriptor;
   allowedAppToolNames: ReadonlySet<string>;
@@ -342,7 +342,7 @@ export async function mintMcpAppViewFromTranscript(params: {
 }
 
 export async function restoreMcpAppView(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   viewId: string;
 }): Promise<ReconstructionResult | undefined> {

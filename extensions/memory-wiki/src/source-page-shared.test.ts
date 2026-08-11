@@ -8,8 +8,8 @@ import { writeImportedSourcePage } from "./source-page-shared.js";
 
 const { fsRootMock } = vi.hoisted(() => ({ fsRootMock: vi.fn() }));
 
-vi.mock("openclaw/plugin-sdk/security-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/security-runtime")>();
+vi.mock("natesclaw/plugin-sdk/security-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/security-runtime")>();
   return {
     ...actual,
     root: (...args: Parameters<typeof actual.root>) => {
@@ -36,8 +36,8 @@ function buildSourcePage(raw: string, updatedAt: string): string {
       renderMarkdownFence(raw, "text"),
       "",
       "## Notes",
-      "<!-- openclaw:human:start -->",
-      "<!-- openclaw:human:end -->",
+      "<!-- natesclaw:human:start -->",
+      "<!-- natesclaw:human:end -->",
       "",
     ].join("\n"),
   });
@@ -195,8 +195,8 @@ describe("writeImportedSourcePage", () => {
     const absPage = path.join(suiteRoot, pagePath);
     const userNote = "IMPORTED PAGE NOTE";
     const edited = (await fs.readFile(absPage, "utf8")).replace(
-      "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
-      `<!-- openclaw:human:start -->\n${userNote}\n<!-- openclaw:human:end -->`,
+      "<!-- natesclaw:human:start -->\n<!-- natesclaw:human:end -->",
+      `<!-- natesclaw:human:start -->\n${userNote}\n<!-- natesclaw:human:end -->`,
     );
     await fs.writeFile(absPage, edited, "utf8");
 
@@ -255,10 +255,10 @@ describe("writeImportedSourcePage", () => {
       const userNote = `DURABLE ${group.toUpperCase()} ANNOTATION`;
       const malformedNotes =
         missingMarker === "opening"
-          ? `${userNote}\n<!-- openclaw:human:end -->`
-          : `<!-- openclaw:human:start -->\n${userNote}`;
+          ? `${userNote}\n<!-- natesclaw:human:end -->`
+          : `<!-- natesclaw:human:start -->\n${userNote}`;
       const existing = (await fs.readFile(absPage, "utf8")).replace(
-        "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
+        "<!-- natesclaw:human:start -->\n<!-- natesclaw:human:end -->",
         malformedNotes,
       );
       await fs.writeFile(absPage, existing, "utf8");
@@ -279,7 +279,7 @@ describe("writeImportedSourcePage", () => {
           state,
           buildRendered: buildSourcePage,
         }),
-      ).rejects.toThrow(/human Notes.*missing|missing.*human Notes|openclaw:human:(start|end)/i);
+      ).rejects.toThrow(/human Notes.*missing|missing.*human Notes|natesclaw:human:(start|end)/i);
 
       await expect(fs.readFile(absPage, "utf8")).resolves.toBe(existing);
       expect(state).toEqual(previousState);
@@ -296,9 +296,9 @@ describe("writeImportedSourcePage", () => {
 
     const sourceWithMarkers = [
       "first imported body",
-      "<!-- openclaw:human:start -->",
+      "<!-- natesclaw:human:start -->",
       "OLD IMPORTED SOURCE MARKER PAYLOAD",
-      "<!-- openclaw:human:end -->",
+      "<!-- natesclaw:human:end -->",
       "",
     ].join("\n");
     await fs.writeFile(sourcePath, sourceWithMarkers, "utf8");
@@ -318,8 +318,8 @@ describe("writeImportedSourcePage", () => {
     const absPage = path.join(suiteRoot, pagePath);
     const userNote = "CRLF IMPORTED PAGE NOTE";
     const edited = (await fs.readFile(absPage, "utf8")).replace(
-      "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
-      `<!-- openclaw:human:start -->\n${userNote}\n<!-- openclaw:human:end -->`,
+      "<!-- natesclaw:human:start -->\n<!-- natesclaw:human:end -->",
+      `<!-- natesclaw:human:start -->\n${userNote}\n<!-- natesclaw:human:end -->`,
     );
     await fs.writeFile(absPage, edited.replace(/\n/g, "\r\n"), "utf8");
 

@@ -58,7 +58,7 @@ describe("resetCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("openclaw backup create"),
+        message.includes("natesclaw backup create"),
       ),
     ).toBe(true);
   });
@@ -73,7 +73,7 @@ describe("resetCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("openclaw backup create"),
+        message.includes("natesclaw backup create"),
       ),
     ).toBe(false);
   });
@@ -86,7 +86,7 @@ describe("resetCommand", () => {
       dryRun: true,
     });
 
-    expect(removeWorkspaceDirs).toHaveBeenCalledWith(["/tmp/.openclaw/workspace"], runtime, {
+    expect(removeWorkspaceDirs).toHaveBeenCalledWith(["/tmp/.natesclaw/workspace"], runtime, {
       dryRun: true,
       removeStateRows: false,
     });
@@ -101,7 +101,7 @@ describe("resetCommand", () => {
       nonInteractive: true,
     });
 
-    expect(removeWorkspaceDirs).toHaveBeenCalledWith(["/tmp/.openclaw/workspace"], runtime, {
+    expect(removeWorkspaceDirs).toHaveBeenCalledWith(["/tmp/.natesclaw/workspace"], runtime, {
       dryRun: false,
       removeStateRows: true,
     });

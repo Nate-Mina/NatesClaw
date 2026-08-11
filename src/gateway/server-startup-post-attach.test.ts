@@ -16,7 +16,7 @@ import {
   resetGatewayWorkAdmission,
   tryBeginGatewayRootWorkAdmission,
 } from "../process/gateway-work-admission.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { createGatewayResidentRegistry } from "./server-resident-registry.js";
 import "./server-startup-outcomes.test-support.js";
@@ -136,11 +136,11 @@ vi.mock("../config/paths.js", async () => {
   const actual = await vi.importActual<typeof import("../config/paths.js")>("../config/paths.js");
   return {
     ...actual,
-    STATE_DIR: "/tmp/openclaw-state",
-    resolveConfigPath: vi.fn(() => "/tmp/openclaw-state/openclaw.json"),
+    STATE_DIR: "/tmp/natesclaw-state",
+    resolveConfigPath: vi.fn(() => "/tmp/natesclaw-state/natesclaw.json"),
     resolveGatewayPort: vi.fn(() => 18789),
     resolveStateDir: vi.fn((env: NodeJS.ProcessEnv = process.env) =>
-      env.OPENCLAW_STATE_DIR?.trim() ? actual.resolveStateDir(env) : "/tmp/openclaw-state",
+      env.NATESCLAW_STATE_DIR?.trim() ? actual.resolveStateDir(env) : "/tmp/natesclaw-state",
     ),
   };
 });
@@ -354,7 +354,7 @@ async function cleanupGatewayTestState(): Promise<void> {
   publishedPostReadySidecars.clear();
   transferredSidecars.clear();
   await cleanup(() => resetGatewayWorkAdmission());
-  await cleanup(() => closeOpenClawStateDatabaseForTest());
+  await cleanup(() => closeNatesclawStateDatabaseForTest());
   await cleanup(() => {
     vi.useRealTimers();
   });
@@ -452,9 +452,9 @@ function firstGatewayStartCall(
 describe("startGatewayPostAttachRuntime", () => {
   beforeEach(() => {
     resetGatewayWorkAdmission();
-    closeOpenClawStateDatabaseForTest();
-    vi.stubEnv("OPENCLAW_SKIP_CHANNELS", "0");
-    vi.stubEnv("OPENCLAW_SKIP_PROVIDERS", "0");
+    closeNatesclawStateDatabaseForTest();
+    vi.stubEnv("NATESCLAW_SKIP_CHANNELS", "0");
+    vi.stubEnv("NATESCLAW_SKIP_PROVIDERS", "0");
     hoisted.startPluginServices.mockClear();
     hoisted.startGmailWatcherWithLogs.mockClear();
     hoisted.loadInternalHooks.mockClear();
@@ -534,12 +534,12 @@ describe("startGatewayPostAttachRuntime", () => {
         stopOrder.push("post-ready");
       }),
     };
-    const originalCleanupEnv = process.env.OPENCLAW_CLEANUP_TEST;
+    const originalCleanupEnv = process.env.NATESCLAW_CLEANUP_TEST;
 
     adoptSidecars(publishedGatewayLifetimeSidecars, [firstLifetimeSidecar, secondLifetimeSidecar]);
     adoptSidecars(publishedPostReadySidecars, [postReadySidecar]);
     vi.useFakeTimers();
-    vi.stubEnv("OPENCLAW_CLEANUP_TEST", "dirty");
+    vi.stubEnv("NATESCLAW_CLEANUP_TEST", "dirty");
     expect(tryBeginGatewayRootWorkAdmission()).not.toBeNull();
 
     await expect(cleanupGatewayTestState()).rejects.toBe(firstError);
@@ -550,7 +550,7 @@ describe("startGatewayPostAttachRuntime", () => {
     expect(transferredSidecars.size).toBe(0);
     expect(getActiveGatewayRootWorkCount()).toBe(0);
     expect(vi.isFakeTimers()).toBe(false);
-    expect(process.env.OPENCLAW_CLEANUP_TEST).toBe(originalCleanupEnv);
+    expect(process.env.NATESCLAW_CLEANUP_TEST).toBe(originalCleanupEnv);
   });
 
   it("re-enables startup-gated methods after post-attach sidecars start", async () => {
@@ -1047,9 +1047,9 @@ describe("startGatewayPostAttachRuntime", () => {
   });
 
   it("skips heavy restart sentinel refresh when no sentinel file exists", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-no-sentinel-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-no-sentinel-"));
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ NATESCLAW_STATE_DIR: stateDir }, async () => {
         hoisted.refreshLatestUpdateRestartSentinel.mockClear();
 
         const result = await testing.refreshLatestUpdateRestartSentinelIfPresent();
@@ -1058,13 +1058,13 @@ describe("startGatewayPostAttachRuntime", () => {
         expect(hoisted.refreshLatestUpdateRestartSentinel).not.toHaveBeenCalled();
       });
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("refreshes the restart sentinel when the sentinel row exists", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sentinel-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-sentinel-"));
     try {
       await writeRestartSentinel(
         {
@@ -1072,9 +1072,9 @@ describe("startGatewayPostAttachRuntime", () => {
           status: "ok",
           ts: 1,
         },
-        { OPENCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
+        { NATESCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
       );
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ NATESCLAW_STATE_DIR: stateDir }, async () => {
         const sentinel = { kind: "update", status: "ok", ts: 1 } as const;
         hoisted.refreshLatestUpdateRestartSentinel.mockClear();
         hoisted.refreshLatestUpdateRestartSentinel.mockResolvedValue(sentinel);
@@ -1085,13 +1085,13 @@ describe("startGatewayPostAttachRuntime", () => {
         expect(hoisted.refreshLatestUpdateRestartSentinel).toHaveBeenCalledOnce();
       });
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("detects restart sentinel rows in explicit state directories", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sentinel-state-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-sentinel-state-"));
     try {
       await writeRestartSentinel(
         {
@@ -1099,22 +1099,22 @@ describe("startGatewayPostAttachRuntime", () => {
           status: "ok",
           ts: 1,
         },
-        { OPENCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
+        { NATESCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
       );
 
       expect(
         await testing.hasRestartSentinelFast({
-          OPENCLAW_STATE_DIR: stateDir,
+          NATESCLAW_STATE_DIR: stateDir,
         } as NodeJS.ProcessEnv),
       ).toBe(true);
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("avoids sync filesystem probes while checking restart sentinel presence", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-async-sentinel-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-async-sentinel-"));
     try {
       await writeRestartSentinel(
         {
@@ -1122,7 +1122,7 @@ describe("startGatewayPostAttachRuntime", () => {
           status: "ok",
           ts: 1,
         },
-        { OPENCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
+        { NATESCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
       );
       const actualExistsSync = fs.existsSync;
       const existsSync = vi.spyOn(fs, "existsSync").mockImplementation((candidate) => {
@@ -1134,7 +1134,7 @@ describe("startGatewayPostAttachRuntime", () => {
       try {
         await expect(
           testing.hasRestartSentinelFast({
-            OPENCLAW_STATE_DIR: stateDir,
+            NATESCLAW_STATE_DIR: stateDir,
           } as NodeJS.ProcessEnv),
         ).resolves.toBe(true);
         expect(
@@ -1144,7 +1144,7 @@ describe("startGatewayPostAttachRuntime", () => {
         existsSync.mockRestore();
       }
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
@@ -1704,8 +1704,8 @@ describe("startGatewayPostAttachRuntime", () => {
   it("starts channels when channel startup is enabled", async () => {
     await withEnvAsync(
       {
-        OPENCLAW_SKIP_CHANNELS: undefined,
-        OPENCLAW_SKIP_PROVIDERS: undefined,
+        NATESCLAW_SKIP_CHANNELS: undefined,
+        NATESCLAW_SKIP_PROVIDERS: undefined,
       },
       async () => {
         const startChannels = vi.fn(async () => {});
@@ -1716,7 +1716,7 @@ describe("startGatewayPostAttachRuntime", () => {
             agents: { defaults: { model: "openai/gpt-5.4" } },
           } as never,
           pluginRegistry: createPostAttachParams().pluginRegistry,
-          defaultWorkspaceDir: "/tmp/openclaw-workspace",
+          defaultWorkspaceDir: "/tmp/natesclaw-workspace",
           deps: {} as never,
           startChannels,
           log: { warn: vi.fn() },
@@ -1738,7 +1738,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("starts and reports plugin services after channel startup completes", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { NATESCLAW_SKIP_CHANNELS: undefined, NATESCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let releaseChannels: (() => void) | undefined;
         const events: string[] = [];
@@ -1801,7 +1801,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("does not start plugin services after deferred close starts during channel startup", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { NATESCLAW_SKIP_CHANNELS: undefined, NATESCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let closing = false;
         let releaseChannels: (() => void) | undefined;
@@ -1845,7 +1845,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("stops plugin services that finish starting after deferred close begins", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { NATESCLAW_SKIP_CHANNELS: undefined, NATESCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let shouldStartPluginServices = true;
         let releasePluginServices: (() => void) | undefined;
@@ -1861,7 +1861,7 @@ describe("startGatewayPostAttachRuntime", () => {
         const sidecarsPromise = startGatewaySidecars({
           cfg: { hooks: { internal: { enabled: false } } } as never,
           pluginRegistry: createPostAttachParams().pluginRegistry,
-          defaultWorkspaceDir: "/tmp/openclaw-workspace",
+          defaultWorkspaceDir: "/tmp/natesclaw-workspace",
           deps: {} as never,
           startChannels: vi.fn(async () => {}),
           shouldStartPluginServices: () => shouldStartPluginServices,
@@ -1897,7 +1897,7 @@ describe("startGatewayPostAttachRuntime", () => {
 
   it("returns plugin services already reported by deferred sidecars", async () => {
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: undefined, OPENCLAW_SKIP_PROVIDERS: undefined },
+      { NATESCLAW_SKIP_CHANNELS: undefined, NATESCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         let releaseStartupLog: (() => void) | undefined;
         let releaseChannels: (() => void) | undefined;
@@ -1963,7 +1963,7 @@ describe("startGatewayPostAttachRuntime", () => {
     const prewarmPrimaryModel = vi.fn(async () => {});
 
     await withEnvAsync(
-      { OPENCLAW_SKIP_CHANNELS: "1", OPENCLAW_SKIP_PROVIDERS: undefined },
+      { NATESCLAW_SKIP_CHANNELS: "1", NATESCLAW_SKIP_PROVIDERS: undefined },
       async () => {
         await startGatewaySidecars({
           cfg: {
@@ -1971,7 +1971,7 @@ describe("startGatewayPostAttachRuntime", () => {
             agents: { defaults: { model: "openai/gpt-5.6" } },
           } as never,
           pluginRegistry: createPostAttachParams().pluginRegistry,
-          defaultWorkspaceDir: "/tmp/openclaw-workspace",
+          defaultWorkspaceDir: "/tmp/natesclaw-workspace",
           deps: {} as never,
           startChannels: vi.fn(async () => {}),
           log: { warn: vi.fn() },
@@ -1996,7 +1996,7 @@ describe("startGatewayPostAttachRuntime", () => {
       expect.objectContaining({ startupTrace: trace.startupTrace }),
     );
     expect(logChannels.info).toHaveBeenCalledWith(
-      "skipping channel start (OPENCLAW_SKIP_CHANNELS=1 or OPENCLAW_SKIP_PROVIDERS=1)",
+      "skipping channel start (NATESCLAW_SKIP_CHANNELS=1 or NATESCLAW_SKIP_PROVIDERS=1)",
     );
   });
 
@@ -2006,7 +2006,7 @@ describe("startGatewayPostAttachRuntime", () => {
     await startGatewaySidecars({
       cfg: { hooks: { internal: { enabled: false } } } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -2121,7 +2121,7 @@ describe("startGatewayPostAttachRuntime", () => {
     const sidecars = startGatewaySidecars({
       cfg: { hooks: { internal: { enabled: false } } } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels,
       prewarmPrimaryModel,
@@ -2227,7 +2227,7 @@ describe("startGatewayPostAttachRuntime", () => {
       startGatewaySidecars({
         cfg: { hooks: { internal: { enabled: false } } } as never,
         pluginRegistry: createPostAttachParams().pluginRegistry,
-        defaultWorkspaceDir: "/tmp/openclaw-workspace",
+        defaultWorkspaceDir: "/tmp/natesclaw-workspace",
         deps: {} as never,
         startChannels,
         prewarmPrimaryModel,
@@ -2259,7 +2259,7 @@ describe("startGatewayPostAttachRuntime", () => {
     await startGatewaySidecars({
       cfg: { hooks: { internal: { enabled: false } } } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels,
       log,
@@ -2345,7 +2345,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log,
@@ -2390,7 +2390,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log,
@@ -2419,7 +2419,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -2466,7 +2466,7 @@ describe("startGatewayPostAttachRuntime", () => {
             hooks: { enabled: true, internal: { enabled: false }, gmail: { account: "me" } },
           } as never,
           pluginRegistry: createPostAttachParams().pluginRegistry,
-          defaultWorkspaceDir: "/tmp/openclaw-workspace",
+          defaultWorkspaceDir: "/tmp/natesclaw-workspace",
           deps: {} as never,
           startChannels: vi.fn(async () => {}),
           log: { warn: vi.fn() },
@@ -2552,7 +2552,7 @@ describe("startGatewayPostAttachRuntime", () => {
         hooks: { internal: { enabled: false }, gmail: { model: "openai/gpt-5.4" } },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -2789,7 +2789,7 @@ describe("startGatewayPostAttachRuntime", () => {
       await startGatewaySidecars({
         cfg,
         pluginRegistry: createPostAttachParams().pluginRegistry,
-        defaultWorkspaceDir: "/tmp/openclaw-workspace",
+        defaultWorkspaceDir: "/tmp/natesclaw-workspace",
         deps,
         startChannels: vi.fn(async () => {}),
         log: { warn: vi.fn() },
@@ -2816,7 +2816,7 @@ describe("startGatewayPostAttachRuntime", () => {
         {
           cfg,
           deps,
-          workspaceDir: "/tmp/openclaw-workspace",
+          workspaceDir: "/tmp/natesclaw-workspace",
         },
       );
       expect(hoisted.triggerInternalHook).toHaveBeenCalledWith(hoisted.startupHookEvent);
@@ -2841,7 +2841,7 @@ describe("startGatewayPostAttachRuntime", () => {
     const result = await startGatewaySidecars({
       cfg: {} as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -2887,7 +2887,7 @@ describe("startGatewayPostAttachRuntime", () => {
         acp: { enabled: true, backend: "acpx" },
       } as never,
       pluginRegistry: createPostAttachParams().pluginRegistry,
-      defaultWorkspaceDir: "/tmp/openclaw-workspace",
+      defaultWorkspaceDir: "/tmp/natesclaw-workspace",
       deps: {} as never,
       startChannels: vi.fn(async () => {}),
       log: { warn: vi.fn() },
@@ -2965,7 +2965,7 @@ describe("startGatewayPostAttachRuntime", () => {
     expect(event).toEqual({ port: 18789 });
     expect(ctx.port).toBe(18789);
     expect(ctx.config).toBe(params.gatewayPluginConfigAtStart);
-    expect(ctx.workspaceDir).toBe("/tmp/openclaw-workspace");
+    expect(ctx.workspaceDir).toBe("/tmp/natesclaw-workspace");
     const getCron = ctx.getCron;
     if (!getCron) {
       throw new Error("gateway_start context did not expose getCron");
@@ -3107,7 +3107,7 @@ function createPostAttachParams(overrides: Partial<PostAttachParams> = {}): Post
       ],
       typedHooks: [],
     } as never,
-    defaultWorkspaceDir: "/tmp/openclaw-workspace",
+    defaultWorkspaceDir: "/tmp/natesclaw-workspace",
     deps: {} as never,
     startChannels: vi.fn(async () => {}),
     recoveryRuntime: {

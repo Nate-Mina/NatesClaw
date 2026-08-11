@@ -1,13 +1,13 @@
-# IRC OpenClaw channel
+# IRC Natesclaw channel
 
-Official OpenClaw channel plugin for IRC.
+Official Natesclaw channel plugin for IRC.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/irc
+natesclaw plugins install @natesclaw/irc
 ```
 
 ## Docs
 
-See `docs/channels/irc.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/channels/irc`.
+See `docs/channels/irc.md` in the Natesclaw repository, or the published docs at `https://docs.natesclaw.ai/channels/irc`.

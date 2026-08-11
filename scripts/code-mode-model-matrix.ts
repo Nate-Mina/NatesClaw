@@ -556,7 +556,7 @@ async function prepareTaskFixture(workspace: string, cell: MatrixCell): Promise<
   await fs.mkdir(workspace, { recursive: true });
   await fs.writeFile(
     path.join(workspace, "facts.txt"),
-    `project=openclaw\nverification_code=${expected}\n`,
+    `project=natesclaw\nverification_code=${expected}\n`,
     "utf8",
   );
   if (cell.task === "read") {
@@ -678,8 +678,8 @@ async function buildMatrixCliArtifacts(repoRoot: string): Promise<void> {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_BUILD_ALL_NO_PNPM: "1",
-        OPENCLAW_RUN_NODE_SKIP_DTS_BUILD: "1",
+        NATESCLAW_BUILD_ALL_NO_PNPM: "1",
+        NATESCLAW_RUN_NODE_SKIP_DTS_BUILD: "1",
       },
       maxBuffer: 8 * 1024 * 1024,
       timeout: 10 * 60 * 1_000,
@@ -873,7 +873,7 @@ async function prepareRuntimeEntrypoint(
 
   const entries = await fs.readdir(physicalNodeModules, { withFileTypes: true });
   for (const entry of entries) {
-    if (entry.name.startsWith(".") || entry.name === "@openclaw") {
+    if (entry.name.startsWith(".") || entry.name === "@natesclaw") {
       continue;
     }
     await fs.symlink(
@@ -883,17 +883,17 @@ async function prepareRuntimeEntrypoint(
     );
   }
 
-  const overlayOpenClaw = path.join(overlayNodeModules, "@openclaw");
-  const physicalOpenClaw = path.join(physicalNodeModules, "@openclaw");
-  await fs.mkdir(overlayOpenClaw);
-  for (const entry of await fs.readdir(physicalOpenClaw, { withFileTypes: true })) {
+  const overlayNatesclaw = path.join(overlayNodeModules, "@natesclaw");
+  const physicalNatesclaw = path.join(physicalNodeModules, "@natesclaw");
+  await fs.mkdir(overlayNatesclaw);
+  for (const entry of await fs.readdir(physicalNatesclaw, { withFileTypes: true })) {
     const worktreePackage = path.join(repoRoot, "packages", entry.name);
     const target = (await pathIsDirectory(path.join(worktreePackage, "dist")))
       ? worktreePackage
-      : path.join(physicalOpenClaw, entry.name);
+      : path.join(physicalNatesclaw, entry.name);
     await fs.symlink(
       target,
-      path.join(overlayOpenClaw, entry.name),
+      path.join(overlayNatesclaw, entry.name),
       process.platform === "win32" ? "junction" : "dir",
     );
   }
@@ -912,7 +912,7 @@ export function buildCodeModeMatrixAgentEnv(
   const env: NodeJS.ProcessEnv = {
     ...baseEnv,
     NODE_DISABLE_COMPILE_CACHE: "1",
-    OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(runtimeCwd, "dist", "extensions"),
+    NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(runtimeCwd, "dist", "extensions"),
   };
   // The local Ollama provider uses a non-secret opt-in marker. Keep cloud and
   // custom credentials caller-owned, but make the local acceptance path work.
@@ -1020,7 +1020,7 @@ async function runMatrixCell(params: RunCellParams): Promise<CodeModeMatrixCellR
   }
   const root = params.keepState
     ? retainedRoot
-    : await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-code-mode-matrix-"));
+    : await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-code-mode-matrix-"));
   const stateDir = path.join(root, "state");
   const workspace = path.join(root, "workspace");
   await fs.mkdir(stateDir, { recursive: true });
@@ -1336,7 +1336,7 @@ export async function runCodeModeModelMatrix(
 
   const runtimeRoot = deps.runCell
     ? undefined
-    : await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-code-mode-runtime-"));
+    : await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-code-mode-runtime-"));
   try {
     const runtime = runtimeRoot
       ? await prepareRuntimeEntrypoint(options.repoRoot, runtimeRoot)

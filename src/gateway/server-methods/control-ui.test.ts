@@ -1,4 +1,4 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, expect, it, vi } from "vitest";
 import type { ControlUiGitHubPreview } from "../control-ui-contract.js";
 import { ControlUiGitHubError } from "../control-ui-github-api.js";
@@ -28,8 +28,8 @@ describe("controlUi.githubPreview", () => {
       kind: "issue",
       login: "octocat",
       number: 99815,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "natesclaw",
+      repo: "natesclaw",
       state: "open",
       title: "Keep hover previews compact",
       updatedAt: "2026-07-05T09:55:00Z",
@@ -43,7 +43,7 @@ describe("controlUi.githubPreview", () => {
       'handlers["controlUi.githubPreview"] test invariant',
     )(
       requestOptions(
-        { kind: "issue", number: 99815, owner: "openclaw", repo: "openclaw" },
+        { kind: "issue", number: 99815, owner: "natesclaw", repo: "natesclaw" },
         respond,
       ),
     );
@@ -51,8 +51,8 @@ describe("controlUi.githubPreview", () => {
     expect(loadPreview).toHaveBeenCalledWith({
       kind: "issue",
       number: 99815,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "natesclaw",
+      repo: "natesclaw",
     });
     expect(respond).toHaveBeenCalledWith(true, preview, undefined);
   });
@@ -67,7 +67,7 @@ describe("controlUi.githubPreview", () => {
       'handlers["controlUi.githubPreview"] test invariant',
     )(
       requestOptions(
-        { kind: "issue", number: 1, owner: "openclaw/evil", repo: "openclaw" },
+        { kind: "issue", number: 1, owner: "natesclaw/evil", repo: "natesclaw" },
         respond,
       ),
     );
@@ -89,7 +89,7 @@ describe("controlUi.githubPreview", () => {
       handlers["controlUi.githubPreview"],
       'handlers["controlUi.githubPreview"] test invariant',
     )(
-      requestOptions({ kind: "pull", number: 99816, owner: "openclaw", repo: "openclaw" }, respond),
+      requestOptions({ kind: "pull", number: 99816, owner: "natesclaw", repo: "natesclaw" }, respond),
     );
 
     expect(respond).toHaveBeenCalledWith(false, undefined, {

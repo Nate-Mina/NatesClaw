@@ -233,7 +233,7 @@ function renderCard(props: WorkboardProps, card: WorkboardCard) {
     ? renderArchiveCardAction(props, card, busy, archived, { iconOnly: true })
     : nothing;
   const detailAction = html`
-    <openclaw-tooltip .content=${t("workboard.viewDetails")}>
+    <natesclaw-tooltip .content=${t("workboard.viewDetails")}>
       <button
         class="btn btn--icon workboard-card__icon"
         aria-label=${t("workboard.viewDetails")}
@@ -247,7 +247,7 @@ function renderCard(props: WorkboardProps, card: WorkboardCard) {
       >
         ${icons.panelRightOpen}
       </button>
-    </openclaw-tooltip>
+    </natesclaw-tooltip>
   `;
   const sessionAction = renderOpenSessionCardAction(props, linkedSessionKey, { iconOnly: true });
   const stopAction =

@@ -40,7 +40,7 @@ function dispatchDragEvent(
 }
 
 describe("AppSidebar group mutation collapsed state", () => {
-  const COLLAPSED_STORAGE_KEY = "openclaw:sidebar:sessions:collapsed-sections";
+  const COLLAPSED_STORAGE_KEY = "natesclaw:sidebar:sessions:collapsed-sections";
   let restoreDialogPolyfill: () => void;
 
   beforeEach(() => {
@@ -109,7 +109,7 @@ describe("AppSidebar group mutation collapsed state", () => {
     items[items.length - 1]?.click();
     const confirm = await waitForFast(() => {
       const button = document.body.querySelector<HTMLButtonElement>(
-        "openclaw-modal-dialog .exec-approval-actions .btn.danger",
+        "natesclaw-modal-dialog .exec-approval-actions .btn.danger",
       );
       if (!button) {
         throw new Error("expected the group delete confirm");
@@ -191,14 +191,14 @@ describe("AppSidebar group mutation collapsed state", () => {
 
   it("keeps a reconnected group delete retryable after its confirm opened", async () => {
     const { sidebar, harness, gatewayHarness } = await mountCollapsedGroup({});
-    const toast = document.body.appendChild(document.createElement("openclaw-toast-host"));
+    const toast = document.body.appendChild(document.createElement("natesclaw-toast-host"));
     await toast.updateComplete;
     const menu = await openGroupMenu(sidebar);
     const items = menu.querySelectorAll<HTMLButtonElement>(".session-menu__item");
     items[items.length - 1]?.click();
     const confirm = await waitForFast(() => {
       const button = document.body.querySelector<HTMLButtonElement>(
-        "openclaw-modal-dialog .exec-approval-actions .btn.danger",
+        "natesclaw-modal-dialog .exec-approval-actions .btn.danger",
       );
       if (!button) {
         throw new Error("expected the group delete confirm");
@@ -210,7 +210,7 @@ describe("AppSidebar group mutation collapsed state", () => {
     gatewayHarness.publish({ phase: "connected" });
     confirm.click();
     await waitForFast(() =>
-      expect(document.body.querySelector("openclaw-modal-dialog")).toBeNull(),
+      expect(document.body.querySelector("natesclaw-modal-dialog")).toBeNull(),
     );
 
     expect(harness.groupsDelete).not.toHaveBeenCalled();
@@ -234,7 +234,7 @@ describe("AppSidebar group mutation collapsed state", () => {
     // group, its members and the collapsed key untouched.
     const cancel = await waitForFast(() => {
       const buttons = document.body.querySelectorAll<HTMLButtonElement>(
-        "openclaw-modal-dialog .exec-approval-actions .btn",
+        "natesclaw-modal-dialog .exec-approval-actions .btn",
       );
       if (buttons.length !== 2) {
         throw new Error("expected the group delete confirm");
@@ -243,7 +243,7 @@ describe("AppSidebar group mutation collapsed state", () => {
     });
     cancel.click();
     await waitForFast(() =>
-      expect(document.body.querySelector("openclaw-modal-dialog")).toBeNull(),
+      expect(document.body.querySelector("natesclaw-modal-dialog")).toBeNull(),
     );
 
     expect(harness.groupsDelete).not.toHaveBeenCalled();

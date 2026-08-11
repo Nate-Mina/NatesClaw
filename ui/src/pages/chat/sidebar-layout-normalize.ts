@@ -1,4 +1,4 @@
-import { isRecord } from "@openclaw/normalization-core";
+import { isRecord } from "@natesclaw/normalization-core";
 import type {
   SidebarColumn,
   SidebarLayout,

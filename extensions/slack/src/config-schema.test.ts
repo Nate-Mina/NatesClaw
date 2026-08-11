@@ -1,5 +1,5 @@
 // Slack tests cover config schema plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { SlackConfigSchema } from "../config-api.js";
 import { listSlackAccountIds, resolveSlackAccount } from "./accounts.js";
@@ -100,7 +100,7 @@ describe("slack config schema", () => {
           accounts: { work: {} },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     expectSlackConfigValid(cfg.channels.slack);
     expect(resolveSlackAccount({ cfg, accountId: "work" }).identity).toBe("user");
@@ -115,7 +115,7 @@ describe("slack config schema", () => {
           appToken: "test-app-token",
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     const account = resolveSlackAccount({ cfg });
 

@@ -1,9 +1,9 @@
-import type { CreateGhosttyTerminalOptions } from "@openclaw/libterminal/browser";
+import type { CreateGhosttyTerminalOptions } from "@natesclaw/libterminal/browser";
 
 /** Creates a terminal whose WASM memory is never reused by another tab. */
 export async function createIsolatedGhosttyTerminal(options: CreateGhosttyTerminalOptions) {
   const [{ createGhosttyTerminal, loadGhosttyRuntime }, ghosttyModule] = await Promise.all([
-    import("@openclaw/libterminal/browser"),
+    import("@natesclaw/libterminal/browser"),
     import("ghostty-web"),
   ]);
   // ghostty-web 0.4.0 reuses freed WASM pages, exposing stale cells and corrupting

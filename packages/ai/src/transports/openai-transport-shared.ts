@@ -1,4 +1,4 @@
-import type { Api, Model, OpenAICompletionsCompat, Usage } from "@openclaw/llm-core";
+import type { Api, Model, OpenAICompletionsCompat, Usage } from "@natesclaw/llm-core";
 import type { ChatCompletionChunk } from "openai/resources/chat/completions.js";
 import { getAiTransportHost } from "../host.js";
 import { applyProviderReportedUsageCost, calculateCost } from "../model-utils.js";

@@ -53,14 +53,14 @@ describe("buildSandboxContainerName", () => {
 
 describe("resolveSandboxWorkspaceLayoutPaths", () => {
   const sessionKey = "agent:poly:msteams:channel-1";
-  const workspaceA = "/tmp/openclaw-customers/atica/agents/poly/workspace";
-  const workspaceB = "/tmp/openclaw-customers/polytopic/agents/poly/workspace";
+  const workspaceA = "/tmp/natesclaw-customers/atica/agents/poly/workspace";
+  const workspaceB = "/tmp/natesclaw-customers/polytopic/agents/poly/workspace";
   const createLayout = (scope: "session" | "agent" | "shared", workspaceDir: string) =>
     resolveSandboxWorkspaceLayoutPaths({
       cfg: {
         scope,
         workspaceAccess: "rw",
-        workspaceRoot: "/tmp/openclaw-sandboxes",
+        workspaceRoot: "/tmp/natesclaw-sandboxes",
       },
       rawSessionKey: sessionKey,
       workspaceDir,

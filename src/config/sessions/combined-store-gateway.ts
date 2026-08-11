@@ -1,7 +1,7 @@
 // Builds the gateway-visible combined session store across agent-specific stores.
 // Gateway callers need canonical per-agent keys even when stores are split by `{agentId}`.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { listAgentEntries, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import {
   resolveSessionStoreKey,
@@ -13,8 +13,8 @@ import {
   normalizeAgentId,
   parseAgentSessionKey,
 } from "../../routing/session-key.js";
-import { listOpenIncognitoAgentDatabases } from "../../state/openclaw-agent-db.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import { listOpenIncognitoAgentDatabases } from "../../state/natesclaw-agent-db.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import { resolveSessionStorePathCore } from "./paths.js";
 import {
   countSessionEntryRowsReadOnly,
@@ -84,7 +84,7 @@ function loadGatewayStoreEntries(params: {
 }
 
 function mergeSessionEntryIntoCombined(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   combined: Record<string, SessionEntry>;
   entry: SessionEntry;
   agentId: string;
@@ -120,7 +120,7 @@ function mergeSessionEntryIntoCombined(params: {
 }
 
 function mergeOpenIncognitoStores(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   combined: Record<string, SessionEntry>;
   projection: GatewaySessionEntryProjection;
   targets: Array<{ agentId: string; storePath: string }>;
@@ -155,7 +155,7 @@ function mergeOpenIncognitoStores(params: {
 }
 
 function resolveGatewaySessionStoreTargets(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   opts: GatewaySessionStoreOptions,
 ): ResolvedGatewaySessionStoreTargets {
   const storeConfig = cfg.session?.store;
@@ -228,7 +228,7 @@ function resolveGatewaySessionStoreTargets(
 
 /** Checks whether Gateway prewarm can project the selected stores within a bounded row budget. */
 export function canPrewarmCombinedSessionStoresForGateway(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   params: { agentIds: readonly string[]; maxRows: number },
 ): boolean {
   const defaultAgentId = normalizeAgentId(resolveDefaultAgentId(cfg));
@@ -251,7 +251,7 @@ export function canPrewarmCombinedSessionStoresForGateway(
 
 /** Loads and canonicalizes session entries for gateway views across one or more agent stores. */
 export function loadCombinedSessionStoreForGatewayCore(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   opts: GatewaySessionStoreOptions = {},
 ): {
   diagnostics?: string[];

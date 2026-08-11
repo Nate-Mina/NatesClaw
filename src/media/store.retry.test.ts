@@ -1,6 +1,6 @@
 // Media store retry tests cover the exact directory-recreation recovery boundary.
 import fs from "node:fs/promises";
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { FsSafeError } from "../infra/fs-safe.js";
@@ -38,8 +38,8 @@ describe("media store directory recreation", () => {
       shouldRetry: true,
     },
   ])("surfaces or retries $name according to its exact cause", async ({ error, shouldRetry }) => {
-    const stateDir = tempDirs.make("openclaw-media-retry-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    const stateDir = tempDirs.make("natesclaw-media-retry-");
+    vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
     const segment = `retry-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const injectedError = error();
     let writeAttempts = 0;

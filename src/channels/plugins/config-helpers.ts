@@ -3,7 +3,7 @@
  *
  * Updates account enabled state and detects configured secret-like values.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { DEFAULT_ACCOUNT_ID } from "../../routing/session-key.js";
 
 type ChannelSection = {
@@ -22,12 +22,12 @@ function isConfiguredSecretValue(value: unknown): boolean {
  * Updates an account enabled flag in a channel config section.
  */
 export function setAccountEnabledInConfigSection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sectionKey: string;
   accountId: string;
   enabled: boolean;
   allowTopLevel?: boolean;
-}): OpenClawConfig {
+}): NatesclawConfig {
   const accountKey = params.accountId || DEFAULT_ACCOUNT_ID;
   const channels = params.cfg.channels as Record<string, unknown> | undefined;
   const base = channels?.[params.sectionKey] as ChannelSection | undefined;
@@ -43,7 +43,7 @@ export function setAccountEnabledInConfigSection(params: {
           enabled: params.enabled,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
   }
 
   const baseAccounts = base?.accounts ?? {};
@@ -63,18 +63,18 @@ export function setAccountEnabledInConfigSection(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 /**
  * Deletes one account from a channel config section, pruning empty channel/accounts objects.
  */
 export function deleteAccountFromConfigSection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sectionKey: string;
   accountId: string;
   clearBaseFields?: string[];
-}): OpenClawConfig {
+}): NatesclawConfig {
   const accountKey = params.accountId || DEFAULT_ACCOUNT_ID;
   const channels = params.cfg.channels as Record<string, unknown> | undefined;
   const base = channels?.[params.sectionKey] as ChannelSection | undefined;
@@ -97,7 +97,7 @@ export function deleteAccountFromConfigSection(params: {
           accounts: Object.keys(accounts).length ? accounts : undefined,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
   }
 
   if (baseAccounts && Object.keys(baseAccounts).length > 0) {
@@ -119,14 +119,14 @@ export function deleteAccountFromConfigSection(params: {
           accounts: Object.keys(baseAccounts).length ? baseAccounts : undefined,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
   }
 
   const nextChannels = { ...params.cfg.channels } as Record<string, unknown>;
   delete nextChannels[params.sectionKey];
-  const nextCfg = { ...params.cfg } as OpenClawConfig;
+  const nextCfg = { ...params.cfg } as NatesclawConfig;
   if (Object.keys(nextChannels).length > 0) {
-    nextCfg.channels = nextChannels as OpenClawConfig["channels"];
+    nextCfg.channels = nextChannels as NatesclawConfig["channels"];
   } else {
     delete nextCfg.channels;
   }

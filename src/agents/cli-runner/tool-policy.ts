@@ -1,25 +1,25 @@
 import type { CliBackendToolAvailability } from "../../plugins/cli-backend.types.js";
 import { normalizeToolPolicyName } from "../tool-policy.js";
 
-/** Transport prefix CLI harnesses use for loopback OpenClaw MCP tool names. */
-const OPENCLAW_MCP_TOOL_PREFIX = "mcp__openclaw__";
+/** Transport prefix CLI harnesses use for loopback Natesclaw MCP tool names. */
+const NATESCLAW_MCP_TOOL_PREFIX = "mcp__natesclaw__";
 
 /** Strips the loopback MCP transport prefix so observers see gateway tool names. */
-export function stripOpenClawMcpToolPrefix(toolName: string): string {
-  return toolName.startsWith(OPENCLAW_MCP_TOOL_PREFIX)
-    ? toolName.slice(OPENCLAW_MCP_TOOL_PREFIX.length)
+export function stripNatesclawMcpToolPrefix(toolName: string): string {
+  return toolName.startsWith(NATESCLAW_MCP_TOOL_PREFIX)
+    ? toolName.slice(NATESCLAW_MCP_TOOL_PREFIX.length)
     : toolName;
 }
 
 /** Builds the public backend contract plus the shipped beta MCP-name projection. */
 export function buildCliBackendToolAvailability(availability: {
   native: readonly string[];
-  openClaw: readonly string[];
+  Natesclaw: readonly string[];
 }): CliBackendToolAvailability {
   return {
     native: availability.native,
-    openClaw: availability.openClaw,
-    mcp: availability.openClaw.map((toolName) => `${OPENCLAW_MCP_TOOL_PREFIX}${toolName}`),
+    Natesclaw: availability.Natesclaw,
+    mcp: availability.Natesclaw.map((toolName) => `${NATESCLAW_MCP_TOOL_PREFIX}${toolName}`),
   };
 }
 

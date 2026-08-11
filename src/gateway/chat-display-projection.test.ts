@@ -129,7 +129,7 @@ describe("oversized multimodal chat history", () => {
           blob: encoded,
           path: "/private/short-circuit-video.mp4",
           url: "https://media-user@media.example/video.mp4?signature=private-signature#private-fragment",
-          openclawReasoningReplay: { private: true },
+          natesclawReasoningReplay: { private: true },
         },
       ],
     };
@@ -157,7 +157,7 @@ describe("oversized multimodal chat history", () => {
       "media-user",
       "private-signature",
       "private-fragment",
-      "openclawReasoningReplay",
+      "natesclawReasoningReplay",
     ]) {
       expect(serialized).not.toContain(privateValue);
     }
@@ -248,7 +248,7 @@ describe("oversized multimodal chat history", () => {
         audio_url: "media://inbound/audio.wav",
         source: { type: "url", url: "/api/chat/media/outgoing/audio.wav" },
       },
-      { type: "audio", url: "/media/audio.wav", openUrl: "/__openclaw__/audio/clip.wav" },
+      { type: "audio", url: "/media/audio.wav", openUrl: "/__natesclaw__/audio/clip.wav" },
     ];
     const message = {
       role: "user",
@@ -340,7 +340,7 @@ describe("private transcript metadata projection", () => {
     const message = {
       role: "user",
       content: "Keep this visible user message.",
-      __openclaw: {
+      __natesclaw: {
         id: "message-1",
         mirrorIdentity: "turn-1:prompt",
         upstreamUserText: "private decorated prompt ".repeat(12_000),
@@ -351,7 +351,7 @@ describe("private transcript metadata projection", () => {
         {
           role: "user",
           content: "Keep this visible user message.",
-          __openclaw: {
+          __natesclaw: {
             id: "message-1",
             mirrorIdentity: "turn-1:prompt",
           },
@@ -370,7 +370,7 @@ describe("current user profile display projection", () => {
       {
         role: "user",
         content: "first",
-        __openclaw: {
+        __natesclaw: {
           senderId: "profile-ada",
           senderName: "Historical Ada",
           senderUsername: "ada",
@@ -379,17 +379,17 @@ describe("current user profile display projection", () => {
       {
         role: "user",
         content: "second",
-        __openclaw: { senderId: "profile-ada", senderName: "Earlier Ada" },
+        __natesclaw: { senderId: "profile-ada", senderName: "Earlier Ada" },
       },
       {
         role: "user",
         content: "third",
-        __openclaw: { senderId: "profile-bob" },
+        __natesclaw: { senderId: "profile-bob" },
       },
       {
         role: "user",
         content: "unknown",
-        __openclaw: {
+        __natesclaw: {
           senderId: "channel-sender",
           senderProfileAvatarUrl: "/channel/avatar",
         },
@@ -398,14 +398,14 @@ describe("current user profile display projection", () => {
       {
         role: "assistant",
         content: [{ type: "text", text: "hostile assistant metadata" }],
-        __openclaw: { senderId: "hostile-assistant" },
+        __natesclaw: { senderId: "hostile-assistant" },
       },
       {
         role: "toolResult",
         toolCallId: "hostile-tool-call",
         toolName: "read",
         content: [{ type: "text", text: "hostile tool metadata" }],
-        __openclaw: { senderId: "hostile-tool" },
+        __natesclaw: { senderId: "hostile-tool" },
       },
     ];
     const originalMessages = structuredClone(messages);
@@ -439,7 +439,7 @@ describe("current user profile display projection", () => {
       "profile-bob",
       "channel-sender",
     ]);
-    expect(projected.map((message) => message["__openclaw"])).toEqual([
+    expect(projected.map((message) => message["__natesclaw"])).toEqual([
       {
         senderId: "profile-ada",
         senderName: "Historical Ada",
@@ -474,7 +474,7 @@ describe("current user profile display projection", () => {
     const staleAvatar = {
       role: "user",
       content: "stale avatar",
-      __openclaw: {
+      __natesclaw: {
         senderId: "with-avatar",
         senderName: "Historical Name",
         senderProfileAvatarUrl: "/api/users/with-avatar/avatar?v=10",
@@ -483,7 +483,7 @@ describe("current user profile display projection", () => {
     const noUploadAvatar = {
       role: "user",
       content: "removed avatar",
-      __openclaw: {
+      __natesclaw: {
         senderId: "without-avatar",
         senderProfileAvatarUrl: "/api/users/without-avatar/avatar?v=10",
       },
@@ -491,7 +491,7 @@ describe("current user profile display projection", () => {
     const failedLookup = {
       role: "user",
       content: "lookup failed",
-      __openclaw: {
+      __natesclaw: {
         senderId: "lookup-failed",
         senderProfileAvatarUrl: "/existing/projected/avatar",
       },
@@ -519,12 +519,12 @@ describe("current user profile display projection", () => {
       },
     });
 
-    expect(projected[0]?.["__openclaw"]).toEqual({
+    expect(projected[0]?.["__natesclaw"]).toEqual({
       senderId: "with-avatar",
       senderName: "Historical Name",
       senderProfileAvatarUrl: "/api/users/with-avatar/avatar?v=20",
     });
-    expect(projected[1]?.["__openclaw"]).toEqual({
+    expect(projected[1]?.["__natesclaw"]).toEqual({
       senderId: "without-avatar",
       senderProfileAvatarUrl: "/api/users/without-avatar/avatar?v=20",
     });
@@ -535,7 +535,7 @@ describe("current user profile display projection", () => {
     const message = {
       role: "user",
       content: "unchanged",
-      __openclaw: {
+      __natesclaw: {
         senderId: "profile-ada",
         senderProfileAvatarUrl: "/api/users/profile-ada/avatar?v=old",
       },
@@ -583,7 +583,7 @@ describe("chat display message-tool projection", () => {
       expect.objectContaining({
         role: "assistant",
         content: [{ type: "text", text: sourceReply }],
-        openclawMessageToolMirror: expect.objectContaining({
+        natesclawMessageToolMirror: expect.objectContaining({
           toolCallId: "call-message-current-source",
         }),
       }),

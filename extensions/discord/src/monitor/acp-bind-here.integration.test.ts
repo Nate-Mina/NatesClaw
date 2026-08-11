@@ -4,24 +4,24 @@ import { ChannelType } from "../internal/discord.js";
 
 const loadConfigMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("natesclaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("natesclaw/plugin-sdk/runtime-config-snapshot")
+  >("natesclaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: () => loadConfigMock(),
   };
 });
 
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   getSessionBindingService,
   registerSessionBindingAdapter,
   type SessionBindingBindInput,
   type SessionBindingRecord,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { testing as sessionBindingTesting } from "openclaw/plugin-sdk/conversation-runtime";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { testing as sessionBindingTesting } from "natesclaw/plugin-sdk/conversation-runtime";
 import { preflightDiscordMessage } from "./message-handler.preflight.js";
 import {
   createDiscordMessage,
@@ -46,7 +46,7 @@ const baseCfg = {
     },
     backend: "acpx",
   },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 function createDmClient(channelId: string): DiscordClient {
   return {

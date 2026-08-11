@@ -2,7 +2,7 @@
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { bundledDistPluginFile } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledDistPluginFile } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   PACKAGE_INSTALL_GUARD_RELATIVE_PATH,
@@ -36,7 +36,7 @@ import {
   type CommandRunner,
 } from "./update-global.js";
 
-const execFileSyncMock = vi.hoisted(() => vi.fn(() => "/tmp/openclaw-test-global-npmrc\n"));
+const execFileSyncMock = vi.hoisted(() => vi.fn(() => "/tmp/natesclaw-test-global-npmrc\n"));
 const TELEGRAM_RUNTIME_API = bundledDistPluginFile("telegram", "runtime-api.js");
 
 vi.mock("node:child_process", async (importOriginal) => {
@@ -50,7 +50,7 @@ vi.mock("node:child_process", async (importOriginal) => {
 async function writeGlobalPackageJson(packageRoot: string, version = "1.0.0") {
   await fs.writeFile(
     path.join(packageRoot, "package.json"),
-    JSON.stringify({ name: "openclaw", version }),
+    JSON.stringify({ name: "natesclaw", version }),
     "utf-8",
   );
 }
@@ -98,68 +98,68 @@ describe("update global helpers", () => {
   });
 
   it("prefers explicit package spec overrides", () => {
-    envSnapshot = captureEnv(["OPENCLAW_UPDATE_PACKAGE_SPEC"]);
-    process.env.OPENCLAW_UPDATE_PACKAGE_SPEC = "file:/tmp/openclaw.tgz";
+    envSnapshot = captureEnv(["NATESCLAW_UPDATE_PACKAGE_SPEC"]);
+    process.env.NATESCLAW_UPDATE_PACKAGE_SPEC = "file:/tmp/natesclaw.tgz";
 
-    expect(resolveGlobalInstallSpec({ packageName: "openclaw", tag: "latest" })).toBe(
-      "file:/tmp/openclaw.tgz",
+    expect(resolveGlobalInstallSpec({ packageName: "natesclaw", tag: "latest" })).toBe(
+      "file:/tmp/natesclaw.tgz",
     );
     expect(
       resolveGlobalInstallSpec({
-        packageName: "openclaw",
+        packageName: "natesclaw",
         tag: "beta",
-        env: { OPENCLAW_UPDATE_PACKAGE_SPEC: "openclaw@next" },
+        env: { NATESCLAW_UPDATE_PACKAGE_SPEC: "natesclaw@next" },
       }),
-    ).toBe("openclaw@next");
+    ).toBe("natesclaw@next");
   });
 
   it("maps main and explicit package targets to install specs", () => {
-    expect(resolveGlobalInstallSpec({ packageName: "openclaw", tag: "main" })).toBe(
-      "github:openclaw/openclaw#main",
+    expect(resolveGlobalInstallSpec({ packageName: "natesclaw", tag: "main" })).toBe(
+      "github:natesclaw/natesclaw#main",
     );
     expect(
       resolveGlobalInstallSpec({
-        packageName: "openclaw",
-        tag: "github:openclaw/openclaw#feature/my-branch",
+        packageName: "natesclaw",
+        tag: "github:natesclaw/natesclaw#feature/my-branch",
       }),
-    ).toBe("github:openclaw/openclaw#feature/my-branch");
+    ).toBe("github:natesclaw/natesclaw#feature/my-branch");
     expect(
       resolveGlobalInstallSpec({
-        packageName: "openclaw",
-        tag: "https://example.com/openclaw-main.tgz",
+        packageName: "natesclaw",
+        tag: "https://example.com/natesclaw-main.tgz",
       }),
-    ).toBe("https://example.com/openclaw-main.tgz");
+    ).toBe("https://example.com/natesclaw-main.tgz");
   });
 
   it.each([
-    { packageName: "openclaw", spec: "openclaw@1.2.3", expected: "1.2.3" },
-    { packageName: "openclaw", spec: "openclaw@v1.2.3", expected: "1.2.3" },
-    { packageName: "openclaw", spec: "openclaw@=1.2.3", expected: "1.2.3" },
-    { packageName: "openclaw", spec: "openclaw@=v1.2.3", expected: "1.2.3" },
+    { packageName: "natesclaw", spec: "natesclaw@1.2.3", expected: "1.2.3" },
+    { packageName: "natesclaw", spec: "natesclaw@v1.2.3", expected: "1.2.3" },
+    { packageName: "natesclaw", spec: "natesclaw@=1.2.3", expected: "1.2.3" },
+    { packageName: "natesclaw", spec: "natesclaw@=v1.2.3", expected: "1.2.3" },
     {
-      packageName: "@openclaw/core",
-      spec: "@openclaw/core@2026.7.30-beta.1",
+      packageName: "@natesclaw/core",
+      spec: "@natesclaw/core@2026.7.30-beta.1",
       expected: "2026.7.30-beta.1",
     },
-    { packageName: "openclaw", spec: "openclaw@^1.2.3", expected: null },
-    { packageName: "openclaw", spec: "openclaw@~1.2.3", expected: null },
-    { packageName: "openclaw", spec: "openclaw@>=1.2.3", expected: null },
-    { packageName: "openclaw", spec: "openclaw@1.2.x", expected: null },
-    { packageName: "openclaw", spec: "openclaw@1.2", expected: null },
-    { packageName: "openclaw", spec: "openclaw@*", expected: null },
-    { packageName: "openclaw", spec: "openclaw@latest", expected: null },
-    { packageName: "openclaw", spec: "openclaw@beta", expected: null },
-    { packageName: "openclaw", spec: "openclaw@next", expected: null },
-    { packageName: "openclaw", spec: "openclaw@main", expected: null },
-    { packageName: "openclaw", spec: "openclaw@nightly", expected: null },
-    { packageName: "openclaw", spec: "openclaw@V1.2.3", expected: null },
-    { packageName: "openclaw", spec: "openclaw@npm:@vendor/openclaw@1.2.3", expected: null },
-    { packageName: "openclaw", spec: "openclaw@file:../candidate", expected: null },
-    { packageName: "openclaw", spec: "openclaw@../candidate", expected: null },
-    { packageName: "openclaw", spec: "openclaw@https://example.test/openclaw.tgz", expected: null },
-    { packageName: "openclaw", spec: "openclaw@github:openclaw/openclaw#main", expected: null },
-    { packageName: "openclaw", spec: "other@1.2.3", expected: null },
-    { packageName: "openclaw", spec: "1.2.3", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@^1.2.3", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@~1.2.3", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@>=1.2.3", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@1.2.x", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@1.2", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@*", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@latest", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@beta", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@next", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@main", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@nightly", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@V1.2.3", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@npm:@vendor/natesclaw@1.2.3", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@file:../candidate", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@../candidate", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@https://example.test/natesclaw.tgz", expected: null },
+    { packageName: "natesclaw", spec: "natesclaw@github:natesclaw/natesclaw#main", expected: null },
+    { packageName: "natesclaw", spec: "other@1.2.3", expected: null },
+    { packageName: "natesclaw", spec: "1.2.3", expected: null },
   ])("derives an expected installed version only for an exact npm spec: $spec", (testCase) => {
     expect(resolveExpectedInstalledVersionFromSpec(testCase.packageName, testCase.spec)).toBe(
       testCase.expected,
@@ -170,8 +170,8 @@ describe("update global helpers", () => {
     expect(canResolveRegistryVersionForPackageTarget("latest")).toBe(true);
     expect(canResolveRegistryVersionForPackageTarget("2026.3.22")).toBe(true);
     expect(canResolveRegistryVersionForPackageTarget("main")).toBe(false);
-    expect(canResolveRegistryVersionForPackageTarget("github:openclaw/openclaw#main")).toBe(false);
-    expect(canResolveRegistryVersionForPackageTarget("/tmp/openclaw.tgz")).toBe(false);
+    expect(canResolveRegistryVersionForPackageTarget("github:natesclaw/natesclaw#main")).toBe(false);
+    expect(canResolveRegistryVersionForPackageTarget("/tmp/natesclaw.tgz")).toBe(false);
   });
 
   it("resolves scoped package paths from the package manager global root", async () => {
@@ -187,12 +187,12 @@ describe("update global helpers", () => {
         manager: "npm",
         runCommand,
         timeoutMs: 1000,
-        packageName: "@kevins8/openclaw",
+        packageName: "@kevins8/natesclaw",
       }),
     ).resolves.toMatchObject({
       manager: "npm",
       globalRoot,
-      packageRoot: path.join(globalRoot, "@kevins8", "openclaw"),
+      packageRoot: path.join(globalRoot, "@kevins8", "natesclaw"),
     });
   });
 
@@ -244,20 +244,20 @@ describe("update global helpers", () => {
 
   it("resolves portable Git paths from process-local app data only", async () => {
     await withMockedWindowsPlatform(async () => {
-      await withTestDir({ prefix: "openclaw-update-portable-git-" }, async (base) => {
+      await withTestDir({ prefix: "natesclaw-update-portable-git-" }, async (base) => {
         envSnapshot = captureEnv(["LOCALAPPDATA"]);
         const injectedLocalAppData = path.join(base, "injected-local-app-data");
         const trustedLocalAppData = path.join(base, "trusted-local-app-data");
         const injectedGitDir = path.join(
           injectedLocalAppData,
-          "OpenClaw",
+          "Natesclaw",
           "deps",
           "portable-git",
           "cmd",
         );
         const trustedGitDir = path.join(
           trustedLocalAppData,
-          "OpenClaw",
+          "Natesclaw",
           "deps",
           "portable-git",
           "cmd",
@@ -284,14 +284,14 @@ describe("update global helpers", () => {
   });
 
   it("detects install managers from resolved roots and on-disk presence", async () => {
-    await withTestDir({ prefix: "openclaw-update-global-" }, async (base) => {
+    await withTestDir({ prefix: "natesclaw-update-global-" }, async (base) => {
       const npmRoot = path.join(base, "npm-root");
       const pnpmRoot = path.join(base, "pnpm-root");
       const bunRoot = path.join(base, ".bun", "install", "global", "node_modules");
-      const pkgRoot = path.join(pnpmRoot, "openclaw");
+      const pkgRoot = path.join(pnpmRoot, "natesclaw");
       await fs.mkdir(pkgRoot, { recursive: true });
-      await fs.mkdir(path.join(npmRoot, "openclaw"), { recursive: true });
-      await fs.mkdir(path.join(bunRoot, "openclaw"), { recursive: true });
+      await fs.mkdir(path.join(npmRoot, "natesclaw"), { recursive: true });
+      await fs.mkdir(path.join(bunRoot, "natesclaw"), { recursive: true });
 
       envSnapshot = captureEnv(["BUN_INSTALL"]);
       process.env.BUN_INSTALL = path.join(base, ".bun");
@@ -311,15 +311,15 @@ describe("update global helpers", () => {
       );
       await expect(detectGlobalInstallManagerByPresence(runCommand, 1000)).resolves.toBe("npm");
 
-      await fs.rm(path.join(npmRoot, "openclaw"), { recursive: true, force: true });
-      await fs.rm(path.join(pnpmRoot, "openclaw"), { recursive: true, force: true });
+      await fs.rm(path.join(npmRoot, "natesclaw"), { recursive: true, force: true });
+      await fs.rm(path.join(pnpmRoot, "natesclaw"), { recursive: true, force: true });
       await expect(detectGlobalInstallManagerByPresence(runCommand, 1000)).resolves.toBe("bun");
     });
   });
 
   it("keeps npm self-updates on the running package root when the PATH probe diverges", async () => {
     await withMockedPlatform("darwin", async () => {
-      await withTestDir({ prefix: "openclaw-update-ephemeral-probe-" }, async (base) => {
+      await withTestDir({ prefix: "natesclaw-update-ephemeral-probe-" }, async (base) => {
         // The running install lives in an nvm tree while `npm root -g` on
         // PATH answers with a Homebrew Cellar root — the skew produced when a
         // per-Node npm shim is executed by a foreign node (e.g. a launchd
@@ -328,7 +328,7 @@ describe("update global helpers", () => {
         // install never loads from.
         const nvmPrefix = path.join(base, "home", ".nvm", "versions", "node", "v24.5.0");
         const nvmRoot = path.join(nvmPrefix, "lib", "node_modules");
-        const pkgRoot = path.join(nvmRoot, "openclaw");
+        const pkgRoot = path.join(nvmRoot, "natesclaw");
         const cellarRoot = path.join(
           base,
           "opt",
@@ -362,7 +362,7 @@ describe("update global helpers", () => {
 
   it("keeps scoped npm self-updates on the running package root", async () => {
     await withMockedPlatform("darwin", async () => {
-      await withTestDir({ prefix: "openclaw-update-scoped-probe-" }, async (base) => {
+      await withTestDir({ prefix: "natesclaw-update-scoped-probe-" }, async (base) => {
         const nvmPrefix = path.join(base, "home", ".nvm", "versions", "node", "v24.5.0");
         const nvmRoot = path.join(nvmPrefix, "lib", "node_modules");
         const pkgRoot = path.join(nvmRoot, "@scope", "cli");
@@ -400,10 +400,10 @@ describe("update global helpers", () => {
 
   it("keeps the npm probe when the package root is not globally installed", async () => {
     await withMockedPlatform("darwin", async () => {
-      await withTestDir({ prefix: "openclaw-update-probe-only-" }, async (base) => {
+      await withTestDir({ prefix: "natesclaw-update-probe-only-" }, async (base) => {
         const nvmPrefix = path.join(base, "home", ".nvm", "versions", "node", "v24.5.0");
         const nvmRoot = path.join(nvmPrefix, "lib", "node_modules");
-        const pkgRoot = path.join(base, "checkout", "node_modules", "openclaw");
+        const pkgRoot = path.join(base, "checkout", "node_modules", "natesclaw");
         await fs.mkdir(pkgRoot, { recursive: true });
 
         const runCommand = createNpmRootRunner({ defaultNpmRoot: nvmRoot });
@@ -419,7 +419,7 @@ describe("update global helpers", () => {
           manager: "npm",
           command: "npm",
           globalRoot: nvmRoot,
-          packageRoot: path.join(nvmRoot, "openclaw"),
+          packageRoot: path.join(nvmRoot, "natesclaw"),
         });
       });
     });
@@ -427,9 +427,9 @@ describe("update global helpers", () => {
 
   it("falls back to the running package root when the npm root probe fails", async () => {
     await withMockedPlatform("darwin", async () => {
-      await withTestDir({ prefix: "openclaw-update-probe-failure-" }, async (base) => {
+      await withTestDir({ prefix: "natesclaw-update-probe-failure-" }, async (base) => {
         const globalRoot = path.join(base, "usr", "local", "lib", "node_modules");
-        const pkgRoot = path.join(globalRoot, "openclaw");
+        const pkgRoot = path.join(globalRoot, "natesclaw");
         await fs.mkdir(pkgRoot, { recursive: true });
 
         const runCommand: CommandRunner = async () => ({ stdout: "", stderr: "", code: 1 });
@@ -452,9 +452,9 @@ describe("update global helpers", () => {
   });
 
   it("does not infer npm ownership from path shape alone when the owning npm binary is absent", async () => {
-    await withTestDir({ prefix: "openclaw-update-npm-missing-bin-" }, async (base) => {
+    await withTestDir({ prefix: "natesclaw-update-npm-missing-bin-" }, async (base) => {
       const brewRoot = path.join(base, "opt", "homebrew", "lib", "node_modules");
-      const pkgRoot = path.join(brewRoot, "openclaw");
+      const pkgRoot = path.join(brewRoot, "natesclaw");
       const pathNpmRoot = path.join(base, "nvm", "lib", "node_modules");
       await fs.mkdir(pkgRoot, { recursive: true });
 
@@ -463,12 +463,12 @@ describe("update global helpers", () => {
       await expect(
         detectGlobalInstallManagerForRoot(runCommand, pkgRoot, 1000),
       ).resolves.toBeNull();
-      expect(globalInstallArgs("npm", "openclaw@latest", pkgRoot)).toEqual([
+      expect(globalInstallArgs("npm", "natesclaw@latest", pkgRoot)).toEqual([
         "npm",
         "i",
         "-g",
-        "--allow-scripts=openclaw",
-        "openclaw@latest",
+        "--allow-scripts=natesclaw",
+        "natesclaw@latest",
         "--no-fund",
         "--no-audit",
         "--loglevel=error",
@@ -478,14 +478,14 @@ describe("update global helpers", () => {
   });
 
   it("honors an explicitly selected direct npm node_modules package root", async () => {
-    await withTestDir({ prefix: "openclaw-update-managed-service-root-" }, async (base) => {
-      const managedNpmRoot = path.join(base, ".openclaw", "npm", "node_modules");
-      const pkgRoot = path.join(managedNpmRoot, "openclaw");
+    await withTestDir({ prefix: "natesclaw-update-managed-service-root-" }, async (base) => {
+      const managedNpmRoot = path.join(base, ".natesclaw", "npm", "node_modules");
+      const pkgRoot = path.join(managedNpmRoot, "natesclaw");
       const pathNpmRoot = path.join(base, "shell", "lib", "node_modules");
       const otherPnpmRoot = path.join(base, "pnpm", "global", "5", "node_modules");
       const customNpm = path.join(base, "bin", "npm");
       await fs.mkdir(pkgRoot, { recursive: true });
-      await fs.mkdir(path.join(otherPnpmRoot, "openclaw"), { recursive: true });
+      await fs.mkdir(path.join(otherPnpmRoot, "natesclaw"), { recursive: true });
 
       const runCommand: CommandRunner = async (argv) => {
         if (argv[0] === "npm" || argv[0] === customNpm) {
@@ -541,11 +541,11 @@ describe("update global helpers", () => {
   });
 
   it("preserves bun ownership for direct node_modules package roots", async () => {
-    await withTestDir({ prefix: "openclaw-update-managed-bun-root-" }, async (base) => {
+    await withTestDir({ prefix: "natesclaw-update-managed-bun-root-" }, async (base) => {
       envSnapshot = captureEnv(["BUN_INSTALL"]);
       process.env.BUN_INSTALL = path.join(base, ".bun");
       const bunRoot = path.join(process.env.BUN_INSTALL, "install", "global", "node_modules");
-      const pkgRoot = path.join(bunRoot, "openclaw");
+      const pkgRoot = path.join(bunRoot, "natesclaw");
       const pathNpmRoot = path.join(base, "shell", "lib", "node_modules");
       await fs.mkdir(pkgRoot, { recursive: true });
 
@@ -569,10 +569,10 @@ describe("update global helpers", () => {
   });
 
   it("detects custom pnpm global layouts from the running package root", async () => {
-    await withTestDir({ prefix: "openclaw-update-pnpm-custom-root-" }, async (base) => {
+    await withTestDir({ prefix: "natesclaw-update-pnpm-custom-root-" }, async (base) => {
       const customGlobalDir = path.join(base, "custom-pnpm");
       const customGlobalRoot = path.join(customGlobalDir, "5", "node_modules");
-      const pkgRoot = path.join(customGlobalRoot, "openclaw");
+      const pkgRoot = path.join(customGlobalRoot, "natesclaw");
       const defaultPnpmRoot = path.join(base, "default-pnpm", "5", "node_modules");
       await fs.mkdir(pkgRoot, { recursive: true });
       await fs.writeFile(
@@ -618,16 +618,16 @@ describe("update global helpers", () => {
   });
 
   it("detects custom pnpm global layouts from virtual-store package roots", async () => {
-    await withTestDir({ prefix: "openclaw-update-pnpm-virtual-root-" }, async (base) => {
+    await withTestDir({ prefix: "natesclaw-update-pnpm-virtual-root-" }, async (base) => {
       const customGlobalDir = path.join(base, "custom-pnpm");
       const customGlobalRoot = path.join(customGlobalDir, "5", "node_modules");
       const pkgRoot = path.join(
         customGlobalDir,
         "5",
         ".pnpm",
-        "openclaw@file+..+pack+openclaw-2026.5.6.tgz",
+        "natesclaw@file+..+pack+natesclaw-2026.5.6.tgz",
         "node_modules",
-        "openclaw",
+        "natesclaw",
       );
       const defaultPnpmRoot = path.join(base, "default-pnpm", "5", "node_modules");
       await fs.mkdir(customGlobalRoot, { recursive: true });
@@ -667,33 +667,33 @@ describe("update global helpers", () => {
         manager: "pnpm",
         command: "pnpm",
         globalRoot: customGlobalRoot,
-        packageRoot: path.join(customGlobalRoot, "openclaw"),
+        packageRoot: path.join(customGlobalRoot, "natesclaw"),
       });
     });
   });
 
   it("builds npm staged install argv with an explicit prefix", () => {
-    expect(globalInstallArgs("npm", "openclaw@latest", null, "/tmp/stage")).toEqual([
+    expect(globalInstallArgs("npm", "natesclaw@latest", null, "/tmp/stage")).toEqual([
       "npm",
       "i",
       "-g",
-      "--allow-scripts=openclaw",
+      "--allow-scripts=natesclaw",
       "--prefix",
       "/tmp/stage",
-      "openclaw@latest",
+      "natesclaw@latest",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
       "--min-release-age=0",
     ]);
-    expect(globalInstallFallbackArgs("npm", "openclaw@latest", null, "/tmp/stage")).toEqual([
+    expect(globalInstallFallbackArgs("npm", "natesclaw@latest", null, "/tmp/stage")).toEqual([
       "npm",
       "i",
       "-g",
-      "--allow-scripts=openclaw",
+      "--allow-scripts=natesclaw",
       "--prefix",
       "/tmp/stage",
-      "openclaw@latest",
+      "natesclaw@latest",
       "--omit=optional",
       "--no-fund",
       "--no-audit",
@@ -703,17 +703,17 @@ describe("update global helpers", () => {
   });
 
   it("allows only the resolved npm candidate lifecycle identity", () => {
-    expect(globalInstallArgs("npm", "/tmp/openclaw-2026.7.2.tgz")).toContain(
-      "--allow-scripts=/tmp/openclaw-2026.7.2.tgz",
+    expect(globalInstallArgs("npm", "/tmp/natesclaw-2026.7.2.tgz")).toContain(
+      "--allow-scripts=/tmp/natesclaw-2026.7.2.tgz",
     );
-    expect(globalInstallArgs("npm", "openclaw@npm:@vendor/openclaw@1.2.3")).toContain(
-      "--allow-scripts=@vendor/openclaw",
+    expect(globalInstallArgs("npm", "natesclaw@npm:@vendor/natesclaw@1.2.3")).toContain(
+      "--allow-scripts=@vendor/natesclaw",
     );
-    expect(globalInstallArgs("npm", "openclaw@npm:vendor-openclaw@1.2.3")).toContain(
-      "--allow-scripts=vendor-openclaw",
+    expect(globalInstallArgs("npm", "natesclaw@npm:vendor-natesclaw@1.2.3")).toContain(
+      "--allow-scripts=vendor-natesclaw",
     );
-    expect(globalInstallArgs("npm", "./openclaw-candidate")).toContain(
-      "--allow-scripts=./openclaw-candidate",
+    expect(globalInstallArgs("npm", "./natesclaw-candidate")).toContain(
+      "--allow-scripts=./natesclaw-candidate",
     );
   });
 
@@ -721,88 +721,88 @@ describe("update global helpers", () => {
     expect(
       globalInstallArgs(
         "npm",
-        "/tmp/build,cache/openclaw-candidate",
+        "/tmp/build,cache/natesclaw-candidate",
         null,
         null,
         "/tmp/build,cache",
       ),
-    ).toContain("--allow-scripts=./openclaw-candidate");
+    ).toContain("--allow-scripts=./natesclaw-candidate");
   });
 
   it("builds global install argv for each supported manager", () => {
-    expect(globalInstallArgs("npm", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("npm", "natesclaw@latest")).toEqual([
       "npm",
       "i",
       "-g",
-      "--allow-scripts=openclaw",
-      "openclaw@latest",
+      "--allow-scripts=natesclaw",
+      "natesclaw@latest",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
       "--min-release-age=0",
     ]);
-    expect(globalInstallArgs("pnpm", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("pnpm", "natesclaw@latest")).toEqual([
       "pnpm",
       "add",
       "-g",
-      "--allow-build=openclaw",
-      "openclaw@latest",
+      "--allow-build=natesclaw",
+      "natesclaw@latest",
     ]);
-    expect(globalInstallArgs("pnpm", "github:openclaw/openclaw#release/2026.5.12")).toEqual([
+    expect(globalInstallArgs("pnpm", "github:natesclaw/natesclaw#release/2026.5.12")).toEqual([
       "pnpm",
       "add",
       "-g",
-      "--allow-build=openclaw",
-      "github:openclaw/openclaw#release/2026.5.12",
+      "--allow-build=natesclaw",
+      "github:natesclaw/natesclaw#release/2026.5.12",
     ]);
-    expect(globalInstallArgs("bun", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("bun", "natesclaw@latest")).toEqual([
       "bun",
       "add",
       "-g",
       "--trust",
-      "openclaw@latest",
+      "natesclaw@latest",
     ]);
-    expect(globalInstallArgs("bun", "/tmp/openclaw-current.tgz")).toEqual([
+    expect(globalInstallArgs("bun", "/tmp/natesclaw-current.tgz")).toEqual([
       "bun",
       "add",
       "-g",
       "--trust",
-      "openclaw@file:/tmp/openclaw-current.tgz",
+      "natesclaw@file:/tmp/natesclaw-current.tgz",
     ]);
-    expect(globalInstallArgs("bun", "https://example.test/openclaw.tgz")).toEqual([
+    expect(globalInstallArgs("bun", "https://example.test/natesclaw.tgz")).toEqual([
       "bun",
       "add",
       "-g",
       "--trust",
-      "openclaw@https://example.test/openclaw.tgz",
+      "natesclaw@https://example.test/natesclaw.tgz",
     ]);
-    expect(globalInstallArgs("bun", "github:openclaw/openclaw#main")).toEqual([
+    expect(globalInstallArgs("bun", "github:natesclaw/natesclaw#main")).toEqual([
       "bun",
       "add",
       "-g",
       "--trust",
-      "openclaw@github:openclaw/openclaw#main",
+      "natesclaw@github:natesclaw/natesclaw#main",
     ]);
-    expect(globalInstallFallbackArgs("npm", "openclaw@latest")).toEqual([
+    expect(globalInstallFallbackArgs("npm", "natesclaw@latest")).toEqual([
       "npm",
       "i",
       "-g",
-      "--allow-scripts=openclaw",
-      "openclaw@latest",
+      "--allow-scripts=natesclaw",
+      "natesclaw@latest",
       "--omit=optional",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
       "--min-release-age=0",
     ]);
-    expect(globalInstallFallbackArgs("pnpm", "openclaw@latest")).toBeNull();
+    expect(globalInstallFallbackArgs("pnpm", "natesclaw@latest")).toBeNull();
   });
 
   it("resolves npm prefix layouts for normal global roots", () => {
-    expect(resolveNpmGlobalPrefixLayoutFromGlobalRoot("/opt/openclaw/lib/node_modules")).toEqual({
-      prefix: "/opt/openclaw",
-      globalRoot: "/opt/openclaw/lib/node_modules",
-      binDir: "/opt/openclaw/bin",
+    expect(resolveNpmGlobalPrefixLayoutFromGlobalRoot("/opt/natesclaw/lib/node_modules")).toEqual({
+      prefix: "/opt/natesclaw",
+      globalRoot: "/opt/natesclaw/lib/node_modules",
+      binDir: "/opt/natesclaw/bin",
     });
     expect(resolveNpmGlobalPrefixLayoutFromPrefix("/tmp/stage")).toEqual({
       prefix: "/tmp/stage",
@@ -813,29 +813,29 @@ describe("update global helpers", () => {
   });
 
   it("cleans only renamed package directories", async () => {
-    await withTestDir({ prefix: "openclaw-update-cleanup-" }, async (root) => {
-      await fs.mkdir(path.join(root, ".openclaw-123"), { recursive: true });
-      await fs.mkdir(path.join(root, ".openclaw-456"), { recursive: true });
-      await fs.writeFile(path.join(root, ".openclaw-file"), "nope", "utf8");
-      await fs.mkdir(path.join(root, "openclaw"), { recursive: true });
+    await withTestDir({ prefix: "natesclaw-update-cleanup-" }, async (root) => {
+      await fs.mkdir(path.join(root, ".natesclaw-123"), { recursive: true });
+      await fs.mkdir(path.join(root, ".natesclaw-456"), { recursive: true });
+      await fs.writeFile(path.join(root, ".natesclaw-file"), "nope", "utf8");
+      await fs.mkdir(path.join(root, "natesclaw"), { recursive: true });
 
       await expect(
         cleanupGlobalRenameDirs({
           globalRoot: root,
-          packageName: "openclaw",
+          packageName: "natesclaw",
         }),
       ).resolves.toEqual({
-        removed: [".openclaw-123", ".openclaw-456"],
+        removed: [".natesclaw-123", ".natesclaw-456"],
       });
-      const packageDirStat = await fs.stat(path.join(root, "openclaw"));
-      const markerFileStat = await fs.stat(path.join(root, ".openclaw-file"));
+      const packageDirStat = await fs.stat(path.join(root, "natesclaw"));
+      const markerFileStat = await fs.stat(path.join(root, ".natesclaw-file"));
       expect(packageDirStat.isDirectory()).toBe(true);
       expect(markerFileStat.isFile()).toBe(true);
     });
   });
 
   it("checks installed dist against the packaged inventory", async () => {
-    await withTestDir({ prefix: "openclaw-update-global-pkg-" }, async (packageRoot) => {
+    await withTestDir({ prefix: "natesclaw-update-global-pkg-" }, async (packageRoot) => {
       await writeGlobalPackageJson(packageRoot);
       for (const relativePath of BUNDLED_RUNTIME_SIDECAR_PATHS) {
         const absolutePath = path.join(packageRoot, relativePath);
@@ -863,7 +863,7 @@ describe("update global helpers", () => {
   });
 
   it("rejects a staged package when lifecycle scripts leave the install guard", async () => {
-    await withTestDir({ prefix: "openclaw-update-global-guard-" }, async (packageRoot) => {
+    await withTestDir({ prefix: "natesclaw-update-global-guard-" }, async (packageRoot) => {
       await writeGlobalPackageJson(packageRoot, "2026.7.2");
       for (const relativePath of BUNDLED_RUNTIME_SIDECAR_PATHS) {
         const absolutePath = path.join(packageRoot, relativePath);
@@ -879,12 +879,12 @@ describe("update global helpers", () => {
   });
 
   it("reports bundled plugin install stages during installed dist verification", async () => {
-    await withTestDir({ prefix: "openclaw-update-global-plugin-stage-" }, async (packageRoot) => {
+    await withTestDir({ prefix: "natesclaw-update-global-plugin-stage-" }, async (packageRoot) => {
       await writeGlobalPackageJson(packageRoot);
       await fs.mkdir(path.join(packageRoot, "dist", "extensions", "brave"), { recursive: true });
       await writePackageDistInventory(packageRoot);
 
-      for (const stageDir of [".openclaw-install-stage", ".openclaw-install-stage-retry"]) {
+      for (const stageDir of [".natesclaw-install-stage", ".natesclaw-install-stage-retry"]) {
         const stagedFile = path.join(
           packageRoot,
           "dist",
@@ -902,17 +902,17 @@ describe("update global helpers", () => {
       }
 
       await expect(collectInstalledGlobalPackageErrors({ packageRoot })).resolves.toEqual([
-        "unexpected packaged dist file dist/extensions/brave/.openclaw-install-stage-retry/node_modules/typebox/build/compile/code.mjs",
-        "unexpected packaged dist file dist/extensions/brave/.openclaw-install-stage/node_modules/typebox/build/compile/code.mjs",
+        "unexpected packaged dist file dist/extensions/brave/.natesclaw-install-stage-retry/node_modules/typebox/build/compile/code.mjs",
+        "unexpected packaged dist file dist/extensions/brave/.natesclaw-install-stage/node_modules/typebox/build/compile/code.mjs",
       ]);
     });
   });
 
   it("flags global package roots that resolve into source checkouts", async () => {
-    await withTestDir({ prefix: "openclaw-update-global-source-checkout-" }, async (base) => {
+    await withTestDir({ prefix: "natesclaw-update-global-source-checkout-" }, async (base) => {
       const checkoutRoot = path.join(base, "checkout");
       const globalRoot = path.join(base, "prefix", "lib", "node_modules");
-      const packageRoot = path.join(globalRoot, "openclaw");
+      const packageRoot = path.join(globalRoot, "natesclaw");
       await fs.mkdir(path.join(checkoutRoot, ".git"), { recursive: true });
       await fs.mkdir(path.join(checkoutRoot, "src"), { recursive: true });
       await fs.mkdir(path.join(checkoutRoot, "extensions"), { recursive: true });
@@ -929,7 +929,7 @@ describe("update global helpers", () => {
   });
 
   it("does not require private QA sidecars when the inventory is missing", async () => {
-    await withTestDir({ prefix: "openclaw-update-global-legacy-" }, async (packageRoot) => {
+    await withTestDir({ prefix: "natesclaw-update-global-legacy-" }, async (packageRoot) => {
       await writeGlobalPackageJson(packageRoot);
 
       await expect(collectInstalledGlobalPackageErrors({ packageRoot })).resolves.toStrictEqual([]);
@@ -938,7 +938,7 @@ describe("update global helpers", () => {
 
   it("fails closed on newer installs when the inventory is missing", async () => {
     await withTestDir(
-      { prefix: "openclaw-update-global-missing-inventory-new-" },
+      { prefix: "natesclaw-update-global-missing-inventory-new-" },
       async (packageRoot) => {
         await writeGlobalPackageJson(packageRoot, "2026.4.15");
 
@@ -951,7 +951,7 @@ describe("update global helpers", () => {
 
   it("rejects invalid inventory files during global verify", async () => {
     await withTestDir(
-      { prefix: "openclaw-update-global-invalid-inventory-" },
+      { prefix: "natesclaw-update-global-invalid-inventory-" },
       async (packageRoot) => {
         await writeGlobalPackageJson(packageRoot, "2026.4.15");
         await fs.mkdir(path.join(packageRoot, "dist"), { recursive: true });
@@ -969,9 +969,9 @@ describe("update global helpers", () => {
   });
 
   it("verifies legacy sidecars for installed bundled plugins without inventory", async () => {
-    await withTestDir({ prefix: "openclaw-update-global-legacy-plugin-" }, async (packageRoot) => {
+    await withTestDir({ prefix: "natesclaw-update-global-legacy-plugin-" }, async (packageRoot) => {
       await writeGlobalPackageJson(packageRoot);
-      await writeBundledPluginPackageJson(packageRoot, "telegram", "@openclaw/telegram");
+      await writeBundledPluginPackageJson(packageRoot, "telegram", "@natesclaw/telegram");
 
       await expect(collectInstalledGlobalPackageErrors({ packageRoot })).resolves.toContain(
         `missing bundled runtime sidecar ${TELEGRAM_RUNTIME_API}`,
@@ -981,10 +981,10 @@ describe("update global helpers", () => {
 
   it("still enforces critical sidecars when the inventory omits them", async () => {
     await withTestDir(
-      { prefix: "openclaw-update-global-critical-sidecars-" },
+      { prefix: "natesclaw-update-global-critical-sidecars-" },
       async (packageRoot) => {
         await writeGlobalPackageJson(packageRoot, "2026.4.15");
-        await writeBundledPluginPackageJson(packageRoot, "telegram", "@openclaw/telegram");
+        await writeBundledPluginPackageJson(packageRoot, "telegram", "@natesclaw/telegram");
         await writePackageDistInventory(packageRoot);
 
         await expect(collectInstalledGlobalPackageErrors({ packageRoot })).resolves.toContain(
@@ -996,10 +996,10 @@ describe("update global helpers", () => {
 
   it("ignores stale metadata for non-packaged private QA plugins during inventory verify", async () => {
     await withTestDir(
-      { prefix: "openclaw-update-global-stale-private-qa-" },
+      { prefix: "natesclaw-update-global-stale-private-qa-" },
       async (packageRoot) => {
         await writeGlobalPackageJson(packageRoot, "2026.4.15");
-        await writeBundledPluginPackageJson(packageRoot, "qa-lab", "@openclaw/qa-lab");
+        await writeBundledPluginPackageJson(packageRoot, "qa-lab", "@natesclaw/qa-lab");
         await writePackageDistInventory(packageRoot);
 
         await expect(collectInstalledGlobalPackageErrors({ packageRoot })).resolves.toStrictEqual(

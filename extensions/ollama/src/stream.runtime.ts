@@ -1,7 +1,7 @@
 // Ollama stream runtime implements native transport behavior.
 import { randomUUID } from "node:crypto";
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import type {
   AssistantMessage,
   StopReason,
@@ -10,16 +10,16 @@ import type {
   ToolCall,
   Tool,
   Usage,
-} from "openclaw/plugin-sdk/llm";
-import { createAssistantMessageEventStream } from "openclaw/plugin-sdk/llm";
-import type { ProviderRuntimeModel } from "openclaw/plugin-sdk/plugin-entry";
-import { isNonSecretApiKeyMarker } from "openclaw/plugin-sdk/provider-auth";
-import { readResponseTextLimited } from "openclaw/plugin-sdk/provider-http";
-import { createPlainTextToolCallCompatWrapper } from "openclaw/plugin-sdk/provider-stream-shared";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { isRecord, readStringValue } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { estimateStringChars, truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/llm";
+import { createAssistantMessageEventStream } from "natesclaw/plugin-sdk/llm";
+import type { ProviderRuntimeModel } from "natesclaw/plugin-sdk/plugin-entry";
+import { isNonSecretApiKeyMarker } from "natesclaw/plugin-sdk/provider-auth";
+import { readResponseTextLimited } from "natesclaw/plugin-sdk/provider-http";
+import { createPlainTextToolCallCompatWrapper } from "natesclaw/plugin-sdk/provider-stream-shared";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { isRecord, readStringValue } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { estimateStringChars, truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { OLLAMA_CLOUD_BASE_URL, OLLAMA_DEFAULT_BASE_URL } from "./defaults.js";
 import { normalizeOllamaWireModelId } from "./model-id.js";
 import {

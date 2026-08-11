@@ -2,19 +2,19 @@
 import {
   createChannelPartialDeliveryError,
   isChannelPartialDeliveryError,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createMessageReceiptFromOutboundResults,
   listMessageReceiptPlatformIds,
   type MessageReceipt,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { stripReasoningTagsFromText } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { stripReasoningTagsFromText } from "natesclaw/plugin-sdk/text-chunking";
 import { getMatrixRuntime } from "../../runtime.js";
 import type { MatrixClient } from "../sdk.js";
 import { chunkMatrixText, sendMessageMatrix } from "../send.js";
 import type { MatrixSendResult } from "../send/types.js";
-import type { MarkdownTableMode, OpenClawConfig, ReplyPayload, RuntimeEnv } from "./runtime-api.js";
+import type { MarkdownTableMode, NatesclawConfig, ReplyPayload, RuntimeEnv } from "./runtime-api.js";
 
 export type MatrixReplyDeliveryResult = {
   messageIds?: string[];
@@ -108,7 +108,7 @@ function resolveVisibleMatrixReplyText(text?: string): string | undefined {
 }
 
 export async function deliverMatrixReplies(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   replies: ReplyPayload[];
   roomId: string;
   client: MatrixClient;

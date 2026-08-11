@@ -2,15 +2,15 @@
 import {
   createChannelMessageReplyPipeline,
   resolveChannelStreamingBlockEnabled,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { resolveChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import { createChannelHistoryWindow } from "openclaw/plugin-sdk/reply-history";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyDispatchKind, ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { getSessionEntry, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-import { readLatestAssistantTextByIdentity } from "openclaw/plugin-sdk/session-transcript-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { resolveMarkdownTableMode } from "natesclaw/plugin-sdk/markdown-table-runtime";
+import { resolveChunkMode } from "natesclaw/plugin-sdk/reply-chunking";
+import { createChannelHistoryWindow } from "natesclaw/plugin-sdk/reply-history";
+import { resolveSendableOutboundReplyParts } from "natesclaw/plugin-sdk/reply-payload";
+import type { ReplyDispatchKind, ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import { getSessionEntry, resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
+import { readLatestAssistantTextByIdentity } from "natesclaw/plugin-sdk/session-transcript-runtime";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import { discordInboundEventDelivery } from "../inbound-event-delivery.js";
 import type { RequestClient } from "../internal/discord.js";

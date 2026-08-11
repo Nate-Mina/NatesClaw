@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/microsoft-foundry",
+  "name": "@natesclaw/microsoft-foundry",
   "version": "2026.8.1",
   "private": true,
-  "description": "OpenClaw Microsoft Foundry provider plugin",
+  "description": "Natesclaw Microsoft Foundry provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

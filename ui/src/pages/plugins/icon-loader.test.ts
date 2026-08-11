@@ -81,7 +81,7 @@ describe("catalog icon loader", () => {
     vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
     const common = {
       auth,
-      basePath: "/openclaw",
+      basePath: "/natesclaw",
       gatewayUrl: window.location.origin.replace(/^http/u, "ws"),
       signal: new AbortController().signal,
     };
@@ -95,8 +95,8 @@ describe("catalog icon loader", () => {
     );
 
     expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
-      "/openclaw/__openclaw__/plugin-icon/firecrawl",
-      `/openclaw/__openclaw__/catalog-icon/${encodeURIComponent(iconUrl)}`,
+      "/natesclaw/__natesclaw__/plugin-icon/firecrawl",
+      `/natesclaw/__natesclaw__/catalog-icon/${encodeURIComponent(iconUrl)}`,
     ]);
     expect(
       fetchMock.mock.calls.map(([, init]) => new Headers(init?.headers).get("Authorization")),

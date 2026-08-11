@@ -52,16 +52,16 @@ describe("browser server-context loopback direct WebSocket profiles", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("openclaw");
+    const state = makeState("natesclaw");
     state.resolved.ssrfPolicy = {};
-    state.resolved.profiles.openclaw = {
+    state.resolved.profiles.natesclaw = {
       cdpUrl: "ws://127.0.0.1:18800/devtools/browser/SESSION?token=abc",
       color: "#FF4500",
     };
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const openclaw = ctx.forProfile("openclaw");
+    const natesclaw = ctx.forProfile("natesclaw");
 
-    const opened = await openclaw.openTab("about:blank");
+    const opened = await natesclaw.openTab("about:blank");
     expect(opened.targetId).toBe("CREATED");
     expect(createTargetViaCdp).toHaveBeenCalledWith({
       cdpUrl: "ws://127.0.0.1:18800/devtools/browser/SESSION?token=abc",
@@ -98,17 +98,17 @@ describe("browser server-context loopback direct WebSocket profiles", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("openclaw");
+    const state = makeState("natesclaw");
     state.resolved.ssrfPolicy = {};
-    state.resolved.profiles.openclaw = {
+    state.resolved.profiles.natesclaw = {
       cdpUrl: "ws://127.0.0.1:18800/devtools/browser/SESSION?token=abc",
       color: "#FF4500",
     };
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const openclaw = ctx.forProfile("openclaw");
+    const natesclaw = ctx.forProfile("natesclaw");
 
-    await openclaw.focusTab("T1");
-    await openclaw.closeTab("T1");
+    await natesclaw.focusTab("T1");
+    await natesclaw.closeTab("T1");
 
     expectFetchCalledWithManualRedirect(
       fetchMock,
@@ -147,19 +147,19 @@ describe("browser server-context loopback direct WebSocket profiles", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("openclaw");
-    state.resolved.profiles.openclaw = {
+    const state = makeState("natesclaw");
+    state.resolved.profiles.natesclaw = {
       cdpUrl: "wss://127.0.0.1:18800/cdp?token=abc",
       color: "#FF4500",
     };
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const openclaw = ctx.forProfile("openclaw");
+    const natesclaw = ctx.forProfile("natesclaw");
 
-    const tabs = await openclaw.listTabs();
+    const tabs = await natesclaw.listTabs();
     expect(tabs.map((tab) => tab.targetId)).toEqual(["T2"]);
 
-    await openclaw.focusTab("T2");
-    await openclaw.closeTab("T2");
+    await natesclaw.focusTab("T2");
+    await natesclaw.closeTab("T2");
   });
 
   it("blocks direct WebSocket tab operations when strict SSRF hostname allowlist rejects the cdpUrl", async () => {
@@ -168,21 +168,21 @@ describe("browser server-context loopback direct WebSocket profiles", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("openclaw");
+    const state = makeState("natesclaw");
     state.resolved.ssrfPolicy = {
       dangerouslyAllowPrivateNetwork: false,
       allowedHostnames: ["browserless.example.com"],
     };
-    state.resolved.profiles.openclaw = {
+    state.resolved.profiles.natesclaw = {
       cdpUrl: "ws://10.0.0.42:18800/devtools/browser/SESSION?token=abc",
       color: "#FF4500",
     };
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const openclaw = ctx.forProfile("openclaw");
+    const natesclaw = ctx.forProfile("natesclaw");
 
-    await expect(openclaw.listTabs()).rejects.toBeInstanceOf(BrowserCdpEndpointBlockedError);
-    await expect(openclaw.focusTab("T1")).rejects.toBeInstanceOf(BrowserCdpEndpointBlockedError);
-    await expect(openclaw.closeTab("T1")).rejects.toBeInstanceOf(BrowserCdpEndpointBlockedError);
+    await expect(natesclaw.listTabs()).rejects.toBeInstanceOf(BrowserCdpEndpointBlockedError);
+    await expect(natesclaw.focusTab("T1")).rejects.toBeInstanceOf(BrowserCdpEndpointBlockedError);
+    await expect(natesclaw.closeTab("T1")).rejects.toBeInstanceOf(BrowserCdpEndpointBlockedError);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

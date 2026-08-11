@@ -15,8 +15,8 @@ import {
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import type { PluginRegistry } from "../plugins/registry-types.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
-import type { OpenClawPluginNodeInvokePolicyContext } from "../plugins/types.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import type { NatesclawPluginNodeInvokePolicyContext } from "../plugins/types.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { ExecApprovalManager } from "./exec-approval-manager.js";
 import { applyPluginNodeInvokePolicy } from "./node-invoke-plugin-policy.js";
 import type { NodeInvokeResult, NodeSession } from "./node-registry.js";
@@ -160,7 +160,7 @@ function createApprovalRequestPolicy(params?: {
   title?: string;
   description?: string;
 }): NodeInvokePolicyRegistration {
-  return createDemoPolicy(async (ctx: OpenClawPluginNodeInvokePolicyContext) => {
+  return createDemoPolicy(async (ctx: NatesclawPluginNodeInvokePolicyContext) => {
     const approval = await ctx.approvals?.request({
       title: params?.title ?? "Sensitive action",
       description: params?.description ?? "Needs approval",
@@ -233,7 +233,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   afterEach(() => {
     resetPluginRuntimeStateForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     for (const dir of tempDirs.splice(0)) {
       fs.rmSync(dir, { force: true, recursive: true });
     }
@@ -259,7 +259,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("uses a matching plugin policy when one is registered", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     const { context, invoke } = createContext();
 
@@ -282,7 +282,7 @@ describe("applyPluginNodeInvokePolicy", () => {
     "bounds plugin timeout override %i by the remaining invocation deadline",
     async (overrideTimeoutMs) => {
       setDangerousDemoCommandRegistry([
-        createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) =>
+        createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) =>
           ctx.invokeNode({ timeoutMs: overrideTimeoutMs }),
         ),
       ]);
@@ -309,7 +309,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("marks plugin-owned work dispatched only after the node transport accepts it", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     const { context, invoke } = createContext();
     const dispatchOrder: string[] = [];
@@ -339,7 +339,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("keeps plugin-owned work pre-dispatch when the node transport rejects the send", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     const { context, invoke } = createContext();
     const onNodeCommandDispatched = vi.fn();
@@ -375,7 +375,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("rejects expired plugin-owned work without dispatching it", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     const { context, invoke } = createContext();
 
@@ -431,7 +431,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("rejects plugin transport dispatch after invocation ownership changes", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     const { context, invoke } = createContext();
 
@@ -454,7 +454,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("rejects plugin transport dispatch when runtime authority closes during pairing recheck", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     let authorityActive = true;
     let releasePairingCheck: (() => void) | undefined;
@@ -507,7 +507,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("rejects bridged approval dispatch when its record closes during pairing recheck", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     let approvalActive = true;
     let releasePairingCheck: (() => void) | undefined;
@@ -542,7 +542,7 @@ describe("applyPluginNodeInvokePolicy", () => {
 
   it("rejects plugin transport dispatch through an invalidated node session", async () => {
     setDangerousDemoCommandRegistry([
-      createDemoPolicy((ctx: OpenClawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
+      createDemoPolicy((ctx: NatesclawPluginNodeInvokePolicyContext) => ctx.invokeNode()),
     ]);
     const nodeSession = createNodeSession();
     nodeSession.client.invalidated = true;
@@ -870,7 +870,7 @@ describe("applyPluginNodeInvokePolicy", () => {
   });
 
   it("fails closed before routing an unrenderable persistent policy approval", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-node-policy-approval-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-node-policy-approval-"));
     tempDirs.push(stateDir);
     const databaseOptions = { path: path.join(stateDir, "state.sqlite") };
     const manager = new ExecApprovalManager<PluginApprovalRequestPayload>({

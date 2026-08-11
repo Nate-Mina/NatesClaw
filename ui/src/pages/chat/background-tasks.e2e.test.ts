@@ -8,7 +8,7 @@ const suite = createControlUiE2eSuite({
   name: "Control UI chat background-tasks rail mocked Gateway E2E",
   startServerBeforeBrowser: true,
   unavailableMessage: (executablePath) =>
-    `Playwright Chromium is not installed at ${executablePath}. Run \`pnpm --dir ui exec playwright install chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+    `Playwright Chromium is not installed at ${executablePath}. Run \`pnpm --dir ui exec playwright install chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
 });
 
 const artifactDir = path.resolve(process.cwd(), ".artifacts/control-ui-e2e/chat-background-tasks");
@@ -462,7 +462,7 @@ suite.define(() => {
         const statusLink = page.locator(".chat-tasks-status__link");
         await statusLink.hover();
         const previewBody = page.locator(
-          "openclaw-tooltip.chat-tasks-status__preview wa-tooltip[open] .body",
+          "natesclaw-tooltip.chat-tasks-status__preview wa-tooltip[open] .body",
         );
         await previewBody.waitFor({ state: "visible" });
         const linkBox = await statusLink.boundingBox();

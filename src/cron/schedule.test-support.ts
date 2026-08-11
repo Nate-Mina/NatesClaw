@@ -9,7 +9,7 @@ type CronScheduleTestApi = {
 
 function getTestApi(): CronScheduleTestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.cronScheduleTestApi")
+    Symbol.for("natesclaw.cronScheduleTestApi")
   ] as CronScheduleTestApi;
 }
 

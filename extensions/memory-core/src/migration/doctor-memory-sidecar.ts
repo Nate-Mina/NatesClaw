@@ -2,15 +2,15 @@ import crypto from "node:crypto";
 import type { Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { reclaimDefinitelyStaleFileLock } from "openclaw/plugin-sdk/file-lock";
-import { resolveUserPath } from "openclaw/plugin-sdk/memory-core-host-engine-fs";
+import { reclaimDefinitelyStaleFileLock } from "natesclaw/plugin-sdk/file-lock";
+import { resolveUserPath } from "natesclaw/plugin-sdk/memory-core-host-engine-fs";
 // Doctor enumeration cold-loads this closure; the host engine schema pulls the
 // runtime-sqlite/kysely graph, so its helpers load lazily in the async migration.
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+import { normalizeAgentId } from "natesclaw/plugin-sdk/routing";
 import {
   legacyStateFileExists,
   type PluginDoctorStateMigration,
-} from "openclaw/plugin-sdk/runtime-doctor-migrations";
+} from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 // sqlite-runtime re-exports the agent-db/kysely graph; keep it lazy so doctor
 // enumeration does not cold-load it with this closure.
 import {
@@ -144,7 +144,7 @@ async function collectLegacyMemorySidecarSources(params: {
   env: NodeJS.ProcessEnv;
   stateDir: string;
 }): Promise<LegacyMemorySidecarSource[]> {
-  const { resolveOpenClawAgentSqlitePath } = await import("openclaw/plugin-sdk/sqlite-runtime");
+  const { resolveNatesclawAgentSqlitePath } = await import("natesclaw/plugin-sdk/sqlite-runtime");
   const agentIds = new Set(resolveConfiguredAgentIds(params.config));
   const legacyDir = path.join(params.stateDir, "memory");
   const retrySidecars: Array<{ agentId: string; legacyPath: string }> = [];
@@ -164,7 +164,7 @@ async function collectLegacyMemorySidecarSources(params: {
     }
   } catch {}
 
-  const migrationEnv = { ...params.env, OPENCLAW_STATE_DIR: params.stateDir };
+  const migrationEnv = { ...params.env, NATESCLAW_STATE_DIR: params.stateDir };
   const sources: LegacyMemorySidecarSource[] = [];
   const seen = new Set<string>();
   async function addSource(agentId: string, legacyPath: string): Promise<void> {
@@ -178,7 +178,7 @@ async function collectLegacyMemorySidecarSources(params: {
       agentId,
       legacyPath: normalizedPath,
       stateDir: params.stateDir,
-      agentDatabasePath: resolveOpenClawAgentSqlitePath({ agentId, env: migrationEnv }),
+      agentDatabasePath: resolveNatesclawAgentSqlitePath({ agentId, env: migrationEnv }),
     });
   }
   for (const agentId of agentIds) {
@@ -375,10 +375,10 @@ async function migrateLegacyMemorySidecarSource(params: {
   warnings: string[];
 }): Promise<{ archiveReady: boolean }> {
   const { ensureMemoryIndexSchema, loadSqliteVecExtension } =
-    await import("openclaw/plugin-sdk/memory-core-host-engine-schema");
-  const { ensureOpenClawAgentDatabaseSchema, openNodeSqliteDatabase } =
-    await import("openclaw/plugin-sdk/sqlite-runtime");
-  // OpenClaw itself can leave a zero-byte placeholder at the legacy sidecar
+    await import("natesclaw/plugin-sdk/memory-core-host-engine-schema");
+  const { ensureNatesclawAgentDatabaseSchema, openNodeSqliteDatabase } =
+    await import("natesclaw/plugin-sdk/sqlite-runtime");
+  // Natesclaw itself can leave a zero-byte placeholder at the legacy sidecar
   // path while the live index is the per-agent SQLite database. An empty file
   // holds no legacy rows, so remove it quietly instead of emitting a permanent
   // self-inflicted "not a legacy memory index" warning.
@@ -406,9 +406,9 @@ async function migrateLegacyMemorySidecarSource(params: {
   try {
     const migrationEnv = {
       ...params.env,
-      OPENCLAW_STATE_DIR: params.source.stateDir,
+      NATESCLAW_STATE_DIR: params.source.stateDir,
     };
-    ensureOpenClawAgentDatabaseSchema(db, {
+    ensureNatesclawAgentDatabaseSchema(db, {
       agentId: params.source.agentId,
       env: migrationEnv,
       path: params.source.agentDatabasePath,

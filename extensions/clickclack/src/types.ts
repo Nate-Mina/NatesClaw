@@ -3,8 +3,8 @@
  */
 import type {
   ChannelBotLoopProtectionConfig,
-  OpenClawConfig,
-} from "openclaw/plugin-sdk/config-contracts";
+  NatesclawConfig,
+} from "natesclaw/plugin-sdk/config-contracts";
 
 /** Session-linked ClickClack discussion settings for one account. */
 type ClickClackDiscussionsConfig = {
@@ -50,7 +50,7 @@ export type ClickClackAccountConfig = {
   nativeProgress?: boolean;
   /** Publish the native command catalog to ClickClack composer autocomplete. */
   commandMenu?: boolean;
-  /** Create and synchronize one managed ClickClack channel per OpenClaw session. */
+  /** Create and synchronize one managed ClickClack channel per Natesclaw session. */
   discussions?: ClickClackDiscussionsConfig;
   /** Require a direct mention before dispatching group messages (default false). */
   requireMention?: boolean;
@@ -66,9 +66,9 @@ type ClickClackConfig = ClickClackAccountConfig & {
   defaultAccount?: string;
 };
 
-/** OpenClaw config narrowed to include ClickClack channel settings. */
-export type CoreConfig = OpenClawConfig & {
-  channels?: OpenClawConfig["channels"] & {
+/** Natesclaw config narrowed to include ClickClack channel settings. */
+export type CoreConfig = NatesclawConfig & {
+  channels?: NatesclawConfig["channels"] & {
     clickclack?: ClickClackConfig;
   };
 };

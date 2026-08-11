@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   resolveAgentRoute,
   type ResolvedAgentRoute,
   type RoutePeer,
-} from "openclaw/plugin-sdk/routing";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/routing";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export const ROUTING_MATCH_KINDS = [
   "binding.peer",
@@ -77,7 +77,7 @@ export function resolvePolicyRoutingProbe(
   probe: PolicyRoutingProbe,
 ): ResolvedAgentRoute {
   return resolveAgentRoute({
-    cfg: cfg as OpenClawConfig,
+    cfg: cfg as NatesclawConfig,
     channel: probe.route.channel,
     accountId: probe.route.accountId,
     peer: probe.route.peer,

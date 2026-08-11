@@ -1,8 +1,8 @@
 // Memory Core provider module implements model/runtime integration.
 import type {
-  OpenClawConfig,
+  NatesclawConfig,
   ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   resolveEmbeddingProviderFallbackModel,
   resolveEmbeddingProviderFallbackRemote,
@@ -183,7 +183,7 @@ export function applyMemoryFallbackProviderState(params: {
 }
 
 export function resolveMemoryFallbackProviderRequest(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   settings: ResolvedMemorySearchConfig;
   currentProviderId: string | null;
 }): {

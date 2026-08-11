@@ -1,9 +1,9 @@
 // Slack plugin module implements actions behavior.
 import type { Block, KnownBlock, WebClient } from "@slack/web-api";
-import { normalizeAccountId } from "openclaw/plugin-sdk/account-resolution";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { normalizeAccountId } from "natesclaw/plugin-sdk/account-resolution";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { requireRuntimeConfig } from "natesclaw/plugin-sdk/plugin-config-runtime";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { z } from "zod";
 import { resolveSlackAccount } from "./accounts.js";
 import type { SlackAuthoredTextPlacement } from "./authored-text.js";
@@ -31,7 +31,7 @@ import { countSlackTextUtf8Bytes, truncateSlackTextByUtf8Bytes } from "./truncat
 import type { SlackAttachment } from "./types.js";
 
 export type SlackActionClientOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   accountId?: string;
   token?: string;
   teamId?: string;
@@ -73,7 +73,7 @@ export type SlackPin = {
   file?: { id?: string; name?: string };
 };
 
-function resolveToken(explicit?: string, accountId?: string, cfg?: OpenClawConfig): string {
+function resolveToken(explicit?: string, accountId?: string, cfg?: NatesclawConfig): string {
   if (explicit?.trim()) {
     const token = resolveSlackBotToken(explicit);
     if (token) {
@@ -332,7 +332,7 @@ export async function sendSlackMessage(
   to: string,
   content: string,
   opts: Omit<SlackActionClientOpts, "cfg"> & {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     mediaUrl?: string;
     mediaAccess?: {
       localRoots?: readonly string[];

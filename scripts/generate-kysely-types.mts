@@ -7,14 +7,14 @@ import { DatabaseSync } from "node:sqlite";
 
 const SCHEMAS = [
   {
-    name: "openclaw-state",
-    schema: "src/state/openclaw-state-schema.sql",
-    outFile: "src/state/openclaw-state-db.generated.d.ts",
+    name: "natesclaw-state",
+    schema: "src/state/natesclaw-state-schema.sql",
+    outFile: "src/state/natesclaw-state-db.generated.d.ts",
   },
   {
-    name: "openclaw-agent",
-    schema: "src/state/openclaw-agent-schema.sql",
-    outFile: "src/state/openclaw-agent-db.generated.d.ts",
+    name: "natesclaw-agent",
+    schema: "src/state/natesclaw-agent-schema.sql",
+    outFile: "src/state/natesclaw-agent-db.generated.d.ts",
   },
 ];
 

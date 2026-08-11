@@ -1,7 +1,7 @@
 // System prompt config tests cover config-to-prompt parameter resolution through
 // the canonical agent prompt facade.
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { buildConfiguredAgentSystemPrompt } from "./system-prompt-config.js";
 
 vi.mock("../tts/tts-settings.js", () => ({
@@ -10,11 +10,11 @@ vi.mock("../tts/tts-settings.js", () => ({
   setTtsMachinePrefsPathResolver: vi.fn(),
 }));
 
-function buildPrompt(config: OpenClawConfig, agentId = "main"): string {
+function buildPrompt(config: NatesclawConfig, agentId = "main"): string {
   return buildConfiguredAgentSystemPrompt({
     config,
     agentId,
-    workspaceDir: "/tmp/openclaw",
+    workspaceDir: "/tmp/natesclaw",
     toolNames: ["sessions_spawn", "subagents"],
   });
 }
@@ -33,7 +33,7 @@ describe("buildConfiguredAgentSystemPrompt", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     expect(buildPrompt(config)).toContain("Mode: prefer");
   });
@@ -55,7 +55,7 @@ describe("buildConfiguredAgentSystemPrompt", () => {
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     expect(buildPrompt(config, "coordinator")).toContain("Mode: prefer");
   });
@@ -72,7 +72,7 @@ describe("buildConfiguredAgentSystemPrompt", () => {
         },
       },
       agentId: "main",
-      workspaceDir: "/tmp/openclaw",
+      workspaceDir: "/tmp/natesclaw",
       toolNames: ["sessions_spawn", "subagents"],
     });
 

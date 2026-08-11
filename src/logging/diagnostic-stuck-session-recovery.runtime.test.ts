@@ -6,7 +6,7 @@ import {
   replaceSessionEntry,
 } from "../config/sessions/session-accessor.js";
 import { saveCronStore } from "../cron/store.js";
-import { createOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { createNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 
 const mocks = vi.hoisted(() => ({
   abortEmbeddedAgentRun: vi.fn(),
@@ -263,11 +263,11 @@ describe("stuck session recovery", () => {
   });
 
   it("logs stopped cron context when aborting an active embedded run", async () => {
-    const openClawState = await createOpenClawTestState({
+    const NatesclawState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-recovery-context-",
+      prefix: "natesclaw-recovery-context-",
     });
-    const tempDir = openClawState.stateDir;
+    const tempDir = NatesclawState.stateDir;
     try {
       await saveCronStore(path.join(tempDir, "cron", "jobs.json"), {
         version: 1,
@@ -306,7 +306,7 @@ describe("stuck session recovery", () => {
         allowActiveAbort: true,
       });
     } finally {
-      await openClawState.cleanup();
+      await NatesclawState.cleanup();
     }
 
     expect(warnLogMessages()).toEqual([

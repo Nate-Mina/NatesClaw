@@ -2,10 +2,10 @@ import fs from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabaseOptions,
+} from "../../state/natesclaw-state-db.js";
 import type { AgentRuntimeIdentity } from "../agent-runtime-identity-token.js";
 import { ExecApprovalManager } from "../exec-approval-manager.js";
 import { createChatRunState } from "../server-chat-state.js";
@@ -14,9 +14,9 @@ import type { GatewayRequestHandlerOptions } from "./types.js";
 
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
-function databaseOptions(): OpenClawStateDatabaseOptions {
+function databaseOptions(): NatesclawStateDatabaseOptions {
   const stateDir = fs.realpathSync(tempDirs.make("exec-approval-id-"));
-  return { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } };
+  return { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } };
 }
 
 function identity(enabled: boolean): AgentRuntimeIdentity {
@@ -89,7 +89,7 @@ function requestOptions(
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 describe("exec approval signed agent runtime", () => {
@@ -156,7 +156,7 @@ describe("exec approval signed agent runtime", () => {
       turnSourceAccountId: "default",
       turnSourceThreadId: "thread-1",
     });
-    const db = openOpenClawStateDatabase(options).db;
+    const db = openNatesclawStateDatabase(options).db;
     if (enabled) {
       expect(
         db

@@ -1,5 +1,5 @@
 /**
- * `openclaw browser extension` CLI: install the unpacked Chrome extension,
+ * `natesclaw browser extension` CLI: install the unpacked Chrome extension,
  * register its native bootstrap host, and retain advanced manual pairing.
  */
 import path from "node:path";
@@ -137,7 +137,7 @@ async function buildCdpEndpoint(options: {
   };
 }
 
-/** Register `openclaw browser extension` lifecycle and compatibility commands. */
+/** Register `natesclaw browser extension` lifecycle and compatibility commands. */
 export function registerBrowserExtensionCommands(
   browser: Command,
   _parentOpts: (cmd: Command) => BrowserParentOpts,
@@ -145,7 +145,7 @@ export function registerBrowserExtensionCommands(
 ) {
   const extension = browser
     .command("extension")
-    .description("Install and inspect the OpenClaw Chrome extension bootstrap");
+    .description("Install and inspect the Natesclaw Chrome extension bootstrap");
 
   extension
     .command("path")
@@ -175,7 +175,7 @@ export function registerBrowserExtensionCommands(
           const bundledDir = resolveChromeExtensionDir(pluginRoot);
           if (opts.json !== true) {
             defaultRuntime.log(
-              info("Preparing the OpenClaw Chrome extension. Keep Chrome running…"),
+              info("Preparing the Natesclaw Chrome extension. Keep Chrome running…"),
             );
           }
           const status = await installChromeExtensionBootstrap({
@@ -241,7 +241,7 @@ export function registerBrowserExtensionCommands(
 
   extension
     .command("uninstall-host")
-    .description("Remove only OpenClaw-owned Chrome native-host registrations")
+    .description("Remove only Natesclaw-owned Chrome native-host registrations")
     .option("--json", "Print a machine-readable removal report")
     .action(async (opts) => {
       await runCommandWithRuntime(defaultRuntime, async () => {
@@ -294,7 +294,7 @@ export function registerBrowserExtensionCommands(
               setupLine,
               info("1. Load the extension: chrome://extensions → Developer mode → Load unpacked →"),
               `   ${resolveChromeExtensionDir(pluginRoot)}`,
-              info("2. Open the OpenClaw popup and paste this pairing string:"),
+              info("2. Open the Natesclaw popup and paste this pairing string:"),
               "",
               theme.heading(result.pairing),
               "",

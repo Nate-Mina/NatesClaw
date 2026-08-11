@@ -2,15 +2,15 @@ import {
   readProviderJsonResponse,
   resolveProviderHttpRequestConfig,
   sanitizeConfiguredModelProviderRequest,
-} from "openclaw/plugin-sdk/provider-http";
-import type { ModelProviderConfig } from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/provider-http";
+import type { ModelProviderConfig } from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   buildUsageHttpErrorSnapshot,
   parseProviderUsageNonNegativeNumber,
   type ProviderUsageSnapshot,
-} from "openclaw/plugin-sdk/provider-usage";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-usage";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   OPENROUTER_BASE_URL,
   resolveOpenRouterApiBaseUrl,

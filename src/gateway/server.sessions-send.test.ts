@@ -10,7 +10,7 @@ import {
   loadSessionEntry,
   persistSessionTranscriptTurn,
 } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { emitAgentEvent } from "../infra/agent-events.js";
 import { createOutboundTestPlugin, createTestRegistry } from "../test-utils/channel-plugins.js";
 import { captureEnv } from "../test-utils/env.js";
@@ -25,7 +25,7 @@ import {
   writeSessionStore,
 } from "./test-helpers.js";
 
-const { createOpenClawTools } = await import("../agents/openclaw-tools.js");
+const { createNatesclawTools } = await import("../agents/natesclaw-tools.js");
 
 installGatewayTestHooks({ scope: "suite" });
 
@@ -34,7 +34,7 @@ let gatewayPort: number;
 const gatewayToken = "test-gateway-token-1234567890";
 let envSnapshot: ReturnType<typeof captureEnv>;
 
-type SessionSendTool = ReturnType<typeof createOpenClawTools>[number];
+type SessionSendTool = ReturnType<typeof createNatesclawTools>[number];
 const SESSION_SEND_E2E_TIMEOUT_MS = 10_000;
 const SESSION_SEND_DM_ROUTING_E2E_TIMEOUT_MS = 30_000;
 let cachedSessionsSendTool: SessionSendTool | null = null;
@@ -43,7 +43,7 @@ function getSessionsSendTool(): SessionSendTool {
   if (cachedSessionsSendTool) {
     return cachedSessionsSendTool;
   }
-  const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_send");
+  const tool = createNatesclawTools().find((candidate) => candidate.name === "sessions_send");
   if (!tool) {
     throw new Error("missing sessions_send tool");
   }
@@ -117,7 +117,7 @@ async function emitLifecycleAssistantReply(params: {
 }
 
 beforeAll(async () => {
-  envSnapshot = captureEnv(["OPENCLAW_GATEWAY_PORT", "OPENCLAW_GATEWAY_TOKEN"]);
+  envSnapshot = captureEnv(["NATESCLAW_GATEWAY_PORT", "NATESCLAW_GATEWAY_TOKEN"]);
   gatewayPort = await getGatewayTestPort();
   const { approveDevicePairing, requestDevicePairing } = await import("../infra/device-pairing.js");
   const { loadOrCreateDeviceIdentity, publicKeyRawBase64UrlFromPem } =
@@ -126,7 +126,7 @@ beforeAll(async () => {
   const pending = await requestDevicePairing({
     deviceId: identity.deviceId,
     publicKey: publicKeyRawBase64UrlFromPem(identity.publicKeyPem),
-    clientId: "openclaw-cli",
+    clientId: "natesclaw-cli",
     clientMode: "cli",
     role: "operator",
     scopes: ["operator.admin", "operator.read", "operator.write", "operator.approvals"],
@@ -136,15 +136,15 @@ beforeAll(async () => {
     callerScopes: pending.request.scopes ?? ["operator.admin"],
   });
   testState.gatewayAuth = { mode: "token", token: gatewayToken };
-  process.env.OPENCLAW_GATEWAY_PORT = String(gatewayPort);
-  process.env.OPENCLAW_GATEWAY_TOKEN = gatewayToken;
+  process.env.NATESCLAW_GATEWAY_PORT = String(gatewayPort);
+  process.env.NATESCLAW_GATEWAY_TOKEN = gatewayToken;
   server = await startTestGatewayServer(gatewayPort);
 });
 
 beforeEach(() => {
   testState.gatewayAuth = { mode: "token", token: gatewayToken };
-  process.env.OPENCLAW_GATEWAY_PORT = String(gatewayPort);
-  process.env.OPENCLAW_GATEWAY_TOKEN = gatewayToken;
+  process.env.NATESCLAW_GATEWAY_PORT = String(gatewayPort);
+  process.env.NATESCLAW_GATEWAY_TOKEN = gatewayToken;
 });
 
 afterAll(async () => {
@@ -222,7 +222,7 @@ describe("sessions_send gateway loopback", () => {
     "announces through gateway send using external deliveryContext over stale webchat session fields",
     { timeout: SESSION_SEND_E2E_TIMEOUT_MS },
     async () => {
-      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sessions-send-route-"));
+      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-sessions-send-route-"));
       const sendCalls: Array<{
         to?: string;
         text?: string;
@@ -337,7 +337,7 @@ describe("sessions_send gateway loopback", () => {
     "does not re-announce a trailing message-tool delivery mirror after a waited A2A run",
     { timeout: SESSION_SEND_E2E_TIMEOUT_MS },
     async () => {
-      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sessions-send-mirror-"));
+      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-sessions-send-mirror-"));
       const sessionKey = "agent:main:whatsapp:direct:peer-1";
       const sessionId = "sess-whatsapp-mirror";
       const runId = `run-message-tool-mirror-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -443,7 +443,7 @@ describe("sessions_send gateway loopback", () => {
               {
                 message: {
                   role: "assistant",
-                  provider: "openclaw",
+                  provider: "natesclaw",
                   model: "delivery-mirror",
                   content: [{ type: "text", text: deliveredReply }],
                   timestamp: 4,
@@ -466,7 +466,7 @@ describe("sessions_send gateway loopback", () => {
               content: expect.arrayContaining([
                 expect.objectContaining({ type: "text", text: deliveredReply }),
               ]),
-              openclawMessageToolMirror: expect.objectContaining({
+              natesclawMessageToolMirror: expect.objectContaining({
                 toolName: "message",
                 toolCallId: "call-message-duplicate-proof",
               }),
@@ -517,9 +517,9 @@ describe("sessions_send label lookup", () => {
     { timeout: SESSION_SEND_E2E_TIMEOUT_MS },
     async () => {
       // This is an operator feature; enable broader session tool targeting for this test.
-      const configPath = process.env.OPENCLAW_CONFIG_PATH;
+      const configPath = process.env.NATESCLAW_CONFIG_PATH;
       if (!configPath) {
-        throw new Error("OPENCLAW_CONFIG_PATH missing in gateway test environment");
+        throw new Error("NATESCLAW_CONFIG_PATH missing in gateway test environment");
       }
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
@@ -545,7 +545,7 @@ describe("sessions_send label lookup", () => {
         timeoutMs: 5000,
       });
 
-      const tool = createOpenClawTools({
+      const tool = createNatesclawTools({
         config: {
           tools: {
             sessions: {
@@ -577,12 +577,12 @@ describe("sessions_send agent targeting", () => {
     "starts configured agent main session by agentId before sending",
     { timeout: SESSION_SEND_E2E_TIMEOUT_MS },
     async () => {
-      const configPath = process.env.OPENCLAW_CONFIG_PATH;
+      const configPath = process.env.NATESCLAW_CONFIG_PATH;
       if (!configPath) {
-        throw new Error("OPENCLAW_CONFIG_PATH missing in gateway test environment");
+        throw new Error("NATESCLAW_CONFIG_PATH missing in gateway test environment");
       }
-      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sessions-send-agent-"));
-      const config: OpenClawConfig = {
+      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-sessions-send-agent-"));
+      const config: NatesclawConfig = {
         tools: {
           sessions: {
             visibility: "all",
@@ -620,7 +620,7 @@ describe("sessions_send agent targeting", () => {
         );
         spy.mockClear();
 
-        const tool = createOpenClawTools({
+        const tool = createNatesclawTools({
           agentSessionKey: "agent:main:main",
           config,
         }).find((candidate) => candidate.name === "sessions_send");
@@ -696,16 +696,16 @@ describe("sessions_send direct-message requester routing", () => {
       bindingAgentId,
       expectedReplySessionKey,
     }) => {
-      const configPath = process.env.OPENCLAW_CONFIG_PATH;
+      const configPath = process.env.NATESCLAW_CONFIG_PATH;
       if (!configPath) {
-        throw new Error("OPENCLAW_CONFIG_PATH missing in gateway test environment");
+        throw new Error("NATESCLAW_CONFIG_PATH missing in gateway test environment");
       }
-      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sessions-send-dm-scope-"));
+      const dir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-sessions-send-dm-scope-"));
       // A2A follow-ups outlive tool.execute. Give every real Gateway case its
       // own agent so a preceding case can never satisfy this case's spy.
       const targetAgentId = `orion-${label.toLowerCase().replaceAll(" ", "-")}`;
       const targetSessionKey = `agent:${targetAgentId}:main`;
-      const config: OpenClawConfig = {
+      const config: NatesclawConfig = {
         ...(bindingAccountId || bindingAgentId
           ? {
               bindings: [
@@ -767,7 +767,7 @@ describe("sessions_send direct-message requester routing", () => {
           }),
         );
 
-        const tool = createOpenClawTools({
+        const tool = createNatesclawTools({
           agentSessionKey: requesterSessionKey,
           agentChannel: "feishu",
           config,

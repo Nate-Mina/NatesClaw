@@ -1,6 +1,6 @@
 // Imessage plugin module implements self chat cache behavior.
 import { createHash } from "node:crypto";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
 import { formatIMessageChatTarget } from "../targets.js";
 
 type SelfChatCacheKeyParts = {

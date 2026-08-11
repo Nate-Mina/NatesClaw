@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { PreparedAgentRunAdmission } from "../../agents/admitted-run-context.js";
 import { resolveBootstrapWarningSignaturesSeen } from "../../agents/bootstrap-budget.js";
 import type { BootstrapContextRunKind } from "../../agents/bootstrap-mode.js";
@@ -13,7 +13,7 @@ import {
   resolveAgentRunErrorLifecycleFields,
 } from "../../agents/run-termination.js";
 import { resolveGroupSessionKey } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   isTrustedMessageActionTurnIngress,
   mintMessageActionTurnCapability,
@@ -62,7 +62,7 @@ export async function runEmbeddedFallbackCandidate(params: {
   turn: AgentTurnParams;
   effectiveRun: FollowupRun["run"];
   candidateRun: FollowupRun["run"];
-  runtimeConfig: OpenClawConfig;
+  runtimeConfig: NatesclawConfig;
   provider: string;
   model: string;
   sessionRuntimeOverride?: string;
@@ -143,8 +143,8 @@ export async function runEmbeddedFallbackCandidate(params: {
   });
   const embeddedRunHarnessOverride =
     params.sessionRuntimeOverride ??
-    (agentHarnessPolicy.runtime === "openclaw" && embeddedRunProvider !== params.provider
-      ? "openclaw"
+    (agentHarnessPolicy.runtime === "natesclaw" && embeddedRunProvider !== params.provider
+      ? "natesclaw"
       : undefined);
   const messageActionCapabilitySessionKey =
     turn.runtimePolicySessionKey ?? embeddedContext.sessionKey;

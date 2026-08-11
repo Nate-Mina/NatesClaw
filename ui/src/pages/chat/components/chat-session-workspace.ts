@@ -829,7 +829,7 @@ export function createSessionWorkspaceProps(
         }
       : undefined,
     onToggleCustodian:
-      state.connected && isGatewayMethodAdvertised(state, "openclaw.chat") === true
+      state.connected && isGatewayMethodAdvertised(state, "natesclaw.chat") === true
         ? () => window.dispatchEvent(new CustomEvent(CUSTODIAN_PANEL_TOGGLE_EVENT))
         : undefined,
     onOpenDiff: canOpenDiff
@@ -908,7 +908,7 @@ export function renderSessionWorkspaceToggle(
   const label = expanded ? t("chat.workspaceFiles.collapse") : t("chat.workspaceFiles.showFiles");
   const modifiedCount = sessionWorkspaceModifiedCount(sessionWorkspace);
   return html`
-    <openclaw-tooltip .content=${`${label} (⇧⌘B)`}>
+    <natesclaw-tooltip .content=${`${label} (⇧⌘B)`}>
       <button
         class="btn btn--ghost btn--icon chat-icon-btn chat-workspace-toggle"
         type="button"
@@ -924,7 +924,7 @@ export function renderSessionWorkspaceToggle(
             >`
           : nothing}
       </button>
-    </openclaw-tooltip>
+    </natesclaw-tooltip>
   `;
 }
 
@@ -937,7 +937,7 @@ export function renderSessionDiffToggle(
   }
   const label = t("chat.sessionDiff.show");
   return html`
-    <openclaw-tooltip .content=${label}>
+    <natesclaw-tooltip .content=${label}>
       <button
         class="btn btn--ghost btn--icon chat-icon-btn chat-session-diff-toggle"
         type="button"
@@ -946,7 +946,7 @@ export function renderSessionDiffToggle(
       >
         ${icons.fileDiff}
       </button>
-    </openclaw-tooltip>
+    </natesclaw-tooltip>
   `;
 }
 
@@ -963,7 +963,7 @@ export function renderSessionWorkspaceRail(
   const dock = sessionWorkspace.narrowLayout ? "bottom" : sessionWorkspace.dock;
   const terminalButton = sessionWorkspace.onToggleTerminal
     ? html`
-        <openclaw-tooltip .content=${t("terminal.toggle")}>
+        <natesclaw-tooltip .content=${t("terminal.toggle")}>
           <button
             type="button"
             class="chat-workspace-rail__terminal"
@@ -972,12 +972,12 @@ export function renderSessionWorkspaceRail(
           >
             ${icons.terminal}
           </button>
-        </openclaw-tooltip>
+        </natesclaw-tooltip>
       `
     : nothing;
   const browserButton = sessionWorkspace.onToggleBrowser
     ? html`
-        <openclaw-tooltip .content=${t("browser.toggle")}>
+        <natesclaw-tooltip .content=${t("browser.toggle")}>
           <button
             type="button"
             class="chat-workspace-rail__terminal"
@@ -986,12 +986,12 @@ export function renderSessionWorkspaceRail(
           >
             ${icons.globe}
           </button>
-        </openclaw-tooltip>
+        </natesclaw-tooltip>
       `
     : nothing;
   const custodianButton = sessionWorkspace.onToggleCustodian
     ? html`
-        <openclaw-tooltip .content=${t("custodian.panel.toggle")}>
+        <natesclaw-tooltip .content=${t("custodian.panel.toggle")}>
           <button
             type="button"
             class="chat-workspace-rail__terminal"
@@ -1000,12 +1000,12 @@ export function renderSessionWorkspaceRail(
           >
             ${icons.lobster}
           </button>
-        </openclaw-tooltip>
+        </natesclaw-tooltip>
       `
     : nothing;
   const diffButton = sessionWorkspace.onOpenDiff
     ? html`
-        <openclaw-tooltip .content=${t("chat.sessionDiff.show")}>
+        <natesclaw-tooltip .content=${t("chat.sessionDiff.show")}>
           <button
             type="button"
             class="chat-workspace-rail__terminal chat-session-diff-toggle"
@@ -1014,7 +1014,7 @@ export function renderSessionWorkspaceRail(
           >
             ${icons.fileDiff}
           </button>
-        </openclaw-tooltip>
+        </natesclaw-tooltip>
       `
     : nothing;
   const files = sessionWorkspace.list?.files ?? [];
@@ -1031,7 +1031,7 @@ export function renderSessionWorkspaceRail(
       role="group"
       aria-label=${t("chat.workspaceFiles.actions")}
     >
-      <openclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
+      <natesclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
         <button
           class="chat-workspace-rail__row-action"
           type="button"
@@ -1043,8 +1043,8 @@ export function renderSessionWorkspaceRail(
         >
           ${icons.eye}
         </button>
-      </openclaw-tooltip>
-      <openclaw-tooltip .content=${t("chat.workspaceFiles.copyPath")}>
+      </natesclaw-tooltip>
+      <natesclaw-tooltip .content=${t("chat.workspaceFiles.copyPath")}>
         <button
           class="chat-workspace-rail__row-action"
           type="button"
@@ -1056,7 +1056,7 @@ export function renderSessionWorkspaceRail(
         >
           ${icons.copy}
         </button>
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
     </span>
   `;
   const renderSessionSummary = (): TemplateResult | typeof nothing => {
@@ -1098,11 +1098,11 @@ export function renderSessionWorkspaceRail(
                   >
                     <span class="chat-workspace-rail__file-icon">${icons.fileText}</span>
                     <span class="chat-workspace-rail__file-main">
-                      <openclaw-tooltip .content=${file.path || file.name}>
+                      <natesclaw-tooltip .content=${file.path || file.name}>
                         <span class="chat-workspace-rail__file-name"
                           >${file.path || file.name}</span
                         >
-                      </openclaw-tooltip>
+                      </natesclaw-tooltip>
                       ${size
                         ? html`<span class="chat-workspace-rail__file-meta">${size}</span>`
                         : nothing}
@@ -1210,9 +1210,9 @@ export function renderSessionWorkspaceRail(
                         >${entry.kind === "directory" ? icons.folder : icons.fileText}</span
                       >
                       <span class="chat-workspace-rail__file-main">
-                        <openclaw-tooltip .content=${entry.path || entry.name}>
+                        <natesclaw-tooltip .content=${entry.path || entry.name}>
                           <span class="chat-workspace-rail__file-name">${entry.name}</span>
-                        </openclaw-tooltip>
+                        </natesclaw-tooltip>
                         <span class="chat-workspace-rail__file-meta">
                           ${entry.kind === "directory"
                             ? entry.path || t("chat.workspaceFiles.root")
@@ -1260,9 +1260,9 @@ export function renderSessionWorkspaceRail(
                       >${isImage ? icons.image : icons.paperclip}</span
                     >
                     <span class="chat-workspace-rail__file-main">
-                      <openclaw-tooltip .content=${artifact.title}>
+                      <natesclaw-tooltip .content=${artifact.title}>
                         <span class="chat-workspace-rail__file-name">${artifact.title}</span>
-                      </openclaw-tooltip>
+                      </natesclaw-tooltip>
                       ${size || artifact.mimeType
                         ? html`<span class="chat-workspace-rail__file-meta"
                             >${[artifact.mimeType, size].filter(Boolean).join(" / ")}</span
@@ -1271,7 +1271,7 @@ export function renderSessionWorkspaceRail(
                     </span>
                   </button>
                   <span class="chat-workspace-rail__row-actions">
-                    <openclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
+                    <natesclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
                       <button
                         class="chat-workspace-rail__row-action"
                         type="button"
@@ -1283,7 +1283,7 @@ export function renderSessionWorkspaceRail(
                       >
                         ${icons.eye}
                       </button>
-                    </openclaw-tooltip>
+                    </natesclaw-tooltip>
                   </span>
                 </div>
               `;
@@ -1310,7 +1310,7 @@ export function renderSessionWorkspaceRail(
           ${sessionWorkspace.narrowLayout
             ? nothing
             : html`
-                <openclaw-tooltip
+                <natesclaw-tooltip
                   .content=${dock === "bottom"
                     ? t("chat.workspaceFiles.dockRight")
                     : t("chat.workspaceFiles.dockBottom")}
@@ -1326,9 +1326,9 @@ export function renderSessionWorkspaceRail(
                   >
                     ${dock === "bottom" ? icons.panelRightOpen : icons.panelBottomOpen}
                   </button>
-                </openclaw-tooltip>
+                </natesclaw-tooltip>
               `}
-          <openclaw-tooltip .content=${t("chat.workspaceFiles.refresh")}>
+          <natesclaw-tooltip .content=${t("chat.workspaceFiles.refresh")}>
             <button
               class="btn btn--ghost btn--sm chat-workspace-rail__refresh"
               type="button"
@@ -1338,8 +1338,8 @@ export function renderSessionWorkspaceRail(
             >
               ${icons.refresh}
             </button>
-          </openclaw-tooltip>
-          <openclaw-tooltip .content=${`${t("chat.workspaceFiles.collapse")} (⇧⌘B)`}>
+          </natesclaw-tooltip>
+          <natesclaw-tooltip .content=${`${t("chat.workspaceFiles.collapse")} (⇧⌘B)`}>
             <button
               type="button"
               class="nav-collapse-toggle chat-workspace-rail__collapse-toggle"
@@ -1352,14 +1352,14 @@ export function renderSessionWorkspaceRail(
                 >${dock === "bottom" ? icons.panelBottomClose : icons.panelRightClose}</span
               >
             </button>
-          </openclaw-tooltip>
+          </natesclaw-tooltip>
         </div>
       </div>
       ${sessionWorkspace.list?.root
         ? html`
-            <openclaw-tooltip .content=${sessionWorkspace.list.root}>
+            <natesclaw-tooltip .content=${sessionWorkspace.list.root}>
               <div class="chat-workspace-rail__path">${sessionWorkspace.list.root}</div>
-            </openclaw-tooltip>
+            </natesclaw-tooltip>
           `
         : nothing}
       ${renderSessionSummary()}

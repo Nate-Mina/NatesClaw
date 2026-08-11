@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { PluginDoctorStateMigration } from "openclaw/plugin-sdk/runtime-doctor-migrations";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import type { PluginDoctorStateMigration } from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 // sqlite-runtime re-exports the agent-db/kysely graph; keep it lazy so doctor
 // enumeration does not cold-load it with this closure.
 
@@ -16,14 +16,14 @@ type VectorProviderFinding = ProviderFailure & {
 };
 
 async function inspectConfiguredProvider(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId: string;
   env: NodeJS.ProcessEnv;
   agentDatabasePath: string;
 }): Promise<ProviderFailure | null> {
   const [{ resolveAgentConfig }, foundation, embeddings, providerState] = await Promise.all([
-    import("openclaw/plugin-sdk/agent-runtime"),
-    import("openclaw/plugin-sdk/memory-core-host-engine-foundation"),
+    import("natesclaw/plugin-sdk/agent-runtime"),
+    import("natesclaw/plugin-sdk/memory-core-host-engine-foundation"),
     import("../memory/embeddings.js"),
     import("../memory/manager-provider-state.js"),
   ]);
@@ -72,11 +72,11 @@ const testing = {
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
   (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.memoryCoreVectorIndexProviderDiagnosticTestApi")
+    Symbol.for("natesclaw.memoryCoreVectorIndexProviderDiagnosticTestApi")
   ] = testing;
 }
 
-function listConfiguredAgentIds(config: OpenClawConfig): string[] {
+function listConfiguredAgentIds(config: NatesclawConfig): string[] {
   const ids = new Set(Object.keys(config.agents?.entries ?? {}));
   for (const entry of config.agents?.list ?? []) {
     if (entry.id.trim()) {
@@ -90,7 +90,7 @@ async function readExistingVectorModel(databasePath: string): Promise<string | n
   if (!fs.existsSync(databasePath)) {
     return null;
   }
-  const { openNodeSqliteDatabase } = await import("openclaw/plugin-sdk/sqlite-runtime");
+  const { openNodeSqliteDatabase } = await import("natesclaw/plugin-sdk/sqlite-runtime");
   let db: ReturnType<typeof openNodeSqliteDatabase> | undefined;
   try {
     db = openNodeSqliteDatabase(databasePath, { readOnly: true });
@@ -110,7 +110,7 @@ async function readExistingVectorModel(databasePath: string): Promise<string | n
   }
 }
 
-function resolveConfigPrefix(config: OpenClawConfig, agentId: string): string {
+function resolveConfigPrefix(config: NatesclawConfig, agentId: string): string {
   if (config.agents?.entries?.[agentId]?.memory?.search) {
     return `agents.entries.${agentId}.memory.search`;
   }
@@ -120,7 +120,7 @@ function resolveConfigPrefix(config: OpenClawConfig, agentId: string): string {
   return "memory.search";
 }
 
-function hasConfiguredMemorySecretRef(config: OpenClawConfig, agentId: string): boolean {
+function hasConfiguredMemorySecretRef(config: NatesclawConfig, agentId: string): boolean {
   const agent =
     config.agents?.entries?.[agentId] ?? config.agents?.list?.find((entry) => entry.id === agentId);
   const apiKey = agent?.memory?.search?.remote?.apiKey ?? config.memory?.search?.remote?.apiKey;
@@ -128,7 +128,7 @@ function hasConfiguredMemorySecretRef(config: OpenClawConfig, agentId: string): 
 }
 
 async function collectVectorProviderFindings(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   stateDir: string;
 }): Promise<VectorProviderFinding[]> {
@@ -141,7 +141,7 @@ async function collectVectorProviderFindings(params: {
       "agents",
       agentId,
       "agent",
-      "openclaw-agent.sqlite",
+      "natesclaw-agent.sqlite",
     );
     const model = await readExistingVectorModel(agentDatabasePath);
     if (!model) {

@@ -1,7 +1,7 @@
 import {
   DEFAULT_GATEWAY_REQUEST_TIMEOUT_MS,
   gatewayStartupUnavailableDetails,
-} from "@openclaw/gateway-client/browser";
+} from "@natesclaw/gateway-client/browser";
 import { render } from "lit";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GatewayRequestError } from "../../api/gateway.ts";
@@ -11,7 +11,7 @@ import { NewSessionModelControl } from "./model-control.ts";
 
 function contextWith(
   models: ModelCatalogEntry[],
-  runtime = "openclaw",
+  runtime = "natesclaw",
   featureMethods: string[] = [],
 ) {
   const request = vi.fn().mockResolvedValue({ models });
@@ -106,7 +106,7 @@ describe("new-session model runtime", () => {
   it("lists create-capable CLI agents and selects the canonical catalog target", async () => {
     const { context, request } = contextWith(
       [{ id: "gpt-5.6-luna", name: "GPT-5.6 Luna", provider: "openai" }],
-      "openclaw",
+      "natesclaw",
       ["sessions.catalog.list"],
     );
     request.mockImplementation((method: string) =>

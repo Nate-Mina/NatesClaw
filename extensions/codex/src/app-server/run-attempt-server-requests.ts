@@ -1,4 +1,4 @@
-import { onInternalDiagnosticEvent } from "openclaw/plugin-sdk/diagnostic-runtime";
+import { onInternalDiagnosticEvent } from "natesclaw/plugin-sdk/diagnostic-runtime";
 import { handleCodexAppServerApprovalRequest } from "./approval-bridge.js";
 import { isCodexAppServerApprovalRequest } from "./client.js";
 import { shouldAutoApproveCodexAppServerApprovals } from "./config.js";
@@ -49,7 +49,7 @@ export function createCodexAttemptServerRequestController(
     computerUseConfig,
     runAbortController,
     appServer,
-    approvalPolicyPromotedForOpenClawToolPolicy,
+    approvalPolicyPromotedForNatesclawToolPolicy,
     sessionAgentId,
   } = connection;
   const {
@@ -62,8 +62,8 @@ export function createCodexAttemptServerRequestController(
     state,
     turnIdRef,
     userInputBridgeRef,
-    openClawDynamicToolExecutions,
-    pendingOpenClawDynamicToolCompletionIds,
+    NatesclawDynamicToolExecutions,
+    pendingNatesclawDynamicToolCompletionIds,
     postToolRawAssistantCompletionIdleTimeoutMs,
     turnWatches,
   } = turnRuntime;
@@ -134,7 +134,7 @@ export function createCodexAttemptServerRequestController(
             turnId,
             nativeHookRelay: resourceState.nativeHookRelay,
             autoApprove: shouldAutoApproveCodexAppServerApprovals(appServer),
-            autoApproveOpenClawToolPolicy: approvalPolicyPromotedForOpenClawToolPolicy,
+            autoApproveNatesclawToolPolicy: approvalPolicyPromotedForNatesclawToolPolicy,
             signal,
             onNativeToolFailureDisposition: (itemId, disposition) =>
               projector?.recordNativeToolApprovalFailure(itemId, disposition),
@@ -146,7 +146,7 @@ export function createCodexAttemptServerRequestController(
       if (!call || call.threadId !== resourceState.thread.threadId || call.turnId !== turnId) {
         return undefined;
       }
-      const replayedExecution = openClawDynamicToolExecutions.get(call);
+      const replayedExecution = NatesclawDynamicToolExecutions.get(call);
       if (replayedExecution) {
         armCompletionWatchOnResponse = true;
         markCurrentTurnRequestProgress();
@@ -157,7 +157,7 @@ export function createCodexAttemptServerRequestController(
       armCompletionWatchOnResponse = true;
       markCurrentTurnRequestProgress();
       state.turnCrossedToolHandoff = true;
-      pendingOpenClawDynamicToolCompletionIds.add(call.callId);
+      pendingNatesclawDynamicToolCompletionIds.add(call.callId);
       trajectoryRecorder?.recordEvent("tool.call", {
         threadId: call.threadId,
         turnId: call.turnId,
@@ -220,7 +220,7 @@ export function createCodexAttemptServerRequestController(
         }
       });
       try {
-        const { execution } = openClawDynamicToolExecutions.claim(call, () =>
+        const { execution } = NatesclawDynamicToolExecutions.claim(call, () =>
           handleDynamicToolCallWithTimeout({
             call,
             toolBridge,
@@ -303,7 +303,7 @@ export function createCodexAttemptServerRequestController(
             durationMs: toolDurationMs,
           });
         }
-        pendingOpenClawDynamicToolCompletionIds.delete(call.callId);
+        pendingNatesclawDynamicToolCompletionIds.delete(call.callId);
         if (response.terminate === true && response.success) {
           scheduleTurnReleaseAfterTerminalDynamicTool({
             call,
@@ -318,7 +318,7 @@ export function createCodexAttemptServerRequestController(
         }
         return protocolResponse as JsonValue;
       } catch (error) {
-        pendingOpenClawDynamicToolCompletionIds.delete(call.callId);
+        pendingNatesclawDynamicToolCompletionIds.delete(call.callId);
         if (
           !terminalDiagnosticObserved &&
           !hasPendingDynamicToolTerminalDiagnostic({

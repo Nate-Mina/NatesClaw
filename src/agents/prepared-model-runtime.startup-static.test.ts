@@ -44,13 +44,13 @@ const mocks = vi.hoisted(() => {
     resolveAmbientCredentials: vi.fn((..._args: unknown[]) => ({})),
     discoverAuthStorage: vi.fn(() => authStorage),
     discoverModels: vi.fn(() => modelRegistry),
-    ensureOpenClawModelsJson: vi.fn(
+    ensureNatesclawModelsJson: vi.fn(
       async (_config: unknown, _agentDir: unknown, _options?: unknown) => ({
         agentDir: "/tmp/agent",
         wrote: false,
       }),
     ),
-    planOpenClawModelsJsonSource: vi.fn(
+    planNatesclawModelsJsonSource: vi.fn(
       async (_config: unknown, agentDir: unknown, _options?: unknown) => ({
         agentDir: String(agentDir),
         modelsJsonContents: null,
@@ -149,8 +149,8 @@ vi.mock("./model-catalog.js", () => ({
 }));
 
 vi.mock("./models-config.js", () => ({
-  ensureOpenClawModelsJson: mocks.ensureOpenClawModelsJson,
-  planOpenClawModelsJsonSource: mocks.planOpenClawModelsJsonSource,
+  ensureNatesclawModelsJson: mocks.ensureNatesclawModelsJson,
+  planNatesclawModelsJsonSource: mocks.planNatesclawModelsJsonSource,
 }));
 
 vi.mock("./models-config.providers.implicit.js", () => ({
@@ -211,7 +211,7 @@ describe("prepared model runtime Gateway catalog mode", () => {
         staticCatalogProviderIds: ["anthropic", "local-runtime", "openai"],
       }),
     );
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledWith(
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledWith(
       config,
       "/tmp/prepared-static-agent",
       expect.objectContaining({
@@ -219,7 +219,7 @@ describe("prepared model runtime Gateway catalog mode", () => {
         providerDiscoveryProviderIds: ["anthropic", "local-runtime", "openai"],
       }),
     );
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
   });
 
   it("uses live provider catalogs for an explicit read-only list scope", async () => {
@@ -240,7 +240,7 @@ describe("prepared model runtime Gateway catalog mode", () => {
       ["anthropic"],
     );
 
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledWith(
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledWith(
       config,
       "/tmp/prepared-live-agent",
       expect.objectContaining({
@@ -248,12 +248,12 @@ describe("prepared model runtime Gateway catalog mode", () => {
         providerDiscoveryTimeoutMs: expect.any(Number),
       }),
     );
-    expect(mocks.planOpenClawModelsJsonSource).not.toHaveBeenCalledWith(
+    expect(mocks.planNatesclawModelsJsonSource).not.toHaveBeenCalledWith(
       expect.anything(),
       expect.anything(),
       expect.objectContaining({ providerDiscoveryEntriesOnly: true }),
     );
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
   });
 
   it("does not publish a static catalog generation superseded while its hook is running", async () => {
@@ -307,7 +307,7 @@ describe("prepared model runtime Gateway catalog mode", () => {
       agents: {
         defaults: {
           model: { primary: "openai/gpt-5.5" },
-          models: { "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } } },
+          models: { "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } } },
         },
       },
     };
@@ -323,7 +323,7 @@ describe("prepared model runtime Gateway catalog mode", () => {
       },
     });
 
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
     expect(mocks.loadAgentRuntimePluginRegistryHandle).toHaveBeenCalledOnce();
     expect(mocks.prepareStaticCatalog).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -375,8 +375,8 @@ describe("prepared model runtime Gateway catalog mode", () => {
     expect(snapshot?.messageToolCatalog).toBeUndefined();
     expect(snapshot?.mediaCapabilityProviders).toBeDefined();
     const fullCatalog = await snapshot?.loadFullModelCatalog?.();
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledWith(
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledWith(
       config,
       "/tmp/prepared-static-agent",
       expect.objectContaining({
@@ -384,7 +384,7 @@ describe("prepared model runtime Gateway catalog mode", () => {
         providerDiscoveryTimeoutMs: 5_000,
       }),
     );
-    const fullCatalogOptions = mocks.planOpenClawModelsJsonSource.mock.calls[0]?.[2];
+    const fullCatalogOptions = mocks.planNatesclawModelsJsonSource.mock.calls[0]?.[2];
     expect(fullCatalogOptions).not.toHaveProperty("providerDiscoveryProviderIds");
     expect(mocks.buildPreparedModelCatalogSnapshot).toHaveBeenCalledWith(
       expect.objectContaining({ includeProviderPluginAugmentation: true }),
@@ -403,8 +403,8 @@ describe("prepared model runtime Gateway catalog mode", () => {
     });
     await expect(snapshot?.loadFullModelCatalog?.()).resolves.toBe(fullCatalog);
     await vi.waitFor(() => expect(mocks.discoverModels).toHaveBeenCalledTimes(3));
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledOnce();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledOnce();
     expect(mocks.prepareStaticCatalog).toHaveBeenCalledOnce();
     expect(mocks.discoverModels).toHaveBeenCalledTimes(3);
   });
@@ -506,8 +506,8 @@ describe("prepared model runtime Gateway catalog mode", () => {
     expect(mocks.discoverModels).toHaveBeenCalledOnce();
     expect(mocks.buildPreparedModelCatalogSnapshot).not.toHaveBeenCalled();
     expect(mocks.loadStaticCatalog).not.toHaveBeenCalled();
-    expect(mocks.planOpenClawModelsJsonSource).not.toHaveBeenCalled();
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.planNatesclawModelsJsonSource).not.toHaveBeenCalled();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
   });
 
   it("does not request a static provider hook when manifest facts resolve the configured model", async () => {

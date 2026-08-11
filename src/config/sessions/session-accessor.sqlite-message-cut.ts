@@ -1,14 +1,14 @@
 import { randomUUID } from "node:crypto";
-import { asOptionalRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { asOptionalRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { executeSqliteQueryTakeFirstSync } from "../../infra/kysely-sync.js";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
 import { extractAssistantPhaseText } from "../../shared/chat-message-content.js";
 import {
-  openOpenClawAgentDatabase,
-  runOpenClawAgentWriteTransaction,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  openNatesclawAgentDatabase,
+  runNatesclawAgentWriteTransaction,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import type { TranscriptEvent } from "./session-accessor.sqlite-contract.js";
 import {
   collectSessionEntryLookupKeys,
@@ -86,7 +86,7 @@ function cloneSessionBranchSummaries(branches: readonly SessionBranchSummary[]) 
 }
 
 function readSessionBranchWatermark(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): Pick<SessionBranchCacheEntry, "generation" | "maxSeq"> {
   const db = getSessionKysely(database.db);
@@ -108,7 +108,7 @@ function readSessionBranchWatermark(
 }
 
 function loadSessionBranchSummaries(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): SessionBranchSummary[] {
   const cacheKey = sessionBranchCacheKey(database.path, sessionId);
@@ -144,7 +144,7 @@ export async function listSessionBranches(
     ...(params.storePath ? { storePath: params.storePath } : {}),
   });
   try {
-    const database = openOpenClawAgentDatabase(toDatabaseOptions(resolved));
+    const database = openNatesclawAgentDatabase(toDatabaseOptions(resolved));
     const currentEntry = readSessionEntryRow(database, sourceKey)?.entry;
     if (!currentEntry?.sessionId) {
       return { status: "missing-session" };
@@ -217,7 +217,7 @@ async function mutateSqliteSessionAtMessage(
     ...(params.storePath ? { storePath: params.storePath } : {}),
   });
   const preparedEntry = readSessionEntryRow(
-    openOpenClawAgentDatabase(toDatabaseOptions(resolved)),
+    openNatesclawAgentDatabase(toDatabaseOptions(resolved)),
     sourceKey,
   )?.entry;
   const preparedExpectedState =
@@ -232,7 +232,7 @@ async function mutateSqliteSessionAtMessage(
     let previousIdentity = new Map<string, SessionEntry>();
     let currentIdentity = new Map<string, SessionEntry>();
     let databasePath: string | undefined;
-    const result = runOpenClawAgentWriteTransaction((database) => {
+    const result = runNatesclawAgentWriteTransaction((database) => {
       databasePath = database.path;
       const identityKeys = uniqueStrings([
         ...collectSessionEntryLookupKeys(database, sourceKey),
@@ -265,7 +265,7 @@ async function mutateSqliteSessionAtMessage(
 }
 
 function mutateSqliteSessionAtMessageInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   resolved: ResolvedSqliteScope,
   params: {
     canonicalSourceKey: string;
@@ -590,7 +590,7 @@ function extractEditorAttachments(
 function extractEditorMediaRefs(
   message: Record<string, unknown>,
 ): Array<{ path: string; contentType: string }> | undefined {
-  const media = asRecord(message["__openclaw"])?.media;
+  const media = asRecord(message["__natesclaw"])?.media;
   if (!Array.isArray(media)) {
     return undefined;
   }

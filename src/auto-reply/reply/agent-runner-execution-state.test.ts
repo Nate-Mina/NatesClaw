@@ -315,7 +315,7 @@ describe("executeAgentTurn: session state", () => {
     const followupRun = createFollowupRun();
     followupRun.run.provider = "anthropic";
     followupRun.run.model = "claude-opus";
-    followupRun.run.authProfileId = "anthropic:openclaw";
+    followupRun.run.authProfileId = "anthropic:natesclaw";
     followupRun.run.authProfileIdSource = "user";
 
     const sessionEntry: SessionEntry = {

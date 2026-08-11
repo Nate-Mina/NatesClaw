@@ -1,4 +1,4 @@
-import { createOpenClawTestState, type OpenClawTestState } from "openclaw/plugin-sdk/test-state";
+import { createNatesclawTestState, type NatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { afterEach, beforeEach } from "vitest";
 import {
   describe,
@@ -20,15 +20,15 @@ import {
 
 registerCodexEventProjectorTestLifecycle();
 
-let openClawState: OpenClawTestState;
+let NatesclawState: NatesclawTestState;
 beforeEach(async () => {
-  openClawState = await createOpenClawTestState({
+  NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-codex-media-state-",
+    prefix: "natesclaw-codex-media-state-",
   });
 });
 afterEach(async () => {
-  await openClawState.cleanup();
+  await NatesclawState.cleanup();
 });
 
 describe("CodexAppServerEventProjector media projection", () => {

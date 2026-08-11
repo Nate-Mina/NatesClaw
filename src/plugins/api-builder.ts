@@ -1,8 +1,8 @@
 // Builds plugin API objects from config, registries, and runtime helpers.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import { attachPluginApiFacades, type OpenClawPluginApiWithoutFacades } from "./api-facades.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
+import { attachPluginApiFacades, type NatesclawPluginApiWithoutFacades } from "./api-facades.js";
 import type { PluginRuntime } from "./runtime/types.js";
-import type { OpenClawPluginApi, PluginLogger } from "./types.js";
+import type { NatesclawPluginApi, PluginLogger } from "./types.js";
 
 type BuildPluginApiParams = {
   id: string;
@@ -11,15 +11,15 @@ type BuildPluginApiParams = {
   description?: string;
   source: string;
   rootDir?: string;
-  registrationMode: OpenClawPluginApi["registrationMode"];
-  config: OpenClawConfig;
+  registrationMode: NatesclawPluginApi["registrationMode"];
+  config: NatesclawConfig;
   pluginConfig?: Record<string, unknown>;
   runtime: PluginRuntime;
   logger: PluginLogger;
   resolvePath: (input: string) => string;
   handlers?: Partial<
     Pick<
-      OpenClawPluginApi,
+      NatesclawPluginApi,
       | "registerTool"
       | "registerHook"
       | "registerHttpRoute"
@@ -89,105 +89,105 @@ type BuildPluginApiParams = {
   >;
 };
 
-const noopRegisterTool: OpenClawPluginApi["registerTool"] = () => {};
-const noopRegisterHook: OpenClawPluginApi["registerHook"] = () => {};
-const noopRegisterHttpRoute: OpenClawPluginApi["registerHttpRoute"] = () => {};
-const noopRegisterHostedMediaResolver: OpenClawPluginApi["registerHostedMediaResolver"] = () => {};
-const noopRegisterMcpServerConnectionResolver: OpenClawPluginApi["registerMcpServerConnectionResolver"] =
+const noopRegisterTool: NatesclawPluginApi["registerTool"] = () => {};
+const noopRegisterHook: NatesclawPluginApi["registerHook"] = () => {};
+const noopRegisterHttpRoute: NatesclawPluginApi["registerHttpRoute"] = () => {};
+const noopRegisterHostedMediaResolver: NatesclawPluginApi["registerHostedMediaResolver"] = () => {};
+const noopRegisterMcpServerConnectionResolver: NatesclawPluginApi["registerMcpServerConnectionResolver"] =
   () => {};
-const noopRegisterChannel: OpenClawPluginApi["registerChannel"] = () => {};
-const noopRegisterGatewayMethod: OpenClawPluginApi["registerGatewayMethod"] = () => {};
-const noopRegisterSessionCatalog: OpenClawPluginApi["registerSessionCatalog"] = () => {};
-const noopRegisterCli: OpenClawPluginApi["registerCli"] = () => {};
-const noopRegisterReload: OpenClawPluginApi["registerReload"] = () => {};
-const noopRegisterNodeHostCommand: OpenClawPluginApi["registerNodeHostCommand"] = () => {};
-const noopRegisterNodeInvokePolicy: OpenClawPluginApi["registerNodeInvokePolicy"] = () => {};
-const noopRegisterSecurityAuditCollector: OpenClawPluginApi["registerSecurityAuditCollector"] =
+const noopRegisterChannel: NatesclawPluginApi["registerChannel"] = () => {};
+const noopRegisterGatewayMethod: NatesclawPluginApi["registerGatewayMethod"] = () => {};
+const noopRegisterSessionCatalog: NatesclawPluginApi["registerSessionCatalog"] = () => {};
+const noopRegisterCli: NatesclawPluginApi["registerCli"] = () => {};
+const noopRegisterReload: NatesclawPluginApi["registerReload"] = () => {};
+const noopRegisterNodeHostCommand: NatesclawPluginApi["registerNodeHostCommand"] = () => {};
+const noopRegisterNodeInvokePolicy: NatesclawPluginApi["registerNodeInvokePolicy"] = () => {};
+const noopRegisterSecurityAuditCollector: NatesclawPluginApi["registerSecurityAuditCollector"] =
   () => {};
-const noopRegisterService: OpenClawPluginApi["registerService"] = () => {};
-const noopRegisterGatewayDiscoveryService: OpenClawPluginApi["registerGatewayDiscoveryService"] =
+const noopRegisterService: NatesclawPluginApi["registerService"] = () => {};
+const noopRegisterGatewayDiscoveryService: NatesclawPluginApi["registerGatewayDiscoveryService"] =
   () => {};
-const noopRegisterCliBackend: OpenClawPluginApi["registerCliBackend"] = () => {};
-const noopRegisterTextTransforms: OpenClawPluginApi["registerTextTransforms"] = () => {};
-const noopRegisterConfigMigration: OpenClawPluginApi["registerConfigMigration"] = () => {};
-const noopRegisterMigrationProvider: OpenClawPluginApi["registerMigrationProvider"] = () => {};
-const noopRegisterAutoEnableProbe: OpenClawPluginApi["registerAutoEnableProbe"] = () => {};
-const noopRegisterProvider: OpenClawPluginApi["registerProvider"] = () => {};
-const noopRegisterWorkerProvider: OpenClawPluginApi["registerWorkerProvider"] = () => {};
-const noopRegisterModelCatalogProvider: OpenClawPluginApi["registerModelCatalogProvider"] =
+const noopRegisterCliBackend: NatesclawPluginApi["registerCliBackend"] = () => {};
+const noopRegisterTextTransforms: NatesclawPluginApi["registerTextTransforms"] = () => {};
+const noopRegisterConfigMigration: NatesclawPluginApi["registerConfigMigration"] = () => {};
+const noopRegisterMigrationProvider: NatesclawPluginApi["registerMigrationProvider"] = () => {};
+const noopRegisterAutoEnableProbe: NatesclawPluginApi["registerAutoEnableProbe"] = () => {};
+const noopRegisterProvider: NatesclawPluginApi["registerProvider"] = () => {};
+const noopRegisterWorkerProvider: NatesclawPluginApi["registerWorkerProvider"] = () => {};
+const noopRegisterModelCatalogProvider: NatesclawPluginApi["registerModelCatalogProvider"] =
   () => {};
-const noopRegisterEmbeddingProvider: OpenClawPluginApi["registerEmbeddingProvider"] = () => {};
-const noopRegisterSpeechProvider: OpenClawPluginApi["registerSpeechProvider"] = () => {};
-const noopRegisterRealtimeTranscriptionProvider: OpenClawPluginApi["registerRealtimeTranscriptionProvider"] =
+const noopRegisterEmbeddingProvider: NatesclawPluginApi["registerEmbeddingProvider"] = () => {};
+const noopRegisterSpeechProvider: NatesclawPluginApi["registerSpeechProvider"] = () => {};
+const noopRegisterRealtimeTranscriptionProvider: NatesclawPluginApi["registerRealtimeTranscriptionProvider"] =
   () => {};
-const noopRegisterRealtimeVoiceProvider: OpenClawPluginApi["registerRealtimeVoiceProvider"] =
+const noopRegisterRealtimeVoiceProvider: NatesclawPluginApi["registerRealtimeVoiceProvider"] =
   () => {};
-const noopRegisterMediaUnderstandingProvider: OpenClawPluginApi["registerMediaUnderstandingProvider"] =
+const noopRegisterMediaUnderstandingProvider: NatesclawPluginApi["registerMediaUnderstandingProvider"] =
   () => {};
-const noopRegisterTranscriptsSourceProvider: OpenClawPluginApi["registerTranscriptSourceProvider"] =
+const noopRegisterTranscriptsSourceProvider: NatesclawPluginApi["registerTranscriptSourceProvider"] =
   () => {};
-const noopRegisterImageGenerationProvider: OpenClawPluginApi["registerImageGenerationProvider"] =
+const noopRegisterImageGenerationProvider: NatesclawPluginApi["registerImageGenerationProvider"] =
   () => {};
-const noopRegisterVideoGenerationProvider: OpenClawPluginApi["registerVideoGenerationProvider"] =
+const noopRegisterVideoGenerationProvider: NatesclawPluginApi["registerVideoGenerationProvider"] =
   () => {};
-const noopRegisterMusicGenerationProvider: OpenClawPluginApi["registerMusicGenerationProvider"] =
+const noopRegisterMusicGenerationProvider: NatesclawPluginApi["registerMusicGenerationProvider"] =
   () => {};
-const noopRegisterWebFetchProvider: OpenClawPluginApi["registerWebFetchProvider"] = () => {};
-const noopRegisterWebSearchProvider: OpenClawPluginApi["registerWebSearchProvider"] = () => {};
-const noopRegisterInteractiveHandler: OpenClawPluginApi["registerInteractiveHandler"] = () => {};
-const noopOnConversationBindingResolved: OpenClawPluginApi["onConversationBindingResolved"] =
+const noopRegisterWebFetchProvider: NatesclawPluginApi["registerWebFetchProvider"] = () => {};
+const noopRegisterWebSearchProvider: NatesclawPluginApi["registerWebSearchProvider"] = () => {};
+const noopRegisterInteractiveHandler: NatesclawPluginApi["registerInteractiveHandler"] = () => {};
+const noopOnConversationBindingResolved: NatesclawPluginApi["onConversationBindingResolved"] =
   () => {};
-const noopRegisterCommand: OpenClawPluginApi["registerCommand"] = () => {};
-const noopRegisterContextEngine: OpenClawPluginApi["registerContextEngine"] = () => {};
-const noopRegisterCompactionProvider: OpenClawPluginApi["registerCompactionProvider"] = () => {};
-const noopRegisterAgentHarness: OpenClawPluginApi["registerAgentHarness"] = () => {};
-const noopRegisterCodexAppServerExtensionFactory: OpenClawPluginApi["registerCodexAppServerExtensionFactory"] =
+const noopRegisterCommand: NatesclawPluginApi["registerCommand"] = () => {};
+const noopRegisterContextEngine: NatesclawPluginApi["registerContextEngine"] = () => {};
+const noopRegisterCompactionProvider: NatesclawPluginApi["registerCompactionProvider"] = () => {};
+const noopRegisterAgentHarness: NatesclawPluginApi["registerAgentHarness"] = () => {};
+const noopRegisterCodexAppServerExtensionFactory: NatesclawPluginApi["registerCodexAppServerExtensionFactory"] =
   () => {};
-const noopRegisterAgentToolResultMiddleware: OpenClawPluginApi["registerAgentToolResultMiddleware"] =
+const noopRegisterAgentToolResultMiddleware: NatesclawPluginApi["registerAgentToolResultMiddleware"] =
   () => {};
-const noopRegisterSessionExtension: OpenClawPluginApi["registerSessionExtension"] = () => {};
-const noopEnqueueNextTurnInjection: OpenClawPluginApi["enqueueNextTurnInjection"] = async (
+const noopRegisterSessionExtension: NatesclawPluginApi["registerSessionExtension"] = () => {};
+const noopEnqueueNextTurnInjection: NatesclawPluginApi["enqueueNextTurnInjection"] = async (
   injection,
 ) => ({ enqueued: false, id: "", sessionKey: injection.sessionKey });
-const noopRegisterTrustedToolPolicy: OpenClawPluginApi["registerTrustedToolPolicy"] = () => {};
-const noopRegisterToolMetadata: OpenClawPluginApi["registerToolMetadata"] = () => {};
-const noopRegisterControlUiDescriptor: OpenClawPluginApi["registerControlUiDescriptor"] = () => {};
-const noopRegisterRuntimeLifecycle: OpenClawPluginApi["registerRuntimeLifecycle"] = () => {};
-const noopRegisterAgentEventSubscription: OpenClawPluginApi["registerAgentEventSubscription"] =
+const noopRegisterTrustedToolPolicy: NatesclawPluginApi["registerTrustedToolPolicy"] = () => {};
+const noopRegisterToolMetadata: NatesclawPluginApi["registerToolMetadata"] = () => {};
+const noopRegisterControlUiDescriptor: NatesclawPluginApi["registerControlUiDescriptor"] = () => {};
+const noopRegisterRuntimeLifecycle: NatesclawPluginApi["registerRuntimeLifecycle"] = () => {};
+const noopRegisterAgentEventSubscription: NatesclawPluginApi["registerAgentEventSubscription"] =
   () => {};
-const noopEmitAgentEvent: OpenClawPluginApi["emitAgentEvent"] = () => ({
+const noopEmitAgentEvent: NatesclawPluginApi["emitAgentEvent"] = () => ({
   emitted: false,
   reason: "not wired",
 });
-const noopSetRunContext: OpenClawPluginApi["setRunContext"] = () => false;
-const noopGetRunContext: OpenClawPluginApi["getRunContext"] = () => undefined;
-const noopClearRunContext: OpenClawPluginApi["clearRunContext"] = () => {};
-const noopRegisterSessionSchedulerJob: OpenClawPluginApi["registerSessionSchedulerJob"] = () =>
+const noopSetRunContext: NatesclawPluginApi["setRunContext"] = () => false;
+const noopGetRunContext: NatesclawPluginApi["getRunContext"] = () => undefined;
+const noopClearRunContext: NatesclawPluginApi["clearRunContext"] = () => {};
+const noopRegisterSessionSchedulerJob: NatesclawPluginApi["registerSessionSchedulerJob"] = () =>
   undefined;
-const noopRegisterSessionAction: OpenClawPluginApi["registerSessionAction"] = () => {};
-const noopSendSessionAttachment: OpenClawPluginApi["sendSessionAttachment"] = async () => ({
+const noopRegisterSessionAction: NatesclawPluginApi["registerSessionAction"] = () => {};
+const noopSendSessionAttachment: NatesclawPluginApi["sendSessionAttachment"] = async () => ({
   ok: false,
   error: "not wired",
 });
-const noopScheduleSessionTurn: OpenClawPluginApi["scheduleSessionTurn"] = async () => undefined;
-const noopUnscheduleSessionTurnsByTag: OpenClawPluginApi["unscheduleSessionTurnsByTag"] =
+const noopScheduleSessionTurn: NatesclawPluginApi["scheduleSessionTurn"] = async () => undefined;
+const noopUnscheduleSessionTurnsByTag: NatesclawPluginApi["unscheduleSessionTurnsByTag"] =
   async () => ({ removed: 0, failed: 0 });
-const noopRegisterDetachedTaskRuntime: OpenClawPluginApi["registerDetachedTaskRuntime"] = () => {};
-const noopRegisterMemoryCapability: OpenClawPluginApi["registerMemoryCapability"] = () => {};
-const noopRegisterMemoryPromptSupplement: OpenClawPluginApi["registerMemoryPromptSupplement"] =
+const noopRegisterDetachedTaskRuntime: NatesclawPluginApi["registerDetachedTaskRuntime"] = () => {};
+const noopRegisterMemoryCapability: NatesclawPluginApi["registerMemoryCapability"] = () => {};
+const noopRegisterMemoryPromptSupplement: NatesclawPluginApi["registerMemoryPromptSupplement"] =
   () => {};
-const noopRegisterMemoryPromptPreparation: OpenClawPluginApi["registerMemoryPromptPreparation"] =
+const noopRegisterMemoryPromptPreparation: NatesclawPluginApi["registerMemoryPromptPreparation"] =
   () => {};
-const noopRegisterMemoryCorpusSupplement: OpenClawPluginApi["registerMemoryCorpusSupplement"] =
+const noopRegisterMemoryCorpusSupplement: NatesclawPluginApi["registerMemoryCorpusSupplement"] =
   () => {};
-const noopRegisterMemoryEmbeddingProvider: OpenClawPluginApi["registerMemoryEmbeddingProvider"] =
+const noopRegisterMemoryEmbeddingProvider: NatesclawPluginApi["registerMemoryEmbeddingProvider"] =
   () => {};
-const noopOn: OpenClawPluginApi["on"] = () => {};
+const noopOn: NatesclawPluginApi["on"] = () => {};
 
-export function buildPluginApi(params: BuildPluginApiParams): OpenClawPluginApi {
+export function buildPluginApi(params: BuildPluginApiParams): NatesclawPluginApi {
   const handlers = params.handlers ?? {};
   const registerCli = handlers.registerCli ?? noopRegisterCli;
-  const api: OpenClawPluginApiWithoutFacades = {
+  const api: NatesclawPluginApiWithoutFacades = {
     id: params.id,
     name: params.name,
     version: params.version,

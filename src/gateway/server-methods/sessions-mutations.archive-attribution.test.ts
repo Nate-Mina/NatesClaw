@@ -11,17 +11,17 @@ import {
   listSessionMembers,
 } from "../../config/sessions/session-sharing-store.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
+import { withNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import { loadGatewaySessionRow } from "../session-utils.js";
 import { sessionMutationHandlers } from "./sessions-mutations.js";
 import { sessionLog } from "./sessions-shared.js";
 import type { GatewayClient, GatewayRequestContext, RespondFn } from "./types.js";
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
 });
 
 function client(profileId?: string, displayName?: string): GatewayClient {
@@ -30,7 +30,7 @@ function client(profileId?: string, displayName?: string): GatewayClient {
       minProtocol: 1,
       maxProtocol: 1,
       client: {
-        id: "openclaw-control-ui",
+        id: "natesclaw-control-ui",
         version: "test",
         platform: "test",
         mode: "webchat",
@@ -89,7 +89,7 @@ async function invokePatchSession(
 
 describe("sessions.patch archive attribution", () => {
   it("stamps the transition actor, audits each transition, and preserves the first archiver", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const sessionKey = "agent:main:archive-attribution";
       const sessionId = "session-archive-attribution";
       await upsertSessionEntryCore(
@@ -126,7 +126,7 @@ describe("sessions.patch archive attribution", () => {
           !message ||
           typeof message !== "object" ||
           !("customType" in message) ||
-          message.customType !== "openclaw.system-note" ||
+          message.customType !== "natesclaw.system-note" ||
           !("content" in message) ||
           typeof message.content !== "string"
         ) {
@@ -142,7 +142,7 @@ describe("sessions.patch archive attribution", () => {
   });
 
   it("does not fabricate attribution or an actor-stamped audit for an unidentified client", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const sessionKey = "agent:main:solo-archive";
       const sessionId = "session-solo-archive";
       await upsertSessionEntryCore({ agentId: "main", sessionKey }, { sessionId, updatedAt: 1 });
@@ -157,7 +157,7 @@ describe("sessions.patch archive attribution", () => {
   });
 
   it("archives through an alias with attribution", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const canonicalKey = "agent:main:alias-happy-archive";
       const aliasKey = "alias-happy-archive";
       await upsertSessionEntryCore(
@@ -183,7 +183,7 @@ describe("sessions.patch archive attribution", () => {
   });
 
   it("keeps an alias archive when its best-effort audit note fails", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async (state) => {
+    await withNatesclawTestState({ scenario: "minimal" }, async (state) => {
       const canonicalKey = "agent:main:alias-archive";
       const aliasKey = "alias-archive";
       const memberId = "profile-member";
@@ -212,7 +212,7 @@ describe("sessions.patch archive attribution", () => {
       expect(listSessionMembers(memberScope)).toEqual([
         { identityId: memberId, addedBy: "profile-owner", addedAt: 123 },
       ]);
-      const database = openOpenClawAgentDatabase({ agentId: "main", env: state.env });
+      const database = openNatesclawAgentDatabase({ agentId: "main", env: state.env });
       const readCandidateState = () => ({
         entries: listSessionEntriesCore({ agentId: "main" })
           .filter(({ sessionKey }) => sessionKey === canonicalKey || sessionKey === aliasKey)

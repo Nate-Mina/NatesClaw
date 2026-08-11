@@ -1,8 +1,8 @@
 import type {
   AgentMessage,
   EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { AssistantMessage } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import { buildCodexMessagesSnapshot } from "./event-projector-snapshot.js";
 

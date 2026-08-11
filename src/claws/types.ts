@@ -1,10 +1,10 @@
-// Shared types for grouped OpenClaw Claw manifests and read-only add plans.
+// Shared types for grouped Natesclaw Claw manifests and read-only add plans.
 import type { ToolProfileId } from "../agents/tool-policy-shared.js";
 import type { AgentConfig } from "../config/types.agents.js";
 
 export const CLAW_SCHEMA_VERSION = 1 as const;
-export const CLAW_ADD_PLAN_SCHEMA_VERSION = "openclaw.clawAddPlan.v1" as const;
-export const CLAW_INSPECT_RESULT_SCHEMA_VERSION = "openclaw.clawInspect.v1" as const;
+export const CLAW_ADD_PLAN_SCHEMA_VERSION = "natesclaw.clawAddPlan.v1" as const;
+export const CLAW_INSPECT_RESULT_SCHEMA_VERSION = "natesclaw.clawInspect.v1" as const;
 export const CLAW_OUTPUT_STABILITY = "experimental" as const;
 
 type ClawDiagnosticLevel = "error" | "warning";
@@ -29,9 +29,9 @@ type ClawAgent = {
   };
 };
 
-type ClawExtensionFormat = "openclaw" | "claude" | "codex" | "cursor";
+type ClawExtensionFormat = "natesclaw" | "claude" | "codex" | "cursor";
 
-export type ClawOpenClawExtension = {
+export type ClawNatesclawExtension = {
   id: string;
   kind: "plugin";
   format: ClawExtensionFormat;
@@ -40,7 +40,7 @@ export type ClawOpenClawExtension = {
   version: string;
 };
 
-export type ClawOpenClawProfile = {
+export type ClawNatesclawProfile = {
   schemaVersion: 1;
   agent: {
     groupChat?: {
@@ -84,7 +84,7 @@ export type ClawOpenClawProfile = {
       maxMs?: number;
     };
   };
-  extensions?: ClawOpenClawExtension[];
+  extensions?: ClawNatesclawExtension[];
 };
 
 export const CLAW_BOOTSTRAP_FILE_NAMES = [
@@ -229,7 +229,7 @@ type ClawProfileSourceSnapshot = ClawSourceFileSnapshot & {
 
 type ClawSourceSnapshot = {
   manifest: ClawSourceFileSnapshot;
-  openClawProfile?: ClawProfileSourceSnapshot;
+  NatesclawProfile?: ClawProfileSourceSnapshot;
   workspaceSources: ClawWorkspaceSourceSnapshot[];
   packageBootstrap?: ClawWorkspaceSourceSnapshot;
 };
@@ -240,7 +240,7 @@ export type ClawReadResult =
       manifest: ClawManifest;
       clawMarkdownBody?: Buffer;
       packageBootstrap?: ClawWorkspaceSourceSnapshot;
-      openClawProfile?: ClawOpenClawProfile;
+      NatesclawProfile?: ClawNatesclawProfile;
       source: ClawSourceIdentity;
       snapshot: ClawSourceSnapshot;
       diagnostics: ClawDiagnostic[];
@@ -263,7 +263,7 @@ export type ClawAddPlanAction = {
   reason?: string;
 };
 
-export type ClawExtensionPlan = ClawOpenClawExtension & {
+export type ClawExtensionPlan = ClawNatesclawExtension & {
   detectedFormat?: ClawExtensionFormat;
   integrity?: string;
   installId?: string;

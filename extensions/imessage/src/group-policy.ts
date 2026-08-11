@@ -4,11 +4,11 @@ import {
   resolveScopeRequireMention,
   resolveScopeToolsPolicy,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+} from "natesclaw/plugin-sdk/channel-policy";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/core";
 
 type IMessageGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   groupId?: string | null;
   senderPolicyMode?: "always" | "never";

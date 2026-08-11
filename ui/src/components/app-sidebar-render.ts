@@ -63,8 +63,8 @@ function readSidebarNativeGateway(): SidebarNativeGateway | null {
     return null;
   }
   const snapshot = (
-    window as Window & { __OPENCLAW_NATIVE_GATEWAYS__?: SidebarNativeGatewaysSnapshot }
-  )["__OPENCLAW_NATIVE_GATEWAYS__"];
+    window as Window & { __NATESCLAW_NATIVE_GATEWAYS__?: SidebarNativeGatewaysSnapshot }
+  )["__NATESCLAW_NATIVE_GATEWAYS__"];
   if (!snapshot || !Array.isArray(snapshot.gateways) || snapshot.gateways.length < 2) {
     return null;
   }
@@ -107,7 +107,7 @@ export function renderAppSidebarBrand(host: AppSidebarRenderHost) {
   // keeps its separate offline-tolerant ⌘N mirror.
   return html`
     <div class="sidebar-brand">
-      <openclaw-sidebar-agent-card
+      <natesclaw-sidebar-agent-card
         .agentName=${cardName}
         .avatarUrl=${cardAgent
           ? resolveAgentAvatarUrl(cardAgent, cardIdentity)
@@ -130,9 +130,9 @@ export function renderAppSidebarBrand(host: AppSidebarRenderHost) {
           const trigger = card.querySelector<HTMLElement>(".sidebar-agent-card__main") ?? card;
           host.sidebarMenus.toggleAgentMenu(trigger);
         }}
-      ></openclaw-sidebar-agent-card>
+      ></natesclaw-sidebar-agent-card>
       <div class="sidebar-brand__actions">
-        <openclaw-tooltip
+        <natesclaw-tooltip
           .content=${newSessionAccess.allowed
             ? t("chat.runControls.newSession")
             : newSessionAccess.reason}
@@ -146,7 +146,7 @@ export function renderAppSidebarBrand(host: AppSidebarRenderHost) {
           >
             ${icons.plus}
           </button>
-        </openclaw-tooltip>
+        </natesclaw-tooltip>
       </div>
     </div>
   `;
@@ -197,32 +197,32 @@ export function renderAppSidebarHomeRow(host: AppSidebarRenderHost) {
       }}
     >
       ${running
-        ? html`<openclaw-tooltip .content=${t("sessionsView.activeRun")}
-            >${homeGlyph}</openclaw-tooltip
+        ? html`<natesclaw-tooltip .content=${t("sessionsView.activeRun")}
+            >${homeGlyph}</natesclaw-tooltip
           >`
         : homeGlyph}
       <span class="nav-item__text">${t("nav.home")}</span>
       ${sessionHasBoard(mainKey)
-        ? html`<openclaw-tooltip .content=${t("sessionsView.dashboardAvailable")}>
+        ? html`<natesclaw-tooltip .content=${t("sessionsView.dashboardAvailable")}>
             <span
               class="sidebar-board-glyph"
               role="img"
               aria-label=${t("sessionsView.dashboardAvailable")}
               >${icons.layoutDashboard}</span
             >
-          </openclaw-tooltip>`
+          </natesclaw-tooltip>`
         : nothing}
       ${approvalNeeded || outboxCount > 0 || hasComposerDraft
         ? html`<span class="nav-item__state sidebar-home-session-states">
             ${approvalNeeded
-              ? html`<openclaw-tooltip .content=${t("sessionsView.approvalNeeded")}>
+              ? html`<natesclaw-tooltip .content=${t("sessionsView.approvalNeeded")}>
                   <span
                     class="session-approval-badge"
                     role="img"
                     aria-label=${t("sessionsView.approvalNeeded")}
                     >${icons.alertTriangle}</span
                   >
-                </openclaw-tooltip>`
+                </natesclaw-tooltip>`
               : nothing}
             ${renderSessionRowBadges({ hasAutomation: false, outboxCount, hasComposerDraft })}
           </span>`
@@ -302,7 +302,7 @@ export function renderAppSidebarFooterBar(host: AppSidebarRenderHost) {
       : buildSubtitle;
   return html`
     <div class="sidebar-footer-bar">
-      <openclaw-tooltip .content=${selfLabel}>
+      <natesclaw-tooltip .content=${selfLabel}>
         <button
           type="button"
           class="sidebar-identity-card"
@@ -314,7 +314,7 @@ export function renderAppSidebarFooterBar(host: AppSidebarRenderHost) {
           @click=${(event: MouseEvent) =>
             host.sidebarMenus.toggleIdentityMenu(event.currentTarget as HTMLElement)}
         >
-          <openclaw-viewer-avatar .user=${avatarUser} variant="footer"></openclaw-viewer-avatar>
+          <natesclaw-viewer-avatar .user=${avatarUser} variant="footer"></natesclaw-viewer-avatar>
           <span class="sidebar-identity-card__text">
             <span class="sidebar-identity-card__name">${selfLabel}</span>
             ${host.offline
@@ -347,7 +347,7 @@ export function renderAppSidebarFooterBar(host: AppSidebarRenderHost) {
             >${icons.chevronDown}</span
           >
         </button>
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
       <span class="sidebar-identity-card__status" role="status" aria-live="polite"
         >${host.offline ? t("connection.reconnecting") : ""}</span
       >
@@ -443,8 +443,8 @@ function renderWorkboardBoard(
 }
 
 export function renderAppSidebarAttention(host: AppSidebarRenderHost) {
-  return html`<openclaw-sidebar-attention
+  return html`<natesclaw-sidebar-attention
     .onNavigate=${(routeId: NavigationRouteId) => host.onNavigate?.(routeId)}
     .onOpenApprovals=${() => host.onOpenApprovals?.()}
-  ></openclaw-sidebar-attention>`;
+  ></natesclaw-sidebar-attention>`;
 }

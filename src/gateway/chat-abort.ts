@@ -5,13 +5,13 @@ import {
   isFutureDateTimestampMs,
   resolveDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@natesclaw/normalization-core/number-coercion";
 import type { OperationalRunInstanceRef } from "../agents/admitted-run-context.js";
 import { resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import { createAgentRunRestartAbortError } from "../agents/run-termination.js";
 import { readToolValidationErrorSummary } from "../agents/tool-error-summary.js";
 import { isAbortRequestText } from "../auto-reply/reply/abort-primitives.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   emitAgentEvent,
   getAgentEventLifecycleGeneration,
@@ -494,7 +494,7 @@ export type ChatAbortOps = {
     sessionKey?: string,
   ) => { sessionKey: string; agentId?: string; clientRunId: string } | undefined;
   agentRunSeq: Map<string, number>;
-  getRuntimeConfig?: () => OpenClawConfig;
+  getRuntimeConfig?: () => NatesclawConfig;
   broadcast: (
     event: string,
     payload: unknown,
@@ -726,7 +726,7 @@ export function updateChatRunProvider(
 export function abortChatRunsForProvider(
   ops: ChatAbortOps,
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     providerId: string;
     agentId?: string;
     stopReason?: string;

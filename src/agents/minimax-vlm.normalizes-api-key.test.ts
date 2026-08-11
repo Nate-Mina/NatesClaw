@@ -1,5 +1,5 @@
 // Covers MiniMax VLM auth/header normalization and provider-specific routing.
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { isMinimaxVlmModel, minimaxUnderstandImage } from "./minimax-vlm.js";
 

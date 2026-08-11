@@ -2,10 +2,10 @@
 import type { DatabaseSync } from "node:sqlite";
 import type { SessionUpdate } from "@agentclientprotocol/sdk";
 import {
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabaseOptions,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import {
   cloneAcpLedgerValue,
   createAcpPromptUpdates,
@@ -397,7 +397,7 @@ function buildSqliteReplay(session: AcpLedgerSession | undefined): AcpEventLedge
 
 /** Creates the SQLite-backed ACP event ledger used by the state database. */
 export function createSqliteAcpEventLedger(
-  params: OpenClawStateDatabaseOptions & AcpLedgerOptions = {},
+  params: NatesclawStateDatabaseOptions & AcpLedgerOptions = {},
 ): AcpEventLedger {
   const normalized = normalizeAcpLedgerOptions(params);
   const dbOptions = { env: params.env, path: params.path };
@@ -405,8 +405,8 @@ export function createSqliteAcpEventLedger(
     ...normalized,
   };
   const mutate = (fn: (db: DatabaseSync) => void) =>
-    runOpenClawStateWriteTransaction((database) => fn(database.db), dbOptions);
-  const read = <T>(fn: (db: DatabaseSync) => T): T => fn(openOpenClawStateDatabase(dbOptions).db);
+    runNatesclawStateWriteTransaction((database) => fn(database.db), dbOptions);
+  const read = <T>(fn: (db: DatabaseSync) => T): T => fn(openNatesclawStateDatabase(dbOptions).db);
 
   return {
     async startSession(sessionParams) {

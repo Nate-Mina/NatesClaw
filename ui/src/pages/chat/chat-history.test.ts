@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { reduceSessionProjection } from "@openclaw/gateway-client/browser";
+import { reduceSessionProjection } from "@natesclaw/gateway-client/browser";
 import { describe, expect, it, vi } from "vitest";
 import { GatewayRequestError, type GatewayBrowserClient } from "../../api/gateway.ts";
 import {
@@ -463,7 +463,7 @@ describe("canonical history snapshot projection", () => {
     return {
       role,
       content: [{ type: "text", text }],
-      ...(metadata ? { __openclaw: metadata } : {}),
+      ...(metadata ? { __natesclaw: metadata } : {}),
     };
   }
 
@@ -810,7 +810,7 @@ describe("active-run commentary reconciliation", () => {
     expect(
       state.chatMessages.some(
         (message) =>
-          (message as { openclawStreamFallback?: { itemId?: unknown } }).openclawStreamFallback
+          (message as { natesclawStreamFallback?: { itemId?: unknown } }).natesclawStreamFallback
             ?.itemId === "preamble-live",
       ),
     ).toBe(true);

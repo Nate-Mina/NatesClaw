@@ -13,7 +13,7 @@ import { approveDevicePairing, getPairedDevice, requestDevicePairing } from "./d
 import { migrateLegacyNodePairingStore } from "./node-pairing-migration.js";
 import { resolvePairingPaths } from "./pairing-files.js";
 
-const suiteRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-node-pairing-migration-" });
+const suiteRootTracker = createSuiteTempRootTracker({ prefix: "natesclaw-node-pairing-migration-" });
 
 async function seedNodeDevice(baseDir: string, deviceId: string): Promise<void> {
   const request = await requestDevicePairing(

@@ -38,9 +38,9 @@ does not flicker while offline.
 
 ## When in doubt
 
-Use the CLI flow in [Gateway health](/gateway/health) (`openclaw status`,
-`openclaw status --deep`, `openclaw health --json`) and run
-`openclaw logs --follow`, filtering for `web-heartbeat` / `web-reconnect`.
+Use the CLI flow in [Gateway health](/gateway/health) (`natesclaw status`,
+`natesclaw status --deep`, `natesclaw health --json`) and run
+`natesclaw logs --follow`, filtering for `web-heartbeat` / `web-reconnect`.
 
 ## Related
 

@@ -574,7 +574,7 @@ export function renderConfig(props: ConfigProps) {
                                     ? t("configView.redacted")
                                     : t("configView.visible")}</span
                                 >
-                                <openclaw-tooltip
+                                <natesclaw-tooltip
                                   .content=${blurred
                                     ? t("configView.revealSensitive")
                                     : t("configView.hideSensitive")}
@@ -592,7 +592,7 @@ export function renderConfig(props: ConfigProps) {
                                   >
                                     ${blurred ? icons.eyeOff : icons.eye}
                                   </button>
-                                </openclaw-tooltip>`
+                                </natesclaw-tooltip>`
                             : nothing}
                         </span>
                         ${blurred

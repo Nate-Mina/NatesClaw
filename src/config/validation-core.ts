@@ -1,6 +1,6 @@
 import path from "node:path";
-import { isCanonicalDottedDecimalIPv4, isLoopbackIpAddress } from "@openclaw/net-policy/ip";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { isCanonicalDottedDecimalIPv4, isLoopbackIpAddress } from "@natesclaw/net-policy/ip";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import {
   listAgentEntriesWithSource,
@@ -29,7 +29,7 @@ import {
   isValidExactModelPolicyRef,
   parseModelPolicyWildcardRef,
 } from "./model-policy-ref.js";
-import type { ConfigValidationIssue, OpenClawConfig } from "./types.js";
+import type { ConfigValidationIssue, NatesclawConfig } from "./types.js";
 import { collectRawBundledChannelConfigIssues } from "./validation-channel-rules.js";
 import {
   collectUnsupportedSecretRefPolicyIssues,
@@ -38,10 +38,10 @@ import {
   withConfigIssuePath,
 } from "./validation-issues.js";
 import { isBuiltInModelProviderOverlayId } from "./zod-schema.core.js";
-import { OpenClawSchema } from "./zod-schema.js";
+import { NatesclawSchema } from "./zod-schema.js";
 import { McpServerNameSchema, NodeHostMcpServerNameSchema } from "./zod-schema.root-support.js";
 
-function materializeBundledModelProviderOverlays(config: OpenClawConfig): OpenClawConfig {
+function materializeBundledModelProviderOverlays(config: NatesclawConfig): NatesclawConfig {
   const providers = config.models?.providers;
   if (!providers) {
     return config;
@@ -138,7 +138,7 @@ function createIdentityAvatarIssue(
 }
 
 function validateIdentityAvatar(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   env?: NodeJS.ProcessEnv,
 ): ConfigValidationIssue[] {
   const agents = listAgentEntriesWithSource(config);
@@ -187,7 +187,7 @@ function validateIdentityAvatar(
   return issues;
 }
 
-function validateGatewayTailscaleBind(config: OpenClawConfig): ConfigValidationIssue[] {
+function validateGatewayTailscaleBind(config: NatesclawConfig): ConfigValidationIssue[] {
   const tailscaleMode = config.gateway?.tailscale?.mode ?? "off";
   if (tailscaleMode !== "serve" && tailscaleMode !== "funnel") {
     return [];
@@ -214,7 +214,7 @@ function validateGatewayTailscaleBind(config: OpenClawConfig): ConfigValidationI
   ];
 }
 
-function validateGatewayTailscaleAuth(config: OpenClawConfig): ConfigValidationIssue[] {
+function validateGatewayTailscaleAuth(config: NatesclawConfig): ConfigValidationIssue[] {
   const tailscaleMode = config.gateway?.tailscale?.mode ?? "off";
   if (!isUnsafeGatewayTailscaleNoAuth({ authMode: config.gateway?.auth?.mode, tailscaleMode })) {
     return [];
@@ -227,7 +227,7 @@ function validateGatewayTailscaleAuth(config: OpenClawConfig): ConfigValidationI
   ];
 }
 
-function collectModelPolicyAllowIssues(config: OpenClawConfig): ConfigValidationIssue[] {
+function collectModelPolicyAllowIssues(config: NatesclawConfig): ConfigValidationIssue[] {
   const issues: ConfigValidationIssue[] = [];
   const defaultModels = config.agents?.defaults?.models;
   const collectAliases = (...modelMaps: Array<typeof defaultModels | undefined>): Set<string> => {
@@ -297,7 +297,7 @@ export function validateConfigObjectRaw(
     preservedLegacyRootKeys?: readonly string[];
     env?: NodeJS.ProcessEnv;
   },
-): { ok: true; config: OpenClawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
+): { ok: true; config: NatesclawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
   const normalizedRaw = stripPreservedLegacyRootKeysForValidation(
     raw,
     opts?.preservedLegacyRootKeys,
@@ -313,7 +313,7 @@ export function validateConfigObjectRaw(
     (issue) => !normalizedMcpServerNameIssueKeys.has(JSON.stringify([issue.path, issue.message])),
   );
   const policyIssues = collectUnsupportedSecretRefPolicyIssues(normalizedRaw);
-  const validated = OpenClawSchema.safeParse(normalizedRaw);
+  const validated = NatesclawSchema.safeParse(normalizedRaw);
   if (!validated.success || mcpServerNameIssues.length > 0) {
     const schemaIssues = validated.success
       ? mcpServerNameIssues
@@ -324,7 +324,7 @@ export function validateConfigObjectRaw(
     };
   }
   const validatedConfig = attachAgentListProjection(
-    materializeBundledModelProviderOverlays(validated.data as OpenClawConfig),
+    materializeBundledModelProviderOverlays(validated.data as NatesclawConfig),
   );
   const channelIssues =
     policyIssues.length > 0 || opts?.validateBundledChannels
@@ -371,7 +371,7 @@ export function validateConfigObject(
     manifestRegistry?: Pick<PluginMetadataSnapshot, "manifestRegistry">["manifestRegistry"];
     sourceRaw?: unknown;
   },
-): { ok: true; config: OpenClawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
+): { ok: true; config: NatesclawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
   const result = validateConfigObjectRaw(migratePersistedImplicitMainRoster(raw).config, opts);
   if (!result.ok) {
     return result;

@@ -4,7 +4,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "no
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 
 const PLUGIN_UPDATE_DOCKER_SCRIPT = "scripts/e2e/plugin-update-unchanged-docker.sh";
@@ -15,7 +15,7 @@ const PLUGIN_UPDATE_REGISTRY_SCRIPT = "scripts/e2e/lib/plugin-update/registry-se
 const CORRUPT_PLUGIN_ID = "demo-corrupt-plugin";
 
 function runProbe(command: string, payload: unknown): void {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-update-probe-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-plugin-update-probe-"));
   const payloadPath = path.join(root, "payload.json");
   try {
     writeFileSync(payloadPath, `${JSON.stringify(payload, null, 2)}\n`);
@@ -32,7 +32,7 @@ function runProbeStatus(
   command: string,
   payload: unknown,
 ): { status: number | null; stderr: string } {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-update-probe-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-plugin-update-probe-"));
   const payloadPath = path.join(root, "payload.json");
   try {
     writeFileSync(payloadPath, `${JSON.stringify(payload, null, 2)}\n`);
@@ -82,9 +82,9 @@ describe("plugin update unchanged Docker E2E", () => {
 
     expect(runner).toContain("scripts/e2e/lib/plugin-update/unchanged-scenario.sh");
     expect(scenario).toContain('node "$probe" seed');
-    expect(probe).toContain("writeJson(process.env.OPENCLAW_CONFIG_PATH, { plugins: {} });");
+    expect(probe).toContain("writeJson(process.env.NATESCLAW_CONFIG_PATH, { plugins: {} });");
     expect(probe).not.toContain(
-      "writeJson(process.env.OPENCLAW_CONFIG_PATH, { plugins: { installs",
+      "writeJson(process.env.NATESCLAW_CONFIG_PATH, { plugins: { installs",
     );
     expect(probe).toContain("installRecords: {");
     expect(probe).toContain('"lossless-claw": {');
@@ -93,8 +93,8 @@ describe("plugin update unchanged Docker E2E", () => {
   it("bounds the update command and prints diagnostics on hangs", () => {
     const script = readFileSync(PLUGIN_UPDATE_SCENARIO_SCRIPT, "utf8");
 
-    expect(script).toContain("OPENCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS");
-    expect(script).toContain("registry_port_file=/tmp/openclaw-e2e-registry.port");
+    expect(script).toContain("NATESCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS");
+    expect(script).toContain("registry_port_file=/tmp/natesclaw-e2e-registry.port");
     expect(script).toContain(
       'node scripts/e2e/lib/plugin-update/registry-server.mjs "$registry_port_file"',
     );
@@ -103,27 +103,27 @@ describe("plugin update unchanged Docker E2E", () => {
     );
     expect(script).toContain('export npm_config_registry="$NPM_CONFIG_REGISTRY"');
     expect(script).toContain(
-      "openclaw_e2e_read_positive_int_env OPENCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS 180",
+      "natesclaw_e2e_read_positive_int_env NATESCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS 180",
     );
     expect(script).toContain(
-      'openclaw_e2e_maybe_timeout "${plugin_update_timeout_seconds}s" node "$entry" plugins update',
+      'natesclaw_e2e_maybe_timeout "${plugin_update_timeout_seconds}s" node "$entry" plugins update',
     );
     expect(script).not.toContain(
-      'plugin_update_timeout_seconds="${OPENCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS:-180}"',
+      'plugin_update_timeout_seconds="${NATESCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS:-180}"',
     );
     expect(script).not.toMatch(
       /^\s*timeout "\$\{plugin_update_timeout_seconds\}s" node "\$entry"/mu,
     );
     expect(script).toContain('"--- plugin update output ---"');
     expect(script).toContain('"--- local registry output ---"');
-    expect(script).toContain("openclaw_e2e_print_log /tmp/plugin-update-output.log");
-    expect(script).toContain("openclaw_e2e_print_log /tmp/openclaw-e2e-registry.log");
+    expect(script).toContain("natesclaw_e2e_print_log /tmp/plugin-update-output.log");
+    expect(script).toContain("natesclaw_e2e_print_log /tmp/natesclaw-e2e-registry.log");
     expect(script).not.toContain("cat /tmp/plugin-update-output.log");
-    expect(script).not.toContain("cat /tmp/openclaw-e2e-registry.log");
+    expect(script).not.toContain("cat /tmp/natesclaw-e2e-registry.log");
   });
 
   it("serves plugin metadata from an ephemeral registry port", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-update-registry-"));
+    const root = mkdtempSync(path.join(tmpdir(), "natesclaw-plugin-update-registry-"));
     const portFile = path.join(root, "registry.port");
     const child = spawn("node", [PLUGIN_UPDATE_REGISTRY_SCRIPT, portFile], {
       stdio: "ignore",
@@ -146,7 +146,7 @@ describe("plugin update unchanged Docker E2E", () => {
   });
 
   it("bounds assert-output diagnostics to the saved command log tail", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-update-probe-"));
+    const root = mkdtempSync(path.join(tmpdir(), "natesclaw-plugin-update-probe-"));
     const logPath = path.join(root, "plugin-update-output.log");
     try {
       writeFileSync(
@@ -169,7 +169,7 @@ describe("plugin update unchanged Docker E2E", () => {
   });
 
   it("detects unexpected download output before a large log tail", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-plugin-update-probe-"));
+    const root = mkdtempSync(path.join(tmpdir(), "natesclaw-plugin-update-probe-"));
     const logPath = path.join(root, "plugin-update-output.log");
     try {
       writeFileSync(
@@ -194,43 +194,43 @@ describe("plugin update unchanged Docker E2E", () => {
   it("waits for the local registry process during cleanup", () => {
     const script = readFileSync(PLUGIN_UPDATE_SCENARIO_SCRIPT, "utf8");
 
-    expect(script).toContain('openclaw_e2e_stop_process "${registry_pid:-}"');
+    expect(script).toContain('natesclaw_e2e_stop_process "${registry_pid:-}"');
     expect(script).not.toContain('kill "$registry_pid"');
   });
 
   it("bounds corrupt plugin update commands and prints diagnostics on hangs", () => {
     const script = readFileSync(CORRUPT_UPDATE_SCENARIO_SCRIPT, "utf8");
 
-    expect(script).toContain('plugins install "npm:@openclaw/demo-corrupt-plugin@0.0.1" --force');
+    expect(script).toContain('plugins install "npm:@natesclaw/demo-corrupt-plugin@0.0.1" --force');
     expect(script).toContain("config set plugins.allow '[\"demo-corrupt-plugin\"]'");
-    expect(script).toContain("OPENCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS");
+    expect(script).toContain("NATESCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS");
     expect(script).toContain(
-      "openclaw_e2e_read_positive_int_env OPENCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS 900",
+      "natesclaw_e2e_read_positive_int_env NATESCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS 900",
     );
-    expect(script).toContain("OPENCLAW_UPDATE_CORRUPT_PLUGIN_STEP_TIMEOUT_SECONDS");
+    expect(script).toContain("NATESCLAW_UPDATE_CORRUPT_PLUGIN_STEP_TIMEOUT_SECONDS");
     expect(script).toContain(
       "default_update_step_timeout_seconds=$((10#$update_timeout_seconds - 30))",
     );
     expect(script).not.toContain(
-      'update_timeout_seconds="${OPENCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS:-900}"',
+      'update_timeout_seconds="${NATESCLAW_UPDATE_CORRUPT_PLUGIN_TIMEOUT_SECONDS:-900}"',
     );
     expect(
-      script.match(/openclaw_e2e_maybe_timeout "\$\{update_timeout_seconds\}s" \\/gu)?.length,
+      script.match(/natesclaw_e2e_maybe_timeout "\$\{update_timeout_seconds\}s" \\/gu)?.length,
     ).toBe(2);
     expect(script).toContain("--channel beta");
     expect(script.match(/--timeout "\$update_step_timeout_seconds"/g)).toHaveLength(2);
-    expect(script).toContain("OPENCLAW_UPDATE_POST_CORE=1");
+    expect(script).toContain("NATESCLAW_UPDATE_POST_CORE=1");
     expect(script).not.toContain(
-      'node "$entry" update --channel beta --tag "${OPENCLAW_CURRENT_PACKAGE_TGZ',
+      'node "$entry" update --channel beta --tag "${NATESCLAW_CURRENT_PACKAGE_TGZ',
     );
     expect(script).toContain(
-      "openclaw update failed or timed out after ${update_timeout_seconds}s",
+      "natesclaw update failed or timed out after ${update_timeout_seconds}s",
     );
     expect(script).toContain(
-      "updated OpenClaw entry failed or timed out after ${update_timeout_seconds}s",
+      "updated Natesclaw entry failed or timed out after ${update_timeout_seconds}s",
     );
-    expect(script.match(/openclaw_e2e_print_log \/tmp\/openclaw-update-corrupt-/g)).toHaveLength(8);
-    expect(script).not.toContain("cat /tmp/openclaw-update-corrupt-");
+    expect(script.match(/natesclaw_e2e_print_log \/tmp\/natesclaw-update-corrupt-/g)).toHaveLength(8);
+    expect(script).not.toContain("cat /tmp/natesclaw-update-corrupt-");
     expect(script.match(/assert-disabled-policy-preserved/g)).toHaveLength(2);
   });
 
@@ -261,7 +261,7 @@ describe("plugin update unchanged Docker E2E", () => {
           {
             pluginId: CORRUPT_PLUGIN_ID,
             status: "skipped",
-            message: `Disabled "${CORRUPT_PLUGIN_ID}" after plugin update failure; OpenClaw will continue without it. Failed to update ${CORRUPT_PLUGIN_ID}: registry timeout`,
+            message: `Disabled "${CORRUPT_PLUGIN_ID}" after plugin update failure; Natesclaw will continue without it. Failed to update ${CORRUPT_PLUGIN_ID}: registry timeout`,
           },
         ],
       },
@@ -284,8 +284,8 @@ describe("plugin update unchanged Docker E2E", () => {
                 disabledAfterFailure.npm.outcomes[0],
                 "corrupt plugin update failure outcome",
               ).message +
-              " Run openclaw update repair to retry post-update plugin repair. " +
-              `Run openclaw plugins inspect ${CORRUPT_PLUGIN_ID} --runtime --json for details.`,
+              " Run natesclaw update repair to retry post-update plugin repair. " +
+              `Run natesclaw plugins inspect ${CORRUPT_PLUGIN_ID} --runtime --json for details.`,
           },
         ],
       }),

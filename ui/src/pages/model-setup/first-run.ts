@@ -1,4 +1,4 @@
-import type { RouteLocation, RouterHistory } from "@openclaw/uirouter";
+import type { RouteLocation, RouterHistory } from "@natesclaw/uirouter";
 import { sessionRouteNamespaceFromPath } from "../../app-route-paths.ts";
 import type { RouteId } from "../../app-routes.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -74,7 +74,7 @@ function startModelSetupFirstRunRedirect(params: {
       snapshot.phase !== "connected" ||
       !snapshot.client ||
       !hasOperatorAdminAccess(snapshot.hello?.auth ?? null) ||
-      isGatewayMethodAdvertised(snapshot, "openclaw.setup.detect") !== true
+      isGatewayMethodAdvertised(snapshot, "natesclaw.setup.detect") !== true
     ) {
       return;
     }

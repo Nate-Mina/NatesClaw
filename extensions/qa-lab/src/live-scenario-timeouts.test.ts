@@ -184,20 +184,20 @@ function runCompletionPolicyFlow(
                         role: parentReply.role ?? "assistant",
                         ...(parentReply.phase ? { phase: parentReply.phase } : {}),
                         ...(parentReply.mirror === "delivery"
-                          ? { model: "delivery-mirror", provider: "openclaw" }
+                          ? { model: "delivery-mirror", provider: "natesclaw" }
                           : {}),
                         ...(parentReply.mirror === "delivery-marker"
-                          ? { openclawDeliveryMirror: { kind: "channel-final" } }
+                          ? { natesclawDeliveryMirror: { kind: "channel-final" } }
                           : {}),
                         ...(parentReply.mirror === "gateway-injected"
-                          ? { model: "gateway-injected", provider: "openclaw" }
+                          ? { model: "gateway-injected", provider: "natesclaw" }
                           : {}),
                         ...(parentReply.mirror === "message-tool"
-                          ? { openclawMessageToolMirror: { toolName: "message" } }
+                          ? { natesclawMessageToolMirror: { toolName: "message" } }
                           : {}),
                         ...(parentReply.providerIdentity
                           ? {
-                              __openclaw: { mirrorIdentity: "completion:assistant" },
+                              __natesclaw: { mirrorIdentity: "completion:assistant" },
                               model: "gpt-5.4",
                               provider: "openai",
                             }

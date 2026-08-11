@@ -54,8 +54,8 @@ function getChannelSubcommandNames(program: Command, parentName: string): string
 }
 
 async function runChannelsAddCli(args: string[]) {
-  const program = new Command().name("openclaw");
-  await registerChannelsCli(program, ["node", "openclaw", ...args]);
+  const program = new Command().name("natesclaw");
+  await registerChannelsCli(program, ["node", "natesclaw", ...args]);
   await program.parseAsync(args, { from: "user" });
   return program;
 }
@@ -70,21 +70,21 @@ describe("registerChannelsCli", () => {
   });
 
   it("loads channel-specific add options only for channels add invocations", async () => {
-    process.argv = ["node", "openclaw", "channels"];
-    await registerChannelsCli(new Command().name("openclaw"));
+    process.argv = ["node", "natesclaw", "channels"];
+    await registerChannelsCli(new Command().name("natesclaw"));
 
     expect(listBundledPackageChannelMetadataMock).not.toHaveBeenCalled();
     expect(listRawChannelPluginCatalogEntriesMock).not.toHaveBeenCalled();
 
-    process.argv = ["node", "openclaw", "channels", "add", "clickclack", "--help"];
-    await registerChannelsCli(new Command().name("openclaw"));
+    process.argv = ["node", "natesclaw", "channels", "add", "clickclack", "--help"];
+    await registerChannelsCli(new Command().name("natesclaw"));
 
     expect(listBundledPackageChannelMetadataMock).toHaveBeenCalledTimes(1);
     expect(listRawChannelPluginCatalogEntriesMock).toHaveBeenCalledTimes(1);
   });
 
   it("registers dead-letter inspection and resubmission commands", async () => {
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program);
 
@@ -94,10 +94,10 @@ describe("registerChannelsCli", () => {
   it.each(["auto", "user", "group", "channel"])(
     "forwards the supported %s resolve target kind",
     async (kind) => {
-      const program = new Command().name("openclaw").exitOverride();
+      const program = new Command().name("natesclaw").exitOverride();
       const args = ["channels", "resolve", "--kind", kind, "room"];
 
-      await registerChannelsCli(program, ["node", "openclaw", ...args]);
+      await registerChannelsCli(program, ["node", "natesclaw", ...args]);
       await program.parseAsync(args, { from: "user" });
 
       expect(channelsResolveCommandMock).toHaveBeenCalledWith(
@@ -109,10 +109,10 @@ describe("registerChannelsCli", () => {
 
   it("rejects unsupported resolve target kinds before dispatching", async () => {
     const writeErr = vi.fn();
-    const program = new Command().name("openclaw").exitOverride().configureOutput({ writeErr });
+    const program = new Command().name("natesclaw").exitOverride().configureOutput({ writeErr });
     const args = ["channels", "resolve", "--kind", "person", "room"];
 
-    await registerChannelsCli(program, ["node", "openclaw", ...args]);
+    await registerChannelsCli(program, ["node", "natesclaw", ...args]);
 
     await expect(program.parseAsync(args, { from: "user" })).rejects.toMatchObject({
       code: "commander.invalidArgument",
@@ -139,8 +139,8 @@ describe("registerChannelsCli", () => {
         ],
       },
     ]);
-    process.argv = ["node", "openclaw", "channels", "add", "clickclack", "--help"];
-    const program = new Command().name("openclaw");
+    process.argv = ["node", "natesclaw", "channels", "add", "clickclack", "--help"];
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program);
 
@@ -166,14 +166,14 @@ describe("registerChannelsCli", () => {
           docsPath: "/channels/installed-chat",
           blurb: "Installed test channel.",
         },
-        install: { npmSpec: "@openclaw/installed-chat" },
+        install: { npmSpec: "@natesclaw/installed-chat" },
       },
     ]);
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program, [
       "node",
-      "openclaw",
+      "natesclaw",
       "channels",
       "add",
       "--channel",
@@ -205,7 +205,7 @@ describe("registerChannelsCli", () => {
           docsPath: "/channels/chat-a",
           blurb: "Chat A test channel.",
         },
-        install: { npmSpec: "@openclaw/chat-a" },
+        install: { npmSpec: "@natesclaw/chat-a" },
       },
       {
         id: "chat-b",
@@ -223,17 +223,17 @@ describe("registerChannelsCli", () => {
           docsPath: "/channels/chat-b",
           blurb: "Chat B test channel.",
         },
-        install: { npmSpec: "@openclaw/chat-b" },
+        install: { npmSpec: "@natesclaw/chat-b" },
       },
     ]);
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
 
     // Commander throws on conflicting switches; registration must survive a
     // plugin redeclaring `--url` with a different placeholder or the static
     // `--token` with a different value name.
     await registerChannelsCli(program, [
       "node",
-      "openclaw",
+      "natesclaw",
       "channels",
       "add",
       "--channel",
@@ -266,7 +266,7 @@ describe("registerChannelsCli", () => {
           docsPath: "/channels/chat-a",
           blurb: "Chat A test channel.",
         },
-        install: { npmSpec: "@openclaw/chat-a" },
+        install: { npmSpec: "@natesclaw/chat-a" },
       },
       {
         id: "chat-b",
@@ -284,14 +284,14 @@ describe("registerChannelsCli", () => {
           docsPath: "/channels/chat-b",
           blurb: "Chat B test channel.",
         },
-        install: { npmSpec: "@openclaw/chat-b" },
+        install: { npmSpec: "@natesclaw/chat-b" },
       },
     ]);
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program, [
       "node",
-      "openclaw",
+      "natesclaw",
       "channels",
       "add",
       "--channel",
@@ -331,8 +331,8 @@ describe("registerChannelsCli", () => {
         },
       },
     ]);
-    process.argv = ["node", "openclaw", "channels", "add", "--channel", "signal", "--help"];
-    const program = new Command().name("openclaw");
+    process.argv = ["node", "natesclaw", "channels", "add", "--channel", "signal", "--help"];
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program);
 
@@ -367,11 +367,11 @@ describe("registerChannelsCli", () => {
         },
       },
     ]);
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program, [
       "node",
-      "openclaw",
+      "natesclaw",
       "channels",
       "add",
       "telegram",
@@ -389,9 +389,9 @@ describe("registerChannelsCli", () => {
   it.each(["--help", "-h"])(
     "keeps generic add help via %s limited to the shared control envelope",
     async (helpFlag) => {
-      const program = new Command().name("openclaw");
+      const program = new Command().name("natesclaw");
 
-      await registerChannelsCli(program, ["node", "openclaw", "channels", "add", helpFlag]);
+      await registerChannelsCli(program, ["node", "natesclaw", "channels", "add", helpFlag]);
 
       expect(getChannelAddOptionFlags(program)).toEqual([
         "--channel <name>",
@@ -422,8 +422,8 @@ describe("registerChannelsCli", () => {
         },
       },
     ]);
-    process.argv = ["node", "openclaw", "channels", "add", "example", "--help"];
-    const program = new Command().name("openclaw");
+    process.argv = ["node", "natesclaw", "channels", "add", "example", "--help"];
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program);
 
@@ -488,11 +488,11 @@ describe("registerChannelsCli", () => {
   });
 
   it("uses caller argv instead of raw process argv for channel-specific add options", async () => {
-    process.argv = ["node", "openclaw", "channels"];
+    process.argv = ["node", "natesclaw", "channels"];
 
-    await registerChannelsCli(new Command().name("openclaw"), [
+    await registerChannelsCli(new Command().name("natesclaw"), [
       "node",
-      "openclaw",
+      "natesclaw",
       "channels",
       "add",
       "telegram",
@@ -509,8 +509,8 @@ describe("registerChannelsCli", () => {
         cliAddOptions: [{ flags: "--homeserver <url>", description: "Matrix homeserver URL" }],
       },
     ]);
-    process.argv = ["node", "openclaw", "completion", "--write-state"];
-    const program = new Command().name("openclaw");
+    process.argv = ["node", "natesclaw", "completion", "--write-state"];
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program, process.argv, { includeSetupOptions: true });
 
@@ -529,7 +529,7 @@ describe("registerChannelsCli", () => {
     process.argv = [
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Program Files\\nodejs\\node.exe",
-      "C:\\repo\\openclaw.js",
+      "C:\\repo\\natesclaw.js",
       "channels",
       "add",
       "--channel",
@@ -537,7 +537,7 @@ describe("registerChannelsCli", () => {
       "--homeserver",
       "https://matrix.example.org",
     ];
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
 
     await registerChannelsCli(program);
 
@@ -615,9 +615,9 @@ describe("registerChannelsCli", () => {
       },
     ]);
 
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
     const argv = ["channels", "add", "telegram", "--token", "test-token"];
-    await registerChannelsCli(program, ["node", "openclaw", ...argv]);
+    await registerChannelsCli(program, ["node", "natesclaw", ...argv]);
     const flags = getChannelAddOptionFlags(program);
     expect(flags).toContain("--token <token>");
     expect(flags).not.toContain("--legacy-token <token>");
@@ -690,7 +690,7 @@ describe("registerChannelsCli", () => {
     await expect(
       resolveChannelsAddChannelFromArgv([
         "node",
-        "openclaw",
+        "natesclaw",
         "channels",
         "add",
         "--unknown-option",
@@ -731,7 +731,7 @@ describe("registerChannelsCli", () => {
     await expect(
       resolveChannelsAddChannelFromArgv([
         "node",
-        "openclaw",
+        "natesclaw",
         "channels",
         "add",
         "--mode",

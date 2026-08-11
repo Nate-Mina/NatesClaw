@@ -1,4 +1,4 @@
-import type { Model } from "openclaw/plugin-sdk/llm";
+import type { Model } from "natesclaw/plugin-sdk/llm";
 /**
  * Shared parameter and metric types for embedded-agent compaction.
  */
@@ -6,7 +6,7 @@ import type { SourceReplyDeliveryMode } from "../../auto-reply/get-reply-options
 import type { ReasoningLevel, ThinkLevel } from "../../auto-reply/thinking.js";
 import type { ChatType } from "../../channels/chat-type.js";
 import type { SessionToolOverrides } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { GroupToolPolicyConfig } from "../../config/types.tools.js";
 import type { ContextEngine, ContextEngineRuntimeContext } from "../../context-engine/types.js";
 import type { CommandQueueEnqueueFn } from "../../process/command-queue.types.js";
@@ -64,7 +64,7 @@ export type CompactEmbeddedAgentSessionParams = {
   /** Optional task working directory; workspaceDir remains the agent bootstrap workspace. */
   cwd?: string;
   agentDir?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   toolOverrides?: SessionToolOverrides;
   skillsSnapshot?: SkillSnapshot;
   senderIsOwner?: boolean;
@@ -84,7 +84,7 @@ export type CompactEmbeddedAgentSessionParams = {
   agentHarnessId?: string;
   /** Prevent compaction from changing the persisted session runtime or model. */
   modelSelectionLocked?: boolean;
-  /** OpenClaw-owned runtime policy prepared for this compaction path. */
+  /** Natesclaw-owned runtime policy prepared for this compaction path. */
   runtimePlan?: AgentRuntimePlan;
   /** Host-prepared route and credential selection for native harness compaction. */
   runtimeAuthPlan?: AgentRuntimeAuthPlan;

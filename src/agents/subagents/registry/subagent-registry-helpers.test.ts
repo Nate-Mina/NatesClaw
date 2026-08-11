@@ -237,8 +237,8 @@ describe("safeRemoveAttachmentsDir", () => {
     await expect(
       safeRemoveAttachmentsDir(
         createRunEntry({
-          attachmentsDir: "/tmp/openclaw-child-attachments",
-          attachmentsRootDir: "/tmp/openclaw-attachments",
+          attachmentsDir: "/tmp/natesclaw-child-attachments",
+          attachmentsRootDir: "/tmp/natesclaw-attachments",
         }),
       ),
     ).resolves.toBe(false);

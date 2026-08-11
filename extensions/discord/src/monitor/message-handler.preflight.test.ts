@@ -12,9 +12,9 @@ const saveRemoteMediaMock = vi.hoisted(() => vi.fn());
 vi.mock("../pluralkit.js", () => ({
   fetchPluralKitMessageInfo: (...args: unknown[]) => fetchPluralKitMessageInfoMock(...args),
 }));
-vi.mock("openclaw/plugin-sdk/media-understanding-runtime", async (importOriginal) => {
+vi.mock("natesclaw/plugin-sdk/media-understanding-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/media-understanding-runtime")>();
+    await importOriginal<typeof import("natesclaw/plugin-sdk/media-understanding-runtime")>();
   return {
     ...actual,
     createChannelPreflightAudio: (
@@ -36,12 +36,12 @@ vi.mock("./dm-command-decision.js", () => ({
 import {
   isRecentOutboundMessageIdentity,
   recordOutboundMessageIdentity,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   testing as sessionBindingTesting,
   registerSessionBindingAdapter,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { saveRemoteMedia } from "openclaw/plugin-sdk/media-runtime";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { saveRemoteMedia } from "natesclaw/plugin-sdk/media-runtime";
 import {
   createDiscordMessage,
   createDiscordPreflightArgs,
@@ -53,7 +53,7 @@ import {
   type DiscordMessageEvent,
 } from "./message-handler.preflight.test-helpers.js";
 
-vi.mock("openclaw/plugin-sdk/media-runtime", { spy: true });
+vi.mock("natesclaw/plugin-sdk/media-runtime", { spy: true });
 let preflightDiscordMessage: typeof import("./message-handler.preflight.js").preflightDiscordMessage;
 let resolvePreflightMentionRequirement: typeof import("./message-handler.preflight.js").resolvePreflightMentionRequirement;
 let shouldIgnoreBoundThreadWebhookMessage: typeof import("./message-handler.preflight.js").shouldIgnoreBoundThreadWebhookMessage;
@@ -76,7 +76,7 @@ beforeEach(() => {
   saveRemoteMediaMock.mockImplementation(
     async (options: { fallbackContentType?: string; filePathHint?: string }) => ({
       id: "test-media",
-      path: `/tmp/openclaw-discord-test/${options.filePathHint ?? "media"}`,
+      path: `/tmp/natesclaw-discord-test/${options.filePathHint ?? "media"}`,
       size: 5,
       contentType: options.fallbackContentType,
     }),
@@ -85,7 +85,7 @@ beforeEach(() => {
 });
 
 function createThreadBinding(
-  overrides?: Partial<import("openclaw/plugin-sdk/conversation-runtime").SessionBindingRecord>,
+  overrides?: Partial<import("natesclaw/plugin-sdk/conversation-runtime").SessionBindingRecord>,
 ) {
   return {
     bindingId: "default:thread-1",
@@ -106,11 +106,11 @@ function createThreadBinding(
       webhookToken: "tok-1",
     },
     ...overrides,
-  } satisfies import("openclaw/plugin-sdk/conversation-runtime").SessionBindingRecord;
+  } satisfies import("natesclaw/plugin-sdk/conversation-runtime").SessionBindingRecord;
 }
 
 function createPreflightArgs(params: {
-  cfg: import("openclaw/plugin-sdk/config-contracts").OpenClawConfig;
+  cfg: import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig;
   discordConfig: DiscordConfig;
   data: DiscordMessageEvent;
   client: DiscordClient;
@@ -187,7 +187,7 @@ async function runThreadBoundPreflight(params: {
   threadId: string;
   parentId: string;
   message: import("../internal/discord.js").Message;
-  threadBinding: import("openclaw/plugin-sdk/conversation-runtime").SessionBindingRecord;
+  threadBinding: import("natesclaw/plugin-sdk/conversation-runtime").SessionBindingRecord;
   discordConfig: DiscordConfig;
   registerBindingAdapter?: boolean;
 }) {
@@ -229,7 +229,7 @@ async function runGuildPreflight(params: {
   guildId: string;
   message: import("../internal/discord.js").Message;
   discordConfig: DiscordConfig;
-  cfg?: import("openclaw/plugin-sdk/config-contracts").OpenClawConfig;
+  cfg?: import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig;
   guildEntries?: Parameters<typeof preflightDiscordMessage>[0]["guildEntries"];
   includeGuildObject?: boolean;
   abortSignal?: AbortSignal;
@@ -272,7 +272,7 @@ async function runDmPreflight(params: {
 }
 
 async function runUnresolvedDmPreflight(params: {
-  cfg?: import("openclaw/plugin-sdk/config-contracts").OpenClawConfig;
+  cfg?: import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig;
   channelId: string;
   message: import("../internal/discord.js").Message;
   discordConfig: DiscordConfig;
@@ -388,7 +388,7 @@ describe("preflightDiscordMessage", () => {
       author: {
         id: "relay-bot-1",
         bot: true,
-        username: "OpenClaw",
+        username: "Natesclaw",
       },
     });
 
@@ -420,8 +420,8 @@ describe("preflightDiscordMessage", () => {
               },
               metadata: {
                 pluginBindingOwner: "plugin",
-                pluginId: "openclaw-codex-app-server",
-                pluginRoot: "/Users/huntharo/github/openclaw-app-server",
+                pluginId: "natesclaw-codex-app-server",
+                pluginRoot: "/Users/huntharo/github/natesclaw-app-server",
               },
             })
           : null,
@@ -459,8 +459,8 @@ describe("preflightDiscordMessage", () => {
       boundAt: 1,
       metadata: {
         pluginBindingOwner: "plugin",
-        pluginId: "openclaw-codex-app-server",
-        pluginRoot: "/Users/huntharo/github/openclaw-app-server",
+        pluginId: "natesclaw-codex-app-server",
+        pluginRoot: "/Users/huntharo/github/natesclaw-app-server",
       },
     });
   });
@@ -541,7 +541,7 @@ describe("preflightDiscordMessage", () => {
   });
 
   it("preflights direct-message voice notes without mention gating", async () => {
-    transcribeFirstAudioMock.mockResolvedValue("hello openclaw from dm audio");
+    transcribeFirstAudioMock.mockResolvedValue("hello natesclaw from dm audio");
 
     const result = await runDmPreflight({
       channelId: "dm-channel-audio-1",
@@ -580,7 +580,7 @@ describe("preflightDiscordMessage", () => {
     ]);
     const preflight = expectPreflightResult(result);
     expect(preflight.isDirectMessage).toBe(true);
-    expect(preflight.preflightAudioTranscript).toBe("hello openclaw from dm audio");
+    expect(preflight.preflightAudioTranscript).toBe("hello natesclaw from dm audio");
   });
 
   it("downloads attachments during preflight, before the message reaches the run queue", async () => {
@@ -616,7 +616,7 @@ describe("preflightDiscordMessage", () => {
     const preflight = expectPreflightResult(result);
     expect(preflight.preparedMedia).toEqual([
       {
-        path: "/tmp/openclaw-discord-test/photo.png",
+        path: "/tmp/natesclaw-discord-test/photo.png",
         contentType: "image/png",
       },
     ]);
@@ -716,8 +716,8 @@ describe("preflightDiscordMessage", () => {
     const message = createDiscordMessage({
       id: "m-loop-1",
       channelId,
-      content: "chatter <@openclaw-bot>",
-      mentionedUsers: [{ id: "openclaw-bot" }],
+      content: "chatter <@natesclaw-bot>",
+      mentionedUsers: [{ id: "natesclaw-bot" }],
       author: { id: senderBotId, bot: true, username: "Relay" },
       timestamp: messageTimestamp,
     });
@@ -747,8 +747,8 @@ describe("preflightDiscordMessage", () => {
     const repeatedMessage = createDiscordMessage({
       id: "m-loop-2",
       channelId,
-      content: "more chatter <@openclaw-bot>",
-      mentionedUsers: [{ id: "openclaw-bot" }],
+      content: "more chatter <@natesclaw-bot>",
+      mentionedUsers: [{ id: "natesclaw-bot" }],
       attachments: [
         {
           id: "att-loop",
@@ -790,8 +790,8 @@ describe("preflightDiscordMessage", () => {
         message: createDiscordMessage({
           id,
           channelId,
-          content: "relay <@openclaw-bot>",
-          mentionedUsers: [{ id: "openclaw-bot" }],
+          content: "relay <@natesclaw-bot>",
+          mentionedUsers: [{ id: "natesclaw-bot" }],
           author: { id: "relay-bot-defaults", bot: true, username: "Relay" },
         }),
         discordConfig,
@@ -1009,14 +1009,14 @@ describe("preflightDiscordMessage", () => {
       message: createDiscordMessage({
         id: "proxy-456",
         channelId: "c1",
-        content: "<@openclaw-bot> hello",
+        content: "<@natesclaw-bot> hello",
         webhookId: "pluralkit-webhook-1",
         author: {
           id: "webhook-author",
           bot: true,
           username: "PluralKit",
         },
-        mentionedUsers: [{ id: "openclaw-bot" }],
+        mentionedUsers: [{ id: "natesclaw-bot" }],
       }),
       discordConfig: {
         pluralkit: { enabled: true },
@@ -1044,13 +1044,13 @@ describe("preflightDiscordMessage", () => {
       message: createDiscordMessage({
         id: "ordinary-human-1",
         channelId: "c1",
-        content: "<@openclaw-bot> hello",
+        content: "<@natesclaw-bot> hello",
         author: {
           id: "human-1",
           bot: false,
           username: "Human",
         },
-        mentionedUsers: [{ id: "openclaw-bot" }],
+        mentionedUsers: [{ id: "natesclaw-bot" }],
       }),
       discordConfig: {
         pluralkit: { enabled: true },
@@ -1068,13 +1068,13 @@ describe("preflightDiscordMessage", () => {
       message: createDiscordMessage({
         id: "ordinary-bot-1",
         channelId: "c1",
-        content: "<@openclaw-bot> hello",
+        content: "<@natesclaw-bot> hello",
         author: {
           id: "bot-1",
           bot: true,
           username: "Bot",
         },
-        mentionedUsers: [{ id: "openclaw-bot" }],
+        mentionedUsers: [{ id: "natesclaw-bot" }],
       }),
       discordConfig: {
         allowBots: true,
@@ -1205,7 +1205,7 @@ describe("preflightDiscordMessage", () => {
       createPreflightArgs({
         cfg: {
           ...DEFAULT_PREFLIGHT_CFG,
-        } as import("openclaw/plugin-sdk/config-contracts").OpenClawConfig,
+        } as import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig,
         discordConfig: {
           allowBots: true,
         } as DiscordConfig,
@@ -1247,7 +1247,7 @@ describe("preflightDiscordMessage", () => {
       channelId: "channel-bot-mentions-on",
       guildId: "guild-bot-mentions-on",
       messageId: "m-bot-mentions-on",
-      content: "hi <@openclaw-bot>",
+      content: "hi <@natesclaw-bot>",
       mentioned: true,
       accepted: true,
     },
@@ -1264,7 +1264,7 @@ describe("preflightDiscordMessage", () => {
       channelId: "channel-bot-command-with-mention",
       guildId: "guild-bot-command-with-mention",
       messageId: "m-bot-command-with-mention",
-      content: "<@openclaw-bot> /new incident room",
+      content: "<@natesclaw-bot> /new incident room",
       mentioned: true,
       accepted: true,
     },
@@ -1273,7 +1273,7 @@ describe("preflightDiscordMessage", () => {
       id: messageId,
       channelId,
       content,
-      ...(mentioned ? { mentionedUsers: [{ id: "openclaw-bot" }] } : {}),
+      ...(mentioned ? { mentionedUsers: [{ id: "natesclaw-bot" }] } : {}),
       author: { id: "relay-bot-1", bot: true, username: "Relay" },
     });
     const result = await runMentionOnlyBotPreflight({ channelId, guildId, message });
@@ -1305,7 +1305,7 @@ describe("preflightDiscordMessage", () => {
       get: vi.fn(async () => ({
         id: message.id,
         content: message.content,
-        mentions: [{ id: botId, username: "OpenClaw", bot: true }],
+        mentions: [{ id: botId, username: "Natesclaw", bot: true }],
         mention_roles: [],
         mention_everyone: false,
       })),
@@ -1546,7 +1546,7 @@ describe("preflightDiscordMessage", () => {
             unmentionedInbound: "room_event",
           },
         },
-      } as import("openclaw/plugin-sdk/config-contracts").OpenClawConfig,
+      } as import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig,
       guildEntries: {
         [guildId]: {
           channels: {
@@ -1627,10 +1627,10 @@ describe("preflightDiscordMessage", () => {
           ...DEFAULT_PREFLIGHT_CFG,
           messages: {
             groupChat: {
-              mentionPatterns: ["openclaw"],
+              mentionPatterns: ["natesclaw"],
             },
           },
-        } as import("openclaw/plugin-sdk/config-contracts").OpenClawConfig,
+        } as import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig,
         discordConfig: {} as DiscordConfig,
         data: createGuildEvent({
           channelId,
@@ -1676,7 +1676,7 @@ describe("preflightDiscordMessage", () => {
       guildId,
       message,
       discordConfig: {
-        botId: "openclaw-bot",
+        botId: "natesclaw-bot",
       } as DiscordConfig,
       guildEntries: {
         [guildId]: {
@@ -1868,7 +1868,7 @@ describe("preflightDiscordMessage", () => {
     const guildHistories = new Map();
     saveRemoteMediaMock.mockResolvedValueOnce({
       id: "test-media",
-      path: "C:\\openclaw\\media\\history.png",
+      path: "C:\\natesclaw\\media\\history.png",
       size: 5,
       contentType: "image/png",
     });
@@ -1947,7 +1947,7 @@ describe("preflightDiscordMessage", () => {
     });
     expect(entries?.[0]?.media?.[0]?.path).toContain("history");
     expect(entries?.[0]?.media?.[0]?.path).not.toMatch(/^https?:/);
-    expect(entries?.[0]?.media?.[0]?.path).toBe("C:\\openclaw\\media\\history.png");
+    expect(entries?.[0]?.media?.[0]?.path).toBe("C:\\natesclaw\\media\\history.png");
     expect(saveRemoteMediaMock).toHaveBeenCalledTimes(1);
   });
 
@@ -2018,7 +2018,7 @@ describe("preflightDiscordMessage", () => {
     const guildHistories = new Map();
     saveRemoteMediaMock.mockResolvedValueOnce({
       id: "test-sticker",
-      path: "/tmp/openclaw-discord-test/sticker.png",
+      path: "/tmp/natesclaw-discord-test/sticker.png",
       size: 5,
       contentType: "image/png",
     });
@@ -2078,7 +2078,7 @@ describe("preflightDiscordMessage", () => {
         messageId: "m-history-sticker",
         media: [
           {
-            path: "/tmp/openclaw-discord-test/sticker.png",
+            path: "/tmp/natesclaw-discord-test/sticker.png",
             contentType: "image/png",
             kind: "sticker",
             messageId: "m-history-sticker",
@@ -2255,7 +2255,7 @@ describe("preflightDiscordMessage", () => {
   });
 
   it("uses attachment content_type for guild audio preflight mention detection", async () => {
-    transcribeFirstAudioMock.mockResolvedValue("hey openclaw");
+    transcribeFirstAudioMock.mockResolvedValue("hey natesclaw");
 
     const channelId = "channel-audio-1";
     const client = createGuildTextClient(channelId);
@@ -2285,10 +2285,10 @@ describe("preflightDiscordMessage", () => {
           ...DEFAULT_PREFLIGHT_CFG,
           messages: {
             groupChat: {
-              mentionPatterns: ["openclaw"],
+              mentionPatterns: ["natesclaw"],
             },
           },
-        } as import("openclaw/plugin-sdk/config-contracts").OpenClawConfig,
+        } as import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig,
         discordConfig: {} as DiscordConfig,
         data: createGuildEvent({
           channelId,
@@ -2322,7 +2322,7 @@ describe("preflightDiscordMessage", () => {
     ]);
     const preflight = expectPreflightResult(result);
     expect(preflight.wasMentioned).toBe(true);
-    expect(preflight.preflightAudioTranscript).toBe("hey openclaw");
+    expect(preflight.preflightAudioTranscript).toBe("hey natesclaw");
   });
 
   it("does not transcribe guild audio from unauthorized members", async () => {
@@ -2355,10 +2355,10 @@ describe("preflightDiscordMessage", () => {
           ...DEFAULT_PREFLIGHT_CFG,
           messages: {
             groupChat: {
-              mentionPatterns: ["openclaw"],
+              mentionPatterns: ["natesclaw"],
             },
           },
-        } as import("openclaw/plugin-sdk/config-contracts").OpenClawConfig,
+        } as import("natesclaw/plugin-sdk/config-contracts").NatesclawConfig,
         discordConfig: {} as DiscordConfig,
         data: createGuildEvent({
           channelId,
@@ -2386,7 +2386,7 @@ describe("preflightDiscordMessage", () => {
   });
 
   it("drops guild message without mention when channel has configuredBinding and requireMention: true", async () => {
-    const conversationRuntime = await import("openclaw/plugin-sdk/conversation-runtime");
+    const conversationRuntime = await import("natesclaw/plugin-sdk/conversation-runtime");
     const channelId = "ch-binding-1";
     const bindingRoute = {
       bindingResolution: {
@@ -2429,7 +2429,7 @@ describe("preflightDiscordMessage", () => {
   });
 
   it("allows guild message with mention when channel has configuredBinding and requireMention: true", async () => {
-    const conversationRuntime = await import("openclaw/plugin-sdk/conversation-runtime");
+    const conversationRuntime = await import("natesclaw/plugin-sdk/conversation-runtime");
     const channelId = "ch-binding-2";
     const bindingRoute = {
       bindingResolution: {
@@ -2456,9 +2456,9 @@ describe("preflightDiscordMessage", () => {
         message: createDiscordMessage({
           id: "m-binding-2",
           channelId,
-          content: "hello <@openclaw-bot>",
+          content: "hello <@natesclaw-bot>",
           author: { id: "user-1", bot: false, username: "alice" },
-          mentionedUsers: [{ id: "openclaw-bot" }],
+          mentionedUsers: [{ id: "natesclaw-bot" }],
         }),
         discordConfig: {} as DiscordConfig,
         guildEntries: {
@@ -2578,7 +2578,7 @@ describe("shouldIgnoreBoundThreadWebhookMessage", () => {
       author: {
         id: "relay-bot-1",
         bot: true,
-        username: "OpenClaw",
+        username: "Natesclaw",
       },
     });
     const result = await preflightDiscordMessage({

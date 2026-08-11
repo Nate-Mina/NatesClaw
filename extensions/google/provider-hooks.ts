@@ -2,14 +2,14 @@
 import type {
   ProviderDefaultThinkingPolicyContext,
   ProviderThinkingProfile,
-} from "openclaw/plugin-sdk/core";
+} from "natesclaw/plugin-sdk/core";
 import type {
   ProviderFailoverErrorContext,
   ProviderWrapStreamFnContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { buildProviderReplayFamilyHooks } from "openclaw/plugin-sdk/provider-model-shared";
-import { createPayloadPatchStreamWrapper } from "openclaw/plugin-sdk/provider-stream-shared";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { buildProviderReplayFamilyHooks } from "natesclaw/plugin-sdk/provider-model-shared";
+import { createPayloadPatchStreamWrapper } from "natesclaw/plugin-sdk/provider-stream-shared";
+import { buildProviderToolCompatFamilyHooks } from "natesclaw/plugin-sdk/provider-tools";
 import { stripGoogleProviderPrefix } from "./model-id.js";
 import { resolveGoogleThinkingProfile } from "./provider-policy.js";
 import { sanitizeGoogleThinkingPayload } from "./thinking-api.js";

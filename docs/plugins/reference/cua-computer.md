@@ -11,8 +11,8 @@ Experimental CUA Driver SDK computer control for Windows and Linux node hosts.
 
 ## Distribution
 
-- Package: `@openclaw/cua-computer`
-- Install route: included in OpenClaw
+- Package: `@natesclaw/cua-computer`
+- Install route: included in Natesclaw
 
 ## Surface
 

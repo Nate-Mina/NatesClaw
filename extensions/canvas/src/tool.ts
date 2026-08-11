@@ -9,26 +9,26 @@ import {
   callGatewayTool,
   listNodes,
   resolveNodeIdFromList,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   imageResultFromFile,
   jsonResult,
   readStringParam,
-} from "openclaw/plugin-sdk/channel-actions";
+} from "natesclaw/plugin-sdk/channel-actions";
 import {
   addTimerTimeoutGraceMs,
   clampPositiveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { readFiniteNumberParam, readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import type { AnyAgentTool, OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
-import { readRegularFile, wrapExternalContent } from "openclaw/plugin-sdk/security-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { readFiniteNumberParam, readPositiveIntegerParam } from "natesclaw/plugin-sdk/param-readers";
+import type { AnyAgentTool, NatesclawConfig } from "natesclaw/plugin-sdk/plugin-entry";
+import { readRegularFile, wrapExternalContent } from "natesclaw/plugin-sdk/security-runtime";
+import { resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import { validateSupportedA2UIJsonl } from "./a2ui-jsonl.js";
 import { normalizeCanvasSnapshotFileExtension, parseCanvasSnapshotPayload } from "./cli-helpers.js";
 import { CanvasToolSchema } from "./tool-schema.js";
 
 type CanvasToolOptions = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   agentSessionKey?: string;
 };
@@ -58,10 +58,10 @@ async function resolveNodeId(
 }
 
 async function writeBase64ToTempFile(params: { base64: string; ext: string }): Promise<string> {
-  const dir = resolvePreferredOpenClawTmpDir();
+  const dir = resolvePreferredNatesclawTmpDir();
   await fs.mkdir(dir, { recursive: true, mode: 0o700 });
   const ext = `.${normalizeCanvasSnapshotFileExtension(params.ext)}`;
-  const filePath = path.join(dir, `openclaw-canvas-snapshot-${randomUUID()}${ext}`);
+  const filePath = path.join(dir, `natesclaw-canvas-snapshot-${randomUUID()}${ext}`);
   await fs.writeFile(filePath, Buffer.from(params.base64, "base64"));
   return filePath;
 }
@@ -93,7 +93,7 @@ async function readJsonlFromPath(jsonlPath: string, workspaceDir?: string): Prom
 }
 
 function resolveCanvasImageSanitizationLimits(
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
 ): CanvasImageSanitizationLimits {
   const configured = config?.agents?.defaults?.imageMaxDimensionPx;
   if (typeof configured !== "number" || !Number.isFinite(configured)) {

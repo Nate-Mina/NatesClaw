@@ -1,5 +1,5 @@
 import type { ReplyPayload } from "../auto-reply/reply-payload.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { OperatorScope } from "../gateway/operator-scopes.js";
 import type {
   PluginConversationBinding,
@@ -23,12 +23,12 @@ type PluginCommandSessionTarget = {
 export type PluginCommandDiagnosticsSession = {
   /** Stable host session key when available. */
   sessionKey?: string;
-  /** Ephemeral OpenClaw session id when available. */
+  /** Ephemeral Natesclaw session id when available. */
   sessionId?: string;
   /** Canonical SQLite identity for active transcript access. */
   sessionTarget?: PluginCommandSessionTarget;
   /**
-   * Deprecated transcript locator for this OpenClaw session when available.
+   * Deprecated transcript locator for this Natesclaw session when available.
    *
    * SQLite-backed sessions use a `sqlite:<agentId>:<sessionId>:<storePath>`
    * marker, not a filesystem path. Use session id/key plus transcript-runtime
@@ -76,7 +76,7 @@ export type PluginCommandContext = {
   /** Canonical SQLite identity for active transcript access. */
   sessionTarget?: PluginCommandSessionTarget;
   /**
-   * Deprecated transcript locator for the active OpenClaw session when available.
+   * Deprecated transcript locator for the active Natesclaw session when available.
    *
    * SQLite-backed sessions use a `sqlite:<agentId>:<sessionId>:<storePath>`
    * marker, not a filesystem path. Use session id/key plus transcript-runtime
@@ -89,8 +89,8 @@ export type PluginCommandContext = {
   args?: string;
   /** The full normalized command body */
   commandBody: string;
-  /** Current OpenClaw configuration */
-  config: OpenClawConfig;
+  /** Current Natesclaw configuration */
+  config: NatesclawConfig;
   /** Raw "From" value (channel-scoped id) */
   from?: string;
   /** Raw "To" value (channel-scoped id) */
@@ -141,8 +141,8 @@ type PluginCommandHandler = (
  * Definition for a plugin-registered command.
  */
 export const AGENT_PROMPT_SURFACE_KINDS = [
-  "openclaw_main",
-  /** @deprecated Use openclaw_main. */
+  "natesclaw_main",
+  /** @deprecated Use natesclaw_main. */
   "pi_main",
   "codex_app_server",
   "cli_backend",
@@ -159,7 +159,7 @@ export type AgentPromptGuidanceEntry = {
 
 export type AgentPromptGuidance = string | AgentPromptGuidanceEntry;
 
-export type OpenClawPluginCommandDefinition = {
+export type NatesclawPluginCommandDefinition = {
   /** Command name without leading slash (e.g., "tts") */
   name: string;
   /**

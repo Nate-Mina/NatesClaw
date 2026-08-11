@@ -11,8 +11,8 @@ Adds web search provider support.
 
 ## Distribution
 
-- Package: `@openclaw/duckduckgo-plugin`
-- Install route: npm; ClawHub: `clawhub:@openclaw/duckduckgo-plugin`
+- Package: `@natesclaw/duckduckgo-plugin`
+- Install route: npm; ClawHub: `clawhub:@natesclaw/duckduckgo-plugin`
 
 ## Surface
 

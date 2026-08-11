@@ -183,9 +183,9 @@ export async function finishGatewayStartup(params: {
       if (minimalTestGateway) {
         return;
       }
-      const { startOpenClawDatabaseIntegrityVerifier } =
-        await import("../state/openclaw-database-verify.js");
-      databaseVerifierHandle = startOpenClawDatabaseIntegrityVerifier({ env: process.env });
+      const { startNatesclawDatabaseIntegrityVerifier } =
+        await import("../state/natesclaw-database-verify.js");
+      databaseVerifierHandle = startNatesclawDatabaseIntegrityVerifier({ env: process.env });
       kernel.addGatewayLifetimeSidecar(databaseVerifierHandle);
     },
     stop: async () => await databaseVerifierHandle?.stop(),

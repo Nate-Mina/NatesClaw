@@ -145,7 +145,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     }
     defaultRuntime.error(
       warnText(
-        `Recommendation: run "${formatCliCommand("openclaw doctor")}" (or "${formatCliCommand("openclaw doctor --repair")}").`,
+        `Recommendation: run "${formatCliCommand("natesclaw doctor")}" (or "${formatCliCommand("natesclaw doctor --repair")}").`,
       ),
     );
   }
@@ -199,7 +199,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
       );
       defaultRuntime.error(
         errorText(
-          `Fix: rerun \`${formatCliCommand("openclaw gateway install --force")}\` from the same --profile / OPENCLAW_STATE_DIR you expect.`,
+          `Fix: rerun \`${formatCliCommand("natesclaw gateway install --force")}\` from the same --profile / NATESCLAW_STATE_DIR you expect.`,
         ),
       );
     }
@@ -249,12 +249,12 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     if (status.cli?.version && status.cli.version !== gatewayVersion) {
       defaultRuntime.error(
         warnText(
-          `Warning: this OpenClaw command is version ${status.cli.version}, but the running Gateway is version ${gatewayVersion}.`,
+          `Warning: this Natesclaw command is version ${status.cli.version}, but the running Gateway is version ${gatewayVersion}.`,
         ),
       );
       defaultRuntime.error(
         warnText(
-          "Check `openclaw --version`, `which openclaw`, and `openclaw gateway status --deep`; if this mismatch is unexpected, update PATH so `openclaw` points to the version you want, or reinstall the Gateway service from that same OpenClaw install.",
+          "Check `natesclaw --version`, `which natesclaw`, and `natesclaw gateway status --deep`; if this mismatch is unexpected, update PATH so `natesclaw` points to the version you want, or reinstall the Gateway service from that same Natesclaw install.",
         ),
       );
     }
@@ -342,7 +342,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     );
     defaultRuntime.error(
       errorText(
-        `Fix: run ${formatCliCommand("openclaw gateway restart")} and re-check with ${formatCliCommand("openclaw gateway status --deep")}.`,
+        `Fix: run ${formatCliCommand("natesclaw gateway restart")} and re-check with ${formatCliCommand("natesclaw gateway status --deep")}.`,
       ),
     );
     spacer();
@@ -362,7 +362,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     }
     defaultRuntime.log(
       warnText(
-        "If logs show protocol mismatch after rollback, stop stale OpenClaw client processes listed here and re-run gateway status.",
+        "If logs show protocol mismatch after rollback, stop stale Natesclaw client processes listed here and re-run gateway status.",
       ),
     );
     spacer();
@@ -419,7 +419,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
           ? // systemd gave up restarting after repeated crashes; sending the operator
             // to restart (which now clears the failed latch) beats "exited immediately".
             `systemd stopped restarting the gateway after repeated crashes; run ${formatCliCommand(
-              "openclaw gateway restart",
+              "natesclaw gateway restart",
             )} or inspect logs.`
           : "Service is loaded but not running (likely exited immediately).",
       ),
@@ -436,20 +436,20 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
 
   if (service.runtime?.cachedLabel) {
     const env = service.command?.environment ?? process.env;
-    const labelValue = resolveGatewayLaunchAgentLabel(env.OPENCLAW_PROFILE);
+    const labelValue = resolveGatewayLaunchAgentLabel(env.NATESCLAW_PROFILE);
     defaultRuntime.error(
       errorText(
         `LaunchAgent label cached but plist missing. Clear with: launchctl bootout gui/$UID/${labelValue}`,
       ),
     );
     defaultRuntime.error(
-      errorText(`Then reinstall: ${formatCliCommand("openclaw gateway install")}`),
+      errorText(`Then reinstall: ${formatCliCommand("natesclaw gateway install")}`),
     );
     spacer();
   }
 
   if (service.staleUpdateLaunchdJobs?.length) {
-    defaultRuntime.error(errorText("Stale OpenClaw updater launchd job(s) detected."));
+    defaultRuntime.error(errorText("Stale Natesclaw updater launchd job(s) detected."));
     for (const job of service.staleUpdateLaunchdJobs) {
       const exitStatus =
         job.lastExitStatus !== undefined ? `, last exit ${job.lastExitStatus}` : "";
@@ -458,7 +458,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     }
     defaultRuntime.error(
       errorText(
-        `Fix after confirming no update is running: launchctl remove <label>, then run ${formatCliCommand("openclaw gateway restart")}.`,
+        `Fix after confirming no update is running: launchctl remove <label>, then run ${formatCliCommand("natesclaw gateway restart")}.`,
       ),
     );
     spacer();
@@ -496,7 +496,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
       defaultRuntime.error(`${errorText("Last gateway error:")} ${status.lastError}`);
     }
     if (process.platform === "linux") {
-      const unit = resolveGatewaySystemdServiceName(serviceEnv.OPENCLAW_PROFILE);
+      const unit = resolveGatewaySystemdServiceName(serviceEnv.NATESCLAW_PROFILE);
       defaultRuntime.error(
         errorText(`Logs: journalctl --user -u ${unit}.service -n 200 --no-pager`),
       );
@@ -543,19 +543,19 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
       );
       if (updateCommands.length === 1) {
         defaultRuntime.log(
-          `${label("Fix:")} ${updateCommands[0]} && ${formatCliCommand("openclaw gateway restart")}.`,
+          `${label("Fix:")} ${updateCommands[0]} && ${formatCliCommand("natesclaw gateway restart")}.`,
         );
       } else {
         defaultRuntime.log(`${label("Fix:")} update each drifted plugin:`);
         for (const command of updateCommands) {
           defaultRuntime.log(`- ${command}`);
         }
-        defaultRuntime.log(`Then run ${formatCliCommand("openclaw gateway restart")}.`);
+        defaultRuntime.log(`Then run ${formatCliCommand("natesclaw gateway restart")}.`);
       }
     } else {
       defaultRuntime.log(
         infoText(
-          `Run ${formatCliCommand("openclaw gateway status --deep")} for affected plugin ids and fix commands.`,
+          `Run ${formatCliCommand("natesclaw gateway status --deep")} for affected plugin ids and fix commands.`,
         ),
       );
     }
@@ -576,6 +576,6 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
     spacer();
   }
 
-  defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("openclaw status")}`);
-  defaultRuntime.log(`${label("Troubleshooting:")} https://docs.openclaw.ai/troubleshooting`);
+  defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("natesclaw status")}`);
+  defaultRuntime.log(`${label("Troubleshooting:")} https://docs.natesclaw.ai/troubleshooting`);
 }

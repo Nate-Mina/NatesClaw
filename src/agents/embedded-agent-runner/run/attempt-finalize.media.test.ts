@@ -121,7 +121,7 @@ describe("finalizeEmbeddedAttempt trajectory capture", () => {
         castAgentMessage({
           role: "user",
           content: "inspect",
-          __openclaw: {
+          __natesclaw: {
             media: [{ path: "/media/canonical.png", contentType: "image/png" }],
           },
         }),
@@ -133,7 +133,7 @@ describe("finalizeEmbeddedAttempt trajectory capture", () => {
 
     expect(captured).not.toHaveProperty("MediaPath");
     expect(captured).not.toHaveProperty("MediaType");
-    expect(captured?.["__openclaw"]).toMatchObject({
+    expect(captured?.["__natesclaw"]).toMatchObject({
       media: [{ path: "/media/canonical.png", contentType: "image/png" }],
     });
   });

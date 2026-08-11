@@ -1,10 +1,10 @@
 // Qqbot tests cover known users plugin behavior.
-import { createPluginStateSyncKeyedStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import { createPluginStateSyncKeyedStoreForTests } from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   installQQBotRuntimeForStateTests,
@@ -39,7 +39,7 @@ function knownUserRows(stateDir: string): KnownUser[] {
   const store = createPluginStateSyncKeyedStoreForTests<KnownUser>("qqbot", {
     namespace: "known-users",
     maxEntries: 100_000,
-    env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+    env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
   });
   return store.entries().map((entry) => entry.value);
 }
@@ -48,17 +48,17 @@ describe("engine/session/known-users", () => {
   beforeEach(async () => {
     vi.resetModules();
     const stateWorkspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-state-",
     });
     const homeWorkspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-home-",
     });
     tempWorkspaces.push(stateWorkspace, homeWorkspace);
     const stateDir = stateWorkspace.dir;
     const homeDir = homeWorkspace.dir;
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
     vi.stubEnv("HOME", homeDir);
     await useMockHome(homeDir);
     installQQBotRuntimeForStateTests(stateDir);
@@ -76,7 +76,7 @@ describe("engine/session/known-users", () => {
 
   it("records known users in SQLite and flushes synchronously", async () => {
     const { flushKnownUsers, recordKnownUser } = await import("./known-users.js");
-    const stateDir = process.env.OPENCLAW_STATE_DIR!;
+    const stateDir = process.env.NATESCLAW_STATE_DIR!;
 
     recordKnownUser({
       openid: "user-1",

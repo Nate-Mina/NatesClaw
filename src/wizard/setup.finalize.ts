@@ -31,7 +31,7 @@ import {
 } from "../commands/onboard-helpers.js";
 import type { OnboardOptions } from "../commands/onboard-types.js";
 import type { GatewayAuthConfig } from "../config/types.gateway.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   describeGatewayServiceRestart,
   formatGatewayServiceStartRepairIssues,
@@ -60,9 +60,9 @@ import type { GatewayWizardSettings, WizardFlow } from "./setup.types.js";
 type FinalizeOnboardingOptions = {
   flow: WizardFlow;
   opts: OnboardOptions;
-  baseConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
   hadExistingConfig?: boolean;
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   workspaceDir: string;
   settings: GatewayWizardSettings;
   prompter: WizardPrompter;
@@ -72,7 +72,7 @@ type FinalizeOnboardingOptions = {
 const HATCH_TUI_TIMEOUT_MS = 5 * 60 * 1000;
 
 function buildSessionGatewayAuthOverride(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   settings: GatewayWizardSettings;
   resolvedGatewayPassword: string;
 }): GatewayAuthConfig | undefined {
@@ -94,7 +94,7 @@ function buildSessionGatewayAuthOverride(params: {
 }
 
 async function startSessionGatewayForOnboarding(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   settings: GatewayWizardSettings;
   resolvedGatewayPassword: string;
   prompter: WizardPrompter;
@@ -123,7 +123,7 @@ async function startSessionGatewayForOnboarding(params: {
         t("wizard.finalize.sessionGatewayStartFailed"),
         formatErrorMessage(error),
         t("wizard.finalize.startGatewayNow", {
-          command: formatCliCommand("openclaw gateway run"),
+          command: formatCliCommand("natesclaw gateway run"),
         }),
       ].join("\n"),
       "Gateway",
@@ -171,7 +171,7 @@ function buildGatewayRecoveryProjection(gateway: GatewayServiceSetupOutcome): {
     gateway.status === "skipped" && gateway.reason === "external"
       ? formatExternalSupervisorActionRequired("start the gateway")
       : t("wizard.finalize.startGatewayNow", {
-          command: formatCliCommand("openclaw gateway run"),
+          command: formatCliCommand("natesclaw gateway run"),
         });
   const notDetected = t("wizard.finalize.gatewayNotDetected");
   const summary = [notDetected, startGuidance].join(" ");
@@ -184,10 +184,10 @@ function buildGatewayRecoveryProjection(gateway: GatewayServiceSetupOutcome): {
       t("wizard.finalize.noBackgroundGatewayExpected"),
       startGuidance,
       t("wizard.finalize.rerunInstallDaemon", {
-        command: formatCliCommand("openclaw onboard --install-daemon"),
+        command: formatCliCommand("natesclaw onboard --install-daemon"),
       }),
       t("wizard.finalize.skipHealthNextTime", {
-        command: formatCliCommand("openclaw onboard --skip-health"),
+        command: formatCliCommand("natesclaw onboard --skip-health"),
       }),
     ].join("\n"),
     summary,
@@ -202,7 +202,7 @@ function buildGatewayRecoveryProjection(gateway: GatewayServiceSetupOutcome): {
 export async function ensureGatewayServiceForOnboarding(params: {
   flow: WizardFlow;
   opts: Pick<OnboardOptions, "installDaemon" | "daemonRuntime">;
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   settings: Pick<GatewayWizardSettings, "port">;
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
@@ -548,7 +548,7 @@ export async function finalizeSetupWizard(
       }
       if (gatewayProbe.ok) {
         try {
-          const healthConfig: OpenClawConfig =
+          const healthConfig: NatesclawConfig =
             settings.authMode === "token" && settings.gatewayToken
               ? {
                   ...nextConfig,
@@ -577,8 +577,8 @@ export async function finalizeSetupWizard(
           await prompter.note(
             [
               t("common.docs"),
-              "https://docs.openclaw.ai/gateway/health",
-              "https://docs.openclaw.ai/gateway/troubleshooting",
+              "https://docs.natesclaw.ai/gateway/health",
+              "https://docs.natesclaw.ai/gateway/troubleshooting",
             ].join("\n"),
             t("wizard.finalize.healthCheckHelp"),
           );
@@ -594,8 +594,8 @@ export async function finalizeSetupWizard(
         await prompter.note(
           [
             t("common.docs"),
-            "https://docs.openclaw.ai/gateway/health",
-            "https://docs.openclaw.ai/gateway/troubleshooting",
+            "https://docs.natesclaw.ai/gateway/health",
+            "https://docs.natesclaw.ai/gateway/troubleshooting",
           ].join("\n"),
           t("wizard.finalize.healthCheckHelp"),
         );
@@ -663,7 +663,7 @@ export async function finalizeSetupWizard(
                 : {}),
             },
           },
-          env: { ...process.env, OPENCLAW_GATEWAY_PORT: String(settings.port) },
+          env: { ...process.env, NATESCLAW_GATEWAY_PORT: String(settings.port) },
         });
         const document = await waitForControlUiDocument({
           url: target.documentUrl,
@@ -765,7 +765,7 @@ export async function finalizeSetupWizard(
           [
             t("wizard.finalize.noModelAuth", { provider: modelAuthStatus.provider }),
             t("wizard.finalize.noModelAuthNext", {
-              command: formatCliCommand("openclaw configure --section model"),
+              command: formatCliCommand("natesclaw configure --section model"),
             }),
           ].join("\n"),
           t("wizard.finalize.noModelAuthTitle"),
@@ -777,14 +777,14 @@ export async function finalizeSetupWizard(
           t("wizard.finalize.gatewayTokenShared"),
           t("wizard.finalize.gatewayTokenStored"),
           t("wizard.finalize.gatewayTokenView", {
-            command: formatCliCommand("openclaw gateway auth-token --show"),
+            command: formatCliCommand("natesclaw gateway auth-token --show"),
           }),
           t("wizard.finalize.gatewayTokenGenerate", {
-            command: formatCliCommand("openclaw doctor --generate-gateway-token"),
+            command: formatCliCommand("natesclaw doctor --generate-gateway-token"),
           }),
           suppressGatewayTokenOutput ? undefined : t("wizard.finalize.dashboardTokenMemory"),
           t("wizard.finalize.dashboardOpenAnytime", {
-            command: formatCliCommand("openclaw dashboard --no-open"),
+            command: formatCliCommand("natesclaw dashboard --no-open"),
           }),
           suppressGatewayTokenOutput ? undefined : t("wizard.finalize.dashboardTokenPrompt"),
         ].filter(Boolean);
@@ -848,7 +848,7 @@ export async function finalizeSetupWizard(
           [
             t("wizard.finalize.webSearchProviderUnavailable", { provider: label }),
             t("wizard.finalize.webSearchUnavailableAction"),
-            `  ${formatCliCommand("openclaw configure --section web")}`,
+            `  ${formatCliCommand("natesclaw configure --section web")}`,
             "",
             t("wizard.finalize.webDocs"),
           ].join("\n"),
@@ -882,10 +882,10 @@ export async function finalizeSetupWizard(
           [
             t("wizard.finalize.webSearchNoKey", { provider: label }),
             t("wizard.finalize.webSearchNeedsKey"),
-            `  ${formatCliCommand("openclaw configure --section web")}`,
+            `  ${formatCliCommand("natesclaw configure --section web")}`,
             "",
             t("wizard.finalize.webSearchGetKey", {
-              url: entry?.signupUrl ?? "https://docs.openclaw.ai/tools/web",
+              url: entry?.signupUrl ?? "https://docs.natesclaw.ai/tools/web",
             }),
             t("wizard.finalize.webDocs"),
           ].join("\n"),
@@ -896,7 +896,7 @@ export async function finalizeSetupWizard(
           [
             t("wizard.finalize.webSearchDisabled", { provider: label }),
             t("wizard.finalize.webSearchReenable", {
-              command: formatCliCommand("openclaw configure --section web"),
+              command: formatCliCommand("natesclaw configure --section web"),
             }),
             "",
             t("wizard.finalize.webDocs"),
@@ -932,7 +932,7 @@ export async function finalizeSetupWizard(
         await prompter.note(
           [
             t("wizard.finalize.webSearchSkipped"),
-            `  ${formatCliCommand("openclaw configure --section web")}`,
+            `  ${formatCliCommand("natesclaw configure --section web")}`,
             "",
             t("wizard.finalize.webDocs"),
           ].join("\n"),
@@ -962,7 +962,7 @@ export async function finalizeSetupWizard(
             ? [
                 t("wizard.guided.complete"),
                 t("wizard.finalize.dashboardWhenReady", {
-                  command: formatCliCommand("openclaw dashboard"),
+                  command: formatCliCommand("natesclaw dashboard"),
                 }),
               ].join(" ")
             : t("wizard.guided.complete")

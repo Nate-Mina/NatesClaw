@@ -3,7 +3,7 @@ import type { PeerCertificate } from "node:tls";
 import { sanitizeTerminalText } from "../../packages/terminal-core/src/safe-text.js";
 import { resolveGatewayPort } from "../config/config.js";
 import type { GatewayTlsConfig } from "../config/types.gateway.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
 import { resolveGatewayAuthToken } from "../gateway/auth-token-resolution.js";
 import { resolveGatewayAuth } from "../gateway/auth.js";
@@ -28,7 +28,7 @@ const CONTROL_UI_DOCUMENT_ERROR_MAX_BYTES = 2_048;
 
 /** One canonical target keeps advertised identity, local browser delivery, and document probes distinct. */
 export async function resolveControlUiHandoffTarget(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env: NodeJS.ProcessEnv;
 }) {
   const { config, env } = params;

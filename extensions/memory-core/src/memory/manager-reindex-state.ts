@@ -5,7 +5,7 @@ import {
   normalizeExtraMemoryPathEntries,
   type MemoryExtraPath,
   type MemorySource,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
 
 export type MemoryIndexMeta = {
   model: string;

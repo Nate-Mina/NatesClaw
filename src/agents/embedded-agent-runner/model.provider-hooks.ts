@@ -1,5 +1,5 @@
-import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { finiteSecondsToTimerSafeMilliseconds } from "@natesclaw/normalization-core/number-coercion";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { Api, Model } from "../../llm/types.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";
 import {
@@ -105,7 +105,7 @@ function canonicalizeLegacyResolvedModel(params: { provider: string; model: Mode
 
 function applyResolvedTransportFallback(params: {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   runtimeHooks: ProviderRuntimeHooks;
   model: Model;
@@ -142,7 +142,7 @@ function applyResolvedTransportFallback(params: {
 export function normalizeResolvedModel(params: {
   provider: string;
   model: Model;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   agentDir?: string;
   workspaceDir?: string;
   runtimeHooks?: ProviderRuntimeHooks;
@@ -246,7 +246,7 @@ export function resolveProviderTransport(params: {
   modelId?: string;
   api?: Api | null;
   baseUrl?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   runtimeHooks?: ProviderRuntimeHooks;
 }): { api?: Api; baseUrl?: string } {

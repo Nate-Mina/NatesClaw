@@ -5,7 +5,7 @@ import {
   type ChannelPlugin,
   listChannelPlugins,
 } from "../channels/plugins/index.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   getActivePluginHttpRouteRegistry,
   getActivePluginHttpRouteRegistryVersion,
@@ -75,7 +75,7 @@ type GatewayReloadPlanOptions = {
   noopPaths?: Iterable<string>;
   forceChangedPaths?: Iterable<string>;
   /** Candidate config used to reject removed, unknown, or unresolvable account targets. */
-  candidateConfig?: OpenClawConfig;
+  candidateConfig?: NatesclawConfig;
 };
 
 const PLUGIN_INSTALL_TIMESTAMP_KEYS = ["installedAt", "resolvedAt"] as const;
@@ -363,7 +363,7 @@ function extractAccountIdFromPath(channel: ChannelId, path: string): string | nu
 function isResolvableChannelAccount(params: {
   plugin: ChannelPlugin | undefined;
   accountId: string;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): boolean {
   if (!params.plugin) {
     return false;

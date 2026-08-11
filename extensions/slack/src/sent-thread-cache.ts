@@ -1,6 +1,6 @@
 // Slack plugin module implements sent thread cache behavior.
-import { createPersistentDedupeCache } from "openclaw/plugin-sdk/dedupe-runtime";
-import { createPluginStateErrorReporter } from "openclaw/plugin-sdk/plugin-state-runtime";
+import { createPersistentDedupeCache } from "natesclaw/plugin-sdk/dedupe-runtime";
+import { createPluginStateErrorReporter } from "natesclaw/plugin-sdk/plugin-state-runtime";
 import { getOptionalSlackRuntime } from "./runtime.js";
 
 /**
@@ -21,7 +21,7 @@ type SlackThreadParticipationRecord = {
  * Keep Slack thread participation shared across bundled chunks so thread
  * auto-reply gating does not diverge between prepare/dispatch call paths.
  */
-const SLACK_THREAD_PARTICIPATION_KEY = Symbol.for("openclaw.slackThreadParticipation");
+const SLACK_THREAD_PARTICIPATION_KEY = Symbol.for("natesclaw.slackThreadParticipation");
 const threadParticipation = createPersistentDedupeCache<SlackThreadParticipationRecord>({
   globalKey: SLACK_THREAD_PARTICIPATION_KEY,
   // Participation remains valid until bounded oldest-entry eviction removes it.

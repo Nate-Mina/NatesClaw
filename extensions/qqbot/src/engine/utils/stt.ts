@@ -6,18 +6,18 @@
 
 import * as fs from "node:fs";
 import path from "node:path";
-import { mimeTypeFromFilePath } from "openclaw/plugin-sdk/media-mime";
-import { finiteSecondsToTimerSafeMilliseconds } from "openclaw/plugin-sdk/number-runtime";
+import { mimeTypeFromFilePath } from "natesclaw/plugin-sdk/media-mime";
+import { finiteSecondsToTimerSafeMilliseconds } from "natesclaw/plugin-sdk/number-runtime";
 import {
   readProviderJsonResponse,
   readResponseTextLimited,
-} from "openclaw/plugin-sdk/provider-http";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeOptionalString,
   readStringField,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { readQqbotObjectRecord as asOptionalObjectRecord } from "../object-record.js";
 import { sanitizeFileName } from "./string-normalize.js";
 

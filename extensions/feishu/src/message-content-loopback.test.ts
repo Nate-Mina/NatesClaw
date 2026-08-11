@@ -8,8 +8,8 @@ import { getMessageFeishu } from "./send.js";
 
 const { mockLogVerbose } = vi.hoisted(() => ({ mockLogVerbose: vi.fn() }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/runtime-env")>();
+vi.mock("natesclaw/plugin-sdk/runtime-env", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/runtime-env")>();
   return { ...actual, logVerbose: mockLogVerbose };
 });
 

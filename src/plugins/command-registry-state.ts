@@ -1,15 +1,15 @@
 // Stores plugin command registry state for the current process lifecycle.
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 import { normalizeAgentPromptSurfaceKind } from "./agent-prompt-surface-kind.js";
 import { listRegisteredPluginCommands } from "./plugin-command-registry.js";
 import { requireActivePluginRegistry } from "./runtime.js";
 import type {
   AgentPromptGuidance,
   AgentPromptSurfaceKind,
-  OpenClawPluginCommandDefinition,
+  NatesclawPluginCommandDefinition,
 } from "./types.js";
 
-export type RegisteredPluginCommand = OpenClawPluginCommandDefinition & {
+export type RegisteredPluginCommand = NatesclawPluginCommandDefinition & {
   pluginId: string;
   pluginName?: string;
   pluginRoot?: string;

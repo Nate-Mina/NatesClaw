@@ -1,12 +1,12 @@
-# OpenClaw Cerebras Provider
+# Natesclaw Cerebras Provider
 
-Official OpenClaw provider plugin for Cerebras.
+Official Natesclaw provider plugin for Cerebras.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/cerebras-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/cerebras-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/cerebras> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/cerebras> for setup and configuration.

@@ -1,5 +1,5 @@
 // Cloud-worker dispatch for managed-worktree sessions.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -169,7 +169,7 @@ export const sessionDispatchHandlers: GatewayRequestHandlers = {
     if (!isWorkerPlacementSessionRuntimeSupported(sessionRuntime)) {
       respondInvalidWorkerSession(
         respond,
-        `cloud worker dispatch requires the OpenClaw runtime, not ${sessionRuntime}`,
+        `cloud worker dispatch requires the Natesclaw runtime, not ${sessionRuntime}`,
       );
       return;
     }

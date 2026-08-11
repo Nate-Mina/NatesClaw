@@ -22,7 +22,7 @@ export function renderSessionRailToggle(
   const expanded = rail.mode === "expanded";
   const label = expanded ? t("chat.rail.collapse") : t("chat.rail.show");
   return html`
-    <openclaw-tooltip .content=${label}>
+    <natesclaw-tooltip .content=${label}>
       <button
         class="btn btn--ghost btn--icon chat-icon-btn chat-session-rail-toggle"
         type="button"
@@ -32,6 +32,6 @@ export function renderSessionRailToggle(
       >
         ${icons.spark}
       </button>
-    </openclaw-tooltip>
+    </natesclaw-tooltip>
   `;
 }

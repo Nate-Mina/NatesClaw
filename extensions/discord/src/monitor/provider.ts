@@ -1,18 +1,18 @@
 // Discord provider module implements model/runtime integration.
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig, ReplyToMode } from "openclaw/plugin-sdk/config-contracts";
-import { resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { logVerbose, warn } from "openclaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { createNonExitingRuntime, type RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { ChannelRuntimeSurface } from "natesclaw/plugin-sdk/channel-contract";
+import type { NatesclawConfig, ReplyToMode } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveTextChunkLimit } from "natesclaw/plugin-sdk/reply-chunking";
+import { getRuntimeConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
+import { logVerbose, warn } from "natesclaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { createNonExitingRuntime, type RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import {
   GROUP_POLICY_BLOCKED_LABEL,
   resolveOpenProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/runtime-group-policy";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { resolveDiscordAccountAllowFrom, resolveDiscordAccountDmPolicy } from "../accounts.js";
 import type { DiscordCommandDeployHashStore } from "../command-deploy-store.js";
 import { GatewayCloseCodes } from "../internal/gateway.js";
@@ -46,7 +46,7 @@ import { createDiscordReadyStatusPatch, type DiscordMonitorStatusSink } from "./
 export type MonitorDiscordOpts = {
   token?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   runtime?: RuntimeEnv;
   channelRuntime?: ChannelRuntimeSurface;
   abortSignal?: AbortSignal;

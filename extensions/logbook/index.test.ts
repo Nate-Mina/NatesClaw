@@ -1,21 +1,21 @@
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginNodeInvokePolicy,
-} from "openclaw/plugin-sdk/plugin-entry";
+  NatesclawPluginApi,
+  NatesclawPluginNodeInvokePolicy,
+} from "natesclaw/plugin-sdk/plugin-entry";
 import { describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
 
-type PolicyContext = Parameters<OpenClawPluginNodeInvokePolicy["handle"]>[0];
+type PolicyContext = Parameters<NatesclawPluginNodeInvokePolicy["handle"]>[0];
 
-function registerLogbookPolicies(): OpenClawPluginNodeInvokePolicy[] {
-  const policies: OpenClawPluginNodeInvokePolicy[] = [];
+function registerLogbookPolicies(): NatesclawPluginNodeInvokePolicy[] {
+  const policies: NatesclawPluginNodeInvokePolicy[] = [];
   plugin.register({
     pluginConfig: {},
     session: { controls: { registerControlUiDescriptor: () => {} } },
-    registerNodeInvokePolicy: (policy: OpenClawPluginNodeInvokePolicy) => policies.push(policy),
+    registerNodeInvokePolicy: (policy: NatesclawPluginNodeInvokePolicy) => policies.push(policy),
     registerService: () => {},
     registerGatewayMethod: () => {},
-  } as unknown as OpenClawPluginApi);
+  } as unknown as NatesclawPluginApi);
   return policies;
 }
 

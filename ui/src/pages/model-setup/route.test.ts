@@ -1,4 +1,4 @@
-import type { RouteLoaderOptions, RouteLocation } from "@openclaw/uirouter";
+import type { RouteLoaderOptions, RouteLocation } from "@natesclaw/uirouter";
 import { describe, expect, it, vi } from "vitest";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import type { SystemAgentSetupDetectResult } from "../../api/types.ts";
@@ -56,7 +56,7 @@ describe("model setup route", () => {
       type: "hello-ok" as const,
       protocol: 1,
       auth: { role: "operator", scopes: ["operator.admin"] },
-      features: { methods: ["openclaw.setup.detect"] },
+      features: { methods: ["natesclaw.setup.detect"] },
     };
     const gateway = {
       snapshot: {

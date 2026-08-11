@@ -1,6 +1,6 @@
 // Implements subagent log retrieval and pagination.
-import { parseStrictNonNegativeInteger } from "@openclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { parseStrictNonNegativeInteger } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { stripToolMessages } from "../../../agents/tools/chat-history-text.js";
 import { callGateway } from "../../../gateway/call.js";
 import { commandReply } from "../command-gates.js";

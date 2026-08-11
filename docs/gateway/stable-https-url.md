@@ -11,7 +11,7 @@ Tailscale Serve gives your Gateway one HTTPS URL without exposing the Gateway po
 
 The result is `https://<host>.<tailnet>.ts.net`, reachable from permitted devices on your tailnet and not from the public internet. The matching WebSocket URL is `wss://<host>.<tailnet>.ts.net`.
 
-If you need a public URL, use [Tailscale Funnel](/gateway/tailscale#public-internet-funnel-shared-password) instead. Funnel is public, and OpenClaw requires password auth for it.
+If you need a public URL, use [Tailscale Funnel](/gateway/tailscale#public-internet-funnel-shared-password) instead. Funnel is public, and Natesclaw requires password auth for it.
 
 ## Before you begin
 
@@ -22,16 +22,16 @@ You need:
 - Tailscale installed and logged in on the Gateway host.
 - The Gateway already configured with token, password, or trusted-proxy auth. Serve cannot be combined with `gateway.auth.mode: "none"`.
 
-OpenClaw locates the Tailscale CLI automatically. It checks `tailscale` on `PATH`, the macOS app bundle at `/Applications/Tailscale.app/Contents/MacOS/Tailscale`, other matching app installations under `/Applications`, and the system locate database. You do not need to add the macOS app-bundle binary to `PATH`.
+Natesclaw locates the Tailscale CLI automatically. It checks `tailscale` on `PATH`, the macOS app bundle at `/Applications/Tailscale.app/Contents/MacOS/Tailscale`, other matching app installations under `/Applications`, and the system locate database. You do not need to add the macOS app-bundle binary to `PATH`.
 
 ## 1. Enable Serve while keeping loopback bind
 
 Run these commands on the Gateway host:
 
 ```bash
-openclaw config set gateway.bind loopback
-openclaw config set gateway.tailscale.mode serve
-openclaw gateway restart
+natesclaw config set gateway.bind loopback
+natesclaw config set gateway.tailscale.mode serve
+natesclaw gateway restart
 ```
 
 The equivalent configuration is:
@@ -47,19 +47,19 @@ The equivalent configuration is:
 }
 ```
 
-OpenClaw configures Tailscale to serve HTTPS on port `443` and proxy to the Gateway port, which is `18789` by default. The Gateway itself remains on `127.0.0.1:<port>`.
+Natesclaw configures Tailscale to serve HTTPS on port `443` and proxy to the Gateway port, which is `18789` by default. The Gateway itself remains on `127.0.0.1:<port>`.
 
 ### Optional identity-header auth
 
 To explicitly allow Tailscale identity headers for Control UI WebSocket auth:
 
 ```bash
-openclaw config set gateway.auth.allowTailscale true
+natesclaw config set gateway.auth.allowTailscale true
 ```
 
-For Serve with token auth, OpenClaw enables this behavior by default unless you set it to `false`. Password and trusted-proxy modes keep their explicit auth boundary unless you opt in.
+For Serve with token auth, Natesclaw enables this behavior by default unless you set it to `false`. Password and trusted-proxy modes keep their explicit auth boundary unless you opt in.
 
-This setting lets a verified Tailscale identity satisfy the Control UI WebSocket shared-secret check. OpenClaw verifies the forwarded client address with `tailscale whois` and matches it to the `tailscale-user-login` header. It applies only when the request arrives from loopback through Serve with the expected forwarded headers.
+This setting lets a verified Tailscale identity satisfy the Control UI WebSocket shared-secret check. Natesclaw verifies the forwarded client address with `tailscale whois` and matches it to the `tailscale-user-login` header. It applies only when the request arrives from loopback through Serve with the expected forwarded headers.
 
 It does not authenticate HTTP API endpoints, remove browser device identity requirements, authenticate node-role connections, or bypass node pairing. See [Tailscale identity headers](/gateway/tailscale#tailscale-identity-headers-serve-only) for the full contract.
 
@@ -129,10 +129,10 @@ For the default port, replace `<port>` with `18789`. The Gateway listener should
 
 ### macOS app
 
-In the OpenClaw macOS app:
+In the Natesclaw macOS app:
 
 1. Open **Settings > Connection**.
-2. Set **OpenClaw runs** to **Remote (another host)**.
+2. Set **Natesclaw runs** to **Remote (another host)**.
 3. Set **Transport** to **Direct (ws/wss)**.
 4. Enter `wss://<host>.<tailnet>.ts.net` in **Gateway URL**.
 5. Select **Test remote**.
@@ -150,11 +150,11 @@ See [iOS app setup](/platforms/ios) and [Android connection setup](/platforms/an
 To use a Tailscale Service name instead of the Gateway device hostname:
 
 ```bash
-openclaw config set gateway.tailscale.serviceName svc:openclaw
-openclaw gateway restart
+natesclaw config set gateway.tailscale.serviceName svc:natesclaw
+natesclaw gateway restart
 ```
 
-This publishes `https://openclaw.<tailnet>.ts.net`. The Gateway host must be an approved tagged node, and the Service may require admin-console approval before Serve can publish it. See [Tailscale Services](/gateway/tailscale#tailnet-only-serve) for the full setup constraints.
+This publishes `https://natesclaw.<tailnet>.ts.net`. The Gateway host must be an approved tagged node, and the Service may require admin-console approval before Serve can publish it. See [Tailscale Services](/gateway/tailscale#tailnet-only-serve) for the full setup constraints.
 
 ## Troubleshooting
 

@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import type { AddressInfo } from "node:net";
 import os from "node:os";
 import path from "node:path";
-import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
+import { rawDataToString } from "@natesclaw/gateway-client/websocket-data";
 import type { TSchema } from "typebox";
 import { Value } from "typebox/value";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -42,7 +42,7 @@ import {
 import { emitAgentEvent } from "../../../src/infra/agent-events.js";
 import { registerAgentRunContext } from "../../../src/infra/agent-run-registry.js";
 import { withTimeout } from "../../../src/utils/with-timeout.js";
-import { GatewayClientTransport, OpenClaw, type OpenClawEvent } from "./index.js";
+import { GatewayClientTransport, Natesclaw, type NatesclawEvent } from "./index.js";
 
 vi.mock("../../../src/infra/device-pairing.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../../../src/infra/device-pairing.js")>();
@@ -390,8 +390,8 @@ async function createFakeGateway(): Promise<FakeGateway> {
   };
 }
 
-async function collectUntilCompleted(events: AsyncIterable<OpenClawEvent>) {
-  const collected: OpenClawEvent[] = [];
+async function collectUntilCompleted(events: AsyncIterable<NatesclawEvent>) {
+  const collected: NatesclawEvent[] = [];
   for await (const event of events) {
     collected.push(event);
     if (event.type === "run.completed") {
@@ -404,7 +404,7 @@ async function collectUntilCompleted(events: AsyncIterable<OpenClawEvent>) {
 async function proveDeterministicGatewayContracts(): Promise<void> {
   const dateNow = vi.spyOn(Date, "now").mockReturnValue(10_000);
   const gateway = await createFakeGateway();
-  const oc = new OpenClaw({
+  const oc = new Natesclaw({
     transport: new GatewayClientTransport({
       url: gateway.url,
       deviceIdentity: null,
@@ -427,7 +427,7 @@ async function proveDeterministicGatewayContracts(): Promise<void> {
       }),
       run.wait({ timeoutMs: 2_000 }),
     ]);
-    const expectedEvents: OpenClawEvent[] = [
+    const expectedEvents: NatesclawEvent[] = [
       {
         version: 1,
         id: "2:agent:run-sdk-e2e:main:1001",
@@ -603,13 +603,13 @@ async function proveDeterministicGatewayContracts(): Promise<void> {
 }
 
 async function proveRealGatewayContracts(): Promise<void> {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sdk-a2-gateway-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-sdk-a2-gateway-"));
   const sessionKey = "agent:main:sdk-real-gateway";
   const sessionId = "sdk-real-gateway-session";
   const transcriptPath = path.join(tempDir, `${sessionId}.jsonl`);
   const previousSessionStorePath = testState.sessionStorePath;
   let started: Awaited<ReturnType<typeof startServer>> | undefined;
-  let oc: OpenClaw | undefined;
+  let oc: Natesclaw | undefined;
   testState.sessionStorePath = path.join(tempDir, "sessions.json");
 
   try {
@@ -630,7 +630,7 @@ async function proveRealGatewayContracts(): Promise<void> {
               title: "sdk-result.txt",
             },
           ],
-          __openclaw: { seq: 2, runId: "sdk-artifact-run" },
+          __natesclaw: { seq: 2, runId: "sdk-artifact-run" },
         },
       })}\n`,
     );
@@ -646,7 +646,7 @@ async function proveRealGatewayContracts(): Promise<void> {
 
     const token = "sdk-real-gateway-token";
     started = await startServer(token, { controlUiEnabled: false });
-    oc = new OpenClaw({
+    oc = new Natesclaw({
       transport: new GatewayClientTransport({
         url: `ws://127.0.0.1:${started.port}`,
         token,

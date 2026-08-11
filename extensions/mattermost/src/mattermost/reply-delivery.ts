@@ -2,24 +2,24 @@
 import {
   createChannelPartialDeliveryError,
   isChannelPartialDeliveryError,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createMessageReceiptFromOutboundResults,
   listMessageReceiptPlatformIds,
   type MessageReceipt,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig, PluginRuntime } from "openclaw/plugin-sdk/core";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig, PluginRuntime } from "natesclaw/plugin-sdk/core";
+import { getAgentScopedMediaLocalRoots } from "natesclaw/plugin-sdk/media-runtime";
 import {
   deliverTextOrMediaReply,
   isReasoningReplyPayload,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
+} from "natesclaw/plugin-sdk/reply-payload";
 import type {
   ReplyDispatchKind,
   ReplyFollowupAdmissionBarrierTimeoutPolicy,
   ReplyPayload,
-} from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/reply-runtime";
 import {
   resolveMattermostReplyDeliveryBarrierTimeoutMs,
   type CreateDmChannelRetryOptions,
@@ -32,7 +32,7 @@ type SendMattermostMessage = (
   to: string,
   text: string,
   opts: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string;
     mediaUrl?: string;
     mediaLocalRoots?: readonly string[];
@@ -114,7 +114,7 @@ export function joinMattermostVisibleContent(contents: readonly (string | undefi
 
 export async function deliverMattermostReplyPayload(params: {
   core: PluginRuntime;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   payload: ReplyPayload;
   to: string;
   accountId: string;

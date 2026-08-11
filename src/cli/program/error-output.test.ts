@@ -5,78 +5,78 @@ import { formatCliParseErrorOutput } from "./error-output.js";
 describe("formatCliParseErrorOutput", () => {
   it("explains unknown commands with root help and plugin hints", () => {
     const output = formatCliParseErrorOutput("error: unknown command 'wat'\n", {
-      argv: ["node", "openclaw", "wat"],
+      argv: ["node", "natesclaw", "wat"],
     });
 
     expect(output).toBe(
-      'OpenClaw does not know the command "wat".\nTry: openclaw --help\nPlugin command? openclaw plugins list\nDocs: https://docs.openclaw.ai/cli\n',
+      'Natesclaw does not know the command "wat".\nTry: natesclaw --help\nPlugin command? natesclaw plugins list\nDocs: https://docs.natesclaw.ai/cli\n',
     );
   });
 
   it("suggests close known commands for unknown commands", () => {
     const output = formatCliParseErrorOutput("error: unknown command 'upate'\n", {
-      argv: ["node", "openclaw", "upate"],
+      argv: ["node", "natesclaw", "upate"],
     });
 
     expect(output).toBe(
-      'OpenClaw does not know the command "upate".\nDid you mean this?\n  openclaw update\nTry: openclaw --help\nPlugin command? openclaw plugins list\nDocs: https://docs.openclaw.ai/cli\n',
+      'Natesclaw does not know the command "upate".\nDid you mean this?\n  natesclaw update\nTry: natesclaw --help\nPlugin command? natesclaw plugins list\nDocs: https://docs.natesclaw.ai/cli\n',
     );
   });
 
   it("suggests explicit aliases for common adjacent terminology", () => {
     const output = formatCliParseErrorOutput("error: unknown command 'upgrade'\n", {
-      argv: ["node", "openclaw", "upgrade"],
+      argv: ["node", "natesclaw", "upgrade"],
     });
 
-    expect(output).toContain("Did you mean this?\n  openclaw update\n");
+    expect(output).toContain("Did you mean this?\n  natesclaw update\n");
   });
 
   it("preserves active profile context in command suggestions", () => {
-    const originalProfile = process.env.OPENCLAW_PROFILE;
-    process.env.OPENCLAW_PROFILE = "work";
+    const originalProfile = process.env.NATESCLAW_PROFILE;
+    process.env.NATESCLAW_PROFILE = "work";
     try {
       const output = formatCliParseErrorOutput("error: unknown command 'doctr'\n", {
-        argv: ["node", "openclaw", "doctr"],
+        argv: ["node", "natesclaw", "doctr"],
       });
 
-      expect(output).toContain("Did you mean this?\n  openclaw --profile work doctor\n");
+      expect(output).toContain("Did you mean this?\n  natesclaw --profile work doctor\n");
     } finally {
       if (originalProfile === undefined) {
-        delete process.env.OPENCLAW_PROFILE;
+        delete process.env.NATESCLAW_PROFILE;
       } else {
-        process.env.OPENCLAW_PROFILE = originalProfile;
+        process.env.NATESCLAW_PROFILE = originalProfile;
       }
     }
   });
 
   it("points unknown options at the active command help", () => {
     const output = formatCliParseErrorOutput("error: unknown option '--wat'\n", {
-      argv: ["node", "openclaw", "channels", "status", "--wat"],
+      argv: ["node", "natesclaw", "channels", "status", "--wat"],
     });
 
     expect(output).toBe(
-      'OpenClaw does not recognize option "--wat".\nTry: openclaw channels status --help\n',
+      'Natesclaw does not recognize option "--wat".\nTry: natesclaw channels status --help\n',
     );
   });
 
   it("points missing required arguments at command help", () => {
     const output = formatCliParseErrorOutput("error: missing required argument 'name'\n", {
-      argv: ["node", "openclaw", "plugins", "install"],
+      argv: ["node", "natesclaw", "plugins", "install"],
     });
 
     expect(output).toBe(
-      'Missing required argument "name".\nTry: openclaw plugins install --help\n',
+      'Missing required argument "name".\nTry: natesclaw plugins install --help\n',
     );
   });
 
   it("prefers the parsed Commander path over option-like argv values", () => {
     const output = formatCliParseErrorOutput("error: unknown option '--wat'\n", {
-      argv: ["node", "openclaw", "plugins", "--source", "install", "list", "--wat"],
+      argv: ["node", "natesclaw", "plugins", "--source", "install", "list", "--wat"],
       commandPath: ["plugins", "list"],
     });
 
     expect(output).toBe(
-      'OpenClaw does not recognize option "--wat".\nTry: openclaw plugins list --help\n',
+      'Natesclaw does not recognize option "--wat".\nTry: natesclaw plugins list --help\n',
     );
   });
 });

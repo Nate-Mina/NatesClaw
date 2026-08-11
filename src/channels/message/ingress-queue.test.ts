@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import type { Insertable } from "kysely";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
@@ -10,14 +10,14 @@ import {
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../../state/natesclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import { createChannelIngressQueue } from "./ingress-queue.js";
 
-type ChannelIngressTestDatabase = Pick<OpenClawStateKyselyDatabase, "channel_ingress_events">;
+type ChannelIngressTestDatabase = Pick<NatesclawStateKyselyDatabase, "channel_ingress_events">;
 
 function createTestIngressQueue<TPayload, TMetadata = unknown, TCompletedMetadata = unknown>(
   stateDir: string,
@@ -35,22 +35,22 @@ function createTestIngressQueue<TPayload, TMetadata = unknown, TCompletedMetadat
 }
 
 async function withTempState<T>(fn: (stateDir: string) => Promise<T>): Promise<T> {
-  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ingress-queue-"));
+  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-ingress-queue-"));
   try {
     return await fn(stateDir);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }
 
 function openIngressStateDatabase(stateDir: string) {
-  return openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } });
+  return openNatesclawStateDatabase({ env: { NATESCLAW_STATE_DIR: stateDir } });
 }
 
 describe("channel ingress queue", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
   });
 
   it("deduplicates pending and completed ingress events", async () => {
@@ -636,7 +636,7 @@ describe("channel ingress queue", () => {
           claim_owner: overrides.claim_owner ?? null,
           claimed_at: overrides.claimed_at ?? null,
           completed_at: overrides.completed_at ?? null,
-        } as Insertable<OpenClawStateKyselyDatabase["channel_ingress_events"]>),
+        } as Insertable<NatesclawStateKyselyDatabase["channel_ingress_events"]>),
       );
     }
 

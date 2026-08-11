@@ -1,17 +1,17 @@
 // Slack plugin module implements prepare thread context behavior.
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   formatInboundEnvelope,
   resolveInboundSupplementalSenderAllowed,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { runTasksWithConcurrency } from "openclaw/plugin-sdk/concurrency-runtime";
-import type { ContextVisibilityMode, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { runTasksWithConcurrency } from "natesclaw/plugin-sdk/concurrency-runtime";
+import type { ContextVisibilityMode, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import {
   filterSupplementalContextItems,
   shouldIncludeSupplementalContext,
-} from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/security-runtime";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackMessageEvent } from "../../types.js";
 import { resolveSlackAllowListMatch } from "../allow-list.js";
@@ -62,7 +62,7 @@ type SlackSessionFreshnessRuntime = {
       defaultAgentId?: string;
       storePath?: string;
       sessionKey: string;
-      sessionCfg?: OpenClawConfig["session"];
+      sessionCfg?: NatesclawConfig["session"];
       resetType: "thread";
       resetOverride?: ReturnType<typeof resolveChannelResetConfig>;
     }) => SlackSessionResetFreshness;
@@ -167,7 +167,7 @@ export async function resolveSlackThreadContextData(params: {
   allowNameMatching: boolean;
   contextVisibilityMode: ContextVisibilityMode;
   envelopeOptions: ReturnType<
-    typeof import("openclaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
+    typeof import("natesclaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
   >;
   effectiveDirectMedia: SlackMediaResult[] | null;
   eventScope?: SlackEventScope;

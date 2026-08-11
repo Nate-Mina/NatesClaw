@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   createPluginCommandRuntime,
   matchPluginCommandInvocation,
@@ -20,7 +20,7 @@ import { isExplicitSourceReplyCommand } from "./source-reply-delivery-mode.js";
 
 export function shouldBypassPluginOwnedBindingForCommand(
   ctx: FinalizedRuntimeMsgContext,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   replyOptions?: PluginCommandExecutionReplyOptions,
 ): boolean {
   // Command authorization is a trust boundary. Reject malformed runtime context

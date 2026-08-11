@@ -1,6 +1,6 @@
 /**
- * OpenClaw ACPX runtime adapter. It wraps the upstream acpx runtime with
- * OpenClaw session metadata, lease tracking, model scoping, and cleanup policy.
+ * Natesclaw ACPX runtime adapter. It wraps the upstream acpx runtime with
+ * Natesclaw session metadata, lease tracking, model scoping, and cleanup policy.
  */
 import { AsyncLocalStorage } from "node:async_hooks";
 import fs from "node:fs/promises";
@@ -24,12 +24,12 @@ import {
   type AcpRuntimeTurnResult,
   type SessionAgentOptions,
 } from "acpx/runtime";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { redactSensitiveText } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { sliceUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { redactSensitiveText } from "natesclaw/plugin-sdk/security-runtime";
+import { normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { sliceUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { AcpRuntimeError, type AcpRuntime, type AcpRuntimeErrorCode } from "../runtime-api.js";
-import { CODEX_ACP_PACKAGE, OPENCLAW_CODEX_CONFIG_ARG } from "./codex-adapter.js";
+import { CODEX_ACP_PACKAGE, NATESCLAW_CODEX_CONFIG_ARG } from "./codex-adapter.js";
 import { splitCommandParts } from "./command-line.js";
 import {
   ACPX_PROBE_LEASE_SESSION_KEY,
@@ -42,9 +42,9 @@ import {
   type AcpxProcessLeaseStore,
 } from "./process-lease.js";
 import {
-  cleanupOpenClawOwnedAcpxPendingLease,
-  cleanupOpenClawOwnedAcpxProcessTree,
-  isOpenClawLeaseAwareAcpxProcessCommand,
+  cleanupNatesclawOwnedAcpxPendingLease,
+  cleanupNatesclawOwnedAcpxProcessTree,
+  isNatesclawLeaseAwareAcpxProcessCommand,
   type AcpxProcessCleanupDeps,
 } from "./process-reaper.js";
 
@@ -52,36 +52,36 @@ type AcpSessionStore = AcpRuntimeOptions["sessionStore"];
 type AcpSessionRecord = Parameters<AcpSessionStore["save"]>[0];
 type AcpLoadedSessionRecord = Awaited<ReturnType<AcpSessionStore["load"]>>;
 type BaseAcpxRuntimeTestOptions = ConstructorParameters<typeof BaseAcpxRuntime>[1];
-type OpenClawAcpxRuntimeOptions = AcpRuntimeOptions & {
-  openclawWrapperRoot?: string;
-  openclawGatewayInstanceId?: string;
-  openclawProcessLeaseStore?: AcpxProcessLeaseStore;
+type NatesclawAcpxRuntimeOptions = AcpRuntimeOptions & {
+  natesclawWrapperRoot?: string;
+  natesclawGatewayInstanceId?: string;
+  natesclawProcessLeaseStore?: AcpxProcessLeaseStore;
   pluginToolsMcpBridgeEnabled?: boolean;
-  openclawToolsMcpBridgeEnabled?: boolean;
+  natesclawToolsMcpBridgeEnabled?: boolean;
 };
 type AcpxRuntimeTestOptions = Record<string, unknown> & {
-  openclawProcessCleanup?: AcpxProcessCleanupDeps;
+  natesclawProcessCleanup?: AcpxProcessCleanupDeps;
 };
-type OpenClawRuntimeTurnInput = Parameters<NonNullable<AcpRuntime["startTurn"]>>[0];
-type OpenClawRuntimeEnsureInput = Parameters<AcpRuntime["ensureSession"]>[0];
-type OpenClawRuntimeHandle = Awaited<ReturnType<AcpRuntime["ensureSession"]>>;
+type NatesclawRuntimeTurnInput = Parameters<NonNullable<AcpRuntime["startTurn"]>>[0];
+type NatesclawRuntimeEnsureInput = Parameters<AcpRuntime["ensureSession"]>[0];
+type NatesclawRuntimeHandle = Awaited<ReturnType<AcpRuntime["ensureSession"]>>;
 type AcpxDelegateEnsureInput = Parameters<BaseAcpxRuntime["ensureSession"]>[0];
 type AcpxMcpServer = NonNullable<AcpRuntimeOptions["mcpServers"]>[number];
 
-const ACPX_PLUGIN_TOOLS_MCP_SERVER_NAME = "openclaw-plugin-tools";
-const ACPX_OPENCLAW_TOOLS_MCP_SERVER_NAME = "openclaw-tools";
-const OPENCLAW_TOOLS_MCP_AGENT_SESSION_KEY_ENV = "OPENCLAW_TOOLS_MCP_AGENT_SESSION_KEY";
+const ACPX_PLUGIN_TOOLS_MCP_SERVER_NAME = "natesclaw-plugin-tools";
+const ACPX_NATESCLAW_TOOLS_MCP_SERVER_NAME = "natesclaw-tools";
+const NATESCLAW_TOOLS_MCP_AGENT_SESSION_KEY_ENV = "NATESCLAW_TOOLS_MCP_AGENT_SESSION_KEY";
 type ResetAwareSessionStore = AcpSessionStore & {
   markFresh: (sessionKey: string) => void;
 };
 
-type OpenClawLeaseSessionMetadata = {
-  openclawLeaseId: string;
-  openclawGatewayInstanceId: string;
+type NatesclawLeaseSessionMetadata = {
+  natesclawLeaseId: string;
+  natesclawGatewayInstanceId: string;
 };
 
-function withOpenClawManagedTurnTimeout<T extends object>(input: T): T & { timeoutMs: 0 } {
-  // OpenClaw owns ACP turn deadlines. acpx treats timeout after partial agent
+function withNatesclawManagedTurnTimeout<T extends object>(input: T): T & { timeoutMs: 0 } {
+  // Natesclaw owns ACP turn deadlines. acpx treats timeout after partial agent
   // output as a completed turn, which can mark background work done early.
   return {
     ...input,
@@ -89,14 +89,14 @@ function withOpenClawManagedTurnTimeout<T extends object>(input: T): T & { timeo
   };
 }
 
-function withOpenClawLeaseSessionMetadata<T extends object>(
+function withNatesclawLeaseSessionMetadata<T extends object>(
   record: T,
-  metadata: OpenClawLeaseSessionMetadata,
-): T & OpenClawLeaseSessionMetadata {
+  metadata: NatesclawLeaseSessionMetadata,
+): T & NatesclawLeaseSessionMetadata {
   return {
     ...record,
-    openclawLeaseId: metadata.openclawLeaseId,
-    openclawGatewayInstanceId: metadata.openclawGatewayInstanceId,
+    natesclawLeaseId: metadata.natesclawLeaseId,
+    natesclawGatewayInstanceId: metadata.natesclawGatewayInstanceId,
   };
 }
 
@@ -211,21 +211,21 @@ function readRecordAgentPid(record: unknown): number | undefined {
   return numericPid && Number.isInteger(numericPid) && numericPid > 0 ? numericPid : undefined;
 }
 
-function readOpenClawLeaseIdFromRecord(record: unknown): string | undefined {
+function readNatesclawLeaseIdFromRecord(record: unknown): string | undefined {
   if (typeof record !== "object" || record === null) {
     return undefined;
   }
-  const { openclawLeaseId } = record as { openclawLeaseId?: unknown };
-  return typeof openclawLeaseId === "string" ? openclawLeaseId.trim() || undefined : undefined;
+  const { natesclawLeaseId } = record as { natesclawLeaseId?: unknown };
+  return typeof natesclawLeaseId === "string" ? natesclawLeaseId.trim() || undefined : undefined;
 }
 
-function readOpenClawGatewayInstanceIdFromRecord(record: unknown): string | undefined {
+function readNatesclawGatewayInstanceIdFromRecord(record: unknown): string | undefined {
   if (typeof record !== "object" || record === null) {
     return undefined;
   }
-  const { openclawGatewayInstanceId } = record as { openclawGatewayInstanceId?: unknown };
-  return typeof openclawGatewayInstanceId === "string"
-    ? openclawGatewayInstanceId.trim() || undefined
+  const { natesclawGatewayInstanceId } = record as { natesclawGatewayInstanceId?: unknown };
+  return typeof natesclawGatewayInstanceId === "string"
+    ? natesclawGatewayInstanceId.trim() || undefined
     : undefined;
 }
 
@@ -289,9 +289,9 @@ function createResetAwareSessionStore(
       if (!lease) {
         return record;
       }
-      return withOpenClawLeaseSessionMetadata(record, {
-        openclawLeaseId: lease.leaseId,
-        openclawGatewayInstanceId: lease.gatewayInstanceId,
+      return withNatesclawLeaseSessionMetadata(record, {
+        natesclawLeaseId: lease.leaseId,
+        natesclawGatewayInstanceId: lease.gatewayInstanceId,
       });
     },
     async save(record: AcpSessionRecord): Promise<void> {
@@ -308,7 +308,7 @@ function createResetAwareSessionStore(
         (!launch || sessionName === launch.sessionKey) &&
         leasedCommand &&
         leaseIdentity?.gatewayInstanceId === params.gatewayInstanceId &&
-        isOpenClawLeaseAwareAcpxProcessCommand({
+        isNatesclawLeaseAwareAcpxProcessCommand({
           command: leasedCommand,
           wrapperRoot: params.wrapperRoot,
         })
@@ -348,7 +348,7 @@ function createResetAwareSessionStore(
               state: "open",
             });
           }
-          recordToSave = withOpenClawLeaseSessionMetadata(
+          recordToSave = withNatesclawLeaseSessionMetadata(
             {
               ...lifecycleRecord,
               // ACPX reconnects from the persisted command, so lease identity must
@@ -356,8 +356,8 @@ function createResetAwareSessionStore(
               agentCommand: leasedCommand,
             },
             {
-              openclawLeaseId: leaseIdentity.leaseId,
-              openclawGatewayInstanceId: leaseIdentity.gatewayInstanceId,
+              natesclawLeaseId: leaseIdentity.leaseId,
+              natesclawGatewayInstanceId: leaseIdentity.gatewayInstanceId,
             },
           );
         }
@@ -376,11 +376,11 @@ function createResetAwareSessionStore(
   };
 }
 
-const OPENCLAW_BRIDGE_EXECUTABLE = "openclaw";
-const OPENCLAW_BRIDGE_SUBCOMMAND = "acp";
+const NATESCLAW_BRIDGE_EXECUTABLE = "natesclaw";
+const NATESCLAW_BRIDGE_SUBCOMMAND = "acp";
 const CODEX_ACP_AGENT_ID = "codex";
-const CODEX_ACP_OPENCLAW_PREFIX = "openai/";
-const CLAUDE_ACP_OPENCLAW_PREFIX = "anthropic/";
+const CODEX_ACP_NATESCLAW_PREFIX = "openai/";
+const CLAUDE_ACP_NATESCLAW_PREFIX = "anthropic/";
 const CODEX_ACP_THINKING_ALIASES = new Map<string, string | undefined>([
   ["off", undefined],
   ["minimal", "low"],
@@ -500,19 +500,19 @@ function isAcpCommand(
   return scriptName === params.executableName || scriptName === `${params.executableName}-wrapper`;
 }
 
-function isOpenClawBridgeCommand(command: string | undefined): boolean {
+function isNatesclawBridgeCommand(command: string | undefined): boolean {
   if (!command) {
     return false;
   }
   const parts = unwrapEnvCommand(splitCommandParts(command.trim()));
-  if (basename(parts[0] ?? "") === OPENCLAW_BRIDGE_EXECUTABLE) {
-    return parts[1] === OPENCLAW_BRIDGE_SUBCOMMAND;
+  if (basename(parts[0] ?? "") === NATESCLAW_BRIDGE_EXECUTABLE) {
+    return parts[1] === NATESCLAW_BRIDGE_SUBCOMMAND;
   }
   if (basename(parts[0] ?? "") !== "node") {
     return false;
   }
   const scriptName = basename(parts[1] ?? "");
-  return /^openclaw(?:\.[cm]?js)?$/i.test(scriptName) && parts[2] === OPENCLAW_BRIDGE_SUBCOMMAND;
+  return /^natesclaw(?:\.[cm]?js)?$/i.test(scriptName) && parts[2] === NATESCLAW_BRIDGE_SUBCOMMAND;
 }
 
 function isCodexAcpCommand(command: string | undefined): boolean {
@@ -540,7 +540,7 @@ function failUnsupportedCodexAcpModel(rawModel: string, detail?: string): never 
 // acpx's `decodeAcpxRuntimeHandleState` only accepts `persistent` and `oneshot`; any other
 // value silently round-trips through the encoded handle as `persistent` and later throws
 // `SessionResumeRequiredError` on agent restart. Fail fast at this boundary instead.
-// See openclaw/openclaw#73071.
+// See natesclaw/natesclaw#73071.
 const SUPPORTED_RUNTIME_SESSION_MODES = new Set(["persistent", "oneshot"] as const);
 const WIRE_TIMEOUT_CONFIG_KEYS = new Set(["timeout", "timeout_seconds"]);
 
@@ -595,8 +595,8 @@ function classifyCodexAcpModelRequest(
 
   let value = raw;
   let hadOpenAiQualifier = false;
-  if (value.toLowerCase().startsWith(CODEX_ACP_OPENCLAW_PREFIX)) {
-    value = value.slice(CODEX_ACP_OPENCLAW_PREFIX.length);
+  if (value.toLowerCase().startsWith(CODEX_ACP_NATESCLAW_PREFIX)) {
+    value = value.slice(CODEX_ACP_NATESCLAW_PREFIX.length);
     hadOpenAiQualifier = true;
   }
 
@@ -648,13 +648,13 @@ function normalizeClaudeAcpModelOverride(rawModel: string | undefined): string |
   if (!raw) {
     return undefined;
   }
-  if (!raw.toLowerCase().startsWith(CLAUDE_ACP_OPENCLAW_PREFIX)) {
+  if (!raw.toLowerCase().startsWith(CLAUDE_ACP_NATESCLAW_PREFIX)) {
     return raw;
   }
-  return raw.slice(CLAUDE_ACP_OPENCLAW_PREFIX.length).trim() || undefined;
+  return raw.slice(CLAUDE_ACP_NATESCLAW_PREFIX.length).trim() || undefined;
 }
 
-function withAcpxSessionOptions(input: OpenClawRuntimeEnsureInput): AcpxDelegateEnsureInput {
+function withAcpxSessionOptions(input: NatesclawRuntimeEnsureInput): AcpxDelegateEnsureInput {
   const existingOptions = (input as { sessionOptions?: SessionAgentOptions }).sessionOptions;
   const model = input.model?.trim() || existingOptions?.model;
   const sessionOptions = model ? { ...existingOptions, model } : existingOptions;
@@ -673,7 +673,7 @@ function isAcpModelCapabilityMissingError(error: unknown): boolean {
 // Retry only the former so explicit model mistakes remain visible to the caller.
 async function ensureDelegateSessionWithModelFallback(
   delegate: BaseAcpxRuntime,
-  input: OpenClawRuntimeEnsureInput,
+  input: NatesclawRuntimeEnsureInput,
 ): Promise<AcpRuntimeHandle> {
   try {
     return await delegate.ensureSession(withAcpxSessionOptions(input));
@@ -707,7 +707,7 @@ function appendCodexAcpConfigOverrides(command: string, override: CodexAcpModelO
   if (Object.keys(config).length === 0) {
     return command;
   }
-  return `${command} ${OPENCLAW_CODEX_CONFIG_ARG} ${quoteShellArg(JSON.stringify(config))}`;
+  return `${command} ${NATESCLAW_CODEX_CONFIG_ARG} ${quoteShellArg(JSON.stringify(config))}`;
 }
 
 function createModelScopedAgentRegistry(params: {
@@ -746,7 +746,7 @@ function resolveAgentCommand(params: {
 }
 
 function shouldUseBridgeSafeDelegateForCommand(command: string | undefined): boolean {
-  return isOpenClawBridgeCommand(command);
+  return isNatesclawBridgeCommand(command);
 }
 
 function shouldUseDistinctBridgeDelegate(options: AcpRuntimeOptions): boolean {
@@ -756,13 +756,13 @@ function shouldUseDistinctBridgeDelegate(options: AcpRuntimeOptions): boolean {
 
 function withManagedToolsMcpSessionEnv(params: {
   pluginToolsEnabled: boolean;
-  openclawToolsEnabled: boolean;
+  natesclawToolsEnabled: boolean;
   mcpServers: AcpRuntimeOptions["mcpServers"];
   sessionKey: string;
 }): AcpRuntimeOptions["mcpServers"] {
   const sessionKey = params.sessionKey.trim();
   if (
-    (!params.pluginToolsEnabled && !params.openclawToolsEnabled) ||
+    (!params.pluginToolsEnabled && !params.natesclawToolsEnabled) ||
     !sessionKey ||
     !params.mcpServers?.length
   ) {
@@ -772,16 +772,16 @@ function withManagedToolsMcpSessionEnv(params: {
   const nextServers = params.mcpServers.map((server): AcpxMcpServer => {
     const isManagedPluginTools =
       params.pluginToolsEnabled && server.name === ACPX_PLUGIN_TOOLS_MCP_SERVER_NAME;
-    const isManagedOpenClawTools =
-      params.openclawToolsEnabled && server.name === ACPX_OPENCLAW_TOOLS_MCP_SERVER_NAME;
-    if ((!isManagedPluginTools && !isManagedOpenClawTools) || !("command" in server)) {
+    const isManagedNatesclawTools =
+      params.natesclawToolsEnabled && server.name === ACPX_NATESCLAW_TOOLS_MCP_SERVER_NAME;
+    if ((!isManagedPluginTools && !isManagedNatesclawTools) || !("command" in server)) {
       return server;
     }
     changed = true;
     const env = [
-      ...server.env.filter((entry) => entry.name !== OPENCLAW_TOOLS_MCP_AGENT_SESSION_KEY_ENV),
+      ...server.env.filter((entry) => entry.name !== NATESCLAW_TOOLS_MCP_AGENT_SESSION_KEY_ENV),
       {
-        name: OPENCLAW_TOOLS_MCP_AGENT_SESSION_KEY_ENV,
+        name: NATESCLAW_TOOLS_MCP_AGENT_SESSION_KEY_ENV,
         value: sessionKey,
       },
     ];
@@ -790,7 +790,7 @@ function withManagedToolsMcpSessionEnv(params: {
   return changed ? nextServers : params.mcpServers;
 }
 
-/** OpenClaw-managed ACP runtime implementation backed by the upstream acpx runtime. */
+/** Natesclaw-managed ACP runtime implementation backed by the upstream acpx runtime. */
 export class AcpxRuntime implements AcpRuntime {
   private readonly sessionStore: ResetAwareSessionStore;
   private readonly agentRegistry: AcpAgentRegistry;
@@ -805,7 +805,7 @@ export class AcpxRuntime implements AcpRuntime {
   private readonly delegateOptions: AcpRuntimeOptions;
   private readonly delegateTestOptions: BaseAcpxRuntimeTestOptions;
   private readonly pluginToolsMcpBridgeEnabled: boolean;
-  private readonly openclawToolsMcpBridgeEnabled: boolean;
+  private readonly natesclawToolsMcpBridgeEnabled: boolean;
   private readonly managedToolsMcpBridgeEnabled: boolean;
   private readonly managedToolsSessionDelegates = new Map<string, BaseAcpxRuntime>();
   private readonly processCleanupDeps: AcpxProcessCleanupDeps | undefined;
@@ -819,16 +819,16 @@ export class AcpxRuntime implements AcpRuntime {
   private readonly uncertainProcessLeaseIds = new Set<string>();
   private readonly cwd: string;
 
-  constructor(options: OpenClawAcpxRuntimeOptions, testOptions?: AcpxRuntimeTestOptions) {
-    const { openclawProcessCleanup, ...delegateTestOptions } = testOptions ?? {};
-    this.processCleanupDeps = openclawProcessCleanup;
-    this.wrapperRoot = options.openclawWrapperRoot;
-    this.gatewayInstanceId = options.openclawGatewayInstanceId;
-    this.processLeaseStore = options.openclawProcessLeaseStore;
+  constructor(options: NatesclawAcpxRuntimeOptions, testOptions?: AcpxRuntimeTestOptions) {
+    const { natesclawProcessCleanup, ...delegateTestOptions } = testOptions ?? {};
+    this.processCleanupDeps = natesclawProcessCleanup;
+    this.wrapperRoot = options.natesclawWrapperRoot;
+    this.gatewayInstanceId = options.natesclawGatewayInstanceId;
+    this.processLeaseStore = options.natesclawProcessLeaseStore;
     this.pluginToolsMcpBridgeEnabled = options.pluginToolsMcpBridgeEnabled === true;
-    this.openclawToolsMcpBridgeEnabled = options.openclawToolsMcpBridgeEnabled === true;
+    this.natesclawToolsMcpBridgeEnabled = options.natesclawToolsMcpBridgeEnabled === true;
     this.managedToolsMcpBridgeEnabled =
-      this.pluginToolsMcpBridgeEnabled || this.openclawToolsMcpBridgeEnabled;
+      this.pluginToolsMcpBridgeEnabled || this.natesclawToolsMcpBridgeEnabled;
     this.cwd = options.cwd;
     this.sessionStore = createResetAwareSessionStore(options.sessionStore, {
       gatewayInstanceId: this.gatewayInstanceId,
@@ -899,7 +899,7 @@ export class AcpxRuntime implements AcpRuntime {
         ...this.delegateOptions,
         mcpServers: withManagedToolsMcpSessionEnv({
           pluginToolsEnabled: this.pluginToolsMcpBridgeEnabled,
-          openclawToolsEnabled: this.openclawToolsMcpBridgeEnabled,
+          natesclawToolsEnabled: this.natesclawToolsMcpBridgeEnabled,
           mcpServers: this.delegateOptions.mcpServers,
           sessionKey: normalizedSessionKey,
         }),
@@ -1021,7 +1021,7 @@ export class AcpxRuntime implements AcpRuntime {
       !this.wrapperRoot ||
       !this.gatewayInstanceId ||
       !this.processLeaseStore ||
-      !isOpenClawLeaseAwareAcpxProcessCommand({
+      !isNatesclawLeaseAwareAcpxProcessCommand({
         command: params.command,
         wrapperRoot: this.wrapperRoot,
       })
@@ -1119,7 +1119,7 @@ export class AcpxRuntime implements AcpRuntime {
     const identity = readAcpxProcessLeaseIdentity(command);
     if (
       !command ||
-      !isOpenClawLeaseAwareAcpxProcessCommand({
+      !isNatesclawLeaseAwareAcpxProcessCommand({
         command,
         wrapperRoot,
       })
@@ -1286,7 +1286,7 @@ export class AcpxRuntime implements AcpRuntime {
       if (lease.rootPid > 0) {
         return;
       }
-      await cleanupOpenClawOwnedAcpxPendingLease({
+      await cleanupNatesclawOwnedAcpxPendingLease({
         leaseId: lease.leaseId,
         gatewayInstanceId: lease.gatewayInstanceId,
         wrapperRoot: lease.wrapperRoot,
@@ -1390,7 +1390,7 @@ export class AcpxRuntime implements AcpRuntime {
     );
     return readCodexWrapperStderrTail({
       wrapperRoot: this.wrapperRoot,
-      leaseId: readOpenClawLeaseIdFromRecord(record),
+      leaseId: readNatesclawLeaseIdFromRecord(record),
     });
   }
 
@@ -1398,7 +1398,7 @@ export class AcpxRuntime implements AcpRuntime {
     handle: AcpRuntimeHandle,
     record: AcpLoadedSessionRecord,
   ): Promise<void> {
-    const leaseId = readOpenClawLeaseIdFromRecord(record);
+    const leaseId = readNatesclawLeaseIdFromRecord(record);
     const rootPid = readAgentPidFromRecord(record);
     const sessionKeys = [handle.sessionKey, readSessionRecordName(record)];
     const openLeases =
@@ -1421,7 +1421,7 @@ export class AcpxRuntime implements AcpRuntime {
         : undefined);
     if (lease && lease.gatewayInstanceId === this.gatewayInstanceId && lease.rootPid > 0) {
       await this.processLeaseStore?.markState(lease.leaseId, "closing");
-      const result = await cleanupOpenClawOwnedAcpxProcessTree({
+      const result = await cleanupNatesclawOwnedAcpxProcessTree({
         rootPid: lease.rootPid,
         rootCommand: readAgentCommandFromRecord(record),
         expectedLeaseId: lease.leaseId,
@@ -1450,8 +1450,8 @@ export class AcpxRuntime implements AcpRuntime {
     if (!rootPid || !rootCommand) {
       return;
     }
-    const expectedGatewayInstanceId = readOpenClawGatewayInstanceIdFromRecord(record);
-    await cleanupOpenClawOwnedAcpxProcessTree({
+    const expectedGatewayInstanceId = readNatesclawGatewayInstanceIdFromRecord(record);
+    await cleanupNatesclawOwnedAcpxProcessTree({
       rootPid,
       rootCommand,
       ...(leaseId ? { expectedLeaseId: leaseId } : {}),
@@ -1485,7 +1485,7 @@ export class AcpxRuntime implements AcpRuntime {
 
   async ensureSession(
     input: Parameters<AcpRuntime["ensureSession"]>[0],
-  ): Promise<OpenClawRuntimeHandle> {
+  ): Promise<NatesclawRuntimeHandle> {
     return await this.runSerializedSessionEnsure(input.sessionKey, () =>
       this.ensureSessionUnlocked(input),
     );
@@ -1493,7 +1493,7 @@ export class AcpxRuntime implements AcpRuntime {
 
   private async ensureSessionUnlocked(
     input: Parameters<AcpRuntime["ensureSession"]>[0],
-  ): Promise<OpenClawRuntimeHandle> {
+  ): Promise<NatesclawRuntimeHandle> {
     assertSupportedRuntimeSessionMode(input.mode);
     const command = resolveAgentCommand({
       agentName: input.agent,
@@ -1520,7 +1520,7 @@ export class AcpxRuntime implements AcpRuntime {
         ? classifiedCodexOverride
         : undefined;
     const requestedModel = input.model?.trim();
-    const appliedModel: OpenClawRuntimeHandle["appliedModel"] =
+    const appliedModel: NatesclawRuntimeHandle["appliedModel"] =
       isCodexAcp && requestedModel
         ? codexModelOverride?.model
           ? { kind: "applied", model: requestedModel }
@@ -1585,7 +1585,7 @@ export class AcpxRuntime implements AcpRuntime {
         input.handle,
         await this.loadOperationSnapshotForHandle(input.handle),
       );
-      for await (const event of delegate.runTurn(withOpenClawManagedTurnTimeout(input))) {
+      for await (const event of delegate.runTurn(withNatesclawManagedTurnTimeout(input))) {
         if (
           event.type !== "error" ||
           !isCodexAcpCommand(command) ||
@@ -1621,7 +1621,7 @@ export class AcpxRuntime implements AcpRuntime {
     }
   }
 
-  startTurn(input: OpenClawRuntimeTurnInput): AcpRuntimeTurn {
+  startTurn(input: NatesclawRuntimeTurnInput): AcpRuntimeTurn {
     const readCodexTurnFailureStderr = () =>
       this.readCodexTurnFailureStderr({
         handle: input.handle,
@@ -1637,7 +1637,7 @@ export class AcpxRuntime implements AcpRuntime {
         try {
           return {
             command,
-            turn: delegate.startTurn(withOpenClawManagedTurnTimeout(input)),
+            turn: delegate.startTurn(withNatesclawManagedTurnTimeout(input)),
           };
         } catch (error) {
           if (!isCodexAcpCommand(command) || !isGenericInternalAcpError(error)) {

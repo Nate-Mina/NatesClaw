@@ -139,7 +139,7 @@ export function readSessionMessageSequence(
   message: unknown,
   envelope?: SessionMessageEnvelope,
 ): number | null {
-  const metadata = readRecord(readRecord(message)?.["__openclaw"]);
+  const metadata = readRecord(readRecord(message)?.["__natesclaw"]);
   return readPositiveSafeInteger(metadata?.seq) ?? readPositiveSafeInteger(envelope?.messageSeq);
 }
 
@@ -159,7 +159,7 @@ export function readSessionMessageIdentity(
   if (!record || !role) {
     return null;
   }
-  const metadata = readRecord(record["__openclaw"]);
+  const metadata = readRecord(record["__natesclaw"]);
   const importedFrom = readNonemptyString(metadata?.importedFrom);
   const cliSessionId = readNonemptyString(metadata?.cliSessionId);
   const externalId = readNonemptyString(metadata?.externalId);
@@ -191,7 +191,7 @@ export function isLocallyOptimisticSessionMessage(message: unknown): boolean {
   if (!identity || (identity.role !== "user" && identity.role !== "assistant")) {
     return false;
   }
-  const metadata = readRecord(readRecord(message)?.["__openclaw"]);
+  const metadata = readRecord(readRecord(message)?.["__natesclaw"]);
   return !metadata || Object.keys(metadata).every((key) => key === "idempotencyKey");
 }
 
@@ -473,7 +473,7 @@ function hasDisplayableSessionMessage(message: unknown): boolean {
         ? entry.type !== "text" || readNonemptyString(entry.text) !== null
         : typeof block === "string" && block.trim().length > 0;
     });
-  const media = readRecord(record["__openclaw"])?.media;
+  const media = readRecord(record["__natesclaw"])?.media;
   return Boolean(
     (typeof record.content === "string" && record.content.trim()) ||
     displayableBlocks ||
@@ -496,7 +496,7 @@ function readSessionProjectionFinalMessageIdentity(message: unknown): string | n
     return `seq:${identity.role}:${identity.sequence}`;
   }
   const record = readRecord(message);
-  const metadata = readRecord(record?.["__openclaw"]);
+  const metadata = readRecord(record?.["__natesclaw"]);
   try {
     return `content:${JSON.stringify([
       identity?.role ?? "assistant",

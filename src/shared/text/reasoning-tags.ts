@@ -1,4 +1,4 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   scanReasoningTags,
   stripReasoningTagsFromMarkdown,

@@ -157,7 +157,7 @@ describe("oxlint config", () => {
       "src/auto-reply/reply/export-html/template.js",
       "vendor/",
       "**/.cache/**",
-      "**/.openclaw-runtime-deps-copy-*/**",
+      "**/.natesclaw-runtime-deps-copy-*/**",
       "**/build/**",
       "**/coverage/**",
       "**/dist/**",

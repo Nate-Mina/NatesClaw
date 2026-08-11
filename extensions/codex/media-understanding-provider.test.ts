@@ -1,5 +1,5 @@
 // Codex tests cover media understanding provider plugin behavior.
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "natesclaw/plugin-sdk/number-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { buildCodexMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import type { CodexAppServerClient } from "./src/app-server/client.js";
@@ -46,7 +46,7 @@ function threadStartResult() {
       updatedAt: 1,
       status: { type: "idle" },
       path: null,
-      cwd: "/tmp/openclaw-agent",
+      cwd: "/tmp/natesclaw-agent",
       cliVersion: "0.147.0",
       source: "unknown",
       agentNickname: null,
@@ -58,7 +58,7 @@ function threadStartResult() {
     model: "gpt-5.4",
     modelProvider: "openai",
     serviceTier: null,
-    cwd: "/tmp/openclaw-agent",
+    cwd: "/tmp/natesclaw-agent",
     instructionSources: [],
     approvalPolicy: "on-request",
     approvalsReviewer: "user",
@@ -225,7 +225,7 @@ describe("codex media understanding provider", () => {
         timeoutMs: 30_000,
         signal: controller.signal,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       }),
     ).rejects.toThrow("caller cancelled Codex media request");
 
@@ -257,7 +257,7 @@ describe("codex media understanding provider", () => {
       timeoutMs: 30_000,
       signal: controller.signal,
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
     });
 
     await vi.waitFor(() => expect(clientFactory).toHaveBeenCalledOnce());
@@ -289,7 +289,7 @@ describe("codex media understanding provider", () => {
       prompt: "Describe briefly.",
       timeoutMs: 30_000,
       cfg,
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
     });
 
     expect(result).toEqual({ text: "A red square.", model: "gpt-5.4" });
@@ -301,19 +301,19 @@ describe("codex media understanding provider", () => {
     expect(clientFactory).toHaveBeenCalledWith({
       startOptions: expect.any(Object),
       authProfileId: undefined,
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       config: cfg,
       timeoutMs: 30_000,
     });
     expect(requests[1]?.params).toEqual({
       model: "gpt-5.4",
       modelProvider: "openai",
-      cwd: "/tmp/openclaw-agent",
+      cwd: "/tmp/natesclaw-agent",
       approvalPolicy: "on-request",
       sandbox: "read-only",
-      serviceName: "OpenClaw",
+      serviceName: "Natesclaw",
       developerInstructions:
-        "You are OpenClaw's bounded image-understanding worker. Describe only the provided image content. Do not call tools, edit files, or ask follow-up questions.",
+        "You are Natesclaw's bounded image-understanding worker. Describe only the provided image content. Do not call tools, edit files, or ask follow-up questions.",
       config: {
         "agents.enabled": false,
         "features.apps": false,
@@ -393,7 +393,7 @@ describe("codex media understanding provider", () => {
       model: "gpt-5.4",
       timeoutMs: 30_000,
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
     });
 
     expect(clientFactory).toHaveBeenCalledWith({
@@ -402,11 +402,11 @@ describe("codex media understanding provider", () => {
         url: "ws://127.0.0.1:4501",
       }),
       authProfileId: undefined,
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       config: {},
       timeoutMs: 30_000,
     });
-    expect(requests[1]?.params).toEqual(expect.objectContaining({ cwd: "/tmp/openclaw-agent" }));
+    expect(requests[1]?.params).toEqual(expect.objectContaining({ cwd: "/tmp/natesclaw-agent" }));
     expect(requests[2]?.params).not.toHaveProperty("cwd");
   });
 
@@ -436,7 +436,7 @@ describe("codex media understanding provider", () => {
         timeoutMs: 30_000,
         signal: controller.signal,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       }),
     ).rejects.toThrow();
 
@@ -472,7 +472,7 @@ describe("codex media understanding provider", () => {
       timeoutMs: 30_000,
       cfg: {},
       authStore,
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
     });
 
     expect(sharedClientMocks.createIsolatedCodexAppServerClient).toHaveBeenCalledWith(
@@ -499,7 +499,7 @@ describe("codex media understanding provider", () => {
         model: "gpt-5.4",
         timeoutMs: MAX_TIMER_TIMEOUT_MS + 1,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       });
 
       expect(result?.text).toBe("A red square.");
@@ -529,7 +529,7 @@ describe("codex media understanding provider", () => {
       prompt: "Describe briefly.",
       timeoutMs: 30_000,
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
     });
 
     expect(approvalResponses).toEqual([{ permissions: {}, scope: "turn" }]);
@@ -548,7 +548,7 @@ describe("codex media understanding provider", () => {
       prompt: "Describe briefly.",
       timeoutMs: 30_000,
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
     });
 
     expect(result).toEqual({ text: "A blue circle.", model: "gpt-5.4" });
@@ -569,7 +569,7 @@ describe("codex media understanding provider", () => {
         model: "gpt-5.4",
         timeoutMs: 30_000,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       }),
     ).rejects.toThrow("Codex app-server model does not support images: gpt-5.4");
     expect(requests.map((entry) => entry.method)).toEqual(["model/list"]);
@@ -590,7 +590,7 @@ describe("codex media understanding provider", () => {
         model: "gpt-5.4",
         timeoutMs: 30_000,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       }),
     ).rejects.toThrow("vision unavailable");
   });
@@ -627,7 +627,7 @@ describe("codex media understanding provider", () => {
       model: "gpt-5.4",
       timeoutMs: 30_000,
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
     });
 
     expect(result).toEqual({
@@ -645,12 +645,12 @@ describe("codex media understanding provider", () => {
     expect(requests[1]?.params).toEqual({
       model: "gpt-5.4",
       modelProvider: "openai",
-      cwd: "/tmp/openclaw-agent",
+      cwd: "/tmp/natesclaw-agent",
       approvalPolicy: "on-request",
       sandbox: "read-only",
-      serviceName: "OpenClaw",
+      serviceName: "Natesclaw",
       developerInstructions:
-        "You are OpenClaw's bounded structured-extraction worker. Return only the requested extraction. Do not call tools, edit files, ask follow-up questions, or include secrets.",
+        "You are Natesclaw's bounded structured-extraction worker. Return only the requested extraction. Do not call tools, edit files, ask follow-up questions, or include secrets.",
       config: {
         "agents.enabled": false,
         "features.apps": false,
@@ -715,7 +715,7 @@ describe("codex media understanding provider", () => {
         model: "gpt-5.4",
         timeoutMs: 30_000,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       }),
     ).rejects.toThrow("Codex structured extraction requires at least one image input.");
     expect(requests).toEqual([]);
@@ -743,7 +743,7 @@ describe("codex media understanding provider", () => {
         model: "gpt-5.4",
         timeoutMs: 30_000,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       }),
     ).rejects.toThrow("Codex structured extraction returned invalid JSON.");
   });
@@ -779,7 +779,7 @@ describe("codex media understanding provider", () => {
         model: "gpt-5.4",
         timeoutMs: 30_000,
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
       }),
     ).rejects.toThrow("Codex structured extraction JSON did not match schema");
   });

@@ -2,10 +2,10 @@ import {
   resolveOAuthTokenExpiresAt,
   resolveOAuthTokenLifetimeMs,
   throwIfOAuthLoginAborted,
-} from "openclaw/plugin-sdk/provider-oauth-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-oauth-runtime";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 const CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann";
 const TOKEN_URL = "https://auth.openai.com/oauth/token";

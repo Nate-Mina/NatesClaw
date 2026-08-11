@@ -14,50 +14,50 @@ type GuidanceCase = {
 const CASES: GuidanceCase[] = [
   {
     file: "skills/session-logs/SKILL.md",
-    required: ["OPENCLAW_STATE_DIR"],
+    required: ["NATESCLAW_STATE_DIR"],
     forbidden: [
-      "for f in ~/.openclaw/agents/<agentId>/sessions/*.jsonl",
-      'rg -l "phrase" ~/.openclaw/agents/<agentId>/sessions/*.jsonl',
-      "~/.openclaw/agents/<agentId>/sessions/<id>.jsonl",
+      "for f in ~/.natesclaw/agents/<agentId>/sessions/*.jsonl",
+      'rg -l "phrase" ~/.natesclaw/agents/<agentId>/sessions/*.jsonl',
+      "~/.natesclaw/agents/<agentId>/sessions/<id>.jsonl",
     ],
   },
   {
     file: "skills/gh-issues/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
-    forbidden: ["cat ~/.openclaw/openclaw.json"],
+    required: ["NATESCLAW_CONFIG_PATH"],
+    forbidden: ["cat ~/.natesclaw/natesclaw.json"],
   },
   {
     file: "extensions/canvas/skills/canvas/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
-    forbidden: ["cat ~/.openclaw/openclaw.json"],
+    required: ["NATESCLAW_CONFIG_PATH"],
+    forbidden: ["cat ~/.natesclaw/natesclaw.json"],
   },
   {
     file: "skills/openai-whisper-api/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
+    required: ["NATESCLAW_CONFIG_PATH"],
   },
   {
     file: "skills/sherpa-onnx-tts/SKILL.md",
     required: [
-      "OPENCLAW_STATE_DIR",
-      "OPENCLAW_CONFIG_PATH",
-      'STATE_DIR="${OPENCLAW_STATE_DIR:-$HOME/.openclaw}"',
+      "NATESCLAW_STATE_DIR",
+      "NATESCLAW_CONFIG_PATH",
+      'STATE_DIR="${NATESCLAW_STATE_DIR:-$HOME/.natesclaw}"',
     ],
     forbidden: [
-      'SHERPA_ONNX_RUNTIME_DIR: "~/.openclaw/tools/sherpa-onnx-tts/runtime"',
-      'SHERPA_ONNX_MODEL_DIR: "~/.openclaw/tools/sherpa-onnx-tts/models/vits-piper-en_US-lessac-high"',
+      'SHERPA_ONNX_RUNTIME_DIR: "~/.natesclaw/tools/sherpa-onnx-tts/runtime"',
+      'SHERPA_ONNX_MODEL_DIR: "~/.natesclaw/tools/sherpa-onnx-tts/models/vits-piper-en_US-lessac-high"',
       "<state-dir>",
     ],
   },
   {
     file: "skills/coding-agent/SKILL.md",
     required: [
-      "OPENCLAW_STATE_DIR",
+      "NATESCLAW_STATE_DIR",
       "CODEX_WORKER_HOME",
       'CODEX_HOME="$CODEX_WORKER_HOME" codex login status',
       "env -u CODEX_API_KEY -u CODEX_ACCESS_TOKEN -u OPENAI_API_KEY",
     ],
     forbidden: [
-      "NEVER start Codex in ~/.openclaw/",
+      "NEVER start Codex in ~/.natesclaw/",
       'command:"codex exec - < \\"$PROMPT\\""',
       "CODEX_HOME=~/.codex",
       "CODEX_HOME=/absolute/codex-worker-home",
@@ -67,7 +67,7 @@ const CASES: GuidanceCase[] = [
 
 describe("bundled skill env-path guidance", () => {
   it.each(CASES)(
-    "keeps $file aligned with OPENCLAW env overrides",
+    "keeps $file aligned with NATESCLAW env overrides",
     ({ file, required, forbidden }) => {
       const content = fs.readFileSync(path.join(REPO_ROOT, file), "utf8");
       for (const needle of required ?? []) {

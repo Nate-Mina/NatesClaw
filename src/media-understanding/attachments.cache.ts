@@ -6,11 +6,11 @@ import path from "node:path";
 import {
   classifyAttachmentBytes,
   type AttachmentClassification,
-} from "@openclaw/media-core/attachment-classify";
+} from "@natesclaw/media-core/attachment-classify";
 import {
   isInboundPathAllowed,
   mergeInboundPathRoots,
-} from "@openclaw/media-core/inbound-path-policy";
+} from "@natesclaw/media-core/inbound-path-policy";
 import { MediaUnderstandingSkipError } from "../../packages/media-understanding-common/src/errors.js";
 import { resolveStateDir } from "../config/paths.js";
 import { logVerbose, shouldLogVerbose } from "../globals.js";
@@ -383,7 +383,7 @@ export class MediaAttachmentCache {
     });
     const extension = path.extname(bufferResult.fileName || "") || "";
     const tmpPath = buildRandomTempFilePath({
-      prefix: "openclaw-media",
+      prefix: "natesclaw-media",
       extension,
     });
     await fs.writeFile(tmpPath, bufferResult.buffer);

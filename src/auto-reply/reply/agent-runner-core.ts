@@ -1,7 +1,7 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { hasSessionAutoModelFallbackProvenance } from "../../agents/agent-scope.js";
 import { hasVisibleCommittedMessagingToolDeliveryEvidence } from "../../agents/embedded-agent-runner/delivery-evidence.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import {
   resolveSessionPluginStatusLines,
   resolveSessionPluginTraceLines,
@@ -100,7 +100,7 @@ export function buildSilentFallbackFailurePayload(params: {
 }
 
 export function resolveSourceReplyPolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionCtx: TemplateContext;
   sessionEntry?: SessionEntry;
   sessionKey: string;
@@ -127,7 +127,7 @@ export function resolveSourceReplyPolicy(params: {
 }
 
 export function resolveReplyRunDeliveryContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionCtx: TemplateContext;
   sessionEntry?: SessionEntry;
   sessionKey: string;
@@ -289,7 +289,7 @@ export function resolveAdmittedRunSessionFile(params: {
 export async function handleReplyAgentRunError(
   error: unknown,
   context: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     blockReplyPipeline: BlockReplyPipeline | null;
     didDeliverVisiblePartialReply: () => boolean;
     isHeartbeat: boolean;

@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 // Memory Core plugin module implements dreaming behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { resolveMemoryDreamingPluginConfig } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { resolveMemoryDreamingPluginConfig } from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
 import {
   DEFAULT_MEMORY_DEEP_DREAMING_MAX_PROMOTED_SNIPPET_TOKENS as DEFAULT_MEMORY_DREAMING_MAX_PROMOTED_SNIPPET_TOKENS,
   DEFAULT_MEMORY_DEEP_DREAMING_RECENCY_HALF_LIFE_DAYS as DEFAULT_MEMORY_DREAMING_RECENCY_HALF_LIFE_DAYS,
@@ -16,14 +16,14 @@ import {
   MEMORY_DREAMING_SYSTEM_EVENT_TEXT as DREAMING_SYSTEM_EVENT_TEXT,
   resolveMemoryDeepDreamingConfig,
   resolveMemoryDreamingWorkspaces,
-} from "openclaw/plugin-sdk/memory-core-host-status";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/memory-core-host-status";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { peekSystemEventEntries } from "openclaw/plugin-sdk/system-event-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { peekSystemEventEntries } from "natesclaw/plugin-sdk/system-event-runtime";
 import { appendFailedDreamingEvent } from "./dreaming-events.js";
 import type { NarrativePhaseData } from "./dreaming-narrative.js";
 import { formatErrorMessage, includesSystemEventToken } from "./dreaming-shared.js";
@@ -34,7 +34,7 @@ const STARTUP_CRON_RETRY_MAX_ATTEMPTS = 12;
 const HEARTBEAT_ISOLATED_SESSION_SUFFIX = ":heartbeat";
 const MANAGED_DREAMING_DECLARATION_KEY = "memory-core:memory-dreaming-promotion";
 
-type Logger = Pick<OpenClawPluginApi["logger"], "info" | "warn" | "error">;
+type Logger = Pick<NatesclawPluginApi["logger"], "info" | "warn" | "error">;
 
 type CronSchedule = { kind: "cron"; expr: string; tz?: string };
 type CronPayload =
@@ -413,7 +413,7 @@ function hasPendingManagedDreamingCronEvent(sessionKey?: string): boolean {
 
 export function resolveShortTermPromotionDreamingConfig(params: {
   pluginConfig?: Record<string, unknown>;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): ShortTermPromotionDreamingConfig {
   const resolved = resolveMemoryDeepDreamingConfig(params);
   return {
@@ -553,10 +553,10 @@ async function runShortTermDreamingPromotionIfTriggered(params: {
   /** Agent whose heartbeat/cron turn triggered the sweep. */
   agentId?: string;
   workspaceDir?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   config: ShortTermPromotionDreamingConfig;
   logger: Logger;
-  subagent?: OpenClawPluginApi["runtime"]["subagent"];
+  subagent?: NatesclawPluginApi["runtime"]["subagent"];
 }): Promise<{ handled: true; reason: string } | undefined> {
   if (params.trigger !== "heartbeat" && params.trigger !== "cron") {
     return undefined;
@@ -811,7 +811,7 @@ async function runShortTermDreamingPromotionIfTriggered(params: {
   };
 }
 
-export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void {
+export function registerShortTermPromotionDreaming(api: NatesclawPluginApi): void {
   let resolveStartupCron: (() => CronServiceLike | null) | null = null;
   // Hold a live reference to the gateway context so we can retry cron resolution at runtime.
   // The startup capture may fail if the cron service isn't available yet (race condition in
@@ -830,8 +830,8 @@ export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void
   let gatewayLifecycleGeneration = 0;
   let disposed = false;
 
-  const resolveCurrentConfig = (): OpenClawConfig =>
-    (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+  const resolveCurrentConfig = (): NatesclawConfig =>
+    (api.runtime.config?.current?.() ?? api.config) as NatesclawConfig;
 
   const clearStartupCronRetry = (): void => {
     if (startupCronRetryTimer) {
@@ -886,7 +886,7 @@ export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void
 
   const reconcileManagedDreamingCron = async (params: {
     reason: "startup" | "startup_retry" | "runtime";
-    startupConfig?: OpenClawConfig;
+    startupConfig?: NatesclawConfig;
     startupCron?: (() => CronServiceLike | null) | null;
   }): Promise<ShortTermPromotionDreamingConfig> => {
     const startupCfg =
@@ -1019,7 +1019,7 @@ export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void
   };
 
   const startDreamingSessionCleanup = async (
-    config: OpenClawConfig,
+    config: NatesclawConfig,
     generation: number,
     startupStartedAtMs: number,
   ): Promise<void> => {
@@ -1029,7 +1029,7 @@ export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void
       return;
     }
     const scrubConfiguredAgents = async (
-      currentConfig: OpenClawConfig,
+      currentConfig: NatesclawConfig,
       nowMs?: number,
     ): Promise<void> => {
       const agentIds = uniqueStrings(

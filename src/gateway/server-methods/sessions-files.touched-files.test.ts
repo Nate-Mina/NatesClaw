@@ -58,7 +58,7 @@ describe("sessions.files touched-file folds", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     hoisted.readSessionTranscriptVisibleMessageDeltaCore.mockReset();
-    workspaceRoot = createWorkspaceFixture("openclaw-session-touched-files-test-");
+    workspaceRoot = createWorkspaceFixture("natesclaw-session-touched-files-test-");
     hoisted.resolveDefaultAgentId.mockReturnValue("main");
     hoisted.resolveAgentWorkspaceDir.mockReturnValue(workspaceRoot);
   });
@@ -411,7 +411,7 @@ describe("sessions.files touched-file folds", () => {
       [
         outsidePath,
         "../outside.txt",
-        "~/.openclaw-external.txt",
+        "~/.natesclaw-external.txt",
         pathToFileURL(outsidePath).href,
         `@${outsidePath}`,
         "..cache/missing.txt",

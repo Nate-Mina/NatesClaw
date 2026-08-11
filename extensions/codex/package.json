@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/codex",
+  "name": "@natesclaw/codex",
   "version": "2026.8.1",
-  "description": "OpenClaw Codex app-server harness and native session supervision plugin.",
+  "description": "Natesclaw Codex app-server harness and native session supervision plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -15,14 +15,14 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/codex",
+      "npmSpec": "@natesclaw/codex",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.1-beta.1",
       "requiredPlatformPackages": [
@@ -38,7 +38,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1"
+      "natesclawVersion": "2026.8.1"
     },
     "release": {
       "publishToClawHub": true,

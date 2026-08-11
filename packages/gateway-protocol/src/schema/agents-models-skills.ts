@@ -16,7 +16,7 @@ import { NonEmptyString } from "./primitives.js";
 /** Model option shown in selectors and model catalog results. */
 const GatewayAgentRuntimeSchema = closedObject({
   id: NonEmptyString,
-  fallback: Type.Optional(Type.Union([Type.Literal("openclaw"), Type.Literal("none")])),
+  fallback: Type.Optional(Type.Union([Type.Literal("natesclaw"), Type.Literal("none")])),
   source: Type.Union([
     Type.Literal("env"),
     Type.Literal("agent"),
@@ -482,7 +482,7 @@ export const SkillsDetailResultSchema = closedObject({
 
 /** Security verdict report for installed/requested skills. */
 export const SkillsSecurityVerdictsResultSchema = closedObject({
-  schema: Type.Literal("openclaw.skills.security-verdicts.v1"),
+  schema: Type.Literal("natesclaw.skills.security-verdicts.v1"),
   items: Type.Array(
     closedObject({
       registry: NonEmptyString,
@@ -521,7 +521,7 @@ export const SkillsSkillCardParamsSchema = closedObject({
 
 /** Rendered skill card content and file metadata. */
 export const SkillsSkillCardResultSchema = closedObject({
-  schema: Type.Literal("openclaw.skills.skill-card.v1"),
+  schema: Type.Literal("natesclaw.skills.skill-card.v1"),
   skillKey: NonEmptyString,
   path: NonEmptyString,
   sizeBytes: Type.Integer({ minimum: 0 }),
@@ -670,7 +670,7 @@ export const SkillProposalEvaluationSchema = closedObject({
 
 /** Full persisted skill proposal record. */
 const SkillProposalRecordSchema = closedObject({
-  schema: Type.Literal("openclaw.skill-workshop.proposal.v1"),
+  schema: Type.Literal("natesclaw.skill-workshop.proposal.v1"),
   id: NonEmptyString,
   kind: SkillProposalKindSchema,
   status: SkillProposalStatusSchema,
@@ -717,7 +717,7 @@ export const SkillsProposalsListParamsSchema = closedObject({
 
 /** Proposal manifest response for dashboard/workshop list views. */
 export const SkillsProposalsListResultSchema = closedObject({
-  schema: Type.Literal("openclaw.skill-workshop.proposals-manifest.v1"),
+  schema: Type.Literal("natesclaw.skill-workshop.proposals-manifest.v1"),
   updatedAt: NonEmptyString,
   proposals: Type.Array(SkillProposalManifestEntrySchema),
 });

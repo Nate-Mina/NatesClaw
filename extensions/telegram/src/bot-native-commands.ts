@@ -7,13 +7,13 @@ import {
   resolveAgentDir,
   resolveDefaultModelForAgent,
   resolveThinkingDefaultWithRuntimeCatalog,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "natesclaw/plugin-sdk/agent-runtime";
 import {
   isChannelPartialDeliveryError,
   type ChannelInboundTurnPlan,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelStreamingBlockEnabled } from "openclaw/plugin-sdk/channel-outbound";
-import { resolveNativeCommandSessionTargets } from "openclaw/plugin-sdk/command-auth-native";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { resolveChannelStreamingBlockEnabled } from "natesclaw/plugin-sdk/channel-outbound";
+import { resolveNativeCommandSessionTargets } from "natesclaw/plugin-sdk/command-auth-native";
 import {
   buildCommandTextFromArgs,
   findCommandByNativeName,
@@ -27,38 +27,38 @@ import {
   resolveFastModeState,
   resolveStoredModelOverride,
   type CommandArgs,
-} from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ChannelGroupPolicy } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/command-auth-native";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ChannelGroupPolicy } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   ReplyToMode,
   TelegramAccountConfig,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
+} from "natesclaw/plugin-sdk/config-contracts";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { resolveMarkdownTableMode } from "natesclaw/plugin-sdk/markdown-table-runtime";
 import {
   createPluginCommandRuntime,
   PLUGIN_COMMAND_DISPATCH,
   type PluginCommandCatalogDecision,
-} from "openclaw/plugin-sdk/plugin-command-runtime";
-import { codexChannelLoginRuntime } from "openclaw/plugin-sdk/provider-auth-login-flow-runtime";
-import { hasOutboundReplyContent } from "openclaw/plugin-sdk/reply-payload";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/plugin-command-runtime";
+import { codexChannelLoginRuntime } from "natesclaw/plugin-sdk/provider-auth-login-flow-runtime";
+import { hasOutboundReplyContent } from "natesclaw/plugin-sdk/reply-payload";
+import { resolveAgentRoute } from "natesclaw/plugin-sdk/routing";
+import { danger, logVerbose } from "natesclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import {
   formatSqliteSessionFileMarker,
   getSessionEntry,
   resolveStorePath,
   type SessionEntry,
   updateSessionStoreEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { escapeHtml } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { escapeHtml } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { expandTelegramAllowFromWithAccessGroups } from "./access-groups.js";
 import { resolveTelegramAccount } from "./accounts.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
@@ -133,9 +133,9 @@ const activeTelegramCodexLoginFlows = codexChannelLoginRuntime.createFlowRegistr
 type TelegramNativeCommandContext = Context & { match?: string };
 
 type TelegramChunkMode = ReturnType<
-  typeof import("openclaw/plugin-sdk/reply-dispatch-runtime").resolveChunkMode
+  typeof import("natesclaw/plugin-sdk/reply-dispatch-runtime").resolveChunkMode
 >;
-type TelegramNativeReplyPayload = import("openclaw/plugin-sdk/plugin-entry").PluginCommandResult;
+type TelegramNativeReplyPayload = import("natesclaw/plugin-sdk/plugin-entry").PluginCommandResult;
 type TelegramNativeReplyChannelData = {
   buttons?: TelegramInlineButtons;
   pin?: boolean;
@@ -260,7 +260,7 @@ function resolveTelegramCommandSessionFile(params: {
 }
 
 async function resolveTelegramCommandTranscriptContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
   threadId?: string | number;
@@ -294,7 +294,7 @@ async function resolveTelegramCommandTranscriptContext(params: {
 }
 
 function resolveTelegramCommandMenuModelContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
 }): TelegramCommandMenuModelContext {
@@ -363,7 +363,7 @@ function resolveTelegramCommandMenuModelContext(params: {
 }
 
 function resolveTelegramFastCommandModelContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
 }): {
@@ -403,7 +403,7 @@ function resolveTelegramFastCommandModelContext(params: {
 }
 
 function resolveTelegramFastCommandState(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
 }): FastModeState {
@@ -443,7 +443,7 @@ function resolveTelegramFastCommandState(params: {
 }
 
 async function resolveTelegramThinkMenuCurrentLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   provider?: string;
   model?: string;
@@ -613,18 +613,18 @@ function resolveTelegramNativeCommandDisableBlockStreaming(
 
 type RegisterTelegramNativeCommandsParams = {
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   runtime: RuntimeEnv;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
   mediaMaxBytes?: number;
   nativeEnabled: boolean;
   nativeSkillsEnabled: boolean;
-  resolveGroupPolicy: (chatId: string | number, cfg: OpenClawConfig) => ChannelGroupPolicy;
+  resolveGroupPolicy: (chatId: string | number, cfg: NatesclawConfig) => ChannelGroupPolicy;
   resolveTelegramGroupConfig: (
     chatId: string | number,
     messageThreadId: number | undefined,
-    cfg: OpenClawConfig,
+    cfg: NatesclawConfig,
   ) => TelegramResolvedGroupConfig;
   shouldSkipUpdate: (ctx: TelegramUpdateKeyContext) => boolean;
   telegramDeps?: TelegramNativeCommandDeps;
@@ -637,17 +637,17 @@ type RegisterTelegramNativeCommandsParams = {
 async function resolveTelegramCommandAuth(params: {
   msg: NonNullable<TelegramNativeCommandContext["message"]>;
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
   readChannelAllowFromStore: TelegramBotDeps["readChannelAllowFromStore"];
   allowFrom?: Array<string | number>;
   groupAllowFrom?: Array<string | number>;
-  resolveGroupPolicy: (chatId: string | number, cfg: OpenClawConfig) => ChannelGroupPolicy;
+  resolveGroupPolicy: (chatId: string | number, cfg: NatesclawConfig) => ChannelGroupPolicy;
   resolveTelegramGroupConfig: (
     chatId: string | number,
     messageThreadId: number | undefined,
-    cfg: OpenClawConfig,
+    cfg: NatesclawConfig,
   ) => TelegramResolvedGroupConfig;
   requireAuth: boolean;
 }): Promise<TelegramCommandAuthResult | null> {
@@ -970,8 +970,8 @@ export const registerTelegramNativeCommands = ({
     : loginCommand
       ? [loginCommand]
       : [];
-  const loadFreshRuntimeConfig = (): OpenClawConfig => telegramDeps.getRuntimeConfig();
-  const resolveFreshTelegramConfig = (runtimeCfg: OpenClawConfig): TelegramAccountConfig =>
+  const loadFreshRuntimeConfig = (): NatesclawConfig => telegramDeps.getRuntimeConfig();
+  const resolveFreshTelegramConfig = (runtimeCfg: NatesclawConfig): TelegramAccountConfig =>
     resolveTelegramAccount({ cfg: runtimeCfg, accountId }).config;
   const {
     commandsToRegister,
@@ -1014,7 +1014,7 @@ export const registerTelegramNativeCommands = ({
 
   const resolveCommandRuntimeContext = async (params: {
     msg: NonNullable<TelegramNativeCommandContext["message"]>;
-    runtimeCfg: OpenClawConfig;
+    runtimeCfg: NatesclawConfig;
     isGroup: boolean;
     isForum: boolean;
     resolvedThreadId?: number;
@@ -1082,7 +1082,7 @@ export const registerTelegramNativeCommands = ({
     return { chatId, threadSpec, route, mediaLocalRoots, tableMode, chunkMode };
   };
   const buildCommandDeliveryBaseOptions = (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     chatId: string | number;
     accountId: string;
     sessionKeyForInternalHooks?: string;
@@ -1119,7 +1119,7 @@ export const registerTelegramNativeCommands = ({
     richMessages: params.richMessages,
   });
   const resolveCommandTargetSessionKey = (params: {
-    runtimeCfg: OpenClawConfig;
+    runtimeCfg: NatesclawConfig;
     route: ReturnType<typeof resolveTelegramConversationRoute>["route"];
     chatId: number;
     isGroup: boolean;
@@ -1262,7 +1262,7 @@ export const registerTelegramNativeCommands = ({
             !codexChannelLoginRuntime.hasConfiguredCommandOwnerAllowlist(runtimeCfg)
           ) {
             await sendLoginMessage(
-              "Only a configured OpenClaw owner can start Codex login from Telegram.",
+              "Only a configured Natesclaw owner can start Codex login from Telegram.",
             );
             return false;
           }

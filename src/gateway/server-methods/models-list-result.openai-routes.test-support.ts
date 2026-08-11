@@ -1,13 +1,13 @@
 import { vi } from "vitest";
 import type { ModelCatalogEntry } from "../../agents/model-catalog.types.js";
 import type { createOpenAIModelRoutesResolver } from "../../agents/openai-model-routes.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { buildModelsListResult } from "./models-list-result.js";
 import type { GatewayRequestContext } from "./types.js";
 
 export const WITHOUT_OPENAI_ENV_AUTH = {
   CODEX_API_KEY: undefined,
-  CODEX_HOME: "/__openclaw_models_list_test__/codex",
+  CODEX_HOME: "/__natesclaw_models_list_test__/codex",
   OPENAI_API_KEY: undefined,
   OPENAI_BASE_URL: undefined,
   OPENAI_OAUTH_TOKEN: undefined,
@@ -24,12 +24,12 @@ export function providerCatalogEntry(provider: string, id: string): ModelCatalog
 
 export async function listModels(params: {
   catalog: ModelCatalogEntry[];
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   discoveryModes?: Record<string, "refreshable" | "runtime" | "static">;
   routeResolverFactory?: typeof createOpenAIModelRoutesResolver;
   view?: "all" | "configured" | "provider-config" | "default";
 }) {
-  const config = params.cfg ?? ({} as OpenClawConfig);
+  const config = params.cfg ?? ({} as NatesclawConfig);
   const context = {
     getRuntimeConfig: () => config,
     loadGatewayModelCatalog: vi.fn(() => Promise.resolve(params.catalog)),

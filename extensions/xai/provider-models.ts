@@ -2,12 +2,12 @@
 import type {
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeModelCompat } from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { normalizeModelCompat } from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveXaiCatalogEntry, XAI_BASE_URL } from "./model-definitions.js";
 import { normalizeXaiModelId, XAI_OAUTH_AUTO_MODEL_ID } from "./model-id.js";
 import { applyXaiRuntimeModelCompat } from "./runtime-model-compat.js";

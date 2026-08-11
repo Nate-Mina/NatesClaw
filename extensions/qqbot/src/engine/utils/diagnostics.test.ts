@@ -32,16 +32,16 @@ describe("QQBot startup diagnostics", () => {
     const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), "qqbot-diagnostics-"));
     tempRoots.push(testRoot);
     const windowsHome = path.join(testRoot, "Users", "张 家豪");
-    const openclawHome = path.join(testRoot, "OpenClaw Home");
+    const natesclawHome = path.join(testRoot, "Natesclaw Home");
     fs.mkdirSync(windowsHome, { recursive: true });
-    fs.mkdirSync(openclawHome, { recursive: true });
+    fs.mkdirSync(natesclawHome, { recursive: true });
     vi.stubEnv("HOME", windowsHome);
     vi.stubEnv("USERPROFILE", windowsHome);
-    vi.stubEnv("OPENCLAW_HOME", openclawHome);
+    vi.stubEnv("NATESCLAW_HOME", natesclawHome);
 
-    const legacyDataDir = path.join(windowsHome, ".openclaw", "qqbot");
+    const legacyDataDir = path.join(windowsHome, ".natesclaw", "qqbot");
     platformMocks.getHomeDir.mockReturnValue(windowsHome);
-    platformMocks.getTempDir.mockReturnValue(path.join(openclawHome, "tmp"));
+    platformMocks.getTempDir.mockReturnValue(path.join(natesclawHome, "tmp"));
     platformMocks.getQQBotDataDir.mockImplementation(() => {
       fs.mkdirSync(legacyDataDir, { recursive: true });
       return legacyDataDir;

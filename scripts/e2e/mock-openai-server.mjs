@@ -16,8 +16,8 @@ import {
 const port =
   process.env.MOCK_PORT != null
     ? readTcpPortEnv("MOCK_PORT")
-    : readTcpPortEnv("OPENCLAW_MOCK_OPENAI_PORT");
-const successMarker = process.env.SUCCESS_MARKER ?? "OPENCLAW_E2E_OK";
+    : readTcpPortEnv("NATESCLAW_MOCK_OPENAI_PORT");
+const successMarker = process.env.SUCCESS_MARKER ?? "NATESCLAW_E2E_OK";
 const requestLog = process.env.MOCK_REQUEST_LOG;
 const responseChunkDelayMs = process.env.MOCK_RESPONSE_CHUNK_DELAY_MS
   ? readPositiveIntEnv("MOCK_RESPONSE_CHUNK_DELAY_MS", undefined)
@@ -233,7 +233,7 @@ function preambleThenToolCallEvents(preamble, name, args) {
 /** Two-turn draft scenario: preamble + shell call, then a final answer. */
 function progressDraftEvents(body, bodyText) {
   const allText = collectText(body).join("\n");
-  if (!allText.includes("OPENCLAW_E2E_DRAFTPROOF")) {
+  if (!allText.includes("NATESCLAW_E2E_DRAFTPROOF")) {
     return null;
   }
   if (!collectFunctionCallOutputText(body)) {
@@ -241,10 +241,10 @@ function progressDraftEvents(body, bodyText) {
       return null;
     }
     return preambleThenToolCallEvents("Checking the workspace before answering.", "exec", {
-      command: ["bash", "-lc", "sleep 3 && echo openclaw-draft-proof"],
+      command: ["bash", "-lc", "sleep 3 && echo natesclaw-draft-proof"],
     });
   }
-  return responseEvents("OPENCLAW_E2E_DRAFTPROOF");
+  return responseEvents("NATESCLAW_E2E_DRAFTPROOF");
 }
 
 function toolCallEvents(name, args) {
@@ -388,14 +388,14 @@ function writeImageGeneration(res) {
         b64_json:
           "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+yf7kAAAAASUVORK5CYII=",
         mime_type: "image/png",
-        revised_prompt: "openclaw mock image",
+        revised_prompt: "natesclaw mock image",
       },
     ],
   });
 }
 
 function resolveResponseText(bodyText) {
-  const matches = Array.from(bodyText.matchAll(/\bOPENCLAW_E2E_[A-Z0-9]+(?:_[A-Z0-9]+)*\b/gu));
+  const matches = Array.from(bodyText.matchAll(/\bNATESCLAW_E2E_[A-Z0-9]+(?:_[A-Z0-9]+)*\b/gu));
   return matches.at(-1)?.[0] ?? successMarker;
 }
 
@@ -533,7 +533,7 @@ const server = http.createServer((req, res) => {
     if (req.method === "GET" && url.pathname === "/v1/models") {
       writeJson(res, 200, {
         object: "list",
-        data: [{ id: "gpt-5.6-luna", object: "model", owned_by: "openclaw-e2e" }],
+        data: [{ id: "gpt-5.6-luna", object: "model", owned_by: "natesclaw-e2e" }],
       });
       return;
     }
@@ -615,7 +615,7 @@ const server = http.createServer((req, res) => {
       // Progress-draft proof needs assistant content followed by a tool call in
       // one streamed turn: the completions transport tags that leading text as
       // commentary, which channels render as the draft status headline.
-      if (bodyText.includes("OPENCLAW_E2E_DRAFTPROOF")) {
+      if (bodyText.includes("NATESCLAW_E2E_DRAFTPROOF")) {
         const messages = Array.isArray(body.messages) ? body.messages : [];
         const toolTurnDone = messages.some((message) => message?.role === "tool");
         if (!toolTurnDone) {
@@ -624,7 +624,7 @@ const server = http.createServer((req, res) => {
             body.stream !== false,
             "Checking the workspace before answering.",
             "exec",
-            { command: ["bash", "-lc", "sleep 3 && echo openclaw-draft-proof"] },
+            { command: ["bash", "-lc", "sleep 3 && echo natesclaw-draft-proof"] },
           );
           return;
         }
@@ -632,7 +632,7 @@ const server = http.createServer((req, res) => {
         // gate. Without this the whole turn finishes in well under a second and
         // no draft is created, which is correct behavior but proves nothing.
         await delay(readPositiveIntEnv("MOCK_DRAFTPROOF_FINAL_DELAY_MS", 6000));
-        writeChatCompletion(res, body.stream !== false, "OPENCLAW_E2E_DRAFTPROOF");
+        writeChatCompletion(res, body.stream !== false, "NATESCLAW_E2E_DRAFTPROOF");
         return;
       }
       const responseText = resolveResponseText(bodyText);

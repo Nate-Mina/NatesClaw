@@ -2,39 +2,39 @@
 set -euo pipefail
 
 SCRIPT_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ROOT_DIR="${OPENCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
+ROOT_DIR="${NATESCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
 ROOT_DIR="$(cd "$ROOT_DIR" && pwd)"
-TRUSTED_HARNESS_DIR="${OPENCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
+TRUSTED_HARNESS_DIR="${NATESCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
 if [[ -z "$TRUSTED_HARNESS_DIR" || ! -d "$TRUSTED_HARNESS_DIR" ]]; then
   echo "ERROR: trusted live Docker harness directory not found: ${TRUSTED_HARNESS_DIR:-<empty>}." >&2
   exit 1
 fi
 TRUSTED_HARNESS_DIR="$(cd "$TRUSTED_HARNESS_DIR" && pwd)"
 source "$TRUSTED_HARNESS_DIR/scripts/lib/live-docker-auth.sh"
-IMAGE_NAME="${OPENCLAW_IMAGE:-openclaw:local}"
-LIVE_IMAGE_NAME="${OPENCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
-CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-$HOME/.openclaw}"
-WORKSPACE_DIR="${OPENCLAW_WORKSPACE_DIR:-$HOME/.openclaw/workspace}"
-PROFILE_FILE="$(openclaw_live_default_profile_file)"
-ACP_AGENT_LIST_RAW="${OPENCLAW_LIVE_ACP_BIND_AGENTS:-${OPENCLAW_LIVE_ACP_BIND_AGENT:-claude,codex,gemini}}"
-ACP_CLAUDE_AUTH_MODE="${OPENCLAW_LIVE_ACP_BIND_CLAUDE_AUTH:-auto}"
-ACP_SETUP_TIMEOUT_SECONDS="$(openclaw_live_read_positive_int_env OPENCLAW_LIVE_ACP_BIND_SETUP_TIMEOUT_SECONDS 180)"
+IMAGE_NAME="${NATESCLAW_IMAGE:-natesclaw:local}"
+LIVE_IMAGE_NAME="${NATESCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
+CONFIG_DIR="${NATESCLAW_CONFIG_DIR:-$HOME/.natesclaw}"
+WORKSPACE_DIR="${NATESCLAW_WORKSPACE_DIR:-$HOME/.natesclaw/workspace}"
+PROFILE_FILE="$(natesclaw_live_default_profile_file)"
+ACP_AGENT_LIST_RAW="${NATESCLAW_LIVE_ACP_BIND_AGENTS:-${NATESCLAW_LIVE_ACP_BIND_AGENT:-claude,codex,gemini}}"
+ACP_CLAUDE_AUTH_MODE="${NATESCLAW_LIVE_ACP_BIND_CLAUDE_AUTH:-auto}"
+ACP_SETUP_TIMEOUT_SECONDS="$(natesclaw_live_read_positive_int_env NATESCLAW_LIVE_ACP_BIND_SETUP_TIMEOUT_SECONDS 180)"
 DOCKER_TRUSTED_HARNESS_CONTAINER_DIR="/trusted-harness"
 DOCKER_TRUSTED_HARNESS_MOUNT=(-v "$TRUSTED_HARNESS_DIR":"$DOCKER_TRUSTED_HARNESS_CONTAINER_DIR":ro)
 
-openclaw_live_acp_bind_append_build_extension() {
+natesclaw_live_acp_bind_append_build_extension() {
   local extension="${1:?extension required}"
-  local current="${OPENCLAW_DOCKER_BUILD_EXTENSIONS:-${OPENCLAW_EXTENSIONS:-}}"
+  local current="${NATESCLAW_DOCKER_BUILD_EXTENSIONS:-${NATESCLAW_EXTENSIONS:-}}"
   case " $current " in
     *" $extension "*)
       ;;
     *)
-      export OPENCLAW_DOCKER_BUILD_EXTENSIONS="${current:+$current }$extension"
+      export NATESCLAW_DOCKER_BUILD_EXTENSIONS="${current:+$current }$extension"
       ;;
   esac
 }
 
-openclaw_live_acp_bind_resolve_auth_provider() {
+natesclaw_live_acp_bind_resolve_auth_provider() {
   case "${1:-}" in
     claude) printf '%s\n' "claude-cli" ;;
     codex) printf '%s\n' "codex-cli" ;;
@@ -42,19 +42,19 @@ openclaw_live_acp_bind_resolve_auth_provider() {
     gemini) printf '%s\n' "google-gemini-cli" ;;
     opencode) printf '%s\n' "opencode" ;;
     *)
-      echo "Unsupported OPENCLAW_LIVE_ACP_BIND agent: ${1:-} (expected claude, codex, droid, gemini, or opencode)" >&2
+      echo "Unsupported NATESCLAW_LIVE_ACP_BIND agent: ${1:-} (expected claude, codex, droid, gemini, or opencode)" >&2
       return 1
       ;;
   esac
 }
 
-openclaw_live_acp_bind_resolve_agent_command() {
+natesclaw_live_acp_bind_resolve_agent_command() {
   case "${1:-}" in
-    claude) printf '%s' "${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CLAUDE:-${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    codex) printf '%s' "${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CODEX:-${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    droid) printf '%s' "${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND_DROID:-${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    gemini) printf '%s' "${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND_GEMINI:-${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    opencode) printf '%s' "${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND_OPENCODE:-${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    claude) printf '%s' "${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CLAUDE:-${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    codex) printf '%s' "${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CODEX:-${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    droid) printf '%s' "${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND_DROID:-${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    gemini) printf '%s' "${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND_GEMINI:-${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    opencode) printf '%s' "${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND_OPENCODE:-${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
     *) return 1 ;;
   esac
 }
@@ -63,15 +63,15 @@ case "$ACP_CLAUDE_AUTH_MODE" in
   auto | api-key | subscription)
     ;;
   *)
-    echo "ERROR: OPENCLAW_LIVE_ACP_BIND_CLAUDE_AUTH must be one of: auto, api-key, subscription." >&2
+    echo "ERROR: NATESCLAW_LIVE_ACP_BIND_CLAUDE_AUTH must be one of: auto, api-key, subscription." >&2
     exit 1
     ;;
 esac
 
-openclaw_live_init_temp_dirs
-openclaw_live_init_cli_tools_dir
-openclaw_live_init_cache_home_dir
-openclaw_live_acp_bind_load_factory_api_key_from_profile() {
+natesclaw_live_init_temp_dirs
+natesclaw_live_init_cli_tools_dir
+natesclaw_live_init_cache_home_dir
+natesclaw_live_acp_bind_load_factory_api_key_from_profile() {
   [[ -z "${FACTORY_API_KEY:-}" ]] || return 0
   [[ -f "$PROFILE_FILE" && -r "$PROFILE_FILE" ]] || return 0
   [[ "$PROFILE_FILE" != "$HOME/.profile" ]] || return 0
@@ -103,19 +103,19 @@ export npm_config_cache="$NPM_CONFIG_CACHE"
 mkdir -p "$NPM_CONFIG_PREFIX" "$HOME/.local/bin" "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE"
 chmod 700 "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE" || true
 export PATH="$HOME/.local/bin:$NPM_CONFIG_PREFIX/bin:$PATH"
-trusted_scripts_dir="${OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
+trusted_scripts_dir="${NATESCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
 source "$trusted_scripts_dir/lib/live-docker-stage.sh"
-openclaw_live_stage_mounted_auth
+natesclaw_live_stage_mounted_auth
 run_setup_command() {
-  openclaw_live_run_setup_command \
-    "${OPENCLAW_LIVE_ACP_BIND_SETUP_TIMEOUT_SECONDS:?missing live ACP bind setup timeout seconds}" \
+  natesclaw_live_run_setup_command \
+    "${NATESCLAW_LIVE_ACP_BIND_SETUP_TIMEOUT_SECONDS:?missing live ACP bind setup timeout seconds}" \
     "live ACP bind setup" \
     "$@"
 }
-agent="${OPENCLAW_LIVE_ACP_BIND_AGENT:-claude}"
+agent="${NATESCLAW_LIVE_ACP_BIND_AGENT:-claude}"
 case "$agent" in
   claude)
-    claude_auth_mode="${OPENCLAW_LIVE_ACP_BIND_CLAUDE_AUTH:-auto}"
+    claude_auth_mode="${NATESCLAW_LIVE_ACP_BIND_CLAUDE_AUTH:-auto}"
     if [ "$claude_auth_mode" = "subscription" ]; then
       unset ANTHROPIC_API_KEY
       unset ANTHROPIC_API_KEY_OLD
@@ -146,15 +146,15 @@ case "$agent" in
       cat > "$NPM_CONFIG_PREFIX/bin/claude" <<WRAP
 #!/usr/bin/env bash
 script_dir="\$(CDPATH= cd -- "\$(dirname -- "\$0")" && pwd)"
-if [ "\${OPENCLAW_LIVE_ACP_BIND_CLAUDE_AUTH:-auto}" = "subscription" ]; then
+if [ "\${NATESCLAW_LIVE_ACP_BIND_CLAUDE_AUTH:-auto}" = "subscription" ]; then
   unset ANTHROPIC_API_KEY ANTHROPIC_API_KEY_OLD ANTHROPIC_API_TOKEN
   unset ANTHROPIC_AUTH_TOKEN ANTHROPIC_OAUTH_TOKEN
 else
-  if [ -n "\${OPENCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY:-}" ]; then
-    export ANTHROPIC_API_KEY="\${OPENCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY}"
+  if [ -n "\${NATESCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY:-}" ]; then
+    export ANTHROPIC_API_KEY="\${NATESCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY}"
   fi
-  if [ -n "\${OPENCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD:-}" ]; then
-    export ANTHROPIC_API_KEY_OLD="\${OPENCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD}"
+  if [ -n "\${NATESCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD:-}" ]; then
+    export ANTHROPIC_API_KEY_OLD="\${NATESCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD}"
   fi
 fi
 exec "\$script_dir/claude-real" "\$@"
@@ -219,54 +219,54 @@ NODE
       run_setup_command npm install -g opencode-ai
     fi
     export OPENCODE_CONFIG_CONTENT="$(
-      node -e 'process.stdout.write(JSON.stringify({model: process.env.OPENCLAW_LIVE_ACP_BIND_OPENCODE_MODEL || "opencode/kimi-k2.6"}))'
+      node -e 'process.stdout.write(JSON.stringify({model: process.env.NATESCLAW_LIVE_ACP_BIND_OPENCODE_MODEL || "opencode/kimi-k2.6"}))'
     )"
     ;;
   *)
-    echo "Unsupported OPENCLAW_LIVE_ACP_BIND_AGENT: $agent" >&2
+    echo "Unsupported NATESCLAW_LIVE_ACP_BIND_AGENT: $agent" >&2
     exit 1
     ;;
 esac
 tmp_dir="$(mktemp -d)"
-openclaw_live_stage_source_tree "$tmp_dir"
-openclaw_live_stage_node_modules "$tmp_dir"
-openclaw_live_link_runtime_tree "$tmp_dir"
-openclaw_live_stage_state_dir "$tmp_dir/.openclaw-state"
-openclaw_live_prepare_staged_config
+natesclaw_live_stage_source_tree "$tmp_dir"
+natesclaw_live_stage_node_modules "$tmp_dir"
+natesclaw_live_link_runtime_tree "$tmp_dir"
+natesclaw_live_stage_state_dir "$tmp_dir/.natesclaw-state"
+natesclaw_live_prepare_staged_config
 cd "$tmp_dir"
-export OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND="${OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}"
-node --import tsx scripts/test-live.mts -- ${OPENCLAW_LIVE_ACP_BIND_TEST_FILES:-src/gateway/gateway-acp-bind.live.test.ts}
+export NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND="${NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}"
+node --import tsx scripts/test-live.mts -- ${NATESCLAW_LIVE_ACP_BIND_TEST_FILES:-src/gateway/gateway-acp-bind.live.test.ts}
 EOF
 
-openclaw_live_acp_bind_append_build_extension acpx
-OPENCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
+natesclaw_live_acp_bind_append_build_extension acpx
+NATESCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
 
 IFS=',' read -r -a ACP_AGENT_TOKENS <<<"$ACP_AGENT_LIST_RAW"
 ACP_AGENTS=()
 for token in "${ACP_AGENT_TOKENS[@]}"; do
-  agent="$(openclaw_live_trim "$token")"
+  agent="$(natesclaw_live_trim "$token")"
   [[ -n "$agent" ]] || continue
-  openclaw_live_acp_bind_resolve_auth_provider "$agent" >/dev/null
+  natesclaw_live_acp_bind_resolve_auth_provider "$agent" >/dev/null
   ACP_AGENTS+=("$agent")
 done
 
 if ((${#ACP_AGENTS[@]} == 0)); then
-  echo "No ACP bind agents selected. Use OPENCLAW_LIVE_ACP_BIND_AGENTS=claude,codex,droid,gemini,opencode." >&2
+  echo "No ACP bind agents selected. Use NATESCLAW_LIVE_ACP_BIND_AGENTS=claude,codex,droid,gemini,opencode." >&2
   exit 1
 fi
 
 for ACP_AGENT in "${ACP_AGENTS[@]}"; do
-  AUTH_PROVIDER="$(openclaw_live_acp_bind_resolve_auth_provider "$ACP_AGENT")"
-  AGENT_COMMAND="$(openclaw_live_acp_bind_resolve_agent_command "$ACP_AGENT")"
+  AUTH_PROVIDER="$(natesclaw_live_acp_bind_resolve_auth_provider "$ACP_AGENT")"
+  AGENT_COMMAND="$(natesclaw_live_acp_bind_resolve_agent_command "$ACP_AGENT")"
 
-  openclaw_live_collect_auth_for_providers "$AUTH_PROVIDER"
+  natesclaw_live_collect_auth_for_providers "$AUTH_PROVIDER"
   DOCKER_AUTH_PRESTAGED=0
-  openclaw_live_init_managed_home
-  openclaw_live_init_profile_mount
-  openclaw_live_finalize_auth_mounts
+  natesclaw_live_init_managed_home
+  natesclaw_live_init_profile_mount
+  natesclaw_live_finalize_auth_mounts
 
   if [[ "$ACP_AGENT" == "droid" ]]; then
-    openclaw_live_acp_bind_load_factory_api_key_from_profile
+    natesclaw_live_acp_bind_load_factory_api_key_from_profile
   fi
   if [[ "$ACP_AGENT" == "droid" && -z "${FACTORY_API_KEY:-}" ]]; then
     echo "==> Run ACP bind live test in Docker"
@@ -288,15 +288,15 @@ for ACP_AGENT in "${ACP_AGENTS[@]}"; do
 
   echo "==> Run ACP bind live test in Docker"
   echo "==> Agent: $ACP_AGENT"
-  echo "==> Test files: ${OPENCLAW_LIVE_ACP_BIND_TEST_FILES:-src/gateway/gateway-acp-bind.live.test.ts}"
+  echo "==> Test files: ${NATESCLAW_LIVE_ACP_BIND_TEST_FILES:-src/gateway/gateway-acp-bind.live.test.ts}"
   echo "==> Profile file: $PROFILE_STATUS"
   echo "==> Auth dirs: ${AUTH_DIRS_CSV:-none}"
   echo "==> Auth files: ${AUTH_FILES_CSV:-none}"
   if [[ "$ACP_AGENT" == "claude" ]]; then
     echo "==> Claude auth mode: $CLAUDE_AUTH_MODE"
   fi
-  if openclaw_live_uses_managed_bind_dirs; then
-    openclaw_live_chown_bind_dirs_for_container_user \
+  if natesclaw_live_uses_managed_bind_dirs; then
+    natesclaw_live_chown_bind_dirs_for_container_user \
       "$LIVE_IMAGE_NAME" \
       "$DOCKER_USER" \
       "$CLI_TOOLS_DIR" \
@@ -304,20 +304,20 @@ for ACP_AGENT in "${ACP_AGENTS[@]}"; do
       "${DOCKER_HOME_DIR:-}"
   fi
   DOCKER_RUN_ARGS=()
-  openclaw_live_init_docker_run_args DOCKER_RUN_ARGS "${OPENCLAW_LIVE_ACP_BIND_DOCKER_RUN_TIMEOUT:-2700s}"
+  natesclaw_live_init_docker_run_args DOCKER_RUN_ARGS "${NATESCLAW_LIVE_ACP_BIND_DOCKER_RUN_TIMEOUT:-2700s}"
   DOCKER_AUTH_ENV=()
   if [[ "$ACP_AGENT" == "claude" && "$CLAUDE_AUTH_MODE" == "subscription" ]]; then
     DOCKER_AUTH_ENV+=(
       -e CLAUDE_CODE_OAUTH_TOKEN="${CLAUDE_CODE_OAUTH_TOKEN:-}"
-      -e OPENCLAW_LIVE_ACP_BIND_CLAUDE_AUTH="$CLAUDE_AUTH_MODE"
+      -e NATESCLAW_LIVE_ACP_BIND_CLAUDE_AUTH="$CLAUDE_AUTH_MODE"
     )
   elif [[ "$ACP_AGENT" == "claude" ]]; then
     DOCKER_AUTH_ENV+=(
       -e ANTHROPIC_API_KEY
       -e ANTHROPIC_API_KEY_OLD
-      -e OPENCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
-      -e OPENCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}"
-      -e OPENCLAW_LIVE_ACP_BIND_CLAUDE_AUTH="$CLAUDE_AUTH_MODE"
+      -e NATESCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
+      -e NATESCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}"
+      -e NATESCLAW_LIVE_ACP_BIND_CLAUDE_AUTH="$CLAUDE_AUTH_MODE"
     )
   fi
   DOCKER_RUN_ARGS+=(--rm -t \
@@ -335,40 +335,40 @@ for ACP_AGENT in "${ACP_AGENTS[@]}"; do
     -e OPENCODE_CONFIG_CONTENT \
     -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
     -e HOME=/home/node \
-    -e NODE_OPTIONS="$(openclaw_live_container_node_options)" \
-    -e OPENCLAW_SKIP_CHANNELS=1 \
-    -e OPENCLAW_VITEST_FS_MODULE_CACHE=0 \
-    -e OPENCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
-    -e OPENCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
-    -e OPENCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
-    -e OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
-    -e OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
-    -e OPENCLAW_LIVE_TEST=1 \
-    -e OPENCLAW_LIVE_ACP_BIND=1 \
-    -e OPENCLAW_LIVE_ACP_BIND_AGENT="$ACP_AGENT" \
-    -e OPENCLAW_LIVE_ACP_BIND_REQUIRE_CRON="${OPENCLAW_LIVE_ACP_BIND_REQUIRE_CRON:-}" \
-    -e OPENCLAW_LIVE_ACP_BIND_TEST_FILES="${OPENCLAW_LIVE_ACP_BIND_TEST_FILES:-}" \
-    -e OPENCLAW_LIVE_ACP_BIND_CODEX_MODEL="${OPENCLAW_LIVE_ACP_BIND_CODEX_MODEL:-}" \
-    -e OPENCLAW_LIVE_ACP_BIND_SETUP_TIMEOUT_SECONDS="$ACP_SETUP_TIMEOUT_SECONDS" \
-    -e OPENCLAW_LIVE_ACP_BIND_OPENCODE_MODEL="${OPENCLAW_LIVE_ACP_BIND_OPENCODE_MODEL:-opencode/kimi-k2.6}" \
-    -e OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS="${OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS:-}" \
-    -e OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_AGENT="${OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_AGENT:-}" \
-    -e OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_CONNECT_TIMEOUT_MS="${OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_CONNECT_TIMEOUT_MS:-}" \
-    -e OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_MODEL="${OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_MODEL:-}" \
-    -e OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_THINKING="${OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_THINKING:-}" \
-    -e OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_TIMEOUT_MS="${OPENCLAW_LIVE_ACP_SPAWN_DEFAULTS_TIMEOUT_MS:-}" \
-    -e OPENCLAW_LIVE_ACP_BIND_AGENT_COMMAND="$AGENT_COMMAND")
-  openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
-  openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
-  openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
+    -e NODE_OPTIONS="$(natesclaw_live_container_node_options)" \
+    -e NATESCLAW_SKIP_CHANNELS=1 \
+    -e NATESCLAW_VITEST_FS_MODULE_CACHE=0 \
+    -e NATESCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
+    -e NATESCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
+    -e NATESCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
+    -e NATESCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
+    -e NATESCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${NATESCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
+    -e NATESCLAW_LIVE_TEST=1 \
+    -e NATESCLAW_LIVE_ACP_BIND=1 \
+    -e NATESCLAW_LIVE_ACP_BIND_AGENT="$ACP_AGENT" \
+    -e NATESCLAW_LIVE_ACP_BIND_REQUIRE_CRON="${NATESCLAW_LIVE_ACP_BIND_REQUIRE_CRON:-}" \
+    -e NATESCLAW_LIVE_ACP_BIND_TEST_FILES="${NATESCLAW_LIVE_ACP_BIND_TEST_FILES:-}" \
+    -e NATESCLAW_LIVE_ACP_BIND_CODEX_MODEL="${NATESCLAW_LIVE_ACP_BIND_CODEX_MODEL:-}" \
+    -e NATESCLAW_LIVE_ACP_BIND_SETUP_TIMEOUT_SECONDS="$ACP_SETUP_TIMEOUT_SECONDS" \
+    -e NATESCLAW_LIVE_ACP_BIND_OPENCODE_MODEL="${NATESCLAW_LIVE_ACP_BIND_OPENCODE_MODEL:-opencode/kimi-k2.6}" \
+    -e NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS="${NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS:-}" \
+    -e NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_AGENT="${NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_AGENT:-}" \
+    -e NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_CONNECT_TIMEOUT_MS="${NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_CONNECT_TIMEOUT_MS:-}" \
+    -e NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_MODEL="${NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_MODEL:-}" \
+    -e NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_THINKING="${NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_THINKING:-}" \
+    -e NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_TIMEOUT_MS="${NATESCLAW_LIVE_ACP_SPAWN_DEFAULTS_TIMEOUT_MS:-}" \
+    -e NATESCLAW_LIVE_ACP_BIND_AGENT_COMMAND="$AGENT_COMMAND")
+  natesclaw_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
+  natesclaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
+  natesclaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
   DOCKER_RUN_ARGS+=(\
     -v "$CACHE_HOME_DIR":/home/node/.cache \
     -v "$ROOT_DIR":/src:ro \
-    -v "$CONFIG_DIR":/home/node/.openclaw \
-    -v "$WORKSPACE_DIR":/home/node/.openclaw/workspace \
+    -v "$CONFIG_DIR":/home/node/.natesclaw \
+    -v "$WORKSPACE_DIR":/home/node/.natesclaw/workspace \
     -v "$CLI_TOOLS_DIR":/home/node/.npm-global)
-  openclaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
-  openclaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
+  natesclaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
+  natesclaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
   DOCKER_RUN_ARGS+=(\
     "$LIVE_IMAGE_NAME" \
     -lc "$LIVE_TEST_CMD")

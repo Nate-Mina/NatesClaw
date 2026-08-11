@@ -2,7 +2,7 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
+import { withTempHome } from "natesclaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 
 function runSourceCli(tempHome: string, args: string[], envOverrides: NodeJS.ProcessEnv = {}) {
@@ -10,11 +10,11 @@ function runSourceCli(tempHome: string, args: string[], envOverrides: NodeJS.Pro
     ...process.env,
     HOME: tempHome,
     USERPROFILE: tempHome,
-    OPENCLAW_TEST_FAST: "1",
+    NATESCLAW_TEST_FAST: "1",
   };
-  delete env.OPENCLAW_HOME;
-  delete env.OPENCLAW_STATE_DIR;
-  delete env.OPENCLAW_CONFIG_PATH;
+  delete env.NATESCLAW_HOME;
+  delete env.NATESCLAW_STATE_DIR;
+  delete env.NATESCLAW_CONFIG_PATH;
   delete env.VITEST;
   Object.assign(env, envOverrides);
 
@@ -38,30 +38,30 @@ describe("cli json stdout contract", () => {
     {
       name: "Commander config get",
       args: ["config", "get", "gateway.port", "--json"],
-      overrides: { OPENCLAW_DISABLE_ROUTE_FIRST: "1" },
+      overrides: { NATESCLAW_DISABLE_ROUTE_FIRST: "1" },
     },
     {
       name: "Nix config get",
       args: ["config", "get", "gateway.port", "--json"],
-      overrides: { OPENCLAW_NIX_MODE: "1" },
+      overrides: { NATESCLAW_NIX_MODE: "1" },
     },
     { name: "config schema", args: ["config", "schema"], overrides: {} },
     {
       name: "Nix config schema",
       args: ["config", "schema"],
-      overrides: { OPENCLAW_NIX_MODE: "1" },
+      overrides: { NATESCLAW_NIX_MODE: "1" },
     },
     { name: "config validate", args: ["config", "validate", "--json"], overrides: {} },
     {
       name: "Nix config validate",
       args: ["config", "validate", "--json"],
-      overrides: { OPENCLAW_NIX_MODE: "1" },
+      overrides: { NATESCLAW_NIX_MODE: "1" },
     },
   ])("does not initialize shared SQLite for $name", async (testCase) => {
     await withTempHome(
       async (tempHome) => {
         const stateDir = path.join(tempHome, "read-only-state");
-        const configPath = path.join(tempHome, "read-only-openclaw.json");
+        const configPath = path.join(tempHome, "read-only-natesclaw.json");
         await fs.writeFile(
           configPath,
           `${JSON.stringify({ gateway: { mode: "local", port: 18789 } })}\n`,
@@ -69,20 +69,20 @@ describe("cli json stdout contract", () => {
         );
 
         const result = runSourceCli(tempHome, testCase.args, {
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_STATE_DIR: stateDir,
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_STATE_DIR: stateDir,
           ...testCase.overrides,
         });
 
         expect(result.status, result.stderr).toBe(0);
         expect(() => JSON.parse(result.stdout)).not.toThrow();
         await expect(
-          fs.access(path.join(stateDir, "state", "openclaw.sqlite")),
+          fs.access(path.join(stateDir, "state", "natesclaw.sqlite")),
         ).rejects.toMatchObject({
           code: "ENOENT",
         });
       },
-      { prefix: "openclaw-read-only-config-e2e-" },
+      { prefix: "natesclaw-read-only-config-e2e-" },
     );
   });
 
@@ -90,21 +90,21 @@ describe("cli json stdout contract", () => {
     { name: "routed malformed config get", overrides: {} },
     {
       name: "Commander malformed config get",
-      overrides: { OPENCLAW_DISABLE_ROUTE_FIRST: "1" },
+      overrides: { NATESCLAW_DISABLE_ROUTE_FIRST: "1" },
     },
   ])("returns actionable JSON without creating state for $name", async (testCase) => {
     await withTempHome(
       async (tempHome) => {
         const stateDir = path.join(tempHome, "read-only-state");
-        const configPath = path.join(tempHome, "read-only-openclaw.json");
+        const configPath = path.join(tempHome, "read-only-natesclaw.json");
         await fs.writeFile(configPath, "{}\n", "utf8");
 
         const result = runSourceCli(
           tempHome,
           ["config", "get", "gateway.__proto__.token", "--json"],
           {
-            OPENCLAW_CONFIG_PATH: configPath,
-            OPENCLAW_STATE_DIR: stateDir,
+            NATESCLAW_CONFIG_PATH: configPath,
+            NATESCLAW_STATE_DIR: stateDir,
             ...testCase.overrides,
           },
         );
@@ -115,12 +115,12 @@ describe("cli json stdout contract", () => {
         });
         expect(result.stderr).toBe("");
         await expect(
-          fs.access(path.join(stateDir, "state", "openclaw.sqlite")),
+          fs.access(path.join(stateDir, "state", "natesclaw.sqlite")),
         ).rejects.toMatchObject({
           code: "ENOENT",
         });
       },
-      { prefix: "openclaw-read-only-invalid-config-e2e-" },
+      { prefix: "natesclaw-read-only-invalid-config-e2e-" },
     );
   });
 
@@ -128,13 +128,13 @@ describe("cli json stdout contract", () => {
     { name: "routed invalid config get", overrides: {} },
     {
       name: "Commander invalid config get",
-      overrides: { OPENCLAW_DISABLE_ROUTE_FIRST: "1" },
+      overrides: { NATESCLAW_DISABLE_ROUTE_FIRST: "1" },
     },
   ])("reports invalid configuration as JSON without creating state for $name", async (testCase) => {
     await withTempHome(
       async (tempHome) => {
         const stateDir = path.join(tempHome, "read-only-state");
-        const configPath = path.join(tempHome, "read-only-openclaw.json");
+        const configPath = path.join(tempHome, "read-only-natesclaw.json");
         await fs.writeFile(
           configPath,
           `${JSON.stringify({ gateway: { bind: "not-a-supported-mode" } })}\n`,
@@ -142,56 +142,56 @@ describe("cli json stdout contract", () => {
         );
 
         const result = runSourceCli(tempHome, ["config", "get", "gateway.port", "--json"], {
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_STATE_DIR: stateDir,
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_STATE_DIR: stateDir,
           ...testCase.overrides,
         });
 
         expect(result.status, result.stderr).toBe(1);
         expect(JSON.parse(result.stdout)).toMatchObject({
-          error: expect.stringContaining("OpenClaw config is invalid"),
+          error: expect.stringContaining("Natesclaw config is invalid"),
           issues: expect.arrayContaining([
             expect.objectContaining({ path: "gateway.bind", message: expect.any(String) }),
           ]),
         });
         expect(result.stderr).toBe("");
         await expect(
-          fs.access(path.join(stateDir, "state", "openclaw.sqlite")),
+          fs.access(path.join(stateDir, "state", "natesclaw.sqlite")),
         ).rejects.toMatchObject({
           code: "ENOENT",
         });
       },
-      { prefix: "openclaw-read-only-invalid-snapshot-e2e-" },
+      { prefix: "natesclaw-read-only-invalid-snapshot-e2e-" },
     );
   });
 
   it.each([
-    { name: "default service", inheritedProfile: undefined, inheritedStateName: ".openclaw" },
-    { name: "named service", inheritedProfile: "main", inheritedStateName: ".openclaw-main" },
+    { name: "default service", inheritedProfile: undefined, inheritedStateName: ".natesclaw" },
+    { name: "named service", inheritedProfile: "main", inheritedStateName: ".natesclaw-main" },
   ])("resolves the requested profile from inherited $name state", async (inherited) => {
     await withTempHome(
       async (tempHome) => {
         const inheritedStateDir = path.join(tempHome, inherited.inheritedStateName);
         const result = runSourceCli(tempHome, ["--profile", "work", "config", "file"], {
-          OPENCLAW_PROFILE: inherited.inheritedProfile,
-          OPENCLAW_STATE_DIR: inheritedStateDir,
-          OPENCLAW_CONFIG_PATH: path.join(inheritedStateDir, "openclaw.json"),
+          NATESCLAW_PROFILE: inherited.inheritedProfile,
+          NATESCLAW_STATE_DIR: inheritedStateDir,
+          NATESCLAW_CONFIG_PATH: path.join(inheritedStateDir, "natesclaw.json"),
         });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout.trim()).toBe(path.join(tempHome, ".openclaw-work", "openclaw.json"));
-        await expect(fs.access(path.join(tempHome, ".openclaw-work"))).rejects.toMatchObject({
+        expect(result.stdout.trim()).toBe(path.join(tempHome, ".natesclaw-work", "natesclaw.json"));
+        await expect(fs.access(path.join(tempHome, ".natesclaw-work"))).rejects.toMatchObject({
           code: "ENOENT",
         });
       },
-      { prefix: "openclaw-profile-isolation-e2e-" },
+      { prefix: "natesclaw-profile-isolation-e2e-" },
     );
   });
 
   it("keeps default-profile exec approvals untouched for a scratch-state config query", async () => {
     await withTempHome(
       async (tempHome) => {
-        const defaultStateDir = path.join(tempHome, ".openclaw");
+        const defaultStateDir = path.join(tempHome, ".natesclaw");
         const scratchStateDir = path.join(tempHome, "scratch-state");
         const approvalsPath = path.join(defaultStateDir, "exec-approvals.json");
         const approvals = '{"version":1,"approvals":{"demo":true}}\n';
@@ -200,11 +200,11 @@ describe("cli json stdout contract", () => {
         await fs.writeFile(approvalsPath, approvals, "utf8");
 
         const result = runSourceCli(tempHome, ["config", "file"], {
-          OPENCLAW_STATE_DIR: scratchStateDir,
+          NATESCLAW_STATE_DIR: scratchStateDir,
         });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout.trim()).toBe(path.join(scratchStateDir, "openclaw.json"));
+        expect(result.stdout.trim()).toBe(path.join(scratchStateDir, "natesclaw.json"));
         await expect(fs.readFile(approvalsPath, "utf8")).resolves.toBe(approvals);
         await expect(fs.access(`${approvalsPath}.migrated`)).rejects.toMatchObject({
           code: "ENOENT",
@@ -213,10 +213,10 @@ describe("cli json stdout contract", () => {
           fs.access(path.join(scratchStateDir, "exec-approvals.json")),
         ).rejects.toMatchObject({ code: "ENOENT" });
         await expect(
-          fs.access(path.join(scratchStateDir, "state", "openclaw.sqlite")),
+          fs.access(path.join(scratchStateDir, "state", "natesclaw.sqlite")),
         ).rejects.toMatchObject({ code: "ENOENT" });
       },
-      { prefix: "openclaw-read-only-state-e2e-" },
+      { prefix: "natesclaw-read-only-state-e2e-" },
     );
   });
 
@@ -245,7 +245,7 @@ describe("cli json stdout contract", () => {
         expect(stdout).not.toContain("Doctor changes");
         expect(stdout).not.toContain("Config invalid");
       },
-      { prefix: "openclaw-json-e2e-" },
+      { prefix: "natesclaw-json-e2e-" },
     );
   });
 
@@ -258,7 +258,7 @@ describe("cli json stdout contract", () => {
         expect(result.stdout).toBe("");
         expect(result.stderr).toContain("--timeout must be a positive integer (seconds)");
       },
-      { prefix: "openclaw-update-empty-timeout-e2e-" },
+      { prefix: "natesclaw-update-empty-timeout-e2e-" },
     );
   });
 
@@ -266,7 +266,7 @@ describe("cli json stdout contract", () => {
     await withTempHome(
       async (tempHome) => {
         const result = runSourceCli(tempHome, ["config", "schema"], {
-          OPENCLAW_LOG_LEVEL: "debug",
+          NATESCLAW_LOG_LEVEL: "debug",
         });
 
         expect(result.status).toBe(0);
@@ -277,18 +277,18 @@ describe("cli json stdout contract", () => {
         expect(result.stdout).not.toContain("possibly sensitive key found");
         expect(result.stderr).not.toContain("possibly sensitive key found");
       },
-      { prefix: "openclaw-config-schema-json-e2e-" },
+      { prefix: "natesclaw-config-schema-json-e2e-" },
     );
   });
 
   it("keeps `config validate --json` stdout parseable at debug log level", async () => {
     await withTempHome(
       async (tempHome) => {
-        const configPath = path.join(tempHome, "openclaw.json");
+        const configPath = path.join(tempHome, "natesclaw.json");
         await fs.writeFile(configPath, "{}", "utf8");
         const result = runSourceCli(tempHome, ["config", "validate", "--json"], {
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_LOG_LEVEL: "debug",
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_LOG_LEVEL: "debug",
         });
 
         expect(result.status).toBe(0);
@@ -298,7 +298,7 @@ describe("cli json stdout contract", () => {
         });
         expect(result.stdout).not.toContain("possibly sensitive key found");
       },
-      { prefix: "openclaw-config-validate-json-e2e-" },
+      { prefix: "natesclaw-config-validate-json-e2e-" },
     );
   });
 });

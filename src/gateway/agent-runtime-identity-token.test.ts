@@ -11,10 +11,10 @@ import {
 } from "../infra/agent-run-registry.js";
 import { readExecApprovalsSnapshot } from "../infra/exec-approvals-store.js";
 import { testing as execApprovalsStoreTesting } from "../infra/exec-approvals-store.test-support.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { captureEnv, setTestEnvValue } from "../test-utils/env.js";
 
-const envSnapshot = captureEnv(["HOME", "OPENCLAW_HOME", "OPENCLAW_STATE_DIR"]);
+const envSnapshot = captureEnv(["HOME", "NATESCLAW_HOME", "NATESCLAW_STATE_DIR"]);
 
 const tempHomes: string[] = [];
 
@@ -25,12 +25,12 @@ function operationalRun(runId = "run-1") {
 }
 
 function useTempHome(): string {
-  const home = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-agent-runtime-"));
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-agent-runtime-"));
   tempHomes.push(home);
   setTestEnvValue("HOME", home);
-  setTestEnvValue("OPENCLAW_HOME", home);
-  setTestEnvValue("OPENCLAW_STATE_DIR", path.join(home, ".openclaw"));
-  closeOpenClawStateDatabaseForTest();
+  setTestEnvValue("NATESCLAW_HOME", home);
+  setTestEnvValue("NATESCLAW_STATE_DIR", path.join(home, ".natesclaw"));
+  closeNatesclawStateDatabaseForTest();
   execApprovalsStoreTesting.reset();
   return home;
 }
@@ -63,7 +63,7 @@ function validateDelegatedAuthority(
 
 afterEach(() => {
   resetAgentRunRegistryForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   execApprovalsStoreTesting.reset();
   vi.resetModules();
   envSnapshot.restore();

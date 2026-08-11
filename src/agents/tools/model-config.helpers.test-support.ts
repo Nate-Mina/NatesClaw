@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { AuthProfileStore } from "../auth-profiles/types.js";
 import "./model-config.helpers.js";
 
 type ModelConfigHelpersTestApi = {
   hasDirectProviderApiKeyAuthForTool(params: {
     provider: string;
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     workspaceDir?: string;
     agentDir?: string;
     authStore?: AuthProfileStore;
@@ -15,7 +15,7 @@ type ModelConfigHelpersTestApi = {
 
 function getTestApi(): ModelConfigHelpersTestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.modelConfigHelpersTestApi")
+    Symbol.for("natesclaw.modelConfigHelpersTestApi")
   ] as ModelConfigHelpersTestApi;
 }
 

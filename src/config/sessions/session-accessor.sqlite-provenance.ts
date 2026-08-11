@@ -1,6 +1,6 @@
 import { executeSqliteQueryTakeFirstSync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import type { SessionEntry } from "./types.js";
 
 type SessionProvenanceRow = {
@@ -26,11 +26,11 @@ export function bindSessionEntryProvenance(entry: SessionEntry): SessionProvenan
 
 export function resolveSessionEntryProvenanceRow<T extends SessionProvenanceRow>(params: {
   boundSessionRow: T;
-  database: OpenClawAgentDatabase;
+  database: NatesclawAgentDatabase;
   entry: SessionEntry;
   previousEntry?: SessionEntry;
 }): T {
-  const db = getNodeSqliteKysely<OpenClawAgentKyselyDatabase>(params.database.db);
+  const db = getNodeSqliteKysely<NatesclawAgentKyselyDatabase>(params.database.db);
   const existingRoot = executeSqliteQueryTakeFirstSync(
     params.database.db,
     db

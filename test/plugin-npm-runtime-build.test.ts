@@ -37,7 +37,7 @@ function expectPluginNpmRuntimeBuildPlan(
 
 describe("plugin npm runtime build planning", () => {
   it("rejects a symlinked package dist root before building", async () => {
-    const syntheticRepoRoot = tempDirs.make("openclaw-plugin-runtime-output-root-");
+    const syntheticRepoRoot = tempDirs.make("natesclaw-plugin-runtime-output-root-");
     const packageDir = path.join(syntheticRepoRoot, "extensions", "demo");
     mkdirSync(packageDir, { recursive: true });
     writeFileSync(
@@ -47,9 +47,9 @@ describe("plugin npm runtime build planning", () => {
     writeFileSync(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/demo",
+        name: "@natesclaw/demo",
         version: "1.0.0",
-        openclaw: {
+        natesclaw: {
           compat: { pluginApi: "1.0.0" },
           extensions: ["./index.ts"],
           release: { publishToNpm: true },
@@ -92,10 +92,10 @@ describe("plugin npm runtime build planning", () => {
       expectDistRelativePaths(plan.runtimeExtensions);
       expectDistRelativePaths(plan.runtimeBuildOutputs);
       expect(plan.packageFiles).toContain("dist/**");
-      expect(plan.packagePeerMetadata.peerDependencies.openclaw).toBe(
-        plan.packageJson.openclaw?.compat?.pluginApi,
+      expect(plan.packagePeerMetadata.peerDependencies.natesclaw).toBe(
+        plan.packageJson.natesclaw?.compat?.pluginApi,
       );
-      expect(plan.packagePeerMetadata.peerDependenciesMeta.openclaw.optional).toBe(true);
+      expect(plan.packagePeerMetadata.peerDependenciesMeta.natesclaw.optional).toBe(true);
     }
   });
 
@@ -132,7 +132,7 @@ describe("plugin npm runtime build planning", () => {
     });
     expect(diffsRuntimePlan.packageFiles).toEqual([
       "dist/**",
-      "openclaw.plugin.json",
+      "natesclaw.plugin.json",
       "README.md",
       "skills/**",
     ]);
@@ -252,12 +252,12 @@ describe("plugin npm runtime build planning", () => {
   });
 
   it("detects unresolved side-effect host imports in built plugin runtimes", () => {
-    const outDir = tempDirs.make("openclaw-plugin-runtime-host-import-");
+    const outDir = tempDirs.make("natesclaw-plugin-runtime-host-import-");
     writeFileSync(
       path.join(outDir, "index.js"),
       [
-        'import "openclaw/plugin-sdk/not-exported";',
-        'const runtime = __require("openclaw/plugin-sdk/not-exported-from-require");',
+        'import "natesclaw/plugin-sdk/not-exported";',
+        'const runtime = __require("natesclaw/plugin-sdk/not-exported-from-require");',
         "void runtime;",
         "",
       ].join("\n"),
@@ -270,14 +270,14 @@ describe("plugin npm runtime build planning", () => {
     );
 
     expect(listMissingPluginNpmRuntimeHostExports({ ...plan, outDir })).toEqual([
-      "openclaw/plugin-sdk/not-exported",
-      "openclaw/plugin-sdk/not-exported-from-require",
+      "natesclaw/plugin-sdk/not-exported",
+      "natesclaw/plugin-sdk/not-exported-from-require",
     ]);
   });
 
   it("does not require host metadata when the runtime has no host imports", () => {
-    const syntheticRepoRoot = tempDirs.make("openclaw-plugin-runtime-synthetic-repo-");
-    const outDir = tempDirs.make("openclaw-plugin-runtime-no-host-import-");
+    const syntheticRepoRoot = tempDirs.make("natesclaw-plugin-runtime-synthetic-repo-");
+    const outDir = tempDirs.make("natesclaw-plugin-runtime-no-host-import-");
     writeFileSync(path.join(outDir, "index.js"), "export default {};\n");
     const plan = expectPluginNpmRuntimeBuildPlan(
       resolvePluginNpmRuntimeBuildPlan({

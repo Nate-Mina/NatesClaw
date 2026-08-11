@@ -22,7 +22,7 @@ const runtime = vi.hoisted(() => ({
   resolveSessionAgentId: vi.fn(() => "main"),
   loadSessionEntry: vi.fn(() => ({
     cfg: {},
-    storePath: "/tmp/openclaw-sessions.json",
+    storePath: "/tmp/natesclaw-sessions.json",
     entry: { sessionId: "sess-main" },
   })),
   resolveSessionModelRef: vi.fn(() => ({ provider: "openai" })),
@@ -51,7 +51,7 @@ const runtime = vi.hoisted(() => ({
   capArrayByJsonBytes: vi.fn((items: unknown[]) => ({ items })),
   enforceChatHistoryFinalBudget: vi.fn(({ messages }: { messages: unknown[] }) => ({ messages })),
   loadCombinedSessionStoreForGatewayCore: vi.fn(() => ({
-    storePath: "/tmp/openclaw-sessions.json",
+    storePath: "/tmp/natesclaw-sessions.json",
     store: {},
   })),
   listSessionsFromStoreAsync: vi.fn(async () => ({ sessions: [] })),
@@ -92,7 +92,7 @@ describe("embedded gateway stub", () => {
     );
     expect(runtime.listSessionsFromStoreAsync).toHaveBeenCalledWith({
       cfg: { agents: { list: [{ id: "main", default: true }] } },
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/natesclaw-sessions.json",
       store: {},
       opts: { agentId: "work", includeGlobal: true, search: "global" },
     });
@@ -229,7 +229,7 @@ describe("embedded gateway stub", () => {
         sessionEntry: { sessionId: "sess-main" },
         sessionId: "sess-main",
         sessionKey: "agent:main:main",
-        storePath: "/tmp/openclaw-sessions.json",
+        storePath: "/tmp/natesclaw-sessions.json",
       },
       {
         mode: "recent",
@@ -296,7 +296,7 @@ describe("embedded gateway stub", () => {
         sessionEntry: { sessionId: "sess-main" },
         sessionId: "sess-main",
         sessionKey: "agent:main:main",
-        storePath: "/tmp/openclaw-sessions.json",
+        storePath: "/tmp/natesclaw-sessions.json",
       },
       {
         mode: "recent",
@@ -338,7 +338,7 @@ describe("embedded gateway stub", () => {
         sessionEntry: { sessionId: "sess-main" },
         sessionId: "sess-main",
         sessionKey: "agent:main:main",
-        storePath: "/tmp/openclaw-sessions.json",
+        storePath: "/tmp/natesclaw-sessions.json",
       },
       {
         offset: 2,
@@ -360,12 +360,12 @@ describe("embedded gateway stub", () => {
 
   it("caps projected offset chat history pages to the requested limit", async () => {
     const rawMessages = [
-      { role: "assistant", content: "overread", __openclaw: { seq: 1 } },
-      { role: "assistant", content: "page anchor", __openclaw: { seq: 2 } },
+      { role: "assistant", content: "overread", __natesclaw: { seq: 1 } },
+      { role: "assistant", content: "page anchor", __natesclaw: { seq: 2 } },
     ];
     const projectedMessages = [
-      { role: "assistant", content: "projected one", __openclaw: { seq: 2 } },
-      { role: "assistant", content: "projected two", __openclaw: { seq: 3 } },
+      { role: "assistant", content: "projected one", __natesclaw: { seq: 2 } },
+      { role: "assistant", content: "projected two", __natesclaw: { seq: 3 } },
     ];
     runtime.readSessionMessagesPageWithStatsAsync.mockImplementationOnce(async () => ({
       messages: rawMessages,
@@ -393,13 +393,13 @@ describe("embedded gateway stub", () => {
 
   it("filters offset chat history pages at the session start boundary", async () => {
     const rawMessages = [
-      { role: "user", content: "stale announce", __openclaw: { seq: 1 } },
-      { role: "assistant", content: "stale reply", __openclaw: { seq: 2 } },
+      { role: "user", content: "stale announce", __natesclaw: { seq: 1 } },
+      { role: "assistant", content: "stale reply", __natesclaw: { seq: 2 } },
     ];
     const filteredMessages: unknown[] = [];
     runtime.loadSessionEntry.mockReturnValueOnce({
       cfg: {},
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/natesclaw-sessions.json",
       entry: { sessionId: "sess-main", sessionStartedAt: 1234 } as {
         sessionId: string;
         sessionStartedAt: number;
@@ -425,7 +425,7 @@ describe("embedded gateway stub", () => {
   });
 
   it("does not merge full CLI imports into explicit offset chat history pages", async () => {
-    const rawMessages = [{ role: "assistant", content: "local page", __openclaw: { seq: 2 } }];
+    const rawMessages = [{ role: "assistant", content: "local page", __natesclaw: { seq: 2 } }];
     runtime.readSessionMessagesPageWithStatsAsync.mockImplementationOnce(async () => ({
       messages: rawMessages,
       totalMessages: 2,
@@ -443,9 +443,9 @@ describe("embedded gateway stub", () => {
 
   it("overreads bounded recent history for the first offset page", async () => {
     const rawMessages = [
-      { role: "user", content: "visible older", __openclaw: { seq: 6 } },
-      { role: "assistant", content: "hidden control", __openclaw: { seq: 7 } },
-      { role: "assistant", content: "visible latest", __openclaw: { seq: 8 } },
+      { role: "user", content: "visible older", __natesclaw: { seq: 6 } },
+      { role: "assistant", content: "hidden control", __natesclaw: { seq: 7 } },
+      { role: "assistant", content: "visible latest", __natesclaw: { seq: 8 } },
     ];
     const projectedMessages = [rawMessages[0], rawMessages[2]];
     runtime.readRecentSessionMessagesWithStatsAsync.mockImplementationOnce(async () => ({
@@ -473,7 +473,7 @@ describe("embedded gateway stub", () => {
         sessionEntry: { sessionId: "sess-main" },
         sessionId: "sess-main",
         sessionKey: "agent:main:main",
-        storePath: "/tmp/openclaw-sessions.json",
+        storePath: "/tmp/natesclaw-sessions.json",
       },
       {
         maxMessages: 61,
@@ -496,9 +496,9 @@ describe("embedded gateway stub", () => {
 
   it("computes offset continuation from the final budgeted chat history page", async () => {
     const rawMessages = [
-      { role: "user", content: "visible older", __openclaw: { seq: 6 } },
-      { role: "assistant", content: "visible newer", __openclaw: { seq: 7 } },
-      { role: "assistant", content: "visible latest", __openclaw: { seq: 8 } },
+      { role: "user", content: "visible older", __natesclaw: { seq: 6 } },
+      { role: "assistant", content: "visible newer", __natesclaw: { seq: 7 } },
+      { role: "assistant", content: "visible latest", __natesclaw: { seq: 8 } },
     ];
     const returnedMessages = [rawMessages[2]];
     runtime.readRecentSessionMessagesWithStatsAsync.mockImplementationOnce(async () => ({
@@ -545,7 +545,7 @@ describe("embedded gateway stub", () => {
         sessionEntry: { sessionId: "sess-main" },
         sessionId: "sess-main",
         sessionKey: "agent:main:main",
-        storePath: "/tmp/openclaw-sessions.json",
+        storePath: "/tmp/natesclaw-sessions.json",
       },
       {
         mode: "recent",

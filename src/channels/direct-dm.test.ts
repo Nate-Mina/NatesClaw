@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { dispatchInboundDirectDm } from "./direct-dm.js";
 
 const mocks = vi.hoisted(() => ({
@@ -36,7 +36,7 @@ vi.mock("./turn/lifecycle.js", () => ({
 describe("dispatchInboundDirectDm", () => {
   it("forwards the canonical model-selection reply pipeline", async () => {
     await dispatchInboundDirectDm({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       channel: "nostr",
       channelLabel: "Nostr",
       accountId: "account-1",
@@ -70,7 +70,7 @@ describe("dispatchInboundDirectDm", () => {
     };
 
     await dispatchInboundDirectDm({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       channel: "nostr",
       channelLabel: "Nostr",
       accountId: "account-1",

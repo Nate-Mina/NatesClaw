@@ -8,5 +8,5 @@ export {
   isWithinDir,
   safeRealpathSync,
   safeStatSync,
-} from "@openclaw/fs-safe/path";
-export { formatPosixMode } from "@openclaw/fs-safe/advanced";
+} from "@natesclaw/fs-safe/path";
+export { formatPosixMode } from "@natesclaw/fs-safe/advanced";

@@ -1,7 +1,7 @@
 // Persistence helpers for plugin installs plus related config mutation.
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { theme } from "../../packages/terminal-core/src/theme.js";
 import {
   hashConfigIncludeRaw,
@@ -10,7 +10,7 @@ import {
 } from "../config/includes.js";
 import type { ConfigWriteOptions } from "../config/io.js";
 import { containsConfigIncludeDirective } from "../config/io.read-helpers.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { isPathInside } from "../infra/path-guards.js";
 import { defaultRuntime, type RuntimeEnv } from "../runtime.js";
@@ -37,7 +37,7 @@ import {
   type PluginUninstallDirectoryRemoval,
 } from "./uninstall.js";
 
-function addInstalledPluginToAllowlist(cfg: OpenClawConfig, pluginId: string): OpenClawConfig {
+function addInstalledPluginToAllowlist(cfg: NatesclawConfig, pluginId: string): NatesclawConfig {
   const allow = cfg.plugins?.allow;
   if (!Array.isArray(allow) || allow.length === 0 || allow.includes(pluginId)) {
     return cfg;
@@ -53,7 +53,7 @@ function addInstalledPluginToAllowlist(cfg: OpenClawConfig, pluginId: string): O
   };
 }
 
-function removeInstalledPluginFromDenylist(cfg: OpenClawConfig, pluginId: string): OpenClawConfig {
+function removeInstalledPluginFromDenylist(cfg: NatesclawConfig, pluginId: string): NatesclawConfig {
   const deny = cfg.plugins?.deny;
   if (!Array.isArray(deny) || !deny.includes(pluginId)) {
     return cfg;
@@ -73,7 +73,7 @@ function removeInstalledPluginFromDenylist(cfg: OpenClawConfig, pluginId: string
 }
 
 export type ConfigSnapshotForInstallPersist = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   baseHash: string | undefined;
   writeOptions: Pick<
     ConfigWriteOptions,
@@ -305,7 +305,7 @@ function sourceMatchesInstalledPath(params: {
 }
 
 function logShadowedNpmInstallWarning(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginId: string;
   install: Omit<PluginInstallUpdate, "pluginId">;
   warn: (message: string, managementMessage: string) => void;
@@ -337,9 +337,9 @@ function logShadowedNpmInstallWarning(params: {
       `Warning: installed plugin "${params.pluginId}" is not the active source because a config-selected plugin with the same id is currently selected:`,
       `  active config source: ${shortenHomePath(active.source)}`,
       `  installed npm source: ${shortenHomePath(installedSource)}`,
-      "Run `openclaw plugins doctor` for repair options.",
+      "Run `natesclaw plugins doctor` for repair options.",
     ].join("\n"),
-    `Installed plugin "${params.pluginId}" is shadowed by a configured plugin source. Run \`openclaw plugins doctor\`.`,
+    `Installed plugin "${params.pluginId}" is shadowed by a configured plugin source. Run \`natesclaw plugins doctor\`.`,
   );
 }
 
@@ -393,7 +393,7 @@ function resolveReplacedManagedInstallRemoval(params: {
           [params.pluginId]: params.previousInstall,
         },
       },
-    } as OpenClawConfig,
+    } as NatesclawConfig,
     pluginId: params.pluginId,
     deleteFiles: true,
   });
@@ -411,7 +411,7 @@ function resolveReplacedManagedInstallRemoval(params: {
   return plan.directoryRemoval;
 }
 
-function prepareConfigForDisabledInstall(config: OpenClawConfig, pluginId: string): OpenClawConfig {
+function prepareConfigForDisabledInstall(config: NatesclawConfig, pluginId: string): NatesclawConfig {
   const entry = config.plugins?.entries?.[pluginId];
   const policy = isRecord(entry) ? { ...entry } : {};
   delete policy.config;
@@ -433,7 +433,7 @@ type PluginConfigEnablement =
   | { mode: "invalid"; error: string };
 
 function resolvePluginConfigEnablement(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginId: string;
   installRecords: Record<string, PluginInstallRecord>;
 }): PluginConfigEnablement {
@@ -471,7 +471,7 @@ export async function persistPluginInstall(params: {
   warningMessage?: string;
   runtime?: RuntimeEnv;
   persistenceLogger?: PluginInstallLogger;
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   const runtime = params.runtime ?? defaultRuntime;
   // Terminal diagnostics may contain paths/errors; management receives only producer-authored summaries.
   const warn = (message: string, managementMessage: string): void => {
@@ -560,7 +560,7 @@ export async function persistPluginInstall(params: {
     for (const warning of removalResult.warnings) {
       warn(
         warning,
-        "A previous plugin installation could not be fully cleaned up. Run `openclaw plugins doctor`.",
+        "A previous plugin installation could not be fully cleaned up. Run `natesclaw plugins doctor`.",
       );
     }
     if (removalResult.directoryRemoved) {
@@ -590,13 +590,13 @@ export async function persistPluginInstall(params: {
   }
   const configWarning =
     params.enable !== false && configEnablement.mode === "missing"
-      ? `Installed plugin "${params.pluginId}" without enabling it because it requires configuration first. Configure it, then run \`openclaw plugins enable ${params.pluginId}\`.`
+      ? `Installed plugin "${params.pluginId}" without enabling it because it requires configuration first. Configure it, then run \`natesclaw plugins enable ${params.pluginId}\`.`
       : undefined;
   const warningMessage = [params.warningMessage, configWarning].filter(Boolean).join("\n");
   if (warningMessage) {
     warn(
       warningMessage,
-      configWarning ?? "Plugin installation reported a warning. Run `openclaw plugins doctor`.",
+      configWarning ?? "Plugin installation reported a warning. Run `natesclaw plugins doctor`.",
     );
   }
   runtime.log(params.successMessage ?? `Installed plugin: ${params.pluginId}`);

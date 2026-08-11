@@ -6,13 +6,13 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { stableStringify } from "@openclaw/normalization-core";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { stableStringify } from "@natesclaw/normalization-core";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
   projectConfigOntoRuntimeSourceSnapshot,
-  type OpenClawConfig,
+  type NatesclawConfig,
 } from "../config/config.js";
 import { createConfigRuntimeEnv } from "../config/env-vars.js";
 import { hashRuntimeConfigValue } from "../config/runtime-snapshot.js";
@@ -35,7 +35,7 @@ import {
   type ModelsJsonReadyResult,
   type ModelsJsonReadyState,
 } from "./models-config-state.js";
-import { planOpenClawModelsJson } from "./models-config.plan.js";
+import { planNatesclawModelsJson } from "./models-config.plan.js";
 import { repairPluginModelCatalogTransportMetadata } from "./plugin-model-catalog-repair.js";
 import {
   decodePluginModelCatalogRelativePathPluginId,
@@ -47,7 +47,7 @@ import {
   type PersistedPluginModelCatalog,
 } from "./plugin-model-catalog.js";
 
-type PreparedOpenClawModelsJsonSource = ModelsJsonReadyResult & {
+type PreparedNatesclawModelsJsonSource = ModelsJsonReadyResult & {
   fingerprint: string;
   workspaceDir?: string;
 };
@@ -57,7 +57,7 @@ type ModelsConfigPluginMetadataSnapshot = Pick<
   "index" | "manifestRegistry" | "owners" | "pluginIds"
 >;
 
-type EnsureOpenClawModelsJsonOptions = {
+type EnsureNatesclawModelsJsonOptions = {
   env?: NodeJS.ProcessEnv;
   pluginMetadataSnapshot?: ModelsConfigPluginMetadataSnapshot;
   preparedStaticProviderCatalog?: PreparedProviderStaticCatalog;
@@ -68,9 +68,9 @@ type EnsureOpenClawModelsJsonOptions = {
   onProviderCatalogOutcome?: (outcome: ProviderCatalogOutcome) => void;
 };
 
-type PlanOpenClawModelsJsonSourceOptions = EnsureOpenClawModelsJsonOptions;
+type PlanNatesclawModelsJsonSourceOptions = EnsureNatesclawModelsJsonOptions;
 
-type PlannedOpenClawModelsJsonSource = Readonly<{
+type PlannedNatesclawModelsJsonSource = Readonly<{
   agentDir: string;
   modelsJsonContents: string | null;
   pluginCatalogs: readonly PersistedPluginModelCatalog[];
@@ -80,7 +80,7 @@ function listPreparedPluginModelCatalogs(agentDir: string) {
   const { catalogs, warnings } = loadPersistedPluginModelCatalogs(agentDir);
   if (warnings.length > 0) {
     throw new Error(
-      `Cannot safely prepare provider models until legacy catalog migration succeeds: ${warnings.join("; ")}. Run openclaw doctor --fix.`,
+      `Cannot safely prepare provider models until legacy catalog migration succeeds: ${warnings.join("; ")}. Run natesclaw doctor --fix.`,
     );
   }
   return catalogs;
@@ -96,9 +96,9 @@ async function readFileMtimeMs(pathname: string): Promise<number | null> {
 }
 
 async function buildModelsJsonFingerprint(params: {
-  config: OpenClawConfig;
-  discoveryAuthConfig: OpenClawConfig;
-  sourceConfigForSecrets: OpenClawConfig;
+  config: NatesclawConfig;
+  discoveryAuthConfig: NatesclawConfig;
+  sourceConfigForSecrets: NatesclawConfig;
   agentDir: string;
   workspaceDir?: string;
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index" | "pluginIds">;
@@ -185,7 +185,7 @@ async function writeModelsFileAtomicForModelsJson(
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.modelsConfigTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.modelsConfigTestApi")] = {
     ensureModelsFileModeForModelsJson,
     writeModelsFileAtomicForModelsJson,
   };
@@ -263,10 +263,10 @@ function writePluginCatalogsForModelsJson(params: {
   });
 }
 
-function resolveModelsConfigInput(config?: OpenClawConfig): {
-  config: OpenClawConfig;
-  discoveryAuthConfig: OpenClawConfig;
-  sourceConfigForSecrets: OpenClawConfig;
+function resolveModelsConfigInput(config?: NatesclawConfig): {
+  config: NatesclawConfig;
+  discoveryAuthConfig: NatesclawConfig;
+  sourceConfigForSecrets: NatesclawConfig;
 } {
   const runtimeSource = getRuntimeConfigSourceSnapshot();
   if (!config) {
@@ -296,7 +296,7 @@ function resolveModelsConfigInput(config?: OpenClawConfig): {
 
 /** Builds the canonical source freshness fingerprint for generated model catalogs. */
 async function buildModelsJsonSourceFingerprint(
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
   agentDirOverride?: string,
   options: {
     env?: NodeJS.ProcessEnv;
@@ -354,11 +354,11 @@ async function withModelsJsonWriteLock<T>(targetPath: string, run: () => Promise
 }
 
 /** Ensures models.json and the agent SQLite catalog cache are current. */
-async function prepareOpenClawModelsJsonSource(
-  config?: OpenClawConfig,
+async function prepareNatesclawModelsJsonSource(
+  config?: NatesclawConfig,
   agentDirOverride?: string,
-  options: EnsureOpenClawModelsJsonOptions = {},
-): Promise<PreparedOpenClawModelsJsonSource> {
+  options: EnsureNatesclawModelsJsonOptions = {},
+): Promise<PreparedNatesclawModelsJsonSource> {
   const resolved = resolveModelsConfigInput(config);
   const cfg = resolved.config;
   const sourceFingerprint = await buildModelsJsonSourceFingerprint(
@@ -400,7 +400,7 @@ async function prepareOpenClawModelsJsonSource(
       existingParsed: existingModelsFile.parsed,
       ...(pluginMetadataSnapshot ? { pluginMetadataSnapshot } : {}),
     });
-    const plan = await planOpenClawModelsJson({
+    const plan = await planNatesclawModelsJson({
       cfg,
       discoveryAuthConfig: resolved.discoveryAuthConfig,
       sourceConfigForSecrets: resolved.sourceConfigForSecrets,
@@ -503,11 +503,11 @@ async function prepareOpenClawModelsJsonSource(
  * Plans the complete root/plugin catalog generation without mutating agent-owned state.
  * Control-plane inventory reads use this when their lifecycle generation may be superseded.
  */
-export async function planOpenClawModelsJsonSource(
-  config?: OpenClawConfig,
+export async function planNatesclawModelsJsonSource(
+  config?: NatesclawConfig,
   agentDirOverride?: string,
-  options: PlanOpenClawModelsJsonSourceOptions = {},
-): Promise<PlannedOpenClawModelsJsonSource> {
+  options: PlanNatesclawModelsJsonSourceOptions = {},
+): Promise<PlannedNatesclawModelsJsonSource> {
   const resolved = resolveModelsConfigInput(config);
   const cfg = resolved.config;
   const workspaceDir =
@@ -534,7 +534,7 @@ export async function planOpenClawModelsJsonSource(
     ...(pluginMetadataSnapshot ? { pluginMetadataSnapshot } : {}),
   });
   const env = createConfigRuntimeEnv(cfg, options.env);
-  const plan = await planOpenClawModelsJson({
+  const plan = await planNatesclawModelsJson({
     cfg,
     discoveryAuthConfig: resolved.discoveryAuthConfig,
     sourceConfigForSecrets: resolved.sourceConfigForSecrets,
@@ -573,11 +573,11 @@ export async function planOpenClawModelsJsonSource(
 }
 
 /** Ensures models.json and the agent SQLite catalog cache are current. */
-export async function ensureOpenClawModelsJson(
-  config?: OpenClawConfig,
+export async function ensureNatesclawModelsJson(
+  config?: NatesclawConfig,
   agentDirOverride?: string,
-  options: EnsureOpenClawModelsJsonOptions = {},
+  options: EnsureNatesclawModelsJsonOptions = {},
 ): Promise<ModelsJsonReadyResult> {
-  const prepared = await prepareOpenClawModelsJsonSource(config, agentDirOverride, options);
+  const prepared = await prepareNatesclawModelsJsonSource(config, agentDirOverride, options);
   return { agentDir: prepared.agentDir, wrote: prepared.wrote };
 }

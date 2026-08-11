@@ -6,9 +6,9 @@ import {
   type ChannelIngressQueue,
   type ChannelIngressMonitorDeliveryResult,
   type ChannelIngressMonitorLifecycle,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isChannelTarget } from "./normalize.js";
 import { parseIrcLine, parseIrcPrefix } from "./protocol.js";
 import { getIrcRuntime } from "./runtime.js";

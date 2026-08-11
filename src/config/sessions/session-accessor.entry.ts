@@ -1,11 +1,11 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import {
   resolveSessionStoreAgentId,
   resolveSessionStoreKey,
 } from "../../gateway/session-store-key.js";
 import { isIncognitoSessionKey, resolveAgentIdFromSessionKey } from "../../routing/session-key.js";
-import { resolveIncognitoOpenClawAgentSqlitePath } from "../../state/openclaw-agent-db.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import { resolveIncognitoNatesclawAgentSqlitePath } from "../../state/natesclaw-agent-db.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import { resolveAgentMainSessionKey } from "./main-session.js";
 import { resolveSessionStorePathCore } from "./paths.js";
 import { clearPluginOwnedSessionState } from "./plugin-host-cleanup.js";
@@ -109,7 +109,7 @@ function isStorePathTemplate(store?: string): boolean {
 
 function resolveLogicalSessionStoreCandidates(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): SessionStoreTarget[] {
   const storeConfig = params.cfg.session?.store;
@@ -136,7 +136,7 @@ function resolveLogicalSessionStoreCandidates(params: {
 function buildLogicalSessionEntryCandidateKeys(params: {
   agentId: string;
   canonicalKey: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   requestedKey: string;
 }): string[] {
   const targets = new Set<string>();
@@ -214,7 +214,7 @@ export function resolveSessionEntryCandidateTarget(
   const incognitoKey = candidateKeys.find(isIncognitoSessionKey);
   const incognitoAgentId = incognitoKey ? resolveAgentIdFromSessionKey(incognitoKey) : undefined;
   const storePath = incognitoAgentId
-    ? resolveIncognitoOpenClawAgentSqlitePath({ agentId: incognitoAgentId, env: scope.env })
+    ? resolveIncognitoNatesclawAgentSqlitePath({ agentId: incognitoAgentId, env: scope.env })
     : resolveSessionStorePathCore(scope.cfg.session?.store, {
         agentId: scope.agentId,
         env: scope.env,
@@ -271,7 +271,7 @@ function resolveSessionEntryStoreTarget(
   });
   if (isIncognitoSessionKey(canonicalKey)) {
     const incognitoAgentId = resolveAgentIdFromSessionKey(canonicalKey);
-    const storePath = resolveIncognitoOpenClawAgentSqlitePath({
+    const storePath = resolveIncognitoNatesclawAgentSqlitePath({
       agentId: incognitoAgentId,
       env: scope.env,
     });

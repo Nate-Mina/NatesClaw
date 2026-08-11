@@ -14,8 +14,8 @@ import { managedWorktrees } from "../agents/worktrees/service.js";
 import { loadSessionEntry } from "../config/sessions/session-accessor.js";
 import { isSessionLifecycleMutationActive } from "../sessions/session-lifecycle-admission.js";
 import { listSessionStateEventsSince } from "../sessions/session-state-events.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
-import { createOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
+import { createNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import { testState, writeSessionStore } from "./test-helpers.js";
 import {
   directSessionReq,
@@ -32,13 +32,13 @@ async function initializeRemoteBackedGitWorkspace(root: string): Promise<string>
   const remote = path.join(root, "remote.git");
   await fs.mkdir(workspace, { recursive: true });
   await execFileAsync("git", ["-C", workspace, "init", "-b", "main"]);
-  await execFileAsync("git", ["-C", workspace, "config", "user.name", "OpenClaw Test"]);
+  await execFileAsync("git", ["-C", workspace, "config", "user.name", "Natesclaw Test"]);
   await execFileAsync("git", [
     "-C",
     workspace,
     "config",
     "user.email",
-    "openclaw-test@example.invalid",
+    "natesclaw-test@example.invalid",
   ]);
   await fs.writeFile(path.join(workspace, "README.md"), "base\n");
   await execFileAsync("git", ["-C", workspace, "add", "README.md"]);
@@ -50,12 +50,12 @@ async function initializeRemoteBackedGitWorkspace(root: string): Promise<string>
 }
 
 test("sessions.delete keeps same-key successor worktree creation behind exact cleanup", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-delete-worktree-successor-",
+    prefix: "natesclaw-delete-worktree-successor-",
   });
-  const workspace = await initializeRemoteBackedGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeRemoteBackedGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   const { storePath } = await createSessionStoreDir();
   const key = "agent:main:dashboard:delete-worktree-successor";
@@ -174,19 +174,19 @@ test("sessions.delete keeps same-key successor worktree creation behind exact cl
         force: true,
       });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.delete reports the exact preserved worktree when cleanup fails", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-delete-worktree-preserved-",
+    prefix: "natesclaw-delete-worktree-preserved-",
   });
-  const workspace = await initializeRemoteBackedGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeRemoteBackedGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   const { storePath } = await createSessionStoreDir();
   const key = "agent:main:dashboard:delete-worktree-preserved";
@@ -232,19 +232,19 @@ test("sessions.delete reports the exact preserved worktree when cleanup fails", 
     if (worktreeId && getRegistryWorktree(process.env, worktreeId)?.removedAt === undefined) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });
 
 test("sessions.delete preserves an entry-bound worktree owned by another principal", async () => {
-  const openClawState = await createOpenClawTestState({
+  const NatesclawState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-delete-worktree-owner-mismatch-",
+    prefix: "natesclaw-delete-worktree-owner-mismatch-",
   });
-  const workspace = await initializeRemoteBackedGitWorkspace(openClawState.root);
-  closeOpenClawStateDatabaseForTest();
+  const workspace = await initializeRemoteBackedGitWorkspace(NatesclawState.root);
+  closeNatesclawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   const key = "agent:main:dashboard:delete-worktree-owner-mismatch";
@@ -300,8 +300,8 @@ test("sessions.delete preserves an entry-bound worktree owned by another princip
         force: true,
       });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     testState.agentConfig = undefined;
-    await openClawState.cleanup();
+    await NatesclawState.cleanup();
   }
 });

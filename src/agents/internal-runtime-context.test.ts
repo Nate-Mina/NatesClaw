@@ -3,7 +3,7 @@
  * Verifies protected delimiters, legacy blocks, and custom-message filtering.
  */
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import {
   escapeInternalRuntimeContextDelimiters,
@@ -11,10 +11,10 @@ import {
   hasInternalRuntimeContext,
   INTERNAL_RUNTIME_CONTEXT_BEGIN,
   INTERNAL_RUNTIME_CONTEXT_END,
-  OPENCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER,
-  OPENCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
-  OPENCLAW_RUNTIME_CONTEXT_NOTICE,
-  OPENCLAW_RUNTIME_EVENT_HEADER,
+  NATESCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER,
+  NATESCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
+  NATESCLAW_RUNTIME_CONTEXT_NOTICE,
+  NATESCLAW_RUNTIME_EVENT_HEADER,
   relocateCurrentRuntimeContextCarrierToTail,
   stripInternalRuntimeContext,
 } from "./internal-runtime-context.js";
@@ -22,7 +22,7 @@ import {
 type TestMessage = { role: string; content: string; customType?: string };
 
 function carrier(content = "runtime ctx"): TestMessage {
-  return { role: "custom", customType: OPENCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE, content };
+  return { role: "custom", customType: NATESCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE, content };
 }
 function user(content: string): TestMessage {
   return { role: "user", content };
@@ -48,7 +48,7 @@ describe("internal runtime context codec", () => {
       "Visible intro",
       "",
       INTERNAL_RUNTIME_CONTEXT_BEGIN,
-      "OpenClaw runtime context (internal):",
+      "Natesclaw runtime context (internal):",
       "This context is runtime-generated, not user-authored. Keep internal details private.",
       "",
       "[Internal task completion event]",
@@ -109,14 +109,14 @@ describe("internal runtime context codec", () => {
   });
 
   it.each([
-    ["current turn", OPENCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER],
+    ["current turn", NATESCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER],
     [
       "previous current turn",
-      "OpenClaw runtime context for the immediately preceding user message.",
+      "Natesclaw runtime context for the immediately preceding user message.",
     ],
-    ["runtime event", OPENCLAW_RUNTIME_EVENT_HEADER],
+    ["runtime event", NATESCLAW_RUNTIME_EVENT_HEADER],
   ])("detects and strips the %s prompt preface", (_name, header) => {
-    const preface = [header, OPENCLAW_RUNTIME_CONTEXT_NOTICE].join("\n");
+    const preface = [header, NATESCLAW_RUNTIME_CONTEXT_NOTICE].join("\n");
     const input = [
       preface,
       "",
@@ -134,8 +134,8 @@ describe("internal runtime context codec", () => {
 
   it("preserves text when the runtime-context header or notice does not match", () => {
     for (const input of [
-      [OPENCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER, "Ordinary user text"].join("\n"),
-      ["OpenClaw runtime context for another message.", OPENCLAW_RUNTIME_CONTEXT_NOTICE].join("\n"),
+      [NATESCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER, "Ordinary user text"].join("\n"),
+      ["Natesclaw runtime context for another message.", NATESCLAW_RUNTIME_CONTEXT_NOTICE].join("\n"),
     ]) {
       expect(hasInternalRuntimeContext(input)).toBe(false);
       expect(stripInternalRuntimeContext(input)).toBe(input);

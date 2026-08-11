@@ -25,8 +25,8 @@
  */
 
 import os from "node:os";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { ApiClient } from "../api/api-client.js";
 import { isQQBotTokenAuthenticationFailure } from "../api/auth-errors.js";
 import { ChunkedMediaApi as ChunkedMediaApiClass } from "../api/media-chunked.js";
@@ -58,11 +58,11 @@ export { UploadDailyLimitExceededError } from "../api/media-chunked.js";
 // ============ Plugin User-Agent ============
 
 let pluginVersion = "unknown";
-let openclawVersion = "unknown";
+let natesclawVersion = "unknown";
 
 /** Build the User-Agent string from the current plugin and framework versions. */
 function buildUserAgent(): string {
-  return `QQBotPlugin/${pluginVersion} (Node/${process.versions.node}; ${os.platform()}; OpenClaw/${openclawVersion})`;
+  return `QQBotPlugin/${pluginVersion} (Node/${process.versions.node}; ${os.platform()}; Natesclaw/${natesclawVersion})`;
 }
 
 /** Return the current User-Agent string. */
@@ -74,19 +74,19 @@ export function getPluginUserAgent(): string {
  * Initialize sender with the plugin version.
  * Must be called once during startup before any API calls.
  */
-export function initSender(options: { pluginVersion?: string; openclawVersion?: string }): void {
+export function initSender(options: { pluginVersion?: string; natesclawVersion?: string }): void {
   if (options.pluginVersion) {
     pluginVersion = options.pluginVersion;
   }
-  if (options.openclawVersion) {
-    openclawVersion = options.openclawVersion;
+  if (options.natesclawVersion) {
+    natesclawVersion = options.natesclawVersion;
   }
 }
 
-/** Update the OpenClaw framework version in the User-Agent (called after runtime injection). */
-export function setOpenClawVersion(version: string): void {
+/** Update the Natesclaw framework version in the User-Agent (called after runtime injection). */
+export function setNatesclawVersion(version: string): void {
   if (version) {
-    openclawVersion = version;
+    natesclawVersion = version;
   }
 }
 

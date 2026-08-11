@@ -1,12 +1,12 @@
 // TTS core coordinates text preparation, provider selection, and speech output.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   buildModelAliasIndex,
   resolveDefaultModelForAgent,
   resolveModelRefFromString,
   type ModelRef,
 } from "../agents/model-selection.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NatesclawConfig } from "../config/types.js";
 import type { TextContent } from "../llm/types.js";
 import { resolveTimerTimeoutMs } from "../shared/number-coercion.js";
 import type { ResolvedTtsConfig } from "./tts-types.js";
@@ -54,7 +54,7 @@ type SummaryModelSelection = {
 };
 
 function resolveSummaryModelRef(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   config: ResolvedTtsConfig,
 ): SummaryModelSelection {
   const defaultRef = resolveDefaultModelForAgent({ cfg });
@@ -84,7 +84,7 @@ export async function summarizeText(
   params: {
     text: string;
     targetLength: number;
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     config: ResolvedTtsConfig;
     timeoutMs: number;
   },

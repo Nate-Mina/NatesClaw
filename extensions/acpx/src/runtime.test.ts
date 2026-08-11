@@ -11,10 +11,10 @@ import {
   type AcpRuntimeEvent,
   type AcpRuntimeTurn,
 } from "../runtime-api.js";
-import { OPENCLAW_CODEX_CONFIG_ARG } from "./codex-adapter.js";
+import { NATESCLAW_CODEX_CONFIG_ARG } from "./codex-adapter.js";
 import {
-  OPENCLAW_ACPX_LEASE_ID_ARG,
-  OPENCLAW_GATEWAY_INSTANCE_ID_ARG,
+  NATESCLAW_ACPX_LEASE_ID_ARG,
+  NATESCLAW_GATEWAY_INSTANCE_ID_ARG,
   readAcpxProcessLeaseIdentity,
 } from "./process-lease.js";
 import { AcpxRuntime, testing, type AcpSessionStore } from "./runtime.js";
@@ -25,11 +25,11 @@ type TestSessionStore = {
   save(record: Record<string, unknown>): Promise<void>;
 };
 
-const DOCUMENTED_OPENCLAW_BRIDGE_COMMAND =
-  "env OPENCLAW_HIDE_BANNER=1 OPENCLAW_SUPPRESS_NOTES=1 openclaw acp --url ws://127.0.0.1:18789 --token-file ~/.openclaw/gateway.token --session agent:main:main";
+const DOCUMENTED_NATESCLAW_BRIDGE_COMMAND =
+  "env NATESCLAW_HIDE_BANNER=1 NATESCLAW_SUPPRESS_NOTES=1 natesclaw acp --url ws://127.0.0.1:18789 --token-file ~/.natesclaw/gateway.token --session agent:main:main";
 const CODEX_ACP_COMMAND = "npx @agentclientprotocol/codex-acp@1.1.2";
-const CODEX_ACP_WRAPPER_COMMAND = `node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"`;
-const CODEX_ACP_WRAPPER_COMMAND_WITH_LEASE = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-close ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+const CODEX_ACP_WRAPPER_COMMAND = `node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"`;
+const CODEX_ACP_WRAPPER_COMMAND_WITH_LEASE = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-close ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
 const LOCAL_NODE_MODULES_CODEX_COMMAND = `node "${path.resolve(
   "node_modules/@agentclientprotocol/codex-acp/dist/index.js",
 )}"`;
@@ -70,8 +70,8 @@ function makeRuntime(
       cwd: "/tmp",
       sessionStore: baseStore as unknown as AcpSessionStore,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "openclaw" ? "openclaw acp" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "natesclaw" ? "natesclaw acp" : agentName),
+        list: () => ["codex", "natesclaw"],
       },
       permissionMode: "approve-reads",
       ...options,
@@ -199,25 +199,25 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(ensureSpy).not.toHaveBeenCalled();
   });
 
-  it("adds the OpenClaw session key to both managed tools MCP bridges", () => {
+  it("adds the Natesclaw session key to both managed tools MCP bridges", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
     };
     const { runtime } = makeRuntime(baseStore, {
       pluginToolsMcpBridgeEnabled: true,
-      openclawToolsMcpBridgeEnabled: true,
+      natesclawToolsMcpBridgeEnabled: true,
       mcpServers: [
         {
-          name: "openclaw-plugin-tools",
+          name: "natesclaw-plugin-tools",
           command: "node",
           args: ["dist/mcp/plugin-tools-serve.js"],
           env: [],
         },
         {
-          name: "openclaw-tools",
+          name: "natesclaw-tools",
           command: "node",
-          args: ["dist/mcp/openclaw-tools-serve.js"],
+          args: ["dist/mcp/natesclaw-tools-serve.js"],
           env: [],
         },
       ],
@@ -239,28 +239,28 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       return delegate.options.mcpServers?.find((server) => server.name === serverName)?.env;
     };
 
-    expect(readScopedMcpEnv("agent:worker:main", "openclaw-plugin-tools")).toContainEqual({
-      name: "OPENCLAW_TOOLS_MCP_AGENT_SESSION_KEY",
+    expect(readScopedMcpEnv("agent:worker:main", "natesclaw-plugin-tools")).toContainEqual({
+      name: "NATESCLAW_TOOLS_MCP_AGENT_SESSION_KEY",
       value: "agent:worker:main",
     });
-    expect(readScopedMcpEnv("agent:research:main", "openclaw-tools")).toContainEqual({
-      name: "OPENCLAW_TOOLS_MCP_AGENT_SESSION_KEY",
+    expect(readScopedMcpEnv("agent:research:main", "natesclaw-tools")).toContainEqual({
+      name: "NATESCLAW_TOOLS_MCP_AGENT_SESSION_KEY",
       value: "agent:research:main",
     });
   });
 
-  it("keeps managed OpenClaw tools MCP delegates reachable for fresh sessions", async () => {
+  it("keeps managed Natesclaw tools MCP delegates reachable for fresh sessions", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
     };
     const { runtime } = makeRuntime(baseStore, {
-      openclawToolsMcpBridgeEnabled: true,
+      natesclawToolsMcpBridgeEnabled: true,
       mcpServers: [
         {
-          name: "openclaw-tools",
+          name: "natesclaw-tools",
           command: "node",
-          args: ["dist/mcp/openclaw-tools-serve.js"],
+          args: ["dist/mcp/natesclaw-tools-serve.js"],
           env: [],
         },
       ],
@@ -281,18 +281,18 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     );
   });
 
-  it("uses the no-MCP delegate for startup probes when the OpenClaw tools bridge is enabled", async () => {
+  it("uses the no-MCP delegate for startup probes when the Natesclaw tools bridge is enabled", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
     };
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
-      openclawToolsMcpBridgeEnabled: true,
+      natesclawToolsMcpBridgeEnabled: true,
       mcpServers: [
         {
-          name: "openclaw-tools",
+          name: "natesclaw-tools",
           command: "node",
-          args: ["dist/mcp/openclaw-tools-serve.js"],
+          args: ["dist/mcp/natesclaw-tools-serve.js"],
           env: [],
         },
       ],
@@ -322,9 +322,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
         agentRegistry: {
           resolve: (agentName: string) =>
             agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -332,7 +332,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
         },
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => {
             events.push("process-inspected");
             return [];
@@ -351,8 +351,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     await runtime.probeAvailability();
 
     expect(events).toEqual(["lease-saved", "probe-entered", "process-inspected"]);
-    expect(launchedCommand).toContain(OPENCLAW_ACPX_LEASE_ID_ARG);
-    expect(launchedCommand).toContain(`${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`);
+    expect(launchedCommand).toContain(NATESCLAW_ACPX_LEASE_ID_ARG);
+    expect(launchedCommand).toContain(`${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`);
     expect(Array.from(leaseStore.leases.values())).toEqual([
       expect.objectContaining({ rootPid: 0, state: "open" }),
     ]);
@@ -370,9 +370,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
         agentRegistry: {
           resolve: (agentName: string) =>
             agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -380,7 +380,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
         },
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             { pid: 710, ppid: 1, command: launchedCommand },
             { pid: 711, ppid: 710, command: "node adapter-child.js" },
@@ -418,9 +418,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
         agentRegistry: {
           resolve: (agentName: string) =>
             agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -428,7 +428,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
         },
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => {
             throw new Error("process evidence unavailable");
           }),
@@ -454,8 +454,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-live",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:live",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 700,
       commandHash: "hash-live",
       startedAt: 1,
@@ -475,9 +475,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
         agentRegistry: {
           resolve: (agentName: string) =>
             agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -485,7 +485,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
         },
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => []),
         },
       },
@@ -507,9 +507,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime: updatedRuntime, delegate: updatedDelegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
         agentRegistry: {
           resolve: (agentName: string) =>
             agentName === "codex" ? `${CODEX_ACP_WRAPPER_COMMAND} --updated` : agentName,
@@ -517,7 +517,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
         },
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => []),
         },
       },
@@ -546,9 +546,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -559,7 +559,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       const command = (
         runtime as unknown as { scopedAgentRegistry: { resolve(agent: string): string } }
       ).scopedAgentRegistry.resolve("codex");
-      expect(command).toContain(OPENCLAW_ACPX_LEASE_ID_ARG);
+      expect(command).toContain(NATESCLAW_ACPX_LEASE_ID_ARG);
       throw new Error("probe launch state unknown");
     });
 
@@ -569,14 +569,14 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       expect.objectContaining({
         gatewayInstanceId: "gateway-test",
         rootPid: 0,
-        sessionKey: "openclaw:acpx:probe",
+        sessionKey: "natesclaw:acpx:probe",
         state: "open",
       }),
     ]);
     expect(leaseStore.store.markState).not.toHaveBeenCalledWith(expect.any(String), "lost");
   });
 
-  it("normalizes OpenClaw Codex model ids for ACP startup", async () => {
+  it("normalizes Natesclaw Codex model ids for ACP startup", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -584,7 +584,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -611,7 +611,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
 
   it.each([
     {
-      name: "strips the OpenClaw Anthropic provider prefix for Claude ACP startup",
+      name: "strips the Natesclaw Anthropic provider prefix for Claude ACP startup",
       model: "anthropic/claude-sonnet-4-6",
       expectedModel: "claude-sonnet-4-6",
     },
@@ -629,7 +629,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "claude" ? "npx @agentclientprotocol/claude-agent-acp" : agentName,
-        list: () => ["claude", "openclaw"],
+        list: () => ["claude", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -662,7 +662,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -702,7 +702,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       forbiddenFragment: "\ude80",
     },
   ])("$name", async ({ stderr, expectedFragment, forbiddenFragment }) => {
-    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-acpx-runtime-"));
+    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-acpx-runtime-"));
     const leaseStore = makeLeaseStore();
     const wrapperCommand = `node "${path.join(wrapperRoot, "codex-acp-wrapper.mjs")}"`;
     const baseStore: TestSessionStore = {
@@ -710,9 +710,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       save: vi.fn(async () => {}),
     };
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: wrapperRoot,
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: wrapperRoot,
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? wrapperCommand : agentName),
         list: () => ["codex"],
@@ -757,7 +757,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("adds Codex wrapper stderr tail to generic first-turn failures", async () => {
-    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-acpx-runtime-"));
+    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-acpx-runtime-"));
     await fs.writeFile(
       path.join(wrapperRoot, "codex-acp-wrapper.stderr.lease-turn.log"),
       "Unhandled error during turn: upstream model returned 404\n",
@@ -767,12 +767,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:test",
         agentCommand: CODEX_ACP_WRAPPER_COMMAND,
-        openclawLeaseId: "lease-turn",
+        natesclawLeaseId: "lease-turn",
       })),
       save: vi.fn(async () => {}),
     };
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawWrapperRoot: wrapperRoot,
+      natesclawWrapperRoot: wrapperRoot,
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -812,7 +812,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("adds Codex wrapper stderr tail to generic terminal turn error events", async () => {
-    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-acpx-runtime-"));
+    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-acpx-runtime-"));
     await fs.writeFile(
       path.join(wrapperRoot, "codex-acp-wrapper.stderr.lease-turn-event.log"),
       "Unhandled error during turn: profile missing OPENAI_API_KEY\n",
@@ -822,12 +822,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:test",
         agentCommand: CODEX_ACP_WRAPPER_COMMAND,
-        openclawLeaseId: "lease-turn-event",
+        natesclawLeaseId: "lease-turn-event",
       })),
       save: vi.fn(async () => {}),
     };
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawWrapperRoot: wrapperRoot,
+      natesclawWrapperRoot: wrapperRoot,
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -868,7 +868,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("adds Codex wrapper stderr tail to generic startTurn failure results", async () => {
-    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-acpx-runtime-"));
+    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-acpx-runtime-"));
     await fs.writeFile(
       path.join(wrapperRoot, "codex-acp-wrapper.stderr.lease-start-turn.log"),
       "Unhandled error during turn: adapter disconnected after progress\n",
@@ -878,12 +878,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:test",
         agentCommand: CODEX_ACP_WRAPPER_COMMAND,
-        openclawLeaseId: "lease-start-turn",
+        natesclawLeaseId: "lease-start-turn",
       })),
       save: vi.fn(async () => {}),
     };
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawWrapperRoot: wrapperRoot,
+      natesclawWrapperRoot: wrapperRoot,
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -946,7 +946,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("adds Codex wrapper stderr tail when startTurn creation throws", async () => {
-    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-acpx-runtime-"));
+    const wrapperRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-acpx-runtime-"));
     await fs.writeFile(
       path.join(wrapperRoot, "codex-acp-wrapper.stderr.lease-start-turn-create.log"),
       "Unhandled error during turn: adapter failed before returning turn\n",
@@ -956,12 +956,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:test",
         agentCommand: CODEX_ACP_WRAPPER_COMMAND,
-        openclawLeaseId: "lease-start-turn-create",
+        natesclawLeaseId: "lease-start-turn-create",
       })),
       save: vi.fn(async () => {}),
     };
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawWrapperRoot: wrapperRoot,
+      natesclawWrapperRoot: wrapperRoot,
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -991,7 +991,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     });
   });
 
-  it("disables delegate prompt timeout for OpenClaw-managed turns", async () => {
+  it("disables delegate prompt timeout for Natesclaw-managed turns", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:test",
@@ -1077,7 +1077,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "main" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["main", "codex", "openclaw"],
+        list: () => ["main", "codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1205,9 +1205,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
         reasoningEffort: "medium",
       }),
     ).toBe(
-      `npx @agentclientprotocol/codex-acp@1.1.2 ${OPENCLAW_CODEX_CONFIG_ARG} '{"model":"gpt-5.4","model_reasoning_effort":"medium"}'`,
+      `npx @agentclientprotocol/codex-acp@1.1.2 ${NATESCLAW_CODEX_CONFIG_ARG} '{"model":"gpt-5.4","model_reasoning_effort":"medium"}'`,
     );
-    expect(testing.isCodexAcpCommand("openclaw acp")).toBe(false);
+    expect(testing.isCodexAcpCommand("natesclaw acp")).toBe(false);
     expect(testing.normalizeAgentCommand(["node", "/tmp/codex acp/index.js", "--label", ""])).toBe(
       "node '/tmp/codex acp/index.js' --label ''",
     );
@@ -1221,7 +1221,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1254,7 +1254,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1297,7 +1297,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1331,7 +1331,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1358,7 +1358,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1385,7 +1385,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1416,7 +1416,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1447,7 +1447,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       const { runtime, delegate } = makeRuntime(baseStore, {
         agentRegistry: {
           resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-          list: () => ["codex", "openclaw"],
+          list: () => ["codex", "natesclaw"],
         },
       });
       const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1477,7 +1477,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "natesclaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1504,7 +1504,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
 
   it.each([
     {
-      name: "normalizes OpenClaw-qualified Codex ACP model controls",
+      name: "normalizes Natesclaw-qualified Codex ACP model controls",
       value: "openai/gpt-5.4",
     },
     { name: "passes bare Codex ACP model controls through", value: "gpt-5.4" },
@@ -1827,19 +1827,19 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(testing.isClaudeAcpCommand("claude-agent-acp")).toBe(true);
     expect(testing.isClaudeAcpCommand("claude-agent-acp.exe")).toBe(true);
     expect(
-      testing.isClaudeAcpCommand(`node "/tmp/openclaw/acpx/claude-agent-acp-wrapper.mjs"`),
+      testing.isClaudeAcpCommand(`node "/tmp/natesclaw/acpx/claude-agent-acp-wrapper.mjs"`),
     ).toBe(true);
     expect(
       testing.isClaudeAcpCommand(
-        `node.exe "C:/Users/runner/AppData/Local/Temp/openclaw/acpx/claude-agent-acp-wrapper.mjs"`,
+        `node.exe "C:/Users/runner/AppData/Local/Temp/natesclaw/acpx/claude-agent-acp-wrapper.mjs"`,
       ),
     ).toBe(true);
     expect(
       testing.isClaudeAcpCommand(
-        `Node.EXE "C:/Users/runner/AppData/Local/Temp/openclaw/acpx/claude-agent-acp-wrapper.mjs"`,
+        `Node.EXE "C:/Users/runner/AppData/Local/Temp/natesclaw/acpx/claude-agent-acp-wrapper.mjs"`,
       ),
     ).toBe(true);
-    expect(testing.isClaudeAcpCommand("openclaw acp")).toBe(false);
+    expect(testing.isClaudeAcpCommand("natesclaw acp")).toBe(false);
     expect(testing.isClaudeAcpCommand("npx @agentclientprotocol/codex-acp")).toBe(false);
   });
 
@@ -1908,19 +1908,19 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(baseStore["load"]).toHaveBeenCalledOnce();
   });
 
-  it("releases managed OpenClaw tools MCP delegates after close", async () => {
+  it("releases managed Natesclaw tools MCP delegates after close", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
     };
 
     const { runtime } = makeRuntime(baseStore, {
-      openclawToolsMcpBridgeEnabled: true,
+      natesclawToolsMcpBridgeEnabled: true,
       mcpServers: [
         {
-          name: "openclaw-tools",
+          name: "natesclaw-tools",
           command: "node",
-          args: ["dist/mcp/openclaw-tools-serve.js"],
+          args: ["dist/mcp/natesclaw-tools-serve.js"],
           env: [],
         },
       ],
@@ -1947,11 +1947,11 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(exposedRuntime.managedToolsSessionDelegates.has("agent:codex:main")).toBe(false);
   });
 
-  it("cleans up OpenClaw-owned ACPX process trees after close", async () => {
+  it("cleans up Natesclaw-owned ACPX process trees after close", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
         pid: 900,
       })),
       save: vi.fn(async () => {}),
@@ -1960,21 +1960,21 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 900,
               ppid: 1,
-              command: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+              command: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
             },
             {
               pid: 901,
               ppid: 900,
               command:
-                "node /tmp/openclaw/plugin-runtime-deps/node_modules/@agentclientprotocol/codex-acp/dist/index.js",
+                "node /tmp/natesclaw/plugin-runtime-deps/node_modules/@agentclientprotocol/codex-acp/dist/index.js",
             },
           ]),
           killProcess: vi.fn((pid, signal) => {
@@ -2012,9 +2012,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2052,12 +2052,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(lease?.sessionKey).toBe("agent:codex:acp:binding:test");
     expect(lease?.rootPid).toBe(777);
     expect(lease?.state).toBe("open");
-    expect(lease?.wrapperPath).toBe("/tmp/openclaw/acpx/codex-acp-wrapper.mjs");
-    expect(launchCommands[0]).toContain(OPENCLAW_ACPX_LEASE_ID_ARG);
-    expect(launchCommands[0]).toContain(OPENCLAW_GATEWAY_INSTANCE_ID_ARG);
+    expect(lease?.wrapperPath).toBe("/tmp/natesclaw/acpx/codex-acp-wrapper.mjs");
+    expect(launchCommands[0]).toContain(NATESCLAW_ACPX_LEASE_ID_ARG);
+    expect(launchCommands[0]).toContain(NATESCLAW_GATEWAY_INSTANCE_ID_ARG);
     expect(savedRecords[0]?.agentCommand).toBe(launchCommands[0]);
-    expect(savedRecords[0]?.openclawGatewayInstanceId).toBe("gateway-test");
-    expect(savedRecords[0]?.openclawLeaseId).toBe(lease?.leaseId);
+    expect(savedRecords[0]?.natesclawGatewayInstanceId).toBe("gateway-test");
+    expect(savedRecords[0]?.natesclawLeaseId).toBe(lease?.leaseId);
   });
 
   it("does not create launch leases for direct plugin-local ACP adapter commands", async () => {
@@ -2068,9 +2068,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? LOCAL_NODE_MODULES_CODEX_COMMAND : agentName,
@@ -2105,7 +2105,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("keeps reusable persistent ACP launch commands stable across ensures", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-existing ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-existing ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -2123,17 +2123,17 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-existing",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 1,
       state: "open",
     });
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2165,7 +2165,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("recreates a missing sidecar with the persisted lease identity", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-missing ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-missing ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     let savedRecord: Record<string, unknown> = {
       name: "agent:codex:acp:binding:test",
       acpxRecordId: "record-1",
@@ -2182,9 +2182,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2218,7 +2218,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("does not reuse commands leased by another gateway instance", async () => {
-    const foreignCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-foreign ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-foreign`;
+    const foreignCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-foreign ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-foreign`;
     let savedRecord: Record<string, unknown> = {
       name: "agent:codex:acp:binding:test",
       acpxRecordId: "record-1",
@@ -2236,9 +2236,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2271,13 +2271,13 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     });
 
     expect(resolvedCommands[0]).not.toBe(foreignCommand);
-    expect(resolvedCommands[0]).toContain(`${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`);
+    expect(resolvedCommands[0]).toContain(`${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`);
     expect(savedRecord.pid).toBe(888);
     expect(leaseStore.leases.size).toBe(1);
   });
 
   it("rejects reconnect operations for commands leased by another gateway", async () => {
-    const foreignCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-foreign-operation ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-foreign`;
+    const foreignCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-foreign-operation ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-foreign`;
     const handle = {
       sessionKey: "agent:codex:acp:binding:test",
       backend: "acpx" as const,
@@ -2297,15 +2297,15 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       };
       const leaseStore = makeLeaseStore();
       const { runtime } = makeRuntime(baseStore, {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawToolsMcpBridgeEnabled: true,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawToolsMcpBridgeEnabled: true,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
         mcpServers: [
           {
-            name: "openclaw-tools",
+            name: "natesclaw-tools",
             command: "node",
-            args: ["dist/mcp/openclaw-tools-serve.js"],
+            args: ["dist/mcp/natesclaw-tools-serve.js"],
             env: [],
           },
         ],
@@ -2362,9 +2362,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2446,9 +2446,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2477,15 +2477,15 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     });
 
     expect(resolvedCommands).toEqual([CODEX_ACP_WRAPPER_COMMAND]);
-    expect(savedRecord.agentCommand).toContain(OPENCLAW_ACPX_LEASE_ID_ARG);
-    expect(savedRecord.agentCommand).toContain(OPENCLAW_GATEWAY_INSTANCE_ID_ARG);
+    expect(savedRecord.agentCommand).toContain(NATESCLAW_ACPX_LEASE_ID_ARG);
+    expect(savedRecord.agentCommand).toContain(NATESCLAW_GATEWAY_INSTANCE_ID_ARG);
     expect(savedRecord.pid).toBeUndefined();
     expect(leaseStore.leases.size).toBe(0);
 
     await wrappedStore.save({ ...savedRecord, pid: 888 });
 
     const [lease] = Array.from(leaseStore.leases.values());
-    expect(lease?.leaseId).toBe(savedRecord.openclawLeaseId);
+    expect(lease?.leaseId).toBe(savedRecord.natesclawLeaseId);
     expect(lease?.rootPid).toBe(888);
   });
 
@@ -2496,9 +2496,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2531,9 +2531,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -2567,7 +2567,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("restores a pending process lease before runTurn reconnects", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-turn-reconnect ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-turn-reconnect ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -2577,9 +2577,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     vi.spyOn(delegate, "runTurn").mockImplementation(async function* () {
       expect(leaseStore.leases.get("lease-turn-reconnect")).toMatchObject({
@@ -2605,7 +2605,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("restores a missing sidecar from the persisted lease PID", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-live-reconnect ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-live-reconnect ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -2616,9 +2616,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     vi.spyOn(delegate, "runTurn").mockImplementation(async function* () {
       expect(leaseStore.leases.get("lease-live-reconnect")).toMatchObject({
@@ -2648,7 +2648,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("retires runTurn pending leases when handle resolution fails", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-turn-resolution ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-turn-resolution ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     let loads = 0;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => {
@@ -2665,9 +2665,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
 
     await expect(async () => {
@@ -2689,7 +2689,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("restores a pending process lease before startTurn reconnects", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-start-reconnect ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-start-reconnect ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -2699,9 +2699,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     vi.spyOn(delegate, "startTurn").mockImplementation((input) => {
       expect(leaseStore.leases.get("lease-start-reconnect")).toMatchObject({
@@ -2733,7 +2733,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("loads one wrapper snapshot per handle operation before mutation", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-control-reconnect ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-control-reconnect ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -2743,9 +2743,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     const expectPendingLease = () => {
       expect(leaseStore.leases.get("lease-control-reconnect")).toMatchObject({
@@ -2796,7 +2796,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("preserves a promoted PID when the session record save fails", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-partial-save ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-partial-save ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const savedRecord: Record<string, unknown> = {
       name: "agent:codex:acp:binding:test",
       agentCommand: leasedCommand,
@@ -2813,17 +2813,17 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-partial-save",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 1,
       state: "open",
     });
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     vi.spyOn(delegate, "setMode").mockImplementation(async () => {
       await wrappedStore.save({ ...savedRecord, pid: 888 });
@@ -2847,7 +2847,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("keeps a shared pending lease until the last concurrent operation finishes", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-concurrent-operations ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-concurrent-operations ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -2857,9 +2857,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     let markTurnStarted!: () => void;
     const turnStarted = new Promise<void>((resolve) => {
@@ -2903,8 +2903,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("retires an old lease after the session record switches identity", async () => {
-    const oldCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-old-operation ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
-    const newCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-new-session ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const oldCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-old-operation ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const newCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-new-session ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     let savedRecord: Record<string, unknown> = {
       name: "agent:codex:acp:binding:test",
       agentCommand: oldCommand,
@@ -2921,17 +2921,17 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-old-operation",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 1,
       state: "open",
     });
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     let markTurnStarted!: () => void;
     const turnStarted = new Promise<void>((resolve) => {
@@ -2985,9 +2985,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -3045,7 +3045,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     failLaunch();
     await expect(launch).rejects.toThrow("launch failed");
 
-    const leaseId = String(savedRecord?.openclawLeaseId);
+    const leaseId = String(savedRecord?.natesclawLeaseId);
     expect(leaseStore.leases.get(leaseId)).toMatchObject({
       leaseId,
       rootPid: 0,
@@ -3056,7 +3056,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("serializes last-owner retirement with the next lease acquisition", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-retirement-race ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-retirement-race ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -3083,9 +3083,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       return leaseStore.leases.get(leaseId) as never;
     });
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     vi.spyOn(delegate, "runTurn").mockImplementation(async function* () {
       yield { type: "status", text: "completed" };
@@ -3121,7 +3121,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("rechecks a reusable sidecar after the prior owner retires it", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-reusable-race ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-reusable-race ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const sessionKey = "agent:codex:acp:binding:test";
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
@@ -3137,8 +3137,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-reusable-race",
       gatewayInstanceId: "gateway-test",
       sessionKey,
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 0,
       commandHash: "hash",
       startedAt: 1,
@@ -3162,9 +3162,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       return leaseStore.leases.get(leaseId) as never;
     });
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -3216,7 +3216,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("keeps close pending leases when cleanup fails", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-close-failure ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-close-failure ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -3226,9 +3226,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     vi.spyOn(delegate, "close").mockResolvedValue(undefined);
     vi.spyOn(
@@ -3256,7 +3256,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   });
 
   it("preserves PID-bearing close leases when cleanup fails", async () => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-close-live ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-close-live ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -3270,17 +3270,17 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-close-live",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 1,
       state: "open",
     });
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
     vi.spyOn(delegate, "close").mockResolvedValue(undefined);
     vi.spyOn(
@@ -3324,7 +3324,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       },
     },
   ])("keeps close leases retryable when $evidence", async ({ processCleanup }) => {
-    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-close-process-list ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+    const leasedCommand = `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-close-process-list ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
@@ -3338,8 +3338,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-close-process-list",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 1,
@@ -3348,12 +3348,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           ...processCleanup,
           sleep: vi.fn(async () => {}),
         },
@@ -3385,8 +3385,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-loaded",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 1,
@@ -3395,20 +3395,20 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
         pid: 777,
       })),
       save: vi.fn(async () => {}),
     };
     const { wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
 
     const loadedRecord = await wrappedStore.load("agent:codex:acp:binding:test");
-    expect(loadedRecord?.openclawGatewayInstanceId).toBe("gateway-test");
-    expect(loadedRecord?.openclawLeaseId).toBe("lease-loaded");
+    expect(loadedRecord?.natesclawGatewayInstanceId).toBe("gateway-test");
+    expect(loadedRecord?.natesclawLeaseId).toBe("lease-loaded");
   });
 
   it("merges the lease for the current ACPX session process when old leases exist", async () => {
@@ -3417,8 +3417,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-old",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 700,
       commandHash: "hash",
       startedAt: 1,
@@ -3428,8 +3428,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-current",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 2,
@@ -3438,20 +3438,20 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
         pid: 777,
       })),
       save: vi.fn(async () => {}),
     };
     const { wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      natesclawGatewayInstanceId: "gateway-test",
+      natesclawProcessLeaseStore: leaseStore.store,
+      natesclawWrapperRoot: "/tmp/natesclaw/acpx",
     });
 
     const loadedRecord = await wrappedStore.load("agent:codex:acp:binding:test");
-    expect(loadedRecord?.openclawGatewayInstanceId).toBe("gateway-test");
-    expect(loadedRecord?.openclawLeaseId).toBe("lease-current");
+    expect(loadedRecord?.natesclawGatewayInstanceId).toBe("gateway-test");
+    expect(loadedRecord?.natesclawLeaseId).toBe("lease-current");
   });
 
   it("uses matching leases before legacy pid cleanup on close", async () => {
@@ -3460,8 +3460,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-close",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 930,
       commandHash: "hash",
       startedAt: 1,
@@ -3470,8 +3470,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
-        openclawLeaseId: "lease-close",
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
+        natesclawLeaseId: "lease-close",
         pid: 930,
       })),
       save: vi.fn(async () => {}),
@@ -3480,12 +3480,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 930,
@@ -3526,8 +3526,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-old",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 930,
       commandHash: "hash",
       startedAt: 1,
@@ -3537,8 +3537,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-current",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/natesclaw/acpx",
+      wrapperPath: "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 940,
       commandHash: "hash",
       startedAt: 2,
@@ -3547,8 +3547,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
-        openclawLeaseId: "lease-old",
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
+        natesclawLeaseId: "lease-old",
         pid: 940,
       })),
       save: vi.fn(async () => {}),
@@ -3557,22 +3557,22 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawProcessLeaseStore: leaseStore.store,
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 930,
               ppid: 1,
-              command: `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-old ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
+              command: `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-old ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
             },
             {
               pid: 940,
               ppid: 1,
-              command: `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-current ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
+              command: `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} lease-current ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
             },
             { pid: 941, ppid: 940, command: "node child.js" },
           ]),
@@ -3608,7 +3608,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
         pid: 920,
       })),
       save: vi.fn(async () => {}),
@@ -3617,10 +3617,10 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 920,
@@ -3662,11 +3662,11 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 920,
@@ -3703,9 +3703,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
-        openclawGatewayInstanceId: "gateway-test",
-        openclawLeaseId: "lease-record",
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawLeaseId: "lease-record",
         pid: 920,
       })),
       save: vi.fn(async () => {}),
@@ -3714,16 +3714,16 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        natesclawGatewayInstanceId: "gateway-test",
+        natesclawWrapperRoot: "/tmp/natesclaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 920,
               ppid: 1,
-              command: `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} other-lease ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
+              command: `${CODEX_ACP_WRAPPER_COMMAND} ${NATESCLAW_ACPX_LEASE_ID_ARG} other-lease ${NATESCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
             },
           ]),
           killProcess: vi.fn((pid, signal) => {
@@ -3751,7 +3751,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/natesclaw/acpx/codex-acp-wrapper.mjs"',
         processId: "910",
       })),
       save: vi.fn(async () => {}),
@@ -3764,7 +3764,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       baseStore,
       {},
       {
-        openclawProcessCleanup: {
+        natesclawProcessCleanup: {
           listProcesses,
           killProcess: vi.fn((pid, signal) => {
             killed.push({ pid, signal });
@@ -3790,7 +3790,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(killed).toStrictEqual([]);
   });
 
-  it("routes openclaw ensureSession through the bridge-safe delegate when MCP servers are configured", async () => {
+  it("routes natesclaw ensureSession through the bridge-safe delegate when MCP servers are configured", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -3805,14 +3805,14 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:natesclaw:acp:test",
+      agent: "natesclaw",
       mode: "persistent",
     });
 
@@ -3821,7 +3821,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultEnsure).not.toHaveBeenCalled();
   });
 
-  it("routes non-openclaw sessions through the default delegate", async () => {
+  it("routes non-natesclaw sessions through the default delegate", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -3836,7 +3836,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
@@ -3852,7 +3852,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(bridgeEnsure).not.toHaveBeenCalled();
   });
 
-  it("routes handle-based follow-up calls for openclaw sessions through the bridge-safe delegate", async () => {
+  it("routes handle-based follow-up calls for natesclaw sessions through the bridge-safe delegate", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -3868,9 +3868,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       summary: "bridge",
     });
     const handle: Parameters<NonNullable<AcpRuntime["getStatus"]>>[0]["handle"] = {
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
-      runtimeSessionName: "openclaw-session-handle",
+      runtimeSessionName: "natesclaw-session-handle",
     };
 
     const status = await runtime.getStatus({ handle });
@@ -3880,7 +3880,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultStatus).not.toHaveBeenCalled();
   });
 
-  it("keeps MCP-enabled routing when the openclaw agent is overridden to a non-bridge adapter", async () => {
+  it("keeps MCP-enabled routing when the natesclaw agent is overridden to a non-bridge adapter", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -3889,24 +3889,24 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "openclaw" ? "codex" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "natesclaw" ? "codex" : agentName),
+        list: () => ["codex", "natesclaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:natesclaw:acp:test",
+      agent: "natesclaw",
       mode: "persistent",
     });
 
@@ -3915,7 +3915,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(bridgeEnsure).not.toHaveBeenCalled();
   });
 
-  it("uses the bridge-safe delegate for any agent mapped to the openclaw bridge command", async () => {
+  it("uses the bridge-safe delegate for any agent mapped to the natesclaw bridge command", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -3924,8 +3924,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "codex" ? "openclaw acp" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "codex" ? "natesclaw acp" : agentName),
+        list: () => ["codex", "natesclaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -3950,7 +3950,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultEnsure).not.toHaveBeenCalled();
   });
 
-  it("uses the bridge-safe delegate for documented env-wrapped openclaw bridge commands", async () => {
+  it("uses the bridge-safe delegate for documented env-wrapped natesclaw bridge commands", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -3960,24 +3960,24 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
         resolve: (agentName: string) =>
-          agentName === "openclaw" ? DOCUMENTED_OPENCLAW_BRIDGE_COMMAND : agentName,
-        list: () => ["codex", "openclaw"],
+          agentName === "natesclaw" ? DOCUMENTED_NATESCLAW_BRIDGE_COMMAND : agentName,
+        list: () => ["codex", "natesclaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:natesclaw:acp:test",
+      agent: "natesclaw",
       mode: "persistent",
     });
 
@@ -3986,7 +3986,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultEnsure).not.toHaveBeenCalled();
   });
 
-  it("uses the bridge-safe delegate for local node openclaw entrypoints", async () => {
+  it("uses the bridge-safe delegate for local node natesclaw entrypoints", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -3996,24 +3996,24 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
         resolve: (agentName: string) =>
-          agentName === "openclaw" ? "env OPENCLAW_HIDE_BANNER=1 node openclaw.mjs acp" : agentName,
-        list: () => ["codex", "openclaw"],
+          agentName === "natesclaw" ? "env NATESCLAW_HIDE_BANNER=1 node natesclaw.mjs acp" : agentName,
+        list: () => ["codex", "natesclaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:natesclaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:natesclaw:acp:test",
+      agent: "natesclaw",
       mode: "persistent",
     });
 
@@ -4025,8 +4025,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   it("routes follow-up calls by persisted agent command before current config", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
-        acpxRecordId: "agent:openclaw:acp:test",
-        agentCommand: DOCUMENTED_OPENCLAW_BRIDGE_COMMAND,
+        acpxRecordId: "agent:natesclaw:acp:test",
+        agentCommand: DOCUMENTED_NATESCLAW_BRIDGE_COMMAND,
       })),
       save: vi.fn(async () => {}),
     };
@@ -4034,8 +4034,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "openclaw" ? "codex" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "natesclaw" ? "codex" : agentName),
+        list: () => ["codex", "natesclaw"],
       },
     });
     const defaultStatus = vi.spyOn(delegate, "getStatus").mockResolvedValue({
@@ -4047,9 +4047,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
 
     const status = await runtime.getStatus({
       handle: {
-        sessionKey: "agent:openclaw:acp:test",
+        sessionKey: "agent:natesclaw:acp:test",
         backend: "acpx",
-        runtimeSessionName: "agent:openclaw:acp:test",
+        runtimeSessionName: "agent:natesclaw:acp:test",
       },
     });
 
@@ -4058,7 +4058,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultStatus).not.toHaveBeenCalled();
   });
 
-  it("probes through the bridge-safe delegate when probeAgent resolves to openclaw bridge", async () => {
+  it("probes through the bridge-safe delegate when probeAgent resolves to natesclaw bridge", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -4066,11 +4066,11 @@ describe("AcpxRuntime fresh reset wrapper", () => {
 
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
-      probeAgent: "  OpenClaw  ",
+      probeAgent: "  Natesclaw  ",
       agentRegistry: {
         resolve: (agentName: string) =>
-          agentName === "openclaw" ? DOCUMENTED_OPENCLAW_BRIDGE_COMMAND : agentName,
-        list: () => ["codex", "openclaw"],
+          agentName === "natesclaw" ? DOCUMENTED_NATESCLAW_BRIDGE_COMMAND : agentName,
+        list: () => ["codex", "natesclaw"],
       },
     });
     const defaultProbe = vi.spyOn(delegate, "probeAvailability").mockResolvedValue(undefined);

@@ -1,7 +1,7 @@
 // Skill tool dispatch routes runtime skill tool calls through the active session context.
 import { resolveEffectiveToolPolicy } from "../../agents/agent-tools.policy.js";
 import type { AnyAgentTool } from "../../agents/agent-tools.types.js";
-import { createOpenClawTools } from "../../agents/openclaw-tools.runtime.js";
+import { createNatesclawTools } from "../../agents/natesclaw-tools.runtime.js";
 import { resolveRequesterToolPolicies } from "../../agents/requester-tool-policy.js";
 import { resolveSandboxRuntimeStatus } from "../../agents/sandbox/runtime-status.js";
 import { buildDeclaredToolAllowlistContext } from "../../agents/tool-policy-declared-context.js";
@@ -23,7 +23,7 @@ import {
   type CronCreatorToolAllowlistEntry,
 } from "../../agents/tools/cron-tool.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";
 import { getPluginToolMeta } from "../../plugins/tools.js";
 import { GATEWAY_OWNER_ONLY_CORE_TOOLS } from "../../security/dangerous-tools.js";
@@ -52,7 +52,7 @@ type SkillDispatchMessageContext = {
  */
 export function resolveSkillDispatchTools(params: {
   message: SkillDispatchMessageContext;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   agentDir?: string;
   sessionEntry?: SessionEntry;
@@ -155,7 +155,7 @@ export function resolveSkillDispatchTools(params: {
         },
       }
     : undefined;
-  const tools = createOpenClawTools({
+  const tools = createNatesclawTools({
     agentSessionKey: params.sessionKey,
     agentChannel: channel,
     agentAccountId: params.message.accountId,

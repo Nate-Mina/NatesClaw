@@ -3,15 +3,15 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { stripAnsiSequences } from "../../../../packages/terminal-core/src/ansi.js";
-import type { OpenClawConfig } from "../../../../src/config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../../src/config/types.natesclaw.js";
 import { withSecureTestNodeCommand } from "../../../../src/secrets/test-node-command.test-support.js";
 import {
-  createOpenClawTestInstance,
-  type OpenClawTestInstance,
-} from "../../../helpers/openclaw-test-instance.js";
+  createNatesclawTestInstance,
+  type NatesclawTestInstance,
+} from "../../../helpers/natesclaw-test-instance.js";
 
-let instance: OpenClawTestInstance | undefined;
-type GatewayToken = NonNullable<NonNullable<OpenClawConfig["gateway"]>["auth"]>["token"];
+let instance: NatesclawTestInstance | undefined;
+type GatewayToken = NonNullable<NonNullable<NatesclawConfig["gateway"]>["auth"]>["token"];
 const DOCTOR_CLI_TIMEOUT_MS = 120_000;
 const DOCTOR_CLI_CALL_COUNT = 6;
 // Entry-point preparation can precede the first CLI timeout; reserve one more
@@ -31,11 +31,11 @@ function normalizedOutputOf(result: { stderr: string; stdout: string }): string 
   return stripAnsiSequences(outputOf(result)).replaceAll("│", " ").replace(/\s+/g, " ").trim();
 }
 
-async function writeConfig(config: OpenClawConfig): Promise<void> {
+async function writeConfig(config: NatesclawConfig): Promise<void> {
   await instance?.state.writeConfig(config);
 }
 
-function localGatewayConfig(token?: GatewayToken): OpenClawConfig {
+function localGatewayConfig(token?: GatewayToken): NatesclawConfig {
   return {
     gateway: {
       mode: "local",
@@ -57,7 +57,7 @@ describe.skipIf(process.platform === "win32")("doctor auth and SecretRef product
     "preserves SecretRef ownership while proving resolution, fallback, exec gating, and token generation",
     { timeout: DOCTOR_SCENARIO_TIMEOUT_MS },
     async () => {
-      instance = await createOpenClawTestInstance({
+      instance = await createNatesclawTestInstance({
         name: "qa-doctor-auth-secretref",
       });
 
@@ -80,7 +80,7 @@ describe.skipIf(process.platform === "win32")("doctor auth and SecretRef product
       expect(resolvedOutput).not.toContain(resolvedValue);
 
       delete instance.env.QA_DOCTOR_MISSING_GATEWAY_TOKEN;
-      instance.env.OPENCLAW_GATEWAY_TOKEN = "qa-ambient-token-must-not-win";
+      instance.env.NATESCLAW_GATEWAY_TOKEN = "qa-ambient-token-must-not-win";
       const unresolvedRef = {
         source: "env" as const,
         provider: "default",
@@ -184,7 +184,7 @@ describe.skipIf(process.platform === "win32")("doctor auth and SecretRef product
         expect(execAllowedOutput).not.toContain("qa-exec-token");
       });
 
-      delete instance.env.OPENCLAW_GATEWAY_TOKEN;
+      delete instance.env.NATESCLAW_GATEWAY_TOKEN;
       await writeConfig(localGatewayConfig());
       const generated = await instance.cli(
         [

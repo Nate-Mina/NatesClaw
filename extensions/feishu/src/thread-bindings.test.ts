@@ -1,12 +1,12 @@
 // Feishu tests cover thread bindings plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { getSessionBindingService } from "openclaw/plugin-sdk/conversation-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { getSessionBindingService } from "natesclaw/plugin-sdk/conversation-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { testing, createFeishuThreadBindingManager } from "./thread-bindings.js";
 
 const baseCfg = {
   session: { mainKey: "main", scope: "per-sender" },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 describe("Feishu thread bindings", () => {
   beforeEach(() => {
@@ -137,7 +137,7 @@ describe("Feishu thread bindings", () => {
         scope: "per-sender",
         threadBindings: { idleHours: 2, maxAgeHours: 1 },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     createFeishuThreadBindingManager({ cfg, accountId: "default" });
     const service = getSessionBindingService();
     const conversation = {

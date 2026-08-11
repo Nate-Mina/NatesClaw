@@ -1,4 +1,4 @@
 // Discord helper module supports agent components helpers behavior.
-export { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-export { readChannelIngressStoreAllowFromForDmPolicy } from "openclaw/plugin-sdk/channel-ingress-runtime";
-export { upsertChannelPairingRequest } from "openclaw/plugin-sdk/conversation-runtime";
+export { resolvePinnedMainDmOwnerFromAllowlist } from "natesclaw/plugin-sdk/security-runtime";
+export { readChannelIngressStoreAllowFromForDmPolicy } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+export { upsertChannelPairingRequest } from "natesclaw/plugin-sdk/conversation-runtime";

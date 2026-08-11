@@ -4,15 +4,15 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openExistingOpenClawStateDatabaseReadOnly,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  closeNatesclawStateDatabaseForTest,
+  openExistingNatesclawStateDatabaseReadOnly,
+  openNatesclawStateDatabase,
+} from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import {
   clearExpiredWorkspaceStateForVanishedWorkspace,
   deleteWorkspaceState,
@@ -24,17 +24,17 @@ import {
   WORKSPACE_LEGACY_STATE_MIGRATION_KIND,
 } from "./workspace-state-store.js";
 
-let testState: OpenClawTestState | undefined;
+let testState: NatesclawTestState | undefined;
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-workspace-store-",
+    prefix: "natesclaw-workspace-store-",
   });
 });
 
 afterEach(async () => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   await testState?.cleanup();
   testState = undefined;
 });
@@ -52,7 +52,7 @@ function deleteState(targetDir: string): void {
 
 function insertPersistedAttestationHash(filename: string, sha256: string): void {
   const identity = resolveWorkspaceStateIdentity(workspaceDir());
-  const db = openOpenClawStateDatabase().db;
+  const db = openNatesclawStateDatabase().db;
   db.prepare(
     "INSERT INTO workspace_attestations (workspace_key, attested_at_ms, updated_at_ms) VALUES (?, 1, 1)",
   ).run(identity.workspaceKey);
@@ -77,7 +77,7 @@ describe("workspace state store", () => {
       ]),
     });
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
 
     const snapshot = readWorkspaceStateSnapshot(dir);
     expect(snapshot.setupExists).toBe(true);
@@ -263,7 +263,7 @@ describe("workspace state store", () => {
     const alias = testState!.path("workspace-link");
     const env = {
       ...process.env,
-      OPENCLAW_STATE_DIR: testState!.path("custom-state"),
+      NATESCLAW_STATE_DIR: testState!.path("custom-state"),
     };
     fs.symlinkSync(dir, alias, process.platform === "win32" ? "junction" : "dir");
     const identity = resolveWorkspaceStateIdentity(dir);
@@ -276,7 +276,7 @@ describe("workspace state store", () => {
 
     expect(readWorkspaceStateSnapshot(alias, { env }).identity).toStrictEqual(identity);
     expect(readWorkspaceStateSnapshot(alias, { env }).setupExists).toBe(true);
-    expect(resolveOpenClawStateSqlitePath(env)).not.toBe(resolveOpenClawStateSqlitePath());
+    expect(resolveNatesclawStateSqlitePath(env)).not.toBe(resolveNatesclawStateSqlitePath());
     expect(readWorkspaceStateSnapshot(alias).setupExists).toBe(false);
   });
 
@@ -285,14 +285,14 @@ describe("workspace state store", () => {
     const alias = testState!.path("workspace-link");
     const env = {
       ...process.env,
-      OPENCLAW_STATE_DIR: testState!.path("custom-state"),
+      NATESCLAW_STATE_DIR: testState!.path("custom-state"),
     };
     mergeWorkspaceSetupState(dir, { bootstrapSeededAt: "2026-07-16T01:00:00.000Z" }, 1_000, {
       env,
     });
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     fs.symlinkSync(dir, alias, process.platform === "win32" ? "junction" : "dir");
-    const database = await openExistingOpenClawStateDatabaseReadOnly({ env });
+    const database = await openExistingNatesclawStateDatabaseReadOnly({ env });
     if (!database) {
       throw new Error("expected read-only database");
     }
@@ -339,7 +339,7 @@ describe("workspace state store", () => {
 
     expect(readWorkspaceStateSnapshot(dir).setupExists).toBe(true);
     expect(readWorkspaceStateSnapshot(replacement).setupExists).toBe(false);
-    const staleAlias = openOpenClawStateDatabase()
+    const staleAlias = openNatesclawStateDatabase()
       .db.prepare("SELECT alias_key FROM workspace_path_aliases WHERE alias_path = ?")
       .get(alias);
     expect(staleAlias).toBeUndefined();
@@ -355,7 +355,7 @@ describe("workspace state store", () => {
     deleteState(alias);
 
     expect(readWorkspaceStateSnapshot(dir).setupExists).toBe(false);
-    const aliases = openOpenClawStateDatabase()
+    const aliases = openNatesclawStateDatabase()
       .db.prepare("SELECT alias_key FROM workspace_path_aliases")
       .all();
     expect(aliases).toEqual([]);
@@ -394,7 +394,7 @@ describe("workspace state store", () => {
   it("deletes future-version state without parsing it", () => {
     const dir = workspaceDir();
     const identity = resolveWorkspaceStateIdentity(dir);
-    const db = openOpenClawStateDatabase().db;
+    const db = openNatesclawStateDatabase().db;
     db.prepare(
       `INSERT INTO workspace_setup_state (
         workspace_key,
@@ -406,7 +406,7 @@ describe("workspace state store", () => {
       ) VALUES (?, ?, 99, NULL, NULL, 1)`,
     ).run(identity.workspaceKey, identity.workspacePath);
 
-    expect(() => readWorkspaceStateSnapshot(dir)).toThrow(/version requires openclaw doctor/u);
+    expect(() => readWorkspaceStateSnapshot(dir)).toThrow(/version requires natesclaw doctor/u);
     expect(() => deleteState(dir)).not.toThrow();
     const row = db
       .prepare("SELECT workspace_key FROM workspace_setup_state WHERE workspace_key = ?")
@@ -416,8 +416,8 @@ describe("workspace state store", () => {
 
   it("does not recreate a missing database during delete-only cleanup", () => {
     const dir = workspaceDir();
-    const databasePath = resolveOpenClawStateSqlitePath();
-    closeOpenClawStateDatabaseForTest();
+    const databasePath = resolveNatesclawStateSqlitePath();
+    closeNatesclawStateDatabaseForTest();
     fs.rmSync(path.dirname(databasePath), { recursive: true, force: true });
 
     deleteState(dir);
@@ -429,7 +429,7 @@ describe("workspace state store", () => {
   it("deletes migration receipts owned by the workspace", () => {
     const dir = workspaceDir();
     const identity = resolveWorkspaceStateIdentity(dir);
-    const db = openOpenClawStateDatabase().db;
+    const db = openNatesclawStateDatabase().db;
     mergeWorkspaceSetupState(dir, { bootstrapSeededAt: "2026-07-16T01:00:00.000Z" });
     const insertRun = db.prepare(
       "INSERT INTO migration_runs (id, started_at, finished_at, status, report_json) VALUES (?, 1, 1, 'completed', '{}')",
@@ -451,7 +451,7 @@ describe("workspace state store", () => {
     insertReceipt.run(
       "owned-receipt",
       WORKSPACE_LEGACY_STATE_MIGRATION_KIND,
-      path.join(dir, ".openclaw", "workspace-state.json"),
+      path.join(dir, ".natesclaw", "workspace-state.json"),
       "owned-run",
       JSON.stringify({ workspaceKey: identity.workspaceKey }),
     );

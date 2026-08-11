@@ -4,8 +4,8 @@
  */
 import fs from "node:fs/promises";
 import path from "node:path";
-import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
-import { OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../../context-engine/host-compat.js";
+import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
+import { NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../../context-engine/host-compat.js";
 import { buildContextEngineRuntimeSettings } from "../../../context-engine/runtime-settings.js";
 import type { ContextEngine } from "../../../context-engine/types.js";
 import {
@@ -356,7 +356,7 @@ export function installEmbeddedAttemptContextGuards(input: {
   if (activeContextEngine?.info.ownsCompaction === true) {
     const selectedContextEngineId = activeContextEngine.info.id;
     const runtimeSettings = buildContextEngineRuntimeSettings({
-      contextEngineHost: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+      contextEngineHost: NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
       provider: attempt.provider,
       requestedModel: attempt.requestedModelId,
       resolvedModel: attempt.modelId,

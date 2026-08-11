@@ -1,6 +1,6 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { canonicalizeMainSessionAlias } from "../../config/sessions/main-session.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { McpLoopbackRequestContext } from "../../gateway/mcp-grant-store.js";
 import { normalizeMessageChannel } from "../../utils/message-channel.js";
 import type { RunCliAgentParams } from "./types.js";
@@ -80,7 +80,7 @@ function resolveCliMcpMessageProvider(
 
 function resolveCliMcpSessionKey(
   run: Pick<RunCliAgentParams, "sessionKey">,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   agentId: string,
 ): string {
   return canonicalizeMainSessionAlias({
@@ -92,7 +92,7 @@ function resolveCliMcpSessionKey(
 
 export function buildCliMcpGrantContext(params: {
   run: RunCliAgentParams;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   requireExplicitMessageTarget: boolean;
   agentId: string;
   modelProvider: string;
@@ -116,7 +116,7 @@ export function buildCliMcpGrantContext(params: {
   const spawnedBy = normalizeOptionalMcpContextValue(params.run.spawnedBy ?? undefined);
   const messageProvider = resolveCliMcpMessageProvider(params.run);
   const currentChannelId = normalizeOptionalMcpContextValue(params.run.currentChannelId);
-  const grantedToolsAllow = params.run.cliToolAvailability?.openClaw ?? params.toolsAllow;
+  const grantedToolsAllow = params.run.cliToolAvailability?.Natesclaw ?? params.toolsAllow;
   // Trusted message-only completions stay restricted even when source routing
   // is missing; the message tool must fail closed instead of widening authority.
   const sourceReplyOnly =

@@ -6,10 +6,10 @@ import path from "node:path";
 import {
   resolveDefaultAgentId,
   resolveSessionAgentId,
-} from "openclaw/plugin-sdk/agent-scope-runtime";
-import { mapPluginConfigIssues } from "openclaw/plugin-sdk/extension-shared";
-import { buildPluginConfigSchema, z, type OpenClawPluginConfigSchema } from "../api.js";
-import type { OpenClawConfig } from "../api.js";
+} from "natesclaw/plugin-sdk/agent-scope-runtime";
+import { mapPluginConfigIssues } from "natesclaw/plugin-sdk/extension-shared";
+import { buildPluginConfigSchema, z, type NatesclawPluginConfigSchema } from "../api.js";
+import type { NatesclawConfig } from "../api.js";
 
 const WIKI_VAULT_MODES = ["isolated", "bridge", "unsafe-local"] as const;
 const WIKI_VAULT_SCOPES = ["global", "agent"] as const;
@@ -114,7 +114,7 @@ export type ResolvedMemoryWikiConfig = {
 
 export type MemoryWikiConfigResolver = (
   agentId?: string,
-  appConfig?: OpenClawConfig,
+  appConfig?: NatesclawConfig,
 ) => ResolvedMemoryWikiConfig;
 
 const DEFAULT_WIKI_VAULT_MODE: WikiVaultMode = "isolated";
@@ -218,7 +218,7 @@ const memoryWikiConfigSchemaBase = buildPluginConfigSchema(MemoryWikiConfigSourc
   },
 });
 
-export const memoryWikiConfigSchema: OpenClawPluginConfigSchema = memoryWikiConfigSchemaBase;
+export const memoryWikiConfigSchema: NatesclawPluginConfigSchema = memoryWikiConfigSchemaBase;
 
 function expandHomePath(inputPath: string, homedir: string): string {
   if (inputPath === "~") {
@@ -231,11 +231,11 @@ function expandHomePath(inputPath: string, homedir: string): string {
 }
 
 function resolveDefaultMemoryWikiVaultPath(homedir = os.homedir()): string {
-  return path.join(homedir, ".openclaw", "wiki", "main");
+  return path.join(homedir, ".natesclaw", "wiki", "main");
 }
 
 function resolveDefaultMemoryWikiVaultRoot(homedir = os.homedir()): string {
-  return path.join(homedir, ".openclaw", "wiki");
+  return path.join(homedir, ".natesclaw", "wiki");
 }
 
 export function resolveMemoryWikiConfig(
@@ -299,7 +299,7 @@ export function resolveMemoryWikiConfig(
 }
 
 export function resolveMemoryWikiConfiguredAgentIds(
-  appConfig: OpenClawConfig | undefined,
+  appConfig: NatesclawConfig | undefined,
 ): string[] {
   const configuredIds = appConfig?.agents?.entries
     ? Object.keys(appConfig.agents.entries)
@@ -317,7 +317,7 @@ export function resolveMemoryWikiConfiguredAgentIds(
 /** Resolve the exact vault for one trusted runtime agent context. */
 export function resolveMemoryWikiAgentConfig(params: {
   config: ResolvedMemoryWikiConfig;
-  appConfig?: OpenClawConfig;
+  appConfig?: NatesclawConfig;
   agentId?: string;
 }): ResolvedMemoryWikiConfig {
   if (params.config.vault.scope === "global") {

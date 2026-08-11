@@ -4,9 +4,9 @@ export {
   DEFAULT_ACCOUNT_ID,
   formatPairingApproveHint,
   type ChannelPlugin,
-} from "openclaw/plugin-sdk/channel-plugin-common";
-export type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-contract";
+} from "natesclaw/plugin-sdk/channel-plugin-common";
+export type { ChannelOutboundAdapter } from "natesclaw/plugin-sdk/channel-contract";
 export {
   collectStatusIssuesFromLastError,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "natesclaw/plugin-sdk/status-helpers";

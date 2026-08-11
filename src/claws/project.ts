@@ -5,7 +5,7 @@ import { readClawManifestFile } from "./reader.js";
 import { isCanonicalClawHubPackageName, portableClawPathKey } from "./schema-portability.js";
 import type { ClawDiagnostic, ClawReadResult } from "./types.js";
 
-export const CLAW_PROJECT_RESULT_SCHEMA_VERSION = "openclaw.clawProject.v1" as const;
+export const CLAW_PROJECT_RESULT_SCHEMA_VERSION = "natesclaw.clawProject.v1" as const;
 
 const MAX_PACKAGE_JSON_BYTES = 256 * 1024;
 const MAX_PROJECT_ENTRIES = 4096;
@@ -15,7 +15,7 @@ type ClawProjectPackageJson = {
   name: string;
   version: string;
   type?: string;
-  openclaw: { claw: "CLAW.md" };
+  natesclaw: { claw: "CLAW.md" };
 };
 
 type ClawProjectValidationResult =
@@ -233,7 +233,7 @@ export async function createClawProject(
   const packageJson: ClawProjectPackageJson = {
     name,
     version: "0.1.0",
-    openclaw: { claw: "CLAW.md" },
+    natesclaw: { claw: "CLAW.md" },
   };
   const clawMarkdown = [
     "---",
@@ -242,7 +242,7 @@ export async function createClawProject(
     `  id: ${JSON.stringify(agentId)}`,
     `  name: ${JSON.stringify(displayName(agentId))}`,
     "---",
-    `You are ${displayName(agentId)}, a purpose-built OpenClaw agent.`,
+    `You are ${displayName(agentId)}, a purpose-built Natesclaw agent.`,
     "",
   ].join("\n");
 
@@ -315,18 +315,18 @@ export async function validateClawProject(
     packageValue && typeof packageValue === "object" && !Array.isArray(packageValue)
       ? (packageValue as Record<string, unknown>)
       : undefined;
-  const openclaw =
-    record?.openclaw && typeof record.openclaw === "object" && !Array.isArray(record.openclaw)
-      ? (record.openclaw as Record<string, unknown>)
+  const natesclaw =
+    record?.natesclaw && typeof record.natesclaw === "object" && !Array.isArray(record.natesclaw)
+      ? (record.natesclaw as Record<string, unknown>)
       : undefined;
   const scripts = record?.scripts;
   const diagnostics: ClawDiagnostic[] = [];
-  if (openclaw?.claw !== "CLAW.md") {
+  if (natesclaw?.claw !== "CLAW.md") {
     diagnostics.push(
       diagnostic(
         "project_manifest_must_be_claw_markdown",
-        "package.json.openclaw.claw",
-        'A Claw project must set openclaw.claw to "CLAW.md".',
+        "package.json.natesclaw.claw",
+        'A Claw project must set natesclaw.claw to "CLAW.md".',
       ),
     );
   }
@@ -354,11 +354,11 @@ export async function validateClawProject(
     return { ok: false, root, diagnostics: claw.diagnostics };
   }
   const excludedSource = [
-    ...(claw.snapshot.openClawProfile
+    ...(claw.snapshot.NatesclawProfile
       ? [
           {
-            path: claw.snapshot.openClawProfile.sourcePath,
-            diagnosticPath: "$.metadata.openclaw.config",
+            path: claw.snapshot.NatesclawProfile.sourcePath,
+            diagnosticPath: "$.metadata.natesclaw.config",
           },
         ]
       : []),
@@ -400,7 +400,7 @@ export async function validateClawProject(
     "package.json",
     "CLAW.md",
     ...(claw.packageBootstrap ? ["BOOTSTRAP.md"] : []),
-    ...(claw.snapshot.openClawProfile ? [claw.snapshot.openClawProfile.sourcePath] : []),
+    ...(claw.snapshot.NatesclawProfile ? [claw.snapshot.NatesclawProfile.sourcePath] : []),
     ...claw.snapshot.workspaceSources.map((source) => source.sourcePath),
   ];
   const portableSelectedPaths = new Map<string, string>();
@@ -446,7 +446,7 @@ export async function validateClawProject(
       name: claw.source.name,
       version: claw.source.version,
       ...(typeof record?.type === "string" ? { type: record.type } : {}),
-      openclaw: { claw: "CLAW.md" },
+      natesclaw: { claw: "CLAW.md" },
     },
     claw,
     excludedPaths,

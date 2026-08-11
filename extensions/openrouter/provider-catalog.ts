@@ -2,25 +2,25 @@
 import {
   buildLiveModelProviderConfig,
   type LiveModelCatalogFetchGuard,
-} from "openclaw/plugin-sdk/provider-catalog-live-runtime";
+} from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
 import {
   normalizeBaseUrl,
   resolveProviderHttpRequestConfig,
   sanitizeConfiguredModelProviderRequest,
-} from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-http";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedOrigin,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   asOptionalRecord,
   asPositiveSafeInteger,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 const OPENROUTER_LEGACY_BASE_URL = "https://openrouter.ai/v1";

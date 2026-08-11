@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { readSessionTranscriptRawDelta } from "openclaw/plugin-sdk/session-transcript-runtime";
+import { readSessionTranscriptRawDelta } from "natesclaw/plugin-sdk/session-transcript-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../../test/helpers/temp-dir.js";
 import {
@@ -45,12 +45,12 @@ function buildAssistantMessage(text: string) {
 
 describe("embedded attempt transcript persistence", () => {
   it("replays native video after reopening the canonical transcript", async () => {
-    const stateDir = tempDirs.make("openclaw-video-transcript-replay-");
+    const stateDir = tempDirs.make("natesclaw-video-transcript-replay-");
     const inboundDir = path.join(stateDir, "media", "inbound");
     await fs.mkdir(inboundDir, { recursive: true });
     await fs.writeFile(path.join(inboundDir, "history.mp4"), MP4);
-    const env = captureEnv(["OPENCLAW_STATE_DIR"]);
-    setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
+    const env = captureEnv(["NATESCLAW_STATE_DIR"]);
+    setTestEnvValue("NATESCLAW_STATE_DIR", stateDir);
     const target = {
       agentId: "main",
       sessionId: "video-replay",
@@ -109,7 +109,7 @@ describe("embedded attempt transcript persistence", () => {
   });
 
   it("resumes a raw cursor after append-only attempt settlement", async () => {
-    const dir = tempDirs.make("openclaw-attempt-transcript-");
+    const dir = tempDirs.make("natesclaw-attempt-transcript-");
     const storePath = path.join(dir, "sessions.json");
     const target = {
       agentId: "main",

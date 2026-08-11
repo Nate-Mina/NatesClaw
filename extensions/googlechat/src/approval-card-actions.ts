@@ -1,11 +1,11 @@
 import crypto from "node:crypto";
-import type { ExecApprovalDecision } from "openclaw/plugin-sdk/approval-runtime";
-import { pruneMapToMaxSize } from "openclaw/plugin-sdk/collection-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { ExecApprovalDecision } from "natesclaw/plugin-sdk/approval-runtime";
+import { pruneMapToMaxSize } from "natesclaw/plugin-sdk/collection-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { GoogleChatActionParameter, GoogleChatEvent } from "./types.js";
 
-export const GOOGLECHAT_APPROVAL_ACTION = "openclaw.approval";
-const GOOGLECHAT_APPROVAL_ACTION_PARAM = "openclaw_action";
+export const GOOGLECHAT_APPROVAL_ACTION = "natesclaw.approval";
+const GOOGLECHAT_APPROVAL_ACTION_PARAM = "natesclaw_action";
 const GOOGLECHAT_APPROVAL_TOKEN_PARAM = "token";
 const GOOGLECHAT_APPROVAL_ACTION_VALUE = "approval";
 const MANUAL_EXEC_APPROVAL_COMMAND_RE =

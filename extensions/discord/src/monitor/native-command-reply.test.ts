@@ -9,7 +9,7 @@ import {
 } from "./native-command-reply.js";
 
 const loadWebMediaMock = vi.hoisted(() => vi.fn());
-vi.mock("openclaw/plugin-sdk/web-media", () => ({
+vi.mock("natesclaw/plugin-sdk/web-media", () => ({
   loadWebMedia: loadWebMediaMock,
 }));
 

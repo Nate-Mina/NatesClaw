@@ -258,7 +258,7 @@ describe("AppSidebar multi-select", () => {
       menu.querySelector<HTMLButtonElement>('[data-shortcut="d"]')?.click();
 
       const actions = await waitForConfirmDialogActions();
-      expect(document.body.querySelector("openclaw-modal-dialog")?.textContent).toContain("2");
+      expect(document.body.querySelector("natesclaw-modal-dialog")?.textContent).toContain("2");
       answerConfirmDialog(actions, "confirm");
 
       await waitForFast(() => expect(harness.deleteMany).toHaveBeenCalledOnce());
@@ -334,7 +334,7 @@ describe("AppSidebar catalog session rows", () => {
 
   it("opens the catalog view menu from its header and hides that section with undo", async () => {
     vi.useFakeTimers();
-    const toastHost = document.createElement("openclaw-toast-host");
+    const toastHost = document.createElement("natesclaw-toast-host");
     document.body.append(toastHost);
     await toastHost.updateComplete;
     try {
@@ -527,7 +527,7 @@ describe("AppSidebar catalog session rows", () => {
         }),
       );
       await sidebar.updateComplete;
-      const menu = sidebar.querySelector("openclaw-catalog-session-menu") as HTMLElement & {
+      const menu = sidebar.querySelector("natesclaw-catalog-session-menu") as HTMLElement & {
         updateComplete: Promise<boolean>;
       };
       await menu.updateComplete;
@@ -545,7 +545,7 @@ describe("AppSidebar catalog session rows", () => {
       });
       row.querySelector("a")?.dispatchEvent(keyboardContextMenu);
       await sidebar.updateComplete;
-      expect(sidebar.querySelector("openclaw-catalog-session-menu")).not.toBeNull();
+      expect(sidebar.querySelector("natesclaw-catalog-session-menu")).not.toBeNull();
       expect(keyboardContextMenu.defaultPrevented).toBe(true);
     } finally {
       vi.useRealTimers();

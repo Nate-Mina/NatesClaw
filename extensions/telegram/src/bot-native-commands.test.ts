@@ -2,12 +2,12 @@ import {
   createEmptyPluginRegistry,
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/channel-test-helpers";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
 // Telegram tests cover bot native commands plugin behavior.
-import type { OpenClawConfig, TelegramAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { listNativeCommandSpecsForConfig } from "openclaw/plugin-sdk/native-command-registry";
-import { clearPluginCommands, registerPluginCommand } from "openclaw/plugin-sdk/plugin-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { NatesclawConfig, TelegramAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { listNativeCommandSpecsForConfig } from "natesclaw/plugin-sdk/native-command-registry";
+import { clearPluginCommands, registerPluginCommand } from "natesclaw/plugin-sdk/plugin-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createCommandBot,
@@ -29,7 +29,7 @@ type TelegramInlineKeyboardReplyMarkup = {
 };
 type PlugCommandHarnessParams = {
   botHarness?: CommandBotHarness;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   command?: Record<string, unknown>;
   acceptsArgs?: boolean;
   args?: string;
@@ -157,7 +157,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("scopes skill commands when account binding exists", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "butler" }],
       },
@@ -178,7 +178,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("scopes skill commands to default agent without a matching binding (#15599)", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "butler" }],
       },
@@ -230,7 +230,7 @@ describe("registerTelegramNativeCommands", () => {
         description: "Demo skill unchanged",
       },
     ];
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       commands: { native: true, nativeSkills: true },
       agents: { list: [{ id: "main", default: true }] },
     };
@@ -274,7 +274,7 @@ describe("registerTelegramNativeCommands", () => {
   it("promotes /skill when direct skills are omitted by local menu pressure", async () => {
     const { bot, commandHandlers, setMyCommands } = createCommandBot();
     const runtimeLog = vi.fn();
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       commands: { native: true, nativeSkills: true },
       agents: { list: [{ id: "main", default: true }] },
     };
@@ -343,7 +343,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("resolves plugin commands from one registry-bound runtime", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       commands: { native: true },
       channels: {
         telegram: {
@@ -409,7 +409,7 @@ describe("registerTelegramNativeCommands", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     registerTelegramNativeCommands({
       ...createNativeCommandTestParams(cfg, { bot, allowFrom: [200] }),
@@ -447,7 +447,7 @@ describe("registerTelegramNativeCommands", () => {
 
   it("passes agent-scoped media roots for plugin command replies with media", async () => {
     const mediaMaxBytes = 50 * 1024 * 1024;
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "work" }],
       },
@@ -470,7 +470,7 @@ describe("registerTelegramNativeCommands", () => {
     const deliverParams = firstDeliverRepliesParams();
     expect(deliverParams.mediaMaxBytes).toBe(mediaMaxBytes);
     const mediaLocalRoots = deliverParams.mediaLocalRoots as Array<string> | undefined;
-    expect(mediaLocalRoots?.some((root) => /[\\/]\.openclaw[\\/]workspace-work$/.test(root))).toBe(
+    expect(mediaLocalRoots?.some((root) => /[\\/]\.natesclaw[\\/]workspace-work$/.test(root))).toBe(
       true,
     );
     expect(sendMessage).not.toHaveBeenCalledWith(123, "Command not found.");

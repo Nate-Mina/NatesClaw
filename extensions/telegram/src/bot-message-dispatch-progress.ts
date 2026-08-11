@@ -3,7 +3,7 @@ import {
   isChannelProgressDraftWorkToolName,
   resolveChannelStreamingPreviewToolProgress,
   type ChannelProgressDraftLine,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import {
   renderStreamText,

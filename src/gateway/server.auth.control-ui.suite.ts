@@ -156,7 +156,7 @@ export function registerControlUiAndPairingSuite(): void {
   };
 
   const startControlUiServerWithOperatorIdentity = async (
-    identityPrefix = "openclaw-device-scope-",
+    identityPrefix = "natesclaw-device-scope-",
   ) => {
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identityPath, identity, client } = await createOperatorIdentityFixture(identityPrefix);
@@ -321,7 +321,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { publicKeyRawBase64UrlFromPem } = await import("../infra/device-identity.js");
     const { rejectDevicePairing, requestDevicePairing } =
       await import("../infra/device-pairing.js");
-    const { identity } = await createOperatorIdentityFixture("openclaw-control-ui-trusted-proxy-");
+    const { identity } = await createOperatorIdentityFixture("natesclaw-control-ui-trusted-proxy-");
     const pendingRequest = await requestDevicePairing({
       deviceId: identity.deviceId,
       publicKey: publicKeyRawBase64UrlFromPem(identity.publicKeyPem),
@@ -487,7 +487,7 @@ export function registerControlUiAndPairingSuite(): void {
     });
     await withControlUiGatewayServer(async ({ port }) => {
       const seeded = await seedApprovedOperatorReadPairing({
-        identityPrefix: "openclaw-control-ui-trusted-proxy-bounded-",
+        identityPrefix: "natesclaw-control-ui-trusted-proxy-bounded-",
         clientId: CONTROL_UI_CLIENT.id,
         clientMode: CONTROL_UI_CLIENT.mode,
         displayName: "Control UI",
@@ -496,7 +496,7 @@ export function registerControlUiAndPairingSuite(): void {
       });
       const ws = await openWs(port, {
         ...TRUSTED_PROXY_CONTROL_UI_HEADERS,
-        "x-openclaw-scopes": "operator.read",
+        "x-natesclaw-scopes": "operator.read",
       });
       try {
         const challengeNonce = await readConnectChallengeNonce(ws);
@@ -764,7 +764,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { getPairedDevice, listDevicePairing } = await import("../infra/device-pairing.js");
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identity, identityPath } = await seedApprovedOperatorReadPairing({
-      identityPrefix: "openclaw-device-token-scope-",
+      identityPrefix: "natesclaw-device-token-scope-",
       clientId: CONTROL_UI_CLIENT.id,
       clientMode: CONTROL_UI_CLIENT.mode,
       displayName: "loopback-control-ui-upgrade",
@@ -800,7 +800,7 @@ export function registerControlUiAndPairingSuite(): void {
 
   test("returns pairing-required for malformed persisted access lists", async () => {
     const { identity, identityPath } = await seedApprovedOperatorReadPairing({
-      identityPrefix: "openclaw-device-malformed-access-",
+      identityPrefix: "natesclaw-device-malformed-access-",
       clientId: TEST_OPERATOR_CLIENT.id,
       clientMode: TEST_OPERATOR_CLIENT.mode,
       displayName: "malformed-access-upgrade",
@@ -839,7 +839,7 @@ export function registerControlUiAndPairingSuite(): void {
 
   test("does not expose approved access when a paired device id reconnects with a different key", async () => {
     const { identity, identityPath } = await seedApprovedOperatorReadPairing({
-      identityPrefix: "openclaw-device-key-mismatch-",
+      identityPrefix: "natesclaw-device-key-mismatch-",
       clientId: TEST_OPERATOR_CLIENT.id,
       clientMode: TEST_OPERATOR_CLIENT.mode,
       displayName: "remote-key-mismatch",
@@ -931,7 +931,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { getPairedDevice, listDevicePairing } = await import("../infra/device-pairing.js");
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-voice-node-",
+      "natesclaw-bootstrap-voice-node-",
     );
     const client = {
       id: "node-host",
@@ -1045,10 +1045,10 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
 
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-node-",
+      "natesclaw-bootstrap-node-",
     );
     const client = {
-      id: "openclaw-ios",
+      id: "natesclaw-ios",
       version: "2026.3.30",
       platform: "iOS 26.3.1",
       mode: "node",
@@ -1226,9 +1226,9 @@ export function registerControlUiAndPairingSuite(): void {
   test.each([
     {
       name: "Android",
-      identityPrefix: "openclaw-bootstrap-android-node-",
+      identityPrefix: "natesclaw-bootstrap-android-node-",
       client: {
-        id: "openclaw-android",
+        id: "natesclaw-android",
         version: "2026.6.2",
         platform: "Android 16",
         mode: "node" as const,
@@ -1237,9 +1237,9 @@ export function registerControlUiAndPairingSuite(): void {
     },
     {
       name: "iPadOS",
-      identityPrefix: "openclaw-bootstrap-ipados-node-",
+      identityPrefix: "natesclaw-bootstrap-ipados-node-",
       client: {
-        id: "openclaw-ios",
+        id: "natesclaw-ios",
         version: "2026.6.2",
         platform: "iPadOS 26.3.1",
         mode: "node" as const,
@@ -1303,9 +1303,9 @@ export function registerControlUiAndPairingSuite(): void {
 
   test("limited qr setup keeps the previous bounded operator handoff", async () => {
     const { identity, initial } = await connectSetupCodeBootstrapNode({
-      identityPrefix: "openclaw-bootstrap-limited-node-",
+      identityPrefix: "natesclaw-bootstrap-limited-node-",
       client: {
-        id: "openclaw-ios",
+        id: "natesclaw-ios",
         version: "2026.7.13",
         platform: "iOS 26.3.1",
         mode: "node",
@@ -1358,9 +1358,9 @@ export function registerControlUiAndPairingSuite(): void {
   });
 
   test("full qr setup upgrades an existing limited mobile pairing", async () => {
-    const identityPrefix = "openclaw-bootstrap-limited-upgrade-node-";
+    const identityPrefix = "natesclaw-bootstrap-limited-upgrade-node-";
     const client = {
-      id: "openclaw-ios",
+      id: "natesclaw-ios",
       version: "2026.7.13",
       platform: "iOS 26.3.1",
       mode: "node" as const,
@@ -1395,9 +1395,9 @@ export function registerControlUiAndPairingSuite(): void {
   test.each([
     {
       name: "mobile client id with mismatched platform metadata",
-      identityPrefix: "openclaw-bootstrap-mobile-spoof-",
+      identityPrefix: "natesclaw-bootstrap-mobile-spoof-",
       client: {
-        id: "openclaw-android",
+        id: "natesclaw-android",
         version: "2026.6.2",
         platform: "iOS 26.3.1",
         mode: "node" as const,
@@ -1406,7 +1406,7 @@ export function registerControlUiAndPairingSuite(): void {
     },
     {
       name: "valid non-mobile client id with mobile metadata",
-      identityPrefix: "openclaw-bootstrap-node-host-spoof-",
+      identityPrefix: "natesclaw-bootstrap-node-host-spoof-",
       client: {
         id: "node-host",
         version: "2026.6.2",
@@ -1454,10 +1454,10 @@ export function registerControlUiAndPairingSuite(): void {
       await import("../shared/device-bootstrap-profile.js");
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-node-retry-",
+      "natesclaw-bootstrap-node-retry-",
     );
     const client = {
-      id: "openclaw-ios",
+      id: "natesclaw-ios",
       version: "2026.3.30",
       platform: "iOS 26.3.1",
       mode: "node",
@@ -1546,10 +1546,10 @@ export function registerControlUiAndPairingSuite(): void {
     const { listDevicePairing, rejectDevicePairing } = await import("../infra/device-pairing.js");
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-node-reject-",
+      "natesclaw-bootstrap-node-reject-",
     );
     const client = {
-      id: "openclaw-ios",
+      id: "natesclaw-ios",
       version: "2026.3.30",
       platform: "iOS 26.3.1",
       mode: "node",
@@ -1625,11 +1625,11 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
 
     const { identityPath, client } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-reconcile-fail-",
+      "natesclaw-bootstrap-reconcile-fail-",
     );
     const nodeClient = {
       ...client,
-      id: "openclaw-android",
+      id: "natesclaw-android",
       mode: "node",
     };
 
@@ -1702,10 +1702,10 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
 
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-role-upgrade-",
+      "natesclaw-bootstrap-role-upgrade-",
     );
     const client = {
-      id: "openclaw-ios",
+      id: "natesclaw-ios",
       version: "2026.3.30",
       platform: "iOS 26.3.1",
       mode: "node",
@@ -1792,7 +1792,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
 
     const { identityPath, identity, client } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-operator-",
+      "natesclaw-bootstrap-operator-",
     );
 
     try {
@@ -1843,7 +1843,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
 
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-control-ui-",
+      "natesclaw-bootstrap-control-ui-",
     );
 
     try {
@@ -1957,7 +1957,7 @@ export function registerControlUiAndPairingSuite(): void {
     testState.gatewayControlUi = { allowedOrigins: ["https://localhost"] };
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-control-ui-bounded-",
+      "natesclaw-bootstrap-control-ui-bounded-",
     );
 
     try {
@@ -2016,7 +2016,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { CONTROL_UI_OWNER_BOOTSTRAP_OPERATOR_SCOPES, CONTROL_UI_OWNER_BOOTSTRAP_PROFILE } =
       await import("../shared/device-bootstrap-profile.js");
     const { identity, identityPath } = await seedApprovedOperatorReadPairing({
-      identityPrefix: "openclaw-control-ui-owner-upgrade-",
+      identityPrefix: "natesclaw-control-ui-owner-upgrade-",
       clientId: CONTROL_UI_CLIENT.id,
       clientMode: CONTROL_UI_CLIENT.mode,
       displayName: "control-ui-owner-upgrade",
@@ -2031,7 +2031,7 @@ export function registerControlUiAndPairingSuite(): void {
     testState.gatewayControlUi = { allowedOrigins: ["https://localhost"] };
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identityPath: secondIdentityPath } = await createOperatorIdentityFixture(
-      "openclaw-control-ui-owner-upgrade-second-browser-",
+      "natesclaw-control-ui-owner-upgrade-second-browser-",
     );
 
     try {
@@ -2124,7 +2124,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
 
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-control-ui-missing-purpose-",
+      "natesclaw-bootstrap-control-ui-missing-purpose-",
     );
 
     try {
@@ -2169,7 +2169,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { server, port, prevToken } = await startControlUiServer("secret");
 
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-bootstrap-control-ui-node-profile-",
+      "natesclaw-bootstrap-control-ui-node-profile-",
     );
 
     try {
@@ -2212,7 +2212,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { getPairedDevice, listDevicePairing } = await import("../infra/device-pairing.js");
     const { server, port, prevToken } = await startControlUiServer("secret");
     const { identityPath, identity, client } =
-      await createOperatorIdentityFixture("openclaw-device-scope-");
+      await createOperatorIdentityFixture("natesclaw-device-scope-");
     const connectWithNonce = async (role: "operator" | "node", scopes: string[]) => {
       const socket = new WebSocket(`ws://127.0.0.1:${port}`, {
         headers: { host: "gateway.example" },
@@ -2272,7 +2272,7 @@ export function registerControlUiAndPairingSuite(): void {
   test("allows operator.read connect when device is paired with operator.admin", async () => {
     const { listDevicePairing } = await import("../infra/device-pairing.js");
     const { identityPath, identity } = await seedApprovedOperatorReadPairing({
-      identityPrefix: "openclaw-device-admin-superset-",
+      identityPrefix: "natesclaw-device-admin-superset-",
       clientId: TEST_OPERATOR_CLIENT.id,
       clientMode: TEST_OPERATOR_CLIENT.mode,
       displayName: "operator-admin-superset",
@@ -2310,7 +2310,7 @@ export function registerControlUiAndPairingSuite(): void {
     const { approveDevicePairing, getPairedDevice, listDevicePairing, requestDevicePairing } =
       await import("../infra/device-pairing.js");
     const { identityPath, identity } = await createOperatorIdentityFixture(
-      "openclaw-device-legacy-meta-",
+      "natesclaw-device-legacy-meta-",
     );
     const deviceId = identity.deviceId;
     const publicKey = publicKeyRawBase64UrlFromPem(identity.publicKeyPem);
@@ -2365,7 +2365,7 @@ export function registerControlUiAndPairingSuite(): void {
   test("requires approval for local scope upgrades even when paired metadata is legacy-shaped", async () => {
     const { getPairedDevice, listDevicePairing } = await import("../infra/device-pairing.js");
     const { identity, identityPath } = await seedApprovedOperatorReadPairing({
-      identityPrefix: "openclaw-device-legacy-",
+      identityPrefix: "natesclaw-device-legacy-",
       clientId: TEST_OPERATOR_CLIENT.id,
       clientMode: TEST_OPERATOR_CLIENT.mode,
       displayName: "legacy-upgrade-test",
@@ -2479,9 +2479,9 @@ export function registerControlUiAndPairingSuite(): void {
     ws2.close();
     await server.close();
     if (prevToken === undefined) {
-      delete process.env.OPENCLAW_GATEWAY_TOKEN;
+      delete process.env.NATESCLAW_GATEWAY_TOKEN;
     } else {
-      process.env.OPENCLAW_GATEWAY_TOKEN = prevToken;
+      process.env.NATESCLAW_GATEWAY_TOKEN = prevToken;
     }
   });
 
@@ -2525,7 +2525,7 @@ export function registerControlUiAndPairingSuite(): void {
     const wsDockerCli = await openWs(port, { host: "172.17.0.2:18789" });
     try {
       const { identity, identityPath } =
-        await createOperatorIdentityFixture("openclaw-cli-docker-");
+        await createOperatorIdentityFixture("natesclaw-cli-docker-");
       const nonce = await readConnectChallengeNonce(wsDockerCli);
       const dockerCli = await connectReq(wsDockerCli, {
         token: "secret",

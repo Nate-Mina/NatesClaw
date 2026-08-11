@@ -2,9 +2,9 @@
 import {
   downloadGeneratedVideoAsset,
   resolveGeneratedMediaMaxBytes,
-} from "openclaw/plugin-sdk/media-generation-runtime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "natesclaw/plugin-sdk/media-generation-runtime";
+import { isProviderApiKeyConfigured } from "natesclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "natesclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -16,19 +16,19 @@ import {
   resolveProviderOperationTimeoutMs,
   resolveProviderHttpRequestConfig,
   type ProviderOperationTimeoutMs,
-} from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-http";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
   VideoGenerationResult,
   VideoGenerationSourceAsset,
-} from "openclaw/plugin-sdk/video-generation";
+} from "natesclaw/plugin-sdk/video-generation";
 
 const DEFAULT_RUNWAY_BASE_URL = "https://api.dev.runwayml.com";
 const DEFAULT_RUNWAY_MODEL = "gen4.5";

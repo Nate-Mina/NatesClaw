@@ -1,6 +1,6 @@
 // Qa Lab Matrix module implements request behavior.
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+import { resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
 
 export type MatrixQaFetchLike = typeof fetch;
 

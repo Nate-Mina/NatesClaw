@@ -2,7 +2,7 @@ import type {
   ConfigFileSnapshot,
   ConfigValidationIssue,
   LegacyConfigIssue,
-  OpenClawConfig,
+  NatesclawConfig,
 } from "../config/types.js";
 
 export function createDoctorConfigSnapshot(
@@ -14,9 +14,9 @@ export function createDoctorConfigSnapshot(
     legacyIssues?: LegacyConfigIssue[];
   } = {},
 ): ConfigFileSnapshot {
-  const config = (params.config ?? {}) as OpenClawConfig;
+  const config = (params.config ?? {}) as NatesclawConfig;
   return {
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     includedPaths: [],
     exists: true,
     raw: "{}",

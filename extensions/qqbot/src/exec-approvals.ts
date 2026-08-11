@@ -2,19 +2,19 @@
 import {
   markImplicitSameChatApprovalAuthorization,
   resolveApprovalApprovers,
-} from "openclaw/plugin-sdk/approval-auth-runtime";
+} from "natesclaw/plugin-sdk/approval-auth-runtime";
 import {
   createChannelExecApprovalProfile,
   isChannelExecApprovalClientEnabledFromConfig,
   matchesApprovalRequestFilters,
-} from "openclaw/plugin-sdk/approval-client-runtime";
-import { doesApprovalRequestSelectChannelAccount } from "openclaw/plugin-sdk/approval-native-runtime";
+} from "natesclaw/plugin-sdk/approval-client-runtime";
+import { doesApprovalRequestSelectChannelAccount } from "natesclaw/plugin-sdk/approval-native-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/approval-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveDefaultQQBotAccountId, resolveQQBotAccount } from "./bridge/config.js";
 import type { QQBotExecApprovalConfig } from "./types.js";
 
@@ -24,7 +24,7 @@ function normalizeApproverId(value: string | number): string | undefined {
 }
 
 export function resolveQQBotExecApprovalConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
 }): QQBotExecApprovalConfig | undefined {
   const account = resolveQQBotAccount(params.cfg, params.accountId);
@@ -39,7 +39,7 @@ export function resolveQQBotExecApprovalConfig(params: {
 }
 
 function getQQBotExecApprovalApprovers(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
 }): string[] {
   const accountConfig = resolveQQBotAccount(params.cfg, params.accountId).config;
@@ -51,7 +51,7 @@ function getQQBotExecApprovalApprovers(params: {
 }
 
 function isQQBotExecApprovalAccountEligible(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -75,7 +75,7 @@ function isQQBotExecApprovalAccountEligible(params: {
 }
 
 function matchesQQBotRequestAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -91,7 +91,7 @@ function matchesQQBotRequestAccount(params: {
 }
 
 function matchesQQBotFallbackRequestAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -134,7 +134,7 @@ type QQBotApprovalAccountOwnershipRequest = {
  * gate (shouldHandle) and the lazy native runtime adapter.
  */
 export function matchesQQBotApprovalAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   request: QQBotApprovalAccountOwnershipRequest;
 }): boolean {
@@ -163,7 +163,7 @@ const isQQBotExecApprovalAuthorizedSender = qqbotExecApprovalProfile.isAuthorize
 export const shouldHandleQQBotExecApprovalRequest = qqbotExecApprovalProfile.shouldHandleRequest;
 
 export function authorizeQQBotApprovalAction(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   senderId?: string | null;
   approvalKind: "exec" | "plugin";

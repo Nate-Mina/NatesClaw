@@ -11,7 +11,7 @@ const changedSha = "fedcba9876543210fedcba9876543210fedcba98";
 const describePosix = process.platform === "win32" ? describe.skip : describe;
 
 function createFakeGh() {
-  const tempDir = tempDirs.make("openclaw-pr-ci-dispatch-");
+  const tempDir = tempDirs.make("natesclaw-pr-ci-dispatch-");
   const binDir = join(tempDir, "bin");
   const pathGh = join(binDir, "gh");
   const realGh = join(tempDir, "real-gh");
@@ -21,26 +21,26 @@ function createFakeGh() {
   mkdirSync(binDir);
   const fakeGhScript = `#!/usr/bin/env bash
 set -euo pipefail
-printf '%s\\t%s\\n' "$(basename "$0")" "$*" >> "$OPENCLAW_TEST_GH_CALLS"
+printf '%s\\t%s\\n' "$(basename "$0")" "$*" >> "$NATESCLAW_TEST_GH_CALLS"
 case "$1 $2" in
   "run list")
-    if [ "\${OPENCLAW_TEST_GH_MODE:-}" = "pending-head-change" ]; then
+    if [ "\${NATESCLAW_TEST_GH_MODE:-}" = "pending-head-change" ]; then
       printf '[]\\n'
-    elif [ -e "$OPENCLAW_TEST_GH_SEEN_RUN_LIST" ]; then
-      printf '[{"databaseId":99,"url":"https://github.com/openclaw/openclaw/actions/runs/99","headSha":"%s","createdAt":"2026-01-01T00:00:00Z","status":"queued"}]\\n' "$OPENCLAW_TEST_HEAD_SHA"
+    elif [ -e "$NATESCLAW_TEST_GH_SEEN_RUN_LIST" ]; then
+      printf '[{"databaseId":99,"url":"https://github.com/natesclaw/natesclaw/actions/runs/99","headSha":"%s","createdAt":"2026-01-01T00:00:00Z","status":"queued"}]\\n' "$NATESCLAW_TEST_HEAD_SHA"
     else
-      : > "$OPENCLAW_TEST_GH_SEEN_RUN_LIST"
+      : > "$NATESCLAW_TEST_GH_SEEN_RUN_LIST"
       printf '[]\\n'
     fi
     ;;
   "pr view")
-    if [ -e "$OPENCLAW_TEST_GH_DISPATCHED" ] && [ -n "\${OPENCLAW_TEST_GH_MODE:-}" ]; then
-      printf '%s\\n' "$OPENCLAW_TEST_CHANGED_HEAD_SHA"
+    if [ -e "$NATESCLAW_TEST_GH_DISPATCHED" ] && [ -n "\${NATESCLAW_TEST_GH_MODE:-}" ]; then
+      printf '%s\\n' "$NATESCLAW_TEST_CHANGED_HEAD_SHA"
     else
-      printf '%s\\n' "$OPENCLAW_TEST_HEAD_SHA"
+      printf '%s\\n' "$NATESCLAW_TEST_HEAD_SHA"
     fi
     ;;
-  "workflow run") : > "$OPENCLAW_TEST_GH_DISPATCHED" ;;
+  "workflow run") : > "$NATESCLAW_TEST_GH_DISPATCHED" ;;
   *) echo "unexpected gh invocation: $*" >&2; exit 2 ;;
 esac
 `;
@@ -61,7 +61,7 @@ function runDispatch(
 ) {
   let nodeOptions = process.env.NODE_OPTIONS ?? "";
   if (options.immediateTimers) {
-    const preload = join(tempDirs.make("openclaw-pr-ci-dispatch-timers-"), "immediate-timers.cjs");
+    const preload = join(tempDirs.make("natesclaw-pr-ci-dispatch-timers-"), "immediate-timers.cjs");
     writeFileSync(preload, "global.setTimeout = (callback) => { callback(); return 0; };\n");
     nodeOptions = `${nodeOptions} --require ${preload}`.trim();
   }
@@ -74,13 +74,13 @@ function runDispatch(
       env: {
         ...process.env,
         NODE_OPTIONS: nodeOptions,
-        OPENCLAW_GH_BIN: fakeGh.realGh,
-        OPENCLAW_TEST_CHANGED_HEAD_SHA: changedSha,
-        OPENCLAW_TEST_GH_CALLS: fakeGh.calls,
-        OPENCLAW_TEST_GH_DISPATCHED: fakeGh.dispatched,
-        OPENCLAW_TEST_GH_MODE: options.mode ?? "",
-        OPENCLAW_TEST_GH_SEEN_RUN_LIST: fakeGh.seenRunList,
-        OPENCLAW_TEST_HEAD_SHA: sha,
+        NATESCLAW_GH_BIN: fakeGh.realGh,
+        NATESCLAW_TEST_CHANGED_HEAD_SHA: changedSha,
+        NATESCLAW_TEST_GH_CALLS: fakeGh.calls,
+        NATESCLAW_TEST_GH_DISPATCHED: fakeGh.dispatched,
+        NATESCLAW_TEST_GH_MODE: options.mode ?? "",
+        NATESCLAW_TEST_GH_SEEN_RUN_LIST: fakeGh.seenRunList,
+        NATESCLAW_TEST_HEAD_SHA: sha,
         PATH: `${fakeGh.binDir}:${process.env.PATH ?? ""}`,
       },
     },
@@ -89,7 +89,7 @@ function runDispatch(
 
 describePosix("scripts/pr ci-dispatch", () => {
   it("warns when a same-named local branch points away from the dispatched remote head", () => {
-    const repo = tempDirs.make("openclaw-pr-ci-dispatch-repo-");
+    const repo = tempDirs.make("natesclaw-pr-ci-dispatch-repo-");
     const git = (...args: string[]) =>
       spawnSync("git", args, { cwd: repo, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
     git("init", "-q", "-b", "main");
@@ -105,7 +105,7 @@ describePosix("scripts/pr ci-dispatch", () => {
   });
 
   it("stays silent when no same-named local branch exists", () => {
-    const repo = tempDirs.make("openclaw-pr-ci-dispatch-repo-");
+    const repo = tempDirs.make("natesclaw-pr-ci-dispatch-repo-");
     spawnSync("git", ["init", "-q", "-b", "main"], { cwd: repo, encoding: "utf8" });
 
     const fakeGh = createFakeGh();
@@ -121,7 +121,7 @@ describePosix("scripts/pr ci-dispatch", () => {
 
     expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
     expect(result.stdout).toContain(
-      "observed_run_url=https://github.com/openclaw/openclaw/actions/runs/99",
+      "observed_run_url=https://github.com/natesclaw/natesclaw/actions/runs/99",
     );
     const calls = readFileSync(fakeGh.calls, "utf8");
     const callLines = calls.trim().split("\n");
@@ -142,11 +142,11 @@ describePosix("scripts/pr ci-dispatch", () => {
         encoding: "utf8",
         env: {
           ...process.env,
-          OPENCLAW_GH_BIN: fakeGh.realGh,
-          OPENCLAW_TEST_GH_CALLS: fakeGh.calls,
-          OPENCLAW_TEST_GH_DISPATCHED: fakeGh.dispatched,
-          OPENCLAW_TEST_GH_SEEN_RUN_LIST: fakeGh.seenRunList,
-          OPENCLAW_TEST_HEAD_SHA: sha,
+          NATESCLAW_GH_BIN: fakeGh.realGh,
+          NATESCLAW_TEST_GH_CALLS: fakeGh.calls,
+          NATESCLAW_TEST_GH_DISPATCHED: fakeGh.dispatched,
+          NATESCLAW_TEST_GH_SEEN_RUN_LIST: fakeGh.seenRunList,
+          NATESCLAW_TEST_HEAD_SHA: sha,
           PATH: `${fakeGh.binDir}:${process.env.PATH ?? ""}`,
         },
       },

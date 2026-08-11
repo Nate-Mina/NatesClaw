@@ -1,13 +1,13 @@
 // Telegram provider-owned authorization for message mutations in forum topics.
-import { normalizeAccountId, normalizeOptionalAccountId } from "openclaw/plugin-sdk/account-core";
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
+import { normalizeAccountId, normalizeOptionalAccountId } from "natesclaw/plugin-sdk/account-core";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
 import type {
   ChannelMessageActionContext,
   ChannelThreadingToolContext,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+} from "natesclaw/plugin-sdk/channel-contract";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
 import { resolveDefaultTelegramAccountId } from "./accounts.js";
 import { resolveTelegramMessageCacheScope } from "./message-cache-persistence.js";
 import {
@@ -69,7 +69,7 @@ function resolveCurrentTelegramConversation(
 export async function resolveTelegramMessageMutationChatId(params: {
   chatId: string | number;
   messageId: number;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   context?: TelegramMessageMutationContext;
 }): Promise<string | number> {

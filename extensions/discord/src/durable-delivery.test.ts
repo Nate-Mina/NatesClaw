@@ -1,13 +1,13 @@
 // Discord tests cover durable delivery plugin behavior.
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
-import { sendDurableMessageBatch } from "openclaw/plugin-sdk/channel-outbound";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
+import { sendDurableMessageBatch } from "natesclaw/plugin-sdk/channel-outbound";
 import {
   createEmptyPluginRegistry,
   createTestRegistry,
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   createDiscordOutboundHoisted,

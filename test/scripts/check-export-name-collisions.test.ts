@@ -189,7 +189,7 @@ describe("export name collision guard", () => {
   });
 
   it("discovers JavaScript source collisions", async () => {
-    await withTempDir("openclaw-export-collisions-", async (repoRoot) => {
+    await withTempDir("natesclaw-export-collisions-", async (repoRoot) => {
       const sourceRoot = path.join(repoRoot, "src");
       await fs.mkdir(sourceRoot);
       await Promise.all([

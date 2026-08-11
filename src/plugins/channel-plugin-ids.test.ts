@@ -1,13 +1,13 @@
 /** Tests channel plugin id resolution from config, manifests, and installed state. */
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
 import type { InstalledPluginIndex, InstalledPluginIndexRecord } from "./installed-plugin-index.js";
 import type { PluginManifestRecord, PluginManifestRegistry } from "./manifest-registry.js";
 
 const listPotentialConfiguredChannelIds = vi.hoisted(() => vi.fn());
 const listExplicitlyDisabledChannelIdsForConfig = vi.hoisted(() =>
-  vi.fn((config: OpenClawConfig) => {
+  vi.fn((config: NatesclawConfig) => {
     return Object.entries(config.channels ?? {})
       .filter(([, value]) => {
         return (
@@ -86,7 +86,7 @@ function withManifestLoadPaths<T extends { id: string }>(
   return {
     rootDir: `/tmp/plugins/${plugin.id}`,
     source: `/tmp/plugins/${plugin.id}/index.ts`,
-    manifestPath: `/tmp/plugins/${plugin.id}/openclaw.plugin.json`,
+    manifestPath: `/tmp/plugins/${plugin.id}/natesclaw.plugin.json`,
     skills: [],
     hooks: [],
     ...plugin,
@@ -397,8 +397,8 @@ function useManifestRegistryFixture(
 }
 
 function expectStartupPluginIds(params: {
-  config: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config: NatesclawConfig;
+  activationSourceConfig?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   workerProviderIds?: readonly string[];
   expected: readonly string[];
@@ -495,12 +495,12 @@ function createStartupConfig(params: {
     };
   }
 
-  return config as OpenClawConfig;
+  return config as NatesclawConfig;
 }
 
 describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
   beforeEach(() => {
-    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: OpenClawConfig) => {
+    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: NatesclawConfig) => {
       if (Object.hasOwn(config, "channels")) {
         return Object.keys(config.channels ?? {});
       }
@@ -508,7 +508,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
     });
     listPotentialConfiguredChannelPresenceSignals
       .mockReset()
-      .mockImplementation((config: OpenClawConfig) => {
+      .mockImplementation((config: NatesclawConfig) => {
         return listPotentialConfiguredChannelIds(config).map((channelId: string) => ({
           channelId,
           source: "config",
@@ -534,7 +534,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
     ],
     [
       "keeps bundled startup sidecars with enabledByDefault at idle startup",
-      {} as OpenClawConfig,
+      {} as NatesclawConfig,
       ["demo-channel", "browser", "memory-core"],
     ],
     [
@@ -561,7 +561,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["demo-channel", "browser", "amazon-bedrock", "memory-core"],
     ],
     [
@@ -573,7 +573,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
         plugins: { entries: { "amazon-bedrock": { enabled: false } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["demo-channel", "browser", "memory-core"],
     ],
     [
@@ -581,7 +581,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       {
         channels: {},
         tts: { provider: "microsoft" },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -589,7 +589,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       {
         channels: {},
         tts: { providers: { "tts-local-cli": { command: "say" } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "tts-local-cli", "memory-core"],
     ],
     [
@@ -597,7 +597,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       {
         channels: {},
         tts: { provider: "edge" },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -606,7 +606,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         channels: {},
         tts: { provider: "gradium" },
         plugins: { entries: { gradium: { enabled: true } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "gradium", "memory-core"],
     ],
     [
@@ -622,7 +622,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -640,7 +640,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           list: [{ id: "reader", tts: { persona: "narrator" } }],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -657,7 +657,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["demo-channel", "browser", "microsoft", "memory-core"],
     ],
     [
@@ -678,7 +678,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["demo-channel", "browser", "microsoft", "memory-core"],
     ],
     [
@@ -689,7 +689,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           provider: "microsoft",
           providers: { microsoft: { enabled: false } },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -698,7 +698,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         channels: {},
         tts: { provider: "microsoft" },
         plugins: { entries: { microsoft: { enabled: false } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -717,7 +717,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "google", "memory-core"],
     ],
     [
@@ -732,7 +732,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
         plugins: { entries: { google: { enabled: false } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -747,7 +747,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "google", "memory-core"],
     ],
     [
@@ -760,7 +760,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
         plugins: { entries: { openai: { enabled: false } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -772,7 +772,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "memory-core"],
     ],
     [
@@ -784,7 +784,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           allow: ["memory-core"],
           slots: { memory: "memory-core" },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["memory-core"],
     ],
     [
@@ -796,7 +796,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "ollama", "memory-core"],
     ],
     [
@@ -806,7 +806,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           list: [{ id: "researcher", memory: { search: { provider: "openai" } } }],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "memory-core"],
     ],
     [
@@ -827,7 +827,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "ollama", "memory-core"],
     ],
     [
@@ -848,7 +848,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "ollama", "memory-core"],
     ],
     [
@@ -860,7 +860,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "generic-embedding", "memory-core"],
     ],
     [
@@ -872,7 +872,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -893,7 +893,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -908,7 +908,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         plugins: {
           slots: { memory: "none" },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser"],
     ],
     [
@@ -920,7 +920,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -932,7 +932,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "llama-cpp", "memory-core"],
     ],
     [
@@ -944,7 +944,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         agents: {
           defaults: {},
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -957,7 +957,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           defaults: {},
         },
         plugins: { entries: { openai: { enabled: false } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -970,7 +970,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           defaults: {},
         },
         plugins: { deny: ["openai"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -985,7 +985,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             { id: "researcher", memory: { search: { provider: "openai", fallback: "ollama" } } },
           ],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -998,7 +998,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           defaults: {},
           list: [{ id: "researcher", memory: { search: { enabled: true } } }],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "ollama", "memory-core"],
     ],
     [
@@ -1014,7 +1014,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             { id: "researcher", memory: { search: { provider: "ollama" } } },
           ],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "ollama", "memory-core"],
     ],
     [
@@ -1027,7 +1027,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           defaults: {},
           list: [{ id: "researcher" }],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "openai", "memory-core"],
     ],
     [
@@ -1050,7 +1050,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["brave"],
     ],
     [
@@ -1073,7 +1073,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       [],
     ],
     [
@@ -1096,7 +1096,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       [],
     ],
     [
@@ -1111,7 +1111,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
         plugins: { allow: ["browser"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser"],
     ],
     [
@@ -1130,7 +1130,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             "external-env-channel-plugin": { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "external-env-channel-plugin", "memory-core"],
     ],
     [
@@ -1144,7 +1144,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             "external-env-channel-plugin": { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -1187,7 +1187,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             "external-env-channel-plugin": { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["browser", "memory-core"],
     });
   });
@@ -1201,7 +1201,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           secondary: { provider: "STATIC-SSH" },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config: activationSourceConfig,
@@ -1215,7 +1215,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       channels: {},
       cloudWorkers: { profiles: { development: { provider: "static-ssh" } } },
       plugins: { allow: ["browser"] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const effectiveConfig = applyPluginAutoEnable({
       config: authoredConfig,
       env: createPluginPlanningTestEnv(),
@@ -1231,7 +1231,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
 
   it("loads bundled worker-provider owners required by durable environments", () => {
     expectStartupPluginIds({
-      config: { channels: {} } as OpenClawConfig,
+      config: { channels: {} } as NatesclawConfig,
       workerProviderIds: [" Static-SSH ", "STATIC-SSH"],
       expected: ["browser", "memory-core", "qa-lab"],
     });
@@ -1239,7 +1239,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
 
   it("keeps durable external worker-provider owners behind explicit enablement", () => {
     expectStartupPluginIds({
-      config: { channels: {} } as OpenClawConfig,
+      config: { channels: {} } as NatesclawConfig,
       workerProviderIds: ["external-ssh"],
       expected: ["browser", "memory-core"],
     });
@@ -1247,7 +1247,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       config: {
         channels: {},
         plugins: { entries: { "external-worker-provider": { enabled: true } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       workerProviderIds: ["external-ssh"],
       expected: ["browser", "memory-core", "external-worker-provider"],
     });
@@ -1262,7 +1262,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         },
       },
       plugins: { entries: { "qa-lab": { enabled: false } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config,
@@ -1280,7 +1280,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         },
       },
       plugins: { allow: ["browser"] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config,
@@ -1291,7 +1291,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
 
   it("keeps durable worker-provider owners behind disable and allowlist gates", () => {
     expectStartupPluginIds({
-      config: { channels: {}, plugins: { enabled: false } } as OpenClawConfig,
+      config: { channels: {}, plugins: { enabled: false } } as NatesclawConfig,
       workerProviderIds: ["static-ssh"],
       expected: [],
     });
@@ -1299,17 +1299,17 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       config: {
         channels: {},
         plugins: { entries: { "qa-lab": { enabled: false } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       workerProviderIds: ["static-ssh"],
       expected: ["browser", "memory-core"],
     });
     expectStartupPluginIds({
-      config: { channels: {}, plugins: { deny: ["qa-lab"] } } as OpenClawConfig,
+      config: { channels: {}, plugins: { deny: ["qa-lab"] } } as NatesclawConfig,
       workerProviderIds: ["static-ssh"],
       expected: ["browser", "memory-core"],
     });
     expectStartupPluginIds({
-      config: { channels: {}, plugins: { allow: ["browser"] } } as OpenClawConfig,
+      config: { channels: {}, plugins: { allow: ["browser"] } } as NatesclawConfig,
       workerProviderIds: ["static-ssh"],
       expected: ["browser"],
     });
@@ -1332,7 +1332,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config: effectiveConfig,
@@ -1355,7 +1355,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       plugins: {
         allow: ["browser"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const effectiveConfig = {
       ...rawConfig,
       plugins: {
@@ -1366,7 +1366,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config: effectiveConfig,
@@ -1386,7 +1386,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const runtimeConfig = {
       ...activationSourceConfig,
       plugins: {
@@ -1402,7 +1402,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config: runtimeConfig,
@@ -1484,7 +1484,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         plugins: {
           slots: { memory: "none" },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
     ],
     [
       "selected provider",
@@ -1535,7 +1535,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["browser", "demo-config-startup"],
     });
   });
@@ -1553,7 +1553,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["browser", "external-config-startup"],
     });
 
@@ -1568,7 +1568,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["browser"],
     });
   });
@@ -1578,7 +1578,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       enabled: true,
       config: { autoStart: { enabled: true } },
     };
-    const cases: Array<{ plugins: OpenClawConfig["plugins"]; expected: readonly string[] }> = [
+    const cases: Array<{ plugins: NatesclawConfig["plugins"]; expected: readonly string[] }> = [
       {
         plugins: {
           slots: { memory: "none" },
@@ -1619,7 +1619,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
 
     for (const testCase of cases) {
       expectStartupPluginIds({
-        config: { channels: {}, plugins: testCase.plugins } as OpenClawConfig,
+        config: { channels: {}, plugins: testCase.plugins } as NatesclawConfig,
         expected: testCase.expected,
       });
     }
@@ -1638,14 +1638,14 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const runtimeConfig = {
       ...activationSourceConfig,
       plugins: {
         ...activationSourceConfig.plugins,
         allow: ["browser", "external-config-startup"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config: runtimeConfig,
@@ -1795,7 +1795,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const runtimeConfig = {
       channels: {},
       plugins: {
@@ -1812,7 +1812,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expectStartupPluginIds({
       config: runtimeConfig,
@@ -1828,7 +1828,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         defaultProfile: "docker-cdp",
       },
       channels: {},
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const effectiveConfig = {
       ...rawConfig,
       plugins: {
@@ -1838,7 +1838,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     expectStartupPluginIds({
       config: effectiveConfig,
@@ -1884,7 +1884,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       { channelId: "demo-channel", source: "env" },
     ]);
 
-    const config = {} as OpenClawConfig;
+    const config = {} as NatesclawConfig;
 
     expectStartupPluginIds({
       config,
@@ -1906,7 +1906,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         plugins: {
           allow: ["browser"],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       env: createPluginPlanningTestEnv(),
       expected: ["demo-channel", "browser"],
     });
@@ -1930,7 +1930,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -1954,7 +1954,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -1981,7 +1981,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2007,7 +2007,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "memory-core",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2023,7 +2023,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         config: {
           channels: {},
           plugins: { allow: ["browser"], slots: { memory: "none" } },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
         workerProviderIds: ["static-ssh"],
@@ -2041,7 +2041,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           channels: {},
           cloudWorkers: { profiles: { development: { provider: "static-ssh" } } },
           plugins: { allow: ["browser"], slots: { memory: "none" } },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2067,7 +2067,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2109,7 +2109,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2149,7 +2149,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           plugins: {
             allow: ["openai"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2167,7 +2167,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             allow: ["browser"],
             bundledDiscovery: "compat",
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2189,7 +2189,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           plugins: {
             allow: ["browser"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2222,7 +2222,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2250,7 +2250,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2276,7 +2276,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2304,7 +2304,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2329,7 +2329,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2355,7 +2355,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               memory: "none",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2370,7 +2370,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       resolveConfigValidationMetadataPluginIds({
         config: {
           channels: {},
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2392,7 +2392,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
           plugins: {
             enabled: false,
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2413,7 +2413,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               paths: ["/tmp/plugins/custom"],
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2429,7 +2429,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             token: "stale",
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       env: createPluginPlanningTestEnv(),
       expected: ["browser", "memory-core"],
     });
@@ -2438,16 +2438,16 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
   it("does not treat persisted auth alone as gateway startup intent", () => {
     listPotentialConfiguredChannelIds.mockImplementation(
       (
-        configForTest: OpenClawConfig,
+        configForTest: NatesclawConfig,
         _env: NodeJS.ProcessEnv,
         options?: { includePersistedAuthState?: boolean },
       ) => (options?.includePersistedAuthState === false ? [] : ["demo-channel"]),
     );
 
     expectStartupPluginIds({
-      config: {} as OpenClawConfig,
+      config: {} as NatesclawConfig,
       env: createPluginPlanningTestEnv({
-        OPENCLAW_STATE_DIR: "/tmp/openclaw-with-persisted-demo-channel",
+        NATESCLAW_STATE_DIR: "/tmp/natesclaw-with-persisted-demo-channel",
       }),
       expected: ["browser", "memory-core"],
     });
@@ -2464,7 +2464,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             token: "configured",
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       env: createPluginPlanningTestEnv(),
       index,
       manifestRegistry: registry,
@@ -2488,7 +2488,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
         plugins: {
           allow: ["workspace-demo-channel-plugin"],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       env: createPluginPlanningTestEnv(),
       index,
       manifestRegistry: registry,
@@ -2518,7 +2518,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             "memory-lancedb": { enabled: true, config: { dreaming: { enabled: true } } },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["browser", "memory-core", "memory-lancedb"],
     });
   });
@@ -2538,7 +2538,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
               "memory-lancedb": { enabled: true, config: { dreaming: { enabled: true } } },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         env: createPluginPlanningTestEnv(),
         index,
       }),
@@ -2557,7 +2557,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             "memory-lancedb": { enabled: true, config: { dreaming: { enabled: true } } },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["browser", "memory-lancedb"],
     });
   });
@@ -2574,7 +2574,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             "memory-lancedb": { enabled: true, config: { dreaming: { enabled: true } } },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["browser", "memory-lancedb"],
     });
   });
@@ -2671,7 +2671,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             codex: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["demo-channel", "browser", "openai", "codex", "memory-core"],
     });
   });
@@ -2696,23 +2696,23 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["demo-channel", "browser", "anthropic", "openai", "codex", "memory-core"],
     });
   });
 
-  it("does not include Codex when an OpenAI model is manually pinned to OpenClaw", () => {
+  it("does not include Codex when an OpenAI model is manually pinned to Natesclaw", () => {
     expectStartupPluginIds({
       config: {
         agents: {
           defaults: {
             model: { primary: "openai/gpt-5.5" },
             models: {
-              "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+              "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } },
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["demo-channel", "browser", "openai", "memory-core"],
     });
   });
@@ -2732,7 +2732,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
       config: createStartupConfig({
         enabledPluginIds: ["codex"],
       }),
-      env: { OPENCLAW_AGENT_RUNTIME: "codex" },
+      env: { NATESCLAW_AGENT_RUNTIME: "codex" },
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -2764,7 +2764,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             "demo-provider-plugin": { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["demo-channel", "browser", "demo-provider-plugin", "memory-core"],
     });
   });
@@ -2779,7 +2779,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["demo-channel", "browser", "anthropic", "memory-core"],
     });
   });
@@ -2815,7 +2815,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -2837,7 +2837,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: ["demo-channel", "browser", "openai", "memory-core"],
     });
   });
@@ -2845,7 +2845,7 @@ describe("resolveGatewayStartupPluginIdsFromRegistry", () => {
 
 describe("resolveConfiguredChannelPluginIds", () => {
   beforeEach(() => {
-    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: OpenClawConfig) => {
+    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: NatesclawConfig) => {
       if (Object.hasOwn(config, "channels")) {
         return Object.keys(config.channels ?? {});
       }
@@ -2853,7 +2853,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
     });
     listPotentialConfiguredChannelPresenceSignals
       .mockReset()
-      .mockImplementation((config: OpenClawConfig) => {
+      .mockImplementation((config: NatesclawConfig) => {
         return listPotentialConfiguredChannelIds(config).map((channelId: string) => ({
           channelId,
           source: "config",
@@ -2881,7 +2881,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
       config: {
         channels: { "demo-channel": { token: "configured" } },
         plugins: { allow: ["browser"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       env: {},
       expected: ["demo-channel"],
     },
@@ -2890,7 +2890,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
       config: {
         channels: { "activation-only-channel": { enabled: true } },
         plugins: { deny: ["activation-only-channel-plugin"] },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: [],
     },
     {
@@ -2898,7 +2898,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
       config: {
         channels: { "activation-only-channel": { enabled: true } },
         plugins: { enabled: false },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: [],
     },
     {
@@ -2935,13 +2935,13 @@ describe("resolveConfiguredChannelPluginIds", () => {
       config: {
         channels: { "activation-only-channel": { enabled: true } },
         plugins: { entries: { "activation-only-channel-plugin": { enabled: false } } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       expected: [],
     },
   ] satisfies Array<{
     name: string;
-    config: OpenClawConfig;
-    activationSourceConfig?: OpenClawConfig;
+    config: NatesclawConfig;
+    activationSourceConfig?: NatesclawConfig;
     env?: NodeJS.ProcessEnv;
     expected: string[];
   }>)("$name", ({ config, activationSourceConfig, env, expected }) => {
@@ -2976,7 +2976,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_FAKE_TEST_TRIGGER: "present",
@@ -2991,7 +2991,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_FAKE_TEST_TRIGGER: "present",
@@ -3013,7 +3013,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_FAKE_TEST_TRIGGER: "present",
@@ -3054,11 +3054,11 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_HOST: "irc.example.com",
-          EXTERNAL_ENV_CHANNEL_NICK: "openclaw",
+          EXTERNAL_ENV_CHANNEL_NICK: "natesclaw",
         } as NodeJS.ProcessEnv,
         includePersistedAuthState: false,
         ambientEnvTriggers: "suppress",
@@ -3077,7 +3077,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           channels: {
             "demo-channel": { enabled: true },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: { DEMO_FAKE_TEST_TRIGGER: "present" } as NodeJS.ProcessEnv,
         includePersistedAuthState: false,
@@ -3110,7 +3110,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_FAKE_TEST_TRIGGER: "present",
@@ -3129,7 +3129,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -3152,7 +3152,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -3168,7 +3168,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           token: "stale-token",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(listExplicitConfiguredChannelIdsForConfig(config)).toStrictEqual([]);
     expect(
@@ -3209,7 +3209,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveConfiguredChannelPresencePolicy({
@@ -3254,7 +3254,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3273,7 +3273,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "present",
@@ -3288,7 +3288,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
       plugins: {
         allow: ["external-env-channel-plugin"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       listConfiguredChannelIdsForReadOnlyScope({
@@ -3306,7 +3306,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_HOST: "irc.example.com",
-          EXTERNAL_ENV_CHANNEL_NICK: "openclaw",
+          EXTERNAL_ENV_CHANNEL_NICK: "natesclaw",
         } as NodeJS.ProcessEnv,
         includePersistedAuthState: false,
       }),
@@ -3323,7 +3323,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
       plugins: {
         allow: ["browser"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveConfiguredChannelPresencePolicy({
@@ -3365,7 +3365,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               token: "configured",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -3390,7 +3390,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             enabled: false,
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -3408,7 +3408,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             deny: ["demo-channel"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -3437,7 +3437,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
             enabled: false,
           },
         },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
     ).toEqual(["demo-channel", "trimmed-channel"]);
   });
 
@@ -3463,7 +3463,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_FAKE_TEST_TRIGGER: "ambient",
@@ -3490,7 +3490,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["demo-other-channel"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_FAKE_TEST_TRIGGER: "ambient",
@@ -3508,7 +3508,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               token: "configured",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3522,7 +3522,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           token: "configured",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       listConfiguredAnnounceChannelIdsForConfig({
@@ -3531,7 +3531,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             enabled: false,
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3544,7 +3544,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             deny: ["clickclack"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3561,7 +3561,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3574,7 +3574,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["slack"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3588,7 +3588,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           token: "configured",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       listConfiguredAnnounceChannelIdsForConfig({
@@ -3597,7 +3597,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             enabled: false,
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3610,7 +3610,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             deny: ["demo-channel"],
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3627,7 +3627,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -3653,7 +3653,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {},
         manifestRecords: [
@@ -3694,7 +3694,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         workspaceDir: "/tmp",
         env: {
           ACTIVATION_ONLY_CHANNEL_TOKEN: "ambient",

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { runWithGatewayIndependentRootWorkAdmission } from "../process/gateway-work-admission.js";
 import { getActiveSecretsRuntimeSnapshotRevisionState } from "../secrets/runtime-state.js";
 import { resetSkillSnapshotConfigFingerprintCache } from "../skills/runtime/snapshot-config-fingerprint.js";
@@ -49,22 +49,22 @@ export function startManagedGatewayConfigReloader(
   }
 
   const prepareRuntimeCandidate = (
-    runtimeConfig: OpenClawConfig,
-    sourceConfig: OpenClawConfig,
+    runtimeConfig: NatesclawConfig,
+    sourceConfig: NatesclawConfig,
     ownership?: GatewayConfigReloadTransactionOwnership,
-  ): OpenClawConfig => {
+  ): NatesclawConfig => {
     const canonicalConfig = restoreCanonicalSecretRefs(runtimeConfig, sourceConfig);
     const candidateConfig = ownership?.reapplyRuntimeOverlays(canonicalConfig) ?? canonicalConfig;
     return params.applyRuntimeConfigOverrides?.(candidateConfig) ?? candidateConfig;
   };
-  const applyRuntimeConfigOverrides = (config: OpenClawConfig): OpenClawConfig =>
+  const applyRuntimeConfigOverrides = (config: NatesclawConfig): NatesclawConfig =>
     params.applyRuntimeConfigOverrides?.(config) ?? config;
   const restartRecoveryAvailable =
     params.restartRecoveryAvailable !== false && params.requestRecoveryRestart !== undefined;
 
   let stopped = false;
   const tryPrepareRuntimeSecrets = async (
-    config: OpenClawConfig,
+    config: NatesclawConfig,
     transactionOwnership: GatewayConfigReloadTransactionOwnership,
     activationParams: RuntimeSecretsPreflightParams,
   ): Promise<CurrentRuntimeSecretsPreparation | null> => {
@@ -149,9 +149,9 @@ export function startManagedGatewayConfigReloader(
       ? { requestRecoveryRestart: params.requestRecoveryRestart }
       : {}),
     assertRestartReady: () =>
-      import("../state/openclaw-database-preflight.js").then(
-        ({ assertOpenClawDatabasesReadyForRestart }) =>
-          assertOpenClawDatabasesReadyForRestart({ env: process.env }),
+      import("../state/natesclaw-database-preflight.js").then(
+        ({ assertNatesclawDatabasesReadyForRestart }) =>
+          assertNatesclawDatabasesReadyForRestart({ env: process.env }),
       ),
     restartRecoveryAvailable,
     createHealthMonitor: (config) =>
@@ -162,9 +162,9 @@ export function startManagedGatewayConfigReloader(
   });
   const runManagedRestart = async (
     plan: GatewayReloadPlan,
-    nextConfig: OpenClawConfig,
+    nextConfig: NatesclawConfig,
     transactionOwnership: GatewayConfigReloadTransactionOwnership,
-    sourceConfig: OpenClawConfig,
+    sourceConfig: NatesclawConfig,
     restartOptions?: GatewayRestartRequestOptions,
     beforeRestartRequest?: () => Promise<void>,
   ) => {
@@ -182,7 +182,7 @@ export function startManagedGatewayConfigReloader(
           previousRequired: string | undefined | null;
           previousCurrent: string | undefined;
           nextGeneration: string | undefined;
-          runtimeConfig: OpenClawConfig;
+          runtimeConfig: NatesclawConfig;
         }
       | undefined;
     try {

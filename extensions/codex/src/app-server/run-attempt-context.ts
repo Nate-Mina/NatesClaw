@@ -6,9 +6,9 @@ import {
   getAgentHarnessHookRunner,
   resolveContextEngineOwnerPluginId,
   runHarnessContextEngineMaintenance,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
-  buildCodexOpenClawPromptContext,
+  buildCodexNatesclawPromptContext,
   buildCodexWatchedSessionsContext,
   buildCodexWorkspaceBootstrapContext,
   getCodexWorkspaceMemoryToolNames,
@@ -150,7 +150,7 @@ export async function prepareCodexAttemptContext(
   const baseDeveloperInstructions = buildDeveloperInstructions(runtimeParams, {
     dynamicTools: toolBridge.availableSpecs,
   });
-  const openClawPromptContext = buildCodexOpenClawPromptContext({
+  const NatesclawPromptContext = buildCodexNatesclawPromptContext({
     params: runtimeParams,
     workspacePromptContext: workspaceBootstrapContext.promptContext,
     watchedSessionsContext: buildCodexWatchedSessionsContext({
@@ -190,7 +190,7 @@ export async function prepareCodexAttemptContext(
     buildActiveContextEngineRuntimeContext,
     workspaceBootstrapContext,
     baseDeveloperInstructions,
-    openClawPromptContext,
+    NatesclawPromptContext,
     skillsCollaborationInstructions,
     promptState,
     codexContextProjectionMaxChars,

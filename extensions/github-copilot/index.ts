@@ -1,6 +1,6 @@
-// Github Copilot plugin entrypoint registers its OpenClaw integration.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
+// Github Copilot plugin entrypoint registers its Natesclaw integration.
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resolvePluginConfigObject } from "natesclaw/plugin-sdk/plugin-config-runtime";
 import {
   definePluginEntry,
   type ProviderAuthContext,
@@ -8,7 +8,7 @@ import {
   type ProviderAuthMethodNonInteractiveContext,
   type UnifiedModelCatalogEntry,
   type UnifiedModelCatalogProviderContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import {
   applyAuthProfileConfig,
   coerceSecretRef,
@@ -17,7 +17,7 @@ import {
   normalizeOptionalSecretInput,
   resolveDefaultSecretProviderAlias,
   upsertAuthProfileWithLock,
-} from "openclaw/plugin-sdk/provider-auth";
+} from "natesclaw/plugin-sdk/provider-auth";
 import { resolveFirstGithubToken } from "./auth.js";
 import {
   normalizeGithubCopilotDomain,
@@ -59,7 +59,7 @@ async function loadGithubCopilotRuntime() {
   return await import("./register.runtime.js");
 }
 
-function resolveCopilotConfiguredPrimary(cfg: OpenClawConfig): string {
+function resolveCopilotConfiguredPrimary(cfg: NatesclawConfig): string {
   const defaults = cfg.agents?.defaults;
   const existingModel = defaults?.model;
   return typeof existingModel === "string"
@@ -69,7 +69,7 @@ function resolveCopilotConfiguredPrimary(cfg: OpenClawConfig): string {
       : "";
 }
 
-function applyCopilotDefaultModel(cfg: OpenClawConfig, modelRef: string): OpenClawConfig {
+function applyCopilotDefaultModel(cfg: NatesclawConfig, modelRef: string): NatesclawConfig {
   if (resolveCopilotConfiguredPrimary(cfg)) {
     return cfg;
   }
@@ -167,7 +167,7 @@ async function resolveInteractiveCopilotStarterModel(params: {
 // or tenant fallback), so only the host is stored here. Mirror of
 // clearGithubCopilotDomainConfigPatch; both are provider-owned and live with the
 // plugin rather than the shared SDK.
-function buildGithubCopilotDomainConfigPatch(domain: string): Partial<OpenClawConfig> {
+function buildGithubCopilotDomainConfigPatch(domain: string): Partial<NatesclawConfig> {
   const normalized = normalizeGithubCopilotDomain(domain);
   return {
     models: {
@@ -175,26 +175,26 @@ function buildGithubCopilotDomainConfigPatch(domain: string): Partial<OpenClawCo
         [PROVIDER_ID]: { params: { githubDomain: normalized } },
       },
     },
-  } as unknown as Partial<OpenClawConfig>;
+  } as unknown as Partial<NatesclawConfig>;
 }
 
 // Removes a previously persisted enterprise domain so config falls back to the
 // "no config == github.com" default. Undefined leaves are deleted on merge.
-function clearGithubCopilotDomainConfigPatch(): Partial<OpenClawConfig> {
+function clearGithubCopilotDomainConfigPatch(): Partial<NatesclawConfig> {
   return {
     models: {
       providers: {
         [PROVIDER_ID]: { params: { githubDomain: undefined } },
       },
     },
-  } as unknown as Partial<OpenClawConfig>;
+  } as unknown as Partial<NatesclawConfig>;
 }
 
 function applyGithubCopilotDomainToConfig(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   domain: string,
   previousDomain: string,
-): OpenClawConfig {
+): NatesclawConfig {
   const isEnterprise = domain !== PUBLIC_GITHUB_COPILOT_DOMAIN;
   const shouldClear = !isEnterprise && previousDomain !== PUBLIC_GITHUB_COPILOT_DOMAIN;
   if (!isEnterprise && !shouldClear) {
@@ -300,7 +300,7 @@ async function resolveCopilotNonInteractiveToken(
 
 async function runGitHubCopilotNonInteractiveAuth(
   ctx: ProviderAuthMethodNonInteractiveContext,
-): Promise<OpenClawConfig | null> {
+): Promise<NatesclawConfig | null> {
   const opts = ctx.opts as Record<string, unknown> | undefined;
   const flagValue = normalizeOptionalSecretInput(opts?.githubCopilotToken);
   const resolved = await resolveCopilotNonInteractiveToken(ctx, flagValue);
@@ -410,7 +410,7 @@ export default definePluginEntry({
   description: "Bundled GitHub Copilot provider plugin",
   register(api) {
     const startupPluginConfig = (api.pluginConfig ?? {}) as GithubCopilotPluginConfig;
-    function resolveCurrentPluginConfig(config?: OpenClawConfig): GithubCopilotPluginConfig {
+    function resolveCurrentPluginConfig(config?: NatesclawConfig): GithubCopilotPluginConfig {
       const runtimePluginConfig = resolvePluginConfigObject(config, "github-copilot");
       if (runtimePluginConfig) {
         return runtimePluginConfig as GithubCopilotPluginConfig;

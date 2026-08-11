@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { readStringValue } from "@openclaw/normalization-core/string-coerce";
+import { readStringValue } from "@natesclaw/normalization-core/string-coerce";
 import * as tar from "tar";
 import { loadSqliteVecExtension } from "../../packages/memory-host-sdk/src/engine-storage.js";
 import { isTransientSqliteBackupPath } from "../infra/backup-volatile-filter.js";
@@ -422,16 +422,16 @@ function assertCanonicalSqlitePathCasing(relativePath: string, archivePath: stri
   const segments = relativePath.split("/");
   const portablePath = resolvePortableArchivePathKey(relativePath);
   const isGlobalAlias =
-    portablePath === "state/openclaw.sqlite" && relativePath !== "state/openclaw.sqlite";
+    portablePath === "state/natesclaw.sqlite" && relativePath !== "state/natesclaw.sqlite";
   const isAgentAlias =
     segments.length === 4 &&
     segments[0]?.toLowerCase() === "agents" &&
     Boolean(segments[1]) &&
     segments[2]?.toLowerCase() === "agent" &&
-    segments[3]?.toLowerCase() === "openclaw-agent.sqlite" &&
+    segments[3]?.toLowerCase() === "natesclaw-agent.sqlite" &&
     (segments[0] !== "agents" ||
       segments[2] !== "agent" ||
-      segments[3] !== "openclaw-agent.sqlite");
+      segments[3] !== "natesclaw-agent.sqlite");
   if (isGlobalAlias || isAgentAlias) {
     throw new Error(`Backup contains a case-mangled canonical SQLite path: ${archivePath}`);
   }
@@ -517,7 +517,7 @@ function resolveExpectedSqliteRole(entry: SqliteSnapshotEntry): ExpectedSqliteRo
 function resolveExpectedSqliteRoleFromRelativePath(
   relativePath: string,
 ): ExpectedSqliteRole | undefined {
-  if (relativePath === "state/openclaw.sqlite") {
+  if (relativePath === "state/natesclaw.sqlite") {
     return "global";
   }
   const segments = relativePath.split("/");
@@ -526,7 +526,7 @@ function resolveExpectedSqliteRoleFromRelativePath(
     segments[0] === "agents" &&
     segments[1] &&
     segments[2] === "agent" &&
-    segments[3] === "openclaw-agent.sqlite"
+    segments[3] === "natesclaw-agent.sqlite"
   ) {
     return "agent";
   }
@@ -648,7 +648,7 @@ async function verifySqliteSnapshots(params: {
 
   const tempRoot = os.tmpdir();
   assertSqliteExtractionBudget({ entries: sqliteEntries, tempRoot });
-  const tempDir = await fs.mkdtemp(path.join(tempRoot, "openclaw-backup-verify-sqlite-"));
+  const tempDir = await fs.mkdtemp(path.join(tempRoot, "natesclaw-backup-verify-sqlite-"));
   try {
     const sqliteEntriesByRawPath = new Map(sqliteEntries.map((entry) => [entry.raw, entry]));
     await tar.x({

@@ -222,7 +222,7 @@ describe("sidebar attention refresh ownership", () => {
     vi.spyOn(Date, "now").mockImplementation(() => now);
 
     const provider = createApplicationContextProvider({ gateway, overlays } as ApplicationContext);
-    const element = document.createElement("openclaw-sidebar-attention") as SidebarAttentionElement;
+    const element = document.createElement("natesclaw-sidebar-attention") as SidebarAttentionElement;
     provider.append(element);
     document.body.append(provider);
     await waitForFast(() => expect(request).toHaveBeenCalledTimes(2));
@@ -298,7 +298,7 @@ describe("sidebar attention refresh ownership", () => {
     vi.stubGlobal("localStorage", createTestStorageMock());
 
     const provider = createApplicationContextProvider({ gateway, overlays } as ApplicationContext);
-    const element = document.createElement("openclaw-sidebar-attention") as SidebarAttentionElement;
+    const element = document.createElement("natesclaw-sidebar-attention") as SidebarAttentionElement;
     provider.append(element);
     document.body.append(provider);
     await waitForFast(() => expect(element.textContent).toContain("1 automation(s) failed"));

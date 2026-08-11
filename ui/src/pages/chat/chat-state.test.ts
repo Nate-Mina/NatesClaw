@@ -75,7 +75,7 @@ describe("canonical session message recovery", () => {
         message: {
           role: "user",
           content: [{ type: "text", text: "Incomplete imported prompt" }],
-          __openclaw: { importedFrom: "claude-cli", externalId: "source-local-user" },
+          __natesclaw: { importedFrom: "claude-cli", externalId: "source-local-user" },
         },
       },
     });
@@ -96,14 +96,14 @@ describe("canonical session message recovery", () => {
         message: {
           role: "user",
           content: [{ type: "text", text: "Persisted imported prompt" }],
-          __openclaw: { importedFrom: "claude-cli", externalId: "source-local-user", seq: 3 },
+          __natesclaw: { importedFrom: "claude-cli", externalId: "source-local-user", seq: 3 },
         },
       },
     });
 
     expect(state.chatMessages).toHaveLength(1);
     expect(state.chatMessages[0]).toMatchObject({
-      __openclaw: { importedFrom: "claude-cli", externalId: "source-local-user", seq: 3 },
+      __natesclaw: { importedFrom: "claude-cli", externalId: "source-local-user", seq: 3 },
     });
   });
 
@@ -134,7 +134,7 @@ describe("canonical session message recovery", () => {
           message: {
             role: "user",
             content: [{ type: "text", text: "shared prompt" }],
-            __openclaw: {
+            __natesclaw: {
               id: `canonical-${client}-same-text`,
               idempotencyKey: `${client}-same-text-run:user`,
               seq: index + 1,
@@ -158,8 +158,8 @@ describe("canonical session message recovery", () => {
 
     expect(request).toHaveBeenCalledOnce();
     expect(state.chatMessages).toMatchObject([
-      { __openclaw: { id: "canonical-web-same-text", seq: 1 } },
-      { __openclaw: { id: "canonical-tui-same-text", seq: 2 } },
+      { __natesclaw: { id: "canonical-web-same-text", seq: 1 } },
+      { __natesclaw: { id: "canonical-tui-same-text", seq: 2 } },
     ]);
   });
 
@@ -167,7 +167,7 @@ describe("canonical session message recovery", () => {
     const pendingUser = {
       role: "user",
       content: [{ type: "text", text: "Pending before reset" }],
-      __openclaw: { idempotencyKey: "pre-reset-pending:user" },
+      __natesclaw: { idempotencyKey: "pre-reset-pending:user" },
     };
     const { state } = createSessionEventState({
       connected: false,
@@ -182,7 +182,7 @@ describe("canonical session message recovery", () => {
           message: {
             role: "user",
             content: [{ type: "text", text }],
-            __openclaw: { id, idempotencyKey: `${id}:user`, seq: 1 },
+            __natesclaw: { id, idempotencyKey: `${id}:user`, seq: 1 },
           },
         },
       });
@@ -204,7 +204,7 @@ describe("canonical session message recovery", () => {
     deliverUser("post-reset-live", "Live after reset");
     expect(state.chatMessages).toHaveLength(1);
     expect(state.chatMessages[0]).toMatchObject({
-      __openclaw: { id: "post-reset-live", seq: 1 },
+      __natesclaw: { id: "post-reset-live", seq: 1 },
     });
   });
 
@@ -212,7 +212,7 @@ describe("canonical session message recovery", () => {
     const selectedUser = {
       role: "user",
       content: [{ type: "text", text: "Keep this agent's conversation" }],
-      __openclaw: { id: "selected-user", seq: 1 },
+      __natesclaw: { id: "selected-user", seq: 1 },
     };
     const { state } = createSessionEventState({
       connected: false,
@@ -274,7 +274,7 @@ describe("canonical session message recovery", () => {
     const selectedUser = {
       role: "user",
       content: [{ type: "text", text: "Keep this pending transcript" }],
-      __openclaw: { idempotencyKey: "still-pending:user" },
+      __natesclaw: { idempotencyKey: "still-pending:user" },
     };
     const { state } = createSessionEventState({
       connected: false,
@@ -913,26 +913,26 @@ describe("ChatStateController render lifecycle", () => {
     expect(refreshSessionPullRequests).not.toHaveBeenCalled();
 
     // Issue links never carry chips.
-    delta("see https://github.com/openclaw/openclaw/issues/42 ");
+    delta("see https://github.com/natesclaw/natesclaw/issues/42 ");
     expect(refreshSessionPullRequests).not.toHaveBeenCalled();
 
-    delta("opened https://github.com/openclaw/openclaw/pull/113840 for review ");
+    delta("opened https://github.com/natesclaw/natesclaw/pull/113840 for review ");
     expect(refreshSessionPullRequests).toHaveBeenCalledTimes(1);
     expect(refreshSessionPullRequests).toHaveBeenCalledWith({ refresh: true });
 
     // One refresh reloads all of the branch's PRs; further links in the same
     // run must not spend more GitHub quota.
-    delta("also https://github.com/openclaw/openclaw/pull/113900 ");
+    delta("also https://github.com/natesclaw/natesclaw/pull/113900 ");
     expect(refreshSessionPullRequests).toHaveBeenCalledTimes(1);
 
     // Streaming may split a URL across chunks; the rolling tail rejoins it.
-    delta("continuing https://github.com/openclaw/openclaw/pu", "run-2");
+    delta("continuing https://github.com/natesclaw/natesclaw/pu", "run-2");
     expect(refreshSessionPullRequests).toHaveBeenCalledTimes(1);
     delta("ll/113901 done", "run-2");
     expect(refreshSessionPullRequests).toHaveBeenCalledTimes(2);
 
     // A later run announcing the same PR (e.g. its merge) refreshes again.
-    delta("merged https://github.com/openclaw/openclaw/pull/113840 at last", "run-3");
+    delta("merged https://github.com/natesclaw/natesclaw/pull/113840 at last", "run-3");
     expect(refreshSessionPullRequests).toHaveBeenCalledTimes(3);
   });
 
@@ -1222,12 +1222,12 @@ describe("session pull request refresh", () => {
   it.each([
     {
       name: "requests an authoritative refresh after a final assistant PR link",
-      text: "Opened `https://github.com/openclaw/openclaw/pull/111532`.",
+      text: "Opened `https://github.com/natesclaw/natesclaw/pull/111532`.",
       refresh: true,
     },
     {
       name: "refreshes for a visible same-session final from another run",
-      text: "Opened https://github.com/openclaw/openclaw/pull/111532",
+      text: "Opened https://github.com/natesclaw/natesclaw/pull/111532",
       activeRunId: "active-run",
       runId: "announcement-run",
       refresh: true,
@@ -1237,17 +1237,17 @@ describe("session pull request refresh", () => {
       text: "Finished the background task.",
       activeRunId: "active-run",
       runId: "announcement-run",
-      stream: "Opened https://github.com/openclaw/openclaw/pull/111532",
+      stream: "Opened https://github.com/natesclaw/natesclaw/pull/111532",
       refresh: false,
     },
     {
       name: "does not refresh for an issue link",
-      text: "Tracked in https://github.com/openclaw/openclaw/issues/111532.",
+      text: "Tracked in https://github.com/natesclaw/natesclaw/issues/111532.",
       refresh: false,
     },
     {
       name: "does not refresh for another session's PR announcement",
-      text: "Opened https://github.com/openclaw/openclaw/pull/111532",
+      text: "Opened https://github.com/natesclaw/natesclaw/pull/111532",
       sessionKey: "agent:main:other",
       refresh: false,
     },

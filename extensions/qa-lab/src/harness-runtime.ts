@@ -5,8 +5,8 @@ import {
   matchesMentionPatterns,
   matchesMentionWithExplicit,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
-import type { PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/runtime-store";
 
 type SessionRecord = {
   sessionKey: string;

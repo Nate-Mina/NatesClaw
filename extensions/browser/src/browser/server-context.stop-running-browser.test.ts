@@ -23,11 +23,11 @@ vi.mock("./chrome.js", () => ({
   isChromeCdpOwnedByPid: vi.fn(async () => true),
   isChromeCdpReady: vi.fn(async () => true),
   isChromeReachable: vi.fn(async () => true),
-  launchOpenClawChrome: vi.fn(async () => {
+  launchNatesclawChrome: vi.fn(async () => {
     throw new Error("unexpected launch");
   }),
-  resolveOpenClawUserDataDir: vi.fn(() => "/tmp/openclaw-test"),
-  stopOpenClawChrome: vi.fn(async () => {}),
+  resolveNatesclawUserDataDir: vi.fn(() => "/tmp/natesclaw-test"),
+  stopNatesclawChrome: vi.fn(async () => {}),
 }));
 vi.mock("./chrome-mcp.js", () => ({
   closeChromeMcpSession: vi.fn(async () => false),

@@ -1,6 +1,6 @@
 // System-agent session tests cover caller ownership and response projection.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetCommandQueueStateForTest } from "../../process/command-queue.test-support.js";
 import { SystemAgentWizardAnswerError } from "../../system-agent/chat-engine.js";
@@ -96,7 +96,7 @@ function makeClient(params: {
   return {
     connId: params.connId,
     connect: {
-      client: { id: "openclaw-control-ui", mode: "webchat" },
+      client: { id: "natesclaw-control-ui", mode: "webchat" },
       ...(params.deviceId ? { device: { id: params.deviceId } } : {}),
     },
     ...(params.authenticatedUserId ? { authenticatedUserId: params.authenticatedUserId } : {}),
@@ -129,8 +129,8 @@ async function callChat(
   const calls: RespondCall[] = [];
   const respond: RespondFn = (ok, payload, error) => calls.push({ ok, payload, error });
   await expectDefined(
-    systemAgentHandlers["openclaw.chat"],
-    'systemAgentHandlers["openclaw.chat"] test invariant',
+    systemAgentHandlers["natesclaw.chat"],
+    'systemAgentHandlers["natesclaw.chat"] test invariant',
   )({
     params,
     client,
@@ -153,7 +153,7 @@ afterEach(() => {
   resetCommandQueueStateForTest();
 });
 
-describe("openclaw.chat session ownership", () => {
+describe("natesclaw.chat session ownership", () => {
   it("binds a new non-delegated session and rejects another principal", async () => {
     const sessions = new Map<string, SystemAgentChatSession>();
     const context = makeContext(sessions);
@@ -350,7 +350,7 @@ describe("openclaw.chat session ownership", () => {
   });
 });
 
-describe("openclaw.chat session responses", () => {
+describe("natesclaw.chat session responses", () => {
   it("returns the stored welcome when no message is sent", async () => {
     const sessions = new Map<string, SystemAgentChatSession>([["s1", seededSession()]]);
     const call = await callChat(makeContext(sessions), { sessionId: "s1" });

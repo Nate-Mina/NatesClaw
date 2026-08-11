@@ -1,10 +1,10 @@
-import type { OpenClawPluginApi as MatrixEntryPluginApi } from "openclaw/plugin-sdk/channel-entry-contract";
+import type { NatesclawPluginApi as MatrixEntryPluginApi } from "natesclaw/plugin-sdk/channel-entry-contract";
 import {
   getRequiredHookHandler,
   registerHookHandlersForTest,
-} from "openclaw/plugin-sdk/channel-test-helpers";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
 // Matrix tests cover subagent hooks plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { registerMatrixSubagentHooks } from "../../subagent-hooks-api.js";
 
@@ -19,7 +19,7 @@ const removeBindingRecordMock = vi.hoisted(() => vi.fn(() => false));
 const resolveMatrixBaseConfigMock = vi.hoisted(() => vi.fn((): any => ({})));
 const findMatrixAccountConfigMock = vi.hoisted(() => vi.fn((): any => undefined));
 
-vi.mock("openclaw/plugin-sdk/conversation-binding-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/conversation-binding-runtime", () => ({
   getSessionBindingService: () => ({
     bind: bindMock,
     getCapabilities: getCapabilitiesMock,

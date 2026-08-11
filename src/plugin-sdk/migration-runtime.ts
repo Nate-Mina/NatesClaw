@@ -3,7 +3,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { writeTextAtomic } from "@openclaw/fs-safe/atomic";
+import { writeTextAtomic } from "@natesclaw/fs-safe/atomic";
 import { resolveAgentConfig } from "../agents/agent-scope-config.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { ensureAbsoluteDirectory, pathExists, root as openFsSafeRoot } from "../infra/fs-safe.js";
@@ -358,7 +358,7 @@ export async function copyMemoryMigrationFileItem(
         symlinks: "reject",
       });
       backupPath = await backupMemoryMigrationTarget(item.target, existing.buffer, reportDir);
-      stagingDir = path.join(".openclaw-memory-import-staging", crypto.randomUUID());
+      stagingDir = path.join(".natesclaw-memory-import-staging", crypto.randomUUID());
       stagedRelative = path.join(stagingDir, path.basename(relativeTarget));
       const plannedRecoveryPath = path.join(safeRoot.rootReal, stagedRelative);
       journalRecoveryPath = plannedRecoveryPath;
@@ -408,7 +408,7 @@ export async function copyMemoryMigrationFileItem(
     }
     if (stagingDir) {
       await safeRoot.remove(stagingDir);
-      await safeRoot.remove(".openclaw-memory-import-staging").catch(() => undefined);
+      await safeRoot.remove(".natesclaw-memory-import-staging").catch(() => undefined);
     }
     if (recoveryRecordPath) {
       try {

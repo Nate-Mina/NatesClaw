@@ -1,7 +1,7 @@
 // Telegram plugin module recovers dispatch routing and group-history context.
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { createChannelHistoryWindow } from "openclaw/plugin-sdk/reply-history";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { createChannelHistoryWindow } from "natesclaw/plugin-sdk/reply-history";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import type { TelegramMessageContext } from "./bot-message-context.js";
 import {

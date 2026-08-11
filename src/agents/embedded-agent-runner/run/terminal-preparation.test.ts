@@ -1,4 +1,4 @@
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it, vi } from "vitest";
 import { createTestAdmittedRunContext } from "../../admitted-run-context.test-support.js";
 import { createUsageAccumulator } from "../usage-accumulator.js";
@@ -77,7 +77,7 @@ describe("prepareEmbeddedRunTerminal", () => {
           admittedRunContext: createTestAdmittedRunContext("run-1"),
           sessionId: "session-1",
           runId: "run-1",
-          workspaceDir: "/tmp/openclaw-test",
+          workspaceDir: "/tmp/natesclaw-test",
           prompt: "hi",
           trigger: "user",
           timeoutMs: 60_000,
@@ -150,7 +150,7 @@ describe("prepareEmbeddedRunTerminal run stats", () => {
         admittedRunContext: createTestAdmittedRunContext("run-1"),
         sessionId: "session-1",
         runId: "run-1",
-        workspaceDir: "/tmp/openclaw-test",
+        workspaceDir: "/tmp/natesclaw-test",
         prompt: "hi",
         trigger: "user",
         timeoutMs: 60_000,

@@ -4,8 +4,8 @@ import type {
   ChannelInboundMediaInput,
   MediaPlaceholderTextFact,
   NormalizedLocation,
-} from "openclaw/plugin-sdk/channel-inbound";
-import type { PollInput } from "openclaw/plugin-sdk/poll-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import type { PollInput } from "natesclaw/plugin-sdk/poll-runtime";
 import type { WhatsAppIdentity, WhatsAppReplyContext, WhatsAppSelfIdentity } from "../identity.js";
 import type { WhatsAppQuotedMessageKey } from "../quoted-message.js";
 import type { DeprecatedWebInboundAdmissionTopLevelFields } from "./admission-types.js";

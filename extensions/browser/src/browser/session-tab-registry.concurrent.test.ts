@@ -1,12 +1,12 @@
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CloseTab, RegistryModule } from "./session-tab-registry.sqlite.test-helpers.js";
 
 const processStateSymbols = [
-  "openclaw.browser.session-tabs.volatile",
-  "openclaw.browser.session-tabs.volatile-cleanup",
-  "openclaw.browser.session-tabs.volatile-aliases",
-  "openclaw.browser.session-tabs.exact-volatile-aliases",
+  "natesclaw.browser.session-tabs.volatile",
+  "natesclaw.browser.session-tabs.volatile-cleanup",
+  "natesclaw.browser.session-tabs.volatile-aliases",
+  "natesclaw.browser.session-tabs.exact-volatile-aliases",
 ];
 
 function clearProcessLocalTabState(): void {

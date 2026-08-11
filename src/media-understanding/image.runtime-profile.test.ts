@@ -2,7 +2,7 @@
 // provider payload transforms, and MiniMax/Copilot special paths.
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   looksLikeSecretSentinel,
   mintSecretSentinel,
@@ -15,7 +15,7 @@ const SET_RUNTIME_API_KEY_FIELD = ["setRuntime", "ApiKey"].join("");
 
 const hoisted = vi.hoisted(() => ({
   completeMock: vi.fn(),
-  ensureOpenClawModelsJsonMock: vi.fn(async () => {}),
+  ensureNatesclawModelsJsonMock: vi.fn(async () => {}),
   getApiKeyForModelMock: vi.fn(
     async (): Promise<{
       apiKey: string;
@@ -49,7 +49,7 @@ const hoisted = vi.hoisted(() => ({
 }));
 const {
   completeMock,
-  ensureOpenClawModelsJsonMock,
+  ensureNatesclawModelsJsonMock,
   getApiKeyForModelMock,
   resolveApiKeyForProviderCoreMock,
   requireApiKeyMock,
@@ -113,7 +113,7 @@ vi.mock("../agents/models-config.js", async () => ({
   ...(await vi.importActual<typeof import("../agents/models-config.js")>(
     "../agents/models-config.js",
   )),
-  ensureOpenClawModelsJson: ensureOpenClawModelsJsonMock,
+  ensureNatesclawModelsJson: ensureNatesclawModelsJsonMock,
 }));
 
 vi.mock("../agents/model-auth.js", () => ({
@@ -189,7 +189,7 @@ describe("describeImageWithModelCore", () => {
   beforeEach(() => {
     // Provider endpoint policy comes from manifests. Pin source manifests so a
     // prior local build cannot make this source-checkout test read partial dist output.
-    vi.stubEnv("OPENCLAW_BUNDLED_PLUGINS_DIR", path.join(process.cwd(), "extensions"));
+    vi.stubEnv("NATESCLAW_BUNDLED_PLUGINS_DIR", path.join(process.cwd(), "extensions"));
     vi.stubGlobal("fetch", fetchMock);
     vi.clearAllMocks();
     acquireAgentRunPreparedModelRuntimeMock.mockImplementation(
@@ -302,7 +302,7 @@ describe("describeImageWithModelCore", () => {
 
     const result = await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "google",
       model: "gemini-3.1-flash-preview",
       profile: "google:default",
@@ -357,7 +357,7 @@ describe("describeImageWithModelCore", () => {
 
     const result = await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "google",
       model: "gemini-3.1-flash-lite",
       profile: "google:default",
@@ -417,7 +417,7 @@ describe("describeImageWithModelCore", () => {
 
     await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "github-copilot",
       model: "gpt-5.6-sol",
       profile: "github-copilot:preferred",
@@ -471,7 +471,7 @@ describe("describeImageWithModelCore", () => {
 
     await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "github-copilot",
       model: "gemini-3.1-pro-preview",
       buffer: Buffer.from("png-bytes"),
@@ -556,7 +556,7 @@ describe("describeImageWithModelCore", () => {
 
     await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "github-copilot",
       model: "gpt-4.1",
       buffer: Buffer.from("png-bytes"),
@@ -595,7 +595,7 @@ describe("describeImageWithModelCore", () => {
     await expect(
       describeImageWithModelCore({
         cfg: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/natesclaw-agent",
         provider: "github-copilot",
         model: "gemini-3.1-pro-preview",
         buffer: Buffer.from("png-bytes"),
@@ -632,7 +632,7 @@ describe("describeImageWithModelCore", () => {
 
     await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "openai",
       model: "gpt-4o",
       buffer: Buffer.from("png-bytes"),
@@ -678,7 +678,7 @@ describe("describeImageWithModelCore", () => {
 
     await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "agent-plan",
       model: "doubao-seed-2.0-pro",
       buffer: Buffer.from("png-bytes"),
@@ -715,7 +715,7 @@ describe("describeImageWithModelCore", () => {
 
     await describeImageWithModelCore({
       cfg: {},
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "fake",
       model: "small-vlm",
       buffer: Buffer.from("png-bytes"),
@@ -752,8 +752,8 @@ describe("describeImageWithModelCore", () => {
         list: [
           {
             id: "vision-agent",
-            agentDir: "/tmp/openclaw-agent",
-            workspace: "/tmp/openclaw-workspace",
+            agentDir: "/tmp/natesclaw-agent",
+            workspace: "/tmp/natesclaw-workspace",
           },
         ],
       },
@@ -762,7 +762,7 @@ describe("describeImageWithModelCore", () => {
     await describeImageWithModelCore({
       cfg,
       agentId: "vision-agent",
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/natesclaw-agent",
       provider: "google",
       model: "gemini-2.5-flash",
       buffer: Buffer.alloc(1),
@@ -773,20 +773,20 @@ describe("describeImageWithModelCore", () => {
     });
 
     expect(acquireAgentRunPreparedModelRuntimeMock).toHaveBeenCalledWith(
-      expect.objectContaining({ workspaceDir: "/tmp/openclaw-workspace" }),
+      expect.objectContaining({ workspaceDir: "/tmp/natesclaw-workspace" }),
     );
     expect(resolveModelAsyncMock).toHaveBeenCalledWith(
       "google",
       "gemini-2.5-flash",
-      "/tmp/openclaw-agent",
+      "/tmp/natesclaw-agent",
       cfg,
-      expect.objectContaining({ workspaceDir: "/tmp/openclaw-workspace" }),
+      expect.objectContaining({ workspaceDir: "/tmp/natesclaw-workspace" }),
     );
   });
 
   it("uses one committed prepared generation for image setup and streaming", async () => {
-    const requestedCfg: OpenClawConfig = { logging: { level: "info" } };
-    const committedCfg: OpenClawConfig = { logging: { level: "debug" } };
+    const requestedCfg: NatesclawConfig = { logging: { level: "info" } };
+    const committedCfg: NatesclawConfig = { logging: { level: "debug" } };
     acquireAgentRunPreparedModelRuntimeMock.mockResolvedValueOnce({
       snapshot: {
         agentDir: "/tmp/committed-agent",
@@ -846,7 +846,7 @@ describe("describeImageWithModelCore", () => {
   });
 
   it("reuses a parent run generation without acquiring another image lease", async () => {
-    const cfg: OpenClawConfig = { logging: { level: "info" } };
+    const cfg: NatesclawConfig = { logging: { level: "info" } };
     discoverModelsMock.mockReturnValue({
       find: vi.fn(() => ({
         provider: "google",

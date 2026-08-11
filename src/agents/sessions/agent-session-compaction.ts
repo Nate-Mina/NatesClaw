@@ -1,4 +1,4 @@
-import { isContextOverflow } from "@openclaw/ai/internal/runtime";
+import { isContextOverflow } from "@natesclaw/ai/internal/runtime";
 import { InvalidSummaryOutputError } from "../../../packages/agent-core/src/harness/types.js";
 import type { AssistantMessage, Model } from "../../llm/types.js";
 import {
@@ -27,7 +27,7 @@ type CompactionWorkOutcome =
 
 /** @internal */
 export const agentSessionAutomaticCompaction: unique symbol = Symbol.for(
-  "openclaw.agent-session.automatic-compaction",
+  "natesclaw.agent-session.automatic-compaction",
 );
 
 export abstract class AgentSessionCompaction extends AgentSessionInspection {

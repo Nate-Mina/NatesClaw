@@ -3,9 +3,9 @@ import "@awesome.me/webawesome/dist/components/dialog/dialog.js";
 import type WaDialog from "@awesome.me/webawesome/dist/components/dialog/dialog.js";
 import { css, html, type PropertyValues } from "lit";
 import { property, query } from "lit/decorators.js";
-import { OpenClawLitElement } from "../lit/openclaw-element.ts";
+import { NatesclawLitElement } from "../lit/natesclaw-element.ts";
 
-const modalToastLayers = (document.openClawModalToastLayers ??= new Set<HTMLElement>());
+const modalToastLayers = (document.NatesclawModalToastLayers ??= new Set<HTMLElement>());
 
 function setModalToastLayer(modal: HTMLElement, open: boolean) {
   modalToastLayers.delete(modal);
@@ -14,7 +14,7 @@ function setModalToastLayer(modal: HTMLElement, open: boolean) {
   }
 }
 
-export class OpenClawModalDialog extends OpenClawLitElement {
+export class NatesclawModalDialog extends NatesclawLitElement {
   @property({ type: Boolean }) open = true;
   @property({ type: Boolean, reflect: true }) manual = false;
   @property() label = "";
@@ -33,14 +33,14 @@ export class OpenClawModalDialog extends OpenClawLitElement {
     }
 
     wa-dialog {
-      --width: min(var(--openclaw-modal-width, 540px), calc(100vw - 48px));
+      --width: min(var(--natesclaw-modal-width, 540px), calc(100vw - 48px));
       --spacing: 0;
       --backdrop-filter: blur(4px);
     }
 
     wa-dialog::part(dialog) {
-      max-width: var(--openclaw-modal-max-width, calc(100vw - 48px));
-      max-height: var(--openclaw-modal-max-height, calc(100dvh - 48px));
+      max-width: var(--natesclaw-modal-max-width, calc(100vw - 48px));
+      max-height: var(--natesclaw-modal-max-height, calc(100dvh - 48px));
       padding: 0;
       border: 0;
       background: transparent;
@@ -68,7 +68,7 @@ export class OpenClawModalDialog extends OpenClawLitElement {
     }
 
     :host(.drawer) wa-dialog {
-      --width: min(var(--openclaw-modal-width, 100vw), 100vw);
+      --width: min(var(--natesclaw-modal-width, 100vw), 100vw);
     }
 
     :host(.drawer) wa-dialog::part(dialog) {
@@ -105,11 +105,11 @@ export class OpenClawModalDialog extends OpenClawLitElement {
 
     @media (max-width: 640px) {
       wa-dialog {
-        --width: min(var(--openclaw-modal-width, 540px), calc(100vw - 24px));
+        --width: min(var(--natesclaw-modal-width, 540px), calc(100vw - 24px));
       }
 
       wa-dialog::part(dialog) {
-        max-width: var(--openclaw-modal-max-width, calc(100vw - 24px));
+        max-width: var(--natesclaw-modal-max-width, calc(100vw - 24px));
         max-height: 90dvh;
       }
     }
@@ -302,16 +302,16 @@ export class OpenClawModalDialog extends OpenClawLitElement {
   }
 }
 
-if (!customElements.get("openclaw-modal-dialog")) {
-  customElements.define("openclaw-modal-dialog", OpenClawModalDialog);
+if (!customElements.get("natesclaw-modal-dialog")) {
+  customElements.define("natesclaw-modal-dialog", NatesclawModalDialog);
 }
 
 declare global {
   interface Document {
-    openClawModalToastLayers?: Set<HTMLElement>;
+    NatesclawModalToastLayers?: Set<HTMLElement>;
   }
 
   interface HTMLElementTagNameMap {
-    "openclaw-modal-dialog": OpenClawModalDialog;
+    "natesclaw-modal-dialog": NatesclawModalDialog;
   }
 }

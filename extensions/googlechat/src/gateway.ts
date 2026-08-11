@@ -1,15 +1,15 @@
 // Googlechat plugin module implements gateway behavior.
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "natesclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelRuntimeSurface } from "natesclaw/plugin-sdk/channel-contract";
 import {
   createAccountStatusSink,
   runPassiveAccountLifecycle,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { channelBlockedPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/status-helpers";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { registerChannelRuntimeContext } from "natesclaw/plugin-sdk/channel-runtime-context";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { channelBlockedPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { createLazyRuntimeNamedExport } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { ChannelAccountSnapshot } from "natesclaw/plugin-sdk/status-helpers";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import { isGoogleChatNativeApprovalClientEnabled } from "./approval-native.js";
 import type { GoogleChatRuntimeEnv } from "./monitor-types.js";
@@ -24,7 +24,7 @@ const UNRESOLVED_WEBHOOK_URL_ERROR =
 
 export async function startGoogleChatGatewayAccount(ctx: {
   account: ResolvedGoogleChatAccount;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   runtime: GoogleChatRuntimeEnv;
   abortSignal: AbortSignal;
   channelRuntime?: ChannelRuntimeSurface;

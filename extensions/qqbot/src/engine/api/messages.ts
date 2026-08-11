@@ -7,7 +7,7 @@
  * - Markdown support flag is per-instance, not a global Map.
  */
 
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import type {
   ChatScope,
   MessageResponse,

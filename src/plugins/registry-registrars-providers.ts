@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { AgentHarness } from "../agents/harness/types.js";
 import { getCoreEmbeddingProvider } from "./core-embedding-providers.js";
 import type { EmbeddingProviderAdapter } from "./embedding-providers.js";
@@ -85,12 +85,12 @@ export function createProviderRegistrars(state: PluginRegistryState) {
       });
       return;
     }
-    if (id === "openclaw") {
+    if (id === "natesclaw") {
       pushDiagnostic({
         level: "error",
         pluginId: record.id,
         source: record.source,
-        message: 'agent harness id "openclaw" is reserved for the built-in runtime',
+        message: 'agent harness id "natesclaw" is reserved for the built-in runtime',
       });
       return;
     }
@@ -150,7 +150,7 @@ export function createProviderRegistrars(state: PluginRegistryState) {
     registry.cliBackends.push({
       pluginId: record.id,
       pluginName: record.name,
-      builtWithOpenClawVersion: record.builtWithOpenClawVersion,
+      builtWithNatesclawVersion: record.builtWithNatesclawVersion,
       backend: { ...backend, id },
       source: record.source,
       rootDir: record.rootDir,

@@ -1,7 +1,7 @@
 // Doctor cron storage repair mechanics for legacy stores, run logs, payloads, and Codex refs.
 import { normalizeOptionalString } from "../../../../packages/normalization-core/src/string-coerce.js";
 import { formatCliCommand } from "../../../cli/command-format.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { getInvalidPersistedCronJobReason } from "../../../cron/persisted-shape.js";
 import {
   loadCronJobsStoreWithConfigJobs,
@@ -83,13 +83,13 @@ function formatRunLogMigrationNote(importedFiles: number): string {
     : "";
 }
 
-function readLegacyCronStorePath(cfg: OpenClawConfig): string | undefined {
-  return (cfg.cron as (NonNullable<OpenClawConfig["cron"]> & { store?: string }) | undefined)
+function readLegacyCronStorePath(cfg: NatesclawConfig): string | undefined {
+  return (cfg.cron as (NonNullable<NatesclawConfig["cron"]> & { store?: string }) | undefined)
     ?.store;
 }
 
 export async function loadLegacyCronRepairState(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   onlyIfLegacyDetected?: boolean;
   readOnly?: boolean;
 }): Promise<LegacyCronRepairState | null> {
@@ -183,7 +183,7 @@ export async function loadLegacyCronRepairState(params: {
 }
 
 export async function applyLegacyCronStoreRepair(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   state: LegacyCronRepairState;
   normalized?: ReturnType<typeof normalizeStoredCronJobs>;
   migrateCodexModelRefs?: boolean;
@@ -290,7 +290,7 @@ export async function applyLegacyCronStoreRepair(params: {
       );
     } else {
       warnings.push(
-        `Migrated quarantined automations to SQLite but could not archive the legacy cron file at ${shortenHomePath(state.legacyQuarantine.path)}: ${archiveResult.reason}. Remove it manually or rerun ${formatCliCommand("openclaw doctor --fix")} to retry.`,
+        `Migrated quarantined automations to SQLite but could not archive the legacy cron file at ${shortenHomePath(state.legacyQuarantine.path)}: ${archiveResult.reason}. Remove it manually or rerun ${formatCliCommand("natesclaw doctor --fix")} to retry.`,
       );
     }
   }
@@ -330,7 +330,7 @@ export async function applyLegacyCronStoreRepair(params: {
       // claiming a finished migration; doctor re-detects the leftover and retries.
       for (const failure of archiveResult.failures) {
         warnings.push(
-          `Migrated automations to SQLite but could not archive the legacy cron file at ${shortenHomePath(failure.path)}: ${failure.reason}. Remove it manually or rerun ${formatCliCommand("openclaw doctor --fix")} to retry.`,
+          `Migrated automations to SQLite but could not archive the legacy cron file at ${shortenHomePath(failure.path)}: ${failure.reason}. Remove it manually or rerun ${formatCliCommand("natesclaw doctor --fix")} to retry.`,
         );
       }
     }
@@ -355,7 +355,7 @@ export async function applyLegacyCronStoreRepair(params: {
 }
 
 export async function repairLegacyCronStoreWithoutPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   migrateCodexModelRefs?: boolean;
   blockedModelIdentities?: ReadonlySet<LegacyCodexModelIdentity>;
 }): Promise<LegacyCronRepairResult> {
@@ -384,7 +384,7 @@ export async function repairLegacyCronStoreWithoutPrompt(params: {
 
 /** Read legacy Codex cron targets without changing either cron storage or config. */
 export async function collectCronCodexRuntimePolicyTargetsReadOnly(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 }): Promise<{ targets: CronCodexRuntimePolicyTarget[]; warnings: string[] }> {
   const storePath = resolveCronJobsStorePath(
     normalizeOptionalString(readLegacyCronStorePath(params.cfg)),
@@ -407,7 +407,7 @@ export async function collectCronCodexRuntimePolicyTargetsReadOnly(params: {
 
 /** Commit Codex cron refs only after their model-scoped config policy is durable. */
 export async function repairCronCodexModelRefsAfterConfigWrite(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   blockedModelIdentities?: ReadonlySet<LegacyCodexModelIdentity>;
 }): Promise<LegacyCronRepairResult> {
   const storePath = resolveCronJobsStorePath(

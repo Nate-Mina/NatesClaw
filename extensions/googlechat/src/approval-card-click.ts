@@ -1,8 +1,8 @@
 import {
   resolveApprovalOverGateway,
   type ApprovalResolveResult,
-} from "openclaw/plugin-sdk/approval-gateway-runtime";
-import { isApprovalNotFoundError } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/approval-gateway-runtime";
+import { isApprovalNotFoundError } from "natesclaw/plugin-sdk/error-runtime";
 import { updateGoogleChatMessage } from "./api.js";
 import { googleChatApprovalAuth } from "./approval-auth.js";
 import {

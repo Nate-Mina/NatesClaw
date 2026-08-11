@@ -1,10 +1,10 @@
 // Runtime bridge for plugin install security scanning.
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { tryReadJson } from "../infra/json-files.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import { resolveNatesclawPackageRootSync } from "../infra/natesclaw-root.js";
 import { parseStrictPositiveInteger } from "../infra/parse-finite-number.js";
 import {
   runInstallPolicy,
@@ -84,13 +84,13 @@ function pathContainsNodeModulesSegment(relativePath: string): boolean {
     .includes("node_modules");
 }
 
-function isPackageRootOpenClawPeerSymlink(segments: string[]): boolean {
+function isPackageRootNatesclawPeerSymlink(segments: string[]): boolean {
   return (
-    (segments.length === 2 && segments[0] === "node_modules" && segments[1] === "openclaw") ||
+    (segments.length === 2 && segments[0] === "node_modules" && segments[1] === "natesclaw") ||
     (segments.length === 3 &&
       segments[0] === "node_modules" &&
       segments[1] === ".bin" &&
-      segments[2] === "openclaw")
+      segments[2] === "natesclaw")
   );
 }
 
@@ -106,23 +106,23 @@ function isManagedNpmRootPackagePeerSymlink(segments: string[]): boolean {
   ) {
     return false;
   }
-  return isPackageRootOpenClawPeerSymlink(segments.slice(packageEndIndex));
+  return isPackageRootNatesclawPeerSymlink(segments.slice(packageEndIndex));
 }
 
-function isTrustedOpenClawPeerSymlink(params: {
+function isTrustedNatesclawPeerSymlink(params: {
   allowManagedNpmRootPackagePeerSymlinks?: boolean;
   relativePath: string;
 }): boolean {
   const segments = params.relativePath.split(/[\\/]+/);
   return (
-    isPackageRootOpenClawPeerSymlink(segments) ||
+    isPackageRootNatesclawPeerSymlink(segments) ||
     (params.allowManagedNpmRootPackagePeerSymlinks === true &&
       isManagedNpmRootPackagePeerSymlink(segments))
   );
 }
 
-async function resolveTrustedHostOpenClawRootRealPath(): Promise<string | null> {
-  const hostRoot = resolveOpenClawPackageRootSync({
+async function resolveTrustedHostNatesclawRootRealPath(): Promise<string | null> {
+  const hostRoot = resolveNatesclawPackageRootSync({
     argv1: process.argv[1],
     cwd: process.cwd(),
     moduleUrl: import.meta.url,
@@ -133,13 +133,13 @@ async function resolveTrustedHostOpenClawRootRealPath(): Promise<string | null> 
   return await fs.realpath(hostRoot).catch(() => path.resolve(hostRoot));
 }
 
-function isTrustedHostOpenClawPath(params: {
+function isTrustedHostNatesclawPath(params: {
   resolvedTargetPath: string;
-  trustedHostOpenClawRootRealPath: string | null;
+  trustedHostNatesclawRootRealPath: string | null;
 }): boolean {
   return (
-    params.trustedHostOpenClawRootRealPath !== null &&
-    isPathInside(params.trustedHostOpenClawRootRealPath, params.resolvedTargetPath)
+    params.trustedHostNatesclawRootRealPath !== null &&
+    isPathInside(params.trustedHostNatesclawRootRealPath, params.resolvedTargetPath)
   );
 }
 
@@ -148,7 +148,7 @@ async function inspectNodeModulesSymlinkTarget(params: {
   rootRealPath: string;
   symlinkPath: string;
   symlinkRelativePath: string;
-  trustedHostOpenClawRootRealPath: string | null;
+  trustedHostNatesclawRootRealPath: string | null;
 }): Promise<void> {
   let resolvedTargetPath: string;
   try {
@@ -164,13 +164,13 @@ async function inspectNodeModulesSymlinkTarget(params: {
 
   if (!isPathInside(params.rootRealPath, resolvedTargetPath)) {
     if (
-      isTrustedOpenClawPeerSymlink({
+      isTrustedNatesclawPeerSymlink({
         allowManagedNpmRootPackagePeerSymlinks: params.allowManagedNpmRootPackagePeerSymlinks,
         relativePath: params.symlinkRelativePath,
       }) &&
-      isTrustedHostOpenClawPath({
+      isTrustedHostNatesclawPath({
         resolvedTargetPath,
-        trustedHostOpenClawRootRealPath: params.trustedHostOpenClawRootRealPath,
+        trustedHostNatesclawRootRealPath: params.trustedHostNatesclawRootRealPath,
       })
     ) {
       return;
@@ -193,11 +193,11 @@ function readPositiveIntegerEnv(name: string, fallback: number): number {
 function resolvePackageTraversalLimits(): PackageTraversalLimits {
   return {
     maxDepth: readPositiveIntegerEnv(
-      "OPENCLAW_INSTALL_SCAN_MAX_DEPTH",
+      "NATESCLAW_INSTALL_SCAN_MAX_DEPTH",
       DEFAULT_PACKAGE_TRAVERSAL_LIMITS.maxDepth,
     ),
     maxDirectories: readPositiveIntegerEnv(
-      "OPENCLAW_INSTALL_SCAN_MAX_DIRECTORIES",
+      "NATESCLAW_INSTALL_SCAN_MAX_DIRECTORIES",
       DEFAULT_PACKAGE_TRAVERSAL_LIMITS.maxDirectories,
     ),
   };
@@ -237,7 +237,7 @@ function collectManifestRuntimeDependencyNames(manifest: PackageManifest): strin
     }
   }
   for (const dependencyName of Object.keys(manifest.peerDependencies ?? {})) {
-    if (dependencyName !== "openclaw" && isInstallScannableDependencyName(dependencyName)) {
+    if (dependencyName !== "natesclaw" && isInstallScannableDependencyName(dependencyName)) {
       dependencyNames.add(dependencyName);
     }
   }
@@ -249,7 +249,7 @@ async function resolveInstalledPackageScanRoot(params: {
   boundaryRealPath: string;
   dependencyName: string;
   packageDir: string;
-  trustedHostOpenClawRootRealPath: string | null;
+  trustedHostNatesclawRootRealPath: string | null;
 }): Promise<InstalledPackageScanRoot | undefined> {
   const packageDir = path.join(params.packageDir, "node_modules", params.dependencyName);
   let stats: Awaited<ReturnType<typeof fs.stat>>;
@@ -269,10 +269,10 @@ async function resolveInstalledPackageScanRoot(params: {
   if (!isSamePathOrInside(params.boundaryRealPath, realPath)) {
     if (
       params.allowManagedNpmRootPackagePeerSymlinks === true &&
-      params.dependencyName === "openclaw" &&
-      isTrustedHostOpenClawPath({
+      params.dependencyName === "natesclaw" &&
+      isTrustedHostNatesclawPath({
         resolvedTargetPath: realPath,
-        trustedHostOpenClawRootRealPath: params.trustedHostOpenClawRootRealPath,
+        trustedHostNatesclawRootRealPath: params.trustedHostNatesclawRootRealPath,
       })
     ) {
       return undefined;
@@ -293,7 +293,7 @@ async function collectInstalledPackageScanRoots(params: {
   const limits = resolvePackageTraversalLimits();
   const boundaryDir = params.dependencyScanRootDir ?? params.packageDir;
   const boundaryRealPath = await fs.realpath(boundaryDir).catch(() => path.resolve(boundaryDir));
-  const trustedHostOpenClawRootRealPath = await resolveTrustedHostOpenClawRootRealPath();
+  const trustedHostNatesclawRootRealPath = await resolveTrustedHostNatesclawRootRealPath();
   const packageRealPath = await fs
     .realpath(params.packageDir)
     .catch(() => path.resolve(params.packageDir));
@@ -345,7 +345,7 @@ async function collectInstalledPackageScanRoots(params: {
         boundaryRealPath,
         dependencyName,
         packageDir: current.packageDir,
-        trustedHostOpenClawRootRealPath,
+        trustedHostNatesclawRootRealPath,
       });
       const candidate =
         nestedCandidate ??
@@ -355,7 +355,7 @@ async function collectInstalledPackageScanRoots(params: {
               boundaryRealPath,
               dependencyName,
               packageDir: params.dependencyScanRootDir,
-              trustedHostOpenClawRootRealPath,
+              trustedHostNatesclawRootRealPath,
             })
           : undefined);
       if (candidate && !visitedRealPaths.has(candidate.realPath)) {
@@ -386,7 +386,7 @@ async function validatePackageDependencyBoundaries(params: {
   const limits = resolvePackageTraversalLimits();
   const rootDir = params.rootDir;
   const rootRealPath = await fs.realpath(rootDir).catch(() => rootDir);
-  const trustedHostOpenClawRootRealPath = await resolveTrustedHostOpenClawRootRealPath();
+  const trustedHostNatesclawRootRealPath = await resolveTrustedHostNatesclawRootRealPath();
   const queue: Array<{ depth: number; dir: string }> = [{ depth: 0, dir: rootDir }];
   const visitedDirectories = new Set<string>();
   let queueIndex = 0;
@@ -439,7 +439,7 @@ async function validatePackageDependencyBoundaries(params: {
             rootRealPath,
             symlinkPath: nextPath,
             symlinkRelativePath: relativeNextPath,
-            trustedHostOpenClawRootRealPath,
+            trustedHostNatesclawRootRealPath,
           });
         }
         continue;
@@ -544,7 +544,7 @@ function resolvePolicySource(params: {
   if (params.requestKind === "skill-install") {
     switch (params.origin?.type) {
       case "clawhub":
-        return { kind: "clawhub", authority: "openclaw", mutable: false, network: true };
+        return { kind: "clawhub", authority: "natesclaw", mutable: false, network: true };
       case "git":
         return {
           kind: "git",
@@ -556,11 +556,11 @@ function resolvePolicySource(params: {
         return { kind: "local-path", authority: "user", mutable: true, network: false };
       case "upload":
         return { kind: "upload", authority: "user", mutable: false, network: false };
-      case "openclaw-bundled":
-        return { kind: "bundled", authority: "openclaw", mutable: false, network: false };
-      case "openclaw-managed":
-      case "openclaw-extra":
-        return { kind: "managed", authority: "openclaw", mutable: false, network: false };
+      case "natesclaw-bundled":
+        return { kind: "bundled", authority: "natesclaw", mutable: false, network: false };
+      case "natesclaw-managed":
+      case "natesclaw-extra":
+        return { kind: "managed", authority: "natesclaw", mutable: false, network: false };
       default:
         return { kind: "workspace", authority: "user", mutable: true, network: false };
     }
@@ -581,7 +581,7 @@ function resolvePolicySource(params: {
   return { kind: "local-path", authority: "unknown", mutable: true, network: false };
 }
 
-function shouldBypassOpenClawInstallFriction(params: {
+function shouldBypassNatesclawInstallFriction(params: {
   source?: InstallPolicySource;
   trustedSourceLinkedOfficialInstall?: boolean;
 }): boolean {
@@ -596,12 +596,12 @@ function shouldBypassOpenClawInstallFriction(params: {
     return source.kind === "clawhub" || source.kind === "git" || source.kind === "npm";
   }
   return (
-    source.authority === "openclaw" && (source.kind === "bundled" || source.kind === "managed")
+    source.authority === "natesclaw" && (source.kind === "bundled" || source.kind === "managed")
   );
 }
 
 async function runOperatorInstallPolicy(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   logger: InstallScanLogger;
   origin: InstallPolicyOrigin;
   source?: InstallPolicySource;
@@ -658,7 +658,7 @@ async function runOperatorInstallPolicy(params: {
 
 export async function scanBundleInstallSourceRuntime(
   params: InstallSafetyOverrides & {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     logger: InstallScanLogger;
     pluginId: string;
     sourceDir: string;
@@ -693,7 +693,7 @@ export async function scanBundleInstallSourceRuntime(
   await validatePackageDependencyBoundaries({
     rootDir: params.sourceDir,
   });
-  if (shouldBypassOpenClawInstallFriction({ source: params.source })) {
+  if (shouldBypassNatesclawInstallFriction({ source: params.source })) {
     return await runPolicy();
   }
 
@@ -725,7 +725,7 @@ export async function scanBundleInstallSourceRuntime(
 
 export async function scanPackageInstallSourceRuntime(
   params: InstallSafetyOverrides & {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     extensions: string[];
     logger: InstallScanLogger;
     packageDir: string;
@@ -771,7 +771,7 @@ export async function scanPackageInstallSourceRuntime(
     rootDir: params.packageDir,
   });
   if (
-    shouldBypassOpenClawInstallFriction({
+    shouldBypassNatesclawInstallFriction({
       source: params.source,
       trustedSourceLinkedOfficialInstall: params.trustedSourceLinkedOfficialInstall,
     })
@@ -810,7 +810,7 @@ export async function scanPackageInstallSourceRuntime(
 export async function scanInstalledPackageDependencyTreeRuntime(params: {
   additionalPackageDirs?: string[];
   allowManagedNpmRootPackagePeerSymlinks?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   dependencyScanRootDir?: string;
   logger: InstallScanLogger;
   mode?: "install" | "update";
@@ -861,7 +861,7 @@ export async function scanInstalledPackageDependencyTreeRuntime(params: {
 
 export async function scanFileInstallSourceRuntime(
   params: InstallSafetyOverrides & {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     filePath: string;
     logger: InstallScanLogger;
     mode?: "install" | "update";
@@ -913,7 +913,7 @@ export async function scanFileInstallSourceRuntime(
 }
 
 export async function preflightPluginNpmInstallPolicyRuntime(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   logger: InstallScanLogger;
   mode?: "install" | "update";
   packageName: string;
@@ -945,7 +945,7 @@ export async function preflightPluginNpmInstallPolicyRuntime(params: {
 }
 
 export async function preflightPluginGitInstallPolicyRuntime(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   logger: InstallScanLogger;
   mode?: "install" | "update";
   pluginId: string;
@@ -973,7 +973,7 @@ export async function preflightPluginGitInstallPolicyRuntime(params: {
 }
 
 export async function evaluateSkillInstallPolicyRuntime(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   installId: string;
   installSpec?: SkillInstallSpec;
   logger: InstallScanLogger;
@@ -1004,7 +1004,7 @@ export async function evaluateSkillInstallPolicyRuntime(params: {
         ...(params.installSpec ? { installSpec: params.installSpec } : {}),
       },
     });
-  if (shouldBypassOpenClawInstallFriction({ source: params.source })) {
+  if (shouldBypassNatesclawInstallFriction({ source: params.source })) {
     return await runPolicy();
   }
   const policyResult = await runPolicy();

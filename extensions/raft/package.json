@@ -1,34 +1,34 @@
 {
-  "name": "@openclaw/raft",
+  "name": "@natesclaw/raft",
   "version": "2026.8.1",
-  "description": "OpenClaw Raft channel plugin for Raft CLI wake bridges.",
+  "description": "Natesclaw Raft channel plugin for Raft CLI wake bridges.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "setupEntry": "./setup-entry.ts",
     "install": {
-      "npmSpec": "@openclaw/raft",
+      "npmSpec": "@natesclaw/raft",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },
@@ -36,7 +36,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1"
+      "natesclawVersion": "2026.8.1"
     },
     "channel": {
       "id": "raft",

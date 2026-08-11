@@ -1,5 +1,5 @@
 // Reconciles stale or lost task registry records during maintenance passes.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { isAcpTurnActive } from "../acp/control-plane/active-turns.js";
 import { getAcpSessionManager } from "../acp/control-plane/manager.js";
 import {
@@ -18,7 +18,7 @@ import {
   listSessionEntriesReadOnly,
   type SessionEntrySummary,
 } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isCronJobActive } from "../cron/active-jobs.js";
 import { resolveCronTaskRecordTimestamp } from "../cron/task-run-detail.js";
 import { getAgentRunContext } from "../infra/agent-run-registry.js";
@@ -90,7 +90,7 @@ type TaskRegistryMaintenanceRuntime = {
   listAcpSessionEntries: typeof listAcpSessionEntries;
   readAcpSessionEntry: typeof readAcpSessionEntry;
   closeAcpSession?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     sessionKey: string;
     reason: string;
   }) => Promise<void>;

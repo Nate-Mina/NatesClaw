@@ -1,24 +1,24 @@
 ---
-summary: "CLI reference for `openclaw daemon` (legacy alias for gateway service management)"
+summary: "CLI reference for `natesclaw daemon` (legacy alias for gateway service management)"
 read_when:
-  - You still use `openclaw daemon ...` in scripts
+  - You still use `natesclaw daemon ...` in scripts
   - You need service lifecycle commands (install/start/stop/restart/status)
 title: "Daemon"
 ---
 
-# `openclaw daemon`
+# `natesclaw daemon`
 
-Legacy alias for Gateway service management. `openclaw daemon ...` maps to the same service-control commands as `openclaw gateway ...`. Prefer [`openclaw gateway`](/cli/gateway) for current docs and examples.
+Legacy alias for Gateway service management. `natesclaw daemon ...` maps to the same service-control commands as `natesclaw gateway ...`. Prefer [`natesclaw gateway`](/cli/gateway) for current docs and examples.
 
 ## Usage
 
 ```bash
-openclaw daemon status
-openclaw daemon install
-openclaw daemon start
-openclaw daemon stop
-openclaw daemon restart
-openclaw daemon uninstall
+natesclaw daemon status
+natesclaw daemon install
+natesclaw daemon start
+natesclaw daemon stop
+natesclaw daemon restart
+natesclaw daemon uninstall
 ```
 
 ## Subcommands and options

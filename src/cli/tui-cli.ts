@@ -32,7 +32,7 @@ export async function runTuiCliAction(
   const isLocal = Boolean(opts.local) || invokedAsLocalAlias;
   if (target && isLocal) {
     throw new Error(
-      "a session target cannot be combined with --local, openclaw chat, or openclaw terminal",
+      "a session target cannot be combined with --local, natesclaw chat, or natesclaw terminal",
     );
   }
   if (isLocal && (opts.url || opts.token || opts.password || opts.tlsFingerprint)) {
@@ -114,7 +114,7 @@ export function registerTuiCli(program: Command) {
     .option("--history-limit <n>", "History entries to load", "200")
     .addHelpText(
       "after",
-      () => `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/tui", "docs.openclaw.ai/cli/tui")}\n`,
+      () => `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/tui", "docs.natesclaw.ai/cli/tui")}\n`,
     )
     .action(async (target: string | undefined, opts: TuiCliOptions, cmd: Command) => {
       try {

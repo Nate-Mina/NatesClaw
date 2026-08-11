@@ -1,5 +1,5 @@
 // Voice Call tests cover manager.notify plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it, vi } from "vitest";
 import { createManagerHarness, FakeProvider } from "./manager.test-harness.js";
 

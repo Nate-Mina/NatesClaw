@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/byteplus-provider",
+  "name": "@natesclaw/byteplus-provider",
   "version": "2026.8.1",
-  "description": "OpenClaw BytePlus provider plugin.",
+  "description": "Natesclaw BytePlus provider plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/byteplus-provider",
-      "npmSpec": "@openclaw/byteplus-provider",
+      "clawhubSpec": "clawhub:@natesclaw/byteplus-provider",
+      "npmSpec": "@natesclaw/byteplus-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {

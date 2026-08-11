@@ -1,10 +1,10 @@
 // Matrix helper module declares formatting capabilities and shared projections.
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-contracts";
+import type { MarkdownTableMode } from "natesclaw/plugin-sdk/config-contracts";
 import {
   convertMarkdownTables,
   FormatCapabilityProfile,
   renderMarkdownWithMarkers,
-} from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/text-chunking";
 
 export type MatrixSpoilerMarkers = { open: string; close: string; padding: string };
 export type MatrixSpoilerProtection = { markdown: string; markers?: MatrixSpoilerMarkers };

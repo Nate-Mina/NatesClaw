@@ -40,8 +40,8 @@ describe("getStatusSummary read-only session access", () => {
   });
 
   it("does not create the heartbeat session database while checking its route", async () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-status-heartbeat-"));
-    const databasePath = path.join(tempDir, "openclaw-agent.sqlite");
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-status-heartbeat-"));
+    const databasePath = path.join(tempDir, "natesclaw-agent.sqlite");
 
     try {
       const summary = await getStatusSummary({
@@ -59,8 +59,8 @@ describe("getStatusSummary read-only session access", () => {
   it.each([undefined, "owner"])(
     "resolves the configured owner DM without writing session state for target %s",
     async (target) => {
-      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-status-owner-"));
-      const databasePath = path.join(tempDir, "openclaw-agent.sqlite");
+      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-status-owner-"));
+      const databasePath = path.join(tempDir, "natesclaw-agent.sqlite");
 
       try {
         const summary = await getStatusSummary({

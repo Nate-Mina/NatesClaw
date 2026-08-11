@@ -30,7 +30,7 @@ import {
   claimPluginInteractiveCallbackDedupe,
   commitPluginInteractiveCallbackDedupe,
 } from "./interactive-state.js";
-import { loadOpenClawPlugins } from "./loader.js";
+import { loadNatesclawPlugins } from "./loader.js";
 import {
   makePluginLoaderTempDir,
   mkdirSafe,
@@ -76,7 +76,7 @@ import {
 afterEach(globalAfterEach0);
 afterAll(globalAfterAll1);
 
-describe("loadOpenClawPlugins", () => {
+describe("loadNatesclawPlugins", () => {
   it("rejects a repeated named legacy hook before adding another executable handler", () => {
     useNoBundledPlugins();
     const plugin = writePlugin({
@@ -91,7 +91,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -129,7 +129,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -174,7 +174,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -237,7 +237,7 @@ describe("loadOpenClawPlugins", () => {
     });
     for (const plugin of [first, second]) {
       fs.writeFileSync(
-        path.join(plugin.dir, "openclaw.plugin.json"),
+        path.join(plugin.dir, "natesclaw.plugin.json"),
         JSON.stringify(
           {
             id: plugin.id,
@@ -252,7 +252,7 @@ describe("loadOpenClawPlugins", () => {
 
     clearInternalHooks();
 
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       cache: false,
       workspaceDir: first.dir,
       onlyPluginIds: ["hook-context-first", "hook-context-second"],
@@ -351,7 +351,7 @@ describe("loadOpenClawPlugins", () => {
     clearPluginCommands();
     clearPluginInteractiveHandlers();
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -401,7 +401,7 @@ describe("loadOpenClawPlugins", () => {
           },
         };`,
     });
-    const priorRegistry = loadOpenClawPlugins({
+    const priorRegistry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: prior.dir,
       config: {
@@ -439,7 +439,7 @@ describe("loadOpenClawPlugins", () => {
         },
       },
       onlyPluginIds: ["activation-replacement"],
-    } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+    } satisfies Parameters<typeof loadNatesclawPlugins>[0];
     const hookInit = vi
       .spyOn(hookRunnerGlobal, "initializeGlobalHookRunner")
       .mockImplementationOnce(() => {
@@ -447,7 +447,7 @@ describe("loadOpenClawPlugins", () => {
       });
 
     try {
-      expect(() => loadOpenClawPlugins(replacementOptions)).toThrow("hook activation failed");
+      expect(() => loadNatesclawPlugins(replacementOptions)).toThrow("hook activation failed");
     } finally {
       hookInit.mockRestore();
     }
@@ -460,7 +460,7 @@ describe("loadOpenClawPlugins", () => {
     expect(getActivePluginRegistryWorkspaceDir()).toBe(priorWorkspaceDir);
     expect(getPluginCommandSpecs().map((command) => command.name)).toEqual(["prior"]);
 
-    const activated = loadOpenClawPlugins(replacementOptions);
+    const activated = loadNatesclawPlugins(replacementOptions);
     expect(activated.commands.map((entry) => entry.command.name)).toEqual(["replacement"]);
     expect(getPluginCommandSpecs().map((command) => command.name)).toEqual(["replacement"]);
   });
@@ -480,7 +480,7 @@ describe("loadOpenClawPlugins", () => {
 
     clearInternalHooks();
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -523,7 +523,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -555,8 +555,8 @@ describe("loadOpenClawPlugins", () => {
     fs.writeFileSync(
       path.join(scopedDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/scoped-provider",
-        openclaw: { extensions: ["./index.cjs"] },
+        name: "@natesclaw/scoped-provider",
+        natesclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",
     );
@@ -582,8 +582,8 @@ describe("loadOpenClawPlugins", () => {
     fs.writeFileSync(
       path.join(unscopedDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/unscoped-provider",
-        openclaw: { extensions: ["./index.cjs"] },
+        name: "@natesclaw/unscoped-provider",
+        natesclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",
     );
@@ -602,10 +602,10 @@ describe("loadOpenClawPlugins", () => {
       enabledByDefault: true,
       providers: ["unscoped-provider"],
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
-    delete process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
+    process.env.NATESCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    delete process.env.NATESCLAW_DISABLE_BUNDLED_PLUGINS;
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadNatesclawPlugins({
       cache: false,
       activate: false,
       config: {
@@ -629,8 +629,8 @@ describe("loadOpenClawPlugins", () => {
     fs.writeFileSync(
       path.join(bundledPluginDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/notify-host",
-        openclaw: { extensions: ["./index.cjs"] },
+        name: "@natesclaw/notify-host",
+        natesclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",
     );
@@ -649,10 +649,10 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
     updatePluginManifest(bundled, { enabledByDefault: true });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
-    delete process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
+    process.env.NATESCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    delete process.env.NATESCLAW_DISABLE_BUNDLED_PLUGINS;
 
-    const bundledRegistry = loadOpenClawPlugins({
+    const bundledRegistry = loadNatesclawPlugins({
       cache: false,
       config: { plugins: { allow: ["notify-host"] } },
       onlyPluginIds: ["notify-host"],
@@ -675,7 +675,7 @@ describe("loadOpenClawPlugins", () => {
           },
         };`,
     });
-    const externalRegistry = loadOpenClawPlugins({
+    const externalRegistry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: external.dir,
       config: {
@@ -760,7 +760,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadNatesclawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -811,7 +811,7 @@ describe("loadOpenClawPlugins", () => {
       contracts: { embeddingProviders: ["snapshot"] },
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadNatesclawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -858,7 +858,7 @@ describe("loadOpenClawPlugins", () => {
       contracts: { embeddingProviders: ["shared"] },
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadNatesclawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -902,7 +902,7 @@ describe("loadOpenClawPlugins", () => {
       contracts: { embeddingProviders: ["failed"] },
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -965,7 +965,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -1013,7 +1013,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadNatesclawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -1048,7 +1048,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -1090,7 +1090,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -1140,15 +1140,15 @@ describe("loadOpenClawPlugins", () => {
         },
       },
       onlyPluginIds: ["cached-detached-runtime"],
-    } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+    } satisfies Parameters<typeof loadNatesclawPlugins>[0];
 
-    loadOpenClawPlugins(loadOptions);
+    loadNatesclawPlugins(loadOptions);
     expect(getDetachedTaskLifecycleRuntimeRegistration()?.pluginId).toBe("cached-detached-runtime");
 
     setActivePluginRegistry(createEmptyPluginRegistry());
     expect(getDetachedTaskLifecycleRuntimeRegistration()).toBeUndefined();
 
-    loadOpenClawPlugins(loadOptions);
+    loadNatesclawPlugins(loadOptions);
 
     expect(getDetachedTaskLifecycleRuntimeRegistration()?.pluginId).toBe("cached-detached-runtime");
   });
@@ -1181,15 +1181,15 @@ describe("loadOpenClawPlugins", () => {
         },
       },
       onlyPluginIds: ["cached-legacy-hook"],
-    } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+    } satisfies Parameters<typeof loadNatesclawPlugins>[0];
 
-    loadOpenClawPlugins(loadOptions);
+    loadNatesclawPlugins(loadOptions);
     const firstEvent = createInternalHookEvent("gateway", "startup", "gateway:startup");
     await triggerInternalHook(firstEvent);
     expect(firstEvent.messages).toEqual(["cached-hook-fired"]);
 
     setActivePluginRegistry(createEmptyPluginRegistry());
-    loadOpenClawPlugins(loadOptions);
+    loadNatesclawPlugins(loadOptions);
 
     const cachedEvent = createInternalHookEvent("gateway", "startup", "gateway:startup");
     await triggerInternalHook(cachedEvent);
@@ -1227,9 +1227,9 @@ describe("loadOpenClawPlugins", () => {
         },
       },
       onlyPluginIds: ["cached-command-interactive"],
-    } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+    } satisfies Parameters<typeof loadNatesclawPlugins>[0];
 
-    const registry = loadOpenClawPlugins(loadOptions);
+    const registry = loadNatesclawPlugins(loadOptions);
     expect(getPluginCommandSpecs()).toEqual([
       { name: "hue", description: "Control Hue lights", acceptsArgs: false },
     ]);
@@ -1249,14 +1249,14 @@ describe("loadOpenClawPlugins", () => {
     commitPluginInteractiveCallbackDedupe(dedupeKey, 1_000);
     expect(claimPluginInteractiveCallbackDedupe(dedupeKey, 1_001)).toBe(false);
 
-    loadOpenClawPlugins(loadOptions);
+    loadNatesclawPlugins(loadOptions);
     expect(claimPluginInteractiveCallbackDedupe(dedupeKey, 1_002)).toBe(false);
 
     setActivePluginRegistry(createEmptyPluginRegistry());
     expect(getPluginCommandSpecs()).toStrictEqual([]);
     expect(resolvePluginInteractiveNamespaceMatch("telegram", "hue:on")).toBeNull();
 
-    loadOpenClawPlugins(loadOptions);
+    loadNatesclawPlugins(loadOptions);
 
     expect(getPluginCommandSpecs()).toEqual([
       { name: "hue", description: "Control Hue lights", acceptsArgs: false },
@@ -1272,7 +1272,7 @@ describe("loadOpenClawPlugins", () => {
     useNoBundledPlugins();
     registerDetachedTaskLifecycleRuntime("stale-runtime", createDetachedTaskRuntimeStub("stale"));
 
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1338,14 +1338,14 @@ describe("loadOpenClawPlugins", () => {
       },
     ];
 
-    const first = loadOpenClawPlugins(options);
+    const first = loadNatesclawPlugins(options);
     await expect(listActiveMemoryPublicArtifacts({ cfg: {} as never })).resolves.toEqual(
       expectedArtifacts,
     );
 
     setActivePluginRegistry(createEmptyPluginRegistry());
 
-    const second = loadOpenClawPlugins(options);
+    const second = loadNatesclawPlugins(options);
     expect(second).toBe(first);
     await expect(listActiveMemoryPublicArtifacts({ cfg: {} as never })).resolves.toEqual(
       expectedArtifacts,
@@ -1397,7 +1397,7 @@ describe("loadOpenClawPlugins", () => {
         slots: { memory: "capability-survives-memory" },
       },
     };
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       cache: false,
       workspaceDir: memoryPlugin.dir,
       config: activateConfig,
@@ -1421,7 +1421,7 @@ describe("loadOpenClawPlugins", () => {
     // Simulate what resolvePluginWebSearchProviders and similar read-only paths do:
     // load plugins again with activate:false. Each per-plugin snapshot/rollback must
     // preserve the previously registered memory capability.
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       cache: false,
       activate: false,
       workspaceDir: memoryPlugin.dir,
@@ -1435,7 +1435,7 @@ describe("loadOpenClawPlugins", () => {
 
   it("uses discovery registration mode for non-activating loads", () => {
     useNoBundledPlugins();
-    const marker = "__openclawDiscoveryModeTest";
+    const marker = "__natesclawDiscoveryModeTest";
     const plugin = writePlugin({
       id: "discovery-mode-test",
       filename: "discovery-mode-test.cjs",
@@ -1462,7 +1462,7 @@ describe("loadOpenClawPlugins", () => {
       },
     };
 
-    const snapshot = loadOpenClawPlugins({
+    const snapshot = loadNatesclawPlugins({
       activate: false,
       cache: false,
       workspaceDir: plugin.dir,
@@ -1472,7 +1472,7 @@ describe("loadOpenClawPlugins", () => {
     expect(snapshot.providers.map((entry) => entry.provider.id)).toEqual(["discovery-provider"]);
     expect(snapshot.tools.flatMap((entry) => entry.names)).toContain("discovery_tool");
 
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config,
@@ -1511,7 +1511,7 @@ describe("loadOpenClawPlugins", () => {
       contracts: { tools: ["attested_tool", "unknown_policy_tool"] },
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       activate: false,
       cache: false,
       workspaceDir: plugin.dir,
@@ -1554,7 +1554,7 @@ describe("loadOpenClawPlugins", () => {
         };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       activate: false,
       cache: false,
       workspaceDir: plugin.dir,
@@ -1595,7 +1595,7 @@ describe("loadOpenClawPlugins", () => {
     });
     updatePluginManifest(plugin, { contracts: { tools: ["manifest_tool"] } });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadNatesclawPlugins({
       activate: false,
       cache: false,
       workspaceDir: plugin.dir,
@@ -1620,7 +1620,7 @@ describe("loadOpenClawPlugins", () => {
   it("caches non-activating snapshots without restoring global side effects", () => {
     useNoBundledPlugins();
     clearPluginCommands();
-    const marker = "__openclawSnapshotCacheRegisterCount";
+    const marker = "__natesclawSnapshotCacheRegisterCount";
     const plugin = writePlugin({
       id: "snapshot-cache",
       filename: "snapshot-cache.cjs",
@@ -1648,15 +1648,15 @@ describe("loadOpenClawPlugins", () => {
       onlyPluginIds: ["snapshot-cache"],
     };
 
-    const first = loadOpenClawPlugins(options);
-    const second = loadOpenClawPlugins(options);
+    const first = loadNatesclawPlugins(options);
+    const second = loadNatesclawPlugins(options);
 
     expect(second).toBe(first);
     expect((globalThis as Record<string, unknown>)[marker]).toBe(1);
     expect(first.commands.map((entry) => entry.command.name)).toEqual(["snapshot-command"]);
     expect(getPluginCommandSpecs()).toStrictEqual([]);
 
-    const active = loadOpenClawPlugins({
+    const active = loadNatesclawPlugins({
       workspaceDir: plugin.dir,
       config: options.config,
       onlyPluginIds: ["snapshot-cache"],
@@ -1691,13 +1691,13 @@ describe("loadOpenClawPlugins", () => {
       },
     };
 
-    const first = loadOpenClawPlugins(options);
+    const first = loadNatesclawPlugins(options);
     expectGlobalHookRunner(getGlobalHookRunner());
 
     resetGlobalHookRunner();
     expect(getGlobalHookRunner()).toBeNull();
 
-    const second = loadOpenClawPlugins(options);
+    const second = loadNatesclawPlugins(options);
     expect(second).toBe(first);
     expectGlobalHookRunner(getGlobalHookRunner());
 
@@ -1721,7 +1721,7 @@ describe("loadOpenClawPlugins", () => {
         } };`,
     });
 
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       workspaceDir: firstPlugin.dir,
       config: {
         plugins: {
@@ -1735,7 +1735,7 @@ describe("loadOpenClawPlugins", () => {
 
     // A second activation retires the unpinned first registry entirely; its
     // hooks must drop instead of dispatching stale config closures.
-    loadOpenClawPlugins({
+    loadNatesclawPlugins({
       workspaceDir: secondPlugin.dir,
       config: {
         plugins: {
@@ -1785,19 +1785,19 @@ describe("loadOpenClawPlugins", () => {
           expectedFirstSource: pluginA.file,
           expectedSecondSource: pluginB.file,
           loadFirst: () =>
-            loadOpenClawPlugins({
+            loadNatesclawPlugins({
               ...options,
               env: {
                 ...process.env,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledA,
+                NATESCLAW_BUNDLED_PLUGINS_DIR: bundledA,
               },
             }),
           loadSecond: () =>
-            loadOpenClawPlugins({
+            loadNatesclawPlugins({
               ...options,
               env: {
                 ...process.env,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledB,
+                NATESCLAW_BUNDLED_PLUGINS_DIR: bundledB,
               },
             }),
         };
@@ -1842,25 +1842,25 @@ describe("loadOpenClawPlugins", () => {
           expectedFirstSource: pluginA.file,
           expectedSecondSource: pluginB.file,
           loadFirst: () =>
-            loadOpenClawPlugins({
+            loadNatesclawPlugins({
               ...options,
               env: {
                 ...process.env,
                 HOME: homeA,
-                OPENCLAW_HOME: undefined,
-                OPENCLAW_STATE_DIR: stateDir,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+                NATESCLAW_HOME: undefined,
+                NATESCLAW_STATE_DIR: stateDir,
+                NATESCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
               },
             }),
           loadSecond: () =>
-            loadOpenClawPlugins({
+            loadNatesclawPlugins({
               ...options,
               env: {
                 ...process.env,
                 HOME: homeB,
-                OPENCLAW_HOME: undefined,
-                OPENCLAW_STATE_DIR: stateDir,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+                NATESCLAW_HOME: undefined,
+                NATESCLAW_STATE_DIR: stateDir,
+                NATESCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
               },
             }),
         };

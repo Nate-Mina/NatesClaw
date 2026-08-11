@@ -9,14 +9,14 @@ import {
   type OpenAiCompatibleVideoPayload,
   type VideoDescriptionRequest,
   type VideoDescriptionResult,
-} from "openclaw/plugin-sdk/media-understanding";
+} from "natesclaw/plugin-sdk/media-understanding";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   readProviderJsonResponse,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+} from "natesclaw/plugin-sdk/provider-http";
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 
 const DEFAULT_MOONSHOT_VIDEO_BASE_URL = "https://api.moonshot.ai/v1";
 // Media defaults are capability-specific and intentionally independent from chat onboarding.

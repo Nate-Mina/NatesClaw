@@ -1,7 +1,7 @@
-// Moonshot plugin entrypoint registers its OpenClaw integration.
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
-import { buildOpenAICompatibleReplayPolicy } from "openclaw/plugin-sdk/provider-model-shared";
-import { buildProviderStreamFamilyHooks } from "openclaw/plugin-sdk/provider-stream-family";
+// Moonshot plugin entrypoint registers its Natesclaw integration.
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
+import { buildOpenAICompatibleReplayPolicy } from "natesclaw/plugin-sdk/provider-model-shared";
+import { buildProviderStreamFamilyHooks } from "natesclaw/plugin-sdk/provider-stream-family";
 import { applyMoonshotNativeStreamingUsageCompat } from "./api.js";
 import { moonshotMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { applyMoonshotConfig, applyMoonshotConfigCn } from "./onboard.js";

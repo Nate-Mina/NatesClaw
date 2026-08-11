@@ -1,7 +1,7 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 // Pure helpers for parsing, adding, removing, and generating agent route bindings.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeSortedUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeSortedUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
 import { getBundledChannelSetupPlugin } from "../channels/plugins/bundled.js";
 import { resolveChannelDefaultAccountId } from "../channels/plugins/helpers.js";
 import { getLoadedChannelPlugin } from "../channels/plugins/index.js";
@@ -10,7 +10,7 @@ import { normalizeChatChannelId as normalizeBundledChannelId } from "../channels
 import { formatUnknownChannelMessage } from "../cli/error-format.js";
 import { isRouteBinding, listRouteBindings } from "../config/bindings.js";
 import type { AgentRouteBinding } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { listManifestChannelContributionIds } from "../plugins/manifest-contribution-ids.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAgentId } from "../routing/session-key.js";
 import type { ChannelChoice } from "./onboard-types.js";
@@ -57,10 +57,10 @@ function canUpgradeBindingAccountScope(params: {
 
 /** Merge new route bindings into config while reporting adds, upgrades, skips, and conflicts. */
 export function applyAgentBindings(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   bindings: AgentRouteBinding[],
 ): {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   added: AgentRouteBinding[];
   updated: AgentRouteBinding[];
   skipped: AgentRouteBinding[];
@@ -144,10 +144,10 @@ export function applyAgentBindings(
 
 /** Remove matching route bindings from config without disturbing non-route binding entries. */
 export function removeAgentBindings(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   bindings: AgentRouteBinding[],
 ): {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   removed: AgentRouteBinding[];
   missing: AgentRouteBinding[];
   conflicts: Array<{ binding: AgentRouteBinding; existingAgentId: string }>;
@@ -211,7 +211,7 @@ export function removeAgentBindings(
   };
 }
 
-function resolveDefaultAccountId(cfg: OpenClawConfig, provider: ChannelId): string {
+function resolveDefaultAccountId(cfg: NatesclawConfig, provider: ChannelId): string {
   const plugin = getBindingChannelPlugin(provider);
   if (!plugin) {
     return DEFAULT_ACCOUNT_ID;
@@ -219,7 +219,7 @@ function resolveDefaultAccountId(cfg: OpenClawConfig, provider: ChannelId): stri
   return resolveChannelDefaultAccountId({ plugin, cfg });
 }
 
-function listManifestChannelIds(config: OpenClawConfig): Set<string> {
+function listManifestChannelIds(config: NatesclawConfig): Set<string> {
   return new Set(
     listManifestChannelContributionIds({
       includeDisabled: true,
@@ -231,7 +231,7 @@ function listManifestChannelIds(config: OpenClawConfig): Set<string> {
 
 function normalizeBindingChannelId(
   raw: string | undefined,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): ChannelId | null {
   const bundled = normalizeBundledChannelId(raw);
   if (bundled) {
@@ -250,7 +250,7 @@ function getBindingChannelPlugin(channel: ChannelId) {
 
 function resolveBindingAccountId(params: {
   channel: ChannelId;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentId: string;
   explicitAccountId?: string;
 }): string | undefined {
@@ -284,7 +284,7 @@ function resolveBindingAccountId(params: {
 export function buildChannelBindings(params: {
   agentId: string;
   selection: ChannelChoice[];
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   accountIds?: Partial<Record<ChannelChoice, string>>;
 }): AgentRouteBinding[] {
   const bindings: AgentRouteBinding[] = [];
@@ -308,7 +308,7 @@ export function buildChannelBindings(params: {
 export function parseBindingSpecs(params: {
   agentId: string;
   specs?: string[];
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): { bindings: AgentRouteBinding[]; errors: string[] } {
   const bindings: AgentRouteBinding[] = [];
   const errors: string[] = [];

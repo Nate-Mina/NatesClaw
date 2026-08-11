@@ -39,7 +39,7 @@ export function showSecretRevealDialog(options: SecretRevealDialogOptions): Prom
     const paint = () => {
       render(
         html`
-          <openclaw-modal-dialog
+          <natesclaw-modal-dialog
             label=${options.title}
             description=${options.message}
             @modal-cancel=${refuseDismiss}
@@ -64,7 +64,7 @@ export function showSecretRevealDialog(options: SecretRevealDialogOptions): Prom
                 </button>
               </div>
             </div>
-          </openclaw-modal-dialog>
+          </natesclaw-modal-dialog>
         `,
         host,
       );

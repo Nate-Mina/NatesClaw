@@ -3,22 +3,22 @@ import { GATEWAY_LAUNCH_AGENT_LABEL, resolveGatewayLaunchAgentLabel } from "../d
 import { isGatewayExternallySupervised } from "./gateway-supervision.js";
 
 const SUPERVISOR_HINTS = {
-  launchd: ["OPENCLAW_LAUNCHD_LABEL"],
-  systemd: ["OPENCLAW_SYSTEMD_UNIT", "INVOCATION_ID", "SYSTEMD_EXEC_PID", "JOURNAL_STREAM"],
-  schtasks: ["OPENCLAW_WINDOWS_TASK_NAME"],
+  launchd: ["NATESCLAW_LAUNCHD_LABEL"],
+  systemd: ["NATESCLAW_SYSTEMD_UNIT", "INVOCATION_ID", "SYSTEMD_EXEC_PID", "JOURNAL_STREAM"],
+  schtasks: ["NATESCLAW_WINDOWS_TASK_NAME"],
 } as const;
 
 /** Environment keys that imply the gateway process is supervised by an external respawner. */
 export const SUPERVISOR_HINT_ENV_VARS = [
-  "OPENCLAW_SUPERVISOR_MODE",
+  "NATESCLAW_SUPERVISOR_MODE",
   "LAUNCH_JOB_LABEL",
   "LAUNCH_JOB_NAME",
   "XPC_SERVICE_NAME",
   ...SUPERVISOR_HINTS.launchd,
   ...SUPERVISOR_HINTS.systemd,
   ...SUPERVISOR_HINTS.schtasks,
-  "OPENCLAW_SERVICE_MARKER",
-  "OPENCLAW_SERVICE_KIND",
+  "NATESCLAW_SERVICE_MARKER",
+  "NATESCLAW_SERVICE_KIND",
 ] as const;
 
 /** Supported supervisor families that can respawn the gateway after update/restart handoff. */
@@ -26,7 +26,7 @@ export type RespawnSupervisor = "launchd" | "systemd" | "schtasks";
 type GatewayRespawnSupervisor = RespawnSupervisor | "external";
 
 interface DetectRespawnSupervisorOptions {
-  includeLinuxOpenClawGatewayServiceMarker?: boolean;
+  includeLinuxNatesclawGatewayServiceMarker?: boolean;
 }
 
 function hasAnyHint(env: NodeJS.ProcessEnv, keys: readonly string[]): boolean {
@@ -36,15 +36,15 @@ function hasAnyHint(env: NodeJS.ProcessEnv, keys: readonly string[]): boolean {
   });
 }
 
-function hasOpenClawGatewayServiceMarker(env: NodeJS.ProcessEnv): boolean {
+function hasNatesclawGatewayServiceMarker(env: NodeJS.ProcessEnv): boolean {
   return (
-    env.OPENCLAW_SERVICE_MARKER?.trim() === "openclaw" &&
-    env.OPENCLAW_SERVICE_KIND?.trim() === "gateway"
+    env.NATESCLAW_SERVICE_MARKER?.trim() === "natesclaw" &&
+    env.NATESCLAW_SERVICE_KIND?.trim() === "gateway"
   );
 }
 
 function isCurrentGatewayLaunchdJob(env: NodeJS.ProcessEnv): boolean {
-  const expectedLabel = resolveGatewayLaunchAgentLabel(env.OPENCLAW_PROFILE);
+  const expectedLabel = resolveGatewayLaunchAgentLabel(env.NATESCLAW_PROFILE);
   if (
     [env.LAUNCH_JOB_LABEL, env.LAUNCH_JOB_NAME].some((value) => value?.trim() === expectedLabel)
   ) {
@@ -66,8 +66,8 @@ export function detectRespawnSupervisor(
   }
   if (platform === "linux") {
     return hasAnyHint(env, SUPERVISOR_HINTS.systemd) ||
-      (options.includeLinuxOpenClawGatewayServiceMarker === true &&
-        hasOpenClawGatewayServiceMarker(env))
+      (options.includeLinuxNatesclawGatewayServiceMarker === true &&
+        hasNatesclawGatewayServiceMarker(env))
       ? "systemd"
       : null;
   }
@@ -75,8 +75,8 @@ export function detectRespawnSupervisor(
     if (hasAnyHint(env, SUPERVISOR_HINTS.schtasks)) {
       return "schtasks";
     }
-    const marker = env.OPENCLAW_SERVICE_MARKER?.trim();
-    const serviceKind = env.OPENCLAW_SERVICE_KIND?.trim();
+    const marker = env.NATESCLAW_SERVICE_MARKER?.trim();
+    const serviceKind = env.NATESCLAW_SERVICE_KIND?.trim();
     return marker && serviceKind === "gateway" ? "schtasks" : null;
   }
   return null;

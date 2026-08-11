@@ -1,9 +1,9 @@
 // Audio transcode helpers run ffmpeg to convert audio for provider requirements.
 import path from "node:path";
-import { basenameFromAnyPath } from "@openclaw/media-core/file-name";
+import { basenameFromAnyPath } from "@natesclaw/media-core/file-name";
 import { writeExternalFileWithinRoot } from "../infra/fs-safe.js";
 import { tempWorkspaceSync, withTempWorkspace } from "../infra/private-temp-workspace.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredNatesclawTmpDir } from "../infra/tmp-natesclaw-dir.js";
 import { runCommandWithTimeout } from "../process/exec.js";
 import { runFfmpeg } from "./ffmpeg-exec.js";
 
@@ -70,7 +70,7 @@ export async function transcodeAudioBufferToOpus(params: {
   const maxDurationSeconds = resolveMaxDurationSeconds(params.maxDurationSeconds);
   return await withTempWorkspace(
     {
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: normalizeTempPrefix(params.tempPrefix),
     },
     async (workspace) => {
@@ -155,7 +155,7 @@ export async function transcodeAudioBuffer(params: {
 
   // afconvert is macOS-only and writes native Messages-compatible voice containers.
   const tmp = tempWorkspaceSync({
-    rootDir: resolvePreferredOpenClawTmpDir(),
+    rootDir: resolvePreferredNatesclawTmpDir(),
     prefix: "tts-transcode-",
   });
   const inPath = tmp.write(`in.${source}`, params.audioBuffer);

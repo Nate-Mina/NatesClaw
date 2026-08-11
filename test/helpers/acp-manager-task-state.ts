@@ -21,9 +21,9 @@ export function resetAcpManagerTaskStateForTests(): void {
 export async function withAcpManagerTaskStateDir(
   run: (root: string) => Promise<void>,
 ): Promise<void> {
-  await withTestDir({ prefix: "openclaw-acp-manager-task-" }, async (root) => {
-    const envSnapshot = captureEnv(["OPENCLAW_STATE_DIR"]);
-    setTestEnvValue("OPENCLAW_STATE_DIR", root);
+  await withTestDir({ prefix: "natesclaw-acp-manager-task-" }, async (root) => {
+    const envSnapshot = captureEnv(["NATESCLAW_STATE_DIR"]);
+    setTestEnvValue("NATESCLAW_STATE_DIR", root);
     resetAcpManagerTaskStateForTests();
     installInMemoryTaskRegistryRuntime();
     configureTaskFlowRegistryRuntime({

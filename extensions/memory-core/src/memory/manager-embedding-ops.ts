@@ -1,15 +1,15 @@
 // Memory Core plugin module implements manager embedding ops behavior.
 import fs from "node:fs/promises";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
 import {
   enforceEmbeddingMaxInputTokens,
   hasNonTextEmbeddingParts,
   isEmbeddingBatchUnavailableError,
   type EmbeddingInput,
   type MemoryEmbeddingProviderRuntime,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   buildMultimodalChunkForIndexing,
   chunkMarkdown,
@@ -28,10 +28,10 @@ import {
   type MemoryEntryProvenance,
   MEMORY_INDEX_CHUNK_PROVENANCE_TABLE,
   MEMORY_INDEX_CHUNK_RECALL_METADATA_TABLE,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { MAX_TIMER_TIMEOUT_MS, resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
-import { runSqliteImmediateTransactionSync } from "openclaw/plugin-sdk/sqlite-runtime";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
+import { MAX_TIMER_TIMEOUT_MS, resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
+import { sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
+import { runSqliteImmediateTransactionSync } from "natesclaw/plugin-sdk/sqlite-runtime";
 import type { EmbeddingProvider } from "./embeddings.js";
 import {
   MEMORY_BATCH_FAILURE_LIMIT,

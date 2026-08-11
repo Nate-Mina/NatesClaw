@@ -1,14 +1,14 @@
 // Slack plugin module implements reply action ids behavior.
 import type { Block, KnownBlock } from "@slack/web-api";
 
-export const SLACK_REPLY_BUTTON_ACTION_ID = "openclaw:reply_button";
-export const SLACK_REPLY_LINK_ACTION_ID = "openclaw:reply_link";
-export const SLACK_REPLY_SELECT_ACTION_ID = "openclaw:reply_select";
-export const SLACK_CALLBACK_BUTTON_ACTION_ID = "openclaw:callback_button";
-export const SLACK_CALLBACK_SELECT_ACTION_ID = "openclaw:callback_select";
-export const SLACK_APPROVAL_BUTTON_ACTION_ID = "openclaw:approval_button";
-export const SLACK_APPROVAL_SELECT_ACTION_ID = "openclaw:approval_select";
-export const SLACK_QUESTION_BUTTON_ACTION_ID = "openclaw:question_button";
+export const SLACK_REPLY_BUTTON_ACTION_ID = "natesclaw:reply_button";
+export const SLACK_REPLY_LINK_ACTION_ID = "natesclaw:reply_link";
+export const SLACK_REPLY_SELECT_ACTION_ID = "natesclaw:reply_select";
+export const SLACK_CALLBACK_BUTTON_ACTION_ID = "natesclaw:callback_button";
+export const SLACK_CALLBACK_SELECT_ACTION_ID = "natesclaw:callback_select";
+export const SLACK_APPROVAL_BUTTON_ACTION_ID = "natesclaw:approval_button";
+export const SLACK_APPROVAL_SELECT_ACTION_ID = "natesclaw:approval_select";
+export const SLACK_QUESTION_BUTTON_ACTION_ID = "natesclaw:question_button";
 // Keep accepted display blocks plugin-private; string-keyed receipts are serialized.
 export const SLACK_QUESTION_FINALIZATION_BLOCKS: unique symbol = Symbol(
   "slackQuestionFinalizationBlocks",

@@ -1,12 +1,12 @@
 // Imported by dispatch-from-config.test.ts to keep its mocked suite in one Vitest module graph.
 import { AsyncResource } from "node:async_hooks";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearActiveEmbeddedRun,
   setActiveEmbeddedRun,
 } from "../../agents/embedded-agent-runner/runs.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   interruptSessionWorkAdmissions,
@@ -105,7 +105,7 @@ describe("dispatchReplyFromConfig", () => {
       async (
         _ctx: MsgContext,
         _opts?: GetReplyOptions,
-        _cfg?: OpenClawConfig,
+        _cfg?: NatesclawConfig,
         _preparedRuntime?: unknown,
       ) => ({ text: "hi" }) satisfies ReplyPayload,
     );
@@ -167,7 +167,7 @@ describe("dispatchReplyFromConfig", () => {
         }),
       );
     const replyResolver = vi.fn(
-      async (_ctx: MsgContext, _opts?: GetReplyOptions, configOverride?: OpenClawConfig) => {
+      async (_ctx: MsgContext, _opts?: GetReplyOptions, configOverride?: NatesclawConfig) => {
         expect(configOverride).toBeUndefined();
         receivedPreparedRuntime = getPreparedReplyDispatchRuntime();
         replacementPreparedRuntime = await preparedLookup({ agentId: "main" });
@@ -368,7 +368,7 @@ describe("dispatchReplyFromConfig", () => {
         MessageThreadId: 3731,
         TransportThreadId: 3731,
         To: "telegram:-1003774691294:topic:3731",
-        BodyForAgent: "[OpenClaw heartbeat poll]",
+        BodyForAgent: "[Natesclaw heartbeat poll]",
       }),
       cfg: automaticGroupReplyConfig,
       dispatcher,
@@ -409,7 +409,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       _opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => ({ text: "hi" }) satisfies ReplyPayload;
     await dispatchReplyFromConfig({ ctx, cfg, dispatcher, replyResolver });
 
@@ -726,7 +726,7 @@ describe("dispatchReplyFromConfig", () => {
       ChatType: "channel",
       SessionKey: "agent:main:slack:channel:C123",
     });
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const replyResolver = async (
       _ctx: MsgContext,
       opts?: GetReplyOptions,
@@ -1463,7 +1463,7 @@ describe("dispatchReplyFromConfig", () => {
         SessionKey: sessionKey,
         MessageSid: "visible-after-failure",
         To: "telegram:-1003774691294",
-        BodyForAgent: "@openclaw recover",
+        BodyForAgent: "@natesclaw recover",
       }),
       cfg: automaticGroupReplyConfig,
       dispatcher,
@@ -1544,7 +1544,7 @@ describe("dispatchReplyFromConfig", () => {
           SessionKey: sessionKey,
           MessageSid: messageSid,
           To: "telegram:-1003774691295",
-          BodyForAgent: "@openclaw recover",
+          BodyForAgent: "@natesclaw recover",
         });
 
       const firstTurn = dispatchReplyFromConfig({
@@ -1620,7 +1620,7 @@ describe("dispatchReplyFromConfig", () => {
         SessionKey: sessionKey,
         MessageSid: "heartbeat-after-failure",
         To: "telegram:-1003774691296",
-        BodyForAgent: "[OpenClaw heartbeat poll]",
+        BodyForAgent: "[Natesclaw heartbeat poll]",
       }),
       cfg: automaticGroupReplyConfig,
       dispatcher,
@@ -1687,7 +1687,7 @@ describe("dispatchReplyFromConfig", () => {
         SessionKey: sessionKey,
         MessageSid: "visible-after-rotation",
         To: "telegram:-1003774691297",
-        BodyForAgent: "@openclaw recover",
+        BodyForAgent: "@natesclaw recover",
       }),
       cfg: automaticGroupReplyConfig,
       dispatcher,
@@ -1744,7 +1744,7 @@ describe("dispatchReplyFromConfig", () => {
     const replyResolver = async (
       _ctx: MsgContext,
       _opts?: GetReplyOptions,
-      _cfg?: OpenClawConfig,
+      _cfg?: NatesclawConfig,
     ) => ({ text: "hi" }) satisfies ReplyPayload;
     await dispatchReplyFromConfig({ ctx, cfg, dispatcher, replyResolver });
 

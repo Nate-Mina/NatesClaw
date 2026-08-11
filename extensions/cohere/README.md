@@ -1,13 +1,13 @@
-# OpenClaw Cohere Provider
+# Natesclaw Cohere Provider
 
-Official OpenClaw provider plugin for Cohere's OpenAI-compatible Compatibility
+Official Natesclaw provider plugin for Cohere's OpenAI-compatible Compatibility
 API.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/cohere-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/cohere-provider
+natesclaw gateway restart
 ```
 
 Configure a Cohere API key, then select `cohere/command-a-plus-05-2026`,

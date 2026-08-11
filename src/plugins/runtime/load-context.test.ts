@@ -1,11 +1,11 @@
 // Load context tests cover agent and workspace context resolution for plugin runtimes.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 
 const loadConfigMock = vi.fn<typeof import("../../config/config.js").loadConfig>();
 const applyPluginAutoEnableMock =
   vi.fn<typeof import("../../config/plugin-auto-enable.js").applyPluginAutoEnable>();
-const fingerprintPluginAutoEnableConfigMock = vi.fn((config: OpenClawConfig) =>
+const fingerprintPluginAutoEnableConfigMock = vi.fn((config: NatesclawConfig) =>
   JSON.stringify(config),
 );
 const fingerprintPluginAutoEnableEnvMock = vi.fn((env: NodeJS.ProcessEnv) => JSON.stringify(env));
@@ -107,7 +107,7 @@ describe("resolvePluginRuntimeLoadContext", () => {
         },
       },
     };
-    const env = { HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/natesclaw-home" } as NodeJS.ProcessEnv;
 
     applyPluginAutoEnableMock.mockReturnValue({
       config: resolvedConfig,
@@ -159,7 +159,7 @@ describe("resolvePluginRuntimeLoadContext", () => {
 
   it("reuses a prepared metadata snapshot without resolving metadata again", () => {
     const config = { plugins: {} };
-    const env = { HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/natesclaw-home" } as NodeJS.ProcessEnv;
 
     const context = resolvePluginRuntimeLoadContext({
       config,
@@ -181,13 +181,13 @@ describe("resolvePluginRuntimeLoadContext", () => {
 
     resolvePluginRuntimeLoadContext({
       config: { plugins: {} },
-      env: { HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv,
+      env: { HOME: "/tmp/natesclaw-home" } as NodeJS.ProcessEnv,
     });
 
     expect(setCurrentPluginMetadataSnapshotMock).toHaveBeenCalledWith(derivedSnapshot, {
       config: { plugins: {} },
       compatibleConfigs: [{ plugins: {} }, { plugins: {} }],
-      env: { HOME: "/tmp/openclaw-home" },
+      env: { HOME: "/tmp/natesclaw-home" },
       workspaceDir: "/resolved-workspace",
     });
   });
@@ -234,7 +234,7 @@ describe("resolvePluginRuntimeLoadContext", () => {
   });
 
   it("uses reference fast paths, content fingerprints, and lifecycle invalidation", () => {
-    const firstConfig: OpenClawConfig = { plugins: {} };
+    const firstConfig: NatesclawConfig = { plugins: {} };
     const env = process.env;
     const first = resolvePluginRuntimeLoadContext({ config: firstConfig, env });
 
@@ -247,7 +247,7 @@ describe("resolvePluginRuntimeLoadContext", () => {
     expect(fingerprintPluginAutoEnableConfigMock).toHaveBeenCalledTimes(1);
     expect(fingerprintPluginAutoEnableEnvMock).toHaveBeenCalledTimes(1);
 
-    const replacementConfig: OpenClawConfig = { plugins: {} };
+    const replacementConfig: NatesclawConfig = { plugins: {} };
     expect(resolvePluginRuntimeLoadContext({ config: replacementConfig, env }).config).toBe(
       first.config,
     );
@@ -278,7 +278,7 @@ describe("resolvePluginRuntimeLoadContext", () => {
 
     const context = resolvePluginRuntimeLoadContext({
       config: { plugins: {} },
-      env: { HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv,
+      env: { HOME: "/tmp/natesclaw-home" } as NodeJS.ProcessEnv,
     });
 
     expect(context.installRecords).toEqual({
@@ -294,7 +294,7 @@ describe("resolvePluginRuntimeLoadContext", () => {
     { scope: "explicit owner", pluginIds: ["demo"] },
   ])("keeps $scope plugin metadata scoped before activation", ({ pluginIds }) => {
     const config = { plugins: {} };
-    const env = { HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/natesclaw-home" } as NodeJS.ProcessEnv;
     loadPluginMetadataSnapshotMock.mockReturnValueOnce({ ...metadataSnapshot, pluginIds });
 
     resolvePluginRuntimeLoadContext({ config, env, onlyPluginIds: pluginIds });
@@ -312,7 +312,7 @@ describe("resolvePluginRuntimeLoadContext", () => {
   it("builds plugin load options from the shared runtime context", () => {
     const context = resolvePluginRuntimeLoadContext({
       config: { plugins: {} },
-      env: { HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv,
+      env: { HOME: "/tmp/natesclaw-home" } as NodeJS.ProcessEnv,
       workspaceDir: "/explicit-workspace",
     });
 

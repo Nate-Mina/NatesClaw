@@ -1,7 +1,7 @@
 // Googlechat tests cover channel config plugin behavior.
-import type { ChannelOutboundPayloadHint } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+import type { ChannelOutboundPayloadHint } from "natesclaw/plugin-sdk/channel-contract";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   registerGoogleChatApprovalCardBinding,
@@ -40,7 +40,7 @@ describe("googlechatPlugin config adapter", () => {
           serviceAccount: { client_email: "bot@example.com" },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(googlechatPlugin.actions?.describeMessageTool?.({ cfg })).toEqual({
       actions: ["send"],
@@ -59,7 +59,7 @@ describe("googlechatPlugin config adapter", () => {
         providers: {
           google_chat_service_account: {
             source: "file",
-            path: "/tmp/openclaw-missing-google-chat-service-account",
+            path: "/tmp/natesclaw-missing-google-chat-service-account",
             mode: "singleValue",
           },
         },
@@ -75,7 +75,7 @@ describe("googlechatPlugin config adapter", () => {
           defaultTo: "spaces/AAA",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(googlechatPlugin.config.resolveAllowFrom?.({ cfg, accountId: "default" })).toEqual([
       "users/123",
@@ -101,7 +101,7 @@ describe("googlechatPlugin config adapter", () => {
           allowFrom: ["users/123"],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const payload: ReplyPayload = {
       channelData: {
         execApproval: {
@@ -147,7 +147,7 @@ describe("googlechatPlugin config adapter", () => {
 
     expect(
       googlechatPlugin.outbound?.normalizePayload?.({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NatesclawConfig,
         payload,
       }),
     ).toBeNull();
@@ -178,19 +178,19 @@ describe("googlechatPlugin config adapter", () => {
 
     expect(
       googlechatPlugin.outbound?.normalizePayload?.({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NatesclawConfig,
         payload: unrelatedPayload,
       }),
     ).toBe(unrelatedPayload);
     expect(
       googlechatPlugin.outbound?.normalizePayload?.({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NatesclawConfig,
         payload: metadataPayload,
       }),
     ).toBeNull();
     expect(
       googlechatPlugin.outbound?.normalizePayload?.({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NatesclawConfig,
         payload: structuredPayload,
       }),
     ).toBe(structuredPayload);

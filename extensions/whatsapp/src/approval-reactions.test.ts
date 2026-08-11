@@ -17,10 +17,10 @@ const resolverMocks = vi.hoisted(() => ({
   isApprovalNotFoundError: vi.fn(() => false),
 }));
 
-vi.mock("openclaw/plugin-sdk/approval-gateway-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/approval-gateway-runtime", () => ({
   resolveApprovalOverGateway: resolverMocks.resolveWhatsAppApproval,
 }));
-vi.mock("openclaw/plugin-sdk/error-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/error-runtime", () => ({
   isApprovalNotFoundError: resolverMocks.isApprovalNotFoundError,
 }));
 

@@ -1,8 +1,8 @@
 // Model probe RPC tests cover validation, normalization, bounded execution, and redacted mapping.
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthProbeSummary } from "../../commands/models/list.probe.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { GatewayRequestHandlerOptions } from "./types.js";
 
 const mocks = vi.hoisted(() => ({
@@ -45,7 +45,7 @@ function summary(results: AuthProbeSummary["results"]): AuthProbeSummary {
   };
 }
 
-function createOptions(params: Record<string, unknown>, cfg: OpenClawConfig = {}) {
+function createOptions(params: Record<string, unknown>, cfg: NatesclawConfig = {}) {
   const respond = vi.fn();
   return {
     options: {
@@ -90,7 +90,7 @@ describe("models.probe", () => {
   });
 
   it("normalizes providers, trims profiles, and clamps the timeout", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: {
           model: { primary: "openai/gpt-5.6", fallbacks: ["openai/gpt-5.5"] },
@@ -124,7 +124,7 @@ describe("models.probe", () => {
     { name: "omitted", params: {} },
     { name: "empty", params: { agentId: "" } },
   ])("probes the default agent when agentId is $name", async ({ params }) => {
-    const cfg: OpenClawConfig = { agents: { list: [{ id: "main", default: true }] } };
+    const cfg: NatesclawConfig = { agents: { list: [{ id: "main", default: true }] } };
     const { options } = createOptions({ provider: "openai", ...params }, cfg);
 
     await handler(options);
@@ -139,7 +139,7 @@ describe("models.probe", () => {
   });
 
   it("probes an explicit configured agent", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: { list: [{ id: "main", default: true }, { id: "writer" }] },
     };
     const { options } = createOptions({ provider: "openai", agentId: "Writer" }, cfg);
@@ -156,7 +156,7 @@ describe("models.probe", () => {
   });
 
   it.each(["retired", "   "])("rejects explicit unknown agentId %j", async (agentId) => {
-    const cfg: OpenClawConfig = { agents: { list: [{ id: "main", default: true }] } };
+    const cfg: NatesclawConfig = { agents: { list: [{ id: "main", default: true }] } };
     mocks.listAgentIds.mockReturnValue(["main"]);
     const { options, respond } = createOptions({ provider: "openai", agentId }, cfg);
 
@@ -172,7 +172,7 @@ describe("models.probe", () => {
   });
 
   it("probes the requested provider so overrides and model selection resolve", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       models: {
         providers: {
           "byteplus-plan": {
@@ -208,7 +208,7 @@ describe("models.probe", () => {
   });
 
   it("does not require a configured default before probing provider credentials", async () => {
-    const cfg: OpenClawConfig = {};
+    const cfg: NatesclawConfig = {};
     const { options } = createOptions({ provider: "openai" }, cfg);
 
     await handler(options);

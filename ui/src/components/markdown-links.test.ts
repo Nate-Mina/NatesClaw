@@ -171,9 +171,9 @@ describe("toSanitizedMarkdownHtml links", () => {
     });
 
     it("links http:// URLs", () => {
-      const html = toSanitizedMarkdownHtml("Visit http://github.com/openclaw");
+      const html = toSanitizedMarkdownHtml("Visit http://github.com/natesclaw");
       expect(html).toBe(
-        '<p>Visit <a href="http://github.com/openclaw" class="markdown-bare-url markdown-github-link" rel="noreferrer noopener" target="_blank">http://github.com/openclaw</a></p>\n',
+        '<p>Visit <a href="http://github.com/natesclaw" class="markdown-bare-url markdown-github-link" rel="noreferrer noopener" target="_blank">http://github.com/natesclaw</a></p>\n',
       );
     });
 
@@ -218,9 +218,9 @@ describe("toSanitizedMarkdownHtml links", () => {
     });
 
     it("does NOT rewrite explicit markdown links with CJK display text", () => {
-      const html = toSanitizedMarkdownHtml("[OpenClaw中文](https://docs.openclaw.ai)");
+      const html = toSanitizedMarkdownHtml("[Natesclaw中文](https://docs.natesclaw.ai)");
       expect(html).toBe(
-        '<p><a href="https://docs.openclaw.ai" rel="noreferrer noopener" target="_blank">OpenClaw中文</a></p>\n',
+        '<p><a href="https://docs.natesclaw.ai" rel="noreferrer noopener" target="_blank">Natesclaw中文</a></p>\n',
       );
     });
 
@@ -480,14 +480,14 @@ describe("toSanitizedMarkdownHtml links", () => {
     it.each([
       [
         "bare autolink",
-        "https://github.com/openclaw/openclaw/pull/3434",
-        "https://github.com/openclaw/openclaw/pull/3434",
+        "https://github.com/natesclaw/natesclaw/pull/3434",
+        "https://github.com/natesclaw/natesclaw/pull/3434",
       ],
-      ["issue shorthand", "[#3434](https://github.com/openclaw/openclaw/pull/3434)", "#3434"],
-      ["labelled link", "[the fix](https://github.com/openclaw/openclaw/pull/3434)", "the fix"],
-      ["www host", "[the fix](https://www.github.com/openclaw/openclaw/pull/3434)", "the fix"],
-      ["http scheme", "[the fix](http://github.com/openclaw/openclaw/pull/3434)", "the fix"],
-      ["list item", "- [the fix](https://github.com/openclaw/openclaw/pull/3434)", "the fix"],
+      ["issue shorthand", "[#3434](https://github.com/natesclaw/natesclaw/pull/3434)", "#3434"],
+      ["labelled link", "[the fix](https://github.com/natesclaw/natesclaw/pull/3434)", "the fix"],
+      ["www host", "[the fix](https://www.github.com/natesclaw/natesclaw/pull/3434)", "the fix"],
+      ["http scheme", "[the fix](http://github.com/natesclaw/natesclaw/pull/3434)", "the fix"],
+      ["list item", "- [the fix](https://github.com/natesclaw/natesclaw/pull/3434)", "the fix"],
     ])("marks %s", (_kind, input, expectedText) => {
       const fragment = htmlFragment(toSanitizedMarkdownHtml(input));
       const link = fragment.querySelector<HTMLAnchorElement>("a");
@@ -498,11 +498,11 @@ describe("toSanitizedMarkdownHtml links", () => {
     });
 
     it.each([
-      ["non-github host", "[docs](https://example.com/openclaw)"],
-      ["lookalike host", "[docs](https://notgithub.com/openclaw)"],
-      ["github in query", "[docs](https://example.com/?to=https://github.com/openclaw)"],
-      ["subdomain host", "[pages](https://openclaw.github.io/openclaw)"],
-      ["image-only link", "[![build](data:image/png;base64,x)](https://github.com/openclaw)"],
+      ["non-github host", "[docs](https://example.com/natesclaw)"],
+      ["lookalike host", "[docs](https://notgithub.com/natesclaw)"],
+      ["github in query", "[docs](https://example.com/?to=https://github.com/natesclaw)"],
+      ["subdomain host", "[pages](https://natesclaw.github.io/natesclaw)"],
+      ["image-only link", "[![build](data:image/png;base64,x)](https://github.com/natesclaw)"],
     ])("leaves %s unmarked", (_kind, input) => {
       const fragment = htmlFragment(toSanitizedMarkdownHtml(input));
       expect(fragment.querySelector("a.markdown-github-link")).toBeNull();
@@ -511,7 +511,7 @@ describe("toSanitizedMarkdownHtml links", () => {
     it("leaves github urls inside code untouched", () => {
       const fragment = htmlFragment(
         toSanitizedMarkdownHtml(
-          "`https://github.com/openclaw/openclaw`\n\n```\nhttps://github.com/openclaw/openclaw\n```",
+          "`https://github.com/natesclaw/natesclaw`\n\n```\nhttps://github.com/natesclaw/natesclaw\n```",
         ),
       );
       expect(fragment.querySelector("a")).toBeNull();
@@ -520,10 +520,10 @@ describe("toSanitizedMarkdownHtml links", () => {
 
     it("keeps the hover preview target intact on marked links", () => {
       const fragment = htmlFragment(
-        toSanitizedMarkdownHtml("[#3434](https://github.com/openclaw/openclaw/pull/3434)"),
+        toSanitizedMarkdownHtml("[#3434](https://github.com/natesclaw/natesclaw/pull/3434)"),
       );
       const link = fragment.querySelector<HTMLAnchorElement>("a.markdown-github-link");
-      expect(link?.getAttribute("href")).toBe("https://github.com/openclaw/openclaw/pull/3434");
+      expect(link?.getAttribute("href")).toBe("https://github.com/natesclaw/natesclaw/pull/3434");
       expect(link?.getAttribute("target")).toBe("_blank");
     });
   });

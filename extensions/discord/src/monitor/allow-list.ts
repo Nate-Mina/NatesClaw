@@ -2,18 +2,18 @@
 import {
   type AllowlistMatch,
   resolveAllowlistMatchByCandidates,
-} from "openclaw/plugin-sdk/allow-from";
+} from "natesclaw/plugin-sdk/allow-from";
 import {
   buildChannelKeyCandidates,
   resolveChannelEntryMatchWithFallback,
   resolveChannelMatchConfig,
   type ChannelMatchSource,
-} from "openclaw/plugin-sdk/channel-targets";
-import type { DiscordGuildEntry, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-targets";
+import type { DiscordGuildEntry, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { Guild, User } from "../internal/discord.js";
 import { formatDiscordUserTag } from "./format.js";
 
@@ -311,7 +311,7 @@ export function resolveDiscordOwnerAccess(params: {
   return { ownerAllowList, ownerAllowed };
 }
 
-export function resolveDiscordCommandOwnerAllowFrom(cfg: OpenClawConfig): string[] | undefined {
+export function resolveDiscordCommandOwnerAllowFrom(cfg: NatesclawConfig): string[] | undefined {
   const raw = cfg.commands?.ownerAllowFrom;
   if (!Array.isArray(raw) || raw.length === 0) {
     return undefined;

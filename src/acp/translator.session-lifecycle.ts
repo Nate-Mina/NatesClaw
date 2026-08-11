@@ -19,9 +19,9 @@ import type {
   SetSessionModeRequest,
   SetSessionModeResponse,
 } from "@agentclientprotocol/sdk";
-import type { AcpSessionStore } from "@openclaw/acp-core/session";
-import type { AcpServerOptions } from "@openclaw/acp-core/types";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import type { AcpSessionStore } from "@natesclaw/acp-core/session";
+import type { AcpServerOptions } from "@natesclaw/acp-core/types";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { GatewayClient } from "../gateway/client.js";
 import type { SessionsListResult } from "../gateway/session-utils.js";
 import type { FixedWindowRateLimiter } from "../infra/fixed-window-rate-limit.js";
@@ -398,7 +398,7 @@ export class AcpTranslatorSessionLifecycle {
       return;
     }
     throw new Error(
-      "ACP bridge mode does not support per-session MCP servers. Configure MCP on the OpenClaw gateway or agent instead.",
+      "ACP bridge mode does not support per-session MCP servers. Configure MCP on the Natesclaw gateway or agent instead.",
     );
   }
 

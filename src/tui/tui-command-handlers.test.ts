@@ -1,8 +1,8 @@
 // Covers TUI slash command handlers and backend call wiring.
 
 import type { OverlayHandle } from "@earendil-works/pi-tui";
-import { expectDefined } from "@openclaw/normalization-core";
-import type { Result } from "@openclaw/normalization-core/result";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { Result } from "@natesclaw/normalization-core/result";
 import { describe, expect, it, vi } from "vitest";
 import {
   createSessionProjection,
@@ -419,7 +419,7 @@ describe("tui command handlers", () => {
         message: {
           role: "user",
           content: [{ type: "text", text: "hello" }],
-          __openclaw: { idempotencyKey: `${provisionalRunId}:user` },
+          __natesclaw: { idempotencyKey: `${provisionalRunId}:user` },
         },
       }),
     ]);
@@ -447,7 +447,7 @@ describe("tui command handlers", () => {
         pendingRunId: "r-accepted",
         message: expect.objectContaining({
           role: "user",
-          __openclaw: { idempotencyKey: `${localRunId}:user` },
+          __natesclaw: { idempotencyKey: `${localRunId}:user` },
         }),
       }),
     ]);
@@ -466,7 +466,7 @@ describe("tui command handlers", () => {
     const acceptedMessage = {
       role: "user",
       content: [{ type: "text", text: "hello" }],
-      __openclaw: {
+      __natesclaw: {
         id: "accepted-user",
         seq: 1,
         idempotencyKey: "accepted-run:user",
@@ -475,7 +475,7 @@ describe("tui command handlers", () => {
     const sameTextPeer = {
       role: "user",
       content: [{ type: "text", text: "hello" }],
-      __openclaw: {
+      __natesclaw: {
         id: "peer-user",
         seq: 2,
         idempotencyKey: "peer-run:user",
@@ -795,13 +795,13 @@ describe("tui command handlers", () => {
     expect(addSystem).toHaveBeenCalledWith("Version: 1.2.3");
   });
 
-  it("returns to OpenClaw with an optional request", async () => {
+  it("returns to Natesclaw with an optional request", async () => {
     const { handleCommand, addSystem, requestExit, sendChat } = createHarness();
 
-    await handleCommand("/openclaw restart gateway");
+    await handleCommand("/natesclaw restart gateway");
 
     expect(sendChat).not.toHaveBeenCalled();
-    expect(addSystem).toHaveBeenCalledWith("returning to OpenClaw with request: restart gateway");
+    expect(addSystem).toHaveBeenCalledWith("returning to Natesclaw with request: restart gateway");
     expect(requestExit).toHaveBeenCalledWith({
       exitReason: "return-to-system-agent",
       systemAgentMessage: "restart gateway",
@@ -819,14 +819,14 @@ describe("tui command handlers", () => {
     expect(addSystem).not.toHaveBeenCalled();
   });
 
-  it("leaves a OpenClaw breadcrumb after switching agents", async () => {
+  it("leaves a Natesclaw breadcrumb after switching agents", async () => {
     const { handleCommand, addSystem, setSession, state } = createHarness();
 
     await handleCommand("/agent Work");
 
     expect(state.currentAgentId).toBe("work");
     expect(setSession).toHaveBeenCalledWith("");
-    expect(addSystem).toHaveBeenCalledWith("agent set to work; use /openclaw to return");
+    expect(addSystem).toHaveBeenCalledWith("agent set to work; use /natesclaw to return");
   });
 
   it("marks the generated runId as local before gateway events arrive", async () => {
@@ -892,7 +892,7 @@ describe("tui command handlers", () => {
         {
           role: "user",
           content: [{ type: "text", text: "new session prompt" }],
-          __openclaw: { id: "new-user", seq: 1 },
+          __natesclaw: { id: "new-user", seq: 1 },
         },
       ],
     );
@@ -1265,7 +1265,7 @@ describe("tui command handlers", () => {
     const peerMessage = {
       role: "user",
       content: [{ type: "text", text: "hello" }],
-      __openclaw: {
+      __natesclaw: {
         id: "peer-user",
         seq: 4,
         idempotencyKey: "peer-run:user",
@@ -1693,7 +1693,7 @@ describe("tui command handlers", () => {
         {
           role: "user",
           content: [{ type: "text", text: "before reset" }],
-          __openclaw: { id: "before-reset", seq: 1 },
+          __natesclaw: { id: "before-reset", seq: 1 },
         },
       ],
     );
@@ -1730,7 +1730,7 @@ describe("tui command handlers", () => {
     const message = {
       role: "user",
       content: [{ type: "text", text: "preserve failed reset" }],
-      __openclaw: { id: "before-failed-reset", seq: 1 },
+      __natesclaw: { id: "before-failed-reset", seq: 1 },
     };
     const sessionProjection = createSessionProjection(
       { sessionKey: "agent:main:main", agentId: "main" },
@@ -1979,15 +1979,15 @@ describe("tui command handlers", () => {
     await codex.handleCommand("/think");
     expect(codex.addSystem).toHaveBeenCalledWith(expect.not.stringContaining("ultra"));
 
-    const openclaw = createHarness({
+    const natesclaw = createHarness({
       sessionInfo: {
         modelProvider: "openai",
         model: "gpt-5.6-luna",
-        agentRuntime: { id: "openclaw", source: "session-key" },
+        agentRuntime: { id: "natesclaw", source: "session-key" },
       },
     });
-    await openclaw.handleCommand("/think");
-    expect(openclaw.addSystem).toHaveBeenCalledWith(expect.stringContaining("ultra"));
+    await natesclaw.handleCommand("/think");
+    expect(natesclaw.addSystem).toHaveBeenCalledWith(expect.stringContaining("ultra"));
   });
 
   it.each([
@@ -2511,7 +2511,7 @@ describe("tui command handlers", () => {
     expect(closeOverlay).toHaveBeenCalledTimes(1);
   });
 
-  it.each(["codex", "openclaw"])(
+  it.each(["codex", "natesclaw"])(
     "forwards model/runtime transactions through the server directive path for %s",
     async (runtime) => {
       const sendChat = vi.fn().mockResolvedValue({ status: "ok" });

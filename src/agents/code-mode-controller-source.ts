@@ -5,11 +5,11 @@ export const CODE_MODE_CONTROLLER_SOURCE = String.raw`
 (() => {
   const output = [];
   const pending = new Map();
-  const catalog = Array.isArray(globalThis.__openclawCatalog) ? globalThis.__openclawCatalog : [];
-  const apiFiles = Array.isArray(globalThis.__openclawApiFiles) ? globalThis.__openclawApiFiles : [];
-  const namespaceDescriptors = Array.isArray(globalThis.__openclawNamespaces) ? globalThis.__openclawNamespaces : [];
-  const hostRequest = globalThis.__openclawHostRequest;
-  delete globalThis.__openclawHostRequest;
+  const catalog = Array.isArray(globalThis.__natesclawCatalog) ? globalThis.__natesclawCatalog : [];
+  const apiFiles = Array.isArray(globalThis.__natesclawApiFiles) ? globalThis.__natesclawApiFiles : [];
+  const namespaceDescriptors = Array.isArray(globalThis.__natesclawNamespaces) ? globalThis.__natesclawNamespaces : [];
+  const hostRequest = globalThis.__natesclawHostRequest;
+  delete globalThis.__natesclawHostRequest;
   const bridgeSequences = new Map();
 
   function safe(value) {
@@ -129,7 +129,7 @@ export const CODE_MODE_CONTROLLER_SOURCE = String.raw`
     read: (name) => request("skillsRead", [name]),
   });
 
-  if (globalThis.__openclawSwarmEnabled === true) {
+  if (globalThis.__natesclawSwarmEnabled === true) {
     Object.defineProperties(globalThis, {
       agents: {
         value: Object.freeze({ run: runAgent }),
@@ -231,8 +231,8 @@ export const CODE_MODE_CONTROLLER_SOURCE = String.raw`
     text: { value: (value) => output.push({ type: "text", text: asText(value) }), enumerable: true },
     json: { value: (value) => output.push({ type: "json", value: safe(value) }), enumerable: true },
     yield_control: { value: (reason) => request("yield", [reason]), enumerable: true },
-    __openclawSettleBridge: { value: settle },
-    __openclawTakeOutput: { value: () => output.splice(0) },
+    __natesclawSettleBridge: { value: settle },
+    __natesclawTakeOutput: { value: () => output.splice(0) },
   });
 })();
 `;

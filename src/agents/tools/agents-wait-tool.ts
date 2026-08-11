@@ -1,5 +1,5 @@
 import { Type } from "typebox";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createAbortError } from "../../infra/abort-signal.js";
 import { resolveSubagentCompletionResultText } from "../subagents/completion/subagent-completion-result.js";
 import { onSubagentRegistryPersisted } from "../subagents/registry/subagent-registry-state.js";
@@ -202,7 +202,7 @@ export function createAgentsWaitTool(opts: {
   agentSessionKey?: string;
   runSessionKey?: string;
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
 }): AnyAgentTool {
   const swarm = resolveSwarmConfig(opts.config, opts.agentId);
   return {

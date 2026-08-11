@@ -6,12 +6,12 @@ import {
   toInboundMediaFactsWithMetadata,
   type ChannelBotLoopProtectionFacts,
   type ChannelInboundMediaInput,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { channelBlockedPatch, channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { MediaFetchError } from "openclaw/plugin-sdk/media-runtime";
-import { mergePairLoopGuardConfig } from "openclaw/plugin-sdk/pair-loop-guard-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import type { OpenClawConfig } from "../runtime-api.js";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { channelBlockedPatch, channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { MediaFetchError } from "natesclaw/plugin-sdk/media-runtime";
+import { mergePairLoopGuardConfig } from "natesclaw/plugin-sdk/pair-loop-guard-runtime";
+import { normalizeOptionalLowercaseString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import type { NatesclawConfig } from "../runtime-api.js";
 import { resolveWebhookPath } from "../runtime-api.js";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import { downloadGoogleChatMedia, sendGoogleChatMessage } from "./api.js";
@@ -158,12 +158,12 @@ async function processGoogleChatEvent(
  * Resolve bot display name with fallback chain:
  * 1. Account config name
  * 2. Agent name from config
- * 3. "OpenClaw" as generic fallback
+ * 3. "Natesclaw" as generic fallback
  */
 function resolveBotDisplayName(params: {
   accountName?: string;
   agentId: string;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): string {
   const { accountName, agentId, config } = params;
   if (accountName?.trim()) {
@@ -173,13 +173,13 @@ function resolveBotDisplayName(params: {
   if (agent?.name?.trim()) {
     return agent.name.trim();
   }
-  return "OpenClaw";
+  return "Natesclaw";
 }
 
 async function processMessageWithPipeline(params: {
   event: GoogleChatEvent;
   account: ResolvedGoogleChatAccount;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   runtime: GoogleChatRuntimeEnv;
   core: GoogleChatCoreRuntime;
   statusSink?: GoogleChatStatusSink;
@@ -580,4 +580,4 @@ export function resolveGoogleChatWebhookPath(params: {
     defaultPath: "/googlechat",
   });
 }
-import { parseDateStringTimestampMs as resolveGoogleChatTimestampMs } from "openclaw/plugin-sdk/number-runtime";
+import { parseDateStringTimestampMs as resolveGoogleChatTimestampMs } from "natesclaw/plugin-sdk/number-runtime";

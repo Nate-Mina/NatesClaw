@@ -2,8 +2,8 @@
 import {
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.js";
+} from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.js";
 import { probeGateway } from "../../gateway/probe.js";
 import {
   discoverGatewayBeacons,
@@ -31,7 +31,7 @@ export type GatewayStatusProbedTarget = {
 
 /** Probes configured, explicit, and optionally SSH-discovered gateway targets. */
 export async function runGatewayStatusProbePass(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   opts: {
     token?: string;
     password?: string;

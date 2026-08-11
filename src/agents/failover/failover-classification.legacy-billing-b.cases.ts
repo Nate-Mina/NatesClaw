@@ -194,7 +194,7 @@ export const legacyBillingBCases = [
       "src/agents/embedded-agent-helpers.isbillingerrormessage.test.ts#classifyFailoverReason",
     signal: {
       message:
-        'No API key found for provider "openai". Auth store: /tmp/openclaw-agent-abc/auth-profiles.json (agentDir: /tmp/openclaw-agent-abc).',
+        'No API key found for provider "openai". Auth store: /tmp/natesclaw-agent-abc/auth-profiles.json (agentDir: /tmp/natesclaw-agent-abc).',
     },
     expected: reason("auth"),
   },

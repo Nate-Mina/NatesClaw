@@ -3,7 +3,7 @@ import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   resolveAccountEntry,
-} from "openclaw/plugin-sdk/account-resolution";
+} from "natesclaw/plugin-sdk/account-resolution";
 import {
   buildChannelConfigSchema,
   buildChannelReactionShape,
@@ -15,9 +15,9 @@ import {
   ReplyToModeSchema,
   requireAllowlistAllowFrom,
   requireOpenAllowFrom,
-} from "openclaw/plugin-sdk/channel-config-schema";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-config-schema";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 import { signalChannelConfigUiHints } from "./config-ui-hints.js";
 
@@ -46,7 +46,7 @@ const SignalTransportUrlSchema = z
   );
 
 function projectSignalConfigForUpdateValidation(value: unknown): unknown {
-  if (process.env.OPENCLAW_UPDATE_IN_PROGRESS !== "1" || !isRecord(value)) {
+  if (process.env.NATESCLAW_UPDATE_IN_PROGRESS !== "1" || !isRecord(value)) {
     return value;
   }
   const next = { ...value };

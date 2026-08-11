@@ -7,14 +7,14 @@ import {
   queueAgentHarnessMessage,
   resetAgentEventsForTest,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { clearRuntimeAuthProfileStoreSnapshots } from "openclaw/plugin-sdk/agent-runtime";
-import { resetDiagnosticEventsForTest } from "openclaw/plugin-sdk/diagnostic-runtime";
-import type { ExecApprovalsFile } from "openclaw/plugin-sdk/exec-approvals-runtime";
-import { clearInternalHooks, resetGlobalHookRunner } from "openclaw/plugin-sdk/hook-runtime";
-import { clearMemoryPluginState } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import { clearPluginCommands } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { clearRuntimeAuthProfileStoreSnapshots } from "natesclaw/plugin-sdk/agent-runtime";
+import { resetDiagnosticEventsForTest } from "natesclaw/plugin-sdk/diagnostic-runtime";
+import type { ExecApprovalsFile } from "natesclaw/plugin-sdk/exec-approvals-runtime";
+import { clearInternalHooks, resetGlobalHookRunner } from "natesclaw/plugin-sdk/hook-runtime";
+import { clearMemoryPluginState } from "natesclaw/plugin-sdk/memory-core-host-runtime-core";
+import { clearPluginCommands } from "natesclaw/plugin-sdk/plugin-runtime";
+import { resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, expect, vi } from "vitest";
 import { defaultCodexAppInventoryCache } from "./app-inventory-cache.js";
 import type { CodexAppServerClient } from "./client.js";
@@ -62,9 +62,9 @@ function createHarnessHostCapabilities(): EmbeddedRunAttemptParams["hostCapabili
   });
 }
 
-vi.mock("openclaw/plugin-sdk/exec-approvals-runtime", async (importOriginal) => {
+vi.mock("natesclaw/plugin-sdk/exec-approvals-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/exec-approvals-runtime")>();
+    await importOriginal<typeof import("natesclaw/plugin-sdk/exec-approvals-runtime")>();
   return {
     ...actual,
     loadExecApprovals: execApprovalsRuntimeMocks.loadExecApprovals,
@@ -354,7 +354,7 @@ export function turnStartResult(turnId = "turn-1", status = "inProgress") {
 }
 
 export function threadStartResult(threadId = "thread-1", options: { cwd?: string } = {}) {
-  const cwd = options.cwd ?? tempDir ?? "/tmp/openclaw-codex-test";
+  const cwd = options.cwd ?? tempDir ?? "/tmp/natesclaw-codex-test";
   return createThreadStartResult(threadId, cwd);
 }
 
@@ -668,10 +668,10 @@ export function setupRunAttemptTestHooks(): void {
     clearMemoryPluginState();
     resetAgentEventsForTest();
     resetDiagnosticEventsForTest();
-    vi.stubEnv("OPENCLAW_TRAJECTORY", "0");
+    vi.stubEnv("NATESCLAW_TRAJECTORY", "0");
     vi.stubEnv("CODEX_API_KEY", "");
     vi.stubEnv("OPENAI_API_KEY", "");
-    tempDir = await fs.mkdtemp(path.join(resolvePreferredOpenClawTmpDir(), "openclaw-codex-run-"));
+    tempDir = await fs.mkdtemp(path.join(resolvePreferredNatesclawTmpDir(), "natesclaw-codex-run-"));
   });
 
   afterEach(async () => {
@@ -679,7 +679,7 @@ export function setupRunAttemptTestHooks(): void {
     await sandboxExecServerRegistry.closeAll();
     resetCodexAppServerClientFactoryForTest();
     clearRuntimeAuthProfileStoreSnapshots();
-    dynamicToolBuildState.openClawCodingToolsFactory = undefined;
+    dynamicToolBuildState.NatesclawCodingToolsFactory = undefined;
     codexWorkspaceDirCache.clear();
     nativeHookRelayUnregisterQueue.clear();
     nativeHookRelayTesting.clearNativeHookRelaysForTests();

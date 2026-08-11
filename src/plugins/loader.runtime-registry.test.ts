@@ -1,7 +1,7 @@
 // Verifies plugin loader runtime registry behavior.
 import { afterEach, describe, expect, it } from "vitest";
 import { createPluginMetadataSnapshot } from "../config/plugin-auto-enable.test-helpers.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { setCurrentPluginMetadataSnapshot } from "./current-plugin-metadata-snapshot.js";
 import {
@@ -12,7 +12,7 @@ import { resolvePluginLoadCacheContext } from "./loader-load-context.js";
 import {
   clearPluginRegistryLoadCache,
   loadAndActivateRootPluginRegistry,
-  loadOpenClawPlugins,
+  loadNatesclawPlugins,
   loadPluginRegistryHandle,
   resolveRuntimePluginRegistry,
 } from "./loader.js";
@@ -51,7 +51,7 @@ function requireMemoryEmbeddingProvider(providerId: string) {
 }
 
 function setLoaderMetadataSnapshot(params: { pluginIds?: readonly string[] } = {}) {
-  const config: OpenClawConfig = {
+  const config: NatesclawConfig = {
     plugins: {
       allow: ["demo"],
       slots: { memory: "none" },
@@ -136,7 +136,7 @@ describe("resolvePluginLoadCacheContext", () => {
   });
 
   it("loads a custom profile's install records instead of reusing the process snapshot", () => {
-    const profileEnv = { ...process.env, OPENCLAW_STATE_DIR: makePluginLoaderTempDir() };
+    const profileEnv = { ...process.env, NATESCLAW_STATE_DIR: makePluginLoaderTempDir() };
     const profileInstallRecords: Record<string, PluginInstallRecord> = {
       demo: {
         source: "npm",
@@ -167,7 +167,7 @@ describe("resolvePluginLoadCacheContext", () => {
 
   it("does not reuse metadata when the activation source adds plugin load paths", () => {
     const { config, env, workspaceDir } = setLoaderMetadataSnapshot();
-    const activationSourceConfig: OpenClawConfig = {
+    const activationSourceConfig: NatesclawConfig = {
       plugins: {
         ...config.plugins,
         load: { paths: ["/plugins/activation-source-only"] },
@@ -328,10 +328,10 @@ describe("clearPluginRegistryLoadCache", () => {
       },
       workspaceDir: "/tmp/workspace-a",
     };
-    const registry = loadOpenClawPlugins(loadOptions);
+    const registry = loadNatesclawPlugins(loadOptions);
 
     clearPluginRegistryLoadCache();
 
-    expect(loadOpenClawPlugins(loadOptions)).not.toBe(registry);
+    expect(loadNatesclawPlugins(loadOptions)).not.toBe(registry);
   });
 });

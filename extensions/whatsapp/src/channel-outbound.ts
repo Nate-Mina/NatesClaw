@@ -3,11 +3,11 @@ import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
   type ChannelMessageSendResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-send-result";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { questionGatewayRuntime } from "openclaw/plugin-sdk/question-gateway-runtime";
-import { chunkText } from "openclaw/plugin-sdk/reply-chunking";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { ChannelOutboundAdapter } from "natesclaw/plugin-sdk/channel-send-result";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { questionGatewayRuntime } from "natesclaw/plugin-sdk/question-gateway-runtime";
+import { chunkText } from "natesclaw/plugin-sdk/reply-chunking";
 import { createWhatsAppOutboundBase } from "./outbound-base.js";
 import { normalizeWhatsAppPayloadTextPreservingIndentation } from "./outbound-media-contract.js";
 import { resolveWhatsAppOutboundTarget } from "./resolve-outbound-target.js";

@@ -24,11 +24,11 @@ import {
   type OpenAITransportReplayEvidence,
 } from "../../test/helpers/openai-long-context-live.js";
 import {
-  createOpenClawTestInstance,
-  type OpenClawTestInstance,
-} from "../../test/helpers/openclaw-test-instance.js";
+  createNatesclawTestInstance,
+  type NatesclawTestInstance,
+} from "../../test/helpers/natesclaw-test-instance.js";
 import { isLiveTestEnabled } from "../agents/live-test-helpers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import { loadOrCreateDeviceIdentity } from "../infra/device-identity.js";
 import { extractFirstTextBlock } from "../shared/chat-message-content.js";
 import type { GatewayClient } from "./client.js";
@@ -89,7 +89,7 @@ type SessionRow = {
   agentRuntime?: { id?: string };
 };
 
-const instances: OpenClawTestInstance[] = [];
+const instances: NatesclawTestInstance[] = [];
 const clients: GatewayClient[] = [];
 
 afterEach(async () => {
@@ -188,7 +188,7 @@ function emitMetric(params: {
 }
 
 async function waitForTransportEvidence(params: {
-  instance: OpenClawTestInstance;
+  instance: NatesclawTestInstance;
   modelId: string;
   requestId: string;
 }): Promise<OpenAITransportReplayEvidence> {
@@ -211,7 +211,7 @@ async function waitForTransportEvidence(params: {
 
 async function requestTurn(params: {
   client: GatewayClient;
-  instance: OpenClawTestInstance;
+  instance: NatesclawTestInstance;
   allEvents: OpenAILongContextAgentEvent[];
   profile: OpenAILongContextProfile;
   phase: string;
@@ -275,7 +275,7 @@ async function requestTurn(params: {
     agentId: AGENT_ID,
     sessionId: params.sessionId,
     sessionKey: SESSION_KEY,
-    storePath: path.join(params.instance.state.agentDir(AGENT_ID), "openclaw-agent.sqlite"),
+    storePath: path.join(params.instance.state.agentDir(AGENT_ID), "natesclaw-agent.sqlite"),
   });
   emitMetric({
     profile: params.profile,
@@ -375,16 +375,16 @@ describeLive("Gateway OpenAI long-context compaction (live)", () => {
     async () => {
       const settings = requireSettings();
       const { profile } = settings;
-      const instance = await createOpenClawTestInstance({
+      const instance = await createNatesclawTestInstance({
         name: `gateway-openai-long-context-${profile.name}`,
         env: {
           OPENAI_API_KEY: settings.apiKey,
           OPENAI_BASE_URL: undefined,
           OPENAI_API_BASE: undefined,
-          OPENCLAW_SKIP_PROVIDERS: undefined,
-          OPENCLAW_TEST_MINIMAL_GATEWAY: undefined,
-          OPENCLAW_DEBUG_MODEL_PAYLOAD: "summary",
-          OPENCLAW_LOG_LEVEL: "info",
+          NATESCLAW_SKIP_PROVIDERS: undefined,
+          NATESCLAW_TEST_MINIMAL_GATEWAY: undefined,
+          NATESCLAW_DEBUG_MODEL_PAYLOAD: "summary",
+          NATESCLAW_LOG_LEVEL: "info",
         },
         startTimeoutMs: 120_000,
         stopTimeoutMs: 10_000,
@@ -396,7 +396,7 @@ describeLive("Gateway OpenAI long-context compaction (live)", () => {
         agentId: AGENT_ID,
       });
       assertOpenAILongContextConfig(modelConfig, profile);
-      const config: OpenClawConfig = {
+      const config: NatesclawConfig = {
         ...modelConfig,
         gateway: {
           mode: "local",
@@ -495,7 +495,7 @@ describeLive("Gateway OpenAI long-context compaction (live)", () => {
           agentId: AGENT_ID,
           sessionId,
           sessionKey: SESSION_KEY,
-          storePath: path.join(instance.state.agentDir(AGENT_ID), "openclaw-agent.sqlite"),
+          storePath: path.join(instance.state.agentDir(AGENT_ID), "natesclaw-agent.sqlite"),
         });
         if (observed.activeCount > 0) {
           compactionState = observed;
@@ -576,7 +576,7 @@ describeLive("Gateway OpenAI long-context compaction (live)", () => {
       }
 
       if (settings.runToolOutput) {
-        const toolPath = ".openclaw/tmp/openai-long-context-tool-output.txt";
+        const toolPath = ".natesclaw/tmp/openai-long-context-tool-output.txt";
         const toolMarker = `TOOL-OUTPUT-${randomUUID().toUpperCase()}`;
         const fixture = buildToolOutputFixture({
           marker: toolMarker,
@@ -627,7 +627,7 @@ describeLive("Gateway OpenAI long-context compaction (live)", () => {
         agentId: AGENT_ID,
         sessionId,
         sessionKey: SESSION_KEY,
-        storePath: path.join(instance.state.agentDir(AGENT_ID), "openclaw-agent.sqlite"),
+        storePath: path.join(instance.state.agentDir(AGENT_ID), "natesclaw-agent.sqlite"),
       });
       expect(beforeRestart.activeCount).toBeGreaterThan(0);
       await client.stopAndWait({ timeoutMs: 5_000 });
@@ -658,7 +658,7 @@ describeLive("Gateway OpenAI long-context compaction (live)", () => {
         agentId: AGENT_ID,
         sessionId,
         sessionKey: SESSION_KEY,
-        storePath: path.join(instance.state.agentDir(AGENT_ID), "openclaw-agent.sqlite"),
+        storePath: path.join(instance.state.agentDir(AGENT_ID), "natesclaw-agent.sqlite"),
       });
       expect(afterRestart).toEqual(beforeRestart);
 

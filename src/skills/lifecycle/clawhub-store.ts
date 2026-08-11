@@ -1,6 +1,6 @@
 import fsSync from "node:fs";
 import path from "node:path";
-import { normalizeOptionalString as normalizeOptionalStringValue } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString as normalizeOptionalStringValue } from "@natesclaw/normalization-core/string-coerce";
 import type { ClawHubDownloadResult } from "../../infra/clawhub-artifacts.js";
 import {
   CLAWHUB_SKILLS_SH_TRUST_STATE,

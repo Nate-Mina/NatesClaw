@@ -7,9 +7,9 @@
 // The service account key is a throwaway RSA key generated in-process; no real
 // credentials or network access are involved.
 import { generateKeyPairSync } from "node:crypto";
-import { withServer } from "openclaw/plugin-sdk/test-env";
+import { withServer } from "natesclaw/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { NatesclawConfig } from "../runtime-api.js";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import { deliverGoogleChatReply } from "./monitor-reply-delivery.js";
 import type { GoogleChatCoreRuntime, GoogleChatRuntimeEnv } from "./monitor-types.js";
@@ -33,7 +33,7 @@ const account = {
   config: {},
 } as unknown as ResolvedGoogleChatAccount;
 
-const config = {} as OpenClawConfig;
+const config = {} as NatesclawConfig;
 
 const CHUNKS = [
   "First chunk of the assistant reply.",

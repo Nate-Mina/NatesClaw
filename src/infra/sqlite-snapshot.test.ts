@@ -3,7 +3,7 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { __setFsSafeTestHooksForTest } from "@openclaw/fs-safe/test-hooks";
+import { __setFsSafeTestHooksForTest } from "@natesclaw/fs-safe/test-hooks";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { requireNodeSqlite } from "./node-sqlite.js";
 import { createPrivateSqliteDirectory } from "./sqlite-private-directory.js";
@@ -15,8 +15,8 @@ const durabilityTestState = vi.hoisted(() => ({
     | undefined,
 }));
 
-vi.mock("@openclaw/fs-safe/durability", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@openclaw/fs-safe/durability")>();
+vi.mock("@natesclaw/fs-safe/durability", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@natesclaw/fs-safe/durability")>();
   return {
     ...actual,
     syncDirectory: async (...args: Parameters<typeof actual.syncDirectory>) =>
@@ -29,7 +29,7 @@ import { createVerifiedSqliteSnapshot } from "./sqlite-snapshot.js";
 const tempDirs: string[] = [];
 
 async function createTempDir(): Promise<string> {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sqlite-snapshot-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-sqlite-snapshot-"));
   tempDirs.push(tempDir);
   if (process.platform === "win32") {
     const privateTempDir = path.join(tempDir, "private");
@@ -113,7 +113,7 @@ function createHotRollbackJournal(sqlitePath: string): void {
       "-e",
       `
         import { DatabaseSync } from "node:sqlite";
-        const database = new DatabaseSync(process.env.OPENCLAW_HOT_JOURNAL_PATH);
+        const database = new DatabaseSync(process.env.NATESCLAW_HOT_JOURNAL_PATH);
         database.exec(
           "PRAGMA journal_mode = DELETE; " +
           "PRAGMA synchronous = FULL; " +
@@ -126,7 +126,7 @@ function createHotRollbackJournal(sqlitePath: string): void {
       `,
     ],
     {
-      env: { ...process.env, OPENCLAW_HOT_JOURNAL_PATH: sqlitePath },
+      env: { ...process.env, NATESCLAW_HOT_JOURNAL_PATH: sqlitePath },
       encoding: "utf8",
     },
   );

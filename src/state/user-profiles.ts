@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 // Durable user profiles plus typed login identities in the shared state DB.
 import type { DatabaseSync } from "node:sqlite";
-import { err, ok, type Result } from "@openclaw/normalization-core/result";
+import { err, ok, type Result } from "@natesclaw/normalization-core/result";
 import { sql } from "kysely";
 import {
   executeSqliteQuerySync,
@@ -11,10 +11,10 @@ import {
 import { generateSecureUuid } from "../infra/secure-random.js";
 import { runSqliteDeferredTransactionSync } from "../infra/sqlite-transaction.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "./openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "./natesclaw-state-db.js";
 import { USER_PROFILES_SCHEMA_SQL } from "./user-profiles-schema.js";
 import {
   fetchTailscaleAvatar,
@@ -110,12 +110,12 @@ function profileDb(db: DatabaseSync) {
   return getNodeSqliteKysely<UserProfilesDatabase>(db);
 }
 
-export function ensureUserProfilesSchema(options: OpenClawStateDatabaseOptions): void {
-  const database = openOpenClawStateDatabase(options);
+export function ensureUserProfilesSchema(options: NatesclawStateDatabaseOptions): void {
+  const database = openNatesclawStateDatabase(options);
   if (ensuredDatabases.has(database.db)) {
     return;
   }
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       db.exec(USER_PROFILES_SCHEMA_SQL);
     },
@@ -239,30 +239,30 @@ function requireResolvedProfileById(db: DatabaseSync, profileId: string): UserPr
 /** Resolves a durable profile reference to its current one-hop merge head. */
 export function resolveUserProfileId(
   profileId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): string | undefined {
   ensureUserProfilesSchema(options);
-  const { db } = openOpenClawStateDatabase(options);
+  const { db } = openNatesclawStateDatabase(options);
   return selectResolvedProfileById(db, profileId)?.id;
 }
 
 /** Reads a profile's protocol-facing representation through its merge head. */
 export function getUserProfileListItem(
   profileId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): UserProfileListItem {
   ensureUserProfilesSchema(options);
-  const { db } = openOpenClawStateDatabase(options);
+  const { db } = openNatesclawStateDatabase(options);
   return selectUserProfileListItemById(db, requireResolvedProfileById(db, profileId).id);
 }
 
 /** Reads merge-aware display data without exposing avatar content through list/RPC shapes. */
 export function getUserProfileDisplay(
   profileId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): UserProfileDisplay {
   ensureUserProfilesSchema(options);
-  const { db } = openOpenClawStateDatabase(options);
+  const { db } = openNatesclawStateDatabase(options);
   const profile = requireResolvedProfileById(db, profileId);
   const avatarMime = toAvatarMime(profile.avatar_mime);
   const avatarRevision =
@@ -280,7 +280,7 @@ export function getUserProfileDisplay(
 function ensureProfileForEmailWithInitialName(
   email: string,
   initialDisplayName: string | null,
-  options: OpenClawStateDatabaseOptions,
+  options: NatesclawStateDatabaseOptions,
 ): UserProfile {
   const normalizedEmail = normalizeEmail(email);
   const profileId = generateSecureUuid();
@@ -292,7 +292,7 @@ function ensureProfileForEmailWithInitialName(
       MAX_USER_PROFILE_DISPLAY_NAME_LENGTH,
     );
   ensureUserProfilesSchema(options);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = profileDb(db);
       const existingAlias = executeSqliteQueryTakeFirstSync(
@@ -334,7 +334,7 @@ function ensureProfileForEmailWithInitialName(
 /** Resolves an email alias or atomically creates its first durable profile. */
 export function ensureProfileForEmail(
   email: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): UserProfile {
   return ensureProfileForEmailWithInitialName(email, null, options);
 }
@@ -343,12 +343,12 @@ function ensureProfileForProviderIdentity(params: {
   provider: string;
   subject: string;
   initialDisplayName: string | null;
-  options: OpenClawStateDatabaseOptions;
+  options: NatesclawStateDatabaseOptions;
 }): UserProfile {
   const profileId = generateSecureUuid();
   const now = Date.now();
   ensureUserProfilesSchema(params.options);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = profileDb(db);
       const existingIdentity = executeSqliteQueryTakeFirstSync(
@@ -392,14 +392,14 @@ function ensureProfileForProviderIdentity(params: {
 function adoptDisplayNameIfEmpty(
   profileId: string,
   displayName: string | null,
-  options: OpenClawStateDatabaseOptions,
+  options: NatesclawStateDatabaseOptions,
 ): UserProfile {
   if (!displayName) {
-    const { db } = openOpenClawStateDatabase(options);
+    const { db } = openNatesclawStateDatabase(options);
     return toUserProfile(requireResolvedProfileById(db, profileId));
   }
   const now = Date.now();
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const profile = requireResolvedProfileById(db, profileId);
       if (profile.display_name !== null) {
@@ -422,10 +422,10 @@ function adoptDisplayNameIfEmpty(
 async function adoptAvatarIfEmpty(params: {
   profileId: string;
   profilePic: string | undefined;
-  options: OpenClawStateDatabaseOptions;
+  options: NatesclawStateDatabaseOptions;
   fetchOptions: TailscaleAvatarFetchOptions;
 }): Promise<UserProfile> {
-  const { db } = openOpenClawStateDatabase(params.options);
+  const { db } = openNatesclawStateDatabase(params.options);
   const beforeFetch = requireResolvedProfileById(db, params.profileId);
   if (beforeFetch.avatar !== null || !params.profilePic) {
     return toUserProfile(beforeFetch);
@@ -435,7 +435,7 @@ async function adoptAvatarIfEmpty(params: {
     return toUserProfile(requireResolvedProfileById(db, params.profileId));
   }
   const now = Date.now();
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db: transactionDb }) => {
       const profile = requireResolvedProfileById(transactionDb, params.profileId);
       if (profile.avatar !== null) {
@@ -470,7 +470,7 @@ async function adoptAvatarIfEmpty(params: {
 /** Resolves a verified Tailscale login and adopts its display name into an empty field. */
 export function ensureProfileForTailscaleIdentity(
   identity: TailscaleProfileIdentity,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): UserProfile {
   const classified = classifyTailscaleLogin(identity.login);
   if (classified.kind === "invalid") {
@@ -493,7 +493,7 @@ export function ensureProfileForTailscaleIdentity(
 export async function adoptTailscaleProfileAvatar(
   profileId: string,
   profilePic: string | undefined,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
   fetchOptions: TailscaleAvatarFetchOptions = {},
 ): Promise<UserProfile> {
   return await adoptAvatarIfEmpty({
@@ -508,12 +508,12 @@ export async function adoptTailscaleProfileAvatar(
 export function linkEmail(
   email: string,
   targetProfileId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): UserProfileListItem {
   const normalizedEmail = normalizeEmail(email);
   const now = Date.now();
   ensureUserProfilesSchema(options);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = profileDb(db);
       const target = requireResolvedProfileById(db, targetProfileId);
@@ -594,11 +594,11 @@ export function linkEmail(
 export function setDisplayName(
   profileId: string,
   name: string | null,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): UserProfileListItem {
   const now = Date.now();
   ensureUserProfilesSchema(options);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const profile = requireResolvedProfileById(db, profileId);
       executeSqliteQuerySync(
@@ -620,7 +620,7 @@ export function setAvatar(
   profileId: string,
   bytes: Uint8Array,
   mime: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): Result<UserProfileListItem, UserProfileAvatarError> {
   if (bytes.byteLength > MAX_USER_PROFILE_AVATAR_BYTES) {
     return err({ code: "avatar_too_large", maxBytes: MAX_USER_PROFILE_AVATAR_BYTES });
@@ -630,7 +630,7 @@ export function setAvatar(
   }
   const now = Date.now();
   ensureUserProfilesSchema(options);
-  const value = runOpenClawStateWriteTransaction(
+  const value = runNatesclawStateWriteTransaction(
     ({ db }) => {
       const profile = requireResolvedProfileById(db, profileId);
       const sha256 = createHash("sha256").update(bytes).digest("hex");
@@ -651,10 +651,10 @@ export function setAvatar(
 
 export function getProfileAvatar(
   profileId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): UserProfileAvatar | undefined {
   ensureUserProfilesSchema(options);
-  const { db } = openOpenClawStateDatabase(options);
+  const { db } = openNatesclawStateDatabase(options);
   const profile = selectResolvedProfileById(db, profileId);
   if (!profile?.avatar || !profile.avatar_mime || !profile.avatar_sha256) {
     return undefined;
@@ -665,9 +665,9 @@ export function getProfileAvatar(
     : undefined;
 }
 
-export function listProfiles(options: OpenClawStateDatabaseOptions = {}): UserProfileListItem[] {
+export function listProfiles(options: NatesclawStateDatabaseOptions = {}): UserProfileListItem[] {
   ensureUserProfilesSchema(options);
-  const database = openOpenClawStateDatabase(options);
+  const database = openNatesclawStateDatabase(options);
   return runSqliteDeferredTransactionSync(
     database.db,
     () => {

@@ -2,12 +2,12 @@ import type { Dirent } from "node:fs";
 // Matrix API module exposes the plugin public contract.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeAccountId } from "openclaw/plugin-sdk/account-id";
+import { normalizeAccountId } from "natesclaw/plugin-sdk/account-id";
 import {
   archiveLegacyStateSource,
   type PluginDoctorStateMigration,
-} from "openclaw/plugin-sdk/runtime-doctor-migrations";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/runtime-doctor-migrations";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   requiresExplicitMatrixDefaultAccount,
   resolveMatrixDefaultOrOnlyAccountId,

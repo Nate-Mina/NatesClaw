@@ -1,9 +1,9 @@
 // Feishu plugin module implements drive behavior.
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import { isRecord, readStringValue as readString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import type { OpenClawPluginApi } from "../runtime-api.js";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { readPositiveIntegerParam } from "natesclaw/plugin-sdk/param-readers";
+import { isRecord, readStringValue as readString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import type { NatesclawPluginApi } from "../runtime-api.js";
 import { listEnabledFeishuAccounts } from "./accounts.js";
 import { cleanupAmbientCommentTypingReaction } from "./comment-reaction.js";
 import { encodeQuery, extractReplyText, formatFeishuApiError } from "./comment-shared.js";
@@ -793,7 +793,7 @@ export async function deliverCommentThreadText(
 
 // ============ Tool Registration ============
 
-export function registerFeishuDriveTools(api: OpenClawPluginApi) {
+export function registerFeishuDriveTools(api: NatesclawPluginApi) {
   if (!api.config) {
     return;
   }

@@ -1,7 +1,7 @@
 // Discord tests cover client plugin behavior.
 import { ApplicationCommandType, ComponentType, Routes } from "discord-api-types/v10";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { MAX_TIMER_TIMEOUT_MS } from "natesclaw/plugin-sdk/number-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Client } from "./client.js";
 import { BaseCommand } from "./commands.js";
@@ -518,7 +518,7 @@ describe("Client gateway event queue", () => {
     );
   }
 
-  it("uses OpenClaw Discord event queue defaults", () => {
+  it("uses Natesclaw Discord event queue defaults", () => {
     const client = createQueuedClient({
       listeners: [],
       eventQueue: {},

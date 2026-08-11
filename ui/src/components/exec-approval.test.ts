@@ -37,7 +37,7 @@ async function renderApproval(
   const queue = Array.isArray(requestOrQueue) ? requestOrQueue : [requestOrQueue];
   const onDecision = overrides.onDecision ?? vi.fn();
   render(
-    html`<openclaw-exec-approval
+    html`<natesclaw-exec-approval
       .props=${{
         queue,
         busy: overrides.busy ?? false,
@@ -46,10 +46,10 @@ async function renderApproval(
         inlineApprovalId: overrides.inlineApprovalId ?? null,
         onDecision,
       }}
-    ></openclaw-exec-approval>`,
+    ></natesclaw-exec-approval>`,
     container,
   );
-  const approval = container.querySelector<LitElement>("openclaw-exec-approval");
+  const approval = container.querySelector<LitElement>("natesclaw-exec-approval");
   if (!approval) {
     throw new Error("Expected exec approval");
   }
@@ -61,7 +61,7 @@ function chord(key: string, init: KeyboardEventInit = {}): KeyboardEvent {
   return new KeyboardEvent("keydown", { key, metaKey: true, bubbles: true, ...init });
 }
 
-describe("openclaw-exec-approval", () => {
+describe("natesclaw-exec-approval", () => {
   beforeEach(async () => {
     restoreDialogPolyfill = installDialogPolyfill();
     await i18n.setLocale("en");
@@ -319,12 +319,12 @@ describe("openclaw-exec-approval", () => {
     const { approval } = await renderApproval(createExecRequest(), {
       inlineApprovalId: "approval-1",
     });
-    expect(container.querySelector("openclaw-modal-dialog")).toBeNull();
+    expect(container.querySelector("natesclaw-modal-dialog")).toBeNull();
 
     (approval as LitElement & { show(): void }).show();
     await approval.updateComplete;
 
-    expect(container.querySelector("openclaw-modal-dialog")).not.toBeNull();
+    expect(container.querySelector("natesclaw-modal-dialog")).not.toBeNull();
   });
 
   it("keeps unrelated requests modal while one active-session request is inline", async () => {
@@ -346,12 +346,12 @@ describe("openclaw-exec-approval", () => {
     let rendered = await renderApproval(createExecRequest(), { inlineApprovalId: "approval-1" });
     (rendered.approval as LitElement & { show(): void }).show();
     await rendered.approval.updateComplete;
-    expect(container.querySelector("openclaw-modal-dialog")).not.toBeNull();
+    expect(container.querySelector("natesclaw-modal-dialog")).not.toBeNull();
 
     rendered = await renderApproval([], { inlineApprovalId: null });
     await rendered.approval.updateComplete;
     await renderApproval(createExecRequest(), { inlineApprovalId: "approval-1" });
 
-    expect(container.querySelector("openclaw-modal-dialog")).toBeNull();
+    expect(container.querySelector("natesclaw-modal-dialog")).toBeNull();
   });
 });

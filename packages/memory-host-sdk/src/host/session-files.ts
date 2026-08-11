@@ -4,7 +4,7 @@ import path from "node:path";
 import { normalizeAgentId } from "./config-utils.js";
 import { readRegularFile, statRegularFile } from "./fs-utils.js";
 import { hashText } from "./hash.js";
-import { createSubsystemLogger, redactSensitiveText } from "./openclaw-runtime-io.js";
+import { createSubsystemLogger, redactSensitiveText } from "./natesclaw-runtime-io.js";
 import {
   DREAMING_NARRATIVE_RUN_PREFIX,
   isDreamingNarrativeSessionStoreKey,
@@ -29,7 +29,7 @@ import {
   resolveSessionTranscriptsDirForAgent,
   stripInboundMetadata,
   stripInternalRuntimeContext,
-} from "./openclaw-runtime-session.js";
+} from "./natesclaw-runtime-session.js";
 import { retryTransientMemoryRead } from "./read-retry.js";
 import {
   listSessionTranscriptCorpusEntriesForAgent,
@@ -157,7 +157,7 @@ function isDreamingNarrativeBootstrapRecord(record: unknown): boolean {
   };
   if (
     candidate.type !== "custom" ||
-    candidate.customType !== "openclaw:bootstrap-context:full" ||
+    candidate.customType !== "natesclaw:bootstrap-context:full" ||
     !candidate.data ||
     typeof candidate.data !== "object" ||
     Array.isArray(candidate.data)
@@ -387,7 +387,7 @@ export function sessionPathForSessionIdentity(agentId: string, sessionId: string
 
 /**
  * Parses a deprecated path-shaped memory sync hint only when it points at an
- * OpenClaw-owned usage-counted transcript in the canonical agent sessions dir.
+ * Natesclaw-owned usage-counted transcript in the canonical agent sessions dir.
  */
 export function parseCanonicalSessionSyncTargetFromPath(
   sessionFile: string,
@@ -554,7 +554,7 @@ function renderSessionExportLines(label: string, text: string): string[] {
 }
 
 /**
- * Strip OpenClaw-injected inbound metadata envelopes from a raw text block.
+ * Strip Natesclaw-injected inbound metadata envelopes from a raw text block.
  *
  * User-role messages arriving from external channels (Telegram, Discord,
  * Slack, …) are stored with a multi-line prefix containing Conversation info,
@@ -564,7 +564,7 @@ function renderSessionExportLines(label: string, text: string): string[] {
  * `normalizeSessionText` collapses newlines into spaces, stripping is
  * impossible.
  *
- * See: https://github.com/openclaw/openclaw/issues/63921
+ * See: https://github.com/natesclaw/natesclaw/issues/63921
  */
 function stripInboundMetadataForUserRole(text: string, role: "user" | "assistant"): string {
   if (role !== "user") {
@@ -642,11 +642,11 @@ function classifySessionMessageOrigin(
   turnOrigin: MemoryOriginClass,
 ): MemoryOriginClass {
   if (message.role === "assistant") {
-    const openClawMetadata = message["__openclaw"];
+    const NatesclawMetadata = message["__natesclaw"];
     if (
-      openClawMetadata &&
-      typeof openClawMetadata === "object" &&
-      (openClawMetadata as { turnTainted?: unknown }).turnTainted === true
+      NatesclawMetadata &&
+      typeof NatesclawMetadata === "object" &&
+      (NatesclawMetadata as { turnTainted?: unknown }).turnTainted === true
     ) {
       return "untrusted";
     }
@@ -656,10 +656,10 @@ function classifySessionMessageOrigin(
   if (provenance?.kind === "internal_system") {
     return "system";
   }
-  const openClawMetadata = message["__openclaw"];
+  const NatesclawMetadata = message["__natesclaw"];
   const metadata =
-    openClawMetadata && typeof openClawMetadata === "object"
-      ? (openClawMetadata as { senderIsOwner?: unknown })
+    NatesclawMetadata && typeof NatesclawMetadata === "object"
+      ? (NatesclawMetadata as { senderIsOwner?: unknown })
       : undefined;
   return metadata?.senderIsOwner === true ? "owner" : "untrusted";
 }

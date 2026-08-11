@@ -2,8 +2,8 @@
 import type {
   ProviderDefaultThinkingPolicyContext,
   ProviderThinkingProfile,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { resolveClaudeThinkingProfile } from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { resolveClaudeThinkingProfile } from "natesclaw/plugin-sdk/provider-model-shared";
 
 const FIXED_REASONING_PROFILE = {
   levels: [{ id: "off", label: "always on" }],

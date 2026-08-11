@@ -1,14 +1,14 @@
 // Parses npm registry specs into package, version, and tag references.
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import {
   parse as parseSemver,
   prerelease as parseSemverPrerelease,
   type SemVer,
   valid as validSemver,
 } from "semver";
-import { compareOpenClawSemver, isOpenClawCorrectionSemver } from "./semver.js";
+import { compareNatesclawSemver, isNatesclawCorrectionSemver } from "./semver.js";
 
-const OPENCLAW_RELEASE_PREFIX_RE = /^\d{4}\./;
+const NATESCLAW_RELEASE_PREFIX_RE = /^\d{4}\./;
 const DIST_TAG_RE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
 /**
@@ -120,7 +120,7 @@ function parseRegistryNpmSpecInternal(
         selectorKind: "exact-version",
         selectorIsPrerelease:
           parseSemverPrerelease(exactVersion) !== null &&
-          !isOpenClawStableCorrectionVersion(selector),
+          !isNatesclawStableCorrectionVersion(selector),
       },
     };
   }
@@ -148,10 +148,10 @@ export function parseRegistryNpmSpec(rawSpec: string): ParsedRegistryNpmSpec | n
   return parsed.ok ? parsed.parsed : null;
 }
 
-/** Returns whether a user-provided npm spec resolves to the official OpenClaw npm scope. */
-export function isOpenClawOrgNpmSpec(rawSpec: string | undefined): boolean {
+/** Returns whether a user-provided npm spec resolves to the official Natesclaw npm scope. */
+export function isNatesclawOrgNpmSpec(rawSpec: string | undefined): boolean {
   const parsed = rawSpec ? parseRegistryNpmSpec(rawSpec) : null;
-  return parsed?.name.startsWith("@openclaw/") === true;
+  return parsed?.name.startsWith("@natesclaw/") === true;
 }
 
 /** Validates a registry-only npm spec and returns a user-facing error when rejected. */
@@ -165,10 +165,10 @@ export function isExactSemverVersion(value: string): boolean {
   return validSemver(value.trim()) !== null;
 }
 
-/** Parses OpenClaw's monthly patch stable/alpha/beta/correction version format. */
-function parseOpenClawReleaseVersion(value: string): SemVer | null {
+/** Parses Natesclaw's monthly patch stable/alpha/beta/correction version format. */
+function parseNatesclawReleaseVersion(value: string): SemVer | null {
   const trimmed = value.trim();
-  const parsed = OPENCLAW_RELEASE_PREFIX_RE.test(trimmed) ? parseSemver(trimmed) : null;
+  const parsed = NATESCLAW_RELEASE_PREFIX_RE.test(trimmed) ? parseSemver(trimmed) : null;
   if (!parsed || parsed.build.length > 0) {
     return null;
   }
@@ -178,7 +178,7 @@ function parseOpenClawReleaseVersion(value: string): SemVer | null {
 
   const [label, sequence] = parsed.prerelease;
   const isStable = parsed.prerelease.length === 0;
-  const isCorrection = isOpenClawCorrectionSemver(parsed) && typeof label === "number" && label > 0;
+  const isCorrection = isNatesclawCorrectionSemver(parsed) && typeof label === "number" && label > 0;
   const isAlpha =
     parsed.prerelease.length === 2 &&
     label === "alpha" &&
@@ -195,29 +195,29 @@ function parseOpenClawReleaseVersion(value: string): SemVer | null {
   return parsed;
 }
 
-/** Returns whether a version is an OpenClaw monthly patch stable correction release. */
-function isOpenClawStableCorrectionVersion(value: string): boolean {
-  const parsed = parseOpenClawReleaseVersion(value);
-  return parsed !== null && isOpenClawCorrectionSemver(parsed);
+/** Returns whether a version is an Natesclaw monthly patch stable correction release. */
+function isNatesclawStableCorrectionVersion(value: string): boolean {
+  const parsed = parseNatesclawReleaseVersion(value);
+  return parsed !== null && isNatesclawCorrectionSemver(parsed);
 }
 
-/** Compares OpenClaw monthly patch release versions across alpha, beta, stable, and corrections. */
-export function compareOpenClawReleaseVersions(left: string, right: string): number | null {
-  const parsedLeft = parseOpenClawReleaseVersion(left);
-  const parsedRight = parseOpenClawReleaseVersion(right);
-  return parsedLeft && parsedRight ? compareOpenClawSemver(parsedLeft, parsedRight) : null;
+/** Compares Natesclaw monthly patch release versions across alpha, beta, stable, and corrections. */
+export function compareNatesclawReleaseVersions(left: string, right: string): number | null {
+  const parsedLeft = parseNatesclawReleaseVersion(left);
+  const parsedRight = parseNatesclawReleaseVersion(right);
+  return parsedLeft && parsedRight ? compareNatesclawSemver(parsedLeft, parsedRight) : null;
 }
 
 /** Returns whether an exact semver value is a prerelease, excluding stable correction releases. */
 export function isPrereleaseSemverVersion(value: string): boolean {
   const trimmed = value.trim();
-  return parseSemverPrerelease(trimmed) !== null && !isOpenClawStableCorrectionVersion(trimmed);
+  return parseSemverPrerelease(trimmed) !== null && !isNatesclawStableCorrectionVersion(trimmed);
 }
 
 /**
  * Enforces explicit opt-in before an npm spec may resolve to a prerelease.
  * Bare specs and `latest` stay on stable releases unless the resolved version
- * is an OpenClaw stable correction.
+ * is an Natesclaw stable correction.
  */
 export function isPrereleaseResolutionAllowed(params: {
   spec: ParsedRegistryNpmSpec;

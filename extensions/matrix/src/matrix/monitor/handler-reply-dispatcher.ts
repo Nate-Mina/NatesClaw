@@ -3,12 +3,12 @@ import {
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
   type MessageReceipt,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import {
   buildTtsSupplementMediaPayload,
   getReplyPayloadTtsSupplement,
-} from "openclaw/plugin-sdk/reply-payload";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { CoreConfig, MatrixStreamingMode, ReplyToMode } from "../../types.js";
 import type { MatrixClient } from "../sdk.js";
 import type { createMatrixDraftController } from "./handler-draft-controller.js";
@@ -38,7 +38,7 @@ export function createMatrixReplyDispatcher(config: {
   cfg: CoreConfig;
   prefixOptions: Omit<ReturnType<typeof createReplyPrefixOptions>, "onModelSelected">;
   humanDelay: ReturnType<
-    typeof import("openclaw/plugin-sdk/agent-runtime").resolveHumanDelayConfig
+    typeof import("natesclaw/plugin-sdk/agent-runtime").resolveHumanDelayConfig
   >;
   typingCallbacks: ReturnType<typeof createTypingCallbacks>;
   streaming: MatrixStreamingMode;

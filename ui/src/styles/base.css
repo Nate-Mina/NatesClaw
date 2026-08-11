@@ -698,7 +698,7 @@ html.theme-transition::view-transition-new(theme) {
   }
 }
 
-openclaw-app {
+natesclaw-app {
   display: block;
   position: relative;
   z-index: 1;
@@ -746,7 +746,7 @@ openclaw-app {
 /* Native app hosts are installed desktop windows too, but they embed a plain
    web view that reports `display-mode: browser`; they announce themselves with
    these `<html>` markers instead (all three, as layout.css already matches). */
-html:is(.openclaw-native-macos, .openclaw-native-nav, .openclaw-native-web-chrome) {
+html:is(.natesclaw-native-macos, .natesclaw-native-nav, .natesclaw-native-web-chrome) {
   --cursor-action: default;
 }
 

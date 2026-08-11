@@ -1,15 +1,15 @@
 import process from "node:process";
-import { resolveAcpSessionAvailability } from "openclaw/plugin-sdk/acp-runtime";
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { resolveAcpSessionAvailability } from "natesclaw/plugin-sdk/acp-runtime";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   decodeNodePtyResumeParams,
   resolveNodeHostExecutable,
   runNodePtyCommand,
-  type OpenClawPluginNodeHostCommandIo,
-} from "openclaw/plugin-sdk/node-host";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
+  type NatesclawPluginNodeHostCommandIo,
+} from "natesclaw/plugin-sdk/node-host";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
 import type {
   SessionCatalogHost,
   SessionCatalogProvider,
@@ -17,15 +17,15 @@ import type {
   SessionCatalogTerminalPlan,
   SessionCatalogTranscriptItem,
   SessionsCatalogReadResult,
-} from "openclaw/plugin-sdk/session-catalog";
+} from "natesclaw/plugin-sdk/session-catalog";
 import {
   createSessionCatalogAdoptionCoordinator,
   importSessionCatalogHistory,
   listAdoptedSessionCatalogSessions,
   sessionCatalogAdoptedSessionKey,
   sessionCatalogAdoptedSourceKey,
-} from "openclaw/plugin-sdk/session-catalog";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/session-catalog";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   PI_SESSIONS_LIST_COMMAND,
   PI_SESSION_READ_COMMAND,
@@ -241,7 +241,7 @@ function parseNodeTranscriptPage(value: unknown, threadId: string): SessionsCata
 }
 
 async function listPiHosts(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   query: Parameters<SessionCatalogProvider["list"]>[0],
 ): Promise<SessionCatalogHost[]> {
   const runtime = api.runtime;
@@ -309,12 +309,12 @@ async function requireLocalPiSession(threadId: string): Promise<SessionCatalogSe
   return record;
 }
 
-function currentPiCatalogConfig(api: OpenClawPluginApi): OpenClawConfig {
-  return (api.runtime.config?.current?.() ?? api.config ?? {}) as OpenClawConfig;
+function currentPiCatalogConfig(api: NatesclawPluginApi): NatesclawConfig {
+  return (api.runtime.config?.current?.() ?? api.config ?? {}) as NatesclawConfig;
 }
 
 function resolvePiContinuationAvailability(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
 ): { available: true } | { available: false; message: string } {
   const availability = resolveAcpSessionAvailability({
     config: currentPiCatalogConfig(api),
@@ -332,7 +332,7 @@ function resolvePiContinuationAvailability(
   return executable ? { available: true } : { available: false, message: "Pi CLI is unavailable" };
 }
 
-function listAdoptedPiSessions(api: OpenClawPluginApi): Map<string, string> {
+function listAdoptedPiSessions(api: NatesclawPluginApi): Map<string, string> {
   return listAdoptedSessionCatalogSessions({
     config: currentPiCatalogConfig(api),
     pluginId: api.id,
@@ -348,7 +348,7 @@ function listAdoptedPiSessions(api: OpenClawPluginApi): Map<string, string> {
 }
 
 async function continuePiSession(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   hostId: string,
   threadId: string,
 ): Promise<Awaited<ReturnType<typeof linkContinuedPiSession>>> {
@@ -554,7 +554,7 @@ export async function readPiSession(paramsJSON?: string | null): Promise<string>
 
 export async function resumePiSession(
   paramsJSON?: string | null,
-  io?: OpenClawPluginNodeHostCommandIo,
+  io?: NatesclawPluginNodeHostCommandIo,
 ): Promise<string> {
   if (!io) {
     throw new Error("Pi terminal command requires duplex transport");
@@ -583,7 +583,7 @@ export async function resumePiSession(
   );
 }
 
-export function createPiSessionCatalogRuntime(api: OpenClawPluginApi) {
+export function createPiSessionCatalogRuntime(api: NatesclawPluginApi) {
   return {
     list: async (query) => await listPiHosts(api, query),
     read: async (request) => await readPiTranscript(api.runtime, request),

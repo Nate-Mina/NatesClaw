@@ -1,14 +1,14 @@
 /**
  * Tests provider-native tool collision policy.
- * Protects OpenClaw web_search routing when provider/model compatibility also
+ * Protects Natesclaw web_search routing when provider/model compatibility also
  * advertises native search support.
  */
 import { describe, expect, it, vi } from "vitest";
-import { createOpenClawCodingTools } from "./agent-tools.js";
+import { createNatesclawCodingTools } from "./agent-tools.js";
 import type { AnyAgentTool } from "./agent-tools.types.js";
 
-vi.mock("./openclaw-plugin-tools.js", () => ({
-  resolveOpenClawPluginToolsForOptions: () => [{ name: "browser" }],
+vi.mock("./natesclaw-plugin-tools.js", () => ({
+  resolveNatesclawPluginToolsForOptions: () => [{ name: "browser" }],
 }));
 
 const HTML_ENTITY_TOOL_CALL_ARGUMENTS_ENCODING = "html-entities";
@@ -23,17 +23,17 @@ const baseTools = [
 const testing = {
   applyModelProviderToolPolicy(
     requestedTools: AnyAgentTool[],
-    options?: NonNullable<Parameters<typeof createOpenClawCodingTools>[0]>,
+    options?: NonNullable<Parameters<typeof createNatesclawCodingTools>[0]>,
   ): AnyAgentTool[] {
-    const actualTools = createOpenClawCodingTools({
+    const actualTools = createNatesclawCodingTools({
       ...options,
-      cwd: "/tmp/openclaw-agent-tools-policy-test",
-      workspaceDir: "/tmp/openclaw-agent-tools-policy-test",
+      cwd: "/tmp/natesclaw-agent-tools-policy-test",
+      workspaceDir: "/tmp/natesclaw-agent-tools-policy-test",
       toolConstructionPlan: {
         includeBaseCodingTools: true,
         includeShellTools: true,
         includeChannelTools: false,
-        includeOpenClawTools: true,
+        includeNatesclawTools: true,
         includePluginTools: true,
       },
     });
@@ -58,7 +58,7 @@ describe("applyModelProviderToolPolicy", () => {
     expect(toolNames(filtered)).toEqual(["read", "web_search", "exec"]);
   });
 
-  it("keeps web_search for OpenRouter xAI model ids so OpenClaw tool routing stays authoritative", () => {
+  it("keeps web_search for OpenRouter xAI model ids so Natesclaw tool routing stays authoritative", () => {
     const filtered = testing.applyModelProviderToolPolicy(baseTools, {
       modelCompat: {
         toolSchemaProfile: XAI_TOOL_SCHEMA_PROFILE,

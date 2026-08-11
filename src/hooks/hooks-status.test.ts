@@ -25,11 +25,11 @@ describe("hook status", () => {
     const report = buildWorkspaceHookStatus("/tmp/workspace", {
       entries: [
         createHookEntry({
-          source: "openclaw-managed",
+          source: "natesclaw-managed",
           events: [],
         }),
         createHookEntry({
-          source: "openclaw-workspace",
+          source: "natesclaw-workspace",
           events: ["command:new"],
         }),
       ],
@@ -37,7 +37,7 @@ describe("hook status", () => {
 
     expect(report.hooks).toHaveLength(1);
     expect(report.hooks[0]).toMatchObject({
-      source: "openclaw-managed",
+      source: "natesclaw-managed",
       events: [],
       enabledByConfig: true,
       requirementsSatisfied: true,

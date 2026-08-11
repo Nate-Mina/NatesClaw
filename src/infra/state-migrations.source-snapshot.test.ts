@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { root, type Root } from "@openclaw/fs-safe";
+import { root, type Root } from "@natesclaw/fs-safe";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import {
@@ -21,7 +21,7 @@ describe("doctor legacy migration source contract", () => {
   });
 
   function createSource(content = '{"version":1}\n') {
-    const stateDir = tempDirs.make("openclaw-migration-source-");
+    const stateDir = tempDirs.make("natesclaw-migration-source-");
     const sourcePath = path.join(stateDir, "legacy.json");
     fs.writeFileSync(sourcePath, content, "utf8");
     return { sourcePath, stateDir };

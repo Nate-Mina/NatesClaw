@@ -1,16 +1,16 @@
 import {
   formatToolAggregate,
   formatToolProgressOutput,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { readStringField as readString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { readStringField as readString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { isJsonObject, type CodexThreadItem } from "./protocol.js";
 
 export const MAX_TOOL_OUTPUT_DELTA_MESSAGES_PER_ITEM = 20;
 export const TOOL_TRANSCRIPT_OUTPUT_MAX_CHARS = 10_000;
 export const TOOL_PROGRESS_ECHO_PREFIX_MIN_CHARS = 1_024;
 export const TOOL_PROGRESS_ECHO_SIGNATURE_CAP = MAX_TOOL_OUTPUT_DELTA_MESSAGES_PER_ITEM + 4;
-const TOOL_OUTPUT_TRUNCATION_NOTICE_PREFIX = "...(OpenClaw truncated Codex native tool output";
+const TOOL_OUTPUT_TRUNCATION_NOTICE_PREFIX = "...(Natesclaw truncated Codex native tool output";
 
 type ToolOutputTrimState = {
   totalLength: number;

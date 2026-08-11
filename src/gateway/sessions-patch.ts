@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   type ErrorShape,
@@ -34,7 +34,7 @@ import {
 } from "../auto-reply/thinking.js";
 import type { SessionEntry, SessionToolOverrides } from "../config/sessions.js";
 import { projectCanonicalSessionEntryShape } from "../config/sessions/store-entry-shape.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeExecTarget } from "../infra/exec-approvals.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.types.js";
 import {
@@ -77,7 +77,7 @@ function invalid(message: string): { ok: false; error: ErrorShape } {
 }
 
 export function resolveSessionPatchModelSelection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   catalog: ModelCatalogEntry[];
   raw: string;
   defaultProvider: string;
@@ -158,7 +158,7 @@ function normalizeSessionToolOverrides(
 
 /** Project a validated gateway session patch for one session entry. */
 export async function projectSessionsPatchEntry(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   existingEntry?: SessionEntry;
   isLabelInUse: (label: string) => boolean;
   storeKey: string;

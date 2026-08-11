@@ -165,8 +165,8 @@ describe("runProviderCatalog", () => {
     await runProviderCatalog({
       provider,
       config: {},
-      agentDir: "/tmp/openclaw-agent",
-      workspaceDir: "/tmp/openclaw-workspace",
+      agentDir: "/tmp/natesclaw-agent",
+      workspaceDir: "/tmp/natesclaw-workspace",
       env: {},
       resolveProviderApiKey: () => ({ apiKey: undefined }),
       resolveProviderAuth: () => ({ apiKey: undefined, mode: "none", source: "none" }),

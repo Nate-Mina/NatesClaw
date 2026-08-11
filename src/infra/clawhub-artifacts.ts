@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   createClawHubError,
   readClawHubBytes,
@@ -176,7 +176,7 @@ export async function downloadClawHubPackageArchive(params: {
     const rawSpecVersion = response.headers.get("X-ClawHub-ClawPack-Spec-Version");
     const specVersion = parseStrictPositiveInteger(rawSpecVersion);
     const target = await createTempDownloadTarget({
-      prefix: "openclaw-clawhub-clawpack",
+      prefix: "natesclaw-clawhub-clawpack",
       fileName: npmTarballName,
     });
     await fs.writeFile(target.path, bytes);
@@ -218,7 +218,7 @@ export async function downloadClawHubPackageArchive(params: {
   });
   const sha256Digest = sha256Hex(bytes);
   const target = await createTempDownloadTarget({
-    prefix: "openclaw-clawhub-package",
+    prefix: "natesclaw-clawhub-package",
     fileName: `${params.name}.zip`,
   });
   await fs.writeFile(target.path, bytes);
@@ -264,7 +264,7 @@ export async function downloadClawHubSkillArchive(params: {
   });
   const sha256Digest = sha256Hex(bytes);
   const target = await createTempDownloadTarget({
-    prefix: "openclaw-clawhub-skill",
+    prefix: "natesclaw-clawhub-skill",
     fileName: `${params.slug}.zip`,
   });
   await fs.writeFile(target.path, bytes);
@@ -306,7 +306,7 @@ export async function downloadClawHubSkillArchiveUrl(params: {
   });
   const sha256Digest = sha256Hex(bytes);
   const target = await createTempDownloadTarget({
-    prefix: "openclaw-clawhub-skill",
+    prefix: "natesclaw-clawhub-skill",
     fileName: "skill.zip",
   });
   await fs.writeFile(target.path, bytes);
@@ -342,7 +342,7 @@ export async function downloadClawHubGitHubSkillArchive(params: {
   });
   const sha256Digest = sha256Hex(bytes);
   const target = await createTempDownloadTarget({
-    prefix: "openclaw-clawhub-github-skill",
+    prefix: "natesclaw-clawhub-github-skill",
     fileName: `${params.commit}.zip`,
   });
   await fs.writeFile(target.path, bytes);

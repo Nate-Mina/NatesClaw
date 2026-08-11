@@ -6,14 +6,14 @@ import {
   resolveAuthStorePathForDisplay,
   saveAuthProfileStore,
   type AuthProfileStore,
-} from "openclaw/plugin-sdk/agent-runtime";
-import type { MigrationProviderContext } from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/provider-auth";
+} from "natesclaw/plugin-sdk/agent-runtime";
+import type { MigrationProviderContext } from "natesclaw/plugin-sdk/plugin-entry";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/provider-auth";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspace,
   type TempWorkspace,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   HERMES_REASON_AUTH_PROFILE_EXISTS,
@@ -69,7 +69,7 @@ async function makeHermesSecretFixture(sourceName = "hermes") {
   const stateDir = path.join(root, "state");
   const reportDir = path.join(root, "report");
   const agentDir = path.join(stateDir, "agents", "main", "agent");
-  const config = { agents: { defaults: { workspace: workspaceDir } } } as OpenClawConfig;
+  const config = { agents: { defaults: { workspace: workspaceDir } } } as NatesclawConfig;
   const runtime = makeConfigRuntime(config);
   const provider = buildHermesMigrationProvider();
   const secretContext = (overrides: Partial<Parameters<typeof makeProviderContext>[0]> = {}) =>
@@ -91,8 +91,8 @@ async function makeHermesSecretFixture(sourceName = "hermes") {
 describe("Hermes migration secret items", () => {
   beforeEach(async () => {
     testWorkspace = await tempWorkspace({
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-migrate-hermes-",
+      rootDir: resolvePreferredNatesclawTmpDir(),
+      prefix: "natesclaw-migrate-hermes-",
     });
   });
 
@@ -119,7 +119,7 @@ describe("Hermes migration secret items", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const plan = await provider.plan(
       secretContext({
         config,
@@ -275,7 +275,7 @@ describe("Hermes migration secret items", () => {
     );
   });
 
-  it("imports a configured provider key_env as matching OpenClaw provider auth", async () => {
+  it("imports a configured provider key_env as matching Natesclaw provider auth", async () => {
     const { source, stateDir, secretContext, config, runtime } = await makeHermesSecretFixture();
     const value = ["custom", "provider", "placeholder"].join("-");
     const envVar = ["ACME", "TOKEN"].join("_");
@@ -591,7 +591,7 @@ describe("Hermes migration secret items", () => {
           workspace: workspaceDir,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const runtime = {
       config: {
         current: () => config,
@@ -717,7 +717,7 @@ describe("Hermes migration secret items", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const ctx = secretContext({
       config,
     });
@@ -747,7 +747,7 @@ describe("Hermes migration secret items", () => {
           workspace: workspaceDir,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const ctx = secretContext({
       config,
       runtime: makeConfigRuntime(config),
@@ -790,7 +790,7 @@ describe("Hermes migration secret items", () => {
           workspace: workspaceDir,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const ctx = secretContext({
       config,
       reportDir,
@@ -910,7 +910,7 @@ describe("Hermes migration secret items", () => {
           workspace: workspaceDir,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const ctx = secretContext({
       config,
       reportDir,
@@ -1004,7 +1004,7 @@ describe("Hermes migration secret items", () => {
           workspace: workspaceDir,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const ctx = secretContext({
       config,
       reportDir,
@@ -1052,7 +1052,7 @@ describe("Hermes migration secret items", () => {
           workspace: workspaceDir,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     try {
       process.env.XDG_DATA_HOME = xdgDataHome;
@@ -1123,7 +1123,7 @@ describe("Hermes migration secret items", () => {
           workspace: workspaceDir,
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const ctx = secretContext({
       config,
       reportDir,
@@ -1245,7 +1245,7 @@ describe("Hermes migration secret items", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     await writeFile(path.join(source, "auth.json"), "{}");
     await writeFile(
       path.join(root, ".local", "share", "opencode", "auth.json"),
@@ -1297,7 +1297,7 @@ describe("Hermes migration secret items", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     await writeFile(path.join(source, "config.yaml"), "model: openai/gpt-5.5\n");
     await writeFile(
       path.join(root, ".local", "share", "opencode", "auth.json"),

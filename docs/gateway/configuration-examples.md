@@ -1,9 +1,9 @@
 ---
-summary: "Schema-accurate configuration examples for common OpenClaw setups"
+summary: "Schema-accurate configuration examples for common Natesclaw setups"
 read_when:
-  - Learning how to configure OpenClaw
+  - Learning how to configure Natesclaw
   - Looking for configuration examples
-  - Setting up OpenClaw for the first time
+  - Setting up Natesclaw for the first time
 title: "Configuration examples"
 ---
 
@@ -15,12 +15,12 @@ Examples below are aligned with the current config schema. For the exhaustive re
 
 ```json5
 {
-  agents: { defaults: { workspace: "~/.openclaw/workspace" } },
+  agents: { defaults: { workspace: "~/.natesclaw/workspace" } },
   channels: { whatsapp: { allowFrom: ["+15555550123"] } },
 }
 ```
 
-Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
+Save to `~/.natesclaw/natesclaw.json` and you can DM the bot from that number.
 
 ### Recommended starter
 
@@ -28,7 +28,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
 {
   agents: {
     defaults: {
-      workspace: "~/.openclaw/workspace",
+      workspace: "~/.natesclaw/workspace",
       model: { primary: "anthropic/claude-sonnet-4-6" },
     },
     entries: {
@@ -94,7 +94,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
   // Logging
   logging: {
     level: "info",
-    file: "/tmp/openclaw/openclaw.log",
+    file: "/tmp/natesclaw/natesclaw.log",
     consoleLevel: "info",
     consoleStyle: "pretty",
   },
@@ -139,7 +139,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
       discord: { mode: "idle", idleMinutes: 10080 },
     },
     resetTriggers: ["/new", "/reset"],
-    store: "~/.openclaw/agents/main/sessions/sessions.json",
+    store: "~/.natesclaw/agents/main/sessions/sessions.json",
     maintenance: {
       mode: "warn",
       pruneAfter: "30d",
@@ -180,7 +180,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
       allowFrom: ["123456789012345678"],
       guilds: {
         "123456789012345678": {
-          slug: "friends-of-openclaw",
+          slug: "friends-of-natesclaw",
           requireMention: false,
           channels: {
             general: { enabled: true },
@@ -201,7 +201,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
       allowFrom: ["U123"],
       slashCommand: {
         enabled: true,
-        name: "openclaw",
+        name: "natesclaw",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -211,7 +211,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
   // Agent runtime
   agents: {
     defaults: {
-      workspace: "~/.openclaw/workspace",
+      workspace: "~/.natesclaw/workspace",
       userTimezone: "America/Chicago",
       model: {
         primary: "anthropic/claude-sonnet-4-6",
@@ -259,9 +259,9 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
       sandbox: {
         mode: "non-main",
         scope: "session", // preferred over legacy perSession: true
-        workspaceRoot: "~/.openclaw/sandboxes",
+        workspaceRoot: "~/.natesclaw/sandboxes",
         docker: {
-          image: "openclaw-sandbox:bookworm-slim",
+          image: "natesclaw-sandbox:bookworm-slim",
           workdir: "/workspace",
           readOnlyRoot: true,
           tmpfs: ["/tmp", "/var/tmp", "/run"],
@@ -283,7 +283,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
         },
         // inherits defaults.skills -> github, weather
         groupChat: {
-          mentionPatterns: ["@openclaw", "openclaw"],
+          mentionPatterns: ["@natesclaw", "natesclaw"],
         },
         thinkingDefault: "high", // per-agent thinking override
         reasoningDefault: "on", // per-agent reasoning visibility
@@ -376,7 +376,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
     path: "/hooks",
     token: "shared-secret",
     presets: ["gmail"],
-    transformsDir: "~/.openclaw/hooks/transforms",
+    transformsDir: "~/.natesclaw/hooks/transforms",
     mappings: [
       {
         id: "gmail-hook",
@@ -399,7 +399,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
       },
     ],
     gmail: {
-      account: "openclaw@gmail.com",
+      account: "natesclaw@gmail.com",
       label: "INBOX",
       topic: "projects/<project-id>/topics/gog-gmail-watch",
       subscription: "gog-gmail-watch-push",
@@ -418,7 +418,7 @@ Save to `~/.openclaw/openclaw.json` and you can DM the bot from that number.
     mode: "local",
     port: 18789,
     bind: "loopback",
-    controlUi: { enabled: true, basePath: "/openclaw" },
+    controlUi: { enabled: true, basePath: "/natesclaw" },
     auth: {
       mode: "token",
       token: "gateway-token",
@@ -482,12 +482,12 @@ example `~/.agents/skills/manager -> ~/Projects/manager/skills`.
 {
   agents: {
     defaults: {
-      workspace: "~/.openclaw/workspace",
+      workspace: "~/.natesclaw/workspace",
       skills: ["github", "weather"],
     },
     entries: {
       main: { default: true },
-      docs: { workspace: "~/.openclaw/workspace-docs", skills: ["docs-search"] },
+      docs: { workspace: "~/.natesclaw/workspace-docs", skills: ["docs-search"] },
     },
   },
 }
@@ -501,9 +501,9 @@ example `~/.agents/skills/manager -> ~/Projects/manager/skills`.
 
 ```json5
 {
-  agents: { defaults: { workspace: "~/.openclaw/workspace" } },
+  agents: { defaults: { workspace: "~/.natesclaw/workspace" } },
   channels: {
-    whatsapp: { allowFrom: ["+15555550123"], responsePrefix: "[openclaw]" },
+    whatsapp: { allowFrom: ["+15555550123"], responsePrefix: "[natesclaw]" },
     telegram: {
       enabled: true,
       botToken: "YOUR_TOKEN",
@@ -595,7 +595,7 @@ Only enable direct mutable name/email/nick matching with each channel's `dangero
   },
   agents: {
     defaults: {
-      workspace: "~/.openclaw/workspace",
+      workspace: "~/.natesclaw/workspace",
       model: {
         primary: "anthropic/claude-opus-4-6",
         fallbacks: ["minimax/MiniMax-M2.7"],
@@ -611,7 +611,7 @@ Only enable direct mutable name/email/nick matching with each channel's `dangero
 {
   agents: {
     defaults: {
-      workspace: "~/work-openclaw",
+      workspace: "~/work-natesclaw",
       elevatedDefault: "off",
     },
     entries: {
@@ -642,7 +642,7 @@ Only enable direct mutable name/email/nick matching with each channel's `dangero
 {
   agents: {
     defaults: {
-      workspace: "~/.openclaw/workspace",
+      workspace: "~/.natesclaw/workspace",
       model: { primary: "lmstudio/my-local-model" },
     },
   },

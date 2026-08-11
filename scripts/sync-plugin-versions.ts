@@ -1,4 +1,4 @@
-// Sync Plugin Versions script supports OpenClaw repository automation.
+// Sync Plugin Versions script supports Natesclaw repository automation.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
@@ -7,7 +7,7 @@ type PackageJson = {
   version?: string;
   devDependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
-  openclaw?: {
+  natesclaw?: {
     install?: {
       minHostVersion?: string;
     };
@@ -15,7 +15,7 @@ type PackageJson = {
       pluginApi?: string;
     };
     build?: {
-      openclawVersion?: string;
+      natesclawVersion?: string;
     };
   };
 };
@@ -24,33 +24,33 @@ type SyncPluginVersionsOptions = {
   write?: boolean;
 };
 
-const OPENCLAW_VERSION_RANGE_RE = /^>=\d{4}\.\d{1,2}\.\d{1,2}(?:[-.][^"\s]+)?$/u;
+const NATESCLAW_VERSION_RANGE_RE = /^>=\d{4}\.\d{1,2}\.\d{1,2}(?:[-.][^"\s]+)?$/u;
 const VERSION_ALIGNED_PACKAGE_DIRS = [
   "packages/ai",
   "packages/gateway-client",
   "packages/gateway-protocol",
 ] as const;
 
-function syncOpenClawDependencyRange(
+function syncNatesclawDependencyRange(
   deps: Record<string, string> | undefined,
   targetVersion: string,
 ): boolean {
-  const current = deps?.openclaw;
-  if (!current || current === "workspace:*" || !OPENCLAW_VERSION_RANGE_RE.test(current)) {
+  const current = deps?.natesclaw;
+  if (!current || current === "workspace:*" || !NATESCLAW_VERSION_RANGE_RE.test(current)) {
     return false;
   }
   const next = `>=${targetVersion}`;
   if (current === next) {
     return false;
   }
-  deps.openclaw = next;
+  deps.natesclaw = next;
   return true;
 }
 
 function syncPluginApiVersion(pkg: PackageJson, targetVersion: string): boolean {
-  const compat = pkg.openclaw?.compat;
+  const compat = pkg.natesclaw?.compat;
   const current = compat?.pluginApi;
-  if (!current || !OPENCLAW_VERSION_RANGE_RE.test(current)) {
+  if (!current || !NATESCLAW_VERSION_RANGE_RE.test(current)) {
     return false;
   }
   const next = `>=${targetVersion}`;
@@ -61,16 +61,16 @@ function syncPluginApiVersion(pkg: PackageJson, targetVersion: string): boolean 
   return true;
 }
 
-function syncBuildOpenClawVersion(pkg: PackageJson, targetVersion: string): boolean {
-  const build = pkg.openclaw?.build;
-  const current = build?.openclawVersion;
+function syncBuildNatesclawVersion(pkg: PackageJson, targetVersion: string): boolean {
+  const build = pkg.natesclaw?.build;
+  const current = build?.natesclawVersion;
   if (!current) {
     return false;
   }
   if (current === targetVersion) {
     return false;
   }
-  build.openclawVersion = targetVersion;
+  build.natesclawVersion = targetVersion;
   return true;
 }
 
@@ -86,7 +86,7 @@ function ensureChangelogEntry(changelogPath: string, version: string, write: boo
   if (content.includes(`## ${version}`)) {
     return false;
   }
-  const entry = `## ${version}\n\n### Changes\n- Version alignment with core OpenClaw release numbers.\n\n`;
+  const entry = `## ${version}\n\n### Changes\n- Version alignment with core Natesclaw release numbers.\n\n`;
   if (content.startsWith("# Changelog\n\n")) {
     const next = content.replace("# Changelog\n\n", `# Changelog\n\n${entry}`);
     if (write) {
@@ -159,18 +159,18 @@ export function syncPluginVersions(
     }
 
     const versionChanged = pkg.version !== targetVersion;
-    const devDependencyChanged = syncOpenClawDependencyRange(pkg.devDependencies, targetVersion);
-    const peerDependencyChanged = syncOpenClawDependencyRange(pkg.peerDependencies, targetVersion);
+    const devDependencyChanged = syncNatesclawDependencyRange(pkg.devDependencies, targetVersion);
+    const peerDependencyChanged = syncNatesclawDependencyRange(pkg.peerDependencies, targetVersion);
     // minHostVersion is a compatibility floor, not release alignment metadata.
     // Keep it stable unless the owning plugin intentionally raises it.
     const pluginApiChanged = syncPluginApiVersion(pkg, targetVersion);
-    const buildOpenClawVersionChanged = syncBuildOpenClawVersion(pkg, targetVersion);
+    const buildNatesclawVersionChanged = syncBuildNatesclawVersion(pkg, targetVersion);
     const packageChanged =
       versionChanged ||
       devDependencyChanged ||
       peerDependencyChanged ||
       pluginApiChanged ||
-      buildOpenClawVersionChanged;
+      buildNatesclawVersionChanged;
     if (!packageChanged) {
       skipped.push(pkg.name);
       continue;

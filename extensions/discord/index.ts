@@ -1,5 +1,5 @@
-// Discord plugin entrypoint registers its OpenClaw integration.
-import { defineBundledChannelEntry } from "openclaw/plugin-sdk/channel-entry-contract";
+// Discord plugin entrypoint registers its Natesclaw integration.
+import { defineBundledChannelEntry } from "natesclaw/plugin-sdk/channel-entry-contract";
 import { registerDiscordActivities } from "./activities-api.js";
 import { registerDiscordSubagentHooks } from "./subagent-hooks-api.js";
 import { discordVoiceTranscriptsSourceProvider } from "./transcripts-source-api.js";

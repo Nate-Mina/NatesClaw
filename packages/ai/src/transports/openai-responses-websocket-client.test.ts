@@ -4,7 +4,7 @@ import {
   type AssistantMessage,
   type Context,
   type Model,
-} from "@openclaw/llm-core";
+} from "@natesclaw/llm-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { configureAiTransportHost, getAiTransportHost } from "../host.js";
 import { cleanupSessionResources } from "../session-resources.js";
@@ -253,20 +253,20 @@ describe("native OpenAI Responses WebSocket client integration", () => {
           turn += 1;
           return {
             headers: {
-              "x-openclaw-session-id": context.sessionId ?? "",
-              "x-openclaw-turn-id": `turn-${turn}`,
-              "x-openclaw-turn-attempt": "1",
+              "x-natesclaw-session-id": context.sessionId ?? "",
+              "x-natesclaw-turn-id": `turn-${turn}`,
+              "x-natesclaw-turn-attempt": "1",
             },
             metadata: {
-              openclaw_session_id: context.sessionId ?? "",
-              openclaw_turn_id: `turn-${turn}`,
-              openclaw_turn_attempt: "1",
-              openclaw_transport: context.transport,
+              natesclaw_session_id: context.sessionId ?? "",
+              natesclaw_turn_id: `turn-${turn}`,
+              natesclaw_turn_attempt: "1",
+              natesclaw_transport: context.transport,
             },
             websocket: {
               headers: {
                 "x-client-request-id": context.sessionId ?? "",
-                "x-openclaw-session-id": context.sessionId ?? "",
+                "x-natesclaw-session-id": context.sessionId ?? "",
               },
               degradeCooldownMs: 1_000,
             },
@@ -307,9 +307,9 @@ describe("native OpenAI Responses WebSocket client integration", () => {
     expect(transportState.websocketOptions).toHaveLength(1);
     expect(transportState.websocketOptions[0]?.headers).toMatchObject({
       "x-client-request-id": "session-1",
-      "x-openclaw-session-id": "session-1",
+      "x-natesclaw-session-id": "session-1",
     });
-    expect(transportState.websocketOptions[0]?.headers).not.toHaveProperty("x-openclaw-turn-id");
+    expect(transportState.websocketOptions[0]?.headers).not.toHaveProperty("x-natesclaw-turn-id");
     expect(transportState.websocketOptions[0]?.headers).not.toHaveProperty("traceparent");
     expect(transportState.websocketRequests).toHaveLength(2);
     expect(transportState.websocketRequests[1]).toMatchObject({

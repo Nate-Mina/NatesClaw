@@ -5,45 +5,45 @@
 import PackageDescription
 
 let package = Package(
-    name: "OpenClawMLXTTS",
+    name: "NatesclawMLXTTS",
     platforms: [
         .macOS(.v15),
     ],
     products: [
-        .executable(name: "openclaw-mlx-tts", targets: ["OpenClawMLXTTSHelper"]),
+        .executable(name: "natesclaw-mlx-tts", targets: ["NatesclawMLXTTSHelper"]),
     ],
     dependencies: [
         // Progressive Fish chunks and cancellation from upstream PR #237.
         .package(
             url: "https://github.com/Blaizzy/mlx-audio-swift",
             revision: "2de211cf80ada19a75f291e491430e2af8e4befe"),
-        .package(path: "../shared/OpenClawMLXTTSProtocol"),
+        .package(path: "../shared/NatesclawMLXTTSProtocol"),
     ],
     targets: [
         .target(
-            name: "OpenClawMLXTTSRuntime",
+            name: "NatesclawMLXTTSRuntime",
             dependencies: [
                 .product(name: "MLXAudioCore", package: "mlx-audio-swift"),
                 .product(name: "MLXAudioTTS", package: "mlx-audio-swift"),
-                .product(name: "OpenClawMLXTTSProtocol", package: "OpenClawMLXTTSProtocol"),
+                .product(name: "NatesclawMLXTTSProtocol", package: "NatesclawMLXTTSProtocol"),
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .executableTarget(
-            name: "OpenClawMLXTTSHelper",
+            name: "NatesclawMLXTTSHelper",
             dependencies: [
-                "OpenClawMLXTTSRuntime",
-                .product(name: "OpenClawMLXTTSProtocol", package: "OpenClawMLXTTSProtocol"),
+                "NatesclawMLXTTSRuntime",
+                .product(name: "NatesclawMLXTTSProtocol", package: "NatesclawMLXTTSProtocol"),
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .testTarget(
-            name: "OpenClawMLXTTSRuntimeTests",
+            name: "NatesclawMLXTTSRuntimeTests",
             dependencies: [
-                "OpenClawMLXTTSRuntime",
-                .product(name: "OpenClawMLXTTSProtocol", package: "OpenClawMLXTTSProtocol"),
+                "NatesclawMLXTTSRuntime",
+                .product(name: "NatesclawMLXTTSProtocol", package: "NatesclawMLXTTSProtocol"),
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),

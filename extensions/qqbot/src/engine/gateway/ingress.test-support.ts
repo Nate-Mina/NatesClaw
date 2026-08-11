@@ -2,10 +2,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-  closeOpenClawStateDatabaseForTest,
+  closeNatesclawStateDatabaseForTest,
   createChannelIngressQueueForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
+import { resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import { GatewayEvent, GatewayOp } from "./constants.js";
 
 export type QQBotTestIngressPayload = {
@@ -60,7 +60,7 @@ export async function withQQBotIngressQueue<T>(
   ) => Promise<T>,
 ): Promise<T> {
   const created = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-qqbot-ingress-"),
+    path.join(resolvePreferredNatesclawTmpDir(), "natesclaw-qqbot-ingress-"),
   );
   const stateDir = await fs.realpath(created);
   const queue = createChannelIngressQueueForTests<QQBotTestIngressPayload>({
@@ -71,7 +71,7 @@ export async function withQQBotIngressQueue<T>(
   try {
     return await run(queue);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }

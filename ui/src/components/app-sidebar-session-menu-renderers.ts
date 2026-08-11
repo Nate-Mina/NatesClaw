@@ -98,7 +98,7 @@ export function renderSidebarSessionGroupMenu(params: {
   return keyed(
     menu,
     html`
-      <openclaw-menu-surface>
+      <natesclaw-menu-surface>
         <wa-dropdown
           class="session-menu sidebar-session-group-menu"
           .open=${true}
@@ -153,7 +153,7 @@ export function renderSidebarSessionGroupMenu(params: {
             <span class="session-menu__text">${t("sessionsView.deleteGroupMenu")}</span>
           </wa-dropdown-item>
         </wa-dropdown>
-      </openclaw-menu-surface>
+      </natesclaw-menu-surface>
     `,
   );
 }
@@ -181,7 +181,7 @@ export function renderSidebarCatalogViewMenu(params: {
   return keyed(
     position,
     html`
-      <openclaw-menu-surface>
+      <natesclaw-menu-surface>
         <wa-dropdown
           class="sidebar-session-sort-menu sidebar-catalog-view-menu"
           .open=${true}
@@ -219,7 +219,7 @@ export function renderSidebarCatalogViewMenu(params: {
             <span class="session-menu__text">${t("chat.sidebar.hideFromSidebar")}</span>
           </wa-dropdown-item>
         </wa-dropdown>
-      </openclaw-menu-surface>
+      </natesclaw-menu-surface>
     `,
   );
 }
@@ -254,7 +254,7 @@ export function renderSidebarSessionSortMenu(params: {
   return keyed(
     position,
     html`
-      <openclaw-menu-surface>
+      <natesclaw-menu-surface>
         <wa-dropdown
           class="sidebar-session-sort-menu"
           .open=${true}
@@ -344,7 +344,7 @@ export function renderSidebarSessionSortMenu(params: {
             >
           </wa-dropdown-item>
         </wa-dropdown>
-      </openclaw-menu-surface>
+      </natesclaw-menu-surface>
     `,
   );
 }

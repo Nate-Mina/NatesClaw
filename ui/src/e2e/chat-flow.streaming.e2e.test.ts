@@ -17,7 +17,7 @@ const suite = createChatFlowE2eSuite();
 
 suite.define(() => {
   it("keeps streamed audio and video metadata pinned without overriding manual scroll", async () => {
-    const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+    const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
     const context = await suite.newBrowserContext({
       locale: "en-US",
       serviceWorkers: "block",
@@ -87,7 +87,7 @@ suite.define(() => {
             const layoutOwner =
               mediaKind === "video"
                 ? element.closest<HTMLElement>(".chat-assistant-video-frame")
-                : element.closest<HTMLElement>("openclaw-chat-audio-player");
+                : element.closest<HTMLElement>("natesclaw-chat-audio-player");
             if (!layoutOwner) {
               throw new Error(`expected assistant ${mediaKind} layout owner`);
             }
@@ -344,7 +344,7 @@ suite.define(() => {
           .waitFor({ timeout: 10_000 });
 
         const gatewayErrorText =
-          "⚠️ Model login expired on the gateway for openai. Send `/login codex` from a private chat or Web UI session to pair a new Codex login, or re-auth with `openclaw models auth login --provider openai` in a terminal, then try again.";
+          "⚠️ Model login expired on the gateway for openai. Send `/login codex` from a private chat or Web UI session to pair a new Codex login, or re-auth with `natesclaw models auth login --provider openai` in a terminal, then try again.";
         const errorText = gatewayErrorText.replace(/^⚠️\s*/u, "");
         await gateway.emitGatewayEvent("chat", {
           errorMessage: gatewayErrorText,
@@ -433,7 +433,7 @@ suite.define(() => {
       }
       const pendingLayout = await pendingRow.evaluate((row) => {
         const rect = row.getBoundingClientRect();
-        Reflect.set(window, "__openclawPendingWorkingRow", row);
+        Reflect.set(window, "__natesclawPendingWorkingRow", row);
         return {
           height: rect.height,
           key: row.getAttribute("data-virtual-row-key"),
@@ -448,10 +448,10 @@ suite.define(() => {
           sameRow: boolean;
           top: number | null;
         }> = [];
-        Reflect.set(window, "__openclawWorkingRowSamples", samples);
+        Reflect.set(window, "__natesclawWorkingRowSamples", samples);
         let remaining = 20;
         const sample = () => {
-          const originalRow = Reflect.get(window, "__openclawPendingWorkingRow");
+          const originalRow = Reflect.get(window, "__natesclawPendingWorkingRow");
           const currentRow = document
             .querySelector(".chat-reading-indicator")
             ?.closest<HTMLElement>(".chat-virtual-row");
@@ -485,7 +485,7 @@ suite.define(() => {
             }>
           >((resolve) => {
             const read = () => {
-              const current = Reflect.get(window, "__openclawWorkingRowSamples");
+              const current = Reflect.get(window, "__natesclawWorkingRowSamples");
               if (Array.isArray(current) && current.length >= 20) {
                 resolve(current);
                 return;
@@ -714,7 +714,7 @@ suite.define(() => {
       });
       await gateway.setHistoryMessages([
         {
-          __openclaw: { idempotencyKey: `${runId}:user` },
+          __natesclaw: { idempotencyKey: `${runId}:user` },
           content: [{ text: prompt, type: "text" }],
           role: "user",
           timestamp: Date.now(),

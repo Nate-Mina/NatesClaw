@@ -1,18 +1,18 @@
 // Qa Lab plugin module implements suite runtime agent session behavior.
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   listSessionEntries,
   loadTranscriptEventsSync,
   resolveStorePath,
   upsertSessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { appendSessionTranscriptMessageByIdentity } from "openclaw/plugin-sdk/session-transcript-runtime";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { appendSessionTranscriptMessageByIdentity } from "natesclaw/plugin-sdk/session-transcript-runtime";
 import {
   isRecord,
   normalizeOptionalString as readNonEmptyString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   createDirectReplyTranscriptSentinelScanner,
   extractGatewayMessageText,
@@ -188,8 +188,8 @@ function summarizeSessionTranscriptEvents(
     if (text) {
       finalText = text;
     }
-    const openClawMeta = isRecord(message["__openclaw"]) ? message["__openclaw"] : undefined;
-    const mirrorIdentity = readNonEmptyString(openClawMeta?.mirrorIdentity);
+    const NatesclawMeta = isRecord(message["__natesclaw"]) ? message["__natesclaw"] : undefined;
+    const mirrorIdentity = readNonEmptyString(NatesclawMeta?.mirrorIdentity);
     if (mirrorIdentity && text) {
       assistantMirrors.push({ identity: mirrorIdentity, text });
     }
@@ -303,7 +303,7 @@ async function readSkillStatus(env: QaGatewayCallEnv, agentId = "qa") {
 function qaSessionRuntimeEnv(tempRoot: string): NodeJS.ProcessEnv {
   return {
     ...process.env,
-    OPENCLAW_STATE_DIR: path.join(tempRoot, "state"),
+    NATESCLAW_STATE_DIR: path.join(tempRoot, "state"),
   };
 }
 

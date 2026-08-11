@@ -8,18 +8,18 @@ import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { hasActiveStartupMigrationLease } from "../infra/startup-migration-checkpoint.js";
 import { writePersistedInstalledPluginIndexSync } from "../plugins/installed-plugin-index-store.js";
 import { clearPluginMetadataLifecycleCaches } from "../plugins/plugin-metadata-lifecycle.js";
 import { loadPluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { writeManagedNpmPlugin } from "../plugins/test-helpers/managed-npm-plugin.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 
 const STARTUP_REFUSAL =
-  "OpenClaw startup migrations did not complete cleanly; refusing to report the gateway ready.";
+  "Natesclaw startup migrations did not complete cleanly; refusing to report the gateway ready.";
 const STARTUP_RECOVERY =
-  'Run "openclaw doctor --fix" against the same state/config, then restart the gateway.';
+  'Run "natesclaw doctor --fix" against the same state/config, then restart the gateway.';
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 const execFileAsync = promisify(execFile);
 
@@ -68,7 +68,7 @@ function createSourceRuntime(root: string): string {
 }
 
 function seedPluginStateConflict(stateDir: string): void {
-  const sharedPath = path.join(stateDir, "state", "openclaw.sqlite");
+  const sharedPath = path.join(stateDir, "state", "natesclaw.sqlite");
   const sidecarPath = path.join(stateDir, "plugin-state", "state.sqlite");
   fs.mkdirSync(path.dirname(sharedPath), { recursive: true });
   fs.mkdirSync(path.dirname(sidecarPath), { recursive: true });
@@ -126,23 +126,23 @@ function seedPluginStateConflict(stateDir: string): void {
 describe("gateway startup-migration refusal", () => {
   it("exits cleanly after reporting the refusal once and releasing its lease", async () => {
     const temporaryRoot = await fs.promises.mkdtemp(
-      path.join(os.tmpdir(), "openclaw-startup-migration-exit-"),
+      path.join(os.tmpdir(), "natesclaw-startup-migration-exit-"),
     );
     const root = await fs.promises.realpath(temporaryRoot);
     const stateDir = path.join(root, "state");
-    const configPath = path.join(root, "openclaw.json");
+    const configPath = path.join(root, "natesclaw.json");
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       HOME: root,
       USERPROFILE: root,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_TEST_FAST: "1",
+      NATESCLAW_CONFIG_PATH: configPath,
+      NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_TEST_FAST: "1",
       NO_COLOR: "1",
     };
     delete env.NODE_ENV;
-    delete env.OPENCLAW_HOME;
+    delete env.NATESCLAW_HOME;
     delete env.VITEST;
 
     try {
@@ -171,7 +171,7 @@ describe("gateway startup-migration refusal", () => {
       expect(result.stderr).toContain(STARTUP_REFUSAL);
       expect(result.stderr).toContain(STARTUP_RECOVERY);
       expect(result.stderr.split(STARTUP_REFUSAL)).toHaveLength(2);
-      expect(result.stderr).not.toContain("[openclaw] Could not start the CLI.");
+      expect(result.stderr).not.toContain("[natesclaw] Could not start the CLI.");
       expect(hasActiveStartupMigrationLease({ env })).toBe(false);
     } finally {
       await fs.promises.rm(root, { recursive: true, force: true });
@@ -179,23 +179,23 @@ describe("gateway startup-migration refusal", () => {
   }, 45_000);
 
   it("reuses the state-migration checkpoint when the config file remains absent", async () => {
-    const root = await fs.promises.realpath(tempDirs.make("openclaw-configless-checkpoint-"));
+    const root = await fs.promises.realpath(tempDirs.make("natesclaw-configless-checkpoint-"));
     const runtimeRoot = createSourceRuntime(root);
     const stateDir = path.join(root, "state");
-    const configPath = path.join(root, "openclaw.json");
+    const configPath = path.join(root, "natesclaw.json");
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       HOME: root,
       USERPROFILE: root,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_TEST_FAST: "1",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
+      NATESCLAW_CONFIG_PATH: configPath,
+      NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_TEST_FAST: "1",
       NO_COLOR: "1",
     };
     delete env.NODE_ENV;
-    delete env.OPENCLAW_HOME;
+    delete env.NATESCLAW_HOME;
     delete env.VITEST;
     delete env.VITEST_POOL_ID;
     delete env.VITEST_WORKER_ID;
@@ -253,25 +253,25 @@ describe("gateway startup-migration refusal", () => {
   }, 150_000);
 
   it("persists a refreshed legacy plugin index for the next process", async () => {
-    const root = await fs.promises.realpath(tempDirs.make("openclaw-plugin-index-checkpoint-"));
+    const root = await fs.promises.realpath(tempDirs.make("natesclaw-plugin-index-checkpoint-"));
     const stateDir = path.join(root, "state");
-    const configPath = path.join(root, "openclaw.json");
+    const configPath = path.join(root, "natesclaw.json");
     const config = {
       gateway: { mode: "local", auth: { mode: "none" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       HOME: root,
       USERPROFILE: root,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_TEST_FAST: "1",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
+      NATESCLAW_CONFIG_PATH: configPath,
+      NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_TEST_FAST: "1",
       NO_COLOR: "1",
     };
     delete env.NODE_ENV;
-    delete env.OPENCLAW_HOME;
+    delete env.NATESCLAW_HOME;
     delete env.VITEST;
     delete env.VITEST_POOL_ID;
     delete env.VITEST_WORKER_ID;
@@ -282,23 +282,23 @@ describe("gateway startup-migration refusal", () => {
       const pluginId = "legacy-doctor-index";
       const pluginDir = writeManagedNpmPlugin({
         stateDir,
-        packageName: "@openclaw/legacy-doctor-index",
+        packageName: "@natesclaw/legacy-doctor-index",
         pluginId,
         version: "1.0.0",
       });
       const packageJsonPath = path.join(pluginDir, "package.json");
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8")) as {
-        openclaw: Record<string, unknown>;
+        natesclaw: Record<string, unknown>;
       };
       fs.writeFileSync(
         packageJsonPath,
         JSON.stringify({
           ...packageJson,
-          openclaw: {
-            ...packageJson.openclaw,
+          natesclaw: {
+            ...packageJson.natesclaw,
             build: {
               bundledDist: false,
-              openclawVersion: "2026.7.2",
+              natesclawVersion: "2026.7.2",
               pluginSdkVersion: "2026.7.2",
             },
           },
@@ -324,7 +324,7 @@ describe("gateway startup-migration refusal", () => {
       };
       writePersistedInstalledPluginIndexSync(legacyIndex, { env });
       clearPluginMetadataLifecycleCaches();
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
 
       const preflightUrl = new URL("./doctor-config-preflight.ts", import.meta.url).href;
       const first = runIsolatedModuleScript(
@@ -342,7 +342,7 @@ describe("gateway startup-migration refusal", () => {
       expect(first.status, `${first.stderr}\n${first.stdout}`).toBe(0);
       expect(first.signal, `${first.stderr}\n${first.stdout}`).toBeNull();
       expect(hasActiveStartupMigrationLease({ env })).toBe(false);
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
 
       const configIoUrl = new URL("../config/io.ts", import.meta.url).href;
       const second = runIsolatedModuleScript(
@@ -392,38 +392,38 @@ describe("gateway startup-migration refusal", () => {
       });
     } finally {
       clearPluginMetadataLifecycleCaches();
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       await fs.promises.rm(root, { recursive: true, force: true });
     }
   }, 60_000);
 
   it("reloads tool ownership after updater-managed manifest repair", async () => {
-    const root = await fs.promises.realpath(tempDirs.make("openclaw-updater-manifest-repair-"));
+    const root = await fs.promises.realpath(tempDirs.make("natesclaw-updater-manifest-repair-"));
     const stateDir = path.join(root, "state");
-    const configPath = path.join(root, "openclaw.json");
+    const configPath = path.join(root, "natesclaw.json");
     const pluginId = "updater-tool-owner";
     const pluginDir = path.join(root, "plugins", pluginId);
-    const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+    const manifestPath = path.join(pluginDir, "natesclaw.plugin.json");
     const config = {
       gateway: { mode: "local", auth: { mode: "none" } },
       plugins: {
         load: { paths: [pluginDir] },
         entries: { [pluginId]: { enabled: true } },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       HOME: root,
       USERPROFILE: root,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_TEST_FAST: "1",
-      OPENCLAW_UPDATE_IN_PROGRESS: "1",
+      NATESCLAW_CONFIG_PATH: configPath,
+      NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_TEST_FAST: "1",
+      NATESCLAW_UPDATE_IN_PROGRESS: "1",
       NO_COLOR: "1",
     };
     delete env.NODE_ENV;
-    delete env.OPENCLAW_HOME;
+    delete env.NATESCLAW_HOME;
     delete env.VITEST;
     delete env.VITEST_POOL_ID;
     delete env.VITEST_WORKER_ID;
@@ -433,9 +433,9 @@ describe("gateway startup-migration refusal", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: `@openclaw/${pluginId}`,
+        name: `@natesclaw/${pluginId}`,
         version: "1.0.0",
-        openclaw: { extensions: ["./index.js"] },
+        natesclaw: { extensions: ["./index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export default {};\n");
@@ -537,28 +537,28 @@ describe("gateway startup-migration refusal", () => {
     }> => {
       const root = await fs.promises.realpath(
         tempDirs.make(
-          `openclaw-doctor-metadata-scans-${mode}-${pluginCount}-${agentCount}-${options.configuredChannel ? "channel" : "base"}-`,
+          `natesclaw-doctor-metadata-scans-${mode}-${pluginCount}-${agentCount}-${options.configuredChannel ? "channel" : "base"}-`,
         ),
       );
       const stateDir = path.join(root, "state");
-      const configPath = path.join(root, "openclaw.json");
+      const configPath = path.join(root, "natesclaw.json");
       const resultPath = path.join(root, "result.json");
       const timelinePath = path.join(root, "timeline.jsonl");
       const env: NodeJS.ProcessEnv = {
         ...process.env,
         HOME: root,
         USERPROFILE: root,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
-        OPENCLAW_CONFIG_PATH: configPath,
-        OPENCLAW_DIAGNOSTICS: "1",
-        OPENCLAW_DIAGNOSTICS_TIMELINE_PATH: timelinePath,
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_TEST_FAST: "1",
+        NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
+        NATESCLAW_CONFIG_PATH: configPath,
+        NATESCLAW_DIAGNOSTICS: "1",
+        NATESCLAW_DIAGNOSTICS_TIMELINE_PATH: timelinePath,
+        NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_TEST_FAST: "1",
         NO_COLOR: "1",
       };
       delete env.NODE_ENV;
-      delete env.OPENCLAW_HOME;
+      delete env.NATESCLAW_HOME;
       delete env.VITEST;
       delete env.VITEST_POOL_ID;
       delete env.VITEST_WORKER_ID;
@@ -596,12 +596,12 @@ describe("gateway startup-migration refusal", () => {
         const pluginId = `doctor-scan-${index}`;
         const pluginDir = writeManagedNpmPlugin({
           stateDir,
-          packageName: `@openclaw/${pluginId}`,
+          packageName: `@natesclaw/${pluginId}`,
           pluginId,
           version: "1.0.0",
         });
         if (options.configuredChannel && index === 0) {
-          const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+          const manifestPath = path.join(pluginDir, "natesclaw.plugin.json");
           const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as Record<
             string,
             unknown
@@ -624,7 +624,7 @@ describe("gateway startup-migration refusal", () => {
           "utf8",
         );
       }
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
 
       const configFlowUrl = new URL("./doctor-config-flow.ts", import.meta.url).href;
       const doctorHealthUrl = new URL("../flows/doctor-health.ts", import.meta.url).href;

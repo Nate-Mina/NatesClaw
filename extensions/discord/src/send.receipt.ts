@@ -4,8 +4,8 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { attachChannelToResults } from "openclaw/plugin-sdk/channel-send-result";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { attachChannelToResults } from "natesclaw/plugin-sdk/channel-send-result";
 import type { DiscordReplyReference } from "./reply-reference.js";
 import type { DiscordSendResult } from "./send.types.js";
 

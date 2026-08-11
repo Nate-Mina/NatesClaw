@@ -66,7 +66,7 @@ describe("duckduckgo web search provider", () => {
     }
 
     const result = await tool.execute({
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
       region: "us-en",
       safeSearch: "off",
@@ -74,14 +74,14 @@ describe("duckduckgo web search provider", () => {
 
     expect(runDuckDuckGoSearch).toHaveBeenCalledWith({
       config: { test: true },
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
       region: "us-en",
       safeSearch: "off",
     });
     expect(result).toEqual({
       config: { test: true },
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
       region: "us-en",
       safeSearch: "off",
@@ -97,10 +97,10 @@ describe("duckduckgo web search provider", () => {
       throw new Error("Expected tool definition");
     }
 
-    await expect(tool.execute({ query: "openclaw docs", count: 4.5 })).rejects.toThrow(
+    await expect(tool.execute({ query: "natesclaw docs", count: 4.5 })).rejects.toThrow(
       "count must be an integer from 1 to 10.",
     );
-    await expect(tool.execute({ query: "openclaw docs", count: 11 })).rejects.toThrow(
+    await expect(tool.execute({ query: "natesclaw docs", count: 11 })).rejects.toThrow(
       "count must be an integer from 1 to 10.",
     );
     expect(runDuckDuckGoSearch).not.toHaveBeenCalled();

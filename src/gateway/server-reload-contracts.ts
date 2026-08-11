@@ -1,5 +1,5 @@
 import type { CliDeps } from "../cli/deps.types.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.openclaw.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "../config/types.natesclaw.js";
 import type { HeartbeatRunner } from "../infra/heartbeat-runner.js";
 import type { GatewayRestartEmitter } from "../infra/restart.js";
 import type { ChannelHealthMonitor } from "./channel-health-monitor.js";
@@ -68,9 +68,9 @@ export type GatewayGmailRestartAbortController = {
 export type GatewayHotReloadPublication = {
   publish: (commit: () => Promise<void>, isCommitted: () => boolean) => Promise<void>;
   isCurrent: () => boolean;
-  prepareRestartRuntimeConfig?: () => Promise<OpenClawConfig>;
+  prepareRestartRuntimeConfig?: () => Promise<NatesclawConfig>;
   runtimeEnv?: NodeJS.ProcessEnv;
-  sourceConfig?: OpenClawConfig;
+  sourceConfig?: NatesclawConfig;
 };
 
 export type GatewayRestartTransactionState = "pending" | "committed" | "rejected";
@@ -82,14 +82,14 @@ export type GatewayRestartTransactionResult = {
 
 export type GatewayRestartRequestOptions = {
   retainDebtAcrossConfigChanges?: boolean;
-  prepareRuntimeConfig?: () => Promise<OpenClawConfig>;
-  debtConfig?: OpenClawConfig;
+  prepareRuntimeConfig?: () => Promise<NatesclawConfig>;
+  debtConfig?: NatesclawConfig;
 };
 
 export type AcceptedRestartTarget = {
-  runtimeConfig: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
-  prepareRuntimeConfig: () => Promise<OpenClawConfig>;
+  runtimeConfig: NatesclawConfig;
+  sourceConfig: NatesclawConfig;
+  prepareRuntimeConfig: () => Promise<NatesclawConfig>;
 };
 
 export type AcceptedRestartTargetOwnership = {
@@ -148,7 +148,7 @@ export type GatewayReloadHandlerParams = {
   getChannelAutostartSuppression?: GatewayChannelManager["getAutostartSuppression"];
   stopPostReadySidecars?: () => Promise<void> | void;
   reloadPlugins: (params: {
-    nextConfig: OpenClawConfig;
+    nextConfig: NatesclawConfig;
     changedPaths: readonly string[];
     beforeReplace: (
       channels: ReadonlySet<ChannelKind>,
@@ -167,7 +167,7 @@ export type GatewayReloadHandlerParams = {
   logCron: { error: (msg: string) => void };
   logReload: GatewayReloadLog;
   cronReconciliation: GatewayCronReconciliation;
-  createHealthMonitor: (config: OpenClawConfig) => ChannelHealthMonitor | null;
+  createHealthMonitor: (config: NatesclawConfig) => ChannelHealthMonitor | null;
   createGmailRestartAbortController?: () => GatewayGmailRestartAbortController;
   clearGmailRestartAbortController?: (controller: GatewayGmailRestartAbortController) => void;
   onCronRestart?: () => void;
@@ -182,8 +182,8 @@ export type ManagedGatewayConfigReloaderParams = Omit<
   "assertRestartReady" | "createHealthMonitor" | "logReload"
 > & {
   minimalTestGateway: boolean;
-  initialConfig: OpenClawConfig;
-  initialCompareConfig?: OpenClawConfig;
+  initialConfig: NatesclawConfig;
+  initialCompareConfig?: NatesclawConfig;
   initialSnapshotRawHash: string | null;
   initialAuthoredConfig: unknown;
   initialIncludedPaths?: readonly string[];
@@ -199,22 +199,22 @@ export type ManagedGatewayConfigReloaderParams = Omit<
   activateRuntimeSecrets: ActivateRuntimeSecrets;
   /** Applies one immutable effective config/compare snapshot before reload planning. */
   prepareConfigCandidate?: (params: {
-    runtimeConfig: OpenClawConfig;
-    sourceConfig: OpenClawConfig;
+    runtimeConfig: NatesclawConfig;
+    sourceConfig: NatesclawConfig;
   }) => {
-    runtimeConfig: OpenClawConfig;
-    compareConfig: OpenClawConfig;
-    reapplyRuntimeOverlays?: (config: OpenClawConfig) => OpenClawConfig;
-    reapplyCompareOverlays?: (config: OpenClawConfig) => OpenClawConfig;
+    runtimeConfig: NatesclawConfig;
+    compareConfig: NatesclawConfig;
+    reapplyRuntimeOverlays?: (config: NatesclawConfig) => NatesclawConfig;
+    reapplyCompareOverlays?: (config: NatesclawConfig) => NatesclawConfig;
   };
   /** Reapplies fixed process-lifetime overlays before secrets preparation. */
-  applyRuntimeConfigOverrides?: (config: OpenClawConfig) => OpenClawConfig;
-  resolveSharedGatewaySessionGenerationForConfig: (config: OpenClawConfig) => string | undefined;
+  applyRuntimeConfigOverrides?: (config: NatesclawConfig) => NatesclawConfig;
+  resolveSharedGatewaySessionGenerationForConfig: (config: NatesclawConfig) => string | undefined;
   sharedGatewaySessionGenerationState: SharedGatewaySessionGenerationState;
   clients: Iterable<SharedGatewayAuthClient>;
-  prepareTerminalConfig: (plan: GatewayReloadPlan, nextConfig: OpenClawConfig) => void;
-  reconcileTerminalSessions: (plan: GatewayReloadPlan, nextConfig: OpenClawConfig) => void;
-  commitTerminalConfig: (nextConfig: OpenClawConfig) => void;
+  prepareTerminalConfig: (plan: GatewayReloadPlan, nextConfig: NatesclawConfig) => void;
+  reconcileTerminalSessions: (plan: GatewayReloadPlan, nextConfig: NatesclawConfig) => void;
+  commitTerminalConfig: (nextConfig: NatesclawConfig) => void;
   acceptTerminalConfig: (options: { retireRejectedRestart: boolean }) => void;
 };
 

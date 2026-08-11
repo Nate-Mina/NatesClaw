@@ -36,13 +36,13 @@ const preparedModelRuntimeMocks = vi.hoisted(() => ({
   createStaticCatalogResolver: vi.fn<CreateStaticCatalogResolver>(),
   discoverAuthStorage: vi.fn((..._args: unknown[]) => undefined as unknown),
   discoverModels: vi.fn(),
-  ensureOpenClawModelsJson: vi.fn(async (..._args: unknown[]) => ({
+  ensureNatesclawModelsJson: vi.fn(async (..._args: unknown[]) => ({
     agentDir: "/tmp/agent",
     wrote: false,
   })),
   loadAgentRuntimePluginRegistryHandle: vi.fn(),
   loadStaticCatalog: vi.fn<LoadStaticCatalog>(async () => []),
-  planOpenClawModelsJsonSource: vi.fn(async (...args: unknown[]) => ({
+  planNatesclawModelsJsonSource: vi.fn(async (...args: unknown[]) => ({
     agentDir: String(args[1]),
     modelsJsonContents: null,
     pluginCatalogs: [],
@@ -202,10 +202,10 @@ vi.mock("./model-discovery-context.js", () => ({
 }));
 
 vi.mock("./models-config.js", () => ({
-  ensureOpenClawModelsJson: (...args: unknown[]) =>
-    preparedModelRuntimeMocks.ensureOpenClawModelsJson(...args),
-  planOpenClawModelsJsonSource: (...args: unknown[]) =>
-    preparedModelRuntimeMocks.planOpenClawModelsJsonSource(...args),
+  ensureNatesclawModelsJson: (...args: unknown[]) =>
+    preparedModelRuntimeMocks.ensureNatesclawModelsJson(...args),
+  planNatesclawModelsJsonSource: (...args: unknown[]) =>
+    preparedModelRuntimeMocks.planNatesclawModelsJsonSource(...args),
 }));
 
 vi.mock("./models-config.providers.implicit.js", () => ({
@@ -241,7 +241,7 @@ export function getPreparedModelRuntimeMocks(): typeof preparedModelRuntimeMocks
 
 export function getPreparedModelRuntimeTestApi(): PreparedModelRuntimeTestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.preparedModelRuntimeTestApi")
+    Symbol.for("natesclaw.preparedModelRuntimeTestApi")
   ] as PreparedModelRuntimeTestApi;
 }
 
@@ -265,14 +265,14 @@ export function resetPreparedModelRuntimeHarness(): void {
     .mockReset()
     .mockImplementation(() => preparedModelRuntimeMocks.authStorage);
   preparedModelRuntimeMocks.discoverModels.mockReset();
-  preparedModelRuntimeMocks.ensureOpenClawModelsJson
+  preparedModelRuntimeMocks.ensureNatesclawModelsJson
     .mockReset()
     .mockResolvedValue({ agentDir: "/tmp/agent", wrote: false });
   preparedModelRuntimeMocks.loadAgentRuntimePluginRegistryHandle
     .mockReset()
     .mockReturnValue(createEmptyPluginRegistry());
   preparedModelRuntimeMocks.loadStaticCatalog.mockReset().mockResolvedValue([]);
-  preparedModelRuntimeMocks.planOpenClawModelsJsonSource
+  preparedModelRuntimeMocks.planNatesclawModelsJsonSource
     .mockReset()
     .mockImplementation(async (_config, agentDir) => ({
       agentDir: String(agentDir),

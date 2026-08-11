@@ -11,8 +11,8 @@ import {
   listSessionSuggestions,
   SESSION_SUGGESTION_DISPATCH_CLAIM_TTL_MS,
 } from "../../config/sessions/session-suggestion-store.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../state/openclaw-agent-db.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import { closeNatesclawAgentDatabasesForTest } from "../../state/natesclaw-agent-db.js";
+import { withNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import { sessionSuggestionHandlers } from "./sessions-suggestions.js";
 import type { GatewayClient, GatewayRequestContext, RespondFn } from "./types.js";
 
@@ -89,7 +89,7 @@ function client(profileId: string, displayName: string, admin = false): GatewayC
       minProtocol: 1,
       maxProtocol: 1,
       client: {
-        id: "openclaw-control-ui",
+        id: "natesclaw-control-ui",
         version: "test",
         platform: "test",
         mode: "webchat",
@@ -161,12 +161,12 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
 });
 
 describe("session suggestion handlers", () => {
   it("lets a suggest viewer add and list only their own suggestion", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const alice = client("alice", "Alice");
       const add = await call(
@@ -203,7 +203,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("hides draft suggestions from members while owner and admin can list", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const draftKey = "agent:main:draft-suggestions";
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey: draftKey },
@@ -285,7 +285,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("keeps incognito suggestion and typing surfaces admin-only", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const incognitoKey = "agent:main:dashboard:incognito-suggestions";
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey: incognitoKey },
@@ -354,7 +354,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("rejects archived suggestion creation and non-dismiss resolutions", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const archivedKey = "agent:main:archived-suggestions";
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey: archivedKey },
@@ -413,7 +413,7 @@ describe("session suggestion handlers", () => {
   ] as const)(
     "dispatches %s through chat.send with suggested-by attribution",
     async (resolution, queueMode) => {
-      await withOpenClawTestState({ scenario: "minimal" }, async () => {
+      await withNatesclawTestState({ scenario: "minimal" }, async () => {
         await upsertDefaultSuggestionSession();
         const added = await call(
           "session.suggestions.add",
@@ -462,7 +462,7 @@ describe("session suggestion handlers", () => {
   );
 
   it("sends immediately without a steer override when the session is idle", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const added = await call(
         "session.suggestions.add",
@@ -489,7 +489,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("keeps a suggestion pending when multiple active runs make send-now ambiguous", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const added = await call(
         "session.suggestions.add",
@@ -527,7 +527,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("rejects send-now when active work has no exact gateway run identity", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const added = await call(
         "session.suggestions.add",
@@ -562,7 +562,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("allows only owners and admins to resolve suggestions", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const added = await call(
         "session.suggestions.add",
@@ -604,7 +604,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("publishes a fenced resolution before awaiting the transcript audit", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const added = await call(
         "session.suggestions.add",
@@ -634,7 +634,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("keeps typing dormant for one identity and broadcasts for two live viewers", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       vi.useFakeTimers();
       vi.setSystemTime(1_000);
       await upsertDefaultSuggestionSession();
@@ -732,7 +732,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("returns structured errors for blank text and clientless dispatch", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const blank = await call(
         "session.suggestions.add",
@@ -784,7 +784,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("keeps an uncertain dispatch claimed until retry reconciliation", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       let now = 1_000;
       vi.spyOn(Date, "now").mockImplementation(() => now);
       await upsertDefaultSuggestionSession();
@@ -836,7 +836,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("claims a pending suggestion before dispatching it", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const added = await call(
         "session.suggestions.add",
@@ -869,7 +869,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("returns a structured error when the session is replaced after dispatch", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey },
         {
@@ -928,7 +928,7 @@ describe("session suggestion handlers", () => {
   it.each(["claim", "release", "finalize"] as const)(
     "maps a session replacement during %s to the structured terminal error",
     async (phase) => {
-      await withOpenClawTestState({ scenario: "minimal" }, async () => {
+      await withNatesclawTestState({ scenario: "minimal" }, async () => {
         await upsertSessionEntryCore(
           { agentId: "main", sessionKey },
           {
@@ -983,7 +983,7 @@ describe("session suggestion handlers", () => {
   );
 
   it("keeps an unexpected claim-release failure retryable", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey },
         {
@@ -1023,7 +1023,7 @@ describe("session suggestion handlers", () => {
   });
 
   it("releases a durable claim after a definite dispatch rejection", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       await upsertDefaultSuggestionSession();
       const added = await call(
         "session.suggestions.add",

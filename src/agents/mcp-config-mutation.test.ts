@@ -1,7 +1,7 @@
 import path from "node:path";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
+import { withTempHome } from "natesclaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it } from "vitest";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
   setConfiguredMcpServer,
   unsetConfiguredMcpServer,
@@ -41,25 +41,25 @@ function seedOAuthState(name: string) {
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 async function withMcpConfigHome(run: () => Promise<void>): Promise<void> {
   await withTempHome(
     async () => {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       try {
         await run();
       } finally {
-        closeOpenClawStateDatabaseForTest();
+        closeNatesclawStateDatabaseForTest();
       }
     },
     {
-      prefix: "openclaw-mcp-config-oauth-",
+      prefix: "natesclaw-mcp-config-oauth-",
       skipSessionCleanup: true,
       env: {
-        OPENCLAW_CONFIG_PATH: undefined,
-        OPENCLAW_STATE_DIR: (home) => path.join(home, ".openclaw"),
+        NATESCLAW_CONFIG_PATH: undefined,
+        NATESCLAW_STATE_DIR: (home) => path.join(home, ".natesclaw"),
       },
     },
   );

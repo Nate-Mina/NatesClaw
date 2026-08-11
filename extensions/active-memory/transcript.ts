@@ -1,16 +1,16 @@
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import * as readline from "node:readline";
-import { parseSqliteSessionFileMarker } from "openclaw/plugin-sdk/session-store-runtime";
+import { parseSqliteSessionFileMarker } from "natesclaw/plugin-sdk/session-store-runtime";
 import {
   readSessionTranscriptRawDelta,
   type SessionTranscriptTargetParams,
-} from "openclaw/plugin-sdk/session-transcript-runtime";
+} from "natesclaw/plugin-sdk/session-transcript-runtime";
 import {
   asOptionalRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { clampInt } from "./config.js";
 import {
   readExplicitMemoryEvidence,

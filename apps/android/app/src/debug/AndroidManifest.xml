@@ -11,7 +11,7 @@
         <activity
             android:name="androidx.activity.ComponentActivity"
             android:exported="false"
-            android:theme="@style/Theme.OpenClawNode" />
+            android:theme="@style/Theme.NatesclawNode" />
         <activity
             android:name=".ui.CanvasLifecycleTestActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density|keyboard|keyboardHidden|navigation"
@@ -22,7 +22,7 @@
             android:permission="${applicationId}.permission.RUN_VOICE_E2E"
             android:exported="false">
             <intent-filter>
-                <action android:name="ai.openclaw.app.debug.RUN_VOICE_E2E" />
+                <action android:name="ai.natesclaw.app.debug.RUN_VOICE_E2E" />
             </intent-filter>
         </receiver>
         <service

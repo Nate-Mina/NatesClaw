@@ -15,7 +15,7 @@ import {
 } from "../../agents/run-termination.js";
 import { withLocalSessionPlacementTurnAdmission } from "../../agents/session-placement-admission.js";
 import { normalizeChatType } from "../../channels/chat-type.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   getGeneratedMediaTaskIdsForSessionKey,
   hasNewGeneratedMediaTaskForSessionKey,
@@ -55,7 +55,7 @@ export async function runCliFallbackCandidate(params: {
   preparedRunAdmission: PreparedAgentRunAdmission;
   turn: AgentTurnParams;
   candidateRun: FollowupRun["run"];
-  runtimeConfig: OpenClawConfig;
+  runtimeConfig: NatesclawConfig;
   provider: string;
   model: string;
   cliExecutionProvider: string;

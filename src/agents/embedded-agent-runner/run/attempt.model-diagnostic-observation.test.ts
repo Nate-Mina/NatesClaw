@@ -1,6 +1,6 @@
 // Coverage for model-call diagnostic events around attempt stream functions.
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   onInternalDiagnosticEvent,

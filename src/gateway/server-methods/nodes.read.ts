@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -7,7 +7,7 @@ import {
   validateNodePluginToolsUpdateParams,
   validateNodeSkillsUpdateParams,
 } from "../../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { projectNodePairing } from "../../infra/device-pairing-node.js";
 import { listDevicePairing, resolveNodePairingState } from "../../infra/device-pairing.js";
 import { formatErrorMessage } from "../../infra/errors.js";
@@ -186,7 +186,7 @@ const handlePluginSurfaceRefresh: GatewayRequestHandler = ({ params, respond, cl
 export function refreshConnectedNodeSurfaceCaches(params: {
   context: GatewayRequestContext;
   nodeSession: NodeSession;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }) {
   const cfg = params.cfg ?? params.context.getRuntimeConfig();
   const { nodeSession } = params;

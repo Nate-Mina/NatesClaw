@@ -9,9 +9,9 @@
  */
 
 import { lookup } from "node:dns/promises";
-import { isPrivateIpAddress } from "openclaw/plugin-sdk/ssrf-policy";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { fetchWithTimeout } from "openclaw/plugin-sdk/text-utility-runtime";
+import { isPrivateIpAddress } from "natesclaw/plugin-sdk/ssrf-policy";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { fetchWithTimeout } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { resolveMSTeamsSharePointUploadTimeoutMs } from "./request-timeout.js";
 import { buildUserAgent } from "./user-agent.js";
 

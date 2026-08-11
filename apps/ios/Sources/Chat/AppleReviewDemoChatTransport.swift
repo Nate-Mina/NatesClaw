@@ -1,6 +1,6 @@
 import Foundation
-import OpenClawChatUI
-import OpenClawProtocol
+import NatesclawChatUI
+import NatesclawProtocol
 
 enum AppleReviewDemoMode {
     static let setupCode = "APPLE-REVIEW-DEMO"
@@ -19,7 +19,7 @@ enum AppleReviewDemoMode {
 }
 
 enum ScreenshotFixtureMode {
-    static let gatewayName = "OpenClaw Gateway"
+    static let gatewayName = "Natesclaw Gateway"
     static let gatewayAddress = "Gateway on local network"
     static let gatewayID = "screenshot-fixture-gateway"
 
@@ -77,8 +77,8 @@ struct LocalChatFixture {
         modelProvider: "openai",
         modelID: "gpt-5.6-sol",
         modelName: "GPT-5.6 Sol",
-        responsePrefix: "OpenClaw is connected to your gateway.",
-        seedMessages: ProcessInfo.processInfo.arguments.contains("--openclaw-empty-chat-fixture")
+        responsePrefix: "Natesclaw is connected to your gateway.",
+        seedMessages: ProcessInfo.processInfo.arguments.contains("--natesclaw-empty-chat-fixture")
             ? []
             : ["Ready when you are. I can check a project, coordinate an agent, or prepare the next step."],
         agents: [
@@ -86,7 +86,7 @@ struct LocalChatFixture {
                 id: "main",
                 name: "Molty",
                 identity: ["emoji": AnyCodable("M")],
-                workspace: "OpenClaw",
+                workspace: "Natesclaw",
                 workspacegit: false,
                 model: ["provider": AnyCodable("openai"), "model": AnyCodable("gpt-5.6-sol")],
                 agentruntime: ["kind": AnyCodable("gateway")],
@@ -97,7 +97,7 @@ struct LocalChatFixture {
                 id: "research",
                 name: "Research",
                 identity: ["emoji": AnyCodable("RS")],
-                workspace: "OpenClaw",
+                workspace: "Natesclaw",
                 workspacegit: false,
                 model: ["provider": AnyCodable("openai"), "model": AnyCodable("gpt-5.6-sol")],
                 agentruntime: ["kind": AnyCodable("gateway")],
@@ -108,7 +108,7 @@ struct LocalChatFixture {
                 id: "automation",
                 name: "Automation",
                 identity: ["emoji": AnyCodable("AU")],
-                workspace: "OpenClaw",
+                workspace: "Natesclaw",
                 workspacegit: false,
                 model: ["provider": AnyCodable("openai"), "model": AnyCodable("gpt-5.6-sol")],
                 agentruntime: ["kind": AnyCodable("gateway")],
@@ -118,7 +118,7 @@ struct LocalChatFixture {
         ])
 }
 
-struct LocalFixtureChatTransport: OpenClawChatTransport {
+struct LocalFixtureChatTransport: NatesclawChatTransport {
     private let fixture: LocalChatFixture
     private let store: LocalFixtureChatStore
 
@@ -131,18 +131,18 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
         key: String,
         label _: String?,
         parentSessionKey _: String?,
-        worktree _: Bool?) async throws -> OpenClawChatCreateSessionResponse
+        worktree _: Bool?) async throws -> NatesclawChatCreateSessionResponse
     {
         try await self.store.createSession(key: key)
     }
 
-    func requestHistory(sessionKey: String) async throws -> OpenClawChatHistoryPayload {
+    func requestHistory(sessionKey: String) async throws -> NatesclawChatHistoryPayload {
         try await self.store.history(sessionKey: sessionKey)
     }
 
-    func listModels() async throws -> [OpenClawChatModelChoice] {
+    func listModels() async throws -> [NatesclawChatModelChoice] {
         [
-            OpenClawChatModelChoice(
+            NatesclawChatModelChoice(
                 modelID: self.fixture.modelID,
                 name: self.fixture.modelName,
                 provider: self.fixture.modelProvider,
@@ -151,7 +151,7 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
     }
 
     func isSwarmEnabled(sessionKey _: String) async throws -> Bool {
-        ProcessInfo.processInfo.arguments.contains("--openclaw-swarm-chat-fixture")
+        ProcessInfo.processInfo.arguments.contains("--natesclaw-swarm-chat-fixture")
     }
 
     func sendMessage(
@@ -159,7 +159,7 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
         message: String,
         thinking _: String,
         idempotencyKey: String,
-        attachments _: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments _: [NatesclawChatAttachmentPayload]) async throws -> NatesclawChatSendResponse
     {
         try await self.store.sendMessage(
             sessionKey: sessionKey,
@@ -174,7 +174,7 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
     func listSessions(
         limit _: Int?,
         search: String?,
-        archived: Bool) async throws -> OpenClawChatSessionsListResponse
+        archived: Bool) async throws -> NatesclawChatSessionsListResponse
     {
         let response = try await store.sessions()
         var sessions = response.sessions
@@ -182,9 +182,9 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
             sessions = []
         }
         if let search {
-            sessions = OpenClawChatSessionListOrganizer.filter(sessions, search: search)
+            sessions = NatesclawChatSessionListOrganizer.filter(sessions, search: search)
         }
-        return OpenClawChatSessionsListResponse(
+        return NatesclawChatSessionsListResponse(
             ts: response.ts,
             path: response.path,
             count: sessions.count,
@@ -192,8 +192,8 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
             sessions: sessions)
     }
 
-    func listChildSessions(parentKey: String) async throws -> [OpenClawChatSessionEntry] {
-        guard ProcessInfo.processInfo.arguments.contains("--openclaw-swarm-chat-fixture") else { return [] }
+    func listChildSessions(parentKey: String) async throws -> [NatesclawChatSessionEntry] {
+        guard ProcessInfo.processInfo.arguments.contains("--natesclaw-swarm-chat-fixture") else { return [] }
         let groupID = "swarm:\(parentKey):research"
         return [
             self.swarmChild("polling", "National polling", status: "done", groupID: groupID, parentKey: parentKey),
@@ -216,9 +216,9 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
         status: String?,
         groupID: String,
         parentKey: String,
-        queued: Bool = false) -> OpenClawChatSessionEntry
+        queued: Bool = false) -> NatesclawChatSessionEntry
     {
-        OpenClawChatSessionEntry(
+        NatesclawChatSessionEntry(
             key: "agent:main:subagent:\(key)",
             kind: "direct",
             displayName: label,
@@ -258,11 +258,11 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
     }
 
     /// The held screenshot run resolves only when the real composer aborts it.
-    func waitForRunCompletion(runId: String, timeoutMs _: Int) async -> OpenClawChatRunObservation {
+    func waitForRunCompletion(runId: String, timeoutMs _: Int) async -> NatesclawChatRunObservation {
         await self.store.runObservation(runId: runId)
     }
 
-    func events() -> AsyncStream<OpenClawChatTransportEvent> {
+    func events() -> AsyncStream<NatesclawChatTransportEvent> {
         AsyncStream { continuation in
             continuation.yield(.health(ok: true))
             self.registerFixtureEventContinuation(continuation)
@@ -278,14 +278,14 @@ struct LocalFixtureChatTransport: OpenClawChatTransport {
     func compactSession(sessionKey _: String) async throws {}
 }
 
-struct AppleReviewDemoChatTransport: OpenClawChatTransport {
+struct AppleReviewDemoChatTransport: NatesclawChatTransport {
     private let transport = LocalFixtureChatTransport(fixture: .appleReviewDemo)
 
     func createSession(
         key: String,
         label: String?,
         parentSessionKey: String?,
-        worktree: Bool?) async throws -> OpenClawChatCreateSessionResponse
+        worktree: Bool?) async throws -> NatesclawChatCreateSessionResponse
     {
         try await self.transport.createSession(
             key: key,
@@ -294,11 +294,11 @@ struct AppleReviewDemoChatTransport: OpenClawChatTransport {
             worktree: worktree)
     }
 
-    func requestHistory(sessionKey: String) async throws -> OpenClawChatHistoryPayload {
+    func requestHistory(sessionKey: String) async throws -> NatesclawChatHistoryPayload {
         try await self.transport.requestHistory(sessionKey: sessionKey)
     }
 
-    func listModels() async throws -> [OpenClawChatModelChoice] {
+    func listModels() async throws -> [NatesclawChatModelChoice] {
         try await self.transport.listModels()
     }
 
@@ -307,7 +307,7 @@ struct AppleReviewDemoChatTransport: OpenClawChatTransport {
         message: String,
         thinking: String,
         idempotencyKey: String,
-        attachments: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments: [NatesclawChatAttachmentPayload]) async throws -> NatesclawChatSendResponse
     {
         try await self.transport.sendMessage(
             sessionKey: sessionKey,
@@ -324,7 +324,7 @@ struct AppleReviewDemoChatTransport: OpenClawChatTransport {
     func listSessions(
         limit: Int?,
         search: String?,
-        archived: Bool) async throws -> OpenClawChatSessionsListResponse
+        archived: Bool) async throws -> NatesclawChatSessionsListResponse
     {
         try await self.transport.listSessions(limit: limit, search: search, archived: archived)
     }
@@ -336,7 +336,7 @@ struct AppleReviewDemoChatTransport: OpenClawChatTransport {
     func patchSessionModel(
         sessionKey: String,
         agentID: String?,
-        model: String?) async throws -> OpenClawChatModelPatchResult?
+        model: String?) async throws -> NatesclawChatModelPatchResult?
     {
         try await self.transport.patchSessionModel(
             sessionKey: sessionKey,
@@ -354,12 +354,12 @@ struct AppleReviewDemoChatTransport: OpenClawChatTransport {
 
     func waitForRunCompletion(
         runId: String,
-        timeoutMs: Int) async -> OpenClawChatRunObservation
+        timeoutMs: Int) async -> NatesclawChatRunObservation
     {
         await self.transport.waitForRunCompletion(runId: runId, timeoutMs: timeoutMs)
     }
 
-    func events() -> AsyncStream<OpenClawChatTransportEvent> {
+    func events() -> AsyncStream<NatesclawChatTransportEvent> {
         self.transport.events()
     }
 
@@ -378,20 +378,20 @@ struct AppleReviewDemoChatTransport: OpenClawChatTransport {
 
 private actor LocalFixtureChatStore {
     private let fixture: LocalChatFixture
-    private var messages: [OpenClawChatMessage]
+    private var messages: [NatesclawChatMessage]
 
     init(fixture: LocalChatFixture) {
         self.fixture = fixture
         self.messages = Self.seedMessages(fixture: fixture)
     }
 
-    func createSession(key: String) throws -> OpenClawChatCreateSessionResponse {
+    func createSession(key: String) throws -> NatesclawChatCreateSessionResponse {
         try Self.decode(
             CreateSessionPayload(ok: true, key: key, sessionId: "\(self.fixture.sessionIDPrefix)-\(key)"),
-            as: OpenClawChatCreateSessionResponse.self)
+            as: NatesclawChatCreateSessionResponse.self)
     }
 
-    func history(sessionKey: String) throws -> OpenClawChatHistoryPayload {
+    func history(sessionKey: String) throws -> NatesclawChatHistoryPayload {
         let normalizedSessionKey = Self.normalizedSessionKey(sessionKey, fallback: self.fixture.sessionKey)
         return try Self.decode(
             HistoryPayload(
@@ -399,10 +399,10 @@ private actor LocalFixtureChatStore {
                 sessionId: "\(self.fixture.sessionIDPrefix)-\(normalizedSessionKey)",
                 messages: self.messages,
                 thinkingLevel: "auto"),
-            as: OpenClawChatHistoryPayload.self)
+            as: NatesclawChatHistoryPayload.self)
     }
 
-    func sendMessage(sessionKey _: String, message: String, runId: String) throws -> OpenClawChatSendResponse {
+    func sendMessage(sessionKey _: String, message: String, runId: String) throws -> NatesclawChatSendResponse {
         let now = Date().timeIntervalSince1970 * 1000
         self.messages.append(
             Self.message(
@@ -420,7 +420,7 @@ private actor LocalFixtureChatStore {
             self.activeRunID = runId
             return try Self.decode(
                 SendPayload(runId: runId, status: "started"),
-                as: OpenClawChatSendResponse.self)
+                as: NatesclawChatSendResponse.self)
         }
         self.messages.append(
             Self.message(
@@ -432,25 +432,25 @@ private actor LocalFixtureChatStore {
                 timestamp: now + 1))
         return try Self.decode(
             SendPayload(runId: runId, status: "ok"),
-            as: OpenClawChatSendResponse.self)
+            as: NatesclawChatSendResponse.self)
     }
 
     private var heldInitialRun = false
     private var activeRunID: String?
-    private var eventContinuation: AsyncStream<OpenClawChatTransportEvent>.Continuation?
+    private var eventContinuation: AsyncStream<NatesclawChatTransportEvent>.Continuation?
 
-    func setEventContinuation(_ continuation: AsyncStream<OpenClawChatTransportEvent>.Continuation) {
+    func setEventContinuation(_ continuation: AsyncStream<NatesclawChatTransportEvent>.Continuation) {
         self.eventContinuation = continuation
     }
 
-    func runObservation(runId: String) -> OpenClawChatRunObservation {
+    func runObservation(runId: String) -> NatesclawChatRunObservation {
         self.activeRunID == runId ? .checkAgain : .terminal(.completed)
     }
 
     func abortRun(sessionKey: String, runId: String) {
         guard self.activeRunID == runId else { return }
         self.activeRunID = nil
-        self.eventContinuation?.yield(.chat(OpenClawChatEventPayload(
+        self.eventContinuation?.yield(.chat(NatesclawChatEventPayload(
             runId: runId,
             sessionKey: sessionKey,
             state: "aborted",
@@ -458,8 +458,8 @@ private actor LocalFixtureChatStore {
             errorMessage: nil)))
     }
 
-    func sessions() throws -> OpenClawChatSessionsListResponse {
-        let entry = OpenClawChatSessionEntry(
+    func sessions() throws -> NatesclawChatSessionsListResponse {
+        let entry = NatesclawChatSessionEntry(
             key: fixture.sessionKey,
             kind: "chat",
             displayName: self.fixture.displayName,
@@ -482,11 +482,11 @@ private actor LocalFixtureChatStore {
             thinkingLevels: Self.thinkingLevels,
             thinkingOptions: Self.thinkingOptions,
             thinkingDefault: "auto")
-        return OpenClawChatSessionsListResponse(
+        return NatesclawChatSessionsListResponse(
             ts: Date().timeIntervalSince1970 * 1000,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(
+            defaults: NatesclawChatSessionsDefaults(
                 modelProvider: self.fixture.modelProvider,
                 model: self.fixture.modelID,
                 contextTokens: 128_000,
@@ -505,16 +505,16 @@ private actor LocalFixtureChatStore {
         ["auto", "low", "medium", "high"]
     }
 
-    private static var thinkingLevels: [OpenClawChatThinkingLevelOption] {
+    private static var thinkingLevels: [NatesclawChatThinkingLevelOption] {
         [
-            OpenClawChatThinkingLevelOption(id: "auto", label: "Auto"),
-            OpenClawChatThinkingLevelOption(id: "low", label: "Low"),
-            OpenClawChatThinkingLevelOption(id: "medium", label: "Medium"),
-            OpenClawChatThinkingLevelOption(id: "high", label: "High"),
+            NatesclawChatThinkingLevelOption(id: "auto", label: "Auto"),
+            NatesclawChatThinkingLevelOption(id: "low", label: "Low"),
+            NatesclawChatThinkingLevelOption(id: "medium", label: "Medium"),
+            NatesclawChatThinkingLevelOption(id: "high", label: "High"),
         ]
     }
 
-    private static func seedMessages(fixture: LocalChatFixture) -> [OpenClawChatMessage] {
+    private static func seedMessages(fixture: LocalChatFixture) -> [NatesclawChatMessage] {
         let now = Date().timeIntervalSince1970 * 1000
         return fixture.seedMessages.enumerated().map { index, text in
             self.message(role: "assistant", text: text, timestamp: now + Double(index))
@@ -525,12 +525,12 @@ private actor LocalFixtureChatStore {
         role: String,
         text: String,
         timestamp: Double,
-        idempotencyKey: String? = nil) -> OpenClawChatMessage
+        idempotencyKey: String? = nil) -> NatesclawChatMessage
     {
-        OpenClawChatMessage(
+        NatesclawChatMessage(
             role: role,
             content: [
-                OpenClawChatMessageContent(
+                NatesclawChatMessageContent(
                     type: "text",
                     text: text,
                     mimeType: nil,
@@ -555,7 +555,7 @@ private actor LocalFixtureChatStore {
     private struct HistoryPayload: Encodable {
         var sessionKey: String
         var sessionId: String?
-        var messages: [OpenClawChatMessage]?
+        var messages: [NatesclawChatMessage]?
         var thinkingLevel: String?
     }
 
@@ -573,13 +573,13 @@ private actor LocalFixtureChatStore {
 
 extension ScreenshotFixtureMode {
     static var holdsInitialChatRun: Bool {
-        ProcessInfo.processInfo.arguments.contains("--openclaw-hold-initial-chat-run")
+        ProcessInfo.processInfo.arguments.contains("--natesclaw-hold-initial-chat-run")
     }
 }
 
 extension LocalFixtureChatTransport {
     private func registerFixtureEventContinuation(
-        _ continuation: AsyncStream<OpenClawChatTransportEvent>.Continuation)
+        _ continuation: AsyncStream<NatesclawChatTransportEvent>.Continuation)
     {
         guard ScreenshotFixtureMode.holdsInitialChatRun else {
             continuation.finish()

@@ -6,7 +6,7 @@ import {
   patchSessionEntryCore,
   upsertSessionEntryCore,
 } from "../../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { isAgentSessionModelPatchOrigin } from "../../gateway/session-model-patch-origin.js";
 import { GATEWAY_OWNER_ONLY_CORE_TOOLS } from "../../security/dangerous-tools.js";
 import { beginSessionWorkAdmission } from "../../sessions/session-lifecycle-admission.js";
@@ -21,7 +21,7 @@ const adversarialResolved = {
   model: overlongUnicode("模", 96),
   agentRuntime: {
     id: overlongUnicode("運", 48),
-    fallback: "openclaw" as const,
+    fallback: "natesclaw" as const,
     source: "session-key" as const,
   },
   thinkingLevel: overlongUnicode("考", 16),
@@ -272,10 +272,10 @@ describe("sessions tool", () => {
   });
 
   it("patches its session, then reverts a failed agent-selected model", async () => {
-    await withTestDir({ prefix: "openclaw-sessions-tool-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-sessions-tool-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
       const sessionKey = "agent:main:main";
-      const cfg: OpenClawConfig = {
+      const cfg: NatesclawConfig = {
         session: { store: storePath },
         agents: { defaults: { model: { primary: "openai/good" } } },
       };
@@ -402,7 +402,7 @@ describe("sessions tool", () => {
       expect(events).toContainEqual(
         expect.objectContaining({
           message: expect.objectContaining({
-            customType: "openclaw.system-note",
+            customType: "natesclaw.system-note",
             content: "System note: model broken/bad failed; reverted to openai/good.",
           }),
         }),
@@ -411,7 +411,7 @@ describe("sessions tool", () => {
   });
 
   it("clears the model fallback marker after a successful run", async () => {
-    await withTestDir({ prefix: "openclaw-sessions-tool-success-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-sessions-tool-success-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
       const sessionKey = "agent:main:main";
       await upsertSessionEntryCore(
@@ -462,7 +462,7 @@ describe("sessions tool", () => {
   });
 
   it("reverts when the patched model fails but a fallback completes the run", async () => {
-    await withTestDir({ prefix: "openclaw-sessions-tool-fallback-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-sessions-tool-fallback-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
       const sessionKey = "agent:main:main";
       await upsertSessionEntryCore(
@@ -509,10 +509,10 @@ describe("sessions tool", () => {
   });
 
   it("promotes the newest validated model across overlapping patches", async () => {
-    await withTestDir({ prefix: "openclaw-sessions-tool-overlap-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-sessions-tool-overlap-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
       const sessionKey = "agent:main:main";
-      const cfg: OpenClawConfig = {
+      const cfg: NatesclawConfig = {
         agents: { defaults: { model: { primary: "openai/a" } } },
       };
       await upsertSessionEntryCore(
@@ -669,7 +669,7 @@ describe("sessions tool", () => {
     const resolved = {
       modelProvider: "openai",
       model: "gpt-5.6-luna",
-      agentRuntime: { id: "codex", fallback: "openclaw" as const, source: "session" as const },
+      agentRuntime: { id: "codex", fallback: "natesclaw" as const, source: "session" as const },
       thinkingLevel: "medium",
       thinkingLevels: [
         { id: "off", label: "Off" },
@@ -801,7 +801,7 @@ describe("sessions tool", () => {
   });
 
   it("keeps resolved model and thinking metadata when self-archive is deferred", async () => {
-    await withTestDir({ prefix: "openclaw-sessions-tool-archive-" }, async (dir) => {
+    await withTestDir({ prefix: "natesclaw-sessions-tool-archive-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
       const sessionKey = "agent:main:subagent:archive-me";
       const sessionId = "archive-me-session";

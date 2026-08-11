@@ -33,15 +33,15 @@ const TEST_TIMEOUT_MS = 5_000;
 const STARTUP_TEST_TIMEOUT_MS = 25_000;
 
 async function startTuiFixture(opts: { env?: NodeJS.ProcessEnv } = {}) {
-  const tempDir = await mkdtemp(path.join(tmpdir(), "openclaw-tui-pty-"));
+  const tempDir = await mkdtemp(path.join(tmpdir(), "natesclaw-tui-pty-"));
   const scriptPath = await writeTuiPtyFixtureScript(tempDir);
   const logPath = path.join(tempDir, "fixture-log.jsonl");
   const run = startPty(process.execPath, ["--import", "tsx", scriptPath], {
     activeRuns,
     cwd: process.cwd(),
     env: {
-      OPENCLAW_THEME: "dark",
-      OPENCLAW_TUI_PTY_LOG_PATH: logPath,
+      NATESCLAW_THEME: "dark",
+      NATESCLAW_TUI_PTY_LOG_PATH: logPath,
       NO_COLOR: undefined,
       ...opts.env,
     },
@@ -85,20 +85,20 @@ describe.sequential("TUI PTY harness", () => {
       startTuiFixture(),
       startTuiFixture({
         env: {
-          OPENCLAW_TUI_PTY_MODEL: "gpt-5.6-sol@openai:setup-64cddea3-938c-431e-be3b-aa47090577c7",
-          OPENCLAW_TUI_PTY_THINKING_LEVEL: "high",
+          NATESCLAW_TUI_PTY_MODEL: "gpt-5.6-sol@openai:setup-64cddea3-938c-431e-be3b-aa47090577c7",
+          NATESCLAW_TUI_PTY_THINKING_LEVEL: "high",
         },
       }),
       startTuiFixture({
         env: {
-          OPENCLAW_TUI_PTY_MODEL: "fixture-provider/fixture-model",
-          OPENCLAW_TUI_PTY_THINKING_LEVEL: "medium",
-          OPENCLAW_TUI_PTY_LAUNCH_THINKING: "high",
-          OPENCLAW_TUI_PTY_INITIAL_MESSAGE: "thinking override proof",
+          NATESCLAW_TUI_PTY_MODEL: "fixture-provider/fixture-model",
+          NATESCLAW_TUI_PTY_THINKING_LEVEL: "medium",
+          NATESCLAW_TUI_PTY_LAUNCH_THINKING: "high",
+          NATESCLAW_TUI_PTY_INITIAL_MESSAGE: "thinking override proof",
         },
       }),
       startTuiFixture({
-        env: { OPENCLAW_TUI_PTY_STARTUP_DELAY_MS: "400" },
+        env: { NATESCLAW_TUI_PTY_STARTUP_DELAY_MS: "400" },
       }),
     ]);
     const [mainBoot, compactBoot, thinkingOverrideBoot, slowBoot] = boots;
@@ -154,8 +154,8 @@ describe.sequential("TUI PTY harness", () => {
     async () => {
       const modeFixture = await startTuiFixture({
         env: {
-          OPENCLAW_TUI_PTY_DELIVER: "1",
-          OPENCLAW_TUI_PTY_MODEL: "fixture-model",
+          NATESCLAW_TUI_PTY_DELIVER: "1",
+          NATESCLAW_TUI_PTY_MODEL: "fixture-model",
         },
       });
       try {
@@ -280,7 +280,7 @@ describe.sequential("TUI PTY harness", () => {
     "recovers session subscription after $failures startup failures",
     async ({ failures }) => {
       const subscriptionFixture = await startTuiFixture({
-        env: { OPENCLAW_TUI_PTY_SUBSCRIBE_FAILURES: String(failures) },
+        env: { NATESCLAW_TUI_PTY_SUBSCRIBE_FAILURES: String(failures) },
       });
       try {
         await subscriptionFixture.run.waitForOutput("local ready | idle", STARTUP_TIMEOUT_MS);
@@ -308,7 +308,7 @@ describe.sequential("TUI PTY harness", () => {
     "never reports ready after exhausting session subscription recovery",
     async () => {
       const subscriptionFixture = await startTuiFixture({
-        env: { OPENCLAW_TUI_PTY_SUBSCRIBE_FAILURES: "5" },
+        env: { NATESCLAW_TUI_PTY_SUBSCRIBE_FAILURES: "5" },
       });
       try {
         await subscriptionFixture.run.waitForOutput(
@@ -442,7 +442,7 @@ describe.sequential("TUI PTY harness", () => {
     "cancels a buffered submit before Ctrl+D shutdown",
     async () => {
       const bufferedFixture = await startTuiFixture({
-        env: { OPENCLAW_TUI_PTY_SUBMIT_BURST_WINDOW_MS: "500" },
+        env: { NATESCLAW_TUI_PTY_SUBMIT_BURST_WINDOW_MS: "500" },
       });
       try {
         const message = "buffered shutdown proof";
@@ -513,8 +513,8 @@ describe.sequential("TUI PTY harness", () => {
     async (cols, rows) => {
       const compactFixture = await startTuiFixture({
         env: {
-          OPENCLAW_TUI_PTY_COLS: String(cols),
-          OPENCLAW_TUI_PTY_ROWS: String(rows),
+          NATESCLAW_TUI_PTY_COLS: String(cols),
+          NATESCLAW_TUI_PTY_ROWS: String(rows),
         },
       });
 
@@ -533,9 +533,9 @@ describe.sequential("TUI PTY harness", () => {
     async () => {
       const compactPickerFixture = await startTuiFixture({
         env: {
-          OPENCLAW_TUI_PTY_COLS: "20",
-          OPENCLAW_TUI_PTY_ROWS: "18",
-          OPENCLAW_TUI_PTY_PICKER_FIXTURE: "1",
+          NATESCLAW_TUI_PTY_COLS: "20",
+          NATESCLAW_TUI_PTY_ROWS: "18",
+          NATESCLAW_TUI_PTY_PICKER_FIXTURE: "1",
         },
       });
 

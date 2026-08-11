@@ -8,7 +8,7 @@ import {
   CONTROL_UI_OWNER_BOOTSTRAP_OPERATOR_SCOPES,
   CONTROL_UI_OWNER_BOOTSTRAP_PROFILE,
 } from "../shared/device-bootstrap-profile.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { createTrackedTempDirs } from "../test-utils/tracked-temp-dirs.js";
 import {
   clearDeviceBootstrapTokens,
@@ -27,7 +27,7 @@ import {
 } from "./device-pairing-store.js";
 
 const tempDirs = createTrackedTempDirs();
-const createTempDir = () => tempDirs.make("openclaw-device-bootstrap-test-");
+const createTempDir = () => tempDirs.make("natesclaw-device-bootstrap-test-");
 
 async function verifyBootstrapToken(
   baseDir: string,
@@ -49,7 +49,7 @@ afterEach(async () => {
   vi.useRealTimers();
   resetLogger();
   setLoggerOverride(null);
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   await tempDirs.cleanup();
 });
 

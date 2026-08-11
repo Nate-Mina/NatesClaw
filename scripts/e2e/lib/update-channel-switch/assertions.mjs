@@ -174,11 +174,11 @@ function assertUpdate(channel) {
 }
 
 function assertConfigChannel(channel) {
-  const config = readJson(path.join(process.env.HOME, ".openclaw", "openclaw.json"));
+  const config = readJson(path.join(process.env.HOME, ".natesclaw", "natesclaw.json"));
   if (config.update?.channel === channel) {
     return;
   }
-  if (process.env.OPENCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT === "1") {
+  if (process.env.NATESCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT === "1") {
     console.log(
       `legacy package did not persist update.channel ${channel}; got ${JSON.stringify(config.update?.channel)}`,
     );
@@ -200,17 +200,17 @@ function assertInstalledVersion(root, expectedVersion) {
   const manifest = readJson(path.join(root, "package.json"));
   if (manifest.version !== expectedVersion) {
     throw new Error(
-      `expected installed openclaw ${expectedVersion}, got ${String(manifest.version)}`,
+      `expected installed natesclaw ${expectedVersion}, got ${String(manifest.version)}`,
     );
   }
 }
 
 switch (command) {
   case "prepare-git-fixture":
-    prepareGitFixture(args[0] ?? "/tmp/openclaw-git");
+    prepareGitFixture(args[0] ?? "/tmp/natesclaw-git");
     break;
   case "write-control-ui":
-    writeControlUi(args[0] ?? "/tmp/openclaw-git");
+    writeControlUi(args[0] ?? "/tmp/natesclaw-git");
     break;
   case "assert-update":
     assertUpdate(args[0]);

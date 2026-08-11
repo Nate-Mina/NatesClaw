@@ -2,7 +2,7 @@
  * Shared gateway-token session rotation tests.
  */
 import fs from "node:fs/promises";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   loadGatewayConfig,
@@ -31,9 +31,9 @@ let configSetRotationCase: {
 };
 
 beforeAll(async () => {
-  const configPath = process.env.OPENCLAW_CONFIG_PATH;
+  const configPath = process.env.NATESCLAW_CONFIG_PATH;
   if (!configPath) {
-    throw new Error("OPENCLAW_CONFIG_PATH missing in gateway test environment");
+    throw new Error("NATESCLAW_CONFIG_PATH missing in gateway test environment");
   }
   port = await getGatewayTestPort();
   testState.gatewayAuth = undefined;

@@ -1,7 +1,7 @@
 // Normalizes the Gateway's update-availability and update-schedule payloads into
 // the shapes the Control UI renders. These readers are the trust boundary for
 // wire data, so they stay separate from the lifecycle controllers that consume them.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { GatewayHelloOk } from "../api/gateway.ts";
 import type { UpdateAvailable, UpdateScheduleState } from "../api/types.ts";
 

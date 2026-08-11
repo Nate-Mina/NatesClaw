@@ -7,9 +7,9 @@ import {
   registerAcpRuntimeBackend,
   unregisterAcpRuntimeBackend,
   type AcpRuntime,
-} from "openclaw/plugin-sdk/acp-runtime-backend";
-import type { OpenClawPluginService, OpenClawPluginServiceContext } from "openclaw/plugin-sdk/core";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+} from "natesclaw/plugin-sdk/acp-runtime-backend";
+import type { NatesclawPluginService, NatesclawPluginServiceContext } from "natesclaw/plugin-sdk/core";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 import { createLazyAcpRuntimeProxy } from "./src/runtime-proxy.js";
 
 const ACPX_BACKEND_ID = "acpx";
@@ -21,12 +21,12 @@ type InnerAcpxRuntimeServiceParams = NonNullable<
 type CreateAcpxRuntimeServiceParams = Omit<InnerAcpxRuntimeServiceParams, "backendLifecycle">;
 
 type DeferredServiceState = {
-  ctx: OpenClawPluginServiceContext | null;
+  ctx: NatesclawPluginServiceContext | null;
   lifecycleRevision: number;
   ownedRuntime: AcpRuntime | null;
   params: CreateAcpxRuntimeServiceParams;
   realRuntime: AcpRuntime | null;
-  realService: OpenClawPluginService | null;
+  realService: NatesclawPluginService | null;
   startPromise: Promise<AcpRuntime> | null;
   stopPromise: Promise<void> | null;
 };
@@ -115,7 +115,7 @@ function createDeferredRuntime(state: DeferredServiceState, lifecycleRevision: n
 /** Creates the plugin service that registers ACPX as an ACP runtime backend. */
 export function createAcpxRuntimeService(
   params: CreateAcpxRuntimeServiceParams = {},
-): OpenClawPluginService {
+): NatesclawPluginService {
   const state: DeferredServiceState = {
     ctx: null,
     lifecycleRevision: 0,
@@ -130,8 +130,8 @@ export function createAcpxRuntimeService(
   return {
     id: "acpx-runtime",
     async start(ctx) {
-      if (process.env.OPENCLAW_SKIP_ACPX_RUNTIME === "1") {
-        ctx.logger.info("skipping embedded acpx runtime backend (OPENCLAW_SKIP_ACPX_RUNTIME=1)");
+      if (process.env.NATESCLAW_SKIP_ACPX_RUNTIME === "1") {
+        ctx.logger.info("skipping embedded acpx runtime backend (NATESCLAW_SKIP_ACPX_RUNTIME=1)");
         return;
       }
       if (state.stopPromise) {

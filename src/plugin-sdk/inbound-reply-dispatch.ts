@@ -1,5 +1,5 @@
 /**
- * @deprecated Compatibility shim for openclaw/skills' openclaw-zulip plugin and
+ * @deprecated Compatibility shim for natesclaw/skills' natesclaw-zulip plugin and
  * tloncorp/tlon-apps. Removal is targeted for the next Plugin SDK major.
  */
 import type { GetReplyOptions } from "../auto-reply/get-reply-options.types.js";
@@ -11,7 +11,7 @@ import {
   throwIfDurableInboundReplyDeliveryFailed,
   type DurableInboundReplyDeliveryOptions,
 } from "../channels/turn/durable-delivery.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   normalizeOutboundReplyPayloadCore,
   type OutboundReplyPayload,
@@ -25,7 +25,7 @@ type ReplyOptionsWithoutModelSelected = Omit<
 type RecordInboundSessionFn = typeof import("../channels/session.js").recordInboundSession;
 
 function buildInboundReplyDispatchBase(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
   accountId?: string;
   route: { agentId: string; sessionKey: string };
@@ -56,7 +56,7 @@ function buildInboundReplyDispatchBase(params: {
 
 type BuildInboundReplyDispatchBaseParams = Parameters<typeof buildInboundReplyDispatchBase>[0];
 type RecordInboundSessionAndDispatchReplyParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
   accountId?: string;
   agentId: string;

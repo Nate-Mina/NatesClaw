@@ -1,13 +1,13 @@
-# Mattermost OpenClaw channel
+# Mattermost Natesclaw channel
 
-Official OpenClaw channel plugin for Mattermost.
+Official Natesclaw channel plugin for Mattermost.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/mattermost
+natesclaw plugins install @natesclaw/mattermost
 ```
 
 ## Docs
 
-See `docs/channels/mattermost.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/channels/mattermost`.
+See `docs/channels/mattermost.md` in the Natesclaw repository, or the published docs at `https://docs.natesclaw.ai/channels/mattermost`.

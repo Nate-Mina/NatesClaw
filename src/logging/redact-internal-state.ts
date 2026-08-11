@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
-type LoggingConfig = OpenClawConfig["logging"];
+type LoggingConfig = NatesclawConfig["logging"];
 type InternalLoggingConfig = NonNullable<LoggingConfig> & {
   [fullContextToolPayloadRedaction]: true;
 };

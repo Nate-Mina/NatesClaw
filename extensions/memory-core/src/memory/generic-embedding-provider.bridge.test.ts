@@ -1,13 +1,13 @@
 // Memory Core tests cover generic embedding provider.bridge plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   EmbeddingInput,
   EmbeddingProviderCallOptions,
-} from "openclaw/plugin-sdk/embedding-providers";
+} from "natesclaw/plugin-sdk/embedding-providers";
 import {
   createPluginRegistryFixture,
   registerVirtualTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "natesclaw/plugin-sdk/plugin-test-contracts";
 import {
   clearEmbeddingProviders,
   createEmptyPluginRegistry,
@@ -21,7 +21,7 @@ import {
   type RegisteredMemoryEmbeddingProvider,
   restoreRegisteredMemoryEmbeddingProviders,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createEmbeddingProvider, resolveEmbeddingProviderIndexIdentity } from "./embeddings.js";
 
@@ -35,10 +35,10 @@ let embeddingProvidersSnapshot: RegisteredEmbeddingProvider[];
 let memoryEmbeddingProvidersSnapshot: RegisteredMemoryEmbeddingProvider[];
 let previousPluginRegistry: ReturnType<typeof getActivePluginRegistry>;
 
-function createOptions(config: OpenClawConfig) {
+function createOptions(config: NatesclawConfig) {
   return {
     config,
-    agentDir: "/tmp/openclaw-agent",
+    agentDir: "/tmp/natesclaw-agent",
     provider: "virtual-generic",
     fallback: "none",
     model: "virtual-model",
@@ -69,7 +69,7 @@ describe("memory-core generic embedding provider bridge", () => {
       plugins: {
         enabled: false,
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     registerVirtualTestPlugin({
       registry,

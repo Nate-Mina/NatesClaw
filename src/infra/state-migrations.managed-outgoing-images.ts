@@ -2,8 +2,8 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { readNonBlankString as optionalNonEmptyString } from "@openclaw/normalization-core/string-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { readNonBlankString as optionalNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
 import {
   managedImageRecordFromRow,
   managedImageRecordsEqual,
@@ -14,9 +14,9 @@ import {
 } from "../gateway/managed-image-record-store.js";
 import { getMediaDir } from "../media/store.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
@@ -322,7 +322,7 @@ function rollbackImportedRecords(params: {
   stateDir: string;
 }): string | null {
   try {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<ManagedImageRecordDatabase>(db);
         for (const parsed of params.records) {
@@ -348,7 +348,7 @@ function rollbackImportedRecords(params: {
           );
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } },
     );
     return null;
   } catch (error) {
@@ -407,7 +407,7 @@ export function migrateLegacyManagedOutgoingImages(params: {
   }
 
   try {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<ManagedImageRecordDatabase>(db);
         for (const parsed of parsedRecords) {
@@ -439,7 +439,7 @@ export function migrateLegacyManagedOutgoingImages(params: {
           insertedRecords.push(parsed);
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, NATESCLAW_STATE_DIR: params.stateDir } },
     );
   } catch (error) {
     warnings.push(
@@ -450,8 +450,8 @@ export function migrateLegacyManagedOutgoingImages(params: {
 
   try {
     params.beforeVerify?.();
-    const database = openOpenClawStateDatabase({
-      env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir },
+    const database = openNatesclawStateDatabase({
+      env: { ...process.env, NATESCLAW_STATE_DIR: params.stateDir },
     });
     const stateDb = getNodeSqliteKysely<ManagedImageRecordDatabase>(database.db);
     for (const parsed of parsedRecords) {

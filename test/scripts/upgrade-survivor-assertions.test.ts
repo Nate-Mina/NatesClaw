@@ -18,7 +18,7 @@ function writeMigratedSessionState(stateDir: string): void {
   mkdirSync(agentSessionsDir, { recursive: true });
   mkdirSync(agentDbDir, { recursive: true });
 
-  const db = new DatabaseSync(join(agentDbDir, "openclaw-agent.sqlite"));
+  const db = new DatabaseSync(join(agentDbDir, "natesclaw-agent.sqlite"));
   try {
     db.exec(`
       CREATE TABLE session_nodes (
@@ -143,7 +143,7 @@ function writeLegacyCacheSessionState(
   stateDir: string,
   options: { empty?: boolean; includePrompt?: boolean; replaceNodes?: boolean } = {},
 ) {
-  const dbPath = join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+  const dbPath = join(stateDir, "agents", "main", "agent", "natesclaw-agent.sqlite");
   const db = new DatabaseSync(dbPath);
   try {
     if (options.replaceNodes) {
@@ -171,7 +171,7 @@ function writeLegacyCacheSessionState(
 }
 
 function writeLegacySessionEntriesState(stateDir: string): void {
-  const dbPath = join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+  const dbPath = join(stateDir, "agents", "main", "agent", "natesclaw-agent.sqlite");
   const db = new DatabaseSync(dbPath);
   try {
     db.exec(`
@@ -200,7 +200,7 @@ function writeLegacySessionEntriesState(stateDir: string): void {
 }
 
 function runSessionStateAssertion(setup: (stateDir: string) => void): void {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-session-state-"));
+  const root = mkdtempSync(join(tmpdir(), "natesclaw-upgrade-survivor-session-state-"));
   try {
     const stateDir = join(root, "state");
     const workspace = join(root, "workspace");
@@ -215,9 +215,9 @@ function runSessionStateAssertion(setup: (stateDir: string) => void): void {
     execFileSync(process.execPath, [ASSERTIONS_PATH, "assert-state"], {
       env: {
         ...process.env,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_TEST_WORKSPACE_DIR: workspace,
-        OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "base",
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_TEST_WORKSPACE_DIR: workspace,
+        NATESCLAW_UPGRADE_SURVIVOR_SCENARIO: "base",
       },
       stdio: "pipe",
     });
@@ -227,7 +227,7 @@ function runSessionStateAssertion(setup: (stateDir: string) => void): void {
 }
 
 function assertConfiguredPluginState(params: { installPath?: string } = {}): void {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-"));
+  const root = mkdtempSync(join(tmpdir(), "natesclaw-upgrade-survivor-"));
   try {
     const stateDir = join(root, "state");
     const workspace = join(root, "workspace");
@@ -242,15 +242,15 @@ function assertConfiguredPluginState(params: { installPath?: string } = {}): voi
     });
     writeMigratedSessionState(stateDir);
     writeJson(join(matrixInstallDir, "package.json"), {
-      name: "@openclaw/matrix",
+      name: "@natesclaw/matrix",
     });
     writeJson(join(stateDir, "plugins", "installs.json"), {
       installRecords: {
         matrix: {
           source: "clawhub",
-          spec: "clawhub:@openclaw/matrix",
+          spec: "clawhub:@natesclaw/matrix",
           installPath: matrixInstallDir,
-          clawhubPackage: "@openclaw/matrix",
+          clawhubPackage: "@natesclaw/matrix",
           clawhubChannel: "official",
           artifactKind: "npm-pack",
         },
@@ -266,10 +266,10 @@ function assertConfiguredPluginState(params: { installPath?: string } = {}): voi
     execFileSync(process.execPath, [ASSERTIONS_PATH, "assert-state"], {
       env: {
         ...process.env,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_TEST_WORKSPACE_DIR: workspace,
-        OPENCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
-        OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "configured-plugin-installs",
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_TEST_WORKSPACE_DIR: workspace,
+        NATESCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
+        NATESCLAW_UPGRADE_SURVIVOR_SCENARIO: "configured-plugin-installs",
       },
       stdio: "pipe",
     });
@@ -284,7 +284,7 @@ function createUpdateRunSelfUpgradeSummary() {
   const note = "QA-UPDATE-RUN-PACKAGE-SELF-UPGRADE";
   return {
     status: "passed",
-    source: { spec: `openclaw@${sourceVersion}`, version: sourceVersion },
+    source: { spec: `natesclaw@${sourceVersion}`, version: sourceVersion },
     target: { tag: "latest", resolvedVersion: targetVersion },
     installedVersion: targetVersion,
     expectedRestartNote: note,
@@ -329,7 +329,7 @@ function createUpdateRunSelfUpgradeSummary() {
     },
     supervisorHandoff: {
       servicePid: 4242,
-      systemctlInvocations: ["--user start openclaw-gateway.service"],
+      systemctlInvocations: ["--user start natesclaw-gateway.service"],
       monitorEvents: [
         "source Gateway exited through supervised update handoff",
         "starting installed service without provider suppression",
@@ -357,7 +357,7 @@ function createUpdateRunSelfUpgradeSummary() {
 }
 
 function assertUpdateRunSelfUpgrade(summary: ReturnType<typeof createUpdateRunSelfUpgradeSummary>) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-update-run-self-upgrade-"));
+  const root = mkdtempSync(join(tmpdir(), "natesclaw-update-run-self-upgrade-"));
   try {
     const summaryPath = join(root, "summary.json");
     writeJson(summaryPath, summary);
@@ -380,12 +380,12 @@ describe("upgrade survivor assertions", () => {
     ) as string[];
 
     expect(scenarios).toContain("base");
-    expect(scenarios).toContain("acpx-openclaw-tools-bridge");
+    expect(scenarios).toContain("acpx-natesclaw-tools-bridge");
     expect(new Set(scenarios).size).toBe(scenarios.length);
   });
 
   it("seeds recent ordered legacy session timestamps", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-seed-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-upgrade-survivor-seed-"));
     try {
       const stateDir = join(root, "state");
       const workspace = join(root, "workspace");
@@ -396,9 +396,9 @@ describe("upgrade survivor assertions", () => {
       execFileSync(process.execPath, [ASSERTIONS_PATH, "seed"], {
         env: {
           ...process.env,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_WORKSPACE_DIR: workspace,
-          OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "base",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_WORKSPACE_DIR: workspace,
+          NATESCLAW_UPGRADE_SURVIVOR_SCENARIO: "base",
         },
         stdio: "pipe",
       });
@@ -449,8 +449,8 @@ describe("upgrade survivor assertions", () => {
     }
   });
 
-  it("accepts the ACPX OpenClaw tools bridge scenario during seed", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-acpx-"));
+  it("accepts the ACPX Natesclaw tools bridge scenario during seed", () => {
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-upgrade-survivor-acpx-"));
     try {
       const stateDir = join(root, "state");
       const workspace = join(root, "workspace");
@@ -460,9 +460,9 @@ describe("upgrade survivor assertions", () => {
       execFileSync(process.execPath, [ASSERTIONS_PATH, "seed"], {
         env: {
           ...process.env,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_WORKSPACE_DIR: workspace,
-          OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-openclaw-tools-bridge",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_WORKSPACE_DIR: workspace,
+          NATESCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-natesclaw-tools-bridge",
         },
         stdio: "pipe",
       });
@@ -471,10 +471,10 @@ describe("upgrade survivor assertions", () => {
     }
   });
 
-  it("asserts the ACPX OpenClaw tools bridge config survived", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-acpx-config-"));
+  it("asserts the ACPX Natesclaw tools bridge config survived", () => {
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-upgrade-survivor-acpx-config-"));
     try {
-      const configPath = join(root, "openclaw.json");
+      const configPath = join(root, "natesclaw.json");
       const coveragePath = join(root, "coverage.json");
       writeJson(configPath, {
         plugins: {
@@ -483,23 +483,23 @@ describe("upgrade survivor assertions", () => {
             acpx: {
               enabled: true,
               config: {
-                openClawToolsMcpBridge: true,
+                NatesclawToolsMcpBridge: true,
               },
             },
           },
         },
       });
       writeJson(coveragePath, {
-        acceptedIntents: ["acpx-openclaw-tools-bridge"],
+        acceptedIntents: ["acpx-natesclaw-tools-bridge"],
         skippedIntents: [],
       });
 
       execFileSync(process.execPath, [ASSERTIONS_PATH, "assert-config"], {
         env: {
           ...process.env,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
-          OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-openclaw-tools-bridge",
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
+          NATESCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-natesclaw-tools-bridge",
         },
         stdio: "pipe",
       });
@@ -527,7 +527,7 @@ describe("upgrade survivor assertions", () => {
       runSessionStateAssertion((stateDir) => {
         writeMigratedSessionState(stateDir);
         const db = new DatabaseSync(
-          join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite"),
+          join(stateDir, "agents", "main", "agent", "natesclaw-agent.sqlite"),
         );
         try {
           db.exec("DELETE FROM session_nodes;");
@@ -575,7 +575,7 @@ describe("upgrade survivor assertions", () => {
       runSessionStateAssertion((stateDir) => {
         const agentDbDir = join(stateDir, "agents", "main", "agent");
         mkdirSync(agentDbDir, { recursive: true });
-        const db = new DatabaseSync(join(agentDbDir, "openclaw-agent.sqlite"));
+        const db = new DatabaseSync(join(agentDbDir, "natesclaw-agent.sqlite"));
         try {
           db.exec("CREATE TABLE unrelated_state (key TEXT PRIMARY KEY);");
         } finally {
@@ -595,7 +595,7 @@ describe("upgrade survivor assertions", () => {
   });
 
   it("rejects ClawHub npm-pack installs outside the managed extensions root", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-outside-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-upgrade-survivor-outside-"));
     try {
       expect(() =>
         assertConfiguredPluginState({ installPath: join(root, "outside-matrix") }),
@@ -655,7 +655,7 @@ describe("upgrade survivor assertions", () => {
   it("rejects duplicate target service starts during the supervised handoff", () => {
     const summary = createUpdateRunSelfUpgradeSummary();
     summary.supervisorHandoff.systemctlInvocations.push(
-      "--user --quiet start openclaw-gateway.service",
+      "--user --quiet start natesclaw-gateway.service",
     );
 
     expect(() => assertUpdateRunSelfUpgrade(summary)).toThrow(/target exactly once/);

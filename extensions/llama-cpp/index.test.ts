@@ -1,12 +1,12 @@
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
-import type { OpenClawPluginService } from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { NatesclawPluginService } from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import {
   createPluginRegistryFixture,
   registerVirtualTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "natesclaw/plugin-sdk/plugin-test-contracts";
 import {
   clearEmbeddingProviders,
   clearMemoryEmbeddingProviders,
@@ -14,16 +14,16 @@ import {
   getActivePluginRegistry,
   getRegisteredEmbeddingProvider,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
+import type { ProviderPlugin } from "natesclaw/plugin-sdk/provider-model-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const memoryHostEmbeddingMocks = vi.hoisted(() => ({
   createLocalEmbeddingProvider: vi.fn(),
 }));
-const LOCAL_EMBEDDING_RUNTIME_FACTS = Symbol.for("openclaw.localEmbeddingRuntimeFacts");
+const LOCAL_EMBEDDING_RUNTIME_FACTS = Symbol.for("natesclaw.localEmbeddingRuntimeFacts");
 
-vi.mock("openclaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
+vi.mock("natesclaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
   createLocalEmbeddingProvider: memoryHostEmbeddingMocks.createLocalEmbeddingProvider,
 }));
 
@@ -118,7 +118,7 @@ afterEach(() => {
 
 describe("llama.cpp provider plugin", () => {
   it("registers process-owned inference cleanup as a plugin service", async () => {
-    const services: OpenClawPluginService[] = [];
+    const services: NatesclawPluginService[] = [];
     llamaCppPlugin.register(
       createTestPluginApi({
         id: "llama-cpp",
@@ -439,7 +439,7 @@ describe("llama.cpp provider plugin", () => {
     });
 
     expect(llamaCppEmbeddingProviderAdapter.formatSetupError?.(err)).toContain(
-      "openclaw plugins install @openclaw/llama-cpp-provider",
+      "natesclaw plugins install @natesclaw/llama-cpp-provider",
     );
   });
 });

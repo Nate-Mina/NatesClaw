@@ -5,11 +5,11 @@ import {
   modelSupportsVision,
   resolveAgentDir,
   resolveDefaultModelForAgent,
-} from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 
 export async function resolveStickerVisionSupportRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
 }): Promise<boolean> {
   const catalog = await loadPreparedModelCatalog({

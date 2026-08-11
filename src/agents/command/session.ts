@@ -28,7 +28,7 @@ import { resolveChannelResetConfig, resolveSessionResetType } from "../../config
 import { listSessionEntriesCore } from "../../config/sessions/session-accessor.js";
 import { resolveSessionKey } from "../../config/sessions/session-key.js";
 import type { InternalSessionEntry as SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   classifySessionKeyShape,
   isUnscopedSessionKeySentinel,
@@ -129,7 +129,7 @@ export function buildExplicitSessionIdSessionKey(params: {
 }
 
 function collectSessionIdMatchesForRequest(opts: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionStore: Record<string, SessionEntry>;
   storePath: string;
   storeAgentId?: string;
@@ -191,7 +191,7 @@ function collectSessionIdMatchesForRequest(opts: {
  * into that agent's main session key.
  */
 export function resolveStoredSessionKeyForSessionId(opts: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionId: string;
   agentId?: string;
 }): SessionKeyResolution {
@@ -223,7 +223,7 @@ export function resolveStoredSessionKeyForSessionId(opts: {
 
 /** Resolves the session key/store targeted by one command request. */
 export function resolveSessionKeyForRequestCore(opts: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   to?: string;
   sessionId?: string;
   sessionKey?: string;
@@ -322,7 +322,7 @@ export function resolveSessionKeyForRequestCore(opts: {
 
 /** Resolves or creates the session used by one agent command request. */
 export function resolveSession(opts: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   to?: string;
   sessionId?: string;
   sessionKey?: string;

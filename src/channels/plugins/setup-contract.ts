@@ -1,6 +1,6 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { Option } from "commander";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { parseStrictNonNegativeInteger } from "../../infra/parse-finite-number.js";
 import type { RuntimeEnv } from "../../runtime.js";
 import type { ChannelSetupAdapter } from "./setup-adapter.types.js";
@@ -115,12 +115,12 @@ export type ChannelOwnedSetupContract = {
   metadata: ChannelSetupMetadata;
   parseInput: (input: unknown) => ChannelSetupParseResult;
   resolveAccountId?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string;
     input?: unknown;
   }) => string;
   prepareAccountConfigInput?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: unknown;
     runtime: RuntimeEnv;
@@ -130,19 +130,19 @@ export type ChannelOwnedSetupContract = {
   }>["resolveBindingAccountId"];
   applyAccountName?: ChannelOwnedSetupAdapterShape<{ name?: string }>["applyAccountName"];
   applyAccountConfig: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: unknown;
-  }) => OpenClawConfig;
+  }) => NatesclawConfig;
   afterAccountConfigWritten?: (params: {
-    previousCfg: OpenClawConfig;
-    cfg: OpenClawConfig;
+    previousCfg: NatesclawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: unknown;
     runtime: RuntimeEnv;
   }) => Promise<void> | void;
   validateInput?: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId: string;
     input: unknown;
   }) => string | null;

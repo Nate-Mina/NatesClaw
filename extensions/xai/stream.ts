@@ -1,13 +1,13 @@
 // Xai plugin module implements stream behavior.
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import { streamSimple } from "openclaw/plugin-sdk/llm";
-import type { ProviderWrapStreamFnContext } from "openclaw/plugin-sdk/plugin-entry";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import { streamSimple } from "natesclaw/plugin-sdk/llm";
+import type { ProviderWrapStreamFnContext } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   composeProviderStreamWrappers,
   createPayloadPatchStreamWrapper,
   createPlainTextToolCallCompatWrapper,
   createToolStreamWrapper,
-} from "openclaw/plugin-sdk/provider-stream-shared";
+} from "natesclaw/plugin-sdk/provider-stream-shared";
 import { XAI_GROK_OAUTH_BASE_URL } from "./provider-catalog.js";
 import { isXaiProviderId } from "./provider-id.js";
 

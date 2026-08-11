@@ -1,5 +1,5 @@
 /** Builds deterministic plugin load plans for selected harness, memory, and context-engine owners. */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { withActivatedPluginIds } from "../../plugins/activation-context.js";
 import { resolveManifestActivationPlan } from "../../plugins/activation-planner.js";
 import {
@@ -17,7 +17,7 @@ import {
   resolveBundledProviderCompatPluginIds,
   resolveOwningPluginIdsForProviderRef,
 } from "../../plugins/providers.js";
-import { isDefaultAgentRuntimeId, OPENCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
+import { isDefaultAgentRuntimeId, NATESCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
 import { normalizeOptionalAgentRuntimeId } from "../agent-runtime-id.js";
 import { isCliRuntimeAliasForProvider } from "../model-runtime-aliases.js";
 import { resolveAgentHarnessPolicy } from "./policy.js";
@@ -40,13 +40,13 @@ function dedupePluginIds(values: readonly string[]): string[] {
   return result;
 }
 
-function restrictiveAllowlistOmitsPlugin(config: OpenClawConfig | undefined, pluginId: string) {
+function restrictiveAllowlistOmitsPlugin(config: NatesclawConfig | undefined, pluginId: string) {
   const allow = config?.plugins?.allow ?? [];
   return allow.length > 0 && !allow.includes(pluginId);
 }
 
 function resolveSelectedMemoryPluginIds(params: {
-  config: OpenClawConfig | undefined;
+  config: NatesclawConfig | undefined;
   workspaceDir: string;
 }): string[] {
   // Honor config-owned test defaults before discovery forces an implicit memory owner.
@@ -81,7 +81,7 @@ function resolveSelectedMemoryPluginIds(params: {
 export function resolveAgentHarnessOwnerPluginIds(params: {
   runtime: string;
   provider: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir: string;
 }): string[] {
   const harnessPluginIds = resolveManifestActivationPlan({
@@ -125,10 +125,10 @@ export function resolveAgentHarnessOwnerPluginIds(params: {
 }
 
 function withRuntimePluginIdsAllowed(
-  config: OpenClawConfig | undefined,
+  config: NatesclawConfig | undefined,
   pluginIds: readonly string[],
   materializeAllowlist: boolean,
-): OpenClawConfig | undefined {
+): NatesclawConfig | undefined {
   const existingAllowlist = config?.plugins?.allow ?? [];
   if (pluginIds.length === 0 || (!materializeAllowlist && existingAllowlist.length === 0)) {
     return config;
@@ -144,7 +144,7 @@ function withRuntimePluginIdsAllowed(
 
 export function resolveSelectedAgentHarnessRuntime(
   selection: AgentHarnessPluginSelection,
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
 ) {
   const requestedRuntime = normalizeOptionalAgentRuntimeId(selection.runtime);
   return requestedRuntime && !isDefaultAgentRuntimeId(requestedRuntime)
@@ -160,10 +160,10 @@ export function resolveSelectedAgentHarnessRuntime(
 /** Returns whether a selection needs a plugin-owned harness in its prepared generation. */
 export function requiresAgentHarnessPluginSelection(
   selection: AgentHarnessPluginSelection,
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
 ): boolean {
   const runtime = resolveSelectedAgentHarnessRuntime(selection, config);
-  if (isDefaultAgentRuntimeId(runtime) || runtime === OPENCLAW_AGENT_RUNTIME_ID) {
+  if (isDefaultAgentRuntimeId(runtime) || runtime === NATESCLAW_AGENT_RUNTIME_ID) {
     return false;
   }
   // Codex is a native plugin harness, never a CLI backend alias. Keep this hot-path decision
@@ -176,11 +176,11 @@ export function requiresAgentHarnessPluginSelection(
 
 /** Folds selected harness, memory, and context-engine owners into one deterministic load plan. */
 export function resolveAgentRuntimePluginLoadPlan(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir: string;
   basePluginIds?: readonly string[];
   selections: readonly AgentHarnessPluginSelection[];
-}): { config?: OpenClawConfig; pluginIds?: string[] } {
+}): { config?: NatesclawConfig; pluginIds?: string[] } {
   let config = params.config;
   const memoryPluginIds = resolveSelectedMemoryPluginIds({
     config: params.config,

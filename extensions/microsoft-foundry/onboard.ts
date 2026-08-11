@@ -1,14 +1,14 @@
-import type { ProviderAuthContext } from "openclaw/plugin-sdk/core";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import type { ProviderAuthContext } from "natesclaw/plugin-sdk/core";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 // Microsoft Foundry setup module handles plugin onboarding behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { readResponseTextLimited } from "openclaw/plugin-sdk/provider-http";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { readResponseTextLimited } from "natesclaw/plugin-sdk/provider-http";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import {
   azLoginDeviceCode,
   azLoginDeviceCodeWithOptions,
@@ -504,7 +504,7 @@ function isValidTenantIdentifier(value: string): boolean {
 }
 
 if (process.env.VITEST === "true") {
-  const key = Symbol.for("openclaw.microsoftFoundryTestApi");
+  const key = Symbol.for("natesclaw.microsoftFoundryTestApi");
   const api = (Reflect.get(globalThis, key) as Record<string, unknown> | undefined) ?? {};
   Reflect.set(globalThis, key, { ...api, buildFoundryConnectionTest, isValidTenantIdentifier });
 }

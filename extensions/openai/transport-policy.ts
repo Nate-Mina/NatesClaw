@@ -2,9 +2,9 @@
 import type {
   ProviderResolveTransportTurnStateContext,
   ProviderTransportTurnState,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { normalizeProviderId } from "natesclaw/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isOpenAIApiBaseUrl, isOpenAICodexBaseUrl } from "./base-url.js";
 
 const DEFAULT_OPENAI_WS_DEGRADE_COOLDOWN_MS = 60_000;
@@ -51,7 +51,7 @@ function resolveSessionHeaders(sessionIdValue?: string): Record<string, string> 
   }
   return {
     "x-client-request-id": sessionId,
-    "x-openclaw-session-id": sessionId,
+    "x-natesclaw-session-id": sessionId,
   };
 }
 
@@ -74,14 +74,14 @@ export function resolveOpenAITransportTurnState(
   return {
     headers: {
       ...sessionHeaders,
-      "x-openclaw-turn-id": turnId,
-      "x-openclaw-turn-attempt": attempt,
+      "x-natesclaw-turn-id": turnId,
+      "x-natesclaw-turn-attempt": attempt,
     },
     metadata: {
-      openclaw_session_id: sessionHeaders["x-openclaw-session-id"] ?? "",
-      openclaw_turn_id: turnId,
-      openclaw_turn_attempt: attempt,
-      openclaw_transport: ctx.transport,
+      natesclaw_session_id: sessionHeaders["x-natesclaw-session-id"] ?? "",
+      natesclaw_turn_id: turnId,
+      natesclaw_turn_attempt: attempt,
+      natesclaw_transport: ctx.transport,
     },
     ...(ctx.transport === "websocket"
       ? {

@@ -1,20 +1,20 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   createPluginStateKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import type {
   OpenKeyedStoreOptions,
   PluginDoctorStateMigrationContext,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/runtime-doctor-migrations";
+} from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspace,
   type TempWorkspace,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { stateMigrations } from "../doctor-contract-api.js";
 import { buildQQBotStateKey } from "./engine/utils/state-keys.js";
@@ -100,12 +100,12 @@ describe("qqbot doctor state migration", () => {
   beforeEach(async () => {
     resetPluginStateStoreForTests();
     const workspace = await tempWorkspace({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-state-",
     });
     tempWorkspaces.push(workspace);
     stateDir = workspace.dir;
-    env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+    env = { ...process.env, NATESCLAW_STATE_DIR: stateDir };
   });
 
   afterEach(async () => {
@@ -205,14 +205,14 @@ describe("qqbot doctor state migration", () => {
 
   it("does not scan credential backups outside the active state directory", async () => {
     const homeWorkspace = await tempWorkspace({
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "qqbot-home-",
     });
     tempWorkspaces.push(homeWorkspace);
     const homeDir = homeWorkspace.dir;
     env.HOME = homeDir;
     await writeJson(
-      path.join(homeDir, ".openclaw", "qqbot", "data", "credential-backup-default.json"),
+      path.join(homeDir, ".natesclaw", "qqbot", "data", "credential-backup-default.json"),
       {
         accountId: "default",
         appId: "other-state-app",

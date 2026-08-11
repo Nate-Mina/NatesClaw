@@ -4,8 +4,8 @@ import {
   createChannelProgressDraftCompositor,
   formatChannelProgressDraftLine,
   formatChannelProgressDraftText,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { GetReplyOptions } from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { GetReplyOptions } from "natesclaw/plugin-sdk/reply-runtime";
 import type { CoreConfig, MatrixConfig, MatrixStreamingMode, ReplyToMode } from "../../types.js";
 import type { MatrixClient } from "../sdk.js";
 import { formatMatrixToolProgressMarkdownCode } from "./handler-helpers.js";

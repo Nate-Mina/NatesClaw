@@ -1,6 +1,6 @@
 // Firecrawl provider module implements model/runtime integration.
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import type { WebSearchProviderPlugin } from "openclaw/plugin-sdk/provider-web-search-contract";
+import { readPositiveIntegerParam } from "natesclaw/plugin-sdk/param-readers";
+import type { WebSearchProviderPlugin } from "natesclaw/plugin-sdk/provider-web-search-contract";
 import { buildFirecrawlFreeWebSearchProviderBase } from "../web-search-shared.js";
 import { GenericFirecrawlSearchSchema } from "./firecrawl-search-provider.js";
 

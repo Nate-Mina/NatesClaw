@@ -1,6 +1,6 @@
 // Firecrawl tests cover firecrawl tools plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { mockPinnedHostnameResolution } from "openclaw/plugin-sdk/test-env";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { mockPinnedHostnameResolution } from "natesclaw/plugin-sdk/test-env";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createStreamingResponse } from "../../test-support/streaming-error-response.js";
 import {
@@ -120,7 +120,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     expect(preservedFetchProvider.tools?.web?.fetch?.provider).toBe("other");
   });
 
@@ -155,7 +155,7 @@ describe("firecrawl tools", () => {
           url: "https://api.firecrawl.dev/v2/search",
           timeoutSeconds: 5,
           apiKey: "firecrawl-key",
-          body: { query: "openclaw" },
+          body: { query: "natesclaw" },
           errorLabel: "Firecrawl search",
         },
         async () => "ok",
@@ -186,7 +186,7 @@ describe("firecrawl tools", () => {
         plugins: {
           entries: { firecrawl: { config: { webSearch: { apiKey: "firecrawl-owner-test" } } } },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       query: "hostile successful HTTP error",
     }).catch((error: unknown) => error);
 
@@ -213,7 +213,7 @@ describe("firecrawl tools", () => {
         plugins: {
           entries: { firecrawl: { config: { webFetch: { apiKey: "firecrawl-owner-test" } } } },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       url: "https://example.com/hostile-firecrawl-error",
       extractMode: "markdown",
     }).catch((error: unknown) => error);
@@ -251,7 +251,7 @@ describe("firecrawl tools", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       const request =
         operation === "search"
           ? runActualFirecrawlSearch({
@@ -291,7 +291,7 @@ describe("firecrawl tools", () => {
         plugins: {
           entries: { firecrawl: { config: { webSearch: { apiKey: "firecrawl-budget-test" } } } },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       query: "bounded successful Firecrawl search",
       count: 2,
       scrapeResults: true,
@@ -321,7 +321,7 @@ describe("firecrawl tools", () => {
         plugins: {
           entries: { firecrawl: { config: { webSearch: { apiKey: "firecrawl-sanitized-test" } } } },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       query: "sanitized Firecrawl search",
     });
 
@@ -366,7 +366,7 @@ describe("firecrawl tools", () => {
         plugins: {
           entries: { firecrawl: { config: { webFetch: { apiKey: "firecrawl-cap-test" } } } },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       url: "https://example.com/firecrawl-hard-cap",
       extractMode: "markdown",
       maxChars: 1_000_000,
@@ -392,7 +392,7 @@ describe("firecrawl tools", () => {
         url: "https://api.firecrawl.dev/v2/search",
         timeoutSeconds: 5,
         apiKey: "firecrawl-test-\r\nkey",
-        body: { query: "openclaw" },
+        body: { query: "natesclaw" },
         errorLabel: "Firecrawl search",
       },
       async () => "ok",
@@ -437,7 +437,7 @@ describe("firecrawl tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       url: "https://example.com/keyless-firecrawl",
       extractMode: "markdown",
       access: "keyless",
@@ -461,7 +461,7 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         url: "https://example.com/direct-scrape",
         extractMode: "markdown",
       }),
@@ -497,7 +497,7 @@ describe("firecrawl tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       query: "keyless firecrawl search",
       access: "keyless",
     });
@@ -529,7 +529,7 @@ describe("firecrawl tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       query: "keyless ignores configured key",
       access: "keyless",
     });
@@ -558,7 +558,7 @@ describe("firecrawl tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       query: "keyed search identity",
     });
 
@@ -580,7 +580,7 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         query: "direct firecrawl search",
       }),
     ).rejects.toThrow("web_search (firecrawl) needs a Firecrawl API key");
@@ -602,7 +602,7 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         query: "conflicting domain filters",
         includeDomains: ["firecrawl.dev"],
         excludeDomains: ["example.com"],
@@ -635,8 +635,8 @@ describe("firecrawl tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
-      query: "openclaw",
+      } as NatesclawConfig,
+      query: "natesclaw",
       count: 25,
       excludeDomains: ["example.com"],
       tbs: "qdr:w",
@@ -645,7 +645,7 @@ describe("firecrawl tools", () => {
     });
 
     expect(capturedBody).toMatchObject({
-      query: "openclaw",
+      query: "natesclaw",
       limit: 25,
       excludeDomains: ["example.com"],
       tbs: "qdr:w",
@@ -701,7 +701,7 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         url: "http://169.254.169.254/latest/meta-data/",
         extractMode: "markdown",
       }),
@@ -720,18 +720,18 @@ describe("firecrawl tools", () => {
     }
 
     const result = await tool.execute({
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
     });
 
     expect(runFirecrawlSearch).toHaveBeenCalledWith({
       cfg: { test: true },
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
     });
     expect(result).toEqual({
       cfg: { test: true },
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
     });
   });
@@ -754,13 +754,13 @@ describe("firecrawl tools", () => {
     }
 
     await tool.execute({
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
     });
 
     expect(runFirecrawlSearch).toHaveBeenCalledWith({
       cfg: { test: true },
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
       access: "keyless",
     });
@@ -803,18 +803,18 @@ describe("firecrawl tools", () => {
     }
 
     await tool.execute({
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: "4",
     });
 
     expect(runFirecrawlSearch).toHaveBeenCalledWith({
       cfg: { test: true },
-      query: "openclaw docs",
+      query: "natesclaw docs",
       count: 4,
     });
     await expect(
       tool.execute({
-        query: "openclaw docs",
+        query: "natesclaw docs",
         count: "4.5",
       }),
     ).rejects.toThrow("count must be an integer from 1 to 10");
@@ -822,7 +822,7 @@ describe("firecrawl tools", () => {
 
   it("keeps the compare-helper fetch facade owned by the Firecrawl extension", async () => {
     await fetchFirecrawlContent({
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "markdown",
       apiKey: "firecrawl-key",
       baseUrl: "https://api.firecrawl.dev",
@@ -853,7 +853,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       proxy: "stealth",
@@ -891,7 +891,7 @@ describe("firecrawl tools", () => {
     }
 
     await tool.execute({
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       proxy: "stealth",
@@ -900,7 +900,7 @@ describe("firecrawl tools", () => {
 
     expect(runFirecrawlScrape).toHaveBeenCalledWith({
       cfg: { test: true },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "markdown",
       access: "keyless",
       maxChars: 1500,
@@ -919,20 +919,20 @@ describe("firecrawl tools", () => {
     }
 
     await tool.execute({
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       maxChars: "1500",
     });
 
     expect(runFirecrawlScrape).toHaveBeenCalledWith({
       cfg: { test: true },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "markdown",
       access: "keyless",
       maxChars: 1500,
     });
     await expect(
       tool.execute({
-        url: "https://docs.openclaw.ai",
+        url: "https://docs.natesclaw.ai",
         maxChars: "1500.5",
       }),
     ).rejects.toThrow("maxChars must be a positive integer");
@@ -1027,7 +1027,7 @@ describe("firecrawl tools", () => {
     expect(tool.resultContentSource).toBe("network");
 
     const result = await tool.execute("call-1", {
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       maxChars: 1500,
       onlyMainContent: false,
       maxAgeMs: 5000,
@@ -1038,7 +1038,7 @@ describe("firecrawl tools", () => {
 
     expect(runFirecrawlScrape).toHaveBeenCalledWith({
       cfg: { env: "test" },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       onlyMainContent: false,
@@ -1051,7 +1051,7 @@ describe("firecrawl tools", () => {
     expect(details.ok).toBe(true);
     expect(details.params).toEqual({
       cfg: { env: "test" },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       onlyMainContent: false,
@@ -1090,19 +1090,19 @@ describe("firecrawl tools", () => {
 
     await expect(
       scrapeTool.execute("call-scrape-max-chars", {
-        url: "https://docs.openclaw.ai",
+        url: "https://docs.natesclaw.ai",
         maxChars: 1500.5,
       }),
     ).rejects.toThrow("maxChars must be a positive integer");
     await expect(
       scrapeTool.execute("call-scrape-max-age", {
-        url: "https://docs.openclaw.ai",
+        url: "https://docs.natesclaw.ai",
         maxAgeMs: -1,
       }),
     ).rejects.toThrow("maxAgeMs must be a non-negative integer");
     await expect(
       scrapeTool.execute("call-scrape-timeout", {
-        url: "https://docs.openclaw.ai",
+        url: "https://docs.natesclaw.ai",
         timeoutSeconds: 22.5,
       }),
     ).rejects.toThrow("timeoutSeconds must be a positive integer");
@@ -1116,14 +1116,14 @@ describe("firecrawl tools", () => {
     } as never);
 
     await tool.execute("call-2", {
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "text",
       proxy: "invalid",
     });
 
     expect(runFirecrawlScrape).toHaveBeenCalledWith({
       cfg: { env: "test" },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.natesclaw.ai",
       extractMode: "text",
       maxChars: undefined,
       onlyMainContent: undefined,
@@ -1158,7 +1158,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBe("plugin-key");
     expect(resolveFirecrawlBaseUrl(cfg)).toBe("https://plugin.firecrawl.test");
@@ -1174,7 +1174,7 @@ describe("firecrawl tools", () => {
     expect(resolveFirecrawlMaxAgeMs()).toBe(172_800_000);
     expect(resolveFirecrawlScrapeTimeoutSeconds()).toBe(60);
     expect(resolveFirecrawlSearchTimeoutSeconds()).toBe(30);
-    expect(resolveFirecrawlBaseUrl({} as OpenClawConfig)).not.toBe(DEFAULT_FIRECRAWL_BASE_URL);
+    expect(resolveFirecrawlBaseUrl({} as NatesclawConfig)).not.toBe(DEFAULT_FIRECRAWL_BASE_URL);
   });
 
   it("resolves env SecretRefs for Firecrawl API key without requiring a runtime snapshot", () => {
@@ -1195,7 +1195,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBe("firecrawl-env-ref-key");
   });
@@ -1218,7 +1218,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -1241,7 +1241,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -1272,7 +1272,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -1303,7 +1303,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -1358,7 +1358,7 @@ describe("firecrawl tools", () => {
         url: "http://127.0.0.1:8787/v2/search",
         timeoutSeconds: 5,
         apiKey: "firecrawl-key",
-        body: { query: "openclaw" },
+        body: { query: "natesclaw" },
         errorLabel: "Firecrawl Search",
       },
       async (response) => (await response.json()) as Record<string, unknown>,
@@ -1392,8 +1392,8 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
-        query: "openclaw malformed search",
+        } as NatesclawConfig,
+        query: "natesclaw malformed search",
       }),
     ).rejects.toThrow("Firecrawl Search API error: malformed JSON response");
   });
@@ -1424,8 +1424,8 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
-        query: `openclaw malformed ${kind} search`,
+        } as NatesclawConfig,
+        query: `natesclaw malformed ${kind} search`,
         access: "keyless",
       }),
     ).rejects.toThrow("Firecrawl Search API error: malformed JSON response");
@@ -1476,7 +1476,7 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         url: "https://example.com/firecrawl-malformed-scrape",
         extractMode: "markdown",
       }),
@@ -1509,7 +1509,7 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         url: `https://example.com/firecrawl-malformed-${kind}-scrape`,
         extractMode: "markdown",
         access: "keyless",
@@ -1532,7 +1532,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveFirecrawlOnlyMainContent(cfg)).toBe(false);
     expect(resolveFirecrawlMaxAgeMs(cfg)).toBe(1234);

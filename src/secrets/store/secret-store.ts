@@ -1,4 +1,4 @@
-import { err, ok, type Result } from "@openclaw/normalization-core/result";
+import { err, ok, type Result } from "@natesclaw/normalization-core/result";
 import type { Selectable } from "kysely";
 import { ENV_SECRET_REF_ID_RE } from "../../config/types.secrets.js";
 import {
@@ -8,17 +8,17 @@ import {
 } from "../../infra/kysely-sync.js";
 import { normalizeSqliteNumber } from "../../infra/sqlite-number.js";
 import { registerSecretValueForRedaction } from "../../logging/secret-redaction-registry.js";
-import { withExistingOpenClawStateDatabaseReadOnly } from "../../state/openclaw-state-db-readonly.js";
-import { ensureSecretStoreSchema } from "../../state/openclaw-state-db-schema-additive.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import { withExistingNatesclawStateDatabaseReadOnly } from "../../state/natesclaw-state-db-readonly.js";
+import { ensureSecretStoreSchema } from "../../state/natesclaw-state-db-schema-additive.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "../../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "../../state/natesclaw-state-db.js";
 
-type SecretStoreDatabase = Pick<OpenClawStateKyselyDatabase, "secret_store_entries">;
-type SecretStoreRow = Selectable<OpenClawStateKyselyDatabase["secret_store_entries"]>;
+type SecretStoreDatabase = Pick<NatesclawStateKyselyDatabase, "secret_store_entries">;
+type SecretStoreRow = Selectable<NatesclawStateKyselyDatabase["secret_store_entries"]>;
 type SecretStoreScope = { kind: "team" };
 type SecretStoreKind = "secret" | "env";
 
@@ -116,12 +116,12 @@ function toMetadata(row: SecretStoreRow): SecretStoreEntryMetadata {
 export function listSecretStoreEntries(params: {
   scope: SecretStoreScope;
   includeDeleted?: boolean;
-  database?: OpenClawStateDatabaseOptions;
+  database?: NatesclawStateDatabaseOptions;
 }): SecretStoreEntryMetadata[] {
   const { scopeKind, scopeId } = normalizeScope(params.scope);
   try {
     return (
-      withExistingOpenClawStateDatabaseReadOnly(({ db: sqlite }) => {
+      withExistingNatesclawStateDatabaseReadOnly(({ db: sqlite }) => {
         const db = getNodeSqliteKysely<SecretStoreDatabase>(sqlite);
         let query = db
           .selectFrom("secret_store_entries")
@@ -146,12 +146,12 @@ export function listSecretStoreEntries(params: {
 export function readSecretStoreValue(params: {
   scope: SecretStoreScope;
   name: string;
-  database?: OpenClawStateDatabaseOptions;
+  database?: NatesclawStateDatabaseOptions;
 }): Result<string, SecretStoreReadError> {
   try {
     assertSecretStoreName(params.name);
     const { scopeKind, scopeId } = normalizeScope(params.scope);
-    const row = withExistingOpenClawStateDatabaseReadOnly(({ db: sqlite }) => {
+    const row = withExistingNatesclawStateDatabaseReadOnly(({ db: sqlite }) => {
       const db = getNodeSqliteKysely<SecretStoreDatabase>(sqlite);
       return executeSqliteQueryTakeFirstSync(
         sqlite,
@@ -198,13 +198,13 @@ export function writeSecretStoreEntry(params: {
   value: string;
   kind: SecretStoreKind;
   updatedBy: string | null;
-  database?: OpenClawStateDatabaseOptions;
+  database?: NatesclawStateDatabaseOptions;
 }): void {
   assertSecretStoreName(params.name);
   assertSecretStoreValue(params.value, params.kind);
   const { scopeKind, scopeId } = normalizeScope(params.scope);
   const now = Date.now();
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db: sqlite }) => {
       ensureSecretStoreSchema(sqlite);
       const db = getNodeSqliteKysely<SecretStoreDatabase>(sqlite);
@@ -242,14 +242,14 @@ export function writeSecretStoreEntry(params: {
 export function deleteSecretStoreEntry(params: {
   scope: SecretStoreScope;
   name: string;
-  database?: OpenClawStateDatabaseOptions;
+  database?: NatesclawStateDatabaseOptions;
 }): void {
   assertSecretStoreName(params.name);
   const { scopeKind, scopeId } = normalizeScope(params.scope);
-  const state = openOpenClawStateDatabase(params.database);
+  const state = openNatesclawStateDatabase(params.database);
   const now = Date.now();
   try {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db: sqlite }) => {
         const db = getNodeSqliteKysely<SecretStoreDatabase>(sqlite);
         executeSqliteQuerySync(
@@ -275,13 +275,13 @@ export function deleteSecretStoreEntry(params: {
 
 export function purgeExpiredSecretStoreEntries(
   params: {
-    database?: OpenClawStateDatabaseOptions;
+    database?: NatesclawStateDatabaseOptions;
   } = {},
 ): number {
-  const state = openOpenClawStateDatabase(params.database);
+  const state = openNatesclawStateDatabase(params.database);
   const threshold = Date.now() - SECRET_STORE_RETENTION_MS;
   try {
-    return runOpenClawStateWriteTransaction(
+    return runNatesclawStateWriteTransaction(
       ({ db: sqlite }) => {
         const db = getNodeSqliteKysely<SecretStoreDatabase>(sqlite);
         const deleted = executeSqliteQuerySync(

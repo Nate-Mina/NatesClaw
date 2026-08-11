@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { lstat, realpath } from "node:fs/promises";
 import { homedir } from "node:os";
 import { relative, resolve } from "node:path";
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import { resolvePathViaExistingAncestorSync } from "../infra/boundary-path.js";
 import { assertNoSymlinkParents } from "../infra/fs-safe-advanced.js";
 import { FsSafeError, root as fsSafeRoot, type Root } from "../infra/fs-safe.js";
@@ -22,7 +22,7 @@ import {
   type ClawDiagnostic,
   type ClawManifest,
   type ClawLocalPrerequisite,
-  type ClawOpenClawProfile,
+  type ClawNatesclawProfile,
   type ClawPackagePreflight,
   type ClawPackagePreflightResult,
   type ClawSourceIdentity,
@@ -191,7 +191,7 @@ export async function buildClawAddPlan(params: {
   clawMarkdownBody?: Buffer;
   packageBootstrap?: ClawWorkspaceSourceSnapshot;
   includePackageBootstrap?: boolean;
-  openClawProfile?: ClawOpenClawProfile;
+  NatesclawProfile?: ClawNatesclawProfile;
   source: ClawSourceIdentity;
   diagnostics?: ClawDiagnostic[];
   context?: ClawAddPlanContext;
@@ -199,7 +199,7 @@ export async function buildClawAddPlan(params: {
   const context = params.context ?? {};
   const finalId = context.agentId ?? params.manifest.agent.id;
   const workspace = canonicalWorkspacePath(
-    context.workspace ?? resolve(homedir(), ".openclaw", `workspace-${finalId}`),
+    context.workspace ?? resolve(homedir(), ".natesclaw", `workspace-${finalId}`),
   );
   const packageRoot = await realpath(params.source.packageRoot).catch(
     () => params.source.packageRoot,
@@ -235,10 +235,10 @@ export async function buildClawAddPlan(params: {
   }
   const existingAgentIds = new Set(context.existingAgentIds ?? []);
   const agentBlocked = existingAgentIds.has(finalId);
-  const openClawAgentSettings = params.openClawProfile?.agent ?? {};
+  const NatesclawAgentSettings = params.NatesclawProfile?.agent ?? {};
   const agentConfig: ClawAddPlan["agent"]["config"] = {
     ...params.manifest.agent,
-    ...openClawAgentSettings,
+    ...NatesclawAgentSettings,
     id: finalId,
     workspace,
   };
@@ -260,10 +260,10 @@ export async function buildClawAddPlan(params: {
     blocked: agentBlocked || !AGENT_ID_PATTERN.test(finalId),
   });
   const agentCapabilityEffect = {
-    ...(openClawAgentSettings.sandbox ? { sandbox: openClawAgentSettings.sandbox } : {}),
-    ...(openClawAgentSettings.tools ? { tools: openClawAgentSettings.tools } : {}),
-    ...(openClawAgentSettings.memory ? { memory: openClawAgentSettings.memory } : {}),
-    ...(openClawAgentSettings.heartbeat ? { heartbeat: openClawAgentSettings.heartbeat } : {}),
+    ...(NatesclawAgentSettings.sandbox ? { sandbox: NatesclawAgentSettings.sandbox } : {}),
+    ...(NatesclawAgentSettings.tools ? { tools: NatesclawAgentSettings.tools } : {}),
+    ...(NatesclawAgentSettings.memory ? { memory: NatesclawAgentSettings.memory } : {}),
+    ...(NatesclawAgentSettings.heartbeat ? { heartbeat: NatesclawAgentSettings.heartbeat } : {}),
   };
   if (Object.keys(agentCapabilityEffect).length > 0) {
     capabilityChanges.push(
@@ -550,14 +550,14 @@ export async function buildClawAddPlan(params: {
   }
 
   const extensionPlan = await planClawExtensions({
-    extensions: params.openClawProfile?.extensions ?? [],
+    extensions: params.NatesclawProfile?.extensions ?? [],
     workspace,
     packagePreflight: context.packagePreflight,
   });
   const extensions = extensionPlan.extensions;
   const extensionCollisions = findClawExtensionPackageCollisions({
     packages: params.manifest.packages,
-    extensions: params.openClawProfile?.extensions ?? [],
+    extensions: params.NatesclawProfile?.extensions ?? [],
   });
   const collisionIndexes = new Set(extensionCollisions.map(({ index }) => index));
   blockers.push(...extensionCollisions.map(({ diagnostic }) => diagnostic));

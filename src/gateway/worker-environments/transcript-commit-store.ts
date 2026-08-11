@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { Insertable, Selectable } from "kysely";
 import type {
   WorkerTranscriptCommitErrorReason,
@@ -14,12 +14,12 @@ import type {
   DB as StateDatabase,
   WorkerTranscriptCommitHeads,
   WorkerTranscriptCommits,
-} from "../../state/openclaw-state-db.generated.js";
+} from "../../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 
 type TranscriptCommitDb = Pick<
   StateDatabase,
@@ -224,12 +224,12 @@ function insertPendingCommit(db: DatabaseSync, input: NormalizedCommitInput): vo
 }
 
 export function createWorkerTranscriptCommitStore(
-  options: { database?: OpenClawStateDatabase; now?: () => number } = {},
+  options: { database?: NatesclawStateDatabase; now?: () => number } = {},
 ) {
-  const path = (options.database ?? openOpenClawStateDatabase()).path;
+  const path = (options.database ?? openNatesclawStateDatabase()).path;
   const now = options.now ?? Date.now;
   const write = <T>(operation: (db: DatabaseSync) => T): T =>
-    runOpenClawStateWriteTransaction(({ db }) => operation(db), { path });
+    runNatesclawStateWriteTransaction(({ db }) => operation(db), { path });
 
   const begin = (rawInput: WorkerTranscriptCommitInput): WorkerTranscriptCommitBeginResult => {
     const input = normalizeInput(rawInput, now());

@@ -4,7 +4,7 @@ import type { PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import type { GatewayBrowserClient } from "../../../api/gateway.ts";
 import { applicationContext, type ApplicationContext } from "../../../app/context.ts";
-import { OpenClawLightDomElement } from "../../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../../lit/subscriptions-controller.ts";
 import { isActiveWorkboardCard, nextWorkboardCardPosition } from "../../workboard/card-state.ts";
 import { moveWorkboardCard } from "../../workboard/mutations.ts";
@@ -121,7 +121,7 @@ function subscribeToSharedWorkboardChanges(
   };
 }
 
-export abstract class WorkboardWidgetElement extends OpenClawLightDomElement {
+export abstract class WorkboardWidgetElement extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   protected context?: ApplicationContext;
 

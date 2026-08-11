@@ -1,7 +1,7 @@
 <resources>
-    <string-array name="ask_openclaw_query_patterns">
-        <item>"zapytaj OpenClaw %1$s"</item>
-        <item>"powiedz OpenClaw, aby %1$s"</item>
-        <item>"otwórz OpenClaw i zapytaj %1$s"</item>
+    <string-array name="ask_natesclaw_query_patterns">
+        <item>"zapytaj Natesclaw %1$s"</item>
+        <item>"powiedz Natesclaw, aby %1$s"</item>
+        <item>"otwórz Natesclaw i zapytaj %1$s"</item>
     </string-array>
 </resources>

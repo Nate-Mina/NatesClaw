@@ -1,17 +1,17 @@
 // Matrix tests cover exec approvals plugin behavior.
 import path from "node:path";
-import type { ExecApprovalRequest } from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { ExecApprovalRequest } from "natesclaw/plugin-sdk/approval-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   normalizeSessionDeliveryState,
   upsertSessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { closeOpenClawAgentDatabasesForTest } from "openclaw/plugin-sdk/sqlite-runtime-testing";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { closeNatesclawAgentDatabasesForTest } from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, describe, expect, it } from "vitest";
 import { normalizeMatrixApproverId } from "./approval-ids.js";
 import {
@@ -29,7 +29,7 @@ type MatrixExecApprovalConfig = NonNullable<MatrixAccountConfig["execApprovals"]
 type MatrixExecApprovalRequest = ExecApprovalRequest;
 
 function shouldHandleMatrixExecApprovalRequest(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest;
 }): boolean {
@@ -40,16 +40,16 @@ function shouldHandleMatrixExecApprovalRequest(params: {
 }
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
   for (const workspace of tempWorkspaces.splice(0)) {
     workspace.cleanup();
   }
 });
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<OpenClawConfig["channels"]>["matrix"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["matrix"]>>,
-): OpenClawConfig {
+  execApprovals?: NonNullable<NonNullable<NatesclawConfig["channels"]>["matrix"]>["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<NatesclawConfig["channels"]>["matrix"]>>,
+): NatesclawConfig {
   return {
     channels: {
       matrix: {
@@ -60,7 +60,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function matrixAccount(
@@ -83,7 +83,7 @@ function buildMultiAccountMatrixConfig(params: {
   opsExecApprovals?: MatrixExecApprovalConfig;
   defaultOverrides?: Partial<MatrixAccountConfig>;
   opsOverrides?: Partial<MatrixAccountConfig>;
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     ...(params.sessionStorePath ? { session: { store: params.sessionStorePath } } : {}),
     channels: {
@@ -108,7 +108,7 @@ function buildMultiAccountMatrixConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function makeForeignChannelApprovalRequest(params: {
@@ -216,7 +216,7 @@ describe("matrix exec approvals", () => {
           ],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(isMatrixExecApprovalAuthorizedSender({ cfg, senderId: "@target:example.org" })).toBe(
       true,
@@ -373,8 +373,8 @@ describe("matrix exec approvals", () => {
 
   it("scopes non-matrix turn sources to the stored matrix account", async () => {
     const workspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-matrix-exec-approvals-",
+      rootDir: resolvePreferredNatesclawTmpDir(),
+      prefix: "natesclaw-matrix-exec-approvals-",
     });
     tempWorkspaces.push(workspace);
     const tmpDir = workspace.dir;

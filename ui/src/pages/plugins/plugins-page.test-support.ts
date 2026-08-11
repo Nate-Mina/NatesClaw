@@ -1,4 +1,4 @@
-import type { RouteLocation } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
 import { vi } from "vitest";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import type {
@@ -257,7 +257,7 @@ export async function mountPage(
   routeData?: PluginsRouteData,
 ): Promise<{ page: TestPluginsPage; provider: ApplicationContextProvider }> {
   const provider = createApplicationContextProvider(context);
-  const page = document.createElement("openclaw-plugins-page") as unknown as TestPluginsPage;
+  const page = document.createElement("natesclaw-plugins-page") as unknown as TestPluginsPage;
   page.routeData = routeData;
   provider.append(page);
   document.body.append(provider);

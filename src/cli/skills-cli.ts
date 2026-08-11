@@ -1,5 +1,5 @@
 // Skills CLI for workspace status, install/update, ClawHub verification, and workshop proposals.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { Command } from "commander";
 import {
   GATEWAY_CLIENT_MODES,
@@ -255,7 +255,7 @@ function buildSkillVerificationOutput(
   const verifiedSourceUrl = readVerifiedClawHubSkillSourceUrl(result.provenance);
   return {
     ...result,
-    openclaw: {
+    natesclaw: {
       resolution: {
         source: target.resolution.source,
         selector: target.resolution.selector,
@@ -567,7 +567,7 @@ export function registerSkillsCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/skills", "docs.openclaw.ai/cli/skills")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/skills", "docs.natesclaw.ai/cli/skills")}\n`,
     );
   const hasJsonOutput = (opts?: { json?: boolean }): boolean =>
     Boolean(opts?.json || skills.opts<{ json?: boolean }>().json);
@@ -643,7 +643,7 @@ export function registerSkillsCli(program: Command) {
     .option("--as <slug>", "Install a git/local skill under this slug")
     .addHelpText(
       "after",
-      "\nExamples:\n  openclaw skills install @owner/weather\n  openclaw skills install skills-sh:owner/repo/weather\n",
+      "\nExamples:\n  natesclaw skills install @owner/weather\n  natesclaw skills install skills-sh:owner/repo/weather\n",
     )
     .action(
       async (
@@ -843,7 +843,7 @@ export function registerSkillsCli(program: Command) {
       false,
     )
     .option("--agent <id>", "Target agent workspace (defaults to cwd-inferred, then default agent)")
-    .addHelpText("after", "\nExamples:\n  openclaw skills verify @owner/weather\n")
+    .addHelpText("after", "\nExamples:\n  natesclaw skills verify @owner/weather\n")
     .action(
       async (
         slug: string,

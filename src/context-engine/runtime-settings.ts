@@ -1,4 +1,4 @@
-import { normalizeNullableString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeNullableString } from "@natesclaw/normalization-core/string-coerce";
 import type { ContextEngineHostSupport } from "./host-compat.js";
 import type {
   ContextEngineRuntimeReasonCode,
@@ -75,7 +75,7 @@ export function buildContextEngineRuntimeSettings(params: {
   return {
     schemaVersion: 1,
     runtime: {
-      host: "openclaw",
+      host: "natesclaw",
       mode,
       harnessId: normalizeNullableString(params.harnessId),
       runtimeId: normalizeNullableString(params.runtimeId),

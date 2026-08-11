@@ -4,29 +4,29 @@ import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { loadPersistedAuthProfileStore } from "../agents/auth-profiles/persisted.js";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../agents/auth-profiles/runtime-snapshots.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { maybeMigrateAuthProfileJsonStoresToSqlite } from "./doctor-auth-flat-profiles.js";
 
-const states: OpenClawTestState[] = [];
+const states: NatesclawTestState[] = [];
 const secretRef = { source: "env", provider: "default", id: "MY_PROVIDER_API_KEY" } as const;
 
-async function makeTestState(): Promise<OpenClawTestState> {
-  const state = await createOpenClawTestState({
+async function makeTestState(): Promise<NatesclawTestState> {
+  const state = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-doctor-canonical-api-key-",
-    env: { OPENCLAW_AGENT_DIR: undefined, PI_CODING_AGENT_DIR: undefined },
+    prefix: "natesclaw-doctor-canonical-api-key-",
+    env: { NATESCLAW_AGENT_DIR: undefined, PI_CODING_AGENT_DIR: undefined },
   });
   states.push(state);
   return state;
 }
 
 async function writeProfiles(
-  state: OpenClawTestState,
+  state: NatesclawTestState,
   profile: Record<string, unknown>,
   options: { agentDir?: string; order?: boolean } = {},
 ): Promise<string> {
@@ -45,8 +45,8 @@ async function writeProfiles(
 
 afterEach(async () => {
   clearRuntimeAuthProfileStoreSnapshots();
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
   for (const state of states.splice(0)) {
     await state.cleanup();
   }
@@ -113,7 +113,7 @@ describe("canonical SQLite migration for historical API-key aliases", () => {
     expect(prompter.confirmAutoFix).toHaveBeenCalledOnce();
   });
 
-  it.each(["OPENCLAW_AGENT_DIR", "PI_CODING_AGENT_DIR"] as const)(
+  it.each(["NATESCLAW_AGENT_DIR", "PI_CODING_AGENT_DIR"] as const)(
     "migrates aliases from the shipped %s agent override",
     async (agentDirVariable) => {
       const state = await makeTestState();

@@ -396,7 +396,7 @@ describe("method scope resolution", () => {
   });
 
   it("keeps sessions.create project IDs at write scope", () => {
-    const params = { projectId: "openclaw", worktree: true };
+    const params = { projectId: "natesclaw", worktree: true };
     expect(resolveLeastPrivilegeOperatorScopesForMethod("sessions.create", params)).toEqual([
       "operator.write",
     ]);
@@ -501,7 +501,7 @@ describe("method scope resolution", () => {
     expect(
       authorizeOperatorScopesForMethod("sessions.create", ["operator.write"], {
         execNode: "macbook",
-        cwd: "/Users/peter/Projects/openclaw",
+        cwd: "/Users/peter/Projects/natesclaw",
       }),
     ).toEqual({ allowed: false, missingScope: "operator.admin" });
   });

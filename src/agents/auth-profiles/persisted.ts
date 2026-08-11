@@ -3,11 +3,11 @@
  * Normalizes legacy JSON stores, SQLite/raw payloads, runtime state metadata,
  * legacy OAuth files, and merged main/agent stores.
  */
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { coerceSecretRef } from "../../config/types.secrets.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import { asBoolean } from "../../utils/boolean.js";
 import { AUTH_STORE_VERSION, authProfilesLog } from "./constants.js";
 import { hasUsableOAuthCredential } from "./credential-state.js";
@@ -37,7 +37,7 @@ type LegacyAuthStore = Record<string, AuthProfileCredential>;
 
 type LoadPersistedAuthProfileStoreOptions = {
   allowKeychainPrompt?: boolean;
-  database?: OpenClawAgentDatabase;
+  database?: NatesclawAgentDatabase;
 };
 
 type CredentialRejectReason = "non_object" | "invalid_type" | "missing_provider";

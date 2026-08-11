@@ -21,7 +21,7 @@ import {
   type ProviderBatchOutputLine,
   uploadBatchJsonlFile,
   withRemoteHttpResponse,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   assertOkOrThrowProviderError,
   createProviderOperationDeadline,
@@ -29,8 +29,8 @@ import {
   readProviderTextResponse,
   resolveProviderOperationTimeoutMs,
   waitProviderOperationPollInterval,
-} from "openclaw/plugin-sdk/provider-http";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { OpenAiEmbeddingClient } from "./embedding-provider.js";
 
 type OpenAiBatchRequest = {
@@ -82,7 +82,7 @@ async function submitOpenAiBatch(params: {
       endpoint: OPENAI_BATCH_ENDPOINT,
       completion_window: OPENAI_BATCH_COMPLETION_WINDOW,
       metadata: {
-        source: "openclaw-memory",
+        source: "natesclaw-memory",
         agent: params.agentId,
       },
     },

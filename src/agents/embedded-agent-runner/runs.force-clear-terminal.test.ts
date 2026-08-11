@@ -12,9 +12,9 @@ import {
   upsertSessionEntryCore,
 } from "../../config/sessions/session-accessor.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import {
   abortAndDrainEmbeddedAgentRun,
   clearActiveEmbeddedRun,
@@ -40,13 +40,13 @@ function createRunHandle(
 }
 
 describe("force-clear terminal state persistence", () => {
-  let testState: OpenClawTestState | undefined;
+  let testState: NatesclawTestState | undefined;
   let storePath: string;
 
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-forceclear-",
+      prefix: "natesclaw-forceclear-",
     });
     storePath = path.join(testState.sessionsDir(), "sessions.json");
     setRuntimeConfigSnapshot({ session: { store: storePath } });

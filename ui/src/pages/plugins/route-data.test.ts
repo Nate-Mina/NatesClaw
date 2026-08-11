@@ -1,5 +1,5 @@
 // @vitest-environment node
-import type { RouteLocation } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
 import { describe, expect, it } from "vitest";
 import {
   canonicalPluginsRouteLocation,
@@ -47,7 +47,7 @@ describe("Plugins route data", () => {
     expect(
       pluginsRouteLocation(
         location(
-          "/settings/plugins?__openclawPluginsPath=%2Fsettings%2Fplugins%2Fdiscover&query=calendar#featured",
+          "/settings/plugins?__natesclawPluginsPath=%2Fsettings%2Fplugins%2Fdiscover&query=calendar#featured",
         ),
       ),
     ).toEqual(location("/settings/plugins/discover?query=calendar#featured"));

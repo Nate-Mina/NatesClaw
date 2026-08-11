@@ -2,25 +2,25 @@
 import type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogProviderContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
-import { getCachedLiveCatalogValue } from "openclaw/plugin-sdk/provider-catalog-shared";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { resolveApiKeyForProvider } from "natesclaw/plugin-sdk/provider-auth-runtime";
+import { getCachedLiveCatalogValue } from "natesclaw/plugin-sdk/provider-catalog-shared";
 import {
   assertOkOrThrowHttpError,
   readProviderJsonResponse,
   resolveProviderHttpRequestConfig,
   sanitizeConfiguredModelProviderRequest,
-} from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-http";
 import {
   isRecord,
   normalizeOptionalString,
   normalizeTrimmedStringList,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   VideoGenerationModelCapabilitiesContext,
   VideoGenerationProviderCapabilities,
   VideoGenerationResolution,
-} from "openclaw/plugin-sdk/video-generation";
+} from "natesclaw/plugin-sdk/video-generation";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 import { fetchOpenRouterVideoGet, type OpenRouterVideoDispatcherPolicy } from "./video-http.js";
 
@@ -254,8 +254,8 @@ function resolveOpenRouterVideoCatalogRequest(params: {
       defaultBaseUrl: OPENROUTER_BASE_URL,
       defaultHeaders: {
         Authorization: `Bearer ${params.apiKey}`,
-        "HTTP-Referer": "https://openclaw.ai",
-        "X-OpenRouter-Title": "OpenClaw",
+        "HTTP-Referer": "https://natesclaw.ai",
+        "X-OpenRouter-Title": "Natesclaw",
       },
       request,
     }),

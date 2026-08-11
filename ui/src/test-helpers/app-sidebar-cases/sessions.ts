@@ -111,7 +111,7 @@ describe("AppSidebar lobster outcome wiring", () => {
       });
       await sidebar.updateComplete;
 
-      const pet = sidebar.querySelector<LobsterPetElement>("openclaw-lobster-pet");
+      const pet = sidebar.querySelector<LobsterPetElement>("natesclaw-lobster-pet");
       expect(pet?.runOutcome).toBe(expectedOutcome);
     },
   );
@@ -141,7 +141,7 @@ describe("AppSidebar session source lifecycle", () => {
     menuButton.click();
     await sidebar.updateComplete;
 
-    const menu = sidebar.querySelector<TestSessionMenu>("openclaw-session-menu");
+    const menu = sidebar.querySelector<TestSessionMenu>("natesclaw-session-menu");
     if (!menu) {
       throw new Error("Expected sidebar session menu");
     }

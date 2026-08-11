@@ -1,7 +1,7 @@
-// Qwen plugin entrypoint registers its OpenClaw integration.
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { buildOpenAICompatibleLiveModelProviderConfig } from "openclaw/plugin-sdk/provider-catalog-live-runtime";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
+// Qwen plugin entrypoint registers its Natesclaw integration.
+import { createProviderApiKeyAuthMethod } from "natesclaw/plugin-sdk/provider-auth-api-key";
+import { buildOpenAICompatibleLiveModelProviderConfig } from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
 import { applyQwenNativeStreamingUsageCompat } from "./api.js";
 import { buildQwenMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import {

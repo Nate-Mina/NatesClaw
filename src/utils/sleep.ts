@@ -1,4 +1,4 @@
-import { sleepWithAbort } from "@openclaw/retry";
+import { sleepWithAbort } from "@natesclaw/retry";
 import { createAbortError } from "../infra/abort-signal.js";
 import { resolveTimerTimeoutMs } from "../shared/number-coercion.js";
 

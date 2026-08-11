@@ -35,13 +35,13 @@ describe("status.gateway-connection", () => {
           message: "ignored",
         },
         bindMode: "loopback",
-        configPath: "/tmp/openclaw.json",
+        configPath: "/tmp/natesclaw.json",
       }),
     ).toBe(
       [
         "Gateway mode: remote",
         "Gateway target: (missing gateway.remote.url)",
-        "Config: /tmp/openclaw.json",
+        "Config: /tmp/natesclaw.json",
         "Bind: loopback",
         "Local fallback (used for probes): ws://127.0.0.1:18789",
         "Fix: set gateway.remote.url, or set gateway.mode=local.",
@@ -59,7 +59,7 @@ describe("status.gateway-connection", () => {
         message: "ignored",
       },
       bindMode: "loopback",
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
     });
     expect(details).not.toContain("secret");
     expect(details).not.toContain("abc123");
@@ -81,7 +81,7 @@ describe("status.gateway-connection", () => {
           message: "Gateway mode: local",
         },
         bindMode: "loopback",
-        configPath: "/tmp/openclaw.json",
+        configPath: "/tmp/natesclaw.json",
       }),
     ).toBe("Node-only mode detected");
   });

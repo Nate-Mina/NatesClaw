@@ -7,7 +7,7 @@
 import {
   clampPositiveTimerTimeoutMs,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
 import { buildProfileQuery, withBaseUrl } from "./client-actions-url.js";
 import { fetchBrowserJson } from "./client-fetch.js";
 import type {
@@ -89,7 +89,7 @@ export type ProfileStatus = {
   cdpPort: number | null;
   cdpUrl: string | null;
   color: string;
-  driver: "openclaw" | "existing-session" | "extension";
+  driver: "natesclaw" | "existing-session" | "extension";
   running: boolean;
   tabCount: number;
   isDefault: boolean;
@@ -287,7 +287,7 @@ export async function browserCreateProfile(
     color?: string;
     cdpUrl?: string;
     userDataDir?: string;
-    driver?: "openclaw" | "existing-session";
+    driver?: "natesclaw" | "existing-session";
   },
 ): Promise<BrowserCreateProfileResult> {
   return await fetchBrowserJson<BrowserCreateProfileResult>(
@@ -379,7 +379,7 @@ export async function browserCloseTab(
   await sendTabTargetRequest({ baseUrl, path, method: "DELETE", opts });
 }
 
-/** Close a canonical raw target id selected by OpenClaw's internal tab bookkeeping. */
+/** Close a canonical raw target id selected by Natesclaw's internal tab bookkeeping. */
 export async function browserCloseTabByRawTargetId(
   baseUrl: string | undefined,
   targetId: string,

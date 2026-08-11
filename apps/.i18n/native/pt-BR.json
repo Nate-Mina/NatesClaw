@@ -15,8 +15,8 @@
     },
     {
       "id": "native.android.85cc8de945e3929c",
-      "source": "OpenClaw translations · $languageTag",
-      "translated": "Traduções do OpenClaw · $languageTag"
+      "source": "Natesclaw translations · $languageTag",
+      "translated": "Traduções do Natesclaw · $languageTag"
     },
     {
       "id": "native.android.914725056e04bd7a",
@@ -30,8 +30,8 @@
     },
     {
       "id": "native.android.49b641d61b32710e",
-      "source": "Reply to OpenClaw…",
-      "translated": "Responder ao OpenClaw…"
+      "source": "Reply to Natesclaw…",
+      "translated": "Responder ao Natesclaw…"
     },
     {
       "id": "native.android.c17863b62b70d822",
@@ -40,8 +40,8 @@
     },
     {
       "id": "native.android.8700c1dee5524079",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.2028e1559e760da1",
@@ -390,8 +390,8 @@
     },
     {
       "id": "native.android.ff4c22906eac1e9e",
-      "source": "OPENCLAW",
-      "translated": "OPENCLAW"
+      "source": "NATESCLAW",
+      "translated": "NATESCLAW"
     },
     {
       "id": "native.android.dec357dfc9b8c0a5",
@@ -415,13 +415,13 @@
     },
     {
       "id": "native.android.25ce6f89dd2fda90",
-      "source": "OpenClaw Node · Talk",
-      "translated": "OpenClaw Node · Conversa"
+      "source": "Natesclaw Node · Talk",
+      "translated": "Natesclaw Node · Conversa"
     },
     {
       "id": "native.android.b48f7aeb7a884942",
-      "source": "OpenClaw Node · Connected",
-      "translated": "OpenClaw Node · Conectado"
+      "source": "Natesclaw Node · Connected",
+      "translated": "Natesclaw Node · Conectado"
     },
     {
       "id": "native.android.b781a577d8da896d",
@@ -430,8 +430,8 @@
     },
     {
       "id": "native.android.97365bea9725ae80",
-      "source": "OpenClaw Node",
-      "translated": "Nó do OpenClaw"
+      "source": "Natesclaw Node",
+      "translated": "Nó do Natesclaw"
     },
     {
       "id": "native.android.3e0889d921c92cab",
@@ -450,8 +450,8 @@
     },
     {
       "id": "native.android.f4886ad80e8149cf",
-      "source": "OpenClaw node connection status",
-      "translated": "Status da conexão do OpenClaw Node"
+      "source": "Natesclaw node connection status",
+      "translated": "Status da conexão do Natesclaw Node"
     },
     {
       "id": "native.android.20fb810920ccb98c",
@@ -980,8 +980,8 @@
     },
     {
       "id": "native.android.3b076d12026fd953",
-      "source": "OpenClaw is syncing back up",
-      "translated": "O OpenClaw está sincronizando novamente"
+      "source": "Natesclaw is syncing back up",
+      "translated": "O Natesclaw está sincronizando novamente"
     },
     {
       "id": "native.android.8dd8abf489f1fe50",
@@ -1000,8 +1000,8 @@
     },
     {
       "id": "native.android.8e22550e0205b237",
-      "source": "Welcome to OpenClaw",
-      "translated": "Boas-vindas ao OpenClaw"
+      "source": "Welcome to Natesclaw",
+      "translated": "Boas-vindas ao Natesclaw"
     },
     {
       "id": "native.android.fee881b8134958ab",
@@ -1080,8 +1080,8 @@
     },
     {
       "id": "native.android.237761be968be3f4",
-      "source": "OpenClaw needs ${labels.joinToString(\", \")} permissions to continue.",
-      "translated": "O OpenClaw precisa das permissões ${labels.joinToString(\", \")} para continuar."
+      "source": "Natesclaw needs ${labels.joinToString(\", \")} permissions to continue.",
+      "translated": "O Natesclaw precisa das permissões ${labels.joinToString(\", \")} para continuar."
     },
     {
       "id": "native.android.f9b9d558dc078d96",
@@ -1255,18 +1255,18 @@
     },
     {
       "id": "native.android.c9b3801fdf5499a9",
-      "source": "OpenClaw Passive",
-      "translated": "OpenClaw Passivo"
+      "source": "Natesclaw Passive",
+      "translated": "Natesclaw Passivo"
     },
     {
       "id": "native.android.e2a79a2c3ddba922",
-      "source": "OpenClaw Time Sensitive",
-      "translated": "OpenClaw Urgente"
+      "source": "Natesclaw Time Sensitive",
+      "translated": "Natesclaw Urgente"
     },
     {
       "id": "native.android.a79d6ccab877c9ca",
-      "source": "OpenClaw Active",
-      "translated": "OpenClaw Ativo"
+      "source": "Natesclaw Active",
+      "translated": "Natesclaw Ativo"
     },
     {
       "id": "native.android.2aa3ad1a12683954",
@@ -1280,13 +1280,13 @@
     },
     {
       "id": "native.android.e1a8681198e91766",
-      "source": "OpenClaw request failed.",
-      "translated": "A solicitação do OpenClaw falhou."
+      "source": "Natesclaw request failed.",
+      "translated": "A solicitação do Natesclaw falhou."
     },
     {
       "id": "native.android.a71a93ec69cee4d9",
-      "source": "The Gateway connection changed. Restart OpenClaw to reconnect.",
-      "translated": "A conexão com o Gateway mudou. Reinicie o OpenClaw para reconectar."
+      "source": "The Gateway connection changed. Restart Natesclaw to reconnect.",
+      "translated": "A conexão com o Gateway mudou. Reinicie o Natesclaw para reconectar."
     },
     {
       "id": "native.android.cc8d2e1456629a59",
@@ -1500,8 +1500,8 @@
     },
     {
       "id": "native.android.5ce94621017855b6",
-      "source": "Talk or dictate with OpenClaw",
-      "translated": "Fale ou dite com o OpenClaw"
+      "source": "Talk or dictate with Natesclaw",
+      "translated": "Fale ou dite com o Natesclaw"
     },
     {
       "id": "native.android.e2cf5a38587382cb",
@@ -1545,8 +1545,8 @@
     },
     {
       "id": "native.android.9f877120690b0c59",
-      "source": "Search OpenClaw",
-      "translated": "Pesquisar no OpenClaw"
+      "source": "Search Natesclaw",
+      "translated": "Pesquisar no Natesclaw"
     },
     {
       "id": "native.android.c142846e7b88306c",
@@ -1585,8 +1585,8 @@
     },
     {
       "id": "native.android.9a839f6e3e05a744",
-      "source": "OpenClaw thread",
-      "translated": "Conversa do OpenClaw"
+      "source": "Natesclaw thread",
+      "translated": "Conversa do Natesclaw"
     },
     {
       "id": "native.android.5f06e4d6a59f7a59",
@@ -2760,8 +2760,8 @@
     },
     {
       "id": "native.android.8b55ed05cd70b8d9",
-      "source": "Device pairing actions are unavailable in this Gateway session. Run openclaw devices list on the Gateway host and manage the request there. Node capability approval is separate and still uses nodes approve <request id>.",
-      "translated": "As ações de pareamento de dispositivos não estão disponíveis nesta sessão do Gateway. Execute openclaw devices list no host do Gateway e gerencie a solicitação por lá. A aprovação de recursos do nó é separada e ainda usa nodes approve <request id>."
+      "source": "Device pairing actions are unavailable in this Gateway session. Run natesclaw devices list on the Gateway host and manage the request there. Node capability approval is separate and still uses nodes approve <request id>.",
+      "translated": "As ações de pareamento de dispositivos não estão disponíveis nesta sessão do Gateway. Execute natesclaw devices list no host do Gateway e gerencie a solicitação por lá. A aprovação de recursos do nó é separada e ainda usa nodes approve <request id>."
     },
     {
       "id": "native.android.0d8e9ede9c229b8e",
@@ -2820,18 +2820,18 @@
     },
     {
       "id": "native.android.1556c7b90c4a24ff",
-      "source": "Enter the setup code from openclaw qr.",
-      "translated": "Insira o código de configuração gerado por openclaw qr."
+      "source": "Enter the setup code from natesclaw qr.",
+      "translated": "Insira o código de configuração gerado por natesclaw qr."
     },
     {
       "id": "native.android.c6d2aa9f033cecc8",
-      "source": "Setup code was not accepted. Generate a fresh code with openclaw qr.",
-      "translated": "O código de configuração não foi aceito. Gere um novo código com openclaw qr."
+      "source": "Setup code was not accepted. Generate a fresh code with natesclaw qr.",
+      "translated": "O código de configuração não foi aceito. Gere um novo código com natesclaw qr."
     },
     {
       "id": "native.android.3c50060d3efc154d",
-      "source": "That QR code is not an OpenClaw setup QR. Generate a fresh code with openclaw qr, then try again.",
-      "translated": "Esse código QR não é um QR de configuração do OpenClaw. Gere um novo código com openclaw qr e tente novamente."
+      "source": "That QR code is not an Natesclaw setup QR. Generate a fresh code with natesclaw qr, then try again.",
+      "translated": "Esse código QR não é um QR de configuração do Natesclaw. Gere um novo código com natesclaw qr e tente novamente."
     },
     {
       "id": "native.android.f8cd1cbe29c4c582",
@@ -2840,13 +2840,13 @@
     },
     {
       "id": "native.android.63ed21b4888ba5d3",
-      "source": "Could not read that image. Choose a clear screenshot or image of the QR from openclaw qr.",
-      "translated": "Não foi possível ler essa imagem. Escolha uma captura de tela nítida ou uma imagem do QR gerado por openclaw qr."
+      "source": "Could not read that image. Choose a clear screenshot or image of the QR from natesclaw qr.",
+      "translated": "Não foi possível ler essa imagem. Escolha uma captura de tela nítida ou uma imagem do QR gerado por natesclaw qr."
     },
     {
       "id": "native.android.61beaad5c5279eb9",
-      "source": "No setup QR code was found in that image. Choose the QR generated by openclaw qr, or enter the setup code manually.",
-      "translated": "Nenhum código QR de configuração foi encontrado nessa imagem. Escolha o QR gerado por openclaw qr ou insira o código de configuração manualmente."
+      "source": "No setup QR code was found in that image. Choose the QR generated by natesclaw qr, or enter the setup code manually.",
+      "translated": "Nenhum código QR de configuração foi encontrado nessa imagem. Escolha o QR gerado por natesclaw qr ou insira o código de configuração manualmente."
     },
     {
       "id": "native.android.4c4912a456b4213a",
@@ -2890,18 +2890,18 @@
     },
     {
       "id": "native.android.64c8db13ef91513c",
-      "source": "Welcome to OpenClaw",
-      "translated": "Boas-vindas ao OpenClaw"
+      "source": "Welcome to Natesclaw",
+      "translated": "Boas-vindas ao Natesclaw"
     },
     {
       "id": "native.android.c38e106cc8f1e9ff",
-      "source": "Turn this device into a secure OpenClaw node for chat, voice, camera, and device tools.",
-      "translated": "Transforme este dispositivo em um nó OpenClaw seguro para chat, voz, câmera e ferramentas do dispositivo."
+      "source": "Turn this device into a secure Natesclaw node for chat, voice, camera, and device tools.",
+      "translated": "Transforme este dispositivo em um nó Natesclaw seguro para chat, voz, câmera e ferramentas do dispositivo."
     },
     {
       "id": "native.android.f941909a3fa51055",
-      "source": "OpenClaw logo",
-      "translated": "Logotipo do OpenClaw"
+      "source": "Natesclaw logo",
+      "translated": "Logotipo do Natesclaw"
     },
     {
       "id": "native.android.cc878f72a6b70b23",
@@ -2915,8 +2915,8 @@
     },
     {
       "id": "native.android.3bfe29d4d13d3c3e",
-      "source": "Use OpenClaw from your phone",
-      "translated": "Use o OpenClaw pelo seu telefone"
+      "source": "Use Natesclaw from your phone",
+      "translated": "Use o Natesclaw pelo seu telefone"
     },
     {
       "id": "native.android.c0b539eeb4612f5d",
@@ -2925,8 +2925,8 @@
     },
     {
       "id": "native.android.5aed4b5c8d6b246d",
-      "source": "The connected OpenClaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
-      "translated": "O agente OpenClaw conectado pode usar os recursos do dispositivo que você ativar. Continue somente se você confiar no Gateway e no agente ao qual se conectar."
+      "source": "The connected Natesclaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
+      "translated": "O agente Natesclaw conectado pode usar os recursos do dispositivo que você ativar. Continue somente se você confiar no Gateway e no agente ao qual se conectar."
     },
     {
       "id": "native.android.63c31ee564d63347",
@@ -2935,8 +2935,8 @@
     },
     {
       "id": "native.android.f50a9c1ee6d47055",
-      "source": "Scan a QR code or use the setup code from your OpenClaw Gateway.",
-      "translated": "Escaneie um código QR ou use o código de configuração do seu OpenClaw Gateway."
+      "source": "Scan a QR code or use the setup code from your Natesclaw Gateway.",
+      "translated": "Escaneie um código QR ou use o código de configuração do seu Natesclaw Gateway."
     },
     {
       "id": "native.android.58d80589d9d4b7ff",
@@ -2965,8 +2965,8 @@
     },
     {
       "id": "native.android.c8a43dbba02941f0",
-      "source": "Have a terminal open on the device running OpenClaw.",
-      "translated": "Tenha um terminal aberto no dispositivo que está executando OpenClaw."
+      "source": "Have a terminal open on the device running Natesclaw.",
+      "translated": "Tenha um terminal aberto no dispositivo que está executando Natesclaw."
     },
     {
       "id": "native.android.71ce00f359981a0b",
@@ -3000,8 +3000,8 @@
     },
     {
       "id": "native.android.d4b295b5146af4b8",
-      "source": "openclaw gateway",
-      "translated": "openclaw gateway"
+      "source": "natesclaw gateway",
+      "translated": "natesclaw gateway"
     },
     {
       "id": "native.android.250b7dda7cff6b5d",
@@ -3015,8 +3015,8 @@
     },
     {
       "id": "native.android.db24e4be7a1b5547",
-      "source": "openclaw qr",
-      "translated": "openclaw qr"
+      "source": "natesclaw qr",
+      "translated": "natesclaw qr"
     },
     {
       "id": "native.android.96d40475de2885d6",
@@ -3040,8 +3040,8 @@
     },
     {
       "id": "native.android.05987e822ac102ec",
-      "source": "Open the camera and frame the code from openclaw qr.",
-      "translated": "Abra a câmera e enquadre o código do openclaw qr."
+      "source": "Open the camera and frame the code from natesclaw qr.",
+      "translated": "Abra a câmera e enquadre o código do natesclaw qr."
     },
     {
       "id": "native.android.90fa932d2e0adbd9",
@@ -3210,8 +3210,8 @@
     },
     {
       "id": "native.android.f43cb6ed03dc6766",
-      "source": "Gateway pairing is complete. Approve this phone as a node so OpenClaw can use the device capabilities you enable.",
-      "translated": "O pareamento do Gateway foi concluído. Aprove este telefone como um nó para que o OpenClaw possa usar os recursos do dispositivo que você habilitar."
+      "source": "Gateway pairing is complete. Approve this phone as a node so Natesclaw can use the device capabilities you enable.",
+      "translated": "O pareamento do Gateway foi concluído. Aprove este telefone como um nó para que o Natesclaw possa usar os recursos do dispositivo que você habilitar."
     },
     {
       "id": "native.android.8e49feba12c350ac",
@@ -3255,8 +3255,8 @@
     },
     {
       "id": "native.android.d4c3bcf880727fb3",
-      "source": "Only enable access you are comfortable letting OpenClaw use while this phone is connected. You can change these later in Android Settings.",
-      "translated": "Habilite apenas os acessos que você se sente confortável em permitir que o OpenClaw use enquanto este telefone estiver conectado. Você pode alterá-los depois nas Configurações do Android."
+      "source": "Only enable access you are comfortable letting Natesclaw use while this phone is connected. You can change these later in Android Settings.",
+      "translated": "Habilite apenas os acessos que você se sente confortável em permitir que o Natesclaw use enquanto este telefone estiver conectado. Você pode alterá-los depois nas Configurações do Android."
     },
     {
       "id": "native.android.44549cfd7e6a1ab8",
@@ -3300,8 +3300,8 @@
     },
     {
       "id": "native.android.176b4f5d1c9f8ce2",
-      "source": "Approval is in progress.\nOpenClaw will reconnect automatically.",
-      "translated": "A aprovação está em andamento.\nO OpenClaw se reconectará automaticamente."
+      "source": "Approval is in progress.\nNatesclaw will reconnect automatically.",
+      "translated": "A aprovação está em andamento.\nO Natesclaw se reconectará automaticamente."
     },
     {
       "id": "native.android.466e3fb210732587",
@@ -3310,8 +3310,8 @@
     },
     {
       "id": "native.android.7b95b9e103bbbb92",
-      "source": "OpenClaw is checking gateway and node access.",
-      "translated": "O OpenClaw está verificando o acesso ao Gateway e ao nó."
+      "source": "Natesclaw is checking gateway and node access.",
+      "translated": "O Natesclaw está verificando o acesso ao Gateway e ao nó."
     },
     {
       "id": "native.android.a75fc5ca269cbb15",
@@ -3405,8 +3405,8 @@
     },
     {
       "id": "native.android.1c93d0cbb8e05a7a",
-      "source": "Gateway approval is pending. Run openclaw devices list on the gateway host, approve this phone, then retry.",
-      "translated": "A aprovação do Gateway está pendente. Execute openclaw devices list no host do Gateway, aprove este telefone e tente novamente."
+      "source": "Gateway approval is pending. Run natesclaw devices list on the gateway host, approve this phone, then retry.",
+      "translated": "A aprovação do Gateway está pendente. Execute natesclaw devices list no host do Gateway, aprove este telefone e tente novamente."
     },
     {
       "id": "native.android.d0c1dcc8236a1ab9",
@@ -3420,8 +3420,8 @@
     },
     {
       "id": "native.android.bdd063b9f766050b",
-      "source": "Gateway approval is in progress. OpenClaw will retry automatically.",
-      "translated": "A aprovação do Gateway está em andamento. O OpenClaw tentará novamente automaticamente."
+      "source": "Gateway approval is in progress. Natesclaw will retry automatically.",
+      "translated": "A aprovação do Gateway está em andamento. O Natesclaw tentará novamente automaticamente."
     },
     {
       "id": "native.android.45cfb86623fa2251",
@@ -3475,18 +3475,18 @@
     },
     {
       "id": "native.android.c94c164d474cb0db",
-      "source": "This app is older than the Gateway. Update OpenClaw on this device, then retry.",
-      "translated": "Este aplicativo é mais antigo que o Gateway. Atualize o OpenClaw neste dispositivo e tente novamente."
+      "source": "This app is older than the Gateway. Update Natesclaw on this device, then retry.",
+      "translated": "Este aplicativo é mais antigo que o Gateway. Atualize o Natesclaw neste dispositivo e tente novamente."
     },
     {
       "id": "native.android.48ba24436b643607",
-      "source": "The Gateway is older than this app. Update OpenClaw on the Gateway host, then retry.",
-      "translated": "O Gateway é mais antigo que este aplicativo. Atualize o OpenClaw no host do Gateway e tente novamente."
+      "source": "The Gateway is older than this app. Update Natesclaw on the Gateway host, then retry.",
+      "translated": "O Gateway é mais antigo que este aplicativo. Atualize o Natesclaw no host do Gateway e tente novamente."
     },
     {
       "id": "native.android.1473077d05ac1739",
-      "source": "The app and Gateway use incompatible protocol versions. Update OpenClaw on both, then retry.",
-      "translated": "O aplicativo e o Gateway usam versões de protocolo incompatíveis. Atualize o OpenClaw em ambos e tente novamente."
+      "source": "The app and Gateway use incompatible protocol versions. Update Natesclaw on both, then retry.",
+      "translated": "O aplicativo e o Gateway usam versões de protocolo incompatíveis. Atualize o Natesclaw em ambos e tente novamente."
     },
     {
       "id": "native.android.6379bfb6b09ef8cd",
@@ -3495,23 +3495,23 @@
     },
     {
       "id": "native.android.ee7dad03cd78babe",
-      "source": "openclaw devices approve $requestId",
-      "translated": "openclaw devices approve $requestId"
+      "source": "natesclaw devices approve $requestId",
+      "translated": "natesclaw devices approve $requestId"
     },
     {
       "id": "native.android.3792801e2951bb11",
-      "source": "openclaw devices list",
-      "translated": "openclaw devices list"
+      "source": "natesclaw devices list",
+      "translated": "natesclaw devices list"
     },
     {
       "id": "native.android.8fe20d8f8090064d",
-      "source": "openclaw nodes approve $requestId",
-      "translated": "openclaw nodes approve $requestId"
+      "source": "natesclaw nodes approve $requestId",
+      "translated": "natesclaw nodes approve $requestId"
     },
     {
       "id": "native.android.2961a521c1b6837f",
-      "source": "openclaw nodes approve REQUEST_ID",
-      "translated": "openclaw nodes approve REQUEST_ID"
+      "source": "natesclaw nodes approve REQUEST_ID",
+      "translated": "natesclaw nodes approve REQUEST_ID"
     },
     {
       "id": "native.android.a7933196a18ec924",
@@ -3615,8 +3615,8 @@
     },
     {
       "id": "native.android.d096df67bff5e611",
-      "source": "Show OpenClaw alerts",
-      "translated": "Mostrar alertas do OpenClaw"
+      "source": "Show Natesclaw alerts",
+      "translated": "Mostrar alertas do Natesclaw"
     },
     {
       "id": "native.android.93cbec65dbc5de69",
@@ -3930,8 +3930,8 @@
     },
     {
       "id": "native.android.fc145645b9620e57",
-      "source": "OpenClaw thread",
-      "translated": "Conversa do OpenClaw"
+      "source": "Natesclaw thread",
+      "translated": "Conversa do Natesclaw"
     },
     {
       "id": "native.android.71cbb8dde8bf138b",
@@ -3995,8 +3995,8 @@
     },
     {
       "id": "native.android.b5e4ae7f8c9eca2d",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.f46b06f8550516e4",
@@ -4185,8 +4185,8 @@
     },
     {
       "id": "native.android.5e3e4cd42004cb28",
-      "source": "Scheduled OpenClaw work from your gateway.",
-      "translated": "Trabalho agendado do OpenClaw a partir do seu gateway."
+      "source": "Scheduled Natesclaw work from your gateway.",
+      "translated": "Trabalho agendado do Natesclaw a partir do seu gateway."
     },
     {
       "id": "native.android.31a5440e22667f02",
@@ -4345,8 +4345,8 @@
     },
     {
       "id": "native.android.fea93eda5bf97d9e",
-      "source": "How this phone appears to OpenClaw.",
-      "translated": "Como este telefone aparece para o OpenClaw."
+      "source": "How this phone appears to Natesclaw.",
+      "translated": "Como este telefone aparece para o Natesclaw."
     },
     {
       "id": "native.android.695229fd01afbc2d",
@@ -4385,8 +4385,8 @@
     },
     {
       "id": "native.android.6e58157abced395f",
-      "source": "Runs on-device while OpenClaw is visible.",
-      "translated": "É executado no dispositivo enquanto o OpenClaw está visível."
+      "source": "Runs on-device while Natesclaw is visible.",
+      "translated": "É executado no dispositivo enquanto o Natesclaw está visível."
     },
     {
       "id": "native.android.6464166ab71fde3f",
@@ -4465,8 +4465,8 @@
     },
     {
       "id": "native.android.5ff888931aae2738",
-      "source": "Check that OpenClaw can speak clearly on this phone.",
-      "translated": "Verifique se o OpenClaw consegue falar claramente neste telefone."
+      "source": "Check that Natesclaw can speak clearly on this phone.",
+      "translated": "Verifique se o Natesclaw consegue falar claramente neste telefone."
     },
     {
       "id": "native.android.f82d5d81f5dc9b43",
@@ -4575,8 +4575,8 @@
     },
     {
       "id": "native.android.9feed8722db5d2cc",
-      "source": "Choose what reaches OpenClaw.",
-      "translated": "Escolha o que chega ao OpenClaw."
+      "source": "Choose what reaches Natesclaw.",
+      "translated": "Escolha o que chega ao Natesclaw."
     },
     {
       "id": "native.android.d32071018de11907",
@@ -4595,8 +4595,8 @@
     },
     {
       "id": "native.android.5a077bf9cf4f47c8",
-      "source": "OpenClaw can receive selected alerts.",
-      "translated": "O OpenClaw pode receber alertas selecionados."
+      "source": "Natesclaw can receive selected alerts.",
+      "translated": "O Natesclaw pode receber alertas selecionados."
     },
     {
       "id": "native.android.a04ee29c0a3b68f5",
@@ -4755,8 +4755,8 @@
     },
     {
       "id": "native.android.bdafaceb7af93f5a",
-      "source": "OpenClaw can list launcher-visible apps.",
-      "translated": "O OpenClaw pode listar apps visíveis no launcher."
+      "source": "Natesclaw can list launcher-visible apps.",
+      "translated": "O Natesclaw pode listar apps visíveis no launcher."
     },
     {
       "id": "native.android.be89d5601904322a",
@@ -4785,8 +4785,8 @@
     },
     {
       "id": "native.android.58549715b04997cc",
-      "source": "Always allows requested location checks while OpenClaw is in the background; Android shows this in the persistent node notification.",
-      "translated": "Sempre permite as verificações de localização solicitadas enquanto o OpenClaw está em segundo plano; o Android mostra isso na notificação persistente do nó."
+      "source": "Always allows requested location checks while Natesclaw is in the background; Android shows this in the persistent node notification.",
+      "translated": "Sempre permite as verificações de localização solicitadas enquanto o Natesclaw está em segundo plano; o Android mostra isso na notificação persistente do nó."
     },
     {
       "id": "native.android.d5a8d7f97a7971b1",
@@ -4795,8 +4795,8 @@
     },
     {
       "id": "native.android.031d3ed6fb8a6559",
-      "source": "OpenClaw only checks location when your paired Gateway requests it. On the next Android screen, choose $backgroundPermissionLabel to allow checks while the app is in the background.",
-      "translated": "O OpenClaw só verifica a localização quando o Gateway pareado solicita. Na próxima tela do Android, escolha $backgroundPermissionLabel para permitir verificações enquanto o app estiver em segundo plano."
+      "source": "Natesclaw only checks location when your paired Gateway requests it. On the next Android screen, choose $backgroundPermissionLabel to allow checks while the app is in the background.",
+      "translated": "O Natesclaw só verifica a localização quando o Gateway pareado solicita. Na próxima tela do Android, escolha $backgroundPermissionLabel para permitir verificações enquanto o app estiver em segundo plano."
     },
     {
       "id": "native.android.c48805f3de1d72ca",
@@ -4810,13 +4810,13 @@
     },
     {
       "id": "native.android.c3a001bb0191892d",
-      "source": "OpenClaw collects and sends the names, package IDs, and status of apps visible on this phone when your paired OpenClaw Gateway asks for them. This lets your assistant answer questions and take actions using installed apps.",
-      "translated": "O OpenClaw coleta e envia os nomes, IDs de pacote e status dos aplicativos visíveis neste telefone quando o seu Gateway do OpenClaw pareado os solicita. Isso permite que o seu assistente responda perguntas e execute ações usando aplicativos instalados."
+      "source": "Natesclaw collects and sends the names, package IDs, and status of apps visible on this phone when your paired Natesclaw Gateway asks for them. This lets your assistant answer questions and take actions using installed apps.",
+      "translated": "O Natesclaw coleta e envia os nomes, IDs de pacote e status dos aplicativos visíveis neste telefone quando o seu Gateway do Natesclaw pareado os solicita. Isso permite que o seu assistente responda perguntas e execute ações usando aplicativos instalados."
     },
     {
       "id": "native.android.b05f8909de072d71",
-      "source": "Your phone sends this information to your Gateway, not to a server run by OpenClaw. Your Gateway may include it in requests to the AI provider you chose.",
-      "translated": "Seu telefone envia essas informações para o seu Gateway, e não para um servidor operado pelo OpenClaw. Seu Gateway pode incluí-las em solicitações ao provedor de IA que você escolheu."
+      "source": "Your phone sends this information to your Gateway, not to a server run by Natesclaw. Your Gateway may include it in requests to the AI provider you chose.",
+      "translated": "Seu telefone envia essas informações para o seu Gateway, e não para um servidor operado pelo Natesclaw. Seu Gateway pode incluí-las em solicitações ao provedor de IA que você escolheu."
     },
     {
       "id": "native.android.95a3cc1b163c1edf",
@@ -4860,8 +4860,8 @@
     },
     {
       "id": "native.android.9d658ff26e59274b",
-      "source": "Connection between this phone and OpenClaw.",
-      "translated": "Conexão entre este telefone e o OpenClaw."
+      "source": "Connection between this phone and Natesclaw.",
+      "translated": "Conexão entre este telefone e o Natesclaw."
     },
     {
       "id": "native.android.718cb50d1bff3e32",
@@ -4970,8 +4970,8 @@
     },
     {
       "id": "native.android.de12fd162a566974",
-      "source": "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with openclaw qr, then scan it here or paste the setup code below.",
-      "translated": "O Android pode escanear ou colar um código de configuração existente, mas este Gateway ainda não expõe a geração de códigos de configuração para o app. Gere o QR/código no host do Gateway com openclaw qr e, em seguida, escaneie-o aqui ou cole o código de configuração abaixo."
+      "source": "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with natesclaw qr, then scan it here or paste the setup code below.",
+      "translated": "O Android pode escanear ou colar um código de configuração existente, mas este Gateway ainda não expõe a geração de códigos de configuração para o app. Gere o QR/código no host do Gateway com natesclaw qr e, em seguida, escaneie-o aqui ou cole o código de configuração abaixo."
     },
     {
       "id": "native.android.ac1032dabe06ab02",
@@ -5070,8 +5070,8 @@
     },
     {
       "id": "native.android.f6ab96d066bd583c",
-      "source": "Use a secure wss:// or Tailscale Serve Gateway, generate a full-access setup code in the Control UI or with openclaw qr, then scan or paste it below and reconnect to enable settings and upgrades.",
-      "translated": "Use um Gateway seguro wss:// ou Tailscale Serve, gere um código de configuração de acesso completo na Control UI ou com openclaw qr, depois escaneie ou cole-o abaixo e reconecte para ativar configurações e atualizações."
+      "source": "Use a secure wss:// or Tailscale Serve Gateway, generate a full-access setup code in the Control UI or with natesclaw qr, then scan or paste it below and reconnect to enable settings and upgrades.",
+      "translated": "Use um Gateway seguro wss:// ou Tailscale Serve, gere um código de configuração de acesso completo na Control UI ou com natesclaw qr, depois escaneie ou cole-o abaixo e reconecte para ativar configurações e atualizações."
     },
     {
       "id": "native.android.5311e446ce2bf857",
@@ -5145,8 +5145,8 @@
     },
     {
       "id": "native.android.c2d37ac2ad4c9e3c",
-      "source": "OpenClaw for Android.",
-      "translated": "OpenClaw para Android."
+      "source": "Natesclaw for Android.",
+      "translated": "Natesclaw para Android."
     },
     {
       "id": "native.android.38889ec3f682dcf8",
@@ -5190,18 +5190,18 @@
     },
     {
       "id": "native.android.aac3310699b496c8",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — Licença MIT."
+      "source": "© 2026 Natesclaw Foundation — MIT License.",
+      "translated": "© 2026 Natesclaw Foundation — Licença MIT."
     },
     {
       "id": "native.android.a157bbb606e9b398",
-      "source": "OpenClaw logo",
-      "translated": "Logotipo do OpenClaw"
+      "source": "Natesclaw logo",
+      "translated": "Logotipo do Natesclaw"
     },
     {
       "id": "native.android.7b78b4869baf2160",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.ad4c14835d1b71ca",
@@ -5215,8 +5215,8 @@
     },
     {
       "id": "native.android.996367534eb94cc2",
-      "source": "OpenClaw appreciates its partners in the open-source community.",
-      "translated": "A OpenClaw agradece aos seus parceiros na comunidade de código aberto."
+      "source": "Natesclaw appreciates its partners in the open-source community.",
+      "translated": "A Natesclaw agradece aos seus parceiros na comunidade de código aberto."
     },
     {
       "id": "native.android.24da1d2eb750ba07",
@@ -5265,8 +5265,8 @@
     },
     {
       "id": "native.android.c971506716c96e91",
-      "source": "OpenClaw turns this phone into a clean mobile command surface for threads, voice, providers, and Gateway.",
-      "translated": "O OpenClaw transforma este celular em uma interface móvel simples para conversas, voz, provedores e Gateway."
+      "source": "Natesclaw turns this phone into a clean mobile command surface for threads, voice, providers, and Gateway.",
+      "translated": "O Natesclaw transforma este celular em uma interface móvel simples para conversas, voz, provedores e Gateway."
     },
     {
       "id": "native.android.3a3bea53e6a6ada7",
@@ -5740,8 +5740,8 @@
     },
     {
       "id": "native.android.2e33a4fd5f60b550",
-      "source": "Start a chat and your active OpenClaw conversations will appear here.",
-      "translated": "Inicie uma conversa e suas conversas ativas do OpenClaw aparecerão aqui."
+      "source": "Start a chat and your active Natesclaw conversations will appear here.",
+      "translated": "Inicie uma conversa e suas conversas ativas do Natesclaw aparecerão aqui."
     },
     {
       "id": "native.android.85726cfd4207d48a",
@@ -6015,8 +6015,8 @@
     },
     {
       "id": "native.android.4f369a09c8731092",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.4878165188c0310c",
@@ -6175,8 +6175,8 @@
     },
     {
       "id": "native.android.ca1451df912ed5cf",
-      "source": "OpenClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
-      "translated": "OpenClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+      "source": "Natesclaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+      "translated": "Natesclaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
     },
     {
       "id": "native.android.b7d8c506999a68f7",
@@ -6365,8 +6365,8 @@
     },
     {
       "id": "native.android.e197964b10ba02ce",
-      "source": "OpenClaw mobile",
-      "translated": "OpenClaw para dispositivos móveis"
+      "source": "Natesclaw mobile",
+      "translated": "Natesclaw para dispositivos móveis"
     },
     {
       "id": "native.android.45005deba537cc59",
@@ -6480,8 +6480,8 @@
     },
     {
       "id": "native.android.aa57a340615c6acc",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.0a6327687ccfbfdb",
@@ -7060,8 +7060,8 @@
     },
     {
       "id": "native.android.4b2c29c94377f235",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.7a7da7d8f8613d33",
@@ -7085,8 +7085,8 @@
     },
     {
       "id": "native.android.06e5bfbad4b42e3b",
-      "source": "Connect this phone to a Gateway before opening OpenClaw.",
-      "translated": "Conecte este telefone a um Gateway antes de abrir o OpenClaw."
+      "source": "Connect this phone to a Gateway before opening Natesclaw.",
+      "translated": "Conecte este telefone a um Gateway antes de abrir o Natesclaw."
     },
     {
       "id": "native.android.44cca3625b125c19",
@@ -7095,18 +7095,18 @@
     },
     {
       "id": "native.android.6089cc78ebd95573",
-      "source": "Checking whether this Gateway supports the OpenClaw settings assistant.",
-      "translated": "Verificando se este Gateway é compatível com o assistente de configurações do OpenClaw."
+      "source": "Checking whether this Gateway supports the Natesclaw settings assistant.",
+      "translated": "Verificando se este Gateway é compatível com o assistente de configurações do Natesclaw."
     },
     {
       "id": "native.android.3c3a35369bc2f1f9",
-      "source": "Update this Gateway to use the OpenClaw settings assistant.",
-      "translated": "Atualize este Gateway para usar o assistente de configurações do OpenClaw."
+      "source": "Update this Gateway to use the Natesclaw settings assistant.",
+      "translated": "Atualize este Gateway para usar o assistente de configurações do Natesclaw."
     },
     {
       "id": "native.android.41b7b9cd883e3e81",
-      "source": "OpenClaw is working…",
-      "translated": "O OpenClaw está trabalhando…"
+      "source": "Natesclaw is working…",
+      "translated": "O Natesclaw está trabalhando…"
     },
     {
       "id": "native.android.072481856dd25c89",
@@ -7115,8 +7115,8 @@
     },
     {
       "id": "native.android.25fcaa5f2ef2546e",
-      "source": "OpenClaw is ready to continue in your ordinary chat.",
-      "translated": "O OpenClaw está pronto para continuar no seu chat comum."
+      "source": "Natesclaw is ready to continue in your ordinary chat.",
+      "translated": "O Natesclaw está pronto para continuar no seu chat comum."
     },
     {
       "id": "native.android.88377fbc76395226",
@@ -7145,8 +7145,8 @@
     },
     {
       "id": "native.android.4753194a1f8c6c6b",
-      "source": "Reply to OpenClaw…",
-      "translated": "Responder ao OpenClaw…"
+      "source": "Reply to Natesclaw…",
+      "translated": "Responder ao Natesclaw…"
     },
     {
       "id": "native.android.07d2609a561a43b0",
@@ -7225,8 +7225,8 @@
     },
     {
       "id": "native.android.9d977253fdcda216",
-      "source": "OpenClaw speaking",
-      "translated": "OpenClaw falando"
+      "source": "Natesclaw speaking",
+      "translated": "Natesclaw falando"
     },
     {
       "id": "native.android.1babfd757bbcfeb4",
@@ -7305,8 +7305,8 @@
     },
     {
       "id": "native.android.2e2b5efe4ca2380a",
-      "source": "OpenClaw is replying",
-      "translated": "O OpenClaw está respondendo"
+      "source": "Natesclaw is replying",
+      "translated": "O Natesclaw está respondendo"
     },
     {
       "id": "native.android.64731fc46a862f86",
@@ -7405,8 +7405,8 @@
     },
     {
       "id": "native.android.253debc9d0714dda",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.24057bba4bbfa27a",
@@ -7425,8 +7425,8 @@
     },
     {
       "id": "native.android.5b8bd9f2b69b91ea",
-      "source": "OpenClaw is preparing a response.",
-      "translated": "O OpenClaw está preparando uma resposta."
+      "source": "Natesclaw is preparing a response.",
+      "translated": "O Natesclaw está preparando uma resposta."
     },
     {
       "id": "native.android.420cccbd48298a8d",
@@ -7440,8 +7440,8 @@
     },
     {
       "id": "native.android.285eeed928be0fc1",
-      "source": "OpenClaw only listens when you start Talk or Dictation.",
-      "translated": "O OpenClaw só escuta quando você inicia a Conversa ou o Ditado."
+      "source": "Natesclaw only listens when you start Talk or Dictation.",
+      "translated": "O Natesclaw só escuta quando você inicia a Conversa ou o Ditado."
     },
     {
       "id": "native.android.b10a51fe9d4b8d2d",
@@ -7450,8 +7450,8 @@
     },
     {
       "id": "native.android.c8bff891c9a442d9",
-      "source": "OpenClaw is speaking",
-      "translated": "OpenClaw está falando"
+      "source": "Natesclaw is speaking",
+      "translated": "Natesclaw está falando"
     },
     {
       "id": "native.android.248e1292eff12b84",
@@ -7900,8 +7900,8 @@
     },
     {
       "id": "native.android.82e9fe45e93909b6",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.66aef4de5e07438f",
@@ -8175,8 +8175,8 @@
     },
     {
       "id": "native.android.ebe49a8b8df80bd3",
-      "source": "Catch me up on my recent OpenClaw threads and suggest next steps.",
-      "translated": "Atualize-me sobre minhas conversas recentes no OpenClaw e sugira os próximos passos."
+      "source": "Catch me up on my recent Natesclaw threads and suggest next steps.",
+      "translated": "Atualize-me sobre minhas conversas recentes no Natesclaw e sugira os próximos passos."
     },
     {
       "id": "native.android.79f64f0b5ecaa07c",
@@ -8200,8 +8200,8 @@
     },
     {
       "id": "native.android.1656b8b922a5e3f2",
-      "source": "Ask OpenClaw to use Android capabilities.",
-      "translated": "Peça ao OpenClaw para usar os recursos do Android."
+      "source": "Ask Natesclaw to use Android capabilities.",
+      "translated": "Peça ao Natesclaw para usar os recursos do Android."
     },
     {
       "id": "native.android.04c826e3507eb47e",
@@ -8210,8 +8210,8 @@
     },
     {
       "id": "native.android.67075c8d2ccc0bb5",
-      "source": "OpenClaw · Live",
-      "translated": "OpenClaw · Ao vivo"
+      "source": "Natesclaw · Live",
+      "translated": "Natesclaw · Ao vivo"
     },
     {
       "id": "native.android.869f1130ca16bab5",
@@ -8225,8 +8225,8 @@
     },
     {
       "id": "native.android.25d8575c0063aee5",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.b18964167dbb3c02",
@@ -8265,8 +8265,8 @@
     },
     {
       "id": "native.android.d851a32f367f8b31",
-      "source": "OpenClaw is working",
-      "translated": "OpenClaw está trabalhando"
+      "source": "Natesclaw is working",
+      "translated": "Natesclaw está trabalhando"
     },
     {
       "id": "native.android.0fd6b75cadc0ce75",
@@ -8415,8 +8415,8 @@
     },
     {
       "id": "native.android.f1d69eb66c5dfa39",
-      "source": "Message OpenClaw",
-      "translated": "Mensagem para o OpenClaw"
+      "source": "Message Natesclaw",
+      "translated": "Mensagem para o Natesclaw"
     },
     {
       "id": "native.android.9b42791ed9da90d3",
@@ -8735,8 +8735,8 @@
     },
     {
       "id": "native.android.79d7a1026ef43e80",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.e8318a46a213cb91",
@@ -8770,13 +8770,13 @@
     },
     {
       "id": "native.android.794873efdfcdff4f",
-      "source": "OpenClaw gateway",
-      "translated": "Gateway do OpenClaw"
+      "source": "Natesclaw gateway",
+      "translated": "Gateway do Natesclaw"
     },
     {
       "id": "native.android.2d3b6dd9a8f186fe",
-      "source": "Ask OpenClaw anything",
-      "translated": "Pergunte qualquer coisa ao OpenClaw"
+      "source": "Ask Natesclaw anything",
+      "translated": "Pergunte qualquer coisa ao Natesclaw"
     },
     {
       "id": "native.android.608ccdaeababf056",
@@ -8810,8 +8810,8 @@
     },
     {
       "id": "native.android.3457b4ee28d964ee",
-      "source": "OpenClaw will surface approvals, failed jobs, and channel issues here.",
-      "translated": "O OpenClaw exibirá aprovações, trabalhos com falha e problemas de canais aqui."
+      "source": "Natesclaw will surface approvals, failed jobs, and channel issues here.",
+      "translated": "O Natesclaw exibirá aprovações, trabalhos com falha e problemas de canais aqui."
     },
     {
       "id": "native.android.7a6a37643fcfb2d9",
@@ -9095,23 +9095,23 @@
     },
     {
       "id": "native.android.f392ee2d50d6b7ce",
-      "source": "ask OpenClaw $prompt",
-      "translated": "perguntar ao OpenClaw $prompt"
+      "source": "ask Natesclaw $prompt",
+      "translated": "perguntar ao Natesclaw $prompt"
     },
     {
       "id": "native.android.ea9d1a78cfa13033",
-      "source": "tell OpenClaw to $prompt",
-      "translated": "dizer ao OpenClaw para $prompt"
+      "source": "tell Natesclaw to $prompt",
+      "translated": "dizer ao Natesclaw para $prompt"
     },
     {
       "id": "native.android.7f96ac9b9e10abd0",
-      "source": "open OpenClaw and ask $prompt",
-      "translated": "abrir o OpenClaw e perguntar $prompt"
+      "source": "open Natesclaw and ask $prompt",
+      "translated": "abrir o Natesclaw e perguntar $prompt"
     },
     {
       "id": "native.android.a3c395b04ae7a621",
-      "source": "OpenClaw Node",
-      "translated": "Nó OpenClaw"
+      "source": "Natesclaw Node",
+      "translated": "Nó Natesclaw"
     },
     {
       "id": "native.android.cd32b06480d9bb69",
@@ -9195,13 +9195,13 @@
     },
     {
       "id": "native.android.e3661fcea979a74c",
-      "source": "OpenClaw Git commit",
-      "translated": "Git commit do OpenClaw"
+      "source": "Natesclaw Git commit",
+      "translated": "Git commit do Natesclaw"
     },
     {
       "id": "native.android.a610564c863cdef7",
-      "source": "OpenClaw build timestamp",
-      "translated": "Timestamp de compilação do OpenClaw"
+      "source": "Natesclaw build timestamp",
+      "translated": "Timestamp de compilação do Natesclaw"
     },
     {
       "id": "native.android.9b9a42b4f56bea2a",
@@ -9380,8 +9380,8 @@
     },
     {
       "id": "native.android.16d2abc828935351",
-      "source": "Enabling lets OpenClaw observe and control other apps' screens when armed. Android accessibility access is required.",
-      "translated": "Ativar permite que o OpenClaw observe e controle as telas de outros apps quando armado. É necessário o acesso à acessibilidade do Android."
+      "source": "Enabling lets Natesclaw observe and control other apps' screens when armed. Android accessibility access is required.",
+      "translated": "Ativar permite que o Natesclaw observe e controle as telas de outros apps quando armado. É necessário o acesso à acessibilidade do Android."
     },
     {
       "id": "native.android.2762510a90e577a3",
@@ -9395,8 +9395,8 @@
     },
     {
       "id": "native.android.b3cae8c7b0ac2222",
-      "source": "OpenClaw UI control",
-      "translated": "Controle da UI do OpenClaw"
+      "source": "Natesclaw UI control",
+      "translated": "Controle da UI do Natesclaw"
     },
     {
       "id": "native.android.d980d910a3466dc2",
@@ -9405,13 +9405,13 @@
     },
     {
       "id": "native.android.7f56eb025a774101",
-      "source": "Allows the third-party OpenClaw build to inspect and control the active app during local development.",
-      "translated": "Permite que a versão OpenClaw de terceiros inspecione e controle o app ativo durante o desenvolvimento local."
+      "source": "Allows the third-party Natesclaw build to inspect and control the active app during local development.",
+      "translated": "Permite que a versão Natesclaw de terceiros inspecione e controle o app ativo durante o desenvolvimento local."
     },
     {
       "id": "native.android.e1c713595c555f5f",
-      "source": "OpenClaw Accessibility Developer",
-      "translated": "Desenvolvedor de Acessibilidade OpenClaw"
+      "source": "Natesclaw Accessibility Developer",
+      "translated": "Desenvolvedor de Acessibilidade Natesclaw"
     },
     {
       "id": "native.android.342644995c7fa39d",
@@ -9610,8 +9610,8 @@
     },
     {
       "id": "native.android.b8de3221042b2fd3",
-      "source": "Talk or type on your watch. The paired phone sends the message through its authenticated OpenClaw session.",
-      "translated": "Fale ou digite no relógio. O telefone pareado envia a mensagem por meio da sessão autenticada do OpenClaw."
+      "source": "Talk or type on your watch. The paired phone sends the message through its authenticated Natesclaw session.",
+      "translated": "Fale ou digite no relógio. O telefone pareado envia a mensagem por meio da sessão autenticada do Natesclaw."
     },
     {
       "id": "native.android.44c6bb3c4c7b61ae",
@@ -9720,13 +9720,13 @@
     },
     {
       "id": "native.android.5d98a2a8a4f1f793",
-      "source": "Reconnect the Gateway in OpenClaw on the paired phone.",
-      "translated": "Reconecte o Gateway no OpenClaw no telefone pareado."
+      "source": "Reconnect the Gateway in Natesclaw on the paired phone.",
+      "translated": "Reconecte o Gateway no Natesclaw no telefone pareado."
     },
     {
       "id": "native.android.867011d568b0b0db",
-      "source": "Open OpenClaw on phone",
-      "translated": "Abra o OpenClaw no telefone"
+      "source": "Open Natesclaw on phone",
+      "translated": "Abra o Natesclaw no telefone"
     },
     {
       "id": "native.android.e70d812f3bc1bb40",
@@ -9740,8 +9740,8 @@
     },
     {
       "id": "native.android.d6c4dc6d15a4eaac",
-      "source": "Keep the paired phone nearby and install the matching OpenClaw app.",
-      "translated": "Mantenha o telefone pareado por perto e instale o aplicativo OpenClaw correspondente."
+      "source": "Keep the paired phone nearby and install the matching Natesclaw app.",
+      "translated": "Mantenha o telefone pareado por perto e instale o aplicativo Natesclaw correspondente."
     },
     {
       "id": "native.android.bfebf63a2c96e9cd",
@@ -9775,8 +9775,8 @@
     },
     {
       "id": "native.android.ce39278848b1615d",
-      "source": "Update OpenClaw on both phone and watch.",
-      "translated": "Atualize o OpenClaw no telefone e no relógio."
+      "source": "Update Natesclaw on both phone and watch.",
+      "translated": "Atualize o Natesclaw no telefone e no relógio."
     },
     {
       "id": "native.android.b5d6a37fb96f38f1",
@@ -9790,8 +9790,8 @@
     },
     {
       "id": "native.android.6b973e2d4540f1dc",
-      "source": "OpenClaw replies",
-      "translated": "Respostas do OpenClaw"
+      "source": "Natesclaw replies",
+      "translated": "Respostas do Natesclaw"
     },
     {
       "id": "native.android.daf75f1939c5048f",
@@ -9800,8 +9800,8 @@
     },
     {
       "id": "native.android.2ab12cfd9399407c",
-      "source": "OpenClaw reply",
-      "translated": "Resposta do OpenClaw"
+      "source": "Natesclaw reply",
+      "translated": "Resposta do Natesclaw"
     },
     {
       "id": "native.android.289456e2626dd0f4",
@@ -9815,8 +9815,8 @@
     },
     {
       "id": "native.android.3ec65645eda5ded7",
-      "source": "Open OpenClaw to reply",
-      "translated": "Abra o OpenClaw para responder"
+      "source": "Open Natesclaw to reply",
+      "translated": "Abra o Natesclaw para responder"
     },
     {
       "id": "native.android.7658464805a4b605",
@@ -9825,8 +9825,8 @@
     },
     {
       "id": "native.android.6b2e913641d45f02",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.android.7c74dd9a2bf91d3a",
@@ -9845,13 +9845,13 @@
     },
     {
       "id": "native.apple.093081590556db7f",
-      "source": "OPENCLAW",
-      "translated": "OPENCLAW"
+      "source": "NATESCLAW",
+      "translated": "NATESCLAW"
     },
     {
       "id": "native.apple.86d546e1f1247028",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.9fd01bdb5a753f3e",
@@ -12100,8 +12100,8 @@
     },
     {
       "id": "native.apple.3548c8d1ab43e85e",
-      "source": "OpenClaw could not prepare the Markdown file.",
-      "translated": "O OpenClaw não conseguiu preparar o arquivo Markdown."
+      "source": "Natesclaw could not prepare the Markdown file.",
+      "translated": "O Natesclaw não conseguiu preparar o arquivo Markdown."
     },
     {
       "id": "native.apple.202b97e93b938049",
@@ -12220,13 +12220,13 @@
     },
     {
       "id": "native.apple.14492e334b87e4f2",
-      "source": "Check OpenClaw status",
-      "translated": "Verificar status do OpenClaw"
+      "source": "Check Natesclaw status",
+      "translated": "Verificar status do Natesclaw"
     },
     {
       "id": "native.apple.bbf7bd23da1e7865",
-      "source": "Summarize the current OpenClaw status and tell me what needs attention.",
-      "translated": "Resuma o status atual do OpenClaw e me diga o que precisa de atenção."
+      "source": "Summarize the current Natesclaw status and tell me what needs attention.",
+      "translated": "Resuma o status atual do Natesclaw e me diga o que precisa de atenção."
     },
     {
       "id": "native.apple.ea8cbb1b4230c652",
@@ -13335,8 +13335,8 @@
     },
     {
       "id": "native.apple.56935c5384889b8e",
-      "source": "Browse the current OpenClaw reference.",
-      "translated": "Navegue pela referência atual do OpenClaw."
+      "source": "Browse the current Natesclaw reference.",
+      "translated": "Navegue pela referência atual do Natesclaw."
     },
     {
       "id": "native.apple.2ee2f8c71fa2d2cc",
@@ -13365,8 +13365,8 @@
     },
     {
       "id": "native.apple.cf9bb65f8e405cc8",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.20d011936ab5cd30",
@@ -13670,8 +13670,8 @@
     },
     {
       "id": "native.apple.9bb1dae351d0e3a4",
-      "source": "Enable OpenClaw Hosted Push Relay?",
-      "translated": "Ativar OpenClaw Hosted Push Relay?"
+      "source": "Enable Natesclaw Hosted Push Relay?",
+      "translated": "Ativar Natesclaw Hosted Push Relay?"
     },
     {
       "id": "native.apple.f8c042a923222472",
@@ -13850,8 +13850,8 @@
     },
     {
       "id": "native.apple.2d878afa870cd7cc",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.b99af99847ac7823",
@@ -13910,13 +13910,13 @@
     },
     {
       "id": "native.apple.3503aca018f04865",
-      "source": "Setup sent. Open OpenClaw on the watch to connect.",
-      "translated": "Configuração enviada. Abra o OpenClaw no relógio para conectar."
+      "source": "Setup sent. Open Natesclaw on the watch to connect.",
+      "translated": "Configuração enviada. Abra o Natesclaw no relógio para conectar."
     },
     {
       "id": "native.apple.a9a778465dfe1198",
-      "source": "Setup queued for the watch. Open OpenClaw before the code expires.",
-      "translated": "Configuração na fila para o relógio. Abra o OpenClaw antes que o código expire."
+      "source": "Setup queued for the watch. Open Natesclaw before the code expires.",
+      "translated": "Configuração na fila para o relógio. Abra o Natesclaw antes que o código expire."
     },
     {
       "id": "native.apple.ba8d38a642bee7f3",
@@ -13925,8 +13925,8 @@
     },
     {
       "id": "native.apple.07668650c75a20f1",
-      "source": "Pairing required. Run /pair approve in your OpenClaw chat, then connect again.",
-      "translated": "Emparelhamento necessário. Execute /pair approve no seu chat do OpenClaw e conecte-se novamente."
+      "source": "Pairing required. Run /pair approve in your Natesclaw chat, then connect again.",
+      "translated": "Emparelhamento necessário. Execute /pair approve no seu chat do Natesclaw e conecte-se novamente."
     },
     {
       "id": "native.apple.101b491eed1648ce",
@@ -14005,8 +14005,8 @@
     },
     {
       "id": "native.apple.3d805ac21285b092",
-      "source": "Foreground approvals still appear while OpenClaw is connected.",
-      "translated": "As aprovações em primeiro plano ainda aparecem enquanto o OpenClaw está conectado."
+      "source": "Foreground approvals still appear while Natesclaw is connected.",
+      "translated": "As aprovações em primeiro plano ainda aparecem enquanto o Natesclaw está conectado."
     },
     {
       "id": "native.apple.0b7a54926d06b7d8",
@@ -14145,18 +14145,18 @@
     },
     {
       "id": "native.apple.817057c658a751c7",
-      "source": "This build uses OpenClaw's hosted push relay at %@ for notification delivery data.",
-      "translated": "Esta compilação usa o relay de push hospedado da OpenClaw em %@ para dados de entrega de notificações."
+      "source": "This build uses Natesclaw's hosted push relay at %@ for notification delivery data.",
+      "translated": "Esta compilação usa o relay de push hospedado da Natesclaw em %@ para dados de entrega de notificações."
     },
     {
       "id": "native.apple.d70d23305da2016a",
-      "source": "This build is not configured to use OpenClaw's hosted push relay.",
-      "translated": "Esta compilação não está configurada para usar o relay de push hospedado da OpenClaw."
+      "source": "This build is not configured to use Natesclaw's hosted push relay.",
+      "translated": "Esta compilação não está configurada para usar o relay de push hospedado da Natesclaw."
     },
     {
       "id": "native.apple.6c81c3d48548ca05",
-      "source": "Enabling this sends delivery data through OpenClaw's hosted push relay.",
-      "translated": "Ativar esta opção envia dados de entrega pelo relay de push hospedado da OpenClaw."
+      "source": "Enabling this sends delivery data through Natesclaw's hosted push relay.",
+      "translated": "Ativar esta opção envia dados de entrega pelo relay de push hospedado da Natesclaw."
     },
     {
       "id": "native.apple.80fade864c8ad242",
@@ -14195,8 +14195,8 @@
     },
     {
       "id": "native.apple.fc49f9b63e160581",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.2c2cdafd79f8ba5b",
@@ -14280,8 +14280,8 @@
     },
     {
       "id": "native.apple.7793f5de6975faef",
-      "source": "Use a secure wss:// or Tailscale Serve Gateway, then scan a full-access setup code from the Control UI or openclaw qr and reconnect to enable settings and upgrades.",
-      "translated": "Use um Gateway seguro wss:// ou Tailscale Serve, depois escaneie um código de configuração de acesso completo na Control UI ou com openclaw qr e reconecte para ativar configurações e atualizações."
+      "source": "Use a secure wss:// or Tailscale Serve Gateway, then scan a full-access setup code from the Control UI or natesclaw qr and reconnect to enable settings and upgrades.",
+      "translated": "Use um Gateway seguro wss:// ou Tailscale Serve, depois escaneie um código de configuração de acesso completo na Control UI ou com natesclaw qr e reconecte para ativar configurações e atualizações."
     },
     {
       "id": "native.apple.666cea428e126188",
@@ -14345,8 +14345,8 @@
     },
     {
       "id": "native.apple.1bd0f0b41f4d4750",
-      "source": "Install the OpenClaw watch app before enabling direct mode.",
-      "translated": "Instale o app do OpenClaw para o relógio antes de ativar o modo direto."
+      "source": "Install the Natesclaw watch app before enabling direct mode.",
+      "translated": "Instale o app do Natesclaw para o relógio antes de ativar o modo direto."
     },
     {
       "id": "native.apple.3710cda9cb13870f",
@@ -14385,8 +14385,8 @@
     },
     {
       "id": "native.apple.2e042499c42824f5",
-      "source": "Enable Notifications to receive approval alerts while OpenClaw is not open.",
-      "translated": "Ative as notificações para receber alertas de aprovação enquanto o OpenClaw não estiver aberto."
+      "source": "Enable Notifications to receive approval alerts while Natesclaw is not open.",
+      "translated": "Ative as notificações para receber alertas de aprovação enquanto o Natesclaw não estiver aberto."
     },
     {
       "id": "native.apple.fc1f2fdbe437cb9d",
@@ -14495,8 +14495,8 @@
     },
     {
       "id": "native.apple.d1ee91d07764faf0",
-      "source": "Turns OpenClaw notification delivery on or off",
-      "translated": "Ativa ou desativa a entrega de notificações do OpenClaw"
+      "source": "Turns Natesclaw notification delivery on or off",
+      "translated": "Ativa ou desativa a entrega de notificações do Natesclaw"
     },
     {
       "id": "native.apple.31f9c5fa6c3ca5dd",
@@ -14515,8 +14515,8 @@
     },
     {
       "id": "native.apple.a82dc4a746268028",
-      "source": "OpenClaw appreciates its partners in the open-source community.",
-      "translated": "A OpenClaw agradece a seus parceiros na comunidade de código aberto."
+      "source": "Natesclaw appreciates its partners in the open-source community.",
+      "translated": "A Natesclaw agradece a seus parceiros na comunidade de código aberto."
     },
     {
       "id": "native.apple.eaa4fe72f3730f3f",
@@ -14550,8 +14550,8 @@
     },
     {
       "id": "native.apple.b962116ff5bf1905",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — Licença MIT."
+      "source": "© 2026 Natesclaw Foundation — MIT License.",
+      "translated": "© 2026 Natesclaw Foundation — Licença MIT."
     },
     {
       "id": "native.apple.106434d1305d153b",
@@ -14950,13 +14950,13 @@
     },
     {
       "id": "native.apple.675219772ee5adf0",
-      "source": "OpenClaw can show approval prompts and event alerts when the app is not active.",
-      "translated": "O OpenClaw pode exibir solicitações de aprovação e alertas de eventos quando o app não está ativo."
+      "source": "Natesclaw can show approval prompts and event alerts when the app is not active.",
+      "translated": "O Natesclaw pode exibir solicitações de aprovação e alertas de eventos quando o app não está ativo."
     },
     {
       "id": "native.apple.44133229b2b05062",
-      "source": "OpenClaw notifications are off.",
-      "translated": "As notificações do OpenClaw estão desativadas."
+      "source": "Natesclaw notifications are off.",
+      "translated": "As notificações do Natesclaw estão desativadas."
     },
     {
       "id": "native.apple.9794732a37cb580f",
@@ -14975,8 +14975,8 @@
     },
     {
       "id": "native.apple.bfe6a918d23fa20e",
-      "source": "OpenClaw cannot determine the current notification permission state.",
-      "translated": "O OpenClaw não consegue determinar o estado atual da permissão de notificações."
+      "source": "Natesclaw cannot determine the current notification permission state.",
+      "translated": "O Natesclaw não consegue determinar o estado atual da permissão de notificações."
     },
     {
       "id": "native.apple.fc7d007916016c0d",
@@ -14990,8 +14990,8 @@
     },
     {
       "id": "native.apple.737eb52b08f2640c",
-      "source": "Connected to openclaw-gateway.tailnet.ts.net.",
-      "translated": "Conectado a openclaw-gateway.tailnet.ts.net."
+      "source": "Connected to natesclaw-gateway.tailnet.ts.net.",
+      "translated": "Conectado a natesclaw-gateway.tailnet.ts.net."
     },
     {
       "id": "native.apple.b59e37e73db49f94",
@@ -15470,18 +15470,18 @@
     },
     {
       "id": "native.apple.8aee90eb1e1061b9",
-      "source": "The Gateway connection changed. Restart OpenClaw to reconnect.",
-      "translated": "A conexão do Gateway mudou. Reinicie o OpenClaw para reconectar."
+      "source": "The Gateway connection changed. Restart Natesclaw to reconnect.",
+      "translated": "A conexão do Gateway mudou. Reinicie o Natesclaw para reconectar."
     },
     {
       "id": "native.apple.47bc765cd8464c1e",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.a791a671fb60b5f7",
-      "source": "OpenClaw is working…",
-      "translated": "OpenClaw está trabalhando…"
+      "source": "Natesclaw is working…",
+      "translated": "Natesclaw está trabalhando…"
     },
     {
       "id": "native.apple.bd0e286399723c42",
@@ -15505,8 +15505,8 @@
     },
     {
       "id": "native.apple.441f1770a487a055",
-      "source": "Connect this iPhone to a Gateway before opening the OpenClaw settings assistant.",
-      "translated": "Conecte este iPhone a um Gateway antes de abrir o assistente de configurações do OpenClaw."
+      "source": "Connect this iPhone to a Gateway before opening the Natesclaw settings assistant.",
+      "translated": "Conecte este iPhone a um Gateway antes de abrir o assistente de configurações do Natesclaw."
     },
     {
       "id": "native.apple.8e0a20f39742ff98",
@@ -15515,13 +15515,13 @@
     },
     {
       "id": "native.apple.9115f5d67e36fd08",
-      "source": "Checking whether this Gateway supports the OpenClaw settings assistant.",
-      "translated": "Verificando se este Gateway é compatível com o assistente de configurações do OpenClaw."
+      "source": "Checking whether this Gateway supports the Natesclaw settings assistant.",
+      "translated": "Verificando se este Gateway é compatível com o assistente de configurações do Natesclaw."
     },
     {
       "id": "native.apple.3a7955c72e7ab728",
-      "source": "Update this Gateway to use the OpenClaw settings assistant.",
-      "translated": "Atualize este Gateway para usar o assistente de configurações do OpenClaw."
+      "source": "Update this Gateway to use the Natesclaw settings assistant.",
+      "translated": "Atualize este Gateway para usar o assistente de configurações do Natesclaw."
     },
     {
       "id": "native.apple.fd24248c00007ba3",
@@ -15530,8 +15530,8 @@
     },
     {
       "id": "native.apple.7ec6b261897ee62c",
-      "source": "OpenClaw is ready to continue in your ordinary chat.",
-      "translated": "OpenClaw está pronto para continuar no seu chat comum."
+      "source": "Natesclaw is ready to continue in your ordinary chat.",
+      "translated": "Natesclaw está pronto para continuar no seu chat comum."
     },
     {
       "id": "native.apple.ad820dd76c74e3f8",
@@ -15550,8 +15550,8 @@
     },
     {
       "id": "native.apple.e40e721e131e606e",
-      "source": "Reply to OpenClaw…",
-      "translated": "Responder ao OpenClaw…"
+      "source": "Reply to Natesclaw…",
+      "translated": "Responder ao Natesclaw…"
     },
     {
       "id": "native.apple.5b0adbb8a28011ab",
@@ -15600,8 +15600,8 @@
     },
     {
       "id": "native.apple.c218ef5194d0ee56",
-      "source": "Run OpenClaw agent?",
-      "translated": "Executar agente do OpenClaw?"
+      "source": "Run Natesclaw agent?",
+      "translated": "Executar agente do Natesclaw?"
     },
     {
       "id": "native.apple.5d2fb30a9c85ad10",
@@ -15955,8 +15955,8 @@
     },
     {
       "id": "native.apple.c18f5bd36f119282",
-      "source": "Run openclaw gateway --port 18789.",
-      "translated": "Execute openclaw gateway --port 18789."
+      "source": "Run natesclaw gateway --port 18789.",
+      "translated": "Execute natesclaw gateway --port 18789."
     },
     {
       "id": "native.apple.a4eb9a9b02915961",
@@ -16000,8 +16000,8 @@
     },
     {
       "id": "native.apple.8f6f60c9a5196918",
-      "source": "Exec approvals can only be reviewed while OpenClaw is open and connected.\n\nEnable Notifications to receive approval notifications while OpenClaw is not open.",
-      "translated": "As aprovações de execução só podem ser revisadas enquanto o OpenClaw estiver aberto e conectado.\n\nAtive as Notificações para receber notificações de aprovação enquanto o OpenClaw não estiver aberto."
+      "source": "Exec approvals can only be reviewed while Natesclaw is open and connected.\n\nEnable Notifications to receive approval notifications while Natesclaw is not open.",
+      "translated": "As aprovações de execução só podem ser revisadas enquanto o Natesclaw estiver aberto e conectado.\n\nAtive as Notificações para receber notificações de aprovação enquanto o Natesclaw não estiver aberto."
     },
     {
       "id": "native.apple.a2378696390cca1e",
@@ -16050,73 +16050,73 @@
     },
     {
       "id": "native.apple.cf820096080f7031",
-      "source": "OpenClaw uses your calendars to show events and scheduling context when you enable calendar access.",
-      "translated": "O OpenClaw usa seus calendários para mostrar eventos e contexto de agendamento quando você ativa o acesso ao calendário."
+      "source": "Natesclaw uses your calendars to show events and scheduling context when you enable calendar access.",
+      "translated": "O Natesclaw usa seus calendários para mostrar eventos e contexto de agendamento quando você ativa o acesso ao calendário."
     },
     {
       "id": "native.apple.fe85b609e9a9a144",
-      "source": "OpenClaw uses your calendars to add events when you enable calendar access.",
-      "translated": "O OpenClaw usa seus calendários para adicionar eventos quando você ativa o acesso ao calendário."
+      "source": "Natesclaw uses your calendars to add events when you enable calendar access.",
+      "translated": "O Natesclaw usa seus calendários para adicionar eventos quando você ativa o acesso ao calendário."
     },
     {
       "id": "native.apple.ff5729a17d66ad91",
-      "source": "OpenClaw uses the camera when you scan a Gateway setup QR code or ask your paired Gateway or assistant to capture a photo or short video from this iPhone, for example to connect to your Gateway or show your assistant a document, device screen, or workspace.",
-      "translated": "O OpenClaw usa a câmera quando você escaneia um código QR de configuração do Gateway ou pede ao Gateway pareado ou ao assistente para capturar uma foto ou um vídeo curto deste iPhone, por exemplo, para se conectar ao Gateway ou mostrar ao assistente um documento, a tela de um dispositivo ou seu espaço de trabalho."
+      "source": "Natesclaw uses the camera when you scan a Gateway setup QR code or ask your paired Gateway or assistant to capture a photo or short video from this iPhone, for example to connect to your Gateway or show your assistant a document, device screen, or workspace.",
+      "translated": "O Natesclaw usa a câmera quando você escaneia um código QR de configuração do Gateway ou pede ao Gateway pareado ou ao assistente para capturar uma foto ou um vídeo curto deste iPhone, por exemplo, para se conectar ao Gateway ou mostrar ao assistente um documento, a tela de um dispositivo ou seu espaço de trabalho."
     },
     {
       "id": "native.apple.2f21aa6f5cd72915",
-      "source": "OpenClaw uses your contacts so you can search and reference people while using the assistant.",
-      "translated": "O OpenClaw usa seus contatos para que você possa pesquisar e mencionar pessoas ao usar o assistente."
+      "source": "Natesclaw uses your contacts so you can search and reference people while using the assistant.",
+      "translated": "O Natesclaw usa seus contatos para que você possa pesquisar e mencionar pessoas ao usar o assistente."
     },
     {
       "id": "native.apple.9d550c77a37bb165",
-      "source": "OpenClaw discovers and connects to your OpenClaw gateway on the local network.",
-      "translated": "O OpenClaw descobre e se conecta ao Gateway do OpenClaw na rede local."
+      "source": "Natesclaw discovers and connects to your Natesclaw gateway on the local network.",
+      "translated": "O Natesclaw descobre e se conecta ao Gateway do Natesclaw na rede local."
     },
     {
       "id": "native.apple.d822c41a0b7e9739",
-      "source": "OpenClaw can share your location in the background when you enable Always.",
-      "translated": "O OpenClaw pode compartilhar sua localização em segundo plano quando você ativa Sempre."
+      "source": "Natesclaw can share your location in the background when you enable Always.",
+      "translated": "O Natesclaw pode compartilhar sua localização em segundo plano quando você ativa Sempre."
     },
     {
       "id": "native.apple.441062ce99375692",
-      "source": "OpenClaw uses your location when you allow location sharing.",
-      "translated": "O OpenClaw usa sua localização quando você permite o compartilhamento de localização."
+      "source": "Natesclaw uses your location when you allow location sharing.",
+      "translated": "O Natesclaw usa sua localização quando você permite o compartilhamento de localização."
     },
     {
       "id": "native.apple.7c2cbe7077e4eff1",
-      "source": "OpenClaw uses the microphone for realtime chat, voice wake, push-to-talk, and voice notes.",
-      "translated": "O OpenClaw usa o microfone para chat em tempo real, ativação por voz, pressionar para falar e notas de voz."
+      "source": "Natesclaw uses the microphone for realtime chat, voice wake, push-to-talk, and voice notes.",
+      "translated": "O Natesclaw usa o microfone para chat em tempo real, ativação por voz, pressionar para falar e notas de voz."
     },
     {
       "id": "native.apple.85345f18204d67ec",
-      "source": "OpenClaw may use motion data to support device-aware interactions and automations.",
-      "translated": "O OpenClaw pode usar dados de movimento para oferecer suporte a interações e automações sensíveis ao dispositivo."
+      "source": "Natesclaw may use motion data to support device-aware interactions and automations.",
+      "translated": "O Natesclaw pode usar dados de movimento para oferecer suporte a interações e automações sensíveis ao dispositivo."
     },
     {
       "id": "native.apple.1d3a6099d7e11895",
-      "source": "OpenClaw reads your steps, sleep, resting heart rate, and workouts from the Apple Health app to create summaries you request and send them through your Gateway to your configured AI provider.",
-      "translated": "O OpenClaw lê seus passos, sono, frequência cardíaca em repouso e exercícios no app Saúde da Apple para criar os resumos que você solicitar e enviá-los por meio do seu Gateway para o provedor de IA configurado."
+      "source": "Natesclaw reads your steps, sleep, resting heart rate, and workouts from the Apple Health app to create summaries you request and send them through your Gateway to your configured AI provider.",
+      "translated": "O Natesclaw lê seus passos, sono, frequência cardíaca em repouso e exercícios no app Saúde da Apple para criar os resumos que você solicitar e enviá-los por meio do seu Gateway para o provedor de IA configurado."
     },
     {
       "id": "native.apple.c90a204b3232c401",
-      "source": "OpenClaw does not write to the Apple Health app. It uses read-only data to create summaries you request and send them through your Gateway to your configured AI provider.",
-      "translated": "O OpenClaw não grava dados no app Saúde da Apple. Ele usa dados somente leitura para criar os resumos que você solicitar e enviá-los por meio do seu Gateway para o provedor de IA configurado."
+      "source": "Natesclaw does not write to the Apple Health app. It uses read-only data to create summaries you request and send them through your Gateway to your configured AI provider.",
+      "translated": "O Natesclaw não grava dados no app Saúde da Apple. Ele usa dados somente leitura para criar os resumos que você solicitar e enviá-los por meio do seu Gateway para o provedor de IA configurado."
     },
     {
       "id": "native.apple.40ed4259ec869f1b",
-      "source": "OpenClaw lets your assistant read photos you allow and lets you choose photos to share.",
-      "translated": "O OpenClaw permite que seu assistente leia as fotos que você autorizar e permite que você escolha fotos para compartilhar."
+      "source": "Natesclaw lets your assistant read photos you allow and lets you choose photos to share.",
+      "translated": "O Natesclaw permite que seu assistente leia as fotos que você autorizar e permite que você escolha fotos para compartilhar."
     },
     {
       "id": "native.apple.81b673f0c6fc4371",
-      "source": "OpenClaw uses your reminders to list, add, and complete tasks when you enable reminders access.",
-      "translated": "O OpenClaw usa seus lembretes para listar, adicionar e concluir tarefas quando você ativa o acesso aos lembretes."
+      "source": "Natesclaw uses your reminders to list, add, and complete tasks when you enable reminders access.",
+      "translated": "O Natesclaw usa seus lembretes para listar, adicionar e concluir tarefas quando você ativa o acesso aos lembretes."
     },
     {
       "id": "native.apple.2275552c26460945",
-      "source": "OpenClaw uses on-device speech recognition for talk mode and voice wake.",
-      "translated": "O OpenClaw usa reconhecimento de fala no dispositivo para o modo de conversa e ativação por voz."
+      "source": "Natesclaw uses on-device speech recognition for talk mode and voice wake.",
+      "translated": "O Natesclaw usa reconhecimento de fala no dispositivo para o modo de conversa e ativação por voz."
     },
     {
       "id": "native.apple.46111fe0569488ab",
@@ -16190,18 +16190,18 @@
     },
     {
       "id": "native.apple.2dc593065171c201",
-      "source": "Location sharing is disabled in OpenClaw. Location Services are off in iOS Settings.",
-      "translated": "O compartilhamento de localização está desativado no OpenClaw. Os Serviços de Localização estão desativados nos Ajustes do iOS."
+      "source": "Location sharing is disabled in Natesclaw. Location Services are off in iOS Settings.",
+      "translated": "O compartilhamento de localização está desativado no Natesclaw. Os Serviços de Localização estão desativados nos Ajustes do iOS."
     },
     {
       "id": "native.apple.1dc990a9cc0500c5",
-      "source": "Location sharing is disabled in OpenClaw. iOS currently allows Always.",
-      "translated": "O compartilhamento de localização está desativado no OpenClaw. No momento, o iOS permite Sempre."
+      "source": "Location sharing is disabled in Natesclaw. iOS currently allows Always.",
+      "translated": "O compartilhamento de localização está desativado no Natesclaw. No momento, o iOS permite Sempre."
     },
     {
       "id": "native.apple.9a4e858d2b218d41",
-      "source": "Location sharing is disabled in OpenClaw. iOS currently allows While Using.",
-      "translated": "O compartilhamento de localização está desativado no OpenClaw. No momento, o iOS permite Ao usar."
+      "source": "Location sharing is disabled in Natesclaw. iOS currently allows While Using.",
+      "translated": "O compartilhamento de localização está desativado no Natesclaw. No momento, o iOS permite Ao usar."
     },
     {
       "id": "native.apple.ab481eb11214797f",
@@ -16275,8 +16275,8 @@
     },
     {
       "id": "native.apple.633f011b81108a8c",
-      "source": "OpenClaw cannot determine the current iOS location permission.",
-      "translated": "O OpenClaw não consegue determinar a permissão de localização atual do iOS."
+      "source": "Natesclaw cannot determine the current iOS location permission.",
+      "translated": "O Natesclaw não consegue determinar a permissão de localização atual do iOS."
     },
     {
       "id": "native.apple.e5673992d3aeac64",
@@ -16305,8 +16305,8 @@
     },
     {
       "id": "native.apple.f6b19113d5d8e7db",
-      "source": "OpenClaw cannot determine the current iOS location permission.",
-      "translated": "O OpenClaw não consegue determinar a permissão de localização atual do iOS."
+      "source": "Natesclaw cannot determine the current iOS location permission.",
+      "translated": "O Natesclaw não consegue determinar a permissão de localização atual do iOS."
     },
     {
       "id": "native.apple.2892e5b02c6789f0",
@@ -16540,8 +16540,8 @@
     },
     {
       "id": "native.apple.d4d9568dca8ceaa9",
-      "source": "The connected OpenClaw agent can use device capabilities you enable.",
-      "translated": "O agente OpenClaw conectado pode usar os recursos do dispositivo que você habilitar."
+      "source": "The connected Natesclaw agent can use device capabilities you enable.",
+      "translated": "O agente Natesclaw conectado pode usar os recursos do dispositivo que você habilitar."
     },
     {
       "id": "native.apple.fdd93eb6b6eef525",
@@ -16565,8 +16565,8 @@
     },
     {
       "id": "native.apple.e8b4dc00cd23ae73",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.9b414850baa618da",
@@ -16740,8 +16740,8 @@
     },
     {
       "id": "native.apple.559dccb9f9dfbbad",
-      "source": "OpenClaw is checking gateway and node access.",
-      "translated": "O OpenClaw está verificando o acesso ao gateway e ao nó."
+      "source": "Natesclaw is checking gateway and node access.",
+      "translated": "O Natesclaw está verificando o acesso ao gateway e ao nó."
     },
     {
       "id": "native.apple.4404f435fb496b62",
@@ -16760,13 +16760,13 @@
     },
     {
       "id": "native.apple.da636328de464a40",
-      "source": "Request ID: check `openclaw devices list`.",
-      "translated": "ID da solicitação: consulte `openclaw devices list`."
+      "source": "Request ID: check `natesclaw devices list`.",
+      "translated": "ID da solicitação: consulte `natesclaw devices list`."
     },
     {
       "id": "native.apple.d5a5f13a1dd28c9d",
-      "source": "Approve this device on the gateway.\n1) `%1$@`\n2) `/pair approve` in your OpenClaw chat\n%2$@\nOpenClaw will also retry automatically when you return to this app.",
-      "translated": "Aprove este dispositivo no Gateway.\n1) `%1$@`\n2) `/pair approve` no seu chat do OpenClaw\n%2$@\nO OpenClaw também tentará novamente de forma automática quando você voltar a este app."
+      "source": "Approve this device on the gateway.\n1) `%1$@`\n2) `/pair approve` in your Natesclaw chat\n%2$@\nNatesclaw will also retry automatically when you return to this app.",
+      "translated": "Aprove este dispositivo no Gateway.\n1) `%1$@`\n2) `/pair approve` no seu chat do Natesclaw\n%2$@\nO Natesclaw também tentará novamente de forma automática quando você voltar a este app."
     },
     {
       "id": "native.apple.af3890b1e07c3084",
@@ -16850,8 +16850,8 @@
     },
     {
       "id": "native.apple.5b46de1ccb06852b",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.0e07e7044608f954",
@@ -16895,8 +16895,8 @@
     },
     {
       "id": "native.apple.8855710a55de2ed5",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.7029e1235380a92c",
@@ -17080,8 +17080,8 @@
     },
     {
       "id": "native.apple.a55a43940452b04b",
-      "source": "OpenClaw iOS",
-      "translated": "OpenClaw iOS"
+      "source": "Natesclaw iOS",
+      "translated": "Natesclaw iOS"
     },
     {
       "id": "native.apple.35b6f99d627028f6",
@@ -17300,8 +17300,8 @@
     },
     {
       "id": "native.apple.4ebb39f445d7dbff",
-      "source": "OpenClaw reacts when any trigger appears in a transcription. Keep them short to avoid false positives.",
-      "translated": "OpenClaw reage quando qualquer gatilho aparece em uma transcrição. Mantenha-os curtos para evitar falsos positivos."
+      "source": "Natesclaw reacts when any trigger appears in a transcription. Keep them short to avoid false positives.",
+      "translated": "Natesclaw reage quando qualquer gatilho aparece em uma transcrição. Mantenha-os curtos para evitar falsos positivos."
     },
     {
       "id": "native.apple.994760420a194561",
@@ -17570,18 +17570,18 @@
     },
     {
       "id": "native.apple.5b40cb9cf4ee4d4f",
-      "source": "Asking OpenClaw",
-      "translated": "Perguntando ao OpenClaw"
+      "source": "Asking Natesclaw",
+      "translated": "Perguntando ao Natesclaw"
     },
     {
       "id": "native.apple.34531893ae6091b1",
-      "source": "Still asking OpenClaw",
-      "translated": "Ainda perguntando ao OpenClaw"
+      "source": "Still asking Natesclaw",
+      "translated": "Ainda perguntando ao Natesclaw"
     },
     {
       "id": "native.apple.027ab0bbb4553124",
-      "source": "Updating OpenClaw",
-      "translated": "Atualizando o OpenClaw"
+      "source": "Updating Natesclaw",
+      "translated": "Atualizando o Natesclaw"
     },
     {
       "id": "native.apple.471dc394d6b9e443",
@@ -17635,8 +17635,8 @@
     },
     {
       "id": "native.apple.deb282fd61fd2de3",
-      "source": "OpenClaw unavailable",
-      "translated": "OpenClaw indisponível"
+      "source": "Natesclaw unavailable",
+      "translated": "Natesclaw indisponível"
     },
     {
       "id": "native.apple.f4adf2762402e92a",
@@ -17700,13 +17700,13 @@
     },
     {
       "id": "native.apple.1065cfe92d7c1eb6",
-      "source": "Asking OpenClaw",
-      "translated": "Perguntando ao OpenClaw"
+      "source": "Asking Natesclaw",
+      "translated": "Perguntando ao Natesclaw"
     },
     {
       "id": "native.apple.d2db26b3bb266491",
-      "source": "Updating OpenClaw",
-      "translated": "Atualizando o OpenClaw"
+      "source": "Updating Natesclaw",
+      "translated": "Atualizando o Natesclaw"
     },
     {
       "id": "native.apple.4b89dccea20c58fa",
@@ -17715,8 +17715,8 @@
     },
     {
       "id": "native.apple.8a62f0e9416188e3",
-      "source": "OpenClaw unavailable",
-      "translated": "OpenClaw indisponível"
+      "source": "Natesclaw unavailable",
+      "translated": "Natesclaw indisponível"
     },
     {
       "id": "native.apple.8a944b06087fe8ef",
@@ -17800,8 +17800,8 @@
     },
     {
       "id": "native.apple.12a4a51d251f65c0",
-      "source": "OpenClaw connects this Apple Watch directly to your Gateway on trusted local networks.",
-      "translated": "O OpenClaw conecta este Apple Watch diretamente ao seu Gateway em redes locais confiáveis."
+      "source": "Natesclaw connects this Apple Watch directly to your Gateway on trusted local networks.",
+      "translated": "O Natesclaw conecta este Apple Watch diretamente ao seu Gateway em redes locais confiáveis."
     },
     {
       "id": "native.apple.130180e0065c80fc",
@@ -17850,8 +17850,8 @@
     },
     {
       "id": "native.apple.32473b10033ac0f4",
-      "source": "Reconnects when OpenClaw is active",
-      "translated": "Reconecta quando o OpenClaw está ativo"
+      "source": "Reconnects when Natesclaw is active",
+      "translated": "Reconecta quando o Natesclaw está ativo"
     },
     {
       "id": "native.apple.760267006777c454",
@@ -18140,8 +18140,8 @@
     },
     {
       "id": "native.apple.ca02fd2965efe74e",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.1ba2f03dc98103c0",
@@ -18290,8 +18290,8 @@
     },
     {
       "id": "native.apple.c7d87356e6cdb374",
-      "source": "Uses Wi-Fi or cellular while OpenClaw is active",
-      "translated": "Usa Wi-Fi ou rede celular enquanto o OpenClaw está ativo"
+      "source": "Uses Wi-Fi or cellular while Natesclaw is active",
+      "translated": "Usa Wi-Fi ou rede celular enquanto o Natesclaw está ativo"
     },
     {
       "id": "native.apple.08583448d9b2455e",
@@ -18480,8 +18480,8 @@
     },
     {
       "id": "native.apple.3fdc651e507de84b",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.c1de056da9ee1b27",
@@ -18520,8 +18520,8 @@
     },
     {
       "id": "native.apple.b816e4b9e492ae6c",
-      "source": "Message OpenClaw",
-      "translated": "Enviar mensagem para OpenClaw"
+      "source": "Message Natesclaw",
+      "translated": "Enviar mensagem para Natesclaw"
     },
     {
       "id": "native.apple.502a884cec1f0d5d",
@@ -18645,8 +18645,8 @@
     },
     {
       "id": "native.apple.5ac0c79487a492b4",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.95b5730738a28d71",
@@ -18695,8 +18695,8 @@
     },
     {
       "id": "native.apple.4ec07761308f7f50",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — Licença MIT."
+      "source": "© 2026 Natesclaw Foundation — MIT License.",
+      "translated": "© 2026 Natesclaw Foundation — Licença MIT."
     },
     {
       "id": "native.apple.37661ff1af405580",
@@ -18770,28 +18770,28 @@
     },
     {
       "id": "native.apple.edfef1f4b5cb081f",
-      "source": "OpenClaw couldn’t be installed in Applications. Move it there manually, then open that copy.",
-      "translated": "Não foi possível instalar o OpenClaw em Aplicativos. Mova-o para lá manualmente e abra essa cópia."
+      "source": "Natesclaw couldn’t be installed in Applications. Move it there manually, then open that copy.",
+      "translated": "Não foi possível instalar o Natesclaw em Aplicativos. Mova-o para lá manualmente e abra essa cópia."
     },
     {
       "id": "native.apple.7f86f5acf3d32ec2",
-      "source": "Replace the older OpenClaw in Applications?",
-      "translated": "Substituir a versão mais antiga do OpenClaw em Aplicativos?"
+      "source": "Replace the older Natesclaw in Applications?",
+      "translated": "Substituir a versão mais antiga do Natesclaw em Aplicativos?"
     },
     {
       "id": "native.apple.088b39cc34b44e54",
-      "source": "Install OpenClaw in Applications?",
-      "translated": "Instalar o OpenClaw em Aplicativos?"
+      "source": "Install Natesclaw in Applications?",
+      "translated": "Instalar o Natesclaw em Aplicativos?"
     },
     {
       "id": "native.apple.c8898d685457401f",
-      "source": "This copy is newer than the installed app. OpenClaw will replace it and reopen from Applications.",
-      "translated": "Esta cópia é mais recente que o aplicativo instalado. O OpenClaw irá substituí-lo e reabrir a partir de Aplicativos."
+      "source": "This copy is newer than the installed app. Natesclaw will replace it and reopen from Applications.",
+      "translated": "Esta cópia é mais recente que o aplicativo instalado. O Natesclaw irá substituí-lo e reabrir a partir de Aplicativos."
     },
     {
       "id": "native.apple.a77a46d0ca32551f",
-      "source": "OpenClaw will copy itself to Applications and reopen there so updates and launch at login stay reliable.",
-      "translated": "O OpenClaw se copiará para Aplicativos e reabrirá de lá para que as atualizações e a inicialização no login permaneçam confiáveis."
+      "source": "Natesclaw will copy itself to Applications and reopen there so updates and launch at login stay reliable.",
+      "translated": "O Natesclaw se copiará para Aplicativos e reabrirá de lá para que as atualizações e a inicialização no login permaneçam confiáveis."
     },
     {
       "id": "native.apple.22ebb7b228c8275a",
@@ -18805,8 +18805,8 @@
     },
     {
       "id": "native.apple.9ac444c15bd52f0e",
-      "source": "OpenClaw is installed in Applications, but couldn’t reopen automatically. Open it there manually.",
-      "translated": "O OpenClaw está instalado em Aplicativos, mas não foi possível reabri-lo automaticamente. Abra-o lá manualmente."
+      "source": "Natesclaw is installed in Applications, but couldn’t reopen automatically. Open it there manually.",
+      "translated": "O Natesclaw está instalado em Aplicativos, mas não foi possível reabri-lo automaticamente. Abra-o lá manualmente."
     },
     {
       "id": "native.apple.d1faee12838b677f",
@@ -18925,18 +18925,18 @@
     },
     {
       "id": "native.apple.cfc2509b8bbcf1d7",
-      "source": "OpenClaw Gateway \\(version) is ready.",
-      "translated": "OpenClaw Gateway \\(version) está pronto."
+      "source": "Natesclaw Gateway \\(version) is ready.",
+      "translated": "Natesclaw Gateway \\(version) está pronto."
     },
     {
       "id": "native.apple.9b767e46895714f9",
-      "source": "OpenClaw Gateway is not installed yet.",
-      "translated": "OpenClaw Gateway ainda não está instalado."
+      "source": "Natesclaw Gateway is not installed yet.",
+      "translated": "Natesclaw Gateway ainda não está instalado."
     },
     {
       "id": "native.apple.b4dc58a1b294e140",
-      "source": "The OpenClaw Gateway could not be verified. Setup will repair it.",
-      "translated": "Não foi possível verificar o OpenClaw Gateway. A configuração irá repará-lo."
+      "source": "The Natesclaw Gateway could not be verified. Setup will repair it.",
+      "translated": "Não foi possível verificar o Natesclaw Gateway. A configuração irá repará-lo."
     },
     {
       "id": "native.apple.4088056ae7b0f3b4",
@@ -18945,13 +18945,13 @@
     },
     {
       "id": "native.apple.86e7c86924ad0c70",
-      "source": "Repairing the OpenClaw Gateway update…",
-      "translated": "Reparando a atualização do Gateway do OpenClaw…"
+      "source": "Repairing the Natesclaw Gateway update…",
+      "translated": "Reparando a atualização do Gateway do Natesclaw…"
     },
     {
       "id": "native.apple.b59713e1e3e7ee65",
-      "source": "Updating the OpenClaw Gateway to \\(targetVersion)…",
-      "translated": "Atualizando o Gateway do OpenClaw para \\(targetVersion)…"
+      "source": "Updating the Natesclaw Gateway to \\(targetVersion)…",
+      "translated": "Atualizando o Gateway do Natesclaw para \\(targetVersion)…"
     },
     {
       "id": "native.apple.7772913c171b78ac",
@@ -18970,8 +18970,8 @@
     },
     {
       "id": "native.apple.66f44c526206f5de",
-      "source": "OpenClaw Gateway \\(installedVersion) is installed.",
-      "translated": "O OpenClaw Gateway \\(installedVersion) está instalado."
+      "source": "Natesclaw Gateway \\(installedVersion) is installed.",
+      "translated": "O Natesclaw Gateway \\(installedVersion) está instalado."
     },
     {
       "id": "native.apple.6f14c557e2573526",
@@ -19055,8 +19055,8 @@
     },
     {
       "id": "native.apple.81435e60c0b78093",
-      "source": "OpenClaw could not load editable settings for this channel.",
-      "translated": "O OpenClaw não conseguiu carregar as configurações editáveis deste canal."
+      "source": "Natesclaw could not load editable settings for this channel.",
+      "translated": "O Natesclaw não conseguiu carregar as configurações editáveis deste canal."
     },
     {
       "id": "native.apple.f74dfc887ee4f936",
@@ -19125,8 +19125,8 @@
     },
     {
       "id": "native.apple.60f2b09010a7809b",
-      "source": "Config invalid; fix it in ~/.openclaw/openclaw.json.",
-      "translated": "Config invalid; fix it in ~/.openclaw/openclaw.json."
+      "source": "Config invalid; fix it in ~/.natesclaw/natesclaw.json.",
+      "translated": "Config invalid; fix it in ~/.natesclaw/natesclaw.json."
     },
     {
       "id": "native.apple.313dabb10c37e00c",
@@ -19275,8 +19275,8 @@
     },
     {
       "id": "native.apple.055a88d0f9d3d2fe",
-      "source": "Missing: \\(buckets.map(\\.displayName).joined(separator: \", \")). Grant access in System Settings → Privacy & Security, then reopen OpenClaw.",
-      "translated": "Ausente: \\(buckets.map(\\.displayName).joined(separator: \", \")). Conceda acesso em Ajustes do Sistema → Privacidade e Segurança e reabra o OpenClaw."
+      "source": "Missing: \\(buckets.map(\\.displayName).joined(separator: \", \")). Grant access in System Settings → Privacy & Security, then reopen Natesclaw.",
+      "translated": "Ausente: \\(buckets.map(\\.displayName).joined(separator: \", \")). Conceda acesso em Ajustes do Sistema → Privacidade e Segurança e reabra o Natesclaw."
     },
     {
       "id": "native.apple.0a65101d40a6704c",
@@ -19305,8 +19305,8 @@
     },
     {
       "id": "native.apple.8103e662c0e40760",
-      "source": "Edit ~/.openclaw/openclaw.json using the schema-driven form.",
-      "translated": "Edite ~/.openclaw/openclaw.json usando o formulário orientado por esquema."
+      "source": "Edit ~/.natesclaw/natesclaw.json using the schema-driven form.",
+      "translated": "Edite ~/.natesclaw/natesclaw.json usando o formulário orientado por esquema."
     },
     {
       "id": "native.apple.a3465ec90e435ea9",
@@ -19555,8 +19555,8 @@
     },
     {
       "id": "native.apple.df6243155293f80b",
-      "source": "What should OpenClaw do?",
-      "translated": "O que o OpenClaw deve fazer?"
+      "source": "What should Natesclaw do?",
+      "translated": "O que o Natesclaw deve fazer?"
     },
     {
       "id": "native.apple.81b5ba441a230f07",
@@ -19880,53 +19880,53 @@
     },
     {
       "id": "native.apple.905508b749e99f2a",
-      "source": "OpenClaw Not Configured",
-      "translated": "OpenClaw não configurado"
+      "source": "Natesclaw Not Configured",
+      "translated": "Natesclaw não configurado"
     },
     {
       "id": "native.apple.a7b0d4e6bf5796c0",
-      "source": "OpenClaw Active",
-      "translated": "OpenClaw ativo"
+      "source": "Natesclaw Active",
+      "translated": "Natesclaw ativo"
     },
     {
       "id": "native.apple.b36a54d8fef80333",
-      "source": "OpenClaw Not Configured — \\(primaryName)",
-      "translated": "OpenClaw não configurado — \\(primaryName)"
+      "source": "Natesclaw Not Configured — \\(primaryName)",
+      "translated": "Natesclaw não configurado — \\(primaryName)"
     },
     {
       "id": "native.apple.2be6d3dd1a0d2699",
-      "source": "OpenClaw Active — \\(primaryName)",
-      "translated": "OpenClaw ativo — \\(primaryName)"
+      "source": "Natesclaw Active — \\(primaryName)",
+      "translated": "Natesclaw ativo — \\(primaryName)"
     },
     {
       "id": "native.apple.293bf9a6e721036d",
-      "source": "Remote OpenClaw Active",
-      "translated": "OpenClaw remoto ativo"
+      "source": "Remote Natesclaw Active",
+      "translated": "Natesclaw remoto ativo"
     },
     {
       "id": "native.apple.6d4e4047b0278805",
-      "source": "Remote OpenClaw Active — \\(name)",
-      "translated": "OpenClaw Remoto Ativo — \\(name)"
+      "source": "Remote Natesclaw Active — \\(name)",
+      "translated": "Natesclaw Remoto Ativo — \\(name)"
     },
     {
       "id": "native.apple.9ca38f6a779263eb",
-      "source": "Remote OpenClaw Connecting",
-      "translated": "OpenClaw Remoto Conectando"
+      "source": "Remote Natesclaw Connecting",
+      "translated": "Natesclaw Remoto Conectando"
     },
     {
       "id": "native.apple.9a0da573f4e61f2f",
-      "source": "Remote OpenClaw Connecting — \\(name)",
-      "translated": "OpenClaw Remoto Conectando — \\(name)"
+      "source": "Remote Natesclaw Connecting — \\(name)",
+      "translated": "Natesclaw Remoto Conectando — \\(name)"
     },
     {
       "id": "native.apple.6f9a4c4e67ef0bd8",
-      "source": "Remote OpenClaw Needs Attention",
-      "translated": "OpenClaw Remoto Precisa de Atenção"
+      "source": "Remote Natesclaw Needs Attention",
+      "translated": "Natesclaw Remoto Precisa de Atenção"
     },
     {
       "id": "native.apple.4953d4c2dba0f324",
-      "source": "Remote OpenClaw Needs Attention — \\(name)",
-      "translated": "OpenClaw Remoto Precisa de Atenção — \\(name)"
+      "source": "Remote Natesclaw Needs Attention — \\(name)",
+      "translated": "Natesclaw Remoto Precisa de Atenção — \\(name)"
     },
     {
       "id": "native.apple.179c8c2ce733969f",
@@ -20010,8 +20010,8 @@
     },
     {
       "id": "native.apple.d8b3e55c41a77627",
-      "source": "When enabled, OpenClaw won't install or manage \\(gatewayLaunchdLabel). It will only attach to an existing Gateway.",
-      "translated": "Quando ativado, o OpenClaw não instalará nem gerenciará \\(gatewayLaunchdLabel). Ele apenas se anexará a um Gateway existente."
+      "source": "When enabled, Natesclaw won't install or manage \\(gatewayLaunchdLabel). It will only attach to an existing Gateway.",
+      "translated": "Quando ativado, o Natesclaw não instalará nem gerenciará \\(gatewayLaunchdLabel). Ele apenas se anexará a um Gateway existente."
     },
     {
       "id": "native.apple.15e528c55a96394f",
@@ -20110,8 +20110,8 @@
     },
     {
       "id": "native.apple.f8e4e2b25dbdbd44",
-      "source": "Deep links (openclaw://…) are always enabled; the key controls unattended runs.",
-      "translated": "Deep links (openclaw://…) estão sempre ativados; a chave controla execuções autônomas."
+      "source": "Deep links (natesclaw://…) are always enabled; the key controls unattended runs.",
+      "translated": "Deep links (natesclaw://…) estão sempre ativados; a chave controla execuções autônomas."
     },
     {
       "id": "native.apple.aeba5ae43a292c55",
@@ -20160,8 +20160,8 @@
     },
     {
       "id": "native.apple.5437c7d545b749ca",
-      "source": "Writes a rotating, local-only log under ~/Library/Logs/OpenClaw/. Enable only while actively debugging.",
-      "translated": "Writes a rotating, local-only log under ~/Library/Logs/OpenClaw/. Enable only while actively debugging."
+      "source": "Writes a rotating, local-only log under ~/Library/Logs/Natesclaw/. Enable only while actively debugging.",
+      "translated": "Writes a rotating, local-only log under ~/Library/Logs/Natesclaw/. Enable only while actively debugging."
     },
     {
       "id": "native.apple.5b35a89bea603457",
@@ -20210,13 +20210,13 @@
     },
     {
       "id": "native.apple.5e9e8bf8e35c48ef",
-      "source": "OpenClaw project root",
-      "translated": "Raiz do projeto OpenClaw"
+      "source": "Natesclaw project root",
+      "translated": "Raiz do projeto Natesclaw"
     },
     {
       "id": "native.apple.8b01a6daf7a7b94e",
-      "source": "Path to openclaw repo",
-      "translated": "Caminho para o repositório openclaw"
+      "source": "Path to natesclaw repo",
+      "translated": "Caminho para o repositório natesclaw"
     },
     {
       "id": "native.apple.b9e064d213c6b451",
@@ -20245,8 +20245,8 @@
     },
     {
       "id": "native.apple.a8154f17cda71415",
-      "source": "Used by the CLI session loader; stored in ~/.openclaw/openclaw.json.",
-      "translated": "Usado pelo carregador de sessões da CLI; armazenado em ~/.openclaw/openclaw.json."
+      "source": "Used by the CLI session loader; stored in ~/.natesclaw/natesclaw.json.",
+      "translated": "Usado pelo carregador de sessões da CLI; armazenado em ~/.natesclaw/natesclaw.json."
     },
     {
       "id": "native.apple.3e472353e27107af",
@@ -20275,8 +20275,8 @@
     },
     {
       "id": "native.apple.3307505d507faf31",
-      "source": "Note: macOS may require restarting OpenClaw after enabling Accessibility or Screen Recording.",
-      "translated": "Observação: o macOS pode exigir reiniciar o OpenClaw após ativar Acessibilidade ou Gravação de Tela."
+      "source": "Note: macOS may require restarting Natesclaw after enabling Accessibility or Screen Recording.",
+      "translated": "Observação: o macOS pode exigir reiniciar o Natesclaw após ativar Acessibilidade ou Gravação de Tela."
     },
     {
       "id": "native.apple.974d1478dd99ffb0",
@@ -20285,8 +20285,8 @@
     },
     {
       "id": "native.apple.e52d463773aef1e1",
-      "source": "Restart OpenClaw",
-      "translated": "Reiniciar OpenClaw"
+      "source": "Restart Natesclaw",
+      "translated": "Reiniciar Natesclaw"
     },
     {
       "id": "native.apple.e299e77f3ad75a75",
@@ -20400,13 +20400,13 @@
     },
     {
       "id": "native.apple.a8af393b84d63ab8",
-      "source": "OpenClaw is paused",
-      "translated": "OpenClaw está pausado"
+      "source": "Natesclaw is paused",
+      "translated": "Natesclaw está pausado"
     },
     {
       "id": "native.apple.7ba1542539c0d40b",
-      "source": "Unpause OpenClaw to run agent actions.",
-      "translated": "Retome o OpenClaw para executar ações do agente."
+      "source": "Unpause Natesclaw to run agent actions.",
+      "translated": "Retome o Natesclaw para executar ações do agente."
     },
     {
       "id": "native.apple.7c1e1dbfde976ab9",
@@ -20430,8 +20430,8 @@
     },
     {
       "id": "native.apple.50f1211af2a1945e",
-      "source": "Run OpenClaw agent?",
-      "translated": "Executar agente do OpenClaw?"
+      "source": "Run Natesclaw agent?",
+      "translated": "Executar agente do Natesclaw?"
     },
     {
       "id": "native.apple.4f3841d5de0135c4",
@@ -20490,8 +20490,8 @@
     },
     {
       "id": "native.apple.b28538e2e444510f",
-      "source": "Exec approvals need migration — run openclaw doctor --fix with OPENCLAW_STATE_DIR set to \\(error.stateDirectoryURL.path).",
-      "translated": "As aprovações de execução precisam de migração — execute openclaw doctor --fix com OPENCLAW_STATE_DIR definido como \\(error.stateDirectoryURL.path)."
+      "source": "Exec approvals need migration — run natesclaw doctor --fix with NATESCLAW_STATE_DIR set to \\(error.stateDirectoryURL.path).",
+      "translated": "As aprovações de execução precisam de migração — execute natesclaw doctor --fix com NATESCLAW_STATE_DIR definido como \\(error.stateDirectoryURL.path)."
     },
     {
       "id": "native.apple.49e886ab7a093e63",
@@ -20565,8 +20565,8 @@
     },
     {
       "id": "native.apple.ace257e298e5bf46",
-      "source": "OpenClaw connecting",
-      "translated": "OpenClaw conectando"
+      "source": "Natesclaw connecting",
+      "translated": "Natesclaw conectando"
     },
     {
       "id": "native.apple.083ea354ad2d8e22",
@@ -20595,13 +20595,13 @@
     },
     {
       "id": "native.apple.8a9259535246e7cf",
-      "source": "OpenClaw needs attention",
-      "translated": "OpenClaw precisa de atenção"
+      "source": "Natesclaw needs attention",
+      "translated": "Natesclaw precisa de atenção"
     },
     {
       "id": "native.apple.0bec3829fd3ff778",
-      "source": "OpenClaw paused",
-      "translated": "OpenClaw pausado"
+      "source": "Natesclaw paused",
+      "translated": "Natesclaw pausado"
     },
     {
       "id": "native.apple.af4a1c5f1eca9c8a",
@@ -20615,8 +20615,8 @@
     },
     {
       "id": "native.apple.18c46b3643479d39",
-      "source": "OpenClaw active",
-      "translated": "OpenClaw ativo"
+      "source": "Natesclaw active",
+      "translated": "Natesclaw ativo"
     },
     {
       "id": "native.apple.448e954d678c2fff",
@@ -20645,8 +20645,8 @@
     },
     {
       "id": "native.apple.66ad783199ef9729",
-      "source": "Discover OpenClaw gateways on your LAN",
-      "translated": "Descobrir gateways OpenClaw na sua LAN"
+      "source": "Discover Natesclaw gateways on your LAN",
+      "translated": "Descobrir gateways Natesclaw na sua LAN"
     },
     {
       "id": "native.apple.110f6e64e25dcd2e",
@@ -20805,8 +20805,8 @@
     },
     {
       "id": "native.apple.1c4fca89983d7487",
-      "source": "Everyday OpenClaw app behavior.",
-      "translated": "Comportamento cotidiano do app OpenClaw."
+      "source": "Everyday Natesclaw app behavior.",
+      "translated": "Comportamento cotidiano do app Natesclaw."
     },
     {
       "id": "native.apple.7d03158a40ddb60a",
@@ -20825,8 +20825,8 @@
     },
     {
       "id": "native.apple.e7a0819bd2f4e1dc",
-      "source": "Keep OpenClaw visible in the Dock. When off, windows still show the Dock icon while open.",
-      "translated": "Manter o OpenClaw visível no Dock. Quando desativado, as janelas ainda mostram o ícone no Dock enquanto estiverem abertas."
+      "source": "Keep Natesclaw visible in the Dock. When off, windows still show the Dock icon while open.",
+      "translated": "Manter o Natesclaw visível no Dock. Quando desativado, as janelas ainda mostram o ícone no Dock enquanto estiverem abertas."
     },
     {
       "id": "native.apple.af23f7b5fb03a877",
@@ -20965,8 +20965,8 @@
     },
     {
       "id": "native.apple.7fe6df69d8050832",
-      "source": "OpenClaw active",
-      "translated": "OpenClaw ativo"
+      "source": "Natesclaw active",
+      "translated": "Natesclaw ativo"
     },
     {
       "id": "native.apple.eac861e2d1da4745",
@@ -21005,8 +21005,8 @@
     },
     {
       "id": "native.apple.8021dcd7963a4cc2",
-      "source": "OpenClaw starts and monitors the Gateway on this Mac.",
-      "translated": "O OpenClaw inicia e monitora o Gateway neste Mac."
+      "source": "Natesclaw starts and monitors the Gateway on this Mac.",
+      "translated": "O Natesclaw inicia e monitora o Gateway neste Mac."
     },
     {
       "id": "native.apple.fe2a790f28ffd1ae",
@@ -21020,8 +21020,8 @@
     },
     {
       "id": "native.apple.d261da13966fa812",
-      "source": "OpenClaw runs",
-      "translated": "O OpenClaw é executado"
+      "source": "Natesclaw runs",
+      "translated": "O Natesclaw é executado"
     },
     {
       "id": "native.apple.397850fa5e803f53",
@@ -21120,8 +21120,8 @@
     },
     {
       "id": "native.apple.c663b8a50de8a7d8",
-      "source": "/home/you/Projects/openclaw",
-      "translated": "/home/you/Projects/openclaw"
+      "source": "/home/you/Projects/natesclaw",
+      "translated": "/home/you/Projects/natesclaw"
     },
     {
       "id": "native.apple.938ee646aac4ce66",
@@ -21130,8 +21130,8 @@
     },
     {
       "id": "native.apple.09f99e863e081f9f",
-      "source": "/Applications/OpenClaw.app/.../openclaw",
-      "translated": "/Applications/OpenClaw.app/.../openclaw"
+      "source": "/Applications/Natesclaw.app/.../natesclaw",
+      "translated": "/Applications/Natesclaw.app/.../natesclaw"
     },
     {
       "id": "native.apple.f588f7dad51aae2e",
@@ -21205,8 +21205,8 @@
     },
     {
       "id": "native.apple.24aa092829f9a3b1",
-      "source": "The current gateway.remote.token value is not plain text. OpenClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
-      "translated": "O valor atual de gateway.remote.token não está em texto simples. O OpenClaw para macOS não pode usá-lo diretamente; insira um token em texto simples aqui para substituí-lo."
+      "source": "The current gateway.remote.token value is not plain text. Natesclaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
+      "translated": "O valor atual de gateway.remote.token não está em texto simples. O Natesclaw para macOS não pode usá-lo diretamente; insira um token em texto simples aqui para substituí-lo."
     },
     {
       "id": "native.apple.d0b21bc12ab63cad",
@@ -21265,13 +21265,13 @@
     },
     {
       "id": "native.apple.405e74c96498b7c0",
-      "source": "Automatically start OpenClaw after you sign in.",
-      "translated": "Iniciar o OpenClaw automaticamente após você entrar."
+      "source": "Automatically start Natesclaw after you sign in.",
+      "translated": "Iniciar o Natesclaw automaticamente após você entrar."
     },
     {
       "id": "native.apple.8b74758a60f78642",
-      "source": "Move OpenClaw to Applications before enabling launch at login.",
-      "translated": "Mova o OpenClaw para Aplicativos antes de ativar a inicialização no login."
+      "source": "Move Natesclaw to Applications before enabling launch at login.",
+      "translated": "Mova o Natesclaw para Aplicativos antes de ativar a inicialização no login."
     },
     {
       "id": "native.apple.4d96b20de25a9ddf",
@@ -21360,8 +21360,8 @@
     },
     {
       "id": "native.apple.876c066efa88aee3",
-      "source": "Latest presence beacons from OpenClaw nodes. Updated periodically.",
-      "translated": "Beacons de presença mais recentes dos nós OpenClaw. Atualizado periodicamente."
+      "source": "Latest presence beacons from Natesclaw nodes. Updated periodically.",
+      "translated": "Beacons de presença mais recentes dos nós Natesclaw. Atualizado periodicamente."
     },
     {
       "id": "native.apple.8a6bcd51fd9f1f62",
@@ -21455,13 +21455,13 @@
     },
     {
       "id": "native.apple.13a7356f48278757",
-      "source": "OpenClaw - Voice Wake live meter active",
-      "translated": "OpenClaw - medidor ao vivo de Voice Wake ativo"
+      "source": "Natesclaw - Voice Wake live meter active",
+      "translated": "Natesclaw - medidor ao vivo de Voice Wake ativo"
     },
     {
       "id": "native.apple.fae2cf18519da0d5",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.ef59188264be95d4",
@@ -21570,8 +21570,8 @@
     },
     {
       "id": "native.apple.fbab65790d6eca89",
-      "source": "About OpenClaw",
-      "translated": "Sobre o OpenClaw"
+      "source": "About Natesclaw",
+      "translated": "Sobre o Natesclaw"
     },
     {
       "id": "native.apple.14c8f4b1a57569f3",
@@ -21875,13 +21875,13 @@
     },
     {
       "id": "native.apple.3db546546fbaf38e",
-      "source": "OpenClaw is preparing a local model.",
-      "translated": "O OpenClaw está preparando um modelo local."
+      "source": "Natesclaw is preparing a local model.",
+      "translated": "O Natesclaw está preparando um modelo local."
     },
     {
       "id": "native.apple.c5992a23c991f948",
-      "source": "OpenClaw is completing provider sign-in.",
-      "translated": "O OpenClaw está concluindo o login do provedor."
+      "source": "Natesclaw is completing provider sign-in.",
+      "translated": "O Natesclaw está concluindo o login do provedor."
     },
     {
       "id": "native.apple.0f3c1c6f0672bed7",
@@ -21915,8 +21915,8 @@
     },
     {
       "id": "native.apple.e3e27d22fd2312a2",
-      "source": "OpenClaw will check again before changing any inference settings.",
-      "translated": "O OpenClaw verificará novamente antes de alterar qualquer configuração de inferência."
+      "source": "Natesclaw will check again before changing any inference settings.",
+      "translated": "O Natesclaw verificará novamente antes de alterar qualquer configuração de inferência."
     },
     {
       "id": "native.apple.a0a8f45082d0ba99",
@@ -22020,8 +22020,8 @@
     },
     {
       "id": "native.apple.4a1e5a5600b907f4",
-      "source": "Use an existing subscription or provider account. OpenClaw opens the provider’s own sign-in flow, then verifies it with a real reply.",
-      "translated": "Use uma assinatura ou conta de provedor existente. O OpenClaw abre o próprio fluxo de login do provedor e depois o verifica com uma resposta real."
+      "source": "Use an existing subscription or provider account. Natesclaw opens the provider’s own sign-in flow, then verifies it with a real reply.",
+      "translated": "Use uma assinatura ou conta de provedor existente. O Natesclaw abre o próprio fluxo de login do provedor e depois o verifica com uma resposta real."
     },
     {
       "id": "native.apple.14b23c357d7a9eff",
@@ -22045,8 +22045,8 @@
     },
     {
       "id": "native.apple.97b24c854f768998",
-      "source": "OpenClaw will detect and verify the prepared model before using it.",
-      "translated": "O OpenClaw detectará e verificará o modelo preparado antes de usá-lo."
+      "source": "Natesclaw will detect and verify the prepared model before using it.",
+      "translated": "O Natesclaw detectará e verificará o modelo preparado antes de usá-lo."
     },
     {
       "id": "native.apple.869fe436119bb8a6",
@@ -22185,18 +22185,18 @@
     },
     {
       "id": "native.apple.b92f94ddc6bbc8e5",
-      "source": "OpenClaw was interrupted. Restart to try again.",
-      "translated": "O OpenClaw foi interrompido. Reinicie para tentar novamente."
+      "source": "Natesclaw was interrupted. Restart to try again.",
+      "translated": "O Natesclaw foi interrompido. Reinicie para tentar novamente."
     },
     {
       "id": "native.apple.829845818e97978a",
-      "source": "The Gateway connection changed. Restart OpenClaw to reconnect.",
-      "translated": "A conexão com o Gateway mudou. Reinicie o OpenClaw para reconectar."
+      "source": "The Gateway connection changed. Restart Natesclaw to reconnect.",
+      "translated": "A conexão com o Gateway mudou. Reinicie o Natesclaw para reconectar."
     },
     {
       "id": "native.apple.012861f82eff0ca9",
-      "source": "OpenClaw is working…",
-      "translated": "O OpenClaw está trabalhando…"
+      "source": "Natesclaw is working…",
+      "translated": "O Natesclaw está trabalhando…"
     },
     {
       "id": "native.apple.2f7ad21b747fbc15",
@@ -22210,8 +22210,8 @@
     },
     {
       "id": "native.apple.35a542956f4f5497",
-      "source": "Reply to OpenClaw… (yes sets everything up)",
-      "translated": "Responda ao OpenClaw… (sim configura tudo)"
+      "source": "Reply to Natesclaw… (yes sets everything up)",
+      "translated": "Responda ao Natesclaw… (sim configura tudo)"
     },
     {
       "id": "native.apple.134b9ae1d8a543df",
@@ -22240,8 +22240,8 @@
     },
     {
       "id": "native.apple.ea8beaeecef15e54",
-      "source": "Welcome to OpenClaw",
-      "translated": "Boas-vindas ao OpenClaw"
+      "source": "Welcome to Natesclaw",
+      "translated": "Boas-vindas ao Natesclaw"
     },
     {
       "id": "native.apple.0629bbbd6db95199",
@@ -22285,8 +22285,8 @@
     },
     {
       "id": "native.apple.fb64a5b187cfdc15",
-      "source": "OpenClaw can take actions using the permissions and services you enable. Review prompts and only connect tools you trust.",
-      "translated": "O OpenClaw pode realizar ações usando as permissões e serviços que você habilitar. Revise os prompts e conecte apenas ferramentas em que você confia."
+      "source": "Natesclaw can take actions using the permissions and services you enable. Review prompts and only connect tools you trust.",
+      "translated": "O Natesclaw pode realizar ações usando as permissões e serviços que você habilitar. Revise os prompts e conecte apenas ferramentas em que você confia."
     },
     {
       "id": "native.apple.a5d02aaf6208e924",
@@ -22295,8 +22295,8 @@
     },
     {
       "id": "native.apple.e6acb60b10ef1206",
-      "source": "Most people pick this Mac — OpenClaw installs everything and keeps it running in the background. You can change this anytime in Settings.",
-      "translated": "A maioria das pessoas escolhe este Mac — o OpenClaw instala tudo e mantém tudo em execução em segundo plano. Você pode alterar isso a qualquer momento nos Ajustes."
+      "source": "Most people pick this Mac — Natesclaw installs everything and keeps it running in the background. You can change this anytime in Settings.",
+      "translated": "A maioria das pessoas escolhe este Mac — o Natesclaw instala tudo e mantém tudo em execução em segundo plano. Você pode alterar isso a qualquer momento nos Ajustes."
     },
     {
       "id": "native.apple.21f1053c1054db24",
@@ -22320,8 +22320,8 @@
     },
     {
       "id": "native.apple.d54084b48f40aa0a",
-      "source": "OK — OpenClaw won’t start anything yet. Pick Local or Remote later in Settings → General.",
-      "translated": "OK — o OpenClaw ainda não vai iniciar nada. Escolha Local ou Remoto depois em Ajustes → Geral."
+      "source": "OK — Natesclaw won’t start anything yet. Pick Local or Remote later in Settings → General.",
+      "translated": "OK — o Natesclaw ainda não vai iniciar nada. Escolha Local ou Remoto depois em Ajustes → Geral."
     },
     {
       "id": "native.apple.9ab228a4cb7d4403",
@@ -22360,8 +22360,8 @@
     },
     {
       "id": "native.apple.f6332654911cb2e2",
-      "source": "Verify OpenClaw can reach this gateway.",
-      "translated": "Verifique se o OpenClaw consegue acessar este gateway."
+      "source": "Verify Natesclaw can reach this gateway.",
+      "translated": "Verifique se o Natesclaw consegue acessar este gateway."
     },
     {
       "id": "native.apple.6e5d3a3c3022e8c8",
@@ -22395,8 +22395,8 @@
     },
     {
       "id": "native.apple.2a50c3ee94dde35d",
-      "source": "The current gateway.remote.token value is not plain text. OpenClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
-      "translated": "O valor atual de gateway.remote.token não está em texto simples. O OpenClaw para macOS não pode usá-lo diretamente; insira um token em texto simples aqui para substituí-lo."
+      "source": "The current gateway.remote.token value is not plain text. Natesclaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
+      "translated": "O valor atual de gateway.remote.token não está em texto simples. O Natesclaw para macOS não pode usá-lo diretamente; insira um token em texto simples aqui para substituí-lo."
     },
     {
       "id": "native.apple.7881cec64b177026",
@@ -22445,8 +22445,8 @@
     },
     {
       "id": "native.apple.dca75ab0dd73f0a4",
-      "source": "/home/you/Projects/openclaw",
-      "translated": "/home/you/Projects/openclaw"
+      "source": "/home/you/Projects/natesclaw",
+      "translated": "/home/you/Projects/natesclaw"
     },
     {
       "id": "native.apple.6998a7754dea6eb1",
@@ -22455,8 +22455,8 @@
     },
     {
       "id": "native.apple.5a3f4f943c8ee86a",
-      "source": "/Applications/OpenClaw.app/.../openclaw",
-      "translated": "/Applications/OpenClaw.app/.../openclaw"
+      "source": "/Applications/Natesclaw.app/.../natesclaw",
+      "translated": "/Applications/Natesclaw.app/.../natesclaw"
     },
     {
       "id": "native.apple.56e9b0831ec1eded",
@@ -22485,8 +22485,8 @@
     },
     {
       "id": "native.apple.d0b8cf59f852b3d0",
-      "source": "Install OpenClaw",
-      "translated": "Instalar OpenClaw"
+      "source": "Install Natesclaw",
+      "translated": "Instalar Natesclaw"
     },
     {
       "id": "native.apple.0b0fc42b8827e01f",
@@ -22530,8 +22530,8 @@
     },
     {
       "id": "native.apple.f0b128f895130fef",
-      "source": "OpenClaw installation failed",
-      "translated": "A instalação do OpenClaw falhou"
+      "source": "Natesclaw installation failed",
+      "translated": "A instalação do Natesclaw falhou"
     },
     {
       "id": "native.apple.f36edc58238aa8ce",
@@ -22560,8 +22560,8 @@
     },
     {
       "id": "native.apple.409bfb3a6e0f9f7c",
-      "source": "Click the OpenClaw menu bar icon for the compact chat panel and status.",
-      "translated": "Clique no ícone do OpenClaw na barra de menus para acessar o painel de chat compacto e o status."
+      "source": "Click the Natesclaw menu bar icon for the compact chat panel and status.",
+      "translated": "Clique no ícone do Natesclaw na barra de menus para acessar o painel de chat compacto e o status."
     },
     {
       "id": "native.apple.1b6cfcf3be8765c2",
@@ -22665,13 +22665,13 @@
     },
     {
       "id": "native.apple.11b1b5e9dd510766",
-      "source": "A node wants to connect to OpenClaw.",
-      "translated": "Um nó quer se conectar ao OpenClaw."
+      "source": "A node wants to connect to Natesclaw.",
+      "translated": "Um nó quer se conectar ao Natesclaw."
     },
     {
       "id": "native.apple.2e9d9d1f5d4346d4",
-      "source": "A device wants to connect to OpenClaw.",
-      "translated": "Um dispositivo quer se conectar ao OpenClaw."
+      "source": "A device wants to connect to Natesclaw.",
+      "translated": "Um dispositivo quer se conectar ao Natesclaw."
     },
     {
       "id": "native.apple.2412e85f7d11395e",
@@ -22680,8 +22680,8 @@
     },
     {
       "id": "native.apple.a09a61f4efe1e63e",
-      "source": "OpenClaw Mac app",
-      "translated": "Aplicativo OpenClaw para Mac"
+      "source": "Natesclaw Mac app",
+      "translated": "Aplicativo Natesclaw para Mac"
     },
     {
       "id": "native.apple.6b29ec65de666dab",
@@ -22735,8 +22735,8 @@
     },
     {
       "id": "native.apple.870e09824984a9b2",
-      "source": "Share this Mac's idle duration so OpenClaw can identify the Mac you used most recently and route node alerts. Never sends keys, pointer positions, app names, or window titles. Requires Accessibility.",
-      "translated": "Compartilhe o tempo de inatividade deste Mac para que o OpenClaw possa identificar o Mac que você usou mais recentemente e rotear alertas de nó. Nunca envia teclas, posições do ponteiro, nomes de apps ou títulos de janelas. Requer Acessibilidade."
+      "source": "Share this Mac's idle duration so Natesclaw can identify the Mac you used most recently and route node alerts. Never sends keys, pointer positions, app names, or window titles. Requires Accessibility.",
+      "translated": "Compartilhe o tempo de inatividade deste Mac para que o Natesclaw possa identificar o Mac que você usou mais recentemente e rotear alertas de nó. Nunca envia teclas, posições do ponteiro, nomes de apps ou títulos de janelas. Requer Acessibilidade."
     },
     {
       "id": "native.apple.89a4f5934df8268a",
@@ -22770,8 +22770,8 @@
     },
     {
       "id": "native.apple.4344ff6c0e9d7187",
-      "source": "OpenClaw only asks for macOS capabilities when a feature needs them.",
-      "translated": "O OpenClaw só solicita recursos do macOS quando um recurso precisa deles."
+      "source": "Natesclaw only asks for macOS capabilities when a feature needs them.",
+      "translated": "O Natesclaw só solicita recursos do macOS quando um recurso precisa deles."
     },
     {
       "id": "native.apple.4fecdab98e2f6a11",
@@ -22905,13 +22905,13 @@
     },
     {
       "id": "native.apple.65c21de72f06fd33",
-      "source": "OpenClaw updated",
-      "translated": "OpenClaw atualizado"
+      "source": "Natesclaw updated",
+      "translated": "Natesclaw atualizado"
     },
     {
       "id": "native.apple.6197fc2d1ebd6b2e",
-      "source": "Finishing your OpenClaw update",
-      "translated": "Finalizando a atualização do OpenClaw"
+      "source": "Finishing your Natesclaw update",
+      "translated": "Finalizando a atualização do Natesclaw"
     },
     {
       "id": "native.apple.226b698fbbfc3cc4",
@@ -22925,8 +22925,8 @@
     },
     {
       "id": "native.apple.91debe404bb7affc",
-      "source": "The managed OpenClaw runtime could not be reinstalled.",
-      "translated": "Não foi possível reinstalar o ambiente de execução gerenciado do OpenClaw."
+      "source": "The managed Natesclaw runtime could not be reinstalled.",
+      "translated": "Não foi possível reinstalar o ambiente de execução gerenciado do Natesclaw."
     },
     {
       "id": "native.apple.1cc391ec928070c4",
@@ -22950,43 +22950,43 @@
     },
     {
       "id": "native.apple.69b54e24b90414dd",
-      "source": "OpenClaw \\(receipt.toVersion) and its Gateway are ready.",
-      "translated": "O OpenClaw \\(receipt.toVersion) e seu Gateway estão prontos."
+      "source": "Natesclaw \\(receipt.toVersion) and its Gateway are ready.",
+      "translated": "O Natesclaw \\(receipt.toVersion) e seu Gateway estão prontos."
     },
     {
       "id": "native.apple.f9d6fa6d7aaf23b6",
-      "source": "OpenClaw \\(receipt.toVersion) and its Mac node runtime are ready.",
-      "translated": "O OpenClaw \\(receipt.toVersion) e o runtime do nó do Mac estão prontos."
+      "source": "Natesclaw \\(receipt.toVersion) and its Mac node runtime are ready.",
+      "translated": "O Natesclaw \\(receipt.toVersion) e o runtime do nó do Mac estão prontos."
     },
     {
       "id": "native.apple.a3fa88f5fd3c2732",
-      "source": "Your agent could not be notified yet. OpenClaw will retry after the next app launch.",
-      "translated": "Ainda não foi possível notificar seu agente. O OpenClaw tentará novamente após a próxima inicialização do aplicativo."
+      "source": "Your agent could not be notified yet. Natesclaw will retry after the next app launch.",
+      "translated": "Ainda não foi possível notificar seu agente. O Natesclaw tentará novamente após a próxima inicialização do aplicativo."
     },
     {
       "id": "native.apple.e9020028ddab1ba6",
-      "source": "OpenClaw could not notify your agent automatically. The app and Gateway update are complete.",
-      "translated": "O OpenClaw não conseguiu notificar seu agente automaticamente. A atualização do aplicativo e do Gateway foi concluída."
+      "source": "Natesclaw could not notify your agent automatically. The app and Gateway update are complete.",
+      "translated": "O Natesclaw não conseguiu notificar seu agente automaticamente. A atualização do aplicativo e do Gateway foi concluída."
     },
     {
       "id": "native.apple.afc120cf0a96ea30",
-      "source": "OpenClaw could not notify your agent automatically. The app and Mac node update are complete.",
-      "translated": "O OpenClaw não conseguiu notificar seu agente automaticamente. A atualização do aplicativo e do nó do Mac foi concluída."
+      "source": "Natesclaw could not notify your agent automatically. The app and Mac node update are complete.",
+      "translated": "O Natesclaw não conseguiu notificar seu agente automaticamente. A atualização do aplicativo e do nó do Mac foi concluída."
     },
     {
       "id": "native.apple.71ad85442725f45c",
-      "source": "OpenClaw could not confirm the agent notification. It will not retry, to avoid a duplicate welcome.",
-      "translated": "O OpenClaw não conseguiu confirmar a notificação do agente. Não haverá uma nova tentativa para evitar uma mensagem de boas-vindas duplicada."
+      "source": "Natesclaw could not confirm the agent notification. It will not retry, to avoid a duplicate welcome.",
+      "translated": "O Natesclaw não conseguiu confirmar a notificação do agente. Não haverá uma nova tentativa para evitar uma mensagem de boas-vindas duplicada."
     },
     {
       "id": "native.apple.a3deea03e4870dd0",
-      "source": "The remote Gateway is older than this Mac app, so OpenClaw skipped the agent notification.",
-      "translated": "O Gateway remoto é mais antigo que este aplicativo para Mac, então o OpenClaw ignorou a notificação do agente."
+      "source": "The remote Gateway is older than this Mac app, so Natesclaw skipped the agent notification.",
+      "translated": "O Gateway remoto é mais antigo que este aplicativo para Mac, então o Natesclaw ignorou a notificação do agente."
     },
     {
       "id": "native.apple.3636a8b503ff00d2",
-      "source": "The Gateway remains paused, so OpenClaw did not wake your agent.",
-      "translated": "O Gateway continua pausado, então o OpenClaw não ativou seu agente."
+      "source": "The Gateway remains paused, so Natesclaw did not wake your agent.",
+      "translated": "O Gateway continua pausado, então o Natesclaw não ativou seu agente."
     },
     {
       "id": "native.apple.0f533623878f3d67",
@@ -23030,8 +23030,8 @@
     },
     {
       "id": "native.apple.9ac2dfa295929a92",
-      "source": "OpenClaw installed the update but could not verify the Gateway connection.",
-      "translated": "O OpenClaw instalou a atualização, mas não conseguiu verificar a conexão com o Gateway."
+      "source": "Natesclaw installed the update but could not verify the Gateway connection.",
+      "translated": "O Natesclaw instalou a atualização, mas não conseguiu verificar a conexão com o Gateway."
     },
     {
       "id": "native.apple.3abafcfb64b362fb",
@@ -23040,8 +23040,8 @@
     },
     {
       "id": "native.apple.00e3d2037782506c",
-      "source": "OpenClaw could not read the Gateway service ownership record. Retry after checking the Gateway LaunchAgent.",
-      "translated": "O OpenClaw não conseguiu ler o registro de propriedade do serviço Gateway. Tente novamente após verificar o LaunchAgent do Gateway."
+      "source": "Natesclaw could not read the Gateway service ownership record. Retry after checking the Gateway LaunchAgent.",
+      "translated": "O Natesclaw não conseguiu ler o registro de propriedade do serviço Gateway. Tente novamente após verificar o LaunchAgent do Gateway."
     },
     {
       "id": "native.apple.c4b8806a570dad31",
@@ -23050,8 +23050,8 @@
     },
     {
       "id": "native.apple.0483bf19d612560b",
-      "source": "OpenClaw could not read the node service ownership record. Retry after checking the node LaunchAgent.",
-      "translated": "O OpenClaw não conseguiu ler o registro de propriedade do serviço do nó. Tente novamente após verificar o LaunchAgent do nó."
+      "source": "Natesclaw could not read the node service ownership record. Retry after checking the node LaunchAgent.",
+      "translated": "O Natesclaw não conseguiu ler o registro de propriedade do serviço do nó. Tente novamente após verificar o LaunchAgent do nó."
     },
     {
       "id": "native.apple.d0f712a2ed470a3e",
@@ -23170,8 +23170,8 @@
     },
     {
       "id": "native.apple.507c2d9c7e94716f",
-      "source": "Allow OpenClaw to read text from \\(appName)",
-      "translated": "Permitir que o OpenClaw leia texto de \\(appName)"
+      "source": "Allow Natesclaw to read text from \\(appName)",
+      "translated": "Permitir que o Natesclaw leia texto de \\(appName)"
     },
     {
       "id": "native.apple.c5313d544a833af0",
@@ -23340,13 +23340,13 @@
     },
     {
       "id": "native.apple.88d0123c86b06144",
-      "source": "Allow OpenClaw to capture windows",
-      "translated": "Permitir que o OpenClaw capture janelas"
+      "source": "Allow Natesclaw to capture windows",
+      "translated": "Permitir que o Natesclaw capture janelas"
     },
     {
       "id": "native.apple.677c5733cd132aed",
-      "source": "Allow OpenClaw to capture a screen area",
-      "translated": "Permitir que o OpenClaw capture uma área da tela"
+      "source": "Allow Natesclaw to capture a screen area",
+      "translated": "Permitir que o Natesclaw capture uma área da tela"
     },
     {
       "id": "native.apple.529a6fc5aeba03b0",
@@ -23400,23 +23400,23 @@
     },
     {
       "id": "native.apple.90b00f3f5418b439",
-      "source": "Paste the token configured on the gateway host. On the gateway host, run `openclaw gateway auth-token --show` in an interactive terminal, then paste its output.",
-      "translated": "Cole o token configurado no host do gateway. No host do gateway, execute `openclaw gateway auth-token --show` em um terminal interativo e cole a saída."
+      "source": "Paste the token configured on the gateway host. On the gateway host, run `natesclaw gateway auth-token --show` in an interactive terminal, then paste its output.",
+      "translated": "Cole o token configurado no host do gateway. No host do gateway, execute `natesclaw gateway auth-token --show` em um terminal interativo e cole a saída."
     },
     {
       "id": "native.apple.b79d3c42bd5438d5",
-      "source": "On the gateway host, run `openclaw gateway auth-token --show` in an interactive terminal, then replace the token and try again.",
-      "translated": "No host do gateway, execute `openclaw gateway auth-token --show` em um terminal interativo, substitua o token e tente novamente."
+      "source": "On the gateway host, run `natesclaw gateway auth-token --show` in an interactive terminal, then replace the token and try again.",
+      "translated": "No host do gateway, execute `natesclaw gateway auth-token --show` em um terminal interativo, substitua o token e tente novamente."
     },
     {
       "id": "native.apple.c26f61d639591f81",
-      "source": "This gateway is set to token auth, but no `gateway.auth.token` is configured on the gateway host. If the gateway uses an environment variable instead, set `OPENCLAW_GATEWAY_TOKEN` before starting the gateway.",
-      "translated": "This gateway is set to token auth, but no `gateway.auth.token` is configured on the gateway host. If the gateway uses an environment variable instead, set `OPENCLAW_GATEWAY_TOKEN` before starting the gateway."
+      "source": "This gateway is set to token auth, but no `gateway.auth.token` is configured on the gateway host. If the gateway uses an environment variable instead, set `NATESCLAW_GATEWAY_TOKEN` before starting the gateway.",
+      "translated": "This gateway is set to token auth, but no `gateway.auth.token` is configured on the gateway host. If the gateway uses an environment variable instead, set `NATESCLAW_GATEWAY_TOKEN` before starting the gateway."
     },
     {
       "id": "native.apple.83145f8f53d7be34",
-      "source": "Scan or paste a fresh setup code from an already-paired OpenClaw client, then try again.",
-      "translated": "Escaneie ou cole um novo código de configuração de um cliente OpenClaw já pareado e tente novamente."
+      "source": "Scan or paste a fresh setup code from an already-paired Natesclaw client, then try again.",
+      "translated": "Escaneie ou cole um novo código de configuração de um cliente Natesclaw já pareado e tente novamente."
     },
     {
       "id": "native.apple.a8bf4f7ab4a35dc0",
@@ -23425,18 +23425,18 @@
     },
     {
       "id": "native.apple.52c0f97f0b3bb792",
-      "source": "Approve this device from an already-paired OpenClaw client. In your OpenClaw chat, run `/pair approve`, then click **Check connection** again.",
-      "translated": "Approve this device from an already-paired OpenClaw client. In your OpenClaw chat, run `/pair approve`, then click **Check connection** again."
+      "source": "Approve this device from an already-paired Natesclaw client. In your Natesclaw chat, run `/pair approve`, then click **Check connection** again.",
+      "translated": "Approve this device from an already-paired Natesclaw client. In your Natesclaw chat, run `/pair approve`, then click **Check connection** again."
     },
     {
       "id": "native.apple.a1cb5542806f0ec9",
-      "source": "This gateway requires an auth token. Run openclaw gateway auth-token --show on the gateway host.",
-      "translated": "Este gateway requer um token de autenticação. Execute openclaw gateway auth-token --show no host do gateway."
+      "source": "This gateway requires an auth token. Run natesclaw gateway auth-token --show on the gateway host.",
+      "translated": "Este gateway requer um token de autenticação. Execute natesclaw gateway auth-token --show no host do gateway."
     },
     {
       "id": "native.apple.e12c96574b97ed4a",
-      "source": "Gateway token mismatch. Run openclaw gateway auth-token --show on the gateway host.",
-      "translated": "Incompatibilidade de token do Gateway. Execute openclaw gateway auth-token --show no host do gateway."
+      "source": "Gateway token mismatch. Run natesclaw gateway auth-token --show on the gateway host.",
+      "translated": "Incompatibilidade de token do Gateway. Execute natesclaw gateway auth-token --show no host do gateway."
     },
     {
       "id": "native.apple.cd96754a96e5aa35",
@@ -23455,8 +23455,8 @@
     },
     {
       "id": "native.apple.3e5a2b2a24f73418",
-      "source": "Pairing required. In an already-paired OpenClaw client, run /pair approve, then check the connection again.",
-      "translated": "Pairing required. In an already-paired OpenClaw client, run /pair approve, then check the connection again."
+      "source": "Pairing required. In an already-paired Natesclaw client, run /pair approve, then check the connection again.",
+      "translated": "Pairing required. In an already-paired Natesclaw client, run /pair approve, then check the connection again."
     },
     {
       "id": "native.apple.58e76e9c8b04290a",
@@ -23500,48 +23500,48 @@
     },
     {
       "id": "native.apple.2d7556d00f123112",
-      "source": "OpenClaw needs notification permission to show alerts for agent actions.",
-      "translated": "O OpenClaw precisa de permissão de notificações para mostrar alertas de ações do agente."
+      "source": "Natesclaw needs notification permission to show alerts for agent actions.",
+      "translated": "O Natesclaw precisa de permissão de notificações para mostrar alertas de ações do agente."
     },
     {
       "id": "native.apple.d9e7be03543b508f",
-      "source": "OpenClaw captures the screen when the agent needs screenshots for context.",
-      "translated": "O OpenClaw captura a tela quando o agente precisa de capturas de tela para contexto."
+      "source": "Natesclaw captures the screen when the agent needs screenshots for context.",
+      "translated": "O Natesclaw captura a tela quando o agente precisa de capturas de tela para contexto."
     },
     {
       "id": "native.apple.eca927767423799c",
-      "source": "OpenClaw can capture photos or short video clips when requested by the agent.",
-      "translated": "O OpenClaw pode capturar fotos ou vídeos curtos quando solicitado pelo agente."
+      "source": "Natesclaw can capture photos or short video clips when requested by the agent.",
+      "translated": "O Natesclaw pode capturar fotos ou vídeos curtos quando solicitado pelo agente."
     },
     {
       "id": "native.apple.9389d1100944a1fd",
-      "source": "OpenClaw can share your location when requested by the agent.",
-      "translated": "O OpenClaw pode compartilhar sua localização quando solicitado pelo agente."
+      "source": "Natesclaw can share your location when requested by the agent.",
+      "translated": "O Natesclaw pode compartilhar sua localização quando solicitado pelo agente."
     },
     {
       "id": "native.apple.59da76aed1cb07ee",
-      "source": "OpenClaw uses the local network to connect to your remote OpenClaw gateway over LAN, Tailnet, or SSH.",
-      "translated": "O OpenClaw usa a rede local para se conectar ao seu Gateway remoto OpenClaw por LAN, Tailnet ou SSH."
+      "source": "Natesclaw uses the local network to connect to your remote Natesclaw gateway over LAN, Tailnet, or SSH.",
+      "translated": "O Natesclaw usa a rede local para se conectar ao seu Gateway remoto Natesclaw por LAN, Tailnet ou SSH."
     },
     {
       "id": "native.apple.0fdd4a93f90c6f95",
-      "source": "OpenClaw uses the microphone for Voice Wake, push-to-talk, Talk Mode, Quick Chat dictation, and agent audio capture.",
-      "translated": "O OpenClaw usa o microfone para Voice Wake, push-to-talk, Talk Mode, ditado do Quick Chat e captura de áudio do agente."
+      "source": "Natesclaw uses the microphone for Voice Wake, push-to-talk, Talk Mode, Quick Chat dictation, and agent audio capture.",
+      "translated": "O Natesclaw usa o microfone para Voice Wake, push-to-talk, Talk Mode, ditado do Quick Chat e captura de áudio do agente."
     },
     {
       "id": "native.apple.44701896858c9029",
-      "source": "OpenClaw uses Apple Speech for Voice Wake, push-to-talk, Talk Mode, and Quick Chat dictation. Voice Wake stays on-device.",
-      "translated": "O OpenClaw usa Apple Speech para Voice Wake, push-to-talk, Talk Mode e ditado do Quick Chat. O Voice Wake permanece no dispositivo."
+      "source": "Natesclaw uses Apple Speech for Voice Wake, push-to-talk, Talk Mode, and Quick Chat dictation. Voice Wake stays on-device.",
+      "translated": "O Natesclaw usa Apple Speech para Voice Wake, push-to-talk, Talk Mode e ditado do Quick Chat. O Voice Wake permanece no dispositivo."
     },
     {
       "id": "native.apple.2d5411b5cc54a93e",
-      "source": "OpenClaw needs Automation (AppleScript) permission to drive Terminal and other apps for agent actions.",
-      "translated": "O OpenClaw precisa de permissão de Automação (AppleScript) para controlar o Terminal e outros apps em ações do agente."
+      "source": "Natesclaw needs Automation (AppleScript) permission to drive Terminal and other apps for agent actions.",
+      "translated": "O Natesclaw precisa de permissão de Automação (AppleScript) para controlar o Terminal e outros apps em ações do agente."
     },
     {
       "id": "native.apple.e16fc45de0f2bb86",
-      "source": "OpenClaw can access Reminders when requested by the agent for the apple-reminders skill.",
-      "translated": "O OpenClaw pode acessar Lembretes quando solicitado pelo agente para a skill apple-reminders."
+      "source": "Natesclaw can access Reminders when requested by the agent for the apple-reminders skill.",
+      "translated": "O Natesclaw pode acessar Lembretes quando solicitado pelo agente para a skill apple-reminders."
     },
     {
       "id": "native.apple.6f7c6ef00a40a571",
@@ -23695,8 +23695,8 @@
     },
     {
       "id": "native.apple.59bed721dff1a25f",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.04b9c8402f19b8ce",
@@ -23950,8 +23950,8 @@
     },
     {
       "id": "native.apple.d769a8ac65441d48",
-      "source": "Saved to openclaw.json under skills.entries.\\(self.editor.skillKey)",
-      "translated": "Salvo em openclaw.json em skills.entries.\\(self.editor.skillKey)"
+      "source": "Saved to natesclaw.json under skills.entries.\\(self.editor.skillKey)",
+      "translated": "Salvo em natesclaw.json em skills.entries.\\(self.editor.skillKey)"
     },
     {
       "id": "native.apple.af47aadb262d225d",
@@ -23985,8 +23985,8 @@
     },
     {
       "id": "native.apple.4b27b3be5f3f1f66",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "Natesclaw",
+      "translated": "Natesclaw"
     },
     {
       "id": "native.apple.9427da914cdbfbf3",
@@ -24335,8 +24335,8 @@
     },
     {
       "id": "native.apple.800bb607f45c05e4",
-      "source": "Stored in ~/.openclaw/openclaw.json. Prefer OPENCLAW_GATEWAY_PASSWORD for production.",
-      "translated": "Armazenado em ~/.openclaw/openclaw.json. Prefira OPENCLAW_GATEWAY_PASSWORD para produção."
+      "source": "Stored in ~/.natesclaw/natesclaw.json. Prefer NATESCLAW_GATEWAY_PASSWORD for production.",
+      "translated": "Armazenado em ~/.natesclaw/natesclaw.json. Prefira NATESCLAW_GATEWAY_PASSWORD para produção."
     },
     {
       "id": "native.apple.3942d43ca047de29",
@@ -24630,8 +24630,8 @@
     },
     {
       "id": "native.apple.237e9371a693b0ff",
-      "source": "OpenClaw reacts when any trigger appears in a transcription. Keep phrases short to avoid false positives.",
-      "translated": "OpenClaw reage quando qualquer acionador aparece em uma transcrição. Mantenha as frases curtas para evitar falsos positivos."
+      "source": "Natesclaw reacts when any trigger appears in a transcription. Keep phrases short to avoid false positives.",
+      "translated": "Natesclaw reage quando qualquer acionador aparece em uma transcrição. Mantenha as frases curtas para evitar falsos positivos."
     },
     {
       "id": "native.apple.2bcc6f4eca98f7f2",
@@ -24725,13 +24725,13 @@
     },
     {
       "id": "native.apple.448dfe21a7f3a883",
-      "source": "Check OpenClaw status",
-      "translated": "Verificar o status do OpenClaw"
+      "source": "Check Natesclaw status",
+      "translated": "Verificar o status do Natesclaw"
     },
     {
       "id": "native.apple.00f4977e0123ce7a",
-      "source": "Summarize the current OpenClaw status and tell me what needs attention.",
-      "translated": "Resuma o status atual do OpenClaw e diga o que precisa de atenção."
+      "source": "Summarize the current Natesclaw status and tell me what needs attention.",
+      "translated": "Resuma o status atual do Natesclaw e diga o que precisa de atenção."
     },
     {
       "id": "native.apple.9c1a9be47ac92727",
@@ -26765,8 +26765,8 @@
     },
     {
       "id": "native.apple.1823d7bddaa73a1a",
-      "source": "OpenClaw could not read the gateway certificate for %@.",
-      "translated": "O OpenClaw não conseguiu ler o certificado do Gateway de %@."
+      "source": "Natesclaw could not read the gateway certificate for %@.",
+      "translated": "O Natesclaw não conseguiu ler o certificado do Gateway de %@."
     },
     {
       "id": "native.apple.b737f84578f558eb",
@@ -26780,8 +26780,8 @@
     },
     {
       "id": "native.apple.7493b8bf5dcaa05f",
-      "source": "OpenClaw could not securely save the TLS certificate pin for %@.",
-      "translated": "O OpenClaw não conseguiu salvar com segurança o pin do certificado TLS para %@."
+      "source": "Natesclaw could not securely save the TLS certificate pin for %@.",
+      "translated": "O Natesclaw não conseguiu salvar com segurança o pin do certificado TLS para %@."
     },
     {
       "id": "native.apple.9a4c4bd6b41420ae",

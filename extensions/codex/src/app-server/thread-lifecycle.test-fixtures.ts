@@ -1,5 +1,5 @@
-import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { AuthStorage, ModelRegistry } from "openclaw/plugin-sdk/agent-sessions";
+import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { AuthStorage, ModelRegistry } from "natesclaw/plugin-sdk/agent-sessions";
 import type { CodexAppServerRuntimeOptions } from "./config.js";
 import { testCodexAppServerBindingStore } from "./session-binding.test-helpers.js";
 import { createCodexTestModel } from "./test-support.js";

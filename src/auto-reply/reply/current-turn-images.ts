@@ -1,6 +1,6 @@
 // Tracks image attachments that belong to the current reply turn.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import type { ImageContent } from "../../llm/types.js";
@@ -126,7 +126,7 @@ function resolveMergedTurnImages(entries: OrderedTurnImage[]): {
 /** Resolves current-turn image attachments that were not already described by media understanding. */
 export async function resolveCurrentTurnImages(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   images?: ImageContent[];
   imageOrder?: PromptImageOrderEntry[];
   extractedFileImages?: ExtractedFileImage[];
@@ -177,7 +177,7 @@ export async function resolveCurrentTurnImages(params: {
     );
     if (images.length < undescribedImageAttachments.length) {
       logVerbose(
-        `agent-runner: native OpenClaw media resolution produced ${images.length}/${undescribedImageAttachments.length} current image attachment(s); falling back to prompt image refs`,
+        `agent-runner: native Natesclaw media resolution produced ${images.length}/${undescribedImageAttachments.length} current image attachment(s); falling back to prompt image refs`,
       );
       return resolveMergedTurnImages(entries);
     }

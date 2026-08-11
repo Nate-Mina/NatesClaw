@@ -186,7 +186,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
         }),
       );
     const desktopPanelAction = desktopPanelAvailable
-      ? html`<openclaw-tooltip .content=${t("desktop.toggle")}>
+      ? html`<natesclaw-tooltip .content=${t("desktop.toggle")}>
           <button
             class="btn btn--ghost btn--icon chat-icon-btn chat-desktop-panel-toggle"
             type="button"
@@ -195,7 +195,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
           >
             ${icons.monitor}
           </button>
-        </openclaw-tooltip>`
+        </natesclaw-tooltip>`
       : nothing;
     const discussion = this.resolveSessionDiscussionAction();
     const sessionRailMode = this.selectedSessionRailMode(this.state?.sessionKey ?? "");
@@ -339,7 +339,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
           this.context.gateway.snapshot.client?.instanceId,
           this.state?.sessionKey ?? "",
         )
-          ? html`<openclaw-viewer-facepile
+          ? html`<natesclaw-viewer-facepile
               class="chat-pane__presence"
               .presencePayload=${this.presencePayload}
               .selfUserId=${this.context.gateway.snapshot.selfUser?.id}
@@ -347,7 +347,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
               .sessionKey=${this.state?.sessionKey}
               .maxVisible=${4}
               variant="session"
-            ></openclaw-viewer-facepile>`
+            ></natesclaw-viewer-facepile>`
           : nothing,
       faceControl: renderBoardViewSwitch({
         hasBoard: board.hasBoard,
@@ -406,7 +406,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
         : nothing,
       sessionMenuAction:
         row && this.state
-          ? html`<openclaw-chat-header-session-menu
+          ? html`<natesclaw-chat-header-session-menu
               .sessionLabel=${normalizeOptionalString(row.label) ??
               normalizeOptionalString(this.paneTitle) ??
               row.key}
@@ -428,7 +428,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
               }}
               .onSettingsChange=${this.state.applySettings}
               .onAction=${(action: HeaderMenuAction) => this.handleHeaderSessionAction(action, row)}
-            ></openclaw-chat-header-session-menu>`
+            ></natesclaw-chat-header-session-menu>`
           : nothing,
       nativeGateways: this.nativeGateways,
       gatewaysSnapshot: this.gatewaysSnapshot,
@@ -642,7 +642,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
       return nothing;
     }
     return html`
-      <openclaw-tooltip .content=${action.label}>
+      <natesclaw-tooltip .content=${action.label}>
         <button
           class="btn btn--ghost btn--icon chat-icon-btn chat-session-discussion-toggle"
           type="button"
@@ -652,7 +652,7 @@ export abstract class ChatPaneHeader extends ChatPaneSessionMenu {
         >
           ${icons.messageSquare}
         </button>
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
     `;
   }
 }

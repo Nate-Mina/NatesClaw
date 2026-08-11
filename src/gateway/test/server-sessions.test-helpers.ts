@@ -5,7 +5,7 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AssistantMessage, UserMessage } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage, UserMessage } from "natesclaw/plugin-sdk/llm";
 import { afterAll, beforeAll, beforeEach, expect, vi } from "vitest";
 import type { InternalSessionEntry as SessionEntry } from "../../config/sessions.js";
 import type { InternalHookEvent } from "../../hooks/internal-hooks.js";
@@ -323,7 +323,7 @@ function createGatewaySessionsTestHarness(startServer: boolean) {
       const { startGatewayServerHarness } = await getGatewayServerHarnessModule();
       harness = await startGatewayServerHarness();
     }
-    sharedSessionStoreDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sessions-"));
+    sharedSessionStoreDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-sessions-"));
   });
 
   afterAll(async () => {
@@ -471,9 +471,9 @@ function createGatewaySessionsTestHarness(startServer: boolean) {
       });
     }
 
-    const configPath = process.env.OPENCLAW_CONFIG_PATH;
+    const configPath = process.env.NATESCLAW_CONFIG_PATH;
     if (!configPath) {
-      throw new Error("OPENCLAW_CONFIG_PATH is required");
+      throw new Error("NATESCLAW_CONFIG_PATH is required");
     }
     await fs.writeFile(
       configPath,

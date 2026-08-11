@@ -2,8 +2,8 @@
  * Message normalization utilities for chat rendering.
  */
 
-import { mediaKindFromMime } from "@openclaw/media-core/constants";
-import { asRecord as asMessageRecord, isRecord } from "@openclaw/normalization-core/record-coerce";
+import { mediaKindFromMime } from "@natesclaw/media-core/constants";
+import { asRecord as asMessageRecord, isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { stripInboundMetadata } from "../../../../src/auto-reply/reply/strip-inbound-meta.js";
 import { extractCanvasShortcodes } from "../../../../src/chat/canvas-render.js";
 import {
@@ -153,7 +153,7 @@ function isRenderableAssistantAttachment(url: string): boolean {
   return (
     /^https?:\/\//i.test(trimmed) ||
     /^data:(?:image|audio|video)\//i.test(trimmed) ||
-    /^\/(?:__openclaw__|media)\//.test(trimmed) ||
+    /^\/(?:__natesclaw__|media)\//.test(trimmed) ||
     trimmed.startsWith("file://") ||
     trimmed.startsWith("~") ||
     trimmed.startsWith("/") ||
@@ -169,7 +169,7 @@ function shouldPreserveRelativeAssistantAttachment(url: string): boolean {
   return (
     !/^https?:\/\//i.test(trimmed) &&
     !/^data:(?:image|audio|video)\//i.test(trimmed) &&
-    !/^\/(?:__openclaw__|media)\//.test(trimmed) &&
+    !/^\/(?:__natesclaw__|media)\//.test(trimmed) &&
     !trimmed.startsWith("file://") &&
     !trimmed.startsWith("~") &&
     !trimmed.startsWith("/") &&
@@ -618,16 +618,16 @@ export function normalizeMessage(message: unknown): NormalizedMessage {
 
   const timestamp = typeof m.timestamp === "number" ? m.timestamp : Date.now();
   const id = typeof m.id === "string" ? m.id : undefined;
-  const rawOpenClawMeta = m["__openclaw"];
-  const openClawMeta =
-    rawOpenClawMeta && typeof rawOpenClawMeta === "object" && !Array.isArray(rawOpenClawMeta)
-      ? (rawOpenClawMeta as Record<string, unknown>)
+  const rawNatesclawMeta = m["__natesclaw"];
+  const NatesclawMeta =
+    rawNatesclawMeta && typeof rawNatesclawMeta === "object" && !Array.isArray(rawNatesclawMeta)
+      ? (rawNatesclawMeta as Record<string, unknown>)
       : undefined;
   const metaSender = normalizeSenderIdentity({
-    id: openClawMeta?.senderId,
-    name: openClawMeta?.senderName,
-    username: openClawMeta?.senderUsername,
-    profileAvatarUrl: openClawMeta?.senderProfileAvatarUrl,
+    id: NatesclawMeta?.senderId,
+    name: NatesclawMeta?.senderName,
+    username: NatesclawMeta?.senderUsername,
+    profileAvatarUrl: NatesclawMeta?.senderProfileAvatarUrl,
   });
   const rawLabel = typeof m.senderLabel === "string" ? m.senderLabel.trim() : "";
   const legacyLabelIdentity = rawLabel ? splitOpaqueIdLabel(rawLabel) : null;

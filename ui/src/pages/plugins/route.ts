@@ -1,4 +1,4 @@
-import { definePage, type RouteLoaderOptions, type RouteLocation } from "@openclaw/uirouter";
+import { definePage, type RouteLoaderOptions, type RouteLocation } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -43,6 +43,6 @@ export const page = definePage({
     import("./plugins-page.ts").then(() => ({
       header: true,
       render: (data: PluginsRouteData | undefined) =>
-        html`<openclaw-plugins-page .routeData=${data}></openclaw-plugins-page>`,
+        html`<natesclaw-plugins-page .routeData=${data}></natesclaw-plugins-page>`,
     })),
 });

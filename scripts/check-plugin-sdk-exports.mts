@@ -44,7 +44,7 @@ if (!nativePreviewTsgoBin) {
   throw new Error("@typescript/native-preview does not declare the tsgo binary");
 }
 const tsgoPath = resolve(dirname(nativePreviewPackageJsonPath), nativePreviewTsgoBin);
-const forbiddenPublicDeclarationSpecifiers = ["@openclaw/llm-core"];
+const forbiddenPublicDeclarationSpecifiers = ["@natesclaw/llm-core"];
 const FORBIDDEN_PUBLIC_PROTOCOL_REGISTRY_RE = /\bdeclare\s+const\s+ProtocolSchemas(?:\$\d+)?\b/u;
 const RELATIVE_DECLARATION_SPECIFIER_RE = /\b(?:from|import)\s*(?:\(\s*)?["']([^"']+)["']/gu;
 const requiredSubpathExports: Record<string, string[]> = {
@@ -61,16 +61,16 @@ const requiredSubpathExports: Record<string, string[]> = {
 let missing = 0;
 
 {
-  const tempRoot = mkdtempSync(join(tmpdir(), "openclaw-plugin-sdk-consumer-"));
+  const tempRoot = mkdtempSync(join(tmpdir(), "natesclaw-plugin-sdk-consumer-"));
   const consumerRoot = join(tempRoot, "consumer");
   try {
     mkdirSync(consumerRoot, { recursive: true });
     writeFileSync(
       join(consumerRoot, "index.ts"),
-      `import { buildChannelConfigSchema, DmPolicySchema } from "openclaw/plugin-sdk/channel-config-schema";
-import { defineChannelPluginEntry } from "openclaw/plugin-sdk/core";
-import { createPluginRuntimeStore, type PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
-import { z } from "openclaw/plugin-sdk/zod";
+      `import { buildChannelConfigSchema, DmPolicySchema } from "natesclaw/plugin-sdk/channel-config-schema";
+import { defineChannelPluginEntry } from "natesclaw/plugin-sdk/core";
+import { createPluginRuntimeStore, type PluginRuntime } from "natesclaw/plugin-sdk/runtime-store";
+import { z } from "natesclaw/plugin-sdk/zod";
 
 const runtimeStore = createPluginRuntimeStore<PluginRuntime>({
   pluginId: "package-consumer",
@@ -107,9 +107,9 @@ export default defineChannelPluginEntry({
 }
 `,
     );
-    const openclawPackagePath = join(consumerRoot, "node_modules", "openclaw");
-    mkdirSync(dirname(openclawPackagePath), { recursive: true });
-    symlinkSync(repoRoot, openclawPackagePath, process.platform === "win32" ? "junction" : "dir");
+    const natesclawPackagePath = join(consumerRoot, "node_modules", "natesclaw");
+    mkdirSync(dirname(natesclawPackagePath), { recursive: true });
+    symlinkSync(repoRoot, natesclawPackagePath, process.platform === "win32" ? "junction" : "dir");
 
     const result = spawnSync(
       process.execPath,

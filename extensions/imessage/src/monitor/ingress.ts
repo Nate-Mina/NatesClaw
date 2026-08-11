@@ -5,11 +5,11 @@ import {
   type ChannelIngressQueue,
   type ChannelIngressMonitorDeliveryResult,
   type ChannelIngressMonitorLifecycle,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { isRecord } from "openclaw/plugin-sdk/channel-secret-basic-runtime";
-import { collectErrorGraphCandidates, formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/keyed-async-queue";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { isRecord } from "natesclaw/plugin-sdk/channel-secret-basic-runtime";
+import { collectErrorGraphCandidates, formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { KeyedAsyncQueue } from "natesclaw/plugin-sdk/keyed-async-queue";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import { getIMessageRuntime } from "../runtime.js";
 import { parseIMessageNotification } from "./parse-notification.js";
 import type { IMessagePayload } from "./types.js";

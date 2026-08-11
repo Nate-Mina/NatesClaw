@@ -1,6 +1,6 @@
 // Agent scope tests cover which per-agent fields may flatten into runtime defaults.
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   listAgentEntriesWithSource,
   listAgentIds,
@@ -62,7 +62,7 @@ describe("agent roster resolution", () => {
       expect(
         tryResolveDefaultAgentId({
           agents: { entries: { alpha: { default: marker } } },
-        } as unknown as OpenClawConfig),
+        } as unknown as NatesclawConfig),
       ).toBeUndefined();
     }
   });
@@ -71,7 +71,7 @@ describe("agent roster resolution", () => {
     const entry = JSON.parse('{"__proto__":{"tools":{"allow":["*"]}}}') as Record<string, unknown>;
     const [listed] = listAgentEntriesWithSource({
       agents: { entries: { ops: entry } },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     expect(listed).toBeDefined();
     const listedEntry = listed!.entry;
 
@@ -86,7 +86,7 @@ describe("agent roster resolution", () => {
 
 describe("resolveAgentConfig model policy", () => {
   it("keeps an empty per-agent policy inherited instead of flattening it", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: { modelPolicy: { allow: ["openai/gpt-5.5"] } },
         list: [{ id: "main", modelPolicy: {} }],
@@ -97,7 +97,7 @@ describe("resolveAgentConfig model policy", () => {
   });
 
   it("returns an explicit per-agent allowlist override", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: { modelPolicy: { allow: ["openai/gpt-5.5"] } },
         list: [{ id: "main", modelPolicy: { allow: ["openai/gpt-5.6-sol"] } }],

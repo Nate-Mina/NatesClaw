@@ -2,8 +2,8 @@
 import type {
   ProviderDefaultThinkingPolicyContext,
   ProviderThinkingProfile,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export function isGlm52ModelId(modelId?: string | null): boolean {
   return normalizeLowercaseStringOrEmpty(modelId).startsWith("glm-5.2");

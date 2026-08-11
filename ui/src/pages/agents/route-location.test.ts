@@ -1,5 +1,5 @@
 // @vitest-environment node
-import type { RouteLocation } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
 import { describe, expect, it } from "vitest";
 import { resolveAgentsRouteLocation } from "./route-location.ts";
 
@@ -88,7 +88,7 @@ describe("Agents route location", () => {
     expect(
       resolveAgentsRouteLocation(
         location(
-          "/settings/agents?__openclawAgentPath=%2Fsettings%2Fagents%2Fresearch%2Fmemory&probe=1",
+          "/settings/agents?__natesclawAgentPath=%2Fsettings%2Fagents%2Fresearch%2Fmemory&probe=1",
         ),
       ),
     ).toEqual({

@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   PluginStateEntry,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-runtime";
 import { DiscordActivitiesRuntime } from "./runtime.js";
 import { DiscordActivityStore } from "./store.js";
 
@@ -75,7 +75,7 @@ export function createActivityTestConfig(params?: {
   userId?: string;
   clientSecret?: string;
   applicationId?: string;
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     channels: {
       discord: {

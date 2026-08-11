@@ -1,6 +1,6 @@
 /** Harness-facing materialization of configured MCP tools. */
 import type { SessionToolOverrides } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import { getPluginToolMeta } from "../plugins/tools.js";
 import {
@@ -90,7 +90,7 @@ type MaterializeRequesterScopedMcpToolsForHarnessRunParams = {
   sessionKey?: string;
   workspaceDir: string;
   agentDir?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   manifestRegistry?: Pick<PluginManifestRegistry, "plugins">;
   toolOverrides?: Pick<SessionToolOverrides, "mcpServers" | "mcpToolsDeny">;
   requesterSenderId?: string | null;

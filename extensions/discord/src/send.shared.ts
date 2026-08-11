@@ -1,22 +1,22 @@
 import { PollLayoutType } from "discord-api-types/payloads/v10";
 import type { RESTAPIPoll } from "discord-api-types/rest/v10";
 import type { APIChannel } from "discord-api-types/v10";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 // Discord plugin module implements send.shared behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { buildOutboundMediaLoadOptions } from "openclaw/plugin-sdk/media-runtime";
-import { extensionForMime } from "openclaw/plugin-sdk/media-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { buildOutboundMediaLoadOptions } from "natesclaw/plugin-sdk/media-runtime";
+import { extensionForMime } from "natesclaw/plugin-sdk/media-runtime";
 import {
   normalizePollDurationHours,
   normalizePollInput,
   type OutboundMediaAccess,
   type PollInput,
-} from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import type { ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import { resolveTextChunksWithFallback } from "openclaw/plugin-sdk/reply-payload";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "natesclaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "natesclaw/plugin-sdk/plugin-config-runtime";
+import type { ChunkMode } from "natesclaw/plugin-sdk/reply-chunking";
+import { resolveTextChunksWithFallback } from "natesclaw/plugin-sdk/reply-payload";
+import { normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { loadWebMedia } from "natesclaw/plugin-sdk/web-media";
 import { chunkDiscordTextWithMode } from "./chunk.js";
 import { createDiscordClient, resolveDiscordRest, type DiscordClientOpts } from "./client.js";
 import {
@@ -179,7 +179,7 @@ async function buildDiscordSendError(
   err: unknown,
   ctx: {
     channelId: string;
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     rest: RequestClient;
     token: string;
     hasMedia: boolean;
@@ -268,7 +268,7 @@ async function resolveChannelId(
 
 async function resolveDiscordTargetChannelId(
   raw: string,
-  opts: DiscordClientOpts & { cfg: OpenClawConfig },
+  opts: DiscordClientOpts & { cfg: NatesclawConfig },
 ): Promise<{ channelId: string; dm?: boolean }> {
   const cfg = requireRuntimeConfig(opts.cfg, "Discord target channel resolution");
   const recipient = await parseAndResolveRecipient(raw, cfg, opts.accountId, {

@@ -1,4 +1,4 @@
-import type { GhosttyTerminalController } from "@openclaw/libterminal/browser";
+import type { GhosttyTerminalController } from "@natesclaw/libterminal/browser";
 import { html, nothing, svg } from "lit";
 import { t } from "../../i18n/index.ts";
 import type { TerminalGatewayClient } from "./terminal-connection.ts";

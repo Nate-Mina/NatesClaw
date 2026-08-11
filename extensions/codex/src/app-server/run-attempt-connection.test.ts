@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { initializeGlobalHookRunner } from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { initializeGlobalHookRunner } from "natesclaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import * as appServerPolicy from "./app-server-policy.js";
 import * as bindingConnection from "./binding-connection.js";
@@ -122,10 +122,10 @@ describe("prepareCodexAttemptConnection", () => {
     expect(readApprovalRequirements).toHaveBeenCalledOnce();
     expect(readApprovalRequirements).toHaveBeenCalledWith("untrusted");
     expect(connection.appServer.approvalPolicy).toBe("untrusted");
-    expect(connection.approvalPolicyPromotedForOpenClawToolPolicy).toBe(true);
+    expect(connection.approvalPolicyPromotedForNatesclawToolPolicy).toBe(true);
   });
 
-  it("does not give OpenClaw ownership of an explicit operator approval policy", async () => {
+  it("does not give Natesclaw ownership of an explicit operator approval policy", async () => {
     initializeGlobalHookRunner(
       createMockPluginRegistry([{ hookName: "before_tool_call", handler: vi.fn() }]),
     );
@@ -144,6 +144,6 @@ describe("prepareCodexAttemptConnection", () => {
     });
 
     expect(connection.appServer.approvalPolicy).toBe("untrusted");
-    expect(connection.approvalPolicyPromotedForOpenClawToolPolicy).toBe(false);
+    expect(connection.approvalPolicyPromotedForNatesclawToolPolicy).toBe(false);
   });
 });

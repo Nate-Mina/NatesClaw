@@ -2,8 +2,8 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { PluginDoctorStateMigrationContext } from "openclaw/plugin-sdk/runtime-doctor-migrations";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { PluginDoctorStateMigrationContext } from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 import { afterEach, describe, expect, it } from "vitest";
 import { vectorIndexProviderDiagnostic } from "./doctor-vector-index-provider.js";
 import { vectorIndexProviderDiagnosticTesting } from "./doctor-vector-index-provider.test-support.js";
@@ -22,9 +22,9 @@ describe("memory vector index provider doctor diagnostic", () => {
       provider: "openai",
       reason: "OpenAI API key missing",
     }));
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-memory-vector-doctor-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-memory-vector-doctor-"));
     roots.add(stateDir);
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "natesclaw-agent.sqlite");
     await fs.mkdir(path.dirname(agentPath), { recursive: true });
     const db = new DatabaseSync(agentPath);
     db.exec("CREATE TABLE memory_index_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT");
@@ -36,10 +36,10 @@ describe("memory vector index provider doctor diagnostic", () => {
     const config = {
       memory: {},
       agents: { entries: {} },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const params = {
       config,
-      env: { OPENCLAW_STATE_DIR: stateDir },
+      env: { NATESCLAW_STATE_DIR: stateDir },
       stateDir,
       oauthDir: path.join(stateDir, "oauth"),
       context: {} as PluginDoctorStateMigrationContext,

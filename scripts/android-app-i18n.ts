@@ -30,16 +30,16 @@ const TOOL_DISPLAY_PATH = path.join(
   ROOT,
   "apps",
   "shared",
-  "OpenClawKit",
+  "NatesclawKit",
   "Sources",
-  "OpenClawKit",
+  "NatesclawKit",
   "Resources",
   "tool-display.json",
 );
 const GENERATED_KOTLIN_PATH = path.join(
   SOURCE_ROOT,
   "ai",
-  "openclaw",
+  "natesclaw",
   "app",
   "i18n",
   "NativeStringResources.kt",
@@ -496,8 +496,8 @@ const ALLOWED_UI_LITERALS = new Map<string, ReadonlySet<string>>([
       "O",
       "OC",
       "OK",
-      "OPENCLAW",
-      "OpenClaw",
+      "NATESCLAW",
+      "Natesclaw",
       "U",
       "e.g. America/New_York",
       "current-step-alpha",
@@ -505,50 +505,50 @@ const ALLOWED_UI_LITERALS = new Map<string, ReadonlySet<string>>([
       "iMessage",
       "main, isolated, current, or session:<id>",
       "n/a",
-      "openclaw gateway",
-      "openclaw qr",
+      "natesclaw gateway",
+      "natesclaw qr",
       "PTT_BUSY: previous push-to-talk turn is still finishing",
       "WhatsApp",
     ]),
   ],
-  ["apps/android/app/src/main/java/ai/openclaw/app/chat/ChatController.kt", new Set(["Off"])],
+  ["apps/android/app/src/main/java/ai/natesclaw/app/chat/ChatController.kt", new Set(["Off"])],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/SkillWorkshopSettingsScreen.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/SkillWorkshopSettingsScreen.kt",
     new Set(["all", "applied", "held", "pending", "rejected"]),
   ],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/GatewayDiagnostics.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/GatewayDiagnostics.kt",
     new Set(["$versionName-dev"]),
   ],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/chat/ChatScreen.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/chat/ChatScreen.kt",
     // Plan checklist chrome: numeric done-counter and checkmark glyph.
     new Set(["$completedCount/${steps.size}", "✓"]),
   ],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/SettingsScreens.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/SettingsScreens.kt",
     // Discovered-gateway subtitles are host:port endpoints, not translatable copy.
     new Set(["${endpoint.host}:${endpoint.port}"]),
   ],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/VoiceScreen.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/VoiceScreen.kt",
     new Set(["${normalized.takeUtf16Safe(87)}..."]),
   ],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/SidebarShell.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/SidebarShell.kt",
     // Compose animation labels are tooling identifiers, not rendered copy.
     new Set(["sidebar-content-translation"]),
   ],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/chat/ChatCommandControls.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/chat/ChatCommandControls.kt",
     new Set(["/$name", "help"]),
   ],
   [
-    "apps/android/app/src/main/java/ai/openclaw/app/ui/chat/ChatMessageActions.kt",
+    "apps/android/app/src/main/java/ai/natesclaw/app/ui/chat/ChatMessageActions.kt",
     new Set([">", "> $line"]),
   ],
   [
-    "apps/android/wear/src/main/java/ai/openclaw/wear/WearScreens.kt",
+    "apps/android/wear/src/main/java/ai/natesclaw/wear/WearScreens.kt",
     // Compose animation labels are tooling identifiers, not rendered copy.
     new Set(["voice-swipe-hint", "voice-swipe-hint-offset"]),
   ],
@@ -575,13 +575,13 @@ function shouldScanUiLiterals(repoPath: string): boolean {
   if (repoPath.endsWith("/ui/design/ClawComponents.kt")) {
     return false;
   }
-  if (repoPath.endsWith("/ui/design/OpenClawMascot.kt")) {
+  if (repoPath.endsWith("/ui/design/NatesclawMascot.kt")) {
     return false;
   }
   return (
     repoPath.includes("/ui/") ||
     repoPath.endsWith("/accessibility/AccessibilityDevActivity.kt") ||
-    repoPath.includes("/wear/src/main/java/ai/openclaw/wear/") ||
+    repoPath.includes("/wear/src/main/java/ai/natesclaw/wear/") ||
     repoPath.endsWith("/MainActivity.kt") ||
     repoPath.endsWith("/NodeRuntime.kt") ||
     repoPath.endsWith("/PermissionRequester.kt") ||
@@ -1201,7 +1201,7 @@ function renderStringsXml(
 function renderAssistantXml(items: readonly string[]): string {
   return [
     "<resources>",
-    '    <string-array name="ask_openclaw_query_patterns">',
+    '    <string-array name="ask_natesclaw_query_patterns">',
     ...items.map((item) => `        <item>"${renderAndroidResourceValue(item, item)}"</item>`),
     "    </string-array>",
     "</resources>",
@@ -1213,9 +1213,9 @@ function renderKotlin(sourceToKey: ReadonlyMap<string, string>): string {
   const entries = [...sourceToKey].toSorted(([left], [right]) => compareText(left, right));
   return [
     GENERATED_KOTLIN_HEADER,
-    "package ai.openclaw.app.i18n",
+    "package ai.natesclaw.app.i18n",
     "",
-    "import ai.openclaw.app.R",
+    "import ai.natesclaw.app.R",
     "",
     "internal val nativeStringResourceIds: Map<String, Int> =",
     "  mapOf(",
@@ -1370,7 +1370,7 @@ export async function buildAndroidAppI18nCatalog(): Promise<GeneratedCatalog> {
     path.join(RESOURCE_ROOT, "values", "assistant.xml"),
     "utf8",
   );
-  const assistantItems = parseArrays(assistantSource).get("ask_openclaw_query_patterns") ?? [];
+  const assistantItems = parseArrays(assistantSource).get("ask_natesclaw_query_patterns") ?? [];
   for (const [locale, artifactEntries] of artifacts) {
     const translatedBySource = new Map<string, string[]>();
     for (const entry of artifactEntries) {

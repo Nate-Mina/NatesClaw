@@ -11,20 +11,20 @@ Anthropic models, Claude CLI, and native Claude session catalog.
 
 ## Distribution
 
-- Package: `@openclaw/anthropic-provider`
-- Install route: included in OpenClaw
+- Package: `@natesclaw/anthropic-provider`
+- Install route: included in Natesclaw
 
 ## Surface
 
 providers: `anthropic`; contracts: `mediaUnderstandingProviders`, `usageProviders`
 
-<!-- openclaw-plugin-reference:manual-start -->
+<!-- natesclaw-plugin-reference:manual-start -->
 
 node commands: anthropic.claude.sessions.list.v1,
 anthropic.claude.sessions.read.v1; contracts: mediaUnderstandingProviders,
 usageProviders
 
-<!-- openclaw-plugin-reference:manual-end -->
+<!-- natesclaw-plugin-reference:manual-end -->
 
 ## Related docs
 

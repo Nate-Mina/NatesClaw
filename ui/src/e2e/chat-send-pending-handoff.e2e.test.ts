@@ -16,8 +16,8 @@ type FrameSample = {
 };
 
 type SamplerWindow = Window & {
-  openclawSendFrameSamples?: FrameSample[];
-  openclawSendFrameSamplerStop?: () => void;
+  natesclawSendFrameSamples?: FrameSample[];
+  natesclawSendFrameSamplerStop?: () => void;
 };
 
 const PROBE_TEXT = "Flicker probe message 4242";
@@ -27,9 +27,9 @@ async function startFrameSampler(currentPage: Page): Promise<void> {
   await currentPage.evaluate((probeText) => {
     const win = window as SamplerWindow;
     const frames: FrameSample[] = [];
-    win.openclawSendFrameSamples = frames;
+    win.natesclawSendFrameSamples = frames;
     let running = true;
-    win.openclawSendFrameSamplerStop = () => {
+    win.natesclawSendFrameSamplerStop = () => {
       running = false;
     };
     const sample = () => {
@@ -53,8 +53,8 @@ async function startFrameSampler(currentPage: Page): Promise<void> {
 async function stopFrameSampler(currentPage: Page): Promise<FrameSample[]> {
   return currentPage.evaluate(() => {
     const win = window as SamplerWindow;
-    win.openclawSendFrameSamplerStop?.();
-    return win.openclawSendFrameSamples ?? [];
+    win.natesclawSendFrameSamplerStop?.();
+    return win.natesclawSendFrameSamples ?? [];
   });
 }
 
@@ -87,7 +87,7 @@ const BASE_HISTORY = [
     content: [{ text: "Ready.", type: "text" }],
     role: "assistant",
     timestamp: Date.now() - 5_000,
-    __openclaw: { seq: 1 },
+    __natesclaw: { seq: 1 },
   },
 ];
 
@@ -128,7 +128,7 @@ async function finishRunAndSettle(
       content: [{ text: "Run complete.", type: "text" }],
       role: "assistant",
       timestamp: Date.now() + 1,
-      __openclaw: { seq: 3 },
+      __natesclaw: { seq: 3 },
     },
   ]);
   // The terminal reconciliation must re-read history; baseline before the
@@ -138,7 +138,7 @@ async function finishRunAndSettle(
     content: [{ text: "Run complete.", type: "text" }],
     role: "assistant",
     timestamp: Date.now() + 1,
-    __openclaw: { seq: 3 },
+    __natesclaw: { seq: 3 },
   };
   await gateway.emitChatFinal({ runId, text: "Run complete." });
   await currentPage
@@ -206,7 +206,7 @@ suite.define(() => {
       content: [{ text: PROBE_TEXT, type: "text" }],
       role: "user",
       timestamp: Date.now(),
-      __openclaw: { id: USER_ECHO_ENTRY_ID, idempotencyKey: runId, seq: 2 },
+      __natesclaw: { id: USER_ECHO_ENTRY_ID, idempotencyKey: runId, seq: 2 },
     });
 
     const { gapFrames, keyTimeline } = analyzeFrameSamples(frames);
@@ -230,7 +230,7 @@ suite.define(() => {
       content: [{ text: PROBE_TEXT, type: "text" }],
       role: "user",
       timestamp: Date.now(),
-      __openclaw: { id: USER_ECHO_ENTRY_ID, idempotencyKey: runId, seq: 2 },
+      __natesclaw: { id: USER_ECHO_ENTRY_ID, idempotencyKey: runId, seq: 2 },
     };
     await gateway.setHistoryMessages([...BASE_HISTORY, userEcho]);
     const historyRequestsBefore = (await gateway.getRequests("chat.history")).length;

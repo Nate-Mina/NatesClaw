@@ -16,7 +16,7 @@ const {
   makeStateDir: makeNodePairingStateDir,
   seedNodeDevice,
   setup: setupNodePairingTestState,
-} = createNodePairingTestState("openclaw-node-pair-authz-diagnostics-");
+} = createNodePairingTestState("natesclaw-node-pair-authz-diagnostics-");
 
 describe("gateway node pairing authorization", () => {
   beforeAll(async () => {

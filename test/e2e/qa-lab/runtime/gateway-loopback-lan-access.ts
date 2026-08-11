@@ -6,7 +6,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
+import { rawDataToString } from "@natesclaw/gateway-client/websocket-data";
 import { WebSocket, type RawData } from "ws";
 import { PROTOCOL_VERSION } from "../../../../packages/gateway-protocol/src/index.js";
 import { clearConfigCache, clearRuntimeConfigSnapshot } from "../../../../src/config/config.js";
@@ -29,19 +29,19 @@ const PROBE_TIMEOUT_MS = 10_000;
 const ENV_KEYS = [
   "HOME",
   ...GATEWAY_STARTUP_MUTATED_ENV_KEYS,
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PASSWORD",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_GATEWAY_TOKEN",
+  "NATESCLAW_GATEWAY_PASSWORD",
+  "NATESCLAW_SKIP_CHANNELS",
+  "NATESCLAW_SKIP_GMAIL_WATCHER",
+  "NATESCLAW_SKIP_CRON",
+  "NATESCLAW_SKIP_CANVAS_HOST",
+  "NATESCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "NATESCLAW_SKIP_PROVIDERS",
+  "NATESCLAW_BUNDLED_PLUGINS_DIR",
+  "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NATESCLAW_TEST_MINIMAL_GATEWAY",
 ] as const;
 
 type ProducerOptions = {
@@ -331,10 +331,10 @@ export async function runGatewayLoopbackLanProof(): Promise<GatewayLoopbackLanPr
   }
 
   const env = captureEnv([...ENV_KEYS]);
-  // openclaw-temp-dir: standalone producer removes this state root in finally
-  const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-network-"));
-  const stateDir = path.join(tempHome, ".openclaw");
-  const configPath = path.join(stateDir, "openclaw.json");
+  // natesclaw-temp-dir: standalone producer removes this state root in finally
+  const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-gateway-network-"));
+  const stateDir = path.join(tempHome, ".natesclaw");
+  const configPath = path.join(stateDir, "natesclaw.json");
   const emptyPluginsDir = path.join(tempHome, "empty-bundled-plugins");
   const token = `gateway-network-${randomUUID()}`;
   let server: GatewayServer | undefined;
@@ -344,18 +344,18 @@ export async function runGatewayLoopbackLanProof(): Promise<GatewayLoopbackLanPr
       deleteTestEnvValue(key);
     }
     setTestEnvValue("HOME", tempHome);
-    setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
-    setTestEnvValue("OPENCLAW_CONFIG_PATH", configPath);
-    setTestEnvValue("OPENCLAW_GATEWAY_TOKEN", token);
-    setTestEnvValue("OPENCLAW_SKIP_CHANNELS", "1");
-    setTestEnvValue("OPENCLAW_SKIP_GMAIL_WATCHER", "1");
-    setTestEnvValue("OPENCLAW_SKIP_CRON", "1");
-    setTestEnvValue("OPENCLAW_SKIP_CANVAS_HOST", "1");
-    setTestEnvValue("OPENCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
-    setTestEnvValue("OPENCLAW_SKIP_PROVIDERS", "1");
-    setTestEnvValue("OPENCLAW_BUNDLED_PLUGINS_DIR", emptyPluginsDir);
-    setTestEnvValue("OPENCLAW_DISABLE_BUNDLED_PLUGINS", "1");
-    setTestEnvValue("OPENCLAW_TEST_MINIMAL_GATEWAY", "1");
+    setTestEnvValue("NATESCLAW_STATE_DIR", stateDir);
+    setTestEnvValue("NATESCLAW_CONFIG_PATH", configPath);
+    setTestEnvValue("NATESCLAW_GATEWAY_TOKEN", token);
+    setTestEnvValue("NATESCLAW_SKIP_CHANNELS", "1");
+    setTestEnvValue("NATESCLAW_SKIP_GMAIL_WATCHER", "1");
+    setTestEnvValue("NATESCLAW_SKIP_CRON", "1");
+    setTestEnvValue("NATESCLAW_SKIP_CANVAS_HOST", "1");
+    setTestEnvValue("NATESCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
+    setTestEnvValue("NATESCLAW_SKIP_PROVIDERS", "1");
+    setTestEnvValue("NATESCLAW_BUNDLED_PLUGINS_DIR", emptyPluginsDir);
+    setTestEnvValue("NATESCLAW_DISABLE_BUNDLED_PLUGINS", "1");
+    setTestEnvValue("NATESCLAW_TEST_MINIMAL_GATEWAY", "1");
     await fs.mkdir(emptyPluginsDir, { recursive: true });
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(

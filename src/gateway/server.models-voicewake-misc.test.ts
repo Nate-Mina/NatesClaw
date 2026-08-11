@@ -144,7 +144,7 @@ const expectedSortedCatalog = (): ModelCatalogRpcEntry[] => [
     id: "gpt-test-a",
     name: "A-Model",
     provider: "openai",
-    agentRuntime: { id: "openclaw", source: "implicit" },
+    agentRuntime: { id: "natesclaw", source: "implicit" },
     available: false,
     contextWindow: 8000,
   },
@@ -152,7 +152,7 @@ const expectedSortedCatalog = (): ModelCatalogRpcEntry[] => [
     id: "gpt-test-z",
     name: "gpt-test-z",
     provider: "openai",
-    agentRuntime: { id: "openclaw", source: "implicit" },
+    agentRuntime: { id: "natesclaw", source: "implicit" },
     available: false,
   },
 ];
@@ -225,7 +225,7 @@ describe("gateway server models + voicewake", () => {
   const listModels = async (params?: { view?: "default" | "configured" | "all" }) =>
     withEnvAsync(
       {
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+        NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
         CODEX_API_KEY: undefined,
         OPENAI_API_KEY: undefined,
         OPENAI_OAUTH_TOKEN: undefined,
@@ -258,9 +258,9 @@ describe("gateway server models + voicewake", () => {
   };
 
   const withModelsConfig = async <T>(config: unknown, run: () => Promise<T>): Promise<T> => {
-    const configPath = process.env.OPENCLAW_CONFIG_PATH;
+    const configPath = process.env.NATESCLAW_CONFIG_PATH;
     if (!configPath) {
-      throw new Error("Missing OPENCLAW_CONFIG_PATH");
+      throw new Error("Missing NATESCLAW_CONFIG_PATH");
     }
     let previousConfig: string | undefined;
     try {
@@ -290,7 +290,7 @@ describe("gateway server models + voicewake", () => {
   };
 
   const withTempHome = async <T>(fn: (homeDir: string) => Promise<T>): Promise<T> => {
-    const tempHome = await createTempHomeEnv("openclaw-home-");
+    const tempHome = await createTempHomeEnv("natesclaw-home-");
     try {
       return await fn(tempHome.home);
     } finally {
@@ -380,7 +380,7 @@ describe("gateway server models + voicewake", () => {
       await withTempHome(async (homeDir) => {
         const initial = await rpcReq<{ triggers: string[] }>(ws, "voicewake.get");
         expect(initial.ok).toBe(true);
-        expect(initial.payload?.triggers).toEqual(["openclaw", "claude", "computer"]);
+        expect(initial.payload?.triggers).toEqual(["natesclaw", "claude", "computer"]);
 
         const changedP = onceMessage(
           ws,
@@ -405,7 +405,7 @@ describe("gateway server models + voicewake", () => {
         expect(after.payload?.triggers).toEqual(["hi", "there"]);
 
         await expect(
-          fs.readFile(path.join(homeDir, ".openclaw", "settings", "voicewake.json"), "utf8"),
+          fs.readFile(path.join(homeDir, ".natesclaw", "settings", "voicewake.json"), "utf8"),
         ).rejects.toThrow(/ENOENT/u);
       });
     },
@@ -415,7 +415,7 @@ describe("gateway server models + voicewake", () => {
     await withConnectedNodeEvent("voicewake.changed", async (nodeWs, first) => {
       expect(first.event).toBe("voicewake.changed");
       expect((first.payload as { triggers?: unknown } | undefined)?.triggers).toEqual([
-        "openclaw",
+        "natesclaw",
         "claude",
         "computer",
       ]);
@@ -425,14 +425,14 @@ describe("gateway server models + voicewake", () => {
         (o) => o.type === "event" && o.event === "voicewake.changed",
       );
       const setRes = await rpcReq(ws, "voicewake.set", {
-        triggers: ["openclaw", "computer"],
+        triggers: ["natesclaw", "computer"],
       });
       expect(setRes.ok).toBe(true);
 
       const broadcast = (await broadcastP) as { event?: string; payload?: unknown };
       expect(broadcast.event).toBe("voicewake.changed");
       expect((broadcast.payload as { triggers?: unknown } | undefined)?.triggers).toEqual([
-        "openclaw",
+        "natesclaw",
         "computer",
       ]);
     });
@@ -574,7 +574,7 @@ describe("gateway server models + voicewake", () => {
             id: "gpt-test-z",
             name: "gpt-test-z",
             provider: "openai",
-            agentRuntime: { id: "openclaw", source: "implicit" },
+            agentRuntime: { id: "natesclaw", source: "implicit" },
             available: false,
           },
         ]);
@@ -623,7 +623,7 @@ describe("gateway server models + voicewake", () => {
           id: "gpt-test-z",
           name: "gpt-test-z",
           provider: "openai",
-          agentRuntime: { id: "openclaw", source: "implicit" },
+          agentRuntime: { id: "natesclaw", source: "implicit" },
           available: false,
         },
       ],
@@ -641,7 +641,7 @@ describe("gateway server models + voicewake", () => {
           id: "not-in-catalog",
           name: "not-in-catalog",
           provider: "openai",
-          agentRuntime: { id: "openclaw", source: "implicit" },
+          agentRuntime: { id: "natesclaw", source: "implicit" },
           available: false,
         },
       ],

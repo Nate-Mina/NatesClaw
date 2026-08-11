@@ -1,8 +1,8 @@
 /**
  * Resolves CLI runtime backends registered by plugins or setup metadata.
  */
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ContextEngineHostCapability } from "../context-engine/types.js";
 import type {
   CliBackendConfig,
@@ -123,7 +123,7 @@ function resolveToolAvailabilityEnforcement(
   backend: Pick<
     CliBackendPlugin,
     "nativeToolMode" | "resolveExecutionArgs" | "toolAvailabilityEnforcement"
-  > & { builtWithOpenClawVersion?: string },
+  > & { builtWithNatesclawVersion?: string },
 ): CliBackendToolAvailabilityEnforcement | undefined {
   if (backend.toolAvailabilityEnforcement) {
     return backend.toolAvailabilityEnforcement;
@@ -131,7 +131,7 @@ function resolveToolAvailabilityEnforcement(
   // v2026.7.2-beta.1 through .3 made selectable + resolveExecutionArgs the
   // public enforcement contract. Require matching package build provenance so
   // a new no-op hook cannot be mistaken for that shipped SDK path.
-  const builtWith = backend.builtWithOpenClawVersion?.replace(/^v/u, "");
+  const builtWith = backend.builtWithNatesclawVersion?.replace(/^v/u, "");
   const isShippedBetaContract = /^2026\.7\.2-beta\.[123]$/u.test(builtWith ?? "");
   return isShippedBetaContract &&
     backend.nativeToolMode === "selectable" &&
@@ -217,7 +217,7 @@ function addCliRuntimeModelBinding(
 /** Lists model-provider to CLI-runtime bindings from runtime and optional setup registries. */
 export function listCliRuntimeModelBackendBindings(
   params: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     env?: NodeJS.ProcessEnv;
     includeSetupRegistry?: boolean;
   } = {},
@@ -250,7 +250,7 @@ export function listCliRuntimeModelBackendBindings(
 /** Lists CLI runtime ids that alias canonical model providers. */
 export function listCliRuntimeProviderIds(
   params: {
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     env?: NodeJS.ProcessEnv;
     includeSetupRegistry?: boolean;
   } = {},
@@ -270,7 +270,7 @@ export function listCliRuntimeProviderIds(
 /** Resolves the canonical model provider served by a CLI runtime id. */
 export function resolveCliRuntimeCanonicalProvider(params: {
   runtime: string | undefined;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   includeSetupRegistry?: boolean;
 }): string | undefined {
@@ -299,7 +299,7 @@ export function resolveCliRuntimeCanonicalProvider(params: {
 export function resolveCliRuntimeModelBackendBinding(params: {
   provider: string | undefined;
   runtime: string | undefined;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): CliRuntimeModelBackendBinding | undefined {
   const provider = normalizeProviderId(params.provider ?? "");
@@ -339,7 +339,7 @@ export function resolveCliRuntimeModelBackendBinding(params: {
 export function isCliRuntimeModelBackendForProvider(params: {
   provider: string | undefined;
   runtime: string | undefined;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): boolean {
   return resolveCliRuntimeModelBackendBinding(params) !== undefined;
@@ -386,7 +386,7 @@ export function resolveCliBackendLiveSessionRequirement(
 /** Resolves the executable CLI backend registered by its owning plugin. */
 export function resolveCliBackendConfig(
   provider: string,
-  cfg?: OpenClawConfig,
+  cfg?: NatesclawConfig,
   options: { agentId?: string } = {},
 ): ResolvedCliBackend | null {
   const normalized = normalizeBackendKey(provider);
@@ -485,5 +485,5 @@ const testing = {
 } as const;
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.cliBackendsTestApi")] = testing;
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.cliBackendsTestApi")] = testing;
 }

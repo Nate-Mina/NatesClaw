@@ -57,8 +57,8 @@ export class FakeWebSocket {
     readonly url: string,
     readonly protocols: string[] = [],
   ) {
-    this.protocol = protocols.includes("openclaw-extension-relay.v2")
-      ? (configuredProtocol ?? "openclaw-extension-relay.v2")
+    this.protocol = protocols.includes("natesclaw-extension-relay.v2")
+      ? (configuredProtocol ?? "natesclaw-extension-relay.v2")
       : (protocols[0] ?? "");
     configuredSockets.push(this);
   }

@@ -1,4 +1,4 @@
-import { asNullableRecord, isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { asNullableRecord, isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 /**
  * Managed Chrome graphics diagnostics.
  *

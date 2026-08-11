@@ -1,8 +1,8 @@
-OPENCLAW_PLUGINS_FIXTURE_PID_FILES=()
-OPENCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=0
-OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=""
+NATESCLAW_PLUGINS_FIXTURE_PID_FILES=()
+NATESCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=0
+NATESCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=""
 
-openclaw_plugins_read_positive_int_env() {
+natesclaw_plugins_read_positive_int_env() {
   local name="${1:?missing environment variable name}"
   local fallback="${2:?missing fallback value}"
   local value="${!name-}"
@@ -16,7 +16,7 @@ openclaw_plugins_read_positive_int_env() {
   printf "%s\n" "$((10#$value))"
 }
 
-openclaw_plugins_read_nonnegative_decimal_env() {
+natesclaw_plugins_read_nonnegative_decimal_env() {
   local name="${1:?missing environment variable name}"
   local fallback="${2:?missing fallback value}"
   local value="${!name-}"
@@ -30,20 +30,20 @@ openclaw_plugins_read_nonnegative_decimal_env() {
   printf "%s\n" "$value"
 }
 
-openclaw_plugins_cleanup_fixture_servers() {
+natesclaw_plugins_cleanup_fixture_servers() {
   local pid_file
   local pid
-  for pid_file in "${OPENCLAW_PLUGINS_FIXTURE_PID_FILES[@]:-}"; do
+  for pid_file in "${NATESCLAW_PLUGINS_FIXTURE_PID_FILES[@]:-}"; do
     [[ -f "$pid_file" ]] || continue
     pid="$(cat "$pid_file" 2>/dev/null || true)"
     if [[ "$pid" =~ ^[0-9]+$ ]]; then
-      openclaw_plugins_stop_fixture_process "$pid"
+      natesclaw_plugins_stop_fixture_process "$pid"
     fi
     rm -f "$pid_file"
   done
 }
 
-openclaw_plugins_signal_fixture_process() {
+natesclaw_plugins_signal_fixture_process() {
   local pid="$1"
   local signal="$2"
   if kill -0 -- "-$pid" >/dev/null 2>&1; then
@@ -53,31 +53,31 @@ openclaw_plugins_signal_fixture_process() {
   kill "-$signal" "$pid" >/dev/null 2>&1 || true
 }
 
-openclaw_plugins_fixture_process_alive() {
+natesclaw_plugins_fixture_process_alive() {
   local pid="$1"
   kill -0 "$pid" >/dev/null 2>&1 || kill -0 -- "-$pid" >/dev/null 2>&1
 }
 
-openclaw_plugins_stop_fixture_process() {
+natesclaw_plugins_stop_fixture_process() {
   local pid="$1"
   local _
   local attempts interval
-  attempts="$(openclaw_plugins_read_positive_int_env OPENCLAW_PLUGINS_FIXTURE_STOP_ATTEMPTS 40)" || return $?
-  interval="$(openclaw_plugins_read_nonnegative_decimal_env OPENCLAW_PLUGINS_FIXTURE_STOP_INTERVAL_SECONDS 0.25)" || return $?
-  if declare -F openclaw_e2e_stop_process >/dev/null 2>&1; then
-    openclaw_e2e_stop_process "$pid"
+  attempts="$(natesclaw_plugins_read_positive_int_env NATESCLAW_PLUGINS_FIXTURE_STOP_ATTEMPTS 40)" || return $?
+  interval="$(natesclaw_plugins_read_nonnegative_decimal_env NATESCLAW_PLUGINS_FIXTURE_STOP_INTERVAL_SECONDS 0.25)" || return $?
+  if declare -F natesclaw_e2e_stop_process >/dev/null 2>&1; then
+    natesclaw_e2e_stop_process "$pid"
     return
   fi
-  openclaw_plugins_signal_fixture_process "$pid" TERM
+  natesclaw_plugins_signal_fixture_process "$pid" TERM
   for _ in $(seq 1 "$attempts"); do
-    ! openclaw_plugins_fixture_process_alive "$pid" && { wait "$pid" >/dev/null 2>&1 || true; return; }
+    ! natesclaw_plugins_fixture_process_alive "$pid" && { wait "$pid" >/dev/null 2>&1 || true; return; }
     sleep "$interval"
   done
-  openclaw_plugins_signal_fixture_process "$pid" KILL
+  natesclaw_plugins_signal_fixture_process "$pid" KILL
   wait "$pid" >/dev/null 2>&1 || true
 }
 
-openclaw_plugins_print_fixture_log() {
+natesclaw_plugins_print_fixture_log() {
   local log_file="$1"
   if declare -F docker_e2e_print_log >/dev/null 2>&1; then
     docker_e2e_print_log "$log_file"
@@ -88,7 +88,7 @@ openclaw_plugins_print_fixture_log() {
   fi
 
   local max_bytes
-  max_bytes="$(openclaw_plugins_read_positive_int_env OPENCLAW_DOCKER_E2E_LOG_PRINT_BYTES 65536)" || return $?
+  max_bytes="$(natesclaw_plugins_read_positive_int_env NATESCLAW_DOCKER_E2E_LOG_PRINT_BYTES 65536)" || return $?
 
   local log_bytes
   log_bytes="$(wc -c <"$log_file" 2>/dev/null || echo 0)"
@@ -104,38 +104,38 @@ openclaw_plugins_print_fixture_log() {
   tail -c "$max_bytes" "$log_file"
 }
 
-openclaw_plugins_validate_fixture_log_print_bytes() {
-  openclaw_plugins_read_positive_int_env OPENCLAW_DOCKER_E2E_LOG_PRINT_BYTES 65536 >/dev/null
+natesclaw_plugins_validate_fixture_log_print_bytes() {
+  natesclaw_plugins_read_positive_int_env NATESCLAW_DOCKER_E2E_LOG_PRINT_BYTES 65536 >/dev/null
 }
 
-openclaw_plugins_register_fixture_pid_file() {
+natesclaw_plugins_register_fixture_pid_file() {
   local pid_file="$1"
-  OPENCLAW_PLUGINS_FIXTURE_PID_FILES+=("$pid_file")
-  openclaw_plugins_install_fixture_cleanup_trap
+  NATESCLAW_PLUGINS_FIXTURE_PID_FILES+=("$pid_file")
+  natesclaw_plugins_install_fixture_cleanup_trap
 }
 
-openclaw_plugins_install_fixture_cleanup_trap() {
-  if [[ "${OPENCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED:-0}" = "1" ]]; then
+natesclaw_plugins_install_fixture_cleanup_trap() {
+  if [[ "${NATESCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED:-0}" = "1" ]]; then
     return
   fi
 
   local existing_trap
   existing_trap="$(trap -p EXIT || true)"
-  if [[ -n "$existing_trap" && "$existing_trap" != *openclaw_plugins_fixture_exit_trap* ]]; then
+  if [[ -n "$existing_trap" && "$existing_trap" != *natesclaw_plugins_fixture_exit_trap* ]]; then
     local existing_action="${existing_trap#trap -- }"
     existing_action="${existing_action% EXIT}"
-    eval "OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=$existing_action"
+    eval "NATESCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION=$existing_action"
   fi
 
-  OPENCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=1
-  trap openclaw_plugins_fixture_exit_trap EXIT
+  NATESCLAW_PLUGINS_FIXTURE_EXIT_TRAP_INSTALLED=1
+  trap natesclaw_plugins_fixture_exit_trap EXIT
 }
 
-openclaw_plugins_fixture_exit_trap() {
+natesclaw_plugins_fixture_exit_trap() {
   local status="$?"
-  openclaw_plugins_cleanup_fixture_servers
-  if [[ -n "${OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION:-}" ]]; then
-    eval "$OPENCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION"
+  natesclaw_plugins_cleanup_fixture_servers
+  if [[ -n "${NATESCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION:-}" ]]; then
+    eval "$NATESCLAW_PLUGINS_FIXTURE_PREVIOUS_EXIT_ACTION"
   fi
   exit "$status"
 }
@@ -236,7 +236,7 @@ import fs from "node:fs";
 
 const packageJsonPath = process.argv[2];
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-packageJson.openclaw.extensions = ["./index.js", " "];
+packageJson.natesclaw.extensions = ["./index.js", " "];
 fs.writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, "utf8");
 NODE
   tar -czf "$output_tgz" -C "$pack_dir" package
@@ -253,12 +253,12 @@ start_npm_fixture_registry() {
 
   shift 4
 
-  openclaw_plugins_validate_fixture_log_print_bytes || return $?
+  natesclaw_plugins_validate_fixture_log_print_bytes || return $?
 
   node scripts/e2e/lib/plugins/npm-registry-server.mjs "$server_port_file" "$package_name" "$version" "$tarball" "$@" >"$server_log" 2>&1 &
   local server_pid="$!"
   echo "$server_pid" >"$server_pid_file"
-  openclaw_plugins_register_fixture_pid_file "$server_pid_file"
+  natesclaw_plugins_register_fixture_pid_file "$server_pid_file"
 
   for _ in $(seq 1 100); do
     if [[ -s "$server_port_file" ]]; then
@@ -266,13 +266,13 @@ start_npm_fixture_registry() {
       return 0
     fi
     if ! kill -0 "$server_pid" 2>/dev/null; then
-      openclaw_plugins_print_fixture_log "$server_log"
+      natesclaw_plugins_print_fixture_log "$server_log"
       return 1
     fi
     sleep 0.1
   done
 
-  openclaw_plugins_print_fixture_log "$server_log"
+  natesclaw_plugins_print_fixture_log "$server_log"
   echo "Timed out waiting for npm fixture registry." >&2
   return 1
 }

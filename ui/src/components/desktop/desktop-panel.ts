@@ -4,13 +4,13 @@ import type {
   WorkerDesktopAppId,
   WorkerDesktopLaunchResult,
   WorkerDesktopObserveResult,
-} from "@openclaw/gateway-protocol";
+} from "@natesclaw/gateway-protocol";
 import { css, html, nothing, svg } from "lit";
 import { property, state } from "lit/decorators.js";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import { t } from "../../i18n/index.ts";
 import { formatUiError } from "../../lib/format-error.ts";
-import { OpenClawLitElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLitElement } from "../../lit/natesclaw-element.ts";
 import { DockLayoutController, dockPanelStyles } from "../dock-layout-controller.ts";
 import { createDockPanelLayout } from "../dock-panel-layout.ts";
 import { icons } from "../icons.ts";
@@ -27,7 +27,7 @@ const DOCK_BOTTOM_GLYPH = svg`<svg viewBox="0 0 16 16" width="13" height="13" fi
 const DOCK_RIGHT_GLYPH = svg`<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2.5" width="12" height="11" rx="1.5" /><path d="M10 2.5v11" /></svg>`;
 
 const panelLayout = createDockPanelLayout({
-  storageKey: "openclaw.desktopPanel",
+  storageKey: "natesclaw.desktopPanel",
   minHeight: 240,
   minWidth: 380,
   defaultDock: "right",
@@ -39,8 +39,8 @@ const panelLayout = createDockPanelLayout({
 type DesktopPanelState = "picker" | "connecting" | "connected" | "disconnected";
 type DesktopAppId = WorkerDesktopAppId;
 
-/** `<openclaw-desktop-panel>` — dockable RFB access to cloud-worker desktops. */
-class OpenClawDesktopPanel extends OpenClawLitElement {
+/** `<natesclaw-desktop-panel>` — dockable RFB access to cloud-worker desktops. */
+class NatesclawDesktopPanel extends NatesclawLitElement {
   @property({ attribute: false }) client: GatewayBrowserClient | null = null;
   @property({ type: Boolean }) available = false;
   @property({ type: Boolean }) suppressed = false;
@@ -682,12 +682,12 @@ class OpenClawDesktopPanel extends OpenClawLitElement {
   }
 }
 
-if (!customElements.get("openclaw-desktop-panel")) {
-  customElements.define("openclaw-desktop-panel", OpenClawDesktopPanel);
+if (!customElements.get("natesclaw-desktop-panel")) {
+  customElements.define("natesclaw-desktop-panel", NatesclawDesktopPanel);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-desktop-panel": OpenClawDesktopPanel;
+    "natesclaw-desktop-panel": NatesclawDesktopPanel;
   }
 }

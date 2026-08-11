@@ -1,6 +1,6 @@
-import { resolveAgentConfig } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+import { resolveAgentConfig } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
 import { normalizeActiveMemoryFastMode } from "./config.js";
 import { getModelRef } from "./query.js";
 import { runRecallSubagent } from "./recall-run.js";
@@ -50,8 +50,8 @@ function formatActiveMemoryFastMode(fastMode: ActiveMemoryFastMode | undefined):
 }
 
 function prepareRecallRunContext(params: {
-  api: OpenClawPluginApi;
-  runtimeConfig: OpenClawConfig;
+  api: NatesclawPluginApi;
+  runtimeConfig: NatesclawConfig;
   config: ResolvedActiveRecallPluginConfig;
   agentId: string;
   sessionKey?: string;
@@ -92,8 +92,8 @@ function prepareRecallRunContext(params: {
 }
 
 type ActiveRecallParams = {
-  api: OpenClawPluginApi;
-  runtimeConfig: OpenClawConfig;
+  api: NatesclawPluginApi;
+  runtimeConfig: NatesclawConfig;
   config: ResolvedActiveRecallPluginConfig;
   agentId: string;
   sessionKey?: string;

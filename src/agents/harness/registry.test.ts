@@ -1,6 +1,6 @@
 // Exercises agent harness registration, ownership metadata, and selection handoff.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createEmptyPluginRegistry } from "../../plugins/registry-empty.js";
 import { withPluginRegistrationContext } from "../../plugins/runtime.js";
 import {
@@ -26,7 +26,7 @@ vi.mock("../../plugins/provider-model-routes.js", () => ({
   resolveProviderModelRoutes: () => null,
 }));
 
-const originalRuntime = process.env.OPENCLAW_AGENT_RUNTIME;
+const originalRuntime = process.env.NATESCLAW_AGENT_RUNTIME;
 
 beforeEach(() => {
   clearAgentHarnesses();
@@ -36,9 +36,9 @@ beforeEach(() => {
 afterEach(() => {
   clearAgentHarnesses();
   if (originalRuntime == null) {
-    delete process.env.OPENCLAW_AGENT_RUNTIME;
+    delete process.env.NATESCLAW_AGENT_RUNTIME;
   } else {
-    process.env.OPENCLAW_AGENT_RUNTIME = originalRuntime;
+    process.env.NATESCLAW_AGENT_RUNTIME = originalRuntime;
   }
 });
 
@@ -65,25 +65,25 @@ function makeHarness(
   };
 }
 
-function providerRuntimeConfig(provider: string, runtime: string): OpenClawConfig {
+function providerRuntimeConfig(provider: string, runtime: string): NatesclawConfig {
   return {
     models: {
       providers: {
         [provider]: {
-          baseUrl: "https://api.openclaw.test/v1",
+          baseUrl: "https://api.natesclaw.test/v1",
           agentRuntime: { id: runtime },
           models: [],
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 describe("agent harness registry", () => {
   it("rejects the built-in runtime id before mutating the registry", () => {
     expect(() =>
-      registerAgentHarness(makeHarness("openclaw"), { ownerPluginId: "untrusted-plugin" }),
-    ).toThrow('agent harness id "openclaw" is reserved for the built-in runtime');
+      registerAgentHarness(makeHarness("natesclaw"), { ownerPluginId: "untrusted-plugin" }),
+    ).toThrow('agent harness id "natesclaw" is reserved for the built-in runtime');
     expect(listRegisteredAgentHarnesses()).toEqual([]);
   });
 
@@ -174,10 +174,10 @@ describe("agent harness registry", () => {
   it("keeps model-specific harnesses behind plugin registration in auto mode", () => {
     // Auto mode should not select a model-specific runtime until the owning
     // plugin has registered its harness in this process.
-    process.env.OPENCLAW_AGENT_RUNTIME = "auto";
+    process.env.NATESCLAW_AGENT_RUNTIME = "auto";
 
     expect(selectAgentHarness({ provider: "plugin-models", modelId: "custom-1" }).id).toBe(
-      "openclaw",
+      "natesclaw",
     );
 
     registerAgentHarness(makeHarness("custom", { providers: ["plugin-models"] }), {
@@ -189,16 +189,16 @@ describe("agent harness registry", () => {
     );
   });
 
-  it("falls back to OpenClaw for other models", () => {
-    process.env.OPENCLAW_AGENT_RUNTIME = "auto";
+  it("falls back to Natesclaw for other models", () => {
+    process.env.NATESCLAW_AGENT_RUNTIME = "auto";
 
     expect(selectAgentHarness({ provider: "anthropic", modelId: "sonnet-4.6" }).id).toBe(
-      "openclaw",
+      "natesclaw",
     );
   });
 
   it("lets a plugin harness win in auto mode by priority", () => {
-    process.env.OPENCLAW_AGENT_RUNTIME = "auto";
+    process.env.NATESCLAW_AGENT_RUNTIME = "auto";
     registerAgentHarness(makeHarness("plugin-harness", { priority: 200 }), {
       ownerPluginId: "plugin-a",
     });
@@ -206,7 +206,7 @@ describe("agent harness registry", () => {
     expect(selectAgentHarness({ provider: "codex", modelId: "gpt-5.4" }).id).toBe("plugin-harness");
   });
 
-  it("honors explicit provider OpenClaw runtime policy", () => {
+  it("honors explicit provider Natesclaw runtime policy", () => {
     registerAgentHarness(makeHarness("plugin-harness", { priority: 200 }), {
       ownerPluginId: "plugin-a",
     });
@@ -215,9 +215,9 @@ describe("agent harness registry", () => {
       selectAgentHarness({
         provider: "codex",
         modelId: "gpt-5.4",
-        config: providerRuntimeConfig("codex", "openclaw"),
+        config: providerRuntimeConfig("codex", "natesclaw"),
       }).id,
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
   it("honors explicit provider plugin runtime policy when the plugin harness is registered", () => {

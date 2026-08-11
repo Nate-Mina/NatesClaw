@@ -1,4 +1,4 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import { formatCliCommand } from "../../cli/command-format.js";
 /**
@@ -222,22 +222,22 @@ export function buildOAuthRefreshFailureLoginCommand(
   if (sanitizedProvider === "claude-cli") {
     // claude-cli is not a standalone provider id; it is the Anthropic provider
     // accessed via the CLI auth method. Refresh the local Claude CLI session
-    // first, then re-register that auth method with OpenClaw.
+    // first, then re-register that auth method with Natesclaw.
     const claudeLoginCommand = formatCliCommand("claude auth login");
-    const openclawLoginCommand = formatCliCommand(
+    const natesclawLoginCommand = formatCliCommand(
       sanitizedProfileId
-        ? `openclaw models auth login --provider anthropic --method cli --profile-id ${quoteShellArg(sanitizedProfileId)}`
-        : "openclaw models auth login --provider anthropic --method cli",
+        ? `natesclaw models auth login --provider anthropic --method cli --profile-id ${quoteShellArg(sanitizedProfileId)}`
+        : "natesclaw models auth login --provider anthropic --method cli",
     );
-    return `${claudeLoginCommand} && ${openclawLoginCommand}`;
+    return `${claudeLoginCommand} && ${natesclawLoginCommand}`;
   }
   return sanitizedProvider
     ? formatCliCommand(
         sanitizedProfileId
-          ? `openclaw models auth login --provider ${sanitizedProvider} --profile-id ${quoteShellArg(sanitizedProfileId)}`
-          : `openclaw models auth login --provider ${sanitizedProvider}`,
+          ? `natesclaw models auth login --provider ${sanitizedProvider} --profile-id ${quoteShellArg(sanitizedProfileId)}`
+          : `natesclaw models auth login --provider ${sanitizedProvider}`,
       )
-    : formatCliCommand("openclaw models auth login");
+    : formatCliCommand("natesclaw models auth login");
 }
 
 /** Build operator guidance for an active profile cooldown or disable window. */
@@ -255,8 +255,8 @@ export function buildAuthProfileUnusableHint(params: {
     if (params.provider === "google-gemini-cli") {
       // The legacy runtime has no auth method of its own. Recovery creates a
       // supported Google API-key profile and then selects it for that runtime.
-      const command = formatCliCommand("openclaw models auth login --provider google");
-      return `Gemini CLI OAuth cannot be repaired by OpenClaw. Connect Google with an AI Studio API key using ${formatOAuthRefreshFailureLoginCommandMarkdown(command)}, then select that Google profile for the Gemini CLI runtime.`;
+      const command = formatCliCommand("natesclaw models auth login --provider google");
+      return `Gemini CLI OAuth cannot be repaired by Natesclaw. Connect Google with an AI Studio API key using ${formatOAuthRefreshFailureLoginCommandMarkdown(command)}, then select that Google profile for the Gemini CLI runtime.`;
     }
     const command = buildOAuthRefreshFailureLoginCommand(params.provider, {
       profileId: params.profileId,

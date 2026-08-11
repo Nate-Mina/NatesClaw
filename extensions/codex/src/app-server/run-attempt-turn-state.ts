@@ -1,4 +1,4 @@
-import { emitTrustedDiagnosticEvent } from "openclaw/plugin-sdk/diagnostic-runtime";
+import { emitTrustedDiagnosticEvent } from "natesclaw/plugin-sdk/diagnostic-runtime";
 import {
   CODEX_APP_SERVER_INTERRUPT_TIMEOUT_MS,
   closeCodexStartupClientBestEffort,
@@ -100,10 +100,10 @@ export function createCodexAttemptTurnState(resources: CodexAttemptResources) {
     params.runTimeoutOverrideMs,
   );
   const turnAttemptIdleTimeoutMs = Math.max(100, Math.floor(params.timeoutMs));
-  const pendingOpenClawDynamicToolCompletionIds = new Set<string>();
+  const pendingNatesclawDynamicToolCompletionIds = new Set<string>();
   // One execution promise per call id prevents duplicate delivery from
   // repeating non-idempotent computer input while the attempt remains active.
-  const openClawDynamicToolExecutions = createCodexDynamicToolExecutionRegistry();
+  const NatesclawDynamicToolExecutions = createCodexDynamicToolExecutionRegistry();
   const activeTurnItemIds = new Set<string>();
   const activeCompletionBlockerItemIds = new Set<string>();
   const activeFinalizationHookRunIds = new Set<string>();
@@ -220,8 +220,8 @@ export function createCodexAttemptTurnState(resources: CodexAttemptResources) {
     postToolRawAssistantCompletionIdleTimeoutMs,
     turnTerminalIdleTimeoutMs,
     turnAttemptIdleTimeoutMs,
-    pendingOpenClawDynamicToolCompletionIds,
-    openClawDynamicToolExecutions,
+    pendingNatesclawDynamicToolCompletionIds,
+    NatesclawDynamicToolExecutions,
     activeTurnItemIds,
     activeCompletionBlockerItemIds,
     activeFinalizationHookRunIds,

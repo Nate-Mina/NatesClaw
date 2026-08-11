@@ -2,7 +2,7 @@
 import {
   getProviderHttpMocks,
   installProviderHttpMockCleanup,
-} from "openclaw/plugin-sdk/provider-http-test-mocks";
+} from "natesclaw/plugin-sdk/provider-http-test-mocks";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildOpenRouterImageGenerationProvider } from "./image-generation-provider.js";
 
@@ -147,8 +147,8 @@ describe("openrouter image generation provider", () => {
       allowPrivateNetwork: false,
       defaultHeaders: {
         Authorization: "Bearer openrouter-key",
-        "HTTP-Referer": "https://openclaw.ai",
-        "X-OpenRouter-Title": "OpenClaw",
+        "HTTP-Referer": "https://natesclaw.ai",
+        "X-OpenRouter-Title": "Natesclaw",
       },
       request: undefined,
       provider: "openrouter",
@@ -160,8 +160,8 @@ describe("openrouter image generation provider", () => {
     const headers = requireHeaders(request.headers);
     expect(Object.fromEntries(headers.entries())).toEqual({
       authorization: "Bearer openrouter-key",
-      "http-referer": "https://openclaw.ai",
-      "x-openrouter-title": "OpenClaw",
+      "http-referer": "https://natesclaw.ai",
+      "x-openrouter-title": "Natesclaw",
     });
     expect(request).toEqual({
       url: "https://custom.openrouter.test/api/v1/chat/completions",

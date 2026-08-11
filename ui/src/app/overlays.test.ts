@@ -44,7 +44,7 @@ function installUpdateTranslations() {
       "Update finished, but the running install does not match the expected revision. Expected {expected}, running {actual}.",
     "common.unknown": "Unknown",
     "updates.outcomeUnknown":
-      "The update request may have been accepted, but the Gateway did not report a final result after reconnect. Run `openclaw update status` before retrying.",
+      "The update request may have been accepted, but the Gateway did not report a final result after reconnect. Run `natesclaw update status` before retrying.",
   };
   return vi.spyOn(i18n, "t").mockImplementation((key, params) => {
     const template = translations[key] ?? key;
@@ -358,7 +358,7 @@ describe("application approval overlays", () => {
 
     expect(request).not.toHaveBeenCalledWith("exec.approval.list", {});
     expect(request).not.toHaveBeenCalledWith("plugin.approval.list", {});
-    expect(request).not.toHaveBeenCalledWith("openclaw.approval.list", {});
+    expect(request).not.toHaveBeenCalledWith("natesclaw.approval.list", {});
 
     harness.emitApproval("hidden-approval", 1_000);
     expect(overlays.snapshot.approvalQueue).toEqual([]);
@@ -386,7 +386,7 @@ describe("application approval overlays", () => {
 
     expect(request).toHaveBeenCalledWith("exec.approval.list", {});
     expect(request).toHaveBeenCalledWith("plugin.approval.list", {});
-    expect(request).toHaveBeenCalledWith("openclaw.approval.list", {});
+    expect(request).toHaveBeenCalledWith("natesclaw.approval.list", {});
     overlays.dispose();
   });
 
@@ -571,7 +571,7 @@ describe("application approval overlays", () => {
     overlays.dispose();
   });
 
-  it("resolves OpenClaw changes through unified human approval", async () => {
+  it("resolves Natesclaw changes through unified human approval", async () => {
     const request = vi.fn<RequestFn>(async (method) =>
       method.endsWith(".list") ? [] : { ok: true },
     );
@@ -613,7 +613,7 @@ describe("application approval overlays", () => {
     expect(execListRequests).toBe(1);
     expect(request).toHaveBeenCalledWith("exec.approval.list", {});
     expect(request).toHaveBeenCalledWith("plugin.approval.list", {});
-    expect(request).toHaveBeenCalledWith("openclaw.approval.list", {});
+    expect(request).toHaveBeenCalledWith("natesclaw.approval.list", {});
 
     harness.update({ phase: "stopped" });
     expect(overlays.snapshot.approvalQueue).toEqual([]);

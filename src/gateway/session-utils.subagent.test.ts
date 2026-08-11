@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { canonicalSubagentRunFixtures } from "../agents/subagents/registry/subagent-registry.persistence.test-support.js";
 import type { SubagentRunFixture } from "../agents/subagents/registry/subagent-registry.persistence.test-support.js";
@@ -13,17 +13,17 @@ import {
   addSubagentRunForTests,
   resetSubagentRegistryForTests,
 } from "../agents/subagents/registry/subagent-registry.test-helpers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 import { canPrewarmCombinedSessionStoresForGateway } from "../config/sessions/combined-store-gateway.js";
 import { replaceSessionEntry } from "../config/sessions/session-accessor.js";
 import { resetAgentEventsForTest } from "../infra/agent-events.js";
 import { registerAgentRunContext } from "../infra/agent-run-registry.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  resolveIncognitoOpenClawAgentSqlitePath,
-} from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  resolveIncognitoNatesclawAgentSqlitePath,
+} from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { withStateDirEnv } from "../test-helpers/state-dir-env.js";
 import { withEnv } from "../test-utils/env.js";
 import { buildSingleRowStoreChildSessionsByKey } from "./session-utils-projection.js";
@@ -34,7 +34,7 @@ import {
 } from "./session-utils.js";
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
 });
 
 async function seedSessionEntry(
@@ -49,7 +49,7 @@ async function seedSessionEntry(
 describe("listSessionsFromStore subagent metadata", () => {
   afterEach(() => {
     resetAgentEventsForTest({ preserveListeners: true });
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     resetSubagentRegistryForTests({ persist: false });
   });
   beforeEach(() => {
@@ -60,7 +60,7 @@ describe("listSessionsFromStore subagent metadata", () => {
   const cfg = {
     session: { mainKey: "main" },
     agents: { list: [{ id: "main", default: true }] },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 
   test("searches channel-derived display names before row enrichment", () => {
     const result = listSessionsFromStore({
@@ -865,7 +865,7 @@ describe("listSessionsFromStore subagent metadata", () => {
   });
 
   test("prefers persisted terminal session state when only stale active subagent snapshots remain", () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-utils-subagent-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-session-utils-subagent-"));
     const stateDir = path.join(tempRoot, "state");
     fs.mkdirSync(stateDir, { recursive: true });
     try {
@@ -904,8 +904,8 @@ describe("listSessionsFromStore subagent metadata", () => {
 
       const row = withEnv(
         {
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_READ_SUBAGENT_RUNS_FROM_SQLITE: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_READ_SUBAGENT_RUNS_FROM_SQLITE: "1",
         },
         () => {
           saveSubagentRegistryToSqlite(canonicalSubagentRunFixtures(persistedRuns));
@@ -935,14 +935,14 @@ describe("listSessionsFromStore subagent metadata", () => {
       expect(row?.endedAt).toBe(now - 1_800);
       expect(row?.runtimeMs).toBe(100);
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
   });
 
   test("reuses one SQLite registry snapshot across sessions.list filtering and row enrichment", () => {
     const tempRoot = fs.mkdtempSync(
-      path.join(os.tmpdir(), "openclaw-session-utils-subagent-cache-"),
+      path.join(os.tmpdir(), "natesclaw-session-utils-subagent-cache-"),
     );
     const stateDir = path.join(tempRoot, "state");
     const registryPath = path.join(stateDir, "subagents", "runs.json");
@@ -995,8 +995,8 @@ describe("listSessionsFromStore subagent metadata", () => {
     try {
       const result = withEnv(
         {
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_READ_SUBAGENT_RUNS_FROM_SQLITE: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_READ_SUBAGENT_RUNS_FROM_SQLITE: "1",
         },
         () => {
           saveSubagentRegistryToSqlite(canonicalSubagentRunFixtures(persistedRuns));
@@ -1016,14 +1016,14 @@ describe("listSessionsFromStore subagent metadata", () => {
       expect(registryStatCount).toBe(0);
     } finally {
       statSpy.mockRestore();
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
   });
 
   test("does not read the subagent registry when raw filters drop every session", () => {
     const tempRoot = fs.mkdtempSync(
-      path.join(os.tmpdir(), "openclaw-session-utils-subagent-cache-empty-"),
+      path.join(os.tmpdir(), "natesclaw-session-utils-subagent-cache-empty-"),
     );
     const stateDir = path.join(tempRoot, "state");
     const registryPath = path.join(stateDir, "subagents", "runs.json");
@@ -1032,8 +1032,8 @@ describe("listSessionsFromStore subagent metadata", () => {
     try {
       const result = withEnv(
         {
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_READ_SUBAGENT_RUNS_FROM_SQLITE: "1",
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_TEST_READ_SUBAGENT_RUNS_FROM_SQLITE: "1",
         },
         () =>
           listSessionsFromStore({
@@ -1056,7 +1056,7 @@ describe("listSessionsFromStore subagent metadata", () => {
       expect(registryStatCount).toBe(0);
     } finally {
       statSpy.mockRestore();
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
   });
@@ -1390,7 +1390,7 @@ describe("listSessionsFromStore subagent metadata", () => {
 
 describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#32804)", () => {
   test("fixed stores retain a colliding unsuffixed database on the default owner", async () => {
-    await withStateDirEnv("openclaw-fixed-store-collision-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-fixed-store-collision-", async ({ stateDir }) => {
       const storePath = path.join(stateDir, "ops.json");
       const cfg = {
         session: { mainKey: "main", store: storePath },
@@ -1400,7 +1400,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
             ops: {},
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       await seedSessionEntry(
         storePath,
@@ -1428,7 +1428,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
   });
 
   test("fixed stores preserve a registered suffix while the default keeps the unsuffixed target", async () => {
-    await withStateDirEnv("openclaw-fixed-store-registered-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-fixed-store-registered-", async ({ stateDir }) => {
       const storePath = path.join(stateDir, "ops.json");
       const cfg = {
         session: { mainKey: "main", store: storePath },
@@ -1438,7 +1438,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
             ops: {},
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       await seedSessionEntry(
         storePath,
@@ -1459,7 +1459,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
   });
 
   test("fixed stores merge every configured agent's partition", async () => {
-    await withStateDirEnv("openclaw-fixed-store-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-fixed-store-", async ({ stateDir }) => {
       const storePath = path.join(stateDir, "shared-sessions.json");
       const cfg = {
         session: { mainKey: "main", store: storePath },
@@ -1469,7 +1469,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
             worker: {},
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       await seedSessionEntry(
         storePath,
@@ -1497,13 +1497,13 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
       );
       const dynamicIncognitoKey = "dashboard:incognito-dynamic";
       await seedSessionEntry(
-        resolveIncognitoOpenClawAgentSqlitePath({ agentId: "dynamic" }),
+        resolveIncognitoNatesclawAgentSqlitePath({ agentId: "dynamic" }),
         dynamicIncognitoKey,
         { incognito: true, sessionId: "s-incognito-dynamic", updatedAt: 500 },
         "dynamic",
       );
       await seedSessionEntry(
-        resolveIncognitoOpenClawAgentSqlitePath({ agentId: "ops" }),
+        resolveIncognitoNatesclawAgentSqlitePath({ agentId: "ops" }),
         "dashboard:incognito-ops",
         { incognito: true, sessionId: "s-incognito-ops", updatedAt: 600 },
         "ops",
@@ -1547,7 +1547,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
   });
 
   test("ACP agent sessions are visible even when agents.list is configured", async () => {
-    await withStateDirEnv("openclaw-acp-vis-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-acp-vis-", async ({ stateDir }) => {
       const customRoot = path.join(stateDir, "custom-state");
       const agentsDir = path.join(customRoot, "agents");
       const mainDir = path.join(agentsDir, "main", "sessions");
@@ -1572,7 +1572,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
         agents: {
           list: [{ id: "main", default: true }],
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       const { store } = loadCombinedSessionStoreForGatewayCore(cfg);
       expect(store["agent:main:main"]?.sessionId).toBe("s-main");
@@ -1581,7 +1581,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
   });
 
   test("agent-scoped loads read only matching agent stores", async () => {
-    await withStateDirEnv("openclaw-acp-scoped-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-acp-scoped-", async ({ stateDir }) => {
       const customRoot = path.join(stateDir, "custom-state");
       const agentsDir = path.join(customRoot, "agents");
       const mainDir = path.join(agentsDir, "main", "sessions");
@@ -1608,7 +1608,7 @@ describe("loadCombinedSessionStoreForGatewayCore includes disk-only agents (#328
         agents: {
           list: [{ id: "main", default: true }],
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       const { store, storePath } = loadCombinedSessionStoreForGatewayCore(cfg, {
         agentId: "codex",

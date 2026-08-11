@@ -1,10 +1,10 @@
 // Discord plugin module implements segment behavior.
 import path from "node:path";
 import { Readable } from "node:stream";
-import type { DiscordAccountConfig, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import type { DiscordAccountConfig, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { maybeControlDiscordVoiceAgentRun } from "./agent-control.js";
 import { createDiscordOpusPlaybackStream } from "./audio.js";
 import {
@@ -31,7 +31,7 @@ export async function processDiscordVoiceSegment(params: {
   wavPath: string;
   userId: string;
   durationSeconds: number;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   discordConfig: DiscordAccountConfig;
   runtime: RuntimeEnv;
   admissionAllowFrom?: string[];

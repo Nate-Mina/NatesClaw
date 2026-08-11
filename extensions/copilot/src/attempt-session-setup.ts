@@ -1,9 +1,9 @@
 import type { Tool as SdkTool } from "@github/copilot-sdk";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   resolveAgentHarnessBeforePromptBuildResult,
   runAgentHarnessLlmInputHook,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   createSessionConfig,
   createSystemMessageContent,
@@ -92,7 +92,7 @@ export async function createCopilotSessionSetup(params: {
       : undefined,
   );
   // Restricted turns may expose native ask_user only when its policy-filtered
-  // OpenClaw equivalent survived the canonical tool catalog.
+  // Natesclaw equivalent survived the canonical tool catalog.
   const includeAskUser =
     !ringZeroSystemAgentRun &&
     (attemptInput.pluginHarnessToolPolicyRestricted !== true ||

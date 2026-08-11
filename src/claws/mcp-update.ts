@@ -1,7 +1,7 @@
 import { setConfiguredMcpServer, unsetConfiguredMcpServer } from "../agents/mcp-config-mutation.js";
 import { normalizeConfiguredMcpServers } from "../config/mcp-config-normalize.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import {
   CLAW_MCP_REF_SCHEMA_VERSION,
   deleteClawMcpServerRef,
@@ -32,8 +32,8 @@ export class ClawMcpUpdateError extends Error {
 export async function applyClawMcpUpdate(
   updatePlan: ClawUpdatePlan,
   targetManifest: ClawManifest,
-  options: OpenClawStateDatabaseOptions & {
-    config: OpenClawConfig;
+  options: NatesclawStateDatabaseOptions & {
+    config: NatesclawConfig;
     sourceMcpServers: Record<string, Record<string, unknown>>;
     nowMs?: number;
     setServer?: typeof setConfiguredMcpServer;
@@ -41,7 +41,7 @@ export async function applyClawMcpUpdate(
     readRefs?: typeof readClawMcpServerRefs;
     planRemoval?: (
       ref: PersistedClawMcpServerRef,
-      options: OpenClawStateDatabaseOptions,
+      options: NatesclawStateDatabaseOptions,
     ) => { action: "remove" | "release" };
     upsertRef?: typeof upsertClawMcpServerRef;
     deleteRef?: typeof deleteClawMcpServerRef;

@@ -1,14 +1,14 @@
 ---
 summary: "Gateway runtime on macOS (external launchd service)"
 read_when:
-  - Packaging OpenClaw.app
+  - Packaging Natesclaw.app
   - Debugging the macOS gateway launchd service
   - Installing the gateway CLI for macOS
 title: "Gateway on macOS"
 ---
 
-OpenClaw.app does not bundle Node or the Gateway runtime. The macOS app
-expects an **external** `openclaw` CLI install, does not spawn the Gateway as
+Natesclaw.app does not bundle Node or the Gateway runtime. The macOS app
+expects an **external** `natesclaw` CLI install, does not spawn the Gateway as
 a child process, and manages a per-user launchd service to keep the Gateway
 running (or attaches to an already-running local Gateway).
 
@@ -16,21 +16,21 @@ running (or attaches to an already-running local Gateway).
 
 On a fresh Mac, choose **This Mac** during onboarding. The app runs its
 signed, bundled installer script before the Gateway wizard: it installs a
-user-space Node runtime and the matching `openclaw` CLI under `~/.openclaw`,
+user-space Node runtime and the matching `natesclaw` CLI under `~/.natesclaw`,
 then installs and starts the per-user launchd service. This path needs no
 Terminal, Homebrew, or administrator access.
 
 The app bundles the installer script only, not the Node or Gateway payload;
 setup needs an internet connection to download the runtime and matching
-OpenClaw package.
+Natesclaw package.
 
 ## Manual recovery
 
 For a manual install, use Node 26 (recommended) or another supported release:
-Node 22.22.3+, Node 24.15+, or Node 25.9+. Install `openclaw` globally:
+Node 22.22.3+, Node 24.15+, or Node 25.9+. Install `natesclaw` globally:
 
 ```bash
-npm install -g openclaw@<version>
+npm install -g natesclaw@<version>
 ```
 
 Use **Retry setup** after a failed automatic setup. If that still fails,
@@ -39,19 +39,19 @@ in onboarding.
 
 ## Launchd (Gateway as LaunchAgent)
 
-Label: `ai.openclaw.gateway` (default profile), or `ai.openclaw.<profile>`
+Label: `ai.natesclaw.gateway` (default profile), or `ai.natesclaw.<profile>`
 for a named profile.
 
-Plist location (per-user): `~/Library/LaunchAgents/ai.openclaw.gateway.plist`
-(or `ai.openclaw.<profile>.plist`).
+Plist location (per-user): `~/Library/LaunchAgents/ai.natesclaw.gateway.plist`
+(or `ai.natesclaw.<profile>.plist`).
 
 The macOS app owns LaunchAgent install/update for the default profile in
-Local mode. The CLI can also install it directly: `openclaw gateway install`
-(named profiles are selected via the `OPENCLAW_PROFILE` env var).
+Local mode. The CLI can also install it directly: `natesclaw gateway install`
+(named profiles are selected via the `NATESCLAW_PROFILE` env var).
 
 Behavior:
 
-- "OpenClaw Active" enables/disables the LaunchAgent.
+- "Natesclaw Active" enables/disables the LaunchAgent.
 - Quitting the app does **not** stop the Gateway (launchd keeps it alive).
 - If a Gateway is already running on the configured port, the app attaches to
   it instead of starting a new one.
@@ -59,8 +59,8 @@ Behavior:
 Use the CLI for lifecycle checks and recovery:
 
 ```bash
-openclaw gateway status --deep
-openclaw gateway restart
+natesclaw gateway status --deep
+natesclaw gateway restart
 ```
 
 Launchd provides auto-start at login, crash restarts, and one predictable log
@@ -76,16 +76,16 @@ scripts/restart-mac.sh --attach-only
 ```
 
 Launching the app directly with `--attach-only` or `--no-launchd` has the same
-effect. The override persists in `~/.openclaw/disable-launchagent`; remove that
+effect. The override persists in `~/.natesclaw/disable-launchagent`; remove that
 file to restore app-managed launchd behavior.
 
 Logging:
 
-- launchd stdout: `~/Library/Logs/openclaw/gateway.log` (profiles use
+- launchd stdout: `~/Library/Logs/natesclaw/gateway.log` (profiles use
   `gateway-<profile>.log`)
 - launchd stderr: suppressed
 - If the host loops with repeated `EADDRINUSE` or fast restarts, check for
-  duplicate `ai.openclaw.gateway` / `ai.openclaw.node` LaunchAgents and the
+  duplicate `ai.natesclaw.gateway` / `ai.natesclaw.node` LaunchAgents and the
   launchd-marker workaround in
   [Gateway troubleshooting](/gateway/troubleshooting#macos-launchd-supervisor-loop-with-duplicate-gatewaynode-launchagents).
 
@@ -98,12 +98,12 @@ after repairing an external CLI.
 
 ## State directory on macOS
 
-Keep OpenClaw state on a local, non-synced disk. Avoid iCloud Drive and other
+Keep Natesclaw state on a local, non-synced disk. Avoid iCloud Drive and other
 cloud-synced folders; sync latency and file locks can affect sessions,
 credentials, and Gateway state.
 
-Set `OPENCLAW_STATE_DIR` to a local path only when you need an override.
-`openclaw doctor` warns about common cloud-synced state paths and recommends
+Set `NATESCLAW_STATE_DIR` to a local path only when you need an override.
+`natesclaw doctor` warns about common cloud-synced state paths and recommends
 moving back to local storage. See
 [environment variables](/help/environment#path-related-env-vars) and
 [Doctor](/gateway/doctor).
@@ -115,30 +115,30 @@ WebSocket handshake and discovery logic the app uses:
 
 ```bash
 cd apps/macos
-swift run openclaw-mac connect --json
-swift run openclaw-mac discover --timeout 3000 --json
+swift run natesclaw-mac connect --json
+swift run natesclaw-mac discover --timeout 3000 --json
 ```
 
 `connect` accepts `--url`, `--token`, `--timeout`, `--probe`, and `--json`
 (plus client-identity overrides; run with `--help` for the full list).
 `discover` accepts `--timeout`, `--json`, and `--include-local`. Compare
-discovery output with `openclaw gateway discover --json` when you need to
+discovery output with `natesclaw gateway discover --json` when you need to
 separate CLI discovery from app-side connection issues.
 
 ## Smoke check
 
 ```bash
-openclaw --version
+natesclaw --version
 
-OPENCLAW_SKIP_CHANNELS=1 \
-OPENCLAW_SKIP_CANVAS_HOST=1 \
-openclaw gateway --port 18999 --bind loopback
+NATESCLAW_SKIP_CHANNELS=1 \
+NATESCLAW_SKIP_CANVAS_HOST=1 \
+natesclaw gateway --port 18999 --bind loopback
 ```
 
 Then:
 
 ```bash
-openclaw gateway call health --port 18999 --timeout 3000
+natesclaw gateway call health --port 18999 --timeout 3000
 ```
 
 ## Related

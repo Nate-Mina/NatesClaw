@@ -2,10 +2,10 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { afterEach, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { loadEnabledBundleMcpConfig } from "../plugins/bundle-mcp.js";
 import { clearPluginMetadataLifecycleCaches } from "../plugins/plugin-metadata-lifecycle.js";
 import { getPluginToolMeta } from "../plugins/tools.js";
@@ -108,7 +108,7 @@ process.on("SIGINT", shutdown);
 
 it("discovers an installed Agent Plugins bundle and executes its real stdio tool", async () => {
   const stateDir = await fs.realpath(
-    await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-agent-bundle-runtime-")),
+    await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-agent-bundle-runtime-")),
   );
   tempDirs.push(stateDir);
   const pluginId = "agent-bundle-probe";
@@ -141,16 +141,16 @@ it("discovers an installed Agent Plugins bundle and executes its real stdio tool
     "utf8",
   );
 
-  const cfg: OpenClawConfig = {
+  const cfg: NatesclawConfig = {
     plugins: { entries: { [pluginId]: { enabled: true } } },
   };
   await withEnvAsync(
     {
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_HOME: undefined,
-      OPENCLAW_CONFIG_PATH: undefined,
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_HOME: undefined,
+      NATESCLAW_CONFIG_PATH: undefined,
+      NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      NATESCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
     },
     async () => {
       clearPluginMetadataLifecycleCaches();

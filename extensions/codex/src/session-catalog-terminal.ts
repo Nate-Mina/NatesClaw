@@ -1,17 +1,17 @@
 // Codex catalog terminal ownership: validated resume commands and terminal plans.
-import { resolveDefaultAgentDir } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { resolveDefaultAgentDir } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   decodeNodePtyResumeParams,
   resolveNodeHostExecutable,
   runNodePtyCommand,
-} from "openclaw/plugin-sdk/node-host";
+} from "natesclaw/plugin-sdk/node-host";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import type { SessionCatalogTerminalPlan } from "openclaw/plugin-sdk/session-catalog";
+  NatesclawPluginApi,
+  NatesclawPluginNodeHostCommand,
+} from "natesclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
+import type { SessionCatalogTerminalPlan } from "natesclaw/plugin-sdk/session-catalog";
 import { resolveCodexAppServerLocalHomeDir } from "./app-server/auth-start-options.js";
 import { resolveCodexSupervisionAppServerRuntimeOptions } from "./app-server/config.js";
 import {
@@ -35,13 +35,13 @@ export const CODEX_TERMINAL_RESUME_COMMAND = "codex.terminal.resume.v1";
 
 export type CodexTerminalConfigSources = {
   getPluginConfig: () => unknown;
-  getRuntimeConfig: () => OpenClawConfig | undefined;
+  getRuntimeConfig: () => NatesclawConfig | undefined;
 };
 
 function resolveCodexCatalogTerminalHome(sources: CodexTerminalConfigSources): string {
   const runtimeConfig = sources.getRuntimeConfig();
   if (!runtimeConfig) {
-    throw new Error("OpenClaw runtime config is unavailable");
+    throw new Error("Natesclaw runtime config is unavailable");
   }
   const startOptions = resolveCodexSupervisionAppServerRuntimeOptions({
     pluginConfig: sources.getPluginConfig(),
@@ -127,7 +127,7 @@ async function findCatalogEligibleThread(
 export function createCodexTerminalNodeHostCommand(
   control: CodexSessionCatalogControl,
   configSources: CodexTerminalConfigSources,
-): OpenClawPluginNodeHostCommand {
+): NatesclawPluginNodeHostCommand {
   return {
     command: CODEX_TERMINAL_RESUME_COMMAND,
     cap: CODEX_APP_SERVER_THREADS_CAPABILITY,
@@ -219,7 +219,7 @@ async function resolveNodeCatalogEligibleThread(params: {
 
 export async function openCodexCatalogTerminal(
   params: {
-    api: OpenClawPluginApi;
+    api: NatesclawPluginApi;
     control: CodexSessionCatalogControl;
     hostId: string;
     threadId: string;

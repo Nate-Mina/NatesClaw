@@ -10,7 +10,7 @@ function cardBoardId(card: WorkboardCard): string {
   return card.metadata?.automation?.boardId ?? "default";
 }
 
-class OpenClawWorkboardMiniWidget extends WorkboardWidgetElement {
+class NatesclawWorkboardMiniWidget extends WorkboardWidgetElement {
   override render(): TemplateResult {
     if (this.loading && !this.loaded) {
       return html`<p class="workboard-widget__state">${t("workboard.widget.loading")}</p>`;
@@ -78,8 +78,8 @@ class OpenClawWorkboardMiniWidget extends WorkboardWidgetElement {
   }
 }
 
-if (!customElements.get("openclaw-workboard-mini-widget")) {
-  customElements.define("openclaw-workboard-mini-widget", OpenClawWorkboardMiniWidget);
+if (!customElements.get("natesclaw-workboard-mini-widget")) {
+  customElements.define("natesclaw-workboard-mini-widget", NatesclawWorkboardMiniWidget);
 }
 
 export const renderWorkboardMiniWidget: PluginBoardWidgetRenderer = ({
@@ -93,16 +93,16 @@ export const renderWorkboardMiniWidget: PluginBoardWidgetRenderer = ({
   active: boolean;
   requestUpdate: () => void;
 }) => html`
-  <openclaw-workboard-mini-widget
+  <natesclaw-workboard-mini-widget
     .widget=${widget}
     .sessionKey=${sessionKey}
     .active=${active}
     .hostRequestUpdate=${requestUpdate}
-  ></openclaw-workboard-mini-widget>
+  ></natesclaw-workboard-mini-widget>
 `;
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-workboard-mini-widget": OpenClawWorkboardMiniWidget;
+    "natesclaw-workboard-mini-widget": NatesclawWorkboardMiniWidget;
   }
 }

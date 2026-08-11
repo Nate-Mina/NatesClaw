@@ -80,13 +80,13 @@ function createPairingShell(params: {
     sessions: { state: { result: null } },
     theme: { mode: "system" },
   } as unknown as ApplicationContext;
-  const shell = document.createElement("openclaw-app-shell") as PairingShell;
+  const shell = document.createElement("natesclaw-app-shell") as PairingShell;
   shell.runtime = { context, router: {} } as ApplicationRuntime;
   const container = document.createElement("div");
 
   const renderSidebar = () => {
     render(shell.render(), container);
-    const sidebar = container.querySelector<PairingSidebar>("openclaw-app-sidebar");
+    const sidebar = container.querySelector<PairingSidebar>("natesclaw-app-sidebar");
     if (!sidebar) {
       throw new Error("Expected the application shell to render its navigation sidebar");
     }

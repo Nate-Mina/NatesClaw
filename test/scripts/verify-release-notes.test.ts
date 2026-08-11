@@ -29,10 +29,10 @@ import {
   subtractShippedPullRequests,
   validateReleaseProvenanceOverrides,
   withoutExcludedContributionRecords,
-} from "../../.agents/skills/openclaw-changelog-update/scripts/verify-release-notes.mjs";
+} from "../../.agents/skills/natesclaw-changelog-update/scripts/verify-release-notes.mjs";
 
 const verifier = resolve(
-  ".agents/skills/openclaw-changelog-update/scripts/verify-release-notes.mjs",
+  ".agents/skills/natesclaw-changelog-update/scripts/verify-release-notes.mjs",
 );
 
 function git(cwd: string, args: string[]): string {
@@ -41,10 +41,10 @@ function git(cwd: string, args: string[]): string {
     encoding: "utf8",
     env: {
       ...process.env,
-      GIT_AUTHOR_NAME: "OpenClaw Test",
-      GIT_AUTHOR_EMAIL: "test@openclaw.invalid",
-      GIT_COMMITTER_NAME: "OpenClaw Test",
-      GIT_COMMITTER_EMAIL: "test@openclaw.invalid",
+      GIT_AUTHOR_NAME: "Natesclaw Test",
+      GIT_AUTHOR_EMAIL: "test@natesclaw.invalid",
+      GIT_COMMITTER_NAME: "Natesclaw Test",
+      GIT_COMMITTER_EMAIL: "test@natesclaw.invalid",
     },
   }).trim();
 }
@@ -206,11 +206,11 @@ describe("release-note verification", () => {
   });
 
   it("stores default GitHub snapshots in the shared Git common directory", () => {
-    const commonDir = resolve("/tmp/openclaw-shared-git");
+    const commonDir = resolve("/tmp/natesclaw-shared-git");
     expect(defaultGithubSnapshotPath("a".repeat(40), "b".repeat(40), commonDir)).toBe(
       join(
         commonDir,
-        "openclaw-release-cache",
+        "natesclaw-release-cache",
         `verify-release-notes-${"a".repeat(40)}-${"b".repeat(40)}.json`,
       ),
     );
@@ -516,7 +516,7 @@ describe("release-note verification", () => {
   });
 
   it("reuses exact-range GitHub GraphQL snapshots without caching REST reads", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-snapshot-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-snapshot-"));
     try {
       const filePath = join(cwd, "snapshot.json");
       let fetches = 0;
@@ -537,10 +537,10 @@ describe("release-note verification", () => {
         },
       });
       expect(
-        githubApiWithSnapshot(["repos/openclaw/openclaw/releases/tags/v1"], fetchApi, first),
+        githubApiWithSnapshot(["repos/natesclaw/natesclaw/releases/tags/v1"], fetchApi, first),
       ).toEqual({
         data: {
-          request: ["repos/openclaw/openclaw/releases/tags/v1"],
+          request: ["repos/natesclaw/natesclaw/releases/tags/v1"],
           fetches: 2,
         },
       });
@@ -566,7 +566,7 @@ describe("release-note verification", () => {
   });
 
   it("checkpoints successful GraphQL responses during long verification runs", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-snapshot-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-snapshot-"));
     try {
       const filePath = join(cwd, "snapshot.json");
       const state = createGithubSnapshotState({
@@ -593,7 +593,7 @@ describe("release-note verification", () => {
   });
 
   it("does not cache transient GraphQL errors", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-snapshot-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-snapshot-"));
     try {
       const filePath = join(cwd, "snapshot.json");
       const state = createGithubSnapshotState({
@@ -626,7 +626,7 @@ describe("release-note verification", () => {
   });
 
   it("rejects a snapshot bound to a different release target", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-snapshot-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-snapshot-"));
     try {
       const filePath = join(cwd, "snapshot.json");
       const state = createGithubSnapshotState({
@@ -868,7 +868,7 @@ describe("release-note verification", () => {
   });
 
   it("records a canonical target SHA when --target is symbolic", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-"));
     try {
       git(cwd, ["init", "-q"]);
       writeFileSync(
@@ -925,7 +925,7 @@ describe("release-note verification", () => {
   });
 
   it("accepts a release-only base that shares history with canonical main", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-"));
     try {
       git(cwd, ["init", "-q"]);
       writeFileSync(
@@ -988,7 +988,7 @@ describe("release-note verification", () => {
   });
 
   it("leaves CHANGELOG.md untouched when the rendered ledger fails validation", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-"));
     try {
       git(cwd, ["init", "-q"]);
       const changelog = [
@@ -1047,7 +1047,7 @@ describe("release-note verification", () => {
   });
 
   it("rejects a release base that is not an ancestor of the target", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "openclaw-release-notes-"));
+    const cwd = mkdtempSync(join(tmpdir(), "natesclaw-release-notes-"));
     try {
       git(cwd, ["init", "-q"]);
       writeFileSync(

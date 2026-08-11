@@ -1,13 +1,13 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 // Slack tests cover media plugin behavior.
 import type { WebClient } from "@slack/web-api";
-import type { FetchLike, SavedMedia } from "openclaw/plugin-sdk/media-runtime";
+import type { FetchLike, SavedMedia } from "natesclaw/plugin-sdk/media-runtime";
 import {
   fetchWithSsrFGuard,
   type LookupFn,
   type SsrFPolicy,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   resolveSlackAttachmentContent,

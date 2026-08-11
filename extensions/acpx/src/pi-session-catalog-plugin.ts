@@ -1,15 +1,15 @@
 import {
   createLazyRuntimeModule,
   createLazyRuntimeSurface,
-} from "openclaw/plugin-sdk/lazy-runtime";
-import { resolveNodeHostExecutable } from "openclaw/plugin-sdk/node-host";
+} from "natesclaw/plugin-sdk/lazy-runtime";
+import { resolveNodeHostExecutable } from "natesclaw/plugin-sdk/node-host";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { SessionCatalogProvider } from "openclaw/plugin-sdk/session-catalog";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+  NatesclawPluginApi,
+  NatesclawPluginNodeHostCommand,
+  NatesclawPluginNodeInvokePolicy,
+} from "natesclaw/plugin-sdk/plugin-entry";
+import type { SessionCatalogProvider } from "natesclaw/plugin-sdk/session-catalog";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   PI_SESSIONS_LIST_COMMAND,
   PI_SESSION_READ_COMMAND,
@@ -41,7 +41,7 @@ function isPiSessionCatalogEnabled(pluginConfig: unknown): boolean {
   );
 }
 
-function createPiSessionNodeHostCommands(): OpenClawPluginNodeHostCommand[] {
+function createPiSessionNodeHostCommands(): NatesclawPluginNodeHostCommand[] {
   const storeAvailable = ({ config, env }: { config: unknown; env: NodeJS.ProcessEnv }) =>
     fullConfigCatalogEnabled(config) && piSessionStoreAvailable(env);
   return [
@@ -81,7 +81,7 @@ function createPiSessionNodeHostCommands(): OpenClawPluginNodeHostCommand[] {
   ];
 }
 
-function createPiSessionNodeInvokePolicies(): OpenClawPluginNodeInvokePolicy[] {
+function createPiSessionNodeInvokePolicies(): NatesclawPluginNodeInvokePolicy[] {
   return [
     {
       commands: [PI_SESSIONS_LIST_COMMAND, PI_SESSION_READ_COMMAND, PI_TERMINAL_RESUME_COMMAND],
@@ -92,7 +92,7 @@ function createPiSessionNodeInvokePolicies(): OpenClawPluginNodeInvokePolicy[] {
   ];
 }
 
-export function registerPiSessionCatalog(api: OpenClawPluginApi): void {
+export function registerPiSessionCatalog(api: NatesclawPluginApi): void {
   if (!isPiSessionCatalogEnabled(api.pluginConfig)) {
     return;
   }

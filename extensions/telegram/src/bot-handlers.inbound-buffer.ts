@@ -1,12 +1,12 @@
 import type { Message } from "grammy/types";
-import { shouldDebounceTextInbound } from "openclaw/plugin-sdk/channel-inbound";
+import { shouldDebounceTextInbound } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createInboundDebouncer,
   resolveInboundDebounceMs,
-} from "openclaw/plugin-sdk/channel-inbound-debounce";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/keyed-async-queue";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/channel-inbound-debounce";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { KeyedAsyncQueue } from "natesclaw/plugin-sdk/keyed-async-queue";
+import { danger, logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import type { TelegramMessagePipeline } from "./bot-handlers.message-pipeline.js";
 import type { RegisterTelegramHandlerParams } from "./bot-handlers.types.js";
 import type { TelegramMediaRef } from "./bot-message-context.js";

@@ -1,26 +1,26 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
 import type {
-  OpenClawConfig,
+  NatesclawConfig,
   ProviderRuntimeModel,
   ProviderWrapStreamFnContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import {
   DEFAULT_CONTEXT_TOKENS,
   normalizeProviderId,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   createMoonshotThinkingWrapper,
   createPayloadPatchStreamWrapper,
   resolveMoonshotThinkingType,
-} from "openclaw/plugin-sdk/provider-stream-shared";
-import { isLoopbackHost } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/provider-stream-shared";
+import { isLoopbackHost } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { shouldWrapOllamaCompatMoonshotThinking } from "./model-behavior.js";
 import { supportsOllamaCloudFullThinkingEffort } from "./model-reasoning.js";
 
 export type OllamaThinkValue = boolean | "low" | "medium" | "high" | "max";
 
 export function resolveConfiguredOllamaProviderConfig(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   providerId?: string;
 }) {
   const providerId = params.providerId?.trim();
@@ -74,7 +74,7 @@ export function isOllamaCompatProvider(model: {
 }
 
 export function resolveOllamaCompatNumCtxEnabled(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   providerId?: string;
 }): boolean {
   return resolveConfiguredOllamaProviderConfig(params)?.injectNumCtxForOpenAICompat ?? true;
@@ -82,7 +82,7 @@ export function resolveOllamaCompatNumCtxEnabled(params: {
 
 export function shouldInjectOllamaCompatNumCtx(params: {
   model: { api?: string; provider?: string; baseUrl?: string };
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   providerId?: string;
 }): boolean {
   if (params.model.api !== "openai-completions") {
@@ -137,7 +137,7 @@ function normalizeOllamaThinkValue(
     return "low";
   }
   if (value === "xhigh" || value === "adaptive") {
-    // These OpenClaw-only tiers are not advertised by Ollama; keep their established high mapping.
+    // These Natesclaw-only tiers are not advertised by Ollama; keep their established high mapping.
     return "high";
   }
   return undefined;

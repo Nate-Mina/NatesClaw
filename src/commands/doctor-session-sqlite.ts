@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { tryResolveDefaultAgentId } from "../agents/agent-scope.js";
 import { getRuntimeConfig } from "../config/config.js";
 import { resolveStateDir } from "../config/paths.js";
@@ -17,13 +17,13 @@ import {
   type SessionStoreTarget,
 } from "../config/sessions/targets.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveStoredSessionOwnerAgentId } from "../gateway/session-store-key.js";
 import { readFileDescriptorBoundedSync } from "../infra/boundary-file-read.js";
 import { resolveSqliteDatabaseFilePaths } from "../infra/sqlite-files.js";
 import { normalizeLegacySessionEntryDelivery as normalizeSessionEntryDelivery } from "../infra/state-migrations.legacy-session-store.js";
 import { LEGACY_IMPLICIT_AGENT_ID, normalizeAgentId } from "../routing/session-key.js";
-import { closeOpenClawAgentDatabaseByPath } from "../state/openclaw-agent-db.js";
+import { closeNatesclawAgentDatabaseByPath } from "../state/natesclaw-agent-db.js";
 import { compactDoctorSessionSqliteTarget } from "./doctor-session-sqlite-compact.js";
 import {
   assertSafeSessionSqliteMigrationDirectory,
@@ -217,7 +217,7 @@ function commonPathAncestor(leftPath: string, rightPath: string): string {
 }
 
 // Direct store migrations are scoped by path; broader agent discovery needs runtime config.
-function resolveDoctorSessionSqliteConfig(options: DoctorSessionSqliteOptions): OpenClawConfig {
+function resolveDoctorSessionSqliteConfig(options: DoctorSessionSqliteOptions): NatesclawConfig {
   if (options.cfg) {
     return options.cfg;
   }
@@ -230,7 +230,7 @@ function resolveDoctorSessionSqliteConfig(options: DoctorSessionSqliteOptions): 
 function resolveDoctorSessionSqliteTargets(params: {
   allAgents?: boolean;
   agent?: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   mode: DoctorSessionSqliteMode;
   store?: string;
@@ -281,7 +281,7 @@ function filterLegacySessionStoreTargets(
 async function inspectOrMigrateTarget(params: {
   activeRun?: ActiveSessionSqliteMigrationRun;
   archiveImportedArtifacts?: boolean;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   mode: Exclude<DoctorSessionSqliteMode, "restore" | "recover">;
   target: SessionStoreTarget;
@@ -378,7 +378,7 @@ async function inspectOrMigrateTarget(params: {
 }
 
 function resolveFullyCoveredLegacyStorePaths(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   targets: readonly SessionStoreTarget[],
 ): Set<string> {
   const covered = new Set<string>();
@@ -503,7 +503,7 @@ function readLegacySessionRecords(
 }
 
 function isLegacySessionRecordOwnedByTarget(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   target: SessionStoreTarget,
   sessionKey: string,
 ): boolean {
@@ -1125,7 +1125,7 @@ function compactSqliteDatabase(
 ): void {
   try {
     if (options.closeImportedHandle) {
-      closeOpenClawAgentDatabaseByPath(resolveTargetSqlitePath(target));
+      closeNatesclawAgentDatabaseByPath(resolveTargetSqlitePath(target));
     }
     report.compact = options.migrateOlderSchema
       ? compactDoctorSessionSqliteTarget(target, {

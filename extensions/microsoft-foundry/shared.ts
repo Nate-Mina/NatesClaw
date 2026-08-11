@@ -1,22 +1,22 @@
 // Microsoft Foundry plugin module implements shared behavior.
-import type { AuthConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { AuthConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   applyAuthProfileConfig,
   buildApiKeyCredential,
   type ProviderAuthResult,
   type SecretInput,
-} from "openclaw/plugin-sdk/provider-auth";
+} from "natesclaw/plugin-sdk/provider-auth";
 import {
   resolveClaudeFable5ModelIdentity,
   supportsClaudeAdaptiveThinking,
   supportsClaudeNativeXhighEffort,
   type ModelApi,
   type ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export const PROVIDER_ID = "microsoft-foundry";
 export const DEFAULT_API = "openai-completions";
@@ -296,7 +296,7 @@ function supportsFoundryReasoningEffort(value?: string | null): boolean {
 }
 
 if (process.env.VITEST === "true") {
-  const key = Symbol.for("openclaw.microsoftFoundryTestApi");
+  const key = Symbol.for("natesclaw.microsoftFoundryTestApi");
   const api = (Reflect.get(globalThis, key) as Record<string, unknown> | undefined) ?? {};
   Reflect.set(globalThis, key, {
     ...api,

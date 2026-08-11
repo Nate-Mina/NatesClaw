@@ -1,28 +1,28 @@
 import type { DatabaseSync } from "node:sqlite";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { Selectable } from "kysely";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import type { TranscriptSessionDescriptor, TranscriptUtterance } from "./provider-types.js";
 import type { TranscriptsSummary } from "./summary.js";
 
 type MeetingTranscriptsDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "meeting_transcript_sessions" | "meeting_transcript_summaries" | "meeting_transcript_utterances"
 >;
 
 export type MeetingTranscriptSessionRow = Selectable<
-  OpenClawStateKyselyDatabase["meeting_transcript_sessions"]
+  NatesclawStateKyselyDatabase["meeting_transcript_sessions"]
 >;
 type MeetingTranscriptSummaryRow = Selectable<
-  OpenClawStateKyselyDatabase["meeting_transcript_summaries"]
+  NatesclawStateKyselyDatabase["meeting_transcript_summaries"]
 >;
 type MeetingTranscriptUtteranceRow = Selectable<
-  OpenClawStateKyselyDatabase["meeting_transcript_utterances"]
+  NatesclawStateKyselyDatabase["meeting_transcript_utterances"]
 >;
 
 export function meetingTranscriptDb(db: DatabaseSync) {

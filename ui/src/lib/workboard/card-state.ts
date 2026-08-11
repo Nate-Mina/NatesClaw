@@ -1,4 +1,4 @@
-import { normalizeNullableString as normalizeString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeNullableString as normalizeString } from "@natesclaw/normalization-core/string-coerce";
 import type { GatewaySessionRow } from "../../api/types.ts";
 import type {
   WorkboardCard,

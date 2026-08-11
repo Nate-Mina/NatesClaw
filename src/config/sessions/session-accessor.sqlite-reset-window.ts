@@ -5,14 +5,14 @@ import {
   getNodeSqliteKysely,
 } from "../../infra/kysely-sync.js";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import type { TranscriptEvent } from "./session-accessor.sqlite-contract.js";
 import { resolveSqliteTranscriptReadScope } from "./session-accessor.sqlite-scope.js";
 import type { SessionTranscriptProjectionState } from "./session-transcript-index.js";
 
 type ResetWindowDatabase = Pick<
-  OpenClawAgentKyselyDatabase,
+  NatesclawAgentKyselyDatabase,
   | "session_transcript_active_events"
   | "transcript_rewrite_watermarks"
   | "transcript_event_identities"
@@ -20,7 +20,7 @@ type ResetWindowDatabase = Pick<
 >;
 
 type ResetWindowProjection = {
-  database: OpenClawAgentDatabase;
+  database: NatesclawAgentDatabase;
   resolved: ReturnType<typeof resolveSqliteTranscriptReadScope>;
   state: SessionTranscriptProjectionState;
 };
@@ -52,7 +52,7 @@ type ResetMessageWindowCacheEntry = {
 const resetMessageWindowCache = new Map<string, ResetMessageWindowCacheEntry>();
 const MAX_RESET_MESSAGE_WINDOW_CACHE = 64;
 
-function getResetWindowKysely(database: OpenClawAgentDatabase) {
+function getResetWindowKysely(database: NatesclawAgentDatabase) {
   return getNodeSqliteKysely<ResetWindowDatabase>(database.db);
 }
 

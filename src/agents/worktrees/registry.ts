@@ -1,15 +1,15 @@
 import type { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { Insertable, Selectable } from "kysely";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
 import { isLockOwnerDefinitelyStale } from "../../infra/stale-lock-file.js";
-import { withExistingOpenClawStateDatabaseReadOnly } from "../../state/openclaw-state-db-readonly.js";
-import { tableExists } from "../../state/openclaw-state-db-schema-helpers.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import { withExistingNatesclawStateDatabaseReadOnly } from "../../state/natesclaw-state-db-readonly.js";
+import { tableExists } from "../../state/natesclaw-state-db-schema-helpers.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../../state/natesclaw-state-db.js";
 import type {
   ManagedWorktreeOwnerKind,
   ManagedWorktreeRecord,
@@ -17,17 +17,17 @@ import type {
   ProvisionedFileState,
 } from "./types.js";
 
-type WorktreesTable = OpenClawStateKyselyDatabase["worktrees"];
+type WorktreesTable = NatesclawStateKyselyDatabase["worktrees"];
 type WorktreeRow = Selectable<WorktreesTable>;
-type WorktreeRegistryDatabase = Pick<OpenClawStateKyselyDatabase, "worktrees">;
+type WorktreeRegistryDatabase = Pick<NatesclawStateKyselyDatabase, "worktrees">;
 type WorktreeProvisionedDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "worktree_provisioned_file_chunks"
 >;
-type WorktreeLeaseDatabase = Pick<OpenClawStateKyselyDatabase, "worktrees" | "state_leases">;
+type WorktreeLeaseDatabase = Pick<NatesclawStateKyselyDatabase, "worktrees" | "state_leases">;
 
 function dbFor(env: NodeJS.ProcessEnv): DatabaseSync {
-  return openOpenClawStateDatabase({ env }).db;
+  return openNatesclawStateDatabase({ env }).db;
 }
 
 function kyselyFor(db: DatabaseSync) {
@@ -162,7 +162,7 @@ export function listRegistryWorktrees(env: NodeJS.ProcessEnv): ManagedWorktreeRe
 
 export function listRegistryWorktreesForMigration(env: NodeJS.ProcessEnv): ManagedWorktreeRecord[] {
   return (
-    withExistingOpenClawStateDatabaseReadOnly(
+    withExistingNatesclawStateDatabaseReadOnly(
       ({ db }) => {
         if (!tableExists(db, "worktrees")) {
           return [];
@@ -216,7 +216,7 @@ export function hasLegacyRegistryWorktrees(env: NodeJS.ProcessEnv): boolean {
 
 export function discardLegacyRegistryWorktrees(env: NodeJS.ProcessEnv): number {
   const db = dbFor(env);
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     () =>
       Number(
         executeSqliteQuerySync(
@@ -240,7 +240,7 @@ export function rewriteRegistryWorktreePathsForMigration(
   const db = dbFor(env);
   // Only the state-migration owner may rewrite persisted worktree identity paths.
   // Runtime updates deliberately keep `path` outside their patch surface.
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     () =>
       rewrites.reduce(
         (count, rewrite) =>
@@ -282,7 +282,7 @@ export function clearRegistryWorktreeProvisionedChunks(
   worktreeId: string,
 ): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(() => {
+  runNatesclawStateWriteTransaction(() => {
     executeSqliteQuerySync(
       db,
       kyselyProvisionedFor(db)
@@ -302,7 +302,7 @@ export function insertRegistryWorktreeProvisionedChunk(
   },
 ): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(() => {
+  runNatesclawStateWriteTransaction(() => {
     executeSqliteQuerySync(
       db,
       kyselyProvisionedFor(db).insertInto("worktree_provisioned_file_chunks").values({
@@ -384,7 +384,7 @@ export function insertRegistryWorktree(
   options: { provisionedPaths?: readonly string[] } = {},
 ): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(() => {
+  runNatesclawStateWriteTransaction(() => {
     executeSqliteQuerySync(
       db,
       kyselyFor(db).insertInto("worktrees").values(recordToRow(record, options.provisionedPaths)),
@@ -423,7 +423,7 @@ export function updateRegistryWorktree(
   } else if (patch.provisionedPaths !== undefined) {
     values.provisioned_paths_json = JSON.stringify(patch.provisionedPaths);
   }
-  runOpenClawStateWriteTransaction(() => {
+  runNatesclawStateWriteTransaction(() => {
     let update = kyselyFor(db).updateTable("worktrees").set(values).where("id", "=", id);
     // Busy/retained/failed outcomes are authoritative only for the lifecycle the
     // writer observed: the live condition blocks post-finalization overwrites, and
@@ -441,7 +441,7 @@ export function updateRegistryWorktree(
 
 export function deleteRegistryWorktree(env: NodeJS.ProcessEnv, id: string): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(() => {
+  runNatesclawStateWriteTransaction(() => {
     executeSqliteQuerySync(
       db,
       kyselyProvisionedFor(db)
@@ -553,7 +553,7 @@ export function admitWorktreeRunLeaseRow(
     checks?: RunLeaseOwnerChecks;
   },
 ): void {
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     (database) => {
       const db = database.db;
       const k = kyselyLeaseFor(db);
@@ -606,7 +606,7 @@ export function claimWorktreeRemovalRow(
     checks?: RunLeaseOwnerChecks;
   },
 ): void {
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     (database) => {
       const db = database.db;
       const k = kyselyLeaseFor(db);
@@ -673,7 +673,7 @@ export function releaseWorktreeRunLeaseRow(
   token: string,
 ): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     () => {
       executeSqliteQuerySync(
         db,
@@ -689,7 +689,7 @@ export function releaseWorktreeRunLeaseRow(
 
 export function finalizeWorktreeRemovalRows(env: NodeJS.ProcessEnv, worktreeId: string): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     () => {
       executeSqliteQuerySync(
         db,
@@ -708,7 +708,7 @@ export function abortWorktreeRemovalRow(
   token: string,
 ): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     () => {
       // Owner-scoped: only the claim that still owns the marker may clear it, so a slow
       // remover cannot delete a marker a newer remover established after replacing it.
@@ -730,7 +730,7 @@ export function hasLiveWorktreeRunLeaseRow(
   worktreeId: string,
   checks?: RunLeaseOwnerChecks,
 ): boolean {
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     (database) => {
       const db = database.db;
       const k = kyselyLeaseFor(db);

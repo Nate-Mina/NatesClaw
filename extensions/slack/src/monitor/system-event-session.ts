@@ -1,9 +1,9 @@
 // Slack plugin module owns session routing for non-message events.
-import { resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig, SessionScope } from "openclaw/plugin-sdk/config-contracts";
-import { resolveRuntimeConversationBindingRoute } from "openclaw/plugin-sdk/conversation-runtime";
-import { resolveAgentRoute, resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig, SessionScope } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveRuntimeConversationBindingRoute } from "natesclaw/plugin-sdk/conversation-runtime";
+import { resolveAgentRoute, resolveThreadSessionKeys } from "natesclaw/plugin-sdk/routing";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { SlackMessageEvent } from "../types.js";
 import { normalizeSlackChannelType } from "./channel-type.js";
 import { resolveSessionKey } from "./config.runtime.js";
@@ -23,7 +23,7 @@ type SlackSystemEventSessionKeyParams = {
 };
 
 export function createSlackSystemEventSessionKeyResolver(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   getTeamId: () => string;
   mainKey: string;
@@ -95,7 +95,7 @@ export function createSlackSystemEventSessionKeyResolver(params: {
 }
 
 function resolveSlackSystemEventRouteSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   teamId: string;
   threadInheritParent: boolean;

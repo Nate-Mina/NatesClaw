@@ -1,5 +1,5 @@
 // Xai API module exposes the plugin public contract.
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalLowercaseString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   applyXaiModelCompat,
   HTML_ENTITY_TOOL_CALL_ARGUMENTS_ENCODING,

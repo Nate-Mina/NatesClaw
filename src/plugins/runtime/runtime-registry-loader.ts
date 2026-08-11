@@ -1,5 +1,5 @@
 // Runtime registry loader assembles process-root plugin runtimes from config metadata.
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { withActivatedPluginIds } from "../activation-context.js";
 import {
   resolveChannelPluginIds,
@@ -9,7 +9,7 @@ import { normalizePluginsConfig } from "../config-state.js";
 import { resolveEffectivePluginIds } from "../effective-plugin-ids.js";
 import { collectConfiguredMemoryEmbeddingProviderIds } from "../gateway-startup-plugin-ids.js";
 import { createInstalledPluginIndexScopeLookup } from "../installed-plugin-index-scope-lookup.js";
-import { loadOpenClawPlugins } from "../loader.js";
+import { loadNatesclawPlugins } from "../loader.js";
 import { hasNonEmptyPluginIdScope } from "../plugin-scope.js";
 import {
   buildPluginRuntimeLoadOptionsFromValues,
@@ -74,8 +74,8 @@ function resolveScopePluginIds(params: {
 
 export function ensurePluginRegistryLoaded(options?: {
   scope?: PluginRegistryScope;
-  config?: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  config?: NatesclawConfig;
+  activationSourceConfig?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
 }): void {
@@ -92,7 +92,7 @@ export function ensurePluginRegistryLoaded(options?: {
         pluginIds,
       }) ?? context.activationSourceConfig)
     : context.activationSourceConfig;
-  loadOpenClawPlugins(
+  loadNatesclawPlugins(
     buildPluginRuntimeLoadOptionsFromValues(
       { ...context, config, activationSourceConfig },
       {

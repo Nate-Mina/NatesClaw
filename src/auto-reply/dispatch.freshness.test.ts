@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../test/helpers/promise.js";
 import { createChannelPartialDeliveryError } from "../channels/turn/delivery-result.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { OutboundDeliveryError } from "../infra/outbound/deliver-types.js";
 import { resetGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import { getReplyPayloadMetadata } from "./reply-payload.js";
@@ -68,7 +68,7 @@ function dispatchWithDeliveries(
 ) {
   return dispatchInboundMessageWithBufferedDispatcher({
     ctx,
-    cfg: {} as OpenClawConfig,
+    cfg: {} as NatesclawConfig,
     dispatcherOptions: {
       ...dispatcherOptions,
       deliver:

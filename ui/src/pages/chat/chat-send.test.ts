@@ -1,8 +1,8 @@
 /* @vitest-environment jsdom */
 
-import { reduceSessionProjection } from "@openclaw/gateway-client/browser";
-import { expectDefined } from "@openclaw/normalization-core";
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { reduceSessionProjection } from "@natesclaw/gateway-client/browser";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../../test/helpers/promise.js";
 import { GatewayRequestError } from "../../api/gateway.ts";
@@ -785,7 +785,7 @@ describe("refreshChatAvatar", () => {
     },
     {
       name: "prefers the paired device token for avatar metadata and local avatar URLs",
-      basePath: "/openclaw/",
+      basePath: "/natesclaw/",
       objectUrl: "blob:device-avatar",
       expectedToken: "device-token",
       overrides: {
@@ -796,7 +796,7 @@ describe("refreshChatAvatar", () => {
     },
     {
       name: "fetches local avatars through Authorization headers instead of tokenized URLs",
-      basePath: "/openclaw/",
+      basePath: "/natesclaw/",
       objectUrl: "blob:session-avatar",
       expectedToken: "session-token",
       overrides: { settings: { token: "session-token" } },
@@ -848,10 +848,10 @@ describe("refreshChatAvatar", () => {
     });
     vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
 
-    const host = makeChatHost({ basePath: "/openclaw/", sessionKey: "agent:ops:main" });
+    const host = makeChatHost({ basePath: "/natesclaw/", sessionKey: "agent:ops:main" });
     await refreshChatAvatar(host);
 
-    expect(fetchUrl(fetchMock as unknown as MockCallSource, 0)).toBe("/openclaw/avatar/ops?meta=1");
+    expect(fetchUrl(fetchMock as unknown as MockCallSource, 0)).toBe("/natesclaw/avatar/ops?meta=1");
     expect(fetchInit(fetchMock as unknown as MockCallSource, 0).method).toBe("GET");
     expect(host.chatAvatarUrl).toBeNull();
   });
@@ -1349,7 +1349,7 @@ describe("handleSendChat", () => {
       const persistedPeer = {
         role: "user",
         content: [{ type: "text", text: "same visible message" }],
-        __openclaw: { id: "peer-user", seq: 1, idempotencyKey: "peer-run:user" },
+        __natesclaw: { id: "peer-user", seq: 1, idempotencyKey: "peer-run:user" },
       };
       let rejectedRunId = "";
       const host = makeChatHost({
@@ -1366,7 +1366,7 @@ describe("handleSendChat", () => {
                 message: {
                   role: "user",
                   content: [{ type: "text", text: "same visible message" }],
-                  __openclaw: { idempotencyKey: `${rejectedRunId}:user` },
+                  __natesclaw: { idempotencyKey: `${rejectedRunId}:user` },
                 },
                 scope,
               },
@@ -1771,7 +1771,7 @@ describe("handleSendChat", () => {
     );
     const patch = patchChatSessionSettings(host, "agent:main", { model: "next" });
     history.resolve({
-      messages: [{ role: "user", __openclaw: { idempotencyKey: "older-picker-run:user" } }],
+      messages: [{ role: "user", __natesclaw: { idempotencyKey: "older-picker-run:user" } }],
       sessionInfo: row("agent:main", { hasActiveRun: false, status: "done" }),
     });
 
@@ -3602,7 +3602,7 @@ describe("handleSendChat", () => {
       "steer-behind-outbox-source",
     );
     olderHistory.resolve({
-      messages: [{ role: "user", __openclaw: { idempotencyKey: "older-reconciliation-run:user" } }],
+      messages: [{ role: "user", __natesclaw: { idempotencyKey: "older-reconciliation-run:user" } }],
       sessionInfo: row("agent:main", { hasActiveRun: true, status: "running" }),
     });
     await waitForFast(() => expect(historyRequests).toBe(2));
@@ -4757,7 +4757,7 @@ describe("handleSendChat", () => {
     ).toEqual(["user", "assistant"]);
     expect(
       inactiveCached.filter((message) => {
-        const marker = requireRecord(message, "cached terminal transcript")["__openclaw"];
+        const marker = requireRecord(message, "cached terminal transcript")["__natesclaw"];
         return (
           marker &&
           typeof marker === "object" &&
@@ -6734,7 +6734,7 @@ describe("handleSendChat", () => {
             messages: [
               {
                 role: "user",
-                __openclaw: { idempotencyKey: "ambiguous-run:user" },
+                __natesclaw: { idempotencyKey: "ambiguous-run:user" },
               },
             ],
             sessionInfo: row("agent:main", { hasActiveRun: false, status: "done" }),
@@ -6775,7 +6775,7 @@ describe("handleSendChat", () => {
                 : [
                     {
                       role: "user",
-                      __openclaw: { idempotencyKey: "late-history-proof:user" },
+                      __natesclaw: { idempotencyKey: "late-history-proof:user" },
                     },
                   ],
             sessionInfo: row("agent:main", { hasActiveRun: false, status: "done" }),
@@ -6875,7 +6875,7 @@ describe("handleSendChat", () => {
             messages: [
               {
                 role: "user",
-                __openclaw: { idempotencyKey: "delivered-removal-failure:user" },
+                __natesclaw: { idempotencyKey: "delivered-removal-failure:user" },
               },
             ],
             sessionInfo: row("agent:main", { hasActiveRun: false, status: "done" }),
@@ -7879,7 +7879,7 @@ describe("handleSendChat", () => {
     expect(host.chatMessages).toEqual([
       expect.objectContaining({
         role: "user",
-        __openclaw: { idempotencyKey: "completed-steer-run:user" },
+        __natesclaw: { idempotencyKey: "completed-steer-run:user" },
       }),
     ]);
     expect(JSON.stringify(host.chatMessages[0])).toContain(original.text);
@@ -7904,7 +7904,7 @@ describe("handleSendChat", () => {
     const historyUser = {
       role: "user",
       content: [{ type: "text", text: "history-owned steer" }],
-      __openclaw: { idempotencyKey: "history-steer:user", seq: 1 },
+      __natesclaw: { idempotencyKey: "history-steer:user", seq: 1 },
     };
     const host = makeChatHost({
       client: clientWithRequest(
@@ -7942,7 +7942,7 @@ describe("handleSendChat", () => {
                 role: "user",
                 content: [{ type: "text", text: "cross-run steer" }],
                 idempotencyKey: "cross-run-steer",
-                __openclaw: { seq: 1 },
+                __natesclaw: { seq: 1 },
               },
             ],
           },
@@ -7985,7 +7985,7 @@ describe("handleSendChat", () => {
               {
                 role: "user",
                 content: [{ type: "text", text: inflight.text }],
-                __openclaw: { idempotencyKey: "inflight-steer:user", seq: 1 },
+                __natesclaw: { idempotencyKey: "inflight-steer:user", seq: 1 },
               },
             ],
           },
@@ -8202,7 +8202,7 @@ describe("handleSendChat", () => {
     expect(host.chatMessages).toHaveLength(2);
     expect(host.chatMessages[0]).toMatchObject({
       role: "user",
-      __openclaw: { idempotencyKey: "steer-send-run:user" },
+      __natesclaw: { idempotencyKey: "steer-send-run:user" },
     });
     expect(JSON.stringify(host.chatMessages[0])).toContain("keep this visible");
   });
@@ -8212,7 +8212,7 @@ describe("handleSendChat", () => {
       role: "assistant",
       content: [{ type: "text", text: "assistant reply for the same run" }],
       timestamp: 1,
-      __openclaw: { idempotencyKey: "steer-send-run" },
+      __natesclaw: { idempotencyKey: "steer-send-run" },
     };
     const host = makeChatHost({
       chatRunId: "active-run",
@@ -8251,7 +8251,7 @@ describe("handleSendChat", () => {
     );
     expect(userTurn).toMatchObject({
       role: "user",
-      __openclaw: { idempotencyKey: "steer-send-run:user" },
+      __natesclaw: { idempotencyKey: "steer-send-run:user" },
     });
     expect(JSON.stringify(userTurn)).toContain("user turn must still appear");
   });
@@ -8306,7 +8306,7 @@ describe("handleSendChat", () => {
     expect(host.chatQueue).toEqual([]);
     expect(host.chatMessages[0]).toMatchObject({
       role: "user",
-      __openclaw: { idempotencyKey: "steer-att-run:user" },
+      __natesclaw: { idempotencyKey: "steer-att-run:user" },
     });
     // Inline data-URL images render as a labeled placeholder block; the point
     // is the turn materializes with content instead of vanishing.
@@ -8357,7 +8357,7 @@ describe("handleSendChat", () => {
     expect(listStoredChatOutboxes(host)).toEqual([]);
     expect(host.chatQueue).toEqual([]);
     const idempotencyKeys = host.chatMessages.map((message) => {
-      const marker = (message as { __openclaw?: { idempotencyKey?: string } })["__openclaw"];
+      const marker = (message as { __natesclaw?: { idempotencyKey?: string } })["__natesclaw"];
       return marker?.idempotencyKey;
     });
     expect(idempotencyKeys.slice(0, 2)).toEqual(["active-run:user", "steer-send-run:user"]);
@@ -9038,7 +9038,7 @@ describe("handleSendChat", () => {
           },
         ],
         timestamp: expect.any(Number),
-        __openclaw: { idempotencyKey: expect.stringMatching(/:user$/) },
+        __natesclaw: { idempotencyKey: expect.stringMatching(/:user$/) },
       },
     ]);
   });
@@ -9102,7 +9102,7 @@ describe("handleAbortChat", () => {
 
   it("aborts the exact selected session when no browser run id exists", async () => {
     const request = vi.fn(async () => ({ abortedRunId: null, status: "aborted" }));
-    const sessionKey = "agent:main:openclaw-weixin:direct:wechat-user";
+    const sessionKey = "agent:main:natesclaw-weixin:direct:wechat-user";
     const host = makeChatHost({
       client: { request } as unknown as ChatHost["client"],
       chatRunId: null,

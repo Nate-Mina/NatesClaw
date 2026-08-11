@@ -495,7 +495,7 @@ describe("local embedding provider", () => {
   });
 
   it("uses a worker process for the public local provider", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -572,7 +572,7 @@ process.on("message", (message) => {
   });
 
   it("waits for the local worker process to exit before close resolves", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     const exitMarker = path.join(tempDir, "worker-exited");
     await fs.writeFile(
@@ -605,7 +605,7 @@ process.on("message", (message) => {
   });
 
   it("joins cancellation shutdown before a later close resolves", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     const embedStarted = path.join(tempDir, "embed-started");
     const exitMarker = path.join(tempDir, "worker-exited");
@@ -660,7 +660,7 @@ process.on("message", (message) => {
   });
 
   it("escalates worker shutdown when the child ignores SIGTERM", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -736,7 +736,7 @@ process.on("message", (message) => {
   });
 
   it("treats confirmed worker exit as closed after graceful disposal fails", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -767,7 +767,7 @@ process.on("message", (message) => {
   });
 
   it("rejects pending and queued requests when closing a busy worker", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     const embedStartedPath = path.join(tempDir, "embed-started");
     await fs.writeFile(
@@ -836,7 +836,7 @@ process.on("message", (message) => {
   });
 
   it("retains worker runtime facts from failed embedding responses", async () => {
-    const tempDir = tempDirs.make("openclaw-local-embedding-worker-");
+    const tempDir = tempDirs.make("natesclaw-local-embedding-worker-");
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -881,7 +881,7 @@ process.on("message", (message) => {
   });
 
   it("does not pass inline-source or inspector exec args to the file-backed worker", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -922,7 +922,7 @@ process.on("message", (message) => {
   });
 
   it("reports worker initialization failures during provider creation", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,
@@ -951,7 +951,7 @@ process.on("message", (message) => {
   });
 
   it("reports worker exits with structured failure codes", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-local-embedding-worker-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-local-embedding-worker-"));
     const workerScript = path.join(tempDir, "worker.cjs");
     await fs.writeFile(
       workerScript,

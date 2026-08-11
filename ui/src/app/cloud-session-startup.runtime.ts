@@ -119,7 +119,7 @@ function buildInitialUserMessage(
     role: "user",
     content,
     timestamp: createdAt,
-    __openclaw: {
+    __natesclaw: {
       idempotencyKey: `${identity.messageId}:user`,
       ...(identity.messageSeq !== undefined ? { seq: identity.messageSeq } : {}),
     },

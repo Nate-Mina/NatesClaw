@@ -1,13 +1,13 @@
 // Persists short-lived gateway restart handoff metadata.
 import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { createSubsystemLogger } from "../logging/subsystem.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
@@ -26,7 +26,7 @@ const MAX_PROCESS_INSTANCE_ID_LENGTH = 120;
 const MAX_REASON_LENGTH = 200;
 
 const handoffLog = createSubsystemLogger("restart-handoff");
-type GatewayRestartHandoffDatabase = Pick<OpenClawStateKyselyDatabase, "gateway_restart_handoff">;
+type GatewayRestartHandoffDatabase = Pick<NatesclawStateKyselyDatabase, "gateway_restart_handoff">;
 type GatewayRestartHandoffRow = {
   kind: string;
   version: number;
@@ -305,7 +305,7 @@ function selectGatewayRestartHandoffRowSync(
 
 function readGatewayRestartHandoffRowSync(env: NodeJS.ProcessEnv) {
   try {
-    const { db } = openOpenClawStateDatabase({ env });
+    const { db } = openNatesclawStateDatabase({ env });
     return selectGatewayRestartHandoffRowSync(db);
   } catch {
     return null;
@@ -359,7 +359,7 @@ export function writeGatewayRestartHandoffSync(opts: {
   };
 
   try {
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<GatewayRestartHandoffDatabase>(db);
         executeSqliteQuerySync(
@@ -445,7 +445,7 @@ export function consumeGatewayRestartHandoffSync(opts: {
       ? Math.floor(opts.now)
       : undefined;
 
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const now = fixedNow ?? Date.now();
       const stateDb = getNodeSqliteKysely<GatewayRestartHandoffDatabase>(db);

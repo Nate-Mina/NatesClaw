@@ -1,4 +1,4 @@
-import type { BoardOp } from "@openclaw/gateway-protocol";
+import type { BoardOp } from "@natesclaw/gateway-protocol";
 
 export type BoardGrantDecision = "granted" | "rejected";
 export type BoardWidgetAppViewState =

@@ -1,6 +1,6 @@
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
 import { collectConfiguredAgentHarnessRuntimes } from "../agents/harness-runtimes.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { hasExplicitChannelConfig } from "./channel-presence-policy.js";
 import { resolveEffectivePluginActivationState } from "./config-state.js";
 import { isPluginEnabledByDefaultForPlatform } from "./default-enablement.js";
@@ -27,9 +27,9 @@ import { manifestOwnsWorkerProvider } from "./worker-provider-manifest.js";
 
 type PluginStartupActivationParams = {
   plugin: InstalledPluginIndexRecord;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginsConfig: NormalizedPluginsConfig;
-  activationSource: { plugins: NormalizedPluginsConfig; rootConfig?: OpenClawConfig };
+  activationSource: { plugins: NormalizedPluginsConfig; rootConfig?: NatesclawConfig };
   platform?: NodeJS.Platform;
 };
 
@@ -62,13 +62,13 @@ type StartupContractKey =
 export function addRequiredAgentHarnessPluginIds(
   target: Set<string>,
   params: {
-    activationSourceConfig: OpenClawConfig;
-    config: OpenClawConfig;
+    activationSourceConfig: NatesclawConfig;
+    config: NatesclawConfig;
     index: InstalledPluginIndex;
     pluginsConfig: ReturnType<typeof normalizePluginsConfigForInstalledIndex>;
     activationSource: {
       plugins: ReturnType<typeof normalizePluginsConfigForInstalledIndex>;
-      rootConfig?: OpenClawConfig;
+      rootConfig?: NatesclawConfig;
     };
     env: NodeJS.ProcessEnv;
     platform?: NodeJS.Platform;

@@ -1,7 +1,7 @@
 import type { Command } from "commander";
-import { callGatewayFromCli } from "openclaw/plugin-sdk/gateway-runtime";
-import { MeetingPlatformAdapter } from "openclaw/plugin-sdk/meeting-runtime";
-import { addTimerTimeoutGraceMs } from "openclaw/plugin-sdk/number-runtime";
+import { callGatewayFromCli } from "natesclaw/plugin-sdk/gateway-runtime";
+import { MeetingPlatformAdapter } from "natesclaw/plugin-sdk/meeting-runtime";
+import { addTimerTimeoutGraceMs } from "natesclaw/plugin-sdk/number-runtime";
 import { zoomMeetingsConfig, type ZoomMeetingsConfig } from "./config.js";
 import { zoomMeetingsInvalidRequest } from "./errors.js";
 

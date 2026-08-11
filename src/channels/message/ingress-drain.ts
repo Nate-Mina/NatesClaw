@@ -4,7 +4,7 @@
  * Owns claim recovery, per-lane serialization, adoption-time complete, retry /
  * dead-letter disposition, pre-adoption stall watchdog, and optional supersede.
  */
-import { sleepWithAbort } from "@openclaw/retry";
+import { sleepWithAbort } from "@natesclaw/retry";
 import { formatErrorMessage, toErrorObject } from "../../infra/errors.js";
 import {
   createIngressDrainOwnerId,

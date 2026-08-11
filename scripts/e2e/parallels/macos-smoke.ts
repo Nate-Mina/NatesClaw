@@ -1,5 +1,5 @@
 #!/usr/bin/env -S pnpm tsx
-// Macos Smoke script supports OpenClaw repository automation.
+// Macos Smoke script supports Natesclaw repository automation.
 import { readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -8,13 +8,13 @@ import {
   die,
   ensureValue,
   currentRunningSnapshotInfo,
-  extractLastOpenClawVersionFromLog,
+  extractLastNatesclawVersionFromLog,
   makeTempDir,
   isLikelyMacosDesktopHome,
   packageBuildCommitFromTgz,
   packageVersionFromTgz,
   parseMacosDsclUserHomeLine,
-  packOpenClaw,
+  packNatesclaw,
   parseMode,
   parseProvider,
   modelProviderConfigBatchJson,
@@ -110,9 +110,9 @@ interface MacosSummary {
 
 const guestPath =
   "/opt/homebrew/bin:/opt/homebrew/opt/node/bin:/usr/local/bin:/usr/local/sbin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin";
-const guestOpenClaw = "openclaw";
-const guestOpenClawEntry = '"$(npm root -g)/openclaw/openclaw.mjs"';
-const guestOpenClawEntryRunner = `node ${guestOpenClawEntry}`;
+const guestNatesclaw = "natesclaw";
+const guestNatesclawEntry = '"$(npm root -g)/natesclaw/natesclaw.mjs"';
+const guestNatesclawEntryRunner = `node ${guestNatesclawEntry}`;
 const guestNode = "node";
 const guestNpm = "npm";
 
@@ -123,7 +123,7 @@ const defaultOptions = (): MacosOptions => ({
   hostIp: undefined,
   hostPort: 18425,
   hostPortExplicit: false,
-  installUrl: "https://openclaw.ai/install.sh",
+  installUrl: "https://natesclaw.ai/install.sh",
   installVersion: "",
   json: false,
   keepServer: false,
@@ -151,7 +151,7 @@ Options:
   --model <provider/model>    Override the model used for the agent-turn smoke.
   --api-key-env <var>        Host env var name for provider API key.
   --openai-api-key-env <var> Alias for --api-key-env (backward compatible)
-  --install-url <url>        Installer URL for latest release. Default: https://openclaw.ai/install.sh
+  --install-url <url>        Installer URL for latest release. Default: https://natesclaw.ai/install.sh
   --host-port <port>         Host HTTP port for current-main tgz. Default: 18425
   --host-ip <ip>             Override Parallels host IP.
   --latest-version <ver>     Override npm latest version lookup.
@@ -168,7 +168,7 @@ Options:
   -h, --help                 Show help.
 
 Environment:
-  OPENCLAW_PARALLELS_DEV_TARGET_REF
+  NATESCLAW_PARALLELS_DEV_TARGET_REF
                              Pin the guest dev update to a full commit SHA.
 `;
 }
@@ -318,19 +318,19 @@ class MacosSmoke {
       modelId: options.modelId,
       provider: options.provider,
     });
-    this.agentTimeoutSeconds = readPositiveIntEnv("OPENCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S", 2700);
+    this.agentTimeoutSeconds = readPositiveIntEnv("NATESCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S", 2700);
     this.modelTimeoutSeconds = resolveParallelsModelTimeoutSeconds("macos");
     this.updateDevTimeoutSeconds = readPositiveIntEnv(
-      "OPENCLAW_PARALLELS_MACOS_UPDATE_DEV_TIMEOUT_S",
+      "NATESCLAW_PARALLELS_MACOS_UPDATE_DEV_TIMEOUT_S",
       1800,
     );
-    this.devTargetCommit = readGitCommitEnv("OPENCLAW_PARALLELS_DEV_TARGET_REF");
+    this.devTargetCommit = readGitCommitEnv("NATESCLAW_PARALLELS_DEV_TARGET_REF");
     this.validateDiscord();
   }
 
   async run(): Promise<void> {
     this.options.vmName = resolveMacosVmName(this.options.vmName, this.options.vmNameExplicit);
-    this.runDir = await makeTempDir("openclaw-parallels-macos.");
+    this.runDir = await makeTempDir("natesclaw-parallels-macos.");
     this.phases = new PhaseRunner(this.runDir);
     this.guest = new MacosGuest(
       {
@@ -343,7 +343,7 @@ class MacosSmoke {
       this.phases,
     );
     this.discord = this.createDiscordSmoke();
-    this.tgzDir = await makeTempDir("openclaw-parallels-macos-tgz.");
+    this.tgzDir = await makeTempDir("natesclaw-parallels-macos-tgz.");
     try {
       validateSnapshotRestoreMode(this.options.mode, "macOS smoke");
       this.snapshot = shouldSkipSnapshotRestore()
@@ -371,7 +371,7 @@ class MacosSmoke {
       say(`Run logs: ${this.runDir}`);
 
       if (await this.needsHostTgz()) {
-        this.artifact = await packOpenClaw({
+        this.artifact = await packNatesclaw({
           destination: this.tgzDir,
           packageSpec: this.options.targetPackageSpec,
           requireControlUi: true,
@@ -469,8 +469,8 @@ class MacosSmoke {
       },
       guest: this.guest,
       guestNode,
-      guestOpenClaw,
-      guestOpenClawEntry,
+      guestNatesclaw,
+      guestNatesclawEntry,
       runDir: this.runDir,
       vmName: this.options.vmName,
     });
@@ -511,7 +511,7 @@ class MacosSmoke {
     await this.phase("fresh.restore-snapshot", 780, () => this.restoreSnapshot());
     await this.phase("fresh.reset-state", 180, () => this.resetState());
     await this.phase("fresh.install-main", this.targetInstallsDirectly() ? 420 : 420, () =>
-      this.installMain("openclaw-main-fresh.tgz"),
+      this.installMain("natesclaw-main-fresh.tgz"),
     );
     this.status.freshVersion = await this.extractLastVersion("fresh.install-main");
     await this.phase("fresh.verify-main-version", 60, () => this.verifyTargetVersion());
@@ -554,7 +554,7 @@ class MacosSmoke {
     }
     if (this.options.targetPackageSpec) {
       await this.phase("upgrade.install-main", this.targetInstallsDirectly() ? 420 : 420, () =>
-        this.installMain("openclaw-main-upgrade.tgz"),
+        this.installMain("natesclaw-main-upgrade.tgz"),
       );
       this.status.upgradeVersion = await this.extractLastVersion("upgrade.install-main");
       await this.phase("upgrade.verify-main-version", 60, () => this.verifyTargetVersion());
@@ -618,14 +618,14 @@ class MacosSmoke {
     return this.guest.exec(args, options);
   }
 
-  private guestOpenClawEntryExec(
+  private guestNatesclawEntryExec(
     args: string[],
     options: { check?: boolean; env?: Record<string, string> } = {},
   ): string {
     const argv = args.map((arg) => shellQuote(arg)).join(" ");
     return this.guestSh(
       `set -e
-entry="$(npm root -g)/openclaw/openclaw.mjs"
+entry="$(npm root -g)/natesclaw/natesclaw.mjs"
 exec node "$entry" ${argv}`,
       options.env,
     );
@@ -805,29 +805,29 @@ exec node "$entry" ${argv}`,
   }
 
   private resetState(): void {
-    this.guestSh(String.raw`/usr/bin/pkill -f 'openclaw.*gateway run' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'openclaw-gateway' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'openclaw.mjs gateway' >/dev/null 2>&1 || true
+    this.guestSh(String.raw`/usr/bin/pkill -f 'natesclaw.*gateway run' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'natesclaw-gateway' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'natesclaw.mjs gateway' >/dev/null 2>&1 || true
 printf 'preflight.user=%s\n' "$(whoami)"
 printf 'preflight.home=%s\n' "$HOME"
 printf 'preflight.path=%s\n' "$PATH"
 printf 'preflight.umask=%s\n' "$(umask)"
 printf 'preflight.npmRoot=%s\n' "$(${guestNpm} root -g 2>/dev/null || true)"
-${guestNpm} uninstall -g openclaw >/dev/null 2>&1 || true
-rm -rf "$HOME/.openclaw"
+${guestNpm} uninstall -g natesclaw >/dev/null 2>&1 || true
+rm -rf "$HOME/.natesclaw"
 # Restored snapshots can contain corrupt optional-dependency tarballs that npm silently skips.
 rm -rf "$HOME/.npm/_cacache"
-rm -f /tmp/openclaw-parallels-macos-gateway.log`);
+rm -f /tmp/natesclaw-parallels-macos-gateway.log`);
   }
 
   private installLatestRelease(): void {
     this.guestSh(
-      `export OPENCLAW_NO_ONBOARD=1
+      `export NATESCLAW_NO_ONBOARD=1
 curl -fsSL --connect-timeout 10 --max-time 120 --retry 2 --retry-delay 2 ${shellQuote(
         this.options.installUrl,
-      )} -o /tmp/openclaw-install.sh
-bash /tmp/openclaw-install.sh --version ${shellQuote(this.installVersion)}
-${guestOpenClaw} --version`,
+      )} -o /tmp/natesclaw-install.sh
+bash /tmp/natesclaw-install.sh --version ${shellQuote(this.installVersion)}
+${guestNatesclaw} --version`,
     );
   }
 
@@ -848,7 +848,7 @@ for attempt in 1 2; do
   echo "npm install attempt $attempt failed; retrying in 5s" >&2
   sleep 5
 done
-${guestOpenClaw} --version`);
+${guestNatesclaw} --version`);
       return;
     }
     if (!this.artifact || !this.server) {
@@ -860,7 +860,7 @@ curl -fsSL --connect-timeout 10 --max-time 120 --retry 2 --retry-delay 2 ${shell
       tgzUrl,
     )} -o /tmp/${tempName}
 ${npmRegistryEnv}${guestNpm} install -g /tmp/${tempName}
-${guestOpenClaw} --version`);
+${guestNatesclaw} --version`);
   }
 
   private async verifyTargetVersion(): Promise<void> {
@@ -878,7 +878,7 @@ ${guestOpenClaw} --version`);
   }
 
   private verifyVersionContains(needle: string): void {
-    const version = this.guestExec([guestOpenClaw, "--version"]);
+    const version = this.guestExec([guestNatesclaw, "--version"]);
     if (!version.includes(needle)) {
       throw new Error(`version mismatch: expected substring ${needle}`);
     }
@@ -897,12 +897,12 @@ check_path() {
     exit 1
   fi
 }
-check_path "$root/openclaw"
-check_path "$root/openclaw/extensions"
-if [ -d "$root/openclaw/extensions" ]; then
+check_path "$root/natesclaw"
+check_path "$root/natesclaw/extensions"
+if [ -d "$root/natesclaw/extensions" ]; then
   while IFS= read -r -d '' extension_dir; do
     check_path "$extension_dir"
-  done < <(/usr/bin/find "$root/openclaw/extensions" -mindepth 1 -maxdepth 1 -type d -print0)
+  done < <(/usr/bin/find "$root/natesclaw/extensions" -mindepth 1 -maxdepth 1 -type d -print0)
 fi`);
   }
 
@@ -911,7 +911,7 @@ fi`);
     this.guestExec([
       "/usr/bin/env",
       `${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`,
-      guestOpenClaw,
+      guestNatesclaw,
       "onboard",
       "--non-interactive",
       "--mode",
@@ -939,7 +939,7 @@ fi`);
 
   private ensureGuestPnpm(): void {
     this.guestSh(String.raw`set -eu
-bootstrap_root=/tmp/openclaw-smoke-pnpm-bootstrap
+bootstrap_root=/tmp/natesclaw-smoke-pnpm-bootstrap
 bootstrap_bin="$bootstrap_root/node_modules/.bin"
 if [ -x "$bootstrap_bin/pnpm" ]; then
   echo "bootstrap-pnpm: reuse"
@@ -957,32 +957,32 @@ npm install --prefix "$bootstrap_root" --no-save pnpm@11
     this.ensureGuestPnpm();
     const home = this.guestHome();
     const devTargetEnv = this.devTargetCommit
-      ? ` OPENCLAW_UPDATE_DEV_TARGET_REF=${shellQuote(this.devTargetCommit)}`
+      ? ` NATESCLAW_UPDATE_DEV_TARGET_REF=${shellQuote(this.devTargetCommit)}`
       : "";
     await this.guest.shBackground(
       "macos-update-dev",
       `set -eu
-rm -rf ${shellQuote(`${home}/openclaw`)}
-export PATH=${shellQuote(`/tmp/openclaw-smoke-pnpm-bootstrap/node_modules/.bin:${guestPath}`)}
+rm -rf ${shellQuote(`${home}/natesclaw`)}
+export PATH=${shellQuote(`/tmp/natesclaw-smoke-pnpm-bootstrap/node_modules/.bin:${guestPath}`)}
 ${guestNode} - <<'JS'
 const fs = require("node:fs");
 const path = require("node:path");
-const configPath = path.join(process.env.HOME || ${JSON.stringify(home)}, ".openclaw", "openclaw.json");
+const configPath = path.join(process.env.HOME || ${JSON.stringify(home)}, ".natesclaw", "natesclaw.json");
 const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, "utf8")) : {};
 config.update = { ...(config.update || {}), channel: "dev" };
 fs.mkdirSync(path.dirname(configPath), { recursive: true });
 fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\\n");
 JS
-/usr/bin/env NODE_OPTIONS=--max-old-space-size=8192 OPENCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 OPENCLAW_DISABLE_BUNDLED_PLUGINS=1${devTargetEnv} ${guestOpenClawEntryRunner} update --channel dev --yes --json --no-restart --timeout ${this.updateDevTimeoutSeconds}
-${guestOpenClawEntryRunner} --version
-${guestOpenClawEntryRunner} update status --json`,
+/usr/bin/env NODE_OPTIONS=--max-old-space-size=8192 NATESCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 NATESCLAW_DISABLE_BUNDLED_PLUGINS=1${devTargetEnv} ${guestNatesclawEntryRunner} update --channel dev --yes --json --no-restart --timeout ${this.updateDevTimeoutSeconds}
+${guestNatesclawEntryRunner} --version
+${guestNatesclawEntryRunner} update status --json`,
       {},
       this.updateDevTimeoutSeconds * 1000,
     );
   }
 
   private verifyDevChannelUpdate(): void {
-    const status = this.guestOpenClawEntryExec(["update", "status", "--json"]);
+    const status = this.guestNatesclawEntryExec(["update", "status", "--json"]);
     const expectedBranch = this.devTargetCommit ? "HEAD" : "main";
     for (const needle of [
       '"installKind": "git"',
@@ -995,7 +995,7 @@ ${guestOpenClawEntryRunner} update status --json`,
     }
     if (this.devTargetCommit) {
       const checkoutHead =
-        this.guestSh(`git -C ${shellQuote(`${this.guestHome()}/openclaw`)} rev-parse HEAD`)
+        this.guestSh(`git -C ${shellQuote(`${this.guestHome()}/natesclaw`)} rev-parse HEAD`)
           .replaceAll("\r", "")
           .trim()
           .split("\n")
@@ -1016,21 +1016,21 @@ ${guestOpenClawEntryRunner} update status --json`,
     this.guestSh(
       `set -euo pipefail
 trap '' HUP
-/usr/bin/pkill -f 'openclaw.*gateway run' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'openclaw-gateway' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'openclaw.mjs gateway' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'natesclaw.*gateway run' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'natesclaw-gateway' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'natesclaw.mjs gateway' >/dev/null 2>&1 || true
 /usr/bin/env HOME=${shellQuote(home)} USER=${shellQuote(this.guestUser)} LOGNAME=${shellQuote(this.guestUser)} PATH=${shellQuote(guestPath)} ${shellQuote(
         `${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`,
-      )} OPENCLAW_HOME=${shellQuote(home)} OPENCLAW_STATE_DIR=${shellQuote(`${home}/.openclaw`)} OPENCLAW_CONFIG_PATH=${shellQuote(
-        `${home}/.openclaw/openclaw.json`,
-      )} ${guestOpenClawEntryRunner} gateway run --bind loopback --port 18789 --force </dev/null >/tmp/openclaw-parallels-macos-gateway.log 2>&1 &
+      )} NATESCLAW_HOME=${shellQuote(home)} NATESCLAW_STATE_DIR=${shellQuote(`${home}/.natesclaw`)} NATESCLAW_CONFIG_PATH=${shellQuote(
+        `${home}/.natesclaw/natesclaw.json`,
+      )} ${guestNatesclawEntryRunner} gateway run --bind loopback --port 18789 --force </dev/null >/tmp/natesclaw-parallels-macos-gateway.log 2>&1 &
 sleep 1`,
     );
   }
 
   private verifyGateway(): void {
     for (let attempt = 1; attempt <= 8; attempt++) {
-      const result = this.guestOpenClaw(
+      const result = this.guestNatesclaw(
         ["gateway", "status", "--deep", "--require-rpc", "--timeout", "15000"],
         false,
       );
@@ -1046,16 +1046,16 @@ sleep 1`,
   }
 
   private showGatewayStatusCompat(): void {
-    const help = this.guestExec([guestOpenClaw, "gateway", "status", "--help"], { check: false });
+    const help = this.guestExec([guestNatesclaw, "gateway", "status", "--help"], { check: false });
     const args = help.includes("--require-rpc")
       ? ["gateway", "status", "--deep", "--require-rpc"]
       : ["gateway", "status", "--deep"];
-    if (!this.guestOpenClaw(args, false)) {
+    if (!this.guestNatesclaw(args, false)) {
       throw new Error("gateway status failed");
     }
   }
 
-  private guestOpenClaw(args: string[], check: boolean): boolean {
+  private guestNatesclaw(args: string[], check: boolean): boolean {
     const result = run(
       "prlctl",
       [
@@ -1072,7 +1072,7 @@ sleep 1`,
               `PATH=${guestPath}`,
             ]
           : ["--current-user", "/usr/bin/env", `PATH=${guestPath}`]),
-        guestOpenClaw,
+        guestNatesclaw,
         ...args,
       ],
       { check: false, quiet: true, timeoutMs: this.remainingPhaseTimeoutMs() },
@@ -1080,7 +1080,7 @@ sleep 1`,
     this.log(result.stdout);
     this.log(result.stderr);
     if (check && result.status !== 0) {
-      throw new Error(`openclaw ${args.join(" ")} failed`);
+      throw new Error(`natesclaw ${args.join(" ")} failed`);
     }
     return result.status === 0;
   }
@@ -1089,11 +1089,11 @@ sleep 1`,
     this.guestSh(String.raw`set -eu
 deadline=$((SECONDS + 120))
 while [ $SECONDS -lt $deadline ]; do
-  if curl -fsSL --connect-timeout 2 --max-time 5 http://127.0.0.1:18789/ >/tmp/openclaw-dashboard-smoke.html 2>/dev/null; then
-    if grep -F '<title>OpenClaw Control</title>' /tmp/openclaw-dashboard-smoke.html >/dev/null &&
-      grep -F '<openclaw-app></openclaw-app>' /tmp/openclaw-dashboard-smoke.html >/dev/null; then
+  if curl -fsSL --connect-timeout 2 --max-time 5 http://127.0.0.1:18789/ >/tmp/natesclaw-dashboard-smoke.html 2>/dev/null; then
+    if grep -F '<title>Natesclaw Control</title>' /tmp/natesclaw-dashboard-smoke.html >/dev/null &&
+      grep -F '<natesclaw-app></natesclaw-app>' /tmp/natesclaw-dashboard-smoke.html >/dev/null; then
       asset_paths="$(
-        sed -nE 's/.*<(script|link)[^>]*(src|href)=["'"'"']([^"'"'"']+)["'"'"'].*/\3/p' /tmp/openclaw-dashboard-smoke.html |
+        sed -nE 's/.*<(script|link)[^>]*(src|href)=["'"'"']([^"'"'"']+)["'"'"'].*/\3/p' /tmp/natesclaw-dashboard-smoke.html |
           grep -E '(^|/)assets/' |
           grep -Ev '^(https?:)?//' |
           sort -u
@@ -1134,7 +1134,7 @@ exit 1`);
   }
 
   private verifyTurn(): void {
-    this.guestOpenClawEntryExec(["models", "set", this.auth.modelId]);
+    this.guestNatesclawEntryExec(["models", "set", this.auth.modelId]);
     const modelProviderConfigBatch = modelProviderConfigBatchJson(
       this.auth.modelId,
       "macos",
@@ -1145,17 +1145,17 @@ exit 1`);
 cat >"$provider_config_batch" <<'JSON'
 ${modelProviderConfigBatch}
 JSON
-${guestOpenClawEntryRunner} config set --batch-file "$provider_config_batch" --strict-json
+${guestNatesclawEntryRunner} config set --batch-file "$provider_config_batch" --strict-json
 rm -f "$provider_config_batch"`);
     }
-    this.guestOpenClawEntryExec([
+    this.guestNatesclawEntryExec([
       "config",
       "set",
       "agents.defaults.skipBootstrap",
       "true",
       "--strict-json",
     ]);
-    this.guestOpenClawEntryExec(["config", "set", "tools.profile", "minimal"]);
+    this.guestNatesclawEntryExec(["config", "set", "tools.profile", "minimal"]);
     this.restrictAgentTurnPlugins();
     this.guestSh(
       `${posixAgentWorkspaceScript("Parallels macOS smoke test assistant.")}
@@ -1164,10 +1164,10 @@ agent_ok=false
 for attempt in 1 2; do
   session_id="parallels-macos-smoke"
   if [ "$attempt" -gt 1 ]; then session_id="parallels-macos-smoke-retry-$attempt"; fi
-  rm -f "$HOME/.openclaw/agents/main/sessions/$session_id.jsonl"
+  rm -f "$HOME/.natesclaw/agents/main/sessions/$session_id.jsonl"
   output_file="$(mktemp)"
   set +e
-  /usr/bin/env ${shellQuote(`${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`)} ${guestOpenClawEntryRunner} agent --local --agent main --session-id "$session_id" --message ${shellQuote(
+  /usr/bin/env ${shellQuote(`${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`)} ${guestNatesclawEntryRunner} agent --local --agent main --session-id "$session_id" --message ${shellQuote(
     "Reply with exact ASCII text OK only.",
   )} --thinking off --timeout ${this.modelTimeoutSeconds} --json >"$output_file" 2>&1
   rc=$?
@@ -1194,7 +1194,7 @@ for attempt in 1 2; do
   fi
 done
 if [ "$agent_ok" != true ]; then
-  echo "openclaw agent finished without OK response" >&2
+  echo "natesclaw agent finished without OK response" >&2
   exit 1
 fi`,
     );
@@ -1207,7 +1207,7 @@ fi`,
   private ensureDiscordGatewayReady(): void {
     this.startManualGatewayIfNeeded();
     this.verifyGateway();
-    const status = this.guestOpenClawEntryExec(["channels", "status", "--probe", "--json"]);
+    const status = this.guestNatesclawEntryExec(["channels", "status", "--probe", "--json"]);
     if (!status.includes('"discord"')) {
       throw new Error("Discord channel unavailable after gateway restart");
     }
@@ -1238,7 +1238,7 @@ fi`,
   }
 
   private async extractLastVersion(phaseName: string): Promise<string> {
-    return await extractLastOpenClawVersionFromLog(path.join(this.runDir, `${phaseName}.log`));
+    return await extractLastNatesclawVersionFromLog(path.join(this.runDir, `${phaseName}.log`));
   }
 
   private upgradeSummaryLabel(): string {

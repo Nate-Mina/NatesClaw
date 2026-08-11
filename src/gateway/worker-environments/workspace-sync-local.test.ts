@@ -42,7 +42,7 @@ async function waitForFile(filePath: string): Promise<void> {
 
 describe("runLocalCommandToFile", () => {
   it("force-kills a command that ignores abort termination", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-workspace-sync-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-workspace-sync-"));
     const outputPath = path.join(root, "output");
     const readyPath = path.join(root, "ready");
     const controller = new AbortController();
@@ -77,7 +77,7 @@ describe("runLocalCommandToFile", () => {
   });
 
   it("omits derived artifacts from outbound Git file lists", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-workspace-files-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-workspace-files-"));
     const files = [
       "src/keep.ts",
       "__pycache__/fizzbuzz.cpython-314.pyc",
@@ -127,7 +127,7 @@ describe("runLocalCommandToFile", () => {
   });
 
   it("bounds raw Git candidates before materializing the eligible inventory", async () => {
-    const root = tempDirs.make("openclaw-workspace-candidates-");
+    const root = tempDirs.make("natesclaw-workspace-candidates-");
     const bin = path.join(root, "bin");
     const mockGit = path.join(bin, "git");
     const firstTransfer = `${root}-transfer-accepted`;
@@ -178,7 +178,7 @@ process.stdout.write("eligible.txt\\0".repeat(${count}));
 
 describe("preflightWorkerWorkspace", () => {
   it("measures the canonical Git eligibility boundary without hashing content", async () => {
-    const root = tempDirs.make("openclaw-workspace-preflight-");
+    const root = tempDirs.make("natesclaw-workspace-preflight-");
     const transferDirectory = `${root}-transfer`;
     try {
       await git(root, "init", "--quiet");
@@ -192,9 +192,9 @@ describe("preflightWorkerWorkspace", () => {
       await git(
         root,
         "-c",
-        "user.name=OpenClaw Test",
+        "user.name=Natesclaw Test",
         "-c",
-        "user.email=test@openclaw.invalid",
+        "user.email=test@natesclaw.invalid",
         "commit",
         "--quiet",
         "-m",
@@ -244,7 +244,7 @@ describe("preflightWorkerWorkspace", () => {
   });
 
   it("rejects escaping symlinks with a typed bounded error", async () => {
-    const root = tempDirs.make("openclaw-workspace-symlink-");
+    const root = tempDirs.make("natesclaw-workspace-symlink-");
     try {
       await git(root, "init", "--quiet");
       await fs.writeFile(path.join(root, "tracked.txt"), "tracked\n");
@@ -252,9 +252,9 @@ describe("preflightWorkerWorkspace", () => {
       await git(
         root,
         "-c",
-        "user.name=OpenClaw Test",
+        "user.name=Natesclaw Test",
         "-c",
-        "user.email=test@openclaw.invalid",
+        "user.email=test@natesclaw.invalid",
         "commit",
         "--quiet",
         "-m",
@@ -275,8 +275,8 @@ describe("preflightWorkerWorkspace", () => {
   });
 
   it("preserves filesystem and abort failures as operational errors", async () => {
-    const missingParent = tempDirs.make("openclaw-workspace-missing-");
-    const root = tempDirs.make("openclaw-workspace-abort-");
+    const missingParent = tempDirs.make("natesclaw-workspace-missing-");
+    const root = tempDirs.make("natesclaw-workspace-abort-");
     try {
       const missing = await preflightWorkerWorkspace({
         localPath: path.join(missingParent, "absent"),

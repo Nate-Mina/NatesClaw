@@ -1,17 +1,17 @@
 import type {
   AgentMessage,
   EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { projectAgentHarnessTranscriptMessageForDisplay } from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
-import { asDateTimestampMs } from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { projectAgentHarnessTranscriptMessageForDisplay } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { AssistantMessage } from "natesclaw/plugin-sdk/llm";
+import { asDateTimestampMs } from "natesclaw/plugin-sdk/number-runtime";
 import { attachCodexMirrorIdentity } from "./upstream-prompt-provenance.js";
 import { promptSnapshot } from "./user-prompt-message.js";
 
 type TurnTaintMetadata = { resultContentSource?: "network"; turnTainted?: true };
 
 function readTurnTaintMetadata(message: AgentMessage): TurnTaintMetadata | undefined {
-  const metadata = (message as unknown as Record<string, unknown>)["__openclaw"];
+  const metadata = (message as unknown as Record<string, unknown>)["__natesclaw"];
   return metadata && typeof metadata === "object" && !Array.isArray(metadata)
     ? (metadata as TurnTaintMetadata)
     : undefined;
@@ -27,7 +27,7 @@ function applyStickyTurnTaint(messages: readonly AgentMessage[]): AgentMessage[]
     const metadata = readTurnTaintMetadata(message);
     tainted ||= metadata?.turnTainted === true || metadata?.resultContentSource === "network";
     return message.role === "assistant" && tainted
-      ? ({ ...message, __openclaw: { ...metadata, turnTainted: true } } as AgentMessage)
+      ? ({ ...message, __natesclaw: { ...metadata, turnTainted: true } } as AgentMessage)
       : message;
   });
 }

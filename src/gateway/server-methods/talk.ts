@@ -1,10 +1,10 @@
 // Gateway RPC handlers for Talk voice, transcription, and speech synthesis surfaces.
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -27,7 +27,7 @@ import type {
   TalkProviderConfig,
   TalkRealtimeConfig,
 } from "../../config/types.gateway.js";
-import type { OpenClawConfig, TtsConfig, TtsProviderConfigMap } from "../../config/types.js";
+import type { NatesclawConfig, TtsConfig, TtsProviderConfigMap } from "../../config/types.js";
 import { resolveProviderRawConfig } from "../../plugin-sdk/provider-selection-runtime.js";
 import { canonicalizeRealtimeTranscriptionProviderId } from "../../realtime-transcription/provider-registry.js";
 import { resolveTalkSessionAgentId } from "../../talk/agent-target.js";
@@ -173,9 +173,9 @@ function withTalkBaseTtsSpeakerSelectionCompat(
 }
 
 function buildTalkTtsConfig(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ):
-  | { cfg: OpenClawConfig; provider: string; providerConfig: TalkProviderConfig }
+  | { cfg: NatesclawConfig; provider: string; providerConfig: TalkProviderConfig }
   | { error: string; reason: TalkSpeakReason } {
   const resolved = resolveActiveTalkProviderConfig(config.talk);
   const provider = canonicalizeSpeechProviderId(resolved?.provider, config);
@@ -225,7 +225,7 @@ function buildTalkTtsConfig(
   };
 }
 
-function buildTalkCatalog(config: OpenClawConfig) {
+function buildTalkCatalog(config: NatesclawConfig) {
   const ttsConfig = resolveTtsConfig(config);
   const talkResolved = resolveActiveTalkProviderConfig(config.talk);
   const activeSpeechProvider = canonicalizeSpeechProviderId(talkResolved?.provider, config);
@@ -460,7 +460,7 @@ function resolveTalkSpeed(params: TalkSpeakParams): number | undefined {
 function buildTalkSpeakOverrides(
   provider: string,
   providerConfig: TalkProviderConfig,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   params: TalkSpeakParams,
 ): TtsDirectiveOverrides {
   const speechProvider = getSpeechProvider(provider, config);
@@ -493,8 +493,8 @@ function buildTalkSpeakOverrides(
 
 async function resolveTalkResponseFromConfig(params: {
   includeSecrets: boolean;
-  sourceConfig: OpenClawConfig;
-  runtimeConfig: OpenClawConfig;
+  sourceConfig: NatesclawConfig;
+  runtimeConfig: NatesclawConfig;
 }): Promise<TalkConfigResponse | undefined> {
   // Normalize once at the Gateway boundary. Legacy flat provider fields belong to doctor
   // migration and must not leak into steady-state response construction.
@@ -659,7 +659,7 @@ function projectTalkSourcePayloadForSecrets(payload: TalkConfigResponse): TalkCo
 
 async function resolveTalkProviderInputConfig(params: {
   includeSecrets: boolean;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   providerConfig: TalkProviderConfig;
   provider: string;
 }): Promise<TalkProviderConfig> {

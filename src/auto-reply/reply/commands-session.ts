@@ -3,12 +3,12 @@ import {
   resolveNonNegativeIntegerOption,
   resolveOptionalIntegerOption,
   timestampMsToIsoString,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@natesclaw/normalization-core/number-coercion";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
 import { formatFastModeCurrentStatus, resolveFastModeState } from "../../agents/fast-mode.js";
 import {
@@ -32,7 +32,7 @@ import {
   type RestartSentinelPayload,
   writeRestartSentinel,
 } from "../../infra/restart-sentinel.js";
-import { scheduleGatewaySigusr1Restart, triggerOpenClawRestart } from "../../infra/restart.js";
+import { scheduleGatewaySigusr1Restart, triggerNatesclawRestart } from "../../infra/restart.js";
 import { loadCostUsageSummary, loadSessionCostSummary } from "../../infra/session-cost-usage.js";
 import { DEFAULT_AGENT_ID, isUnscopedSessionKeySentinel } from "../../routing/session-key.js";
 import {
@@ -696,7 +696,7 @@ export const handleRestartCommand: CommandHandler = async (params, allowTextComm
         : undefined,
     });
     return sessionCommandReply(
-      "⚙️ Restarting OpenClaw in-process (SIGUSR1); back in a few seconds.",
+      "⚙️ Restarting Natesclaw in-process (SIGUSR1); back in a few seconds.",
     );
   }
   let sentinelWritten = false;
@@ -711,7 +711,7 @@ export const handleRestartCommand: CommandHandler = async (params, allowTextComm
       "⚠️ Restart failed: could not persist the post-restart acknowledgement.",
     );
   }
-  const restartMethod = triggerOpenClawRestart();
+  const restartMethod = triggerNatesclawRestart();
   if (!restartMethod.ok) {
     if (sentinelWritten) {
       await clearRestartSentinel();
@@ -720,7 +720,7 @@ export const handleRestartCommand: CommandHandler = async (params, allowTextComm
     return sessionCommandReply(`⚠️ Restart failed (${restartMethod.method}).${detail}`);
   }
   return sessionCommandReply(
-    `⚙️ Restarting OpenClaw via ${restartMethod.method}; give me a few seconds to come back online.`,
+    `⚙️ Restarting Natesclaw via ${restartMethod.method}; give me a few seconds to come back online.`,
   );
 };
 

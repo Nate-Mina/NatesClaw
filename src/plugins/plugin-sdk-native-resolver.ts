@@ -1,4 +1,4 @@
-/** Installs native Node resolution aliases so plugins can import the OpenClaw SDK in dev and tests. */
+/** Installs native Node resolution aliases so plugins can import the Natesclaw SDK in dev and tests. */
 import fs from "node:fs";
 import Module from "node:module";
 import path from "node:path";
@@ -41,7 +41,7 @@ type NativeAliasEntry = {
 };
 
 /** Resolver install options for CJS `_resolveFilename` and modern ESM loader hooks. */
-type InstallOpenClawPluginSdkNativeResolverOptions = {
+type InstallNatesclawPluginSdkNativeResolverOptions = {
   modulePath?: string;
   pluginModulePath?: string;
   allowedParentRoots?: readonly string[];
@@ -53,10 +53,10 @@ type InstallOpenClawPluginSdkNativeResolverOptions = {
 
 const moduleWithResolver = Module as ModuleWithResolver;
 const nodeResolveFilenameProperty = "_resolveFilename" as const;
-const PLUGIN_SDK_PACKAGE_PREFIXES = ["openclaw/plugin-sdk", "@openclaw/plugin-sdk"] as const;
+const PLUGIN_SDK_PACKAGE_PREFIXES = ["natesclaw/plugin-sdk", "@natesclaw/plugin-sdk"] as const;
 const INTERNAL_CORE_PACKAGE_ALIASES = [
   {
-    packageName: "@openclaw/markdown-core",
+    packageName: "@natesclaw/markdown-core",
     packageDir: "markdown-core",
     subpaths: [
       ["", "index.ts"],
@@ -74,7 +74,7 @@ const INTERNAL_CORE_PACKAGE_ALIASES = [
     // Mirrors packages/ai/package.json exports; dist file names do not follow
     // the src layout (dist/diagnostics.mjs <- src/utils/diagnostics.ts), so the
     // generic export-map derivation cannot be used here.
-    packageName: "@openclaw/ai",
+    packageName: "@natesclaw/ai",
     packageDir: "ai",
     subpaths: [
       ["", "index.ts"],
@@ -92,7 +92,7 @@ const INTERNAL_CORE_PACKAGE_ALIASES = [
     ],
   },
   {
-    packageName: "@openclaw/media-core",
+    packageName: "@natesclaw/media-core",
     packageDir: "media-core",
     subpaths: [
       ["", "index.ts"],
@@ -108,7 +108,7 @@ const INTERNAL_CORE_PACKAGE_ALIASES = [
     ],
   },
   {
-    packageName: "@openclaw/llm-core",
+    packageName: "@natesclaw/llm-core",
     packageDir: "llm-core",
     subpaths: [
       ["", "index.ts"],
@@ -134,7 +134,7 @@ registerPluginMetadataProcessMemoLifecycleClear(() => {
   registeredInternalCorePackageHosts.clear();
 });
 
-function resolveLoaderModulePath(options: InstallOpenClawPluginSdkNativeResolverOptions): string {
+function resolveLoaderModulePath(options: InstallNatesclawPluginSdkNativeResolverOptions): string {
   return options.modulePath ?? fileURLToPath(options.moduleUrl ?? import.meta.url);
 }
 
@@ -198,10 +198,10 @@ function resolveLoaderPackageRootFromModulePath(modulePath: string): string {
           name?: unknown;
         };
         if (
-          packageJson.name === "openclaw" ||
+          packageJson.name === "natesclaw" ||
           (typeof packageJson.bin === "object" &&
             packageJson.bin !== null &&
-            typeof (packageJson.bin as { openclaw?: unknown }).openclaw === "string")
+            typeof (packageJson.bin as { natesclaw?: unknown }).natesclaw === "string")
         ) {
           return cursor;
         }
@@ -236,7 +236,7 @@ function resolveAllowedParentRoot(modulePath: string): string {
 }
 
 function resolveAllowedParentRoots(
-  options: InstallOpenClawPluginSdkNativeResolverOptions,
+  options: InstallNatesclawPluginSdkNativeResolverOptions,
 ): string[] {
   const roots = new Set<string>();
   if (options.pluginModulePath) {
@@ -286,7 +286,7 @@ function resolveAliasTargetForParentPath(
 }
 
 function listPluginSdkNativeAliases(
-  options: InstallOpenClawPluginSdkNativeResolverOptions,
+  options: InstallNatesclawPluginSdkNativeResolverOptions,
 ): Array<readonly [string, string]> {
   const modulePath = options.pluginModulePath ?? resolveLoaderModulePath(options);
   const aliasMap = buildPluginLoaderAliasMap(
@@ -319,7 +319,7 @@ function listPluginSdkNativeAliases(
 }
 
 function listInternalCorePackageNativeAliases(
-  options: InstallOpenClawPluginSdkNativeResolverOptions,
+  options: InstallNatesclawPluginSdkNativeResolverOptions,
   packageRoot = resolveInternalCorePackageHostRoot(resolveLoaderModulePath(options)),
 ): Array<{
   request: string;
@@ -342,11 +342,11 @@ function listInternalCorePackageNativeAliases(
   const internalCorePackageAliases = [
     ...INTERNAL_CORE_PACKAGE_ALIASES,
     ...["normalization-core", "acp-core"].map((packageDir) => ({
-      packageName: `@openclaw/${packageDir}`,
+      packageName: `@natesclaw/${packageDir}`,
       packageDir,
       subpaths: listWorkspacePackageExportAliasEntries({
         packageRoot,
-        packageName: `@openclaw/${packageDir}`,
+        packageName: `@natesclaw/${packageDir}`,
         packageDir,
       }).map((entry) => [entry.subpath, entry.srcFile] as const),
     })),
@@ -425,7 +425,7 @@ function clearNativeAliasesForParentRoots(parentRoots: readonly string[]): void 
 }
 
 function registerInternalCorePackageNativeAliases(
-  options: InstallOpenClawPluginSdkNativeResolverOptions,
+  options: InstallNatesclawPluginSdkNativeResolverOptions,
 ): void {
   const packageRoot = resolveInternalCorePackageHostRoot(resolveLoaderModulePath(options));
   if (registeredInternalCorePackageHosts.get(packageRoot)) {
@@ -437,8 +437,8 @@ function registerInternalCorePackageNativeAliases(
   registeredInternalCorePackageHosts.set(packageRoot, true);
 }
 
-export function installOpenClawPluginSdkNativeResolver(
-  options: InstallOpenClawPluginSdkNativeResolverOptions = {},
+export function installNatesclawPluginSdkNativeResolver(
+  options: InstallNatesclawPluginSdkNativeResolverOptions = {},
 ): string[] {
   const parentRoots = resolveAllowedParentRoots(options);
   clearNativeAliasesForParentRoots(parentRoots);
@@ -450,8 +450,8 @@ export function installOpenClawPluginSdkNativeResolver(
   return [...pluginSdkNativeAliases.keys()].toSorted();
 }
 
-export function installOpenClawInternalCorePackageNativeResolver(
-  options: Pick<InstallOpenClawPluginSdkNativeResolverOptions, "moduleUrl"> = {},
+export function installNatesclawInternalCorePackageNativeResolver(
+  options: Pick<InstallNatesclawPluginSdkNativeResolverOptions, "moduleUrl"> = {},
 ): string[] {
   registerInternalCorePackageNativeAliases(options);
   installResolver();

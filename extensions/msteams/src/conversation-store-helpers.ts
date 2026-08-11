@@ -1,6 +1,6 @@
 // Msteams helper module supports conversation store helpers behavior.
-import { parseDateStringTimestampMs } from "openclaw/plugin-sdk/number-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { parseDateStringTimestampMs } from "natesclaw/plugin-sdk/number-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type {
   MSTeamsConversationStoreEntry,
   StoredConversationReference,

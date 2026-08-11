@@ -1,6 +1,6 @@
-// Openshell plugin entrypoint registers its OpenClaw integration.
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { registerSandboxBackend } from "openclaw/plugin-sdk/sandbox";
+// Openshell plugin entrypoint registers its Natesclaw integration.
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
+import { registerSandboxBackend } from "natesclaw/plugin-sdk/sandbox";
 import {
   createOpenShellSandboxBackendFactory,
   createOpenShellSandboxBackendManager,

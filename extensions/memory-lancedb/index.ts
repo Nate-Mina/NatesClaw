@@ -1,21 +1,21 @@
 import {
   resolveAgentConfig,
   resolveDefaultAgentId as resolveConfiguredDefaultAgentId,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "natesclaw/plugin-sdk/agent-runtime";
 import {
   optionalFiniteNumberSchema,
   optionalPositiveIntegerSchema,
-} from "openclaw/plugin-sdk/channel-actions";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { readFiniteNumberParam, readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import { resolveLivePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { isIncognitoSessionKey, normalizeAgentId } from "openclaw/plugin-sdk/routing";
-import { asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/channel-actions";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import { readFiniteNumberParam, readPositiveIntegerParam } from "natesclaw/plugin-sdk/param-readers";
+import { resolveLivePluginConfigObject } from "natesclaw/plugin-sdk/plugin-config-runtime";
+import { isIncognitoSessionKey, normalizeAgentId } from "natesclaw/plugin-sdk/routing";
+import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { Type } from "typebox";
-import { definePluginEntry, type OpenClawPluginApi } from "./api.js";
+import { definePluginEntry, type NatesclawPluginApi } from "./api.js";
 import {
   MEMORY_CATEGORIES,
   type MemoryConfig,
@@ -49,7 +49,7 @@ import {
 } from "./memory-policy.js";
 
 const loadMemoryHostCoreModule = createLazyRuntimeModule(
-  () => import("openclaw/plugin-sdk/memory-host-core"),
+  () => import("natesclaw/plugin-sdk/memory-host-core"),
 );
 
 const DEFAULT_AUTO_RECALL_TIMEOUT_MS = 15_000;
@@ -89,7 +89,7 @@ export default definePluginEntry({
   kind: "memory" as const,
   configSchema: memoryConfigSchema,
 
-  register(api: OpenClawPluginApi) {
+  register(api: NatesclawPluginApi) {
     let cfg: MemoryConfig;
     try {
       cfg = memoryConfigSchema.parse(api.pluginConfig);
@@ -113,8 +113,8 @@ export default definePluginEntry({
     const embeddings = createEmbeddings(api, cfg);
     const autoCaptureCursors = new Map<string, AutoCaptureCursor>();
     const memoryRecallCooldowns = new Map<string, { until: number; error: string }>();
-    const resolveRuntimeConfig = (): OpenClawConfig =>
-      (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+    const resolveRuntimeConfig = (): NatesclawConfig =>
+      (api.runtime.config?.current?.() ?? api.config) as NatesclawConfig;
     const resolveEnabledAgentId = (
       rawAgentId: string | undefined,
       runtimeConfig = resolveRuntimeConfig(),
@@ -137,7 +137,7 @@ export default definePluginEntry({
     const resolveCurrentHookConfig = () => {
       const runtimePluginConfig = resolveLivePluginConfigObject(
         api.runtime.config?.current
-          ? () => api.runtime.config.current() as OpenClawConfig
+          ? () => api.runtime.config.current() as NatesclawConfig
           : undefined,
         "memory-lancedb",
         api.pluginConfig as Record<string, unknown>,

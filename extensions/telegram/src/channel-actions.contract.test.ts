@@ -1,6 +1,6 @@
 // Telegram tests cover channel actions.contract plugin behavior.
-import { installChannelActionsContractSuite } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { installChannelActionsContractSuite } from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { telegramPlugin } from "../api.js";
 
@@ -16,7 +16,7 @@ describe("telegram actions contract", () => {
               botToken: "test-token-placeholder",
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         expectedActions: ["send", "poll", "react", "delete", "edit", "topic-create", "topic-edit"],
         expectedCapabilities: ["delivery-pin", "presentation"],
       },
@@ -59,7 +59,7 @@ describe("telegram actions contract", () => {
               richMessages,
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
       });
 
       expect(hints?.text_markup).toBe(expectedMarkup);
@@ -87,7 +87,7 @@ describe("telegram actions contract", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const capabilitiesFor = (accountId: string) =>
       telegramPlugin.agentPrompt?.messageToolCapabilities?.({ cfg, accountId });
 
@@ -105,7 +105,7 @@ describe("telegram actions contract", () => {
             capabilities: [],
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
     });
 
     expect(capabilities).toContain("inlineButtons");
@@ -115,7 +115,7 @@ describe("telegram actions contract", () => {
     const discovery = telegramPlugin.actions?.describeMessageTool?.({
       cfg: {
         channels: { telegram: { botToken: "test-token-placeholder" } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
     });
     const schema = discovery?.schema;
     const contributions = Array.isArray(schema) ? schema : schema ? [schema] : [];
@@ -136,7 +136,7 @@ describe("telegram actions contract", () => {
             capabilities: ["vision"],
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
     });
 
     expect(capabilities).not.toContain("inlineButtons");
@@ -156,7 +156,7 @@ describe("telegram actions contract", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       accountId: "ops",
     });
 
@@ -174,7 +174,7 @@ describe("telegram actions contract", () => {
               richMessages: true,
             },
           },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
       }),
     ).not.toThrow();
   });
@@ -197,7 +197,7 @@ describe("telegram actions contract", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
     });
 
     expect(hints?.text_markup).toBe("markdown_telegram_rich");
@@ -237,7 +237,7 @@ describe("telegram actions contract", () => {
         ctx: {
           channel: "telegram",
           action: "send",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as NatesclawConfig,
           params: { quoteText: "  original message  " },
         },
         to: "123456",
@@ -262,7 +262,7 @@ describe("telegram actions contract", () => {
         ctx: {
           channel: "telegram",
           action: "send",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as NatesclawConfig,
           params: { quoteText: "original message" },
         },
         to: "123456",
@@ -274,7 +274,7 @@ describe("telegram actions contract", () => {
         ctx: {
           channel: "telegram",
           action: "send",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as NatesclawConfig,
           params: { quote_text: "  snake case quote  " },
         },
         to: "123456",
@@ -296,7 +296,7 @@ describe("telegram actions contract", () => {
         ctx: {
           channel: "telegram",
           action: "send",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as NatesclawConfig,
           params: { asVideoNote: true },
         },
         to: "123456",
@@ -308,7 +308,7 @@ describe("telegram actions contract", () => {
         ctx: {
           channel: "telegram",
           action: "send",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as NatesclawConfig,
           params: { location },
         },
         to: "123456",
@@ -325,7 +325,7 @@ describe("telegram actions contract", () => {
         ctx: {
           channel: "telegram",
           action: "send",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as NatesclawConfig,
           params: { buttons: '[[{"text":"Yes","callback_data":"yes"}]]' },
         },
         to: "123456",

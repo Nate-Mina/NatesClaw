@@ -27,11 +27,11 @@ import {
   detectMime,
   estimateStringChars,
   truncateUtf16Safe,
-} from "./openclaw-runtime-io.js";
+} from "./natesclaw-runtime-io.js";
 import {
   resolveCanonicalRootMemoryFile,
   shouldSkipRootMemoryAuxiliaryPath,
-} from "./openclaw-runtime-memory.js";
+} from "./natesclaw-runtime-memory.js";
 import { retryTransientMemoryRead } from "./read-retry.js";
 import type { MemoryEntryProvenance, MemoryExtraPath } from "./types.js";
 
@@ -177,7 +177,7 @@ function shouldDescendMemoryEntry(
   if (shouldSkipPath?.(entry.path)) {
     return false;
   }
-  return entry.kind === "directory" && entry.name !== ".openclaw-repair";
+  return entry.kind === "directory" && entry.name !== ".natesclaw-repair";
 }
 
 async function collectMemoryFilesFromDir(

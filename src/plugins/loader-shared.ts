@@ -1,9 +1,9 @@
-import { err as resultError, ok, type Result } from "@openclaw/normalization-core/result";
+import { err as resultError, ok, type Result } from "@natesclaw/normalization-core/result";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { activateContextEngineRegistrations } from "../context-engine/registry.js";
 import { resolveRealpathOrAbsolute } from "../infra/boundary-path.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -63,7 +63,7 @@ export type AuthorizedDreamingSidecar = {
 };
 
 function resolveDreamingSidecarEngineId(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   memorySlot: string | null | undefined;
 }): string | null {
   const normalizedMemorySlot = normalizeLowercaseStringOrEmpty(params.memorySlot);
@@ -82,7 +82,7 @@ function resolveDreamingSidecarEngineId(params: {
 }
 
 export function resolveAuthorizedDreamingSidecar(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   normalized: NormalizedPluginsConfig;
   activationSource: PluginActivationConfigSource;
   manifestRegistry: PluginManifestRegistry;
@@ -287,8 +287,8 @@ export function createManifestPluginRecord(params: {
     description: manifestRecord.description,
     packageVersion: manifestRecord.packageVersion,
     version: manifestRecord.version,
-    builtWithOpenClawVersion: normalizeOptionalString(
-      candidate.packageManifest?.build?.openclawVersion,
+    builtWithNatesclawVersion: normalizeOptionalString(
+      candidate.packageManifest?.build?.natesclawVersion,
     ),
     packageName: manifestRecord.packageName,
     format: manifestRecord.format,

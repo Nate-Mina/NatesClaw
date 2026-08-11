@@ -1,6 +1,6 @@
-import { createRuntimeEnv } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { createRuntimeEnv } from "natesclaw/plugin-sdk/plugin-test-runtime";
 // Feishu tests cover bot.card action plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, describe, it, expect, vi, beforeEach } from "vitest";
 import type { ClawdbotConfig, RuntimeEnv } from "../runtime-api.js";
 import { processedCardActions, resolvedCardActionChatTypes } from "./card-action-state.js";

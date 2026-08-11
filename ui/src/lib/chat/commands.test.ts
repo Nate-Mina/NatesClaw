@@ -1,6 +1,6 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 // @vitest-environment node
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   buildFallbackSlashCommands,
@@ -76,7 +76,7 @@ function slashCommand(
 describe("getSlashCommandCompletions", () => {
   it("ranks an exact name above prefixes and description-only matches", () => {
     replaceSlashCommands([
-      slashCommand("openclaw", {
+      slashCommand("natesclaw", {
         description: "Run the setup and repair helper.",
         tier: "essential",
         category: "session",
@@ -88,7 +88,7 @@ describe("getSlashCommandCompletions", () => {
       slashCommand("pair", { tier: "power", category: "agents" }),
     ]);
 
-    expect(completionNames("pair")).toEqual(["pair", "pair-device", "openclaw"]);
+    expect(completionNames("pair")).toEqual(["pair", "pair-device", "natesclaw"]);
   });
 
   it("ranks exact and prefix alias matches like primary names", () => {

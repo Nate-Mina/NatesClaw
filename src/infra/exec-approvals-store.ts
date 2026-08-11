@@ -7,9 +7,9 @@ import { createSubsystemLogger } from "../logging/subsystem.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { readAgentDeletionJournal } from "../state/agent-deletion-journal.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import { formatErrorMessage } from "./errors.js";
 import {
   createFailClosedExecApprovalsFallback,
@@ -62,7 +62,7 @@ function warnFailClosed(message: string, error?: unknown): void {
 
 function readExecApprovalsSnapshotFromDatabase(): ExecApprovalsSnapshot {
   assertNoPendingLegacyExecApprovals();
-  const { db } = openOpenClawStateDatabase();
+  const { db } = openNatesclawStateDatabase();
   return snapshotFromExecApprovalsRow({
     path: resolveExecApprovalsDisplayPath(),
     row: readExecApprovalsConfigRow(db),
@@ -133,7 +133,7 @@ function updateExecApprovalsInTransaction(
   params: InternalExecApprovalsUpdate,
 ): ExecApprovalsSnapshot | null {
   assertNoPendingLegacyExecApprovals();
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const current = snapshotFromExecApprovalsRow({
         path: resolveExecApprovalsDisplayPath(),
@@ -213,7 +213,7 @@ export async function withAgentExecApprovalsRemoved<T>(
       throw new Error("Exec approvals changed while deleting agent; retry deletion.");
     }
   } else {
-    runOpenClawStateWriteTransaction(({ db }) => {
+    runNatesclawStateWriteTransaction(({ db }) => {
       assertExecApprovalsMutationAuthority(db, {
         action: "remove",
         agentId: key,
@@ -249,7 +249,7 @@ export async function withAgentExecApprovalsRemoved<T>(
 }
 
 function restoreExecApprovalsSnapshotInTransaction(snapshot: ExecApprovalsSnapshot): void {
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       const current = snapshotFromExecApprovalsRow({
         path: resolveExecApprovalsDisplayPath(),
@@ -278,7 +278,7 @@ export async function restoreExecApprovalsSnapshotLocked(
   baseHash: string,
 ): Promise<boolean> {
   assertNoPendingLegacyExecApprovals();
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const current = snapshotFromExecApprovalsRow({
         path: resolveExecApprovalsDisplayPath(),
@@ -343,6 +343,6 @@ const testing = {
 };
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.execApprovalsStoreTestApi")] =
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.execApprovalsStoreTestApi")] =
     testing;
 }

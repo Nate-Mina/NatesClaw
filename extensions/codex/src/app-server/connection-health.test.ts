@@ -1,4 +1,4 @@
-import type { OpenClawPluginServiceContext } from "openclaw/plugin-sdk/plugin-entry";
+import type { NatesclawPluginServiceContext } from "natesclaw/plugin-sdk/plugin-entry";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CodexAppServerClient } from "./client.js";
 import { createCodexAppServerConnectionHealthService } from "./connection-health.js";
@@ -182,10 +182,10 @@ function createClient() {
   };
 }
 
-function createServiceContext(): OpenClawPluginServiceContext {
+function createServiceContext(): NatesclawPluginServiceContext {
   return {
     config: {},
-    stateDir: "/tmp/openclaw-codex-connection-health-test",
+    stateDir: "/tmp/natesclaw-codex-connection-health-test",
     logger: {
       debug: vi.fn(),
       info: vi.fn(),

@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
-import { GATEWAY_AGENT_MEDIA_MIGRATION_REQUIRED_REASON } from "../state/openclaw-agent-db-migration-required.js";
+import { GATEWAY_AGENT_MEDIA_MIGRATION_REQUIRED_REASON } from "../state/natesclaw-agent-db-migration-required.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
   completeGatewayBootLifecycle,
   inspectGatewayCrashLoopBreaker,
@@ -17,16 +17,16 @@ import { migrateLegacyMediaPersistence } from "./state-migrations.media-persiste
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 describe("media persistence gateway lifecycle recovery", () => {
   it("repairs repeated typed startup failures after a successful v14 migration", () => {
     const stateDir = tempDirs.make("media-persistence-startup-recovery-");
-    const env = { OPENCLAW_STATE_DIR: stateDir };
-    const databasePath = openOpenClawAgentDatabase({ agentId: "main", env }).path;
-    closeOpenClawAgentDatabasesForTest();
+    const env = { NATESCLAW_STATE_DIR: stateDir };
+    const databasePath = openNatesclawAgentDatabase({ agentId: "main", env }).path;
+    closeNatesclawAgentDatabasesForTest();
 
     const { DatabaseSync } = requireNodeSqlite();
     const database = new DatabaseSync(databasePath);

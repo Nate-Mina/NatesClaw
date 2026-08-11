@@ -4,13 +4,13 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { writePersistedInstalledPluginIndexSync } from "./installed-plugin-index-store.js";
-import { listOpenClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
+import { listNatesclawPluginManifestMetadata } from "./manifest-metadata-scan.js";
 import { loadPluginManifest } from "./manifest.js";
 
 const tempRoots: string[] = [];
 
 function createTempRoot(): string {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-manifest-metadata-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-manifest-metadata-"));
   tempRoots.push(root);
   return root;
 }
@@ -20,7 +20,7 @@ function writeJson(filePath: string, value: unknown): void {
   fs.writeFileSync(filePath, JSON.stringify(value, null, 2), "utf8");
 }
 
-describe("listOpenClawPluginManifestMetadata", () => {
+describe("listNatesclawPluginManifestMetadata", () => {
   afterEach(() => {
     for (const root of tempRoots.splice(0)) {
       fs.rmSync(root, { recursive: true, force: true });
@@ -33,11 +33,11 @@ describe("listOpenClawPluginManifestMetadata", () => {
     const bundledRoot = path.join(root, "extensions");
     const staleBundledRoot = path.join(root, "stale", "extensions");
 
-    writeJson(path.join(bundledRoot, "openai", "openclaw.plugin.json"), {
+    writeJson(path.join(bundledRoot, "openai", "natesclaw.plugin.json"), {
       id: "openai",
       providerEndpoints: [{ endpointClass: "openai-public", hosts: ["api.openai.com"] }],
     });
-    writeJson(path.join(staleBundledRoot, "openai", "openclaw.plugin.json"), {
+    writeJson(path.join(staleBundledRoot, "openai", "natesclaw.plugin.json"), {
       id: "openai",
       providers: ["openai"],
     });
@@ -53,7 +53,7 @@ describe("listOpenClawPluginManifestMetadata", () => {
         plugins: [
           {
             pluginId: "openai",
-            manifestPath: path.join(staleBundledRoot, "openai", "openclaw.plugin.json"),
+            manifestPath: path.join(staleBundledRoot, "openai", "natesclaw.plugin.json"),
             manifestHash: "stale-openai",
             rootDir: path.join(staleBundledRoot, "openai"),
             origin: "bundled",
@@ -68,12 +68,12 @@ describe("listOpenClawPluginManifestMetadata", () => {
         ],
         diagnostics: [],
       },
-      { stateDir: path.join(home, ".openclaw") },
+      { stateDir: path.join(home, ".natesclaw") },
     );
 
-    const records = listOpenClawPluginManifestMetadata({
-      OPENCLAW_HOME: home,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+    const records = listNatesclawPluginManifestMetadata({
+      NATESCLAW_HOME: home,
+      NATESCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
     });
 
     const openai = records.find((record) => record.manifest.id === "openai");
@@ -88,14 +88,14 @@ describe("listOpenClawPluginManifestMetadata", () => {
     const home = path.join(root, "home");
     const partialBundledRoot = path.join(root, "dist", "extensions");
 
-    writeJson(path.join(partialBundledRoot, "qa-lab", "openclaw.plugin.json"), {
+    writeJson(path.join(partialBundledRoot, "qa-lab", "natesclaw.plugin.json"), {
       id: "qa-lab",
       providers: ["qa-lab"],
     });
 
-    const records = listOpenClawPluginManifestMetadata({
-      OPENCLAW_HOME: home,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: partialBundledRoot,
+    const records = listNatesclawPluginManifestMetadata({
+      NATESCLAW_HOME: home,
+      NATESCLAW_BUNDLED_PLUGINS_DIR: partialBundledRoot,
     });
 
     const openai = records.find((record) => record.manifest.id === "openai");
@@ -108,16 +108,16 @@ describe("listOpenClawPluginManifestMetadata", () => {
     });
   });
 
-  it("falls through a blank OpenClaw home when scanning global manifests", () => {
+  it("falls through a blank Natesclaw home when scanning global manifests", () => {
     const root = createTempRoot();
     const home = path.join(root, "home");
-    const pluginDir = path.join(home, ".openclaw", "extensions", "example");
-    writeJson(path.join(pluginDir, "openclaw.plugin.json"), { id: "example" });
+    const pluginDir = path.join(home, ".natesclaw", "extensions", "example");
+    writeJson(path.join(pluginDir, "natesclaw.plugin.json"), { id: "example" });
 
-    const records = listOpenClawPluginManifestMetadata({
-      OPENCLAW_HOME: "   ",
+    const records = listNatesclawPluginManifestMetadata({
+      NATESCLAW_HOME: "   ",
       HOME: home,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
+      NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "bundled"),
     });
 
     expect(records).toContainEqual({
@@ -130,7 +130,7 @@ describe("listOpenClawPluginManifestMetadata", () => {
   it("preserves identity, capabilities, and config schema without loading plugin runtime", () => {
     const root = createTempRoot();
     const home = path.join(root, "home");
-    const pluginDir = path.join(home, ".openclaw", "extensions", "authoring-contract");
+    const pluginDir = path.join(home, ".natesclaw", "extensions", "authoring-contract");
     const manifest = {
       id: "authoring-contract",
       name: "Authoring contract",
@@ -147,11 +147,11 @@ describe("listOpenClawPluginManifestMetadata", () => {
         },
       },
     };
-    writeJson(path.join(pluginDir, "openclaw.plugin.json"), manifest);
+    writeJson(path.join(pluginDir, "natesclaw.plugin.json"), manifest);
 
-    const records = listOpenClawPluginManifestMetadata({
-      OPENCLAW_HOME: home,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "empty-bundled"),
+    const records = listNatesclawPluginManifestMetadata({
+      NATESCLAW_HOME: home,
+      NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "empty-bundled"),
     });
 
     expect(records).toContainEqual({
@@ -174,7 +174,7 @@ describe("listOpenClawPluginManifestMetadata", () => {
     },
   ])("fails fast on $name", ({ manifest, error }) => {
     const pluginDir = createTempRoot();
-    writeJson(path.join(pluginDir, "openclaw.plugin.json"), manifest);
+    writeJson(path.join(pluginDir, "natesclaw.plugin.json"), manifest);
 
     const result = loadPluginManifest(pluginDir, false);
 
@@ -185,11 +185,11 @@ describe("listOpenClawPluginManifestMetadata", () => {
     const root = createTempRoot();
     const home = path.join(root, "home");
 
-    const goodPluginDir = path.join(home, ".openclaw", "extensions", "good-plugin");
-    writeJson(path.join(goodPluginDir, "openclaw.plugin.json"), { id: "good-plugin" });
+    const goodPluginDir = path.join(home, ".natesclaw", "extensions", "good-plugin");
+    writeJson(path.join(goodPluginDir, "natesclaw.plugin.json"), { id: "good-plugin" });
 
-    const oversizedDir = path.join(home, ".openclaw", "extensions", "big-plugin");
-    const oversizedPath = path.join(oversizedDir, "openclaw.plugin.json");
+    const oversizedDir = path.join(home, ".natesclaw", "extensions", "big-plugin");
+    const oversizedPath = path.join(oversizedDir, "natesclaw.plugin.json");
     fs.mkdirSync(oversizedDir, { recursive: true });
     fs.writeFileSync(
       oversizedPath,
@@ -198,9 +198,9 @@ describe("listOpenClawPluginManifestMetadata", () => {
     );
     expect(fs.statSync(oversizedPath).size).toBeGreaterThan(256 * 1024);
 
-    const records = listOpenClawPluginManifestMetadata({
-      OPENCLAW_HOME: home,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "empty-bundled"),
+    const records = listNatesclawPluginManifestMetadata({
+      NATESCLAW_HOME: home,
+      NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "empty-bundled"),
     });
 
     // "good-plugin" is present; "big-plugin" is skipped due to oversized manifest.
@@ -212,11 +212,11 @@ describe("listOpenClawPluginManifestMetadata", () => {
     const root = createTempRoot();
     const home = path.join(root, "home");
 
-    const exactDir = path.join(home, ".openclaw", "extensions", "exact-plugin");
+    const exactDir = path.join(home, ".natesclaw", "extensions", "exact-plugin");
     fs.mkdirSync(exactDir, { recursive: true });
 
     // Write a compact JSON manifest padded to exactly the byte limit.
-    const exactPath = path.join(exactDir, "openclaw.plugin.json");
+    const exactPath = path.join(exactDir, "natesclaw.plugin.json");
     const exactManifest = { id: "exact-plugin", pad: "" };
     const compactJson = JSON.stringify(exactManifest);
     const requiredPadding = 256 * 1024 - Buffer.byteLength(compactJson, "utf8");
@@ -224,9 +224,9 @@ describe("listOpenClawPluginManifestMetadata", () => {
     fs.writeFileSync(exactPath, JSON.stringify(exactManifest), "utf8");
     expect(Buffer.byteLength(fs.readFileSync(exactPath), "utf8")).toBe(256 * 1024);
 
-    const records = listOpenClawPluginManifestMetadata({
-      OPENCLAW_HOME: home,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "empty-bundled"),
+    const records = listNatesclawPluginManifestMetadata({
+      NATESCLAW_HOME: home,
+      NATESCLAW_BUNDLED_PLUGINS_DIR: path.join(root, "empty-bundled"),
     });
 
     expect(records.find((record) => record.manifest.id === "exact-plugin")).toBeTruthy();

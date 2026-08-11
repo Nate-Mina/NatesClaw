@@ -102,7 +102,7 @@ export class RouteDraftComposerFocus {
         this.timer = undefined;
         return;
       }
-      const pane = [...this.host.querySelectorAll<ChatPaneElement>("openclaw-chat-pane")].find(
+      const pane = [...this.host.querySelectorAll<ChatPaneElement>("natesclaw-chat-pane")].find(
         (candidate) =>
           candidate.active &&
           candidate.sessionKey !== undefined &&

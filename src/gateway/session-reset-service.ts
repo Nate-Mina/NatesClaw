@@ -1,8 +1,8 @@
 // Gateway session reset/delete service.
 // Rotates transcripts and coordinates lifecycle cleanup across runtimes/hooks.
 import { randomUUID } from "node:crypto";
-import { cleanupSessionResources } from "@openclaw/ai/internal/runtime";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { cleanupSessionResources } from "@natesclaw/ai/internal/runtime";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { ErrorCodes, errorShape } from "../../packages/gateway-protocol/src/index.js";
 import { getAcpSessionManager } from "../acp/control-plane/manager.js";
 import { getAcpRuntimeBackend } from "../acp/runtime/registry.js";
@@ -49,7 +49,7 @@ import {
   type SessionCreatedVia,
 } from "../config/sessions/session-entry-provenance.js";
 import type { SessionAcpMeta } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { logVerbose } from "../globals.js";
 import { createInternalHookEvent, triggerInternalHook } from "../hooks/internal-hooks.js";
 import {
@@ -124,7 +124,7 @@ type McpRunEndWatcherState = {
 };
 
 const mcpRunEndWatcherState = resolveGlobalSingleton<McpRunEndWatcherState>(
-  Symbol.for("openclaw.mcpRunEndWatchers"),
+  Symbol.for("natesclaw.mcpRunEndWatchers"),
   () => ({ cancellations: new Map(), retirements: new Set(), watchers: new Map() }),
   async (state) => {
     for (const cancel of state.cancellations.values()) {
@@ -163,7 +163,7 @@ export function archiveSessionTranscriptsForSessionDetailed(params: {
 }
 
 export function emitGatewaySessionEndPluginHook(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   sessionId?: string;
   storePath: string;
@@ -244,7 +244,7 @@ export function emitGatewaySessionEndPluginHook(params: {
 }
 
 export function emitGatewaySessionStartPluginHook(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   sessionId?: string;
   resumedFrom?: string;
@@ -410,7 +410,7 @@ export async function emitSessionUnboundLifecycleEvent(params: {
 }
 
 async function ensureSessionRuntimeCleanup(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string;
   target: ReturnType<typeof resolveGatewaySessionStoreTarget>;
   sessionId?: string;
@@ -585,7 +585,7 @@ async function runAcpCleanupStep(params: {
 }
 
 async function closeAcpRuntimeForSession(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   fallbackSessionKeys?: Array<string | undefined>;
   reason: "session-reset" | "session-delete";
@@ -732,7 +732,7 @@ function buildPendingAcpMeta(base: SessionAcpMeta, now: number): SessionAcpMeta 
 }
 
 async function ensureFreshAcpResetState(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   reason: "session-reset" | "session-delete";
   acpMeta: SessionAcpMeta;
@@ -796,7 +796,7 @@ async function ensureFreshAcpResetState(params: {
 }
 
 async function closeChildAcpRuntimesForParent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   parentKey: string;
   reason: "session-reset" | "session-delete";
   assertCurrent?: () => void;
@@ -860,7 +860,7 @@ async function closeChildAcpRuntimesForParent(params: {
 }
 
 export async function cleanupSessionBeforeMutation(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string;
   target: ReturnType<typeof resolveGatewaySessionStoreTarget>;
   entry: SessionEntry | undefined;
@@ -933,7 +933,7 @@ export async function cleanupSessionBeforeMutation(params: {
 }
 
 export async function emitGatewayBeforeResetPluginHook(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string;
   messages?: unknown[];
   target: ReturnType<typeof resolveGatewaySessionStoreTarget>;

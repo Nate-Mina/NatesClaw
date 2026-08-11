@@ -59,7 +59,7 @@ const {
 const installSnapshot = {
   config: {},
   baseHash: "base-hash",
-  writeOptions: { expectedConfigPath: "/tmp/openclaw.json" },
+  writeOptions: { expectedConfigPath: "/tmp/natesclaw.json" },
 };
 
 function mockClawHubWorkboardInstall() {
@@ -90,12 +90,12 @@ function metadataSnapshot(enabled: boolean) {
     origin: "bundled",
     rootDir: "/tmp/workboard",
     source: "/tmp/workboard/index.ts",
-    manifestPath: "/tmp/workboard/openclaw.plugin.json",
+    manifestPath: "/tmp/workboard/natesclaw.plugin.json",
   };
   return {
     index: {
       plugins: [
-        { pluginId: "workboard", packageName: "@openclaw/workboard", origin: "bundled", enabled },
+        { pluginId: "workboard", packageName: "@natesclaw/workboard", origin: "bundled", enabled },
       ],
       installRecords: {},
     },
@@ -120,11 +120,11 @@ describe("plugin management registry refresh", () => {
         snapshot: {
           valid: true,
           parsed: {},
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
           sourceConfig: { plugins: { entries: { workboard: { enabled: !enabled } } } },
           hash: "base-hash",
         },
-        writeOptions: { expectedConfigPath: "/tmp/openclaw.json" },
+        writeOptions: { expectedConfigPath: "/tmp/natesclaw.json" },
       });
       mocks.replaceConfig.mockResolvedValue({});
       mocks.metadata
@@ -152,7 +152,7 @@ describe("plugin management registry refresh", () => {
       snapshot: {
         valid: true,
         parsed: {},
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         sourceConfig: {},
         hash: "base-hash",
       },

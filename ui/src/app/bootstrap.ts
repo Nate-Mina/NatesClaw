@@ -1,4 +1,4 @@
-import type { RouteLocation } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
 import type { GatewayBrowserClient } from "../api/gateway.ts";
 import { sessionRouteNamespaceFromPath } from "../app-route-paths.ts";
 import {
@@ -68,7 +68,7 @@ function applyThemePresentation(settings: ReturnType<typeof loadSettings>): void
   const resolvedTheme = resolveTheme(settings.theme, settings.themeMode);
   root.dataset.theme = resolvedTheme;
   root.dataset.themeMode = resolvedTheme.endsWith("light") ? "light" : "dark";
-  // Carapace CSS (openclaw/carapace) selects on [data-theme-resolved]; keep it
+  // Carapace CSS (natesclaw/carapace) selects on [data-theme-resolved]; keep it
   // in lockstep with data-theme-mode so its stylesheets work unmodified here.
   root.dataset.themeResolved = root.dataset.themeMode;
   root.classList.toggle("wa-light", root.dataset.themeMode === "light");
@@ -270,7 +270,7 @@ export function bootstrapApplication(
     dependencies.sessionPathBuilderReady ??
     (documentMode
       ? Promise.resolve()
-      : import("@openclaw/session-url-contract").then((contract) => {
+      : import("@natesclaw/session-url-contract").then((contract) => {
           setSessionPathBuilder(contract.buildControlUiSessionPath);
         }));
 
@@ -472,7 +472,7 @@ export function bootstrapApplication(
       void router
         .navigate(routeId, context, { history: "push" }, location)
         .catch((error: unknown) => {
-          console.error("[openclaw] route navigation failed", error);
+          console.error("[natesclaw] route navigation failed", error);
         });
     },
     replace: (routeId, options) => {
@@ -483,7 +483,7 @@ export function bootstrapApplication(
       void router
         .navigate(routeId, context, { history: "replace" }, location)
         .catch((error: unknown) => {
-          console.error("[openclaw] route replacement failed", error);
+          console.error("[natesclaw] route replacement failed", error);
         });
     },
     revalidate: (routeId) => router.revalidate(context, routeId),
@@ -557,7 +557,7 @@ export function bootstrapApplication(
                 isDefaultChatLanding(history.location(), basePath, routeIdFromPath),
             }),
             (error) => {
-              console.error("[openclaw] initial session location failed", error);
+              console.error("[natesclaw] initial session location failed", error);
             },
           );
         });

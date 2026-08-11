@@ -3,12 +3,12 @@
  *
  * Routes completion payloads through gateway/channel/session paths and records delivery evidence.
  */
-import { clampTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeUniqueTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
+import { clampTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeUniqueTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
 import { completionRequiresMessageToolDelivery } from "../../../auto-reply/reply/completion-delivery-policy.js";
 import { sanitizePendingFinalDeliveryText } from "../../../auto-reply/reply/pending-final-delivery.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { isFastTestRuntimeEnv } from "../../../infra/env.js";
 import { isOutboundDeliveryError } from "../../../infra/outbound/deliver-types.js";
 import { sourceDeliveryTargetsMatch } from "../../../infra/outbound/source-delivery-plan.js";
@@ -337,7 +337,7 @@ async function resolveActiveWakeWithRetries(
   return outcome;
 }
 
-export function resolveSubagentAnnounceTimeoutMs(cfg: OpenClawConfig): number {
+export function resolveSubagentAnnounceTimeoutMs(cfg: NatesclawConfig): number {
   const configured = cfg.agents?.defaults?.subagents?.announceTimeoutMs;
   return clampTimerTimeoutMs(configured) ?? DEFAULT_SUBAGENT_ANNOUNCE_TIMEOUT_MS;
 }
@@ -726,7 +726,7 @@ function hasFailedSubagentNoOutputCompletion(events: readonly AgentInternalEvent
 }
 
 async function deliverCompletionDirect(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   requesterSessionKey: string;
   directIdempotencyKey: string;
   deliveryTarget: {
@@ -1583,7 +1583,7 @@ const testing = {
 };
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
   (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.subagentAnnounceDeliveryTestApi")
+    Symbol.for("natesclaw.subagentAnnounceDeliveryTestApi")
   ] = testing;
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

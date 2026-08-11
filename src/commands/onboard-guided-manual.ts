@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { withConsoleSubsystemsSuppressed } from "../logging/console.js";
 import type { RuntimeEnv } from "../runtime.js";
 import type {
@@ -92,7 +92,7 @@ export async function tryCandidate(params: {
 export async function runManualStage(params: {
   detection: SetupInferenceDetection;
   autoAttemptedKinds: ReadonlySet<SetupInferenceCandidate["kind"]>;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   workspace: string;
   runtime: RuntimeEnv;
   prompter: WizardPrompter;

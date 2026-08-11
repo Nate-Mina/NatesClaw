@@ -1,6 +1,6 @@
 /* Full-page new-session draft: the welcome and draft form one top-anchored
    composition, with the target row and composer between hero and recents. */
-openclaw-new-session-page {
+natesclaw-new-session-page {
   display: flex;
   flex: 1 1 0;
   min-width: 0;
@@ -116,7 +116,7 @@ openclaw-new-session-page {
   position: relative;
 }
 
-.new-session-page__select--agent openclaw-agent-select {
+.new-session-page__select--agent natesclaw-agent-select {
   width: auto;
   max-width: min(40vw, 260px);
 }

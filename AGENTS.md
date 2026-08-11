@@ -5,12 +5,12 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 
 ## Start
 
-- Repo: `https://github.com/openclaw/openclaw`
+- Repo: `https://github.com/natesclaw/natesclaw`
 - Replies: repo-root refs only: `extensions/telegram/src/index.ts:80`. No absolute paths, no `~/`.
 - Docs/user-visible work: `pnpm docs:list`, then read relevant docs only.
-- Existing-solutions preflight: before proposing or building a custom system, feature, workflow, tool, integration, or automation, do a lightweight check for open-source projects, maintained libraries, existing OpenClaw plugins, or free platforms that already solve it well enough. Prefer those when adequate. Build custom only when existing options are unsuitable, too expensive, unmaintained, unsafe, non-compliant, or the user explicitly asks for custom. Avoid paid-service recommendations unless the user explicitly approves spend. Keep this to a brief preflight gate, not a broad research assignment.
+- Existing-solutions preflight: before proposing or building a custom system, feature, workflow, tool, integration, or automation, do a lightweight check for open-source projects, maintained libraries, existing Natesclaw plugins, or free platforms that already solve it well enough. Prefer those when adequate. Build custom only when existing options are unsuitable, too expensive, unmaintained, unsafe, non-compliant, or the user explicitly asks for custom. Avoid paid-service recommendations unless the user explicitly approves spend. Keep this to a brief preflight gate, not a broad research assignment.
 - Fix/triage/review: Repair Doctrine applies. Verdicts need source, tests, current/shipped behavior, and dependency contract proof; diff-only review is insufficient.
-- Dependency-touching work: direct dependency inspection is mandatory when feasible; do not rely on assumptions, wrappers, or memory. Most dependencies are OSS, so read their source/docs/types. Codex-related work has a hard gate: the acting agent must personally inspect sibling `../codex` source for the exact protocol/runtime behavior before any verdict, comment, approval, merge recommendation, code change, or `proof sufficient` claim. If missing, clone `https://github.com/openai/codex.git` there first. Subagent reports, PR text, OpenClaw wrappers, generated schemas, memory, and prior bot reviews do not satisfy this gate. No direct `../codex` check means no Codex verdict. Cite Codex files/lines checked in final/review/comment.
+- Dependency-touching work: direct dependency inspection is mandatory when feasible; do not rely on assumptions, wrappers, or memory. Most dependencies are OSS, so read their source/docs/types. Codex-related work has a hard gate: the acting agent must personally inspect sibling `../codex` source for the exact protocol/runtime behavior before any verdict, comment, approval, merge recommendation, code change, or `proof sufficient` claim. If missing, clone `https://github.com/openai/codex.git` there first. Subagent reports, PR text, Natesclaw wrappers, generated schemas, memory, and prior bot reviews do not satisfy this gate. No direct `../codex` check means no Codex verdict. Cite Codex files/lines checked in final/review/comment.
 - Dependency-backed behavior: read upstream docs/source/types first. No API/default/error/timing guesses.
 - External API work: live test required. Google/search for additional proof. Prefer official docs/source/types; cite current proof. No memory-only API claims.
 - Live-verify when feasible. Never print secrets.
@@ -56,8 +56,8 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 
 ## ClawSweeper Review Policy
 
-- OpenClaw-specific review rules live here; generic ClawSweeper prompts stay repo-agnostic.
-- ClawSweeper-owned schema, labels, close reasons, protected-label gates, maintainer-item gates, and mutation rules live in `openclaw/clawsweeper`.
+- Natesclaw-specific review rules live here; generic ClawSweeper prompts stay repo-agnostic.
+- ClawSweeper-owned schema, labels, close reasons, protected-label gates, maintainer-item gates, and mutation rules live in `natesclaw/clawsweeper`.
 - Review workers read this full root `AGENTS.md` before judging; no reliance on search snippets, `head`, partial ranges, local excerpts, or truncated copies. Then read every scoped `AGENTS.md` that owns touched paths.
 - Optional integrations, providers, channels, skill bundles, MCP surfaces, and service workflows route to plugins, ClawHub, or owner repos when current seams suffice. Keep core items for missing core/plugin APIs, bundled regressions, security/core hardening, or maintainer product decisions.
 - Plugin APIs, provider routing, auth/session state, persisted preferences, config loading, config/default additions, migrations, setup, startup checks, and fallback behavior are compatibility/upgrade-sensitive. Treat config breaks, new config/default surfaces, removed fallbacks, fail-closed changes, stricter validation, or new operator action as merge risk even with green CI when they can affect existing users, upgrades, provider/plugin behavior, or maintainer operations.
@@ -80,7 +80,7 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
   backport, or a release blocker by itself.
 - Before landing any PR: read the latest ClawSweeper comment and its `Rank-up moves:` list. Apply each move, or state in the PR why it is skipped; never merge past them silently. A ClawSweeper review from the last 12 hours covers the PR even when the head moved afterward, provided every actionable finding from that review is addressed (or its skip stated in the PR) and exact-head CI is green. Request `@clawsweeper re-review` only when the latest review is older than 12 hours, still has unaddressed actionable findings, or the post-review pushes changed behavior beyond addressing findings and mechanical refreshes (rebase, format, merge-ref). A queued or late-publishing re-review refreshes the rating; never block landing on the review publisher.
 - Changelog findings: see Docs / Changelog.
-- Public ClawSweeper comments prefer `https://docs.openclaw.ai/...` when a public docs page exists; structured evidence still cites repo files, lines, SHAs.
+- Public ClawSweeper comments prefer `https://docs.natesclaw.ai/...` when a public docs page exists; structured evidence still cites repo files, lines, SHAs.
 - Findings need current source, shipped/current behavior, tests/CI evidence, and dependency contract proof when dependency-backed behavior is involved. Validation is judged against touched and sibling surfaces plus this file's commands; clear evidence matters for user-visible changes, with Telegram/Desktop proof for Telegram-visible behavior when feasible.
 - Real-behavior-proof gate: a mock-gateway harness run — mock channel API + mock provider + ephemeral gateway, with the verdict JSON in the PR body — satisfies it for channel-visible changes when it covers the changed path. Live-channel proof is always welcome and counts as stronger evidence.
 - Prefer findings for concrete behavior regressions, missing changed-surface proof, owner-boundary violations, security/API contract issues, or docs/config mismatches.
@@ -89,19 +89,19 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 ## Map
 
 - Core TS: `src/`, `ui/`, `packages/`; plugins: `extensions/`; SDK: `src/plugin-sdk/*`; channels: `src/channels/*`; loader: `src/plugins/*`; protocol: `packages/gateway-protocol/*`; docs/apps: `docs/`, `apps/`.
-- Installers: sibling `../openclaw.ai`.
+- Installers: sibling `../natesclaw.ai`.
 - Scoped guides: `extensions/`, `src/{plugin-sdk,channels,plugins,gateway,agents}/`, `test/helpers*/`, `docs/`, `ui/`, `scripts/`.
 
 ## Docs
 
-- Source docs: `docs/**`; publish repo: `openclaw/docs`; host: `https://docs.openclaw.ai`.
+- Source docs: `docs/**`; publish repo: `natesclaw/docs`; host: `https://docs.natesclaw.ai`.
 - Flow: source -> `docs-sync-publish.yml` -> mirror build -> R2 -> Worker router.
-- Docs AI: `openclaw/ask-molty`; see its `AGENTS.md`.
+- Docs AI: `natesclaw/ask-molty`; see its `AGENTS.md`.
 
 ## Architecture
 
 - Core stays plugin-agnostic. No bundled ids/defaults/policy in core when manifest/registry/capability contracts work.
-- Plugins cross into core only via `openclaw/plugin-sdk/*`, manifest metadata, injected runtime helpers, documented barrels (`api.ts`, `runtime-api.ts`).
+- Plugins cross into core only via `natesclaw/plugin-sdk/*`, manifest metadata, injected runtime helpers, documented barrels (`api.ts`, `runtime-api.ts`).
 - Plugin prod code: no core `src/**`, `src/plugin-sdk-internal/**`, other plugin `src/**`, or relative outside package.
 - Core/tests: no deep plugin internals (`extensions/*/src/**`, `onboard.js`). Use public barrels, SDK facade, generic contracts.
 - Owner boundary: owner-specific repair/detection/onboarding/auth/defaults/provider behavior lives in owner plugin. Shared/core gets generic seams only.
@@ -109,26 +109,26 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 - Internal bundled plugins ship in core dist; bundled-only facade loader ok only for them.
 - External official plugins own package/deps and are excluded from core dist; core uses registry-aware `facade-runtime` or generic contracts.
 - Externalizing a bundled plugin: update package excludes, official catalogs, docs, tests, and prove core runtime paths resolve installed plugin roots before root-dep removal.
-- Runtime reads canonical config only. No silent compat for old/malformed config keys. If a config change invalidates existing files, add a matching `openclaw doctor --fix` migration. Core/auth config repairs live in core doctor; plugin-owned config repairs live in that plugin's doctor contract (`legacyConfigRules` / `normalizeCompatibilityConfig`).
+- Runtime reads canonical config only. No silent compat for old/malformed config keys. If a config change invalidates existing files, add a matching `natesclaw doctor --fix` migration. Core/auth config repairs live in core doctor; plugin-owned config repairs live in that plugin's doctor contract (`legacyConfigRules` / `normalizeCompatibilityConfig`).
 - OpenAI Codex is folded into `openai`. No new/live `openai-codex` provider/plugin/auth/model routes; treat them as legacy input only. Runtime/setup/auth/catalog use `openai` + `openai/*`; doctor/migrations repair stale `openai-codex/*` profiles/metadata.
-- Config/env surface bar is high; `openclaw.json` and environment variables are already large. Before adding a config option or env var, first prove existing product behavior, provider selection, defaults, or doctor migration cannot solve it. Prefer removing or consolidating config/env options when touching these surfaces. Core supports only the latest config shape; `openclaw doctor --fix` migrates older shipped shapes into the current one.
-- CLI setup flows are public API when external docs, installers, or integrations can copy them. Changes to `openclaw onboard`, `openclaw configure`, their documented flags, non-interactive behavior, or generated config shape are compatibility-sensitive API contract changes; prefer additive flags/aliases, deprecation windows, and backward-preserving migrations over breaking existing snippets.
+- Config/env surface bar is high; `natesclaw.json` and environment variables are already large. Before adding a config option or env var, first prove existing product behavior, provider selection, defaults, or doctor migration cannot solve it. Prefer removing or consolidating config/env options when touching these surfaces. Core supports only the latest config shape; `natesclaw doctor --fix` migrates older shipped shapes into the current one.
+- CLI setup flows are public API when external docs, installers, or integrations can copy them. Changes to `natesclaw onboard`, `natesclaw configure`, their documented flags, non-interactive behavior, or generated config shape are compatibility-sensitive API contract changes; prefer additive flags/aliases, deprecation windows, and backward-preserving migrations over breaking existing snippets.
 - Fix shape: Repair Doctrine owns the default. Prefer coherent owner-boundary refactors; remove connected stale abstractions, duplicate policy, dead branches, wrappers, and fallback stacks.
-- New binary fallible-operation results use `Result` from `@openclaw/normalization-core/result`; domain-rich outcomes keep named discriminated unions.
+- New binary fallible-operation results use `Result` from `@natesclaw/normalization-core/result`; domain-rich outcomes keep named discriminated unions.
 - Tests may use observed examples, but prod literals need a short contract reason.
 - Compatibility is opt-in. "Shipped" means reachable from a release Git tag; main/GitHub/PR/unreleased code is not shipped.
 - Refactor default: one canonical path. Delete the old path unless user explicitly wants compat or the shipped public contract is obvious and cited.
-- Reuse the canonical non-array record guard instead of adding local `isRecord` copies. Core, UI, scripts with workspace package resolution, and packages that already depend on normalization-core import `@openclaw/normalization-core/record-coerce`; plugins import `openclaw/plugin-sdk/string-coerce-runtime`. Keep a local guard only when the semantics intentionally differ or the file must remain dependency-free, browser-serialized, generated, or runnable outside workspace package resolution.
+- Reuse the canonical non-array record guard instead of adding local `isRecord` copies. Core, UI, scripts with workspace package resolution, and packages that already depend on normalization-core import `@natesclaw/normalization-core/record-coerce`; plugins import `natesclaw/plugin-sdk/string-coerce-runtime`. Keep a local guard only when the semantics intentionally differ or the file must remain dependency-free, browser-serialized, generated, or runnable outside workspace package resolution.
 - Core runtime consumes only current canonical shapes/config/data. Legacy or retired shapes normalize only in doctor/migration code before runtime; no runtime shims, aliases, or fallback readers.
-- State/storage migrations are database-first. Runtime reads/writes the canonical store only. Old file stores, sidecars, aliases, and fallback readers belong in `openclaw doctor --fix` migration code only, never steady-state runtime.
-- Storage default: SQLite only. Do not add JSON/JSONL/TXT/sidecar files for OpenClaw-owned runtime state, caches, queues, registries, indexes, cursors, checkpoints, or plugin scratch data.
+- State/storage migrations are database-first. Runtime reads/writes the canonical store only. Old file stores, sidecars, aliases, and fallback readers belong in `natesclaw doctor --fix` migration code only, never steady-state runtime.
+- Storage default: SQLite only. Do not add JSON/JSONL/TXT/sidecar files for Natesclaw-owned runtime state, caches, queues, registries, indexes, cursors, checkpoints, or plugin scratch data.
 - Any SQLite change requiring a schema-version bump needs explicit user discussion and acceptance before implementation. Agents must not advance SQLite schema versions autonomously.
 - Purely additive SQLite surface may stay at the same schema version only when downgraded readers remain safe: new tables, or explicitly compatible existing-table columns declared as exactly one bare nullable SQLite `STRICT` datatype (`ANY`, `BLOB`, `INT`, `INTEGER`, `REAL`, or `TEXT`) with no suffix. Defaults, `NOT NULL`, keys, uniqueness, checks, references, collations, generated expressions, and other constraints on an existing-table addition require a schema-version bump or a companion table. Declare same-version surface in the canonical schema plus a one-time idempotent lazy ensure on first feature use; fold it into the migration path at the next natural bump.
 - Approval-linked execution identity is provenance, never authorization. The parent approval row remains the sole authorization owner. Persist identity only as an exact host-validated source-run binding behind its explicit collection opt-in; disabled and unbound paths must leave the lazy companion table absent.
 - Missing, deleted, or corrupt approval-identity provenance must not grant, deny, consume, or otherwise change approval decisions. No eager table creation, late binding, dual write, fallback reader, sidecar, or schema-version workaround. Changes require older-reader open/use plus candidate-reopen proof.
 - SQLite runtime access uses Kysely helpers, not raw SQL statement strings, except schema DDL, migrations, low-level DB bootstrap, or narrowly justified SQLite primitives.
 - SQLite write transactions are synchronous commit sections only. Finish async planning, filesystem access, plugin hooks, and predicates before `BEGIN`; then reread and validate authoritative rows before writing. Never return a Promise or execute `await` from a transaction callback.
-- Use the shared state DB (`state/openclaw.sqlite`) for global runtime state and plugin KV data. Use the per-agent DB (`agents/<agentId>/agent/openclaw-agent.sqlite`) for agent-scoped state/cache. Use a dedicated SQLite DB only when schema, volume, or lifecycle clearly does not fit those stores.
+- Use the shared state DB (`state/natesclaw.sqlite`) for global runtime state and plugin KV data. Use the per-agent DB (`agents/<agentId>/agent/natesclaw-agent.sqlite`) for agent-scoped state/cache. Use a dedicated SQLite DB only when schema, volume, or lifecycle clearly does not fit those stores.
 - Legacy state/cache files are migration debt. When touching code that reads/writes them, prefer moving the data into SQLite or calling out the refactor follow-up; do not add parallel file paths.
 - File storage must be a named product artifact: import/export, user attachment, log, backup, or external tool contract. If it is app state or cache, it belongs in SQLite.
 - Before adding any path under state dirs, choose one: shared state DB, plugin KV, agent DB, or dedicated SQLite schema. If none fits, design the SQLite owner/schema first.
@@ -181,9 +181,9 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 - Runtime: Node 22.22.3+, 24.15+, or 25.9+; Node 26 recommended (CI and release workflows still pin Node 24). Keep Node + Bun paths working.
 - Package manager/runtime: repo defaults only. No swaps without approval.
 - Install: `pnpm install` (keep Bun lock/patches aligned if touched). Agent dependency installation for tests/builds defaults to the selected remote box; do not reconcile a local Codex worktree just to run validation.
-- CLI: `pnpm openclaw ...` or `pnpm dev`; build: `pnpm build`.
+- CLI: `pnpm natesclaw ...` or `pnpm dev`; build: `pnpm build`.
 - Never run the CLI as `node --import tsx src/index.ts`: tsx compiles all bundled plugins per process (~220s), the cost lands inside the agent task budget, and the run fails as a misleading `no progress ... timed out`. Use the dist-backed wrappers above.
-- Packaged `pnpm build` omits QA Lab + qa-channel by design (source-checkout only). To exercise `openclaw qa`/qa-channel from a built dist, build with `OPENCLAW_BUILD_PRIVATE_QA=1 pnpm build` (emits `dist/plugin-sdk/qa-lab.js`, `qa-runtime.js`, `dist/extensions/{qa-lab,qa-channel}`) or run via `pnpm dev`.
+- Packaged `pnpm build` omits QA Lab + qa-channel by design (source-checkout only). To exercise `natesclaw qa`/qa-channel from a built dist, build with `NATESCLAW_BUILD_PRIVATE_QA=1 pnpm build` (emits `dist/plugin-sdk/qa-lab.js`, `qa-runtime.js`, `dist/extensions/{qa-lab,qa-channel}`) or run via `pnpm dev`.
 - Test commands: trusted-source focused local proof uses `node scripts/run-vitest.mjs <path-or-filter>`; remote or normal-checkout proof may use `pnpm test <path-or-filter> [vitest args...]`, `pnpm test:changed`, `pnpm test:serial`, or `pnpm test:coverage`. Never raw `vitest`; if unavoidable, `vitest run ...` (bare `vitest` starts local watch mode and never exits). No `--repeat`; use a bounded shell loop around the focused repo test command.
 - Local agent test execution is allowed only for trusted source and one/few focused files when the existing dependency install is ready. In a Codex worktree or linked/sparse checkout, use `node scripts/run-vitest.mjs <path-or-filter>`; never direct local `pnpm test*`, and never reconcile dependencies merely to keep proof local.
 - Checks/lint in a trusted normal source checkout: `pnpm check:changed` classifies first; docs-only, no-change, and small metadata plans stay local when dependencies are ready, while typecheck/lint fan-out delegates to Crabbox/Testbox. Never run this repository-controlled classifier locally for untrusted source. Inspect lanes with `pnpm changed:lanes --json`; staged/path-scoped forms are `pnpm check:changed --staged` and `pnpm check:changed -- <files...>`.
@@ -199,10 +199,10 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 
 ## Validation
 
-- Use `$openclaw-testing` for test/CI choice and `$crabbox` for remote/full/E2E proof.
+- Use `$natesclaw-testing` for test/CI choice and `$crabbox` for remote/full/E2E proof.
 - Proof routing: source trust first, proof size second. Trusted source runs one/few focused tests, `git diff --check`, targeted formatting, and cheap static probes locally when the existing dependency install is ready. Heavy proof — full suites, changed gates with typecheck/lint fan-out, builds, Docker, packaging, E2E, live, cross-OS, or anything computationally intensive — goes to Crabbox/Testbox; trusted maintainer heavy proof defaults to Blacksmith Testbox. If the remote backend is unavailable (broker/DNS/network/lease failure), trusted-source proof falls back to local execution — including heavier suites and gates — instead of blocking; note the fallback and reason in the proof summary.
 - Untrusted (contributor/fork) source: never run its scripts, tests, checks, wrappers, config, or package hooks locally, regardless of proof size, and never fall back to local. Use secretless fork CI or sanitized direct AWS Crabbox, never a credential-hydrated Testbox. Maintainer approval of credentialed execution after review makes it trusted; an explicit owner/maintainer instruction to land named, reviewed PRs is that approval — do not ask twice.
-- Sanitized AWS Crabbox procedure: launch an installed trusted Crabbox binary from a clean trusted `main` checkout; fetch only the remote PR via `--fresh-pr`; never execute a wrapper, config, or command from the untrusted local checkout. Upload trusted `scripts/crabbox-untrusted-bootstrap.sh` from clean `main` — it proves the remote IMDSv2 IAM credentials endpoint returns 404, verifies the reviewed head SHA, unsets `NODE_OPTIONS`, installs pinned Node/pnpm, verifies the package-manager pin, isolates `HOME`, installs dependencies, then runs the requested test. Before warmup: unset `CRABBOX_AWS_INSTANCE_PROFILE` and all `CRABBOX_TAILSCALE*` overrides; fail closed unless resolved `aws.instanceProfile` is empty; force `--network public --tailscale=false`, clear exit-node/LAN flags; require `crabbox inspect` to report public networking with no Tailscale state before any script. Use a newly warmed lease bound to one reviewed head SHA with `CRABBOX_ENV_ALLOW=CI` and `--no-hydrate`; never reuse a trusted/previously hydrated lease or carry an untrusted lease across head revisions — stop and rewarm when the SHA changes. No repo `OPENCLAW_*` allowlist, existing auth profile, instance role, tailnet/LAN access, moving PR head, or ambient Node preload may reach untrusted execution.
+- Sanitized AWS Crabbox procedure: launch an installed trusted Crabbox binary from a clean trusted `main` checkout; fetch only the remote PR via `--fresh-pr`; never execute a wrapper, config, or command from the untrusted local checkout. Upload trusted `scripts/crabbox-untrusted-bootstrap.sh` from clean `main` — it proves the remote IMDSv2 IAM credentials endpoint returns 404, verifies the reviewed head SHA, unsets `NODE_OPTIONS`, installs pinned Node/pnpm, verifies the package-manager pin, isolates `HOME`, installs dependencies, then runs the requested test. Before warmup: unset `CRABBOX_AWS_INSTANCE_PROFILE` and all `CRABBOX_TAILSCALE*` overrides; fail closed unless resolved `aws.instanceProfile` is empty; force `--network public --tailscale=false`, clear exit-node/LAN flags; require `crabbox inspect` to report public networking with no Tailscale state before any script. Use a newly warmed lease bound to one reviewed head SHA with `CRABBOX_ENV_ALLOW=CI` and `--no-hydrate`; never reuse a trusted/previously hydrated lease or carry an untrusted lease across head revisions — stop and rewarm when the SHA changes. No repo `NATESCLAW_*` allowlist, existing auth profile, instance role, tailnet/LAN access, moving PR head, or ambient Node preload may reach untrusted execution.
 - Leases: do not pre-warm at task start. Acquire the backend lazily at the first heavy proof, reuse that one lease (sync the current checkout for every run), then stop it before handoff. If local proof fans out or becomes expensive, stop it and acquire the remote box.
 - Testbox mechanics: warm from the task checkout; ownership is checkout-path scoped; `--reclaim` only for intentional transfer, and it does not retarget the remote checkout — never cross repos. One lease, one active command; never sync/reclaim during a run; base/head changed means stop and rewarm — never override stale lease checks. Warmup must print a lease id; silent success is unusable — verify before reuse, else fall back to one-shot `run`. Wrapper reuse requires its local SSH key; missing after restart/handoff means warm fresh. Direct lease: `blacksmith testbox run`; Crabbox wrapper reuse needs a wrapper-created lease. Status/stop: `blacksmith testbox status|stop --id <tbx_id>` — id is not positional, no status `--json` flag. Delegated runs reject `--fresh-pr` and `--stop-after`; sync current checkout, workflow owns lifecycle. Compound commands: `bash -lc`, never `sh -lc`; job env uses Bash `declare`. Testbox owns Chromium; never pass Crabbox `--browser` to `provider=blacksmith-testbox`.
 - Crabbox mechanics: a Crabbox request means real scenario proof — install/update/call/repro the user path, not just copied tests run remotely. Final timing JSON = proof complete; if portal sync hangs after it, interrupt the wrapper only. Wrapper `stop` has no `--timing-json`; use `node scripts/crabbox-wrapper.mjs stop --provider <provider> --id <id>`. Sparse-sync temp checkout may claim a kept Testbox; repo-path reuse needs `--reclaim`. Dirty-sync generator proof: compare hashes before/after; `git diff` includes the synced patch.
@@ -226,7 +226,7 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 - Fresh GitHub items: read `CONTRIBUTING.md`, the issue chooser/form, PR template, and `.github/CODEOWNERS`; blank issues are disabled; preserve templates and evidence requirements.
 - Issue first for bugs, user-facing features, architecture/product decisions, or work needing durable discussion. Bounded maintainer-requested refactor may go direct; agent decides whether an issue adds value. PRs use the template, link context, and keep durable problem/impact/evidence sections.
 - Route support to Discord and security through `SECURITY.md`. Use listed maintainer areas/`CODEOWNERS`; never guess mentions.
-- Use `$openclaw-pr-maintainer` immediately for maintainer-side OpenClaw issue/PR review, triage, duplicates, labels, comments, close, land, or evidence. Contributor PR creation/refresh follows the requested contributor workflow; linked refs alone do not require maintainer archive tooling.
+- Use `$natesclaw-pr-maintainer` immediately for maintainer-side Natesclaw issue/PR review, triage, duplicates, labels, comments, close, land, or evidence. Contributor PR creation/refresh follows the requested contributor workflow; linked refs alone do not require maintainer archive tooling.
 - Issue/PR start: `git status -sb`; if clean, `git pull --ff-only`; if dirty, yell before pull/rebase.
 - PR refs: `gh pr view/diff` or `gh api`, not web search. Prefer `gitcrawl` for maintainer discovery; missing/stale `gitcrawl` falls through to live `gh`, not contributor setup. Verify live with `gh` before mutation.
 - Bare issue/PR URL/number: inspect live and take the efficient maintainer path; switch branches/refs when useful.
@@ -259,7 +259,7 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 - CI polling: exact SHA, relevant checks only, minimal fields. Skip routine noise (`Auto response`, `Labeler`, docs agents, performance/stale). Logs only after failure/completion or concrete need. Never `gh run watch`; its 3s polling exhausts API quota. Use sparse GraphQL rollups. Filter `gh run list` by workflow/branch/commit; broad JSON lists can exceed relay caps. Exact-SHA fallback dispatches require the full 40-character SHA.
 - CI waits: `node scripts/watch-pr-ci.mjs <pr> <head-sha>` — prechecks mergeable (CONFLICTING = pull_request CI cannot attach) and run attachment before polling; watchers emit every terminal state; no unbounded polls.
 - Trusted-workflow release-branch CI: pass `target_ref` + `release_candidate_ref`; never `release_gate` (requires workflow head == target).
-- Agent PR landing to `main`: use only the repo-native `scripts/pr` wrapper: run `scripts/pr review-init <PR>`, follow its emitted checkout/guard guidance, initialize and complete review artifacts with `scripts/pr review-artifacts-init <PR>`, validate them with `scripts/pr review-validate-artifacts <PR>`, then run `OPENCLAW_TESTBOX=1 scripts/pr prepare-run <PR>` and `scripts/pr merge-run <PR>`. The Testbox flag is mandatory for agents so prepare verifies hosted CI/Testbox on the current head or reuses a patch-identical pre-rebase run green within 24 hours instead of running full gates locally. `prepare-run` fails fast; invoke only after exact-head CI is complete and green. For owner-approved reviewed fork code without hosted Testbox, use `OPENCLAW_PR_GATES_REMOTE=testbox` instead. Do not rebase only because `main` advanced; merge drift is advisory unless strict drift is explicitly enabled, while GitHub still blocks conflicts. Do not idle on `auto-response` or `check-docs`.
+- Agent PR landing to `main`: use only the repo-native `scripts/pr` wrapper: run `scripts/pr review-init <PR>`, follow its emitted checkout/guard guidance, initialize and complete review artifacts with `scripts/pr review-artifacts-init <PR>`, validate them with `scripts/pr review-validate-artifacts <PR>`, then run `NATESCLAW_TESTBOX=1 scripts/pr prepare-run <PR>` and `scripts/pr merge-run <PR>`. The Testbox flag is mandatory for agents so prepare verifies hosted CI/Testbox on the current head or reuses a patch-identical pre-rebase run green within 24 hours instead of running full gates locally. `prepare-run` fails fast; invoke only after exact-head CI is complete and green. For owner-approved reviewed fork code without hosted Testbox, use `NATESCLAW_PR_GATES_REMOTE=testbox` instead. Do not rebase only because `main` advanced; merge drift is advisory unless strict drift is explicitly enabled, while GitHub still blocks conflicts. Do not idle on `auto-response` or `check-docs`.
 - After GitHub throttling, check core quota before `scripts/pr prepare-run` or `merge-run`. A failed operation can retain its lock; verify no child remains, then recover only with its emitted token.
 - Non-main PRs: do not run `scripts/pr prepare-run` or `merge-run`; they diff against `main`. Use review artifacts, exact base-head CI, revalidate `headRefOid`, then `gh pr merge --match-head-commit <verified-sha>`.
 - Main-bound workflow dispatch: resolve server `main` SHA immediately before dispatch; retry if identity fails after `main` advances.
@@ -313,7 +313,7 @@ Mechanics only; policy lives above.
 - Classes: no prototype mixins/mutations. Prefer inheritance/composition. Tests prefer per-instance stubs.
 - Split files around ~700 LOC when clarity/testability improves.
 - Never add a `max-lines` suppression. Existing suppressions are grandfathered TODOs; split the file and remove its suppression plus baseline entry.
-- Naming: **OpenClaw** product/docs; `openclaw` CLI/package/path/config.
+- Naming: **Natesclaw** product/docs; `natesclaw` CLI/package/path/config.
 - Agents navigate by grep: exported symbols use 2-3 word unique names; no generic single-word exports (`get`, `run`, `create`, `handle`).
 - New modules/dirs concept-named; no new `utils/`, `helpers/`, `common/`. One spelling per concept repo-wide.
 - English: American spelling.
@@ -332,14 +332,14 @@ Mechanics only; policy lives above.
 - Clean timers/env/globals/mocks/sockets/temp dirs/module state; `--isolate=false` safe.
 - Tests asserting resolver/root-containment paths: `fs.realpath` mkdtemp/tmp roots first. macOS `os.tmpdir()` is a `/var` -> `/private/var` symlink; prod resolvers return canonical paths, so raw mkdtemp assertions pass on Linux CI but fail on Mac.
 - Explicit `vi.mock` factories must export every binding prod touches, including error classes used in `instanceof` checks; `vi.importActual` the defining module for those instead of stub classes.
-- Prefer injection and narrow `*.runtime.ts` mocks over broad barrels or `openclaw/plugin-sdk/*`.
+- Prefer injection and narrow `*.runtime.ts` mocks over broad barrels or `natesclaw/plugin-sdk/*`.
 - Do not edit baseline/inventory/ignore/snapshot/expected-failure files to silence checks without explicit approval.
-- Do not run independent `pnpm test`/Vitest commands concurrently in one worktree; Vitest cache races with `ENOTEMPTY`. Group one command or use distinct `OPENCLAW_VITEST_FS_MODULE_CACHE_PATH`.
+- Do not run independent `pnpm test`/Vitest commands concurrently in one worktree; Vitest cache races with `ENOTEMPTY`. Group one command or use distinct `NATESCLAW_VITEST_FS_MODULE_CACHE_PATH`.
 - Never edit source/test files while a Vitest run is in flight in the same checkout; mid-collection reads produce phantom failures and 120s timeouts. Wait for the run to finish, then edit.
-- Vitest rejects Jest `--runInBand`; use `OPENCLAW_VITEST_MAX_WORKERS=1 pnpm test` for serial proof. Test workers max 16.
-- Live: `OPENCLAW_LIVE_TEST=1 pnpm test:live`; verbose `OPENCLAW_LIVE_TEST_QUIET=0`.
-- Live gateway tests: session-owned dev gateway only — isolated `OPENCLAW_STATE_DIR` + free port. Never bind the operator's real gateway port (default 18789) while their gateway runs.
-- Never stop/restart/kickstart a gateway service you did not start (launchd/systemd/tmux) or edit its live `~/.openclaw` state/config; that is the operator's running instance — explicit per-task operator approval required.
+- Vitest rejects Jest `--runInBand`; use `NATESCLAW_VITEST_MAX_WORKERS=1 pnpm test` for serial proof. Test workers max 16.
+- Live: `NATESCLAW_LIVE_TEST=1 pnpm test:live`; verbose `NATESCLAW_LIVE_TEST_QUIET=0`.
+- Live gateway tests: session-owned dev gateway only — isolated `NATESCLAW_STATE_DIR` + free port. Never bind the operator's real gateway port (default 18789) while their gateway runs.
+- Never stop/restart/kickstart a gateway service you did not start (launchd/systemd/tmux) or edit its live `~/.natesclaw` state/config; that is the operator's running instance — explicit per-task operator approval required.
 - Realistic data: copy the state/DB into your dev state dir and test the copy. In-place migration of a live gateway's state needs explicit operator approval.
 - Guide: `docs/reference/test.md`.
 
@@ -347,10 +347,10 @@ Mechanics only; policy lives above.
 
 - Use `$technical-documentation` for docs writing/review. Docs change with behavior/API.
 - Codex harness upgrade (`extensions/codex/package.json` `@openai/codex`): refresh `docs/plugins/codex-harness.md` model snapshot from the new harness `model/list`.
-- Docs final answers: include relevant full `https://docs.openclaw.ai/...` URL(s). If issue/PR work too, GitHub URL last.
+- Docs final answers: include relevant full `https://docs.natesclaw.ai/...` URL(s). If issue/PR work too, GitHub URL last.
 - `CHANGELOG.md`: release-only. Do not edit for normal PRs, direct `main` fixes, or `ship it`; release generation owns it. Do not ask contributors/agents for changelog edits.
 - User-facing `fix`/`feat`/`perf`: put release-note context in PR body, squash message, or direct commit: behavior, surface, issue/PR refs, credited human author/reporter.
-- Release generation: derive `CHANGELOG.md` from merged PRs + all direct `main` commits. Entries: active `### Changes`/`### Fixes`, single-line, thank credited humans; never thank bots/forbidden handles: `@openclaw`, `@clawsweeper`, `@codex`, `@steipete`.
+- Release generation: derive `CHANGELOG.md` from merged PRs + all direct `main` commits. Entries: active `### Changes`/`### Fixes`, single-line, thank credited humans; never thank bots/forbidden handles: `@natesclaw`, `@clawsweeper`, `@codex`, `@steipete`.
 
 ## Git
 
@@ -366,13 +366,13 @@ Mechanics only; policy lives above.
 ## Security / Release
 
 - Never commit real phone numbers, videos, credentials, live config.
-- Secrets: channel/provider creds in `~/.openclaw/credentials/`; model auth profiles in `~/.openclaw/agents/<agentId>/agent/auth-profiles.json`.
+- Secrets: channel/provider creds in `~/.natesclaw/credentials/`; model auth profiles in `~/.natesclaw/agents/<agentId>/agent/auth-profiles.json`.
 - SecretRef failures isolate to the smallest known owning surface. Proven-inactive surfaces skip; unknown ownership fails closed. Gateway refuses startup only when its own ingress protection cannot be established, config is structurally invalid, or the owning surface is unknown. Otherwise start, mark the exact capability/account/route configured-unavailable, emit a typed redacted diagnostic, and forbid implicit credential fallback. On reload, retain last-known-good only for an unchanged ref+provider; a changed unresolved ref makes that owner cold. Doctor and status must list every degraded owner.
 - Dependency patches/overrides/vendor changes need explicit approval. `pnpm-workspace.yaml` patched dependencies use exact versions only.
 - Release/package guards: no hard-coded retired-package denylists; use generic artifact/dependency checks or fix build source.
 - `pnpm-lock.yaml` is the product dependency security review surface; `.github/release/clawhub-cli/package-lock.json` separately pins trusted release tooling. Published packages bundle runtime dependencies where configured and never ship lockfiles; other npm-format locks exist only transiently during checks and publish staging.
 - Carbon pins owner-only: do not change `@buape/carbon` unless Shadow (`@thewilloftheshadow`, verified by `gh`) asks.
-- Releases/publish/version bumps need explicit approval. Use `$release-openclaw-maintainer`.
+- Releases/publish/version bumps need explicit approval. Use `$release-natesclaw-maintainer`.
 - Active release scope lock: freeze the operator-selected cut SHA and release identity through publish and verification. Moving `main`, unrelated CI, optional backports, refactors, cleanup, and normal forward-ports are not part of the release work queue.
 - Touch `main` during a release only when the operator requests it or the smallest critical main-owned blocker prevents that release. Return to the release branch immediately; defer broader main work until closeout.
 - Release versions use `YYYY.M.PATCH`, where `PATCH` is a sequential monthly release-train number, never the calendar day. Stable and beta tags determine the current train; alpha-only tags do not consume or advance the beta/stable patch number. After `2026.6.5`, the next beta train is `2026.6.6-beta.1` even if higher alpha-only tags exist.
@@ -386,7 +386,7 @@ Mechanics only; policy lives above.
 - Release-SHA proof is intentionally narrow: release-note/provenance checks, npm preflight/package bytes, install/update acceptance, and publish readiness. Do not rerun the full product matrix merely because the changelog changed.
 - Pass the successful Release-SHA validation run and npm preflight run into `release:candidate`; do not let the candidate helper dispatch duplicate copies of evidence that already passed.
 - Keep one release operator and one watcher per release identity. Resume partial publish from successful immutable child artifacts/runs; never rebuild or republish an already-published package version.
-- GHSA/advisories: `$openclaw-ghsa-maintainer` / `$security-triage`. Secret scanning: `$openclaw-secret-scanning-maintainer`.
+- GHSA/advisories: `$natesclaw-ghsa-maintainer` / `$security-triage`. Secret scanning: `$natesclaw-secret-scanning-maintainer`.
 - Beta tag/version match: `vYYYY.M.PATCH-beta.N` -> npm `YYYY.M.PATCH-beta.N --tag beta`.
 
 ## Platform / Ops
@@ -394,17 +394,17 @@ Mechanics only; policy lives above.
 - Before simulator/emulator testing, check real iOS/Android devices.
 - "restart iOS/Android apps" = rebuild/reinstall/relaunch, not kill/launch.
 - SwiftUI: Observation (`@Observable`, `@Bindable`) over new `ObservableObject`.
-- Mac gateway: dev watch = `pnpm gateway:watch`; managed installs = `openclaw gateway restart/status --deep`; logs = `./scripts/clawlog.sh`. No launchd/ad-hoc tmux.
+- Mac gateway: dev watch = `pnpm gateway:watch`; managed installs = `natesclaw gateway restart/status --deep`; logs = `./scripts/clawlog.sh`. No launchd/ad-hoc tmux.
 - Mac app permission testing: stable app path + real signing identity required. No `--no-sign`, `SIGN_IDENTITY=-`, or raw debug binary; TCC prompts/listing won't stick.
-- Version bump surfaces live in `$release-openclaw-maintainer`.
-- Parallels: `$openclaw-parallels-smoke`; Discord roundtrip: `$parallels-discord-roundtrip`.
+- Version bump surfaces live in `$release-natesclaw-maintainer`.
+- Parallels: `$natesclaw-parallels-smoke`; Discord roundtrip: `$parallels-discord-roundtrip`.
 - Crabbox/WebVNC human demos: keep remote desktop visible/windowed; no fullscreen remote browser unless video/capture-style output.
 - Before sharing WebVNC links, use Crabbox screenshot first; verify real app/path works and target UI is not broken.
 - ClawSweeper ops: `$clawsweeper`. Deployed hook sessions may post one concise `#clawsweeper` note only when surprising/actionable/risky; if using message tool, reply exactly `NO_REPLY`.
 - Generated-media completions wake the requester agent first. Requester visible-reply config decides final text vs message tool; direct media send is fallback/recovery only.
 - `message_tool_only`: normal agent final visible reply = current-source `message(action=send)` only. No `NO_REPLY` prompt/contract; no message call = no source reply. Plugin-owned bound-thread reply = plugin return value; no message tool needed. Never auto-publish private final.
 - Memory wiki prompt digest stays tiny; prefer `wiki_search` / `wiki_get`; verify contact data before use; source-class provenance for generated people facts.
-- Rebrand/migration/config warnings: run `openclaw doctor`.
+- Rebrand/migration/config warnings: run `natesclaw doctor`.
 - Never edit `node_modules`.
 - Local-only `.agents` ignores: `.git/info/exclude`, not repo `.gitignore`.
 - Provider tool schemas: prefer flat string enum helpers over `Type.Union([Type.Literal(...)])`; some providers reject `anyOf`.

@@ -1,4 +1,4 @@
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   serializeCodexAppInventoryError,
   type CodexAppInventoryCache,

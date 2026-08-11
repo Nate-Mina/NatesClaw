@@ -10,7 +10,7 @@ import {
   loadTranscriptEvents,
   replaceSessionEntry,
 } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { rotateAgentEventLifecycleGeneration } from "../infra/agent-events.js";
 import type { runAgentAttempt } from "./command/attempt-execution.runtime.js";
 import type { EmbeddedAgentRunResult } from "./embedded-agent.js";
@@ -28,7 +28,7 @@ type CliCompactionParams = {
 };
 
 const state = vi.hoisted(() => ({
-  cfg: undefined as OpenClawConfig | undefined,
+  cfg: undefined as NatesclawConfig | undefined,
   workspaceDir: undefined as string | undefined,
   agentDir: undefined as string | undefined,
   runAgentAttemptMock: vi.fn<RunAgentAttempt>(),
@@ -73,11 +73,11 @@ vi.mock("./agent-scope.js", async () => {
     markAutoFallbackPrimaryProbe: vi.fn(),
     resolveAutoFallbackPrimaryProbe: () => undefined,
     resolveAgentConfig: () => undefined,
-    resolveAgentDir: () => state.agentDir ?? "/tmp/openclaw-agent",
+    resolveAgentDir: () => state.agentDir ?? "/tmp/natesclaw-agent",
     resolveDefaultAgentId: () => "main",
     resolveEffectiveModelFallbacks: () => undefined,
     resolveSessionAgentId: () => "main",
-    resolveAgentWorkspaceDir: () => state.workspaceDir ?? "/tmp/openclaw-workspace",
+    resolveAgentWorkspaceDir: () => state.workspaceDir ?? "/tmp/natesclaw-workspace",
   };
 });
 
@@ -218,7 +218,7 @@ beforeEach(async () => {
       return { deliverySucceeded: true };
     },
   );
-  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-rotation-e2e-"));
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-rotation-e2e-"));
   state.workspaceDir = path.join(tmpDir, "workspace");
   state.agentDir = path.join(tmpDir, "agent");
   await fs.mkdir(state.workspaceDir, { recursive: true });
@@ -234,7 +234,7 @@ beforeEach(async () => {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 });
 
 afterEach(async () => {
@@ -364,7 +364,7 @@ describe("agentCommand compaction transcript rotation", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     state.runAgentAttemptMock.mockResolvedValueOnce(
       makeResult({
         sessionId: "custom-provider-session",
@@ -385,7 +385,7 @@ describe("agentCommand compaction transcript rotation", () => {
       providerOverride: "tui-pty-mock",
       modelOverride: "gpt-5.5",
       pluginsEnabled: false,
-      userTurnTranscriptRecorder: { message: { __openclaw: { senderIsOwner: true } } },
+      userTurnTranscriptRecorder: { message: { __natesclaw: { senderIsOwner: true } } },
     });
     expect(state.normalizeProviderModelIdWithRuntimeMock).not.toHaveBeenCalledWith(
       expect.objectContaining({ provider: "tui-pty-mock" }),
@@ -414,7 +414,7 @@ describe("agentCommand compaction transcript rotation", () => {
       expect(state.runAgentAttemptMock.mock.calls[0]?.[0]).toMatchObject({
         opts: { senderIsOwner, inputProvenance },
         userTurnTranscriptRecorder: {
-          message: { provenance: inputProvenance, __openclaw: { senderIsOwner: owner } },
+          message: { provenance: inputProvenance, __natesclaw: { senderIsOwner: owner } },
         },
       });
     },

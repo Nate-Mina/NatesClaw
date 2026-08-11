@@ -7,17 +7,17 @@ import type {
   WAMessage,
   WASocket,
 } from "baileys";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
-import { getChildLogger } from "openclaw/plugin-sdk/logging-core";
-import { parseStrictFiniteNumber } from "openclaw/plugin-sdk/number-runtime";
-import { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+import { recordChannelActivity } from "natesclaw/plugin-sdk/channel-activity-runtime";
+import { getChildLogger } from "natesclaw/plugin-sdk/logging-core";
+import { parseStrictFiniteNumber } from "natesclaw/plugin-sdk/number-runtime";
+import { defaultRuntime } from "natesclaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
 import { maybeResolveWhatsAppApprovalReaction } from "../approval-reactions.js";
 import { resolveComparableIdentity } from "../identity.js";
 import { addWhatsAppImagePreviewFields } from "../image-preview.js";
 import { maybeResolveWhatsAppQuestionReaction } from "../question-reactions.js";
 import { cacheInboundMessageMeta } from "../quoted-message.js";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { NatesclawConfig } from "../runtime-api.js";
 import { formatError } from "../session.js";
 import { requireWhatsAppInboundAdmission } from "./admission.js";
 import {
@@ -84,8 +84,8 @@ export type WhatsAppAppendReplyWindow = {
 };
 
 type WhatsAppMessageDeliveryOptions = {
-  cfg: OpenClawConfig;
-  loadConfig?: () => OpenClawConfig;
+  cfg: NatesclawConfig;
+  loadConfig?: () => NatesclawConfig;
   verbose: boolean;
   accountId: string;
   sock: WASocket;

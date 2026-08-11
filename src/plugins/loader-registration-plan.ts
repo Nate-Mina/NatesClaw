@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { shouldLoadChannelPluginInSetupRuntime } from "./loader-channel-setup.js";
 import type { ChannelPluginLoadIntent } from "./loader-types.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
@@ -27,7 +27,7 @@ export function resolvePluginRegistrationPlan(params: {
   validateOnly: boolean;
   shouldActivate: boolean;
   manifestRecord: PluginManifestRecord;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   channelPluginLoadIntent: ChannelPluginLoadIntent;
   toolDiscovery: boolean;

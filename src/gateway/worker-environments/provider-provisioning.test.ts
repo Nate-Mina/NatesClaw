@@ -1,12 +1,12 @@
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
 import { describe, expect, it, vi } from "vitest";
 import { WorkerProviderError, type WorkerProfile } from "../../plugins/types.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import type { GatewaySessionRow } from "../session-utils.types.js";
 import { writeSessionStore } from "../test-helpers.js";
 import { directSessionReq } from "../test/server-sessions.test-helpers.js";
@@ -349,7 +349,7 @@ describe("worker environment service", () => {
       await resolveIdentity(support.SSH_ENDPOINT.keyRef);
       return {
         bundleHash: installation.bundleHash,
-        openclawVersion: installation.openclawVersion,
+        natesclawVersion: installation.natesclawVersion,
         protocolFeatures: [...installation.protocolFeatures],
       };
     });
@@ -464,9 +464,9 @@ describe("worker environment service", () => {
 
     await first.stop();
     support.testState.service = undefined;
-    closeOpenClawStateDatabaseForTest();
-    support.testState.stateDb = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: support.testState.root },
+    closeNatesclawStateDatabaseForTest();
+    support.testState.stateDb = openNatesclawStateDatabase({
+      env: { NATESCLAW_STATE_DIR: support.testState.root },
     });
     support.testState.store = createWorkerEnvironmentStore({
       database: support.testState.stateDb,
@@ -758,7 +758,7 @@ describe("worker environment service", () => {
           apps: [
             {
               id: "browser",
-              executablePath: "/usr/local/bin/openclaw-worker-browser",
+              executablePath: "/usr/local/bin/natesclaw-worker-browser",
               cdpPort: 9222,
               command: "chromium",
             },

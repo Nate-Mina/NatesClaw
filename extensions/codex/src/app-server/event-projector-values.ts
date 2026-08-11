@@ -1,4 +1,4 @@
-import { asFiniteNumber, readStringField } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { asFiniteNumber, readStringField } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { isJsonObject, type CodexThreadItem, type JsonObject, type JsonValue } from "./protocol.js";
 
 export function normalizeNonEmptyString(value: unknown): string | undefined {

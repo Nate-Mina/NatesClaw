@@ -2,18 +2,18 @@
 import { randomUUID } from "node:crypto";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import path from "node:path";
-import { readSessionTranscriptRawDelta } from "openclaw/plugin-sdk/session-transcript-runtime";
+import { readSessionTranscriptRawDelta } from "natesclaw/plugin-sdk/session-transcript-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   listSessionEntriesCore,
   loadSessionEntry,
 } from "../src/config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../src/config/types.openclaw.js";
+import type { NatesclawConfig } from "../src/config/types.natesclaw.js";
 import { connectGatewayClient, disconnectGatewayClient } from "../src/gateway/test-helpers.e2e.js";
 import {
-  createOpenClawTestInstance,
-  type OpenClawTestInstance,
-} from "./helpers/openclaw-test-instance.js";
+  createNatesclawTestInstance,
+  type NatesclawTestInstance,
+} from "./helpers/natesclaw-test-instance.js";
 
 const TEST_TIMEOUT_MS = 180_000;
 const MODEL_REF = "cursor-settlement/cursor-settlement";
@@ -25,7 +25,7 @@ type MockModelServer = {
   close: () => Promise<void>;
 };
 
-const instances: OpenClawTestInstance[] = [];
+const instances: NatesclawTestInstance[] = [];
 const modelServers: MockModelServer[] = [];
 
 afterEach(async () => {
@@ -40,10 +40,10 @@ describe("embedded transcript cursor settlement", () => {
     async () => {
       const modelServer = await startMockModelServer();
       modelServers.push(modelServer);
-      const instance = await createOpenClawTestInstance({
+      const instance = await createNatesclawTestInstance({
         name: "embedded-transcript-cursor",
         config: createTestConfig(modelServer.baseUrl),
-        env: { OPENCLAW_SKIP_PROVIDERS: undefined },
+        env: { NATESCLAW_SKIP_PROVIDERS: undefined },
       });
       instances.push(instance);
       await instance.startGateway();
@@ -114,14 +114,14 @@ describe("embedded transcript cursor settlement", () => {
   );
 });
 
-function createTestConfig(baseUrl: string): OpenClawConfig {
+function createTestConfig(baseUrl: string): NatesclawConfig {
   return {
     plugins: { slots: { memory: "none" } },
     agents: {
       defaults: {
         heartbeat: { every: "0m" },
         model: { primary: MODEL_REF },
-        models: { [MODEL_REF]: { agentRuntime: { id: "openclaw" } } },
+        models: { [MODEL_REF]: { agentRuntime: { id: "natesclaw" } } },
         skipBootstrap: true,
         skills: [],
       },
@@ -155,7 +155,7 @@ function createTestConfig(baseUrl: string): OpenClawConfig {
 
 async function runAgentTurn(
   client: Awaited<ReturnType<typeof connectGatewayClient>>,
-  instance: OpenClawTestInstance,
+  instance: NatesclawTestInstance,
   message: string,
 ): Promise<{ runId?: string; status?: string }> {
   const requestedRunId = randomUUID();

@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/discord",
+  "name": "@natesclaw/discord",
   "version": "2026.8.1",
-  "description": "OpenClaw Discord channel plugin for channels, DMs, commands, and app events.",
+  "description": "Natesclaw Discord channel plugin for channels, DMs, commands, and app events.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -20,18 +20,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -90,7 +90,7 @@
       }
     },
     "install": {
-      "npmSpec": "@openclaw/discord",
+      "npmSpec": "@natesclaw/discord",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.26",
       "allowInvalidConfigRecovery": true
@@ -99,7 +99,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "staticAssets": [
         {
           "source": "./assets/embedded-app-sdk.mjs",

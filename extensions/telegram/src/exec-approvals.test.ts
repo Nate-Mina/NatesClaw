@@ -1,20 +1,20 @@
 // Telegram tests cover exec approvals plugin behavior.
 import path from "node:path";
 import type {
-  OpenClawConfig,
+  NatesclawConfig,
   TelegramAccountConfig,
   TelegramExecApprovalConfig,
-} from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/config-contracts";
 import {
   normalizeSessionDeliveryState,
   upsertSessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { closeOpenClawAgentDatabasesForTest } from "openclaw/plugin-sdk/sqlite-runtime-testing";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { closeNatesclawAgentDatabasesForTest } from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   getTelegramExecApprovalApprovers,
@@ -34,16 +34,16 @@ type TelegramExecApprovalRequest = Parameters<
 >[0]["request"];
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
   for (const workspace of tempWorkspaces.splice(0)) {
     workspace.cleanup();
   }
 });
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>>,
-): OpenClawConfig {
+  execApprovals?: NonNullable<NonNullable<NatesclawConfig["channels"]>["telegram"]>["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<NatesclawConfig["channels"]>["telegram"]>>,
+): NatesclawConfig {
   return {
     channels: {
       telegram: {
@@ -52,7 +52,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function telegramAccount(
@@ -73,7 +73,7 @@ function buildMultiAccountTelegramConfig(params: {
   opsExecApprovals?: TelegramExecApprovalConfig;
   defaultOverrides?: Partial<TelegramAccountConfig>;
   opsOverrides?: Partial<TelegramAccountConfig>;
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     ...(params.sessionStorePath ? { session: { store: params.sessionStorePath } } : {}),
     channels: {
@@ -92,7 +92,7 @@ function buildMultiAccountTelegramConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function makeForeignChannelApprovalRequest(params: {
@@ -160,7 +160,7 @@ describe("telegram exec approvals", () => {
       commands: {
         ownerAllowFrom: ["telegram:12345", "tg:67890", "discord:ignored", "-100999"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(getTelegramExecApprovalApprovers({ cfg })).toEqual(["12345", "67890"]);
     expect(isTelegramExecApprovalClientEnabled({ cfg })).toBe(true);
@@ -174,7 +174,7 @@ describe("telegram exec approvals", () => {
       commands: {
         ownerAllowFrom: ["telegram:12345"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(cfg.channels?.telegram?.execApprovals?.approvers).toBeUndefined();
     expect(getTelegramExecApprovalApprovers({ cfg })).toEqual(["12345"]);
@@ -233,8 +233,8 @@ describe("telegram exec approvals", () => {
 
   it("scopes non-telegram turn sources to the stored telegram account", async () => {
     const workspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-telegram-exec-approvals-",
+      rootDir: resolvePreferredNatesclawTmpDir(),
+      prefix: "natesclaw-telegram-exec-approvals-",
     });
     tempWorkspaces.push(workspace);
     const tmpDir = workspace.dir;
@@ -375,7 +375,7 @@ describe("telegram exec approvals", () => {
           targets: [{ channel: "telegram", to: "123", accountId: "ops" }],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const request: TelegramExecApprovalRequest = {
       id: "req-target-account",
       request: {
@@ -425,7 +425,7 @@ describe("telegram exec approvals", () => {
           ],
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const request: TelegramExecApprovalRequest = {
       id: "req-mixed-target-account",
       request: {
@@ -495,11 +495,11 @@ describe("telegram exec approvals", () => {
   describe("isTelegramExecApprovalTargetRecipient", () => {
     function buildTargetConfig(
       targets: Array<{ channel: string; to: string; accountId?: string }>,
-    ): OpenClawConfig {
+    ): NatesclawConfig {
       return {
         channels: { telegram: { botToken: "tok" } },
         approvals: { exec: { enabled: true, mode: "targets", targets } },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
     }
 
     it("accepts sender who is a DM target", () => {
@@ -576,7 +576,7 @@ describe("telegram exec approvals", () => {
             targets: [{ channel: "telegram", to: "12345" }],
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       expect(isTelegramExecApprovalTargetRecipient({ cfg, senderId: "12345" })).toBe(false);
     });
 
@@ -614,7 +614,7 @@ describe("telegram exec approvals", () => {
             targets: [{ channel: "telegram", to: "12345" }],
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       expect(isTelegramExecApprovalAuthorizedSender({ cfg, senderId: "12345" })).toBe(true);
     });
   });

@@ -1,7 +1,7 @@
 import path from "node:path";
-import { root } from "openclaw/plugin-sdk/file-access-runtime";
-import { getMediaDir } from "openclaw/plugin-sdk/media-runtime";
-import { saveMediaBuffer } from "openclaw/plugin-sdk/media-store";
+import { root } from "natesclaw/plugin-sdk/file-access-runtime";
+import { getMediaDir } from "natesclaw/plugin-sdk/media-runtime";
+import { saveMediaBuffer } from "natesclaw/plugin-sdk/media-store";
 import type { CodexCommandExecParams, CodexCommandExecResponse } from "./command-exec-protocol.js";
 import {
   isCodexPassThroughMediaSource,

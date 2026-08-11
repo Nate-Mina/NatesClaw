@@ -11,12 +11,12 @@ import {
   toAgentStoreSessionKey,
 } from "../../routing/session-key.js";
 import { runQueuedStoreWrite, type StoreWriterQueue } from "../../shared/store-writer-queue.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
 import {
-  resolveIncognitoOpenClawAgentSqlitePath,
-  resolveOpenClawAgentSqlitePath,
-  type OpenClawAgentDatabaseOptions,
-} from "../../state/openclaw-agent-db.js";
+  resolveIncognitoNatesclawAgentSqlitePath,
+  resolveNatesclawAgentSqlitePath,
+  type NatesclawAgentDatabaseOptions,
+} from "../../state/natesclaw-agent-db.js";
 import { formatSqliteSessionFileMarker } from "./legacy-sqlite-marker.js";
 import type {
   SessionAccessScope,
@@ -28,7 +28,7 @@ import { normalizeStoreSessionKey } from "./store-entry.js";
 import type { SessionEntry } from "./types.js";
 
 type SessionSqliteDatabase = Pick<
-  OpenClawAgentKyselyDatabase,
+  NatesclawAgentKyselyDatabase,
   | "acp_parent_stream_events"
   | "board_tabs"
   | "board_widgets"
@@ -91,7 +91,7 @@ export async function runExclusiveSqliteSessionWrite<T>(
   fn: () => Promise<T>,
 ): Promise<T> {
   const databaseOptions = toDatabaseOptions(scope);
-  const storePath = resolveOpenClawAgentSqlitePath(databaseOptions);
+  const storePath = resolveNatesclawAgentSqlitePath(databaseOptions);
   const startedAt = Date.now();
   try {
     const result = await runQueuedStoreWrite({
@@ -132,7 +132,7 @@ export function resolveSqliteScope(
     ? resolveAgentIdFromSessionKey(scope.sessionKey)
     : undefined;
   const effectiveStorePath = incognitoAgentId
-    ? resolveIncognitoOpenClawAgentSqlitePath({ agentId: incognitoAgentId, env: scope.env })
+    ? resolveIncognitoNatesclawAgentSqlitePath({ agentId: incognitoAgentId, env: scope.env })
     : scope.storePath;
   const effectiveAgentId = incognitoAgentId ?? scopedAgentId;
   const storeTarget = effectiveStorePath
@@ -182,7 +182,7 @@ export function resolveSqliteReadScope(
     ? resolveAgentIdFromSessionKey(sessionKey)
     : undefined;
   const effectiveStorePath = incognitoAgentId
-    ? resolveIncognitoOpenClawAgentSqlitePath({ agentId: incognitoAgentId, env: scope.env })
+    ? resolveIncognitoNatesclawAgentSqlitePath({ agentId: incognitoAgentId, env: scope.env })
     : scope.storePath;
   const effectiveAgentId = incognitoAgentId ?? scopedAgentId;
   const storeTarget = effectiveStorePath
@@ -285,7 +285,7 @@ function resolveSqliteAgentId(params: {
 export function resolveSqliteTranscriptArchiveDirectory(
   scope: Pick<ResolvedSqliteReadScope, "agentId" | "env" | "path">,
 ): string {
-  const databasePath = resolveOpenClawAgentSqlitePath(toDatabaseOptions(scope));
+  const databasePath = resolveNatesclawAgentSqlitePath(toDatabaseOptions(scope));
   const databaseDir = path.dirname(databasePath);
   if (path.basename(databaseDir) !== "agent") {
     return databaseDir;
@@ -330,7 +330,7 @@ export function resolveSqliteTranscriptReadScope(
 
 export function toDatabaseOptions(
   scope: Pick<ResolvedSqliteReadScope, "agentId" | "databaseAgentId" | "env" | "path">,
-): OpenClawAgentDatabaseOptions {
+): NatesclawAgentDatabaseOptions {
   return {
     agentId: scope.databaseAgentId ?? scope.agentId,
     ...(scope.env ? { env: scope.env } : {}),
@@ -355,6 +355,6 @@ export function formatLegacySqliteSessionMarkerForScope(scope: ResolvedTranscrip
   return formatSqliteSessionFileMarker({
     agentId: scope.agentId,
     sessionId: scope.sessionId,
-    storePath: scope.path ?? resolveOpenClawAgentSqlitePath(toDatabaseOptions(scope)),
+    storePath: scope.path ?? resolveNatesclawAgentSqlitePath(toDatabaseOptions(scope)),
   });
 }

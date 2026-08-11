@@ -5,7 +5,7 @@ import type { GatewayBrowserClient } from "../api/gateway.ts";
 import { i18n } from "../i18n/index.ts";
 import { GitHubLinkHovercardProvider } from "./github-link-hovercard.ts";
 
-const GITHUB_LINK_HOVERCARD_ELEMENT_NAME = `test-openclaw-github-link-hovercard-provider-${crypto.randomUUID()}`;
+const GITHUB_LINK_HOVERCARD_ELEMENT_NAME = `test-natesclaw-github-link-hovercard-provider-${crypto.randomUUID()}`;
 
 customElements.define(
   GITHUB_LINK_HOVERCARD_ELEMENT_NAME,
@@ -43,7 +43,7 @@ function leave(anchor: HTMLAnchorElement): void {
   );
 }
 
-describe("openclaw-github-link-hovercard-provider", () => {
+describe("natesclaw-github-link-hovercard-provider", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-07-05T10:00:00Z"));
@@ -70,13 +70,13 @@ describe("openclaw-github-link-hovercard-provider", () => {
       login: "steipete",
       mergedAt: "2026-07-04T09:53:52Z",
       number: 99816,
-      owner: "OpenClaw",
-      repo: "OpenClaw",
+      owner: "Natesclaw",
+      repo: "Natesclaw",
       state: "closed",
       title: "fix(agents): derive conversation scope from trusted group facts",
       updatedAt: "2026-07-05T09:55:00Z",
     });
-    const href = "https://github.com/openclaw/openclaw/pull/99816";
+    const href = "https://github.com/natesclaw/natesclaw/pull/99816";
     const { anchor, provider } = createLink(href, "#99816");
     provider.client = { request } as unknown as GatewayBrowserClient;
 
@@ -84,7 +84,7 @@ describe("openclaw-github-link-hovercard-provider", () => {
 
     const card = document.querySelector<HTMLElement>(".github-link-hovercard");
     expect(card?.textContent).toContain("Merged");
-    expect(card?.textContent).toContain("openclaw/openclaw #99816");
+    expect(card?.textContent).toContain("natesclaw/natesclaw #99816");
     expect(card?.textContent).toContain(
       "fix(agents): derive conversation scope from trusted group facts",
     );
@@ -100,8 +100,8 @@ describe("openclaw-github-link-hovercard-provider", () => {
       {
         kind: "pull",
         number: 99816,
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "natesclaw",
+        repo: "natesclaw",
       },
       { signal: expect.any(AbortSignal) },
     );
@@ -120,15 +120,15 @@ describe("openclaw-github-link-hovercard-provider", () => {
       kind: "issue",
       login: "octocat",
       number: 99815,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "natesclaw",
+      repo: "natesclaw",
       state: "open",
       stateReason: null,
       title: "Keep hover previews compact",
       updatedAt: "2026-07-05T09:55:00Z",
     });
     const { anchor, provider } = createLink(
-      "https://github.com/openclaw/openclaw/issues/99815",
+      "https://github.com/natesclaw/natesclaw/issues/99815",
       "#99815",
     );
     provider.client = { request } as unknown as GatewayBrowserClient;
@@ -144,14 +144,14 @@ describe("openclaw-github-link-hovercard-provider", () => {
 
   it("ignores unsupported GitHub links and shows a quiet unavailable state", async () => {
     const request = vi.fn().mockRejectedValue(new Error("Not Found"));
-    const unsupportedLink = createLink("https://github.com/openclaw/openclaw", "repository");
+    const unsupportedLink = createLink("https://github.com/natesclaw/natesclaw", "repository");
     unsupportedLink.provider.client = { request } as unknown as GatewayBrowserClient;
 
     await hover(unsupportedLink.anchor);
     expect(request).not.toHaveBeenCalled();
     expect(document.querySelector(".github-link-hovercard")).toBeNull();
 
-    const missingLink = createLink("https://github.com/openclaw/openclaw/issues/999999", "missing");
+    const missingLink = createLink("https://github.com/natesclaw/natesclaw/issues/999999", "missing");
     missingLink.provider.client = { request } as unknown as GatewayBrowserClient;
     await hover(missingLink.anchor);
     expect(document.querySelector(".github-link-hovercard")?.textContent).toContain(
@@ -160,9 +160,9 @@ describe("openclaw-github-link-hovercard-provider", () => {
   });
 
   it.each([
-    "http://github.com/openclaw/openclaw/issues/99815",
-    "https://user:password@github.com/openclaw/openclaw/issues/99815",
-    "https://example.com/openclaw/openclaw/issues/99815",
+    "http://github.com/natesclaw/natesclaw/issues/99815",
+    "https://user:password@github.com/natesclaw/natesclaw/issues/99815",
+    "https://example.com/natesclaw/natesclaw/issues/99815",
     "javascript:alert(1)",
   ])("does not preview an untrusted item URL: %s", async (href) => {
     const request = vi.fn();
@@ -177,7 +177,7 @@ describe("openclaw-github-link-hovercard-provider", () => {
 
   it("preserves an existing description when hover ends before opening", async () => {
     const request = vi.fn();
-    const { anchor, provider } = createLink("https://github.com/openclaw/openclaw/issues/99815");
+    const { anchor, provider } = createLink("https://github.com/natesclaw/natesclaw/issues/99815");
     provider.client = { request } as unknown as GatewayBrowserClient;
     anchor.setAttribute("aria-describedby", "existing-description");
 
@@ -201,8 +201,8 @@ describe("openclaw-github-link-hovercard-provider", () => {
         kind: "issue",
         login: "octocat",
         number: 99815,
-        owner: "openclaw",
-        repo: "openclaw",
+        owner: "natesclaw",
+        repo: "natesclaw",
         state: "open",
         stateReason: null,
         title: "Keep hover previews compact",
@@ -211,7 +211,7 @@ describe("openclaw-github-link-hovercard-provider", () => {
     } as unknown as GatewayBrowserClient;
     const route = document.createElement("main");
     const anchor = document.createElement("a");
-    anchor.href = "https://github.com/openclaw/openclaw/issues/99815";
+    anchor.href = "https://github.com/natesclaw/natesclaw/issues/99815";
     route.append(anchor);
     provider.append(route);
     document.body.append(provider);
@@ -234,15 +234,15 @@ describe("openclaw-github-link-hovercard-provider", () => {
       kind: "issue",
       login: "octocat",
       number: 99815,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "natesclaw",
+      repo: "natesclaw",
       state: "open",
       stateReason: null,
       title: "Keep hover previews compact",
       updatedAt: "2026-07-05T09:55:00Z",
     });
     const { anchor, provider } = createLink(
-      "https://github.com/openclaw/openclaw/issues/99815",
+      "https://github.com/natesclaw/natesclaw/issues/99815",
       "#99815",
     );
     provider.client = { request } as unknown as GatewayBrowserClient;

@@ -1,7 +1,7 @@
 // Tests plugin command dispatch and plugin-scoped command aliases.
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import { parseSqliteSessionFileMarker } from "../../config/sessions/legacy-sqlite-marker.js";
 import { registerPluginCommandInRegistry } from "../../plugins/command-registration.js";
 import {
@@ -12,7 +12,7 @@ import { createEmptyPluginRegistry } from "../../plugins/registry-empty.js";
 import type { PluginRegistry } from "../../plugins/registry-types.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../../plugins/runtime.js";
 import type { PluginCommandContext, PluginCommandResult } from "../../plugins/types.js";
-import { resolveIncognitoOpenClawAgentSqlitePath } from "../../state/openclaw-agent-db.js";
+import { resolveIncognitoNatesclawAgentSqlitePath } from "../../state/natesclaw-agent-db.js";
 import { handlePluginCommand } from "./commands-plugin.js";
 import type { HandleCommandsParams } from "./commands-types.js";
 import { shouldBypassPluginOwnedBindingForCommand } from "./dispatch-from-config.plugin-binding.js";
@@ -41,7 +41,7 @@ function firstCommandContext(handler: ReturnType<typeof registerTestCommand>) {
 
 function buildPluginParams(
   commandBodyNormalized: string,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): HandleCommandsParams {
   return {
     cfg,
@@ -84,7 +84,7 @@ describe("handlePluginCommand", () => {
       buildPluginParams("/card", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       true,
     );
 
@@ -104,7 +104,7 @@ describe("handlePluginCommand", () => {
     const params = buildPluginParams("/card", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     params.agentId = "requester";
     params.sessionKey = "agent:target:whatsapp:direct:test-user";
     params.sessionEntry = {
@@ -144,7 +144,7 @@ describe("handlePluginCommand", () => {
     const params = buildPluginParams("/card", {
       commands: { text: true },
       session: { store: "/tmp/durable/{agentId}/sessions.json" },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     params.agentId = "main";
     params.sessionKey = "agent:main:dashboard:incognito-plugin-command";
     params.storePath = "/tmp/durable/main/sessions.json";
@@ -159,7 +159,7 @@ describe("handlePluginCommand", () => {
     await handlePluginCommand(params, true);
 
     const commandParams = firstCommandContext(handler);
-    const expectedStorePath = resolveIncognitoOpenClawAgentSqlitePath({ agentId: "main" });
+    const expectedStorePath = resolveIncognitoNatesclawAgentSqlitePath({ agentId: "main" });
     expect(commandParams.sessionTarget?.storePath).toBe(expectedStorePath);
     expect(parseSqliteSessionFileMarker(commandParams.sessionFile)?.storePath).toBe(
       expectedStorePath,
@@ -172,7 +172,7 @@ describe("handlePluginCommand", () => {
     const params = buildPluginParams("/card", {
       commands: { text: true },
       session: { store: "/tmp/durable/{agentId}/sessions.json" },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     params.agentId = "other";
     params.sessionKey = "global";
 
@@ -195,7 +195,7 @@ describe("handlePluginCommand", () => {
       buildPluginParams("/card", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       true,
     );
 
@@ -223,7 +223,7 @@ describe("handlePluginCommand", () => {
       buildPluginParams("/approve-deploy", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as OpenClawConfig),
+      } as NatesclawConfig),
       true,
     );
 
@@ -236,7 +236,7 @@ describe("handlePluginCommand", () => {
     const allowedParams = buildPluginParams("/approve-deploy", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
     allowedParams.ctx.GatewayClientScopes = ["operator.approvals"];
 
     const allowed = await handlePluginCommand(allowedParams, true);
@@ -252,7 +252,7 @@ describe("handlePluginCommand", () => {
     const originalHandler = registerTestCommand();
     const replyOptions: NonNullable<HandleCommandsParams["opts"]> &
       PluginCommandExecutionReplyOptions = {};
-    const cfg = { commands: { text: true } } as OpenClawConfig;
+    const cfg = { commands: { text: true } } as NatesclawConfig;
     expect(
       shouldBypassPluginOwnedBindingForCommand(
         {
@@ -290,7 +290,7 @@ describe("handlePluginCommand", () => {
 
   it("treats an explicit non-plugin catalog winner as terminal for plugin matching", async () => {
     const handler = registerTestCommand();
-    const params = buildPluginParams("/card", { commands: { text: true } } as OpenClawConfig);
+    const params = buildPluginParams("/card", { commands: { text: true } } as NatesclawConfig);
     params.opts = {
       [PLUGIN_COMMAND_DISPATCH]: { kind: "non-plugin" },
     } as NonNullable<HandleCommandsParams["opts"]> & PluginCommandExecutionReplyOptions;

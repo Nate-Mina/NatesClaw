@@ -1,4 +1,4 @@
-import { createRouter } from "@openclaw/uirouter";
+import { createRouter } from "@natesclaw/uirouter";
 import type {
   PageDefinition,
   RouteLocation,
@@ -6,7 +6,7 @@ import type {
   RouteNotFound,
   Router,
   RouterHistory,
-} from "@openclaw/uirouter";
+} from "@natesclaw/uirouter";
 import {
   agentRouteFromPath,
   INTERNAL_AGENT_PATH_PARAM,
@@ -219,7 +219,7 @@ export async function startApplicationRouter(
           void router
             .navigate(dynamicRoute[0], context, { history: "none" }, next)
             .catch((error: unknown) => {
-              console.error("[openclaw] Dynamic route navigation failed", error);
+              console.error("[natesclaw] Dynamic route navigation failed", error);
             });
           return;
         }

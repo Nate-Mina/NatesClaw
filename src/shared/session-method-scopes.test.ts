@@ -4,7 +4,7 @@ import { resolveDynamicSessionMutationRequiredScope } from "./session-method-sco
 describe("resolveDynamicSessionMutationRequiredScope", () => {
   it.each([
     { agentId: "main", message: "hello", worktree: true },
-    { agentId: "main", message: "hello", projectId: "openclaw" },
+    { agentId: "main", message: "hello", projectId: "natesclaw" },
   ])("keeps ordinary session creation write-scoped %#", (params) => {
     expect(resolveDynamicSessionMutationRequiredScope("sessions.create", params)).toBe(
       "operator.write",

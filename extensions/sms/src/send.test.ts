@@ -1,5 +1,5 @@
 // Sms tests cover send plugin behavior.
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { sendSmsViaTwilio as sendSmsViaTwilioType } from "./twilio.js";
 import type { ResolvedSmsAccount } from "./types.js";
@@ -408,7 +408,7 @@ describe("sendSmsTextChunks", () => {
 
 describe("sendSmsMedia", () => {
   it("preserves existing pre-dispatch proof from hosted-media staging", async () => {
-    const { PlatformMessageNotDispatchedError } = await import("openclaw/plugin-sdk/error-runtime");
+    const { PlatformMessageNotDispatchedError } = await import("natesclaw/plugin-sdk/error-runtime");
     const rejection = new PlatformMessageNotDispatchedError("unsupported hosted media", {
       cause: new Error("unsupported content type"),
       retryable: false,

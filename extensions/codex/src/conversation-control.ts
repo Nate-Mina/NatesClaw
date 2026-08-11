@@ -1,10 +1,10 @@
-import { resolveAgentDir } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveAgentDir } from "natesclaw/plugin-sdk/agent-runtime";
 // Codex plugin module implements conversation control behavior.
 import {
   applyModelOverrideWithAuthProfileCompatibility,
   ModelSelectionLockedError,
-} from "openclaw/plugin-sdk/model-session-runtime";
-import { patchSessionEntry, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+} from "natesclaw/plugin-sdk/model-session-runtime";
+import { patchSessionEntry, resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
 import { resolveCodexBindingAppServerConnection } from "./app-server/binding-connection.js";
 import type { CodexAppServerClient } from "./app-server/client.js";
 import {
@@ -42,7 +42,7 @@ type CodexAppServerBindingLookup = Omit<CodexAppServerAuthProfileLookup, "authPr
 
 type PermissionsMode = "default" | "yolo";
 
-const CODEX_CONVERSATION_CONTROL_STATE = Symbol.for("openclaw.codex.conversationControl");
+const CODEX_CONVERSATION_CONTROL_STATE = Symbol.for("natesclaw.codex.conversationControl");
 
 function getActiveTurns(): Map<string, ActiveTurn> {
   const globalState = globalThis as typeof globalThis & {
@@ -365,7 +365,7 @@ async function requireThreadBinding(
 ) {
   const binding = await bindingStore.read(identity);
   if (!binding?.threadId) {
-    throw new Error("No Codex thread is attached to this OpenClaw session yet.");
+    throw new Error("No Codex thread is attached to this Natesclaw session yet.");
   }
   return binding;
 }

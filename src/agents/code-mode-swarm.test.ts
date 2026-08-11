@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createCodeModeNamespaceRuntime } from "./code-mode-namespaces.js";
 import { resolveCodeModeConfig } from "./code-mode.js";
@@ -285,7 +285,7 @@ describe("Code Mode swarm host bridge", () => {
     });
     const runtime = {
       namespaceEntries: () => [
-        { id: "openclaw:core:sessions_spawn", source: "openclaw", name: "sessions_spawn" },
+        { id: "natesclaw:core:sessions_spawn", source: "natesclaw", name: "sessions_spawn" },
       ],
       callExactId,
     };
@@ -382,7 +382,7 @@ describe("Code Mode swarm host bridge", () => {
     });
     const runtime = {
       namespaceEntries: () => [
-        { id: "openclaw:core:sessions_spawn", source: "openclaw", name: "sessions_spawn" },
+        { id: "natesclaw:core:sessions_spawn", source: "natesclaw", name: "sessions_spawn" },
       ],
       callExactId,
     };
@@ -434,7 +434,7 @@ describe("Code Mode swarm host bridge", () => {
     }));
     const runtime = {
       namespaceEntries: () => [
-        { id: "openclaw:core:sessions_spawn", source: "openclaw", name: "sessions_spawn" },
+        { id: "natesclaw:core:sessions_spawn", source: "natesclaw", name: "sessions_spawn" },
       ],
       callExactId,
     };
@@ -477,7 +477,7 @@ describe("Code Mode swarm host bridge", () => {
     }));
     const runtime = {
       namespaceEntries: () => [
-        { id: "openclaw:core:sessions_spawn", source: "openclaw", name: "sessions_spawn" },
+        { id: "natesclaw:core:sessions_spawn", source: "natesclaw", name: "sessions_spawn" },
       ],
       callExactId,
     };
@@ -539,7 +539,7 @@ describe("Code Mode swarm host bridge", () => {
     });
     const runtime = {
       namespaceEntries: () => [
-        { id: "openclaw:core:sessions_spawn", source: "openclaw", name: "sessions_spawn" },
+        { id: "natesclaw:core:sessions_spawn", source: "natesclaw", name: "sessions_spawn" },
       ],
       callExactId: vi.fn(),
     };

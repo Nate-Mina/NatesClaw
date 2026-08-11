@@ -1,5 +1,5 @@
-import { asNullableObjectRecord as readRecord } from "@openclaw/normalization-core/record-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { asNullableObjectRecord as readRecord } from "@natesclaw/normalization-core/record-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 // Control UI chat domain owns pure tool-card extraction rules.
 import {
   extractCanvasFromDetails,
@@ -21,10 +21,10 @@ function resolveTranscriptMessageId(message: Record<string, unknown>): string | 
   if (typeof message.messageId === "string" && message.messageId.trim()) {
     return message.messageId;
   }
-  const openClawMeta = message["__openclaw"];
+  const NatesclawMeta = message["__natesclaw"];
   const transcriptMeta =
-    openClawMeta && typeof openClawMeta === "object" && !Array.isArray(openClawMeta)
-      ? (openClawMeta as Record<string, unknown>)
+    NatesclawMeta && typeof NatesclawMeta === "object" && !Array.isArray(NatesclawMeta)
+      ? (NatesclawMeta as Record<string, unknown>)
       : null;
   return typeof transcriptMeta?.id === "string" && transcriptMeta.id.trim()
     ? transcriptMeta.id
@@ -298,8 +298,8 @@ function extractToolCards(message: unknown, prefix = "tool"): ToolCard[] {
   const m = message as Record<string, unknown>;
   const content = normalizeContent(m.content);
   const messageIsError = readToolErrorFlag(m);
-  const isLiveToolStream = m["__openclawToolStreamLive"] === true;
-  const liveDiff = readRecord(m["__openclawToolStreamDiffStat"]);
+  const isLiveToolStream = m["__natesclawToolStreamLive"] === true;
+  const liveDiff = readRecord(m["__natesclawToolStreamDiffStat"]);
   const liveDiffStat =
     typeof liveDiff?.added === "number" &&
     Number.isInteger(liveDiff.added) &&
@@ -329,7 +329,7 @@ function extractToolCards(message: unknown, prefix = "tool"): ToolCard[] {
         args,
         inputText: serializeToolInput(args),
         ...(isLiveToolStream
-          ? { live: true, completed: m["__openclawToolStreamResultReceived"] === true }
+          ? { live: true, completed: m["__natesclawToolStreamResultReceived"] === true }
           : {}),
         ...(liveDiffStat ? { liveDiffStat } : {}),
         messageId: transcriptMessageId,

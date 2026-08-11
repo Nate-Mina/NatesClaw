@@ -3,9 +3,9 @@ import path from "node:path";
 import {
   createPluginRegistryFixture,
   registerVirtualTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
-import { typedCases } from "openclaw/plugin-sdk/test-fixtures";
+} from "natesclaw/plugin-sdk/plugin-test-contracts";
+import { withTempHome } from "natesclaw/plugin-sdk/test-env";
+import { typedCases } from "natesclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 
 const echoCases = typedCases([
@@ -16,15 +16,15 @@ const echoCases = typedCases([
 describe("plugin testing harness contracts", () => {
   it("executes declared tools and reports missing tool contracts", async () => {
     const previousHome = process.env.HOME;
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+    const previousStateDir = process.env.NATESCLAW_STATE_DIR;
 
     await withTempHome(async (home) => {
-      const stateDir = path.join(home, ".openclaw");
+      const stateDir = path.join(home, ".natesclaw");
       await expect(
         fs.stat(path.join(stateDir, "agents", "main", "sessions")),
       ).resolves.toBeDefined();
       expect(process.env.HOME).toBe(home);
-      expect(process.env.OPENCLAW_STATE_DIR).toBe(stateDir);
+      expect(process.env.NATESCLAW_STATE_DIR).toBe(stateDir);
 
       const { config, registry } = createPluginRegistryFixture({
         plugins: {
@@ -108,6 +108,6 @@ describe("plugin testing harness contracts", () => {
     });
 
     expect(process.env.HOME).toBe(previousHome);
-    expect(process.env.OPENCLAW_STATE_DIR).toBe(previousStateDir);
+    expect(process.env.NATESCLAW_STATE_DIR).toBe(previousStateDir);
   });
 });

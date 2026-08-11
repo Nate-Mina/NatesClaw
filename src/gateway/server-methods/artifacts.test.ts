@@ -146,7 +146,7 @@ function assistantImageMessage(params: {
   return {
     role: "assistant",
     content: [{ type: "image", data: params.data ?? "aGVsbG8=", alt: params.alt }],
-    __openclaw: {
+    __natesclaw: {
       seq: params.seq ?? 2,
       ...(params.runId ? { runId: params.runId } : {}),
       ...(params.taskId ? { messageTaskId: params.taskId } : {}),
@@ -171,7 +171,7 @@ function assistantFileMessage(params: {
         title: params.title,
       },
     ],
-    __openclaw: {
+    __natesclaw: {
       seq: params.seq ?? 2,
       ...(params.runId ? { runId: params.runId } : {}),
       ...(params.taskId ? { taskId: params.taskId } : {}),
@@ -191,7 +191,7 @@ function resultImageMessage() {
         alt: "result.png",
       },
     ],
-    __openclaw: { seq: 2 },
+    __natesclaw: { seq: 2 },
   };
 }
 
@@ -390,7 +390,7 @@ describe("artifacts RPC handlers", () => {
             sizeBytes: 14,
           },
         ],
-        __openclaw: { seq: 2 },
+        __natesclaw: { seq: 2 },
       },
     ]);
     hoisted.resolveManagedArtifactDownload.mockResolvedValue({
@@ -426,7 +426,7 @@ describe("artifacts RPC handlers", () => {
       {
         role: "assistant",
         content: [{ type, data, mimeType, fileName: `result.${type}` }],
-        __openclaw: { seq: 2 },
+        __natesclaw: { seq: 2 },
       },
     ]);
     const listed = await listArtifacts({ sessionKey: "agent:main:main" });
@@ -457,7 +457,7 @@ describe("artifacts RPC handlers", () => {
       {
         role: "assistant",
         content: [{ type, artifactId, url, openUrl: url, fileName, mimeType, sizeBytes: 10 }],
-        __openclaw: { seq: 2 },
+        __natesclaw: { seq: 2 },
       },
     ]);
     hoisted.resolveManagedArtifactDownload.mockResolvedValue({
@@ -493,7 +493,7 @@ describe("artifacts RPC handlers", () => {
             alt: "result.png",
           },
         ],
-        __openclaw: { seq: 2 },
+        __natesclaw: { seq: 2 },
       },
     ]);
 
@@ -527,7 +527,7 @@ describe("artifacts RPC handlers", () => {
             alt: "second.png",
           },
         ],
-        __openclaw: { seq: 2 },
+        __natesclaw: { seq: 2 },
       },
     ];
     mockedMessages(messages);
@@ -605,17 +605,17 @@ describe("artifacts RPC handlers", () => {
       {
         role: "assistant",
         content: [{ type: "image", data: "dGFyZ2V0", alt: "task-result.png" }],
-        __openclaw: { seq: 2, messageTaskId: "task-1" },
+        __natesclaw: { seq: 2, messageTaskId: "task-1" },
       },
       {
         role: "assistant",
         content: [{ type: "image", data: "b3RoZXI=", alt: "other-task.png" }],
-        __openclaw: { seq: 3, messageTaskId: "task-2" },
+        __natesclaw: { seq: 3, messageTaskId: "task-2" },
       },
       {
         role: "assistant",
         content: [{ type: "image", data: "dW50YWdnZWQ=", alt: "untagged.png" }],
-        __openclaw: { seq: 4 },
+        __natesclaw: { seq: 4 },
       },
     ]);
 
@@ -813,7 +813,7 @@ describe("artifacts RPC handlers", () => {
             alt: "uploaded.png",
           },
         ],
-        __openclaw: { seq: 3 },
+        __natesclaw: { seq: 3 },
       },
     ]);
     const { calls } = await listArtifacts({ sessionKey: "agent:main:main" }, { id: "image-url" });
@@ -841,7 +841,7 @@ describe("artifacts RPC handlers", () => {
             alt: "uploaded.txt",
           },
         ],
-        __openclaw: { seq: 4 },
+        __natesclaw: { seq: 4 },
       },
     ]);
 
@@ -867,7 +867,7 @@ describe("artifacts RPC handlers", () => {
             title: "plain.txt",
           },
         ],
-        __openclaw: { seq: 5 },
+        __natesclaw: { seq: 5 },
       },
     ]);
 
@@ -892,7 +892,7 @@ describe("artifacts RPC handlers", () => {
             title: "bad.txt",
           },
         ],
-        __openclaw: { seq: 6 },
+        __natesclaw: { seq: 6 },
       },
     ]);
 
@@ -917,7 +917,7 @@ describe("artifacts RPC handlers", () => {
             title: "report.pdf",
           },
         ],
-        __openclaw: { seq: 7 },
+        __natesclaw: { seq: 7 },
       },
     ]);
 
@@ -952,7 +952,7 @@ describe("artifacts RPC handlers", () => {
             alt: "bad.png",
           },
         ],
-        __openclaw: { seq: 7 },
+        __natesclaw: { seq: 7 },
       },
     ]);
 
@@ -977,7 +977,7 @@ describe("artifacts RPC handlers", () => {
             alt: "tiny.gif",
           },
         ],
-        __openclaw: { seq: 8 },
+        __natesclaw: { seq: 8 },
       },
     ]);
 
@@ -1007,7 +1007,7 @@ describe("artifacts RPC handlers", () => {
       {
         role: "assistant",
         content: [{ type: "file", title: "secret.txt", url: "file:///etc/passwd" }],
-        __openclaw: { seq: 4 },
+        __natesclaw: { seq: 4 },
       },
     ]);
 

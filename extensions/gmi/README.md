@@ -1,13 +1,13 @@
-# OpenClaw GMI Cloud Provider
+# Natesclaw GMI Cloud Provider
 
-Official OpenClaw provider plugin for hosted GMI Cloud models through an
+Official Natesclaw provider plugin for hosted GMI Cloud models through an
 OpenAI-compatible API.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/gmi-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/gmi-provider
+natesclaw gateway restart
 ```
 
 Configure a GMI Cloud API key, then select models with refs such as

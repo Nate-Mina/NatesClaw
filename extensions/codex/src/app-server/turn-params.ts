@@ -1,10 +1,10 @@
-import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { GPT5_HEARTBEAT_PROMPT_OVERLAY as CODEX_GPT5_HEARTBEAT_PROMPT_OVERLAY } from "openclaw/plugin-sdk/provider-model-shared";
+import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { GPT5_HEARTBEAT_PROMPT_OVERLAY as CODEX_GPT5_HEARTBEAT_PROMPT_OVERLAY } from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   asOptionalRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { codexSandboxPolicyForTurn, type CodexAppServerRuntimeOptions } from "./config.js";
 import type {
   CodexSandboxPolicy,
@@ -23,7 +23,7 @@ const CODEX_CURRENT_SENDER_FIELD_MAX_CHARS = 256;
 
 function buildCodexCurrentSenderContextValue(params: EmbeddedRunAttemptParams): string | undefined {
   const metadata = asOptionalRecord(
-    asOptionalRecord(params.userTurnTranscriptRecorder?.message as unknown)?.["__openclaw"],
+    asOptionalRecord(params.userTurnTranscriptRecorder?.message as unknown)?.["__natesclaw"],
   );
   const recorded = [
     normalizeOptionalString(metadata?.["senderId"]),
@@ -83,7 +83,7 @@ export function buildTurnStartParams(
     params.trigger === "user" ? buildCodexCurrentSenderContextValue(params) : undefined;
   // Untrusted context exposes authenticated attribution without promoting human-controlled labels.
   const additionalContext: CodexTurnStartParams["additionalContext"] = currentSenderContext
-    ? { openclaw_current_sender: { kind: "untrusted", value: currentSenderContext } }
+    ? { natesclaw_current_sender: { kind: "untrusted", value: currentSenderContext } }
     : undefined;
   return {
     threadId: options.threadId,
@@ -107,7 +107,7 @@ export function buildTurnStartParams(
       ? { model: modelSelection.model, personality: CODEX_NATIVE_PERSONALITY_NONE }
       : {}),
     // Codex distinguishes an omitted native default from explicitly clearing
-    // an OpenClaw-owned priority override left on this exact warm session.
+    // an Natesclaw-owned priority override left on this exact warm session.
     ...(options.appServer.serviceTier !== undefined
       ? { serviceTier: options.appServer.serviceTier }
       : options.clearInheritedServiceTier
@@ -189,7 +189,7 @@ function buildTurnScopedCollaborationInstructions(
 
 function buildDefaultCollaborationInstructions(): string {
   // Codex only applies the built-in Default-mode preset when `developer_instructions`
-  // is null. OpenClaw adds per-turn workspace instructions here, so preserve that
+  // is null. Natesclaw adds per-turn workspace instructions here, so preserve that
   // pinned Codex default behavior before appending the workspace overlay.
   return [
     "# Collaboration Mode: Default",
@@ -208,7 +208,7 @@ function buildDefaultCollaborationInstructions(): string {
 
 function buildCronCollaborationInstructions(): string {
   return [
-    "This is an OpenClaw cron automation turn. Apply these instructions only to this scheduled job; ordinary chat turns should stay in Codex Default mode.",
+    "This is an Natesclaw cron automation turn. Apply these instructions only to this scheduled job; ordinary chat turns should stay in Codex Default mode.",
     "Execute the cron payload directly. If it asks you to run an exact command, run that command before doing any investigation, planning, memory review, or workspace bootstrap.",
     "Use context already provided by the runtime, but do not spend time loading or re-reading workspace bootstrap, memory, or project-doc files before executing the cron payload. Inspect those files only if the payload asks for them or the command fails and they are needed to diagnose it.",
     "Keep output concise and automation-oriented. Prefer the final command result or a short failure summary over status narration.",
@@ -217,8 +217,8 @@ function buildCronCollaborationInstructions(): string {
 
 function buildHeartbeatCollaborationInstructions(): string {
   return [
-    "This is an OpenClaw heartbeat turn. Apply these instructions only to this heartbeat wake; ordinary chat turns should stay in Codex Default mode.",
-    "When you are ready to end the heartbeat, prefer the structured `heartbeat_respond` tool so OpenClaw can record the wake outcome and notification decision. If `heartbeat_respond` is not already available and `tool_search` is available, search for `heartbeat_respond`, load it, then call it. Use `notify=false` when nothing should visibly interrupt the user.",
+    "This is an Natesclaw heartbeat turn. Apply these instructions only to this heartbeat wake; ordinary chat turns should stay in Codex Default mode.",
+    "When you are ready to end the heartbeat, prefer the structured `heartbeat_respond` tool so Natesclaw can record the wake outcome and notification decision. If `heartbeat_respond` is not already available and `tool_search` is available, search for `heartbeat_respond`, load it, then call it. Use `notify=false` when nothing should visibly interrupt the user.",
     CODEX_GPT5_HEARTBEAT_PROMPT_OVERLAY,
   ].join("\n\n");
 }

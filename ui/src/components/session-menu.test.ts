@@ -57,7 +57,7 @@ async function mountMenu(
     ...options.session,
   };
   render(
-    html`<openclaw-session-menu
+    html`<natesclaw-session-menu
       .session=${session}
       .selectionCount=${options.selectionCount ?? 1}
       .lastActive=${options.lastActive ?? "57d"}
@@ -77,10 +77,10 @@ async function mountMenu(
         : options.workboard}
       .onAction=${options.onAction ?? (() => {})}
       .onClose=${options.onClose ?? (() => {})}
-    ></openclaw-session-menu>`,
+    ></natesclaw-session-menu>`,
     container,
   );
-  const element = container.querySelector("openclaw-session-menu") as SessionMenuElement | null;
+  const element = container.querySelector("natesclaw-session-menu") as SessionMenuElement | null;
   if (!element) {
     throw new Error("Expected session menu");
   }
@@ -358,7 +358,7 @@ describe("session menu", () => {
   });
 
   it("dispatches open-pr with the resolved URL from click or the G shortcut", async () => {
-    const url = "https://github.com/openclaw/openclaw/pull/12345";
+    const url = "https://github.com/natesclaw/natesclaw/pull/12345";
     const calls: SessionMenuAction[] = [];
     const menu = await mountMenu({
       work: { loading: false, pullRequestUrl: url, worktreePath: null },

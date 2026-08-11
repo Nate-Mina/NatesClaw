@@ -4,4 +4,4 @@ export {
   listRuntimeImageGenerationProviders,
   type GenerateImageParams,
   type GenerateImageRuntimeResult,
-} from "openclaw/plugin-sdk/image-generation-runtime";
+} from "natesclaw/plugin-sdk/image-generation-runtime";

@@ -1,16 +1,16 @@
 // Test-only bridge that feeds legacy fixture values through the canonical mediaModels owner.
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 
 type MediaCapability = "image" | "music" | "video";
 type LegacyMediaModelKey = "imageGenerationModel" | "musicGenerationModel" | "videoGenerationModel";
 
 export function canonicalizeMediaGenerationTestConfig(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   capability: MediaCapability,
   legacyKey: LegacyMediaModelKey,
-): OpenClawConfig {
+): NatesclawConfig {
   const defaults = config.agents?.defaults as
-    | (NonNullable<OpenClawConfig["agents"]>["defaults"] & Record<string, unknown>)
+    | (NonNullable<NatesclawConfig["agents"]>["defaults"] & Record<string, unknown>)
     | undefined;
   const legacyValue = defaults?.[legacyKey];
   if (legacyValue === undefined || defaults?.mediaModels?.[capability] !== undefined) {

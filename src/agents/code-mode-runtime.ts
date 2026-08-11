@@ -1,7 +1,7 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { uniqueValues } from "@openclaw/normalization-core/string-normalization";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { uniqueValues } from "@natesclaw/normalization-core/string-normalization";
 import { parse, tokenizer } from "acorn";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { createLazyPromiseLoader } from "../shared/lazy-runtime.js";
 import { clampNumber } from "../utils.js";
@@ -118,7 +118,7 @@ function normalizeCodeModeRawConfig(value: unknown): Record<string, unknown> | u
   return isRecord(codeMode) ? codeMode : undefined;
 }
 
-function readCodeModeRawConfig(config?: OpenClawConfig, agentId?: string): Record<string, unknown> {
+function readCodeModeRawConfig(config?: NatesclawConfig, agentId?: string): Record<string, unknown> {
   const tools = isRecord(config?.tools) ? config.tools : undefined;
   const globalRaw = normalizeCodeModeRawConfig(tools?.codeMode) ?? {};
   const agentRaw =
@@ -149,7 +149,7 @@ function readLanguages(value: unknown): CodeModeLanguage[] {
 }
 
 /** Resolves Code Mode runtime limits and language support from config. */
-export function resolveCodeModeConfig(config?: OpenClawConfig, agentId?: string): CodeModeConfig {
+export function resolveCodeModeConfig(config?: NatesclawConfig, agentId?: string): CodeModeConfig {
   const raw = readCodeModeRawConfig(config, agentId);
   const maxSearchLimit = clampNumber(
     readPositiveInteger(raw.maxSearchLimit, DEFAULT_MAX_SEARCH_LIMIT),

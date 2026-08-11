@@ -9,13 +9,13 @@
  * - `redactBodyKeys` replaces the hardcoded `file_data` redaction.
  */
 
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   readProviderTextResponse,
   readResponseTextLimited,
-} from "openclaw/plugin-sdk/provider-http";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { qqbotApiGuidance, qqbotNetworkGuidance } from "../config/setup-guidance.js";
 import { ApiError, type ApiClientConfig, type EngineLogger } from "../types.js";
 

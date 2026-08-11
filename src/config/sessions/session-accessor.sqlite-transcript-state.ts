@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
 } from "../../infra/kysely-sync.js";
-import type { OpenClawAgentDatabase } from "../../state/openclaw-agent-db.js";
+import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import { publishSessionEntryCacheInvalidation } from "./session-accessor.sqlite-entry-cache.js";
 import { coerceSqliteNumber } from "./session-accessor.sqlite-normalize.js";
 import { getSessionKysely, type ResolvedTranscriptScope } from "./session-accessor.sqlite-scope.js";
@@ -27,7 +27,7 @@ function createTranscriptGeneration(): string {
 
 /** Read the current raw transcript generation inside the caller's transaction. */
 export function readTranscriptGenerationInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): string | undefined {
   const db = getSessionKysely(database.db);
@@ -42,7 +42,7 @@ export function readTranscriptGenerationInTransaction(
 
 /** Materialize a generation once; pure appends must preserve an existing token. */
 export function ensureTranscriptGenerationInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): string {
   const db = getSessionKysely(database.db);
@@ -59,7 +59,7 @@ export function ensureTranscriptGenerationInTransaction(
 
 /** Rotate the watermark in the same transaction as destructive transcript replacement. */
 export function rotateTranscriptGenerationInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): string {
   const db = getSessionKysely(database.db);
@@ -77,7 +77,7 @@ export function rotateTranscriptGenerationInTransaction(
 }
 
 export function ensureTranscriptSessionRoot(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   scope: ResolvedTranscriptScope,
   updatedAt: number,
   options: { allowStoredAlias?: boolean } = {},
@@ -193,7 +193,7 @@ export function ensureTranscriptSessionRoot(
   );
 }
 
-export function readNextTranscriptSeq(database: OpenClawAgentDatabase, sessionId: string): number {
+export function readNextTranscriptSeq(database: NatesclawAgentDatabase, sessionId: string): number {
   const db = getSessionKysely(database.db);
   const row = executeSqliteQueryTakeFirstSync(
     database.db,
@@ -213,7 +213,7 @@ function normalizeTranscriptMutationAtMs(value: number): number | undefined {
 }
 
 export function readTranscriptMutationStateInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): { observedAt: number | null; updatedAt: number | null } {
   const db = getSessionKysely(database.db);
@@ -231,7 +231,7 @@ export function readTranscriptMutationStateInTransaction(
 }
 
 export function advanceTranscriptMutationAtInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
   value: number,
   options: { strictly?: boolean } = {},
@@ -258,7 +258,7 @@ export function advanceTranscriptMutationAtInTransaction(
 }
 
 export function touchTranscriptMutationInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): void {
   const now = normalizeTranscriptMutationAtMs(Date.now());
@@ -268,7 +268,7 @@ export function touchTranscriptMutationInTransaction(
 }
 
 export function deleteTranscriptEventsInTransaction(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   sessionId: string,
 ): boolean {
   const db = getSessionKysely(database.db);

@@ -91,7 +91,7 @@ function createLaunchAgentRemovalError(error: unknown): Error {
 function currentGatewayLaunchAgentLabel(
   targetEnv: Record<string, string | undefined>,
 ): string | undefined {
-  const configuredCurrentLabel = process.env.OPENCLAW_LAUNCHD_LABEL?.trim();
+  const configuredCurrentLabel = process.env.NATESCLAW_LAUNCHD_LABEL?.trim();
   const candidates = new Set([
     resolveLaunchAgentLabel(targetEnv),
     ...(configuredCurrentLabel ? [assertValidLaunchAgentLabel(configuredCurrentLabel)] : []),
@@ -179,7 +179,7 @@ async function restoreLaunchAgentOwnedFile(params: {
     });
     return;
   }
-  const temporaryPath = `${params.path}.openclaw-${randomUUID()}.rollback`;
+  const temporaryPath = `${params.path}.natesclaw-${randomUUID()}.rollback`;
   try {
     await fs.writeFile(temporaryPath, params.contents.toString("utf8"), {
       flag: "wx",
@@ -263,7 +263,7 @@ async function restoreLaunchAgentInstall(params: {
       domain: params.domain,
       serviceTarget,
       plistPath: params.plistPath,
-      actionHint: "openclaw gateway start",
+      actionHint: "natesclaw gateway start",
       retryPendingTeardown: true,
     });
   }
@@ -275,7 +275,7 @@ async function restoreLaunchAgentInstall(params: {
       domain: params.domain,
       serviceTarget: `${params.domain}/${legacy.label}`,
       plistPath: legacy.plistPath,
-      actionHint: "openclaw gateway start",
+      actionHint: "natesclaw gateway start",
       retryPendingTeardown: true,
     });
   }
@@ -321,7 +321,7 @@ async function activateLaunchAgent(params: {
       domain,
       serviceTarget: `${domain}/${label}`,
       plistPath: params.plistPath,
-      actionHint: "openclaw gateway install --force",
+      actionHint: "natesclaw gateway install --force",
       retryPendingTeardown: true,
     });
     for (const legacy of params.snapshot.legacy) {
@@ -361,7 +361,7 @@ export async function installLaunchAgent(
   // Plist, generated environment files, and launchd registration form one cutover.
   // Capture every prior owner before publication so any later failure can restore it.
   const legacy = await Promise.all(
-    resolveLegacyGatewayLaunchAgentLabels(args.env.OPENCLAW_PROFILE).map(async (legacyLabel) => {
+    resolveLegacyGatewayLaunchAgentLabels(args.env.NATESCLAW_PROFILE).map(async (legacyLabel) => {
       const plistPath = resolveLaunchAgentPlistPathForLabel(args.env, legacyLabel);
       const contents = await readExistingLaunchAgentPlist(plistPath);
       return {

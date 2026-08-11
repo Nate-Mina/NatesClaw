@@ -45,8 +45,8 @@ describe("channel config composition", () => {
     const arraySugar = ChannelMentionPatternsSchemas.stringArray;
 
     expect(canonical.safeParse({ mode: "allow", denyIn: ["room"] }).success).toBe(true);
-    expect(canonical.safeParse(["openclaw"]).success).toBe(false);
-    expect(arraySugar.safeParse(["openclaw"]).success).toBe(true);
+    expect(canonical.safeParse(["natesclaw"]).success).toBe(false);
+    expect(arraySugar.safeParse(["natesclaw"]).success).toBe(true);
     expect(arraySugar.safeParse({ mode: "deny", allowIn: ["#bots"] }).success).toBe(false);
   });
 

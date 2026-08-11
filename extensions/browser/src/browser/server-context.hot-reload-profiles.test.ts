@@ -16,7 +16,7 @@ type TestProfileConfig = {
   color?: string;
   headless?: boolean;
   executablePath?: string;
-  driver?: "openclaw" | "existing-session" | "extension";
+  driver?: "natesclaw" | "existing-session" | "extension";
   mcpCommand?: string;
   mcpArgs?: string[];
 };
@@ -44,7 +44,7 @@ const lifecycleMocks = vi.hoisted(() => ({
   closeChromeMcpSession: vi.fn(async () => false),
   closePlaywrightBrowserConnection: vi.fn(async (_opts: { cdpUrl: string }) => {}),
   retirePlaywrightBrowserConnection: vi.fn((_opts: { cdpUrl: string }) => true),
-  stopOpenClawChrome: vi.fn(async () => {}),
+  stopNatesclawChrome: vi.fn(async () => {}),
 }));
 
 function buildConfig(): TestConfig {
@@ -53,7 +53,7 @@ function buildConfig(): TestConfig {
       enabled: true,
       color: "#FF4500",
       headless: true,
-      defaultProfile: "openclaw",
+      defaultProfile: "natesclaw",
       profiles: { ...mockState.cfgProfiles },
     },
   };
@@ -80,7 +80,7 @@ vi.mock("./config-refresh-source.js", () => ({
 }));
 
 vi.mock("./chrome.js", () => ({
-  stopOpenClawChrome: lifecycleMocks.stopOpenClawChrome,
+  stopNatesclawChrome: lifecycleMocks.stopNatesclawChrome,
 }));
 
 vi.mock("./chrome-mcp.runtime.js", () => ({
@@ -149,7 +149,7 @@ function createProfileFixture(
     lastTargetId?: string | null;
   } = {},
 ) {
-  const name = options.name ?? "openclaw";
+  const name = options.name ?? "natesclaw";
   if (options.config) {
     mockState.cfgProfiles[name] = options.config;
     mockState.cachedConfig = null;
@@ -198,9 +198,9 @@ describe("server-context hot-reload profiles", () => {
     lifecycleMocks.closeChromeMcpSession.mockResolvedValue(false);
     lifecycleMocks.closePlaywrightBrowserConnection.mockResolvedValue(undefined);
     lifecycleMocks.retirePlaywrightBrowserConnection.mockReturnValue(true);
-    lifecycleMocks.stopOpenClawChrome.mockResolvedValue(undefined);
+    lifecycleMocks.stopNatesclawChrome.mockResolvedValue(undefined);
     mockState.cfgProfiles = {
-      openclaw: { cdpPort: 18800, color: "#FF4500" },
+      natesclaw: { cdpPort: 18800, color: "#FF4500" },
     };
     mockState.cachedConfig = null;
   });
@@ -275,16 +275,16 @@ describe("server-context hot-reload profiles", () => {
   it("forProfile refreshes existing profile config after getRuntimeConfig cache updates", () => {
     const { state } = createBrowserState();
 
-    mockState.cfgProfiles.openclaw = { cdpPort: 19999, color: "#FF4500" };
+    mockState.cfgProfiles.natesclaw = { cdpPort: 19999, color: "#FF4500" };
     mockState.cachedConfig = null;
 
     const after = resolveBrowserProfileWithHotReload({
       current: state,
       refreshConfigFromDisk: true,
-      name: "openclaw",
+      name: "natesclaw",
     });
     expect(after?.cdpPort).toBe(19999);
-    expect(state.resolved.profiles.openclaw?.cdpPort).toBe(19999);
+    expect(state.resolved.profiles.natesclaw?.cdpPort).toBe(19999);
   });
 
   it("listProfiles refreshes config before enumerating profiles", () => {
@@ -303,7 +303,7 @@ describe("server-context hot-reload profiles", () => {
       lastTargetId: "tab-1",
     });
     const oldCdpUrl = profile.cdpUrl;
-    updateProfile(state, "openclaw", { cdpPort: 19999, color: "#FF4500" }, true);
+    updateProfile(state, "natesclaw", { cdpPort: 19999, color: "#FF4500" }, true);
 
     expect(runtime.profile.cdpPort).toBe(19999);
     expect(runtime.lastTargetId).toBeNull();
@@ -324,7 +324,7 @@ describe("server-context hot-reload profiles", () => {
     });
     expect(profile.headless).toBe(true);
 
-    updateProfile(state, "openclaw", { cdpPort: 18800, color: "#FF4500", headless: false }, true);
+    updateProfile(state, "natesclaw", { cdpPort: 18800, color: "#FF4500", headless: false }, true);
 
     expect(runtime.profile.headless).toBe(false);
     expect(runtime.lastTargetId).toBeNull();
@@ -345,7 +345,7 @@ describe("server-context hot-reload profiles", () => {
 
     updateProfile(
       state,
-      "openclaw",
+      "natesclaw",
       { cdpPort: 18800, color: "#FF4500", executablePath: "/usr/bin/chrome-new" },
       true,
     );
@@ -400,7 +400,7 @@ describe("server-context hot-reload profiles", () => {
       running: { pid: 789 } as never,
       lastTargetId: "tab-remote-cdp",
     });
-    expect(profile.driver).toBe("openclaw");
+    expect(profile.driver).toBe("natesclaw");
     expect(profile.attachOnly).toBe(false);
     expect(profile.cdpIsLoopback).toBe(false);
     expect(profile.headless).toBe(true);
@@ -412,7 +412,7 @@ describe("server-context hot-reload profiles", () => {
       true,
     );
 
-    expect(runtime.profile.driver).toBe("openclaw");
+    expect(runtime.profile.driver).toBe("natesclaw");
     expect(runtime.profile.cdpIsLoopback).toBe(false);
     expect(runtime.profile.headless).toBe(false);
     expect(runtime.lastTargetId).toBe("tab-remote-cdp");
@@ -554,8 +554,8 @@ describe("server-context hot-reload profiles", () => {
     await getProfileLifecycle(oldRuntime).tail;
     await Promise.resolve();
     expect(state.profiles.has("work")).toBe(false);
-    expect(lifecycleMocks.stopOpenClawChrome).toHaveBeenCalledOnce();
-    expect(lifecycleMocks.stopOpenClawChrome).toHaveBeenCalledWith(lateRunning);
+    expect(lifecycleMocks.stopNatesclawChrome).toHaveBeenCalledOnce();
+    expect(lifecycleMocks.stopNatesclawChrome).toHaveBeenCalledWith(lateRunning);
     const replacement = getOrCreateProfileRuntime(state, workB);
     expect(replacement).not.toBe(oldRuntime);
     await expect(

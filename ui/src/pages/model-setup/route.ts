@@ -1,5 +1,5 @@
-import type { RouteLocation } from "@openclaw/uirouter";
-import { definePage } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -22,7 +22,7 @@ async function loadModelSetupRouteData(
   if (
     !client ||
     !hasOperatorAdminAccess(snapshot.hello?.auth ?? null) ||
-    isGatewayMethodAdvertised(snapshot, "openclaw.setup.detect") !== true
+    isGatewayMethodAdvertised(snapshot, "natesclaw.setup.detect") !== true
   ) {
     return { state: { phase: "loading" }, connection, firstRun };
   }
@@ -54,7 +54,7 @@ async function loadModelSetupRouteData(
     current.phase === "connected" &&
     current.client &&
     hasOperatorAdminAccess(current.hello?.auth ?? null) &&
-    isGatewayMethodAdvertised(current, "openclaw.setup.detect") === true
+    isGatewayMethodAdvertised(current, "natesclaw.setup.detect") === true
   ) {
     return loadModelSetupRouteData(context, location, false);
   }
@@ -74,6 +74,6 @@ export const page = definePage({
     import("./model-setup-page.ts").then(() => ({
       header: true,
       render: (data: ModelSetupRouteData | undefined) =>
-        html`<openclaw-model-setup-page .routeData=${data}></openclaw-model-setup-page>`,
+        html`<natesclaw-model-setup-page .routeData=${data}></natesclaw-model-setup-page>`,
     })),
 });

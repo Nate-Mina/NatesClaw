@@ -1,20 +1,20 @@
-// Machine-owned values retired from openclaw.json live in the shared state database.
+// Machine-owned values retired from natesclaw.json live in the shared state database.
 import { existsSync } from "node:fs";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
-import { withOpenClawStateDatabaseReadOnly } from "./openclaw-state-db-readonly.js";
-import { tableExists } from "./openclaw-state-db-schema-helpers.js";
-import type { DB as OpenClawStateKyselyDatabase } from "./openclaw-state-db.generated.js";
+import { withNatesclawStateDatabaseReadOnly } from "./natesclaw-state-db-readonly.js";
+import { tableExists } from "./natesclaw-state-db-schema-helpers.js";
+import type { DB as NatesclawStateKyselyDatabase } from "./natesclaw-state-db.generated.js";
 import {
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "./openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "./openclaw-state-db.paths.js";
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "./natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "./natesclaw-state-db.paths.js";
 
-type ConfigMachineStateDatabase = Pick<OpenClawStateKyselyDatabase, "config_machine_state">;
+type ConfigMachineStateDatabase = Pick<NatesclawStateKyselyDatabase, "config_machine_state">;
 
 function normalizeStateKey(key: string): string {
   const normalized = key.trim();
@@ -35,13 +35,13 @@ function serializeStateValue(value: unknown): string {
 // oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- Callers own the JSON shape for open-ended state keys.
 export function readConfigMachineState<T>(
   key: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): T | undefined {
-  const pathname = options.path ?? resolveOpenClawStateSqlitePath(options.env ?? process.env);
+  const pathname = options.path ?? resolveNatesclawStateSqlitePath(options.env ?? process.env);
   if (!existsSync(pathname)) {
     return undefined;
   }
-  return withOpenClawStateDatabaseReadOnly(({ db: database }) => {
+  return withNatesclawStateDatabaseReadOnly(({ db: database }) => {
     if (!tableExists(database, "config_machine_state")) {
       return undefined;
     }
@@ -60,12 +60,12 @@ export function readConfigMachineState<T>(
 export function writeConfigMachineState(
   key: string,
   value: unknown,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): void {
   const stateKey = normalizeStateKey(key);
   const valueJson = serializeStateValue(value);
   const now = Date.now();
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     (database) => {
       const db = getNodeSqliteKysely<ConfigMachineStateDatabase>(database.db);
       executeSqliteQuerySync(
@@ -87,11 +87,11 @@ export function writeConfigMachineState(
 export function updateConfigMachineState<T>(
   key: string,
   update: (current: T | undefined) => T,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): T {
   const stateKey = normalizeStateKey(key);
   const now = Date.now();
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     (database) => {
       const db = getNodeSqliteKysely<ConfigMachineStateDatabase>(database.db);
       const row = executeSqliteQueryTakeFirstSync(
@@ -122,7 +122,7 @@ export function updateConfigMachineState<T>(
 /** Import retired config values without replacing newer canonical database state. */
 export function importConfigMachineState(
   entries: ReadonlyArray<readonly [key: string, value: unknown]>,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): { imported: string[]; kept: string[] } {
   if (entries.length === 0) {
     return { imported: [], kept: [] };
@@ -132,7 +132,7 @@ export function importConfigMachineState(
     valueJson: serializeStateValue(value),
   }));
   const now = Date.now();
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     (database) => {
       const db = getNodeSqliteKysely<ConfigMachineStateDatabase>(database.db);
       const imported: string[] = [];

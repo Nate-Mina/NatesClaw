@@ -103,7 +103,7 @@ function createChannelProgressUiHints(params: {
   channelLabel: string;
   includeCommentary?: boolean;
   commentaryOrder?: "before-command" | "after-command";
-  labels?: "openclaw";
+  labels?: "natesclaw";
   titleWording?: boolean;
 }): HintMap {
   const channelLabel = params.channelLabel;
@@ -121,8 +121,8 @@ function createChannelProgressUiHints(params: {
     "streaming.progress.labels": {
       label: `${channelLabel} Progress Label Pool`,
       help:
-        params.labels === "openclaw"
-          ? 'Candidate labels for streaming.progress.label="auto". Leave unset to use OpenClaw built-in progress labels.'
+        params.labels === "natesclaw"
+          ? 'Candidate labels for streaming.progress.label="auto". Leave unset to use Natesclaw built-in progress labels.'
           : 'Candidate labels for streaming.progress.label="auto". Leave unset to use the built-in "Working" label.',
     },
     "streaming.progress.maxLines": {
@@ -229,7 +229,7 @@ export function createChannelConfigUiHints(params: {
   progress?: {
     includeCommentary?: boolean;
     commentaryOrder?: "before-command" | "after-command";
-    labels?: "openclaw";
+    labels?: "natesclaw";
     titleWording?: boolean;
   };
   streaming?: Partial<Record<StreamingHintKey, StreamingHintValue>>;

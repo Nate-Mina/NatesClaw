@@ -13,7 +13,7 @@ import type {
 } from "../../../packages/gateway-protocol/src/schema/frames.js";
 import type { ModelCatalogEntry } from "../../agents/model-catalog.types.js";
 import type { CliDeps } from "../../cli/deps.types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type {
   PluginApprovalRequest,
   PluginApprovalRequestPayload,
@@ -129,7 +129,7 @@ export type RespondFn = (
   meta?: Record<string, unknown>,
 ) => void;
 
-/** Minimal hosted OpenClaw contract retained by the gateway request router. */
+/** Minimal hosted Natesclaw contract retained by the gateway request router. */
 /**
  * Structural mirror of the engine's SystemAgentAssistantTurn. Kept local as a
  * leaf contract: importing the assistant module here closes a madge cycle
@@ -187,7 +187,7 @@ type GatewayKernelContext = {
   deps: CliDeps;
   cron: GatewayCronServiceContract;
   cronStorePath: string;
-  getRuntimeConfig: () => OpenClawConfig;
+  getRuntimeConfig: () => NatesclawConfig;
   sessionCompanion?: import("../session-companion.js").SessionCompanionService;
   sessionObserver?: SessionObserverService;
   resolveTerminalLaunchPolicy: (agentId?: string) => TerminalLaunchResolution;
@@ -240,7 +240,7 @@ type GatewayKernelContext = {
   /** Instance-local native approval subscribers; never derived from a network client. */
   approvalEvents?: GatewayApprovalEventPublisher;
   recoveryRuntime?: GatewayRecoveryRuntime;
-  enforceSharedGatewayAuthGenerationForConfigWrite?: (nextConfig: OpenClawConfig) => void;
+  enforceSharedGatewayAuthGenerationForConfigWrite?: (nextConfig: NatesclawConfig) => void;
   claimControlUiDeviceAuthMigration?: (deviceId: string) => boolean;
   releaseControlUiDeviceAuthMigrationClaim?: (deviceId: string) => void;
   completeControlUiDeviceAuthMigration?: (device: {

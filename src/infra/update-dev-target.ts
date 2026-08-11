@@ -1,9 +1,9 @@
-import { safeParseJson, stableStringify } from "@openclaw/normalization-core";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { safeParseJson, stableStringify } from "@natesclaw/normalization-core";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import type { UpdateScheduleState } from "../../packages/gateway-protocol/src/index.js";
 
-export const UPDATE_DEV_TARGET_REF_ENV = "OPENCLAW_UPDATE_DEV_TARGET_REF";
-const TRACKED_DEV_TARGET_PREFIX = "openclaw-dev-target:v1:";
+export const UPDATE_DEV_TARGET_REF_ENV = "NATESCLAW_UPDATE_DEV_TARGET_REF";
+const TRACKED_DEV_TARGET_PREFIX = "natesclaw-dev-target:v1:";
 const MAX_TRACKED_DEV_TARGET_PAYLOAD_LENGTH = 4096;
 
 export type DevUpdateTarget =

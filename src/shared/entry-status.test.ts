@@ -20,18 +20,18 @@ describe("shared/entry-status", () => {
       entry: {
         metadata: {
           emoji: "🦀",
-          homepage: "https://openclaw.ai",
+          homepage: "https://natesclaw.ai",
           requires: {
             bins: ["bun"],
             anyBins: ["ffmpeg", "sox"],
-            env: ["OPENCLAW_TOKEN"],
+            env: ["NATESCLAW_TOKEN"],
             config: ["gateway.bind"],
           },
           os: ["darwin"],
         },
         frontmatter: {
           emoji: "🙂",
-          homepage: "https://docs.openclaw.ai",
+          homepage: "https://docs.natesclaw.ai",
         },
       },
       hasLocalBin: (bin) => bin === "bun",
@@ -44,18 +44,18 @@ describe("shared/entry-status", () => {
 
     expect(result).toEqual({
       emoji: "🦀",
-      homepage: "https://openclaw.ai",
+      homepage: "https://natesclaw.ai",
       required: {
         bins: ["bun"],
         anyBins: ["ffmpeg", "sox"],
-        env: ["OPENCLAW_TOKEN"],
+        env: ["NATESCLAW_TOKEN"],
         config: ["gateway.bind"],
         os: ["darwin"],
       },
       missing: {
         bins: [],
         anyBins: [],
-        env: ["OPENCLAW_TOKEN"],
+        env: ["NATESCLAW_TOKEN"],
         config: [],
         os: ["darwin"],
       },
@@ -95,7 +95,7 @@ describe("shared/entry-status", () => {
           },
         },
         frontmatter: {
-          website: " https://docs.openclaw.ai ",
+          website: " https://docs.natesclaw.ai ",
           emoji: "🙂",
         },
       },
@@ -106,7 +106,7 @@ describe("shared/entry-status", () => {
 
     expect(result).toEqual({
       emoji: "🙂",
-      homepage: "https://docs.openclaw.ai",
+      homepage: "https://docs.natesclaw.ai",
       required: {
         bins: ["missing-bin"],
         anyBins: [],

@@ -1,7 +1,7 @@
 // Discord tests cover directory contract plugin behavior.
-import type { BaseProbeResult, BaseTokenResolution } from "openclaw/plugin-sdk/channel-contract";
-import { expectDirectoryIds } from "openclaw/plugin-sdk/channel-test-helpers";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { BaseProbeResult, BaseTokenResolution } from "natesclaw/plugin-sdk/channel-contract";
+import { expectDirectoryIds } from "natesclaw/plugin-sdk/channel-test-helpers";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import {
   listDiscordDirectoryGroupsFromConfig,
@@ -36,7 +36,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     await expectDirectoryIds(
       listDiscordDirectoryPeersFromConfig,
@@ -72,7 +72,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     await expectDirectoryIds(listDiscordDirectoryPeersFromConfig, cfg, ["user:111"]);
     await expectDirectoryIds(listDiscordDirectoryGroupsFromConfig, cfg, ["channel:555"]);
@@ -90,7 +90,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     const entries = await listDiscordDirectoryPeersFromConfig({
       cfg,
@@ -117,7 +117,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     const groups = await listDiscordDirectoryGroupsFromConfig({
       cfg,

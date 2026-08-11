@@ -85,7 +85,7 @@ scenario:
         - internal error
         - tool failed
         - /var/folders
-        - openclaw-qa-suite
+        - natesclaw-qa-suite
 
 flow:
   steps:

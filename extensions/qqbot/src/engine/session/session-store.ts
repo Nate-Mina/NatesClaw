@@ -2,7 +2,7 @@
  * Gateway session persistence — SQLite KV-backed store.
  */
 
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import { debugLog, debugError } from "../utils/log.js";
 import { buildQQBotStateKey, openQQBotSyncKeyedStore } from "../utils/sqlite-state.js";
 

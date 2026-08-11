@@ -49,7 +49,7 @@ describe("custodian panel toggle", () => {
       client: null,
       connected: false,
       handleOpenSidebar: vi.fn(),
-      hello: gatewayHello(["openclaw.chat"]),
+      hello: gatewayHello(["natesclaw.chat"]),
       requestUpdate: vi.fn(),
       sessionKey: "agent:main:current",
       sessions: {},

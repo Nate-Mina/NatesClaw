@@ -1,8 +1,8 @@
 import type { ChatMember, ReactionTypeEmoji } from "grammy/types";
-import { resolveChannelConfigWrites } from "openclaw/plugin-sdk/channel-config-helpers";
-import { mutateConfigFile } from "openclaw/plugin-sdk/config-mutation";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose, warn } from "openclaw/plugin-sdk/runtime-env";
+import { resolveChannelConfigWrites } from "natesclaw/plugin-sdk/channel-config-helpers";
+import { mutateConfigFile } from "natesclaw/plugin-sdk/config-mutation";
+import { resolveAgentRoute } from "natesclaw/plugin-sdk/routing";
+import { danger, logVerbose, warn } from "natesclaw/plugin-sdk/runtime-env";
 import { resolveTelegramAccount } from "./accounts.js";
 import type { TelegramHandlerAuthorization } from "./bot-handlers.inbound-authorization.js";
 import type { TelegramMessagePipeline } from "./bot-handlers.message-pipeline.js";

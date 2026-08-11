@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 type AcpxPackageManifest = {
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
-  openclaw?: {
+  natesclaw?: {
     install?: {
       requiredPlatformPackages?: string[];
     };
@@ -27,7 +27,7 @@ describe("acpx package manifest", () => {
   });
 
   it("declares the transitive native platform packages required by ACP adapters", () => {
-    expect(packageJson.openclaw?.install?.requiredPlatformPackages).toEqual([
+    expect(packageJson.natesclaw?.install?.requiredPlatformPackages).toEqual([
       "@anthropic-ai/claude-agent-sdk-linux-x64",
       "@anthropic-ai/claude-agent-sdk-linux-arm64",
       "@anthropic-ai/claude-agent-sdk-linux-x64-musl",

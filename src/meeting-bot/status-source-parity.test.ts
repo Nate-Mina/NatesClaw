@@ -7,20 +7,20 @@ const platforms = [
     name: "Teams",
     token: "teams",
     globals: {
-      audioOutputs: "__openclawTeamsAudioOutputs",
-      captionArchive: "__openclawTeamsCaptionArchive",
-      captions: "__openclawTeamsCaptions",
-      meeting: "__openclawTeamsMeeting",
+      audioOutputs: "__natesclawTeamsAudioOutputs",
+      captionArchive: "__natesclawTeamsCaptionArchive",
+      captions: "__natesclawTeamsCaptions",
+      meeting: "__natesclawTeamsMeeting",
     },
   },
   {
     name: "Zoom",
     token: "zoom",
     globals: {
-      audioOutputs: "__openclawZoomAudioOutputs",
-      captionArchive: "__openclawZoomCaptionArchive",
-      captions: "__openclawZoomCaptions",
-      meeting: "__openclawZoomMeeting",
+      audioOutputs: "__natesclawZoomAudioOutputs",
+      captionArchive: "__natesclawZoomCaptionArchive",
+      captions: "__natesclawZoomCaptions",
+      meeting: "__natesclawZoomMeeting",
     },
   },
 ] as const;
@@ -30,7 +30,7 @@ describe.each(platforms)("$name meeting status source parity", (platform) => {
     const callOptions = {
       captionEnableSource: "captionsEnabledNow = true;",
       platform: {
-        audioOutputElementIdPrefix: `openclaw-${platform.token}-audio-output-`,
+        audioOutputElementIdPrefix: `natesclaw-${platform.token}-audio-output-`,
         displayName: platform.name,
         globals: {
           audioOutputs: platform.globals.audioOutputs,
@@ -59,7 +59,7 @@ describe.each(platforms)("$name meeting status source parity", (platform) => {
       autoJoin: false,
       captureCaptions: false,
       expectedIdentity: `${platform.token}:meeting`,
-      guestName: "OpenClaw",
+      guestName: "Natesclaw",
       pageIdentitySource: "const meetingIdentity = () => undefined;",
       selectors: "{}",
       toggleStateFunction: "() => undefined",

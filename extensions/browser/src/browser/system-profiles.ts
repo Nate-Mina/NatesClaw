@@ -2,12 +2,12 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { openNodeSqliteDatabase } from "openclaw/plugin-sdk/sqlite-runtime";
-import type { OpenClawConfig } from "../config/config.js";
+import { openNodeSqliteDatabase } from "natesclaw/plugin-sdk/sqlite-runtime";
+import type { NatesclawConfig } from "../config/config.js";
 import { getRuntimeConfig } from "../config/config.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
-import { resolveOpenClawUserDataDir } from "./chrome.js";
-import { usesOpenClawMockKeychain } from "./chrome.profile-decoration.js";
+import { resolvePreferredNatesclawTmpDir } from "../infra/tmp-natesclaw-dir.js";
+import { resolveNatesclawUserDataDir } from "./chrome.js";
+import { usesNatesclawMockKeychain } from "./chrome.profile-decoration.js";
 import { BrowserProfileUnavailableError } from "./errors.js";
 import { getPwAiModule } from "./pw-ai-module.js";
 import { type BrowserRouteContext, runProfileContextOperation } from "./server-context.js";
@@ -42,12 +42,12 @@ export type ImportSystemProfileResult = {
   domains: string[];
 };
 
-type CreateProfile = (params: { name: string; driver?: "openclaw" }) => Promise<unknown>;
+type CreateProfile = (params: { name: string; driver?: "natesclaw" }) => Promise<unknown>;
 
 type SystemProfileDeps = {
   platform?: NodeJS.Platform;
   homeDir?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   readSecret?: KeychainSecretReader;
 };
 
@@ -138,9 +138,9 @@ function snapshotCookieDatabase(source: string): {
   databasePath: string;
   cleanup: () => void;
 } {
-  const tmpRoot = resolvePreferredOpenClawTmpDir();
+  const tmpRoot = resolvePreferredNatesclawTmpDir();
   fs.mkdirSync(tmpRoot, { recursive: true });
-  const tempDir = fs.mkdtempSync(path.join(tmpRoot, "openclaw-system-cookies-"));
+  const tempDir = fs.mkdtempSync(path.join(tmpRoot, "natesclaw-system-cookies-"));
   const databasePath = path.join(tempDir, "Cookies");
   const sourceDatabase = openNodeSqliteDatabase(source, { readOnly: true });
   try {
@@ -158,7 +158,7 @@ function snapshotCookieDatabase(source: string): {
   };
 }
 
-/** Import decrypted system-profile cookies into one managed OpenClaw profile. */
+/** Import decrypted system-profile cookies into one managed Natesclaw profile. */
 export async function importSystemProfileCookies(
   params: ImportSystemProfileParams,
   runtime: {
@@ -192,16 +192,16 @@ export async function importSystemProfileCookies(
   }
 
   if (!(into in runtime.ctx.state().resolved.profiles)) {
-    await runtime.createProfile({ name: into, driver: "openclaw" });
+    await runtime.createProfile({ name: into, driver: "natesclaw" });
   }
   const profileCtx = runtime.ctx.forProfile(into);
   if (
-    profileCtx.profile.driver !== "openclaw" ||
+    profileCtx.profile.driver !== "natesclaw" ||
     !profileCtx.profile.cdpIsLoopback ||
     profileCtx.profile.attachOnly
   ) {
     throw new Error(
-      `profile "${into}" is not a locally managed OpenClaw profile; import into a fresh profile name`,
+      `profile "${into}" is not a locally managed Natesclaw profile; import into a fresh profile name`,
     );
   }
   for (let attempt = 0; attempt < 2; attempt += 1) {
@@ -211,19 +211,19 @@ export async function importSystemProfileCookies(
         runtime.signal,
         async (signal, profileRuntime) => {
           await profileCtx.ensureBrowserAvailable({ headless: true, signal });
-          const userDataDir = resolveOpenClawUserDataDir(into);
+          const userDataDir = resolveNatesclawUserDataDir(into);
           const runningUserDataDir = profileRuntime.running?.userDataDir;
           if (
             !runningUserDataDir ||
             path.resolve(runningUserDataDir) !== path.resolve(userDataDir)
           ) {
             throw new Error(
-              `managed profile "${into}" is not owned by this OpenClaw browser runtime; stop it and import into a fresh profile name`,
+              `managed profile "${into}" is not owned by this Natesclaw browser runtime; stop it and import into a fresh profile name`,
             );
           }
-          if (!usesOpenClawMockKeychain(userDataDir)) {
+          if (!usesNatesclawMockKeychain(userDataDir)) {
             throw new Error(
-              `managed profile "${into}" does not use the OpenClaw mock keychain; import into a fresh profile name`,
+              `managed profile "${into}" does not use the Natesclaw mock keychain; import into a fresh profile name`,
             );
           }
 

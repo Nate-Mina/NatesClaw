@@ -3,17 +3,17 @@ import fs from "node:fs/promises";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import type {
   PluginBlobEntry,
   PluginBlobEntryInfo,
   PluginBlobStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import { createMockServerResponse } from "openclaw/plugin-sdk/test-env";
+} from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
+import { createMockServerResponse } from "natesclaw/plugin-sdk/test-env";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../api.js";
-import type { OpenClawPluginApi, OpenClawPluginToolContext } from "../api.js";
+import type { NatesclawConfig } from "../api.js";
+import type { NatesclawPluginApi, NatesclawPluginToolContext } from "../api.js";
 import { registerDiffsPlugin } from "./plugin.js";
 import { createTempDiffRoot } from "./test-helpers.js";
 
@@ -60,7 +60,7 @@ describe("PlaywrightDiffScreenshotter", () => {
     }
     originalPlatform = platformDescriptor;
     ({ PlaywrightDiffScreenshotter } = await import("./browser.js"));
-    ({ rootDir, cleanup: cleanupRootDir } = await createTempDiffRoot("openclaw-diffs-browser-"));
+    ({ rootDir, cleanup: cleanupRootDir } = await createTempDiffRoot("natesclaw-diffs-browser-"));
     outputPath = path.join(rootDir, "preview.png");
     launchMock.mockReset();
   });
@@ -102,7 +102,7 @@ describe("PlaywrightDiffScreenshotter", () => {
       value: "win32",
     });
     vi.stubEnv("PATH", "");
-    vi.stubEnv("OPENCLAW_BROWSER_EXECUTABLE_PATH", "");
+    vi.stubEnv("NATESCLAW_BROWSER_EXECUTABLE_PATH", "");
     vi.stubEnv("BROWSER_EXECUTABLE_PATH", "");
     vi.stubEnv("PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH", "");
     vi.stubEnv("LOCALAPPDATA", params.localAppData);
@@ -404,13 +404,13 @@ describe("diffs plugin registration", () => {
       req: IncomingMessage,
       res: ServerResponse,
     ) => boolean | Promise<boolean>;
-    type RegisteredHttpRouteParams = Parameters<OpenClawPluginApi["registerHttpRoute"]>[0];
+    type RegisteredHttpRouteParams = Parameters<NatesclawPluginApi["registerHttpRoute"]>[0];
 
     let registeredToolFactory:
-      | ((ctx: OpenClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
+      | ((ctx: NatesclawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
       | undefined;
     let registeredHttpRouteHandler: HttpRouteHandler | undefined;
-    let configFile: OpenClawConfig = {
+    let configFile: NatesclawConfig = {
       gateway: {
         port: 18789,
         bind: "loopback",
@@ -419,7 +419,7 @@ describe("diffs plugin registration", () => {
         entries: {
           diffs: {
             config: {
-              viewerBaseUrl: "https://startup.example.com/openclaw",
+              viewerBaseUrl: "https://startup.example.com/natesclaw",
               defaults: {
                 mode: "view",
                 theme: "light",
@@ -433,7 +433,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const blobStore = createMemoryBlobStore();
 
     const api = createTestPluginApi({
@@ -448,7 +448,7 @@ describe("diffs plugin registration", () => {
         },
       },
       pluginConfig: {
-        viewerBaseUrl: "https://startup.example.com/openclaw",
+        viewerBaseUrl: "https://startup.example.com/natesclaw",
         defaults: {
           mode: "view",
           theme: "light",
@@ -465,7 +465,7 @@ describe("diffs plugin registration", () => {
         },
         state: { openBlobStore: () => blobStore },
       } as never,
-      registerTool(tool: Parameters<OpenClawPluginApi["registerTool"]>[0]) {
+      registerTool(tool: Parameters<NatesclawPluginApi["registerTool"]>[0]) {
         registeredToolFactory = typeof tool === "function" ? tool : () => tool;
       },
       registerHttpRoute(params: RegisteredHttpRouteParams) {
@@ -474,7 +474,7 @@ describe("diffs plugin registration", () => {
       on: vi.fn(),
     });
 
-    registerDiffsPlugin(api as unknown as OpenClawPluginApi);
+    registerDiffsPlugin(api as unknown as NatesclawPluginApi);
 
     configFile = {
       ...configFile,
@@ -496,7 +496,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const registeredTool = registeredToolFactory?.({
       agentId: "main",
@@ -538,14 +538,14 @@ describe("diffs plugin registration", () => {
       req: IncomingMessage,
       res: ServerResponse,
     ) => boolean | Promise<boolean>;
-    type RegisteredHttpRouteParams = Parameters<OpenClawPluginApi["registerHttpRoute"]>[0];
+    type RegisteredHttpRouteParams = Parameters<NatesclawPluginApi["registerHttpRoute"]>[0];
 
     let registeredToolFactory:
-      | ((ctx: OpenClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
+      | ((ctx: NatesclawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
       | undefined;
     let registeredHttpRouteHandler: HttpRouteHandler | undefined;
     const on = vi.fn();
-    let configFile: OpenClawConfig = {
+    let configFile: NatesclawConfig = {
       gateway: {
         port: 18789,
         bind: "loopback",
@@ -561,7 +561,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const blobStore = createMemoryBlobStore();
 
     const api = createTestPluginApi({
@@ -595,7 +595,7 @@ describe("diffs plugin registration", () => {
         },
         state: { openBlobStore: () => blobStore },
       } as never,
-      registerTool(tool: Parameters<OpenClawPluginApi["registerTool"]>[0]) {
+      registerTool(tool: Parameters<NatesclawPluginApi["registerTool"]>[0]) {
         registeredToolFactory = typeof tool === "function" ? tool : () => tool;
       },
       registerHttpRoute(params: RegisteredHttpRouteParams) {
@@ -604,7 +604,7 @@ describe("diffs plugin registration", () => {
       on,
     });
 
-    registerDiffsPlugin(api as unknown as OpenClawPluginApi);
+    registerDiffsPlugin(api as unknown as NatesclawPluginApi);
 
     expect(on).toHaveBeenCalledTimes(1);
     const [hookName, beforePromptBuild] = firstMockCall(on, "plugin hook registration");
@@ -675,7 +675,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const proxiedRes = createMockServerResponse();
     const proxiedHandled = await registeredHttpRouteHandler?.(
@@ -701,13 +701,13 @@ describe("diffs plugin registration", () => {
       req: IncomingMessage,
       res: ServerResponse,
     ) => boolean | Promise<boolean>;
-    type RegisteredHttpRouteParams = Parameters<OpenClawPluginApi["registerHttpRoute"]>[0];
+    type RegisteredHttpRouteParams = Parameters<NatesclawPluginApi["registerHttpRoute"]>[0];
 
     let registeredToolFactory:
-      | ((ctx: OpenClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
+      | ((ctx: NatesclawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
       | undefined;
     let registeredHttpRouteHandler: HttpRouteHandler | undefined;
-    let configFile: OpenClawConfig = {
+    let configFile: NatesclawConfig = {
       gateway: {
         port: 18789,
         bind: "loopback",
@@ -723,7 +723,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const blobStore = createMemoryBlobStore();
 
     const api = createTestPluginApi({
@@ -748,7 +748,7 @@ describe("diffs plugin registration", () => {
         },
         state: { openBlobStore: () => blobStore },
       } as never,
-      registerTool(tool: Parameters<OpenClawPluginApi["registerTool"]>[0]) {
+      registerTool(tool: Parameters<NatesclawPluginApi["registerTool"]>[0]) {
         registeredToolFactory = typeof tool === "function" ? tool : () => tool;
       },
       registerHttpRoute(params: RegisteredHttpRouteParams) {
@@ -757,7 +757,7 @@ describe("diffs plugin registration", () => {
       on: vi.fn(),
     });
 
-    registerDiffsPlugin(api as unknown as OpenClawPluginApi);
+    registerDiffsPlugin(api as unknown as NatesclawPluginApi);
 
     const registeredTool = registeredToolFactory?.({
       agentId: "main",
@@ -778,7 +778,7 @@ describe("diffs plugin registration", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const proxiedRes = createMockServerResponse();
     const proxiedHandled = await registeredHttpRouteHandler?.(
@@ -896,12 +896,12 @@ function createMemoryBlobStore<TMetadata>(): PluginBlobStore<TMetadata> {
   };
 }
 
-function createConfig(): OpenClawConfig {
+function createConfig(): NatesclawConfig {
   return {
     browser: {
       executablePath: process.execPath,
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function localReq(input: {

@@ -1,7 +1,7 @@
 // Signal tests cover event handler.inbound context plugin behavior.
-import { expectChannelInboundContextContract as expectInboundContextContract } from "openclaw/plugin-sdk/channel-contract-testing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
+import { expectChannelInboundContextContract as expectInboundContextContract } from "natesclaw/plugin-sdk/channel-contract-testing";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { MsgContext } from "natesclaw/plugin-sdk/reply-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveSignalReplyContextWithPersistence } from "../reply-authors.js";
 import { resetSignalReplyAuthorsForTests } from "../reply-authors.test-helpers.js";
@@ -18,7 +18,7 @@ let createSignalEventHandler: typeof import("./event-handler.js").createSignalEv
 
 type DispatchInboundMessageMockParams = {
   ctx: MsgContext;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   dispatcher?: {
     sendFinalReply: (payload: { text: string }) => void;
     markComplete: () => void;
@@ -79,9 +79,9 @@ vi.mock("../send-reactions.js", () => ({
   sendReactionSignal: sendReactionSignalMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/reply-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/reply-runtime")>(
-    "openclaw/plugin-sdk/reply-runtime",
+vi.mock("natesclaw/plugin-sdk/reply-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/reply-runtime")>(
+    "natesclaw/plugin-sdk/reply-runtime",
   );
   return {
     ...actual,
@@ -91,9 +91,9 @@ vi.mock("openclaw/plugin-sdk/reply-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/channel-inbound")>(
-    "openclaw/plugin-sdk/channel-inbound",
+vi.mock("natesclaw/plugin-sdk/channel-inbound", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/channel-inbound")>(
+    "natesclaw/plugin-sdk/channel-inbound",
   );
   type RunParams = Parameters<typeof actual.runChannelInboundEvent>[0];
   return {
@@ -133,7 +133,7 @@ vi.mock("openclaw/plugin-sdk/channel-inbound", async () => {
           channel: resolved.channel,
           accountId: resolved.accountId,
           routeSessionKey: resolved.route.sessionKey,
-          storePath: "/tmp/openclaw/signal-sessions.json",
+          storePath: "/tmp/natesclaw/signal-sessions.json",
           ctxPayload: resolved.ctxPayload,
           recordInboundSession: recordInboundSessionMock,
           afterRecord: resolved.afterRecord,
@@ -171,9 +171,9 @@ vi.mock("openclaw/plugin-sdk/channel-inbound", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/conversation-runtime")>(
-    "openclaw/plugin-sdk/conversation-runtime",
+vi.mock("natesclaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/conversation-runtime")>(
+    "natesclaw/plugin-sdk/conversation-runtime",
   );
   return {
     ...actual,
@@ -183,9 +183,9 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/system-event-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/system-event-runtime")>(
-    "openclaw/plugin-sdk/system-event-runtime",
+vi.mock("natesclaw/plugin-sdk/system-event-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/system-event-runtime")>(
+    "natesclaw/plugin-sdk/system-event-runtime",
   );
   return {
     ...actual,
@@ -203,9 +203,9 @@ vi.mock("../approval-reactions.js", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/runtime-env")>(
-    "openclaw/plugin-sdk/runtime-env",
+vi.mock("natesclaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/runtime-env")>(
+    "natesclaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -228,8 +228,8 @@ function nextTimerTick(): Promise<void> {
 }
 
 type SignalHandler = ReturnType<typeof createSignalEventHandler>;
-type SignalMessagesConfig = NonNullable<OpenClawConfig["messages"]>;
-type SignalChannelConfig = NonNullable<NonNullable<OpenClawConfig["channels"]>["signal"]>;
+type SignalMessagesConfig = NonNullable<NatesclawConfig["messages"]>;
+type SignalChannelConfig = NonNullable<NonNullable<NatesclawConfig["channels"]>["signal"]>;
 type DirectMessageOverrides = Omit<SignalEnvelope, "dataMessage"> & {
   dataMessage?: NonNullable<SignalEnvelope["dataMessage"]>;
 };
@@ -259,7 +259,7 @@ function createStatusReactionConfig(
     messages?: TestMessagesConfig;
     signal?: Partial<SignalChannelConfig>;
   } = {},
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     messages: {
       ackReaction: "👀",
@@ -275,7 +275,7 @@ function createStatusReactionConfig(
         ...options.signal,
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function createDirectConfig(
@@ -283,7 +283,7 @@ function createDirectConfig(
     messages?: TestMessagesConfig;
     signal?: Partial<SignalChannelConfig>;
   } = {},
-): OpenClawConfig {
+): NatesclawConfig {
   return {
     messages: {
       inbound: { debounceMs: 0 },
@@ -302,7 +302,7 @@ function createDirectConfig(
 function createGroupAllowlistConfig(options: {
   messages?: TestMessagesConfig;
   signal: Partial<SignalChannelConfig> & Pick<SignalChannelConfig, "groupAllowFrom">;
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     messages: {
       inbound: { debounceMs: 0 },
@@ -401,7 +401,7 @@ describe("signal createSignalEventHandler inbound context", () => {
 
   it("passes a finalized MsgContext to dispatchInboundMessage", async () => {
     const handler = createTestHandler({
-      cfg: { messages: { inbound: { debounceMs: 0 } } } as OpenClawConfig,
+      cfg: { messages: { inbound: { debounceMs: 0 } } } as NatesclawConfig,
     });
 
     await receiveGroupMessage(handler, "hi");
@@ -416,7 +416,7 @@ describe("signal createSignalEventHandler inbound context", () => {
 
   it("normalizes direct chat To/OriginatingTo targets to canonical Signal ids", async () => {
     const handler = createTestHandler({
-      cfg: { messages: { inbound: { debounceMs: 0 } } } as OpenClawConfig,
+      cfg: { messages: { inbound: { debounceMs: 0 } } } as NatesclawConfig,
     });
 
     await receiveDirectMessage(handler, { dataMessage: { message: "hello" } });
@@ -429,7 +429,7 @@ describe("signal createSignalEventHandler inbound context", () => {
 
   it("sets ReplyToId from the inbound Signal timestamp", async () => {
     const handler = createTestHandler({
-      cfg: { messages: { inbound: { debounceMs: 0 } } } as OpenClawConfig,
+      cfg: { messages: { inbound: { debounceMs: 0 } } } as NatesclawConfig,
     });
 
     await receiveDirectMessage(handler, { dataMessage: { message: "hello" } });
@@ -464,7 +464,7 @@ describe("signal createSignalEventHandler inbound context", () => {
     },
   ])("falls back to $name timestamp for native reply metadata", async ({ envelope }) => {
     const handler = createTestHandler({
-      cfg: { messages: { inbound: { debounceMs: 0 } } } as OpenClawConfig,
+      cfg: { messages: { inbound: { debounceMs: 0 } } } as NatesclawConfig,
     });
 
     await handler(
@@ -484,7 +484,7 @@ describe("signal createSignalEventHandler inbound context", () => {
 
   it("uses editMessage.targetSentTimestamp as the native reply target", async () => {
     const handler = createTestHandler({
-      cfg: { messages: { inbound: { debounceMs: 0 } } } as OpenClawConfig,
+      cfg: { messages: { inbound: { debounceMs: 0 } } } as NatesclawConfig,
     });
 
     await handler(
@@ -531,7 +531,7 @@ describe("signal createSignalEventHandler inbound context", () => {
       cfg: {
         messages: { inbound: { debounceMs: 10 } },
         channels: { signal: { replyToMode: "batched" } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       deliverReplies: deliverRepliesMock,
     });
 
@@ -577,7 +577,7 @@ describe("signal createSignalEventHandler inbound context", () => {
         session: { dmScope: "per-channel-peer" },
         messages: { inbound: { debounceMs: 0 } },
         channels: { signal: { dmPolicy: "open", allowFrom: ["*"] } },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
     });
 
     await receiveDirectMessage(handler, { dataMessage: { message: "hello" } });
@@ -605,7 +605,7 @@ describe("signal createSignalEventHandler inbound context", () => {
 
   it("keeps direct chat text in BodyForAgent while Body remains the legacy envelope", async () => {
     const handler = createTestHandler({
-      cfg: { messages: { inbound: { debounceMs: 0 } } } as OpenClawConfig,
+      cfg: { messages: { inbound: { debounceMs: 0 } } } as NatesclawConfig,
     });
 
     await receiveDirectMessage(handler, {
@@ -1099,7 +1099,7 @@ describe("signal createSignalEventHandler inbound context", () => {
       ],
     ]);
     const handler = createTestHandler({
-      cfg: { messages: { inbound: { debounceMs: 0 } } } as OpenClawConfig,
+      cfg: { messages: { inbound: { debounceMs: 0 } } } as NatesclawConfig,
       groupHistories,
       historyLimit: 5,
     });
@@ -1290,7 +1290,7 @@ describe("signal createSignalEventHandler inbound context", () => {
       },
     };
     const handler = createTestHandler({
-      cfg: cfg as OpenClawConfig,
+      cfg: cfg as NatesclawConfig,
       dmPolicy: "allowlist",
       allowFrom: [],
       reactionMode: "all",

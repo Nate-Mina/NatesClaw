@@ -2,35 +2,35 @@
 import {
   resolveApprovalOverGateway,
   type ApprovalResolveResult,
-} from "openclaw/plugin-sdk/approval-gateway-runtime";
-import type { ExecApprovalReplyDecision } from "openclaw/plugin-sdk/approval-reply-runtime";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
-import { buildChannelInboundEventContext } from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/approval-gateway-runtime";
+import type { ExecApprovalReplyDecision } from "natesclaw/plugin-sdk/approval-reply-runtime";
+import { recordChannelActivity } from "natesclaw/plugin-sdk/channel-activity-runtime";
+import { buildChannelInboundEventContext } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createChannelMessageReplyPipeline,
   deliverInboundReplyWithMessageSendContext,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/conversation-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { readChannelAllowFromStore } from "natesclaw/plugin-sdk/conversation-runtime";
 import {
   recordInboundSession,
   upsertChannelPairingRequest,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { buildModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
-import { dispatchReplyWithBufferedBlockDispatcher } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { buildModelsProviderData } from "natesclaw/plugin-sdk/models-provider-runtime";
+import { dispatchReplyWithBufferedBlockDispatcher } from "natesclaw/plugin-sdk/reply-dispatch-runtime";
+import { resolveInboundLastRouteSessionKey } from "natesclaw/plugin-sdk/routing";
+import { getRuntimeConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "natesclaw/plugin-sdk/security-runtime";
 import {
   getSessionEntry,
   readSessionUpdatedAt,
   readAmbientTranscriptWatermark,
   resolveAmbientTranscriptWatermarkKey,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { listSkillCommandsForAgents } from "openclaw/plugin-sdk/skill-commands-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { listSkillCommandsForAgents } from "natesclaw/plugin-sdk/skill-commands-runtime";
+import { enqueueSystemEvent } from "natesclaw/plugin-sdk/system-event-runtime";
+import { loadWebMedia } from "natesclaw/plugin-sdk/web-media";
 import { syncTelegramMenuCommands } from "./bot-native-command-menu.js";
 import { deliverReplies, emitTelegramMessageSentHooks } from "./bot/delivery.js";
 import { createTelegramDraftStream } from "./draft-stream.js";
@@ -39,7 +39,7 @@ import { editMessageTelegram } from "./send.js";
 import { wasSentByBot } from "./sent-message-cache.js";
 
 type ResolveTelegramApprovalParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   approvalId: string;
   decision: ExecApprovalReplyDecision;
   channel: "telegram";

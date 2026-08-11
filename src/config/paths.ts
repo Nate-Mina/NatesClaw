@@ -7,30 +7,30 @@ import { resolveGatewayNativeServiceIdentityConflict } from "../daemon/constants
 import { resolveHomeRelativePath, resolveRequiredHomeDir } from "../infra/home-dir.js";
 import { parseTcpPort } from "../infra/tcp-port.js";
 import { isFastTestRuntimeEnv } from "../infra/test-runtime-env.js";
-import type { OpenClawConfig } from "./types.js";
+import type { NatesclawConfig } from "./types.js";
 
 /**
- * Nix mode detection: When OPENCLAW_NIX_MODE=1, the gateway is running under Nix.
+ * Nix mode detection: When NATESCLAW_NIX_MODE=1, the gateway is running under Nix.
  * In this mode:
  * - No auto-install flows should be attempted
  * - Missing dependencies should produce actionable Nix-specific error messages
  * - Config is managed externally (read-only from Nix perspective)
  */
 export function resolveIsNixMode(env: NodeJS.ProcessEnv = process.env): boolean {
-  return env.OPENCLAW_NIX_MODE === "1";
+  return env.NATESCLAW_NIX_MODE === "1";
 }
 
 export let isNixMode = resolveIsNixMode();
 
 // Support the remaining legacy pre-rebrand state dir.
 const LEGACY_STATE_DIRNAMES = [".clawdbot"] as const;
-const NEW_STATE_DIRNAME = ".openclaw";
-const CONFIG_FILENAME = "openclaw.json";
+const NEW_STATE_DIRNAME = ".natesclaw";
+const CONFIG_FILENAME = "natesclaw.json";
 const LEGACY_CONFIG_FILENAMES = ["clawdbot.json"] as const;
 
 /** True when the root CLI selected a non-default isolated profile. */
 export function isNamedProfile(env: NodeJS.ProcessEnv = process.env): boolean {
-  const profile = env.OPENCLAW_PROFILE?.trim();
+  const profile = env.NATESCLAW_PROFILE?.trim();
   return Boolean(profile && profile.toLowerCase() !== "default");
 }
 
@@ -42,7 +42,7 @@ function resolveSystemAccountHomeDir(): string {
   return os.userInfo().homedir;
 }
 
-/** Build a homedir thunk that respects OPENCLAW_HOME for the given env. */
+/** Build a homedir thunk that respects NATESCLAW_HOME for the given env. */
 function envHomedir(env: NodeJS.ProcessEnv): () => string {
   return () => resolveRequiredHomeDir(env, os.homedir);
 }
@@ -65,15 +65,15 @@ export function resolveNewStateDir(homedir: () => string = resolveDefaultHomeDir
 
 /**
  * State directory for mutable data (sessions, logs, caches).
- * Can be overridden via OPENCLAW_STATE_DIR.
- * Default: ~/.openclaw
+ * Can be overridden via NATESCLAW_STATE_DIR.
+ * Default: ~/.natesclaw
  */
 export function resolveStateDir(
   env: NodeJS.ProcessEnv = process.env,
   homedir: () => string = envHomedir(env),
 ): string {
   const effectiveHomedir = () => resolveRequiredHomeDir(env, homedir);
-  const override = env.OPENCLAW_STATE_DIR?.trim();
+  const override = env.NATESCLAW_STATE_DIR?.trim();
   if (override) {
     return resolveUserPath(override, env, effectiveHomedir);
   }
@@ -114,7 +114,7 @@ export function isDefaultStateDir(
   env: NodeJS.ProcessEnv = process.env,
   homedir: () => string = envHomedir(env),
 ): boolean {
-  const override = env.OPENCLAW_STATE_DIR?.trim();
+  const override = env.NATESCLAW_STATE_DIR?.trim();
   if (!override) {
     // Preserve the default install path, including automatic legacy-state discovery.
     return true;
@@ -128,7 +128,7 @@ export function isDefaultStateDir(
 
 /** Canonical state directory name for the selected profile, mirroring root `--profile`. */
 function profileStateDirName(env: NodeJS.ProcessEnv): string | null {
-  const profile = env.OPENCLAW_PROFILE?.trim();
+  const profile = env.NATESCLAW_PROFILE?.trim();
   if (!profile || profile.toLowerCase() === "default") {
     return NEW_STATE_DIRNAME;
   }
@@ -145,7 +145,7 @@ export function resolveNativeServiceProfileConflict(
   if (platform !== "darwin" && platform !== "win32") {
     return null;
   }
-  const profile = env.OPENCLAW_PROFILE?.trim();
+  const profile = env.NATESCLAW_PROFILE?.trim();
   if (!profile || profile.toLowerCase() === "default") {
     return null;
   }
@@ -171,8 +171,8 @@ export function isDefaultInstallIdentity(
 ): boolean {
   const accountHome = resolveRequiredHomeDir({}, homedir);
   // Profiles have distinct host-service names; relocated homes do not. Keep
-  // OPENCLAW_HOME isolated so an alternate state tree cannot adopt that service.
-  if (env.OPENCLAW_HOME?.trim()) {
+  // NATESCLAW_HOME isolated so an alternate state tree cannot adopt that service.
+  if (env.NATESCLAW_HOME?.trim()) {
     return false;
   }
   if (
@@ -202,7 +202,7 @@ export function isDefaultInstallIdentity(
   }
   // Default installs historically allow implicit legacy config discovery.
   // Named profiles must resolve their own config so they cannot inherit the default profile.
-  if (stateDirName === NEW_STATE_DIRNAME && !env.OPENCLAW_CONFIG_PATH?.trim()) {
+  if (stateDirName === NEW_STATE_DIRNAME && !env.NATESCLAW_CONFIG_PATH?.trim()) {
     return true;
   }
   return (
@@ -213,9 +213,9 @@ export function isDefaultInstallIdentity(
 
 export function normalizeStateDirEnv(env: NodeJS.ProcessEnv = process.env): void {
   const effectiveHomedir = () => resolveRequiredHomeDir(env, envHomedir(env));
-  const openclawOverride = env.OPENCLAW_STATE_DIR?.trim();
-  if (openclawOverride) {
-    env.OPENCLAW_STATE_DIR = resolveUserPath(openclawOverride, env, effectiveHomedir);
+  const natesclawOverride = env.NATESCLAW_STATE_DIR?.trim();
+  if (natesclawOverride) {
+    env.NATESCLAW_STATE_DIR = resolveUserPath(natesclawOverride, env, effectiveHomedir);
   }
 }
 
@@ -229,7 +229,7 @@ function resolveUserPath(
 
 /**
  * Optional allowlist of directories that `$include` directives may resolve
- * outside the config directory. Set via `OPENCLAW_INCLUDE_ROOTS` as a
+ * outside the config directory. Set via `NATESCLAW_INCLUDE_ROOTS` as a
  * platform-delimited path list (`:` on POSIX, `;` on Windows).
  *
  * Each entry is tilde-expanded and resolved to an absolute path. Entries that
@@ -237,13 +237,13 @@ function resolveUserPath(
  *
  * Returns an empty array when the var is unset or contains no usable entries,
  * preserving the historical behavior where `$include` is confined to the
- * directory containing `openclaw.json`.
+ * directory containing `natesclaw.json`.
  */
 export function resolveIncludeRoots(
   env: NodeJS.ProcessEnv = process.env,
   homedir: () => string = envHomedir(env),
 ): string[] {
-  const raw = env.OPENCLAW_INCLUDE_ROOTS?.trim();
+  const raw = env.NATESCLAW_INCLUDE_ROOTS?.trim();
   if (!raw) {
     return [];
   }
@@ -271,14 +271,14 @@ export let STATE_DIR = resolveStateDir();
 
 /**
  * Config file path (JSON or JSON5).
- * Can be overridden via OPENCLAW_CONFIG_PATH.
- * Default: ~/.openclaw/openclaw.json (or $OPENCLAW_STATE_DIR/openclaw.json)
+ * Can be overridden via NATESCLAW_CONFIG_PATH.
+ * Default: ~/.natesclaw/natesclaw.json (or $NATESCLAW_STATE_DIR/natesclaw.json)
  */
 export function resolveCanonicalConfigPath(
   env: NodeJS.ProcessEnv = process.env,
   stateDir: string = resolveStateDir(env, envHomedir(env)),
 ): string {
-  const override = env.OPENCLAW_CONFIG_PATH?.trim();
+  const override = env.NATESCLAW_CONFIG_PATH?.trim();
   if (override) {
     return resolveUserPath(override, env, envHomedir(env));
   }
@@ -318,14 +318,14 @@ export function resolveConfigPath(
   stateDir: string = resolveStateDir(env, envHomedir(env)),
   homedir: () => string = envHomedir(env),
 ): string {
-  const override = env.OPENCLAW_CONFIG_PATH?.trim();
+  const override = env.NATESCLAW_CONFIG_PATH?.trim();
   if (override) {
     return resolveUserPath(override, env, homedir);
   }
   if (isFastTestRuntimeEnv(env)) {
     return path.join(stateDir, CONFIG_FILENAME);
   }
-  const stateOverride = env.OPENCLAW_STATE_DIR?.trim();
+  const stateOverride = env.NATESCLAW_STATE_DIR?.trim();
   const candidates = [
     path.join(stateDir, CONFIG_FILENAME),
     ...LEGACY_CONFIG_FILENAMES.map((name) => path.join(stateDir, name)),
@@ -378,15 +378,15 @@ export function resolveDefaultConfigCandidates(
   homedir: () => string = envHomedir(env),
 ): string[] {
   const effectiveHomedir = () => resolveRequiredHomeDir(env, homedir);
-  const explicit = env.OPENCLAW_CONFIG_PATH?.trim();
+  const explicit = env.NATESCLAW_CONFIG_PATH?.trim();
   if (explicit) {
     return [resolveUserPath(explicit, env, effectiveHomedir)];
   }
 
   const candidates: string[] = [];
-  const openclawStateDir = env.OPENCLAW_STATE_DIR?.trim();
-  if (openclawStateDir) {
-    const resolved = resolveUserPath(openclawStateDir, env, effectiveHomedir);
+  const natesclawStateDir = env.NATESCLAW_STATE_DIR?.trim();
+  if (natesclawStateDir) {
+    const resolved = resolveUserPath(natesclawStateDir, env, effectiveHomedir);
     candidates.push(path.join(resolved, CONFIG_FILENAME));
     candidates.push(...LEGACY_CONFIG_FILENAMES.map((name) => path.join(resolved, name)));
   }
@@ -403,13 +403,13 @@ export const DEFAULT_GATEWAY_PORT = 18789;
 
 /**
  * Gateway lock directory inside the selected state tree.
- * Default: $OPENCLAW_STATE_DIR/tmp/openclaw-<uid> (uid suffix when available).
+ * Default: $NATESCLAW_STATE_DIR/tmp/natesclaw-<uid> (uid suffix when available).
  */
 export function resolveGatewayLockDir(
   stateDir: string = resolveStateDir(),
   uid: number | undefined = typeof process.getuid === "function" ? process.getuid() : undefined,
 ): string {
-  const suffix = uid != null ? `openclaw-${uid}` : "openclaw";
+  const suffix = uid != null ? `natesclaw-${uid}` : "natesclaw";
   // Clean break: older binaries still use process temp and do not exclude a
   // state-local binary during a mixed-version upgrade.
   return path.join(normalizePathForComparison(stateDir), "tmp", suffix);
@@ -429,7 +429,7 @@ export function resolveOAuthDir(
   env: NodeJS.ProcessEnv = process.env,
   stateDir: string = resolveStateDir(env, envHomedir(env)),
 ): string {
-  const override = env.OPENCLAW_OAUTH_DIR?.trim();
+  const override = env.NATESCLAW_OAUTH_DIR?.trim();
   if (override) {
     return resolveUserPath(override, env, envHomedir(env));
   }
@@ -465,10 +465,10 @@ function parseGatewayPortEnvValue(raw: string | undefined): number | null {
 }
 
 export function resolveGatewayPort(
-  cfg?: OpenClawConfig,
+  cfg?: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): number {
-  const envRaw = env.OPENCLAW_GATEWAY_PORT?.trim();
+  const envRaw = env.NATESCLAW_GATEWAY_PORT?.trim();
   const envPort = parseGatewayPortEnvValue(envRaw);
   if (envPort !== null) {
     return envPort;

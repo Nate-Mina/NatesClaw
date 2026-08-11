@@ -9,7 +9,7 @@ const repoRoot = resolveRepoRoot(import.meta.url);
 const extensionsRoot = path.join(repoRoot, "extensions");
 
 const WILDCARD_PLUGIN_SDK_REEXPORT_PATTERN =
-  /^\s*export\s+(?:type\s+)?\*\s+(?:as\s+[$\w]+\s+)?from\s+["']openclaw\/plugin-sdk\//u;
+  /^\s*export\s+(?:type\s+)?\*\s+(?:as\s+[$\w]+\s+)?from\s+["']natesclaw\/plugin-sdk\//u;
 
 async function listExtensionApiFiles(rootDir = extensionsRoot): Promise<string[]> {
   const entries = await fs.readdir(rootDir, { withFileTypes: true });

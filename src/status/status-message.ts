@@ -4,7 +4,7 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveContextTokensForModel } from "../agents/context.js";
 import { resolveCronStyleNow } from "../agents/current-time.js";
 import { DEFAULT_CONTEXT_TOKENS, DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
@@ -46,7 +46,7 @@ import {
   hasSessionActiveAutoModelFallback,
   hasSessionAutoModelFallbackProvenance,
 } from "../config/sessions/model-override-provenance.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { readRecentSessionUsageFromTranscript } from "../gateway/session-transcript-readers.js";
 import { formatDurationCompact } from "../infra/format-time/format-duration.ts";
 import { formatTimeAgo } from "../infra/format-time/format-relative.ts";
@@ -75,7 +75,7 @@ import { VERSION } from "../version.js";
 import { resolveAgentRuntimeLabel } from "./agent-runtime-label.js";
 import { resolveActiveFallbackState } from "./fallback-notice-state.js";
 
-type AgentDefaults = NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>;
+type AgentDefaults = NonNullable<NonNullable<NatesclawConfig["agents"]>["defaults"]>;
 type AgentConfig = Partial<AgentDefaults> & {
   model?: AgentDefaults["model"] | string;
 };
@@ -90,7 +90,7 @@ type QueueStatus = {
 };
 
 type StatusArgs = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agent: AgentConfig;
   agentId?: string;
   configuredDefaultModelLabel?: string;
@@ -152,7 +152,7 @@ function normalizeAuthMode(value?: string): NormalizedAuthMode | undefined {
 }
 
 function resolveConfiguredTextVerbosity(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   provider?: string | null;
   model?: string | null;
@@ -308,7 +308,7 @@ const readUsageFromSessionLog = (
       model?: string;
     }
   | undefined => {
-  // Transcripts are stored at the session file path (fallback: ~/.openclaw/sessions/<SessionId>.jsonl)
+  // Transcripts are stored at the session file path (fallback: ~/.natesclaw/sessions/<SessionId>.jsonl)
   if (!sessionId) {
     return undefined;
   }
@@ -456,7 +456,7 @@ const formatMediaUnderstandingLine = (decisions?: ReadonlyArray<MediaUnderstandi
 };
 
 const formatVoiceModeLine = (
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
   sessionEntry?: SessionEntry,
   agentId?: string,
 ): string | null => {
@@ -496,7 +496,7 @@ const formatVoiceModeLine = (
 };
 
 function resolveChannelModelNote(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   entry?: SessionEntry;
   selectedProvider: string;
   selectedModel: string;
@@ -586,7 +586,7 @@ export function buildStatusMessageParts(args: StatusArgs): StatusMessageParts {
     agents: {
       defaults: args.agent ?? {},
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
   const contextConfig = args.config
     ? ({
         ...args.config,
@@ -597,12 +597,12 @@ export function buildStatusMessageParts(args: StatusArgs): StatusMessageParts {
             ...args.agent,
           },
         },
-      } as OpenClawConfig)
+      } as NatesclawConfig)
     : ({
         agents: {
           defaults: args.agent ?? {},
         },
-      } as OpenClawConfig);
+      } as NatesclawConfig);
   const resolved = resolveConfiguredModelRef({
     cfg: selectionConfig,
     defaultProvider: DEFAULT_PROVIDER,
@@ -1113,7 +1113,7 @@ export function buildStatusMessageParts(args: StatusArgs): StatusMessageParts {
     : null;
   const fallbackLine = fallbackValue ? `↪️ Fallback: ${fallbackValue}` : null;
   const commit = resolveCommitHash({ moduleUrl: import.meta.url });
-  const versionLine = `🦞 OpenClaw ${VERSION}${commit ? ` (${commit})` : ""}`;
+  const versionLine = `🦞 Natesclaw ${VERSION}${commit ? ` (${commit})` : ""}`;
   const tokensValue = formatTokensPairValue(inputTokens, outputTokens);
   const usagePair = tokensValue ? `🧮 Tokens: ${tokensValue}` : null;
   const cacheValue = formatCacheHitValue(inputTokens, cacheRead, cacheWrite);

@@ -9,7 +9,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../helpers/temp-dir.js";
 
@@ -17,7 +17,7 @@ const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 const scriptPath = "scripts/codesign-mac-app.sh";
 
 function entitlementTemps(dir: string): string[] {
-  return readdirSync(dir).filter((name) => name.startsWith("openclaw-entitlements"));
+  return readdirSync(dir).filter((name) => name.startsWith("natesclaw-entitlements"));
 }
 
 function runCodesign(args: string[], tempRoot: string) {
@@ -87,7 +87,7 @@ describe("codesign-mac-app temp file hygiene", () => {
   });
 
   it("does not allocate entitlement temp files for help output", () => {
-    const tempRoot = tempDirs.make("openclaw-codesign-help-");
+    const tempRoot = tempDirs.make("natesclaw-codesign-help-");
     const result = runCodesign(["--help"], tempRoot);
 
     expect(result.status).toBe(0);
@@ -96,7 +96,7 @@ describe("codesign-mac-app temp file hygiene", () => {
   });
 
   it("does not allocate entitlement temp files before app validation", () => {
-    const tempRoot = tempDirs.make("openclaw-codesign-missing-");
+    const tempRoot = tempDirs.make("natesclaw-codesign-missing-");
     const missingApp = path.join(tempRoot, "Missing.app");
     const result = runCodesign([missingApp], tempRoot);
 
@@ -106,7 +106,7 @@ describe("codesign-mac-app temp file hygiene", () => {
   });
 
   it("rejects unknown options before app validation", () => {
-    const tempRoot = tempDirs.make("openclaw-codesign-unknown-");
+    const tempRoot = tempDirs.make("natesclaw-codesign-unknown-");
     const result = runCodesign(["--wat"], tempRoot);
 
     expect(result.status).toBe(1);
@@ -115,7 +115,7 @@ describe("codesign-mac-app temp file hygiene", () => {
   });
 
   it("rejects extra app bundle arguments before signing", () => {
-    const tempRoot = tempDirs.make("openclaw-codesign-extra-");
+    const tempRoot = tempDirs.make("natesclaw-codesign-extra-");
     const app = path.join(tempRoot, "Fake.app");
     mkdirSync(path.join(app, "Contents", "MacOS"), { recursive: true });
     const result = runCodesign([app, "extra"], tempRoot);
@@ -126,7 +126,7 @@ describe("codesign-mac-app temp file hygiene", () => {
   });
 
   it("cleans entitlement temp files when signing fails", () => {
-    const tempRoot = tempDirs.make("openclaw-codesign-fail-");
+    const tempRoot = tempDirs.make("natesclaw-codesign-fail-");
     const app = path.join(tempRoot, "Fake.app");
     mkdirSync(path.join(app, "Contents", "MacOS"), { recursive: true });
 
@@ -145,7 +145,7 @@ describe("codesign-mac-app temp file hygiene", () => {
   });
 
   it("passes generated app entitlements to signing commands and cleans them", () => {
-    const tempRoot = tempDirs.make("openclaw-codesign-success-");
+    const tempRoot = tempDirs.make("natesclaw-codesign-success-");
     const app = path.join(tempRoot, "Fake.app");
     const binDir = path.join(tempRoot, "bin");
     const captureDir = path.join(tempRoot, "capture");
@@ -153,8 +153,8 @@ describe("codesign-mac-app temp file hygiene", () => {
     mkdirSync(path.join(app, "Contents", "MacOS"), { recursive: true });
     mkdirSync(binDir);
     mkdirSync(captureDir);
-    writeFileSync(path.join(app, "Contents", "MacOS", "openclaw-mlx-tts"), "#!/bin/sh\n");
-    writeFileSync(path.join(app, "Contents", "MacOS", "OpenClaw"), "#!/bin/sh\n");
+    writeFileSync(path.join(app, "Contents", "MacOS", "natesclaw-mlx-tts"), "#!/bin/sh\n");
+    writeFileSync(path.join(app, "Contents", "MacOS", "Natesclaw"), "#!/bin/sh\n");
     installFakeCodesign(binDir);
 
     const result = spawnSync("bash", [scriptPath, app], {
@@ -176,8 +176,8 @@ describe("codesign-mac-app temp file hygiene", () => {
 
     const signLines = readFileSync(logPath, "utf8").trim().split("\n");
     expect(signLines).toHaveLength(3);
-    expect(signLines[0]).toContain(`${path.join(app, "Contents", "MacOS", "openclaw-mlx-tts")}\t`);
-    expect(signLines[1]).toContain(`${path.join(app, "Contents", "MacOS", "OpenClaw")}\t`);
+    expect(signLines[0]).toContain(`${path.join(app, "Contents", "MacOS", "natesclaw-mlx-tts")}\t`);
+    expect(signLines[1]).toContain(`${path.join(app, "Contents", "MacOS", "Natesclaw")}\t`);
     expect(signLines[2]).toContain(`${app}\t`);
     for (const line of signLines) {
       const columns = line.split("\t");
@@ -189,7 +189,7 @@ describe("codesign-mac-app temp file hygiene", () => {
         "copied codesign entitlement path",
       );
       const copiedEntitlements = readFileSync(copiedEntitlementSource, "utf8");
-      expect(entitlementSource).toContain("openclaw-entitlements");
+      expect(entitlementSource).toContain("natesclaw-entitlements");
       expect(existsSync(entitlementSource)).toBe(false);
       expect(copiedEntitlements).toContain("com.apple.security.automation.apple-events");
       expect(copiedEntitlements).toContain("com.apple.security.device.camera");

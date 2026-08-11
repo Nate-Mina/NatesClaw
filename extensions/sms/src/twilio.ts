@@ -5,10 +5,10 @@ import * as querystring from "node:querystring";
 import {
   readResponseTextPrefix,
   readResponseWithLimit,
-} from "openclaw/plugin-sdk/response-limit-runtime";
-import { safeEqualSecret } from "openclaw/plugin-sdk/security-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { readRequestBodyWithLimit } from "openclaw/plugin-sdk/webhook-ingress";
+} from "natesclaw/plugin-sdk/response-limit-runtime";
+import { safeEqualSecret } from "natesclaw/plugin-sdk/security-runtime";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { readRequestBodyWithLimit } from "natesclaw/plugin-sdk/webhook-ingress";
 import { looksLikeSmsPhoneNumber, normalizeSmsPhoneNumber } from "./phone.js";
 import { resolveTwilioStatusCallbackUrl } from "./public-webhook-url.js";
 import type { ResolvedSmsAccount, SmsInboundMessage, SmsSendResult } from "./types.js";

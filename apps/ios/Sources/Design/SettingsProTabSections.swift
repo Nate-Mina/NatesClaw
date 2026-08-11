@@ -1,4 +1,4 @@
-import OpenClawKit
+import NatesclawKit
 import SwiftUI
 
 /// iOS Settings-style icon: white glyph on a solid rounded-square, sized for a List row.
@@ -41,12 +41,12 @@ private struct AppearanceSettingsRow: View {
                 color: .secondary)
 
             Text("Appearance")
-                .font(OpenClawType.subheadSemiBold)
+                .font(NatesclawType.subheadSemiBold)
 
             Spacer(minLength: 8)
 
             Text(self.preference.label)
-                .font(OpenClawType.subhead)
+                .font(NatesclawType.subhead)
                 .foregroundStyle(.secondary)
         }
     }
@@ -67,11 +67,11 @@ private struct AppearanceSettingsScreen: View {
                         Label {
                             HStack {
                                 Text(preference.label)
-                                    .font(OpenClawType.body)
+                                    .font(NatesclawType.body)
                                 Spacer()
                                 if preference == self.appearanceModel.preference {
                                     Image(systemName: "checkmark")
-                                        .foregroundStyle(OpenClawBrand.accent)
+                                        .foregroundStyle(NatesclawBrand.accent)
                                 }
                             }
                         } icon: {
@@ -85,24 +85,24 @@ private struct AppearanceSettingsScreen: View {
                 }
             } footer: {
                 Text("System follows this device’s appearance setting.")
-                    .font(OpenClawType.footnote)
+                    .font(NatesclawType.footnote)
             }
 
             Section {
                 Stepper(value: self.$sidebarVisibleAgentCount, in: 1...3) {
                     HStack {
                         Text("Sidebar Agents")
-                            .font(OpenClawType.body)
+                            .font(NatesclawType.body)
                         Spacer()
                         Text(verbatim: self.sidebarVisibleAgentCount.formatted())
-                            .font(OpenClawType.body)
+                            .font(NatesclawType.body)
                             .foregroundStyle(.secondary)
                     }
                 }
                 .accessibilityIdentifier("settings-appearance-sidebar-agents")
             } footer: {
                 Text("How many agents the sidebar lists before the switcher menu.")
-                    .font(OpenClawType.footnote)
+                    .font(NatesclawType.footnote)
             }
         }
         .navigationTitle("Appearance")
@@ -148,11 +148,11 @@ extension SettingsProTab {
     var gatewayConnectionRow: some View {
         LabeledContent {
             Text(self.gatewayStatusDetail)
-                .font(OpenClawType.subhead)
+                .font(NatesclawType.subhead)
                 .foregroundStyle(self.gatewayStatusColor)
         } label: {
             Text("Connection")
-                .font(OpenClawType.subheadSemiBold)
+                .font(NatesclawType.subheadSemiBold)
         }
     }
 
@@ -160,8 +160,8 @@ extension SettingsProTab {
         Section {
             self.settingsListRow(
                 icon: "sparkles.square.filled.on.square",
-                iconColor: OpenClawBrand.accent,
-                title: "OpenClaw",
+                iconColor: NatesclawBrand.accent,
+                title: "Natesclaw",
                 route: .systemAgent)
                 .accessibilityIdentifier("settings-system-agent-row")
             self.settingsListRow(
@@ -182,7 +182,7 @@ extension SettingsProTab {
                 route: .channels)
             self.settingsListRow(
                 icon: "sparkles",
-                iconColor: OpenClawBrand.accent,
+                iconColor: NatesclawBrand.accent,
                 title: "Skills",
                 route: .skills)
             self.settingsListRow(
@@ -216,7 +216,7 @@ extension SettingsProTab {
                 route: .about)
         } header: {
             Text("Device")
-                .font(OpenClawType.captionSemiBold)
+                .font(NatesclawType.captionSemiBold)
                 .foregroundStyle(.secondary)
         }
 
@@ -240,12 +240,12 @@ extension SettingsProTab {
         NavigationLink(value: route) {
             Label {
                 Text(title)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(NatesclawType.subheadSemiBold)
             } icon: {
                 SettingsIcon(systemName: icon, color: iconColor)
             }
         }
-        .badge(badgeValue.map { Text($0).font(OpenClawType.captionSemiBold) })
+        .badge(badgeValue.map { Text($0).font(NatesclawType.captionSemiBold) })
     }
 
     @ViewBuilder
@@ -292,7 +292,7 @@ extension SettingsProTab {
                     EmptyView()
                 }
             }
-            .font(OpenClawType.body)
+            .font(NatesclawType.body)
             .navigationTitle(title(for: route))
             .navigationBarTitleDisplayMode(.inline)
             .task(id: route) {
@@ -302,7 +302,7 @@ extension SettingsProTab {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(title(for: route))
-                        .font(OpenClawType.headline)
+                        .font(NatesclawType.headline)
                         .foregroundStyle(.primary)
                 }
                 if route == .gateway {
@@ -311,14 +311,14 @@ extension SettingsProTab {
                             self.openGatewayQRScanner()
                         } label: {
                             Image(systemName: "qrcode.viewfinder")
-                                .font(OpenClawType.subheadSemiBold)
+                                .font(NatesclawType.subheadSemiBold)
                         }
                         .disabled(self.connectingGateway != nil)
                         .accessibilityLabel("Scan QR")
                     }
                 }
                 if let headerSidebarAction {
-                    OpenClawSidebarToolbarItem(
+                    NatesclawSidebarToolbarItem(
                         action: headerSidebarAction,
                         placement: .topBarLeading)
                 }
@@ -337,14 +337,14 @@ extension SettingsProTab {
                     Task { await self.reconnectGateway() }
                 } label: {
                     Label("Reconnect", systemImage: "arrow.triangle.2.circlepath")
-                        .font(OpenClawType.body)
+                        .font(NatesclawType.body)
                 }
                 .disabled(self.isReconnectingGateway || self.appModel.isAppleReviewDemoModeEnabled)
                 Button {
                     Task { await self.runDiagnostics() }
                 } label: {
                     Label("Diagnose", systemImage: "cross.case")
-                        .font(OpenClawType.body)
+                        .font(NatesclawType.body)
                 }
                 .disabled(self.isRefreshingGateway)
             }
@@ -378,10 +378,10 @@ extension SettingsProTab {
                 Section("Upgrade access") {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("This phone has limited Gateway access.")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(NatesclawType.subheadSemiBold)
                         Text(
-                            "Use a secure wss:// or Tailscale Serve Gateway, then scan a full-access setup code from the Control UI or openclaw qr and reconnect to enable settings and upgrades.") // swiftlint:disable:this line_length
-                            .font(OpenClawType.caption) // Keep the native localization key contiguous.
+                            "Use a secure wss:// or Tailscale Serve Gateway, then scan a full-access setup code from the Control UI or natesclaw qr and reconnect to enable settings and upgrades.") // swiftlint:disable:this line_length
+                            .font(NatesclawType.caption) // Keep the native localization key contiguous.
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -389,7 +389,7 @@ extension SettingsProTab {
                         self.openGatewayQRScanner()
                     } label: {
                         Label("Scan Full-Access Code", systemImage: "qrcode.viewfinder")
-                            .font(OpenClawType.body)
+                            .font(NatesclawType.body)
                     }
                 }
             }
@@ -399,7 +399,7 @@ extension SettingsProTab {
             self.manualGatewayCard
             self.gatewayAdvancedCard
         }
-        .font(OpenClawType.body)
+        .font(NatesclawType.body)
     }
 
     private var gatewayStatusCard: some View {
@@ -431,7 +431,7 @@ extension SettingsProTab {
                 } label: {
                     Label {
                         Text(entry.name)
-                            .font(OpenClawType.body)
+                            .font(NatesclawType.body)
                     } icon: {
                         Image(systemName: GatewayStableIdentifier.matches(
                             entry.stableID,
@@ -446,8 +446,8 @@ extension SettingsProTab {
             }
         } label: {
             Image(systemName: "arrow.triangle.2.circlepath")
-                .font(OpenClawType.subheadSemiBold)
-                .foregroundStyle(OpenClawBrand.accent)
+                .font(NatesclawType.subheadSemiBold)
+                .foregroundStyle(NatesclawBrand.accent)
         }
         .accessibilityLabel("Switch Gateway")
     }
@@ -467,8 +467,8 @@ extension SettingsProTab {
                     : (self.pendingApprovalCount == 0
                         ? .verbatim(String(localized: "clear"))
                         : .verbatim(self.approvalWaitingText)),
-                color: self.notificationsNeedAttention ? OpenClawBrand.warn :
-                    (self.pendingApprovalCount == 0 ? OpenClawBrand.ok : OpenClawBrand.warn))
+                color: self.notificationsNeedAttention ? NatesclawBrand.warn :
+                    (self.pendingApprovalCount == 0 ? NatesclawBrand.ok : NatesclawBrand.warn))
 
             if self.notificationsNeedAttention {
                 self.approvalNotificationsWarningCard
@@ -488,21 +488,21 @@ extension SettingsProTab {
                     ? String(
                         localized: "Relay remains available; direct mode adds an independent Gateway node.")
                     : String(
-                        localized: "Install the OpenClaw watch app before enabling direct mode.")),
+                        localized: "Install the Natesclaw watch app before enabling direct mode.")),
                 value: .verbatim(
                     watchStatus.reachable
                         ? String(localized: "Reachable")
                         : (watchStatus.appInstalled
                             ? String(localized: "Installed")
                             : String(localized: "Unavailable"))),
-                color: watchStatus.appInstalled ? OpenClawBrand.ok : OpenClawBrand.warn)
+                color: watchStatus.appInstalled ? NatesclawBrand.ok : NatesclawBrand.warn)
 
             Section {
                 Button {
                     Task { await self.sendDirectWatchSetup() }
                 } label: {
                     Label("Enable Direct Gateway Connection", systemImage: "point.3.connected.trianglepath.dotted")
-                        .font(OpenClawType.body)
+                        .font(NatesclawType.body)
                 }
                 .disabled(
                     self.isSendingWatchDirectSetup
@@ -512,7 +512,7 @@ extension SettingsProTab {
 
                 if let statusText = self.watchDirectSetupStatusText {
                     Text(statusText)
-                        .font(OpenClawType.caption)
+                        .font(NatesclawType.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -522,7 +522,7 @@ extension SettingsProTab {
                     The watch receives a one-time pairing code and stores its own device token. \
                     A reachable secure Gateway URL is required away from the iPhone.
                     """)
-                    .font(OpenClawType.footnote)
+                    .font(NatesclawType.footnote)
             }
 
             Section("Direct node features") {
@@ -536,9 +536,9 @@ extension SettingsProTab {
         Section {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Notifications are off")
-                    .font(OpenClawType.subheadSemiBold)
-                Text("Enable Notifications to receive approval alerts while OpenClaw is not open.")
-                    .font(OpenClawType.caption)
+                    .font(NatesclawType.subheadSemiBold)
+                Text("Enable Notifications to receive approval alerts while Natesclaw is not open.")
+                    .font(NatesclawType.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -547,7 +547,7 @@ extension SettingsProTab {
                     self.openNotificationsRouteFromApprovals()
                 } label: {
                     Label("Open Notifications", systemImage: "bell.badge")
-                        .font(OpenClawType.body)
+                        .font(NatesclawType.body)
                 }
             }
         }
@@ -563,11 +563,11 @@ extension SettingsProTab {
                     } label: {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(item.prompt.commandPreview ?? item.prompt.commandText)
-                                .font(OpenClawType.body)
+                                .font(NatesclawType.body)
                                 .foregroundStyle(.primary)
                                 .lineLimit(2)
                             Text(item.prompt.gatewayStableID)
-                                .font(OpenClawType.caption)
+                                .font(NatesclawType.caption)
                                 .foregroundStyle(.secondary)
                                 .lineLimit(1)
                         }
@@ -587,27 +587,27 @@ extension SettingsProTab {
                 if let warningText = pendingApproval.warningText {
                     Label {
                         Text(warningText)
-                            .font(OpenClawType.caption)
+                            .font(NatesclawType.caption)
                     } icon: {
                         Image(systemName: "exclamationmark.triangle.fill")
                     }
-                    .foregroundStyle(OpenClawBrand.warn)
+                    .foregroundStyle(NatesclawBrand.warn)
                     .fixedSize(horizontal: false, vertical: true)
                 }
                 if let errorText = self.appModel.pendingExecApprovalPromptErrorText {
                     Text(errorText)
-                        .font(OpenClawType.caption)
-                        .foregroundStyle(OpenClawBrand.danger)
+                        .font(NatesclawType.caption)
+                        .foregroundStyle(NatesclawBrand.danger)
                 }
                 if let resolvedText = self.appModel.pendingExecApprovalPromptResolvedText {
                     Text(resolvedText)
-                        .font(OpenClawType.caption)
+                        .font(NatesclawType.caption)
                         .foregroundStyle(self.approvalOutcomeColor)
                     Button {
                         self.appModel.dismissPendingExecApprovalPrompt()
                     } label: {
                         Label("Dismiss", systemImage: "xmark")
-                            .font(OpenClawType.body)
+                            .font(NatesclawType.body)
                     }
                 } else {
                     if pendingApproval.allowsAllowOnce {
@@ -615,7 +615,7 @@ extension SettingsProTab {
                             Task { await self.appModel.resolvePendingExecApprovalPrompt(decision: "allow-once") }
                         } label: {
                             Label("Allow Once", systemImage: "checkmark")
-                                .font(OpenClawType.body)
+                                .font(NatesclawType.body)
                         }
                         .disabled(self.appModel.pendingExecApprovalPromptResolving)
                     }
@@ -624,7 +624,7 @@ extension SettingsProTab {
                             Task { await self.appModel.resolvePendingExecApprovalPrompt(decision: "allow-always") }
                         } label: {
                             Label("Allow Always", systemImage: "checkmark.shield")
-                                .font(OpenClawType.body)
+                                .font(NatesclawType.body)
                         }
                         .disabled(self.appModel.pendingExecApprovalPromptResolving)
                     }
@@ -633,7 +633,7 @@ extension SettingsProTab {
                             Task { await self.appModel.resolvePendingExecApprovalPrompt(decision: "deny") }
                         } label: {
                             Label("Deny", systemImage: "xmark")
-                                .font(OpenClawType.body)
+                                .font(NatesclawType.body)
                         }
                         .disabled(self.appModel.pendingExecApprovalPromptResolving)
                     }
@@ -644,7 +644,7 @@ extension SettingsProTab {
                             self.appModel.dismissPendingExecApprovalPrompt()
                         } label: {
                             Label("Dismiss", systemImage: "xmark")
-                                .font(OpenClawType.body)
+                                .font(NatesclawType.body)
                         }
                     }
                 }
@@ -654,14 +654,14 @@ extension SettingsProTab {
                 Label {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("No approvals waiting")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(NatesclawType.subheadSemiBold)
                         Text(self.approvalEmptyDetail)
-                            .font(OpenClawType.caption)
+                            .font(NatesclawType.caption)
                             .foregroundStyle(.secondary)
                     }
                 } icon: {
                     Image(systemName: "checkmark.shield.fill")
-                        .foregroundStyle(OpenClawBrand.ok)
+                        .foregroundStyle(NatesclawBrand.ok)
                 }
             }
         }
@@ -670,11 +670,11 @@ extension SettingsProTab {
     private var approvalOutcomeColor: Color {
         switch self.appModel.pendingExecApprovalPromptOutcome?.tone {
         case .success:
-            OpenClawBrand.ok
+            NatesclawBrand.ok
         case .danger:
-            OpenClawBrand.danger
+            NatesclawBrand.danger
         case .warning:
-            OpenClawBrand.warn
+            NatesclawBrand.warn
         case .neutral, nil:
             .secondary
         }
@@ -704,7 +704,7 @@ extension SettingsProTab {
                 title: "Voice & Talk",
                 detail: .verbatim(self.appModel.talkMode.gatewayTalkVoiceModeTitle),
                 value: .verbatim(self.voiceDetail),
-                color: self.talkEnabled || self.voiceWakeEnabled ? OpenClawBrand.accent : .secondary)
+                color: self.talkEnabled || self.voiceWakeEnabled ? NatesclawBrand.accent : .secondary)
 
             self.voiceFeatureCard
             self.talkVoiceSettingsCard
@@ -719,14 +719,14 @@ extension SettingsProTab {
                 title: "Health Check",
                 detail: "Run app, permission, and gateway-adjacent checks without editing setup.",
                 value: .verbatim(self.diagnosticsHealthValue),
-                color: self.gatewayDiagnosticConnected ? OpenClawBrand.ok : OpenClawBrand.warn)
+                color: self.gatewayDiagnosticConnected ? NatesclawBrand.ok : NatesclawBrand.warn)
 
             Section {
                 Button {
                     Task { await self.runDiagnostics() }
                 } label: {
                     Label("Run Diagnostics", systemImage: "cross.case")
-                        .font(OpenClawType.body)
+                        .font(NatesclawType.body)
                 }
                 .disabled(self.isRefreshingGateway)
             }
@@ -740,7 +740,7 @@ extension SettingsProTab {
                     value: .verbatim(DeviceInfoHelper.platformStringForDisplay()))
                 SettingsDetailRow(
                     "App",
-                    value: .verbatim(DeviceInfoHelper.openClawVersionString()))
+                    value: .verbatim(DeviceInfoHelper.NatesclawVersionString()))
                 SettingsDetailRow("Model", value: .verbatim(DeviceInfoHelper.modelIdentifier()))
             }
 
@@ -777,16 +777,16 @@ extension SettingsProTab {
                 SettingsIcon(systemName: "bell.fill", color: self.notificationStatusColor)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Notifications")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(NatesclawType.subheadSemiBold)
                     Text(self.notificationStatusDetail)
-                        .font(OpenClawType.caption)
+                        .font(NatesclawType.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 8)
                 Toggle(isOn: self.notificationToggleBinding) {
                     Text("Notifications")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(NatesclawType.subheadSemiBold)
                 }
                 .labelsHidden()
                 .disabled(self.notificationStatus == .checking || self.isRequestingNotificationAuthorization)
@@ -794,16 +794,16 @@ extension SettingsProTab {
                 .accessibilityValue(self.notificationServingActive
                     ? String(localized: "On")
                     : String(localized: "Off"))
-                .accessibilityHint("Turns OpenClaw notification delivery on or off")
+                .accessibilityHint("Turns Natesclaw notification delivery on or off")
             }
 
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: "network")
-                    .font(OpenClawType.captionSemiBold)
-                    .foregroundStyle(OpenClawBrand.accent)
+                    .font(NatesclawType.captionSemiBold)
+                    .foregroundStyle(NatesclawBrand.accent)
                     .frame(width: 22, height: 22)
                 Text(self.notificationRelayDetail)
-                    .font(OpenClawType.caption)
+                    .font(NatesclawType.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -816,7 +816,7 @@ extension SettingsProTab {
             self.gatewayActionButton(
                 title: "Reconnect",
                 icon: "arrow.triangle.2.circlepath",
-                color: OpenClawBrand.accent,
+                color: NatesclawBrand.accent,
                 isBusy: self.isReconnectingGateway,
                 isDisabled: self.appModel.isAppleReviewDemoModeEnabled)
             {
@@ -826,7 +826,7 @@ extension SettingsProTab {
             self.gatewayActionButton(
                 title: "Diagnose",
                 icon: "cross.case",
-                color: OpenClawBrand.accent,
+                color: NatesclawBrand.accent,
                 isBusy: self.isRefreshingGateway)
             {
                 Task { await self.runDiagnostics() }
@@ -841,7 +841,7 @@ extension SettingsProTab {
                 "No Licenses Bundled",
                 systemImage: "doc.text",
                 description: Text("License files are not available in this build."))
-                .font(OpenClawType.body)
+                .font(NatesclawType.body)
         } else {
             Section {
                 ForEach(documents) { document in
@@ -850,15 +850,15 @@ extension SettingsProTab {
                     } label: {
                         Label {
                             Text(document.title)
-                                .font(OpenClawType.subhead)
+                                .font(NatesclawType.subhead)
                         } icon: {
                             SettingsIcon(systemName: "doc.text", color: .gray)
                         }
                     }
                 }
             } footer: {
-                Text("OpenClaw appreciates its partners in the open-source community.")
-                    .font(OpenClawType.footnote)
+                Text("Natesclaw appreciates its partners in the open-source community.")
+                    .font(NatesclawType.footnote)
             }
             .accessibilityIdentifier("settings-licenses-list")
         }
@@ -876,7 +876,7 @@ extension SettingsProTab {
         Button(action: action) {
             HStack {
                 Label(title, systemImage: icon)
-                    .font(OpenClawType.body)
+                    .font(NatesclawType.body)
                 Spacer()
                 if isBusy {
                     ProgressView().controlSize(.small)
@@ -894,13 +894,13 @@ extension SettingsProTab {
         Group {
             Section {
                 VStack(spacing: 12) {
-                    OpenClawProMark(size: 96, shadowRadius: 18, interactive: true)
+                    NatesclawProMark(size: 96, shadowRadius: 18, interactive: true)
                         .accessibilityHidden(true)
                     VStack(spacing: 2) {
-                        Text("OpenClaw")
-                            .font(OpenClawType.title2SemiBold)
+                        Text("Natesclaw")
+                            .font(NatesclawType.title2SemiBold)
                         Text("Personal AI on your devices")
-                            .font(OpenClawType.footnote)
+                            .font(NatesclawType.footnote)
                             .foregroundStyle(.secondary)
                         SettingsBuildMetadataStrip(metadata: DeviceInfoHelper.buildMetadata())
                             .padding(.top, 8)
@@ -926,31 +926,31 @@ extension SettingsProTab {
                     title: "Website",
                     icon: "globe",
                     color: .blue,
-                    url: URL(string: "https://openclaw.ai")!)
+                    url: URL(string: "https://natesclaw.ai")!)
                 self.aboutLinkRow(
                     title: "Docs",
                     icon: "book.fill",
                     color: .orange,
-                    url: URL(string: "https://docs.openclaw.ai")!)
+                    url: URL(string: "https://docs.natesclaw.ai")!)
                 self.aboutLinkRow(
                     title: "GitHub",
                     icon: "chevron.left.slash.chevron.right",
                     color: .gray,
-                    url: URL(string: "https://github.com/openclaw/openclaw")!)
+                    url: URL(string: "https://github.com/natesclaw/natesclaw")!)
                 self.aboutLinkRow(
                     title: "Discord",
                     icon: "bubble.left.and.bubble.right.fill",
                     color: .indigo,
                     url: URL(string: "https://discord.gg/clawd")!)
             } footer: {
-                Text("© 2026 OpenClaw Foundation — MIT License.")
-                    .font(OpenClawType.footnote)
+                Text("© 2026 Natesclaw Foundation — MIT License.")
+                    .font(NatesclawType.footnote)
             }
         }
     }
 
     /// About link row with explicit branded label; shorthand `Link("Title", ...)`
-    /// would bypass the typography audit and OpenClawType styling.
+    /// would bypass the typography audit and NatesclawType styling.
     func aboutLinkRow(
         title: LocalizedStringKey,
         icon: String,
@@ -961,7 +961,7 @@ extension SettingsProTab {
             HStack {
                 Label {
                     Text(title)
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(NatesclawType.subheadSemiBold)
                         .foregroundStyle(.primary)
                 } icon: {
                     SettingsIcon(systemName: icon, color: color)
@@ -990,11 +990,11 @@ extension SettingsProTab {
                 } label: {
                     HStack {
                         Text("Location")
-                            .font(OpenClawType.body)
+                            .font(NatesclawType.body)
                             .foregroundStyle(.primary)
                         Spacer(minLength: 8)
                         ZStack {
-                            OpenClawToggleIndicator(isOn: self.locationSettingsPresentation.sharingControlIsOn)
+                            NatesclawToggleIndicator(isOn: self.locationSettingsPresentation.sharingControlIsOn)
                                 .opacity(self.isChangingLocationMode ? 0 : 1)
                             if self.isChangingLocationMode {
                                 ProgressView()
@@ -1021,22 +1021,22 @@ extension SettingsProTab {
                             self.selectLocationAccessLevel(.whileUsing)
                         } label: {
                             Text("While Using the App")
-                                .font(OpenClawType.subheadSemiBold)
+                                .font(NatesclawType.subheadSemiBold)
                         }
                         Button {
                             self.selectLocationAccessLevel(.always)
                         } label: {
                             Text("Always")
-                                .font(OpenClawType.subheadSemiBold)
+                                .font(NatesclawType.subheadSemiBold)
                         }
                     } label: {
                         HStack(alignment: .firstTextBaseline) {
                             Text("Access Level")
-                                .font(OpenClawType.body)
+                                .font(NatesclawType.body)
                                 .foregroundStyle(.primary)
                             Spacer(minLength: 8)
                             Text(accessLevelText)
-                                .font(OpenClawType.subhead)
+                                .font(NatesclawType.subhead)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.trailing)
                                 .lineLimit(2)
@@ -1058,14 +1058,14 @@ extension SettingsProTab {
 
                 if let locationPermissionDetailText {
                     Text(locationPermissionDetailText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(NatesclawType.caption2)
+                        .foregroundStyle(NatesclawBrand.warn)
                 }
 
                 if let locationPermissionWarningText {
                     Text(locationPermissionWarningText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(NatesclawType.caption2)
+                        .foregroundStyle(NatesclawBrand.warn)
                 }
             }
         }
@@ -1074,7 +1074,7 @@ extension SettingsProTab {
     var agentSelectionCard: some View {
         Section {
             Picker("Default Agent", selection: self.$selectedAgentPickerId) {
-                Text("Default").font(OpenClawType.body).tag("")
+                Text("Default").font(NatesclawType.body).tag("")
                 let defaultId = (self.appModel.gatewayDefaultAgentId ?? "")
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                 ForEach(
@@ -1082,13 +1082,13 @@ extension SettingsProTab {
                     id: \.id)
                 { agent in
                     let name = (agent.name ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-                    Text(name.isEmpty ? agent.id : name).font(OpenClawType.body).tag(agent.id)
+                    Text(name.isEmpty ? agent.id : name).font(NatesclawType.body).tag(agent.id)
                 }
             }
-            .font(OpenClawType.body)
+            .font(NatesclawType.body)
         } footer: {
             Text("Used for new Chat and Talk sessions.")
-                .font(OpenClawType.footnote)
+                .font(NatesclawType.footnote)
         }
     }
 
@@ -1099,21 +1099,21 @@ extension SettingsProTab {
             self.gatewayActionButton(
                 title: "Scan QR",
                 icon: "qrcode.viewfinder",
-                color: OpenClawBrand.accent,
+                color: NatesclawBrand.accent,
                 isBusy: false,
                 isDisabled: self.connectingGateway != nil)
             {
                 self.openGatewayQRScanner()
             }
             TextField("Paste setup code", text: self.$setupCode)
-                .font(OpenClawType.body)
+                .font(NatesclawType.body)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .disabled(self.connectingGateway != nil)
             self.gatewayActionButton(
                 title: "Connect",
                 icon: "bolt.horizontal.circle",
-                color: OpenClawBrand.accent,
+                color: NatesclawBrand.accent,
                 isBusy: self.setupAttemptID != nil,
                 isDisabled: !self.canApplyGatewaySetup || self.connectingGateway != nil)
             {
@@ -1121,7 +1121,7 @@ extension SettingsProTab {
             }
             if self.gatewayController.gateways.isEmpty {
                 Text("No gateways found yet. Use manual setup if Bonjour is blocked.")
-                    .font(OpenClawType.subhead)
+                    .font(NatesclawType.subhead)
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(self.gatewayController.gateways) { gateway in
@@ -1130,13 +1130,13 @@ extension SettingsProTab {
             }
         } header: {
             Text("Add Gateway")
-                .font(OpenClawType.subheadSemiBold)
+                .font(NatesclawType.subheadSemiBold)
         } footer: {
             if let warning = self.tailnetWarningText {
-                Text(warning).font(OpenClawType.footnote).foregroundStyle(OpenClawBrand.warn)
+                Text(warning).font(NatesclawType.footnote).foregroundStyle(NatesclawBrand.warn)
             } else if let status = self.setupStatusLine {
                 Text(status)
-                    .font(OpenClawType.footnote)
+                    .font(NatesclawType.footnote)
             }
         }
     }
@@ -1145,7 +1145,7 @@ extension SettingsProTab {
         Section {
             if self.gatewayRegistry.entries.isEmpty {
                 Text("Pair a gateway to make it available here.")
-                    .font(OpenClawType.subhead)
+                    .font(NatesclawType.subhead)
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(self.gatewayRegistry.entries) { entry in
@@ -1154,10 +1154,10 @@ extension SettingsProTab {
             }
         } header: {
             Text("Paired Gateways")
-                .font(OpenClawType.subheadSemiBold)
+                .font(NatesclawType.subheadSemiBold)
         } footer: {
             Text("Keep multiple gateways connected and switch which one is in focus.")
-                .font(OpenClawType.footnote)
+                .font(NatesclawType.footnote)
         }
     }
 
@@ -1175,10 +1175,10 @@ extension SettingsProTab {
             } label: {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(entry.name)
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(NatesclawType.subheadSemiBold)
                         .foregroundStyle(.primary)
                     Text(self.gatewayEndpointSummary(entry))
-                        .font(OpenClawType.caption)
+                        .font(NatesclawType.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer(minLength: 8)
@@ -1191,8 +1191,8 @@ extension SettingsProTab {
                     .controlSize(.small)
             } else if isActive {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(OpenClawType.subheadSemiBold)
-                    .foregroundStyle(OpenClawBrand.accent)
+                    .font(NatesclawType.subheadSemiBold)
+                    .foregroundStyle(NatesclawBrand.accent)
                     .accessibilityLabel("Focused Gateway")
             } else {
                 Button {
@@ -1204,8 +1204,8 @@ extension SettingsProTab {
                     }
                 } label: {
                     Image(systemName: keepsConnected ? "bolt.horizontal.circle.fill" : "bolt.horizontal.circle")
-                        .font(OpenClawType.subheadSemiBold)
-                        .foregroundStyle(keepsConnected ? OpenClawBrand.accent : .secondary)
+                        .font(NatesclawType.subheadSemiBold)
+                        .foregroundStyle(keepsConnected ? NatesclawBrand.accent : .secondary)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(keepsConnected ? "Disconnect Gateway" : "Keep Gateway Connected")
@@ -1218,7 +1218,7 @@ extension SettingsProTab {
             } label: {
                 Label {
                     Text("Forget")
-                        .font(OpenClawType.captionSemiBold)
+                        .font(NatesclawType.captionSemiBold)
                 } icon: {
                     Image(systemName: "trash")
                 }
@@ -1230,7 +1230,7 @@ extension SettingsProTab {
             } label: {
                 Label {
                     Text("Forget Gateway")
-                        .font(OpenClawType.body)
+                        .font(NatesclawType.body)
                 } icon: {
                     Image(systemName: "trash")
                 }
@@ -1244,9 +1244,9 @@ extension SettingsProTab {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(verbatim: gateway.name)
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(NatesclawType.subheadSemiBold)
                     Text(verbatim: self.gatewayDetailLines(gateway).joined(separator: " • "))
-                        .font(OpenClawType.caption)
+                        .font(NatesclawType.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
@@ -1259,22 +1259,22 @@ extension SettingsProTab {
                             ProgressView().controlSize(.small)
                         } else {
                             Text(availability.actionTitle)
-                                .font(OpenClawType.captionSemiBold)
+                                .font(NatesclawType.captionSemiBold)
                         }
                     }
-                    .font(OpenClawType.captionSemiBold)
+                    .font(NatesclawType.captionSemiBold)
                     .buttonStyle(.bordered)
                     .disabled(self.connectingGateway != nil)
                 } else {
                     Text(availability.actionTitle)
-                        .font(OpenClawType.captionSemiBold)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(NatesclawType.captionSemiBold)
+                        .foregroundStyle(NatesclawBrand.warn)
                 }
             }
 
             if let guidanceText = availability.guidanceText {
                 Text(guidanceText)
-                    .font(OpenClawType.caption)
+                    .font(NatesclawType.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -1285,34 +1285,34 @@ extension SettingsProTab {
         Section("Manual Gateway") {
             self.settingsToggle("Use Manual Gateway", isOn: self.manualGatewayEnabledBinding)
             TextField("Host", text: self.manualHostBinding)
-                .font(OpenClawType.body)
+                .font(NatesclawType.body)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
             TextField("Port", text: self.manualPortBinding)
-                .font(OpenClawType.body)
+                .font(NatesclawType.body)
                 .keyboardType(.numberPad)
             Picker(selection: self.manualGatewayTLSBinding) {
                 Text("Unencrypted")
-                    .font(OpenClawType.captionSemiBold)
+                    .font(NatesclawType.captionSemiBold)
                     .tag(false)
                 Text("Secure (TLS)")
-                    .font(OpenClawType.captionSemiBold)
+                    .font(NatesclawType.captionSemiBold)
                     .tag(true)
             } label: {
                 Text("Connection security")
-                    .font(OpenClawType.captionSemiBold)
+                    .font(NatesclawType.captionSemiBold)
             }
             .pickerStyle(.segmented)
             .disabled(self.manualGatewayTransport.requiresTLS)
             if let helperText = self.manualGatewayTransport.helperText {
                 Text(helperText)
-                    .font(OpenClawType.footnote)
+                    .font(NatesclawType.footnote)
                     .foregroundStyle(.secondary)
             }
             self.gatewayActionButton(
                 title: "Connect Manual",
                 icon: "network",
-                color: OpenClawBrand.accent,
+                color: NatesclawBrand.accent,
                 isBusy: self.connectingGateway == .manual,
                 isDisabled: self.manualGatewayHost.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     || !self.manualPortIsValid)
@@ -1348,14 +1348,14 @@ extension SettingsProTab {
                     GatewayCustomHeadersSettingsView(gatewayStableID: headersStableID)
                 } label: {
                     Text("Custom Headers")
-                        .font(OpenClawType.body)
+                        .font(NatesclawType.body)
                 }
             }
             Button(role: .destructive) {
                 self.showResetOnboardingAlert = true
             } label: {
                 Label("Reset Onboarding", systemImage: "arrow.counterclockwise")
-                    .font(OpenClawType.body)
+                    .font(NatesclawType.body)
             }
         }
     }
@@ -1366,20 +1366,20 @@ extension SettingsProTab {
     {
         ZStack(alignment: .leading) {
             SecureField("", text: text)
-                .font(OpenClawType.subhead)
+                .font(NatesclawType.subhead)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .accessibilityLabel(Text(placeholder))
             if text.wrappedValue.isEmpty {
                 Text(placeholder)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(NatesclawType.subheadSemiBold)
                     .foregroundStyle(.tertiary)
                     .padding(.horizontal, 8)
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
         }
-        .font(OpenClawType.subhead)
+        .font(NatesclawType.subhead)
     }
 
     var voiceFeatureCard: some View {
@@ -1397,10 +1397,10 @@ extension SettingsProTab {
             .disabled(self.appModel.isAppleReviewDemoModeEnabled)
             Picker("Speech Language", selection: self.$talkSpeechLocale) {
                 ForEach(TalkSpeechLocale.supportedOptions()) { option in
-                    Text(option.label).font(OpenClawType.body).tag(option.id)
+                    Text(option.label).font(NatesclawType.body).tag(option.id)
                 }
             }
-            .font(OpenClawType.body)
+            .font(NatesclawType.body)
             self.settingsToggle("Background Listening", isOn: self.$talkBackgroundEnabled)
             self.settingsToggle("Speakerphone", isOn: self.talkSpeakerphoneBinding)
             NavigationLink {
@@ -1431,18 +1431,18 @@ extension SettingsProTab {
             Section("Voice") {
                 Picker("Provider", selection: self.talkProviderSelectionBinding) {
                     ForEach(TalkModeProviderSelection.allCases) { option in
-                        Text(option.label).font(OpenClawType.body).tag(option.rawValue)
+                        Text(option.label).font(NatesclawType.body).tag(option.rawValue)
                     }
                 }
-                .font(OpenClawType.body)
+                .font(NatesclawType.body)
                 if self.shouldShowRealtimeVoicePicker {
                     Picker("Realtime Voice", selection: self.talkRealtimeVoiceSelectionBinding) {
-                        Text("Gateway Default").font(OpenClawType.body).tag("")
+                        Text("Gateway Default").font(NatesclawType.body).tag("")
                         ForEach(TalkModeRealtimeVoiceSelection.voices, id: \.self) { voice in
-                            Text(TalkModeRealtimeVoiceSelection.label(for: voice)).font(OpenClawType.body).tag(voice)
+                            Text(TalkModeRealtimeVoiceSelection.label(for: voice)).font(NatesclawType.body).tag(voice)
                         }
                     }
-                    .font(OpenClawType.body)
+                    .font(NatesclawType.body)
                 }
                 SettingsDetailRow(
                     "Voice Mode",
@@ -1465,18 +1465,18 @@ extension SettingsProTab {
         Section {
             self.settingsToggle("Show Talk Control", isOn: self.$talkButtonEnabled)
             TextField("Default Share Instruction", text: self.$defaultShareInstruction, axis: .vertical)
-                .font(OpenClawType.body)
+                .font(NatesclawType.body)
                 .lineLimit(2...5)
                 .textInputAutocapitalization(.sentences)
             Button {
                 Task { await self.appModel.runSharePipelineSelfTest() }
             } label: {
                 Label("Run Share Self-Test", systemImage: "checkmark.seal")
-                    .font(OpenClawType.body)
+                    .font(NatesclawType.body)
             }
         } footer: {
             Text(self.appModel.lastShareEventText)
-                .font(OpenClawType.footnote)
+                .font(NatesclawType.footnote)
         }
     }
 
@@ -1491,7 +1491,7 @@ extension SettingsProTab {
             AppleHealthAccessSectionView()
         } header: {
             Text("Apple Health")
-                .font(OpenClawType.captionSemiBold)
+                .font(NatesclawType.captionSemiBold)
                 .foregroundStyle(.secondary)
         }
     }
@@ -1515,7 +1515,7 @@ extension SettingsProTab {
     var deviceIdentityCard: some View {
         Section("Device") {
             TextField("Device Name", text: self.$displayName)
-                .font(OpenClawType.body)
+                .font(NatesclawType.body)
             SettingsDetailRow("Instance ID", value: .verbatim(self.instanceId))
         }
     }
@@ -1531,9 +1531,9 @@ extension SettingsProTab {
         } label: {
             HStack {
                 Text(title)
-                    .font(OpenClawType.body)
+                    .font(NatesclawType.body)
                 Spacer(minLength: 8)
-                OpenClawToggleIndicator(isOn: isOn.wrappedValue)
+                NatesclawToggleIndicator(isOn: isOn.wrappedValue)
             }
             .contentShape(Rectangle())
         }

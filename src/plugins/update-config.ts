@@ -1,7 +1,7 @@
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
-import { isOpenClawOrgNpmSpec } from "../infra/npm-registry-spec.js";
+import { isNatesclawOrgNpmSpec } from "../infra/npm-registry-spec.js";
 import { resolveUserPath } from "../utils.js";
 import { CLAWHUB_INSTALL_ERROR_CODE } from "./clawhub-error-codes.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./config-state.js";
@@ -14,7 +14,7 @@ import { resolveDefaultPluginExtensionsDir } from "./install-paths.js";
 import { resolvePluginInstallDir } from "./install.js";
 import { resolvePackageExtensionEntries, type PackageManifest } from "./manifest.js";
 import { validatePackageExtensionEntriesForInstall } from "./package-entry-resolution.js";
-import { reconcileRegisteredOpenClawHostLinks } from "./plugin-peer-link.js";
+import { reconcileRegisteredNatesclawHostLinks } from "./plugin-peer-link.js";
 import { resetPluginSlotsToDefaults } from "./slots.js";
 import { setPluginEnabledInConfig } from "./toggle-config.js";
 import type { PluginUpdateLogger } from "./update-source.js";
@@ -190,7 +190,7 @@ export function resolveBridgeInstallRecord(params: {
 }
 
 function isBridgeChannelEnabledByConfig(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   bridge: ExternalizedBundledPluginBridge;
 }): boolean {
   const channels = params.config.channels;
@@ -210,7 +210,7 @@ function isBridgeChannelEnabledByConfig(params: {
 }
 
 export function isExternalizedBundledPluginEnabled(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   bridge: ExternalizedBundledPluginBridge;
 }): boolean {
   const normalized = normalizePluginsConfig(params.config.plugins);
@@ -250,7 +250,7 @@ export function shouldFallbackClawHubBridgeToNpm(params: {
   result: { ok: false; code?: string };
   npmSpec?: string;
 }): boolean {
-  if (!isOpenClawOrgNpmSpec(params.npmSpec)) {
+  if (!isNatesclawOrgNpmSpec(params.npmSpec)) {
     return false;
   }
   return (
@@ -280,10 +280,10 @@ function replacePluginIdInList(
 }
 
 export function migratePluginConfigId(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   fromId: string,
   toId: string,
-): OpenClawConfig {
+): NatesclawConfig {
   const plugins = cfg.plugins;
   if (fromId === toId || !plugins) {
     return cfg;
@@ -357,7 +357,7 @@ export function migratePluginConfigId(
   return nextPlugins === plugins ? cfg : { ...cfg, plugins: nextPlugins };
 }
 
-export function withoutPluginInstallRecord(cfg: OpenClawConfig, pluginId: string): OpenClawConfig {
+export function withoutPluginInstallRecord(cfg: NatesclawConfig, pluginId: string): NatesclawConfig {
   const installs = cfg.plugins?.installs;
   if (!installs || !Object.hasOwn(installs, pluginId)) {
     return cfg;
@@ -373,9 +373,9 @@ export function withoutPluginInstallRecord(cfg: OpenClawConfig, pluginId: string
 }
 
 export function disablePluginAfterUpdateFailure(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   pluginId: string,
-): OpenClawConfig {
+): NatesclawConfig {
   const disabled = setPluginEnabledInConfig(config, pluginId, false, {
     updateChannelConfig: false,
   });
@@ -391,12 +391,12 @@ export function disablePluginAfterUpdateFailure(
 }
 
 /** Repairs a legacy npm-owned extensions-root host without reinstalling its package. */
-export async function repairRegisteredOpenClawHostLink(params: {
+export async function repairRegisteredNatesclawHostLink(params: {
   pluginId: string;
   record: PluginInstallRecord;
   logger: PluginUpdateLogger;
 }): Promise<boolean> {
-  const result = await reconcileRegisteredOpenClawHostLinks({
+  const result = await reconcileRegisteredNatesclawHostLinks({
     installRecords: { [params.pluginId]: params.record },
     extensionsDir: resolveDefaultPluginExtensionsDir(),
     mode: "repair",
@@ -405,18 +405,18 @@ export async function repairRegisteredOpenClawHostLink(params: {
   return result.repaired > 0;
 }
 
-export async function repairOpenClawPeerLinksForNpmInstalls(params: {
-  config: OpenClawConfig;
+export async function repairNatesclawPeerLinksForNpmInstalls(params: {
+  config: NatesclawConfig;
   logger: PluginUpdateLogger;
 }): Promise<boolean> {
-  const result = await reconcileRegisteredOpenClawHostLinks({
+  const result = await reconcileRegisteredNatesclawHostLinks({
     installRecords: params.config.plugins?.installs ?? {},
     extensionsDir: resolveDefaultPluginExtensionsDir(),
     mode: "repair",
     logger: params.logger,
     onPackageReadError: (error, packageDir) => {
       params.logger.warn?.(
-        `Could not repair openclaw peer link at ${packageDir}: ${String(error)}`,
+        `Could not repair natesclaw peer link at ${packageDir}: ${String(error)}`,
       );
     },
   });

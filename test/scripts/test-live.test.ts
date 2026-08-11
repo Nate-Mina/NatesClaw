@@ -61,9 +61,9 @@ describe("scripts/test-live", () => {
 
     expect(env).toMatchObject({
       CI: "1",
-      OPENCLAW_LIVE_CODEX_HARNESS: "1",
-      OPENCLAW_LIVE_TEST: "1",
-      OPENCLAW_LIVE_TEST_QUIET: "1",
+      NATESCLAW_LIVE_CODEX_HARNESS: "1",
+      NATESCLAW_LIVE_TEST: "1",
+      NATESCLAW_LIVE_TEST_QUIET: "1",
       PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false",
       pnpm_config_verify_deps_before_run: "false",
     });
@@ -83,7 +83,7 @@ describe("scripts/test-live", () => {
   });
 
   posixIt("signals the live pnpm child when the wrapper is terminated", async () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-test-live-signal-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-test-live-signal-"));
     const fakePnpmPath = join(root, "pnpm");
     const childPidPath = join(root, "child.pid");
     const descendantPidPath = join(root, "descendant.pid");
@@ -96,9 +96,9 @@ describe("scripts/test-live", () => {
       {
         env: {
           ...process.env,
-          OPENCLAW_FAKE_PNPM_PID_PATH: childPidPath,
-          OPENCLAW_FAKE_PNPM_DESCENDANT_PID_PATH: descendantPidPath,
-          OPENCLAW_FAKE_PNPM_SIGNALED_PATH: signaledPath,
+          NATESCLAW_FAKE_PNPM_PID_PATH: childPidPath,
+          NATESCLAW_FAKE_PNPM_DESCENDANT_PID_PATH: descendantPidPath,
+          NATESCLAW_FAKE_PNPM_SIGNALED_PATH: signaledPath,
           npm_execpath: fakePnpmPath,
         },
         stdio: "ignore",
@@ -139,7 +139,7 @@ describe("scripts/test-live", () => {
   });
 
   posixIt("kills the live pnpm process group after the no-output timeout", async () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-test-live-timeout-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-test-live-timeout-"));
     const fakePnpmPath = join(root, "pnpm");
     const childPidPath = join(root, "child.pid");
     const descendantPidPath = join(root, "descendant.pid");
@@ -152,10 +152,10 @@ describe("scripts/test-live", () => {
       {
         env: {
           ...process.env,
-          OPENCLAW_FAKE_PNPM_PID_PATH: childPidPath,
-          OPENCLAW_FAKE_PNPM_DESCENDANT_PID_PATH: descendantPidPath,
-          OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "25",
-          OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "100",
+          NATESCLAW_FAKE_PNPM_PID_PATH: childPidPath,
+          NATESCLAW_FAKE_PNPM_DESCENDANT_PID_PATH: descendantPidPath,
+          NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "25",
+          NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "100",
           npm_execpath: fakePnpmPath,
         },
         stdio: ["ignore", "ignore", "pipe"],
@@ -194,15 +194,15 @@ describe("scripts/test-live", () => {
 
   it("rejects loose heartbeat intervals instead of parsing prefixes", () => {
     expect(resolveTestLiveHeartbeatMs({})).toBe(20_000);
-    expect(resolveTestLiveHeartbeatMs({ OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "2500" })).toBe(2500);
-    expect(() => resolveTestLiveHeartbeatMs({ OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "1e3" })).toThrow(
-      "invalid OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: 1e3",
+    expect(resolveTestLiveHeartbeatMs({ NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "2500" })).toBe(2500);
+    expect(() => resolveTestLiveHeartbeatMs({ NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "1e3" })).toThrow(
+      "invalid NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: 1e3",
     );
     expect(() =>
-      resolveTestLiveHeartbeatMs({ OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "1000ms" }),
-    ).toThrow("invalid OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: 1000ms");
-    expect(() => resolveTestLiveHeartbeatMs({ OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "0" })).toThrow(
-      "invalid OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS: 0",
+      resolveTestLiveHeartbeatMs({ NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "1000ms" }),
+    ).toThrow("invalid NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: 1000ms");
+    expect(() => resolveTestLiveHeartbeatMs({ NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: "0" })).toThrow(
+      "invalid NATESCLAW_LIVE_WRAPPER_HEARTBEAT_MS: 0",
     );
   });
 
@@ -232,16 +232,16 @@ function writeFakePnpm(filePath: string): void {
       "#!/usr/bin/env node",
       'const { spawn } = require("node:child_process");',
       'const fs = require("node:fs");',
-      "if (process.env.OPENCLAW_FAKE_PNPM_DESCENDANT_PID_PATH) {",
+      "if (process.env.NATESCLAW_FAKE_PNPM_DESCENDANT_PID_PATH) {",
       "  const child = spawn(process.execPath, [",
       '    "-e",',
       "    \"process.on('SIGTERM', () => {}); setInterval(() => {}, 1000);\",",
       "  ], { stdio: 'ignore' });",
-      "  fs.writeFileSync(process.env.OPENCLAW_FAKE_PNPM_DESCENDANT_PID_PATH, String(child.pid));",
+      "  fs.writeFileSync(process.env.NATESCLAW_FAKE_PNPM_DESCENDANT_PID_PATH, String(child.pid));",
       "}",
-      "fs.writeFileSync(process.env.OPENCLAW_FAKE_PNPM_PID_PATH, String(process.pid));",
+      "fs.writeFileSync(process.env.NATESCLAW_FAKE_PNPM_PID_PATH, String(process.pid));",
       'process.on("SIGTERM", () => {',
-      '  fs.writeFileSync(process.env.OPENCLAW_FAKE_PNPM_SIGNALED_PATH, "SIGTERM");',
+      '  fs.writeFileSync(process.env.NATESCLAW_FAKE_PNPM_SIGNALED_PATH, "SIGTERM");',
       "  process.exit(0);",
       "});",
       "setInterval(() => {}, 1000);",

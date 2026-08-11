@@ -1,7 +1,7 @@
 // Telegram plugin module implements api fetch behavior.
-import type { TelegramNetworkConfig } from "openclaw/plugin-sdk/config-contracts";
-import { buildTimeoutAbortSignal } from "openclaw/plugin-sdk/extension-shared";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+import type { TelegramNetworkConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { buildTimeoutAbortSignal } from "natesclaw/plugin-sdk/extension-shared";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
 import { resolveTelegramApiBase, resolveTelegramFetch, resolveTelegramTransport } from "./fetch.js";
 import { makeProxyFetch } from "./proxy.js";
 import { resolveTelegramRequestTimeoutMs } from "./request-timeouts.js";

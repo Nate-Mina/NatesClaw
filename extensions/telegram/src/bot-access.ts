@@ -3,14 +3,14 @@ import {
   firstDefined,
   isSenderIdAllowed,
   mergeDmAllowFromSources,
-} from "openclaw/plugin-sdk/allow-from";
+} from "natesclaw/plugin-sdk/allow-from";
 import type {
   DmPolicy,
   TelegramDirectConfig,
   TelegramGroupConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/config-contracts";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString, uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export type NormalizedAllowFrom = {
   entries: string[];

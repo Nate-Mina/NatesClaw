@@ -3,7 +3,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { formatErrorMessage, isMissingPathError } from "../infra/errors.js";
 import { withFileLock } from "../infra/file-lock.js";
 import { root as createFsRoot, type Root as FsSafeRoot } from "../infra/fs-safe.js";
@@ -63,7 +63,7 @@ import {
   type ConfigWriteFollowUp,
   type RuntimeConfigWritePreparedCandidate,
 } from "./runtime-snapshot.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "./types.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "./types.js";
 import { validateConfigObjectWithPlugins } from "./validation.js";
 
 const CONFIG_MUTATION_LOCK_OPTIONS = {
@@ -87,7 +87,7 @@ export type ConfigReplaceResult = {
   path: string;
   previousHash: string | null;
   snapshot: ConfigFileSnapshot;
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   persistedHash: string | null;
   afterWrite: ConfigWriteAfterWrite;
   followUp: ConfigWriteFollowUp;
@@ -97,7 +97,7 @@ export type ConfigMutationIO = {
   env?: NodeJS.ProcessEnv;
   readConfigFileSnapshotForWrite: typeof readConfigFileSnapshotForWrite;
   writeConfigFile: (
-    cfg: OpenClawConfig,
+    cfg: NatesclawConfig,
     options?: ConfigWriteOptions,
   ) => Promise<ConfigWriteResult | void>;
 };
@@ -109,12 +109,12 @@ export type ConfigMutationContext = {
 };
 
 export type ConfigTransformResult<T> = {
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   result?: T;
 };
 
 export type ConfigMutationCommitParams = {
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   snapshot: ConfigFileSnapshot;
   baseHash?: string;
   writeOptions?: ConfigWriteOptions;
@@ -123,7 +123,7 @@ export type ConfigMutationCommitParams = {
 };
 
 export type ConfigMutationCommitResult = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   persistedHash: string | null;
   afterWrite?: ConfigWriteAfterWrite;
 };
@@ -140,7 +140,7 @@ export type TransformConfigFileParams<T> = {
   io?: ConfigMutationIO;
   commit?: ConfigMutationCommit;
   transform: (
-    currentConfig: OpenClawConfig,
+    currentConfig: NatesclawConfig,
     context: ConfigMutationContext,
   ) => Promise<ConfigTransformResult<T>> | ConfigTransformResult<T>;
 };
@@ -163,7 +163,7 @@ type ConfigMutationOwnership = {
 
 function resolveManagedRuntimeEnvBaseline(): {
   generation: number;
-  sourceConfig: OpenClawConfig;
+  sourceConfig: NatesclawConfig;
 } {
   // Accepted restart candidates publish env before the runtime snapshot advances.
   // Managed writes must stay on that publication generation to avoid mixed env refs.
@@ -319,7 +319,7 @@ async function withConfigMutationSnapshotLock<T>(
  * Nested mutation helpers are reentrant through activeConfigMutationLocks.
  */
 export async function withConfigMutationExclusive<T>(
-  fn: (config: OpenClawConfig) => Promise<T>,
+  fn: (config: NatesclawConfig) => Promise<T>,
 ): Promise<T> {
   return await withConfigMutationSnapshotLock(
     {},
@@ -644,11 +644,11 @@ async function writeRootBoundJsonFile(params: {
 
 async function tryWriteSingleTopLevelIncludeMutation(params: {
   snapshot: ConfigFileSnapshot;
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   afterWrite?: ConfigWriteOptions["afterWrite"];
   writeOptions?: ConfigWriteOptions;
   io?: ConfigMutationIO;
-}): Promise<{ persistedHash: string | null; persistedConfig: OpenClawConfig } | null> {
+}): Promise<{ persistedHash: string | null; persistedConfig: NatesclawConfig } | null> {
   const nextConfig = applyUnsetPathsForWrite(
     params.nextConfig,
     resolveManagedUnsetPathsForWrite(params.writeOptions?.unsetPaths),
@@ -763,7 +763,7 @@ async function tryWriteSingleTopLevelIncludeMutation(params: {
     nextConfig,
     params.snapshot.parsed,
     envForRestore,
-  ) as OpenClawConfig;
+  ) as NatesclawConfig;
   applyConfigEnvVars(authoredRuntimeCandidate, runtimeCandidateEnv);
   const runtimeConfigToWrite = resolveConfigEnvVars(
     {
@@ -772,7 +772,7 @@ async function tryWriteSingleTopLevelIncludeMutation(params: {
     },
     runtimeCandidateEnv,
     { onMissing: () => {} },
-  ) as OpenClawConfig;
+  ) as NatesclawConfig;
   const validated = validateConfigObjectWithPlugins(
     runtimeConfigToWrite,
     params.writeOptions?.skipPluginValidation ? { pluginValidation: "skip" } : undefined,
@@ -956,8 +956,8 @@ async function tryWriteSingleTopLevelIncludeMutation(params: {
 
 function resolveConfigWriteResult(
   result: ConfigWriteResult | void,
-  fallbackConfig: OpenClawConfig,
-): { persistedHash: string | null; persistedConfig: OpenClawConfig } {
+  fallbackConfig: NatesclawConfig,
+): { persistedHash: string | null; persistedConfig: NatesclawConfig } {
   if (result) {
     return {
       persistedHash: result.persistedHash,
@@ -968,7 +968,7 @@ function resolveConfigWriteResult(
 }
 
 export async function replaceConfigFile(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   baseHash?: string;
   snapshot?: ConfigFileSnapshot;
   afterWrite?: ConfigWriteOptions["afterWrite"];
@@ -996,7 +996,7 @@ export async function replaceConfigFile(params: {
 }
 
 async function replaceConfigFileUnlocked(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: NatesclawConfig;
   baseHash?: string;
   snapshot?: ConfigFileSnapshot;
   afterWrite?: ConfigWriteOptions["afterWrite"];
@@ -1235,7 +1235,7 @@ export async function mutateConfigFile<T = void>(params: {
   afterWrite?: ConfigWriteOptions["afterWrite"];
   writeOptions?: ConfigWriteOptions;
   io?: ConfigMutationIO;
-  mutate: (draft: OpenClawConfig, context: ConfigMutationContext) => Promise<T | void> | T | void;
+  mutate: (draft: NatesclawConfig, context: ConfigMutationContext) => Promise<T | void> | T | void;
 }): Promise<ConfigMutationResult<T>> {
   return await transformConfigFile<T>({
     base: params.base,
@@ -1258,7 +1258,7 @@ export async function mutateConfigFileWithRetry<T = void>(params: {
   afterWrite?: ConfigWriteOptions["afterWrite"];
   writeOptions?: ConfigWriteOptions;
   io?: ConfigMutationIO;
-  mutate: (draft: OpenClawConfig, context: ConfigMutationContext) => Promise<T | void> | T | void;
+  mutate: (draft: NatesclawConfig, context: ConfigMutationContext) => Promise<T | void> | T | void;
 }): Promise<ConfigMutationResult<T>> {
   return await transformConfigFileWithRetry<T>({
     base: params.base,

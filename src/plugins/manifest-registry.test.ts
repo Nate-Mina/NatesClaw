@@ -7,7 +7,7 @@ import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { collectBundledChannelConfigsCore } from "./bundled-channel-config-metadata.js";
 import type { PluginCandidate } from "./discovery.js";
 import { loadPluginManifestRegistryCore } from "./manifest-registry.js";
-import type { OpenClawPackageManifest } from "./manifest.js";
+import type { NatesclawPackageManifest } from "./manifest.js";
 import { cleanupTrackedTempDirs, makeTrackedTempDir } from "./test-helpers/fs-fixtures.js";
 
 vi.unmock("../version.js");
@@ -31,19 +31,19 @@ function mkdirSafe(dir: string) {
 }
 
 function makeTempDir() {
-  return makeTrackedTempDir("openclaw-manifest-registry", tempDirs);
+  return makeTrackedTempDir("natesclaw-manifest-registry", tempDirs);
 }
 
-function makeOpenClawDevSourceRoot() {
+function makeNatesclawDevSourceRoot() {
   const root = makeTempDir();
-  fs.writeFileSync(path.join(root, "package.json"), JSON.stringify({ name: "openclaw" }), "utf-8");
+  fs.writeFileSync(path.join(root, "package.json"), JSON.stringify({ name: "natesclaw" }), "utf-8");
   mkdirSafe(path.join(root, "src"));
   mkdirSafe(path.join(root, "extensions"));
   return root;
 }
 
 function writeManifest(dir: string, manifest: Record<string, unknown>) {
-  fs.writeFileSync(path.join(dir, "openclaw.plugin.json"), JSON.stringify(manifest), "utf-8");
+  fs.writeFileSync(path.join(dir, "natesclaw.plugin.json"), JSON.stringify(manifest), "utf-8");
 }
 
 function writeTextFile(rootDir: string, relativePath: string, value: string) {
@@ -74,11 +74,11 @@ function createPluginCandidate(params: {
   rootDir: string;
   sourceName?: string;
   origin: "bundled" | "global" | "workspace" | "config";
-  format?: "openclaw" | "bundle";
+  format?: "natesclaw" | "bundle";
   bundleFormat?: "codex" | "claude" | "cursor";
   packageName?: string;
   packageVersion?: string;
-  packageManifest?: OpenClawPackageManifest;
+  packageManifest?: NatesclawPackageManifest;
   packageDir?: string;
   bundledManifest?: PluginCandidate["bundledManifest"];
   bundledManifestPath?: string;
@@ -105,10 +105,10 @@ function createMsteamsClawHubInstallRecord(
 ): PluginInstallRecord {
   const record: PluginInstallRecord = {
     source: "clawhub",
-    spec: "clawhub:@openclaw/msteams",
+    spec: "clawhub:@natesclaw/msteams",
     installPath,
     clawhubUrl: "https://clawhub.ai",
-    clawhubPackage: "@openclaw/msteams",
+    clawhubPackage: "@natesclaw/msteams",
     clawhubChannel: "official",
   };
   return { ...record, ...overrides };
@@ -125,7 +125,7 @@ function resolveMsteamsClawHubTrust(overrides: Partial<PluginInstallRecord> = {}
       createPluginCandidate({
         idHint: "msteams",
         rootDir: dir,
-        packageName: "@openclaw/msteams",
+        packageName: "@natesclaw/msteams",
         origin: "global",
       }),
     ],
@@ -140,11 +140,11 @@ function resolveDiffsNpmTrust(overrides: Partial<PluginInstallRecord> = {}) {
     installRecords: {
       diffs: {
         source: "npm",
-        spec: "@openclaw/diffs",
+        spec: "@natesclaw/diffs",
         installPath: dir,
-        resolvedName: "@openclaw/diffs",
+        resolvedName: "@natesclaw/diffs",
         resolvedVersion: "2026.7.16",
-        resolvedSpec: "@openclaw/diffs@2026.7.16",
+        resolvedSpec: "@natesclaw/diffs@2026.7.16",
         ...overrides,
       },
     },
@@ -152,7 +152,7 @@ function resolveDiffsNpmTrust(overrides: Partial<PluginInstallRecord> = {}) {
       createPluginCandidate({
         idHint: "diffs",
         rootDir: dir,
-        packageName: "@openclaw/diffs",
+        packageName: "@natesclaw/diffs",
         origin: "global",
       }),
     ],
@@ -168,8 +168,8 @@ function loadRegistry(candidates: PluginCandidate[]) {
 
 function hermeticEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    OPENCLAW_VERSION: undefined,
+    NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    NATESCLAW_VERSION: undefined,
     VITEST: "true",
     ...overrides,
   };
@@ -263,8 +263,8 @@ function prepareLinkedManifestFixture(params: { id: string; mode: "symlink" | "h
 } {
   const rootDir = makeTempDir();
   const outsideDir = makeTempDir();
-  const outsideManifest = path.join(outsideDir, "openclaw.plugin.json");
-  const linkedManifest = path.join(rootDir, "openclaw.plugin.json");
+  const outsideManifest = path.join(outsideDir, "natesclaw.plugin.json");
+  const linkedManifest = path.join(rootDir, "natesclaw.plugin.json");
   fs.writeFileSync(path.join(rootDir, "index.ts"), "export default function () {}", "utf-8");
   fs.writeFileSync(
     outsideManifest,
@@ -319,7 +319,7 @@ function loadRegistryForMinHostVersionCase(params: {
         origin: "global",
         packageManifest: {
           install: {
-            npmSpec: "@openclaw/synology-chat",
+            npmSpec: "@natesclaw/synology-chat",
             minHostVersion: params.minHostVersion,
           },
         },
@@ -345,7 +345,7 @@ function loadRegistryForPluginApiCase(params: {
         origin: params.origin ?? "global",
         packageManifest: {
           install: {
-            npmSpec: "@openclaw/synology-chat",
+            npmSpec: "@natesclaw/synology-chat",
             minHostVersion: ">=2026.4.25",
           },
           compat: {
@@ -482,19 +482,19 @@ describe("loadPluginManifestRegistry", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/cached-manifest",
-        openclaw: { extensions: ["./index.js"] },
+        name: "@natesclaw/cached-manifest",
+        natesclaw: { extensions: ["./index.js"] },
       }),
       "utf-8",
     );
-    const manifestPath = path.join(pluginDir, "openclaw.plugin.json");
+    const manifestPath = path.join(pluginDir, "natesclaw.plugin.json");
     writeManifest(pluginDir, {
       id: "cached-manifest",
       name: "Before",
       configSchema: { type: "object" },
     });
     const env = hermeticEnv({
-      OPENCLAW_STATE_DIR: stateDir,
+      NATESCLAW_STATE_DIR: stateDir,
     });
 
     const first = loadPluginManifestRegistryCore({ env });
@@ -680,7 +680,7 @@ describe("loadPluginManifestRegistry", () => {
   it("preserves the identity of every independently malformed plugin manifest", () => {
     const candidates = ["first-invalid", "second-invalid"].map((pluginId) => {
       const rootDir = makeTempDir();
-      fs.writeFileSync(path.join(rootDir, "openclaw.plugin.json"), '{"id":', "utf-8");
+      fs.writeFileSync(path.join(rootDir, "natesclaw.plugin.json"), '{"id":', "utf-8");
       return createPluginCandidate({ idHint: pluginId, rootDir, origin: "global" });
     });
 
@@ -697,7 +697,7 @@ describe("loadPluginManifestRegistry", () => {
     const candidates = ["first", "second"].map((parent) => {
       const rootDir = path.join(root, parent, "plugin");
       mkdirSafe(rootDir);
-      fs.writeFileSync(path.join(rootDir, "openclaw.plugin.json"), '{"id":', "utf-8");
+      fs.writeFileSync(path.join(rootDir, "natesclaw.plugin.json"), '{"id":', "utf-8");
       writeTextFile(rootDir, "index.js", "export default {};");
       return createPluginCandidate({
         idHint: "index",
@@ -714,7 +714,7 @@ describe("loadPluginManifestRegistry", () => {
         expect.objectContaining({
           level: "error",
           pluginId: "index",
-          source: path.join(candidate.rootDir, "openclaw.plugin.json"),
+          source: path.join(candidate.rootDir, "natesclaw.plugin.json"),
         }),
       ),
     );
@@ -838,7 +838,7 @@ describe("loadPluginManifestRegistry", () => {
   });
 
   it("prefers dev source bundled plugins over installed globals with the same id", () => {
-    const devSourceRoot = makeOpenClawDevSourceRoot();
+    const devSourceRoot = makeNatesclawDevSourceRoot();
     const bundledDir = path.join(devSourceRoot, "extensions", "codex");
     const globalDir = makeTempDir();
     const manifest = { id: "codex", configSchema: { type: "object" } };
@@ -847,7 +847,7 @@ describe("loadPluginManifestRegistry", () => {
     writeManifest(globalDir, manifest);
 
     const registry = loadPluginManifestRegistryCore({
-      env: hermeticEnv({ OPENCLAW_DEV_SOURCE_ROOT: devSourceRoot }),
+      env: hermeticEnv({ NATESCLAW_DEV_SOURCE_ROOT: devSourceRoot }),
       installRecords: {
         codex: {
           source: "npm",
@@ -937,7 +937,7 @@ describe("loadPluginManifestRegistry", () => {
     { name: "complete records", overrides: {} },
     {
       name: "versioned ClawHub specs",
-      overrides: { spec: "clawhub:@openclaw/msteams@2026.6.11" },
+      overrides: { spec: "clawhub:@natesclaw/msteams@2026.6.11" },
     },
     {
       name: "legacy spec-only records",
@@ -949,15 +949,15 @@ describe("loadPluginManifestRegistry", () => {
     },
     {
       name: "matching npm resolved specs",
-      overrides: { resolvedSpec: "@openclaw/msteams@2026.6.11" },
+      overrides: { resolvedSpec: "@natesclaw/msteams@2026.6.11" },
     },
     {
       name: "matching ClawHub resolved specs",
-      overrides: { resolvedSpec: "clawhub:@openclaw/msteams@2026.6.11" },
+      overrides: { resolvedSpec: "clawhub:@natesclaw/msteams@2026.6.11" },
     },
     {
       name: "matching resolved package names",
-      overrides: { resolvedName: "@openclaw/msteams" },
+      overrides: { resolvedName: "@natesclaw/msteams" },
     },
   ] satisfies Array<{ name: string; overrides: Partial<PluginInstallRecord> }>)(
     "marks official npm-only ClawHub installs with $name as trusted",
@@ -985,19 +985,19 @@ describe("loadPluginManifestRegistry", () => {
     },
     {
       name: "conflicting ClawHub package",
-      overrides: { clawhubPackage: "@openclaw/line" },
+      overrides: { clawhubPackage: "@natesclaw/line" },
     },
     {
       name: "conflicting requested spec",
-      overrides: { spec: "clawhub:@openclaw/line" },
+      overrides: { spec: "clawhub:@natesclaw/line" },
     },
     {
       name: "conflicting npm resolved spec",
-      overrides: { resolvedSpec: "@openclaw/line@2026.6.11" },
+      overrides: { resolvedSpec: "@natesclaw/line@2026.6.11" },
     },
     {
       name: "conflicting ClawHub resolved spec",
-      overrides: { resolvedSpec: "clawhub:@openclaw/line@2026.6.11" },
+      overrides: { resolvedSpec: "clawhub:@natesclaw/line@2026.6.11" },
     },
     {
       name: "blank ClawHub package",
@@ -1005,11 +1005,11 @@ describe("loadPluginManifestRegistry", () => {
     },
     {
       name: "malformed ClawHub package",
-      overrides: { clawhubPackage: "@openclaw/msteams@2026.6.11" },
+      overrides: { clawhubPackage: "@natesclaw/msteams@2026.6.11" },
     },
     {
       name: "malformed requested spec",
-      overrides: { spec: "@openclaw/msteams" },
+      overrides: { spec: "@natesclaw/msteams" },
     },
     {
       name: "malformed resolved spec",
@@ -1017,11 +1017,11 @@ describe("loadPluginManifestRegistry", () => {
     },
     {
       name: "conflicting resolved package name",
-      overrides: { resolvedName: "@openclaw/line" },
+      overrides: { resolvedName: "@natesclaw/line" },
     },
     {
       name: "malformed resolved package name",
-      overrides: { resolvedName: "@openclaw/msteams@2026.6.11" },
+      overrides: { resolvedName: "@natesclaw/msteams@2026.6.11" },
     },
     {
       name: "missing package identities",
@@ -1036,7 +1036,7 @@ describe("loadPluginManifestRegistry", () => {
       overrides: {
         clawhubPackage: undefined,
         spec: undefined,
-        resolvedSpec: "@openclaw/msteams@2026.6.11",
+        resolvedSpec: "@natesclaw/msteams@2026.6.11",
       },
     },
   ] satisfies Array<{ name: string; overrides: Partial<PluginInstallRecord> }>)(
@@ -1061,7 +1061,7 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "msteams",
           rootDir: dir,
-          packageName: "@openclaw/msteams",
+          packageName: "@natesclaw/msteams",
           origin: "config",
         }),
       ],
@@ -1078,10 +1078,10 @@ describe("loadPluginManifestRegistry", () => {
       installRecords: {
         "diagnostics-otel": {
           source: "clawhub",
-          spec: "clawhub:@openclaw/diagnostics-otel",
+          spec: "clawhub:@natesclaw/diagnostics-otel",
           installPath: dir,
           clawhubUrl: "https://example.invalid",
-          clawhubPackage: "@openclaw/diagnostics-otel",
+          clawhubPackage: "@natesclaw/diagnostics-otel",
           clawhubChannel: "official",
         },
       },
@@ -1089,7 +1089,7 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "diagnostics-otel",
           rootDir: dir,
-          packageName: "@openclaw/diagnostics-otel",
+          packageName: "@natesclaw/diagnostics-otel",
           origin: "global",
         }),
       ],
@@ -1106,7 +1106,7 @@ describe("loadPluginManifestRegistry", () => {
       installRecords: {
         "diagnostics-otel": {
           source: "clawhub",
-          spec: "clawhub:@openclaw/diagnostics-otel@2026.5.18",
+          spec: "clawhub:@natesclaw/diagnostics-otel@2026.5.18",
           installPath: dir,
         },
       },
@@ -1114,7 +1114,7 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "diagnostics-otel",
           rootDir: dir,
-          packageName: "@openclaw/diagnostics-otel",
+          packageName: "@natesclaw/diagnostics-otel",
           origin: "global",
         }),
       ],
@@ -1131,18 +1131,18 @@ describe("loadPluginManifestRegistry", () => {
       installRecords: {
         "diagnostics-otel": {
           source: "npm",
-          spec: "@openclaw/diagnostics-otel",
+          spec: "@natesclaw/diagnostics-otel",
           installPath: dir,
-          resolvedName: "@openclaw/diagnostics-otel",
+          resolvedName: "@natesclaw/diagnostics-otel",
           resolvedVersion: "2026.5.18",
-          resolvedSpec: "@openclaw/diagnostics-otel@2026.5.18",
+          resolvedSpec: "@natesclaw/diagnostics-otel@2026.5.18",
         },
       },
       candidates: [
         createPluginCandidate({
           idHint: "diagnostics-otel",
           rootDir: dir,
-          packageName: "@openclaw/diagnostics-otel",
+          packageName: "@natesclaw/diagnostics-otel",
           origin: "config",
         }),
       ],
@@ -1164,7 +1164,7 @@ describe("loadPluginManifestRegistry", () => {
         "diagnostics-prometheus": {
           source: "npm",
           installPath: dir,
-          resolvedName: "@openclaw/diagnostics-prometheus",
+          resolvedName: "@natesclaw/diagnostics-prometheus",
           resolvedVersion: "2026.5.3",
         },
       },
@@ -1172,13 +1172,13 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "diagnostics-prometheus",
           rootDir: dir,
-          packageName: "@openclaw/diagnostics-prometheus",
+          packageName: "@natesclaw/diagnostics-prometheus",
           origin: "global",
         }),
         createPluginCandidate({
           idHint: "diagnostics-prometheus",
           rootDir: dir,
-          packageName: "@openclaw/diagnostics-prometheus",
+          packageName: "@natesclaw/diagnostics-prometheus",
           origin: "config",
         }),
       ],
@@ -1201,7 +1201,7 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "diagnostics-prometheus",
           rootDir: dir,
-          packageName: "@openclaw/diagnostics-prometheus",
+          packageName: "@natesclaw/diagnostics-prometheus",
           origin: "global",
         }),
       ],
@@ -1220,7 +1220,7 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "msteams",
           rootDir: dir,
-          packageName: "@openclaw/msteams",
+          packageName: "@natesclaw/msteams",
           origin: "global",
         }),
       ],
@@ -1723,7 +1723,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "external-chat",
-      source: path.join(dir, "openclaw.plugin.json"),
+      source: path.join(dir, "natesclaw.plugin.json"),
       messageIncludes: "without channelConfigs metadata",
     });
   });
@@ -1788,17 +1788,17 @@ describe("loadPluginManifestRegistry", () => {
   it("hydrates supplemental official external catalog contracts for lagging npm manifests", () => {
     const dir = makeTempDir();
     writeManifest(dir, {
-      id: "wecom-openclaw-plugin",
+      id: "wecom-natesclaw-plugin",
       channels: ["wecom"],
       configSchema: { type: "object" },
     });
 
     const registry = loadRegistry([
       createPluginCandidate({
-        idHint: "wecom-openclaw-plugin",
+        idHint: "wecom-natesclaw-plugin",
         rootDir: dir,
         origin: "global",
-        packageName: "@wecom/wecom-openclaw-plugin",
+        packageName: "@wecom/wecom-natesclaw-plugin",
       }),
     ]);
 
@@ -1827,7 +1827,7 @@ describe("loadPluginManifestRegistry", () => {
         idHint: "slack",
         rootDir: dir,
         origin: "global",
-        packageName: "@openclaw/slack",
+        packageName: "@natesclaw/slack",
       }),
     ]);
 
@@ -1859,7 +1859,7 @@ describe("loadPluginManifestRegistry", () => {
         idHint: "diffs",
         rootDir: dir,
         origin: "global",
-        packageName: "@openclaw/diffs",
+        packageName: "@natesclaw/diffs",
       }),
     ]);
 
@@ -1869,7 +1869,7 @@ describe("loadPluginManifestRegistry", () => {
   it("fills missing official external catalog descriptors for partial npm channel configs", () => {
     const dir = makeTempDir();
     writeManifest(dir, {
-      id: "wecom-openclaw-plugin",
+      id: "wecom-natesclaw-plugin",
       channels: ["wecom"],
       configSchema: { type: "object" },
       channelConfigs: {
@@ -1887,10 +1887,10 @@ describe("loadPluginManifestRegistry", () => {
 
     const registry = loadRegistry([
       createPluginCandidate({
-        idHint: "wecom-openclaw-plugin",
+        idHint: "wecom-natesclaw-plugin",
         rootDir: dir,
         origin: "global",
-        packageName: "@wecom/wecom-openclaw-plugin",
+        packageName: "@wecom/wecom-natesclaw-plugin",
       }),
     ]);
 
@@ -1914,7 +1914,7 @@ describe("loadPluginManifestRegistry", () => {
     const dir = makeTempDir();
     writeTextFile(
       dir,
-      "openclaw.plugin.json",
+      "natesclaw.plugin.json",
       JSON.stringify({
         id: "external-chat",
         channels: ["safe-chat"],
@@ -2037,7 +2037,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "outside-provider",
-      source: path.join(pluginDir, "openclaw.plugin.json"),
+      source: path.join(pluginDir, "natesclaw.plugin.json"),
       messageIncludes: "providerCatalogEntry must resolve inside the plugin root",
     });
   });
@@ -2064,7 +2064,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "absolute-provider",
-      source: path.join(dir, "openclaw.plugin.json"),
+      source: path.join(dir, "natesclaw.plugin.json"),
       messageIncludes: "providerCatalogEntry must resolve inside the plugin root",
     });
   });
@@ -2091,7 +2091,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "absolute-catalog",
-      source: path.join(dir, "openclaw.plugin.json"),
+      source: path.join(dir, "natesclaw.plugin.json"),
       messageIncludes: "providerCatalogEntry must resolve inside the plugin root",
     });
   });
@@ -2127,7 +2127,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "symlink-provider",
-      source: path.join(dir, "openclaw.plugin.json"),
+      source: path.join(dir, "natesclaw.plugin.json"),
       messageIncludes: "providerCatalogEntry must resolve inside the plugin root",
     });
   });
@@ -2163,7 +2163,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "fallback-symlink-provider",
-      source: path.join(dir, "openclaw.plugin.json"),
+      source: path.join(dir, "natesclaw.plugin.json"),
       messageIncludes: "providerCatalogEntry must resolve inside the plugin root",
     });
   });
@@ -2202,7 +2202,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "hardlink-provider",
-      source: path.join(dir, "openclaw.plugin.json"),
+      source: path.join(dir, "natesclaw.plugin.json"),
       messageIncludes: "providerCatalogEntry must resolve inside the plugin root",
     });
   });
@@ -2241,7 +2241,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "fallback-hardlink-provider",
-      source: path.join(dir, "openclaw.plugin.json"),
+      source: path.join(dir, "natesclaw.plugin.json"),
       messageIncludes: "providerCatalogEntry must resolve inside the plugin root",
     });
   });
@@ -2521,7 +2521,7 @@ describe("loadPluginManifestRegistry", () => {
     writeManifest(dir, {
       id: "workflow-harness",
       contracts: {
-        agentToolResultMiddleware: ["openclaw", "codex"],
+        agentToolResultMiddleware: ["natesclaw", "codex"],
         trustedToolPolicies: ["workflow-budget"],
       },
       configSchema: { type: "object" },
@@ -2534,7 +2534,7 @@ describe("loadPluginManifestRegistry", () => {
     });
 
     expect(registry.plugins[0]?.contracts).toEqual({
-      agentToolResultMiddleware: ["openclaw", "codex"],
+      agentToolResultMiddleware: ["natesclaw", "codex"],
       trustedToolPolicies: ["workflow-budget"],
     });
   });
@@ -2667,7 +2667,7 @@ describe("loadPluginManifestRegistry", () => {
         idHint: "telegram",
         rootDir: dir,
         origin: "bundled",
-        bundledManifestPath: path.join(dir, "openclaw.plugin.json"),
+        bundledManifestPath: path.join(dir, "natesclaw.plugin.json"),
         bundledManifest: {
           id: "telegram",
           configSchema: { type: "object" },
@@ -2791,27 +2791,27 @@ describe("loadPluginManifestRegistry", () => {
     {
       name: "skips plugins whose minHostVersion is newer than the current host",
       minHostVersion: ">=2026.3.22",
-      env: { OPENCLAW_VERSION: "2026.3.21" } as NodeJS.ProcessEnv,
-      expectedMessage: "plugin requires OpenClaw >=2026.3.22, but this host is 2026.3.21",
+      env: { NATESCLAW_VERSION: "2026.3.21" } as NodeJS.ProcessEnv,
+      expectedMessage: "plugin requires Natesclaw >=2026.3.22, but this host is 2026.3.21",
       expectWarn: true,
     },
     {
       name: "skips plugins whose beta minHostVersion is newer than the current host",
       minHostVersion: ">=2026.5.1-beta.1",
-      env: { OPENCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
-      expectedMessage: "plugin requires OpenClaw >=2026.5.1-beta.1, but this host is 2026.4.30",
+      env: { NATESCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
+      expectedMessage: "plugin requires Natesclaw >=2026.5.1-beta.1, but this host is 2026.4.30",
       expectWarn: true,
     },
     {
       name: "rejects invalid minHostVersion metadata",
       minHostVersion: "2026.3.22",
-      expectedMessage: "plugin manifest invalid | openclaw.install.minHostVersion must use",
+      expectedMessage: "plugin manifest invalid | natesclaw.install.minHostVersion must use",
       expectWarn: false,
     },
     {
       name: "warns distinctly when host version cannot be determined",
       minHostVersion: ">=2026.3.22",
-      env: { OPENCLAW_VERSION: "unknown" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_VERSION: "unknown" } as NodeJS.ProcessEnv,
       expectedMessage: "host version could not be determined",
       expectWarn: true,
     },
@@ -2851,7 +2851,7 @@ describe("loadPluginManifestRegistry", () => {
           origin: "global",
           packageManifest: {
             install: {
-              npmSpec: "@openclaw/codex",
+              npmSpec: "@natesclaw/codex",
               minHostVersion: "2026.3.22",
             },
           },
@@ -2860,7 +2860,7 @@ describe("loadPluginManifestRegistry", () => {
     });
 
     expect(registry.plugins.map((plugin) => plugin.id)).toEqual(["codex"]);
-    expectNoRegistryDiagnosticContains(registry, "openclaw.install.minHostVersion must use");
+    expectNoRegistryDiagnosticContains(registry, "natesclaw.install.minHostVersion must use");
   });
 
   it("does not runtime-gate bundled source plugins by install minHostVersion", () => {
@@ -2876,17 +2876,17 @@ describe("loadPluginManifestRegistry", () => {
           origin: "bundled",
           packageManifest: {
             install: {
-              npmSpec: "@openclaw/codex",
+              npmSpec: "@natesclaw/codex",
               minHostVersion: ">=2026.5.1-beta.1",
             },
           },
         }),
       ],
-      env: { OPENCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
     });
 
     expect(registry.plugins.map((plugin) => plugin.id)).toContain("codex");
-    expectNoRegistryDiagnosticContains(registry, "requires OpenClaw");
+    expectNoRegistryDiagnosticContains(registry, "requires Natesclaw");
   });
 
   it("skips installed plugins whose package plugin API range is newer than the current host", () => {
@@ -2896,13 +2896,13 @@ describe("loadPluginManifestRegistry", () => {
     const registry = loadRegistryForPluginApiCase({
       rootDir: dir,
       pluginApi: ">=2026.5.27",
-      env: { OPENCLAW_VERSION: "2026.5.10-beta.1" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_VERSION: "2026.5.10-beta.1" } as NodeJS.ProcessEnv,
     });
 
     expect(registry.plugins).toStrictEqual([]);
     expectRegistryDiagnosticContains(
       registry,
-      'plugin requires plugin API >=2026.5.27, but this host is 2026.5.10-beta.1; skipping load (check "openclaw --version", OPENCLAW_COMPATIBILITY_HOST_VERSION, or run "openclaw doctor")',
+      'plugin requires plugin API >=2026.5.27, but this host is 2026.5.10-beta.1; skipping load (check "natesclaw --version", NATESCLAW_COMPATIBILITY_HOST_VERSION, or run "natesclaw doctor")',
     );
     expect(registry.diagnostics.map((diag) => diag.level)).toContain("warn");
   });
@@ -2914,13 +2914,13 @@ describe("loadPluginManifestRegistry", () => {
     const registry = loadRegistryForPluginApiCase({
       rootDir: dir,
       pluginApi: 20260527,
-      env: { OPENCLAW_VERSION: "2026.5.27" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_VERSION: "2026.5.27" } as NodeJS.ProcessEnv,
     });
 
     expect(registry.plugins).toStrictEqual([]);
     expectRegistryDiagnosticContains(
       registry,
-      "plugin manifest invalid | package.json openclaw.compat.pluginApi must be a string",
+      "plugin manifest invalid | package.json natesclaw.compat.pluginApi must be a string",
     );
     expect(registry.diagnostics.map((diag) => diag.level)).toContain("error");
   });
@@ -2932,7 +2932,7 @@ describe("loadPluginManifestRegistry", () => {
     const registry = loadRegistryForPluginApiCase({
       rootDir: dir,
       pluginApi: ">=2026.5.27",
-      env: { OPENCLAW_VERSION: "2026.5.27-beta.1" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_VERSION: "2026.5.27-beta.1" } as NodeJS.ProcessEnv,
     });
 
     expect(registry.plugins.map((plugin) => plugin.id)).toEqual(["synology-chat"]);
@@ -2948,7 +2948,7 @@ describe("loadPluginManifestRegistry", () => {
       pluginApi: ">=2026.5.27",
       origin: "bundled",
       idHint: "codex",
-      env: { OPENCLAW_VERSION: "2026.5.10-beta.1" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_VERSION: "2026.5.10-beta.1" } as NodeJS.ProcessEnv,
     });
 
     expect(registry.plugins.map((plugin) => plugin.id)).toContain("codex");
@@ -3039,23 +3039,23 @@ describe("loadPluginManifestRegistry", () => {
   it("suppresses duplicate warning when global candidates come from the same package artifact", () => {
     const firstDir = makeTempDir();
     const secondDir = makeTempDir();
-    const manifest = { id: "opik-openclaw", configSchema: { type: "object" } };
+    const manifest = { id: "opik-natesclaw", configSchema: { type: "object" } };
     writeManifest(firstDir, manifest);
     writeManifest(secondDir, manifest);
 
     const candidates: PluginCandidate[] = [
       createPluginCandidate({
-        idHint: "opik-openclaw",
+        idHint: "opik-natesclaw",
         rootDir: firstDir,
         origin: "global",
-        packageName: "@opik/opik-openclaw",
+        packageName: "@opik/opik-natesclaw",
         packageVersion: "0.2.14",
       }),
       createPluginCandidate({
-        idHint: "opik-openclaw",
+        idHint: "opik-natesclaw",
         rootDir: secondDir,
         origin: "global",
-        packageName: "@opik/opik-openclaw",
+        packageName: "@opik/opik-natesclaw",
         packageVersion: "0.2.14",
       }),
     ];
@@ -3250,7 +3250,7 @@ describe("loadPluginManifestRegistry", () => {
       return;
     }
     const registry = loadPluginManifestRegistryCore({
-      env: hermeticEnv({ OPENCLAW_NIX_MODE: "1" }),
+      env: hermeticEnv({ NATESCLAW_NIX_MODE: "1" }),
       candidates: [
         createPluginCandidate({
           idHint: "unsafe-config-hardlink",
@@ -3309,16 +3309,16 @@ describe("loadPluginManifestRegistry", () => {
       config,
       env: hermeticEnv({
         HOME: homeA,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_STATE_DIR: path.join(homeA, ".state"),
+        NATESCLAW_HOME: undefined,
+        NATESCLAW_STATE_DIR: path.join(homeA, ".state"),
       }),
     });
     const second = loadPluginManifestRegistryCore({
       config,
       env: hermeticEnv({
         HOME: homeB,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_STATE_DIR: path.join(homeB, ".state"),
+        NATESCLAW_HOME: undefined,
+        NATESCLAW_STATE_DIR: path.join(homeB, ".state"),
       }),
     });
 
@@ -3343,7 +3343,7 @@ describe("loadPluginManifestRegistry", () => {
         origin: "global",
         packageManifest: {
           install: {
-            npmSpec: "@openclaw/synology-chat",
+            npmSpec: "@natesclaw/synology-chat",
             minHostVersion: ">=2026.3.22",
           },
         },
@@ -3353,13 +3353,13 @@ describe("loadPluginManifestRegistry", () => {
     const olderHost = loadPluginManifestRegistryCore({
       candidates,
       env: hermeticEnv({
-        OPENCLAW_VERSION: "2026.3.21",
+        NATESCLAW_VERSION: "2026.3.21",
       }),
     });
     const newerHost = loadPluginManifestRegistryCore({
       candidates,
       env: hermeticEnv({
-        OPENCLAW_VERSION: "2026.3.22",
+        NATESCLAW_VERSION: "2026.3.22",
       }),
     });
 

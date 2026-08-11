@@ -1,6 +1,6 @@
 /** launchctl state parsing, inspection, and bootstrap primitives. */
 import fs from "node:fs/promises";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import { parseStrictInteger, parseStrictPositiveInteger } from "../infra/parse-finite-number.js";
 import { parseTcpPort, parseTcpPortFromArgs } from "../infra/tcp-port.js";
 import { sleep } from "../utils.js";
@@ -41,7 +41,7 @@ export async function resolveLaunchAgentGatewayContext(env: GatewayServiceEnv): 
       probeHosts: await resolveGatewayServiceProbeHosts({ env, command }),
     };
   }
-  const fromServiceEnv = parseTcpPort(command?.environment?.OPENCLAW_GATEWAY_PORT ?? "");
+  const fromServiceEnv = parseTcpPort(command?.environment?.NATESCLAW_GATEWAY_PORT ?? "");
   if (fromServiceEnv !== null) {
     return {
       port: fromServiceEnv,
@@ -49,7 +49,7 @@ export async function resolveLaunchAgentGatewayContext(env: GatewayServiceEnv): 
     };
   }
   return {
-    port: parseTcpPort(env.OPENCLAW_GATEWAY_PORT ?? ""),
+    port: parseTcpPort(env.NATESCLAW_GATEWAY_PORT ?? ""),
     probeHosts: await resolveGatewayServiceProbeHosts({ env, command }),
   };
 }
@@ -80,7 +80,7 @@ export function formatLaunchAgentGuiSessionError(params: {
     "This usually means you are running from SSH/headless context or as the wrong user (including sudo).",
     `Fix: sign in to the macOS desktop as the target user and rerun \`${params.actionHint}\`.`,
     "For headless VM setups, enable auto-login for the target user so macOS creates the GUI session after boot.",
-    "Headless deployments should use a dedicated logged-in user session or a custom LaunchDaemon (not shipped): https://docs.openclaw.ai/gateway",
+    "Headless deployments should use a dedicated logged-in user session or a custom LaunchDaemon (not shipped): https://docs.natesclaw.ai/gateway",
   ].join("\n");
 }
 

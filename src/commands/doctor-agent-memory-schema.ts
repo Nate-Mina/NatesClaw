@@ -4,10 +4,10 @@ import { note } from "../../packages/terminal-core/src/note.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { openNodeSqliteDatabase } from "../infra/node-sqlite.js";
 import {
-  closeOpenClawAgentDatabaseByPath,
-  listOpenClawRegisteredAgentDatabases,
-  migrateOpenClawAgentDatabaseForMaintenance,
-} from "../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabaseByPath,
+  listNatesclawRegisteredAgentDatabases,
+  migrateNatesclawAgentDatabaseForMaintenance,
+} from "../state/natesclaw-agent-db.js";
 import { shortenHomePath } from "../utils.js";
 import {
   DoctorSqliteMaintenanceLockUnavailableError,
@@ -69,7 +69,7 @@ function inspectAgentMemoryRecallMetadataMigration(
 ): MemoryRecallMetadataMigrationState | null {
   const stat = fs.lstatSync(pathname);
   if (!stat.isFile()) {
-    throw new Error(`OpenClaw agent database is not a regular file: ${pathname}`);
+    throw new Error(`Natesclaw agent database is not a regular file: ${pathname}`);
   }
   const database = openNodeSqliteDatabase(pathname, { readOnly: true });
   try {
@@ -86,9 +86,9 @@ function repairDoctorAgentMemorySchemas(
   const env = options.env ?? process.env;
   const repaired: DoctorAgentMemorySchemaRepair[] = [];
   const warnings: string[] = [];
-  let registered: ReturnType<typeof listOpenClawRegisteredAgentDatabases>;
+  let registered: ReturnType<typeof listNatesclawRegisteredAgentDatabases>;
   try {
-    registered = listOpenClawRegisteredAgentDatabases({
+    registered = listNatesclawRegisteredAgentDatabases({
       env,
       includeIncompatibleSchemaVersions: true,
     });
@@ -107,8 +107,8 @@ function repairDoctorAgentMemorySchemas(
       }
       // Doctor owns offline maintenance. Close any handle opened by an earlier
       // doctor contribution before the feature owner migrates the shared table.
-      closeOpenClawAgentDatabaseByPath(entry.path);
-      migrateOpenClawAgentDatabaseForMaintenance({
+      closeNatesclawAgentDatabaseByPath(entry.path);
+      migrateNatesclawAgentDatabaseForMaintenance({
         agentId: entry.agentId,
         pathname: entry.path,
       });

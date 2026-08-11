@@ -152,7 +152,7 @@ export async function prepareEmbeddedRunRuntime(input: {
   input.notifyExecutionPhase("model_resolution", { provider, model: modelId });
 
   agentHarness = selectHarnessForModel(effectiveModel);
-  pluginHarnessOwnsTransport = agentHarness.id !== "openclaw";
+  pluginHarnessOwnsTransport = agentHarness.id !== "natesclaw";
   const authStages = log.isEnabled("trace") ? createEmbeddedRunStageTracker() : undefined;
   const preparedAuthPlan = await prepareEmbeddedRunAuthPlan({
     runParams: params,
@@ -169,7 +169,7 @@ export async function prepareEmbeddedRunRuntime(input: {
     getAgentHarness: () => agentHarness,
     setAgentHarness: (nextHarness) => {
       agentHarness = nextHarness;
-      pluginHarnessOwnsTransport = agentHarness.id !== "openclaw";
+      pluginHarnessOwnsTransport = agentHarness.id !== "natesclaw";
     },
     getRuntimeModel: () => runtimeModel,
     getEffectiveModel: () => effectiveModel,
@@ -233,7 +233,7 @@ export async function prepareEmbeddedRunRuntime(input: {
   const pluginHarnessHasPreparedApiKeyAttempt = preparedAuthAttempts.some(
     (attempt) => attempt.plan.modelRoute?.authRequirement === "api-key",
   );
-  const pluginHarnessNeedsOpenClawAuthBootstrap =
+  const pluginHarnessNeedsNatesclawAuthBootstrap =
     pluginHarnessOwnsTransport &&
     (preparedApiKeyRoute ||
       (!pluginHarnessOwnsAuthBootstrap &&
@@ -424,7 +424,7 @@ export async function prepareEmbeddedRunRuntime(input: {
     ? advancePluginHarnessAuthAttempt
     : authController.advanceAuthProfile;
 
-  if (!pluginHarnessOwnsTransport || pluginHarnessNeedsOpenClawAuthBootstrap) {
+  if (!pluginHarnessOwnsTransport || pluginHarnessNeedsNatesclawAuthBootstrap) {
     await authController.initializeAuthProfile();
   } else if (lockedProfileId) {
     lastProfileId = lockedProfileId;

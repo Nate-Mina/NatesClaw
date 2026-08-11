@@ -73,10 +73,10 @@ function createContext() {
       features: {
         methods: [
           "config.set",
-          "openclaw.setup.detect",
-          "openclaw.setup.verify",
-          "openclaw.setup.activate",
-          "openclaw.setup.prepare.start",
+          "natesclaw.setup.detect",
+          "natesclaw.setup.verify",
+          "natesclaw.setup.activate",
+          "natesclaw.setup.prepare.start",
         ],
       },
     },
@@ -110,7 +110,7 @@ function createContext() {
     snapshot,
     context: {
       gateway,
-      basePath: "/openclaw",
+      basePath: "/natesclaw",
       navigate: vi.fn(),
       runtimeConfig,
     } as unknown as ApplicationContext,
@@ -122,7 +122,7 @@ async function mountPage(
   routeData: Omit<ModelSetupRouteData, "connection"> & { client: GatewayBrowserClient | null },
 ): Promise<{ page: TestModelSetupPage; provider: ApplicationContextProvider }> {
   const provider = createApplicationContextProvider(context);
-  const page = document.createElement("openclaw-model-setup-page") as TestModelSetupPage;
+  const page = document.createElement("natesclaw-model-setup-page") as TestModelSetupPage;
   const { client, ...data } = routeData;
   page.routeData = { ...data, connection: { client, hello: context.gateway.snapshot.hello } };
   provider.append(page);
@@ -208,7 +208,7 @@ describe("ModelSetupPage catalog icons", () => {
       ).toBe("blob:acme-icon");
     });
     expect(fetchMock).toHaveBeenCalledWith(
-      `/openclaw/__openclaw__/catalog-icon/${encodeURIComponent(customIconUrl)}`,
+      `/natesclaw/__natesclaw__/catalog-icon/${encodeURIComponent(customIconUrl)}`,
       expect.objectContaining({ credentials: "same-origin" }),
     );
     expect(page.innerHTML).not.toContain(customIconUrl);
@@ -256,7 +256,7 @@ describe("ModelSetupPage catalog icons", () => {
       ).toBe("blob:legacy-ollama");
     });
     expect(fetchMock).toHaveBeenCalledWith(
-      `/openclaw/__openclaw__/catalog-icon/${encodeURIComponent(recommendedIconUrl)}`,
+      `/natesclaw/__natesclaw__/catalog-icon/${encodeURIComponent(recommendedIconUrl)}`,
       expect.objectContaining({ credentials: "same-origin" }),
     );
     expect(page.querySelector(".model-setup__recommendation [data-provider-icon]")).toBeNull();
@@ -265,7 +265,7 @@ describe("ModelSetupPage catalog icons", () => {
   it("starts a prepare wizard from the download affordance", async () => {
     const { context, client, request } = createContext();
     request.mockImplementation(async (method: string) => {
-      if (method === "openclaw.setup.prepare.start") {
+      if (method === "natesclaw.setup.prepare.start") {
         return { sessionId: "prepare-session", done: false, status: "running" };
       }
       if (method === "wizard.next") {
@@ -291,11 +291,11 @@ describe("ModelSetupPage catalog icons", () => {
 
     await vi.waitFor(() => {
       expect(request).toHaveBeenCalledWith(
-        "openclaw.setup.prepare.start",
+        "natesclaw.setup.prepare.start",
         { sessionId: expect.any(String), authChoice: "llama-cpp" },
         expect.objectContaining({ signal: expect.any(AbortSignal) }),
       );
-      expect(page.querySelector("openclaw-modal-dialog")).not.toBeNull();
+      expect(page.querySelector("natesclaw-modal-dialog")).not.toBeNull();
       expect(page.textContent).toContain("Downloading model: 25%");
     });
   });
@@ -323,7 +323,7 @@ describe("ModelSetupPage catalog icons", () => {
     } as unknown as ApplicationContext["runtimeConfig"];
     const context = { ...baseContext, runtimeConfig } as ApplicationContext;
     request.mockImplementation(async (method: string) => {
-      if (method === "openclaw.setup.prepare.start") {
+      if (method === "natesclaw.setup.prepare.start") {
         return { sessionId: "prepare-session", done: false, status: "running" };
       }
       if (method === "wizard.next") {
@@ -333,7 +333,7 @@ describe("ModelSetupPage catalog icons", () => {
           preparedModelRef: "llama-cpp/gemma-4-e4b-it-q4_k_m",
         };
       }
-      if (method === "openclaw.setup.detect") {
+      if (method === "natesclaw.setup.detect") {
         return {
           ...preparedDetection,
           candidates: [
@@ -357,7 +357,7 @@ describe("ModelSetupPage catalog icons", () => {
           ],
         };
       }
-      if (method === "openclaw.setup.activate") {
+      if (method === "natesclaw.setup.activate") {
         return {
           ok: true,
           modelRef: "llama-cpp/gemma-4-e4b-it-q4_k_m",
@@ -377,7 +377,7 @@ describe("ModelSetupPage catalog icons", () => {
 
     await vi.waitFor(() => {
       expect(request).toHaveBeenCalledWith(
-        "openclaw.setup.activate",
+        "natesclaw.setup.activate",
         {
           kind: "provider-auto:vendor%2Flocal%3Av1%25beta%3Fx%23y",
           modelRef: "llama-cpp/gemma-4-e4b-it-q4_k_m",
@@ -389,7 +389,7 @@ describe("ModelSetupPage catalog icons", () => {
       expect(page.textContent).toContain("Verified in 731 ms");
     });
     expect(request).not.toHaveBeenCalledWith(
-      "openclaw.setup.detect",
+      "natesclaw.setup.detect",
       expect.anything(),
       expect.anything(),
     );
@@ -398,13 +398,13 @@ describe("ModelSetupPage catalog icons", () => {
   it("keeps an incomplete provider setup visible instead of claiming success", async () => {
     const { context, client, request } = createContext();
     request.mockImplementation(async (method: string) => {
-      if (method === "openclaw.setup.prepare.start") {
+      if (method === "natesclaw.setup.prepare.start") {
         return { sessionId: "prepare-session", done: false, status: "running" };
       }
       if (method === "wizard.next") {
         return { done: true, status: "done" };
       }
-      if (method === "openclaw.setup.detect") {
+      if (method === "natesclaw.setup.detect") {
         return {
           ...detection,
           configuredModel: "llama-cpp/persisted-before-verification",
@@ -429,7 +429,7 @@ describe("ModelSetupPage catalog icons", () => {
     expect(page.textContent).not.toContain("llama-cpp/persisted-before-verification");
     expect(page.textContent).not.toContain("Connection verified");
     expect(request).not.toHaveBeenCalledWith(
-      "openclaw.setup.activate",
+      "natesclaw.setup.activate",
       expect.anything(),
       expect.anything(),
     );
@@ -459,7 +459,7 @@ describe("ModelSetupPage catalog icons", () => {
         hash = "hash-2";
         return { hash };
       }
-      if (method === "openclaw.setup.activate") {
+      if (method === "natesclaw.setup.activate") {
         order.push(method);
         config = { ...config, configuredModel: "openai/gpt-5" };
         hash = "hash-3";
@@ -495,7 +495,7 @@ describe("ModelSetupPage catalog icons", () => {
     page.querySelector<HTMLButtonElement>('[data-candidate-kind="codex-cli"] button')?.click();
 
     await vi.waitFor(() => {
-      expect(order).toEqual(["config.set", "openclaw.setup.activate", "config.get"]);
+      expect(order).toEqual(["config.set", "natesclaw.setup.activate", "config.get"]);
     });
     expect(runtimeConfig.state.configSnapshot?.hash).toBe("hash-3");
     expect(runtimeConfig.state.configForm).toMatchObject({
@@ -527,7 +527,7 @@ describe("ModelSetupPage catalog icons", () => {
         hash = "hash-2";
         return { hash };
       }
-      if (method === "openclaw.setup.auth.start") {
+      if (method === "natesclaw.setup.auth.start") {
         return { sessionId: "wizard-session", done: false, status: "running" };
       }
       if (method === "wizard.next") {
@@ -535,7 +535,7 @@ describe("ModelSetupPage catalog icons", () => {
         hash = "hash-3";
         return { done: true, status: "done" };
       }
-      if (method === "openclaw.setup.detect") {
+      if (method === "natesclaw.setup.detect") {
         return {
           ...detection,
           configuredModel: "provider/model",
@@ -564,10 +564,10 @@ describe("ModelSetupPage catalog icons", () => {
     await vi.waitFor(() => {
       expect(order).toEqual([
         "config.set",
-        "openclaw.setup.auth.start",
+        "natesclaw.setup.auth.start",
         "wizard.next",
         "config.get",
-        "openclaw.setup.detect",
+        "natesclaw.setup.detect",
       ]);
       expect(page.textContent).toContain("Connection verified");
     });
@@ -617,7 +617,7 @@ describe("ModelSetupPage catalog icons", () => {
 
     await vi.waitFor(() => expect(page.textContent).toContain("Model setup request failed."));
     expect(request).not.toHaveBeenCalledWith(
-      "openclaw.setup.auth.start",
+      "natesclaw.setup.auth.start",
       expect.anything(),
       expect.anything(),
     );
@@ -642,7 +642,7 @@ describe("ModelSetupPage catalog icons", () => {
         };
       }
       order.push(method);
-      if (method === "openclaw.setup.auth.start") {
+      if (method === "natesclaw.setup.auth.start") {
         return { sessionId: "wizard-session", done: false, status: "running" };
       }
       if (method === "wizard.next" && nextCount++ === 0) {
@@ -660,7 +660,7 @@ describe("ModelSetupPage catalog icons", () => {
       if (method === "wizard.cancel") {
         return {};
       }
-      if (method === "openclaw.setup.detect") {
+      if (method === "natesclaw.setup.detect") {
         return { ...detection, configuredModel: "provider/model", setupComplete: true };
       }
       throw new Error(`Unexpected method ${method}`);
@@ -687,7 +687,7 @@ describe("ModelSetupPage catalog icons", () => {
     await Promise.resolve();
     expect(order).not.toContain("competing-mutation");
 
-    page.querySelector<HTMLButtonElement>("openclaw-modal-dialog .btn")?.click();
+    page.querySelector<HTMLButtonElement>("natesclaw-modal-dialog .btn")?.click();
     await page.updateComplete;
     await Promise.resolve();
     expect(order).not.toContain("competing-mutation");
@@ -809,7 +809,7 @@ describe("ModelSetupPage catalog icons", () => {
       },
     } as ApplicationContext;
     request.mockImplementation(async (method: string) => {
-      if (method === "openclaw.setup.auth.start") {
+      if (method === "natesclaw.setup.auth.start") {
         return { sessionId: "wizard-session", done: false, status: "running" };
       }
       if (method === "wizard.next") {
@@ -840,7 +840,7 @@ describe("ModelSetupPage catalog icons", () => {
       expect(page.textContent).toContain("config.get failed after wizard commit");
       expect(page.textContent).toContain("Paste token");
     });
-    page.querySelector<HTMLButtonElement>("openclaw-modal-dialog .btn")?.click();
+    page.querySelector<HTMLButtonElement>("natesclaw-modal-dialog .btn")?.click();
     await page.updateComplete;
     expect(page.textContent).toContain("config.get failed after wizard commit");
   });

@@ -1,6 +1,6 @@
-import { asNullableObjectRecord as readCostRecord } from "@openclaw/normalization-core/record-coerce";
+import { asNullableObjectRecord as readCostRecord } from "@natesclaw/normalization-core/record-coerce";
 import { html, nothing } from "lit";
-import { isTranscriptOnlyOpenClawAssistantMessage } from "../../../../../src/shared/transcript-only-openclaw-assistant.js";
+import { isTranscriptOnlyNatesclawAssistantMessage } from "../../../../../src/shared/transcript-only-natesclaw-assistant.js";
 import type { GatewaySessionRow } from "../../../api/types.ts";
 import { normalizeBasePath } from "../../../app-route-paths.ts";
 import { icons } from "../../../components/icons.ts";
@@ -52,7 +52,7 @@ function latestProviderCostStats(messages: unknown[] | undefined): ProviderCostS
     if (message?.role === "user") {
       return null;
     }
-    if (message?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(message)) {
+    if (message?.role !== "assistant" || isTranscriptOnlyNatesclawAssistantMessage(message)) {
       continue;
     }
     const directCost = readCostRecord(message.cost);

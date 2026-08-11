@@ -1,9 +1,9 @@
 // Media store remote download timeout ownership stays in the canonical fetch path.
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { saveMediaSource } from "./store.js";
 
 const saveRemoteMediaMock = vi.hoisted(() => vi.fn());
@@ -13,12 +13,12 @@ vi.mock("./fetch.js", () => ({
 }));
 
 describe("media store remote download timeouts", () => {
-  let testState: OpenClawTestState;
+  let testState: NatesclawTestState;
 
   beforeAll(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-media-store-download-timeout-",
+      prefix: "natesclaw-media-store-download-timeout-",
     });
   });
 

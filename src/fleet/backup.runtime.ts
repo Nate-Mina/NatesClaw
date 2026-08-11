@@ -52,7 +52,7 @@ const RESTORE_EXTRACT_TIMEOUT_MS = 30 * 60_000;
 
 type FleetBackupManifest = {
   schemaVersion: 1;
-  kind: "openclaw-fleet-cell-backup";
+  kind: "natesclaw-fleet-cell-backup";
   tenant: string;
   createdAt: string;
   hostPort: number;
@@ -83,7 +83,7 @@ function timestampBasename(tenant: string, nowMs: number): string {
     .toISOString()
     .replaceAll(":", "-")
     .replace(/\.\d{3}Z$/u, "Z");
-  return `openclaw-fleet-backup-${tenant}-${stamp}.tgz`;
+  return `natesclaw-fleet-backup-${tenant}-${stamp}.tgz`;
 }
 
 async function resolveOutputPath(out: string | undefined, basename: string): Promise<string> {
@@ -173,7 +173,7 @@ export async function backupFleetCell(params: {
     assertManagedInspection(params.record, inspection);
     if (inspection.running) {
       throw new Error(
-        `Fleet cell ${params.record.tenantId} is running; stop it first (openclaw fleet stop ${params.record.tenantId}) so SQLite state is captured consistently.`,
+        `Fleet cell ${params.record.tenantId} is running; stop it first (natesclaw fleet stop ${params.record.tenantId}) so SQLite state is captured consistently.`,
       );
     }
   }
@@ -222,11 +222,11 @@ export async function backupFleetCell(params: {
   await fs.mkdir(path.dirname(archivePath), { recursive: true });
   const tempArchivePath = `${archivePath}.${randomUUID()}.tmp`;
   const tempRoot = await fs.realpath(os.tmpdir());
-  const tempDir = await fs.mkdtemp(path.join(tempRoot, "openclaw-fleet-backup-"));
+  const tempDir = await fs.mkdtemp(path.join(tempRoot, "natesclaw-fleet-backup-"));
   const manifestPath = path.join(tempDir, "manifest.json");
   const manifest: FleetBackupManifest = {
     schemaVersion: 1,
-    kind: "openclaw-fleet-cell-backup",
+    kind: "natesclaw-fleet-cell-backup",
     tenant: params.record.tenantId,
     createdAt: new Date(nowMs).toISOString(),
     hostPort: params.record.hostPort,
@@ -486,7 +486,7 @@ export async function restoreFleetCell(params: {
   );
   if (inspectionResult.kind === "missing") {
     throw new Error(
-      `Fleet cell container is missing for ${params.record.tenantId}; remove the stale registration without purging data (openclaw fleet rm ${params.record.tenantId} --force), recreate a stopped cell with the intended image (openclaw fleet create ${params.record.tenantId} --no-start --image <image>), then retry fleet restore.`,
+      `Fleet cell container is missing for ${params.record.tenantId}; remove the stale registration without purging data (natesclaw fleet rm ${params.record.tenantId} --force), recreate a stopped cell with the intended image (natesclaw fleet create ${params.record.tenantId} --no-start --image <image>), then retry fleet restore.`,
     );
   }
   const inspection = assertManagedInspection(params.record, inspectionResult);
@@ -604,7 +604,7 @@ export async function restoreFleetCell(params: {
       typeof manifest !== "object" ||
       manifest === null ||
       !("kind" in manifest) ||
-      manifest.kind !== "openclaw-fleet-cell-backup" ||
+      manifest.kind !== "natesclaw-fleet-cell-backup" ||
       !("schemaVersion" in manifest) ||
       manifest.schemaVersion !== 1 ||
       !("tenant" in manifest) ||

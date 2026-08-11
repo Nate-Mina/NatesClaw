@@ -2,10 +2,10 @@
 import { html, nothing } from "lit";
 import { property } from "lit/decorators.js";
 import { formatDurationCompact } from "../lib/format.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomContentsElement } from "../lit/natesclaw-element.ts";
 import { PollController } from "../lit/poll-controller.ts";
 
-class ElapsedTime extends OpenClawLightDomContentsElement {
+class ElapsedTime extends NatesclawLightDomContentsElement {
   @property({ type: Number }) startMs: number | null = null;
   @property({ type: Number }) endMs: number | null = null;
 
@@ -40,6 +40,6 @@ class ElapsedTime extends OpenClawLightDomContentsElement {
   }
 }
 
-if (!customElements.get("openclaw-elapsed-time")) {
-  customElements.define("openclaw-elapsed-time", ElapsedTime);
+if (!customElements.get("natesclaw-elapsed-time")) {
+  customElements.define("natesclaw-elapsed-time", ElapsedTime);
 }

@@ -2,8 +2,8 @@
 import type {
   ProviderDefaultThinkingPolicyContext,
   ProviderThinkingProfile,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { normalizeProviderId } from "natesclaw/plugin-sdk/provider-model-shared";
 
 export type VllmQwenThinkingFormat = "chat-template" | "top-level";
 

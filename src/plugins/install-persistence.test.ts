@@ -20,7 +20,7 @@ import {
   writePersistedInstalledPluginIndexInstallRecordsWithLeaseMock,
   applyPluginUninstallDirectoryRemovalMock,
 } from "../cli/plugins-cli-test-helpers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import { hasRetainedManagedNpmInstallMarker } from "./managed-npm-retention.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
 
@@ -44,7 +44,7 @@ function createManifestRecord(
   id: string,
   overrides: Partial<PluginManifestRecord> = {},
 ): PluginManifestRecord {
-  const rootDir = path.join(os.tmpdir(), "openclaw-plugin-fixtures", id);
+  const rootDir = path.join(os.tmpdir(), "natesclaw-plugin-fixtures", id);
   return {
     id,
     channels: [],
@@ -55,15 +55,15 @@ function createManifestRecord(
     origin: "config",
     rootDir,
     source: path.join(rootDir, "index.ts"),
-    manifestPath: path.join(rootDir, "openclaw.plugin.json"),
+    manifestPath: path.join(rootDir, "natesclaw.plugin.json"),
     ...overrides,
   };
 }
 
 const installWriteOptions = {
   assertConfigPathForWrite: () => {},
-  expectedConfigPath: "/tmp/openclaw.json",
-  ownedConfigPathForWrite: "/tmp/openclaw.json",
+  expectedConfigPath: "/tmp/natesclaw.json",
+  ownedConfigPathForWrite: "/tmp/natesclaw.json",
 };
 
 describe("persistPluginInstall", () => {
@@ -76,13 +76,13 @@ describe("persistPluginInstall", () => {
 
     expect(
       selectInstallMutationWriteOptions({
-        expectedConfigPath: "/tmp/openclaw.json",
-        ownedConfigPathForWrite: "/tmp/openclaw.json",
+        expectedConfigPath: "/tmp/natesclaw.json",
+        ownedConfigPathForWrite: "/tmp/natesclaw.json",
       }),
     ).toMatchObject({
       auditOrigin: "plugin-install",
-      expectedConfigPath: "/tmp/openclaw.json",
-      ownedConfigPathForWrite: "/tmp/openclaw.json",
+      expectedConfigPath: "/tmp/natesclaw.json",
+      ownedConfigPathForWrite: "/tmp/natesclaw.json",
     });
   });
 
@@ -92,7 +92,7 @@ describe("persistPluginInstall", () => {
       plugins: {
         allow: ["memory-core"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         allow: ["memory-core", "alpha"],
@@ -100,9 +100,9 @@ describe("persistPluginInstall", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockImplementation((...args: unknown[]) => {
-      const [cfg, pluginId] = args as [OpenClawConfig, string];
+      const [cfg, pluginId] = args as [NatesclawConfig, string];
       expect(pluginId).toBe("alpha");
       expect(cfg.plugins?.allow).toEqual(["memory-core", "alpha"]);
       return { config: enabledConfig };
@@ -114,8 +114,8 @@ describe("persistPluginInstall", () => {
         baseHash: "config-1",
         writeOptions: {
           assertConfigPathForWrite: installWriteOptions.assertConfigPathForWrite,
-          expectedConfigPath: "/tmp/openclaw.json",
-          ownedConfigPathForWrite: "/tmp/openclaw.json",
+          expectedConfigPath: "/tmp/natesclaw.json",
+          ownedConfigPathForWrite: "/tmp/natesclaw.json",
           includeFileHashesForWrite: { "/tmp/plugins.json5": "include-1" },
           includeFileTargetsForWrite: { "/tmp/plugins.json5": "/tmp/plugins.json5" },
         },
@@ -145,8 +145,8 @@ describe("persistPluginInstall", () => {
       baseHash: "config-1",
       writeOptions: {
         assertConfigPathForWrite: installWriteOptions.assertConfigPathForWrite,
-        expectedConfigPath: "/tmp/openclaw.json",
-        ownedConfigPathForWrite: "/tmp/openclaw.json",
+        expectedConfigPath: "/tmp/natesclaw.json",
+        ownedConfigPathForWrite: "/tmp/natesclaw.json",
         includeFileHashesForWrite: { "/tmp/plugins.json5": "include-1" },
         includeFileTargetsForWrite: { "/tmp/plugins.json5": "/tmp/plugins.json5" },
         afterWrite: { mode: "restart", reason: "plugin source changed" },
@@ -174,14 +174,14 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     clearPluginRegistryLoadCacheMock.mockImplementation(() => {
       throw new Error("cache unavailable");
@@ -212,25 +212,25 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           codex: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "clawhub",
-        spec: "clawhub:@openclaw/codex",
-        installPath: "/tmp/openclaw/extensions/codex",
+        spec: "clawhub:@natesclaw/codex",
+        installPath: "/tmp/natesclaw/extensions/codex",
       },
     });
     planPluginUninstallMock.mockReturnValueOnce({
       ok: true,
-      config: {} as OpenClawConfig,
+      config: {} as NatesclawConfig,
       pluginId: "codex",
       actions: {
         entry: false,
@@ -244,7 +244,7 @@ describe("persistPluginInstall", () => {
         directory: false,
       },
       directoryRemoval: {
-        target: "/tmp/openclaw/extensions/codex",
+        target: "/tmp/natesclaw/extensions/codex",
       },
     });
     applyPluginUninstallDirectoryRemovalMock.mockResolvedValueOnce({
@@ -261,8 +261,8 @@ describe("persistPluginInstall", () => {
       pluginId: "codex",
       install: {
         source: "npm",
-        spec: "@openclaw/codex",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/codex",
+        spec: "@natesclaw/codex",
+        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/codex",
       },
     });
 
@@ -272,8 +272,8 @@ describe("persistPluginInstall", () => {
           installs: {
             codex: {
               source: "clawhub",
-              spec: "clawhub:@openclaw/codex",
-              installPath: "/tmp/openclaw/extensions/codex",
+              spec: "clawhub:@natesclaw/codex",
+              installPath: "/tmp/natesclaw/extensions/codex",
             },
           },
         },
@@ -282,7 +282,7 @@ describe("persistPluginInstall", () => {
       deleteFiles: true,
     });
     expect(applyPluginUninstallDirectoryRemovalMock).toHaveBeenCalledWith({
-      target: "/tmp/openclaw/extensions/codex",
+      target: "/tmp/natesclaw/extensions/codex",
     });
     const cleanupOrder =
       applyPluginUninstallDirectoryRemovalMock.mock.invocationCallOrder[0] ??
@@ -290,7 +290,7 @@ describe("persistPluginInstall", () => {
     const refreshOrder = refreshPluginRegistryMock.mock.invocationCallOrder[0] ?? 0;
     expect(cleanupOrder).toBeLessThan(refreshOrder);
     expect(pluginsCliRuntimeLogs.join("\n")).toContain(
-      "Removed previous plugin install directory: /tmp/openclaw/extensions/codex",
+      "Removed previous plugin install directory: /tmp/natesclaw/extensions/codex",
     );
   });
 
@@ -300,20 +300,20 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           codex: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "npm",
-        spec: "@openclaw/codex",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/codex",
+        spec: "@natesclaw/codex",
+        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/codex",
       },
     });
 
@@ -326,8 +326,8 @@ describe("persistPluginInstall", () => {
       pluginId: "codex",
       install: {
         source: "npm",
-        spec: "@openclaw/codex@latest",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/codex",
+        spec: "@natesclaw/codex@latest",
+        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/codex",
       },
     });
 
@@ -341,21 +341,21 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           codex: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-persist-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-plugin-persist-"));
     const previousProjectRoot = path.join(tempRoot, "npm", "projects", "codex-v1");
     const previousInstallPath = path.join(
       previousProjectRoot,
       "node_modules",
-      "@openclaw",
+      "@natesclaw",
       "codex",
     );
     const nextInstallPath = path.join(
@@ -364,20 +364,20 @@ describe("persistPluginInstall", () => {
       "projects",
       "codex-v2",
       "node_modules",
-      "@openclaw",
+      "@natesclaw",
       "codex",
     );
     fs.mkdirSync(previousInstallPath, { recursive: true });
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "npm",
-        spec: "@openclaw/codex@1.0.0",
+        spec: "@natesclaw/codex@1.0.0",
         installPath: previousInstallPath,
       },
     });
     planPluginUninstallMock.mockReturnValueOnce({
       ok: true,
-      config: {} as OpenClawConfig,
+      config: {} as NatesclawConfig,
       pluginId: "codex",
       actions: {
         entry: false,
@@ -395,7 +395,7 @@ describe("persistPluginInstall", () => {
         cleanup: {
           kind: "npm",
           npmRoot: previousProjectRoot,
-          packageName: "@openclaw/codex",
+          packageName: "@natesclaw/codex",
         },
       },
     });
@@ -410,7 +410,7 @@ describe("persistPluginInstall", () => {
         pluginId: "codex",
         install: {
           source: "npm",
-          spec: "@openclaw/codex@2.0.0",
+          spec: "@natesclaw/codex@2.0.0",
           installPath: nextInstallPath,
         },
       });
@@ -421,7 +421,7 @@ describe("persistPluginInstall", () => {
             installs: {
               codex: {
                 source: "npm",
-                spec: "@openclaw/codex@1.0.0",
+                spec: "@natesclaw/codex@1.0.0",
                 installPath: previousInstallPath,
               },
             },
@@ -443,21 +443,21 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           discord: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     buildPluginSnapshotReportMock.mockReturnValue({
       plugins: [
         {
           id: "discord",
           origin: "config",
-          source: "/tmp/openclaw-upstream/extensions/discord/index.ts",
+          source: "/tmp/natesclaw-upstream/extensions/discord/index.ts",
           status: "error",
         },
       ],
@@ -473,8 +473,8 @@ describe("persistPluginInstall", () => {
       pluginId: "discord",
       install: {
         source: "npm",
-        spec: "@openclaw/discord",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/discord/index.ts",
+        spec: "@natesclaw/discord",
+        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/discord/index.ts",
       },
     });
 
@@ -488,12 +488,12 @@ describe("persistPluginInstall", () => {
       'Warning: installed plugin "discord" is not the active source',
     );
     expect(pluginsCliRuntimeLogs.join("\n")).toContain(
-      "active config source: /tmp/openclaw-upstream/extensions/discord/index.ts",
+      "active config source: /tmp/natesclaw-upstream/extensions/discord/index.ts",
     );
     expect(pluginsCliRuntimeLogs.join("\n")).toContain(
-      "installed npm source: /tmp/openclaw/npm/node_modules/@openclaw/discord/index.ts",
+      "installed npm source: /tmp/natesclaw/npm/node_modules/@natesclaw/discord/index.ts",
     );
-    expect(pluginsCliRuntimeLogs.join("\n")).toContain("openclaw plugins doctor");
+    expect(pluginsCliRuntimeLogs.join("\n")).toContain("natesclaw plugins doctor");
   });
 
   it("does not warn when the config-selected source is inside the npm install path", async () => {
@@ -502,21 +502,21 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           discord: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     buildPluginSnapshotReportMock.mockReturnValue({
       plugins: [
         {
           id: "discord",
           origin: "config",
-          source: "/tmp/openclaw/npm/node_modules/@openclaw/discord/dist/index.js",
+          source: "/tmp/natesclaw/npm/node_modules/@natesclaw/discord/dist/index.js",
           status: "loaded",
         },
       ],
@@ -532,8 +532,8 @@ describe("persistPluginInstall", () => {
       pluginId: "discord",
       install: {
         source: "npm",
-        spec: "@openclaw/discord",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/discord",
+        spec: "@natesclaw/discord",
+        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/discord",
       },
     });
 
@@ -546,14 +546,14 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     refreshPluginRegistryMock.mockRejectedValueOnce(new Error("registry unavailable"));
 
@@ -583,14 +583,14 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
 
     const next = await persistPluginInstall({
@@ -619,7 +619,7 @@ describe("persistPluginInstall", () => {
       plugins: {
         deny: ["alpha", "other"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         deny: ["other"],
@@ -627,9 +627,9 @@ describe("persistPluginInstall", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockImplementation((...args: unknown[]) => {
-      const [cfg, pluginId] = args as [OpenClawConfig, string];
+      const [cfg, pluginId] = args as [NatesclawConfig, string];
       expect(pluginId).toBe("alpha");
       expect(cfg.plugins?.deny).toEqual(["other"]);
       return { config: enabledConfig };
@@ -660,7 +660,7 @@ describe("persistPluginInstall", () => {
           "legacy-memory-a": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
@@ -668,7 +668,7 @@ describe("persistPluginInstall", () => {
           "legacy-memory": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     loadPluginManifestRegistryMock.mockReturnValue({
       plugins: [createManifestRecord("legacy-memory")],
@@ -679,7 +679,7 @@ describe("persistPluginInstall", () => {
       diagnostics: [],
     });
     applyExclusiveSlotSelectionMock.mockImplementation(((params: {
-      config: OpenClawConfig;
+      config: NatesclawConfig;
       selectedId: string;
       selectedKind?: string;
       registry?: { plugins: Array<{ id: string; kind?: string }> };
@@ -738,7 +738,7 @@ describe("persistPluginInstall", () => {
           "legacy-memory-a": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
@@ -746,14 +746,14 @@ describe("persistPluginInstall", () => {
           "memory-b": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     loadPluginManifestRegistryMock.mockReturnValue({
       plugins: [createManifestRecord("memory-b", { kind: "memory" })],
       diagnostics: [],
     });
     applyExclusiveSlotSelectionMock.mockImplementation(((params: {
-      config: OpenClawConfig;
+      config: NatesclawConfig;
       selectedId: string;
       selectedKind?: string;
       registry?: { plugins: Array<{ id: string; kind?: string }> };
@@ -806,14 +806,14 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           plain: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     enablePluginInConfigMock.mockReturnValue({ config: enabledConfig });
     loadPluginManifestRegistryMock.mockReturnValue({
       plugins: [createManifestRecord("plain")],
@@ -865,12 +865,12 @@ describe("persistPluginInstall", () => {
           "needs-config": { hooks: { timeoutMs: 5_000 } },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     loadPluginManifestRegistryMock.mockReturnValue({
       plugins: [
         {
           id: "needs-config",
-          manifestPath: "/tmp/needs-config/openclaw.plugin.json",
+          manifestPath: "/tmp/needs-config/natesclaw.plugin.json",
           configSchema: {
             type: "object",
             required: ["token"],
@@ -931,12 +931,12 @@ describe("persistPluginInstall", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     loadPluginManifestRegistryMock.mockReturnValue({
       plugins: [
         {
           id: "needs-config",
-          manifestPath: "/tmp/needs-config/openclaw.plugin.json",
+          manifestPath: "/tmp/needs-config/natesclaw.plugin.json",
           configSchema: {
             type: "object",
             required: ["token"],
@@ -975,7 +975,7 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const next = await persistPluginInstall({
       snapshot: {
@@ -1017,7 +1017,7 @@ describe("persistPluginInstall", () => {
         allow: ["memory-core"],
         deny: ["memory-lancedb"],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const next = await persistPluginInstall({
       snapshot: {

@@ -1,25 +1,25 @@
 {
-  "name": "@openclaw/policy",
+  "name": "@natesclaw/policy",
   "version": "2026.8.1",
   "private": true,
-  "description": "OpenClaw policy doctor checks for workspace conformance",
+  "description": "Natesclaw policy doctor checks for workspace conformance",
   "type": "module",
   "dependencies": {
     "json5": "2.2.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -12,9 +12,9 @@ A **node** is a companion device (macOS/iOS/watchOS/Android/headless) that conne
 Legacy transport: [Bridge protocol](/gateway/bridge-protocol) (TCP JSONL; historical only for current nodes).
 
 macOS can also run in **node mode**: the menu bar app connects to the Gateway's
-WS server as one node (so `openclaw nodes …` works against this Mac). The app
+WS server as one node (so `natesclaw nodes …` works against this Mac). The app
 adds native Canvas, camera, screen, notification, and computer-control commands
-to the same node-host command surface used by `openclaw node run`. Do not start a
+to the same node-host command surface used by `natesclaw node run`. Do not start a
 second CLI node on that Mac; the app runs the matching CLI node-host runtime as
 an internal worker and remains the sole Gateway connection and node identity.
 
@@ -27,14 +27,14 @@ Troubleshooting runbook: [/nodes/troubleshooting](/nodes/troubleshooting)
 Nodes use **device pairing**. A node presents a signed device identity during connect; the Gateway creates a device pairing request for `role: node`. Approve via the devices CLI (or UI). The direct Apple Watch setup uses an admin-minted, short-lived node-only setup code to approve its fixed low-risk command surface; later capability expansion still requires normal approval.
 
 ```bash
-openclaw devices list
-openclaw devices approve <requestId>
-openclaw devices reject <requestId>
-openclaw nodes status
-openclaw nodes describe --node <idOrNameOrIp>
+natesclaw devices list
+natesclaw devices approve <requestId>
+natesclaw devices reject <requestId>
+natesclaw nodes status
+natesclaw nodes describe --node <idOrNameOrIp>
 ```
 
-Pending pairing requests expire 5 minutes after the device's last retry — a device that keeps reconnecting keeps its one pending request (and `requestId`) alive instead of minting a new prompt every few minutes; see [Node pairing](/gateway/pairing) for the full request/approve lifecycle. If a node retries with changed auth details (role/scopes/public key), the prior pending request is superseded and a new `requestId` is created — clients get a `device.pair.resolved` event for the superseded request, and you should re-run `openclaw devices list` before approving.
+Pending pairing requests expire 5 minutes after the device's last retry — a device that keeps reconnecting keeps its one pending request (and `requestId`) alive instead of minting a new prompt every few minutes; see [Node pairing](/gateway/pairing) for the full request/approve lifecycle. If a node retries with changed auth details (role/scopes/public key), the prior pending request is superseded and a new `requestId` is created — clients get a `device.pair.resolved` event for the superseded request, and you should re-run `natesclaw devices list` before approving.
 
 - `nodes status` marks a node as **paired** when its device pairing role includes `node`.
 - A connected native Mac can opt in to coalesced physical-input activity from
@@ -45,8 +45,8 @@ Pending pairing requests expire 5 minutes after the device's last retry — a de
   [Active computer presence](/nodes/presence) for setup, privacy, timing, and
   troubleshooting.
 - The device pairing record is the durable approved-role contract. Token rotation stays inside that contract; it cannot upgrade a paired node into a role that pairing approval never granted.
-- `node.pair.*` (CLI: `openclaw nodes pending/approve/reject/remove/rename`) is a separate, gateway-owned node pairing store that tracks the node's approved command/capability surface across reconnects. It does **not** gate transport authentication — device pairing does that.
-- `openclaw nodes remove --node <id|name|ip>` removes a node pairing. For a device-backed node it revokes the device's `node` role in the paired-device store and disconnects that device's node-role sessions: a mixed-role device keeps its row and only loses the `node` role, while a node-only device row is deleted. It also clears any matching entry from the separate node pairing store. `operator.pairing` may remove non-operator node rows on other devices; a device-token caller revoking its own node role on a mixed-role device additionally needs `operator.admin`.
+- `node.pair.*` (CLI: `natesclaw nodes pending/approve/reject/remove/rename`) is a separate, gateway-owned node pairing store that tracks the node's approved command/capability surface across reconnects. It does **not** gate transport authentication — device pairing does that.
+- `natesclaw nodes remove --node <id|name|ip>` removes a node pairing. For a device-backed node it revokes the device's `node` role in the paired-device store and disconnects that device's node-role sessions: a mixed-role device keeps its row and only loses the `node` role, while a node-only device row is deleted. It also clears any matching entry from the separate node pairing store. `operator.pairing` may remove non-operator node rows on other devices; a device-token caller revoking its own node role on a mixed-role device additionally needs `operator.admin`.
 - Approval scope follows the pending request's declared commands:
   - commandless request: `operator.pairing`
   - non-exec node commands: `operator.pairing` + `operator.write`
@@ -78,20 +78,20 @@ Use a **node host** when your Gateway runs on one machine and you want commands 
 | ------------ | ---------------------------------------------------------------------------------------- |
 | Gateway host | Receives messages, runs the model, routes tool calls.                                    |
 | Node host    | Executes `system.run`/`system.which` on the node machine.                                |
-| Approvals    | Enforced on the node host via `~/.openclaw/state/openclaw.sqlite#exec_approvals_config`. |
+| Approvals    | Enforced on the node host via `~/.natesclaw/state/natesclaw.sqlite#exec_approvals_config`. |
 
 Approval note:
 
 - Approval-backed node runs bind exact request context. The exec path prepares a canonical `systemRunPlan` before approval; once granted, the gateway forwards that stored plan, not any later caller-edited command/cwd/session fields, and re-validates the working directory before running.
-- For direct shell/runtime file executions, OpenClaw also best-effort binds one concrete local file operand and denies the run if that file changes before execution.
-- If OpenClaw cannot identify exactly one concrete local file for an interpreter/runtime command, approval-backed execution is denied instead of pretending full runtime coverage. Use sandboxing, separate hosts, or an explicit trusted allowlist/full workflow for broader interpreter semantics.
+- For direct shell/runtime file executions, Natesclaw also best-effort binds one concrete local file operand and denies the run if that file changes before execution.
+- If Natesclaw cannot identify exactly one concrete local file for an interpreter/runtime command, approval-backed execution is denied instead of pretending full runtime coverage. Use sandboxing, separate hosts, or an explicit trusted allowlist/full workflow for broader interpreter semantics.
 
 ### Start a node host (foreground)
 
 On the node machine:
 
 ```bash
-openclaw node run --host <gateway-host> --port 18789 --display-name "Build Node"
+natesclaw node run --host <gateway-host> --port 18789 --display-name "Build Node"
 ```
 
 `node run` also accepts `--context-path` (Gateway WS context path), `--tls`, `--tls-fingerprint <sha256>`, and `--node-id` (override the legacy client instance ID; this does not reset pairing). On macOS, pass `--share-installed-apps` to advertise `device.apps`; sharing is off by default. Use `--no-share-installed-apps` to disable a previously saved opt-in.
@@ -107,26 +107,26 @@ Example (node host -> gateway host):
 ssh -N -L 18790:127.0.0.1:18789 user@gateway-host
 
 # Terminal B: export the gateway token and connect through the tunnel
-export OPENCLAW_GATEWAY_TOKEN="<gateway-token>"
-openclaw node run --host 127.0.0.1 --port 18790 --display-name "Build Node"
+export NATESCLAW_GATEWAY_TOKEN="<gateway-token>"
+natesclaw node run --host 127.0.0.1 --port 18790 --display-name "Build Node"
 ```
 
 Notes:
 
-- `openclaw node run` supports token or password auth.
-- Env vars are preferred: `OPENCLAW_GATEWAY_TOKEN` / `OPENCLAW_GATEWAY_PASSWORD`.
+- `natesclaw node run` supports token or password auth.
+- Env vars are preferred: `NATESCLAW_GATEWAY_TOKEN` / `NATESCLAW_GATEWAY_PASSWORD`.
 - Config fallback is `gateway.auth.token` / `gateway.auth.password`.
 - In local mode, node host intentionally ignores `gateway.remote.token` / `gateway.remote.password`.
 - In remote mode, `gateway.remote.token` / `gateway.remote.password` are eligible per remote precedence rules.
 - If active local `gateway.auth.*` SecretRefs are configured but unresolved, node-host auth fails closed.
-- Node-host auth resolution only honors `OPENCLAW_GATEWAY_*` env vars.
+- Node-host auth resolution only honors `NATESCLAW_GATEWAY_*` env vars.
 
 ### Start a node host (service)
 
 ```bash
-openclaw node install --host <gateway-host> --port 18789 --display-name "Build Node"
-openclaw node start
-openclaw node restart
+natesclaw node install --host <gateway-host> --port 18789 --display-name "Build Node"
+natesclaw node start
+natesclaw node restart
 ```
 
 `node install` also accepts `--context-path`, `--tls`, `--tls-fingerprint`, `--node-id` (legacy client instance ID only), `--share-installed-apps` / `--no-share-installed-apps`, `--runtime <node>` (default: node), and `--force` to reinstall. `node status`, `node stop`, and `node uninstall` are also available.
@@ -136,21 +136,21 @@ openclaw node restart
 On the gateway host:
 
 ```bash
-openclaw devices list
-openclaw devices approve <requestId>
-openclaw nodes status
+natesclaw devices list
+natesclaw devices approve <requestId>
+natesclaw nodes status
 ```
 
-If the node retries with changed auth details, re-run `openclaw devices list` and approve the current `requestId`.
+If the node retries with changed auth details, re-run `natesclaw devices list` and approve the current `requestId`.
 
 Naming options:
 
-- `--display-name` on `openclaw node run` / `openclaw node install` (persists in the shared `node_host_config` SQLite row alongside the client instance ID and Gateway connection metadata).
-- `openclaw nodes rename --node <id|name|ip> --name "Build Node"` (gateway override).
+- `--display-name` on `natesclaw node run` / `natesclaw node install` (persists in the shared `node_host_config` SQLite row alongside the client instance ID and Gateway connection metadata).
+- `natesclaw nodes rename --node <id|name|ip> --name "Build Node"` (gateway override).
 
 ### Node-hosted MCP servers
 
-Configure MCP servers in `openclaw.json` on the node machine, not on the
+Configure MCP servers in `natesclaw.json` on the node machine, not on the
 Gateway:
 
 ```json5
@@ -185,10 +185,10 @@ plugin. OAuth MCP servers are not supported by this node-hosted v1 path.
 
 Current node hosts declare the built-in `mcp.tools.call.v1` command family during
 their initial pairing even when no MCP server is configured. A node paired on an
-older OpenClaw version may request a one-time command-surface upgrade after the
+older Natesclaw version may request a one-time command-surface upgrade after the
 node host is updated. Adding, removing, or filtering servers after that does not
 require re-pairing because the approved command family is unchanged. Restart
-`openclaw node run` or `openclaw node restart` to apply node MCP config changes;
+`natesclaw node run` or `natesclaw node restart` to apply node MCP config changes;
 the node host does not watch this config.
 
 Gateway operators can ignore all agent-visible tools published by paired nodes,
@@ -198,11 +198,11 @@ including node-hosted MCP tools, with
 
 ### Node-hosted skills
 
-Install skills under the node machine's active OpenClaw skills directory,
-`~/.openclaw/skills` by default. `OPENCLAW_HOME`, `OPENCLAW_STATE_DIR`, and
-`OPENCLAW_CONFIG_PATH` move that active profile. `OPENCLAW_STATE_DIR` takes
+Install skills under the node machine's active Natesclaw skills directory,
+`~/.natesclaw/skills` by default. `NATESCLAW_HOME`, `NATESCLAW_STATE_DIR`, and
+`NATESCLAW_CONFIG_PATH` move that active profile. `NATESCLAW_STATE_DIR` takes
 precedence for skills; otherwise, `skills/` is beside the path printed by
-`openclaw config file`. The headless node host publishes valid `SKILL.md` files
+`natesclaw config file`. The headless node host publishes valid `SKILL.md` files
 after it connects, and the Gateway adds them to agent skill snapshots only while
 that node remains connected. Each skill directory name must match the `name`
 frontmatter field so the abstract node locator maps to one entry without adding
@@ -210,7 +210,7 @@ another protocol field.
 
 The initial node-role pairing approves skill publication. Adding, removing, or
 changing skills does not require another pairing or Gateway configuration
-change. Restart `openclaw node run` or `openclaw node restart` after changing
+change. Restart `natesclaw node run` or `natesclaw node restart` after changing
 node skill files; the node host does not watch the skills directory.
 
 Node-hosted skill entries identify their node and carry their execution
@@ -221,7 +221,7 @@ not node skill locators; runtimes without the normal read tool can instead run
 `cat SKILL.md` through `exec host=node node=<node-id>` with the advertised
 `node://.../skills/<name>` directory as `workdir`. Referenced files and binaries
 use the same exec target and workdir. The node host resolves that locator against
-its active OpenClaw state directory, so relative paths resolve on the node rather
+its active Natesclaw state directory, so relative paths resolve on the node rather
 than the Gateway machine. The publishing node must have approved `system.run`,
 and the agent's exec policy must allow `host=node`; otherwise the skill stays
 out of that agent's snapshot.
@@ -234,9 +234,9 @@ operators can ignore skills from every paired node with
 
 The headless node keeps three separate state records in shared SQLite:
 
-- `~/.openclaw/state/openclaw.sqlite` (`node_host_config`): the client instance ID, display name, and Gateway connection metadata.
-- `~/.openclaw/state/openclaw.sqlite` (`device_identities`, key `primary`): the signed device keypair and derived cryptographic device ID.
-- `~/.openclaw/state/openclaw.sqlite` (`device_auth_tokens`): paired device auth tokens keyed by cryptographic device ID and role.
+- `~/.natesclaw/state/natesclaw.sqlite` (`node_host_config`): the client instance ID, display name, and Gateway connection metadata.
+- `~/.natesclaw/state/natesclaw.sqlite` (`device_identities`, key `primary`): the signed device keypair and derived cryptographic device ID.
+- `~/.natesclaw/state/natesclaw.sqlite` (`device_auth_tokens`): paired device auth tokens keyed by cryptographic device ID and role.
 
 For a signed node, the Gateway uses the cryptographic device ID for pairing and
 node routing. The client instance ID is only connection metadata. Changing
@@ -246,7 +246,7 @@ supported revoke-and-re-pair flow and upgrade notes.
 
 Retired `identity/device.json` and `identity/device-auth.json` files are
 Doctor-owned migration inputs. Stop the node host and run
-`openclaw doctor --fix`; Doctor imports and verifies their rows in SQLite before
+`natesclaw doctor --fix`; Doctor imports and verifies their rows in SQLite before
 removing the old files.
 
 ### Allowlist the commands
@@ -254,21 +254,21 @@ removing the old files.
 Exec approvals are **per node host**. Add allowlist entries from the gateway:
 
 ```bash
-openclaw approvals allowlist add --node <id|name|ip> "/usr/bin/uname"
-openclaw approvals allowlist add --node <id|name|ip> "/usr/bin/sw_vers"
+natesclaw approvals allowlist add --node <id|name|ip> "/usr/bin/uname"
+natesclaw approvals allowlist add --node <id|name|ip> "/usr/bin/sw_vers"
 ```
 
 Approvals live on the node host in
-`~/.openclaw/state/openclaw.sqlite#exec_approvals_config`.
+`~/.natesclaw/state/natesclaw.sqlite#exec_approvals_config`.
 
 ### Point exec at the node
 
 Configure defaults (gateway config):
 
 ```bash
-openclaw config set tools.exec.host node
-openclaw config set tools.exec.mode allowlist
-openclaw config set tools.exec.node "<id-or-name>"
+natesclaw config set tools.exec.host node
+natesclaw config set tools.exec.mode allowlist
+natesclaw config set tools.exec.node "<id-or-name>"
 ```
 
 Or per session:
@@ -320,7 +320,7 @@ By default, selecting a row opens the normal Chat pane and reads its persisted t
 through bounded, cursor-paginated
 `thread/turns/list` calls with full item projection. Use the row menu, the viewer header, or the **Open Codex/Claude sessions in** preference to start `codex resume <thread-id>` in the operator terminal on the computer that owns the session. The paired-node terminal path is an allowlisted PTY relay owned by the Codex plugin, not arbitrary node command execution.
 
-The relay does not provide the full OpenClaw harness continuation and archive ownership contracts. **Continue** and **Archive** are therefore unavailable for remote rows. On the Gateway computer, stored and idle
+The relay does not provide the full Natesclaw harness continuation and archive ownership contracts. **Continue** and **Archive** are therefore unavailable for remote rows. On the Gateway computer, stored and idle
 rows can start a distinct model-locked Chat branch. Either can be archived only
 after the operator confirms that no other Codex client is using it; a stored
 row's live activity remains unknown. Active rows cannot branch or archive.
@@ -343,7 +343,7 @@ the node pairing upgrade when those commands first appear.
 A native node host with the Claude CLI available also advertises
 `anthropic.claude.terminal.resume.v1`. Eligible CLI and Desktop rows can open
 `claude --resume <session-id>` in the operator terminal on their owning host.
-This is a takeover of the native session; unlike OpenClaw adoption, it does not
+This is a takeover of the native session; unlike Natesclaw adoption, it does not
 fork the Claude session first.
 
 The catalog combines valid Claude CLI project-index records with a bounded
@@ -361,7 +361,7 @@ The list and read commands are read-only. They expose catalog metadata and trans
 content only through the generic `sessions.catalog.list` and
 `sessions.catalog.read` methods to an authenticated operator connection with
 `operator.write`. A Gateway-local Claude CLI row can be adopted from the normal
-Chat composer: OpenClaw imports bounded visible history, resumes with
+Chat composer: Natesclaw imports bounded visible history, resumes with
 `--fork-session` on the first turn, and leaves the source transcript untouched.
 
 A headless node host can opt into the same continuation flow:
@@ -381,7 +381,7 @@ is enabled and the `claude` executable resolves on that node. The Gateway cannot
 enable it remotely. The command also passes through the node's existing exec
 approval policy. When all three Claude commands are advertised and permitted by
 the Gateway's node command policy, a Claude CLI
-row on that node becomes continuable: OpenClaw imports bounded history, binds
+row on that node becomes continuable: Natesclaw imports bounded history, binds
 the adopted session to the node and its catalog-reported working directory, and
 runs each one-shot `claude -p` turn there. The first turn still uses
 `--fork-session`, preserving the source transcript.
@@ -428,7 +428,7 @@ Path insertion supports PowerShell, `cmd.exe`, and recognized POSIX shells (`sh`
 Low-level (raw RPC):
 
 ```bash
-openclaw nodes invoke --node <idOrNameOrIp> --command canvas.eval --params '{"javaScript":"location.href"}'
+natesclaw nodes invoke --node <idOrNameOrIp> --command canvas.eval --params '{"javaScript":"location.href"}'
 ```
 
 `nodes invoke` blocks `system.run` and `system.run.prepare`; those commands only run through the `exec` tool with `host=node` (see above). Higher-level helpers exist for the common "give the agent a MEDIA attachment" workflows (canvas, camera, screen, location, below).
@@ -474,9 +474,9 @@ Dangerous or privacy-heavy commands require a one-time persistent opt-in with `g
 
 Plugin-owned node commands can add a Gateway node-invoke policy. That policy runs after the allowlist check and before forwarding to the node, so raw `node.invoke`, CLI helpers, and dedicated agent tools share the same plugin permission boundary. Dangerous plugin node commands still require explicit `gateway.nodes.commands.allow` opt-in.
 
-After a node changes its declared command list, reconnect it, inspect `openclaw nodes pending`, and approve the widened surface with `openclaw nodes approve <requestId>` so the Gateway stores the updated command snapshot.
+After a node changes its declared command list, reconnect it, inspect `natesclaw nodes pending`, and approve the widened surface with `natesclaw nodes approve <requestId>` so the Gateway stores the updated command snapshot.
 
-## Config (`openclaw.json`)
+## Config (`natesclaw.json`)
 
 Node-related settings live under `gateway.nodes` and `tools.exec`:
 
@@ -542,17 +542,17 @@ If the node is showing the Canvas (WebView), `canvas.snapshot` returns `{ format
 CLI helper (writes to a temp file and prints the saved path):
 
 ```bash
-openclaw nodes canvas snapshot --node <idOrNameOrIp> --format png
-openclaw nodes canvas snapshot --node <idOrNameOrIp> --format jpg --max-width 1200 --quality 0.9
+natesclaw nodes canvas snapshot --node <idOrNameOrIp> --format png
+natesclaw nodes canvas snapshot --node <idOrNameOrIp> --format jpg --max-width 1200 --quality 0.9
 ```
 
 ### Canvas controls
 
 ```bash
-openclaw nodes canvas present --node <idOrNameOrIp> --target https://example.com
-openclaw nodes canvas hide --node <idOrNameOrIp>
-openclaw nodes canvas navigate https://example.com --node <idOrNameOrIp>
-openclaw nodes canvas eval --node <idOrNameOrIp> --js "document.title"
+natesclaw nodes canvas present --node <idOrNameOrIp> --target https://example.com
+natesclaw nodes canvas hide --node <idOrNameOrIp>
+natesclaw nodes canvas navigate https://example.com --node <idOrNameOrIp>
+natesclaw nodes canvas eval --node <idOrNameOrIp> --js "document.title"
 ```
 
 Notes:
@@ -563,9 +563,9 @@ Notes:
 ### A2UI (Canvas)
 
 ```bash
-openclaw nodes canvas a2ui push --node <idOrNameOrIp> --text "Hello"
-openclaw nodes canvas a2ui push --node <idOrNameOrIp> --jsonl ./payload.jsonl
-openclaw nodes canvas a2ui reset --node <idOrNameOrIp>
+natesclaw nodes canvas a2ui push --node <idOrNameOrIp> --text "Hello"
+natesclaw nodes canvas a2ui push --node <idOrNameOrIp> --jsonl ./payload.jsonl
+natesclaw nodes canvas a2ui reset --node <idOrNameOrIp>
 ```
 
 Notes:
@@ -581,18 +581,18 @@ Notes:
 Photos (`jpg`):
 
 ```bash
-openclaw nodes camera list --node <idOrNameOrIp>
-openclaw nodes camera snap --node <idOrNameOrIp>            # default: one node-selected photo
-openclaw nodes camera snap --node <idOrNameOrIp> --facing front
-openclaw nodes camera snap --node <idOrNameOrIp> --facing both # front then back (2 saved paths)
-openclaw nodes camera snap --node <idOrNameOrIp> --device-id <id> --max-width 1200 --quality 0.9 --delay-ms 2000
+natesclaw nodes camera list --node <idOrNameOrIp>
+natesclaw nodes camera snap --node <idOrNameOrIp>            # default: one node-selected photo
+natesclaw nodes camera snap --node <idOrNameOrIp> --facing front
+natesclaw nodes camera snap --node <idOrNameOrIp> --facing both # front then back (2 saved paths)
+natesclaw nodes camera snap --node <idOrNameOrIp> --device-id <id> --max-width 1200 --quality 0.9 --delay-ms 2000
 ```
 
 Video clips (`mp4`):
 
 ```bash
-openclaw nodes camera clip --node <idOrNameOrIp> --duration 10s
-openclaw nodes camera clip --node <idOrNameOrIp> --duration 3000 --no-audio
+natesclaw nodes camera clip --node <idOrNameOrIp> --duration 10s
+natesclaw nodes camera clip --node <idOrNameOrIp> --duration 3000 --no-audio
 ```
 
 Notes:
@@ -606,8 +606,8 @@ Notes:
 Supported nodes expose `screen.record` (mp4). Example:
 
 ```bash
-openclaw nodes screen record --node <idOrNameOrIp> --duration 10s --fps 10
-openclaw nodes screen record --node <idOrNameOrIp> --duration 10s --fps 10 --no-audio
+natesclaw nodes screen record --node <idOrNameOrIp> --duration 10s --fps 10
+natesclaw nodes screen record --node <idOrNameOrIp> --duration 10s --fps 10 --no-audio
 ```
 
 Notes:
@@ -624,8 +624,8 @@ Nodes expose `location.get` when Location is enabled in settings.
 CLI helper:
 
 ```bash
-openclaw nodes location get --node <idOrNameOrIp>
-openclaw nodes location get --node <idOrNameOrIp> --accuracy precise --max-age 15000 --location-timeout 10000
+natesclaw nodes location get --node <idOrNameOrIp>
+natesclaw nodes location get --node <idOrNameOrIp> --accuracy precise --max-age 15000 --location-timeout 10000
 ```
 
 Notes:
@@ -639,7 +639,7 @@ Notes:
 
 Android nodes can expose `sms.send` and `sms.search` when the user grants **SMS** permission and the device supports telephony. Both commands are dangerous-by-default: the gateway operator must also add them to `gateway.nodes.commands.allow` before they can be invoked (see [Command policy](#command-policy)).
 
-For read-only SMS search, opt in explicitly in `openclaw.json`:
+For read-only SMS search, opt in explicitly in `natesclaw.json`:
 
 ```json5
 {
@@ -656,7 +656,7 @@ Add `sms.send` separately only when the node should also be able to send message
 Low-level invoke:
 
 ```bash
-openclaw nodes invoke --node <idOrNameOrIp> --command sms.send --params '{"to":"+15555550123","message":"Hello from OpenClaw"}'
+natesclaw nodes invoke --node <idOrNameOrIp> --command sms.send --params '{"to":"+15555550123","message":"Hello from Natesclaw"}'
 ```
 
 Notes:
@@ -685,10 +685,10 @@ Available families:
 Example invokes:
 
 ```bash
-openclaw nodes invoke --node <idOrNameOrIp> --command device.status --params '{}'
-openclaw nodes invoke --node <idOrNameOrIp> --command device.apps --params '{"limit":10}'
-openclaw nodes invoke --node <idOrNameOrIp> --command notifications.list --params '{}'
-openclaw nodes invoke --node <idOrNameOrIp> --command photos.latest --params '{"limit":1}'
+natesclaw nodes invoke --node <idOrNameOrIp> --command device.status --params '{}'
+natesclaw nodes invoke --node <idOrNameOrIp> --command device.apps --params '{"limit":10}'
+natesclaw nodes invoke --node <idOrNameOrIp> --command notifications.list --params '{}'
+natesclaw nodes invoke --node <idOrNameOrIp> --command photos.latest --params '{"limit":1}'
 ```
 
 ## System commands (node host / mac node)
@@ -698,8 +698,8 @@ The macOS node exposes `system.run`, `system.which`, `system.notify`, and `syste
 Examples:
 
 ```bash
-openclaw nodes notify --node <idOrNameOrIp> --title "Ping" --body "Gateway ready"
-openclaw nodes invoke --node <idOrNameOrIp> --command system.which --params '{"bins":["git"]}'
+natesclaw nodes notify --node <idOrNameOrIp> --title "Ping" --body "Gateway ready"
+natesclaw nodes invoke --node <idOrNameOrIp> --command system.which --params '{"bins":["git"]}'
 ```
 
 Notes:
@@ -725,21 +725,21 @@ When multiple nodes are available, you can bind exec to a specific node. This se
 Global default:
 
 ```bash
-openclaw config set tools.exec.node "node-id-or-name"
+natesclaw config set tools.exec.node "node-id-or-name"
 ```
 
 Per-agent override:
 
 ```bash
-openclaw config get agents.entries
-openclaw config set 'agents.entries.main.tools.exec.node' "node-id-or-name"
+natesclaw config get agents.entries
+natesclaw config set 'agents.entries.main.tools.exec.node' "node-id-or-name"
 ```
 
 Unset to allow any node:
 
 ```bash
-openclaw config unset tools.exec.node
-openclaw config unset 'agents.entries.main.tools.exec.node'
+natesclaw config unset tools.exec.node
+natesclaw config unset 'agents.entries.main.tools.exec.node'
 ```
 
 ## Permissions map
@@ -748,12 +748,12 @@ Nodes may include a `permissions` map in `node.list` / `node.describe`, keyed by
 
 ## Headless node host (cross-platform)
 
-OpenClaw can run a **headless node host** (no UI) that connects to the Gateway WebSocket and exposes `system.run` / `system.which`. This is useful on Linux/Windows or for running a minimal node alongside a server.
+Natesclaw can run a **headless node host** (no UI) that connects to the Gateway WebSocket and exposes `system.run` / `system.which`. This is useful on Linux/Windows or for running a minimal node alongside a server.
 
 Start it:
 
 ```bash
-openclaw node run --host <gateway-host> --port 18789
+natesclaw node run --host <gateway-host> --port 18789
 ```
 
 Notes:
@@ -761,11 +761,11 @@ Notes:
 - Pairing is still required (the Gateway will show a device pairing prompt).
 - Client instance metadata, signed device identity, and pairing auth use separate state records; see [Headless identity state](#headless-identity-state).
 - Exec approvals are enforced locally via
-  `~/.openclaw/state/openclaw.sqlite#exec_approvals_config` (see [Exec approvals](/tools/exec-approvals)).
-- On macOS, the headless node host executes `system.run` locally by default. Set `OPENCLAW_NODE_EXEC_HOST=app` to route `system.run` through the companion app exec host; add `OPENCLAW_NODE_EXEC_FALLBACK=0` to require the app host and fail closed if it is unavailable.
+  `~/.natesclaw/state/natesclaw.sqlite#exec_approvals_config` (see [Exec approvals](/tools/exec-approvals)).
+- On macOS, the headless node host executes `system.run` locally by default. Set `NATESCLAW_NODE_EXEC_HOST=app` to route `system.run` through the companion app exec host; add `NATESCLAW_NODE_EXEC_FALLBACK=0` to require the app host and fail closed if it is unavailable.
 - Add `--tls` / `--tls-fingerprint` when the Gateway WS uses TLS.
 
 ## Mac node mode
 
-- The macOS menubar app connects to the Gateway WS server as a node (so `openclaw nodes …` works against this Mac).
+- The macOS menubar app connects to the Gateway WS server as a node (so `natesclaw nodes …` works against this Mac).
 - In remote mode, the app opens an SSH tunnel for the Gateway port and connects to `localhost`.

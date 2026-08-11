@@ -1,13 +1,13 @@
 // Github Copilot tests cover models plugin behavior.
-import { expectDefined } from "@openclaw/normalization-core";
-import { createProviderUsageFetch, makeResponse } from "openclaw/plugin-sdk/test-env";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { createProviderUsageFetch, makeResponse } from "natesclaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import { CopilotRuntimeAuthError } from "./runtime-auth-error.js";
 import { resolveCopilotRuntimeAuth } from "./runtime-auth.js";
 import { fetchCopilotUsage } from "./usage.js";
 
-vi.mock("openclaw/plugin-sdk/provider-model-shared", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/provider-model-shared")>()),
+vi.mock("natesclaw/plugin-sdk/provider-model-shared", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/provider-model-shared")>()),
   normalizeModelCompat: (model: Record<string, unknown>) => model,
   resolveProviderEndpoint: (baseUrl: string) => ({
     baseUrl,
@@ -16,11 +16,11 @@ vi.mock("openclaw/plugin-sdk/provider-model-shared", async (importOriginal) => (
   }),
 }));
 
-vi.mock("openclaw/plugin-sdk/state-paths", () => ({
-  resolveStateDir: () => "/tmp/openclaw-state",
+vi.mock("natesclaw/plugin-sdk/state-paths", () => ({
+  resolveStateDir: () => "/tmp/natesclaw-state",
 }));
 
-import type { ProviderResolveDynamicModelContext } from "openclaw/plugin-sdk/core";
+import type { ProviderResolveDynamicModelContext } from "natesclaw/plugin-sdk/core";
 import {
   fetchCopilotModelCatalog,
   resolveCopilotForwardCompatModel,

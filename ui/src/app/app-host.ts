@@ -37,12 +37,12 @@ import {
   resolveUiKnownSelectedGlobalAgentId,
 } from "../lib/sessions/session-key.ts";
 import { isTerminalAvailable } from "../lib/terminal-availability.ts";
-import { OpenClawLightDomElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../lit/subscriptions-controller.ts";
 import type { ChatPage } from "../pages/chat/chat-page.ts";
 import type { NewSessionTarget } from "../pages/new-session/location.ts";
 import { selectShellRouteState, type ShellRouteState } from "./app-host-route-state.ts";
-import { OpenClawApp } from "./app-root.ts";
+import { NatesclawApp } from "./app-root.ts";
 import {
   isBrowserPanelAvailable,
   isDesktopPanelAvailable,
@@ -112,8 +112,8 @@ function equalShellRouteState(previous: ShellRouteState, next: ShellRouteState):
   );
 }
 
-class OpenClawShell
-  extends OpenClawLightDomElement
+class NatesclawShell
+  extends NatesclawLightDomElement
   implements
     ShellChromeHost,
     ShellGatewayHost,
@@ -136,15 +136,15 @@ class OpenClawShell
   readonly desktopPanelElement = DESKTOP_PANEL_ELEMENT;
   readonly custodianPanelElement = CUSTODIAN_PANEL_ELEMENT;
   readonly execApprovalElement = EXEC_APPROVAL_ELEMENT;
-  @query("openclaw-command-palette") commandPalette: CommandPaletteElement | undefined;
-  @query("openclaw-exec-approval")
+  @query("natesclaw-command-palette") commandPalette: CommandPaletteElement | undefined;
+  @query("natesclaw-exec-approval")
   approvalOverlay: (HTMLElement & { show(): void }) | undefined;
   commandPaletteTarget: CommandPaletteTargetDetail | undefined;
   navDrawerTrigger: HTMLElement | null = null;
   // Desktop and modal navigation are two slots for the same live sidebar.
   // Moving its element preserves session controllers and the resident pet
   // instead of resetting their lifecycle at every responsive breakpoint.
-  readonly navigationSidebar = document.createElement("openclaw-app-sidebar") as AppSidebarElement;
+  readonly navigationSidebar = document.createElement("natesclaw-app-sidebar") as AppSidebarElement;
   // Where "Back to app" / Escape leaves the settings takeover; falls back to
   // chat (the app default route) when settings was the entry point.
   lastWorkspaceLocation: { routeId: RouteId; pathname: string; search: string } | null = null;
@@ -499,7 +499,7 @@ class OpenClawShell
     if (isSessionRouteId(routeId) && this.activeSessionKey) {
       primaryContext = this.chatTitleContext(context, outboxScopeHost) || primaryContext;
     } else if (routeId === "custodian") {
-      primaryContext = t("nav.askOpenClaw");
+      primaryContext = t("nav.askNatesclaw");
     }
     const title = formatDocumentTitle({
       context: primaryContext,
@@ -514,7 +514,7 @@ class OpenClawShell
 
   override updated() {
     this.syncDocumentTitle();
-    const chatPage = this.querySelector<ChatPage>("openclaw-chat-page");
+    const chatPage = this.querySelector<ChatPage>("natesclaw-chat-page");
     if (chatPage) {
       chatPage.navDrawerOpen = this.navDrawerOpen && !this.onboardingMode;
     }
@@ -538,7 +538,7 @@ class OpenClawShell
       if (desktopAvailable) {
         preloadOptionalElement(this, this.desktopPanelElement);
       }
-      if (isGatewayMethodAdvertised(gatewaySnapshot, "openclaw.chat") === true) {
+      if (isGatewayMethodAdvertised(gatewaySnapshot, "natesclaw.chat") === true) {
         preloadOptionalElement(this, this.custodianPanelElement);
       }
     }
@@ -605,9 +605,9 @@ class OpenClawShell
     return renderApplicationShell(this);
   }
 }
-if (!customElements.get("openclaw-app")) {
-  customElements.define("openclaw-app", OpenClawApp);
+if (!customElements.get("natesclaw-app")) {
+  customElements.define("natesclaw-app", NatesclawApp);
 }
-if (!customElements.get("openclaw-app-shell")) {
-  customElements.define("openclaw-app-shell", OpenClawShell);
+if (!customElements.get("natesclaw-app-shell")) {
+  customElements.define("natesclaw-app-shell", NatesclawShell);
 }

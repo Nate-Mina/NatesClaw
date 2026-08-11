@@ -7,7 +7,7 @@ import {
   SystemAgentChatEngine,
   RuntimeSystemAgentChatEngine,
   SystemAgentInferenceUnavailableError,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type SystemAgentChatEngineOptions,
 } from "./chat-engine.test-support.js";
 
@@ -25,12 +25,12 @@ describe("SystemAgentChatEngine facade", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const changedConfig = {
       agents: { defaults: { model: "anthropic/claude-opus-4-8" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const verifiedInference = await createAmbientVerifiedBinding(baseConfig);
-    let currentConfig = baseConfig as OpenClawConfig;
+    let currentConfig = baseConfig as NatesclawConfig;
     const runConfigSet = vi.fn(async () => {});
     const engine = new SystemAgentChatEngine({
       verifiedInference,
@@ -52,7 +52,7 @@ describe("SystemAgentChatEngine facade", () => {
   it("rejects a setup write without a verified inference binding", async () => {
     useTempStateDir();
     const applySetup = vi.fn(async () => ({
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
       configHashBefore: null,
       configHashAfter: "after",
       bootstrapPending: false,
@@ -88,12 +88,12 @@ describe("SystemAgentChatEngine facade", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const changedConfig = {
       agents: { defaults: { model: "anthropic/claude-opus-4-8" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const verifiedInference = await createAmbientVerifiedBinding(baseConfig);
-    let currentConfig: OpenClawConfig = baseConfig;
+    let currentConfig: NatesclawConfig = baseConfig;
     const planner = vi.fn(async () => {
       currentConfig = changedConfig;
       return { reply: "stale reply" };
@@ -117,14 +117,14 @@ describe("SystemAgentChatEngine facade", () => {
     const planner = vi.fn(async () => null);
     const engine = new SystemAgentChatEngine({
       runAgentTurn: async () => {
-        throw new Error("workspace owner openclaw is missing from the roster");
+        throw new Error("workspace owner natesclaw is missing from the roster");
       },
       planWithAssistant: planner,
       deps: { loadOverview: fakeOverviewLoader() },
     });
 
     await expect(engine.handle("please make everything nice")).rejects.toThrow(
-      "workspace owner openclaw is missing from the roster",
+      "workspace owner natesclaw is missing from the roster",
     );
   });
 });

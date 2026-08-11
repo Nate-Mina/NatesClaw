@@ -17,13 +17,13 @@ const TOKEN = `rpc-identity-presence-${process.pid}`;
 let started: Awaited<ReturnType<typeof startGatewayWithClient>> | undefined;
 
 beforeAll(async () => {
-  const stateDir = process.env.OPENCLAW_STATE_DIR;
+  const stateDir = process.env.NATESCLAW_STATE_DIR;
   if (!stateDir) {
-    throw new Error("OPENCLAW_STATE_DIR is required");
+    throw new Error("NATESCLAW_STATE_DIR is required");
   }
   started = await startGatewayWithClient({
     cfg: { gateway: { auth: { mode: "token", token: TOKEN } } },
-    configPath: path.join(stateDir, "openclaw.json"),
+    configPath: path.join(stateDir, "natesclaw.json"),
     token: TOKEN,
     clientDisplayName: "rpc-identity-presence-bootstrap",
   });

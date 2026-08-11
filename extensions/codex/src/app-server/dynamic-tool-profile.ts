@@ -7,7 +7,7 @@ import type {
   CodexPluginConfig,
 } from "./config-contracts.js";
 
-/** Tool names owned by Codex app-server and normally excluded from OpenClaw dynamic tools. */
+/** Tool names owned by Codex app-server and normally excluded from Natesclaw dynamic tools. */
 const CODEX_APP_SERVER_OWNED_DYNAMIC_TOOL_EXCLUDES = [
   "read",
   "write",
@@ -38,22 +38,22 @@ const DYNAMIC_TOOL_NAME_ALIASES: Record<string, string> = {
 };
 
 type CodexDynamicToolProfileEnv = {
-  OPENCLAW_BUILD_PRIVATE_QA?: string;
-  OPENCLAW_QA_FORCE_RUNTIME?: string;
+  NATESCLAW_BUILD_PRIVATE_QA?: string;
+  NATESCLAW_QA_FORCE_RUNTIME?: string;
 };
 
-/** Normalizes OpenClaw/Codex tool names before filtering and allowlist checks. */
+/** Normalizes Natesclaw/Codex tool names before filtering and allowlist checks. */
 export function normalizeCodexDynamicToolName(name: string): string {
   const normalized = name.trim().toLowerCase();
   return DYNAMIC_TOOL_NAME_ALIASES[normalized] ?? normalized;
 }
 
-/** True only for the host-scoped OpenClaw run's exact tool contract. */
+/** True only for the host-scoped Natesclaw run's exact tool contract. */
 export function isSystemAgentOnlyCodexDynamicToolAllowlist(
   toolsAllow: readonly string[] | undefined,
 ): boolean {
   return (
-    toolsAllow?.length === 1 && normalizeCodexDynamicToolName(toolsAllow[0] ?? "") === "openclaw"
+    toolsAllow?.length === 1 && normalizeCodexDynamicToolName(toolsAllow[0] ?? "") === "natesclaw"
   );
 }
 
@@ -74,8 +74,8 @@ export function isForcedPrivateQaCodexRuntime(
   env: CodexDynamicToolProfileEnv = process.env,
 ): boolean {
   return (
-    env.OPENCLAW_BUILD_PRIVATE_QA === "1" &&
-    env.OPENCLAW_QA_FORCE_RUNTIME?.trim().toLowerCase() === "codex"
+    env.NATESCLAW_BUILD_PRIVATE_QA === "1" &&
+    env.NATESCLAW_QA_FORCE_RUNTIME?.trim().toLowerCase() === "codex"
   );
 }
 
@@ -130,19 +130,19 @@ export function resolveCodexDynamicToolsLoadingForRuntime(
   return loading === "searchable" && options.connectionClass === "remote" ? "direct" : loading;
 }
 
-/** Filters OpenClaw tools that Codex owns natively or config explicitly excludes. */
+/** Filters Natesclaw tools that Codex owns natively or config explicitly excludes. */
 export function filterCodexDynamicTools<T extends { name: string }>(
   tools: T[],
   config: Pick<CodexPluginConfig, "codexDynamicToolsExclude">,
   env: CodexDynamicToolProfileEnv = process.env,
 ): T[] {
   return filterCodexDynamicToolsWithOptions(tools, config, env, {
-    preserveOpenClawReplacements: false,
-    preserveOpenClawShell: false,
+    preserveNatesclawReplacements: false,
+    preserveNatesclawShell: false,
   });
 }
 
-/** Keeps OpenClaw coding tools that replace a disabled Codex native surface. */
+/** Keeps Natesclaw coding tools that replace a disabled Codex native surface. */
 export function filterCodexDynamicToolsForDisabledNativeSurface<T extends { name: string }>(
   tools: T[],
   config: Pick<CodexPluginConfig, "codexDynamicToolsExclude">,
@@ -150,8 +150,8 @@ export function filterCodexDynamicToolsForDisabledNativeSurface<T extends { name
   env: CodexDynamicToolProfileEnv = process.env,
 ): T[] {
   return filterCodexDynamicToolsWithOptions(tools, config, env, {
-    preserveOpenClawReplacements: true,
-    preserveOpenClawShell: options.preserveShell,
+    preserveNatesclawReplacements: true,
+    preserveNatesclawShell: options.preserveShell,
   });
 }
 
@@ -159,10 +159,10 @@ function filterCodexDynamicToolsWithOptions<T extends { name: string }>(
   tools: T[],
   config: Pick<CodexPluginConfig, "codexDynamicToolsExclude">,
   env: CodexDynamicToolProfileEnv,
-  options: { preserveOpenClawReplacements: boolean; preserveOpenClawShell: boolean },
+  options: { preserveNatesclawReplacements: boolean; preserveNatesclawShell: boolean },
 ): T[] {
   const excludes = new Set<string>();
-  if (!options.preserveOpenClawReplacements) {
+  if (!options.preserveNatesclawReplacements) {
     for (const name of CODEX_NATIVE_GOAL_TOOL_EXCLUDES) {
       excludes.add(name);
     }
@@ -174,12 +174,12 @@ function filterCodexDynamicToolsWithOptions<T extends { name: string }>(
   } else {
     for (const name of CODEX_APP_SERVER_OWNED_DYNAMIC_TOOL_EXCLUDES) {
       if (
-        options.preserveOpenClawReplacements &&
+        options.preserveNatesclawReplacements &&
         CODEX_APP_SERVER_OWNED_REPLACEABLE_TOOL_EXCLUDES.has(name)
       ) {
         continue;
       }
-      if (options.preserveOpenClawShell && CODEX_APP_SERVER_OWNED_SHELL_TOOL_EXCLUDES.has(name)) {
+      if (options.preserveNatesclawShell && CODEX_APP_SERVER_OWNED_SHELL_TOOL_EXCLUDES.has(name)) {
         continue;
       }
       excludes.add(name);

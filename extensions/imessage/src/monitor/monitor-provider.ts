@@ -1,7 +1,7 @@
 // Imessage provider module implements model/runtime integration.
-import { resolveAgentConfig, resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-runtime";
-import { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
+import { resolveAgentConfig, resolveHumanDelayConfig } from "natesclaw/plugin-sdk/agent-runtime";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "natesclaw/plugin-sdk/approval-handler-runtime";
+import { logTypingFailure } from "natesclaw/plugin-sdk/channel-feedback";
 import {
   createChannelInboundDebouncer,
   formatInboundMediaUnavailableText,
@@ -10,43 +10,43 @@ import {
   shouldDebounceTextInbound,
   type ChannelInboundTurnPlan,
   type ChannelInboundMediaInput,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { fanInChannelIngressLifecycles } from "openclaw/plugin-sdk/channel-ingress-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { fanInChannelIngressLifecycles } from "natesclaw/plugin-sdk/channel-ingress-runtime";
 import {
   bindIngressLifecycleToReplyOptions,
   createChannelMessageReplyPipeline,
   resolveChannelStreamingBlockEnabled,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { createChannelPairingChallengeIssuer } from "natesclaw/plugin-sdk/channel-pairing";
+import { registerChannelRuntimeContext } from "natesclaw/plugin-sdk/channel-runtime-context";
 import {
   readChannelAllowFromStore,
   upsertChannelPairingRequest,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { redactIdentifier } from "openclaw/plugin-sdk/logging-core";
-import { isInboundPathAllowed, kindFromMime } from "openclaw/plugin-sdk/media-runtime";
-import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import { resolveTextChunkLimit, type GetReplyOptions } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { getRuntimeConfig, type OpenClawConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, logVerbose, shouldLogVerbose, warn } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { redactIdentifier } from "natesclaw/plugin-sdk/logging-core";
+import { isInboundPathAllowed, kindFromMime } from "natesclaw/plugin-sdk/media-runtime";
+import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "natesclaw/plugin-sdk/reply-history";
+import { resolveTextChunkLimit, type GetReplyOptions } from "natesclaw/plugin-sdk/reply-runtime";
+import { resolveInboundLastRouteSessionKey } from "natesclaw/plugin-sdk/routing";
+import { getRuntimeConfig, type NatesclawConfig } from "natesclaw/plugin-sdk/runtime-config-snapshot";
+import { danger, logVerbose, shouldLogVerbose, warn } from "natesclaw/plugin-sdk/runtime-env";
 import {
   resolveOpenProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/runtime-group-policy";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "natesclaw/plugin-sdk/security-runtime";
 import {
   getSessionEntry,
   readSessionUpdatedAt,
   resolveSendPolicy,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { openNodeSqliteDatabase } from "openclaw/plugin-sdk/sqlite-runtime";
-import { sliceUtf16Safe, truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
-import { waitForTransportReady } from "openclaw/plugin-sdk/transport-ready-runtime";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { openNodeSqliteDatabase } from "natesclaw/plugin-sdk/sqlite-runtime";
+import { sliceUtf16Safe, truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
+import { waitForTransportReady } from "natesclaw/plugin-sdk/transport-ready-runtime";
 import { resolveIMessageAccount } from "../accounts.js";
 import { iMessageApprovalControlBindings } from "../approval-control-binding-window.js";
 import type { IMessageApprovalGatewayRuntime } from "../approval-gateway-types.js";
@@ -127,7 +127,7 @@ const IMESSAGE_TYPING_KEEPALIVE_INTERVAL_MS = 8_000;
 const IMESSAGE_TYPING_KEEPALIVE_MAX_DURATION_MS = 10 * 60_000;
 type IMessageTypingController = Parameters<NonNullable<GetReplyOptions["onTypingController"]>>[0];
 
-function resolveConfiguredIMessageTypingMode(cfg: OpenClawConfig, agentId: string) {
+function resolveConfiguredIMessageTypingMode(cfg: NatesclawConfig, agentId: string) {
   return resolveAgentConfig(cfg, agentId)?.typingMode ?? cfg.agents?.defaults?.typingMode;
 }
 

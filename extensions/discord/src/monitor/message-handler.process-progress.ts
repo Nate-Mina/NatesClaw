@@ -1,8 +1,8 @@
-import type { StatusReactionController } from "openclaw/plugin-sdk/channel-feedback";
+import type { StatusReactionController } from "natesclaw/plugin-sdk/channel-feedback";
 // Discord plugin module owns progress-window state and agent-event rendering.
-import { createChannelProgressReceiptTracker } from "openclaw/plugin-sdk/channel-outbound";
-import type { GetReplyOptions } from "openclaw/plugin-sdk/reply-runtime";
-import { getSessionEntry, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+import { createChannelProgressReceiptTracker } from "natesclaw/plugin-sdk/channel-outbound";
+import type { GetReplyOptions } from "natesclaw/plugin-sdk/reply-runtime";
+import { getSessionEntry, resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
 import type { createDiscordDraftPreviewController } from "./message-handler.draft-preview.js";
 import type { DiscordMessagePreflightContext } from "./message-handler.preflight.js";
 

@@ -1,7 +1,7 @@
 // Plugin npm release tests validate plugin npm release artifacts.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { bundledPluginFile, bundledPluginRoot } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledPluginFile, bundledPluginRoot } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { collectClawHubPublishablePluginPackages } from "../scripts/lib/plugin-clawhub-release.ts";
 import {
@@ -11,7 +11,7 @@ import {
   collectPluginReleaseVersionFloorErrors,
   collectPublishablePluginPackages,
   collectPublishablePluginPackageErrors,
-  OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+  NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
   parsePluginReleaseArgs,
   parsePluginNpmReleaseArgs,
   parsePluginReleaseSelection,
@@ -55,8 +55,8 @@ describe("parsePluginReleaseSelection", () => {
 
   it("dedupes and sorts comma or whitespace separated package names", () => {
     expect(
-      parsePluginReleaseSelection(" @openclaw/zalo, @openclaw/feishu  @openclaw/zalo "),
-    ).toEqual(["@openclaw/feishu", "@openclaw/zalo"]);
+      parsePluginReleaseSelection(" @natesclaw/zalo, @natesclaw/feishu  @natesclaw/zalo "),
+    ).toEqual(["@natesclaw/feishu", "@natesclaw/zalo"]);
   });
 });
 
@@ -112,7 +112,7 @@ describe("parsePluginReleaseArgs", () => {
         "--selection-mode",
         "all-publishable",
         "--plugins",
-        "@openclaw/zalo",
+        "@natesclaw/zalo",
       ]),
     ).toThrowError("`--selection-mode all-publishable` must not be combined with `--plugins`.");
   });
@@ -150,7 +150,7 @@ describe("parsePluginReleaseArgs", () => {
         "--selection-mode",
         "selected",
         "--plugins",
-        "@openclaw/slack",
+        "@natesclaw/slack",
         "--npm-dist-tag",
         "extended-stable",
       ]),
@@ -164,7 +164,7 @@ function externalPluginContract(version: string) {
       pluginApi: `>=${version}`,
     },
     build: {
-      openclawVersion: version,
+      natesclawVersion: version,
     },
   };
 }
@@ -183,18 +183,18 @@ describe("collectPublishablePluginPackageErrors", () => {
         packageDir: bundledPluginRoot("zalo"),
         readmeText: "# Zalo\n",
         packageJson: {
-          name: "@openclaw/zalo",
+          name: "@natesclaw/zalo",
           version: "2026.3.15",
           type: "module",
           repository: {
             type: "git",
-            url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+            url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
           },
-          openclaw: {
+          natesclaw: {
             extensions: ["./index.ts"],
             ...externalPluginContract("2026.3.15"),
             install: {
-              npmSpec: "@openclaw/zalo",
+              npmSpec: "@natesclaw/zalo",
             },
             release: {
               publishToNpm: true,
@@ -215,7 +215,7 @@ describe("collectPublishablePluginPackageErrors", () => {
           name: "broken",
           version: "latest",
           private: true,
-          openclaw: {
+          natesclaw: {
             extensions: [""],
             ...externalPluginContract("2026.3.15"),
             install: {
@@ -228,13 +228,13 @@ describe("collectPublishablePluginPackageErrors", () => {
         },
       }),
     ).toEqual([
-      'package name must start with "@openclaw/"; found "broken".',
+      'package name must start with "@natesclaw/"; found "broken".',
       "package.json private must not be true.",
       'package.json type must be "module" so built .js runtime entries load as ESM.',
-      `package.json repository.url must be "${OPENCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
+      `package.json repository.url must be "${NATESCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
       'package.json version must match YYYY.M.PATCH, YYYY.M.PATCH-N, YYYY.M.PATCH-alpha.N, or YYYY.M.PATCH-beta.N; found "latest".',
-      "openclaw.extensions must contain only non-empty strings.",
-      "openclaw.install.npmSpec must be a non-empty string for publishable plugins.",
+      "natesclaw.extensions must contain only non-empty strings.",
+      "natesclaw.install.npmSpec must be a non-empty string for publishable plugins.",
     ]);
   });
 
@@ -245,14 +245,14 @@ describe("collectPublishablePluginPackageErrors", () => {
         packageDir: bundledPluginRoot("twitch"),
         readmeText: "# Twitch\n",
         packageJson: {
-          name: "@openclaw/twitch",
+          name: "@natesclaw/twitch",
           version: "2026.5.1-beta.1",
           type: "module",
-          openclaw: {
+          natesclaw: {
             extensions: ["./index.ts"],
             ...externalPluginContract("2026.5.1-beta.1"),
             install: {
-              npmSpec: "@openclaw/twitch",
+              npmSpec: "@natesclaw/twitch",
             },
             release: {
               publishToNpm: true,
@@ -261,7 +261,7 @@ describe("collectPublishablePluginPackageErrors", () => {
         },
       }),
     ).toEqual([
-      `package.json repository.url must be "${OPENCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
+      `package.json repository.url must be "${NATESCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
     ]);
   });
 
@@ -272,14 +272,14 @@ describe("collectPublishablePluginPackageErrors", () => {
         packageDir: bundledPluginRoot("voice-call"),
         readmeText: "# Voice call\n",
         packageJson: {
-          name: "@openclaw/voice-call",
+          name: "@natesclaw/voice-call",
           version: "2026.5.1-beta.1",
           type: "module",
           repository: {
             type: "git",
-            url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+            url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
           },
-          openclaw: {
+          natesclaw: {
             extensions: ["./index.ts"],
             ...externalPluginContract("2026.5.1-beta.1"),
             release: {
@@ -288,7 +288,7 @@ describe("collectPublishablePluginPackageErrors", () => {
           },
         },
       }),
-    ).toEqual(["openclaw.install.npmSpec must be a non-empty string for publishable plugins."]);
+    ).toEqual(["natesclaw.install.npmSpec must be a non-empty string for publishable plugins."]);
   });
 
   it("requires the external plugin package compatibility contract for npm publish", () => {
@@ -298,17 +298,17 @@ describe("collectPublishablePluginPackageErrors", () => {
         packageDir: bundledPluginRoot("voice-call"),
         readmeText: "# Voice call\n",
         packageJson: {
-          name: "@openclaw/voice-call",
+          name: "@natesclaw/voice-call",
           version: "2026.5.1-beta.1",
           type: "module",
           repository: {
             type: "git",
-            url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+            url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
           },
-          openclaw: {
+          natesclaw: {
             extensions: ["./index.ts"],
             install: {
-              npmSpec: "@openclaw/voice-call",
+              npmSpec: "@natesclaw/voice-call",
             },
             release: {
               publishToNpm: true,
@@ -317,8 +317,8 @@ describe("collectPublishablePluginPackageErrors", () => {
         },
       }),
     ).toEqual([
-      "openclaw.compat.pluginApi is required for external code plugin packages.",
-      "openclaw.build.openclawVersion is required for external code plugin packages.",
+      "natesclaw.compat.pluginApi is required for external code plugin packages.",
+      "natesclaw.build.natesclawVersion is required for external code plugin packages.",
     ]);
   });
 
@@ -329,18 +329,18 @@ describe("collectPublishablePluginPackageErrors", () => {
         packageDir: bundledPluginRoot("zalo"),
         readmeText: " \n",
         packageJson: {
-          name: "@openclaw/zalo",
+          name: "@natesclaw/zalo",
           version: "2026.3.15",
           type: "module",
           repository: {
             type: "git",
-            url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+            url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
           },
-          openclaw: {
+          natesclaw: {
             extensions: ["./index.ts"],
             ...externalPluginContract("2026.3.15"),
             install: {
-              npmSpec: "@openclaw/zalo",
+              npmSpec: "@natesclaw/zalo",
             },
             release: {
               publishToNpm: true,
@@ -358,21 +358,21 @@ describe("collectPublishablePluginPackageErrors", () => {
         packageDir: bundledPluginRoot("codex"),
         readmeText: "# Codex\n",
         packageJson: {
-          name: "@openclaw/codex",
+          name: "@natesclaw/codex",
           version: "2026.6.11",
           type: "module",
           repository: {
             type: "git",
-            url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+            url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
           },
           dependencies: {
             "@openai/codex": "0.142.5",
           },
-          openclaw: {
+          natesclaw: {
             extensions: ["./index.ts"],
             ...externalPluginContract("2026.6.11"),
             install: {
-              npmSpec: "@openclaw/codex",
+              npmSpec: "@natesclaw/codex",
             },
             release: {
               publishToNpm: true,
@@ -382,8 +382,8 @@ describe("collectPublishablePluginPackageErrors", () => {
         },
       }),
     ).toEqual([
-      'openclaw.release.requireLatestDependencies must not contain duplicate package names; found "@openai/codex".',
-      'openclaw.release.requireLatestDependencies must reference package.json dependencies or optionalDependencies; "missing" is not a runtime dependency.',
+      'natesclaw.release.requireLatestDependencies must not contain duplicate package names; found "@openai/codex".',
+      'natesclaw.release.requireLatestDependencies must reference package.json dependencies or optionalDependencies; "missing" is not a runtime dependency.',
     ]);
   });
 });
@@ -393,12 +393,12 @@ describe("collectPluginReleaseVersionFloorErrors", () => {
     expect(
       collectPluginReleaseVersionFloorErrors([
         {
-          packageName: "@openclaw/demo",
+          packageName: "@natesclaw/demo",
           version: "2026.6.4-beta.1",
         },
       ]),
     ).toEqual([
-      '@openclaw/demo@2026.6.4-beta.1: June 2026 stable and beta release trains must use patch 5 or higher because 2026.6.5-beta.1 is already published; found "2026.6.4-beta.1".',
+      '@natesclaw/demo@2026.6.4-beta.1: June 2026 stable and beta release trains must use patch 5 or higher because 2026.6.5-beta.1 is already published; found "2026.6.4-beta.1".',
     ]);
   });
 
@@ -406,11 +406,11 @@ describe("collectPluginReleaseVersionFloorErrors", () => {
     expect(
       collectPluginReleaseVersionFloorErrors([
         {
-          packageName: "@openclaw/demo",
+          packageName: "@natesclaw/demo",
           version: "2026.6.4-alpha.1",
         },
         {
-          packageName: "@openclaw/demo",
+          packageName: "@natesclaw/demo",
           version: "2026.6.5-beta.2",
         },
       ]),
@@ -422,7 +422,7 @@ describe("collectPluginReleaseDependencyFreshnessErrors", () => {
   const plugin: PublishablePluginPackage = {
     extensionId: "codex",
     packageDir: "extensions/codex",
-    packageName: "@openclaw/codex",
+    packageName: "@natesclaw/codex",
     version: "2026.6.11",
     channel: "stable",
     publishTag: "latest",
@@ -436,7 +436,7 @@ describe("collectPluginReleaseDependencyFreshnessErrors", () => {
 
   it("rejects release dependencies older than the npm latest dist-tag", () => {
     expect(collectPluginReleaseDependencyFreshnessErrors([plugin], () => "0.142.5")).toEqual([
-      '@openclaw/codex@2026.6.11: @openai/codex must match npm latest for release; found "0.139.0", latest is "0.142.5".',
+      '@natesclaw/codex@2026.6.11: @openai/codex must match npm latest for release; found "0.139.0", latest is "0.142.5".',
     ]);
   });
 
@@ -465,7 +465,7 @@ describe("collectPluginReleaseDependencyFreshnessErrors", () => {
         throw new Error("registry unavailable");
       }),
     ).toEqual([
-      "@openclaw/codex@2026.6.11: could not resolve npm latest for @openai/codex: registry unavailable",
+      "@natesclaw/codex@2026.6.11: could not resolve npm latest for @openai/codex: registry unavailable",
     ]);
   });
 
@@ -482,7 +482,7 @@ describe("collectPluginReleaseDependencyFreshnessErrors", () => {
         "dist-tags.latest",
         "--json",
         "--userconfig",
-        expect.stringContaining("openclaw-plugin-npm-view-"),
+        expect.stringContaining("natesclaw-plugin-npm-view-"),
       ]);
       expect(options).toMatchObject({
         killSignal: "SIGKILL",
@@ -492,29 +492,29 @@ describe("collectPluginReleaseDependencyFreshnessErrors", () => {
     }) as unknown as ExecFileSync;
 
     expect(collectPluginReleaseDependencyFreshnessErrors([plugin])).toEqual([
-      "@openclaw/codex@2026.6.11: could not resolve npm latest for @openai/codex: npm view timed out after 60000ms.",
+      "@natesclaw/codex@2026.6.11: could not resolve npm latest for @openai/codex: npm view timed out after 60000ms.",
     ]);
   });
 });
 
 describe("collectPluginReleasePlan", () => {
   it("fails closed when the published-version lookup times out", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.4.10",
       type: "module",
       repository: {
         type: "git",
-        url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@natesclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -525,10 +525,10 @@ describe("collectPluginReleasePlan", () => {
       expect(command).toBe("npm");
       expect(args).toEqual([
         "view",
-        "@openclaw/demo-plugin@2026.4.10",
+        "@natesclaw/demo-plugin@2026.4.10",
         "version",
         "--userconfig",
-        expect.stringContaining("openclaw-plugin-npm-view-"),
+        expect.stringContaining("natesclaw-plugin-npm-view-"),
       ]);
       throw Object.assign(new Error("spawnSync npm ETIMEDOUT"), { code: "ETIMEDOUT" });
     }) as unknown as ExecFileSync;
@@ -541,19 +541,19 @@ describe("collectPluginReleasePlan", () => {
 
 describe("collectPublishablePluginPackages", () => {
   it("defers explicitly bundled plugins from npm and ClawHub release plans", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.4.10",
       type: "module",
-      repository: { type: "git", url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL },
-      openclaw: {
+      repository: { type: "git", url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL },
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10"),
-        build: { openclawVersion: "2026.4.10", bundledDist: true },
-        install: { npmSpec: "@openclaw/demo-plugin" },
+        build: { natesclawVersion: "2026.4.10", bundledDist: true },
+        install: { npmSpec: "@natesclaw/demo-plugin" },
         release: { publishToClawHub: true, publishToNpm: true },
       },
     });
@@ -576,13 +576,13 @@ describe("collectPublishablePluginPackages", () => {
       const packageJson = JSON.parse(
         readFileSync(join(plugin.packageDir, "package.json"), "utf8"),
       ) as {
-        openclaw?: {
+        natesclaw?: {
           build?: {
             bundledDist?: unknown;
           };
         };
       };
-      if (packageJson.openclaw?.build?.bundledDist === true) {
+      if (packageJson.natesclaw?.build?.bundledDist === true) {
         corePackageRuntimePluginIds.add(plugin.extensionId);
       }
     }
@@ -598,22 +598,22 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("collects publishable npm plugins from extension package manifests", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.4.10",
       type: "module",
       repository: {
         type: "git",
-        url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@natesclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -625,28 +625,28 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        packageName: "@openclaw/demo-plugin",
+        packageName: "@natesclaw/demo-plugin",
         version: "2026.4.10",
         channel: "stable",
         publishTag: "latest",
-        installNpmSpec: "@openclaw/demo-plugin",
+        installNpmSpec: "@natesclaw/demo-plugin",
       },
     ]);
   });
 
   it("uses extended-stable for every publishable plugin at the exact root version", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     writeJsonFile(join(repoDir, "package.json"), { version: "2026.7.33" });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.7.33",
       type: "module",
-      repository: { type: "git", url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL },
-      openclaw: {
+      repository: { type: "git", url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL },
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.7.33"),
-        install: { npmSpec: "@openclaw/demo-plugin" },
+        install: { npmSpec: "@natesclaw/demo-plugin" },
         release: { publishToNpm: true },
       },
     });
@@ -657,18 +657,18 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("rejects extended-stable plugins whose version differs from core", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     writeJsonFile(join(repoDir, "package.json"), { version: "2026.7.34" });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.7.33",
       type: "module",
-      repository: { type: "git", url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL },
-      openclaw: {
+      repository: { type: "git", url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL },
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.7.33"),
-        install: { npmSpec: "@openclaw/demo-plugin" },
+        install: { npmSpec: "@natesclaw/demo-plugin" },
         release: { publishToNpm: true },
       },
     });
@@ -679,25 +679,25 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("collects exact release dependencies that must match npm latest", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.4.10",
       type: "module",
       repository: {
         type: "git",
-        url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
       dependencies: {
         "demo-runtime": "1.2.3",
       },
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@natesclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -710,11 +710,11 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        packageName: "@openclaw/demo-plugin",
+        packageName: "@natesclaw/demo-plugin",
         version: "2026.4.10",
         channel: "stable",
         publishTag: "latest",
-        installNpmSpec: "@openclaw/demo-plugin",
+        installNpmSpec: "@natesclaw/demo-plugin",
         requiredLatestDependencies: [
           {
             packageName: "demo-runtime",
@@ -726,22 +726,22 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("does not validate unselected publishable plugin manifests", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.4.10-beta.1",
       type: "module",
       repository: {
         type: "git",
-        url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10-beta.1"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@natesclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -750,14 +750,14 @@ describe("collectPublishablePluginPackages", () => {
     });
     mkdirSync(join(repoDir, "extensions", "private-plugin"), { recursive: true });
     writeJsonFile(join(repoDir, "extensions", "private-plugin", "package.json"), {
-      name: "@openclaw/private-plugin",
+      name: "@natesclaw/private-plugin",
       version: "2026.4.10-beta.1",
       private: true,
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10-beta.1"),
         install: {
-          npmSpec: "@openclaw/private-plugin",
+          npmSpec: "@natesclaw/private-plugin",
         },
         release: {
           publishToNpm: true,
@@ -767,15 +767,15 @@ describe("collectPublishablePluginPackages", () => {
 
     expect(
       collectPublishablePluginPackages(repoDir, {
-        packageNames: ["@openclaw/demo-plugin"],
+        packageNames: ["@natesclaw/demo-plugin"],
       }),
     ).toEqual([
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        installNpmSpec: "@openclaw/demo-plugin",
+        installNpmSpec: "@natesclaw/demo-plugin",
         channel: "beta",
-        packageName: "@openclaw/demo-plugin",
+        packageName: "@natesclaw/demo-plugin",
         publishTag: "beta",
         version: "2026.4.10-beta.1",
       },
@@ -783,13 +783,13 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("treats an explicit empty extension filter as no candidates", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "private-plugin"), { recursive: true });
     writeJsonFile(join(repoDir, "extensions", "private-plugin", "package.json"), {
-      name: "@openclaw/private-plugin",
+      name: "@natesclaw/private-plugin",
       version: "2026.4.10-beta.1",
       private: true,
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10-beta.1"),
         release: {
@@ -806,22 +806,22 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("publishes alpha plugin packages to the alpha dist-tag", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "openclaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "natesclaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@natesclaw/demo-plugin",
       version: "2026.4.10-alpha.1",
       type: "module",
       repository: {
         type: "git",
-        url: OPENCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: NATESCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
-      openclaw: {
+      natesclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10-alpha.1"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@natesclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -833,8 +833,8 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        installNpmSpec: "@openclaw/demo-plugin",
-        packageName: "@openclaw/demo-plugin",
+        installNpmSpec: "@natesclaw/demo-plugin",
+        packageName: "@natesclaw/demo-plugin",
         channel: "alpha",
         publishTag: "alpha",
         version: "2026.4.10-alpha.1",
@@ -848,7 +848,7 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     {
       extensionId: "feishu",
       packageDir: bundledPluginRoot("feishu"),
-      packageName: "@openclaw/feishu",
+      packageName: "@natesclaw/feishu",
       version: "2026.3.15",
       channel: "stable",
       publishTag: "latest",
@@ -856,7 +856,7 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     {
       extensionId: "zalo",
       packageDir: bundledPluginRoot("zalo"),
-      packageName: "@openclaw/zalo",
+      packageName: "@natesclaw/zalo",
       version: "2026.3.15-beta.1",
       channel: "beta",
       publishTag: "beta",
@@ -876,7 +876,7 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     expect(
       resolveSelectedPublishablePluginPackages({
         plugins: publishablePlugins,
-        selection: ["@openclaw/zalo"],
+        selection: ["@natesclaw/zalo"],
       }),
     ).toEqual([publishablePlugins[1]]);
   });
@@ -885,9 +885,9 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     expect(() =>
       resolveSelectedPublishablePluginPackages({
         plugins: publishablePlugins,
-        selection: ["@openclaw/missing"],
+        selection: ["@natesclaw/missing"],
       }),
-    ).toThrowError("Unknown or non-publishable plugin package selection: @openclaw/missing.");
+    ).toThrowError("Unknown or non-publishable plugin package selection: @natesclaw/missing.");
   });
 });
 
@@ -909,7 +909,7 @@ describe("resolveChangedPublishablePluginPackages", () => {
     {
       extensionId: "feishu",
       packageDir: bundledPluginRoot("feishu"),
-      packageName: "@openclaw/feishu",
+      packageName: "@natesclaw/feishu",
       version: "2026.3.15",
       channel: "stable",
       publishTag: "latest",
@@ -917,7 +917,7 @@ describe("resolveChangedPublishablePluginPackages", () => {
     {
       extensionId: "zalo",
       packageDir: bundledPluginRoot("zalo"),
-      packageName: "@openclaw/zalo",
+      packageName: "@natesclaw/zalo",
       version: "2026.3.15-beta.1",
       channel: "beta",
       publishTag: "beta",

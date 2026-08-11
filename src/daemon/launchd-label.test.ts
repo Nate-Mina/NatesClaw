@@ -4,19 +4,19 @@ import { resolveLaunchAgentLabel } from "./launchd-label.js";
 
 describe("resolveLaunchAgentLabel", () => {
   it("resolves default, profile, and explicit labels", () => {
-    expect(resolveLaunchAgentLabel()).toBe("ai.openclaw.gateway");
-    expect(resolveLaunchAgentLabel({ OPENCLAW_PROFILE: "work" })).toBe("ai.openclaw.work");
+    expect(resolveLaunchAgentLabel()).toBe("ai.natesclaw.gateway");
+    expect(resolveLaunchAgentLabel({ NATESCLAW_PROFILE: "work" })).toBe("ai.natesclaw.work");
     expect(
       resolveLaunchAgentLabel({
-        OPENCLAW_PROFILE: "work",
-        OPENCLAW_LAUNCHD_LABEL: "com.example.gateway",
+        NATESCLAW_PROFILE: "work",
+        NATESCLAW_LAUNCHD_LABEL: "com.example.gateway",
       }),
     ).toBe("com.example.gateway");
   });
 
   it("rejects labels that cannot be passed safely to launchd", () => {
     expect(() =>
-      resolveLaunchAgentLabel({ OPENCLAW_LAUNCHD_LABEL: "ai.openclaw.$(echo injected)" }),
+      resolveLaunchAgentLabel({ NATESCLAW_LAUNCHD_LABEL: "ai.natesclaw.$(echo injected)" }),
     ).toThrow("Invalid launchd label");
   });
 });

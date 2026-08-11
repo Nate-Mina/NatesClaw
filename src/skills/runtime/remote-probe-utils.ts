@@ -1,7 +1,7 @@
 // Pure platform and payload helpers for remote skill binary probes.
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
 import type { SkillEntry } from "../types.js";
 
 export function extractErrorMessage(err: unknown): string | undefined {

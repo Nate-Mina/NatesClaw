@@ -7,11 +7,11 @@ import { createHash } from "node:crypto";
 import {
   sortUniqueStrings,
   uniqueStrings,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@natesclaw/normalization-core/string-normalization";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { resolveRuntimeConfigCacheKey } from "../../config/runtime-snapshot.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
 import { isBlockedObjectKey } from "../../infra/prototype-keys.js";
@@ -58,7 +58,7 @@ type ReadOnlyChannelPluginOptions = {
   env?: NodeJS.ProcessEnv;
   stateDir?: string;
   workspaceDir?: string;
-  activationSourceConfig?: OpenClawConfig;
+  activationSourceConfig?: NatesclawConfig;
   includePersistedAuthState?: boolean;
   includeSetupFallbackPlugins?: boolean;
   metadataSnapshot?: PluginMetadataSnapshot;
@@ -113,7 +113,7 @@ function rememberReadOnlyChannelPluginResolution(
 }
 
 function resolveReadOnlyChannelPluginResolutionCacheKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   options: ReadOnlyChannelPluginOptions;
   env: NodeJS.ProcessEnv;
   loadedChannelPlugins: readonly ChannelPlugin[];
@@ -211,10 +211,10 @@ function normalizeManifestText(value: string | undefined, fallback: string): str
 }
 
 function rebindChannelConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   sourceChannelId: string,
   targetChannelId: string,
-): OpenClawConfig {
+): NatesclawConfig {
   if (sourceChannelId === targetChannelId || !cfg.channels) {
     return cfg;
   }
@@ -228,11 +228,11 @@ function rebindChannelConfig(
 }
 
 function restoreReboundChannelConfig(params: {
-  original: OpenClawConfig;
-  updated: OpenClawConfig;
+  original: NatesclawConfig;
+  updated: NatesclawConfig;
   sourceChannelId: string;
   targetChannelId: string;
-}): OpenClawConfig {
+}): NatesclawConfig {
   if (params.sourceChannelId === params.targetChannelId || !params.updated.channels) {
     return params.updated;
   }
@@ -253,7 +253,7 @@ function restoreReboundChannelConfig(params: {
   };
 }
 
-function getChannelConfigRecord(cfg: OpenClawConfig, channelId: string): Record<string, unknown> {
+function getChannelConfigRecord(cfg: NatesclawConfig, channelId: string): Record<string, unknown> {
   if (!isSafeManifestChannelId(channelId)) {
     return {};
   }
@@ -271,7 +271,7 @@ function normalizeManifestAccountConfigKey(accountId: string): string {
   return normalizeOptionalAccountId(accountId) ?? "";
 }
 
-function listManifestChannelAccountIds(cfg: OpenClawConfig, channelId: string): string[] {
+function listManifestChannelAccountIds(cfg: NatesclawConfig, channelId: string): string[] {
   const channelConfig = getChannelConfigRecord(cfg, channelId);
   const accounts = channelConfig.accounts;
   if (accounts && typeof accounts === "object" && !Array.isArray(accounts)) {
@@ -285,7 +285,7 @@ function listManifestChannelAccountIds(cfg: OpenClawConfig, channelId: string): 
   return hasExplicitChannelConfig({ config: cfg, channelId }) ? [DEFAULT_ACCOUNT_ID] : [];
 }
 
-function resolveManifestChannelDefaultAccountId(cfg: OpenClawConfig, channelId: string): string {
+function resolveManifestChannelDefaultAccountId(cfg: NatesclawConfig, channelId: string): string {
   const channelConfig = getChannelConfigRecord(cfg, channelId);
   const configuredDefaultAccountId = normalizeOptionalAccountId(
     typeof channelConfig.defaultAccount === "string" ? channelConfig.defaultAccount : undefined,
@@ -297,7 +297,7 @@ function resolveManifestChannelDefaultAccountId(cfg: OpenClawConfig, channelId: 
 }
 
 function resolveManifestChannelAccountConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channelId: string;
   accountId?: string | null;
 }): Record<string, unknown> {
@@ -481,7 +481,7 @@ function rebindChannelPluginConfig(
   sourceChannelId: string,
   targetChannelId: string,
 ): ChannelPlugin["config"] {
-  const rebind = (cfg: OpenClawConfig) =>
+  const rebind = (cfg: NatesclawConfig) =>
     rebindChannelConfig(cfg, sourceChannelId, targetChannelId);
   return {
     ...config,
@@ -637,7 +637,7 @@ function addManifestChannelPlugins(
 }
 
 function resolveReadOnlyWorkspaceDir(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options: ReadOnlyChannelPluginOptions,
 ): string | undefined {
   return options.workspaceDir ?? resolveAgentWorkspaceDir(cfg, resolveDefaultAgentId(cfg));
@@ -656,8 +656,8 @@ function listBundledChannelManifestRecords(
 }
 
 function resolveExternalReadOnlyChannelPluginIds(params: {
-  cfg: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  cfg: NatesclawConfig;
+  activationSourceConfig?: NatesclawConfig;
   channelIds: readonly string[];
   records: readonly PluginManifestRecord[];
   workspaceDir?: string;
@@ -691,14 +691,14 @@ function resolveExternalReadOnlyChannelPluginIds(params: {
 }
 
 export function listReadOnlyChannelPluginsForConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options?: ReadOnlyChannelPluginOptions,
 ): ChannelPlugin[] {
   return resolveReadOnlyChannelPluginsForConfig(cfg, options).plugins;
 }
 
 export function resolveReadOnlyChannelPluginsForConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options: ReadOnlyChannelPluginOptions = {},
 ): ReadOnlyChannelPluginResolution {
   const env = options.env ?? process.env;

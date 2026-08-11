@@ -1,6 +1,6 @@
 // Covers plugin status reporting from config, discovery, and registry state.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PluginMemoryEmbeddingProviderRegistration } from "./registry.test-fixtures.js";
 import {
@@ -14,7 +14,7 @@ import {
 } from "./status.test-fixtures.js";
 
 const loadConfigMock = vi.fn();
-const loadOpenClawPluginsMock = vi.fn();
+const loadNatesclawPluginsMock = vi.fn();
 const resolveCompatibleRuntimePluginRegistryMock = vi.fn();
 const loadPluginMetadataRegistrySnapshotMock = vi.fn();
 const loadPluginManifestRegistryForPluginRegistryMock = vi.fn();
@@ -63,9 +63,9 @@ vi.mock("../config/plugin-auto-enable.js", () => ({
 }));
 
 vi.mock("./loader.js", () => ({
-  loadOpenClawPlugins: (...args: unknown[]) => loadOpenClawPluginsMock(...args),
+  loadNatesclawPlugins: (...args: unknown[]) => loadNatesclawPluginsMock(...args),
   loadPluginRegistryHandle: (options: Record<string, unknown> = {}) =>
-    loadOpenClawPluginsMock({ ...options, activate: false }),
+    loadNatesclawPluginsMock({ ...options, activate: false }),
   resolveCompatibleRuntimePluginRegistry: (...args: unknown[]) =>
     resolveCompatibleRuntimePluginRegistryMock(...args),
 }));
@@ -129,7 +129,7 @@ function setPluginLoadResult(overrides: Partial<ReturnType<typeof createPluginLo
     plugins: [],
     ...overrides,
   });
-  loadOpenClawPluginsMock.mockReturnValue(result);
+  loadNatesclawPluginsMock.mockReturnValue(result);
   loadPluginMetadataRegistrySnapshotMock.mockReturnValue(result);
 }
 
@@ -198,7 +198,7 @@ function expectPluginLoaderCall(params: {
   logger?: unknown;
   loadModules?: boolean;
 }) {
-  expectMockCalledWithFields(loadOpenClawPluginsMock, {
+  expectMockCalledWithFields(loadNatesclawPluginsMock, {
     ...(params.config !== undefined ? { config: params.config } : {}),
     ...(params.activationSourceConfig !== undefined
       ? { activationSourceConfig: params.activationSourceConfig }
@@ -407,7 +407,7 @@ describe("plugin status reports", () => {
 
   beforeEach(() => {
     loadConfigMock.mockReset();
-    loadOpenClawPluginsMock.mockReset();
+    loadNatesclawPluginsMock.mockReset();
     resolveCompatibleRuntimePluginRegistryMock.mockReset();
     loadPluginMetadataRegistrySnapshotMock.mockReset();
     loadPluginManifestRegistryForPluginRegistryMock.mockReset();
@@ -450,7 +450,7 @@ describe("plugin status reports", () => {
   });
 
   it("forwards an explicit env to plugin loading", () => {
-    const env = { HOME: "/tmp/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/natesclaw-home" } as NodeJS.ProcessEnv;
 
     buildPluginSnapshotReport({
       config: {},
@@ -491,7 +491,7 @@ describe("plugin status reports", () => {
     buildPluginSnapshotReport({ config: {}, workspaceDir: "/workspace" });
 
     expect(mockInput(loadPluginMetadataRegistrySnapshotMock).loadModules).toBe(false);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadNatesclawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("reuses a supplied metadata snapshot for scoped diagnostics", () => {
@@ -508,8 +508,8 @@ describe("plugin status reports", () => {
     });
 
     expect(loadPluginMetadataSnapshotMock).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).toHaveBeenCalledTimes(1);
-    expect(mockInput(loadOpenClawPluginsMock)).toMatchObject({
+    expect(loadNatesclawPluginsMock).toHaveBeenCalledTimes(1);
+    expect(mockInput(loadNatesclawPluginsMock)).toMatchObject({
       manifestRegistry: metadataSnapshot.manifestRegistry,
       installRecords: {},
       onlyPluginIds: ["demo"],
@@ -625,7 +625,7 @@ describe("plugin status reports", () => {
     const report = buildPluginDiagnosticsReport({
       config: {},
       env: {
-        OPENCLAW_VERSION: "2026.3.23-1",
+        NATESCLAW_VERSION: "2026.3.23-1",
       } as NodeJS.ProcessEnv,
     });
 
@@ -849,7 +849,7 @@ describe("plugin status reports", () => {
       createCompatibilityNotice({ pluginId: runtimePlugin.id, code: "hook-only" }),
     ]);
     expect(loadPluginMetadataRegistrySnapshotMock).toHaveBeenCalledOnce();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadNatesclawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("does not claim hook-only warnings from an unloaded metadata-only plugin", () => {
@@ -859,7 +859,7 @@ describe("plugin status reports", () => {
     resolveCompatibleRuntimePluginRegistryMock.mockReturnValue(undefined);
 
     expect(buildPluginCompatibilitySnapshotNotices({ config: {} })).toStrictEqual([]);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadNatesclawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("warns external plugins off deprecated memory embedding provider registration", () => {

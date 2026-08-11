@@ -221,12 +221,12 @@ describe("chat history in-flight assistant recovery", () => {
       {
         role: "assistant",
         content: "Saved opening.",
-        __openclaw: { idempotencyKey: "run-reconnected" },
+        __natesclaw: { idempotencyKey: "run-reconnected" },
       },
       {
         role: "user",
         content: "Also check the result.",
-        __openclaw: { idempotencyKey: "run-steer:user" },
+        __natesclaw: { idempotencyKey: "run-steer:user" },
       },
     ];
     history.inFlightRun!.text = "Saved opening. Still working after the steer.";
@@ -246,7 +246,7 @@ describe("chat history in-flight assistant recovery", () => {
       {
         role: "assistant",
         content: "Saved opening.",
-        __openclaw: { idempotencyKey: "run-earlier" },
+        __natesclaw: { idempotencyKey: "run-earlier" },
       },
       { role: "user", content: "Start the next request." },
     ];
@@ -268,7 +268,7 @@ describe("chat history in-flight assistant recovery", () => {
       {
         role: "assistant",
         content: "OK.",
-        __openclaw: { idempotencyKey: "run-reconnected" },
+        __natesclaw: { idempotencyKey: "run-reconnected" },
       },
     ];
     history.inFlightRun!.text = "OK. Finished. New details";
@@ -497,12 +497,12 @@ describe("chat history in-flight assistant recovery", () => {
         {
           role: "assistant",
           content: "Saved opening. Buffered",
-          __openclaw: { idempotencyKey: "run-reconnected" },
+          __natesclaw: { idempotencyKey: "run-reconnected" },
         },
         {
           role: "user",
           content: "Also check the result.",
-          __openclaw: { idempotencyKey: "run-steer:user" },
+          __natesclaw: { idempotencyKey: "run-steer:user" },
         },
       ],
     },

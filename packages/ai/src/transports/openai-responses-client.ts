@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { AssistantMessage, Context, Model, StreamFn } from "@openclaw/llm-core";
+import type { AssistantMessage, Context, Model, StreamFn } from "@natesclaw/llm-core";
 import OpenAI, { AzureOpenAI } from "openai";
 import { getEnvApiKey } from "../env-api-keys.js";
 import { getAiTransportHost } from "../host.js";
@@ -254,11 +254,11 @@ function createResponsesTransportExecutor(config: ResponsesTransportExecutorOpti
             params as Record<string, unknown>,
           ) as typeof params;
           if (
-            (options as { openclawCodeModeToolSurface?: unknown } | undefined)
-              ?.openclawCodeModeToolSurface === true
+            (options as { natesclawCodeModeToolSurface?: unknown } | undefined)
+              ?.natesclawCodeModeToolSurface === true
           ) {
             const visibleToolNames = resolveCodeModeResponsesVisibleToolNames(context);
-            const allowedHostedToolTypes = responsesOptions?.openclawCodeModeAllowedHostedToolTypes;
+            const allowedHostedToolTypes = responsesOptions?.natesclawCodeModeAllowedHostedToolTypes;
             enforceCodeModeResponsesToolSurface(params, visibleToolNames, allowedHostedToolTypes);
             assertCodeModeResponsesToolSurface(params, visibleToolNames, allowedHostedToolTypes);
           }

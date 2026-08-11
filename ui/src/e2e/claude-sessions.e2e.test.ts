@@ -359,7 +359,7 @@ suite.define(() => {
             toggleFocused: true,
           });
 
-        const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+        const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
         if (artifactDir) {
           await fs.mkdir(artifactDir, { recursive: true });
           await header.screenshot({
@@ -456,7 +456,7 @@ suite.define(() => {
         chevronOpacity: "0.75",
       });
 
-      const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+      const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
       if (artifactDir) {
         await fs.mkdir(artifactDir, { recursive: true });
         await page.screenshot({
@@ -505,7 +505,7 @@ suite.define(() => {
       await connecting.waitFor();
       expect(await page.locator(".tabstrip-tab.is-connecting").count()).toBe(1);
 
-      const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+      const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
       if (artifactDir) {
         await fs.mkdir(artifactDir, { recursive: true });
         await page.screenshot({ path: path.join(artifactDir, "claude-terminal-connecting.png") });
@@ -676,7 +676,7 @@ suite.define(() => {
     await page.getByText("Older remote review", { exact: true }).waitFor();
     await page.getByText("Remote architecture review", { exact: true }).click();
     await expect.poll(() => page.getByText("newer answer", { exact: true }).count()).toBe(1);
-    const catalogPane = page.locator('openclaw-chat-pane[aria-hidden="false"]');
+    const catalogPane = page.locator('natesclaw-chat-pane[aria-hidden="false"]');
     const thread = catalogPane.locator(".chat-thread");
     await expect
       .poll(() => thread.evaluate((element) => element.scrollHeight > element.clientHeight + 100))
@@ -727,7 +727,7 @@ suite.define(() => {
     await expect
       .poll(() => page.getByText("This session is on a paired device and is view-only.").count())
       .toBe(1);
-    const artifactDir = process.env.OPENCLAW_UI_E2E_ARTIFACT_DIR?.trim();
+    const artifactDir = process.env.NATESCLAW_UI_E2E_ARTIFACT_DIR?.trim();
     const expectCenteredLayout = async (screenshotName: string) => {
       const [workbenchBox, threadBox, composerBox] = await Promise.all([
         catalogPane.locator(".chat-workbench").boundingBox(),
@@ -776,7 +776,7 @@ suite.define(() => {
     const page = await suite.browser.newPage({ viewport: { width: 1280, height: 800 } });
     await page.clock.install();
     const historyMessage = (seq: number, prefix: string) => ({
-      __openclaw: { seq },
+      __natesclaw: { seq },
       content: [
         {
           type: "text",
@@ -846,7 +846,7 @@ suite.define(() => {
       await expect
         .poll(() =>
           page
-            .locator("openclaw-chat-pane")
+            .locator("natesclaw-chat-pane")
             .evaluate(
               (element) =>
                 (element as HTMLElement & { state: { chatMessages: unknown[] } }).state.chatMessages
@@ -880,7 +880,7 @@ suite.define(() => {
   it("keeps a focused message action mounted while its row scrolls out of view", async () => {
     const page = await suite.browser.newPage({ viewport: { width: 1280, height: 800 } });
     const messages = Array.from({ length: 200 }, (_, index) => ({
-      __openclaw: { seq: index + 1 },
+      __natesclaw: { seq: index + 1 },
       content: [
         {
           type: "text",

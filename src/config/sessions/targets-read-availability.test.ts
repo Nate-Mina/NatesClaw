@@ -1,7 +1,7 @@
 import path from "node:path";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
+import { withTempHome } from "natesclaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config.js";
+import type { NatesclawConfig } from "../config.js";
 import { replaceSessionEntry } from "./session-accessor.js";
 import {
   resolveExistingAgentSessionStoreTargetsReadOnlyResult,
@@ -11,9 +11,9 @@ import {
 describe("session store availability", () => {
   it("reuses one fixed-store ownership snapshot across agents", async () => {
     await withTempHome(async (home) => {
-      const env = { ...process.env, OPENCLAW_STATE_DIR: path.join(home, ".openclaw") };
+      const env = { ...process.env, NATESCLAW_STATE_DIR: path.join(home, ".natesclaw") };
       const storePath = path.join(home, "shared.sqlite");
-      const cfg: OpenClawConfig = {
+      const cfg: NatesclawConfig = {
         session: { store: storePath },
         agents: { entries: { main: { default: true }, ops: {} } },
       };

@@ -1,6 +1,6 @@
 import type { ExecutionIdentityAdmissionFacts } from "../audit/execution-identity-admission.js";
 import type { ExecutionIdentityAdmissionToken } from "../audit/execution-identity-admission.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import {
@@ -32,7 +32,7 @@ function systemIngress(boundary: string): AgentCommandAdmissionIngress {
 function prepareAgentCommandRunAdmission(params: {
   admission?: AgentCommandOpts["executionIdentityAdmission"];
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   ingress: AgentCommandAdmissionIngress;
   operationalRunInstance: OperationalRunInstanceRef;
   runId: string;
@@ -85,7 +85,7 @@ async function bindAgentCommandRecoveryExecutionIdentity(params: {
 export function prepareAgentCommandExecutionIdentity(params: {
   opts: AgentCommandOpts;
   prepared: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     runId: string;
     sessionAgentId: string;
     sessionId: string;

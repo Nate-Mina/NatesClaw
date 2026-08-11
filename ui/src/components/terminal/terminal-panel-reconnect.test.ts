@@ -11,12 +11,12 @@ import {
   terminalOpenResult,
   type CreateGhosttyTerminalMock,
 } from "./terminal-panel.test-support.ts";
-import { OpenClawTerminalPanel } from "./terminal-panel.ts";
+import { NatesclawTerminalPanel } from "./terminal-panel.ts";
 
 const createGhosttyTerminalMock: CreateGhosttyTerminalMock = vi.fn();
 const TERMINAL_PANEL_ELEMENT_NAME = defineTestTerminalPanelElement(createGhosttyTerminalMock);
 
-describe("OpenClawTerminalPanel reconnect", () => {
+describe("NatesclawTerminalPanel reconnect", () => {
   beforeEach(async () => {
     vi.stubGlobal("localStorage", createStorageMock());
     vi.stubGlobal("sessionStorage", createStorageMock());
@@ -83,7 +83,7 @@ describe("OpenClawTerminalPanel reconnect", () => {
       },
       addEventListener: () => () => {},
     };
-    const panel = document.createElement(TERMINAL_PANEL_ELEMENT_NAME) as OpenClawTerminalPanel;
+    const panel = document.createElement(TERMINAL_PANEL_ELEMENT_NAME) as NatesclawTerminalPanel;
     panel.client = client;
     panel.available = true;
     document.body.append(panel);
@@ -119,7 +119,7 @@ describe("OpenClawTerminalPanel reconnect", () => {
     expect(new TextDecoder().decode(controllers[1].write.mock.calls[0]?.[0])).toBe(
       "detached history",
     );
-    expect(sessionStorage.getItem("openclaw.terminal.sessions.v1")).toBe(
+    expect(sessionStorage.getItem("natesclaw.terminal.sessions.v1")).toBe(
       JSON.stringify(["current-1", "detached-1"]),
     );
   });
@@ -183,14 +183,14 @@ describe("OpenClawTerminalPanel reconnect", () => {
         };
       },
     };
-    const panel = document.createElement(TERMINAL_PANEL_ELEMENT_NAME) as OpenClawTerminalPanel;
+    const panel = document.createElement(TERMINAL_PANEL_ELEMENT_NAME) as NatesclawTerminalPanel;
     panel.client = client;
     panel.available = true;
     document.body.append(panel);
     panel.toggle();
 
     await waitForFast(() => {
-      expect(sessionStorage.getItem("openclaw.terminal.sessions.v1")).toContain(
+      expect(sessionStorage.getItem("natesclaw.terminal.sessions.v1")).toContain(
         "surviving-session",
       );
     });

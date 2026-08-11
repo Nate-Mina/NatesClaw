@@ -55,7 +55,7 @@ describe("SystemAgentChatEngine approval", () => {
       value: "19001",
       cliOptions: {},
     });
-    expect(applied?.text).toContain("[openclaw] done: config.set");
+    expect(applied?.text).toContain("[natesclaw] done: config.set");
     expect(duplicate).toBeNull();
     expect(observedInputs[1]).toContain("[proposal-resolved]");
     expect(observedInputs[1]).toContain("was approved");
@@ -118,7 +118,7 @@ describe("SystemAgentChatEngine approval", () => {
     expect(pending.text).toContain("Approval pending");
     expect(runAgentTurn).not.toHaveBeenCalled();
     expect(runConfigSet).toHaveBeenCalledOnce();
-    expect(applied?.text).toContain("[openclaw] done: config.set");
+    expect(applied?.text).toContain("[natesclaw] done: config.set");
     expect(engine.hasPendingProposal()).toBe(false);
   });
 
@@ -134,7 +134,7 @@ describe("SystemAgentChatEngine approval", () => {
     const reply = await engine.handle("yes");
     expect(runConfigSet).toHaveBeenCalledOnce();
     expect(reply.action).toBe("none");
-    expect(reply.text).toContain("[openclaw] done: config.set");
+    expect(reply.text).toContain("[natesclaw] done: config.set");
     expect(engine.hasPendingProposal()).toBe(false);
   });
 
@@ -146,7 +146,7 @@ describe("SystemAgentChatEngine approval", () => {
       latencyMs: 100,
     }));
     const applySetup = vi.fn(async () => ({
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
       configHashBefore: "before",
       configHashAfter: "after",
       bootstrapPending: true,
@@ -177,7 +177,7 @@ describe("SystemAgentChatEngine approval", () => {
       agentDraft: "hatch",
     });
     expect(reply.text).toContain("Your agent is hatching");
-    expect(reply.text).toContain("Settings → Ask OpenClaw");
+    expect(reply.text).toContain("Settings → Ask Natesclaw");
   });
 
   it("hatches into a newly created agent and carries its id", async () => {
@@ -212,7 +212,7 @@ describe("SystemAgentChatEngine approval", () => {
   it("stays in setup when an established workspace has no bootstrap pending", async () => {
     useTempStateDir();
     const applySetup = vi.fn(async () => ({
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
       configHashBefore: "before",
       configHashAfter: "after",
       bootstrapPending: false,
@@ -255,7 +255,7 @@ describe("SystemAgentChatEngine approval", () => {
     const applySetup = vi.fn(async () => {
       applied = true;
       return {
-        configPath: "/tmp/openclaw.json",
+        configPath: "/tmp/natesclaw.json",
         configHashBefore: "before",
         configHashAfter: "after",
         bootstrapPending: true,
@@ -326,14 +326,14 @@ describe("SystemAgentChatEngine approval", () => {
     expect(reply.handoff).toBeUndefined();
     expect(reply.sensitive).toBeUndefined();
     expect(reply.text).toContain("replace the inference route powering this session");
-    // A gateway reader is in a browser or the app and cannot "exit OpenClaw"
+    // A gateway reader is in a browser or the app and cannot "exit Natesclaw"
     // into a shell; the copy must name where the command runs instead.
-    expect(reply.text).toContain("`openclaw onboard`");
-    expect(reply.text).toContain("machine running OpenClaw");
-    expect(reply.text).toContain("Stop the OpenClaw host");
+    expect(reply.text).toContain("`natesclaw onboard`");
+    expect(reply.text).toContain("machine running Natesclaw");
+    expect(reply.text).toContain("Stop the Natesclaw host");
     expect(reply.text).toContain("restart the host");
-    expect(reply.text).toContain("return to OpenClaw");
-    expect(reply.text).not.toContain("Exit OpenClaw");
+    expect(reply.text).toContain("return to Natesclaw");
+    expect(reply.text).not.toContain("Exit Natesclaw");
   });
 
   it("keeps the current inference route when model provider setup is declined", async () => {
@@ -462,7 +462,7 @@ describe("SystemAgentChatEngine approval", () => {
       latencyMs: 100,
     }));
     const applySetup = vi.fn(async () => ({
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
       configHashBefore: "before",
       configHashAfter: "after",
       bootstrapPending: false,
@@ -629,7 +629,7 @@ describe("SystemAgentChatEngine approval", () => {
 
     const applied = await engine.handle("yes");
     expect(runConfigSet).toHaveBeenCalledOnce();
-    expect(applied.text).toContain("[openclaw] done: config.set");
+    expect(applied.text).toContain("[natesclaw] done: config.set");
   });
 
   it("redacts sensitive config-set values from the AI-visible history", async () => {

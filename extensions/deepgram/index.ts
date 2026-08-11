@@ -1,5 +1,5 @@
-// Deepgram plugin entrypoint registers its OpenClaw integration.
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+// Deepgram plugin entrypoint registers its Natesclaw integration.
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 import { deepgramMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { buildDeepgramRealtimeTranscriptionProvider } from "./realtime-transcription-provider.js";
 

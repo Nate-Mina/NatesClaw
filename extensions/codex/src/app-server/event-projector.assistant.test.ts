@@ -1,4 +1,4 @@
-import { normalizeUsage } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { normalizeUsage } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   describe,
   registerCodexEventProjectorTestLifecycle,
@@ -447,7 +447,7 @@ describe("CodexAppServerEventProjector assistant projection", () => {
 
     const result = projector.buildResult(buildEmptyToolTelemetry());
     const userMessage = requireRecord(result.messagesSnapshot[0], "user message");
-    expect(userMessage["__openclaw"]).toMatchObject({
+    expect(userMessage["__natesclaw"]).toMatchObject({
       upstreamUserText: "decorated upstream prompt",
     });
   });

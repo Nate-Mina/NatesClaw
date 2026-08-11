@@ -1,10 +1,10 @@
 // Doctor plugin registry tests cover plugin registry checks and repair diagnostics.
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { note } from "../../packages/terminal-core/src/note.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginCandidate } from "../plugins/discovery.js";
 import { resolvePluginNpmProjectDir } from "../plugins/install-paths.js";
 import {
@@ -15,7 +15,7 @@ import {
 import type { InstalledPluginIndex } from "../plugins/installed-plugin-index.js";
 import { markRetainedManagedNpmInstall } from "../plugins/managed-npm-retention.js";
 import { cleanupTrackedTempDirs, makeTrackedTempDir } from "../plugins/test-helpers/fs-fixtures.js";
-import { runOpenClawStateWriteTransaction } from "../state/openclaw-state-db.js";
+import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 import {
   detectPluginRegistryHealthIssues,
   maybeRepairPluginRegistryState,
@@ -35,7 +35,7 @@ afterEach(() => {
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("openclaw-doctor-plugin-registry", tempDirs);
+  return makeTrackedTempDir("natesclaw-doctor-plugin-registry", tempDirs);
 }
 
 async function readRequiredPersistedInstalledPluginIndex(
@@ -50,8 +50,8 @@ async function readRequiredPersistedInstalledPluginIndex(
 
 function hermeticEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    OPENCLAW_VERSION: "2026.4.25",
+    NATESCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    NATESCLAW_VERSION: "2026.4.25",
     VITEST: "true",
     ...overrides,
   };
@@ -64,7 +64,7 @@ function createCandidate(rootDir: string, id = "demo"): PluginCandidate {
     "utf8",
   );
   fs.writeFileSync(
-    path.join(rootDir, "openclaw.plugin.json"),
+    path.join(rootDir, "natesclaw.plugin.json"),
     JSON.stringify({
       id,
       name: id,
@@ -93,7 +93,7 @@ function createBundledCandidate(params: {
     "utf8",
   );
   fs.writeFileSync(
-    path.join(params.rootDir, "openclaw.plugin.json"),
+    path.join(params.rootDir, "natesclaw.plugin.json"),
     JSON.stringify({
       id: params.id,
       name: params.id,
@@ -181,14 +181,14 @@ function createManagedNpmPlugin(params: {
       name: params.packageName,
       version: params.version,
       ...(params.peerDependencies ? { peerDependencies: params.peerDependencies } : {}),
-      openclaw: {
+      natesclaw: {
         extensions: ["."],
       },
     }),
     "utf8",
   );
   fs.writeFileSync(
-    path.join(packageDir, "openclaw.plugin.json"),
+    path.join(packageDir, "natesclaw.plugin.json"),
     JSON.stringify({
       id: params.id,
       name: params.id,
@@ -265,7 +265,7 @@ function expectedPluginIndexRecord(params: {
     pluginId: params.pluginId,
     ...(params.packageName ? { packageName: params.packageName } : {}),
     ...(params.packageVersion ? { packageVersion: params.packageVersion } : {}),
-    manifestPath: path.join(params.rootDir, "openclaw.plugin.json"),
+    manifestPath: path.join(params.rootDir, "natesclaw.plugin.json"),
     manifestHash: expect.any(String),
     manifestFile: {
       size: expect.any(Number),
@@ -319,7 +319,7 @@ describe("maybeRepairPluginRegistryState", () => {
       checkId: "core/doctor/plugin-registry",
       severity: "warning",
       path: registryPath,
-      fixHint: "Run `openclaw doctor --fix` to rebuild the plugin registry from enabled plugins.",
+      fixHint: "Run `natesclaw doctor --fix` to rebuild the plugin registry from enabled plugins.",
     });
     expect(pluginRegistryIssueToRepairEffect(expectDefined(issue, "issue test invariant"))).toEqual(
       {
@@ -338,7 +338,7 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       version: "2026.5.2",
     });
     await writePersistedInstalledPluginIndex(createCurrentIndex(), { stateDir });
@@ -349,7 +349,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@openclaw/google-meet",
+          packageName: "@natesclaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -372,7 +372,7 @@ describe("maybeRepairPluginRegistryState", () => {
     expect(staleIssue).toMatchObject({
       kind: "stale-managed-npm-bundled-plugin",
       pluginId: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       packageDir: managed.packageDir,
       version: "2026.5.2",
     });
@@ -412,7 +412,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "discord",
-          packageName: "@openclaw/discord",
+          packageName: "@natesclaw/discord",
           version: "2026.5.20-beta.1",
         }),
       ],
@@ -490,7 +490,7 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       version: "2026.5.2",
     });
     await writePersistedInstalledPluginIndex(createCurrentIndex(), { stateDir });
@@ -501,7 +501,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@openclaw/google-meet",
+          packageName: "@natesclaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -523,7 +523,7 @@ describe("maybeRepairPluginRegistryState", () => {
     expect(vi.mocked(note).mock.calls.join("\n")).toContain(
       "Managed npm plugin packages shadow bundled plugins",
     );
-    expect(vi.mocked(note).mock.calls.join("\n")).toContain("@openclaw/google-meet@2026.5.2");
+    expect(vi.mocked(note).mock.calls.join("\n")).toContain("@natesclaw/google-meet@2026.5.2");
     expect(fs.existsSync(managed.packageDir)).toBe(true);
   });
 
@@ -534,12 +534,12 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       version: "2026.5.2",
     });
     const config = JSON.parse(
       '{"plugins":{"installs":{"__proto__":{"source":"bogus"}}}}',
-    ) as OpenClawConfig;
+    ) as NatesclawConfig;
 
     await expect(
       maybeRepairPluginRegistryState({
@@ -548,7 +548,7 @@ describe("maybeRepairPluginRegistryState", () => {
           createBundledCandidate({
             rootDir: bundledDir,
             id: "google-meet",
-            packageName: "@openclaw/google-meet",
+            packageName: "@natesclaw/google-meet",
             version: "2026.5.3",
           }),
         ],
@@ -561,16 +561,16 @@ describe("maybeRepairPluginRegistryState", () => {
     expect(fs.existsSync(managed.packageDir)).toBe(true);
     const notes = vi.mocked(note).mock.calls.join("\n");
     expect(notes).toContain("plugins.installs contains invalid records");
-    expect(notes).toContain("Back up openclaw.json");
-    expect(notes).toContain("rerun `openclaw doctor --fix`");
+    expect(notes).toContain("Back up natesclaw.json");
+    expect(notes).toContain("rerun `natesclaw doctor --fix`");
     expect(fs.existsSync(resolveInstalledPluginIndexStorePath({ stateDir }))).toBe(false);
   });
 
   it("reports the supported manual recovery for invalid persisted records", async () => {
     const stateDir = makeTempDir();
-    const config: OpenClawConfig = {};
+    const config: NatesclawConfig = {};
     const installRecordsJson = '{"__proto__":{"source":"bogus"}}';
-    runOpenClawStateWriteTransaction(
+    runNatesclawStateWriteTransaction(
       ({ db }) => {
         db.prepare(
           `
@@ -586,7 +586,7 @@ describe("maybeRepairPluginRegistryState", () => {
           `,
         ).run(installRecordsJson);
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } },
+      { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } },
     );
 
     await expect(
@@ -603,8 +603,8 @@ describe("maybeRepairPluginRegistryState", () => {
     expect(notes).toContain(
       "delete only the installed_plugin_index row with index_key='installed-plugin-index'",
     );
-    expect(notes).toContain("rerun `openclaw doctor --fix`");
-    const row = runOpenClawStateWriteTransaction(
+    expect(notes).toContain("rerun `natesclaw doctor --fix`");
+    const row = runNatesclawStateWriteTransaction(
       ({ db }) =>
         db
           .prepare(
@@ -613,7 +613,7 @@ describe("maybeRepairPluginRegistryState", () => {
               WHERE index_key = 'installed-plugin-index'`,
           )
           .get() as { install_records_json: string; updated_at_ms: number | bigint },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } },
+      { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } },
     );
     expect(row).toEqual({ install_records_json: installRecordsJson, updated_at_ms: 123 });
   });
@@ -625,7 +625,7 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       version: "2026.5.2",
     });
     await writePersistedInstalledPluginIndex(createCurrentIndex(), { stateDir });
@@ -636,7 +636,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@openclaw/google-meet",
+          packageName: "@natesclaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -666,7 +666,7 @@ describe("maybeRepairPluginRegistryState", () => {
         pluginId: "google-meet",
         rootDir: bundledDir,
         origin: "bundled",
-        packageName: "@openclaw/google-meet",
+        packageName: "@natesclaw/google-meet",
         packageVersion: "2026.5.3",
       }),
     ]);
@@ -682,7 +682,7 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       version: "2026.5.2",
     });
     await markRetainedManagedNpmInstall({
@@ -699,7 +699,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@openclaw/google-meet",
+          packageName: "@natesclaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -731,13 +731,13 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       version: "2026.5.3",
     });
     await writePersistedInstalledPluginIndex(
       createCurrentIndexWithNpmRecord({
         pluginId: "google-meet",
-        packageName: "@openclaw/google-meet",
+        packageName: "@natesclaw/google-meet",
         packageDir: managed.packageDir,
         version: "2026.5.3",
       }),
@@ -750,7 +750,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@openclaw/google-meet",
+          packageName: "@natesclaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -779,7 +779,7 @@ describe("maybeRepairPluginRegistryState", () => {
         pluginId: "google-meet",
         rootDir: bundledDir,
         origin: "bundled",
-        packageName: "@openclaw/google-meet",
+        packageName: "@natesclaw/google-meet",
         packageVersion: "2026.5.3",
       }),
     ]);
@@ -807,7 +807,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "discord",
-          packageName: "@openclaw/discord",
+          packageName: "@natesclaw/discord",
           version: "2026.5.20-beta.1",
         }),
       ],
@@ -856,7 +856,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "discord",
-          packageName: "@openclaw/discord",
+          packageName: "@natesclaw/discord",
           version: "2026.5.20-beta.1",
         }),
       ],
@@ -884,7 +884,7 @@ describe("maybeRepairPluginRegistryState", () => {
         pluginId: "discord",
         rootDir: bundledDir,
         origin: "bundled",
-        packageName: "@openclaw/discord",
+        packageName: "@natesclaw/discord",
         packageVersion: "2026.5.20-beta.1",
       }),
     ]);
@@ -900,7 +900,7 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@openclaw/google-meet",
+      packageName: "@natesclaw/google-meet",
       version: "2026.5.2",
       packageLock: true,
     });
@@ -912,7 +912,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@openclaw/google-meet",
+          packageName: "@natesclaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -935,12 +935,12 @@ describe("maybeRepairPluginRegistryState", () => {
       fs.readFileSync(path.join(managed.npmRoot, "package-lock.json"), "utf8"),
     );
     expect(packageLock.packages[""].dependencies).toEqual({ "other-plugin": "1.0.0" });
-    expect(packageLock.packages).not.toHaveProperty("node_modules/@openclaw/google-meet");
-    expect(packageLock.dependencies).not.toHaveProperty("@openclaw/google-meet");
+    expect(packageLock.packages).not.toHaveProperty("node_modules/@natesclaw/google-meet");
+    expect(packageLock.dependencies).not.toHaveProperty("@natesclaw/google-meet");
     expect(packageLock.dependencies).toHaveProperty("other-plugin");
   });
 
-  it("repairs managed npm openclaw peer links during registry repair", async () => {
+  it("repairs managed npm natesclaw peer links during registry repair", async () => {
     const stateDir = makeTempDir();
     const managed = createManagedNpmPlugin({
       stateDir,
@@ -948,7 +948,7 @@ describe("maybeRepairPluginRegistryState", () => {
       packageName: "codex-plugin",
       version: "2026.5.3",
       peerDependencies: {
-        openclaw: ">=2026.5.3",
+        natesclaw: ">=2026.5.3",
       },
     });
     await writePersistedInstalledPluginIndex(
@@ -968,13 +968,13 @@ describe("maybeRepairPluginRegistryState", () => {
       prompter: { shouldRepair: true },
     });
 
-    const linkPath = path.join(managed.packageDir, "node_modules", "openclaw");
+    const linkPath = path.join(managed.packageDir, "node_modules", "natesclaw");
     expect(fs.lstatSync(linkPath).isSymbolicLink()).toBe(true);
     expect(fs.realpathSync(linkPath)).toBe(fs.realpathSync(process.cwd()));
-    expect(vi.mocked(note).mock.calls.join("\n")).toContain("Repaired OpenClaw host peer link");
+    expect(vi.mocked(note).mock.calls.join("\n")).toContain("Repaired Natesclaw host peer link");
   });
 
-  it("warns about broken managed npm openclaw peer links without repairing them", async () => {
+  it("warns about broken managed npm natesclaw peer links without repairing them", async () => {
     const stateDir = makeTempDir();
     const managed = createManagedNpmPlugin({
       stateDir,
@@ -982,7 +982,7 @@ describe("maybeRepairPluginRegistryState", () => {
       packageName: "codex-plugin",
       version: "2026.5.3",
       peerDependencies: {
-        openclaw: ">=2026.5.3",
+        natesclaw: ">=2026.5.3",
       },
     });
     await writePersistedInstalledPluginIndex(
@@ -1002,11 +1002,11 @@ describe("maybeRepairPluginRegistryState", () => {
       prompter: { shouldRepair: false },
     });
 
-    const linkPath = path.join(managed.packageDir, "node_modules", "openclaw");
+    const linkPath = path.join(managed.packageDir, "node_modules", "natesclaw");
     const notes = vi.mocked(note).mock.calls.join("\n");
-    expect(notes).toContain("Managed npm OpenClaw host peer links need repair");
+    expect(notes).toContain("Managed npm Natesclaw host peer links need repair");
     expect(notes).toContain("codex-plugin");
-    expect(notes).toContain("openclaw doctor --fix");
+    expect(notes).toContain("natesclaw doctor --fix");
     expect(fs.existsSync(linkPath)).toBe(false);
   });
 

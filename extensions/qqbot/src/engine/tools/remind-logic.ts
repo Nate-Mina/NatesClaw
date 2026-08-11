@@ -1,8 +1,8 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 // Qqbot plugin module implements remind logic behavior.
-import { resolveExpiresAtMsFromDurationMs } from "openclaw/plugin-sdk/number-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
-import { jsonResult as json } from "openclaw/plugin-sdk/tool-results";
+import { resolveExpiresAtMsFromDurationMs } from "natesclaw/plugin-sdk/number-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
+import { jsonResult as json } from "natesclaw/plugin-sdk/tool-results";
 
 /**
  * QQBot reminder tool core logic.

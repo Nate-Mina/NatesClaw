@@ -1,9 +1,9 @@
-// OpenClaw rescue policy tests cover eligibility and safety decisions.
+// Natesclaw rescue policy tests cover eligibility and safety decisions.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveSystemAgentRescuePolicy } from "./rescue-policy.js";
 
-function decide(cfg: OpenClawConfig, overrides = {}) {
+function decide(cfg: NatesclawConfig, overrides = {}) {
   return resolveSystemAgentRescuePolicy({
     cfg,
     senderIsOwner: true,

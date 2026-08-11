@@ -1,13 +1,13 @@
-import { isPromiseLike } from "@openclaw/normalization-core/promise-like";
+import { isPromiseLike } from "@natesclaw/normalization-core/promise-like";
 /**
  * Handles embedded-agent assistant message events, block replies, reasoning
  * streams, reply directives, and pending tool media attachment handoff.
  */
-import { asOptionalRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+import { asOptionalRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { resolveSendableOutboundReplyParts } from "natesclaw/plugin-sdk/reply-payload";
 import { createInlineCodeState } from "../../packages/markdown-core/src/code-spans.js";
 import {
   parseReplyDirectives,
@@ -61,22 +61,22 @@ function shouldSuppressAssistantVisibleOutput(message: AgentMessage | undefined)
   return resolveAssistantMessagePhase(message) === "commentary";
 }
 
-function isTranscriptOnlyOpenClawAssistantMessage(message: AgentMessage | undefined): boolean {
+function isTranscriptOnlyNatesclawAssistantMessage(message: AgentMessage | undefined): boolean {
   if (!message || message.role !== "assistant") {
     return false;
   }
   const provider = normalizeOptionalString(message.provider) ?? "";
   const model = normalizeOptionalString(message.model) ?? "";
-  return provider === "openclaw" && (model === "delivery-mirror" || model === "gateway-injected");
+  return provider === "natesclaw" && (model === "delivery-mirror" || model === "gateway-injected");
 }
 
 const RESPONSES_API_IDS = new Set([
   "openai-responses",
   "openai-chatgpt-responses",
   "azure-openai-responses",
-  "openclaw-openai-responses-transport",
-  "openclaw-openai-chatgpt-responses-transport",
-  "openclaw-azure-openai-responses-transport",
+  "natesclaw-openai-responses-transport",
+  "natesclaw-openai-chatgpt-responses-transport",
+  "natesclaw-azure-openai-responses-transport",
 ]);
 
 function isResponsesApiAssistantMessage(message: AgentMessage | undefined): boolean {
@@ -100,14 +100,14 @@ function isOpenAiCompletionsAssistantMessage(message: AgentMessage | undefined):
     return false;
   }
   const api = normalizeOptionalString((message as { api?: unknown }).api) ?? "";
-  return api === "openai-completions" || api === "openclaw-openai-completions-transport";
+  return api === "openai-completions" || api === "natesclaw-openai-completions-transport";
 }
 
 export function preservePendingAssistantUsage(
   message: AssistantMessage,
   pendingUsage: NormalizedUsage | undefined,
 ): AssistantMessage {
-  if (isTranscriptOnlyOpenClawAssistantMessage(message) || !hasNonzeroUsage(pendingUsage)) {
+  if (isTranscriptOnlyNatesclawAssistantMessage(message) || !hasNonzeroUsage(pendingUsage)) {
     return message;
   }
   const messageUsage = normalizeUsage((message as { usage?: UsageLike }).usage);
@@ -141,7 +141,7 @@ export function capturePendingAssistantUsage(
   evt: AgentEvent & { message: AgentMessage; assistantMessageEvent?: unknown },
 ): void {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyNatesclawAssistantMessage(msg)) {
     return;
   }
   const assistantRecord =
@@ -158,7 +158,7 @@ export function resetPendingAssistantUsage(
   ctx: EmbeddedAgentSubscribeContext,
   message: AgentMessage,
 ): void {
-  if (message?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(message)) {
+  if (message?.role !== "assistant" || isTranscriptOnlyNatesclawAssistantMessage(message)) {
     return;
   }
   ctx.state.pendingAssistantUsage = undefined;
@@ -786,7 +786,7 @@ export function handleMessageStart(
   evt: AgentEvent & { message: AgentMessage },
 ) {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyNatesclawAssistantMessage(msg)) {
     return;
   }
 
@@ -806,7 +806,7 @@ export function handleMessageUpdate(
   evt: AgentEvent & { message: AgentMessage; assistantMessageEvent?: unknown },
 ) {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyNatesclawAssistantMessage(msg)) {
     return;
   }
 
@@ -1247,7 +1247,7 @@ export function handleMessageUpdate(
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
   (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.embeddedSubscribeMessagesTestApi")
+    Symbol.for("natesclaw.embeddedSubscribeMessagesTestApi")
   ] = {
     buildAssistantStreamData,
     recordPendingAssistantReplyDirectives,
@@ -1261,7 +1261,7 @@ export function handleMessageEnd(
   evt: AgentEvent & { message: AgentMessage },
 ): void | Promise<void> {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyNatesclawAssistantMessage(msg)) {
     return;
   }
 

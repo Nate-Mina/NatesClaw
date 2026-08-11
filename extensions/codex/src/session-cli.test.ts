@@ -7,9 +7,9 @@ const gatewayRuntime = vi.hoisted(() => ({
   callGatewayFromCli: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/gateway-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/gateway-runtime")>(
-    "openclaw/plugin-sdk/gateway-runtime",
+vi.mock("natesclaw/plugin-sdk/gateway-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/gateway-runtime")>(
+    "natesclaw/plugin-sdk/gateway-runtime",
   );
   return {
     ...actual,
@@ -29,7 +29,7 @@ const catalog = {
         {
           threadId: "00000000-0000-4000-8000-000000000002",
           name: "Build Codex fleet sessions",
-          cwd: "/Users/test/Projects/openclaw",
+          cwd: "/Users/test/Projects/natesclaw",
           status: "idle",
           activeFlags: [],
           updatedAt: 1_788_805_800,
@@ -95,7 +95,7 @@ describe("registerCodexSessionCli", () => {
             "codex",
             "sessions",
             "--search",
-            "  openclaw  ",
+            "  natesclaw  ",
             "--host",
             "node:devbox",
             "--limit",
@@ -124,7 +124,7 @@ describe("registerCodexSessionCli", () => {
         },
         {
           catalogId: "codex",
-          search: "openclaw",
+          search: "natesclaw",
           limitPerHost: 25,
           hostIds: ["node:devbox"],
           cursors: { "node:devbox": "node-next" },
@@ -149,7 +149,7 @@ describe("registerCodexSessionCli", () => {
       expect(output).toContain("MacBook Pro (gateway · gateway:local) — connected — 1 session");
       expect(output).toContain("00000000-0000-4000-8000-000000000002");
       expect(output).toContain("Build Codex fleet sessions");
-      expect(output).toContain("/Users/test/Projects/openclaw");
+      expect(output).toContain("/Users/test/Projects/natesclaw");
       expect(output).toContain("branch codex/codex-session-fleet");
       expect(output).toContain("source vscode");
       expect(output).toContain("provider openai");
@@ -292,7 +292,7 @@ describe("registerCodexSessionCli", () => {
         { catalogId: "codex", hostId: "gateway:local", threadId: "thread-1" },
         { mode: "cli", scopes: ["operator.write"] },
       );
-      expect(output).toBe("OpenClaw session: harness:codex:supervision:branch\n");
+      expect(output).toBe("Natesclaw session: harness:codex:supervision:branch\n");
       expect(output).not.toContain("\u001b");
     });
 

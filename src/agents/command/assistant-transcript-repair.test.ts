@@ -10,7 +10,7 @@ import {
   loadTranscriptEvents,
 } from "../../config/sessions/session-accessor.js";
 import type { appendExactAssistantMessageToSessionTranscript } from "../../config/sessions/transcript.runtime.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { EmbeddedAgentRunResult } from "../embedded-agent.js";
 import type { loadManifestModelCatalog } from "../model-catalog.js";
 import type { persistCliTurnTranscript } from "./attempt-execution.js";
@@ -31,7 +31,7 @@ type CliCompactionParams = {
 };
 
 const state = vi.hoisted(() => ({
-  cfg: undefined as OpenClawConfig | undefined,
+  cfg: undefined as NatesclawConfig | undefined,
   workspaceDir: undefined as string | undefined,
   agentDir: undefined as string | undefined,
   runAgentAttemptMock: vi.fn<RunAgentAttempt>(),
@@ -82,11 +82,11 @@ vi.mock("../agent-scope.js", async () => {
     markAutoFallbackPrimaryProbe: vi.fn(),
     resolveAutoFallbackPrimaryProbe: () => undefined,
     resolveAgentConfig: () => undefined,
-    resolveAgentDir: () => state.agentDir ?? "/tmp/openclaw-agent",
+    resolveAgentDir: () => state.agentDir ?? "/tmp/natesclaw-agent",
     resolveDefaultAgentId: () => "main",
     resolveEffectiveModelFallbacks: () => undefined,
     resolveSessionAgentId: () => "main",
-    resolveAgentWorkspaceDir: () => state.workspaceDir ?? "/tmp/openclaw-workspace",
+    resolveAgentWorkspaceDir: () => state.workspaceDir ?? "/tmp/natesclaw-workspace",
   };
 });
 
@@ -285,7 +285,7 @@ beforeEach(async () => {
       return { deliverySucceeded: true };
     },
   );
-  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-repair-e2e-"));
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-repair-e2e-"));
   state.workspaceDir = path.join(tmpDir, "workspace");
   state.agentDir = path.join(tmpDir, "agent");
   await fs.mkdir(state.workspaceDir, { recursive: true });
@@ -301,7 +301,7 @@ beforeEach(async () => {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 });
 
 afterEach(async () => {

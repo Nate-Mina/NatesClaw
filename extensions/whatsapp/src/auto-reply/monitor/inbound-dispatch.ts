@@ -1,19 +1,19 @@
 // Whatsapp plugin module implements inbound dispatch behavior.
-import type { StatusReactionController } from "openclaw/plugin-sdk/channel-feedback";
+import type { StatusReactionController } from "natesclaw/plugin-sdk/channel-feedback";
 import {
   createChannelPartialDeliveryError,
   isChannelPartialDeliveryError,
   type ChannelInboundTurnPlan,
   toInboundMediaFactsWithMetadata,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { hasVisibleInboundReplyDispatch } from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { hasVisibleInboundReplyDispatch } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   listMessageReceiptPlatformIds,
   resolveChannelStreamingBlockEnabled,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { buildInboundHistoryFromEntries } from "openclaw/plugin-sdk/reply-history";
-import type { FinalizedMsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { buildInboundHistoryFromEntries } from "natesclaw/plugin-sdk/reply-history";
+import type { FinalizedMsgContext } from "natesclaw/plugin-sdk/reply-runtime";
+import { normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { requireWhatsAppInboundAdmission } from "../../inbound/admission.js";
 import type { AdmittedWebInboundMessage } from "../../inbound/types.js";
 import {

@@ -39,14 +39,14 @@ describe("browser extension pairing Gateway URL", () => {
       async (params: Parameters<typeof installChromeExtensionBootstrap>[0]) => {
         params.onProgress?.("Pre-registered the native host for Chromium.");
         params.onProgress?.(
-          "Native bootstrap is ready. In Chrome, use chrome://extensions → Developer mode → Load unpacked → /stable/openclaw-extension",
+          "Native bootstrap is ready. In Chrome, use chrome://extensions → Developer mode → Load unpacked → /stable/natesclaw-extension",
         );
         return {
           platform: "linux",
           platformSupport: "automatic",
-          installedCopy: { path: "/stable/openclaw-extension", present: true, owned: true },
-          bundledPath: "/bundled/openclaw-extension",
-          approvedPaths: ["/stable/openclaw-extension"],
+          installedCopy: { path: "/stable/natesclaw-extension", present: true, owned: true },
+          bundledPath: "/bundled/natesclaw-extension",
+          approvedPaths: ["/stable/natesclaw-extension"],
           discovered: [
             {
               product: "chromium",
@@ -55,7 +55,7 @@ describe("browser extension pairing Gateway URL", () => {
               profile: "Default",
               securePreferencesPath: "/chrome/Default/Secure Preferences",
               extensionId: "abcdefghijklmnopabcdefghijklmnop",
-              extensionPath: "/stable/openclaw-extension",
+              extensionPath: "/stable/natesclaw-extension",
             },
           ],
           registrations: [],
@@ -192,11 +192,11 @@ describe("browser extension pairing Gateway URL", () => {
       browserUrl: "http://127.0.0.1:18799",
       wsEndpoint: "ws://127.0.0.1:18799/cdp",
       auth: {
-        label: "openclaw.browser-relay.auth",
+        label: "natesclaw.browser-relay.auth",
         version: 2,
         keyId: relayKeyIdFromHex(relayMocks.relayKey),
-        challengeUrl: "http://127.0.0.1:18799/_openclaw/relay/auth/v2/challenge",
-        completeUrl: "http://127.0.0.1:18799/_openclaw/relay/auth/v2/complete",
+        challengeUrl: "http://127.0.0.1:18799/_natesclaw/relay/auth/v2/challenge",
+        completeUrl: "http://127.0.0.1:18799/_natesclaw/relay/auth/v2/complete",
         role: "cdp",
         transport: "connection",
         method: "SEQUENCE",

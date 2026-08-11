@@ -1,9 +1,9 @@
-// Agent config mutation and summary builders used by `openclaw agents` commands.
+// Agent config mutation and summary builders used by `natesclaw agents` commands.
 import {
   normalizeOptionalString,
   resolvePrimaryStringValue,
-} from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+} from "@natesclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import {
   listAgentEntries,
   resolveAgentDir,
@@ -16,7 +16,7 @@ import type { AgentIdentityFile } from "../agents/identity-file.js";
 import { identityHasValues, loadAgentIdentityFromWorkspace } from "../agents/identity-file.js";
 import { listRouteBindings } from "../config/bindings.js";
 import type { IdentityConfig } from "../config/types.base.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 
 export type AgentSummary = {
@@ -36,7 +36,7 @@ export type AgentSummary = {
   isDefault: boolean;
 };
 
-type AgentEntry = NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>[number];
+type AgentEntry = NonNullable<NonNullable<NatesclawConfig["agents"]>["list"]>[number];
 
 export type AgentIdentity = AgentIdentityFile;
 export { listAgentEntries };
@@ -47,7 +47,7 @@ export function findAgentEntryIndex(list: AgentEntry[], agentId: string): number
   return list.findIndex((entry) => normalizeAgentId(entry.id) === id);
 }
 
-function resolveAgentModel(cfg: OpenClawConfig, agentId: string) {
+function resolveAgentModel(cfg: NatesclawConfig, agentId: string) {
   const entry = listAgentEntries(cfg).find(
     (agent) => normalizeAgentId(agent.id) === normalizeAgentId(agentId),
   );
@@ -68,7 +68,7 @@ export function loadAgentIdentity(workspace: string): AgentIdentity | null {
 }
 
 /** Build config-derived summaries for text/JSON agent listing. */
-export function buildAgentSummaries(cfg: OpenClawConfig): AgentSummary[] {
+export function buildAgentSummaries(cfg: NatesclawConfig): AgentSummary[] {
   const defaultAgentId = normalizeAgentId(resolveDefaultAgentId(cfg));
   const configuredAgents = listAgentEntries(cfg);
   const orderedIds =
@@ -124,7 +124,7 @@ export function buildAgentSummaries(cfg: OpenClawConfig): AgentSummary[] {
 
 /** Add or update one agent entry. The first roster entry becomes the explicit default. */
 export function applyAgentConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   params: {
     agentId: string;
     name?: string;
@@ -133,7 +133,7 @@ export function applyAgentConfig(
     model?: string | null;
     identity?: IdentityConfig;
   },
-): OpenClawConfig {
+): NatesclawConfig {
   const agentId = normalizeAgentId(params.agentId);
   const name = params.name?.trim();
   const list = listAgentEntries(cfg);
@@ -174,10 +174,10 @@ export function applyAgentConfig(
 
 /** Remove an agent and any config references that route or allow traffic to it. */
 export function pruneAgentConfig(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
 ): {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   removedBindings: number;
   removedAllow: number;
 } {

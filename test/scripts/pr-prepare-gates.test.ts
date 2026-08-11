@@ -13,26 +13,26 @@ const tempDirs = createTempDirTracker();
 const children: ChildProcess[] = [];
 
 function makeLockRepoDir(): string {
-  const dir = tempDirs.make("openclaw-pr-gates-lock-");
+  const dir = tempDirs.make("natesclaw-pr-gates-lock-");
   mkdirSync(join(dir, ".git"), { recursive: true });
   return dir;
 }
 
 function heavyCheckLockDir(repoDir: string): string {
-  return join(repoDir, ".git", "openclaw-local-checks", "heavy-check.lock");
+  return join(repoDir, ".git", "natesclaw-local-checks", "heavy-check.lock");
 }
 
 function sanitizedEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   // check:changed and gate runs export these to children; drop ambient copies
   // so lock and mode behavior under test only sees explicit overrides.
   const env: NodeJS.ProcessEnv = { ...process.env };
-  delete env.OPENCLAW_PR_GATES_REMOTE;
-  delete env.OPENCLAW_TESTBOX;
-  delete env.OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD;
-  delete env.OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD;
-  delete env.OPENCLAW_OXLINT_SKIP_LOCK;
-  delete env.OPENCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS;
-  delete env.OPENCLAW_HEAVY_CHECK_LOCK_POLL_MS;
+  delete env.NATESCLAW_PR_GATES_REMOTE;
+  delete env.NATESCLAW_TESTBOX;
+  delete env.NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD;
+  delete env.NATESCLAW_TSGO_HEAVY_CHECK_LOCK_HELD;
+  delete env.NATESCLAW_OXLINT_SKIP_LOCK;
+  delete env.NATESCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS;
+  delete env.NATESCLAW_HEAVY_CHECK_LOCK_POLL_MS;
   return { ...env, ...overrides };
 }
 
@@ -81,7 +81,7 @@ function spawnGateLockHolder(repoDir: string, statusFile: string, env: NodeJS.Pr
 }
 
 function makeRetryRepo(): { repoDir: string; stubBin: string; headSha: string } {
-  const dir = tempDirs.make("openclaw-pr-gates-retry-");
+  const dir = tempDirs.make("natesclaw-pr-gates-retry-");
   const repoDir = join(dir, "repo");
   mkdirSync(repoDir);
   for (const args of [
@@ -121,7 +121,7 @@ function makeRetryRepo(): { repoDir: string; stubBin: string; headSha: string } 
 }
 
 function makeSyncRepo(options: { needsRebase: boolean }): string {
-  const repoDir = join(tempDirs.make("openclaw-pr-sync-"), "repo");
+  const repoDir = join(tempDirs.make("natesclaw-pr-sync-"), "repo");
   mkdirSync(repoDir);
 
   const git = (...args: string[]) => {
@@ -169,7 +169,7 @@ function makePreparePushHeadDriftRepo(): {
   recordedHead: string;
   reviewedHead: string;
 } {
-  const repoDir = join(tempDirs.make("openclaw-pr-prepare-drift-"), "repo");
+  const repoDir = join(tempDirs.make("natesclaw-pr-prepare-drift-"), "repo");
   mkdirSync(repoDir);
 
   const git = (...args: string[]) => {
@@ -314,10 +314,10 @@ describe("resolve_pr_gates_remote_mode", () => {
     { value: undefined, expected: "local" },
     { value: "", expected: "local" },
     { value: "testbox", expected: "testbox" },
-  ])("resolves OPENCLAW_PR_GATES_REMOTE=$value to $expected", ({ value, expected }) => {
+  ])("resolves NATESCLAW_PR_GATES_REMOTE=$value to $expected", ({ value, expected }) => {
     const env: NodeJS.ProcessEnv = {};
     if (value !== undefined) {
-      env.OPENCLAW_PR_GATES_REMOTE = value;
+      env.NATESCLAW_PR_GATES_REMOTE = value;
     }
     const result = runGatesBash("resolve_pr_gates_remote_mode", { env });
     expect(result.status).toBe(0);
@@ -326,18 +326,18 @@ describe("resolve_pr_gates_remote_mode", () => {
 
   it("rejects unsupported values", () => {
     const result = runGatesBash("resolve_pr_gates_remote_mode", {
-      env: { OPENCLAW_PR_GATES_REMOTE: "azure" },
+      env: { NATESCLAW_PR_GATES_REMOTE: "azure" },
     });
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain("Unsupported OPENCLAW_PR_GATES_REMOTE=azure");
+    expect(result.stderr).toContain("Unsupported NATESCLAW_PR_GATES_REMOTE=azure");
   });
 
   it("rejects the hosted-gates conflict before touching the worktree", () => {
     const result = runGatesBash("prepare_gates 424242", {
-      env: { OPENCLAW_PR_GATES_REMOTE: "testbox", OPENCLAW_TESTBOX: "1" },
+      env: { NATESCLAW_PR_GATES_REMOTE: "testbox", NATESCLAW_TESTBOX: "1" },
     });
     expect(result.status).toBe(2);
-    expect(result.stdout).toContain("conflicts with OPENCLAW_TESTBOX=1");
+    expect(result.stdout).toContain("conflicts with NATESCLAW_TESTBOX=1");
   });
 });
 
@@ -385,7 +385,7 @@ describe("prepare gate changed-file plan", () => {
   });
 
   it("scans changed files without temporary input storage", () => {
-    const workDir = tempDirs.make("openclaw-pr-gates-no-tmp-");
+    const workDir = tempDirs.make("natesclaw-pr-gates-no-tmp-");
     mkdirSync(join(workDir, ".local"));
     writeFileSync(join(workDir, ".local", "pr-meta.env"), "PR_AUTHOR=steipete\n");
     const result = runGatesBash(
@@ -418,7 +418,7 @@ describe("prepare gate changed-file plan", () => {
 
 describe("remote testbox gate delegation", () => {
   it("runs the full pnpm test through the worktree crabbox wrapper", () => {
-    const dir = tempDirs.make("openclaw-pr-gates-remote-");
+    const dir = tempDirs.make("natesclaw-pr-gates-remote-");
     const stubBin = join(dir, "bin");
     mkdirSync(stubBin);
     writeFileSync(
@@ -450,30 +450,30 @@ describe("remote testbox gate delegation", () => {
     expect(argLine).toBe(
       "scripts/crabbox-wrapper.mjs run " +
         "--provider blacksmith-testbox " +
-        "--blacksmith-org openclaw " +
+        "--blacksmith-org natesclaw " +
         "--blacksmith-workflow .github/workflows/ci-check-testbox.yml " +
         "--blacksmith-job check " +
         "--blacksmith-ref main " +
         "--idle-timeout 90m --ttl 240m --timing-json " +
         "--label pr-424242-gates " +
-        "-- env CI=1 OPENCLAW_TESTBOX_REMOTE_RUN=1 " +
+        "-- env CI=1 NATESCLAW_TESTBOX_REMOTE_RUN=1 " +
         "PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=install corepack pnpm test",
     );
   });
 
   it("extracts the last successful blacksmith-testbox timing stamp", () => {
-    const dir = tempDirs.make("openclaw-pr-gates-stamp-");
+    const dir = tempDirs.make("natesclaw-pr-gates-stamp-");
     const log = join(dir, "gates-test.log");
     writeFileSync(
       log,
       [
         "provider=blacksmith-testbox id=tbx_first sync=delegated auth=blacksmith",
-        "GitHub Actions run: https://github.com/openclaw/openclaw/actions/runs/1234",
+        "GitHub Actions run: https://github.com/natesclaw/natesclaw/actions/runs/1234",
         '{"not":"a stamp"}',
         "not json at all",
         '{"provider":"blacksmith-testbox","leaseId":"tbx_first","exitCode":1,"runStatus":"failed"}',
         '{"provider":"blacksmith-testbox","leaseId":"tbx_final","exitCode":0,"runStatus":"passed"}',
-        "GitHub Actions run: https://github.com/openclaw/openclaw/actions/runs/9999",
+        "GitHub Actions run: https://github.com/natesclaw/natesclaw/actions/runs/9999",
         "GitHub Actions run: https://github.com/example/other/actions/runs/8888",
         "",
       ].join("\n"),
@@ -484,12 +484,12 @@ describe("remote testbox gate delegation", () => {
     );
     expect(result.status).toBe(0);
     expect(result.stdout.trim()).toBe(
-      "tbx_final\thttps://github.com/openclaw/openclaw/actions/runs/1234",
+      "tbx_final\thttps://github.com/natesclaw/natesclaw/actions/runs/1234",
     );
   });
 
   it("fails when the gate log has no successful stamp", () => {
-    const dir = tempDirs.make("openclaw-pr-gates-stamp-");
+    const dir = tempDirs.make("natesclaw-pr-gates-stamp-");
     const log = join(dir, "gates-test.log");
     writeFileSync(
       log,
@@ -520,7 +520,7 @@ describe("lease-retry gate stamp refresh", () => {
         cwd: repoDir,
         env: {
           PATH: `${stubBin}:${process.env.PATH ?? ""}`,
-          OPENCLAW_PR_GATES_REMOTE: "testbox",
+          NATESCLAW_PR_GATES_REMOTE: "testbox",
         },
       },
     );
@@ -560,7 +560,7 @@ describe("lease-retry gate stamp refresh", () => {
 
 describe("prepare review readiness", () => {
   it("rejects invalid review artifacts before any preparation side effects", () => {
-    const repoDir = tempDirs.make("openclaw-pr-prepare-invalid-review-");
+    const repoDir = tempDirs.make("natesclaw-pr-prepare-invalid-review-");
     mkdirSync(join(repoDir, ".local"));
     const result = runGatesBash(
       [
@@ -581,7 +581,7 @@ describe("prepare review readiness", () => {
   });
 
   it("rejects a non-ready review before taking the operation lock past validation", () => {
-    const repoDir = tempDirs.make("openclaw-pr-prepare-not-ready-");
+    const repoDir = tempDirs.make("natesclaw-pr-prepare-not-ready-");
     mkdirSync(join(repoDir, ".local"));
     const result = runGatesBash(
       [
@@ -629,7 +629,7 @@ describe("prepare sync-head transitions", () => {
         "test -e .local/published",
         "grep -F 'Preserved hosted PR ancestry' .local/prep.md",
       ].join("\n"),
-      { cwd: repoDir, env: { OPENCLAW_TESTBOX: "1" }, sourcePrepareCore: true },
+      { cwd: repoDir, env: { NATESCLAW_TESTBOX: "1" }, sourcePrepareCore: true },
     );
 
     expect(result.status, result.stderr).toBe(0);
@@ -852,7 +852,7 @@ describe("prepare gate stamp transitions", () => {
     }).stdout.trim();
     const result = runGatesBash(
       [
-        `gh() { if [ "$1" = pr ]; then printf '{"headRefName":"topic","headRefOid":"${currentHead}","isCrossRepository":false}\\n'; else printf 'openclaw/openclaw\\n'; fi; }`,
+        `gh() { if [ "$1" = pr ]; then printf '{"headRefName":"topic","headRefOid":"${currentHead}","isCrossRepository":false}\\n'; else printf 'natesclaw/natesclaw\\n'; fi; }`,
         "run_quiet_logged() { printf 'ARG:%s\\n' \"$@\"; }",
         `run_hosted_prepare_gates 100606 ${currentHead} false`,
       ].join("\n"),
@@ -871,7 +871,7 @@ describe("prepare gate stamp transitions", () => {
     const { repoDir, headSha } = makeRetryRepo();
     const result = runGatesBash(
       [
-        `gh() { if [ "$1" = pr ]; then printf '{"headRefName":"topic","headRefOid":"${headSha}","isCrossRepository":false}\\n'; else printf 'openclaw/openclaw\\n'; fi; }`,
+        `gh() { if [ "$1" = pr ]; then printf '{"headRefName":"topic","headRefOid":"${headSha}","isCrossRepository":false}\\n'; else printf 'natesclaw/natesclaw\\n'; fi; }`,
         'rg() { command grep -F -q "$3" "$4"; }',
         `run_quiet_logged() { printf 'Missing successful recent CI workflow for ${headSha}. Observed: none\\n' > "$2"; return 1; }`,
         `run_hosted_prepare_gates 100606 ${headSha} false`,
@@ -890,7 +890,7 @@ describe("prepare gate stamp transitions", () => {
     const { repoDir, headSha } = makeRetryRepo();
     const result = runGatesBash(
       [
-        `gh() { if [ "$1" = pr ]; then printf '{"headRefName":"topic","headRefOid":"${headSha}","isCrossRepository":true}\\n'; else printf 'openclaw/openclaw\\n'; fi; }`,
+        `gh() { if [ "$1" = pr ]; then printf '{"headRefName":"topic","headRefOid":"${headSha}","isCrossRepository":true}\\n'; else printf 'natesclaw/natesclaw\\n'; fi; }`,
         'rg() { command grep -F -q "$3" "$4"; }',
         `run_quiet_logged() { printf 'Missing successful recent CI workflow for ${headSha}. Observed: none\\n' > "$2"; return 1; }`,
         `run_hosted_prepare_gates 100606 ${headSha} false`,
@@ -983,7 +983,7 @@ describe("prepare gate stamp transitions", () => {
         "prepare_gates 4242",
         "cat .local/gates.env",
       ].join("\n"),
-      { cwd: repoDir, env: { OPENCLAW_TESTBOX: "1" } },
+      { cwd: repoDir, env: { NATESCLAW_TESTBOX: "1" } },
     );
 
     expect(result.status).toBe(0);
@@ -1017,7 +1017,7 @@ describe("pr-gates-lock helper", () => {
     expect(await waitFor(() => existsSync(firstStatus), 5_000)).toBe(true);
 
     const second = spawnGateLockHolder(repoDir, secondStatus, {
-      OPENCLAW_HEAVY_CHECK_LOCK_POLL_MS: "50",
+      NATESCLAW_HEAVY_CHECK_LOCK_POLL_MS: "50",
     });
     await waitForStderr(second, "queued behind the local heavy-check lock", 5_000);
     expect(existsSync(secondStatus)).toBe(false);
@@ -1043,8 +1043,8 @@ describe("pr-gates-lock helper", () => {
 
     const statusFile = join(repoDir, "status");
     const holder = spawnGateLockHolder(repoDir, statusFile, {
-      OPENCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS: "200",
-      OPENCLAW_HEAVY_CHECK_LOCK_POLL_MS: "50",
+      NATESCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS: "200",
+      NATESCLAW_HEAVY_CHECK_LOCK_POLL_MS: "50",
     });
     await waitForExit(holder);
 
@@ -1094,11 +1094,11 @@ describe("gates.sh gate lock plumbing", () => {
     const result = runGatesBash(
       [
         "acquire_pr_gates_lock",
-        'echo "held=${OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD:-unset},${OPENCLAW_TSGO_HEAVY_CHECK_LOCK_HELD:-unset},${OPENCLAW_OXLINT_SKIP_LOCK:-unset}"',
-        "jq -r .tool .git/openclaw-local-checks/heavy-check.lock/owner.json",
+        'echo "held=${NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD:-unset},${NATESCLAW_TSGO_HEAVY_CHECK_LOCK_HELD:-unset},${NATESCLAW_OXLINT_SKIP_LOCK:-unset}"',
+        "jq -r .tool .git/natesclaw-local-checks/heavy-check.lock/owner.json",
         "release_pr_gates_lock",
-        'echo "released=${OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD:-unset}"',
-        '[ -d .git/openclaw-local-checks/heavy-check.lock ] && echo "lock=held" || echo "lock=free"',
+        'echo "released=${NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD:-unset}"',
+        '[ -d .git/natesclaw-local-checks/heavy-check.lock ] && echo "lock=held" || echo "lock=free"',
       ].join("\n"),
       { cwd: repoDir },
     );
@@ -1115,10 +1115,10 @@ describe("gates.sh gate lock plumbing", () => {
     const result = runGatesBash(
       [
         "acquire_pr_gates_lock",
-        '[ -d .git/openclaw-local-checks/heavy-check.lock ] && echo "lock=held" || echo "lock=free"',
+        '[ -d .git/natesclaw-local-checks/heavy-check.lock ] && echo "lock=held" || echo "lock=free"',
         'echo "helper_pid=${PR_GATES_LOCK_PID:-none}"',
       ].join("\n"),
-      { cwd: repoDir, env: { OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1" } },
+      { cwd: repoDir, env: { NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1" } },
     );
 
     expect(result.status).toBe(0);
@@ -1138,8 +1138,8 @@ describe("gates.sh gate lock plumbing", () => {
     const result = runGatesBash("acquire_pr_gates_lock", {
       cwd: repoDir,
       env: {
-        OPENCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS: "200",
-        OPENCLAW_HEAVY_CHECK_LOCK_POLL_MS: "50",
+        NATESCLAW_HEAVY_CHECK_LOCK_TIMEOUT_MS: "200",
+        NATESCLAW_HEAVY_CHECK_LOCK_POLL_MS: "50",
       },
     });
 

@@ -1,16 +1,16 @@
 // Discord tests cover message handler.process plugin behavior.
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { setReplyPayloadMetadata } from "openclaw/plugin-sdk/reply-payload-testing";
-import { logVerbose, sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-dispatch-runtime";
+import { setReplyPayloadMetadata } from "natesclaw/plugin-sdk/reply-payload-testing";
+import { logVerbose, sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
 import { afterEach, beforeAll, beforeEach, vi } from "vitest";
 import type { DiscordMessagePreflightContext } from "./message-handler.preflight.js";
 
-vi.mock("openclaw/plugin-sdk/runtime-env", { spy: true });
+vi.mock("natesclaw/plugin-sdk/runtime-env", { spy: true });
 
 const getGlobalHookRunner = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/plugin-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/plugin-runtime")>();
+vi.mock("natesclaw/plugin-sdk/plugin-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/plugin-runtime")>();
   return {
     ...actual,
     getGlobalHookRunner,
@@ -80,7 +80,7 @@ export const createDiscordDraftStream = deliveryMocks.createDiscordDraftStream;
 export function createNonTerminalToolWarningPayload(): ReplyPayload {
   return setReplyPayloadMetadata(
     {
-      text: "⚠️ 🛠️ `run openclaw definitely-not-a-real-subcommand (agent)` failed",
+      text: "⚠️ 🛠️ `run natesclaw definitely-not-a-real-subcommand (agent)` failed",
       isError: true,
     },
     { nonTerminalToolErrorWarning: true },
@@ -245,7 +245,7 @@ const configSessionsMocks = vi.hoisted(() => ({
   >(async () => undefined),
   readSessionUpdatedAt: vi.fn<(params?: unknown) => number | undefined>(() => undefined),
   resolveStorePath: vi.fn<(path?: unknown, opts?: unknown) => string>(
-    () => "/tmp/openclaw-discord-process-test-sessions.json",
+    () => "/tmp/natesclaw-discord-process-test-sessions.json",
   ),
 }));
 export const getSessionEntry = configSessionsMocks.getSessionEntry;
@@ -280,7 +280,7 @@ let processDiscordMessage: typeof import("./message-handler.process.js").process
 export let formatDiscordReplySkip: typeof import("./message-handler.process.js").formatDiscordReplySkip;
 export let discordInboundEventDelivery: typeof import("../inbound-event-delivery.js").discordInboundEventDelivery;
 
-vi.mock("openclaw/plugin-sdk/reply-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/reply-runtime", () => ({
   dispatchReplyWithBufferedBlockDispatcher: async (params: {
     dispatcherOptions: {
       beforeDeliver?: (
@@ -398,13 +398,13 @@ vi.mock("openclaw/plugin-sdk/reply-runtime", () => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-inbound")>();
-  const replyRuntime = await import("openclaw/plugin-sdk/reply-runtime");
+vi.mock("natesclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/channel-inbound")>();
+  const replyRuntime = await import("natesclaw/plugin-sdk/reply-runtime");
   return {
     ...actual,
     dispatchChannelInboundTurn: async (
-      plan: import("openclaw/plugin-sdk/channel-inbound").ChannelInboundTurnPlan<"provider_message_sending">,
+      plan: import("natesclaw/plugin-sdk/channel-inbound").ChannelInboundTurnPlan<"provider_message_sending">,
     ) => {
       const { cfg, route, delivery, sessionInitRetry, ...prepared } = plan;
       const runDispatch = async () => {
@@ -453,7 +453,7 @@ vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/conversation-runtime", () => ({
   recordInboundSession: (...args: unknown[]) => recordInboundSession(...args),
   resolvePinnedMainDmOwnerFromAllowlist: (params: {
     dmScope?: string | null;
@@ -482,14 +482,14 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", () => ({
     bindingId.split(":").at(-1) ?? bindingId,
 }));
 
-vi.mock("openclaw/plugin-sdk/session-store-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/session-store-runtime", () => ({
   getSessionEntry: (params?: unknown) => configSessionsMocks.getSessionEntry(params),
   readSessionUpdatedAt: (params?: unknown) => configSessionsMocks.readSessionUpdatedAt(params),
   resolveStorePath: (path?: unknown, opts?: unknown) =>
     configSessionsMocks.resolveStorePath(path, opts),
 }));
 
-vi.mock("openclaw/plugin-sdk/session-transcript-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/session-transcript-runtime", () => ({
   readLatestAssistantTextByIdentity: (params?: unknown) =>
     configSessionsMocks.readLatestAssistantTextByIdentity(params),
 }));
@@ -597,7 +597,7 @@ export function registerDiscordProcessTestLifecycle() {
     readSessionUpdatedAt.mockReturnValue(undefined);
     getSessionEntry.mockReturnValue(undefined);
     readLatestAssistantTextByIdentity.mockResolvedValue(undefined);
-    resolveStorePath.mockReturnValue("/tmp/openclaw-discord-process-test-sessions.json");
+    resolveStorePath.mockReturnValue("/tmp/natesclaw-discord-process-test-sessions.json");
     getGlobalHookRunner.mockReturnValue(null);
     threadBindingTesting.resetThreadBindingsForTests();
   });

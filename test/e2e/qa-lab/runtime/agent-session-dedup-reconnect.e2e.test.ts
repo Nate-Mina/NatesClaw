@@ -1,5 +1,5 @@
 import { createServer, type ServerResponse } from "node:http";
-import { GatewayClient } from "openclaw/plugin-sdk/gateway-runtime";
+import { GatewayClient } from "natesclaw/plugin-sdk/gateway-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { startQaGatewayChild } from "../../../../extensions/qa-lab/api.js";
 import {
@@ -228,9 +228,9 @@ describe("agent session deduplication across reconnect", () => {
         controlUiEnabled: false,
         fastMode: true,
         runtimeEnvPatch: {
-          OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-          OPENCLAW_SKIP_CHANNELS: "1",
-          OPENCLAW_TEST_MINIMAL_GATEWAY: "1",
+          NATESCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+          NATESCLAW_SKIP_CHANNELS: "1",
+          NATESCLAW_TEST_MINIMAL_GATEWAY: "1",
         },
         mutateConfig: ({ plugins: _plugins, ...config }) => config,
       });

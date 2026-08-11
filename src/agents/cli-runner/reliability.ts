@@ -2,8 +2,8 @@
  * Watchdog and supervisor key helpers for CLI runner reliability.
  */
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { CliBackendConfig } from "../../plugins/cli-backend.types.js";
 import {
   CLI_FRESH_WATCHDOG_DEFAULTS,
@@ -93,7 +93,7 @@ export function resolveCliNoOutputTimeoutMs(params: {
 }
 
 export function resolveCliRunTimeoutOverrideMs(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   lane?: string;
   timeoutMs: number;
   runTimeoutOverrideMs?: number;

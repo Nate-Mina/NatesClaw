@@ -1,9 +1,9 @@
 // Qqbot plugin module implements channel behavior.
 import type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginToolContext,
-} from "openclaw/plugin-sdk/core";
+  NatesclawPluginApi,
+  NatesclawPluginToolContext,
+} from "natesclaw/plugin-sdk/core";
 import { ChannelApiSchema, executeChannelApi } from "../../engine/tools/channel-api.js";
 import type { ChannelApiParams } from "../../engine/tools/channel-api.js";
 import { listQQBotAccountIds, resolveQQBotAccount } from "../config.js";
@@ -16,8 +16,8 @@ import { listQQBotAccountIds, resolveQQBotAccount } from "../config.js";
  * send requests through this proxy.
  */
 function createChannelTool(
-  cfg: NonNullable<OpenClawPluginApi["config"]>,
-  context: OpenClawPluginToolContext,
+  cfg: NonNullable<NatesclawPluginApi["config"]>,
+  context: NatesclawPluginToolContext,
 ): AnyAgentTool | null {
   // Bind credentials when the per-run tool is built; a process-wide account
   // selection would let one QQBot ingress account exercise another account's API authority.
@@ -64,7 +64,7 @@ function createChannelTool(
   };
 }
 
-export function registerChannelTool(api: OpenClawPluginApi): void {
+export function registerChannelTool(api: NatesclawPluginApi): void {
   const cfg = api.config;
   if (!cfg || listQQBotAccountIds(cfg).length === 0) {
     return;

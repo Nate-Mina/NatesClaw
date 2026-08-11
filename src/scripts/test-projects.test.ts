@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeAll, describe, expect, it } from "vitest";
 import { resolveVitestCliEntry, resolveVitestNodeArgs } from "../../scripts/run-vitest.mts";
 
@@ -69,7 +69,7 @@ describe("test-projects args", () => {
   it.each([
     {
       title: "routes boundary targets to the boundary config",
-      target: "src/infra/openclaw-root.test.ts",
+      target: "src/infra/natesclaw-root.test.ts",
       config: "test/vitest/vitest.boundary.config.ts",
     },
     {
@@ -372,11 +372,11 @@ describe("test-projects args", () => {
   });
 
   it("routes infra targets to the infra config", () => {
-    expect(buildVitestRunPlans(["src/infra/openclaw-root.test.ts"])).toEqual([
+    expect(buildVitestRunPlans(["src/infra/natesclaw-root.test.ts"])).toEqual([
       {
         config: "test/vitest/vitest.boundary.config.ts",
         forwardedArgs: [],
-        includePatterns: ["src/infra/openclaw-root.test.ts"],
+        includePatterns: ["src/infra/natesclaw-root.test.ts"],
         watchMode: false,
       },
     ]);
@@ -394,29 +394,29 @@ describe("test-projects args", () => {
   it("caps project-level parallelism when the Vitest worker budget is conservative", () => {
     expect(
       resolveParallelFullSuiteConcurrency(58, {
-        OPENCLAW_VITEST_MAX_WORKERS: "1",
+        NATESCLAW_VITEST_MAX_WORKERS: "1",
       }),
     ).toBe(1);
 
     expect(
       resolveParallelFullSuiteConcurrency(58, {
-        OPENCLAW_TEST_WORKERS: "1",
+        NATESCLAW_TEST_WORKERS: "1",
       }),
     ).toBe(1);
   });
 
   it("keeps conservative local full-suite runs on leaf project configs", () => {
-    const originalVitestMaxWorkers = process.env.OPENCLAW_VITEST_MAX_WORKERS;
-    const originalTestWorkers = process.env.OPENCLAW_TEST_WORKERS;
-    const originalProjectParallel = process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    const originalLeafShards = process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    const originalVitestMaxWorkers = process.env.NATESCLAW_VITEST_MAX_WORKERS;
+    const originalTestWorkers = process.env.NATESCLAW_TEST_WORKERS;
+    const originalProjectParallel = process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    const originalLeafShards = process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
     const originalCi = process.env.CI;
     const originalActions = process.env.GITHUB_ACTIONS;
     try {
-      process.env.OPENCLAW_VITEST_MAX_WORKERS = "1";
-      delete process.env.OPENCLAW_TEST_WORKERS;
-      delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-      delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+      process.env.NATESCLAW_VITEST_MAX_WORKERS = "1";
+      delete process.env.NATESCLAW_TEST_WORKERS;
+      delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+      delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
       delete process.env.CI;
       delete process.env.GITHUB_ACTIONS;
 
@@ -430,24 +430,24 @@ describe("test-projects args", () => {
       expect(configs).not.toContain("test/vitest/vitest.full-agentic.config.ts");
     } finally {
       if (originalVitestMaxWorkers === undefined) {
-        delete process.env.OPENCLAW_VITEST_MAX_WORKERS;
+        delete process.env.NATESCLAW_VITEST_MAX_WORKERS;
       } else {
-        process.env.OPENCLAW_VITEST_MAX_WORKERS = originalVitestMaxWorkers;
+        process.env.NATESCLAW_VITEST_MAX_WORKERS = originalVitestMaxWorkers;
       }
       if (originalTestWorkers === undefined) {
-        delete process.env.OPENCLAW_TEST_WORKERS;
+        delete process.env.NATESCLAW_TEST_WORKERS;
       } else {
-        process.env.OPENCLAW_TEST_WORKERS = originalTestWorkers;
+        process.env.NATESCLAW_TEST_WORKERS = originalTestWorkers;
       }
       if (originalProjectParallel === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = originalProjectParallel;
+        process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = originalProjectParallel;
       }
       if (originalLeafShards === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+        delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = originalLeafShards;
+        process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = originalLeafShards;
       }
       if (originalCi === undefined) {
         delete process.env.CI;
@@ -466,8 +466,8 @@ describe("test-projects args", () => {
     expect(
       resolveParallelFullSuiteConcurrency(58, {
         GITHUB_ACTIONS: "true",
-        OPENCLAW_TEST_PROJECTS_PARALLEL: "3",
-        OPENCLAW_VITEST_MAX_WORKERS: "1",
+        NATESCLAW_TEST_PROJECTS_PARALLEL: "3",
+        NATESCLAW_VITEST_MAX_WORKERS: "1",
       }),
     ).toBe(3);
   });
@@ -477,7 +477,7 @@ describe("test-projects args", () => {
       resolveParallelFullSuiteConcurrency(
         58,
         {
-          OPENCLAW_TEST_PROJECTS_LEAF_SHARDS: "1",
+          NATESCLAW_TEST_PROJECTS_LEAF_SHARDS: "1",
         },
         {
           cpuCount: 8,
@@ -508,10 +508,10 @@ describe("test-projects args", () => {
 
     const firstEnv = specs[0]?.env;
     expect(firstEnv?.KEEP_ME).toBe("1");
-    expect(firstEnv?.OPENCLAW_VITEST_FS_MODULE_CACHE_PATH?.replaceAll("\\", "/")).toBe(
+    expect(firstEnv?.NATESCLAW_VITEST_FS_MODULE_CACHE_PATH?.replaceAll("\\", "/")).toBe(
       "/repo/node_modules/.experimental-vitest-cache/0-test-vitest-vitest.gateway.config.ts",
     );
-    expect(specs[1]?.env.OPENCLAW_VITEST_FS_MODULE_CACHE_PATH?.replaceAll("\\", "/")).toBe(
+    expect(specs[1]?.env.NATESCLAW_VITEST_FS_MODULE_CACHE_PATH?.replaceAll("\\", "/")).toBe(
       "/repo/node_modules/.experimental-vitest-cache/1-test-vitest-vitest.gateway-server.config.ts",
     );
   });
@@ -651,7 +651,7 @@ describe("test-projects args", () => {
   });
 
   it("routes the Docker package contract without private-QA E2E setup", () => {
-    const target = "test/e2e/qa-lab/runtime/package-openclaw-for-docker.e2e.test.ts";
+    const target = "test/e2e/qa-lab/runtime/package-natesclaw-for-docker.e2e.test.ts";
 
     expect(buildVitestRunPlans([target])).toEqual([
       {
@@ -692,10 +692,10 @@ describe("test-projects args", () => {
   });
 
   it("routes bundled plugin manifest changes through the docs config audit", () => {
-    expect(resolveChangedTestTargetPlan(["extensions/voice-call/openclaw.plugin.json"])).toEqual({
+    expect(resolveChangedTestTargetPlan(["extensions/voice-call/natesclaw.plugin.json"])).toEqual({
       mode: "targets",
       targets: [
-        "extensions/voice-call/openclaw.plugin.json",
+        "extensions/voice-call/natesclaw.plugin.json",
         "src/config/docs-config-examples.test.ts",
       ],
     });
@@ -747,7 +747,7 @@ describe("test-projects args", () => {
     expect(targetArgs).toEqual(["src/plugin-sdk/core.test.ts"]);
     expect(
       resolveChangedTargetArgs(["--changed=origin/main"], process.cwd(), () => changedPaths, {
-        env: { OPENCLAW_TEST_CHANGED_BROAD: "1" },
+        env: { NATESCLAW_TEST_CHANGED_BROAD: "1" },
       }),
     ).toEqual(["src/plugin-sdk/core.test.ts", "extensions"]);
     expect(plans[0]).toEqual({
@@ -821,30 +821,30 @@ describe("test-projects args", () => {
     expect(spec?.includePatterns).toEqual([
       "extensions/discord/src/monitor/message-handler.preflight.test.ts",
     ]);
-    expect(spec?.includeFilePath).toContain("openclaw-vitest-include-");
-    expect(spec?.env.OPENCLAW_VITEST_INCLUDE_FILE).toBe(spec?.includeFilePath);
+    expect(spec?.includeFilePath).toContain("natesclaw-vitest-include-");
+    expect(spec?.env.NATESCLAW_VITEST_INCLUDE_FILE).toBe(spec?.includeFilePath);
   });
 
   it("rejects explicit test file targets that do not exist", () => {
-    expect(findUnmatchedExplicitTestTargets(["src/not-a-real-openclaw-test.test.ts"])).toEqual([
+    expect(findUnmatchedExplicitTestTargets(["src/not-a-real-natesclaw-test.test.ts"])).toEqual([
       {
-        target: "src/not-a-real-openclaw-test.test.ts",
+        target: "src/not-a-real-natesclaw-test.test.ts",
         reason: "path-does-not-exist",
       },
     ]);
   });
 
   it("rejects explicit globs that match no files", () => {
-    expect(findUnmatchedExplicitTestTargets(["src/**/not-a-real-openclaw-test.test.ts"])).toEqual([
+    expect(findUnmatchedExplicitTestTargets(["src/**/not-a-real-natesclaw-test.test.ts"])).toEqual([
       {
-        target: "src/**/not-a-real-openclaw-test.test.ts",
+        target: "src/**/not-a-real-natesclaw-test.test.ts",
         reason: "glob-matched-no-files",
       },
     ]);
   });
 
   it("rejects explicit non-test file targets with no sibling tests", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-test-targets-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-test-targets-"));
     try {
       fs.mkdirSync(path.join(tempDir, "src", "lonely"), { recursive: true });
       fs.writeFileSync(path.join(tempDir, "src", "lonely", "runtime.ts"), "export {};\n");
@@ -862,7 +862,7 @@ describe("test-projects args", () => {
   });
 
   it("accepts explicit untracked test files that exist on disk", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-test-targets-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-test-targets-"));
     try {
       fs.mkdirSync(path.join(tempDir, "src"), { recursive: true });
       fs.writeFileSync(path.join(tempDir, "src", "new.test.ts"), "test('new', () => {});\n");
@@ -917,7 +917,7 @@ describe("test-projects args", () => {
   });
 
   it("skips channel contract configs with no matching external include patterns", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-contract-include-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-contract-include-"));
     try {
       const includeFile = path.join(tempDir, "include.json");
       fs.writeFileSync(
@@ -937,7 +937,7 @@ describe("test-projects args", () => {
         ],
         {
           baseEnv: {
-            OPENCLAW_VITEST_INCLUDE_FILE: includeFile,
+            NATESCLAW_VITEST_INCLUDE_FILE: includeFile,
           } as NodeJS.ProcessEnv,
         },
       );

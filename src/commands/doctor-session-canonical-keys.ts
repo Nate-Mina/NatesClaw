@@ -23,16 +23,16 @@ import { resolveDeliveryProvenCanonicalSessionKey } from "../config/sessions/sto
 import { resolveAllAgentSessionStoreTargetsSync } from "../config/sessions/targets.js";
 import { serializeJsonlLines } from "../config/sessions/transcript-jsonl.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   resolveSessionStoreAgentId,
   resolveStoredSessionKeyForAgentStore,
 } from "../gateway/session-store-key.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
 import {
-  openOpenClawAgentDatabase,
-  type OpenClawAgentDatabase,
-} from "../state/openclaw-agent-db.js";
+  openNatesclawAgentDatabase,
+  type NatesclawAgentDatabase,
+} from "../state/natesclaw-agent-db.js";
 import { resolveTargetSqlitePath } from "./doctor-session-sqlite-readers.js";
 
 type CanonicalSessionCandidate = {
@@ -91,7 +91,7 @@ type CanonicalSessionStore = {
 };
 
 function listCanonicalSessionStores(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
 }): CanonicalSessionStore[] {
   const stores: CanonicalSessionStore[] = [];
@@ -108,7 +108,7 @@ function listCanonicalSessionStores(params: {
 }
 
 function collectCanonicalSessionCandidates(
-  params: { cfg: OpenClawConfig; env: NodeJS.ProcessEnv },
+  params: { cfg: NatesclawConfig; env: NodeJS.ProcessEnv },
   stores: readonly CanonicalSessionStore[],
 ): CanonicalSessionCandidate[] {
   const inventory = stores.flatMap((target) =>
@@ -228,7 +228,7 @@ function collectCanonicalSessionCandidates(
 
 function resolveCanonicalDestination(params: {
   canonicalKey: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   sourceAgentId?: string;
 }) {
@@ -286,7 +286,7 @@ function mergeCanonicalSessionEntryCandidates<T>(
 
 function selectCanonicalSessionCandidate(
   candidates: readonly CanonicalSessionCandidate[],
-  params: { cfg: OpenClawConfig; env: NodeJS.ProcessEnv },
+  params: { cfg: NatesclawConfig; env: NodeJS.ProcessEnv },
 ) {
   const first = candidates[0];
   if (!first) {
@@ -319,7 +319,7 @@ function selectCanonicalSessionCandidate(
 
 function groupRepairCandidates(
   candidates: readonly CanonicalSessionCandidate[],
-  params: { cfg: OpenClawConfig; env: NodeJS.ProcessEnv },
+  params: { cfg: NatesclawConfig; env: NodeJS.ProcessEnv },
 ): CanonicalSessionRepairGroup[] {
   const byCanonicalKey = new Map<string, CanonicalSessionCandidate[]>();
   for (const candidate of candidates) {
@@ -371,7 +371,7 @@ type SingleDatabaseCanonicalRepairGroup = {
 
 function resolveSingleDatabaseCanonicalRepairGroup(
   candidates: readonly CanonicalSessionCandidate[],
-  params: { cfg: OpenClawConfig; env: NodeJS.ProcessEnv },
+  params: { cfg: NatesclawConfig; env: NodeJS.ProcessEnv },
 ): SingleDatabaseCanonicalRepairGroup | undefined {
   const selected = selectCanonicalSessionCandidate(candidates, params);
   if (
@@ -418,7 +418,7 @@ function listCanonicalDestinationAliasKeys(
 
 function applyCanonicalDestinationArtifacts(params: {
   copyWinnerAlias: boolean;
-  database: OpenClawAgentDatabase;
+  database: NatesclawAgentDatabase;
   destinationStore: readonly CanonicalSessionCandidate[];
   rehomeDeliveries: boolean;
   winner: CanonicalSessionCandidate;
@@ -499,7 +499,7 @@ async function repairCanonicalSessionGroupsInSingleDatabase(
 
 async function repairCanonicalSessionGroup(
   candidates: readonly CanonicalSessionCandidate[],
-  params: { cfg: OpenClawConfig; env: NodeJS.ProcessEnv },
+  params: { cfg: NatesclawConfig; env: NodeJS.ProcessEnv },
 ): Promise<string[]> {
   const selected = selectCanonicalSessionCandidate(candidates, params);
   if (!selected) {
@@ -571,7 +571,7 @@ async function repairCanonicalSessionGroup(
     }
   }
   setCanonicalSqliteSessionMainKey(
-    openOpenClawAgentDatabase({ agentId: destination.agentId, path: destination.sqlitePath }),
+    openNatesclawAgentDatabase({ agentId: destination.agentId, path: destination.sqlitePath }),
     params.cfg.session?.mainKey,
   );
   const winnerResult = await applySessionEntryLifecycleMutation({
@@ -640,7 +640,7 @@ async function repairCanonicalSessionGroup(
 /** Doctor-owned durable repair; process-held incognito databases are intentionally excluded. */
 export async function repairCanonicalSessionKeys(params: {
   apply: boolean;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<CanonicalSessionKeyRepairReport> {
   const env = params.env ?? process.env;
@@ -654,7 +654,7 @@ export async function repairCanonicalSessionKeys(params: {
   if (params.apply) {
     for (const store of stores) {
       setCanonicalSqliteSessionMainKey(
-        openOpenClawAgentDatabase({ agentId: store.agentId, path: store.sqlitePath }),
+        openNatesclawAgentDatabase({ agentId: store.agentId, path: store.sqlitePath }),
         params.cfg.session?.mainKey,
       );
     }

@@ -40,7 +40,7 @@ function deferred<T>() {
 }
 
 async function createPage(context: ApplicationContext): Promise<TestSessionsPage> {
-  const page = document.createElement("openclaw-sessions-page") as TestSessionsPage;
+  const page = document.createElement("natesclaw-sessions-page") as TestSessionsPage;
   page.context = context;
   page.render = () => nothing;
   document.body.append(page);
@@ -68,7 +68,7 @@ describe("sessions page lifecycle", () => {
 
     const docsLink = page.querySelector<HTMLAnchorElement>(".page-subtitle a");
     expect(docsLink?.textContent?.trim()).toBe("Learn more");
-    expect(docsLink?.href).toBe("https://docs.openclaw.ai/concepts/session");
+    expect(docsLink?.href).toBe("https://docs.natesclaw.ai/concepts/session");
 
     const archived = [
       ...page.querySelectorAll<HTMLElement & { checked: boolean }>(
@@ -103,7 +103,7 @@ describe("sessions page lifecycle", () => {
     const mutableGateway = createGateway({} as GatewayBrowserClient);
     mutableGateway.emit({ sessionKey: key });
     const page = await createPage(createContext(mutableGateway.gateway, sessions));
-    const toast = document.createElement("openclaw-toast-host");
+    const toast = document.createElement("natesclaw-toast-host");
     document.body.append(toast);
     await toast.updateComplete;
 
@@ -333,7 +333,7 @@ describe("sessions page lifecycle", () => {
     page.openSessionMenu(row, { x: 10, y: 20 }, document.createElement("button"));
     await page.updateComplete;
 
-    const menu = page.querySelector<TestSessionMenu>("openclaw-session-menu");
+    const menu = page.querySelector<TestSessionMenu>("natesclaw-session-menu");
     if (!menu) {
       throw new Error("Expected sessions page menu");
     }
@@ -355,7 +355,7 @@ describe("sessions page lifecycle", () => {
     page.openSessionMenu(row, { x: 10, y: 20 }, document.createElement("button"));
     await page.updateComplete;
 
-    const menu = page.querySelector<TestSessionMenu>("openclaw-session-menu");
+    const menu = page.querySelector<TestSessionMenu>("natesclaw-session-menu");
     if (!menu) {
       throw new Error("Expected sessions page menu");
     }
@@ -404,7 +404,7 @@ describe("sessions page lifecycle", () => {
     page.openSessionMenu(row, { x: 10, y: 20 }, document.createElement("button"));
     await page.updateComplete;
 
-    const menu = page.querySelector<TestSessionMenu>("openclaw-session-menu");
+    const menu = page.querySelector<TestSessionMenu>("natesclaw-session-menu");
     if (!menu) {
       throw new Error("Expected sessions page menu");
     }
@@ -431,7 +431,7 @@ describe("sessions page lifecycle", () => {
     page.openSessionMenu(row, { x: 10, y: 20 }, document.createElement("button"));
     await page.updateComplete;
 
-    const menu = page.querySelector<TestSessionMenu>("openclaw-session-menu");
+    const menu = page.querySelector<TestSessionMenu>("natesclaw-session-menu");
     if (!menu) {
       throw new Error("Expected sessions page menu");
     }
@@ -450,7 +450,7 @@ describe("sessions page lifecycle", () => {
     const freshResult = { count: 1, sessions: [{ key: "fresh" }] } as SessionsListResult;
     const sessions = createSessions({ list: vi.fn(async () => freshResult) });
     const context = createContext(mutableGateway.gateway, sessions);
-    const page = document.createElement("openclaw-sessions-page") as TestSessionsPage;
+    const page = document.createElement("natesclaw-sessions-page") as TestSessionsPage;
     page.context = context;
     page.render = () => nothing;
     page.routeData = {
@@ -726,7 +726,7 @@ describe("sessions page lifecycle", () => {
     const sessions = createSessions({ list });
     const { gateway } = createGateway({ request } as unknown as GatewayBrowserClient);
     const page = await createPage(createContext(gateway, sessions));
-    const toast = document.createElement("openclaw-toast-host");
+    const toast = document.createElement("natesclaw-toast-host");
     document.body.append(toast);
     await toast.updateComplete;
     const row = {

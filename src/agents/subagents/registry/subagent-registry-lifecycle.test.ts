@@ -261,7 +261,7 @@ function makeRunModeCleanupEntry(
         agentId: "main",
         sessionId: transcriptSessionId,
         sessionKey: `agent:main:internal:${sessionKeySuffix}`,
-        storePath: "/tmp/openclaw-agent.sqlite",
+        storePath: "/tmp/natesclaw-agent.sqlite",
       },
       ...execution,
     },
@@ -447,7 +447,7 @@ async function runNoReplyMirrorScenario(params: {
     messages: [
       {
         role: "assistant",
-        provider: "openclaw",
+        provider: "natesclaw",
         model: "delivery-mirror",
         content: text,
         timestamp: params.timestamp,
@@ -3256,7 +3256,7 @@ describe("subagent registry lifecycle hardening", () => {
           agentId: "main",
           sessionId: "child-session",
           sessionKey: "agent:main:subagent:child",
-          storePath: "/tmp/openclaw/agents/main/sessions/sessions.json",
+          storePath: "/tmp/natesclaw/agents/main/sessions/sessions.json",
         },
       },
     });

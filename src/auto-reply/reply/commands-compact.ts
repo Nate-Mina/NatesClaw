@@ -1,9 +1,9 @@
 // Implements compaction commands for session context and model state.
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   resolveAgentConfig,
   resolveAgentDir,
@@ -28,7 +28,7 @@ import {
 import { resolveSessionAuthProfileOverrideSource } from "../../config/sessions/auth-profile-override-provenance.js";
 import { resolveSessionStorePathCore } from "../../config/sessions/paths.js";
 import { resolveSessionStorePathForScope } from "../../config/sessions/session-store-path.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import type { CommandHandler } from "./commands-types.js";
@@ -43,7 +43,7 @@ function loadCompactRuntime(): Promise<typeof import("./commands-compact.runtime
 function extractCompactInstructions(params: {
   rawBody?: string;
   ctx: import("../templating.js").MsgContext;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
   isGroup: boolean;
 }): string | undefined {
@@ -90,7 +90,7 @@ function formatCompactionReason(reason?: string): string | undefined {
 }
 
 function resolveManualCompactContextTokenBudget(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider?: string;
   model?: string;
   agentId: string;

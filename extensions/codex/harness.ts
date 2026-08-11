@@ -6,17 +6,17 @@ import type {
   AgentHarnessCompactParams,
   AgentHarnessCompactResult,
   ContextEngineHostCapability,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { completeWithPreparedSimpleCompletionModel } from "openclaw/plugin-sdk/simple-completion-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
+import { completeWithPreparedSimpleCompletionModel } from "natesclaw/plugin-sdk/simple-completion-runtime";
 import type { CodexAppServerBindingStore } from "./src/app-server/session-binding.js";
 import type { CodexSessionCatalogControl } from "./src/session-catalog-types.js";
 
 // `codex` is legacy input only until Part 2 doctor migration rewrites stored refs.
 // New runtime identity uses the `openai` provider.
 const DEFAULT_CODEX_HARNESS_PROVIDER_IDS = new Set(["codex", "openai"]);
-const SHARED_CODEX_APP_SERVER_CLIENT_DISPOSER = Symbol.for("openclaw.codexAppServerClientDisposer");
+const SHARED_CODEX_APP_SERVER_CLIENT_DISPOSER = Symbol.for("natesclaw.codexAppServerClientDisposer");
 const CODEX_APP_SERVER_CONTEXT_ENGINE_HOST_CAPABILITIES = [
   "bootstrap",
   "assemble-before-prompt",
@@ -52,7 +52,7 @@ export function createCodexAppServerAgentHarness(options: {
   providerIds?: Iterable<string>;
   pluginConfig?: unknown;
   resolvePluginConfig?: () => unknown;
-  resolveConfig?: () => OpenClawConfig | undefined;
+  resolveConfig?: () => NatesclawConfig | undefined;
   runtime?: PluginRuntime;
   bindingStore: CodexAppServerBindingStore;
   sessionCatalogControl?: CodexSessionCatalogControl;

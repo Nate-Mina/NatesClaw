@@ -1,5 +1,5 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import {
   ErrorCodes,
   errorShape,
@@ -13,7 +13,7 @@ import {
   validateSessionsCatalogListParams,
   validateSessionsCatalogReadParams,
 } from "../../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
 import { getPluginRegistryRuntime } from "../../plugins/registry-runtime-binding.js";
 import type { PluginRegistry } from "../../plugins/registry-types.js";
@@ -143,7 +143,7 @@ type ProviderCreateTargetResolution =
   | { ok: false; message: string };
 
 const providerCreateTargetsByConfig = new WeakMap<
-  OpenClawConfig,
+  NatesclawConfig,
   WeakMap<SessionCatalogProvider, Map<string, ProviderCreateTargetResolution>>
 >();
 
@@ -166,10 +166,10 @@ type CatalogListCacheState = {
   entries: Map<string, CatalogListCacheEntry>;
 };
 
-const catalogListsByConfig = new WeakMap<OpenClawConfig, CatalogListCacheState>();
+const catalogListsByConfig = new WeakMap<NatesclawConfig, CatalogListCacheState>();
 
 function providerCreateTargetCache(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   provider: SessionCatalogProvider,
 ): Map<string, ProviderCreateTargetResolution> {
   let byProvider = providerCreateTargetsByConfig.get(config);
@@ -188,7 +188,7 @@ function providerCreateTargetCache(
 function resolveProviderCreateTarget(
   provider: SessionCatalogProvider,
   agentId: string,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): ProviderCreateTargetResolution {
   const cache = providerCreateTargetCache(config, provider);
   const cached = cache.get(agentId);
@@ -219,7 +219,7 @@ function resolveProviderCreateTarget(
 export function resolveRegisteredCatalogCreateTarget(
   catalogId: string,
   agentId: string,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): SessionCatalogCreateTargetResolution {
   const registration = registrations().find((entry) => entry.provider.id === catalogId);
   if (!registration) {
@@ -256,7 +256,7 @@ function sessionCatalogListKey(params: {
 }
 
 function catalogListCache(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   registrationSnapshot: CatalogRegistrationSnapshot,
 ): Map<string, CatalogListCacheEntry> {
   let state = catalogListsByConfig.get(config);

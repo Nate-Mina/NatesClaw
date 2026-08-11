@@ -4,13 +4,13 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { executeSqliteQuerySync } from "../../infra/kysely-sync.js";
 import { beginSessionWorkAdmission } from "../../sessions/session-lifecycle-admission.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  openNatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import { appendSqliteTrajectoryRuntimeEvents } from "../../trajectory/runtime-store.sqlite.js";
 import type { TrajectoryEvent } from "../../trajectory/types.js";
 import { measureSessionPhysicalDiskUsage } from "./disk-budget.js";
@@ -27,13 +27,13 @@ import {
 import { resolveSqliteTargetFromSessionStorePath } from "./session-sqlite-target.js";
 
 describe("SQLite historical session disk budget", () => {
-  let testState: OpenClawTestState;
+  let testState: NatesclawTestState;
   let tempDir: string;
   let storePath: string;
 
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
-      prefix: "openclaw-session-history-budget-",
+    testState = await createNatesclawTestState({
+      prefix: "natesclaw-session-history-budget-",
       layout: "state-only",
     });
     tempDir = testState.sessionsDir();
@@ -47,7 +47,7 @@ describe("SQLite historical session disk budget", () => {
       mode: "warn",
       maintenance: { maxDiskBytes: null, highWaterBytes: null },
     });
-    closeOpenClawAgentDatabasesForTest();
+    closeNatesclawAgentDatabasesForTest();
     await testState.cleanup();
   });
 
@@ -236,7 +236,7 @@ describe("SQLite historical session disk budget", () => {
     if (!target.path) {
       throw new Error("expected SQLite database path");
     }
-    return openOpenClawAgentDatabase({ agentId: target.agentId ?? "main", path: target.path });
+    return openNatesclawAgentDatabase({ agentId: target.agentId ?? "main", path: target.path });
   }
 
   function settlePhysicalUsage(): void {
@@ -296,7 +296,7 @@ describe("SQLite historical session disk budget", () => {
 
 function createTrajectoryEvent(sessionId: string, sessionKey: string): TrajectoryEvent {
   return {
-    traceSchema: "openclaw-trajectory",
+    traceSchema: "natesclaw-trajectory",
     schemaVersion: 1,
     traceId: sessionId,
     source: "runtime",

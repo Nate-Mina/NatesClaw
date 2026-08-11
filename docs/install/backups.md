@@ -1,17 +1,17 @@
 ---
-summary: "Back up OpenClaw state: archives, per-database snapshots, scheduling, offsite copies, and continuous replication"
+summary: "Back up Natesclaw state: archives, per-database snapshots, scheduling, offsite copies, and continuous replication"
 read_when:
-  - You want a backup routine for an OpenClaw install instead of a one-off archive
+  - You want a backup routine for an Natesclaw install instead of a one-off archive
   - You want scheduled, offsite, or continuous backups without copying the whole database every time
-  - You need to restore OpenClaw state from a backup
+  - You need to restore Natesclaw state from a backup
 title: "Backups"
 ---
 
 # Backups
 
-OpenClaw keeps its authoritative state in SQLite: one global control-plane
+Natesclaw keeps its authoritative state in SQLite: one global control-plane
 database plus one database per agent, all under the state directory (usually
-`~/.openclaw`). See [Database schemas](/reference/database-schemas) for the
+`~/.natesclaw`). See [Database schemas](/reference/database-schemas) for the
 exact layout. This guide covers protecting that state: one-off archives,
 per-database snapshots, scheduling, offsite copies, and continuous
 replication for installs that should not re-upload whole databases on every
@@ -33,8 +33,8 @@ committed state safely.
 
 ## Choose a path
 
-- One-off, everything, portable: `openclaw backup create` archive.
-- One database, compact and verified: `openclaw backup sqlite create`.
+- One-off, everything, portable: `natesclaw backup create` archive.
+- One database, compact and verified: `natesclaw backup sqlite create`.
 - Regular protection: schedule either command and sync the output offsite.
 - Continuous, incremental, seconds of data loss: replicate the databases with
   Litestream.
@@ -42,7 +42,7 @@ committed state safely.
 ## Full archives
 
 ```bash
-openclaw backup create --output ~/Backups/openclaw --verify
+natesclaw backup create --output ~/Backups/natesclaw --verify
 ```
 
 This writes a timestamped `.tar.gz` covering state, config, credentials,
@@ -60,14 +60,14 @@ prefer snapshots or continuous replication below.
 ## Per-database snapshots
 
 ```bash
-openclaw backup sqlite create --global --repository ~/Backups/openclaw-sqlite
-openclaw backup sqlite create --agent main --repository ~/Backups/openclaw-sqlite
+natesclaw backup sqlite create --global --repository ~/Backups/natesclaw-sqlite
+natesclaw backup sqlite create --agent main --repository ~/Backups/natesclaw-sqlite
 ```
 
 Each run publishes one verified snapshot directory (`manifest.json` plus
 `database.sqlite`) into the repository directory. Snapshots are vacuumed, so
 deleted-page remnants do not inflate them, and every snapshot records a
-SHA-256 that `openclaw backup sqlite verify` rechecks later.
+SHA-256 that `natesclaw backup sqlite verify` rechecks later.
 
 Snapshot repositories are local directories. Scheduling, upload, retention,
 and restore-on-boot are intentionally left to the operator; the sections
@@ -79,8 +79,8 @@ Use your platform scheduler. A nightly cron example that snapshots the
 control-plane database and the `main` agent database:
 
 ```bash
-0 3 * * * openclaw backup sqlite create --global --repository "$HOME/Backups/openclaw-sqlite" --json >> "$HOME/Backups/openclaw-backup.log" 2>&1
-5 3 * * * openclaw backup sqlite create --agent main --repository "$HOME/Backups/openclaw-sqlite" --json >> "$HOME/Backups/openclaw-backup.log" 2>&1
+0 3 * * * natesclaw backup sqlite create --global --repository "$HOME/Backups/natesclaw-sqlite" --json >> "$HOME/Backups/natesclaw-backup.log" 2>&1
+5 3 * * * natesclaw backup sqlite create --agent main --repository "$HOME/Backups/natesclaw-sqlite" --json >> "$HOME/Backups/natesclaw-backup.log" 2>&1
 ```
 
 On macOS, a `launchd` job works the same way; on servers provisioned from the
@@ -94,7 +94,7 @@ Archives and snapshot repositories are plain files, so any sync tool works.
 An `rclone` example targeting an S3-compatible bucket:
 
 ```bash
-rclone sync ~/Backups/openclaw-sqlite remote:openclaw-backups/sqlite
+rclone sync ~/Backups/natesclaw-sqlite remote:natesclaw-backups/sqlite
 ```
 
 Because every archive and snapshot is a full copy, offsite syncs re-upload
@@ -105,24 +105,24 @@ upload size per backup matters, use continuous replication instead.
 ## Continuous replication with Litestream
 
 [Litestream](https://litestream.io) is an open-source replication daemon for
-SQLite. It runs alongside the Gateway with no OpenClaw changes: it watches
+SQLite. It runs alongside the Gateway with no Natesclaw changes: it watches
 each database's write-ahead log and streams incremental changes to object
 storage, with periodic snapshots so restores stay fast. Only changed pages
 leave the machine, which makes it the right tool when backups must not
 re-upload whole databases.
 
-OpenClaw's databases run in WAL mode, which is Litestream's one hard
+Natesclaw's databases run in WAL mode, which is Litestream's one hard
 requirement. A minimal `litestream.yml` replicating the control-plane
 database and one agent database to an S3-compatible bucket:
 
 ```yaml
 dbs:
-  - path: /home/user/.openclaw/state/openclaw.sqlite
+  - path: /home/user/.natesclaw/state/natesclaw.sqlite
     replicas:
-      - url: s3://openclaw-backups/state
-  - path: /home/user/.openclaw/agents/main/agent/openclaw-agent.sqlite
+      - url: s3://natesclaw-backups/state
+  - path: /home/user/.natesclaw/agents/main/agent/natesclaw-agent.sqlite
     replicas:
-      - url: s3://openclaw-backups/agents/main
+      - url: s3://natesclaw-backups/agents/main
 ```
 
 Run `litestream replicate` under your process supervisor, one entry per
@@ -130,7 +130,7 @@ database you care about. To recover, restore to a fresh path and activate it
 offline:
 
 ```bash
-litestream restore -o ./restored-openclaw.sqlite s3://openclaw-backups/state
+litestream restore -o ./restored-natesclaw.sqlite s3://natesclaw-backups/state
 ```
 
 Litestream replicates database bytes only. Config, credentials files, and
@@ -147,15 +147,15 @@ place:
 2. For archives: extract into a staging directory and follow the
    `manifest.json` source-to-archive mapping to put files back; see
    [Updating](/install/updating#rollback) for the rollback workflow.
-3. For snapshots: `openclaw backup sqlite restore <snapshot-directory>
+3. For snapshots: `natesclaw backup sqlite restore <snapshot-directory>
 --target <new-database-path>` writes a re-verified database to a fresh
    target. Move it into place while the Gateway is stopped.
 4. For Litestream: `litestream restore` writes a fresh database file; move it
    into place the same way.
-5. Start the Gateway and check `openclaw health` and `openclaw doctor`.
+5. Start the Gateway and check `natesclaw health` and `natesclaw doctor`.
 
-After restoring onto a different OpenClaw version, preflight the database
-first with `openclaw database preflight`; see
+After restoring onto a different Natesclaw version, preflight the database
+first with `natesclaw database preflight`; see
 [Database schemas](/reference/database-schemas#preflight-a-target-release).
 
 ## Related

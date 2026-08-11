@@ -2,16 +2,16 @@ import type { CallbackQuery, Message } from "grammy/types";
 import {
   resolveApprovalOverGateway,
   type ApprovalResolveResult,
-} from "openclaw/plugin-sdk/approval-gateway-runtime";
-import type { parseExecApprovalCommandText } from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/approval-gateway-runtime";
+import type { parseExecApprovalCommandText } from "natesclaw/plugin-sdk/approval-reply-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   buildPluginBindingResolvedText,
   parsePluginBindingApprovalCustomId,
   resolvePluginConversationBindingApproval,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { isApprovalNotFoundError } from "openclaw/plugin-sdk/error-runtime";
-import { logVerbose, sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { isApprovalNotFoundError } from "natesclaw/plugin-sdk/error-runtime";
+import { logVerbose, sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
 import type { TelegramApprovalCallback } from "./approval-callback-data.js";
 import {
   buildTelegramCanonicalApprovalTerminalText,
@@ -86,7 +86,7 @@ type LegacyApprovalCallback = NonNullable<ReturnType<typeof parseExecApprovalCom
 export function createTelegramCallbackApprovalRuntime(params: {
   accountId: RegisterTelegramHandlerParams["accountId"];
   telegramDeps: RegisterTelegramHandlerParams["telegramDeps"];
-  runtimeCfg: OpenClawConfig;
+  runtimeCfg: NatesclawConfig;
   senderId: string;
   actions: TelegramCallbackMessageActions;
 }) {

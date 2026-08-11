@@ -3,8 +3,8 @@ export {
   buildPluginConfigSchema,
   definePluginEntry,
   type AnyAgentTool,
-  type OpenClawConfig,
-  type OpenClawPluginApi,
-  type OpenClawPluginConfigSchema,
-} from "openclaw/plugin-sdk/plugin-entry";
+  type NatesclawConfig,
+  type NatesclawPluginApi,
+  type NatesclawPluginConfigSchema,
+} from "natesclaw/plugin-sdk/plugin-entry";
 export { z } from "zod";

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { createSubsystemLogger } from "../logging/subsystem.js";
 import type { GatewayRequestContext } from "./server-methods/types.js";
 import type { GatewayPostReadySidecarHandle } from "./server-startup-post-attach.js";
@@ -6,7 +6,7 @@ import type { GatewayPostReadySidecarHandle } from "./server-startup-post-attach
 type GatewayLogger = ReturnType<typeof createSubsystemLogger>;
 
 export async function createGatewayChatMetadataLifecycle(params: {
-  getConfig: () => OpenClawConfig;
+  getConfig: () => NatesclawConfig;
   minimalTestGateway: boolean;
   log: GatewayLogger;
 }) {

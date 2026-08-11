@@ -11,15 +11,15 @@ describe("claude-auth-status.sh", () => {
   const harness = createScriptTestHarness();
 
   it("prints expiry timestamps on macOS without GNU date", () => {
-    const root = harness.createTempDir("openclaw-claude-auth-status-");
+    const root = harness.createTempDir("natesclaw-claude-auth-status-");
     const bin = path.join(root, "bin");
     mkdirSync(bin, { recursive: true });
-    const openclaw = path.join(bin, "openclaw");
+    const natesclaw = path.join(bin, "natesclaw");
     const futureMs = String(Date.now() + 2 * 60 * 60 * 1000);
     writeNodeBackedJq(bin);
 
     writeFileSync(
-      openclaw,
+      natesclaw,
       [
         "#!/usr/bin/env bash",
         "set -euo pipefail",
@@ -47,7 +47,7 @@ describe("claude-auth-status.sh", () => {
         "",
       ].join("\n"),
     );
-    chmodSync(openclaw, 0o755);
+    chmodSync(natesclaw, 0o755);
 
     const result = spawnSync("bash", [SCRIPT, "full"], {
       cwd: process.cwd(),

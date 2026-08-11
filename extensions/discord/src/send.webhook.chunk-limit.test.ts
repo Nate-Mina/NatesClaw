@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { chunkDiscordTextWithMode } from "./chunk.js";
 import { sendWebhookMessageDiscord } from "./send.webhook.js";
@@ -53,7 +53,7 @@ describe("Discord reasoning chunk delivery", () => {
         maxChars,
         maxLines: 50,
       });
-      const cfg = { channels: { discord: { token: "Bot test-token" } } } as OpenClawConfig;
+      const cfg = { channels: { discord: { token: "Bot test-token" } } } as NatesclawConfig;
 
       for (const chunk of chunks) {
         await sendWebhookMessageDiscord(chunk, {

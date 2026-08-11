@@ -1,7 +1,7 @@
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -48,7 +48,7 @@ vi.mock("./scenario-selection.js", () => ({
 
 import { runQaTelegramCommand, runQaTelegramSuite } from "./cli.runtime.js";
 
-const SUT_COMMAND_ENV = "OPENCLAW_QA_TELEGRAM_SUT_OPENCLAW_COMMAND";
+const SUT_COMMAND_ENV = "NATESCLAW_QA_TELEGRAM_SUT_NATESCLAW_COMMAND";
 
 describe("Telegram live QA scenario gate", () => {
   const originalSutCommand = process.env[SUT_COMMAND_ENV];
@@ -77,7 +77,7 @@ describe("Telegram live QA scenario gate", () => {
     process.exitCode = undefined;
     vi.clearAllMocks();
     delete process.env[SUT_COMMAND_ENV];
-    tempRoot = mkdtempSync(path.join(tmpdir(), "openclaw-qa-telegram-gate-"));
+    tempRoot = mkdtempSync(path.join(tmpdir(), "natesclaw-qa-telegram-gate-"));
     summaryPath = path.join(tempRoot, "qa-suite-summary.json");
     writeSummary("pass");
     mocks.resolveTelegramQaScenarioIds.mockReturnValue(["channel-canary"]);
@@ -224,7 +224,7 @@ describe("Telegram live QA scenario gate", () => {
   });
 
   it("forwards caller-owned gateway config mutation to the flow suite", async () => {
-    const mutateConfig = vi.fn((cfg: OpenClawConfig) => cfg);
+    const mutateConfig = vi.fn((cfg: NatesclawConfig) => cfg);
 
     await runQaTelegramSuite({
       allowFailures: true,

@@ -34,16 +34,16 @@ afterEach(() => {
 });
 
 function fixture() {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-clawhub-bootstrap-"));
+  const root = mkdtempSync(join(tmpdir(), "natesclaw-clawhub-bootstrap-"));
   tempDirs.push(root);
   const artifactRoot = join(root, "artifact");
   const packageRoot = join(artifactRoot, "packages", "meta");
   const existingPackageRoot = join(artifactRoot, "packages", "existing");
   mkdirSync(packageRoot, { recursive: true });
   mkdirSync(existingPackageRoot, { recursive: true });
-  writeFileSync(join(packageRoot, "openclaw-meta-2026.7.1-beta.3.tgz"), "packed meta");
+  writeFileSync(join(packageRoot, "natesclaw-meta-2026.7.1-beta.3.tgz"), "packed meta");
   writeFileSync(
-    join(existingPackageRoot, "openclaw-existing-2026.7.1-beta.3.tgz"),
+    join(existingPackageRoot, "natesclaw-existing-2026.7.1-beta.3.tgz"),
     "packed existing",
   );
   const matrixPath = join(root, "matrix.json");
@@ -51,7 +51,7 @@ function fixture() {
     matrixPath,
     JSON.stringify([
       {
-        packageName: "@openclaw/meta",
+        packageName: "@natesclaw/meta",
         version: "2026.7.1-beta.3",
         packageDir: "extensions/meta",
         publishTag: "beta",
@@ -59,7 +59,7 @@ function fixture() {
         requiresManualOverride: false,
       },
       {
-        packageName: "@openclaw/existing",
+        packageName: "@natesclaw/existing",
         version: "2026.7.1-beta.3",
         packageDir: "extensions/existing",
         publishTag: "beta",
@@ -82,8 +82,8 @@ function common(paths: ReturnType<typeof fixture>) {
     clawhubToolchainIntegrity,
     clawhubToolchainSha256,
     clawhubToolchainVersion,
-    plugins: "@openclaw/meta,@openclaw/existing",
-    repository: "openclaw/openclaw",
+    plugins: "@natesclaw/meta,@natesclaw/existing",
+    repository: "natesclaw/natesclaw",
     runAttempt: "2",
     runId: "123",
     targetSha,
@@ -141,7 +141,7 @@ function writeClawPack(
     type?: "0" | "5";
   }>,
 ) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-clawhub-packed-"));
+  const root = mkdtempSync(join(tmpdir(), "natesclaw-clawhub-packed-"));
   tempDirs.push(root);
   const bytes = gzipSync(
     Buffer.concat([
@@ -168,9 +168,9 @@ describe("ClawHub bootstrap artifact manifest", () => {
       matrixPath: paths.matrixPath,
       outputPath: paths.manifestPath,
     });
-    const meta = created.entries.find((entry) => entry.packageName === "@openclaw/meta");
+    const meta = created.entries.find((entry) => entry.packageName === "@natesclaw/meta");
     expect(meta).toMatchObject({
-      artifactPath: "packages/meta/openclaw-meta-2026.7.1-beta.3.tgz",
+      artifactPath: "packages/meta/natesclaw-meta-2026.7.1-beta.3.tgz",
       size: 11,
     });
     expect(meta?.sha256).toMatch(/^[a-f0-9]{64}$/u);
@@ -194,7 +194,7 @@ describe("ClawHub bootstrap artifact manifest", () => {
       outputPath: paths.manifestPath,
     });
     writeFileSync(
-      join(paths.artifactRoot, "packages", "meta", "openclaw-meta-2026.7.1-beta.3.tgz"),
+      join(paths.artifactRoot, "packages", "meta", "natesclaw-meta-2026.7.1-beta.3.tgz"),
       "changed",
     );
     await expect(
@@ -206,7 +206,7 @@ describe("ClawHub bootstrap artifact manifest", () => {
 
     const manifest = JSON.parse(readFileSync(paths.manifestPath, "utf8"));
     writeFileSync(
-      join(paths.artifactRoot, "packages", "meta", "openclaw-meta-2026.7.1-beta.3.tgz"),
+      join(paths.artifactRoot, "packages", "meta", "natesclaw-meta-2026.7.1-beta.3.tgz"),
       "packed meta",
     );
     writeFileSync(join(paths.artifactRoot, "unexpected.txt"), "unexpected");
@@ -274,9 +274,9 @@ describe("ClawHub bootstrap artifact manifest", () => {
       matrixPath: paths.matrixPath,
       outputPath: paths.manifestPath,
     });
-    const existing = manifest.entries.find((entry) => entry.packageName === "@openclaw/existing");
+    const existing = manifest.entries.find((entry) => entry.packageName === "@natesclaw/existing");
     expect(existing).toMatchObject({
-      artifactPath: "packages/existing/openclaw-existing-2026.7.1-beta.3.tgz",
+      artifactPath: "packages/existing/natesclaw-existing-2026.7.1-beta.3.tgz",
       size: 15,
     });
     expect(existing?.sha256).toMatch(/^[a-f0-9]{64}$/u);
@@ -295,7 +295,7 @@ describe("ClawHub bootstrap artifact manifest", () => {
       clawhubToolchainSha256,
       clawhubToolchainVersion,
       consumerRunAttempt: "2",
-      repository: "openclaw/openclaw",
+      repository: "natesclaw/natesclaw",
       producerJobName: "Pack immutable ClawHub bootstrap artifacts",
       runAttempt: "2",
       runId: "123",
@@ -349,7 +349,7 @@ describe("ClawHub bootstrap artifact manifest", () => {
 describe("ClawHub packed artifact identity", () => {
   const expectedIdentity = {
     expectedDir: "extensions/meta",
-    expectedName: "@openclaw/meta-provider",
+    expectedName: "@natesclaw/meta-provider",
     expectedVersion: "2026.7.1-beta.3",
   };
 
@@ -359,9 +359,9 @@ describe("ClawHub packed artifact identity", () => {
         name: "package.json",
         prefix: "package",
         contents: JSON.stringify({
-          name: "@openclaw/meta-provider",
+          name: "@natesclaw/meta-provider",
           version: "2026.7.1-beta.3",
-          openclaw: {
+          natesclaw: {
             release: {
               publishToClawHub: true,
               publishToNpm: true,
@@ -370,7 +370,7 @@ describe("ClawHub packed artifact identity", () => {
         }),
       },
       {
-        name: "openclaw.plugin.json",
+        name: "natesclaw.plugin.json",
         prefix: "package",
         contents: JSON.stringify({ id: "meta" }),
       },
@@ -382,11 +382,11 @@ describe("ClawHub packed artifact identity", () => {
         expectedSha256: pack.sha256,
         expectedSize: String(pack.bytes.byteLength),
         expectedDir: "extensions/meta",
-        expectedName: "@openclaw/meta-provider",
+        expectedName: "@natesclaw/meta-provider",
         expectedVersion: "2026.7.1-beta.3",
       }),
     ).resolves.toMatchObject({
-      packageName: "@openclaw/meta-provider",
+      packageName: "@natesclaw/meta-provider",
       packageVersion: "2026.7.1-beta.3",
       sha256: pack.sha256,
       size: pack.bytes.byteLength,
@@ -399,19 +399,19 @@ describe("ClawHub packed artifact identity", () => {
         name: " package.json ",
         prefix: " package ",
         contents: JSON.stringify({
-          name: "@openclaw/meta-provider",
+          name: "@natesclaw/meta-provider",
           version: "2026.7.1-beta.3",
         }),
       },
       {
         name: "package/package.json",
         contents: JSON.stringify({
-          name: "@openclaw/other",
+          name: "@natesclaw/other",
           version: "9.9.9",
         }),
       },
       {
-        name: "package/openclaw.plugin.json",
+        name: "package/natesclaw.plugin.json",
         contents: JSON.stringify({ id: "meta" }),
       },
     ]);
@@ -422,7 +422,7 @@ describe("ClawHub packed artifact identity", () => {
         expectedSha256: pack.sha256,
         expectedSize: String(pack.bytes.byteLength),
         expectedDir: "extensions/meta",
-        expectedName: "@openclaw/meta-provider",
+        expectedName: "@natesclaw/meta-provider",
         expectedVersion: "2026.7.1-beta.3",
       }),
     ).rejects.toThrow("changes under the pinned ClawHub path normalization");
@@ -433,7 +433,7 @@ describe("ClawHub packed artifact identity", () => {
       {
         name: "package/package.json",
         contents: JSON.stringify({
-          name: "@openclaw/meta-provider",
+          name: "@natesclaw/meta-provider",
           version: "2026.7.1-beta.3",
         }),
       },
@@ -441,7 +441,7 @@ describe("ClawHub packed artifact identity", () => {
         name: " package.json ",
         prefix: " package ",
         contents: JSON.stringify({
-          name: "@openclaw/other",
+          name: "@natesclaw/other",
           version: "9.9.9",
         }),
       },
@@ -458,7 +458,7 @@ describe("ClawHub packed artifact identity", () => {
   });
 
   it("rejects a compressed artifact above the ClawHub package limit before reading it", async () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-clawhub-packed-limit-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-clawhub-packed-limit-"));
     tempDirs.push(root);
     const artifactPath = join(root, "oversized.tgz");
     writeFileSync(artifactPath, "");
@@ -475,7 +475,7 @@ describe("ClawHub packed artifact identity", () => {
   });
 
   it("bounds expanded tar bytes", async () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-clawhub-expanded-limit-"));
+    const root = mkdtempSync(join(tmpdir(), "natesclaw-clawhub-expanded-limit-"));
     tempDirs.push(root);
     const artifactPath = join(root, "expanded.tgz");
     const bytes = gzipSync(Buffer.alloc(64 * 1024 * 1024 + 1));

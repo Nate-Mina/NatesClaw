@@ -2,7 +2,7 @@
  * Gateway sessions.list changed-state tests.
  */
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, expect, test, vi } from "vitest";
 import { createDeferred } from "../../test/helpers/promise.js";
 import { loadSessionEntry } from "../config/sessions/session-accessor.js";
@@ -304,7 +304,7 @@ test("sessions.list keeps bulk rows lightweight and uses persisted model fields"
       },
       {
         role: "assistant",
-        provider: "openclaw",
+        provider: "natesclaw",
         model: "delivery-mirror",
         usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
       },

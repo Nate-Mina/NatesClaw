@@ -1,4 +1,4 @@
-// Wraps fs-safe JSON reads and atomic writes with OpenClaw defaults.
+// Wraps fs-safe JSON reads and atomic writes with Natesclaw defaults.
 import "./fs-safe-defaults.js";
 import { replaceFileAtomic } from "./replace-file.js";
 
@@ -24,9 +24,9 @@ export {
   writeJson,
   writeJson as writeJsonAtomic,
   writeJsonSync,
-} from "@openclaw/fs-safe/json";
+} from "@natesclaw/fs-safe/json";
 
-export { createAsyncLock } from "@openclaw/fs-safe/advanced";
+export { createAsyncLock } from "@natesclaw/fs-safe/advanced";
 
 export type WriteTextAtomicOptions = {
   mode?: number;

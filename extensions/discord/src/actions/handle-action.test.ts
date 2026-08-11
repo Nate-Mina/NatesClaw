@@ -1,6 +1,6 @@
 // Discord tests cover handle action plugin behavior.
-import { expectDefined } from "@openclaw/normalization-core";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const runtimeModule = await import("./runtime.js");
@@ -15,10 +15,10 @@ const {
 } = await import("../active-turn-thread-route.js");
 const { discordInboundEventDelivery } = await import("../inbound-event-delivery.js");
 
-function discordConfig(actions?: Record<string, boolean>): OpenClawConfig {
+function discordConfig(actions?: Record<string, boolean>): NatesclawConfig {
   return {
     channels: { discord: { token: "tok", ...(actions ? { actions } : {}) } },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function defaultActionOptions() {
@@ -31,7 +31,7 @@ function defaultActionOptions() {
 
 function expectDiscordActionCall(params: {
   payload: unknown;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   options?: unknown;
 }) {
   expect(handleDiscordActionMock).toHaveBeenCalledTimes(1);

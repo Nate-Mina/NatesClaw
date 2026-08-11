@@ -1,11 +1,11 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   type ErrorShape,
   errorShape,
 } from "../../packages/gateway-protocol/src/index.js";
 import { listAgentIds } from "../agents/agent-scope.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
 import { resolveSessionStoreAgentId, resolveSessionStoreKey } from "./session-store-key.js";
 
@@ -14,7 +14,7 @@ type RequestedSessionAgentIdResolution =
   | { ok: false; error: ErrorShape };
 
 export function resolveRequestedSessionAgentId(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   key: string,
   explicitAgentId?: string,
 ): RequestedSessionAgentIdResolution {

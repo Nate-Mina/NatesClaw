@@ -1,8 +1,8 @@
 // Persists and resolves voice wake routing rules.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { normalizeAgentId } from "../routing/session-key.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
-import { openOpenClawStateDatabase } from "../state/openclaw-state-db.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
+import { openNatesclawStateDatabase } from "../state/natesclaw-state-db.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
@@ -38,13 +38,13 @@ const DEFAULT_ROUTING: VoiceWakeRoutingConfig = {
 };
 
 type VoiceWakeRoutingDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "voicewake_routing_config" | "voicewake_routing_routes"
 >;
 
 function openStateDatabase(stateDir?: string) {
-  return openOpenClawStateDatabase({
-    env: stateDir ? { ...process.env, OPENCLAW_STATE_DIR: stateDir } : process.env,
+  return openNatesclawStateDatabase({
+    env: stateDir ? { ...process.env, NATESCLAW_STATE_DIR: stateDir } : process.env,
   });
 }
 

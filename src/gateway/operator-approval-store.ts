@@ -1,4 +1,4 @@
-import { normalizeNullableString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeNullableString } from "@natesclaw/normalization-core/string-coerce";
 // Persistent operator approval lifecycle and first-answer-wins transitions.
 import type { Selectable } from "kysely";
 import {
@@ -16,16 +16,16 @@ import {
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
-import { tableExists } from "../state/openclaw-state-db-schema-helpers.js";
+import { tableExists } from "../state/natesclaw-state-db-schema-helpers.js";
 import type {
-  DB as OpenClawStateKyselyDatabase,
+  DB as NatesclawStateKyselyDatabase,
   OperatorApprovals,
-} from "../state/openclaw-state-db.generated.js";
+} from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 
 const OPERATOR_APPROVAL_TERMINAL_RETENTION_MS = 30 * 24 * 60 * 60_000;
 export const OPERATOR_APPROVAL_MAX_AUDIENCE_SESSION_KEYS = 64;
@@ -146,7 +146,7 @@ type TerminalizeOperatorApprovalsResult = {
 };
 
 type OperatorApprovalDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "operator_approvals" | "operator_approval_execution_identities"
 >;
 type OperatorApprovalRow = Selectable<OperatorApprovals>;
@@ -481,7 +481,7 @@ function decodeOperatorApprovalRow(row: OperatorApprovalRow): OperatorApprovalRe
 }
 
 function selectOperatorApprovalRow(
-  database: ReturnType<typeof openOpenClawStateDatabase>,
+  database: ReturnType<typeof openNatesclawStateDatabase>,
   id: string,
 ): OperatorApprovalRow | undefined {
   const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
@@ -492,7 +492,7 @@ function selectOperatorApprovalRow(
 }
 
 function selectOperatorApprovalRowByLocator(
-  database: ReturnType<typeof openOpenClawStateDatabase>,
+  database: ReturnType<typeof openNatesclawStateDatabase>,
   locator: string,
 ): OperatorApprovalRow | undefined {
   const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
@@ -508,7 +508,7 @@ function selectOperatorApprovalRowByLocator(
 }
 
 function hasApprovalLocatorNamespaceConflict(params: {
-  database: ReturnType<typeof openOpenClawStateDatabase>;
+  database: ReturnType<typeof openNatesclawStateDatabase>;
   id: string;
   resolutionRef: string;
 }): boolean {
@@ -538,7 +538,7 @@ function matchesExpectedApprovalOwner(params: {
 }
 
 function denyCorruptPendingRow(params: {
-  database: ReturnType<typeof openOpenClawStateDatabase>;
+  database: ReturnType<typeof openNatesclawStateDatabase>;
   id: string;
   nowMs: number;
   createdAtMs: number;
@@ -564,7 +564,7 @@ function denyCorruptPendingRow(params: {
 }
 
 function expirePendingRow(params: {
-  database: ReturnType<typeof openOpenClawStateDatabase>;
+  database: ReturnType<typeof openNatesclawStateDatabase>;
   id: string;
   nowMs: number;
   createdAtMs: number;
@@ -632,7 +632,7 @@ function inputMatchesExistingRow(
 
 export function insertOperatorApproval(params: {
   approval: NewOperatorApproval;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): InsertOperatorApprovalResult {
   const input = params.approval;
   const id = requireApprovalId(input.id);
@@ -666,7 +666,7 @@ export function insertOperatorApproval(params: {
   };
   const executionIdentityBinding = normalizeExecutionIdentityBinding(input);
 
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
     executeSqliteQuerySync(
       database.db,
@@ -773,10 +773,10 @@ export function getOperatorApprovalDetailed(params: {
   id: string;
   allowTransportRef?: boolean;
   nowMs?: number;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): GetOperatorApprovalResult {
   const locator = requireApprovalId(params.id);
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     let row = params.allowTransportRef
       ? selectOperatorApprovalRowByLocator(database, locator)
@@ -808,11 +808,11 @@ export function listPendingOperatorApprovals(
     recordFilter?: (record: OperatorApprovalRecord) => boolean;
     limit?: number;
     nowMs?: number;
-    databaseOptions?: OpenClawStateDatabaseOptions;
+    databaseOptions?: NatesclawStateDatabaseOptions;
   } = {},
 ): OperatorApprovalRecord[] {
   expireDueOperatorApprovals({ nowMs: params.nowMs, databaseOptions: params.databaseOptions });
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
     const resultLimit = Math.max(
@@ -893,7 +893,7 @@ export function listTerminalOperatorApprovals(
     limit?: number;
     kind?: OperatorApprovalKind;
     nowMs?: number;
-    databaseOptions?: OpenClawStateDatabaseOptions;
+    databaseOptions?: NatesclawStateDatabaseOptions;
   } = {},
 ): ListTerminalOperatorApprovalsResult {
   const requestedLimit = Number.isSafeInteger(params.limit)
@@ -905,7 +905,7 @@ export function listTerminalOperatorApprovals(
   const retentionCutoffMs = (params.nowMs ?? Date.now()) - OPERATOR_APPROVAL_TERMINAL_RETENTION_MS;
   let cursor =
     params.cursor === undefined ? undefined : decodeOperatorApprovalHistoryCursor(params.cursor);
-  const database = openOpenClawStateDatabase(params.databaseOptions);
+  const database = openNatesclawStateDatabase(params.databaseOptions);
   const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
   const records: OperatorApprovalRecord[] = [];
   const pageSize = resultLimit + 1;
@@ -975,7 +975,7 @@ export function resolveOperatorApproval(params: {
   expectedKind?: OperatorApprovalKind;
   runtimeEpoch?: string;
   nowMs?: number;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): ResolveOperatorApprovalResult {
   const id = requireApprovalId(params.id);
   const resolverId = normalizeNullableString(params.resolver.id);
@@ -983,7 +983,7 @@ export function resolveOperatorApproval(params: {
     params.runtimeEpoch === undefined
       ? undefined
       : requireString(params.runtimeEpoch, "operator approval runtime epoch");
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     let row = selectOperatorApprovalRow(database, id);
     if (!row) {
@@ -1076,14 +1076,14 @@ export function forceDenyOperatorApproval(params: {
   expectedKind?: OperatorApprovalKind;
   runtimeEpoch?: string;
   nowMs?: number;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): ForceDenyOperatorApprovalResult {
   const id = requireApprovalId(params.id);
   const runtimeEpoch =
     params.runtimeEpoch === undefined
       ? undefined
       : requireString(params.runtimeEpoch, "operator approval runtime epoch");
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     const row = selectOperatorApprovalRow(database, id);
     if (!row) {
@@ -1148,9 +1148,9 @@ export function forceDenyOperatorApproval(params: {
 
 export function expireDueOperatorApprovals(params: {
   nowMs?: number;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): TerminalizeOperatorApprovalsResult {
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
     const dueRows = executeSqliteQuerySync(
@@ -1207,10 +1207,10 @@ export function expireDueOperatorApprovals(params: {
 export function closeOrphanedOperatorApprovals(params: {
   runtimeEpoch: string;
   nowMs?: number;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): TerminalizeOperatorApprovalsResult {
   const runtimeEpoch = requireString(params.runtimeEpoch, "operator approval runtime epoch");
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);
     const orphanRows = executeSqliteQuerySync(
@@ -1277,7 +1277,7 @@ export function consumeOperatorApprovalAllowOnce(params: {
   runtimeEpoch?: string;
   redemptionWindowMs?: number;
   nowMs?: number;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): ConsumeOperatorApprovalResult {
   const id = requireApprovalId(params.id);
   const consumerId = requireString(params.consumerId, "operator approval consumer id");
@@ -1288,7 +1288,7 @@ export function consumeOperatorApprovalAllowOnce(params: {
   if (params.redemptionWindowMs !== undefined && !isValidTimestamp(params.redemptionWindowMs)) {
     throw new Error("operator approval redemption window must be a non-negative safe integer");
   }
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     const redemptionThresholdMs =
       params.redemptionWindowMs === undefined ? undefined : nowMs - params.redemptionWindowMs;
@@ -1372,13 +1372,13 @@ export function consumeOperatorApprovalAllowOnce(params: {
 export function pruneTerminalOperatorApprovals(params: {
   nowMs?: number;
   retentionMs?: number;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): number {
   const retentionMs = params.retentionMs ?? OPERATOR_APPROVAL_TERMINAL_RETENTION_MS;
   if (!Number.isSafeInteger(retentionMs) || retentionMs < 0) {
     throw new Error("operator approval retention must be a non-negative safe integer");
   }
-  return runOpenClawStateWriteTransaction((database) => {
+  return runNatesclawStateWriteTransaction((database) => {
     const nowMs = params.nowMs ?? Date.now();
     const cutoffMs = nowMs - retentionMs;
     const stateDb = getNodeSqliteKysely<OperatorApprovalDatabase>(database.db);

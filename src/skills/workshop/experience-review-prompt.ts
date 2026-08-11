@@ -1,5 +1,5 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { sliceUtf16Safe, truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { sliceUtf16Safe, truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import type { RunSkillUsage } from "../runtime/run-usage.js";
 import { SKILL_AUTHORING_STANDARDS_PROMPT } from "./skill-authoring-standards.js";
 

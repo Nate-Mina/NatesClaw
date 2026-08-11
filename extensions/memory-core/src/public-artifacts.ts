@@ -2,11 +2,11 @@
 import {
   listMemoryHostPublicArtifacts,
   type MemoryPluginPublicArtifact,
-} from "openclaw/plugin-sdk/memory-host-core";
-import type { OpenClawConfig } from "../api.js";
+} from "natesclaw/plugin-sdk/memory-host-core";
+import type { NatesclawConfig } from "../api.js";
 
 export async function listMemoryCorePublicArtifacts(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 }): Promise<MemoryPluginPublicArtifact[]> {
   return await listMemoryHostPublicArtifacts(params);
 }

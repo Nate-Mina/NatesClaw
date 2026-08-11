@@ -1,10 +1,10 @@
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { resolveSessionStorePathCore } from "../config/sessions/paths.js";
 import {
   appendTranscriptEvent,
   loadSessionEntryReadOnly,
 } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { buildChannelInboundEventContext } from "./inbound-event/context.js";
 import { createChannelInboundEnvelopeBuilder } from "./inbound-event/envelope.js";
 import { dispatchRoutedChannelTurn } from "./turn/lifecycle.js";
@@ -15,7 +15,7 @@ const MAX_COOLDOWN_ENTRIES = 500;
 const lastReflectionBySession = new Map<string, number>();
 
 export async function recordChannelFeedbackEvent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
   event: Parameters<typeof appendTranscriptEvent>[1];
@@ -101,7 +101,7 @@ function parseReflectionResponse(text: string) {
 }
 
 export async function runChannelFeedbackReflection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: string;
   channelLabel: string;
   accountId?: string;

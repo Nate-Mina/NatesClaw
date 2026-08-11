@@ -6,13 +6,13 @@ import { setTimeout as delay } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   COMMAND_TIMEOUT_MS,
   createContainerizedSutSpawnSpec,
   createCrabboxWarmupArgs,
-  createOpenClawGatewaySpawnSpec,
+  createNatesclawGatewaySpawnSpec,
   parseArgs,
   processTargetExists,
   readCodexProxyPort,
@@ -110,12 +110,12 @@ afterEach(() => {
 
 describe("telegram user Crabbox proof log polling", () => {
   it("starts the local gateway through the repo pnpm runner", () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const fakePnpm = path.join(root, "pnpm.cjs");
     fs.writeFileSync(fakePnpm, "#!/usr/bin/env node\n", { mode: 0o755 });
 
-    const spec = createOpenClawGatewaySpawnSpec({
-      env: { ...process.env, OPENCLAW_TELEGRAM_PROOF_SENTINEL: "1" },
+    const spec = createNatesclawGatewaySpawnSpec({
+      env: { ...process.env, NATESCLAW_TELEGRAM_PROOF_SENTINEL: "1" },
       gatewayPort: 19042,
       nodeExecPath: "/opt/node/bin/node",
       npmExecPath: fakePnpm,
@@ -123,14 +123,14 @@ describe("telegram user Crabbox proof log polling", () => {
     });
 
     expect(spec.command).toBe("/opt/node/bin/node");
-    expect(spec.args).toEqual([fakePnpm, "openclaw", "gateway", "--port", "19042"]);
+    expect(spec.args).toEqual([fakePnpm, "natesclaw", "gateway", "--port", "19042"]);
     expect(spec.options.cwd).toBe(root);
-    expect(spec.options.env?.OPENCLAW_TELEGRAM_PROOF_SENTINEL).toBe("1");
+    expect(spec.options.env?.NATESCLAW_TELEGRAM_PROOF_SENTINEL).toBe("1");
     expect(spec.options.shell).toBe(false);
   });
 
   it("uses an explicitly pinned pnpm executable for a worktree gateway", () => {
-    const spec = createOpenClawGatewaySpawnSpec({
+    const spec = createNatesclawGatewaySpawnSpec({
       env: { PATH: "/definitely-missing" },
       gatewayPort: 19042,
       pnpmExecPath: "/opt/mantis-toolchain/pnpm",
@@ -138,17 +138,17 @@ describe("telegram user Crabbox proof log polling", () => {
     });
 
     expect(spec.command).toBe("/opt/mantis-toolchain/pnpm");
-    expect(spec.args).toEqual(["openclaw", "gateway", "--port", "19042"]);
+    expect(spec.args).toEqual(["natesclaw", "gateway", "--port", "19042"]);
     expect(spec.options.cwd).toBe("/repo");
     expect(spec.options.shell).toBe(false);
   });
 
   it("routes fork SUT startup through the root-owned validating wrapper", () => {
-    const repoRoot = makeTempDir(tempDirs, "openclaw-telegram-proof-");
-    const runtimeRoot = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const repoRoot = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
+    const runtimeRoot = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const spec = createContainerizedSutSpawnSpec({
       codexProxyPort: 43123,
-      containerName: "openclaw-telegram-sut-test",
+      containerName: "natesclaw-telegram-sut-test",
       gatewayEnv: {
         TELEGRAM_BOT_TOKEN: "telegram-burner-token",
       },
@@ -161,7 +161,7 @@ describe("telegram user Crabbox proof log polling", () => {
     });
 
     expect(spec.command).toBe("sudo");
-    expect(spec.args).toContain("/usr/local/sbin/openclaw-mantis-sut-container");
+    expect(spec.args).toContain("/usr/local/sbin/natesclaw-mantis-sut-container");
     expect(spec.args).toContain("run");
     expect(spec.args).toContain("candidate");
     expect(spec.args).not.toContain("docker");
@@ -178,7 +178,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("reads only the loopback Responses proxy port from Codex config", () => {
-    const codexHome = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const codexHome = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     fs.writeFileSync(
       path.join(codexHome, "config.toml"),
       '[model_providers.codex-action-responses-proxy]\nbase_url = "http://127.0.0.1:43123/v1"\n',
@@ -195,18 +195,18 @@ describe("telegram user Crabbox proof log polling", () => {
     const run = vi.fn(() => ({ signal: null, status: 0, stderr: "" }));
     runSutContainerAction(
       "stop",
-      "openclaw-telegram-sut-test",
-      "/tmp/openclaw-tg-crabbox-sut-test",
+      "natesclaw-telegram-sut-test",
+      "/tmp/natesclaw-tg-crabbox-sut-test",
       run,
     );
     expect(run).toHaveBeenCalledWith(
       "sudo",
       [
         "-n",
-        "/usr/local/sbin/openclaw-mantis-sut-container",
+        "/usr/local/sbin/natesclaw-mantis-sut-container",
         "stop",
-        "openclaw-telegram-sut-test",
-        "/tmp/openclaw-tg-crabbox-sut-test",
+        "natesclaw-telegram-sut-test",
+        "/tmp/natesclaw-tg-crabbox-sut-test",
       ],
       expect.objectContaining({ encoding: "utf8", stdio: "pipe" }),
     );
@@ -214,24 +214,24 @@ describe("telegram user Crabbox proof log polling", () => {
     expect(() =>
       runSutContainerAction(
         "destroy",
-        "openclaw-telegram-sut-test",
-        "/tmp/openclaw-tg-crabbox-sut-test",
+        "natesclaw-telegram-sut-test",
+        "/tmp/natesclaw-tg-crabbox-sut-test",
         () => ({ signal: null, status: 1, stderr: "destroy failed" }),
       ),
     ).toThrow("destroy failed with exit code 1.\ndestroy failed");
     expect(() =>
       runSutContainerAction(
         "stop",
-        "openclaw-telegram-sut-test",
-        "/tmp/openclaw-tg-crabbox-sut-test",
+        "natesclaw-telegram-sut-test",
+        "/tmp/natesclaw-tg-crabbox-sut-test",
         () => ({ signal: "SIGKILL", status: null, stderr: "" }),
       ),
     ).toThrow("stop was terminated by SIGKILL");
     expect(() =>
       runSutContainerAction(
         "stop",
-        "openclaw-telegram-sut-test",
-        "/tmp/openclaw-tg-crabbox-sut-test",
+        "natesclaw-telegram-sut-test",
+        "/tmp/natesclaw-tg-crabbox-sut-test",
         () => ({ error: new Error("spawn failed"), status: null }),
       ),
     ).toThrow("Failed to stop container-isolated SUT: spawn failed");
@@ -325,17 +325,17 @@ describe("telegram user Crabbox proof log polling", () => {
   it("rejects loose numeric log tail limits instead of parsing prefixes", () => {
     expect(() =>
       readTelegramUserProofLogTailBytes({
-        OPENCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: "1e3",
+        NATESCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: "1e3",
       }),
-    ).toThrow("invalid OPENCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: 1e3");
+    ).toThrow("invalid NATESCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: 1e3");
     expect(() =>
       readTelegramUserProofLogTailBytes({
-        OPENCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: "1000bytes",
+        NATESCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: "1000bytes",
       }),
-    ).toThrow("invalid OPENCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: 1000bytes");
+    ).toThrow("invalid NATESCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: 1000bytes");
     expect(
       readTelegramUserProofLogTailBytes({
-        OPENCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: "4096",
+        NATESCLAW_TELEGRAM_USER_PROOF_LOG_TAIL_BYTES: "4096",
       }),
     ).toBe(4096);
   });
@@ -393,8 +393,8 @@ describe("telegram user Crabbox proof log polling", () => {
       parseArgs(["--output-dir", ".artifacts/one", "--output-dir", ".artifacts/two"]),
     ).toThrow("--output-dir was provided more than once");
 
-    expect(parseArgs(["--expect", "OpenClaw", "--expect", "ready"]).expect).toEqual([
-      "OpenClaw",
+    expect(parseArgs(["--expect", "Natesclaw", "--expect", "ready"]).expect).toEqual([
+      "Natesclaw",
       "ready",
     ]);
   });
@@ -451,7 +451,7 @@ describe("telegram user Crabbox proof log polling", () => {
       groupId: "group",
       mcpAppFixture: true,
       mockPort: 19043,
-      outputDir: makeTempDir(tempDirs, "openclaw-telegram-proof-"),
+      outputDir: makeTempDir(tempDirs, "natesclaw-telegram-proof-"),
       repoRoot: "/repo",
       testerId: "tester",
     });
@@ -461,7 +461,7 @@ describe("telegram user Crabbox proof log polling", () => {
     expect(config.gateway).toMatchObject({
       auth: {
         mode: "password",
-        password: { id: "OPENCLAW_GATEWAY_PASSWORD", source: "env" },
+        password: { id: "NATESCLAW_GATEWAY_PASSWORD", source: "env" },
       },
       tailscale: { mode: "funnel", resetOnExit: true },
     });
@@ -479,14 +479,14 @@ describe("telegram user Crabbox proof log polling", () => {
       groupId: "group",
       linkPreview: false,
       mockPort: 19043,
-      outputDir: makeTempDir(tempDirs, "openclaw-telegram-proof-"),
+      outputDir: makeTempDir(tempDirs, "natesclaw-telegram-proof-"),
       testerId: "tester",
     });
     const defaultConfigRoot = writeSutConfig({
       gatewayPort: 19044,
       groupId: "group",
       mockPort: 19045,
-      outputDir: makeTempDir(tempDirs, "openclaw-telegram-proof-"),
+      outputDir: makeTempDir(tempDirs, "natesclaw-telegram-proof-"),
       testerId: "tester",
     });
     tempDirs.push(disabledConfigRoot.tempRoot, defaultConfigRoot.tempRoot);
@@ -541,7 +541,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   posixIt("limits the Funnel bridge proxy to the Gateway lifecycle commands", () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const sshPath = path.join(root, "ssh");
     const argvPath = path.join(root, "ssh-argv.json");
     const proxyPath = path.join(root, "tailscale");
@@ -586,7 +586,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   posixIt("keeps the inspect SSH host when selecting a fallback port", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const sshPath = path.join(root, "ssh");
     const argvPath = path.join(root, "ssh-argv.json");
     const proxyPath = path.join(root, "tailscale");
@@ -639,7 +639,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("reads only the requested log tail", () => {
-    const logPath = path.join(makeTempDir(tempDirs, "openclaw-telegram-proof-"), "gateway.log");
+    const logPath = path.join(makeTempDir(tempDirs, "natesclaw-telegram-proof-"), "gateway.log");
     fs.writeFileSync(logPath, `${"old\n".repeat(2000)}ready\n`, "utf8");
 
     const tail = readLogTail(logPath, 32);
@@ -650,7 +650,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("keeps byte-cut log tails UTF-8 safe and reads at least one byte", () => {
-    const logPath = path.join(makeTempDir(tempDirs, "openclaw-telegram-proof-"), "gateway.log");
+    const logPath = path.join(makeTempDir(tempDirs, "natesclaw-telegram-proof-"), "gateway.log");
     fs.writeFileSync(
       logPath,
       Buffer.concat([Buffer.from("x".repeat(100)), Buffer.from("😀"), Buffer.from("y".repeat(20))]),
@@ -662,7 +662,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("keeps readiness timeout tails free of split surrogate pairs", async () => {
-    const logPath = path.join(makeTempDir(tempDirs, "openclaw-telegram-proof-"), "gateway.log");
+    const logPath = path.join(makeTempDir(tempDirs, "natesclaw-telegram-proof-"), "gateway.log");
     fs.writeFileSync(logPath, `${"a".repeat(9)}😀${"b".repeat(3999)}`, "utf8");
 
     let message = "";
@@ -696,7 +696,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("does not reread the full log while waiting for readiness", async () => {
-    const logPath = path.join(makeTempDir(tempDirs, "openclaw-telegram-proof-"), "mock-openai.log");
+    const logPath = path.join(makeTempDir(tempDirs, "natesclaw-telegram-proof-"), "mock-openai.log");
     fs.writeFileSync(logPath, `${"noise\n".repeat(2000)}mock-openai listening\n`, "utf8");
     const readFileSync = vi.spyOn(fs, "readFileSync").mockImplementation(() => {
       throw new Error("full log read");
@@ -708,7 +708,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("reports only a bounded log tail on timeout", async () => {
-    const logPath = path.join(makeTempDir(tempDirs, "openclaw-telegram-proof-"), "gateway.log");
+    const logPath = path.join(makeTempDir(tempDirs, "natesclaw-telegram-proof-"), "gateway.log");
     fs.writeFileSync(logPath, `old-secret\n${"x".repeat(300_000)}recent failure\n`, "utf8");
 
     let message = "";
@@ -732,7 +732,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("shell-quotes generated remote setup and chat literals", () => {
-    const payload = "name $(touch /tmp/openclaw-proof-injected) `touch /tmp/also-injected`";
+    const payload = "name $(touch /tmp/natesclaw-proof-injected) `touch /tmp/also-injected`";
 
     expect(renderRemoteSetup({ tdlibSha256: payload, tdlibUrl: payload })).toContain(
       `tdlib_url='${payload}'`,
@@ -741,14 +741,14 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("stages full publish artifacts without session control files", () => {
-    const outputDir = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const outputDir = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const publishDir = path.join(outputDir, "publish-full-artifacts");
     fs.mkdirSync(publishDir);
     fs.writeFileSync(path.join(publishDir, "stale.txt"), "stale");
     fs.mkdirSync(path.join(outputDir, "publish-gif-only"));
     fs.writeFileSync(
       path.join(outputDir, "session.json"),
-      '{"sshKey":"/private/tmp/openclaw/key"}',
+      '{"sshKey":"/private/tmp/natesclaw/key"}',
     );
     fs.writeFileSync(path.join(outputDir, "lease.json"), '{"token":"secret"}');
     fs.writeFileSync(path.join(outputDir, "status.json"), '{"ok":true}');
@@ -781,10 +781,10 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   it("requires finish to write the proof report before full artifact publishing", () => {
-    const outputDir = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const outputDir = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     fs.writeFileSync(
       path.join(outputDir, "session.json"),
-      '{"sshKey":"/private/tmp/openclaw/key"}',
+      '{"sshKey":"/private/tmp/natesclaw/key"}',
     );
     fs.writeFileSync(path.join(outputDir, "status.json"), '{"ok":true}');
     fs.writeFileSync(path.join(outputDir, "telegram-desktop.log"), "log");
@@ -796,7 +796,7 @@ describe("telegram user Crabbox proof log polling", () => {
   });
 
   posixIt("does not expand generated remote probe arguments in the shell", () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const fakePython = path.join(root, "python3");
     const scriptPath = path.join(root, "remote-probe.sh");
     const argvPath = path.join(root, "argv.json");
@@ -806,7 +806,7 @@ describe("telegram user Crabbox proof log polling", () => {
       fakePython,
       `#!/usr/bin/env node
 import fs from "node:fs";
-fs.writeFileSync(process.env.OPENCLAW_TEST_ARGV_PATH, JSON.stringify(process.argv.slice(1)));
+fs.writeFileSync(process.env.NATESCLAW_TEST_ARGV_PATH, JSON.stringify(process.argv.slice(1)));
 `,
     );
     writeExecutable(
@@ -824,7 +824,7 @@ fs.writeFileSync(process.env.OPENCLAW_TEST_ARGV_PATH, JSON.stringify(process.arg
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_TEST_ARGV_PATH: argvPath,
+        NATESCLAW_TEST_ARGV_PATH: argvPath,
         PATH: `${root}${path.delimiter}${process.env.PATH ?? ""}`,
       },
     });
@@ -851,7 +851,7 @@ fs.writeFileSync(process.env.OPENCLAW_TEST_ARGV_PATH, JSON.stringify(process.arg
   });
 
   it("keeps command failure tails free of split surrogate pairs", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const scriptPath = path.join(root, "unicode-failure.mjs");
     fs.writeFileSync(
       scriptPath,
@@ -901,7 +901,7 @@ process.exitCode = 2;
       await runCommand({
         args: ["-e", script],
         command: process.execPath,
-        cwd: makeTempDir(tempDirs, "openclaw-telegram-proof-"),
+        cwd: makeTempDir(tempDirs, "natesclaw-telegram-proof-"),
       });
     } catch (error) {
       message = error instanceof Error ? error.message : String(error);
@@ -913,7 +913,7 @@ process.exitCode = 2;
   });
 
   posixIt("kills timed-out command process groups when the leader exits first", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const scriptPath = path.join(root, "trap-term.mjs");
     const grandchildPidPath = path.join(root, "grandchild.pid");
     let grandchildPid = 0;
@@ -1044,7 +1044,7 @@ setInterval(() => {}, 1000);
   });
 
   posixIt("lets timed-out command descendants exit during kill grace", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const scriptPath = path.join(root, "trap-term-grace.mjs");
     const readyPath = path.join(root, "descendant.ready");
     const donePath = path.join(root, "descendant.done");
@@ -1093,7 +1093,7 @@ setInterval(() => {}, 1000);
   });
 
   posixIt("keeps closed command groups tracked for parent cleanup", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const commandPath = path.join(root, "closed-command.mjs");
     const runnerPath = path.join(root, "closed-command-runner.mjs");
     const commandSettledPath = path.join(root, "command-settled");
@@ -1178,8 +1178,8 @@ setInterval(() => {}, 1000);
   });
 
   posixIt("keeps local SUT startup tails Unicode-safe and cleans child processes", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
-    const outputDir = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
+    const outputDir = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const mockScript = path.join(root, "scripts/e2e/mock-openai-server.mjs");
     const gatewayScript = path.join(root, "gateway-fail.mjs");
     const mockPidPath = path.join(root, "mock.pid");
@@ -1250,8 +1250,8 @@ process.exit(2);
   });
 
   posixIt("cleans gateway descendants after a failed gateway leader exits", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
-    const outputDir = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
+    const outputDir = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const mockScript = path.join(root, "scripts/e2e/mock-openai-server.mjs");
     const gatewayScript = path.join(root, "gateway-leader-exits.mjs");
     const gatewayGrandchildPidPath = path.join(root, "gateway-grandchild.pid");
@@ -1343,7 +1343,7 @@ process.exit(2);
   });
 
   posixIt("stops Crabbox recording when the desktop probe fails", async () => {
-    const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+    const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
     const recorderPath = path.join(root, "fake-crabbox-recorder.mjs");
     const recorderPidPath = path.join(root, "recorder.pid");
     const recorderTermPath = path.join(root, "recorder.term");
@@ -1390,7 +1390,7 @@ setInterval(() => {}, 1000);
   posixIt(
     "does not wait forever when Crabbox recording exits before the probe returns",
     async () => {
-      const root = makeTempDir(tempDirs, "openclaw-telegram-proof-");
+      const root = makeTempDir(tempDirs, "natesclaw-telegram-proof-");
       const recorderPath = path.join(root, "fake-crabbox-recorder.mjs");
       const recorderExitPath = path.join(root, "recorder.exit");
       writeExecutable(

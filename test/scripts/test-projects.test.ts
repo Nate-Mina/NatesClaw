@@ -66,7 +66,7 @@ function listExpectedFullExtensionRunPlans() {
 }
 
 function withTinyGitRepo(files: Record<string, string>, test: (cwd: string) => void): void {
-  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-test-projects-"));
+  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-test-projects-"));
   try {
     for (const [file, source] of Object.entries(files)) {
       const absolute = path.join(cwd, file);
@@ -84,7 +84,7 @@ function withTinyGitRepo(files: Record<string, string>, test: (cwd: string) => v
 }
 
 function withTinyFileTree(files: Record<string, string>, test: (cwd: string) => void): void {
-  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-test-projects-"));
+  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-test-projects-"));
   try {
     for (const [file, source] of Object.entries(files)) {
       const absolute = path.join(cwd, file);
@@ -194,7 +194,7 @@ describe("scripts/test-projects changed-target routing", () => {
         ["--changed", "origin/main"],
         process.cwd(),
         () => ["test/vitest/vitest.shared.config.ts", "src/utils/provider-utils.ts"],
-        { env: { OPENCLAW_TEST_CHANGED_BROAD: "1" } },
+        { env: { NATESCLAW_TEST_CHANGED_BROAD: "1" } },
       ),
     ).toBeNull();
   });
@@ -481,10 +481,10 @@ describe("scripts/test-projects changed-target routing", () => {
 
   it("keeps npm release workflow edits on the preflight cache guard", () => {
     expectChangedTargets(
-      [".github/workflows/openclaw-npm-release.yml"],
+      [".github/workflows/natesclaw-npm-release.yml"],
       [
-        "test/openclaw-npm-postpublish-verify.test.ts",
-        "test/scripts/openclaw-npm-extended-stable-workflow.test.ts",
+        "test/natesclaw-npm-postpublish-verify.test.ts",
+        "test/scripts/natesclaw-npm-extended-stable-workflow.test.ts",
         "test/scripts/package-acceptance-workflow.test.ts",
         "test/scripts/ci-workflow-guards.test.ts",
       ],
@@ -588,7 +588,7 @@ describe("scripts/test-projects changed-target routing", () => {
         ],
       ],
       [
-        ".github/workflows/shared-openclawkit-periphery.yml",
+        ".github/workflows/shared-natesclawkit-periphery.yml",
         [
           "test/scripts/periphery-intersection.test.ts",
           "test/scripts/periphery-scope-workflows.test.ts",
@@ -643,10 +643,10 @@ describe("scripts/test-projects changed-target routing", () => {
 
   it("keeps release-check workflow edits on release workflow regression tests", () => {
     expectChangedTargets(
-      [".github/workflows/openclaw-release-checks.yml"],
+      [".github/workflows/natesclaw-release-checks.yml"],
       [
         "test/scripts/package-acceptance-workflow.test.ts",
-        "test/scripts/openclaw-cross-os-release-checks.test.ts",
+        "test/scripts/natesclaw-cross-os-release-checks.test.ts",
         "test/scripts/plugin-prerelease-test-plan.test.ts",
         "test/scripts/test-install-sh-docker.test.ts",
         "test/scripts/ci-workflow-guards.test.ts",
@@ -723,8 +723,8 @@ describe("scripts/test-projects changed-target routing", () => {
     );
 
     expectChangedTargets(
-      ["scripts/github/run-openclaw-cross-os-release-checks.sh"],
-      ["test/scripts/openclaw-cross-os-release-workflow.test.ts"],
+      ["scripts/github/run-natesclaw-cross-os-release-checks.sh"],
+      ["test/scripts/natesclaw-cross-os-release-workflow.test.ts"],
     );
 
     expectChangedTargets(
@@ -947,11 +947,11 @@ describe("scripts/test-projects changed-target routing", () => {
   it("routes the shell helper test to the isolated tooling shard", () => {
     expectSingleVitestRunPlan(
       buildVitestRunPlans(["--changed", "origin/main"], process.cwd(), () => [
-        "test/scripts/openclaw-e2e-instance.test.ts",
+        "test/scripts/natesclaw-e2e-instance.test.ts",
       ]),
       {
         config: "test/vitest/vitest.tooling-isolated.config.ts",
-        includePatterns: ["test/scripts/openclaw-e2e-instance.test.ts"],
+        includePatterns: ["test/scripts/natesclaw-e2e-instance.test.ts"],
       },
     );
   });
@@ -1179,7 +1179,7 @@ describe("scripts/test-projects changed-target routing", () => {
         includePatterns: [
           "test/scripts/plugin-prerelease-test-plan.test.ts",
           "test/scripts/kitchen-sink-rpc-walk.test.ts",
-          "test/scripts/openclaw-test-state.test.ts",
+          "test/scripts/natesclaw-test-state.test.ts",
           "test/scripts/plugin-lifecycle-measure.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
           "test/scripts/release-media-memory-scenario.test.ts",
@@ -1303,7 +1303,7 @@ describe("scripts/test-projects changed-target routing", () => {
     ]);
   });
 
-  it("routes OpenClaw Docker E2E script targets instead of skipping changed tests", () => {
+  it("routes Natesclaw Docker E2E script targets instead of skipping changed tests", () => {
     const targets = [
       "scripts/e2e/system-agent-first-run-docker.sh",
       "test/e2e/qa-lab/runtime/system-agent-first-run-docker-client.ts",
@@ -1362,7 +1362,7 @@ describe("scripts/test-projects changed-target routing", () => {
         includePatterns: [
           "test/scripts/check-extension-package-tsc-boundary.test.ts",
           "test/scripts/control-ui-i18n.test.ts",
-          "test/scripts/openclaw-e2e-instance.test.ts",
+          "test/scripts/natesclaw-e2e-instance.test.ts",
         ],
         watchMode: false,
       },
@@ -1377,7 +1377,7 @@ describe("scripts/test-projects changed-target routing", () => {
     expect(toolingPlans.every((plan) => (plan.includePatterns?.length ?? 0) <= 60)).toBe(true);
     expect(toolingTargets).toContain("test/scripts/run-opengrep.test.ts");
     expect(toolingTargets).not.toContain("test/scripts/docker-build-helper.test.ts");
-    expect(toolingTargets).not.toContain("test/scripts/openclaw-e2e-instance.test.ts");
+    expect(toolingTargets).not.toContain("test/scripts/natesclaw-e2e-instance.test.ts");
     expect(new Set(toolingTargets).size).toBe(toolingTargets.length);
     expect(e2ePlans).toEqual([
       {
@@ -1548,7 +1548,7 @@ describe("scripts/test-projects changed-target routing", () => {
         includePatterns: [
           "test/scripts/check-extension-package-tsc-boundary.test.ts",
           "test/scripts/control-ui-i18n.test.ts",
-          "test/scripts/openclaw-e2e-instance.test.ts",
+          "test/scripts/natesclaw-e2e-instance.test.ts",
         ],
         watchMode: false,
       },
@@ -1563,7 +1563,7 @@ describe("scripts/test-projects changed-target routing", () => {
     expect(toolingPlans.every((plan) => (plan.includePatterns?.length ?? 0) <= 60)).toBe(true);
     expect(toolingTargets).toContain("test/scripts/run-opengrep.test.ts");
     expect(toolingTargets).not.toContain("test/scripts/docker-build-helper.test.ts");
-    expect(toolingTargets).not.toContain("test/scripts/openclaw-e2e-instance.test.ts");
+    expect(toolingTargets).not.toContain("test/scripts/natesclaw-e2e-instance.test.ts");
     expect(new Set(toolingTargets).size).toBe(toolingTargets.length);
     expect(e2ePlans).toEqual([
       {
@@ -1657,7 +1657,7 @@ describe("scripts/test-projects changed-target routing", () => {
   });
 
   it("rejects explicit test-support helper files with no importing tests", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-test-targets-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-test-targets-"));
     try {
       fs.mkdirSync(path.join(tempDir, "src", "lonely"), { recursive: true });
       fs.writeFileSync(
@@ -1868,7 +1868,7 @@ describe("scripts/test-projects changed-target routing", () => {
           ["--changed", "origin/main"],
           cwd,
           () => ["test/helpers/unmapped-helper.ts"],
-          { env: { OPENCLAW_TEST_CHANGED_BROAD: "1" } },
+          { env: { NATESCLAW_TEST_CHANGED_BROAD: "1" } },
         );
       },
     );
@@ -1948,7 +1948,7 @@ describe("scripts/test-projects changed-target routing", () => {
       "[test] no precise changed test targets; skipping Vitest.",
       "[test] 1 changed path require broad Vitest fallback:",
       "[test]   unknown-root-surface.txt",
-      "[test] run `OPENCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` for broad coverage.",
+      "[test] run `NATESCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` for broad coverage.",
     ]);
   });
 
@@ -1958,7 +1958,7 @@ describe("scripts/test-projects changed-target routing", () => {
         ["--changed", "origin/main"],
         process.cwd(),
         () => ["unknown/file.txt"],
-        { env: { OPENCLAW_TEST_CHANGED_BROAD: "1" } },
+        { env: { NATESCLAW_TEST_CHANGED_BROAD: "1" } },
       ),
     ).toBeNull();
   });
@@ -1980,7 +1980,7 @@ describe("scripts/test-projects changed-target routing", () => {
   it("skips app-only changes because app tests are separate from Vitest lanes", () => {
     expect(
       buildVitestRunPlans(["--changed", "origin/main"], process.cwd(), () => [
-        "apps/macos/OpenClaw/AppDelegate.swift",
+        "apps/macos/Natesclaw/AppDelegate.swift",
       ]),
     ).toStrictEqual([]);
   });
@@ -1990,7 +1990,7 @@ describe("scripts/test-projects changed-target routing", () => {
       ["--changed", "origin/main"],
       process.cwd(),
       () => ["src/plugin-sdk/provider-entry.ts"],
-      { env: { OPENCLAW_TEST_CHANGED_BROAD: "1" } },
+      { env: { NATESCLAW_TEST_CHANGED_BROAD: "1" } },
     );
 
     expect(plans).toEqual([
@@ -2356,7 +2356,7 @@ describe("scripts/test-projects changed-target routing", () => {
   });
 
   it("uses collision-resistant include-file names for scoped Vitest specs", () => {
-    const tempDir = path.join("tmp", "openclaw-vitest-specs");
+    const tempDir = path.join("tmp", "natesclaw-vitest-specs");
     const [spec] = createVitestRunSpecs(["src/plugin-sdk/temp-path.test.ts"], {
       baseEnv: {},
       tempDir,
@@ -2364,7 +2364,7 @@ describe("scripts/test-projects changed-target routing", () => {
 
     expect(path.dirname(spec?.includeFilePath ?? "")).toBe(tempDir);
     expect(path.basename(spec?.includeFilePath ?? "")).toMatch(
-      /^openclaw-vitest-include-[0-9a-f-]{36}-0\.json$/u,
+      /^natesclaw-vitest-include-[0-9a-f-]{36}-0\.json$/u,
     );
     expect(spec?.includeFilePath).not.toMatch(new RegExp(`${process.pid}-\\d+-0\\.json$`, "u"));
   });
@@ -2398,7 +2398,7 @@ describe("scripts/test-projects changed-target routing", () => {
   });
 
   it("retains routed glob targets in watch-mode include files", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-test-projects-watch-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-test-projects-watch-"));
     try {
       const includeFile = path.join(tempDir, "include.json");
       writeVitestIncludeFile(includeFile, ["src/gateway/**/*.test.ts"], {
@@ -2502,7 +2502,7 @@ describe("scripts/test-projects changed-target routing", () => {
       ["--changed", "origin/main"],
       process.cwd(),
       () => ["src/plugin-sdk/facade-runtime.ts"],
-      { env: { OPENCLAW_TEST_CHANGED_BROAD: "1" } },
+      { env: { NATESCLAW_TEST_CHANGED_BROAD: "1" } },
     );
 
     expect(plans).toEqual([
@@ -2548,7 +2548,7 @@ describe("scripts/test-projects changed-target routing", () => {
   it("keeps broad changed fallback available through explicit env", () => {
     expect(
       resolveChangedTestTargetPlan(["package.json", "src/commands/channels.add.ts"], {
-        env: { OPENCLAW_TEST_CHANGED_BROAD: "1" },
+        env: { NATESCLAW_TEST_CHANGED_BROAD: "1" },
       }),
     ).toEqual({
       mode: "broad",
@@ -2600,7 +2600,7 @@ describe("scripts/test-projects changed-target routing", () => {
           "src/plugins/bundled-plugin-metadata.test.ts",
           "src/infra/update-global.test.ts",
           "src/infra/update-runner.test.ts",
-          "test/openclaw-npm-postpublish-verify.test.ts",
+          "test/natesclaw-npm-postpublish-verify.test.ts",
         ],
       );
     }
@@ -2671,8 +2671,8 @@ describe("scripts/test-projects changed-target routing", () => {
 describe("scripts/test-projects local heavy-check lock", () => {
   const localCheckEnv = () => ({
     ...process.env,
-    OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: undefined,
-    OPENCLAW_TEST_PROJECTS_FORCE_LOCK: undefined,
+    NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD: undefined,
+    NATESCLAW_TEST_PROJECTS_FORCE_LOCK: undefined,
   });
 
   it("skips the lock for a single scoped tooling run", () => {
@@ -2717,7 +2717,7 @@ describe("scripts/test-projects local heavy-check lock", () => {
         ],
         {
           ...localCheckEnv(),
-          OPENCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+          NATESCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
         },
       ),
     ).toBe(false);
@@ -2735,7 +2735,7 @@ describe("scripts/test-projects local heavy-check lock", () => {
         ],
         {
           ...localCheckEnv(),
-          OPENCLAW_TEST_PROJECTS_FORCE_LOCK: "1",
+          NATESCLAW_TEST_PROJECTS_FORCE_LOCK: "1",
         },
       ),
     ).toBe(true);
@@ -2783,7 +2783,7 @@ describe("scripts/test-projects full-suite sharding", () => {
           61,
           {
             CI: ciValue,
-            OPENCLAW_VITEST_MAX_WORKERS: "3",
+            NATESCLAW_VITEST_MAX_WORKERS: "3",
           },
           {
             cpuCount: 14,
@@ -2798,9 +2798,9 @@ describe("scripts/test-projects full-suite sharding", () => {
   it("keeps CI=1 full-suite runs on aggregate shard configs", () => {
     vi.stubEnv("CI", "1");
     vi.stubEnv("GITHUB_ACTIONS", "");
-    vi.stubEnv("OPENCLAW_TESTBOX_REMOTE_RUN", "");
-    vi.stubEnv("OPENCLAW_TEST_PROJECTS_LEAF_SHARDS", "");
-    vi.stubEnv("OPENCLAW_TEST_PROJECTS_PARALLEL", "");
+    vi.stubEnv("NATESCLAW_TESTBOX_REMOTE_RUN", "");
+    vi.stubEnv("NATESCLAW_TEST_PROJECTS_LEAF_SHARDS", "");
+    vi.stubEnv("NATESCLAW_TEST_PROJECTS_PARALLEL", "");
     try {
       const configs = buildFullSuiteVitestRunPlans([], process.cwd()).map((plan) => plan.config);
 
@@ -2867,9 +2867,9 @@ describe("scripts/test-projects full-suite sharding", () => {
   it("splits the Testbox agentic and extension shards into bounded processes", () => {
     vi.stubEnv("CI", "1");
     vi.stubEnv("GITHUB_ACTIONS", "");
-    vi.stubEnv("OPENCLAW_TESTBOX_REMOTE_RUN", "1");
-    vi.stubEnv("OPENCLAW_TEST_PROJECTS_LEAF_SHARDS", "");
-    vi.stubEnv("OPENCLAW_TEST_PROJECTS_PARALLEL", "");
+    vi.stubEnv("NATESCLAW_TESTBOX_REMOTE_RUN", "1");
+    vi.stubEnv("NATESCLAW_TEST_PROJECTS_LEAF_SHARDS", "");
+    vi.stubEnv("NATESCLAW_TEST_PROJECTS_PARALLEL", "");
     try {
       const plans = buildFullSuiteVitestRunPlans([], process.cwd());
       const configs = plans.map((plan) => plan.config);
@@ -2893,7 +2893,7 @@ describe("scripts/test-projects full-suite sharding", () => {
       resolveParallelFullSuiteConcurrency(
         61,
         {
-          OPENCLAW_TEST_PROJECTS_PARALLEL: "3",
+          NATESCLAW_TEST_PROJECTS_PARALLEL: "3",
         },
         {
           cpuCount: 14,
@@ -2909,7 +2909,7 @@ describe("scripts/test-projects full-suite sharding", () => {
       resolveParallelFullSuiteConcurrency(
         61,
         {
-          OPENCLAW_TEST_PROJECTS_PARALLEL: "3x",
+          NATESCLAW_TEST_PROJECTS_PARALLEL: "3x",
         },
         {
           cpuCount: 14,
@@ -2917,13 +2917,13 @@ describe("scripts/test-projects full-suite sharding", () => {
           totalMemoryBytes: 48 * 1024 ** 3,
         },
       ),
-    ).toThrow("OPENCLAW_TEST_PROJECTS_PARALLEL must be a positive integer; got: 3x");
+    ).toThrow("NATESCLAW_TEST_PROJECTS_PARALLEL must be a positive integer; got: 3x");
 
     expect(() =>
       resolveParallelFullSuiteConcurrency(
         61,
         {
-          OPENCLAW_TEST_PROJECTS_PARALLEL: "0",
+          NATESCLAW_TEST_PROJECTS_PARALLEL: "0",
         },
         {
           cpuCount: 14,
@@ -2931,7 +2931,7 @@ describe("scripts/test-projects full-suite sharding", () => {
           totalMemoryBytes: 48 * 1024 ** 3,
         },
       ),
-    ).toThrow("OPENCLAW_TEST_PROJECTS_PARALLEL must be a positive integer; got: 0");
+    ).toThrow("NATESCLAW_TEST_PROJECTS_PARALLEL must be a positive integer; got: 0");
   });
 
   it("rejects malformed conservative worker budget values", () => {
@@ -2939,7 +2939,7 @@ describe("scripts/test-projects full-suite sharding", () => {
       resolveParallelFullSuiteConcurrency(
         61,
         {
-          OPENCLAW_VITEST_MAX_WORKERS: "1e0",
+          NATESCLAW_VITEST_MAX_WORKERS: "1e0",
         },
         {
           cpuCount: 14,
@@ -2947,13 +2947,13 @@ describe("scripts/test-projects full-suite sharding", () => {
           totalMemoryBytes: 48 * 1024 ** 3,
         },
       ),
-    ).toThrow("OPENCLAW_VITEST_MAX_WORKERS must be a positive integer; got: 1e0");
+    ).toThrow("NATESCLAW_VITEST_MAX_WORKERS must be a positive integer; got: 1e0");
 
     expect(() =>
       resolveParallelFullSuiteConcurrency(
         61,
         {
-          OPENCLAW_TEST_WORKERS: "1 worker",
+          NATESCLAW_TEST_WORKERS: "1 worker",
         },
         {
           cpuCount: 14,
@@ -2961,20 +2961,20 @@ describe("scripts/test-projects full-suite sharding", () => {
           totalMemoryBytes: 48 * 1024 ** 3,
         },
       ),
-    ).toThrow("OPENCLAW_TEST_WORKERS must be a positive integer; got: 1 worker");
+    ).toThrow("NATESCLAW_TEST_WORKERS must be a positive integer; got: 1 worker");
   });
 
   it("keeps serial untargeted local runs on leaf project configs", () => {
-    const previousParallel = process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    const previousSerial = process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+    const previousParallel = process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    const previousSerial = process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
     const previousCi = process.env.CI;
     const previousActions = process.env.GITHUB_ACTIONS;
-    delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    delete process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
-    delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+    delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    delete process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
+    delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
     delete process.env.CI;
     delete process.env.GITHUB_ACTIONS;
-    process.env.OPENCLAW_TEST_PROJECTS_SERIAL = "1";
+    process.env.NATESCLAW_TEST_PROJECTS_SERIAL = "1";
     try {
       const configs = buildFullSuiteVitestRunPlans([], process.cwd()).map((plan) => plan.config);
 
@@ -2985,14 +2985,14 @@ describe("scripts/test-projects full-suite sharding", () => {
       expect(configs).not.toContain("test/vitest/vitest.full-extensions.config.ts");
     } finally {
       if (previousParallel === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
+        process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
       }
       if (previousSerial === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_SERIAL = previousSerial;
+        process.env.NATESCLAW_TEST_PROJECTS_SERIAL = previousSerial;
       }
       if (previousCi === undefined) {
         delete process.env.CI;
@@ -3008,20 +3008,20 @@ describe("scripts/test-projects full-suite sharding", () => {
   });
 
   it("expands untargeted local runs to leaf project configs by default", () => {
-    const previousLeafShards = process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    const previousParallel = process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    const previousSerial = process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+    const previousLeafShards = process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    const previousParallel = process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    const previousSerial = process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
     const previousCi = process.env.CI;
     const previousActions = process.env.GITHUB_ACTIONS;
-    const previousVitestMaxWorkers = process.env.OPENCLAW_VITEST_MAX_WORKERS;
-    const previousTestWorkers = process.env.OPENCLAW_TEST_WORKERS;
-    delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    delete process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+    const previousVitestMaxWorkers = process.env.NATESCLAW_VITEST_MAX_WORKERS;
+    const previousTestWorkers = process.env.NATESCLAW_TEST_WORKERS;
+    delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    delete process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
     delete process.env.CI;
     delete process.env.GITHUB_ACTIONS;
-    delete process.env.OPENCLAW_VITEST_MAX_WORKERS;
-    delete process.env.OPENCLAW_TEST_WORKERS;
+    delete process.env.NATESCLAW_VITEST_MAX_WORKERS;
+    delete process.env.NATESCLAW_TEST_WORKERS;
     try {
       const plans = buildFullSuiteVitestRunPlans([], process.cwd());
       const configs = plans.map((plan) => plan.config);
@@ -3041,19 +3041,19 @@ describe("scripts/test-projects full-suite sharding", () => {
       expect(toolingPlans.every((plan) => plan.forwardedArgs.length <= 2)).toBe(true);
     } finally {
       if (previousLeafShards === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+        delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
+        process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
       }
       if (previousParallel === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
+        process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
       }
       if (previousSerial === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_SERIAL = previousSerial;
+        process.env.NATESCLAW_TEST_PROJECTS_SERIAL = previousSerial;
       }
       if (previousCi === undefined) {
         delete process.env.CI;
@@ -3066,33 +3066,33 @@ describe("scripts/test-projects full-suite sharding", () => {
         process.env.GITHUB_ACTIONS = previousActions;
       }
       if (previousVitestMaxWorkers === undefined) {
-        delete process.env.OPENCLAW_VITEST_MAX_WORKERS;
+        delete process.env.NATESCLAW_VITEST_MAX_WORKERS;
       } else {
-        process.env.OPENCLAW_VITEST_MAX_WORKERS = previousVitestMaxWorkers;
+        process.env.NATESCLAW_VITEST_MAX_WORKERS = previousVitestMaxWorkers;
       }
       if (previousTestWorkers === undefined) {
-        delete process.env.OPENCLAW_TEST_WORKERS;
+        delete process.env.NATESCLAW_TEST_WORKERS;
       } else {
-        process.env.OPENCLAW_TEST_WORKERS = previousTestWorkers;
+        process.env.NATESCLAW_TEST_WORKERS = previousTestWorkers;
       }
     }
   });
 
   it("expands conservative local worker runs to leaf project configs", () => {
-    const previousLeafShards = process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    const previousParallel = process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    const previousSerial = process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+    const previousLeafShards = process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    const previousParallel = process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    const previousSerial = process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
     const previousCi = process.env.CI;
     const previousActions = process.env.GITHUB_ACTIONS;
-    const previousVitestMaxWorkers = process.env.OPENCLAW_VITEST_MAX_WORKERS;
-    const previousTestWorkers = process.env.OPENCLAW_TEST_WORKERS;
-    delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    delete process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+    const previousVitestMaxWorkers = process.env.NATESCLAW_VITEST_MAX_WORKERS;
+    const previousTestWorkers = process.env.NATESCLAW_TEST_WORKERS;
+    delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    delete process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
     delete process.env.CI;
     delete process.env.GITHUB_ACTIONS;
-    process.env.OPENCLAW_VITEST_MAX_WORKERS = "1";
-    delete process.env.OPENCLAW_TEST_WORKERS;
+    process.env.NATESCLAW_VITEST_MAX_WORKERS = "1";
+    delete process.env.NATESCLAW_TEST_WORKERS;
     try {
       const configs = buildFullSuiteVitestRunPlans([], process.cwd()).map((plan) => plan.config);
 
@@ -3101,19 +3101,19 @@ describe("scripts/test-projects full-suite sharding", () => {
       expect(configs).not.toContain("test/vitest/vitest.full-agentic.config.ts");
     } finally {
       if (previousLeafShards === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+        delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
+        process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
       }
       if (previousParallel === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
+        process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
       }
       if (previousSerial === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_SERIAL = previousSerial;
+        process.env.NATESCLAW_TEST_PROJECTS_SERIAL = previousSerial;
       }
       if (previousCi === undefined) {
         delete process.env.CI;
@@ -3126,27 +3126,27 @@ describe("scripts/test-projects full-suite sharding", () => {
         process.env.GITHUB_ACTIONS = previousActions;
       }
       if (previousVitestMaxWorkers === undefined) {
-        delete process.env.OPENCLAW_VITEST_MAX_WORKERS;
+        delete process.env.NATESCLAW_VITEST_MAX_WORKERS;
       } else {
-        process.env.OPENCLAW_VITEST_MAX_WORKERS = previousVitestMaxWorkers;
+        process.env.NATESCLAW_VITEST_MAX_WORKERS = previousVitestMaxWorkers;
       }
       if (previousTestWorkers === undefined) {
-        delete process.env.OPENCLAW_TEST_WORKERS;
+        delete process.env.NATESCLAW_TEST_WORKERS;
       } else {
-        process.env.OPENCLAW_TEST_WORKERS = previousTestWorkers;
+        process.env.NATESCLAW_TEST_WORKERS = previousTestWorkers;
       }
     }
   });
 
   it("can skip the aggregate extension shard when CI runs dedicated extension shards", () => {
-    const previous = process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
-    const previousParallel = process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    const previousSerial = process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+    const previous = process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
+    const previousParallel = process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    const previousSerial = process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
     const previousCi = process.env.CI;
-    delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    process.env.OPENCLAW_TEST_PROJECTS_SERIAL = "1";
+    delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    process.env.NATESCLAW_TEST_PROJECTS_SERIAL = "1";
     process.env.CI = "true";
-    process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = "1";
+    process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = "1";
     try {
       const configs = buildFullSuiteVitestRunPlans([], process.cwd()).map((plan) => plan.config);
 
@@ -3154,19 +3154,19 @@ describe("scripts/test-projects full-suite sharding", () => {
       expect(configs).toContain("test/vitest/vitest.full-auto-reply.config.ts");
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
+        delete process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
       } else {
-        process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = previous;
+        process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = previous;
       }
       if (previousParallel === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
+        process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
       }
       if (previousSerial === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_SERIAL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_SERIAL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_SERIAL = previousSerial;
+        process.env.NATESCLAW_TEST_PROJECTS_SERIAL = previousSerial;
       }
       if (previousCi === undefined) {
         delete process.env.CI;
@@ -3251,10 +3251,10 @@ describe("scripts/test-projects full-suite sharding", () => {
   });
 
   it("skips extension project configs when leaf sharding and the aggregate extension shard is disabled", () => {
-    const previousLeafShards = process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    const previousSkipExtensions = process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
-    process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = "1";
-    process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = "1";
+    const previousLeafShards = process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    const previousSkipExtensions = process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
+    process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = "1";
+    process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = "1";
     try {
       const configs = buildFullSuiteVitestRunPlans([], process.cwd()).map((plan) => plan.config);
 
@@ -3263,23 +3263,23 @@ describe("scripts/test-projects full-suite sharding", () => {
       expect(configs).toContain("test/vitest/vitest.auto-reply-reply.config.ts");
     } finally {
       if (previousLeafShards === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+        delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
+        process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
       }
       if (previousSkipExtensions === undefined) {
-        delete process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
+        delete process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD;
       } else {
-        process.env.OPENCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = previousSkipExtensions;
+        process.env.NATESCLAW_TEST_SKIP_FULL_EXTENSIONS_SHARD = previousSkipExtensions;
       }
     }
   });
 
   it("expands full-suite shards before running them in parallel", () => {
-    const previousLeafShards = process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    const previousParallel = process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = "6";
+    const previousLeafShards = process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    const previousParallel = process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = "6";
     try {
       const configs = buildFullSuiteVitestRunPlans([], process.cwd()).map((plan) => plan.config);
 
@@ -3287,37 +3287,37 @@ describe("scripts/test-projects full-suite sharding", () => {
       expect(configs).not.toContain("test/vitest/vitest.full-extensions.config.ts");
     } finally {
       if (previousLeafShards === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+        delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
+        process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
       }
       if (previousParallel === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
+        process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
       }
     }
   });
 
   it("rejects malformed full-suite expansion parallel overrides", () => {
-    const previousLeafShards = process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    const previousParallel = process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
-    delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
-    process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = "6x";
+    const previousLeafShards = process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    const previousParallel = process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
+    delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = "6x";
     try {
       expect(() => buildFullSuiteVitestRunPlans([], process.cwd())).toThrow(
-        "OPENCLAW_TEST_PROJECTS_PARALLEL must be a positive integer; got: 6x",
+        "NATESCLAW_TEST_PROJECTS_PARALLEL must be a positive integer; got: 6x",
       );
     } finally {
       if (previousLeafShards === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS;
+        delete process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
+        process.env.NATESCLAW_TEST_PROJECTS_LEAF_SHARDS = previousLeafShards;
       }
       if (previousParallel === undefined) {
-        delete process.env.OPENCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.NATESCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.OPENCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
+        process.env.NATESCLAW_TEST_PROJECTS_PARALLEL = previousParallel;
       }
     }
   });
@@ -3346,7 +3346,7 @@ describe("scripts/test-projects parallel cache paths", () => {
 
     expect(specs.map((spec) => spec.env)).toEqual([
       {
-        OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
+        NATESCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
           "/repo",
           "node_modules",
           ".experimental-vitest-cache",
@@ -3354,7 +3354,7 @@ describe("scripts/test-projects parallel cache paths", () => {
         ),
       },
       {
-        OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
+        NATESCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
           "/repo",
           "node_modules",
           ".experimental-vitest-cache",
@@ -3369,19 +3369,19 @@ describe("scripts/test-projects parallel cache paths", () => {
       [
         {
           config: "test/vitest/vitest.gateway.config.ts",
-          env: { OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" },
+          env: { NATESCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" },
           pnpmArgs: [],
         },
         {
           config: "test/vitest/vitest.extension-telegram.config.ts",
-          env: { OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" },
+          env: { NATESCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" },
           pnpmArgs: [],
         },
       ],
-      { cwd: "/repo", env: { OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" } },
+      { cwd: "/repo", env: { NATESCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" } },
     );
 
-    expect(specs.map((spec) => spec.env.OPENCLAW_VITEST_FS_MODULE_CACHE_PATH)).toEqual([
+    expect(specs.map((spec) => spec.env.NATESCLAW_VITEST_FS_MODULE_CACHE_PATH)).toEqual([
       path.join("/tmp/cache", "0-test-vitest-vitest.gateway.config.ts"),
       path.join("/tmp/cache", "1-test-vitest-vitest.extension-telegram.config.ts"),
     ]);
@@ -3392,14 +3392,14 @@ describe("scripts/test-projects parallel cache paths", () => {
       [
         {
           config: "test/vitest/vitest.gateway.config.ts",
-          env: { OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache/gateway" },
+          env: { NATESCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache/gateway" },
           pnpmArgs: [],
         },
       ],
-      { cwd: "/repo", env: { OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" } },
+      { cwd: "/repo", env: { NATESCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache" } },
     );
 
-    expect(spec?.env.OPENCLAW_VITEST_FS_MODULE_CACHE_PATH).toBe("/tmp/cache/gateway");
+    expect(spec?.env.NATESCLAW_VITEST_FS_MODULE_CACHE_PATH).toBe("/tmp/cache/gateway");
   });
 });
 
@@ -3457,10 +3457,10 @@ describe("scripts/test-projects Vitest stall watchdog", () => {
       { env: { PATH: "/usr/bin" } },
     );
 
-    expect(spec?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe(
+    expect(spec?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe(
       DEFAULT_TEST_PROJECTS_VITEST_NO_OUTPUT_TIMEOUT_MS,
     );
-    expect(spec?.env.OPENCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS).toBe(
+    expect(spec?.env.NATESCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS).toBe(
       DEFAULT_TEST_PROJECTS_VITEST_NO_OUTPUT_HEARTBEAT_MS,
     );
   });
@@ -3512,11 +3512,11 @@ describe("scripts/test-projects Vitest stall watchdog", () => {
       { env: { PATH: "/usr/bin" } },
     );
 
-    expect(specs[0]?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
-    expect(specs[1]?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
-    expect(specs[2]?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
-    expect(specs[3]?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
-    expect(specs[4]?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe(
+    expect(specs[0]?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
+    expect(specs[1]?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
+    expect(specs[2]?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
+    expect(specs[3]?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("2400000");
+    expect(specs[4]?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe(
       DEFAULT_TEST_PROJECTS_VITEST_NO_OUTPUT_TIMEOUT_MS,
     );
   });
@@ -3535,8 +3535,8 @@ describe("scripts/test-projects Vitest stall watchdog", () => {
         {
           config: "test/vitest/vitest.extension-memory.config.ts",
           env: {
-            OPENCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS: "25000",
-            OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0",
+            NATESCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS: "25000",
+            NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0",
             PATH: "/usr/bin",
           },
           includeFilePath: null,
@@ -3548,10 +3548,10 @@ describe("scripts/test-projects Vitest stall watchdog", () => {
       { env: { PATH: "/usr/bin" } },
     );
 
-    expect(specs[0]?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBeUndefined();
-    expect(specs[0]?.env.OPENCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS).toBeUndefined();
-    expect(specs[1]?.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("0");
-    expect(specs[1]?.env.OPENCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS).toBe("25000");
+    expect(specs[0]?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBeUndefined();
+    expect(specs[0]?.env.NATESCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS).toBeUndefined();
+    expect(specs[1]?.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("0");
+    expect(specs[1]?.env.NATESCLAW_VITEST_NO_OUTPUT_HEARTBEAT_MS).toBe("25000");
   });
 
   it("allows changed checks to disable automatic silent-run retries", () => {
@@ -3561,18 +3561,18 @@ describe("scripts/test-projects Vitest stall watchdog", () => {
   });
 
   it("raises short shard no-output timeouts for the retry attempt", () => {
-    const spec = { env: { OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "60000" } };
-    expect(withRetryNoOutputTimeout(spec).env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("300000");
-    const generous = { env: { OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "600000" } };
+    const spec = { env: { NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "60000" } };
+    expect(withRetryNoOutputTimeout(spec).env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("300000");
+    const generous = { env: { NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "600000" } };
     expect(withRetryNoOutputTimeout(generous)).toBe(generous);
-    const disabled = { env: { OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0" } };
+    const disabled = { env: { NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS: "0" } };
     expect(withRetryNoOutputTimeout(disabled)).toBe(disabled);
     const unset = { env: {} };
     expect(withRetryNoOutputTimeout(unset)).toBe(unset);
     expect(shouldRetryVitestNoOutputTimeout({ GITHUB_ACTIONS: "true" })).toBe(false);
-    expect(shouldRetryVitestNoOutputTimeout({ OPENCLAW_VITEST_NO_OUTPUT_RETRY: "1" })).toBe(true);
-    expect(shouldRetryVitestNoOutputTimeout({ OPENCLAW_VITEST_NO_OUTPUT_RETRY: "0" })).toBe(false);
-    expect(shouldRetryVitestNoOutputTimeout({ OPENCLAW_VITEST_NO_OUTPUT_RETRY: "false" })).toBe(
+    expect(shouldRetryVitestNoOutputTimeout({ NATESCLAW_VITEST_NO_OUTPUT_RETRY: "1" })).toBe(true);
+    expect(shouldRetryVitestNoOutputTimeout({ NATESCLAW_VITEST_NO_OUTPUT_RETRY: "0" })).toBe(false);
+    expect(shouldRetryVitestNoOutputTimeout({ NATESCLAW_VITEST_NO_OUTPUT_RETRY: "false" })).toBe(
       false,
     );
   });
@@ -3602,7 +3602,7 @@ describe("scripts/test-projects Vitest cache isolation", () => {
       { cwd: "/repo", env: {} },
     );
 
-    expect(specs.map((spec) => spec.env.OPENCLAW_VITEST_FS_MODULE_CACHE_PATH)).toEqual([
+    expect(specs.map((spec) => spec.env.NATESCLAW_VITEST_FS_MODULE_CACHE_PATH)).toEqual([
       path.join(
         "/repo",
         "node_modules",

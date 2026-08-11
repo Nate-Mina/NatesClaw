@@ -3,12 +3,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { QaRunnerCliRegistration } from "openclaw/plugin-sdk/qa-runner-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { QaRunnerCliRegistration } from "natesclaw/plugin-sdk/qa-runner-runtime";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedOrigin,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   reserveMSTeamsQaWebhookPort,
   startMSTeamsQaBotFrameworkServer,
@@ -32,8 +32,8 @@ function nativeConversationId(logicalId: string) {
 }
 
 function renderMSTeamsQaText(text: string) {
-  const mentionText = "<at>openclaw</at>";
-  const renderedText = text.replace(/@openclaw\b/giu, mentionText);
+  const mentionText = "<at>natesclaw</at>";
+  const renderedText = text.replace(/@natesclaw\b/giu, mentionText);
   return {
     text: renderedText,
     ...(renderedText === text
@@ -43,7 +43,7 @@ function renderMSTeamsQaText(text: string) {
             {
               type: "mention",
               text: mentionText,
-              mentioned: { id: APP_ID, name: "OpenClaw QA" },
+              mentioned: { id: APP_ID, name: "Natesclaw QA" },
             },
           ],
         }),
@@ -132,7 +132,7 @@ export async function createMSTeamsQaTransportAdapter(
     await fs.writeFile(
       bootstrapPath,
       [
-        'const key = Symbol.for("openclaw.msteams.privateQaRuntime");',
+        'const key = Symbol.for("natesclaw.msteams.privateQaRuntime");',
         `globalThis[key] = ${JSON.stringify({
           connectorUrl: connector.baseUrl,
           nonce,
@@ -174,7 +174,7 @@ export async function createMSTeamsQaTransportAdapter(
           aadObjectId: DRIVER_AAD_OBJECT_ID,
           name: input.senderName ?? "Teams QA Driver",
         },
-        recipient: { id: APP_ID, name: "OpenClaw QA" },
+        recipient: { id: APP_ID, name: "Natesclaw QA" },
         conversation: {
           id: nativeThreadId ? `${conversationId};messageid=${nativeThreadId}` : conversationId,
           conversationType:
@@ -246,9 +246,9 @@ export async function createMSTeamsQaTransportAdapter(
             webhook: { port: webhookPort, path: "/api/messages" },
           },
         },
-      }) as Pick<OpenClawConfig, "channels" | "messages">,
+      }) as Pick<NatesclawConfig, "channels" | "messages">,
     createRuntimeEnvPatch: () => ({
-      OPENCLAW_BUILD_PRIVATE_QA: "1",
+      NATESCLAW_BUILD_PRIVATE_QA: "1",
       NODE_OPTIONS: [
         process.env.NODE_OPTIONS?.trim(),
         `--import=${pathToFileURL(bootstrapPath).href}`,

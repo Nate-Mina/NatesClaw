@@ -1,11 +1,11 @@
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import {
   getLoadedChannelPluginEntryById,
   listLoadedChannelPlugins,
 } from "../channels/plugins/registry-loaded.js";
 import type { ChannelId } from "../channels/plugins/types.public.js";
 import { getRuntimeConfig } from "../config/io.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { createSubsystemLogger } from "../logging/subsystem.js";
 import { setCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";
 import { completePluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
@@ -444,7 +444,7 @@ export async function startGatewayCoreRuntime(input: {
     }
   };
   const reloadAttachedGatewayPlugins = async (params: {
-    nextConfig: OpenClawConfig;
+    nextConfig: NatesclawConfig;
     changedPaths: readonly string[];
     beforeReplace: (
       channels: ReadonlySet<ChannelId>,

@@ -2,15 +2,15 @@
 import crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { mimeTypeFromFilePath } from "openclaw/plugin-sdk/media-mime";
-import { formatByteSize } from "openclaw/plugin-sdk/number-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { mimeTypeFromFilePath } from "natesclaw/plugin-sdk/media-mime";
+import { formatByteSize } from "natesclaw/plugin-sdk/number-runtime";
 import {
   openLocalFileSafely,
   readRegularFile,
   statRegularFileSync,
-} from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { getPlatformAdapter } from "../adapter/index.js";
 import type { SsrfPolicyConfig } from "../adapter/types.js";
 import { MediaFileType } from "../types.js";

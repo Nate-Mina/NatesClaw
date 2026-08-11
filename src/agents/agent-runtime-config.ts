@@ -6,7 +6,7 @@ import {
 } from "../cli/command-secret-targets.js";
 import { getRuntimeConfig, readConfigFileSnapshotForWrite } from "../config/io.js";
 import { setRuntimeConfigSnapshot } from "../config/runtime-snapshot.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isSecretRef } from "../config/types.secrets.js";
 import { resolvePluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.types.js";
@@ -23,9 +23,9 @@ export async function resolveAgentRuntimeConfig(
     runtimeChannelSecretScope?: { channel: string; accountId?: string };
   },
 ): Promise<{
-  loadedRaw: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
-  cfg: OpenClawConfig;
+  loadedRaw: NatesclawConfig;
+  sourceConfig: NatesclawConfig;
+  cfg: NatesclawConfig;
   pluginMetadataSnapshot?: PluginMetadataSnapshot;
 }> {
   const loadedRaw = getRuntimeConfig();
@@ -129,7 +129,7 @@ function hasNestedSecretRef(value: unknown): boolean {
 }
 
 function hasAgentRuntimeSecretRefs(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   includeChannelTargets: boolean;
   channel?: string;
 }): boolean {
@@ -182,7 +182,7 @@ function hasAgentRuntimeSecretRefs(params: {
 }
 
 function resolveAgentRuntimeSecretTargets(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   includeChannelTargets: boolean;
   channelSecretScope?: { channel: string; accountId?: string };
 }): {

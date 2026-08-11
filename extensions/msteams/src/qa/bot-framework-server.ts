@@ -51,7 +51,7 @@ export async function startMSTeamsQaBotFrameworkServer(options: ServerOptions) {
   const server = createServer((request, response) => {
     void (async () => {
       if (
-        request.headers["x-openclaw-msteams-qa-nonce"] !== options.nonce ||
+        request.headers["x-natesclaw-msteams-qa-nonce"] !== options.nonce ||
         request.headers.authorization !== `Bearer ${options.botToken}`
       ) {
         sendJson(response, 401, { error: "unauthorized" });

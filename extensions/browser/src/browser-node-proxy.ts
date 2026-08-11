@@ -3,8 +3,8 @@ import {
   addTimerTimeoutGraceMs,
   MAX_TIMER_TIMEOUT_MS,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
 import {
   BROWSER_PROXY_COMMAND,
   BROWSER_PROXY_UPLOAD_COMMAND,

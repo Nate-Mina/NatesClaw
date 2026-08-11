@@ -1,4 +1,4 @@
-import { EmbeddedBlockChunker } from "openclaw/plugin-sdk/agent-runtime";
+import { EmbeddedBlockChunker } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   type AgentPlanStep,
   buildChannelProgressDraftLine,
@@ -10,16 +10,16 @@ import {
   resolveChannelStreamingPreviewToolProgress,
   resolveChannelStreamingProgressNarration,
   resolveChannelStreamingSuppressDefaultToolProgressMessages,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 // Discord plugin module implements message handlerraft preview behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { getGlobalHookRunner } from "natesclaw/plugin-sdk/plugin-runtime";
 import {
   convertMarkdownTables,
   stripInlineDirectiveTagsForDelivery,
   stripReasoningTagsFromText,
-} from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/text-chunking";
 import { chunkDiscordTextWithMode } from "../chunk.js";
 import { resolveDiscordDraftStreamingChunking } from "../draft-chunking.js";
 import { createDiscordDraftStream } from "../draft-stream.js";
@@ -30,10 +30,10 @@ type DraftReplyReference = {
   peek: () => string | undefined;
 };
 
-type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+type DiscordConfig = NonNullable<NatesclawConfig["channels"]>["discord"];
 
 export function createDiscordDraftPreviewController(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sourceRepliesAreToolOnly: boolean;

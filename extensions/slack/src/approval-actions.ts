@@ -1,9 +1,9 @@
 // Slack plugin module owns its transport-private approval callback envelope.
-import { buildApprovalResolutionRef } from "openclaw/plugin-sdk/approval-reference-runtime";
-import type { MessagePresentationAction } from "openclaw/plugin-sdk/interactive-runtime";
+import { buildApprovalResolutionRef } from "natesclaw/plugin-sdk/approval-reference-runtime";
+import type { MessagePresentationAction } from "natesclaw/plugin-sdk/interactive-runtime";
 import { SLACK_BUTTON_VALUE_MAX } from "./presentation.js";
 
-const SLACK_APPROVAL_VALUE_PREFIX = "openclaw:approval:v1:";
+const SLACK_APPROVAL_VALUE_PREFIX = "natesclaw:approval:v1:";
 
 export type SlackApprovalAction = Extract<MessagePresentationAction, { type: "approval" }>;
 

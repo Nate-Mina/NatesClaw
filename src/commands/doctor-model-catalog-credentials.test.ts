@@ -15,10 +15,10 @@ import {
   PLUGIN_MODEL_CATALOG_GENERATED_BY,
   replacePersistedPluginModelCatalogs,
 } from "../agents/plugin-model-catalog.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { RuntimeEnv } from "../runtime.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { maybeMigrateModelCatalogCredentials } from "./doctor-model-catalog-credentials.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
@@ -28,14 +28,14 @@ vi.mock("../../packages/terminal-core/src/note.js", () => ({ note }));
 const tempDirs: string[] = [];
 
 function createState(): { agentDir: string; env: NodeJS.ProcessEnv; stateDir: string } {
-  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-doctor-catalog-credentials-"));
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-doctor-catalog-credentials-"));
   tempDirs.push(stateDir);
   const agentDir = path.join(stateDir, "agents", "main", "agent");
   fs.mkdirSync(agentDir, { recursive: true });
   return {
     agentDir,
     stateDir,
-    env: { ...process.env, HOME: stateDir, OPENCLAW_STATE_DIR: stateDir },
+    env: { ...process.env, HOME: stateDir, NATESCLAW_STATE_DIR: stateDir },
   };
 }
 
@@ -58,7 +58,7 @@ function provider(apiKey: string) {
   };
 }
 
-function migrationParams(state: ReturnType<typeof createState>, cfg: OpenClawConfig) {
+function migrationParams(state: ReturnType<typeof createState>, cfg: NatesclawConfig) {
   return {
     cfg,
     env: state.env,
@@ -68,8 +68,8 @@ function migrationParams(state: ReturnType<typeof createState>, cfg: OpenClawCon
 }
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -79,7 +79,7 @@ describe("doctor model catalog credential migration", () => {
   it("copies config, root, and plugin catalog keys before runtime retires plaintext", async () => {
     const state = createState();
     const { agentDir } = state;
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       models: { providers: { configured: provider("configured-secret") } },
     };
     const rootContents = `{

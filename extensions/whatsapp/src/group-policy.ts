@@ -4,11 +4,11 @@ import {
   resolveScopeRequireMention,
   resolveScopeToolsPolicy,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-policy";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 
 type WhatsAppGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   groupId?: string | null;
   senderPolicyMode?: "always" | "never";

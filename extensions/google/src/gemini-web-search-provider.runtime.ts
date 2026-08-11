@@ -4,7 +4,7 @@ import {
   createProviderHttpError,
   formatProviderHttpErrorMessage,
   readProviderJsonObjectResponse,
-} from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-http";
 import {
   buildSearchCacheKey,
   buildUnsupportedSearchFilterResponse,
@@ -24,9 +24,9 @@ import {
   withTrustedWebSearchEndpoint,
   wrapWebContent,
   writeCachedSearchPayload,
-} from "openclaw/plugin-sdk/provider-web-search";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-web-search";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveGoogleApiClientHeaders } from "../google-api-client-header.js";
 import {
   resolveGeminiConfig,
@@ -407,7 +407,7 @@ export async function executeGeminiSearch(
       error: "missing_gemini_api_key",
       message:
         "web_search (gemini) needs an API key. Set GEMINI_API_KEY in the Gateway environment, configure plugins.entries.google.config.webSearch.apiKey, or reuse models.providers.google.apiKey. If you do not want to configure a search API key, use web_fetch for a specific URL or the browser tool for interactive pages.",
-      docs: "https://docs.openclaw.ai/tools/web",
+      docs: "https://docs.natesclaw.ai/tools/web",
     };
   }
 

@@ -1,12 +1,12 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { buildOpenClawToolFallbackText } from "./prompt-surface.js";
+import { buildNatesclawToolFallbackText } from "./prompt-surface.js";
 import { AUTOMATIONS_TOOL_NAME } from "./tools/automations-tool-name.js";
 
-describe("buildOpenClawToolFallbackText", () => {
+describe("buildNatesclawToolFallbackText", () => {
   it("teaches the canonical scheduler tool, never the legacy alias", () => {
-    const text = buildOpenClawToolFallbackText({
-      surface: "openclaw_main",
+    const text = buildNatesclawToolFallbackText({
+      surface: "natesclaw_main",
       execToolName: "exec",
       processToolName: "process",
     });

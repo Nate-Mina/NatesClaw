@@ -4,21 +4,21 @@ import {
   GATEWAY_CLIENT_NAMES,
   type GatewayClientMode,
   type GatewayClientName,
-} from "@openclaw/gateway-protocol/client-info";
+} from "@natesclaw/gateway-protocol/client-info";
 import {
   ConnectErrorDetailCodes,
   readConnectErrorDetailCode,
-} from "@openclaw/gateway-protocol/connect-error-details";
-import type { ConnectParams, EventFrame, HelloOk } from "@openclaw/gateway-protocol/frame-guards";
-import { resolveGatewayStartupRetryAfterMs } from "@openclaw/gateway-protocol/startup-unavailable";
+} from "@natesclaw/gateway-protocol/connect-error-details";
+import type { ConnectParams, EventFrame, HelloOk } from "@natesclaw/gateway-protocol/frame-guards";
+import { resolveGatewayStartupRetryAfterMs } from "@natesclaw/gateway-protocol/startup-unavailable";
 import {
   MIN_CLIENT_PROTOCOL_VERSION,
   MIN_NODE_PROTOCOL_VERSION,
   MIN_PROBE_PROTOCOL_VERSION,
   PROTOCOL_VERSION,
-} from "@openclaw/gateway-protocol/version";
-import { isLoopbackIpAddress, type ParsedIpAddress } from "@openclaw/net-policy/ip";
-import { isWssUrl } from "@openclaw/net-policy/url-protocol";
+} from "@natesclaw/gateway-protocol/version";
+import { isLoopbackIpAddress, type ParsedIpAddress } from "@natesclaw/net-policy/ip";
+import { isWssUrl } from "@natesclaw/net-policy/url-protocol";
 import { WebSocket, type ClientOptions, type CertMeta } from "ws";
 import {
   isSensitiveUrlQueryParamName,
@@ -67,7 +67,7 @@ export type DeviceAuthTokenRecord = {
   scopes?: string[];
 };
 
-// The package stays reusable by depending on host callbacks for OpenClaw-owned
+// The package stays reusable by depending on host callbacks for Natesclaw-owned
 // state: device keys, token storage, proxy routing, logging, and TLS formatting.
 export type GatewayClientHostDeps = {
   loadOrCreateDeviceIdentity?: () => DeviceIdentity | undefined;
@@ -529,7 +529,7 @@ export class GatewayClient {
     }
 
     const allowPrivateWs =
-      (this.opts.env ?? process.env).OPENCLAW_ALLOW_INSECURE_PRIVATE_WS === "1";
+      (this.opts.env ?? process.env).NATESCLAW_ALLOW_INSECURE_PRIVATE_WS === "1";
     // Block plaintext before device-token lookup. Credentials may be loaded from
     // host storage later in sendConnect(), and chat payloads are sensitive too.
     if (!isSecureWebSocketUrl(url, { allowPrivateWs })) {
@@ -547,8 +547,8 @@ export class GatewayClient {
           "(ssh -N -L 18789:127.0.0.1:18789 user@gateway-host), or use Tailscale Serve/Funnel. " +
           (allowPrivateWs
             ? ""
-            : "Break-glass (trusted private networks only): set OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1. ") +
-          "Run `openclaw doctor --fix` for guidance.",
+            : "Break-glass (trusted private networks only): set NATESCLAW_ALLOW_INSECURE_PRIVATE_WS=1. ") +
+          "Run `natesclaw doctor --fix` for guidance.",
       );
     }
     // Allow node screen snapshots and other large responses.

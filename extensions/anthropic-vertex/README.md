@@ -1,11 +1,11 @@
-# OpenClaw Anthropic Vertex Provider
+# Natesclaw Anthropic Vertex Provider
 
-Official OpenClaw provider plugin for Claude models hosted through Google Vertex AI.
+Official Natesclaw provider plugin for Claude models hosted through Google Vertex AI.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/anthropic-vertex-provider
+natesclaw plugins install @natesclaw/anthropic-vertex-provider
 ```
 
-Configure Google Cloud credentials and the target Vertex project/region in OpenClaw, then select Claude models with the Anthropic Vertex provider.
+Configure Google Cloud credentials and the target Vertex project/region in Natesclaw, then select Claude models with the Anthropic Vertex provider.

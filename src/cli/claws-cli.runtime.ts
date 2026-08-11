@@ -1,5 +1,5 @@
-import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
-import { stableStringify } from "@openclaw/normalization-core";
+import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
+import { stableStringify } from "@natesclaw/normalization-core";
 import {
   listAgentEntries,
   listAgentIds,
@@ -219,13 +219,13 @@ export async function runClawsInspectCommand(
   }
 
   const extensionPlan = await planClawExtensions({
-    extensions: result.openClawProfile?.extensions ?? [],
+    extensions: result.NatesclawProfile?.extensions ?? [],
     workspace: result.source.packageRoot,
     packagePreflight: preflightClawPackage,
   });
   const extensionCollisions = findClawExtensionPackageCollisions({
     packages: result.manifest.packages,
-    extensions: result.openClawProfile?.extensions ?? [],
+    extensions: result.NatesclawProfile?.extensions ?? [],
   });
   const diagnostics = [
     ...result.diagnostics,
@@ -239,7 +239,7 @@ export async function runClawsInspectCommand(
     valid,
     source: result.source,
     manifest: result.manifest,
-    ...(result.openClawProfile ? { openClawProfile: result.openClawProfile } : {}),
+    ...(result.NatesclawProfile ? { NatesclawProfile: result.NatesclawProfile } : {}),
     extensions: extensionPlan.extensions,
     diagnostics,
   };
@@ -318,7 +318,7 @@ export async function runClawsAddCommand(
     manifest: result.manifest,
     clawMarkdownBody: result.clawMarkdownBody,
     packageBootstrap: result.packageBootstrap,
-    openClawProfile: result.openClawProfile,
+    NatesclawProfile: result.NatesclawProfile,
     source: result.source,
     diagnostics: result.diagnostics,
     context: basePlanContext,
@@ -352,7 +352,7 @@ export async function runClawsAddCommand(
       manifest: result.manifest,
       clawMarkdownBody: result.clawMarkdownBody,
       packageBootstrap: result.packageBootstrap,
-      openClawProfile: result.openClawProfile,
+      NatesclawProfile: result.NatesclawProfile,
       source: result.source,
       diagnostics: result.diagnostics,
       context: {

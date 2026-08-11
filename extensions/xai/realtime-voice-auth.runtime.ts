@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "natesclaw/plugin-sdk/provider-auth-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 export async function resolveXaiRealtimeApiKey(
   configApiKey: string | undefined,
-  cfg: OpenClawConfig | undefined,
+  cfg: NatesclawConfig | undefined,
 ): Promise<string> {
   const direct =
     normalizeOptionalString(configApiKey) ?? normalizeOptionalString(process.env.XAI_API_KEY);
@@ -17,6 +17,6 @@ export async function resolveXaiRealtimeApiKey(
     return oauthKey;
   }
   throw new Error(
-    "xAI credentials missing for realtime voice. Sign in with `openclaw onboard --auth-choice xai-oauth`, run `openclaw onboard --auth-choice xai-api-key`, or set XAI_API_KEY.",
+    "xAI credentials missing for realtime voice. Sign in with `natesclaw onboard --auth-choice xai-oauth`, run `natesclaw onboard --auth-choice xai-api-key`, or set XAI_API_KEY.",
   );
 }

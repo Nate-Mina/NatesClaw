@@ -2,12 +2,12 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { redactMigrationPlan } from "openclaw/plugin-sdk/migration";
+import { redactMigrationPlan } from "natesclaw/plugin-sdk/migration";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspace,
   type TempWorkspace,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveHomePath } from "./helpers.js";
 import { buildMemoryItems } from "./memory.js";
@@ -31,8 +31,8 @@ function planItemById(
 describe("Claude migration provider", () => {
   beforeEach(async () => {
     testWorkspace = await tempWorkspace({
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-migrate-claude-",
+      rootDir: resolvePreferredNatesclawTmpDir(),
+      prefix: "natesclaw-migrate-claude-",
     });
   });
 
@@ -47,16 +47,16 @@ describe("Claude migration provider", () => {
     expect(provider.label).toBe("Claude");
   });
 
-  it("resolves tilde source paths against the OS home when OPENCLAW_HOME is set", () => {
-    const previous = process.env.OPENCLAW_HOME;
-    process.env.OPENCLAW_HOME = path.join(path.sep, "tmp", "openclaw-home");
+  it("resolves tilde source paths against the OS home when NATESCLAW_HOME is set", () => {
+    const previous = process.env.NATESCLAW_HOME;
+    process.env.NATESCLAW_HOME = path.join(path.sep, "tmp", "natesclaw-home");
     try {
       expect(resolveHomePath("~/.claude")).toBe(path.join(os.homedir(), ".claude"));
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_HOME;
+        delete process.env.NATESCLAW_HOME;
       } else {
-        process.env.OPENCLAW_HOME = previous;
+        process.env.NATESCLAW_HOME = previous;
       }
     }
   });
@@ -328,7 +328,7 @@ describe("Claude migration provider", () => {
           itemKinds: ["memory"],
         }),
       ),
-    ).rejects.toThrow("source and OpenClaw import destination must be separate");
+    ).rejects.toThrow("source and Natesclaw import destination must be separate");
   });
 
   it.runIf(process.platform !== "win32")(

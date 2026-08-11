@@ -1,6 +1,6 @@
 // Slack tests cover index plugin behavior.
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import { describe, expect, it, vi } from "vitest";
 import "./index.js";
 import setupEntry from "./setup-entry.js";
@@ -9,12 +9,12 @@ const httpRegistryMocks = vi.hoisted(() => ({
   handleSlackHttpRequest: vi.fn(async () => true),
 }));
 const entryContractMocks = vi.hoisted(() => ({
-  registerFull: undefined as ((api: OpenClawPluginApi) => void) | undefined,
+  registerFull: undefined as ((api: NatesclawPluginApi) => void) | undefined,
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-entry-contract", async (importOriginal) => {
+vi.mock("natesclaw/plugin-sdk/channel-entry-contract", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/channel-entry-contract")>();
+    await importOriginal<typeof import("natesclaw/plugin-sdk/channel-entry-contract")>();
   return {
     ...actual,
     defineBundledChannelEntry: (

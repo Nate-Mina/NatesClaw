@@ -1,10 +1,10 @@
 import type {
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import { createPluginRuntimeMock } from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { SessionCatalogProvider } from "openclaw/plugin-sdk/session-catalog";
+  NatesclawPluginNodeHostCommand,
+  NatesclawPluginNodeInvokePolicy,
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
+import { createPluginRuntimeMock } from "natesclaw/plugin-sdk/plugin-test-runtime";
+import type { SessionCatalogProvider } from "natesclaw/plugin-sdk/session-catalog";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 describe("acpx Pi session catalog lazy imports", () => {
@@ -33,8 +33,8 @@ describe("acpx Pi session catalog lazy imports", () => {
 
     const { default: acpxPlugin } = await import("./index.js");
     const catalogs: SessionCatalogProvider[] = [];
-    const nodeCommands: OpenClawPluginNodeHostCommand[] = [];
-    const nodePolicies: OpenClawPluginNodeInvokePolicy[] = [];
+    const nodeCommands: NatesclawPluginNodeHostCommand[] = [];
+    const nodePolicies: NatesclawPluginNodeInvokePolicy[] = [];
     acpxPlugin.register(
       createTestPluginApi({
         id: "acpx",

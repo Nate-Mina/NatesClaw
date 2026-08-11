@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   clearAgentHarnesses,
   listRegisteredAgentHarnesses,
@@ -37,7 +37,7 @@ describe("hasResolvedThinkingCatalogEntry", () => {
   });
 });
 
-function openAIConfig(runtime: string): OpenClawConfig {
+function openAIConfig(runtime: string): NatesclawConfig {
   return {
     agents: {
       defaults: {
@@ -74,7 +74,7 @@ describe("resolveEffectiveAgentRuntime", () => {
     ).toBe("codex");
   });
 
-  it("resolves residual auto to OpenClaw when no plugin harness is registered", () => {
+  it("resolves residual auto to Natesclaw when no plugin harness is registered", () => {
     expect(
       resolveEffectiveAgentRuntime({
         cfg: {
@@ -90,7 +90,7 @@ describe("resolveEffectiveAgentRuntime", () => {
         provider: "openai",
         modelId: "gpt-5.6-luna",
       }),
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
   it("uses static auto-selection facts before resolving provider routes", () => {
@@ -111,11 +111,11 @@ describe("resolveEffectiveAgentRuntime", () => {
         provider: "deepseek",
         modelId: "deepseek-v4-pro",
       }),
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
     expect(supports).not.toHaveBeenCalled();
   });
 
-  it("keeps an authored custom route on OpenClaw before registered harness selection", () => {
+  it("keeps an authored custom route on Natesclaw before registered harness selection", () => {
     const supports = vi.fn<AgentHarness["supports"]>(({ provider }) =>
       provider === "openai" ? { supported: true, priority: 100 } : { supported: false },
     );
@@ -144,24 +144,24 @@ describe("resolveEffectiveAgentRuntime", () => {
         provider: "openai",
         modelId: "gpt-5.6-luna",
       }),
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
     expect(supports).not.toHaveBeenCalled();
   });
 
   it("prefers explicit session overrides", () => {
-    const cfg = openAIConfig("openclaw");
+    const cfg = openAIConfig("natesclaw");
     expect(
       resolveEffectiveAgentRuntime({
         cfg,
         provider: "openai",
         modelId: "gpt-5.6-luna",
-        sessionEntry: { agentRuntimeOverride: "codex", agentHarnessId: "openclaw" },
+        sessionEntry: { agentRuntimeOverride: "codex", agentHarnessId: "natesclaw" },
       }),
     ).toBe("codex");
   });
 
   it("ignores legacy harness ids when choosing a runtime", () => {
-    const cfg = openAIConfig("openclaw");
+    const cfg = openAIConfig("natesclaw");
     expect(
       resolveEffectiveAgentRuntime({
         cfg,
@@ -169,29 +169,29 @@ describe("resolveEffectiveAgentRuntime", () => {
         modelId: "gpt-5.6-luna",
         sessionEntry: { agentHarnessId: "codex" },
       }),
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
   it("uses configured runtime policy without session hints", () => {
-    const cfg = openAIConfig("openclaw");
+    const cfg = openAIConfig("natesclaw");
     expect(
       resolveEffectiveAgentRuntime({
         cfg,
         provider: "openai",
         modelId: "gpt-5.6-luna",
       }),
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
-  it("lets an explicit OpenClaw override replace configured Codex policy", () => {
+  it("lets an explicit Natesclaw override replace configured Codex policy", () => {
     expect(
       resolveEffectiveAgentRuntime({
         cfg: openAIConfig("codex"),
         provider: "openai",
         modelId: "gpt-5.6-luna",
-        sessionEntry: { agentRuntimeOverride: "openclaw", agentHarnessId: "codex" },
+        sessionEntry: { agentRuntimeOverride: "natesclaw", agentHarnessId: "codex" },
       }),
-    ).toBe("openclaw");
+    ).toBe("natesclaw");
   });
 
   it("keeps a supported candidate level unchanged", () => {
@@ -220,7 +220,7 @@ describe("resolveEffectiveAgentRuntime", () => {
   });
 
   it("re-evaluates every candidate from the immutable request so later support can upgrade", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       agents: {
         defaults: {
           models: {

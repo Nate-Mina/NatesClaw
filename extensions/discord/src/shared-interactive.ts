@@ -4,7 +4,7 @@ import {
   resolveMessagePresentationActionValue,
   resolveMessagePresentationButtonAction,
   resolveMessagePresentationOptionAction,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "natesclaw/plugin-sdk/interactive-runtime";
 import type {
   InteractiveButtonStyle,
   LegacyInteractiveReply,
@@ -12,7 +12,7 @@ import type {
   MessagePresentationButton,
   MessagePresentationOption,
   MessagePresentationSelectBlock,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "natesclaw/plugin-sdk/interactive-runtime";
 import { buildDiscordApprovalCustomId } from "./approval-custom-id.js";
 import {
   buildDiscordActivityCustomId,

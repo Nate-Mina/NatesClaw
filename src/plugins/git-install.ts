@@ -2,9 +2,9 @@
 import "../infra/fs-safe-defaults.js";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
-import { hasHttpUrlPrefix } from "@openclaw/net-policy/url-protocol";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
+import { hasHttpUrlPrefix } from "@natesclaw/net-policy/url-protocol";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import { sha256HexPrefixCore } from "../infra/crypto-digest.js";
 import { pathExists } from "../infra/fs-safe.js";
@@ -250,19 +250,19 @@ async function withGitStagingDir<T>(
   fn: (tmpDir: string) => Promise<T>,
 ): Promise<T> {
   if (!persistentRepoDir) {
-    return await withInstallWorkspace("openclaw-git-plugin-", fn);
+    return await withInstallWorkspace("natesclaw-git-plugin-", fn);
   }
   const targetParent = path.dirname(persistentRepoDir);
   try {
     await fs.mkdir(targetParent, { recursive: true });
   } catch {
-    return await withInstallWorkspace("openclaw-git-plugin-", fn);
+    return await withInstallWorkspace("natesclaw-git-plugin-", fn);
   }
 
   let callbackStarted = false;
   try {
     return await withInstallWorkspace(
-      "openclaw-git-plugin-",
+      "natesclaw-git-plugin-",
       async (tmpDir) => {
         callbackStarted = true;
         return await fn(tmpDir);
@@ -275,7 +275,7 @@ async function withGitStagingDir<T>(
     if (callbackStarted) {
       throw err;
     }
-    return await withInstallWorkspace("openclaw-git-plugin-", fn);
+    return await withInstallWorkspace("natesclaw-git-plugin-", fn);
   }
 }
 

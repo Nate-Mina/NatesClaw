@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 
 const DEFAULT_FANOUT = [1, 8, 32, 64];
 const DEFAULT_SWEEP_ROWS = [32, 128, 512];
@@ -127,7 +127,7 @@ type BenchmarkRuntime = {
 };
 
 function usage(): string {
-  return `OpenClaw agent concurrency benchmark
+  return `Natesclaw agent concurrency benchmark
 
 Usage:
   node --import tsx scripts/bench-agent-concurrency.ts [options]

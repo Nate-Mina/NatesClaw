@@ -11,7 +11,7 @@ import {
   patchSessionEntryCore,
 } from "../../../config/sessions/session-accessor.js";
 import type { SessionEntry } from "../../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { callGateway } from "../../../gateway/call.js";
 import { getGatewayRecoveryRuntime } from "../../../gateway/server-recovery-runtime-context.js";
 import { logVerbose } from "../../../globals.js";
@@ -156,7 +156,7 @@ export type ResolvedSubagentController = {
 };
 /** Resolves which subagent runs the caller is allowed to control. */
 export function resolveSubagentController(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentSessionKey?: string;
 }): ResolvedSubagentController {
   const { mainKey, alias } = resolveMainSessionAlias(params.cfg);
@@ -356,7 +356,7 @@ function markSubagentRunTerminatedBestEffort(
 }
 
 async function killSubagentRun(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry: SubagentRunRecord;
   cache: Map<string, Record<string, SessionEntry>>;
   suppressTaskDelivery?: boolean;
@@ -603,7 +603,7 @@ async function killSubagentRun(params: {
 }
 
 async function killLatestSubagentRun(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry: SubagentRunRecord;
   cache: Map<string, Record<string, SessionEntry>>;
   suppressTaskDelivery?: boolean;
@@ -637,7 +637,7 @@ async function killLatestSubagentRun(params: {
 }
 
 async function killSubagentRunTree(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   runs: Iterable<SubagentRunRecord>;
   cache: Map<string, Record<string, SessionEntry>>;
   seenChildSessionKeys: Set<string>;
@@ -708,7 +708,7 @@ async function killSubagentRunTree(params: {
 }
 
 async function cascadeKillChildren(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   parentChildSessionKey: string;
   cache: Map<string, Record<string, SessionEntry>>;
   seenChildSessionKeys?: Set<string>;
@@ -726,7 +726,7 @@ async function cascadeKillChildren(params: {
 
 /** Kills every currently controlled child run and its descendants. */
 export async function killAllControlledSubagentRuns(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   controller: ResolvedSubagentController;
   runs: SubagentRunRecord[];
 }) {
@@ -758,7 +758,7 @@ export async function killAllControlledSubagentRuns(params: {
 
 /** Kills one controlled subagent run and any active descendants. */
 export async function killControlledSubagentRun(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   controller: ResolvedSubagentController;
   entry: SubagentRunRecord;
   suppressTaskDelivery?: boolean;
@@ -880,7 +880,7 @@ export async function killControlledSubagentRun(params: {
 }
 
 /** Admin kill path for a subagent session key, bypassing caller ownership checks. */
-export async function killSubagentRunAdmin(params: { cfg: OpenClawConfig; sessionKey: string }) {
+export async function killSubagentRunAdmin(params: { cfg: NatesclawConfig; sessionKey: string }) {
   const targetSessionKey = params.sessionKey.trim();
   if (!targetSessionKey) {
     return { found: false as const, killed: false };
@@ -978,7 +978,7 @@ export async function killSubagentRunAdmin(params: { cfg: OpenClawConfig; sessio
 
 /** Restarts a controlled subagent run with a new steering message. */
 export async function steerControlledSubagentRun(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   controller: ResolvedSubagentController;
   entry: SubagentRunRecord;
   message: string;
@@ -1255,7 +1255,7 @@ export async function steerControlledSubagentRun(params: {
 
 /** Sends a follow-up message to a controlled subagent and waits for a reply. */
 export async function sendControlledSubagentMessage(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   controller: ResolvedSubagentController;
   entry: SubagentRunRecord;
   message: string;
@@ -1375,7 +1375,7 @@ const testing = {
   },
 };
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.subagentControlTestApi")] =
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.subagentControlTestApi")] =
     testing;
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

@@ -1,4 +1,4 @@
-import { matchesContextOverflowMessage } from "@openclaw/ai/internal/runtime";
+import { matchesContextOverflowMessage } from "@natesclaw/ai/internal/runtime";
 import { resolveNodeRequireFromMeta } from "../../logging/node-require.js";
 import { isRateLimitErrorMessage } from "./message-patterns.js";
 import type { FailoverReason } from "./signal.js";

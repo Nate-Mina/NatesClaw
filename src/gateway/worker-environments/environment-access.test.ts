@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import * as support from "./service.test-support.js";
 import { createWorkerEnvironmentStore } from "./store.js";
 import type { WorkerTunnelManager } from "./tunnel.js";
@@ -73,9 +73,9 @@ describe("worker environment service", () => {
     support.testState.stateDb.db
       .prepare("UPDATE worker_environments SET shared_host = NULL WHERE environment_id = ?")
       .run("worker-legacy-shared");
-    closeOpenClawStateDatabaseForTest();
-    support.testState.stateDb = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: support.testState.root },
+    closeNatesclawStateDatabaseForTest();
+    support.testState.stateDb = openNatesclawStateDatabase({
+      env: { NATESCLAW_STATE_DIR: support.testState.root },
     });
     support.testState.store = createWorkerEnvironmentStore({
       database: support.testState.stateDb,

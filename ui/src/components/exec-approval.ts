@@ -1,12 +1,12 @@
 // Control UI modal queues approvals that are not currently inline in chat.
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { html, nothing, type PropertyValues } from "lit";
 import { property, query, state } from "lit/decorators.js";
 import { modalApprovalQueue } from "../app/approval-presentation.ts";
 import type { ExecApprovalDecision, ExecApprovalRequest } from "../app/exec-approval.ts";
 import { t } from "../i18n/index.ts";
 import { resolveAsciiShortcutKey } from "../lib/keyboard-shortcuts.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { NatesclawLightDomContentsElement } from "../lit/natesclaw-element.ts";
 import {
   approvalRemainingLabel,
   approvalTitle,
@@ -14,7 +14,7 @@ import {
   renderExecApprovalCard,
   resolveApprovalDecisions,
 } from "./exec-approval-card.ts";
-import type { OpenClawModalDialog } from "./modal-dialog.ts";
+import type { NatesclawModalDialog } from "./modal-dialog.ts";
 import "./modal-dialog.ts";
 
 type ExecApprovalProps = {
@@ -90,9 +90,9 @@ function shortcutDecision(event: KeyboardEvent): ExecApprovalDecision | null {
   return !event.shiftKey && resolveAsciiShortcutKey(event) === "d" ? "deny" : null;
 }
 
-class ExecApproval extends OpenClawLightDomContentsElement {
+class ExecApproval extends NatesclawLightDomContentsElement {
   @property({ attribute: false }) props?: ExecApprovalProps;
-  @query("openclaw-modal-dialog") private dialog?: OpenClawModalDialog;
+  @query("natesclaw-modal-dialog") private dialog?: NatesclawModalDialog;
   @state() private selectedApprovalId: string | null = null;
   @state() private forceShowAll = false;
 
@@ -162,7 +162,7 @@ class ExecApproval extends OpenClawLightDomContentsElement {
       void props.onDecision(active.id, "deny");
     };
     return html`
-      <openclaw-modal-dialog
+      <natesclaw-modal-dialog
         label=${approvalTitle(active)}
         description=${approvalRemainingLabel(active.expiresAtMs, props.nowMs)}
         @keydown=${(event: KeyboardEvent) => this.handleKeydown(event, active)}
@@ -187,11 +187,11 @@ class ExecApproval extends OpenClawLightDomContentsElement {
             },
           })}
         </div>
-      </openclaw-modal-dialog>
+      </natesclaw-modal-dialog>
     `;
   }
 }
 
-if (!customElements.get("openclaw-exec-approval")) {
-  customElements.define("openclaw-exec-approval", ExecApproval);
+if (!customElements.get("natesclaw-exec-approval")) {
+  customElements.define("natesclaw-exec-approval", ExecApproval);
 }

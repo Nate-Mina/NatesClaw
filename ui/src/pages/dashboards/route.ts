@@ -1,4 +1,4 @@
-import { definePage } from "@openclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -43,6 +43,6 @@ export const page = definePage({
     import("./dashboards-page.ts").then(() => ({
       header: true,
       render: (data: DashboardsRouteData | undefined) =>
-        html`<openclaw-dashboards-page .routeData=${data}></openclaw-dashboards-page>`,
+        html`<natesclaw-dashboards-page .routeData=${data}></natesclaw-dashboards-page>`,
     })),
 });

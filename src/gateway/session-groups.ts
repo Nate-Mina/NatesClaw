@@ -2,26 +2,26 @@
 // Membership stays on each session entry's category field; this module owns
 // which groups exist, their display order, and bulk member category updates.
 import type { DatabaseSync } from "node:sqlite";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveAllAgentSessionStoreTargetsSync } from "../config/sessions.js";
 import { applySessionEntryReplacements } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
 import { SessionMutationAuthorizationChangedError } from "./session-sharing.js";
 
 // Write transactions must run on the same env-scoped handle as their
 // statements; a bare transaction would open the default state DB while the
-// SQL hits the override, losing atomicity under OPENCLAW_STATE_DIR overrides.
+// SQL hits the override, losing atomicity under NATESCLAW_STATE_DIR overrides.
 
 type SessionGroupRecord = { name: string; position: number };
 
 type SessionGroupsDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "session_groups" | "sidebar_sections"
 >;
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS sidebar_sections (
 `;
 
 function dbFor(env: NodeJS.ProcessEnv): DatabaseSync {
-  return openOpenClawStateDatabase({ env }).db;
+  return openNatesclawStateDatabase({ env }).db;
 }
 
 function kyselyFor(db: DatabaseSync) {
@@ -42,11 +42,11 @@ function kyselyFor(db: DatabaseSync) {
 }
 
 function ensureSidebarSectionsSchema(env: NodeJS.ProcessEnv): void {
-  const database = openOpenClawStateDatabase({ env });
+  const database = openNatesclawStateDatabase({ env });
   if (ensuredSidebarSectionDatabases.has(database.db)) {
     return;
   }
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       // sqlite-allow-raw -- feature-local additive schema DDL; rows use Kysely below.
       db.exec(SIDEBAR_SECTIONS_SCHEMA_SQL);
@@ -142,7 +142,7 @@ export function putSessionGroups(
     ensureSidebarSectionsSchema(env);
   }
   const now = Date.now();
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = kyselyFor(db);
       const existing = new Map(
@@ -191,7 +191,7 @@ export function ensureSessionGroupRegistered(
   if (!normalized) {
     return;
   }
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = kyselyFor(db);
       const existing = executeSqliteQuerySync(
@@ -220,7 +220,7 @@ export function ensureSessionGroupRegistered(
 
 function renameCatalogEntry(from: string, to: string, env: NodeJS.ProcessEnv): void {
   ensureSidebarSectionsSchema(env);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = kyselyFor(db);
       const source = executeSqliteQuerySync(
@@ -279,7 +279,7 @@ function renameCatalogEntry(from: string, to: string, env: NodeJS.ProcessEnv): v
  * bumping updatedAt: group maintenance must not reshuffle recency ordering.
  */
 async function updateMemberCategories(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   from: string,
   to: string | undefined,
   env: NodeJS.ProcessEnv,
@@ -320,7 +320,7 @@ async function updateMemberCategories(
 }
 
 export async function renameSessionGroup(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   name: string;
   to: string;
   env?: NodeJS.ProcessEnv;
@@ -349,7 +349,7 @@ export async function renameSessionGroup(params: {
 }
 
 export async function deleteSessionGroup(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   name: string;
   env?: NodeJS.ProcessEnv;
   assertCurrent?: () => void;
@@ -362,7 +362,7 @@ export async function deleteSessionGroup(params: {
   }
   params.assertCurrent?.();
   ensureSidebarSectionsSchema(env);
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       const kysely = kyselyFor(db);
       executeSqliteQuerySync(db, kysely.deleteFrom("session_groups").where("name", "=", name));

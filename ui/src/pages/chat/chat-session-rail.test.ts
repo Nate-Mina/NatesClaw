@@ -74,7 +74,7 @@ function backgroundTasksToggleProps(): BackgroundTasksProps {
   };
 }
 
-const displayPreferenceKey = "openclaw.chat.observerHud.display";
+const displayPreferenceKey = "natesclaw.chat.observerHud.display";
 
 describe("ChatSessionRailState", () => {
   beforeEach(() => {
@@ -322,7 +322,7 @@ describe("ChatSessionRailElement", () => {
   });
 
   async function mount(overrides: Partial<ChatSessionRailElement> = {}) {
-    const element = document.createElement("openclaw-chat-session-rail") as ChatSessionRailElement;
+    const element = document.createElement("natesclaw-chat-session-rail") as ChatSessionRailElement;
     element.sessionKey = "agent:main:run";
     element.digest = digest();
     element.running = true;

@@ -1,13 +1,13 @@
 import {
   createChannelInboundEnvelopeBuilder,
   recordChannelBotPairLoopAndCheckSuppression,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { deriveDurableFinalDeliveryRequirements } from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { deriveDurableFinalDeliveryRequirements } from "natesclaw/plugin-sdk/channel-outbound";
 /**
- * Converts authorized ClickClack messages into OpenClaw agent/model replies and
+ * Converts authorized ClickClack messages into Natesclaw agent/model replies and
  * routes resulting outbound text back to ClickClack.
  */
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { resolveClickClackInboundAccess, type ClickClackInboundAccess } from "./access.js";
 import { createClickClackActivityPublisher, type ClickClackActivityPublisher } from "./activity.js";
 import { createClickClackClient } from "./http-client.js";
@@ -43,7 +43,7 @@ function resolveClickClackAgentRunId(messageId: string): string | undefined {
 
 async function dispatchModelReply(params: {
   account: ResolvedClickClackAccount;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   message: ClickClackMessage;
   route: { agentId: string };
   target: string;
@@ -150,7 +150,7 @@ export async function handleClickClackInbound(params: {
     try {
       await dispatchModelReply({
         account: params.account,
-        cfg: params.config as OpenClawConfig,
+        cfg: params.config as NatesclawConfig,
         message,
         route,
         target,
@@ -191,7 +191,7 @@ export async function handleClickClackInbound(params: {
   // Preserve both normalized channel fields and ClickClack-native ids so reply
   // routing, session recovery, and command authorization see the same message.
   const body = createChannelInboundEnvelopeBuilder({
-    cfg: params.config as OpenClawConfig,
+    cfg: params.config as NatesclawConfig,
     route,
   })({
     channel: "ClickClack",
@@ -269,7 +269,7 @@ export async function handleClickClackInbound(params: {
   progress?.start();
   const dispatch = () =>
     runtime.channel.inbound.dispatch({
-      cfg: params.config as OpenClawConfig,
+      cfg: params.config as NatesclawConfig,
       channel: CHANNEL_ID,
       accountId: params.account.accountId,
       route: { agentId: route.agentId, dmScope: route.dmScope, sessionKey: route.sessionKey },

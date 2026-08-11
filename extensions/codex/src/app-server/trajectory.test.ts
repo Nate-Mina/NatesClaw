@@ -1,17 +1,17 @@
 // Codex tests cover SQLite-only trajectory plugin behavior.
 import fs from "node:fs";
 import path from "node:path";
-import { upsertSessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
+import { upsertSessionEntry } from "natesclaw/plugin-sdk/session-store-runtime";
 import {
   appendSqliteTrajectoryRuntimeEvents,
   loadSqliteTrajectoryRuntimeEvents,
   type SqliteTrajectoryRuntimeEventForTest,
-} from "openclaw/plugin-sdk/sqlite-runtime-testing";
+} from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   type CodexHostTrajectoryRecorder,
@@ -26,8 +26,8 @@ let testWorkspace: TempWorkspaceSync;
 
 beforeEach(() => {
   testWorkspace = tempWorkspaceSync({
-    rootDir: resolvePreferredOpenClawTmpDir(),
-    prefix: "openclaw-codex-trajectory-",
+    rootDir: resolvePreferredNatesclawTmpDir(),
+    prefix: "natesclaw-codex-trajectory-",
   });
 });
 
@@ -97,7 +97,7 @@ function createSqliteHostTrajectoryRecorder(params: {
   return {
     recordEvent: (type, data) => {
       events.push({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "natesclaw-trajectory",
         schemaVersion: 1,
         traceId: `${params.sessionId}:test`,
         source: "runtime",
@@ -194,7 +194,7 @@ describe("Codex trajectory recorder", () => {
     const tools = [
       {
         type: "namespace" as const,
-        name: "openclaw",
+        name: "natesclaw",
         description: "",
         tools: [
           {
@@ -231,7 +231,7 @@ describe("Codex trajectory recorder", () => {
         sessionId: "session-1",
         model: { api: "responses" },
       } as never,
-      env: { OPENCLAW_TRAJECTORY: "0" },
+      env: { NATESCLAW_TRAJECTORY: "0" },
       warn,
     });
 

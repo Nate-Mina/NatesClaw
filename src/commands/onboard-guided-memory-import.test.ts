@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createWizardPrompter } from "../../test/helpers/wizard-prompter.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createSuiteLogPathTracker } from "../logging/log-test-helpers.js";
 import { resetLogger } from "../logging/logger.js";
 import { loggingState } from "../logging/state.js";
@@ -21,7 +21,7 @@ const readConfigFileSnapshot = vi.hoisted(() =>
   vi.fn(async () => ({
     exists: false,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     issues: [] as Array<{ path?: string; message: string }>,
     config: {},
   })),
@@ -33,7 +33,7 @@ const localOnboarding = vi.hoisted(() => ({
   complete: vi.fn(() => true),
 }));
 
-const logPathTracker = createSuiteLogPathTracker("openclaw-guided-onboard-memory-import-log-");
+const logPathTracker = createSuiteLogPathTracker("natesclaw-guided-onboard-memory-import-log-");
 
 vi.mock("../config/config.js", () => ({ readConfigFileSnapshot }));
 vi.mock("../state/local-onboarding-state.js", () => ({
@@ -43,10 +43,10 @@ vi.mock("../state/local-onboarding-state.js", () => ({
   completeLocalOnboarding: localOnboarding.complete,
 }));
 vi.mock("./onboard-agent.js", () => ({
-  ensureOnboardingAgent: async ({ config }: { config: OpenClawConfig }) => ({ config }),
+  ensureOnboardingAgent: async ({ config }: { config: NatesclawConfig }) => ({ config }),
 }));
 vi.mock("./onboard-helpers.js", () => ({
-  DEFAULT_WORKSPACE: "/tmp/openclaw-workspace",
+  DEFAULT_WORKSPACE: "/tmp/natesclaw-workspace",
   printWizardHeader: vi.fn(),
 }));
 
@@ -60,7 +60,7 @@ function makeRuntime(): RuntimeEnv {
 
 function setupApplyResult() {
   return {
-    configPath: "/tmp/openclaw.json",
+    configPath: "/tmp/natesclaw.json",
     configHashBefore: null,
     configHashAfter: null,
     bootstrapPending: false,
@@ -87,7 +87,7 @@ function setupDeps(params: {
     listManualOptions: vi.fn(async () => ({
       manualProviders: [],
       authOptions: [],
-      workspace: "/tmp/openclaw-workspace",
+      workspace: "/tmp/natesclaw-workspace",
       setupComplete: false,
     })),
     detect: vi.fn<NonNullable<GuidedOnboardingDeps["detect"]>>(async () => ({
@@ -105,7 +105,7 @@ function setupDeps(params: {
       manualProviders: [],
       authOptions: [],
       recommendedInstalls: [],
-      workspace: "/tmp/openclaw-workspace",
+      workspace: "/tmp/natesclaw-workspace",
       setupComplete: false,
     })),
     activate: vi.fn(async () => ({
@@ -146,7 +146,7 @@ describe("guided onboarding post-inference steps", () => {
     readConfigFileSnapshot.mockResolvedValue({
       exists: false,
       valid: true,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       issues: [],
       config: {},
     });
@@ -162,10 +162,10 @@ describe("guided onboarding post-inference steps", () => {
   });
 
   it("auto-connects one credentialed candidate before any workspace prompt", async () => {
-    const persistedConfig: OpenClawConfig = {
+    const persistedConfig: NatesclawConfig = {
       agents: { defaults: { model: { primary: "claude-cli/opus" } } },
     };
-    const appliedConfig: OpenClawConfig = {
+    const appliedConfig: NatesclawConfig = {
       ...persistedConfig,
       gateway: { mode: "local" },
     };
@@ -173,21 +173,21 @@ describe("guided onboarding post-inference steps", () => {
       .mockResolvedValueOnce({
         exists: false,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         issues: [],
         config: {},
       })
       .mockResolvedValueOnce({
         exists: true,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         issues: [],
         config: persistedConfig,
       })
       .mockResolvedValueOnce({
         exists: true,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         issues: [],
         config: appliedConfig,
       });
@@ -240,10 +240,10 @@ describe("guided onboarding post-inference steps", () => {
   });
 
   it("imports memories only after setup persists the selected agent workspace", async () => {
-    const inferenceConfig: OpenClawConfig = {
+    const inferenceConfig: NatesclawConfig = {
       agents: { defaults: { model: { primary: "claude-cli/opus" } } },
     };
-    const appliedConfig: OpenClawConfig = {
+    const appliedConfig: NatesclawConfig = {
       agents: {
         defaults: {
           model: { primary: "claude-cli/opus" },
@@ -256,21 +256,21 @@ describe("guided onboarding post-inference steps", () => {
       .mockResolvedValueOnce({
         exists: false,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         issues: [],
         config: {},
       })
       .mockResolvedValueOnce({
         exists: true,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         issues: [],
         config: inferenceConfig,
       })
       .mockResolvedValueOnce({
         exists: true,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         issues: [],
         config: appliedConfig,
       });

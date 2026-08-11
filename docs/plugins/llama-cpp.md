@@ -1,10 +1,10 @@
 ---
-summary: "Run local GGUF text inference and memory embeddings in OpenClaw with llama.cpp"
+summary: "Run local GGUF text inference and memory embeddings in Natesclaw with llama.cpp"
 read_when:
   - You want local text inference without an API key or model server
   - You want memory search embeddings from a local GGUF model
   - You are configuring memory.search.provider = "local"
-  - You need the OpenClaw plugin that owns the node-llama-cpp runtime
+  - You need the Natesclaw plugin that owns the node-llama-cpp runtime
 title: "llama.cpp Provider"
 sidebarTitle: "llama.cpp Provider"
 ---
@@ -16,21 +16,21 @@ embedding provider `local`, and owns the `node-llama-cpp` native runtime.
 Install it before using either local inference or local memory embeddings:
 
 ```bash
-openclaw plugins install @openclaw/llama-cpp-provider
+natesclaw plugins install @natesclaw/llama-cpp-provider
 ```
 
-The main `openclaw` npm package does not include `node-llama-cpp`. Keeping the
-native dependency in this plugin prevents normal OpenClaw npm updates from
-deleting a manually installed runtime inside the OpenClaw package directory.
+The main `natesclaw` npm package does not include `node-llama-cpp`. Keeping the
+native dependency in this plugin prevents normal Natesclaw npm updates from
+deleting a manually installed runtime inside the Natesclaw package directory.
 
 ## Local text inference
 
-Choose **llama.cpp** during interactive onboarding. OpenClaw installs the
+Choose **llama.cpp** during interactive onboarding. Natesclaw installs the
 official provider plugin, then asks before downloading the default model:
 
 `hf:unsloth/gemma-4-E4B-it-GGUF/gemma-4-E4B-it-Q4_K_M.gguf`
 
-The Gemma 4 E4B IT Q4_K_M file is about 5.0 GB. OpenClaw offers this default
+The Gemma 4 E4B IT Q4_K_M file is about 5.0 GB. Natesclaw offers this default
 only on machines with at least 16 GiB of RAM, leaving room for model weights,
 context, and Gateway overhead. The default context is automatically sized with
 an 8,192-token cap. Configure a larger context only when the machine has enough
@@ -45,7 +45,7 @@ and verifies a real model reply before marking setup complete.
 
 The provider uses the GGUF model's embedded chat template and native
 node-llama-cpp function calling. Text streams token by token. Tool calls return
-to OpenClaw for execution rather than running inside node-llama-cpp.
+to Natesclaw for execution rather than running inside node-llama-cpp.
 
 ### Use another GGUF model
 
@@ -128,22 +128,22 @@ pnpm rebuild node-llama-cpp
 
 ## Memory runtime diagnostics
 
-Run `openclaw memory status --deep` after the provider has loaded to inspect
+Run `natesclaw memory status --deep` after the provider has loaded to inspect
 the selected backend and build, device names, GPU offloaded layers, requested
 context size, and the last observed VRAM or unified-memory snapshot. The VRAM
 values include an observation timestamp because passive status reads do not
 reload the model or poll the device.
 
-The same last-known facts can appear in `openclaw doctor` when the running
+The same last-known facts can appear in `natesclaw doctor` when the running
 Gateway has already used the local provider. A normal status or doctor command
 does not load a model just to collect diagnostics.
 
 ## Troubleshooting
 
-If `node-llama-cpp` is missing or fails to load, OpenClaw reports the failure
+If `node-llama-cpp` is missing or fails to load, Natesclaw reports the failure
 with:
 
-1. Install the plugin: `openclaw plugins install @openclaw/llama-cpp-provider`.
+1. Install the plugin: `natesclaw plugins install @natesclaw/llama-cpp-provider`.
 2. Use Node 24 for native installs/updates.
 3. From a pnpm source checkout: `pnpm approve-builds`, then `pnpm rebuild node-llama-cpp`.
 

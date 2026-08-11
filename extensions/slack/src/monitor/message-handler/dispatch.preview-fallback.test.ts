@@ -1,6 +1,6 @@
-import type { GetReplyOptions, ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+import type { GetReplyOptions, ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 // Slack tests cover dispatch.preview fallback plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const FINAL_REPLY_TEXT = "final answer";
@@ -344,8 +344,8 @@ function createPreparedSlackMessage(params?: {
       botToken: "xoxb-test",
       app: { client: { chat: { postMessage: postMessageMock, update: chatUpdateMock } } },
       teamId: "T1",
-      botUserId: "U_OPENCLAW",
-      botId: "B_OPENCLAW",
+      botUserId: "U_NATESCLAW",
+      botId: "B_NATESCLAW",
       textLimit: 4000,
       typingReaction: params?.typingReaction ?? "",
       historyLimit: 0,
@@ -427,11 +427,11 @@ async function dispatchNativeProgressScenario(params: {
   );
 }
 
-vi.mock("openclaw/plugin-sdk/agent-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/agent-runtime", () => ({
   resolveHumanDelayConfig: () => undefined,
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-feedback", () => ({
+vi.mock("natesclaw/plugin-sdk/channel-feedback", () => ({
   DEFAULT_TIMING: {
     doneHoldMs: 0,
     errorHoldMs: 0,
@@ -445,8 +445,8 @@ vi.mock("openclaw/plugin-sdk/channel-feedback", () => ({
   removeAckReactionAfterReply: () => {},
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-outbound")>();
+vi.mock("natesclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/channel-outbound")>();
   return {
     ...actual,
     createChannelProgressDraftCompositor: (
@@ -803,14 +803,14 @@ vi.mock("openclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/reply-history", () => ({
+vi.mock("natesclaw/plugin-sdk/reply-history", () => ({
   clearHistoryEntriesIfEnabled: () => {},
   createChannelHistoryWindow: () => ({
     clear: () => {},
   }),
 }));
 
-vi.mock("openclaw/plugin-sdk/reply-payload", () => ({
+vi.mock("natesclaw/plugin-sdk/reply-payload", () => ({
   buildTtsSupplementMediaPayload: (payload: {
     text?: string;
     mediaUrl?: string;
@@ -855,22 +855,22 @@ vi.mock("openclaw/plugin-sdk/reply-payload", () => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", () => ({
+vi.mock("natesclaw/plugin-sdk/runtime-env", () => ({
   danger: (message: string) => message,
   logVerbose: logVerboseMock,
   shouldLogVerbose: () => false,
 }));
 
-vi.mock("openclaw/plugin-sdk/plugin-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/plugin-runtime")>();
+vi.mock("natesclaw/plugin-sdk/plugin-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/plugin-runtime")>();
   return { ...actual, getGlobalHookRunner: getGlobalHookRunnerMock };
 });
 
-vi.mock("openclaw/plugin-sdk/security-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/security-runtime", () => ({
   resolvePinnedMainDmOwnerFromAllowlist: () => mockedPinnedMainDmOwner,
 }));
 
-vi.mock("openclaw/plugin-sdk/string-coerce-runtime", () => {
+vi.mock("natesclaw/plugin-sdk/string-coerce-runtime", () => {
   const isMockRecord = (value: unknown): value is Record<string, unknown> =>
     typeof value === "object" && value !== null && !Array.isArray(value);
   const normalizeMockLowercaseString = (value?: string) => value?.toLowerCase();
@@ -952,7 +952,7 @@ vi.mock("../allow-list.js", () => ({
 }));
 
 vi.mock("../config.runtime.js", () => ({
-  resolveStorePath: () => "/tmp/openclaw-store.json",
+  resolveStorePath: () => "/tmp/natesclaw-store.json",
   updateLastRoute: updateLastRouteMock,
 }));
 
@@ -975,8 +975,8 @@ vi.mock("../replies.js", () => ({
   resolveSlackThreadTs: () => mockedReplyThreadTs,
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-inbound")>();
+vi.mock("natesclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/channel-inbound")>();
   type DispatchParams = Parameters<typeof actual.dispatchChannelInboundTurn>[0];
   return {
     ...actual,
@@ -1465,7 +1465,7 @@ describe("dispatchPreparedSlackMessage preview fallback", () => {
     );
 
     expect(updateLastRouteMock).toHaveBeenCalledWith({
-      storePath: "/tmp/openclaw-store.json",
+      storePath: "/tmp/natesclaw-store.json",
       sessionKey: "agent:main:slack:direct:u1",
       deliveryContext: {
         channel: "slack",
@@ -1529,7 +1529,7 @@ describe("dispatchPreparedSlackMessage preview fallback", () => {
     );
 
     expect(updateLastRouteMock).toHaveBeenCalledWith({
-      storePath: "/tmp/openclaw-store.json",
+      storePath: "/tmp/natesclaw-store.json",
       sessionKey: "agent:main:main",
       deliveryContext: {
         channel: "slack",
@@ -1569,7 +1569,7 @@ describe("dispatchPreparedSlackMessage preview fallback", () => {
     );
 
     expect(updateLastRouteMock).toHaveBeenCalledWith({
-      storePath: "/tmp/openclaw-store.json",
+      storePath: "/tmp/natesclaw-store.json",
       sessionKey: "agent:main:main",
       deliveryContext: {
         channel: "slack",

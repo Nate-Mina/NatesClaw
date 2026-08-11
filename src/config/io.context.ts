@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { collectManifestModelIdNormalizationPolicies } from "@openclaw/model-catalog-core/provider-model-id-normalization";
+import { collectManifestModelIdNormalizationPolicies } from "@natesclaw/model-catalog-core/provider-model-id-normalization";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import { ensureOwnerDisplaySecret } from "../agents/owner-display.js";
 import { classifyOtelGrpcMigrationOwnership } from "../commands/doctor/shared/include-migration-ownership.js";
@@ -38,11 +38,11 @@ import { migratePersistedImplicitMainRoster } from "./legacy.roster.js";
 import { materializeRuntimeConfig } from "./materialize.js";
 import { applyConfigOverrides } from "./runtime-overrides.js";
 import { resolveShellEnvExpectedKeys } from "./shell-env-expected-keys.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "./types.js";
+import type { ConfigFileSnapshot, NatesclawConfig } from "./types.js";
 import { validateConfigObjectWithPlugins } from "./validation.js";
 
 type ValidationPluginMetadataSnapshotLoader = {
-  load: (config: OpenClawConfig) => PluginMetadataSnapshot;
+  load: (config: NatesclawConfig) => PluginMetadataSnapshot;
   getSnapshot: () => PluginMetadataSnapshot | undefined;
 };
 
@@ -51,13 +51,13 @@ export type ConfigIoContext = {
   configPath: string;
   options: ConfigIoFactoryOptions;
   observeLoadConfigSnapshot: (snapshot: ConfigFileSnapshot) => ConfigFileSnapshot;
-  finalizeLoadedRuntimeConfig: (config: OpenClawConfig) => OpenClawConfig;
+  finalizeLoadedRuntimeConfig: (config: NatesclawConfig) => NatesclawConfig;
   createValidationPluginMetadataSnapshotLoader: (params: {
     effectiveConfigRaw: unknown;
     env: NodeJS.ProcessEnv;
     allowCurrentPluginMetadata?: boolean;
   }) => ValidationPluginMetadataSnapshotLoader;
-  resolveRuntimePreflightSourceConfig: (candidate: OpenClawConfig) => OpenClawConfig;
+  resolveRuntimePreflightSourceConfig: (candidate: NatesclawConfig) => NatesclawConfig;
   prepareRecoveryBackupCandidate: (
     candidate: ConfigRecoveryCandidate,
   ) => ConfigRecoveryCandidatePreparation;
@@ -74,7 +74,7 @@ export function createConfigIoContext(options: ConfigIoFactoryOptions = {}): Con
     return snapshot;
   }
 
-  function finalizeLoadedRuntimeConfig(cfg: OpenClawConfig): OpenClawConfig {
+  function finalizeLoadedRuntimeConfig(cfg: NatesclawConfig): NatesclawConfig {
     const duplicates = findDuplicateAgentDirs(cfg, { env: deps.env, homedir: deps.homedir });
     if (duplicates.length > 0) {
       throw new DuplicateAgentDirError(duplicates);
@@ -135,7 +135,7 @@ export function createConfigIoContext(options: ConfigIoFactoryOptions = {}): Con
     };
   }
 
-  function resolveRuntimePreflightSourceConfig(candidate: OpenClawConfig): OpenClawConfig {
+  function resolveRuntimePreflightSourceConfig(candidate: NatesclawConfig): NatesclawConfig {
     const env = { ...deps.env } as NodeJS.ProcessEnv;
     const resolvedIncludes = resolveConfigIncludesForRead(candidate, configPath, { ...deps, env });
     const resolution = resolveConfigForRead(resolvedIncludes, env, deps.lowerPrecedenceEnv);
@@ -246,10 +246,10 @@ export function resolveModelIdNormalizationPolicies(snapshot: PluginMetadataSnap
 
 export function materializeConfigForLoad(
   _context: ConfigIoContext,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   _effectiveConfigRaw: unknown,
   pluginMetadata: PluginMetadataSnapshot | undefined,
-): OpenClawConfig {
+): NatesclawConfig {
   return materializeRuntimeConfig(config, "load", {
     manifestRegistry: pluginMetadata?.manifestRegistry,
   });

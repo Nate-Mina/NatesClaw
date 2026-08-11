@@ -1,7 +1,7 @@
 import type {
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+  NatesclawPluginService,
+  NatesclawPluginServiceContext,
+} from "natesclaw/plugin-sdk/plugin-entry";
 import { isUnsupportedCodexAppServerVersionError, type CodexAppServerClient } from "./client.js";
 import { resolveCodexAppServerRuntimeOptions } from "./config.js";
 import {
@@ -14,12 +14,12 @@ const MAX_RECONNECT_DELAY_MS = 30_000;
 
 type CodexAppServerConnectionHealthServiceOptions = {
   getPluginConfig: () => unknown;
-  getRuntimeConfig: () => OpenClawPluginServiceContext["config"] | undefined;
+  getRuntimeConfig: () => NatesclawPluginServiceContext["config"] | undefined;
 };
 
 export function createCodexAppServerConnectionHealthService(
   options: CodexAppServerConnectionHealthServiceOptions,
-): OpenClawPluginService {
+): NatesclawPluginService {
   let abortController: AbortController | undefined;
   let monitor: Promise<void> | undefined;
   let leasedClient: CodexAppServerClient | undefined;
@@ -33,7 +33,7 @@ export function createCodexAppServerConnectionHealthService(
     releaseLeasedSharedCodexAppServerClient(client);
   };
 
-  const run = async (ctx: OpenClawPluginServiceContext, signal: AbortSignal) => {
+  const run = async (ctx: NatesclawPluginServiceContext, signal: AbortSignal) => {
     let consecutiveFailures = 0;
 
     while (!signal.aborted) {

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { manualTranscriptSourceProvider } from "../../transcripts/manual-source.js";
 import { getTranscriptSourceProvider } from "../../transcripts/provider-registry.js";
 import type {
@@ -17,7 +17,7 @@ export type TranscriptsLogger = {
 
 export type TranscriptsRuntimeContext = {
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   stateDir: string;
   logger: TranscriptsLogger;
 };

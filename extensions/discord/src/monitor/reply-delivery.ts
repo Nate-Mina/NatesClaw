@@ -1,6 +1,6 @@
 // Discord plugin module implements reply delivery behavior.
-import { formatReasoningMessage, resolveAgentAvatar } from "openclaw/plugin-sdk/agent-runtime";
-import { createChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { formatReasoningMessage, resolveAgentAvatar } from "natesclaw/plugin-sdk/agent-runtime";
+import { createChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import {
   buildOutboundSessionContext,
   listMessageReceiptPlatformIds,
@@ -8,18 +8,18 @@ import {
   type OutboundDeliveryFormattingOptions,
   type OutboundIdentity,
   type OutboundSendDeps,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 import type {
   MarkdownTableMode,
-  OpenClawConfig,
+  NatesclawConfig,
   ReplyToMode,
-} from "openclaw/plugin-sdk/config-contracts";
-import type { OutboundMediaAccess } from "openclaw/plugin-sdk/media-runtime";
-import type { ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/config-contracts";
+import type { OutboundMediaAccess } from "natesclaw/plugin-sdk/media-runtime";
+import type { ChunkMode } from "natesclaw/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-dispatch-runtime";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import type { RequestClient } from "../internal/discord.js";
 import { sendMessageDiscord, sendVoiceMessageDiscord } from "../send.js";
 import type { DiscordAllowedMentions } from "../send.shared.js";
@@ -99,7 +99,7 @@ function resolveBoundThreadBinding(params: {
 }
 
 function resolveBindingIdentity(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   binding: DiscordThreadBindingLookupRecord | undefined,
 ): OutboundIdentity | undefined {
   if (!binding) {
@@ -122,7 +122,7 @@ function resolveBindingIdentity(
 }
 
 function createDiscordDeliveryDeps(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   token: string;
   rest?: RequestClient;
   allowedMentions?: DiscordAllowedMentions;
@@ -163,7 +163,7 @@ type DiscordDeliveryOptions = {
 };
 
 function resolveDiscordDeliveryOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   target: string;
   sessionKey?: string;
   threadBindings?: DiscordThreadBindingLookup;
@@ -211,7 +211,7 @@ function formatDiscordReasoningPayload(payload: ReplyPayload): ReplyPayload {
 }
 
 export async function deliverDiscordReply(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   replies: ReplyPayload[];
   target: string;
   token: string;

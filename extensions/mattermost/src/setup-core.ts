@@ -1,17 +1,17 @@
 // Mattermost plugin module implements setup core behavior.
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "natesclaw/plugin-sdk/account-id";
 import {
   defineChannelSetupContract,
   type ChannelSetupAdapter,
   type ChannelSetupInput,
-} from "openclaw/plugin-sdk/channel-setup";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-setup";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   applyAccountNameToChannelSection,
   applySetupAccountConfigPatch,
   migrateBaseNameToDefaultAccount,
-} from "openclaw/plugin-sdk/setup";
-import { createSetupInputPresenceValidator } from "openclaw/plugin-sdk/setup-runtime";
+} from "natesclaw/plugin-sdk/setup";
+import { createSetupInputPresenceValidator } from "natesclaw/plugin-sdk/setup-runtime";
 import {
   inspectMattermostAccount,
   type ResolvedMattermostAccount,
@@ -32,16 +32,16 @@ export function isMattermostConfigured(account: ResolvedMattermostAccount): bool
   return tokenConfigured && Boolean(account.baseUrl);
 }
 
-export function resolveMattermostAccountWithSecrets(cfg: OpenClawConfig, accountId: string) {
+export function resolveMattermostAccountWithSecrets(cfg: NatesclawConfig, accountId: string) {
   return inspectMattermostAccount({ cfg, accountId });
 }
 
 export function applyMattermostSetupConfigPatch(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   name?: string;
   patch: Record<string, unknown>;
-}): OpenClawConfig {
+}): NatesclawConfig {
   const namedConfig = applyAccountNameToChannelSection({
     cfg: params.cfg,
     channelKey: channel,

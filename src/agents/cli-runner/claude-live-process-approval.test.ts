@@ -306,7 +306,7 @@ describe("Claude live process approvals", () => {
     expectClaudeControlDecision(live, {
       behavior: "deny",
       requestId: "req-approval-unavailable",
-      messageIncludes: "OpenClaw approval was not granted",
+      messageIncludes: "Natesclaw approval was not granted",
     });
   });
 
@@ -384,7 +384,7 @@ describe("Claude live process approvals", () => {
                   {
                     type: "mcp_tool_use",
                     id: "tool-live-blocked",
-                    name: "mcp__openclaw__message",
+                    name: "mcp__natesclaw__message",
                     input: { action: "react" },
                   },
                 ],
@@ -419,7 +419,7 @@ describe("Claude live process approvals", () => {
         onStdout?: (chunk: string) => void;
       };
       stdoutListener = input.onStdout;
-      captureKey = input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "";
+      captureKey = input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "";
       return { pid: 3061, startedAtMs: Date.now(), stdin, ...liveRunLifecycle };
     });
     const context = buildClaudeLiveRunContext({

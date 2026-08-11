@@ -1,5 +1,5 @@
 // Metadata-only operator audit queries over the canonical shared SQLite ledger.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

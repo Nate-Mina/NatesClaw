@@ -1,7 +1,7 @@
 /** Scheduling state and next-run computation for cron jobs. */
 import crypto from "node:crypto";
-import { expectDefined } from "@openclaw/normalization-core";
-import { asDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { asDateTimestampMs } from "@natesclaw/normalization-core/number-coercion";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
 import { isCronJobActive } from "../active-jobs.js";
 import { parseAbsoluteTimeMs } from "../parse.js";

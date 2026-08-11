@@ -3,10 +3,10 @@
  *
  * Reads persisted session store state to recover spawn depth and parent lineage across restarts.
  */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveSessionStorePathCore } from "../../../config/sessions/paths.js";
 import { listSessionEntriesReadOnly } from "../../../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { parseStrictNonNegativeInteger } from "../../../infra/parse-finite-number.js";
 import { getSubagentDepth, parseAgentSessionKey } from "../../../sessions/session-key-utils.js";
 import { resolveDefaultAgentId } from "../../agent-scope.js";
@@ -43,7 +43,7 @@ export function readSubagentSessionStore<T extends SessionDepthEntry = SessionDe
   return {};
 }
 
-function buildKeyCandidates(rawKey: string, cfg?: OpenClawConfig): string[] {
+function buildKeyCandidates(rawKey: string, cfg?: NatesclawConfig): string[] {
   if (!cfg) {
     return [rawKey];
   }
@@ -77,7 +77,7 @@ export function findSubagentSessionEntryById<T extends SessionDepthEntry>(
 
 function resolveEntryForSessionKey(params: {
   sessionKey: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   store?: Record<string, SessionDepthEntry>;
   cache: Map<string, Record<string, SessionDepthEntry>>;
 }): SessionDepthEntry | undefined {
@@ -125,7 +125,7 @@ function resolveEntryForSessionKey(params: {
 export function getSubagentDepthFromSessionStore(
   sessionKey: string | undefined | null,
   opts?: {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     store?: Record<string, SessionDepthEntry>;
   },
 ): number {

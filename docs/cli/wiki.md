@@ -1,18 +1,18 @@
 ---
-summary: "CLI reference for `openclaw wiki` (memory-wiki vault status, search, compile, lint, apply, bridge, ChatGPT import, and Obsidian helpers)"
+summary: "CLI reference for `natesclaw wiki` (memory-wiki vault status, search, compile, lint, apply, bridge, ChatGPT import, and Obsidian helpers)"
 read_when:
   - You want to use the memory-wiki CLI
-  - You are documenting or changing `openclaw wiki`
+  - You are documenting or changing `natesclaw wiki`
 title: "Wiki"
 ---
 
-# `openclaw wiki`
+# `natesclaw wiki`
 
 Inspect and maintain the `memory-wiki` vault. Provided by the bundled optional `memory-wiki` plugin. Enable it before first use:
 
 ```bash
-openclaw plugins enable memory-wiki
-openclaw gateway restart
+natesclaw plugins enable memory-wiki
+natesclaw gateway restart
 ```
 
 Related: [Memory Wiki plugin](/plugins/memory-wiki), [Memory Overview](/concepts/memory), [CLI: memory](/cli/memory)
@@ -20,36 +20,36 @@ Related: [Memory Wiki plugin](/plugins/memory-wiki), [Memory Overview](/concepts
 ## Common commands
 
 ```bash
-openclaw wiki status
-openclaw wiki doctor
-openclaw wiki init
-openclaw wiki ingest ./notes/alpha.md
-openclaw wiki okf import ./knowledge-catalog/okf/bundles/ga4
-openclaw wiki compile
-openclaw wiki lint
-openclaw wiki search "alpha"
-openclaw wiki search "who should I ask about Teams?" --mode route-question
-openclaw wiki get entity.alpha --from 1 --lines 80
+natesclaw wiki status
+natesclaw wiki doctor
+natesclaw wiki init
+natesclaw wiki ingest ./notes/alpha.md
+natesclaw wiki okf import ./knowledge-catalog/okf/bundles/ga4
+natesclaw wiki compile
+natesclaw wiki lint
+natesclaw wiki search "alpha"
+natesclaw wiki search "who should I ask about Teams?" --mode route-question
+natesclaw wiki get entity.alpha --from 1 --lines 80
 
-openclaw wiki apply synthesis "Alpha Summary" \
+natesclaw wiki apply synthesis "Alpha Summary" \
   --body "Short synthesis body" \
   --source-id source.alpha
 
-openclaw wiki apply metadata entity.alpha \
+natesclaw wiki apply metadata entity.alpha \
   --source-id source.alpha \
   --status review \
   --question "Still active?"
 
-openclaw wiki bridge import
-openclaw wiki unsafe-local import
-openclaw wiki chatgpt import --export ./chatgpt-export --dry-run
-openclaw wiki chatgpt rollback <run-id>
+natesclaw wiki bridge import
+natesclaw wiki unsafe-local import
+natesclaw wiki chatgpt import --export ./chatgpt-export --dry-run
+natesclaw wiki chatgpt rollback <run-id>
 
-openclaw wiki obsidian status
-openclaw wiki obsidian search "alpha"
-openclaw wiki obsidian open syntheses/alpha-summary.md
-openclaw wiki obsidian command workspace:quick-switcher
-openclaw wiki obsidian daily
+natesclaw wiki obsidian status
+natesclaw wiki obsidian search "alpha"
+natesclaw wiki obsidian open syntheses/alpha-summary.md
+natesclaw wiki obsidian command workspace:quick-switcher
+natesclaw wiki obsidian daily
 ```
 
 ## Agent selection
@@ -58,9 +58,9 @@ When `plugins.entries.memory-wiki.config.vault.scope` is `agent`, select the
 vault with the command's `--agent <id>` option:
 
 ```bash
-openclaw wiki status --agent support
-openclaw wiki search "refund policy" --agent support
-openclaw wiki ingest ./campaign-notes.md --agent marketing
+natesclaw wiki status --agent support
+natesclaw wiki search "refund policy" --agent support
+natesclaw wiki ingest ./campaign-notes.md --agent marketing
 ```
 
 When `--agent` is omitted, CLI operations use the configured default agent,
@@ -118,15 +118,15 @@ Imported pages are flattened under `concepts/` so existing wiki compile, search,
 Examples:
 
 ```bash
-openclaw wiki okf import ./bundles/ga4
-openclaw wiki okf import ./bundles/ga4 --json
-openclaw wiki search "BigQuery Table" --mode source-evidence --json
-openclaw wiki get <path-from-json-result>
+natesclaw wiki okf import ./bundles/ga4
+natesclaw wiki okf import ./bundles/ga4 --json
+natesclaw wiki search "BigQuery Table" --mode source-evidence --json
+natesclaw wiki get <path-from-json-result>
 ```
 
 ### `wiki compile`
 
-Rebuild indexes, related blocks, dashboards, and the compiled query/prompt snapshot. The snapshot is persisted in OpenClaw's shared SQLite plugin state and kept in memory for synchronous prompt projection; it does not create cache files in the vault.
+Rebuild indexes, related blocks, dashboards, and the compiled query/prompt snapshot. The snapshot is persisted in Natesclaw's shared SQLite plugin state and kept in memory for synchronous prompt projection; it does not create cache files in the vault.
 
 If `render.createDashboards` is enabled, compile also refreshes report pages.
 
@@ -151,7 +151,7 @@ Search wiki content. Behavior depends on config:
 - `search.corpus`: `wiki`, `memory`, or `all`
 - `--mode`: `auto`, `find-person`, `route-question`, `source-evidence`, or `raw-claim`
 
-Use `wiki search` for wiki-specific ranking and provenance. For one broad shared recall pass, prefer `openclaw memory search` when the active memory plugin exposes shared search.
+Use `wiki search` for wiki-specific ranking and provenance. For one broad shared recall pass, prefer `natesclaw memory search` when the active memory plugin exposes shared search.
 
 Search modes:
 
@@ -163,10 +163,10 @@ Search modes:
 Examples:
 
 ```bash
-openclaw wiki search "bgroux" --mode find-person
-openclaw wiki search "who knows Teams rollout?" --mode route-question
-openclaw wiki search "maintainer-whois" --mode source-evidence
-openclaw wiki search "strong route Teams" --mode raw-claim --json
+natesclaw wiki search "bgroux" --mode find-person
+natesclaw wiki search "who knows Teams rollout?" --mode route-question
+natesclaw wiki search "maintainer-whois" --mode source-evidence
+natesclaw wiki search "strong route Teams" --mode raw-claim --json
 ```
 
 Text output includes `Claim:` and `Evidence:` lines when a result matches a structured claim. JSON output additionally exposes `matchedClaimId`, `matchedClaimStatus`, `matchedClaimConfidence`, `evidenceKinds`, and `evidenceSourceIds` for agent-side drilldown.
@@ -176,8 +176,8 @@ Text output includes `Claim:` and `Evidence:` lines when a result matches a stru
 Read a wiki page by id or relative path.
 
 ```bash
-openclaw wiki get entity.alpha
-openclaw wiki get syntheses/alpha-summary.md --from 1 --lines 80
+natesclaw wiki get entity.alpha
+natesclaw wiki get syntheses/alpha-summary.md --from 1 --lines 80
 ```
 
 ### `wiki apply`
@@ -204,8 +204,8 @@ Import from explicitly configured local paths (`unsafeLocal.paths`) in `unsafe-l
 Import a ChatGPT export into draft wiki source pages.
 
 ```bash
-openclaw wiki chatgpt import --export ./chatgpt-export
-openclaw wiki chatgpt import --export ./conversations.json --dry-run
+natesclaw wiki chatgpt import --export ./chatgpt-export
+natesclaw wiki chatgpt import --export ./conversations.json --dry-run
 ```
 
 | Flag              | Default    | Description                                                   |
@@ -217,7 +217,7 @@ A non-dry-run import that changes any page records an import run id, printed in 
 
 ### `wiki chatgpt rollback <run-id>`
 
-Roll back a previously applied ChatGPT import run, removing pages it created and restoring pages it overwrote. Pages changed after import are moved under the run's `.openclaw-wiki/import-runs/<run-id>/recovered/` directory instead of being deleted. Recovery paths remain in the command result on retries and later `alreadyRolledBack` responses. Interrupted runs remain `rolling_back` while target recovery or derived-artifact compilation is incomplete. A persisted process-restart fence separates those phases: after it, retries rebuild indexes and compiled caches without rewriting source pages or moving later pathname writes. A later normal compile may refresh machine-managed Related blocks. This covers in-process failure and process restart after ordinary filesystem calls return, not kernel or host power-loss ordering.
+Roll back a previously applied ChatGPT import run, removing pages it created and restoring pages it overwrote. Pages changed after import are moved under the run's `.natesclaw-wiki/import-runs/<run-id>/recovered/` directory instead of being deleted. Recovery paths remain in the command result on retries and later `alreadyRolledBack` responses. Interrupted runs remain `rolling_back` while target recovery or derived-artifact compilation is incomplete. A persisted process-restart fence separates those phases: after it, retries rebuild indexes and compiled caches without rewriting source pages or moving later pathname writes. A later normal compile may refresh machine-managed Related blocks. This covers in-process failure and process restart after ordinary filesystem calls return, not kernel or host power-loss ordering.
 
 ### `wiki obsidian ...`
 
@@ -239,7 +239,7 @@ available.
 
 ## Configuration tie-ins
 
-`openclaw wiki` behavior is shaped by:
+`natesclaw wiki` behavior is shaped by:
 
 - `plugins.entries.memory-wiki.config.vaultMode`
 - `plugins.entries.memory-wiki.config.vault.scope`

@@ -1,10 +1,10 @@
 // Opencode Go plugin module implements stream behavior.
-import type { ProviderWrapStreamFnContext } from "openclaw/plugin-sdk/plugin-entry";
+import type { ProviderWrapStreamFnContext } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   createDeepSeekV4OpenAICompatibleThinkingWrapper,
   createOpenAICompatibleCompletionsThinkingOffWrapper,
   createPayloadPatchStreamWrapper,
-} from "openclaw/plugin-sdk/provider-stream-shared";
+} from "natesclaw/plugin-sdk/provider-stream-shared";
 import { isOpencodeGoKimiNoReasoningModelId } from "./provider-catalog.js";
 import { isOpencodeGoFixedAnthropicReasoningModelId } from "./provider-policy-api.js";
 import { stripOpencodeGoKimiReasoningPayload } from "./reasoning-sanitizer.js";

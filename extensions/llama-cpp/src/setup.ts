@@ -4,11 +4,11 @@ import type {
   ProviderAppGuidedSetupContext,
   ProviderAuthContext,
   ProviderAuthResult,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "natesclaw/plugin-sdk/provider-model-shared";
 import {
   DEFAULT_LLAMA_CPP_MODEL_CACHE_FILE,
   DEFAULT_LLAMA_CPP_MODEL_ID,
@@ -155,7 +155,7 @@ export async function runLlamaCppSetup(ctx: ProviderAuthContext): Promise<Provid
     }
     const consent = await ctx.prompter.confirm({
       message:
-        "OpenClaw will download Gemma 4 E4B IT Q4_K_M (about 5.0 GB) and run it directly inside this Gateway. Continue?",
+        "Natesclaw will download Gemma 4 E4B IT Q4_K_M (about 5.0 GB) and run it directly inside this Gateway. Continue?",
       initialValue: false,
     });
     if (!consent) {

@@ -9,9 +9,9 @@ function getNativeWindowDragPoster(): WebKitMessageHandler["postMessage"] | unde
   // (plain browsers, other hosts) keeps default mouse behavior.
   const handler = (
     window as unknown as {
-      webkit?: { messageHandlers?: { openclawWindowDrag?: WebKitMessageHandler } };
+      webkit?: { messageHandlers?: { natesclawWindowDrag?: WebKitMessageHandler } };
     }
-  ).webkit?.messageHandlers?.openclawWindowDrag;
+  ).webkit?.messageHandlers?.natesclawWindowDrag;
   return handler?.postMessage.bind(handler);
 }
 

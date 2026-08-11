@@ -34,9 +34,9 @@ vi.mock("./connection-controller-runtime-context.js", () => ({
   getWhatsAppConnectionController: (accountId: string) => controllerContexts.get(accountId) ?? null,
 }));
 
-vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/media-runtime")>(
-    "openclaw/plugin-sdk/media-runtime",
+vi.mock("natesclaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("natesclaw/plugin-sdk/media-runtime")>(
+    "natesclaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,

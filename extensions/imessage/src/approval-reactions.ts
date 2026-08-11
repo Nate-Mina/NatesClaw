@@ -1,5 +1,5 @@
 // Imessage plugin module implements approval reactions behavior.
-import type { ApprovalResolveResult } from "openclaw/plugin-sdk/approval-gateway-runtime";
+import type { ApprovalResolveResult } from "natesclaw/plugin-sdk/approval-gateway-runtime";
 import {
   addApprovalReactionHintToText,
   approvalReactionDecisionSetsMatch,
@@ -15,19 +15,19 @@ import {
   type ApprovalReactionDecisionBinding,
   type ApprovalReactionDeliveryBinding,
   type ApprovalReactionTargetRecord,
-} from "openclaw/plugin-sdk/approval-reaction-runtime";
-import type { ExecApprovalReplyDecision } from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { OutboundDeliveryResult } from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { isApprovalNotFoundError } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeSurface } from "openclaw/plugin-sdk/lazy-runtime";
+} from "natesclaw/plugin-sdk/approval-reaction-runtime";
+import type { ExecApprovalReplyDecision } from "natesclaw/plugin-sdk/approval-reply-runtime";
+import type { OutboundDeliveryResult } from "natesclaw/plugin-sdk/channel-send-result";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { isApprovalNotFoundError } from "natesclaw/plugin-sdk/error-runtime";
+import { createLazyRuntimeSurface } from "natesclaw/plugin-sdk/lazy-runtime";
 import {
   asDateTimestampMs,
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { createPluginStateErrorReporter } from "openclaw/plugin-sdk/plugin-state-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { createPluginStateErrorReporter } from "natesclaw/plugin-sdk/plugin-state-runtime";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 import { getIMessageApprovalApprovers, imessageApprovalAuth } from "./approval-auth.js";
 import type { IMessageApprovalGatewayRuntime } from "./approval-gateway-types.js";
 import {
@@ -80,7 +80,7 @@ export type PendingIMessageApprovalReactionPollTarget = {
 };
 
 const loadResolveApprovalOverGateway = createLazyRuntimeSurface(
-  () => import("openclaw/plugin-sdk/approval-gateway-runtime"),
+  () => import("natesclaw/plugin-sdk/approval-gateway-runtime"),
   (runtime) => runtime.resolveApprovalOverGateway,
 );
 const pendingReactionPollTargets = new Map<string, PendingIMessageApprovalReactionPollTarget>();
@@ -627,7 +627,7 @@ function readApprovalReactionEvent(
 }
 
 export async function handleIMessageApprovalReaction(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   message: IMessagePayload;
   bodyText: string;
@@ -729,7 +729,7 @@ export async function handleIMessageApprovalReaction(params: {
       return { handled: true, stopPolling: true, stopPollingReason: "not-found" };
     }
     // Surface non-NotFound errors at warn level so a gateway 5xx / network
-    // outage / auth failure is visible without OPENCLAW_LOG_LEVEL=debug.
+    // outage / auth failure is visible without NATESCLAW_LOG_LEVEL=debug.
     try {
       getOptionalIMessageRuntime()
         ?.logging.getChildLogger({ plugin: "imessage", feature: "approval-reactions" })
@@ -749,7 +749,7 @@ export async function handleIMessageApprovalReaction(params: {
 }
 
 export async function maybeResolveIMessageApprovalReaction(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   message: IMessagePayload;
   bodyText: string;

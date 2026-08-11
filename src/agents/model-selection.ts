@@ -4,9 +4,9 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { DEFAULT_PROVIDER } from "./defaults.js";
 import { findModelInCatalog } from "./model-catalog-lookup.js";
 import type { ModelCatalogEntry } from "./model-catalog.types.js";
@@ -211,7 +211,7 @@ export function normalizeStoredOverrideModel(params: {
 
 export async function canonicalizeCaseOnlyCatalogModelRef(params: {
   raw: string | undefined;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   defaultProvider: string;
   loadCatalog: () => Promise<ModelCatalogEntry[]>;
   aliasIndex?: ModelAliasIndex;
@@ -294,7 +294,7 @@ function resolveModelThroughAliases(value: string, aliasIndex: ModelAliasIndex):
 }
 
 export function resolveSubagentSpawnModelSelection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   modelOverride?: unknown;
 }): string {
@@ -322,7 +322,7 @@ export function resolveSubagentSpawnModelSelection(params: {
 }
 
 export function resolveConfiguredSubagentSpawnModelSelection(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   modelOverride?: unknown;
   defaultProvider?: string;
@@ -353,7 +353,7 @@ export function resolveConfiguredSubagentSpawnModelSelection(params: {
 
 export function buildAllowedModelSet(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     catalog: ModelCatalogEntry[];
     defaultProvider: string;
     defaultModel?: string;
@@ -381,7 +381,7 @@ export function buildAllowedModelSet(
 
 export function resolveAllowedModelRef(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     catalog: ModelCatalogEntry[];
     raw: string;
     defaultProvider: string;

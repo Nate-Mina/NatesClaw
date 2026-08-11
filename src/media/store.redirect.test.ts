@@ -3,9 +3,9 @@ import fs from "node:fs/promises";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinnedLookup } from "../infra/net/ssrf.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import { saveMediaSource } from "./store.js";
 import { setMediaStoreNetworkDepsForTest } from "./store.test-support.js";
 
@@ -26,12 +26,12 @@ async function useActualSaveRemoteMedia(): Promise<void> {
 }
 
 describe("media store remote sources", () => {
-  let testState: OpenClawTestState;
+  let testState: NatesclawTestState;
 
   beforeAll(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-media-store-remote-",
+      prefix: "natesclaw-media-store-remote-",
     });
   });
 

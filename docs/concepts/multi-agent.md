@@ -18,12 +18,12 @@ Each agent has its own:
 
 - **Workspace**: files, `AGENTS.md`/`SOUL.md`/`USER.md`, local notes, persona rules.
 - **State directory** (`agentDir`): auth profiles, model registry, per-agent config.
-- **Session store**: chat history and routing state in `~/.openclaw/agents/<agentId>/agent/openclaw-agent.sqlite`.
+- **Session store**: chat history and routing state in `~/.natesclaw/agents/<agentId>/agent/natesclaw-agent.sqlite`.
 
 Auth profiles are per-agent, read from:
 
 ```text
-~/.openclaw/agents/<agentId>/agent/openclaw-agent.sqlite
+~/.natesclaw/agents/<agentId>/agent/natesclaw-agent.sqlite
 ```
 
 <Note>
@@ -31,10 +31,10 @@ Auth profiles are per-agent, read from:
 </Note>
 
 <Warning>
-Never reuse `agentDir` across agents — it causes auth/session state collisions. When a secondary agent's local OAuth credential is expired or its refresh fails, OpenClaw reads through to the default/main agent's credential for the same profile id and adopts whichever token is freshest, without copying the refresh token into the secondary agent's store. If you want a fully independent OAuth account, sign in from that agent. If you copy credentials manually, copy only portable static `api_key` or `token` profiles — OAuth refresh material is not portable by default (`copyToAgents` can opt a profile in explicitly).
+Never reuse `agentDir` across agents — it causes auth/session state collisions. When a secondary agent's local OAuth credential is expired or its refresh fails, Natesclaw reads through to the default/main agent's credential for the same profile id and adopts whichever token is freshest, without copying the refresh token into the secondary agent's store. If you want a fully independent OAuth account, sign in from that agent. If you copy credentials manually, copy only portable static `api_key` or `token` profiles — OAuth refresh material is not portable by default (`copyToAgents` can opt a profile in explicitly).
 </Warning>
 
-Skills load from each agent workspace plus shared roots such as `~/.openclaw/skills`, then filter by the effective agent skill allowlist. Use `agents.defaults.skills` for a shared baseline and `agents.entries.*.skills` for a per-agent replacement (explicit entries replace the default, they do not merge). See [Skills: per-agent vs shared](/tools/skills#per-agent-vs-shared-skills) and [Skills: agent allowlists](/tools/skills#agent-allowlists).
+Skills load from each agent workspace plus shared roots such as `~/.natesclaw/skills`, then filter by the effective agent skill allowlist. Use `agents.defaults.skills` for a shared baseline and `agents.entries.*.skills` for a per-agent replacement (explicit entries replace the default, they do not merge). See [Skills: per-agent vs shared](/tools/skills#per-agent-vs-shared-skills) and [Skills: agent allowlists](/tools/skills#agent-allowlists).
 
 Plugin-owned storage follows that plugin's configuration; adding a second agent
 does not automatically split every global plugin store. For example, configure
@@ -49,29 +49,29 @@ when personas must not share compiled wiki knowledge.
 
 | What                             | Default                                                                                | Override                                                                                    |
 | -------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Config                           | `~/.openclaw/openclaw.json`                                                            | `OPENCLAW_CONFIG_PATH`                                                                      |
-| State dir                        | `~/.openclaw`                                                                          | `OPENCLAW_STATE_DIR`                                                                        |
-| Default agent's workspace        | `~/.openclaw/workspace` (or `workspace-<profile>` when `OPENCLAW_PROFILE` is set)      | `agents.entries.*.workspace`, then `agents.defaults.workspace`, or `OPENCLAW_WORKSPACE_DIR` |
+| Config                           | `~/.natesclaw/natesclaw.json`                                                            | `NATESCLAW_CONFIG_PATH`                                                                      |
+| State dir                        | `~/.natesclaw`                                                                          | `NATESCLAW_STATE_DIR`                                                                        |
+| Default agent's workspace        | `~/.natesclaw/workspace` (or `workspace-<profile>` when `NATESCLAW_PROFILE` is set)      | `agents.entries.*.workspace`, then `agents.defaults.workspace`, or `NATESCLAW_WORKSPACE_DIR` |
 | Other agents' workspace          | `<stateDir>/workspace-<agentId>` (or `<agents.defaults.workspace>/<agentId>` when set) | `agents.entries.*.workspace`                                                                |
-| Agent dir                        | `~/.openclaw/agents/<agentId>/agent`                                                   | `agents.entries.*.agentDir`                                                                 |
-| Sessions and transcripts         | `~/.openclaw/agents/<agentId>/agent/openclaw-agent.sqlite`                             | —                                                                                           |
-| Legacy/archive session artifacts | `~/.openclaw/agents/<agentId>/sessions`                                                | —                                                                                           |
+| Agent dir                        | `~/.natesclaw/agents/<agentId>/agent`                                                   | `agents.entries.*.agentDir`                                                                 |
+| Sessions and transcripts         | `~/.natesclaw/agents/<agentId>/agent/natesclaw-agent.sqlite`                             | —                                                                                           |
+| Legacy/archive session artifacts | `~/.natesclaw/agents/<agentId>/sessions`                                                | —                                                                                           |
 
 ### Single-agent mode (default)
 
-If you configure nothing, OpenClaw runs one agent:
+If you configure nothing, Natesclaw runs one agent:
 
 - `agentId` defaults to `main`.
 - Sessions key as `agent:main:<mainKey>` (default `mainKey` is `main`).
-- Workspace defaults to `~/.openclaw/workspace` (or `workspace-<profile>` when `OPENCLAW_PROFILE` is set to something other than `default`).
-- State defaults to `~/.openclaw/agents/main/agent`.
+- Workspace defaults to `~/.natesclaw/workspace` (or `workspace-<profile>` when `NATESCLAW_PROFILE` is set to something other than `default`).
+- State defaults to `~/.natesclaw/agents/main/agent`.
 
 ## Agent helper
 
 Add a new isolated agent:
 
 ```bash
-openclaw agents add work
+natesclaw agents add work
 ```
 
 Flags: `--workspace <dir>`, `--model <id>`, `--agent-dir <dir>`, `--bind <channel[:accountId]>` (repeatable), `--non-interactive` (requires `--workspace`).
@@ -79,7 +79,7 @@ Flags: `--workspace <dir>`, `--model <id>`, `--agent-dir <dir>`, `--bind <channe
 Add `bindings` to route inbound messages (the wizard offers to do this for you), then verify:
 
 ```bash
-openclaw agents list --bindings
+natesclaw agents list --bindings
 ```
 
 ## Quick start
@@ -87,11 +87,11 @@ openclaw agents list --bindings
 <Steps>
   <Step title="Create each agent workspace">
     ```bash
-    openclaw agents add coding
-    openclaw agents add social
+    natesclaw agents add coding
+    natesclaw agents add social
     ```
 
-    Each agent gets its own workspace with `SOUL.md`, `AGENTS.md`, and optional `USER.md`, plus a dedicated `agentDir` and session store under `~/.openclaw/agents/<agentId>`.
+    Each agent gets its own workspace with `SOUL.md`, `AGENTS.md`, and optional `USER.md`, plus a dedicated `agentDir` and session store under `~/.natesclaw/agents/<agentId>`.
 
   </Step>
   <Step title="Create channel accounts">
@@ -102,7 +102,7 @@ openclaw agents list --bindings
     - WhatsApp: link each phone number per account.
 
     ```bash
-    openclaw channels login --channel whatsapp --account work
+    natesclaw channels login --channel whatsapp --account work
     ```
 
     See channel guides: [Discord](/channels/discord), [Telegram](/channels/telegram), [WhatsApp](/channels/whatsapp).
@@ -113,9 +113,9 @@ openclaw agents list --bindings
   </Step>
   <Step title="Restart and verify">
     ```bash
-    openclaw gateway restart
-    openclaw agents list --bindings
-    openclaw channels status --probe
+    natesclaw gateway restart
+    natesclaw agents list --bindings
+    natesclaw channels status --probe
     ```
   </Step>
 </Steps>
@@ -145,7 +145,7 @@ compiled knowledge separate from a marketing agent's, set
         config: {
           vault: {
             scope: "agent",
-            path: "~/.openclaw/wiki",
+            path: "~/.natesclaw/wiki",
           },
         },
       },
@@ -154,9 +154,9 @@ compiled knowledge separate from a marketing agent's, set
 }
 ```
 
-The configured path is the parent directory. OpenClaw appends the normalized
-agent id, producing paths such as `~/.openclaw/wiki/support` and
-`~/.openclaw/wiki/marketing`. Agent-scoped CLI and Gateway operations require
+The configured path is the parent directory. Natesclaw appends the normalized
+agent id, producing paths such as `~/.natesclaw/wiki/support` and
+`~/.natesclaw/wiki/marketing`. Agent-scoped CLI and Gateway operations require
 an explicit agent when multiple agents are configured. See
 [Memory Wiki per-agent vaults](/plugins/memory-wiki#per-agent-vaults) for bridge
 filtering, migration, and trust-boundary details.
@@ -182,8 +182,8 @@ Direct chats collapse to the agent's main session key by default, so true isolat
 {
   agents: {
     entries: {
-      alex: { default: true, workspace: "~/.openclaw/workspace-alex" },
-      mia: { workspace: "~/.openclaw/workspace-mia" },
+      alex: { default: true, workspace: "~/.natesclaw/workspace-alex" },
+      mia: { workspace: "~/.natesclaw/workspace-mia" },
     },
   },
   bindings: [
@@ -215,13 +215,13 @@ Bindings are deterministic and most-specific wins. See [Channel routing](/channe
 - If a binding sets multiple match fields (for example `peer` + `guildId`), all specified fields must match (`AND` semantics).
 - A binding that omits `accountId` matches only the default account, not every account. Use `accountId: "*"` for a channel-wide fallback, or `accountId: "<name>"` for one account. Adding the same binding again with an explicit account id upgrades the existing channel-only binding instead of duplicating it.
 
-For existing multi-agent configs, `openclaw doctor --fix` materializes legacy ambient default routing into channel-wide bindings plus explicit heartbeat, Custodian, and Talk targets. Single-agent configs are unchanged.
+For existing multi-agent configs, `natesclaw doctor --fix` materializes legacy ambient default routing into channel-wide bindings plus explicit heartbeat, Custodian, and Talk targets. Single-agent configs are unchanged.
 
 ## Multiple accounts / phone numbers
 
 Channels that support multiple accounts (e.g. WhatsApp) use `accountId` to identify each login. Each `accountId` routes to its own agent, so one server can host multiple phone numbers without mixing sessions.
 
-Set `channels.<channel>.defaultAccount` to choose the account used when `accountId` is omitted. When unset, OpenClaw falls back to `default` if present, otherwise the first configured account id (sorted).
+Set `channels.<channel>.defaultAccount` to choose the account used when `accountId` is omitted. When unset, Natesclaw falls back to `default` if present, otherwise the first configured account id (sorted).
 
 Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imessage`, `irc`, `line`, `mattermost`, `matrix`, `nextcloud-talk`, `nostr`, `signal`, `slack`, `telegram`, `whatsapp`, `zalo`, `zalouser`.
 
@@ -242,8 +242,8 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
     {
       agents: {
         entries: {
-          main: { default: true, workspace: "~/.openclaw/workspace-main" },
-          coding: { workspace: "~/.openclaw/workspace-coding" },
+          main: { default: true, workspace: "~/.natesclaw/workspace-main" },
+          coding: { workspace: "~/.natesclaw/workspace-coding" },
         },
       },
       bindings: [
@@ -289,8 +289,8 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
     {
       agents: {
         entries: {
-          main: { default: true, workspace: "~/.openclaw/workspace-main" },
-          alerts: { workspace: "~/.openclaw/workspace-alerts" },
+          main: { default: true, workspace: "~/.natesclaw/workspace-main" },
+          alerts: { workspace: "~/.natesclaw/workspace-alerts" },
         },
       },
       bindings: [
@@ -328,11 +328,11 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
     Link each account before starting the gateway:
 
     ```bash
-    openclaw channels login --channel whatsapp --account personal
-    openclaw channels login --channel whatsapp --account biz
+    natesclaw channels login --channel whatsapp --account personal
+    natesclaw channels login --channel whatsapp --account biz
     ```
 
-    `~/.openclaw/openclaw.json` (JSON5):
+    `~/.natesclaw/natesclaw.json` (JSON5):
 
     ```js
     {
@@ -341,13 +341,13 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
           home: {
             default: true,
             name: "Home",
-            workspace: "~/.openclaw/workspace-home",
-            agentDir: "~/.openclaw/agents/home/agent",
+            workspace: "~/.natesclaw/workspace-home",
+            agentDir: "~/.natesclaw/agents/home/agent",
           },
           work: {
             name: "Work",
-            workspace: "~/.openclaw/workspace-work",
-            agentDir: "~/.openclaw/agents/work/agent",
+            workspace: "~/.natesclaw/workspace-work",
+            agentDir: "~/.natesclaw/agents/work/agent",
           },
         },
       },
@@ -380,12 +380,12 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
         whatsapp: {
           accounts: {
             personal: {
-              // Optional override. Default: ~/.openclaw/credentials/whatsapp/personal
-              // authDir: "~/.openclaw/credentials/whatsapp/personal",
+              // Optional override. Default: ~/.natesclaw/credentials/whatsapp/personal
+              // authDir: "~/.natesclaw/credentials/whatsapp/personal",
             },
             biz: {
-              // Optional override. Default: ~/.openclaw/credentials/whatsapp/biz
-              // authDir: "~/.openclaw/credentials/whatsapp/biz",
+              // Optional override. Default: ~/.natesclaw/credentials/whatsapp/biz
+              // authDir: "~/.natesclaw/credentials/whatsapp/biz",
             },
           },
         },
@@ -409,12 +409,12 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
           chat: {
             default: true,
             name: "Everyday",
-            workspace: "~/.openclaw/workspace-chat",
+            workspace: "~/.natesclaw/workspace-chat",
             model: "anthropic/claude-sonnet-4-6",
           },
           opus: {
             name: "Deep Work",
-            workspace: "~/.openclaw/workspace-opus",
+            workspace: "~/.natesclaw/workspace-opus",
             model: "anthropic/claude-opus-4-6",
           },
         },
@@ -439,12 +439,12 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
           chat: {
             default: true,
             name: "Everyday",
-            workspace: "~/.openclaw/workspace-chat",
+            workspace: "~/.natesclaw/workspace-chat",
             model: "anthropic/claude-sonnet-4-6",
           },
           opus: {
             name: "Deep Work",
-            workspace: "~/.openclaw/workspace-opus",
+            workspace: "~/.natesclaw/workspace-opus",
             model: "anthropic/claude-opus-4-6",
           },
         },
@@ -472,7 +472,7 @@ Channels supporting multiple accounts: `discord`, `feishu`, `googlechat`, `imess
           family: {
             default: true,
             name: "Family",
-            workspace: "~/.openclaw/workspace-family",
+            workspace: "~/.natesclaw/workspace-family",
             identity: { name: "Family Bot" },
             groupChat: {
               mentionPatterns: ["@family", "@familybot", "@Family Bot"],
@@ -523,14 +523,14 @@ Each agent can have its own sandbox and tool restrictions:
     entries: {
       personal: {
         default: true,
-        workspace: "~/.openclaw/workspace-personal",
+        workspace: "~/.natesclaw/workspace-personal",
         sandbox: {
           mode: "off",  // No sandbox for personal agent
         },
         // No tool restrictions - all tools available
       },
       family: {
-        workspace: "~/.openclaw/workspace-family",
+        workspace: "~/.natesclaw/workspace-family",
         sandbox: {
           mode: "all",     // Always sandboxed
           scope: "agent",  // One container per agent

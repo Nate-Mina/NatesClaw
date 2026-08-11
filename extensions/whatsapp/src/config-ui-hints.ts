@@ -1,6 +1,6 @@
-import { createChannelConfigUiHints } from "openclaw/plugin-sdk/channel-core";
+import { createChannelConfigUiHints } from "natesclaw/plugin-sdk/channel-core";
 // Whatsapp helper module supports config ui hints behavior.
-import type { ChannelConfigUiHint } from "openclaw/plugin-sdk/core";
+import type { ChannelConfigUiHint } from "natesclaw/plugin-sdk/core";
 
 export const whatsAppChannelConfigUiHints = {
   "": {

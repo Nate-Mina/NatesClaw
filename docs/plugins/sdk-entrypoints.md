@@ -20,12 +20,12 @@ each entry shape: `defineToolPlugin`, `definePluginEntry`,
 
 ## Package entries
 
-Installed plugins point `package.json` `openclaw` fields at both source and
+Installed plugins point `package.json` `natesclaw` fields at both source and
 built entries:
 
 ```json
 {
-  "openclaw": {
+  "natesclaw": {
     "extensions": ["./src/index.ts"],
     "runtimeExtensions": ["./dist/index.js"],
     "setupEntry": "./src/setup-entry.ts",
@@ -41,10 +41,10 @@ built entries:
 - `runtimeExtensions`, when present, must match `extensions` in array length
   (entries pair positionally). `runtimeSetupEntry` requires `setupEntry`.
 - If a `runtimeExtensions`/`runtimeSetupEntry` artifact is declared but
-  missing, install/discovery fails with a packaging error; OpenClaw does not
+  missing, install/discovery fails with a packaging error; Natesclaw does not
   silently fall back to source. Source fallback (below) only applies when no
   runtime entry is declared at all.
-- If an installed package declares only a TypeScript source entry, OpenClaw
+- If an installed package declares only a TypeScript source entry, Natesclaw
   looks for a matching built `dist/*.js` (or `.mjs`/`.cjs`) peer and uses it;
   otherwise it falls back to the TypeScript source.
 - All entry paths must stay inside the plugin package directory. Runtime
@@ -53,17 +53,17 @@ built entries:
 
 ## `defineToolPlugin`
 
-**Import:** `openclaw/plugin-sdk/tool-plugin`
+**Import:** `natesclaw/plugin-sdk/tool-plugin`
 
 For plugins that only add agent tools. Keeps the source small, infers config
 and tool-parameter types from TypeBox schemas, wraps plain return values in
-the OpenClaw tool-result format, and exposes static metadata that
-`openclaw plugins build` writes into the plugin manifest (`contracts.tools`,
+the Natesclaw tool-result format, and exposes static metadata that
+`natesclaw plugins build` writes into the plugin manifest (`contracts.tools`,
 `configSchema`).
 
 ```typescript
 import { Type } from "typebox";
-import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
+import { defineToolPlugin } from "natesclaw/plugin-sdk/tool-plugin";
 
 export default defineToolPlugin({
   id: "stock-quotes",
@@ -101,23 +101,23 @@ export default defineToolPlugin({
 - `outputSchema` optionally describes that original `details` value for Code
   Mode and Tool Search. Catalog calls reject an invalid schema before execution
   and validate the final value before returning it.
-- For custom tool results, `openclaw/plugin-sdk/tool-results` exports
+- For custom tool results, `natesclaw/plugin-sdk/tool-results` exports
   `textResult` and `jsonResult`.
-- Tool names are static, so `openclaw plugins build` derives
+- Tool names are static, so `natesclaw plugins build` derives
   `contracts.tools` from the declared tools without hand-duplicated names.
 - Runtime loading stays strict: installed plugins still need
-  `openclaw.plugin.json` and `package.json` `openclaw.extensions`. OpenClaw
+  `natesclaw.plugin.json` and `package.json` `natesclaw.extensions`. Natesclaw
   never executes plugin code to infer missing manifest data.
 
 ## `definePluginEntry`
 
-**Import:** `openclaw/plugin-sdk/plugin-entry`
+**Import:** `natesclaw/plugin-sdk/plugin-entry`
 
 For provider plugins, advanced tool plugins, hook plugins, and anything that
 is **not** a messaging channel.
 
 ```typescript
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 
 export default definePluginEntry({
   id: "my-plugin",
@@ -136,15 +136,15 @@ export default definePluginEntry({
 | `name`                    | `string`                                                         | Yes      | -                   |
 | `description`             | `string`                                                         | Yes      | -                   |
 | `kind`                    | `string` (deprecated, see below)                                 | No       | -                   |
-| `configSchema`            | `OpenClawPluginConfigSchema \| () => OpenClawPluginConfigSchema` | No       | Empty object schema |
-| `reload`                  | `OpenClawPluginReloadRegistration`                               | No       | -                   |
-| `nodeHostCommands`        | `OpenClawPluginNodeHostCommand[]`                                | No       | -                   |
-| `securityAuditCollectors` | `OpenClawPluginSecurityAuditCollector[]`                         | No       | -                   |
-| `register`                | `(api: OpenClawPluginApi) => void`                               | Yes      | -                   |
+| `configSchema`            | `NatesclawPluginConfigSchema \| () => NatesclawPluginConfigSchema` | No       | Empty object schema |
+| `reload`                  | `NatesclawPluginReloadRegistration`                               | No       | -                   |
+| `nodeHostCommands`        | `NatesclawPluginNodeHostCommand[]`                                | No       | -                   |
+| `securityAuditCollectors` | `NatesclawPluginSecurityAuditCollector[]`                         | No       | -                   |
+| `register`                | `(api: NatesclawPluginApi) => void`                               | Yes      | -                   |
 
-- `id` must match your `openclaw.plugin.json` manifest.
+- `id` must match your `natesclaw.plugin.json` manifest.
 - External session catalogs use
-  `openclaw/plugin-sdk/session-catalog` and register a
+  `natesclaw/plugin-sdk/session-catalog` and register a
   `SessionCatalogProvider` with `api.registerSessionCatalog(...)`. Required
   provider fields are `id`, `label`, `list`, and `read`; optional hooks are
   `resolveCreateSession`, `continueSession`, `checkUpstreamActivity`, `archive`,
@@ -155,7 +155,7 @@ export default definePluginEntry({
   `onHost(host)` callback as each host settles; the returned host array remains
   required as the final compatibility snapshot.
   `resolveCreateSession({ agentId })` must return a config-derived model/runtime
-  target before OpenClaw advertises creation or calls `startTerminalSession`.
+  target before Natesclaw advertises creation or calls `startTerminalSession`.
   Use
   [`api.runtime.agent.resolveSessionCatalogCreateTarget(...)`](/plugins/sdk-runtime#apiruntimeagent)
   to apply the host's runtime and model-allowlist policy instead of duplicating
@@ -173,21 +173,21 @@ export default definePluginEntry({
   PTY.
 
 - `kind` is deprecated: declare an exclusive slot (`"memory"` or
-  `"context-engine"`) in the `openclaw.plugin.json` manifest `kind` field
+  `"context-engine"`) in the `natesclaw.plugin.json` manifest `kind` field
   instead. Runtime-entry `kind` remains only as a compatibility fallback for
   older plugins.
-- `configSchema` can be a function for lazy evaluation. OpenClaw resolves and
+- `configSchema` can be a function for lazy evaluation. Natesclaw resolves and
   memoizes the schema on first access, so expensive schema builders only run
   once.
 - A `nodeHostCommands` descriptor can define `isAvailable({ config, env })`.
   Returning `false` omits that command and its capability from the headless
-  node's Gateway declaration. OpenClaw evaluates it against the node-local
+  node's Gateway declaration. Natesclaw evaluates it against the node-local
   startup config; command handlers should still validate availability when
   invoked.
 
 ## `defineChannelPluginEntry`
 
-**Import:** `openclaw/plugin-sdk/channel-core`
+**Import:** `natesclaw/plugin-sdk/channel-core`
 
 Wraps `definePluginEntry` with channel-specific wiring: it automatically
 calls `api.registerChannel({ plugin })`, exposes an optional root-help CLI
@@ -195,7 +195,7 @@ metadata seam, and gates capability and full-runtime callbacks on registration
 mode.
 
 ```typescript
-import { defineChannelPluginEntry } from "openclaw/plugin-sdk/channel-core";
+import { defineChannelPluginEntry } from "natesclaw/plugin-sdk/channel-core";
 
 export default defineChannelPluginEntry({
   id: "my-channel",
@@ -221,11 +221,11 @@ export default defineChannelPluginEntry({
 | `name`                 | `string`                                                         | Yes      | -                   |
 | `description`          | `string`                                                         | Yes      | -                   |
 | `plugin`               | `ChannelPlugin`                                                  | Yes      | -                   |
-| `configSchema`         | `OpenClawPluginConfigSchema \| () => OpenClawPluginConfigSchema` | No       | Empty object schema |
+| `configSchema`         | `NatesclawPluginConfigSchema \| () => NatesclawPluginConfigSchema` | No       | Empty object schema |
 | `setRuntime`           | `(runtime: PluginRuntime) => void`                               | No       | -                   |
-| `registerCliMetadata`  | `(api: OpenClawPluginApi) => void`                               | No       | -                   |
-| `registerFull`         | `(api: OpenClawPluginApi) => void`                               | No       | -                   |
-| `registerCapabilities` | `(api: OpenClawPluginApi) => void`                               | No       | -                   |
+| `registerCliMetadata`  | `(api: NatesclawPluginApi) => void`                               | No       | -                   |
+| `registerFull`         | `(api: NatesclawPluginApi) => void`                               | No       | -                   |
+| `registerCapabilities` | `(api: NatesclawPluginApi) => void`                               | No       | -                   |
 
 Callbacks run per registration mode (full table under
 [Registration mode](#registration-mode)):
@@ -239,7 +239,7 @@ Callbacks run per registration mode (full table under
   command metadata, and normal CLI registration stays compatible with full
   plugin loads.
 - `registerFull` runs only for `"full"` and `"tool-discovery"`. For
-  `"tool-discovery"` it runs _instead of_ channel registration: OpenClaw
+  `"tool-discovery"` it runs _instead of_ channel registration: Natesclaw
   skips `registerChannel`/`setRuntime` entirely and calls the full-runtime
   callback followed by the capability callback. Keep tool registration in
   `registerFull` and capability providers in `registerCapabilities`.
@@ -247,11 +247,11 @@ Callbacks run per registration mode (full table under
   `"tool-discovery"`. Register inert advertised providers here so read-only
   capability discovery can find them without starting sockets, clients,
   workers, or services.
-- Discovery registration is non-activating, not import-free: OpenClaw may
+- Discovery registration is non-activating, not import-free: Natesclaw may
   evaluate the trusted plugin entry and channel plugin module to build the
   snapshot. Keep top-level imports side-effect-free and put sockets,
   clients, workers, and services behind `"full"`-only paths.
-- Like `definePluginEntry`, `configSchema` can be a lazy factory; OpenClaw
+- Like `definePluginEntry`, `configSchema` can be a lazy factory; Natesclaw
   memoizes the resolved schema on first access.
 
 CLI registration:
@@ -259,7 +259,7 @@ CLI registration:
 - Use `api.registerCli(..., { descriptors: [...] })` for plugin-owned root
   CLI commands you want lazy-loaded without disappearing from the root CLI
   parse tree. Descriptor names must match letters, numbers, hyphen, and
-  underscore, starting with a letter or number; OpenClaw rejects other
+  underscore, starting with a letter or number; Natesclaw rejects other
   shapes and strips terminal control sequences from descriptions before
   rendering help. Cover every top-level command root the registrar exposes.
   `commands` alone stays on the eager compatibility path.
@@ -267,14 +267,14 @@ CLI registration:
   `machineOutput({ argv, stdoutIsTTY })` resolver for JSON, JSONL, or other
   machine-readable stdout modes that are not selected solely by `--json`.
   Parse command tokens with `getRootOptionAwareCommandPath` from
-  `openclaw/plugin-sdk/cli-argv`. Keep the resolver in lightweight CLI metadata
+  `natesclaw/plugin-sdk/cli-argv`. Keep the resolver in lightweight CLI metadata
   and share it with full registration. Nested descriptors do not expose this
   field.
 - Use `api.registerNodeCliFeature(...)` for paired-node feature commands so
-  they land under `openclaw nodes` (equivalent to
+  they land under `natesclaw nodes` (equivalent to
   `registerCli(registrar, { parentPath: ["nodes"], ... })`).
 - For other nested plugin commands, add `parentPath` and register commands
-  on the `program` object passed to the registrar; OpenClaw resolves it to
+  on the `program` object passed to the registrar; Natesclaw resolves it to
   the parent command before calling the plugin.
 - For channel plugins, register CLI descriptors from `registerCliMetadata`
   and keep `registerFull` focused on runtime-only work.
@@ -285,18 +285,18 @@ CLI registration:
 
 ## `defineSetupPluginEntry`
 
-**Import:** `openclaw/plugin-sdk/channel-core`
+**Import:** `natesclaw/plugin-sdk/channel-core`
 
 For the lightweight `setup-entry.ts` file. Returns just `{ plugin }` with no
 runtime or CLI wiring.
 
 ```typescript
-import { defineSetupPluginEntry } from "openclaw/plugin-sdk/channel-core";
+import { defineSetupPluginEntry } from "natesclaw/plugin-sdk/channel-core";
 
 export default defineSetupPluginEntry(myChannelPlugin);
 ```
 
-OpenClaw loads this instead of the full entry when a channel is disabled or
+Natesclaw loads this instead of the full entry when a channel is disabled or
 unconfigured. See
 [Setup and Config](/plugins/sdk-setup#setup-entry) for when this matters.
 
@@ -304,25 +304,25 @@ Pair `defineSetupPluginEntry(...)` with the narrow setup helper families:
 
 | Import                                  | Use for                                                                                                                                                                            |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `openclaw/plugin-sdk/setup-runtime`     | Runtime-safe setup helpers: `createSetupTranslator`, import-safe setup patch adapters, lookup-note output, `promptResolvedAllowFrom`, `splitSetupEntries`, delegated setup proxies |
-| `openclaw/plugin-sdk/channel-setup`     | Optional-install setup surfaces                                                                                                                                                    |
-| `openclaw/plugin-sdk/channel-dm-policy` | Account-aware DM policy descriptors for setup flows                                                                                                                                |
-| `openclaw/plugin-sdk/setup-tools`       | Setup/install CLI, archive, and docs helpers                                                                                                                                       |
-| `openclaw/plugin-sdk/archive`           | Bounded archive extraction and single-entry reads                                                                                                                                  |
-| `openclaw/plugin-sdk/root-walk`         | Budgeted, root-bounded directory walking                                                                                                                                           |
-| `openclaw/plugin-sdk/secret-file`       | Pinned secret reads and first-writer-wins creation                                                                                                                                 |
+| `natesclaw/plugin-sdk/setup-runtime`     | Runtime-safe setup helpers: `createSetupTranslator`, import-safe setup patch adapters, lookup-note output, `promptResolvedAllowFrom`, `splitSetupEntries`, delegated setup proxies |
+| `natesclaw/plugin-sdk/channel-setup`     | Optional-install setup surfaces                                                                                                                                                    |
+| `natesclaw/plugin-sdk/channel-dm-policy` | Account-aware DM policy descriptors for setup flows                                                                                                                                |
+| `natesclaw/plugin-sdk/setup-tools`       | Setup/install CLI, archive, and docs helpers                                                                                                                                       |
+| `natesclaw/plugin-sdk/archive`           | Bounded archive extraction and single-entry reads                                                                                                                                  |
+| `natesclaw/plugin-sdk/root-walk`         | Budgeted, root-bounded directory walking                                                                                                                                           |
+| `natesclaw/plugin-sdk/secret-file`       | Pinned secret reads and first-writer-wins creation                                                                                                                                 |
 
 Keep heavy SDKs, CLI registration, and long-lived runtime services in the
 full entry.
 
 Bundled workspace channels that split setup and runtime surfaces can use
 `defineBundledChannelSetupEntry(...)` from
-`openclaw/plugin-sdk/channel-entry-contract` instead. It lets the setup
+`natesclaw/plugin-sdk/channel-entry-contract` instead. It lets the setup
 entry keep setup-safe plugin/secrets exports while still exposing a runtime
 setter:
 
 ```typescript
-import { defineBundledChannelSetupEntry } from "openclaw/plugin-sdk/channel-entry-contract";
+import { defineBundledChannelSetupEntry } from "natesclaw/plugin-sdk/channel-entry-contract";
 
 export default defineBundledChannelSetupEntry({
   importMetaUrl: import.meta.url,
@@ -404,7 +404,7 @@ api.registerService({
 });
 ```
 
-OpenClaw namespaces this as `plugin.<plugin-id>.changed`. Event names are one
+Natesclaw namespaces this as `plugin.<plugin-id>.changed`. Event names are one
 lowercase segment, payloads must be bounded JSON, and the scope must be
 `operator.read`, `operator.write`, or `operator.admin`. The emitter exists only
 for the service lifetime and is revoked after stop or failed start. Prefer
@@ -412,7 +412,7 @@ version or invalidation payloads over full records so authorized clients reread
 canonical state through the plugin's scoped Gateway methods.
 
 Discovery mode builds a non-activating registry snapshot. It may still
-evaluate the plugin entry and the channel plugin object so OpenClaw can
+evaluate the plugin entry and the channel plugin object so Natesclaw can
 register channel capabilities and static CLI descriptors. Treat module
 evaluation in discovery as trusted but lightweight: no network clients,
 subprocesses, listeners, database connections, background workers,
@@ -426,7 +426,7 @@ provider/client SDK bootstraps still belong in `"full"`.
 
 ## Plugin shapes
 
-OpenClaw classifies loaded plugins by their registration behavior:
+Natesclaw classifies loaded plugins by their registration behavior:
 
 | Shape                 | Description                                        |
 | --------------------- | -------------------------------------------------- |
@@ -435,7 +435,7 @@ OpenClaw classifies loaded plugins by their registration behavior:
 | **hook-only**         | Only hooks, no capabilities                        |
 | **non-capability**    | Tools/commands/services but no capabilities        |
 
-Use `openclaw plugins inspect <id>` to see a plugin's shape.
+Use `natesclaw plugins inspect <id>` to see a plugin's shape.
 
 ## Related
 

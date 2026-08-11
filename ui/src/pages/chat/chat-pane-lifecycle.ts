@@ -160,7 +160,7 @@ export abstract class ChatPaneLifecycle extends ChatPaneSessionCreation {
     const title = t("chat.board.resetTitle");
     const description = t("chat.board.resetDescription");
     return html`
-      <openclaw-modal-dialog
+      <natesclaw-modal-dialog
         label=${title}
         description=${description}
         @modal-cancel=${() => this.settleResetConfirmation(false)}
@@ -190,7 +190,7 @@ export abstract class ChatPaneLifecycle extends ChatPaneSessionCreation {
             </button>
           </div>
         </div>
-      </openclaw-modal-dialog>
+      </natesclaw-modal-dialog>
     `;
   }
 

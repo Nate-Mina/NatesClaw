@@ -28,15 +28,15 @@ const IDENTITY_MENU_LINKS: ReadonlyArray<{
   icon: IconName;
   label: () => string;
 }> = [
-  { href: "https://docs.openclaw.ai", icon: "book", label: () => t("common.docs") },
+  { href: "https://docs.natesclaw.ai", icon: "book", label: () => t("common.docs") },
   {
-    href: "https://docs.openclaw.ai/help",
+    href: "https://docs.natesclaw.ai/help",
     icon: "messageSquare",
     label: () => t("agentChip.getHelp"),
   },
   { href: "https://discord.gg/clawd", icon: "users", label: () => t("agentChip.discord") },
   {
-    href: "https://docs.openclaw.ai/releases",
+    href: "https://docs.natesclaw.ai/releases",
     icon: "scrollText",
     label: () => t("agentChip.viewChangelog"),
   },
@@ -247,7 +247,7 @@ export function renderSidebarAgentMenu(params: SidebarAgentMenuParams) {
   const { activeId, activeName, agents } = params;
   const { rows, showFilter } = sidebarAgentMenuRows(params);
   return html`
-    <openclaw-menu-surface>
+    <natesclaw-menu-surface>
       <wa-dropdown
         class="sidebar-customize-menu sidebar-agent-menu"
         .open=${true}
@@ -375,7 +375,7 @@ export function renderSidebarAgentMenu(params: SidebarAgentMenuParams) {
           <span class="sidebar-customize-menu__text">${t("agentChip.agentSettings")}</span>
         </wa-dropdown-item>
       </wa-dropdown>
-    </openclaw-menu-surface>
+    </natesclaw-menu-surface>
   `;
 }
 
@@ -386,7 +386,7 @@ export function renderSidebarIdentityMenu(params: SidebarIdentityMenuParams) {
   }
   const profileLabel = params.selfEmail ?? params.selfName;
   return html`
-    <openclaw-menu-surface>
+    <natesclaw-menu-surface>
       <wa-dropdown
         class="sidebar-customize-menu sidebar-identity-menu"
         style=${`--sidebar-identity-menu-min-width: ${params.triggerWidth}px`}
@@ -495,19 +495,19 @@ export function renderSidebarIdentityMenu(params: SidebarIdentityMenuParams) {
           : nothing}
         <div class="sidebar-customize-menu__separator" role="separator"></div>
         <div class="sidebar-identity-menu__footer">
-          <openclaw-sidebar-build-chip
+          <natesclaw-sidebar-build-chip
             .basePath=${params.basePath}
             .gatewayVersion=${params.gatewayVersion}
             .onNavigate=${(routeId: "about") => {
               params.onClose();
               params.onNavigate(routeId);
             }}
-          ></openclaw-sidebar-build-chip>
+          ></natesclaw-sidebar-build-chip>
           <span class="sidebar-mode-switch">
-            <openclaw-theme-mode-toggle .mode=${params.themeMode}></openclaw-theme-mode-toggle>
+            <natesclaw-theme-mode-toggle .mode=${params.themeMode}></natesclaw-theme-mode-toggle>
           </span>
         </div>
       </wa-dropdown>
-    </openclaw-menu-surface>
+    </natesclaw-menu-surface>
   `;
 }

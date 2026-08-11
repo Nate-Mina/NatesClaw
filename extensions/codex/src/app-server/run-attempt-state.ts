@@ -2,12 +2,12 @@ import {
   embeddedAgentLog,
   formatErrorMessage,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   asBoolean,
   asFiniteNumber,
   hasNonEmptyString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { EmbeddedRunAttemptResult } from "./attempt-terminal.js";
 import { CodexAppServerRpcError } from "./client.js";
 import { isJsonObject, type CodexServerNotification } from "./protocol.js";

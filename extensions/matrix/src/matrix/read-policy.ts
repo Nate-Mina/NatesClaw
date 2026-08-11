@@ -1,5 +1,5 @@
-import { normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import type { ChannelMessageActionContext } from "openclaw/plugin-sdk/channel-contract";
+import { normalizeAccountId } from "natesclaw/plugin-sdk/account-id";
+import type { ChannelMessageActionContext } from "natesclaw/plugin-sdk/channel-contract";
 import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,

@@ -21,7 +21,7 @@ import {
 const suite = createControlUiE2eSuite({
   name: "Control UI Workboard mocked Gateway E2E",
   unavailableMessage: (executablePath) =>
-    `Playwright Chromium is not installed at ${executablePath}. Run \`pnpm --dir ui exec playwright install chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+    `Playwright Chromium is not installed at ${executablePath}. Run \`pnpm --dir ui exec playwright install chromium\`, or set NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
 });
 
 const artifactDir = path.resolve(process.cwd(), ".artifacts/control-ui-e2e/workboard");
@@ -79,7 +79,7 @@ type UpdatingElement = HTMLElement & {
 };
 
 async function waitForWorkboardRender(page: Page, requestUpdate = false): Promise<void> {
-  await page.locator("openclaw-app").evaluate(async (element, shouldRequestUpdate) => {
+  await page.locator("natesclaw-app").evaluate(async (element, shouldRequestUpdate) => {
     const app = element as UpdatingElement;
     if (shouldRequestUpdate) {
       app.requestUpdate?.();
@@ -186,7 +186,7 @@ function workboardConfigSnapshot() {
   return {
     config,
     hash: "workboard-e2e-config",
-    path: "/tmp/openclaw-e2e/openclaw.json",
+    path: "/tmp/natesclaw-e2e/natesclaw.json",
     raw: JSON.stringify(config, null, 2),
     resolved: config,
     sourceConfig: config,
@@ -440,7 +440,7 @@ suite.define(() => {
         .getByRole("button", { name: /New card/u })
         .click();
       const createDialog = writable.page.getByRole("dialog", { name: "New card" });
-      const createForm = writable.page.locator('openclaw-modal-dialog[label="New card"]');
+      const createForm = writable.page.locator('natesclaw-modal-dialog[label="New card"]');
       await expect.poll(() => createDialog.isVisible()).toBe(true);
       await setWorkboardDraftField(createForm, "Title", createdCard.title);
       await setWorkboardDraftField(createForm, "Notes", createdCard.notes ?? "");
@@ -495,7 +495,7 @@ suite.define(() => {
         .locator('button[aria-label="Edit card"]')
         .click();
       const editDialog = writable.page.getByRole("dialog", { name: "Edit card" });
-      const editForm = writable.page.locator('openclaw-modal-dialog[label="Edit card"]');
+      const editForm = writable.page.locator('natesclaw-modal-dialog[label="Edit card"]');
       await expect.poll(() => editDialog.isVisible()).toBe(true);
       await setWorkboardDraftField(editForm, "Title", editedCard.title);
       await setWorkboardDraftField(editForm, "Notes", editedCard.notes ?? "");

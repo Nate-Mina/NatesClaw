@@ -4,7 +4,7 @@ import type { Mock } from "vitest";
 import { vi } from "vitest";
 import { getRuntimeConfig } from "../config/config.js";
 import type { HookInstallRecord } from "../config/types.hooks.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import type { InstalledPluginIndex } from "../plugins/installed-plugin-index.js";
 import type { CliMockOutputRuntime } from "./test-runtime-capture.js";
@@ -90,15 +90,15 @@ function invokeMock<TArgs extends unknown[], TResult>(mock: unknown, ...args: TA
 }
 
 export const pluginCliConfigMock: Mock<LoadConfigFn> = vi.fn<LoadConfigFn>(
-  () => ({}) as OpenClawConfig,
+  () => ({}) as NatesclawConfig,
 );
 export const readConfigFileSnapshotMock: AsyncUnknownMock = vi.fn();
 export const readConfigFileSnapshotForWriteMock: AsyncUnknownMock = vi.fn();
 export const configWriteMock: AsyncUnknownMock = vi.fn(async () => undefined);
 export const replaceConfigFileMock: AsyncUnknownMock = vi.fn(
-  async (params: { nextConfig: OpenClawConfig }) => await configWriteMock(params.nextConfig),
+  async (params: { nextConfig: NatesclawConfig }) => await configWriteMock(params.nextConfig),
 ) as AsyncUnknownMock;
-const resolveStateDir: Mock<() => string> = vi.fn(() => "/tmp/openclaw-state");
+const resolveStateDir: Mock<() => string> = vi.fn(() => "/tmp/natesclaw-state");
 export const installPluginFromMarketplaceMock: Mock<InstallPluginFromMarketplaceFn> = vi.fn();
 export const installPluginFromGitSpecMock: Mock<InstallPluginFromGitSpecFn> = vi.fn();
 const parseGitPluginSpec: Mock<ParseGitPluginSpecFn> = vi.fn();
@@ -113,7 +113,7 @@ const loadInstalledPluginIndexInstallRecords: AsyncUnknownMock = vi.fn(async () 
 const writePersistedInstalledPluginIndexInstallRecords: Mock<WritePersistedInstalledPluginIndexInstallRecordsFn> =
   vi.fn<WritePersistedInstalledPluginIndexInstallRecordsFn>(async (records) => {
     mockInstalledPluginIndexInstallRecords = clonePluginInstallRecords(records);
-    return "/tmp/openclaw-state/openclaw.sqlite";
+    return "/tmp/natesclaw-state/natesclaw.sqlite";
   });
 export const readPersistedInstalledPluginIndexMock: Mock<ReadPersistedInstalledPluginIndexFn> =
   vi.fn<ReadPersistedInstalledPluginIndexFn>(async () => null);
@@ -254,13 +254,13 @@ vi.mock("./plugins-update-gateway-signal.js", () => ({
 
 vi.mock("../config/config.js", () => ({
   assertConfigWriteAllowedInCurrentMode: () => {
-    if (process.env.OPENCLAW_NIX_MODE === "1") {
+    if (process.env.NATESCLAW_NIX_MODE === "1") {
       throw new Error(
         [
-          "Config is managed by Nix (`OPENCLAW_NIX_MODE=1`), so OpenClaw treats openclaw.json as immutable.",
-          "Do not run setup, onboarding, openclaw update, plugin install/update/uninstall/enable, doctor repair/token-generation, or config set against this file.",
-          "Agent-first Nix setup: https://github.com/openclaw/nix-openclaw#quick-start",
-          "OpenClaw Nix overview: https://docs.openclaw.ai/install/nix",
+          "Config is managed by Nix (`NATESCLAW_NIX_MODE=1`), so Natesclaw treats natesclaw.json as immutable.",
+          "Do not run setup, onboarding, natesclaw update, plugin install/update/uninstall/enable, doctor repair/token-generation, or config set against this file.",
+          "Agent-first Nix setup: https://github.com/natesclaw/nix-natesclaw#quick-start",
+          "Natesclaw Nix overview: https://docs.natesclaw.ai/install/nix",
         ].join("\n"),
       );
     }
@@ -287,9 +287,9 @@ vi.mock("../config/config.js", () => ({
       readConfigFileSnapshotForWriteMock,
       ...args,
     )) as (typeof import("../config/config.js"))["readConfigFileSnapshotForWrite"],
-  writeConfigFile: ((config: OpenClawConfig) =>
+  writeConfigFile: ((config: NatesclawConfig) =>
     invokeMock<
-      [OpenClawConfig],
+      [NatesclawConfig],
       ReturnType<(typeof import("../config/config.js"))["writeConfigFile"]>
     >(configWriteMock, config)) as (typeof import("../config/config.js"))["writeConfigFile"],
   replaceConfigFile: ((
@@ -726,8 +726,8 @@ vi.mock("../plugins/git-install.js", () => ({
 
 vi.mock("../hooks/install.js", () => ({
   HOOK_INSTALL_ERROR_CODE: {
-    MISSING_OPENCLAW_HOOKS: "missing_openclaw_hooks",
-    EMPTY_OPENCLAW_HOOKS: "empty_openclaw_hooks",
+    MISSING_NATESCLAW_HOOKS: "missing_natesclaw_hooks",
+    EMPTY_NATESCLAW_HOOKS: "empty_natesclaw_hooks",
   },
   installHooksFromNpmSpec: ((
     ...args: Parameters<(typeof import("../hooks/install.js"))["installHooksFromNpmSpec"]>
@@ -878,11 +878,11 @@ export function resetPluginsCliTestState() {
   installHooksFromPathMock.mockReset();
   recordHookInstallMock.mockReset();
 
-  pluginCliConfigMock.mockReturnValue({} as OpenClawConfig);
+  pluginCliConfigMock.mockReturnValue({} as NatesclawConfig);
   readConfigFileSnapshotMock.mockImplementation(async () => {
     const config = getRuntimeConfig();
     return {
-      path: "/tmp/openclaw-config.json5",
+      path: "/tmp/natesclaw-config.json5",
       exists: true,
       raw: "{}",
       parsed: config,
@@ -910,29 +910,29 @@ export function resetPluginsCliTestState() {
   });
   configWriteMock.mockResolvedValue(undefined);
   replaceConfigFileMock.mockImplementation(
-    (async (params: { nextConfig: OpenClawConfig }) =>
+    (async (params: { nextConfig: NatesclawConfig }) =>
       await configWriteMock(params.nextConfig)) as (...args: unknown[]) => Promise<unknown>,
   );
-  resolveStateDir.mockReturnValue("/tmp/openclaw-state");
+  resolveStateDir.mockReturnValue("/tmp/natesclaw-state");
   resolveMarketplaceInstallShortcutMock.mockResolvedValue(null);
   installPluginFromMarketplaceMock.mockResolvedValue({
     ok: false,
     error: "marketplace install failed",
   });
-  enablePluginInConfigMock.mockImplementation(((cfg: OpenClawConfig, pluginId: string) => ({
+  enablePluginInConfigMock.mockImplementation(((cfg: NatesclawConfig, pluginId: string) => ({
     config: cfg,
     enabled: true,
     pluginId,
   })) as (...args: unknown[]) => unknown);
   recordPluginInstallMock.mockImplementation(
-    ((cfg: OpenClawConfig) => cfg) as (...args: unknown[]) => unknown,
+    ((cfg: NatesclawConfig) => cfg) as (...args: unknown[]) => unknown,
   );
   loadInstalledPluginIndexInstallRecords.mockImplementation(async () =>
     clonePluginInstallRecords(mockInstalledPluginIndexInstallRecords),
   );
   writePersistedInstalledPluginIndexInstallRecords.mockImplementation(async (records) => {
     mockInstalledPluginIndexInstallRecords = clonePluginInstallRecords(records);
-    return "/tmp/openclaw-state/openclaw.sqlite";
+    return "/tmp/natesclaw-state/natesclaw.sqlite";
   });
   readPersistedInstalledPluginIndexMock.mockResolvedValue(null);
   writePersistedInstalledPluginIndexInstallRecordsWithLeaseMock.mockImplementation(
@@ -989,7 +989,7 @@ export function resetPluginsCliTestState() {
   });
   refreshPluginRegistryMock.mockResolvedValue(defaultRegistryIndex);
   notifyGatewayPluginMetadataChangedMock.mockResolvedValue(true);
-  applyExclusiveSlotSelectionMock.mockImplementation((({ config }: { config: OpenClawConfig }) => ({
+  applyExclusiveSlotSelectionMock.mockImplementation((({ config }: { config: NatesclawConfig }) => ({
     config,
     warnings: [],
   })) as (...args: unknown[]) => unknown);
@@ -997,7 +997,7 @@ export function resetPluginsCliTestState() {
     config,
     pluginId,
   }: {
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     pluginId: string;
   }) => ({
     ok: true,
@@ -1013,12 +1013,12 @@ export function resetPluginsCliTestState() {
   updateNpmInstalledPluginsMock.mockResolvedValue({
     outcomes: [],
     changed: false,
-    config: {} as OpenClawConfig,
+    config: {} as NatesclawConfig,
   });
   updateNpmInstalledHookPacksMock.mockResolvedValue({
     outcomes: [],
     changed: false,
-    config: {} as OpenClawConfig,
+    config: {} as NatesclawConfig,
   });
   promptYesNoMock.mockResolvedValue(true);
   promptText.mockResolvedValue("demo");
@@ -1064,7 +1064,7 @@ export function resetPluginsCliTestState() {
     error: "hook npm install disabled in test",
   });
   recordHookInstallMock.mockImplementation(
-    ((cfg: OpenClawConfig) => cfg) as (...args: unknown[]) => unknown,
+    ((cfg: NatesclawConfig) => cfg) as (...args: unknown[]) => unknown,
   );
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

@@ -1,22 +1,22 @@
 // Browser tests cover extension-tab cleanup through live runtime-owned credentials.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   OpenKeyedStoreOptions,
   PluginStateSyncKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "natesclaw/plugin-sdk/plugin-state-runtime";
 import {
   createPluginStateKeyedStoreForTests,
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+} from "natesclaw/plugin-sdk/plugin-state-test-runtime";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
+} from "natesclaw/plugin-sdk/runtime-config-snapshot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerBrowserPlugin } from "../../plugin-registration.js";
-import type { OpenClawPluginApi } from "../../runtime-api.js";
+import type { NatesclawPluginApi } from "../../runtime-api.js";
 import { useAutoCleanupTempDirTracker } from "../../test-support.js";
 import type { CloseTrackedCdpTargetResult } from "./cdp.helpers.js";
 import { resolveBrowserConfig, type ResolvedBrowserConfig } from "./config.js";
@@ -50,19 +50,19 @@ const config = {
       },
     },
   },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 function clearProcessLocalTabState(): void {
   const state = globalThis as Record<symbol, unknown>;
   for (const name of [
-    "openclaw.browser.session-tabs.volatile",
-    "openclaw.browser.session-tabs.volatile-cleanup",
-    "openclaw.browser.session-tabs.active-durable-keys",
-    "openclaw.browser.session-tabs.cold-native-activity",
-    "openclaw.browser.session-tabs.interaction-storage-keys",
-    "openclaw.browser.session-tabs.exact-interaction-storage-keys",
-    "openclaw.browser.session-tabs.volatile-aliases",
-    "openclaw.browser.session-tabs.exact-volatile-aliases",
+    "natesclaw.browser.session-tabs.volatile",
+    "natesclaw.browser.session-tabs.volatile-cleanup",
+    "natesclaw.browser.session-tabs.active-durable-keys",
+    "natesclaw.browser.session-tabs.cold-native-activity",
+    "natesclaw.browser.session-tabs.interaction-storage-keys",
+    "natesclaw.browser.session-tabs.exact-interaction-storage-keys",
+    "natesclaw.browser.session-tabs.volatile-aliases",
+    "natesclaw.browser.session-tabs.exact-volatile-aliases",
   ]) {
     delete state[Symbol.for(name)];
   }
@@ -83,7 +83,7 @@ function installRuntime(): void {
           openSyncKeyedStore: (options: OpenKeyedStoreOptions) =>
             createPluginStateSyncKeyedStoreForTests("browser", options),
         },
-      } as unknown as OpenClawPluginApi["runtime"],
+      } as unknown as NatesclawPluginApi["runtime"],
     }),
   );
 }
@@ -97,13 +97,13 @@ function openStore(): PluginStateSyncKeyedStore<unknown> {
 }
 
 describe("durable extension session tab cleanup", () => {
-  const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+  const originalStateDir = process.env.NATESCLAW_STATE_DIR;
   let resolved: ResolvedBrowserConfig;
 
   beforeEach(() => {
     clearRuntimeConfigSnapshot();
     clearProcessLocalTabState();
-    process.env.OPENCLAW_STATE_DIR = tempDirs.make("openclaw-browser-extension-tabs-");
+    process.env.NATESCLAW_STATE_DIR = tempDirs.make("natesclaw-browser-extension-tabs-");
     resetPluginStateStoreForTests();
     installRuntime();
     openStore().clear();
@@ -117,9 +117,9 @@ describe("durable extension session tab cleanup", () => {
     clearProcessLocalTabState();
     resetPluginStateStoreForTests();
     if (originalStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.NATESCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = originalStateDir;
+      process.env.NATESCLAW_STATE_DIR = originalStateDir;
     }
   });
 
@@ -148,7 +148,7 @@ describe("durable extension session tab cleanup", () => {
     expect(cdpMocks.closeTrackedCdpTarget).toHaveBeenCalledWith(
       expect.objectContaining({
         profileName: "chrome",
-        cdpUrl: `http://openclaw-internal:${internalToken}@127.0.0.1:18799`,
+        cdpUrl: `http://natesclaw-internal:${internalToken}@127.0.0.1:18799`,
         nativeTargetId: "NATIVE-EXTENSION",
       }),
     );
@@ -196,7 +196,7 @@ describe("durable extension session tab cleanup", () => {
     ).resolves.toBe(1);
     expect(cdpMocks.closeTrackedCdpTarget).toHaveBeenCalledWith(
       expect.objectContaining({
-        cdpUrl: `http://openclaw-internal:${internalToken}@127.0.0.1:18799`,
+        cdpUrl: `http://natesclaw-internal:${internalToken}@127.0.0.1:18799`,
       }),
     );
     expect(openStore().entries()).toEqual([]);

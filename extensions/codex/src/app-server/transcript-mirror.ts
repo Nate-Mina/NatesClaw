@@ -6,15 +6,15 @@ import {
   runAgentHarnessBeforeMessageWriteHook,
   type AgentMessage,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { withCodexSessionTranscriptMirrorWriteLock } from "openclaw/plugin-sdk/codex-session-transcript-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { withCodexSessionTranscriptMirrorWriteLock } from "natesclaw/plugin-sdk/codex-session-transcript-runtime";
 import {
   publishSessionTranscriptUpdateByIdentity,
   type TranscriptEntryAnchor,
   type SessionTranscriptTargetParams,
   type SessionTranscriptWriteLockParams,
-} from "openclaw/plugin-sdk/session-transcript-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/session-transcript-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { EmbeddedRunAttemptResult } from "./attempt-terminal.js";
 import type { CodexThread } from "./protocol.js";
 import {
@@ -58,7 +58,7 @@ function isMirroredAgentMessage(message: AgentMessage): message is MirroredAgent
   return message.role === "user" || message.role === "assistant" || message.role === "toolResult";
 }
 
-/** Imports a bounded, user-visible Codex history tail into a new OpenClaw transcript. */
+/** Imports a bounded, user-visible Codex history tail into a new Natesclaw transcript. */
 export async function importCodexThreadHistoryToTranscript(params: {
   thread: CodexThread;
   throughTurnId: string | null;

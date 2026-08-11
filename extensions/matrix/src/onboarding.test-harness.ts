@@ -1,7 +1,7 @@
 // Matrix setup module handles plugin onboarding behavior.
-import { expectDefined } from "@openclaw/normalization-core";
-import type { OutputRuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import type { ChannelSetupWizardAdapter } from "openclaw/plugin-sdk/setup";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { OutputRuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+import type { ChannelSetupWizardAdapter } from "natesclaw/plugin-sdk/setup";
 import { afterEach, vi } from "vitest";
 import type { RuntimeEnv, WizardPrompter } from "../runtime-api.js";
 import type { CoreConfig } from "./types.js";
@@ -275,7 +275,7 @@ export function createMatrixUpdateKeepCredentialsPrompter(params?: {
     },
     text: {
       "Matrix homeserver URL": params?.homeserver ?? "https://matrix.example.org",
-      "Matrix device name (optional)": params?.deviceName ?? "OpenClaw Gateway",
+      "Matrix device name (optional)": params?.deviceName ?? "Natesclaw Gateway",
     },
     confirm: {
       "Matrix credentials already configured. Keep them?": true,

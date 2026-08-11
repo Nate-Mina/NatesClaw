@@ -1,5 +1,5 @@
 /** Main agent command orchestration for sessions, model selection, delivery, and attempts. */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { VerboseLevel } from "../auto-reply/thinking.js";
 import type { CliDeps } from "../cli/deps.types.js";
 import { resolveSessionWorkStartError } from "../config/sessions/lifecycle.js";

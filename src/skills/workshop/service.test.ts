@@ -3,15 +3,15 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
-  closeOpenClawStateDatabaseByPath,
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../../state/openclaw-state-db.paths.js";
+  closeNatesclawStateDatabaseByPath,
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../../state/natesclaw-state-db.paths.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 import { buildWorkspaceSkillStatus } from "../discovery/status.js";
 import {
@@ -44,32 +44,32 @@ import { withSkillCollectionLock } from "./target-lock.js";
 import { SKILL_WORKSHOP_ROLLBACK_SCHEMA, type SkillProposalRollback } from "./types.js";
 
 const tempDirs = createTrackedTempDirs();
-let stateDatabaseTemplate: OpenClawTestState | undefined;
+let stateDatabaseTemplate: NatesclawTestState | undefined;
 let stateDatabaseTemplatePath = "";
-let testState: OpenClawTestState;
+let testState: NatesclawTestState;
 let stateDir = "";
 
 beforeAll(async () => {
-  const template = await createOpenClawTestState({
+  const template = await createNatesclawTestState({
     applyEnv: false,
     layout: "state-only",
-    prefix: "openclaw-skill-workshop-template-",
+    prefix: "natesclaw-skill-workshop-template-",
   });
   stateDatabaseTemplate = template;
   await listSkillProposals({ env: template.env });
-  const database = openOpenClawStateDatabase({ env: template.env });
+  const database = openNatesclawStateDatabase({ env: template.env });
   database.db.exec("PRAGMA wal_checkpoint(TRUNCATE);");
   stateDatabaseTemplatePath = database.path;
-  closeOpenClawStateDatabaseByPath(stateDatabaseTemplatePath);
+  closeNatesclawStateDatabaseByPath(stateDatabaseTemplatePath);
 });
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-skill-workshop-state-",
+    prefix: "natesclaw-skill-workshop-state-",
   });
   stateDir = testState.stateDir;
-  const databasePath = resolveOpenClawStateSqlitePath(testState.env);
+  const databasePath = resolveNatesclawStateSqlitePath(testState.env);
   await fs.mkdir(path.dirname(databasePath), { recursive: true });
   await fs.copyFile(stateDatabaseTemplatePath, databasePath);
 });
@@ -85,7 +85,7 @@ afterAll(async () => {
 });
 
 async function makeWorkspace(): Promise<string> {
-  return await tempDirs.make("openclaw-skill-workshop-");
+  return await tempDirs.make("natesclaw-skill-workshop-");
 }
 
 function createSkillProposalRollback(params: {
@@ -204,7 +204,7 @@ describe("skill workshop proposals", () => {
     const status = buildWorkspaceSkillStatus(workspaceDir);
     expect(status.skills.find((skill) => skill.name === "weather-helper")).toMatchObject({
       name: "weather-helper",
-      source: "openclaw-workspace",
+      source: "natesclaw-workspace",
       filePath: applied.targetSkillFile,
     });
     expect((await inspectSkillProposal(proposal.record.id))?.record.status).toBe("applied");
@@ -238,7 +238,7 @@ describe("skill workshop proposals", () => {
     "applies updates through opted-in trusted workspace skills symlink targets",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-target-skills-");
+      const targetSkillsDir = await tempDirs.make("natesclaw-skill-workshop-target-skills-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const skillDir = path.join(targetSkillsDir, "shared-skill");
       await writeSkill({
@@ -285,7 +285,7 @@ describe("skill workshop proposals", () => {
     "blocks trusted workspace skills symlink writes until workshop writes are enabled",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-readonly-skills-");
+      const targetSkillsDir = await tempDirs.make("natesclaw-skill-workshop-readonly-skills-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const config = { skills: { load: { allowSymlinkTargets: [targetSkillsDir] } } };
       const proposal = await proposeCreateSkill({
@@ -318,8 +318,8 @@ describe("skill workshop proposals", () => {
     "validates support file targets against trusted symlink write roots",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-support-trusted-");
-      const untrustedSkillsDir = await tempDirs.make("openclaw-skill-workshop-support-untrusted-");
+      const targetSkillsDir = await tempDirs.make("natesclaw-skill-workshop-support-trusted-");
+      const untrustedSkillsDir = await tempDirs.make("natesclaw-skill-workshop-support-untrusted-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       await fs.symlink(untrustedSkillsDir, path.join(workspaceDir, "other-skills"), "dir");
       const config = {
@@ -368,7 +368,7 @@ describe("skill workshop proposals", () => {
     "blocks untrusted workspace skills symlink targets before support files are written",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-untrusted-skills-");
+      const targetSkillsDir = await tempDirs.make("natesclaw-skill-workshop-untrusted-skills-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const proposal = await proposeCreateSkill({
         workspaceDir,
@@ -404,7 +404,7 @@ describe("skill workshop proposals", () => {
       name: "Frontmatter Skill",
       description: "Preserve metadata",
       content:
-        "---\nuser-invocable: false\nmetadata:\n  openclaw:\n    requires:\n      env:\n        - API_TOKEN\n---\n\n# Frontmatter Skill\n",
+        "---\nuser-invocable: false\nmetadata:\n  natesclaw:\n    requires:\n      env:\n        - API_TOKEN\n---\n\n# Frontmatter Skill\n",
     });
 
     await expect(
@@ -415,7 +415,7 @@ describe("skill workshop proposals", () => {
       "utf8",
     );
     expect(createdSkill).toContain("user-invocable: false");
-    expect(createdSkill).toContain("metadata:\n  openclaw:");
+    expect(createdSkill).toContain("metadata:\n  natesclaw:");
     expect(createdSkill).not.toContain("status: proposal");
     expect(createdSkill).not.toContain("version: ");
     expect(createdSkill).not.toContain("date: ");
@@ -972,7 +972,7 @@ describe("skill workshop proposals", () => {
       "utf8",
     );
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     const manifest = await listSkillProposals({ workspaceDir });
     expect(manifest.proposals).toEqual(
       expect.arrayContaining([
@@ -1007,7 +1007,7 @@ describe("skill workshop proposals", () => {
     await fs.mkdir(path.dirname(supportFile), { recursive: true });
     await fs.writeFile(supportFile, "Partial support.\n", "utf8");
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     let releaseLock: (() => void) | undefined;
     let markAcquired: (() => void) | undefined;
     const acquired = new Promise<void>((resolve) => {
@@ -1049,7 +1049,7 @@ describe("skill workshop proposals", () => {
     "recovers a partial create through the apply config",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-workshop-recovery-symlink-");
+      const targetSkillsDir = await tempDirs.make("natesclaw-workshop-recovery-symlink-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const config = {
         skills: {
@@ -1083,7 +1083,7 @@ describe("skill workshop proposals", () => {
       await fs.mkdir(path.dirname(targetSupportFile), { recursive: true });
       await fs.writeFile(targetSupportFile, "Symlink support.\n", "utf8");
 
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       await expect(listSkillProposals({ workspaceDir })).resolves.toMatchObject({
         proposals: [expect.objectContaining({ id: proposal.record.id, status: "pending" })],
       });
@@ -1100,7 +1100,7 @@ describe("skill workshop proposals", () => {
     "uses the proposal environment for symlink recovery",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-workshop-recovery-env-symlink-");
+      const targetSkillsDir = await tempDirs.make("natesclaw-workshop-recovery-env-symlink-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const config = {
         skills: {
@@ -1108,10 +1108,10 @@ describe("skill workshop proposals", () => {
           workshop: { allowSymlinkTargetWrites: true },
         },
       };
-      const configDir = await tempDirs.make("openclaw-workshop-recovery-env-config-");
-      const configPath = path.join(configDir, "openclaw.json");
+      const configDir = await tempDirs.make("natesclaw-workshop-recovery-env-config-");
+      const configPath = path.join(configDir, "natesclaw.json");
       await fs.writeFile(configPath, JSON.stringify(config), "utf8");
-      const env = { ...testState.env, OPENCLAW_CONFIG_PATH: configPath };
+      const env = { ...testState.env, NATESCLAW_CONFIG_PATH: configPath };
       const proposal = await proposeCreateSkill({
         workspaceDir,
         config,
@@ -1140,7 +1140,7 @@ describe("skill workshop proposals", () => {
       await fs.mkdir(path.dirname(targetSupportFile), { recursive: true });
       await fs.writeFile(targetSupportFile, "Profile support.\n", "utf8");
 
-      closeOpenClawStateDatabaseForTest();
+      closeNatesclawStateDatabaseForTest();
       await expect(listSkillProposals({ workspaceDir, env })).resolves.toMatchObject({
         proposals: [expect.objectContaining({ id: proposal.record.id, status: "pending" })],
       });
@@ -1181,7 +1181,7 @@ describe("skill workshop proposals", () => {
       "utf8",
     );
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await expect(listSkillProposals({ workspaceDir })).resolves.toMatchObject({
       proposals: [expect.objectContaining({ id: proposal.record.id, status: "pending" })],
     });
@@ -1206,7 +1206,7 @@ describe("skill workshop proposals", () => {
     await fs.mkdir(proposal.record.target.skillDir, { recursive: true });
     await fs.writeFile(proposal.record.target.skillFile, "# External change\n", "utf8");
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await expect(listSkillProposals({ workspaceDir })).resolves.toMatchObject({
       proposals: [expect.objectContaining({ id: proposal.record.id, status: "pending" })],
     });
@@ -1257,7 +1257,7 @@ describe("skill workshop proposals", () => {
     await fs.writeFile(path.join(skillDir, "references", "proof.md"), "New support.\n", "utf8");
     await fs.writeFile(skillFile, stripProposalFrontmatterForSkill(proposal.content), "utf8");
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await expect(listSkillProposals({ workspaceDir })).resolves.toMatchObject({
       proposals: [expect.objectContaining({ id: proposal.record.id, status: "applied" })],
     });
@@ -1302,7 +1302,7 @@ describe("skill workshop proposals", () => {
     });
     await fs.writeFile(skillFile, stripProposalFrontmatterForSkill(proposal.content), "utf8");
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await expect(listSkillProposals({ workspaceDir })).resolves.toMatchObject({
       proposals: [expect.objectContaining({ id: proposal.record.id, status: "pending" })],
     });
@@ -1341,7 +1341,7 @@ describe("skill workshop proposals", () => {
       "utf8",
     );
 
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     await expect(
       inspectSkillProposal(proposal.record.id, { agentId: "other", workspaceDir }),
     ).resolves.toBeNull();

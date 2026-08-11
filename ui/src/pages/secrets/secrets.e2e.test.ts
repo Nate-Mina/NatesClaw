@@ -13,7 +13,7 @@ const suite = createControlUiE2eSuite({
     `Playwright Chromium is not installed or cannot start at ${executablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`.`,
 });
 
-const captureUiProofEnabled = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
+const captureUiProofEnabled = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
 const proofDir = path.join(process.cwd(), ".artifacts", "control-ui-e2e", "secrets-store");
 
 const envEntry: SecretStoreEntry = {
@@ -121,7 +121,7 @@ suite.define(() => {
         await page.getByRole("heading", { name: "Secrets" }).waitFor();
 
         await page.getByRole("button", { name: "Add", exact: true }).click();
-        const addDialog = page.locator('openclaw-modal-dialog[label="Add"]');
+        const addDialog = page.locator('natesclaw-modal-dialog[label="Add"]');
         await addDialog.getByLabel("Name", { exact: true }).fill("SERVICE_URL");
         await addDialog.getByLabel("Value", { exact: true }).fill("https://service.test");
         await capture(page, "02-add-dialog.png");
@@ -129,7 +129,7 @@ suite.define(() => {
         await page.getByRole("status").getByText("Saved SERVICE_URL.").waitFor();
 
         await page.getByRole("button", { name: "Add", exact: true }).click();
-        const secretDialog = page.locator('openclaw-modal-dialog[label="Add"]');
+        const secretDialog = page.locator('natesclaw-modal-dialog[label="Add"]');
         await secretDialog.getByLabel("Name", { exact: true }).fill("SERVICE_API_KEY");
         expect(await secretDialog.locator('input[type="checkbox"]').isChecked()).toBe(true);
         await secretDialog.getByLabel("Value", { exact: true }).fill("super-secret-material");
@@ -138,7 +138,7 @@ suite.define(() => {
         expect(await page.content()).not.toContain("super-secret-material");
 
         await page.getByRole("button", { name: "Bulk Add", exact: true }).click();
-        const bulkDialog = page.locator('openclaw-modal-dialog[label="Bulk Add"]');
+        const bulkDialog = page.locator('natesclaw-modal-dialog[label="Bulk Add"]');
         await bulkDialog
           .getByRole("textbox", { name: "Value", exact: true })
           .fill('BULK_PRIVATE_KEY="line one\nline two"\nBULK_URL=https://bulk.test');
@@ -150,7 +150,7 @@ suite.define(() => {
         const bulkRow = page.getByRole("row", { name: /BULK_URL/u });
         await bulkRow.getByRole("button", { name: "Actions: BULK_URL" }).click();
         await bulkRow.locator('wa-dropdown-item[value="delete"]').click();
-        const confirm = page.locator('openclaw-modal-dialog[label="Delete"]');
+        const confirm = page.locator('natesclaw-modal-dialog[label="Delete"]');
         await confirm.getByRole("button", { name: "Delete", exact: true }).click();
         await page.getByRole("status").getByText("Deleted BULK_URL.").waitFor();
         expect(await page.getByRole("row", { name: /BULK_URL/u }).count()).toBe(0);

@@ -5,9 +5,9 @@ import {
   buildMultiAccountChannelSchema,
   DmPolicySchema,
   requireOpenAllowFrom,
-} from "openclaw/plugin-sdk/channel-config-schema";
-import { requireChannelOpenAllowFrom } from "openclaw/plugin-sdk/extension-shared";
-import { buildSecretInputSchema } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/channel-config-schema";
+import { requireChannelOpenAllowFrom } from "natesclaw/plugin-sdk/extension-shared";
+import { buildSecretInputSchema } from "natesclaw/plugin-sdk/secret-input";
 import { z } from "zod";
 
 const SecretInputSchema = buildSecretInputSchema();
@@ -94,7 +94,7 @@ export const SmsChannelConfigSchema = buildChannelConfigSchema(SmsConfigSchema, 
     "accounts.*.allowFrom.*": { presentation: "phone-number" },
     textChunkLimit: {
       label: "SMS Text Chunk Limit",
-      help: "Maximum characters per outbound SMS chunk before OpenClaw splits long replies.",
+      help: "Maximum characters per outbound SMS chunk before Natesclaw splits long replies.",
     },
   },
 });

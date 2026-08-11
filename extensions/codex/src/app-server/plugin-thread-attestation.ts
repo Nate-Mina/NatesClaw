@@ -1,8 +1,8 @@
 /**
  * Confirms admitted plugin and account apps against their actual Codex thread before
- * OpenClaw commits a binding or starts a turn.
+ * Natesclaw commits a binding or starts a turn.
  */
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   CODEX_APP_SERVER_UNSUBSCRIBE_TIMEOUT_MS,
   unsubscribeCodexThreadBestEffort,

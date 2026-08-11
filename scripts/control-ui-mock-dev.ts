@@ -1,4 +1,4 @@
-// Control Ui Mock Dev script supports OpenClaw repository automation.
+// Control Ui Mock Dev script supports Natesclaw repository automation.
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -84,7 +84,7 @@ const boardFixtureHtml = `<!doctype html>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark light" />
-    <title>OpenClaw Board Fixture</title>
+    <title>Natesclaw Board Fixture</title>
     <script>
       // This standalone fixture bypasses app bootstrap, so mirror its root theme contract.
       const mediaQuery = matchMedia("(prefers-color-scheme: light)");
@@ -326,7 +326,7 @@ function buildSessionDiffMock() {
   ].join("\n");
   return {
     sessionKey: "main",
-    root: "/tmp/openclaw-mock-checkout",
+    root: "/tmp/natesclaw-mock-checkout",
     branch: "feature/session-diff-panel",
     baseRef: "main",
     files: [
@@ -564,12 +564,12 @@ function buildProfileUsageMocks(baseTime: number) {
       endDate: daily[daily.length - 1]?.date,
       sessions: [
         {
-          key: "agent:openclaw-mock:marathon",
+          key: "agent:natesclaw-mock:marathon",
           label: "Release night marathon",
           usage: { ...usageCostTotals(4_000_000_000), durationMs: (59 * 60 + 4) * 60 * 1000 },
         },
         {
-          key: "agent:openclaw-mock:daily",
+          key: "agent:natesclaw-mock:daily",
           label: "Daily driver",
           usage: { ...usageCostTotals(900_000_000), durationMs: 3 * 60 * 60 * 1000 },
         },
@@ -624,7 +624,7 @@ function buildProfileUsageMocks(baseTime: number) {
           },
         ],
         byAgent: [
-          { agentId: "openclaw-mock", totals: usageCostTotals(Math.round(lifetimeTokens * 0.8)) },
+          { agentId: "natesclaw-mock", totals: usageCostTotals(Math.round(lifetimeTokens * 0.8)) },
           { agentId: "alpha", totals: usageCostTotals(Math.round(lifetimeTokens * 0.2)) },
         ],
         byChannel: [
@@ -676,7 +676,7 @@ function buildConfigMocks(options: { swarmEnabled?: boolean } = {}) {
   };
   const schema = {
     type: "object",
-    title: "OpenClaw config",
+    title: "Natesclaw config",
     properties: {
       logging: {
         type: "object",
@@ -852,7 +852,7 @@ function buildConfigMocks(options: { swarmEnabled?: boolean } = {}) {
     },
   };
   const get = {
-    path: "~/.openclaw/openclaw.json",
+    path: "~/.natesclaw/natesclaw.json",
     exists: true,
     raw: `${JSON.stringify(config, null, 2)}\n`,
     hash: "mock-config-hash",
@@ -874,7 +874,7 @@ function buildConfigMocks(options: { swarmEnabled?: boolean } = {}) {
           status: "ok",
           ts: 0,
           message: null,
-          doctorHint: "openclaw doctor --non-interactive",
+          doctorHint: "natesclaw doctor --non-interactive",
           stats: { mode: "config.apply", root: get.path, requiresRestart: false },
         },
       },
@@ -1028,7 +1028,7 @@ async function createChatPickerScenario(
       updatedAtMs: baseTime - 30_000,
     },
   ];
-  const workspaceListCases = ["main", "alpha", "openclaw-mock"].map((agentId) => ({
+  const workspaceListCases = ["main", "alpha", "natesclaw-mock"].map((agentId) => ({
     match: { agentId },
     response: {
       agentId,
@@ -1050,7 +1050,7 @@ async function createChatPickerScenario(
       "# Context notes\n\nThe right rail should feel like workspace context, not a modal pasted beside the chat.\n\n## Current focus\n\n- Markdown previews need readable dark-mode chrome.\n- Empty or unavailable content should show a quiet state instead of an empty card.\n- File previews should load from the same mock scenario as the file list.\n",
     ],
   ]);
-  const workspaceFileCases = ["main", "alpha", "openclaw-mock"].flatMap((agentId) =>
+  const workspaceFileCases = ["main", "alpha", "natesclaw-mock"].flatMap((agentId) =>
     workspaceFiles.map((file) => ({
       match: { agentId, name: file.name },
       response: {
@@ -1117,7 +1117,7 @@ async function createChatPickerScenario(
     ],
     [
       "package.json",
-      '{\n  "name": "openclaw",\n  "scripts": { "dev:ui:mock": "tsx scripts/control-ui-mock-dev.ts" }\n}\n',
+      '{\n  "name": "natesclaw",\n  "scripts": { "dev:ui:mock": "tsx scripts/control-ui-mock-dev.ts" }\n}\n',
     ],
     [
       "ui/vite.config.ts",
@@ -1208,12 +1208,12 @@ async function createChatPickerScenario(
   <path d="M232 114c-72-44-135-22-146 35 52 9 91-4 125-39" fill="none" stroke="#f06b5f" stroke-width="28" stroke-linecap="round"/>
   <path d="M408 114c72-44 135-22 146 35-52 9-91-4-125-39" fill="none" stroke="#f06b5f" stroke-width="28" stroke-linecap="round"/>
   <path d="M232 246c-45 28-91 35-142 23M408 246c45 28 91 35 142 23" fill="none" stroke="#e14b47" stroke-width="16" stroke-linecap="round"/>
-  <text x="320" y="326" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="24" fill="#f6f7f9">openclaw session artifact</text>
+  <text x="320" y="326" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="24" fill="#f6f7f9">natesclaw session artifact</text>
 </svg>`;
   const lobsterArtifact = {
-    id: "artifact-openclaw-lobster",
+    id: "artifact-natesclaw-lobster",
     type: "image",
-    title: "openclaw-lobster-preview.svg",
+    title: "natesclaw-lobster-preview.svg",
     mimeType: "image/svg+xml",
     sizeBytes: Buffer.byteLength(lobsterSvg, "utf8"),
     source: "session-transcript",
@@ -1331,13 +1331,13 @@ async function createChatPickerScenario(
     }),
     sessionRow("agent:main:model-budget", "Model budget review", baseTime - 80_000, {
       category: "Research",
-      execCwd: "/Users/peter/Projects/openclaw",
+      execCwd: "/Users/peter/Projects/natesclaw",
       status: "failed",
       lastRunError: "Model out of credits: openai/gpt-5.6",
     }),
-    sessionRow("agent:main:work-openclaw", "OpenClaw work checkout", baseTime - 85_000, {
+    sessionRow("agent:main:work-natesclaw", "Natesclaw work checkout", baseTime - 85_000, {
       createdActor: MOCK_CREATOR_PETER,
-      execCwd: "/Users/peter/Work/openclaw",
+      execCwd: "/Users/peter/Work/natesclaw",
       lastReadAt: baseTime - 120_000,
       observerDigest: {
         headline: "Done: fixed the flaky retry-window test",
@@ -1359,7 +1359,7 @@ async function createChatPickerScenario(
       channel: "whatsapp",
       unread: true,
     }),
-    sessionRow("agent:main:discord:channel:openclaw-dev", "#openclaw-dev", baseTime - 300_000, {
+    sessionRow("agent:main:discord:channel:natesclaw-dev", "#natesclaw-dev", baseTime - 300_000, {
       kind: "group",
       channel: "discord",
     }),
@@ -1367,7 +1367,7 @@ async function createChatPickerScenario(
       worktree: {
         id: "wt-sidebar-zones",
         branch: "claude/sidebar-agent-zones",
-        repoRoot: "~/Projects/openclaw",
+        repoRoot: "~/Projects/natesclaw",
       },
     }),
     ...buildSessionRows({
@@ -1477,9 +1477,9 @@ async function createChatPickerScenario(
       "chat.metadata",
       "chat.startup",
       "question.list",
-      "openclaw.changes.list",
-      "openclaw.chat",
-      "openclaw.chat.history",
+      "natesclaw.changes.list",
+      "natesclaw.chat",
+      "natesclaw.chat.history",
       "sessions.delete",
       "sessions.diff",
       "sessions.files.set",
@@ -1587,7 +1587,7 @@ async function createChatPickerScenario(
                   {
                     threadId: "codex-thread-1",
                     name: "Release checklist sweep",
-                    cwd: "/Users/demo/projects/openclaw",
+                    cwd: "/Users/demo/projects/natesclaw",
                     status: "idle",
                     updatedAt: baseTime - 10 * 60_000,
                     archived: false,
@@ -1597,7 +1597,7 @@ async function createChatPickerScenario(
                   {
                     threadId: "codex-thread-2",
                     name: "Sidebar context-menu proof",
-                    cwd: "/Users/demo/projects/openclaw",
+                    cwd: "/Users/demo/projects/natesclaw",
                     status: "idle",
                     updatedAt: baseTime - 45 * 60_000,
                     archived: false,
@@ -1711,16 +1711,16 @@ async function createChatPickerScenario(
       "fs.listDir": {
         cases: [
           {
-            match: { path: "/Users/peter/Projects/openclaw" },
+            match: { path: "/Users/peter/Projects/natesclaw" },
             response: {
-              path: "/Users/peter/Projects/openclaw",
+              path: "/Users/peter/Projects/natesclaw",
               parent: "/Users/peter/Projects",
               home: "/Users/peter",
               entries: [
-                { name: "ui", path: "/Users/peter/Projects/openclaw/ui" },
-                { name: "src", path: "/Users/peter/Projects/openclaw/src" },
-                { name: "docs", path: "/Users/peter/Projects/openclaw/docs" },
-                { name: "packages", path: "/Users/peter/Projects/openclaw/packages" },
+                { name: "ui", path: "/Users/peter/Projects/natesclaw/ui" },
+                { name: "src", path: "/Users/peter/Projects/natesclaw/src" },
+                { name: "docs", path: "/Users/peter/Projects/natesclaw/docs" },
+                { name: "packages", path: "/Users/peter/Projects/natesclaw/packages" },
               ],
             },
           },
@@ -1731,7 +1731,7 @@ async function createChatPickerScenario(
               parent: "/Users/peter",
               home: "/Users/peter",
               entries: [
-                { name: "openclaw", path: "/Users/peter/Projects/openclaw" },
+                { name: "natesclaw", path: "/Users/peter/Projects/natesclaw" },
                 { name: "clawdbot", path: "/Users/peter/Projects/clawdbot" },
                 { name: "sweetistics", path: "/Users/peter/Projects/sweetistics" },
                 { name: "Peekaboo", path: "/Users/peter/Projects/Peekaboo" },
@@ -1756,9 +1756,9 @@ async function createChatPickerScenario(
       "worktrees.branches": {
         cases: [
           {
-            match: { repoRoot: "/Users/peter/Projects/openclaw" },
+            match: { repoRoot: "/Users/peter/Projects/natesclaw" },
             response: {
-              repoRoot: "/Users/peter/Projects/openclaw",
+              repoRoot: "/Users/peter/Projects/natesclaw",
               branches: [
                 { kind: "local", name: "main" },
                 { kind: "local", name: "steipete/place-picker" },
@@ -1790,8 +1790,8 @@ async function createChatPickerScenario(
       "config.set": configMocks.set,
       "config.apply": configMocks.apply,
       "config.schema": configMocks.schema,
-      "openclaw.chat.history": custodianHistory,
-      "openclaw.changes.list": custodianChanges,
+      "natesclaw.chat.history": custodianHistory,
+      "natesclaw.changes.list": custodianChanges,
       // The sidebar recovers pending questions through question.list after the
       // hello handshake, so this remains visible after a mock-page refresh.
       "question.list": {
@@ -1826,7 +1826,7 @@ async function createChatPickerScenario(
               {
                 id: "mock-production-export-approval",
                 request: {
-                  command: "openclaw export --target production",
+                  command: "natesclaw export --target production",
                   sessionKey: "agent:main:production-export",
                 },
                 createdAtMs: baseTime - 75_000,
@@ -1835,7 +1835,7 @@ async function createChatPickerScenario(
             ]
           : [],
       "plugin.approval.list": [],
-      "openclaw.approval.list": [],
+      "natesclaw.approval.list": [],
       "sessions.patch": { ok: true },
       "sessions.diff": buildSessionDiffMock(),
       // The worktrees page assumes the gateway contract shape; without this
@@ -1846,9 +1846,9 @@ async function createChatPickerScenario(
             id: "wt-mock-1",
             name: "fix-session-icons",
             repoFingerprint: "a1b2c3d4e5f60718",
-            repoRoot: "/Users/demo/Projects/openclaw",
-            path: "/Users/demo/Projects/openclaw/.openclaw/worktrees/fix-session-icons",
-            branch: "openclaw/fix-session-icons",
+            repoRoot: "/Users/demo/Projects/natesclaw",
+            path: "/Users/demo/Projects/natesclaw/.natesclaw/worktrees/fix-session-icons",
+            branch: "natesclaw/fix-session-icons",
             baseRef: "origin/main",
             ownerKind: "session",
             createdAt: baseTime - 3 * 86_400_000,
@@ -1858,9 +1858,9 @@ async function createChatPickerScenario(
             id: "wt-mock-2",
             name: "dashboard-polish",
             repoFingerprint: "a1b2c3d4e5f60718",
-            repoRoot: "/Users/demo/Projects/openclaw",
-            path: "/Users/demo/Projects/openclaw/.openclaw/worktrees/dashboard-polish",
-            branch: "openclaw/dashboard-polish",
+            repoRoot: "/Users/demo/Projects/natesclaw",
+            path: "/Users/demo/Projects/natesclaw/.natesclaw/worktrees/dashboard-polish",
+            branch: "natesclaw/dashboard-polish",
             baseRef: "origin/main",
             ownerKind: "manual",
             createdAt: baseTime - 9 * 86_400_000,
@@ -1973,7 +1973,7 @@ async function createChatPickerScenario(
             deviceId: "11223344556677889900aabbccddeeff11223344556677889900aabbccddeeff",
             displayName: "iPhone",
             platform: "iOS 26.4",
-            clientId: "openclaw-ios",
+            clientId: "natesclaw-ios",
             clientMode: "ui",
             roles: ["operator", "node"],
             scopes: ["operator.approvals", "operator.read", "operator.write"],
@@ -2104,14 +2104,14 @@ async function createChatPickerScenario(
           ts: baseTime - 30_000,
         },
         {
-          host: "openclaw-control-ui",
+          host: "natesclaw-control-ui",
           version: "2026.6.11",
           platform: "macos 26.5.2",
           mode: "webchat",
           reason: "connect",
           roles: ["operator"],
           instanceId: "mock-unpaired-webchat",
-          text: "Node: openclaw-control-ui · mode webchat",
+          text: "Node: natesclaw-control-ui · mode webchat",
           ts: baseTime - 10_000,
         },
       ],
@@ -2307,7 +2307,7 @@ async function createChatPickerScenario(
     },
     sessionArchiveFiltering: true,
     sessionKey: "agent:main:main",
-    workspace: "/Users/peter/Projects/openclaw",
+    workspace: "/Users/peter/Projects/natesclaw",
     workspaceGit: true,
   };
 }
@@ -2323,10 +2323,10 @@ function installControlUiCustodianMock(replyDelayMs: number): void {
     resolveDeferred: (method: string, payload: unknown) => void;
   };
   type MockWindow = Window & {
-    openclawControlUiE2eGateway?: MockGatewayControls;
+    natesclawControlUiE2eGateway?: MockGatewayControls;
   };
 
-  const gateway = (window as MockWindow).openclawControlUiE2eGateway;
+  const gateway = (window as MockWindow).natesclawControlUiE2eGateway;
   const MockWebSocket = window.WebSocket;
   if (!gateway || !MockWebSocket) {
     return;
@@ -2349,7 +2349,7 @@ function installControlUiCustodianMock(replyDelayMs: number): void {
         frame = null;
       }
     }
-    if (frame?.type !== "req" || frame.method !== "openclaw.chat") {
+    if (frame?.type !== "req" || frame.method !== "natesclaw.chat") {
       sendOriginal(this, data);
       return;
     }
@@ -2405,16 +2405,16 @@ function installControlUiCustodianMock(replyDelayMs: number): void {
       : {
           sessionId,
           reply:
-            "Hi — I’m OpenClaw, your system caretaker.\n\nAsk me about setup, channels, or recent changes.",
+            "Hi — I’m Natesclaw, your system caretaker.\n\nAsk me about setup, channels, or recent changes.",
           action: "none",
         };
 
     // Defer before forwarding so the generic gateway records the request but
     // cannot race its normal immediate response against this stateful reply.
-    gateway.deferNext("openclaw.chat");
+    gateway.deferNext("natesclaw.chat");
     sendOriginal(this, data);
     window.setTimeout(
-      () => gateway.resolveDeferred("openclaw.chat", response),
+      () => gateway.resolveDeferred("natesclaw.chat", response),
       message === undefined ? 0 : replyDelayMs,
     );
   };
@@ -2436,11 +2436,11 @@ function createMockGatewayPlugin(scenario: ControlUiMockGatewayScenario): Plugin
         res.end(bootstrapBody);
       });
     },
-    name: "openclaw-control-ui-mock-gateway",
+    name: "natesclaw-control-ui-mock-gateway",
     transformIndexHtml(html) {
       return html.replace(
         "</head>",
-        `    <script data-openclaw-control-ui-mock-gateway>\n${initScript}\n${custodianInitScript}\n    </script>\n  </head>`,
+        `    <script data-natesclaw-control-ui-mock-gateway>\n${initScript}\n${custodianInitScript}\n    </script>\n  </head>`,
       );
     },
   };
@@ -2448,7 +2448,7 @@ function createMockGatewayPlugin(scenario: ControlUiMockGatewayScenario): Plugin
 
 function createBoardFixturePlugin(): Plugin {
   return {
-    name: "openclaw-control-ui-board-fixture",
+    name: "natesclaw-control-ui-board-fixture",
     configureServer(server) {
       server.middlewares.use(boardFixturePath, (_req, res, next) => {
         void server
@@ -2499,7 +2499,7 @@ const server = await createServer({
   clearScreen: false,
   configFile: path.join(uiRoot, "vite.config.ts"),
   define: {
-    "globalThis.OPENCLAW_CONTROL_UI_BUILD_INFO": JSON.stringify({
+    "globalThis.NATESCLAW_CONTROL_UI_BUILD_INFO": JSON.stringify({
       version: "2026.7.10",
       commit: "0123456789abcdef0123456789abcdef01234567",
       commitAt: "2026-07-10T11:22:33.000Z",

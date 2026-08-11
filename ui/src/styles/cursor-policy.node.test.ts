@@ -9,9 +9,9 @@ const stylesDir = path.dirname(fileURLToPath(import.meta.url));
 const APP_LIKE_MODES = ["standalone", "minimal-ui", "window-controls-overlay"] as const;
 /** `<html>` markers the native app hosts stamp; they report display-mode browser. */
 const NATIVE_HOST_MARKERS = [
-  "openclaw-native-macos",
-  "openclaw-native-nav",
-  "openclaw-native-web-chrome",
+  "natesclaw-native-macos",
+  "natesclaw-native-nav",
+  "natesclaw-native-web-chrome",
 ] as const;
 
 function collectStyleSources(directory: string): string[] {

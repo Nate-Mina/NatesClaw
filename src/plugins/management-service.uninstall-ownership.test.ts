@@ -68,7 +68,7 @@ describe("plugin management uninstall channel ownership", () => {
     "preserves manifest channel ownership when uninstalling $label",
     async ({ enabled, channelIds }) => {
       const pluginId = "custom-plugin";
-      const installPath = "/tmp/openclaw-managed-linked-custom-plugin";
+      const installPath = "/tmp/natesclaw-managed-linked-custom-plugin";
       const installRecord = { source: "path", sourcePath: installPath, installPath } as const;
       const channels = {
         [pluginId]: { enabled: true },
@@ -80,11 +80,11 @@ describe("plugin management uninstall channel ownership", () => {
         snapshot: {
           valid: true,
           parsed: {},
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
           sourceConfig: { plugins: { entries: { [pluginId]: { enabled } } }, channels },
           hash: "base-hash",
         },
-        writeOptions: { expectedConfigPath: "/tmp/openclaw.json" },
+        writeOptions: { expectedConfigPath: "/tmp/natesclaw.json" },
       });
       mocks.installRecords.mockResolvedValue({ [pluginId]: installRecord });
       const manifest =

@@ -1,8 +1,8 @@
 // Gateway-first agent CLI implementation with explicit --local embedded execution.
 import fs from "node:fs/promises";
 import { TextDecoder } from "node:util";
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   GATEWAY_CLIENT_MODES,
   GATEWAY_CLIENT_NAMES,
@@ -17,7 +17,7 @@ import {
   readGatewayDispatchConfig,
   readGatewayDispatchConfigWithShellEnvFallback,
 } from "../config/gateway-dispatch-config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   callGateway,
   isGatewayCredentialsRequiredError,
@@ -145,7 +145,7 @@ const embeddedStateLockModuleLoader = createLazyPromiseLoader(
   { cacheRejections: true },
 );
 const replyPayloadModuleLoader = createLazyPromiseLoader(
-  () => import("openclaw/plugin-sdk/reply-payload"),
+  () => import("natesclaw/plugin-sdk/reply-payload"),
   { cacheRejections: true },
 );
 let gatewayAbortRetryDelaysMsForTests: readonly number[] | undefined;
@@ -166,7 +166,7 @@ type EmbeddedRunDiagnosticsOptions = {
 async function startEmbeddedRunDiagnosticsExporters(
   runtime: RuntimeEnv,
   options: EmbeddedRunDiagnosticsOptions,
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): Promise<OneShotDiagnosticsHandle | null> {
   try {
     return await startOneShotDiagnosticsExporters({
@@ -216,13 +216,13 @@ async function runEmbeddedAgentCommand(
   }
 }
 
-async function loadRuntimeConfig(): Promise<OpenClawConfig> {
+async function loadRuntimeConfig(): Promise<NatesclawConfig> {
   const { getRuntimeConfig } = await runtimeConfigModuleLoader.load();
   return getRuntimeConfig();
 }
 
 function formatActiveGatewayLocalRefusal(identity: GatewayLockIdentity): string {
-  return `A Gateway is running for this state directory (pid ${identity.pid}, port ${identity.port}). Run without --local to use it, or stop the Gateway first (${formatCliCommand("openclaw gateway stop")}).`;
+  return `A Gateway is running for this state directory (pid ${identity.pid}, port ${identity.port}). Run without --local to use it, or stop the Gateway first (${formatCliCommand("natesclaw gateway stop")}).`;
 }
 
 async function acquireEmbeddedAgentStateLock(
@@ -268,7 +268,7 @@ function protectJsonStdout(opts: Pick<AgentCliOpts, "json">): void {
 
 function missingAgentMessageError(): Error {
   return new Error(
-    `Missing message. Use ${formatCliCommand('openclaw agent --message "..." --agent <id>')} or ${formatCliCommand("openclaw agent --message-file <path> --agent <id>")}.`,
+    `Missing message. Use ${formatCliCommand('natesclaw agent --message "..." --agent <id>')} or ${formatCliCommand("natesclaw agent --message-file <path> --agent <id>")}.`,
   );
 }
 
@@ -348,7 +348,7 @@ async function resolveAgentMessageOpts(opts: AgentCliOpts): Promise<AgentDispatc
   return { ...rest, message };
 }
 
-function parseTimeoutSeconds(opts: { cfg: OpenClawConfig; timeout?: string }) {
+function parseTimeoutSeconds(opts: { cfg: NatesclawConfig; timeout?: string }) {
   const raw =
     opts.timeout !== undefined
       ? parseStrictNonNegativeInteger(opts.timeout)
@@ -622,7 +622,7 @@ async function abortAcceptedGatewayAgentRunWithGatewayCall(params: {
   signal: AgentCliSignal | undefined;
   runtime: RuntimeEnv;
   gatewayIdentity: AgentGatewayCallIdentity;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
 }): Promise<void> {
   const request: GatewayRequestFunction = async <T = Record<string, unknown>>(
     method: string,
@@ -741,20 +741,20 @@ async function agentViaGatewayCommand(
   const explicitSessionKey = opts.sessionKey?.trim();
   if (!opts.to && !opts.sessionId && !opts.agent && !explicitSessionKey) {
     throw new Error(
-      `No target session selected. Use --agent <id>, --session-key <key>, --session-id <id>, or --to <E.164>. Run ${formatCliCommand("openclaw agents list")} to see agents.`,
+      `No target session selected. Use --agent <id>, --session-key <key>, --session-id <id>, or --to <E.164>. Run ${formatCliCommand("natesclaw agents list")} to see agents.`,
     );
   }
 
   // Scoped gateway turns need core agent/session/gateway fields only. The
   // running gateway owns plugin validation and plugin metadata freshness.
-  let cfg: OpenClawConfig = readGatewayDispatchConfig();
+  let cfg: NatesclawConfig = readGatewayDispatchConfig();
   const agentIdRaw = opts.agent?.trim();
   const agentId = agentIdRaw ? normalizeAgentId(agentIdRaw) : undefined;
   if (agentId) {
     const knownAgents = listAgentIds(cfg);
     if (!knownAgents.includes(agentId)) {
       throw new Error(
-        `Unknown agent id "${agentIdRaw}". Use "${formatCliCommand("openclaw agents list")}" to see configured agents.`,
+        `Unknown agent id "${agentIdRaw}". Use "${formatCliCommand("natesclaw agents list")}" to see configured agents.`,
       );
     }
   }
@@ -792,7 +792,7 @@ async function agentViaGatewayCommand(
   const modelOverride = normalizeOptionalString(opts.model);
   const hasModelOverride = Boolean(modelOverride);
   const needsAdminGatewayIdentity = hasModelOverride || isSessionResetCommand(body);
-  const hasGatewayUrlOverride = Boolean(normalizeOptionalString(process.env.OPENCLAW_GATEWAY_URL));
+  const hasGatewayUrlOverride = Boolean(normalizeOptionalString(process.env.NATESCLAW_GATEWAY_URL));
   const usesRemoteGateway = cfg.gateway?.mode === "remote" || hasGatewayUrlOverride;
   const gatewayIdentity: AgentGatewayCallIdentity = needsAdminGatewayIdentity
     ? {
@@ -814,7 +814,7 @@ async function agentViaGatewayCommand(
   let activeConnectionAbortAttempted = false;
   let activeConnectionAbortSucceeded = false;
   let response: GatewayAgentResponse | undefined;
-  const dispatchGatewayAgentCall = async (activeCfg: OpenClawConfig) =>
+  const dispatchGatewayAgentCall = async (activeCfg: NatesclawConfig) =>
     await withProgress(
       {
         label: "Waiting for agent reply…",
@@ -979,7 +979,7 @@ export async function agentCliCommand(
   // Fail loudly and point at the first-class command instead of no-opping.
   if (isCompactControlCommand(messageOpts.message)) {
     runtime.error?.(
-      "Slash commands cannot be executed via --message from the CLI. Use: openclaw sessions compact <key>",
+      "Slash commands cannot be executed via --message from the CLI. Use: natesclaw sessions compact <key>",
     );
     runtime.exit(1);
     return undefined;
@@ -1038,7 +1038,7 @@ export async function agentCliCommand(
         // finish this turn. Recommending a blind retry or --local here could
         // double-execute the message, so point at verification first.
         runtime.error?.(
-          `Gateway agent call ${failureHint}; the Gateway may still be running this turn. Check \`openclaw gateway status\` and the session transcript before retrying or rerunning with --local, so the turn does not execute twice.`,
+          `Gateway agent call ${failureHint}; the Gateway may still be running this turn. Check \`natesclaw gateway status\` and the session transcript before retrying or rerunning with --local, so the turn does not execute twice.`,
         );
       }
       throw err;

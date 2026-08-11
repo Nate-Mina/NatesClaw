@@ -62,8 +62,8 @@ function makeRegistry(pluginId: string, channels: string[] = [pluginId]): Plugin
         activation: {},
         startup: {},
         packageInstall: {
-          clawhubSpec: `clawhub:@openclaw/${pluginId}`,
-          npmSpec: `@openclaw/${pluginId}`,
+          clawhubSpec: `clawhub:@natesclaw/${pluginId}`,
+          npmSpec: `@natesclaw/${pluginId}`,
           defaultChoice: "clawhub",
         },
       },
@@ -82,7 +82,7 @@ describe("listPersistedBundledPluginLocationBridges", () => {
     readPersistedInstalledPluginIndexMock.mockResolvedValue(
       makeIndex({
         pluginId: "diagnostics-otel",
-        manifestPath: "/app/dist/extensions/diagnostics-otel/openclaw.plugin.json",
+        manifestPath: "/app/dist/extensions/diagnostics-otel/natesclaw.plugin.json",
         manifestHash: "hash",
         source: "/app/dist/extensions/diagnostics-otel/index.js",
         rootDir: "/app/dist/extensions/diagnostics-otel",
@@ -93,13 +93,13 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         packageInstall: {
           defaultChoice: "clawhub",
           clawhub: {
-            spec: "clawhub:@openclaw/diagnostics-otel",
-            packageName: "@openclaw/diagnostics-otel",
+            spec: "clawhub:@natesclaw/diagnostics-otel",
+            packageName: "@natesclaw/diagnostics-otel",
             exactVersion: false,
           },
           npm: {
-            spec: "@openclaw/diagnostics-otel",
-            packageName: "@openclaw/diagnostics-otel",
+            spec: "@natesclaw/diagnostics-otel",
+            packageName: "@natesclaw/diagnostics-otel",
             selectorKind: "none",
             exactVersion: false,
             pinState: "floating-without-integrity",
@@ -117,8 +117,8 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         bundledPluginId: "diagnostics-otel",
         pluginId: "diagnostics-otel",
         preferredSource: "npm",
-        npmSpec: "@openclaw/diagnostics-otel",
-        clawhubSpec: "clawhub:@openclaw/diagnostics-otel",
+        npmSpec: "@natesclaw/diagnostics-otel",
+        clawhubSpec: "clawhub:@natesclaw/diagnostics-otel",
         channelIds: ["diagnostics-otel"],
       },
     ]);
@@ -128,7 +128,7 @@ describe("listPersistedBundledPluginLocationBridges", () => {
     readPersistedInstalledPluginIndexMock.mockResolvedValue(
       makeIndex({
         pluginId: "diagnostics-otel",
-        manifestPath: "/app/dist/extensions/diagnostics-otel/openclaw.plugin.json",
+        manifestPath: "/app/dist/extensions/diagnostics-otel/natesclaw.plugin.json",
         manifestHash: "hash",
         source: "/app/dist/extensions/diagnostics-otel/index.js",
         rootDir: "/app/dist/extensions/diagnostics-otel",
@@ -139,8 +139,8 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         packageInstall: {
           defaultChoice: "clawhub",
           clawhub: {
-            spec: "clawhub:@openclaw/diagnostics-otel",
-            packageName: "@openclaw/diagnostics-otel",
+            spec: "clawhub:@natesclaw/diagnostics-otel",
+            packageName: "@natesclaw/diagnostics-otel",
             exactVersion: false,
           },
           warnings: [],
@@ -156,34 +156,34 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         bundledPluginId: "diagnostics-otel",
         pluginId: "diagnostics-otel",
         preferredSource: "npm",
-        npmSpec: "@openclaw/diagnostics-otel",
-        clawhubSpec: "clawhub:@openclaw/diagnostics-otel",
+        npmSpec: "@natesclaw/diagnostics-otel",
+        clawhubSpec: "clawhub:@natesclaw/diagnostics-otel",
         channelIds: ["diagnostics-otel"],
       },
     ]);
   });
 
   it.each([
-    ["byteplus", "@openclaw/byteplus-provider", true],
-    ["duckduckgo", "@openclaw/duckduckgo-plugin", false],
-    ["mistral", "@openclaw/mistral-provider", true],
-    ["novita", "@openclaw/novita-provider", true],
-    ["opencode", "@openclaw/opencode-provider", true],
-    ["opencode-go", "@openclaw/opencode-go-provider", true],
-    ["synthetic", "@openclaw/synthetic-provider", true],
-    ["teams-meetings", "@openclaw/teams-meetings", true],
-    ["volcengine", "@openclaw/volcengine-provider", true],
-    ["voyage", "@openclaw/voyage-provider", true],
-    ["vydra", "@openclaw/vydra-provider", true],
-    ["xiaomi", "@openclaw/xiaomi-provider", true],
-    ["zoom-meetings", "@openclaw/zoom-meetings", true],
+    ["byteplus", "@natesclaw/byteplus-provider", true],
+    ["duckduckgo", "@natesclaw/duckduckgo-plugin", false],
+    ["mistral", "@natesclaw/mistral-provider", true],
+    ["novita", "@natesclaw/novita-provider", true],
+    ["opencode", "@natesclaw/opencode-provider", true],
+    ["opencode-go", "@natesclaw/opencode-go-provider", true],
+    ["synthetic", "@natesclaw/synthetic-provider", true],
+    ["teams-meetings", "@natesclaw/teams-meetings", true],
+    ["volcengine", "@natesclaw/volcengine-provider", true],
+    ["voyage", "@natesclaw/voyage-provider", true],
+    ["vydra", "@natesclaw/vydra-provider", true],
+    ["xiaomi", "@natesclaw/xiaomi-provider", true],
+    ["zoom-meetings", "@natesclaw/zoom-meetings", true],
   ] as const)(
     "externalizes the shipped bundled %s plugin using official install metadata",
     async (pluginId, npmSpec, enabledByDefault) => {
       readPersistedInstalledPluginIndexMock.mockResolvedValue(
         makeIndex({
           pluginId,
-          manifestPath: `/app/dist/extensions/${pluginId}/openclaw.plugin.json`,
+          manifestPath: `/app/dist/extensions/${pluginId}/natesclaw.plugin.json`,
           manifestHash: "hash",
           source: `/app/dist/extensions/${pluginId}/index.js`,
           rootDir: `/app/dist/extensions/${pluginId}`,
@@ -216,7 +216,7 @@ describe("listPersistedBundledPluginLocationBridges", () => {
     readPersistedInstalledPluginIndexMock.mockResolvedValue(
       makeIndex({
         pluginId: "comfy",
-        manifestPath: "/app/dist/extensions/comfy/openclaw.plugin.json",
+        manifestPath: "/app/dist/extensions/comfy/natesclaw.plugin.json",
         manifestHash: "hash",
         source: "/app/dist/extensions/comfy/index.js",
         rootDir: "/app/dist/extensions/comfy",
@@ -237,8 +237,8 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         bundledPluginId: "comfy",
         pluginId: "comfy",
         preferredSource: "npm",
-        npmSpec: "@openclaw/comfy-provider",
-        clawhubSpec: "clawhub:@openclaw/comfy-provider",
+        npmSpec: "@natesclaw/comfy-provider",
+        clawhubSpec: "clawhub:@natesclaw/comfy-provider",
         enabledByDefault: true,
       },
     ]);
@@ -248,7 +248,7 @@ describe("listPersistedBundledPluginLocationBridges", () => {
     readPersistedInstalledPluginIndexMock.mockResolvedValue(
       makeIndex({
         pluginId: "imessage",
-        manifestPath: "/app/dist/extensions/imessage/openclaw.plugin.json",
+        manifestPath: "/app/dist/extensions/imessage/natesclaw.plugin.json",
         manifestHash: "hash",
         source: "/app/dist/extensions/imessage/index.js",
         rootDir: "/app/dist/extensions/imessage",
@@ -269,8 +269,8 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         bundledPluginId: "imessage",
         pluginId: "imessage",
         preferredSource: "npm",
-        npmSpec: "@openclaw/imessage",
-        clawhubSpec: "clawhub:@openclaw/imessage",
+        npmSpec: "@natesclaw/imessage",
+        clawhubSpec: "clawhub:@natesclaw/imessage",
         enabledByDefault: true,
         channelIds: ["imessage"],
       },
@@ -281,7 +281,7 @@ describe("listPersistedBundledPluginLocationBridges", () => {
     readPersistedInstalledPluginIndexMock.mockResolvedValue(
       makeIndex({
         pluginId: "local-only",
-        manifestPath: "/app/dist/extensions/local-only/openclaw.plugin.json",
+        manifestPath: "/app/dist/extensions/local-only/natesclaw.plugin.json",
         manifestHash: "hash",
         source: "/app/dist/extensions/local-only/index.js",
         rootDir: "/app/dist/extensions/local-only",
@@ -310,7 +310,7 @@ describe("listPersistedBundledPluginRecoveryLocations", () => {
     readPersistedInstalledPluginIndexMock.mockResolvedValue(
       makeIndex({
         pluginId: "diagnostics-otel",
-        manifestPath: "/app/dist/extensions/diagnostics-otel/openclaw.plugin.json",
+        manifestPath: "/app/dist/extensions/diagnostics-otel/natesclaw.plugin.json",
         manifestHash: "hash",
         source: "/app/dist/extensions/diagnostics-otel/index.js",
         rootDir: "/app/dist/extensions/diagnostics-otel",
@@ -333,7 +333,7 @@ describe("listPersistedBundledPluginRecoveryLocations", () => {
     readPersistedInstalledPluginIndexMock.mockResolvedValue(
       makeIndex({
         pluginId: "diagnostics-otel",
-        manifestPath: "extensions/diagnostics-otel/openclaw.plugin.json",
+        manifestPath: "extensions/diagnostics-otel/natesclaw.plugin.json",
         manifestHash: "hash",
         source: "extensions/diagnostics-otel/index.js",
         rootDir: "extensions/diagnostics-otel",

@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { createOpenClawTestState } from "openclaw/plugin-sdk/test-state";
+import { createNatesclawTestState } from "natesclaw/plugin-sdk/test-state";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import {
   DEFAULT_MEDIA_SEND_ERROR,
@@ -227,7 +227,7 @@ function makeRuntime(params: RuntimeOptions): GatewayPluginRuntime {
         resolveEnvelopeFormatOptions: vi.fn(() => ({})),
       },
       session: {
-        resolveStorePath: vi.fn(() => "/tmp/openclaw/qqbot-sessions.json"),
+        resolveStorePath: vi.fn(() => "/tmp/natesclaw/qqbot-sessions.json"),
         recordInboundSession: vi.fn(async () => undefined),
       },
       inbound: makeInboundRuntime(
@@ -245,7 +245,7 @@ function makeRuntime(params: RuntimeOptions): GatewayPluginRuntime {
     tts: {
       textToSpeech: vi.fn(async () => ({
         success: true,
-        audioPath: "/tmp/openclaw-qqbot/tts.wav",
+        audioPath: "/tmp/natesclaw-qqbot/tts.wav",
         provider: "test-tts",
         outputFormat: "wav",
       })),
@@ -568,13 +568,13 @@ describe("dispatchOutbound", () => {
   });
 
   it("does not expose default sandbox roots through gateway qqmedia replies", async () => {
-    const openClawState = await createOpenClawTestState({
+    const NatesclawState = await createNatesclawTestState({
       layout: "state-only",
       prefix: "qqbot-agent-root-boundary-",
     });
     try {
-      const workspaceDir = path.join(openClawState.root, "workspace");
-      const stateSandboxDir = openClawState.statePath("sandboxes", "other-agent");
+      const workspaceDir = path.join(NatesclawState.root, "workspace");
+      const stateSandboxDir = NatesclawState.statePath("sandboxes", "other-agent");
       const stateSandboxFile = path.join(stateSandboxDir, "outside-report.docx");
       await fs.mkdir(workspaceDir, { recursive: true });
       await fs.mkdir(stateSandboxDir, { recursive: true });
@@ -592,7 +592,7 @@ describe("dispatchOutbound", () => {
       });
       expect(sendMediaMock).not.toHaveBeenCalled();
     } finally {
-      await openClawState.cleanup();
+      await NatesclawState.cleanup();
     }
   });
 
@@ -706,7 +706,7 @@ describe("dispatchOutbound", () => {
       channel: "qqbot",
       accountId: "qq-main",
     });
-    expect(audioFileToSilkBase64Mock).toHaveBeenCalledWith("/tmp/openclaw-qqbot/tts.wav");
+    expect(audioFileToSilkBase64Mock).toHaveBeenCalledWith("/tmp/natesclaw-qqbot/tts.wav");
     const sentMedia = sendMediaMock.mock.calls.at(0)?.[0] as
       | { kind?: string; source?: unknown; msgId?: string; ttsText?: string }
       | undefined;

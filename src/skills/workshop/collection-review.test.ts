@@ -3,9 +3,9 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createSkillWorkshopTool } from "../../agents/tools/skill-workshop-tool.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../../test-utils/natesclaw-test-state.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 import { writeWorkspaceSkills } from "../test-support/e2e-test-helpers.js";
 import {
@@ -34,13 +34,13 @@ async function makeWorkspaceDir(prefix: string): Promise<string> {
   return await fs.realpath(await tempDirs.make(prefix));
 }
 
-let testState: OpenClawTestState;
+let testState: NatesclawTestState;
 
 beforeEach(async () => {
   authStoresByAgentDir.clear();
-  testState = await createOpenClawTestState({
+  testState = await createNatesclawTestState({
     layout: "state-only",
-    prefix: "openclaw-collection-review-state-",
+    prefix: "natesclaw-collection-review-state-",
   });
 });
 
@@ -53,7 +53,7 @@ afterEach(async () => {
 
 describe("skill collection review", () => {
   it("runs an incognito session with only collection read and reconcile", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-workspace-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-workspace-");
     await writeWorkspaceSkills(workspaceDir, [
       { name: "useful", description: "Useful reusable procedure" },
     ]);
@@ -118,7 +118,7 @@ describe("skill collection review", () => {
   });
 
   it("encodes hostile skill metadata as prompt data", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-hostile-metadata-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-hostile-metadata-");
     await writeWorkspaceSkills(workspaceDir, [
       {
         name: "hostile",
@@ -158,7 +158,7 @@ describe("skill collection review", () => {
   });
 
   it("persists the daily boundary per workspace", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-cadence-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-cadence-");
     const nowMs = Date.UTC(2026, 7, 10);
 
     expect(isSkillCollectionReviewDue(workspaceDir, nowMs, { env: testState.env })).toBe(true);
@@ -176,7 +176,7 @@ describe("skill collection review", () => {
   });
 
   it("leaves disabled and agent-filtered skills outside the editable collection", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-filtered-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-filtered-");
     await writeWorkspaceSkills(workspaceDir, [
       { name: "enabled", description: "Enabled procedure" },
       { name: "disabled", description: "Disabled procedure" },
@@ -231,7 +231,7 @@ describe("skill collection review", () => {
   });
 
   it("does not dispatch a second review when the runner fails after reconciliation", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-restart-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-restart-");
     await writeWorkspaceSkills(workspaceDir, [
       { name: "useful", description: "Useful reusable procedure" },
     ]);
@@ -264,7 +264,7 @@ describe("skill collection review", () => {
   });
 
   it("reviews a same-model shared workspace without hiding every agent's skills", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-shared-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-shared-");
     await writeWorkspaceSkills(workspaceDir, [
       { name: "alpha", description: "Alpha procedure" },
       { name: "beta", description: "Beta procedure" },
@@ -339,7 +339,7 @@ describe("skill collection review", () => {
   });
 
   it("skips same-model shared agents with different implicit auth profiles", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-shared-auth-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-shared-auth-");
     await writeWorkspaceSkills(workspaceDir, [
       { name: "alpha", description: "Alpha procedure" },
       { name: "beta", description: "Beta procedure" },
@@ -387,8 +387,8 @@ describe("skill collection review", () => {
   });
 
   it("groups symlink aliases before comparing shared-workspace identities", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-real-workspace-");
-    const aliasParent = await tempDirs.make("openclaw-collection-review-alias-parent-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-real-workspace-");
+    const aliasParent = await tempDirs.make("natesclaw-collection-review-alias-parent-");
     const workspaceAlias = path.join(aliasParent, "workspace-alias");
     await fs.symlink(
       workspaceDir,
@@ -427,7 +427,7 @@ describe("skill collection review", () => {
   });
 
   it("claims a due workspace before dispatching the model", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-claim-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-claim-");
     await writeWorkspaceSkills(workspaceDir, [{ name: "useful", description: "Useful procedure" }]);
     let releaseReview: (() => void) | undefined;
     let markStarted: (() => void) | undefined;
@@ -470,8 +470,8 @@ describe("skill collection review", () => {
   });
 
   it("admits and reports each workspace independently", async () => {
-    const oversizedWorkspace = await makeWorkspaceDir("openclaw-collection-review-failed-");
-    const healthyWorkspace = await makeWorkspaceDir("openclaw-collection-review-healthy-");
+    const oversizedWorkspace = await makeWorkspaceDir("natesclaw-collection-review-failed-");
+    const healthyWorkspace = await makeWorkspaceDir("natesclaw-collection-review-healthy-");
     await writeWorkspaceSkills(oversizedWorkspace, [
       { name: "oversized", description: "Oversized", body: "x".repeat(240_001) },
     ]);
@@ -515,7 +515,7 @@ describe("skill collection review", () => {
   });
 
   it("rejects an oversized collection before model dispatch", async () => {
-    const workspaceDir = await makeWorkspaceDir("openclaw-collection-review-oversized-");
+    const workspaceDir = await makeWorkspaceDir("natesclaw-collection-review-oversized-");
     await writeWorkspaceSkills(workspaceDir, [
       {
         name: "oversized",

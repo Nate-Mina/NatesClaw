@@ -4,34 +4,34 @@ import {
   buildMentionRegexes,
   isChannelPartialDeliveryError,
   matchesMentionPatterns,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-auth-native";
-import type { GroupPolicy, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { resolveStableChannelMessageIngress } from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingChallengeIssuer } from "natesclaw/plugin-sdk/channel-pairing";
+import { hasControlCommand } from "natesclaw/plugin-sdk/command-auth-native";
+import type { GroupPolicy, NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   readChannelAllowFromStore,
   resolvePairingIdLabel,
   upsertChannelPairingRequest,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { toErrorObject } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+import { toErrorObject } from "natesclaw/plugin-sdk/error-runtime";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   createChannelHistoryWindow,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/reply-history";
+import { resolveAgentRoute } from "natesclaw/plugin-sdk/routing";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+import { danger, logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "natesclaw/plugin-sdk/runtime-group-policy";
 import {
   normalizeOptionalString,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { firstDefined, normalizeLineAllowEntry } from "./bot-access.js";
 import {
   buildLineMessageContext,
@@ -73,7 +73,7 @@ function isDownloadableLineMessageType(
 }
 
 interface LineHandlerContext {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedLineAccount;
   runtime: RuntimeEnv;
   mediaMaxBytes: number;

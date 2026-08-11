@@ -114,7 +114,7 @@ function assertExactToolAvailabilityRuntimeVersion(params: {
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.cliRunnerExecuteTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.cliRunnerExecuteTestApi")] = {
     buildCliEnvAuthLog,
     buildCliExecLogLine,
     setCliRunnerExecuteTestDeps: (overrides: Record<string, unknown>) => {
@@ -163,7 +163,7 @@ export async function executePreparedCliRun(
 
   const basePrompt = cliSessionIdToUse
     ? params.prompt
-    : (context.openClawHistoryPrompt ?? params.prompt);
+    : (context.NatesclawHistoryPrompt ?? params.prompt);
   let prompt = applyPluginTextReplacements(
     appendBootstrapPromptWarning(basePrompt, context.bootstrapPromptWarningLines, {
       preserveExactPrompt: context.heartbeatPrompt,
@@ -221,7 +221,7 @@ export async function executePreparedCliRun(
     toolAvailability: params.cliToolAvailability
       ? buildCliBackendToolAvailability(
           nodePlacement
-            ? { native: params.cliToolAvailability.native, openClaw: [] }
+            ? { native: params.cliToolAvailability.native, Natesclaw: [] }
             : params.cliToolAvailability,
         )
       : undefined,
@@ -371,7 +371,7 @@ export async function executePreparedCliRun(
           cliSessionId: cliSessionIdToUse,
           resolvedSessionId,
           reusableSession: context.reusableCliSession,
-          hasHistoryPrompt: Boolean(context.openClawHistoryPrompt),
+          hasHistoryPrompt: Boolean(context.NatesclawHistoryPrompt),
         }),
       );
       const logOutputText =

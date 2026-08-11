@@ -1,34 +1,34 @@
 // Feishu plugin module implements outbound behavior.
 import path from "node:path";
-import { isChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
-import { createReplyToFanout } from "openclaw/plugin-sdk/channel-outbound";
+import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
+import { createReplyToFanout } from "natesclaw/plugin-sdk/channel-outbound";
 import {
   attachChannelToResult,
   createAttachedChannelResultAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
-import type { MessagePresentationBlock } from "openclaw/plugin-sdk/interactive-runtime";
+} from "natesclaw/plugin-sdk/channel-send-result";
+import type { MessagePresentationBlock } from "natesclaw/plugin-sdk/interactive-runtime";
 import {
   legacyInteractiveReplyToPresentation,
   normalizeLegacyInteractiveReply,
   normalizeMessagePresentation,
   renderMessagePresentationFallbackText,
   resolveLegacyInteractiveTextFallback,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { resolveChunkMode, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
+} from "natesclaw/plugin-sdk/interactive-runtime";
+import { resolveMarkdownTableMode } from "natesclaw/plugin-sdk/markdown-table-runtime";
+import { resolveChunkMode, resolveTextChunkLimit } from "natesclaw/plugin-sdk/reply-chunking";
 import {
   getReplyPayloadTtsSupplement,
   resolvePayloadMediaUrls,
   sendPayloadMediaSequenceAndFinalize,
   sendTextMediaPayload,
-} from "openclaw/plugin-sdk/reply-payload";
-import { statRegularFileSync } from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/reply-payload";
+import { statRegularFileSync } from "natesclaw/plugin-sdk/security-runtime";
 import {
   isRecord,
   normalizeLowercaseStringOrEmpty,
   normalizeStringEntries,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { convertMarkdownTables } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { convertMarkdownTables } from "natesclaw/plugin-sdk/text-chunking";
 import { resolveFeishuAccount } from "./accounts.js";
 import { createFeishuClient } from "./client.js";
 import { cleanupAmbientCommentTypingReaction } from "./comment-reaction.js";
@@ -64,8 +64,8 @@ import {
   sendStructuredCardFeishu,
 } from "./send.js";
 
-const RENDERED_FEISHU_CARD = Symbol("openclaw.renderedFeishuCard");
-const FEISHU_PRESENTATION_FALLBACK_MARKER = "__openclawPresentationFallback";
+const RENDERED_FEISHU_CARD = Symbol("natesclaw.renderedFeishuCard");
+const FEISHU_PRESENTATION_FALLBACK_MARKER = "__natesclawPresentationFallback";
 const FEISHU_TEXT_CHUNK_LIMIT = 4000;
 
 function normalizePossibleLocalImagePath(text: string | undefined): string | null {

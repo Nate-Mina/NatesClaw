@@ -1,6 +1,6 @@
 // Runs a Vitest config and enforces wall-time regression budgets.
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import { booleanFlag, parseFlagArgs, stringFlag, type FlagSpec } from "./lib/arg-utils.mts";
 import {
   budgetFloatFlag,
@@ -58,10 +58,10 @@ function parseArgs(argv: readonly string[], env = process.env) {
     argv,
     {
       config: "test/vitest/vitest.unit.config.ts",
-      maxWallMs: readBudgetEnvNumber("OPENCLAW_TEST_PERF_MAX_WALL_MS", env),
-      baselineWallMs: readBudgetEnvNumber("OPENCLAW_TEST_PERF_BASELINE_WALL_MS", env),
-      maxRegressionPct: readBudgetEnvNumber("OPENCLAW_TEST_PERF_MAX_REGRESSION_PCT", env) ?? 10,
-      reportOnly: readBooleanEnv("OPENCLAW_TEST_PERF_REPORT_ONLY", env),
+      maxWallMs: readBudgetEnvNumber("NATESCLAW_TEST_PERF_MAX_WALL_MS", env),
+      baselineWallMs: readBudgetEnvNumber("NATESCLAW_TEST_PERF_BASELINE_WALL_MS", env),
+      maxRegressionPct: readBudgetEnvNumber("NATESCLAW_TEST_PERF_MAX_REGRESSION_PCT", env) ?? 10,
+      reportOnly: readBooleanEnv("NATESCLAW_TEST_PERF_REPORT_ONLY", env),
     },
     [
       stringFlag("--config", "config"),
@@ -120,7 +120,7 @@ function main() {
   const startedAt = process.hrtime.bigint();
   const reportPath = runVitestJsonReport({
     config: opts.config,
-    prefix: "openclaw-vitest-perf",
+    prefix: "natesclaw-vitest-perf",
   });
   const elapsedMs = Number.parseFloat(String(process.hrtime.bigint() - startedAt)) / 1_000_000;
 

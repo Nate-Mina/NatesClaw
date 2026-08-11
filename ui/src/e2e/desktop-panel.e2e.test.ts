@@ -29,7 +29,7 @@ function sessionsList(placement: "local" | "active") {
 
 async function openPalette(page: import("playwright").Page) {
   await page.evaluate(() => {
-    window.dispatchEvent(new CustomEvent("openclaw:command-palette-open"));
+    window.dispatchEvent(new CustomEvent("natesclaw:command-palette-open"));
   });
   await page.getByRole("combobox", { name: "Search chats and commands…" }).waitFor();
 }
@@ -38,7 +38,7 @@ async function openDesktopPanel(page: import("playwright").Page) {
   await page.goto(`${suite.server.baseUrl}chat`);
   await openPalette(page);
   await page.getByRole("option", { name: "Desktop", exact: true }).click();
-  const panel = page.locator("openclaw-desktop-panel");
+  const panel = page.locator("natesclaw-desktop-panel");
   await panel.locator("section[aria-label='Desktop']").waitFor();
   return panel;
 }
@@ -99,12 +99,12 @@ suite.define(() => {
 
       await page.evaluate(() => {
         window.dispatchEvent(
-          new CustomEvent("openclaw:desktop-toggle", { detail: { open: true } }),
+          new CustomEvent("natesclaw:desktop-toggle", { detail: { open: true } }),
         );
       });
       await page.waitForTimeout(250);
       expect(
-        await page.locator("openclaw-desktop-panel section[aria-label='Desktop']").count(),
+        await page.locator("natesclaw-desktop-panel section[aria-label='Desktop']").count(),
       ).toBe(0);
       expect(await gateway.getRequests("environments.list")).toHaveLength(0);
     });

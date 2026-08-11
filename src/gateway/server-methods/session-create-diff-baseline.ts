@@ -1,15 +1,15 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveAgentWorkspaceDir } from "../../agents/agent-scope.js";
 import { ensureAgentWorkspace } from "../../agents/workspace.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { ensureSessionDiffBaseline } from "../../sessions/session-diff-baseline.js";
 import { sessionLog } from "./sessions-shared.js";
 
 async function prepareSessionDiffBaseline(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry: SessionEntry;
   sessionKey: string;
   storePath: string;
@@ -34,7 +34,7 @@ async function prepareSessionDiffBaseline(params: {
 
 export async function captureCreatedSessionDiffBaseline(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry: SessionEntry;
   key: string;
   storePath: string;

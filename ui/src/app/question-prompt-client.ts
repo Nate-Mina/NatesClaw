@@ -2,8 +2,8 @@
 import {
   DEFAULT_GATEWAY_REQUEST_TIMEOUT_MS,
   type GatewayProtocolRequestOptions,
-} from "@openclaw/gateway-client/browser";
-import type { QuestionResolvedEvent } from "@openclaw/gateway-protocol";
+} from "@natesclaw/gateway-client/browser";
+import type { QuestionResolvedEvent } from "@natesclaw/gateway-protocol";
 
 export type QuestionClient = {
   request: (

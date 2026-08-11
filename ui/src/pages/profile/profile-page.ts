@@ -30,13 +30,13 @@ import { renderSettingsWorkspace } from "../../components/settings-workspace.ts"
 import { t } from "../../i18n/index.ts";
 import { AuthenticatedAvatarRouteLoader } from "../../lib/authenticated-avatar-route.ts";
 import { resolveAgentAvatarUrl, resolveAssistantTextAvatar } from "../../lib/avatar.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { PROFILE_SETTINGS_TARGET_IDS } from "../config/settings-targets.ts";
 import "../../styles/profile.css";
 import { processProfileAvatar, ProfileAvatarError } from "./avatar-processing.ts";
 import { renderIdentitySection } from "./identity-section.ts";
 
-const PROFILE_DOCS_URL = "https://docs.openclaw.ai/concepts/user-model";
+const PROFILE_DOCS_URL = "https://docs.natesclaw.ai/concepts/user-model";
 
 function toIdentityErrorMessage(error: unknown): string {
   if (error instanceof Error && error.message.trim()) {
@@ -47,7 +47,7 @@ function toIdentityErrorMessage(error: unknown): string {
     : t("profilePage.identity.profileUnavailable");
 }
 
-export class ProfilePage extends OpenClawLightDomElement {
+export class ProfilePage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: false })
   private context!: ApplicationContext;
 
@@ -393,7 +393,7 @@ export class ProfilePage extends OpenClawLightDomElement {
         <div class="profile-hero__name">${name}</div>
         <div class="profile-hero__handle">
           <span>@${agentId}</span>
-          <span class="profile-hero__badge">OpenClaw</span>
+          <span class="profile-hero__badge">Natesclaw</span>
         </div>
       </section>
     `);
@@ -444,6 +444,6 @@ export class ProfilePage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-profile-page")) {
-  customElements.define("openclaw-profile-page", ProfilePage);
+if (!customElements.get("natesclaw-profile-page")) {
+  customElements.define("natesclaw-profile-page", ProfilePage);
 }

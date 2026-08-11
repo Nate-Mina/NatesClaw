@@ -10,8 +10,8 @@ import {
   readFileDescriptorBoundedSync as readFileDescriptorBoundedSyncFsSafe,
   type RootFileOpenFailure,
   type RootFileOpenResult,
-} from "@openclaw/fs-safe/advanced";
-import { FsSafeError } from "@openclaw/fs-safe/errors";
+} from "@natesclaw/fs-safe/advanced";
+import { FsSafeError } from "@natesclaw/fs-safe/errors";
 
 // Root-scoped file open helpers. Use these for user paths that must stay under
 // an already trusted boundary.
@@ -22,7 +22,7 @@ export {
   openRootFileSync,
   type RootFileOpenFailure,
   type RootFileOpenResult,
-} from "@openclaw/fs-safe/advanced";
+} from "@natesclaw/fs-safe/advanced";
 
 /**
  * Opens a root-scoped file after canonicalizing symlink parents. fs-safe
@@ -80,19 +80,19 @@ export function describeRootFileOpenFailure(params: {
   });
 }
 
-function preserveOpenClawOverflowError(error: unknown, maxBytes: number): never {
+function preserveNatesclawOverflowError(error: unknown, maxBytes: number): never {
   if (error instanceof FsSafeError && error.code === "too-large") {
     throw new RangeError(`File exceeds ${maxBytes} bytes`, { cause: error });
   }
   throw error;
 }
 
-/** Read a pinned descriptor without changing OpenClaw's user-facing overflow error. */
+/** Read a pinned descriptor without changing Natesclaw's user-facing overflow error. */
 export async function readFileDescriptorBounded(fd: number, maxBytes: number): Promise<Buffer> {
   try {
     return await readFileDescriptorBoundedFsSafe(fd, maxBytes);
   } catch (error) {
-    return preserveOpenClawOverflowError(error, maxBytes);
+    return preserveNatesclawOverflowError(error, maxBytes);
   }
 }
 
@@ -101,6 +101,6 @@ export function readFileDescriptorBoundedSync(fd: number, maxBytes: number): Buf
   try {
     return readFileDescriptorBoundedSyncFsSafe(fd, maxBytes);
   } catch (error) {
-    return preserveOpenClawOverflowError(error, maxBytes);
+    return preserveNatesclawOverflowError(error, maxBytes);
   }
 }

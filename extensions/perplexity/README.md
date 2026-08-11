@@ -1,12 +1,12 @@
-# OpenClaw Perplexity Plugin
+# Natesclaw Perplexity Plugin
 
-Official OpenClaw plugin for Perplexity.
+Official Natesclaw plugin for Perplexity.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/perplexity-plugin
-openclaw gateway restart
+natesclaw plugins install @natesclaw/perplexity-plugin
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/tools/perplexity-search> for setup and configuration.
+See <https://docs.natesclaw.ai/tools/perplexity-search> for setup and configuration.

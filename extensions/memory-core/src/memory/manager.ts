@@ -1,24 +1,24 @@
 // Memory Core plugin module implements manager behavior.
 import type { DatabaseSync } from "node:sqlite";
 import type { FSWatcher } from "chokidar";
-import { resolveAgentConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveAgentConfig } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   formatErrorMessage,
   readErrorName,
   toErrorObject,
-} from "openclaw/plugin-sdk/error-runtime";
-import { listRegisteredMemoryEmbeddingProviderAdapters } from "openclaw/plugin-sdk/memory-core-host-embedding-registry";
-import { classifyMemoryMultimodalPath } from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "natesclaw/plugin-sdk/error-runtime";
+import { listRegisteredMemoryEmbeddingProviderAdapters } from "natesclaw/plugin-sdk/memory-core-host-embedding-registry";
+import { classifyMemoryMultimodalPath } from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   createSubsystemLogger,
   resolveGlobalSingleton,
   resolveAgentDir,
   resolveAgentWorkspaceDir,
   resolveMemorySearchConfig,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
-import { extractKeywords } from "openclaw/plugin-sdk/memory-core-host-engine-sessions";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-foundation";
+import { extractKeywords } from "natesclaw/plugin-sdk/memory-core-host-engine-sessions";
 import {
   readCuratedProjectMemoryCandidates,
   readMemoryFile,
@@ -36,10 +36,10 @@ import {
   type MemorySessionSyncTarget,
   type MemorySource,
   type MemorySyncParams,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
-import { redactSensitiveText } from "openclaw/plugin-sdk/security-runtime";
-import { uniqueValues } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
+import { normalizeAgentId } from "natesclaw/plugin-sdk/routing";
+import { redactSensitiveText } from "natesclaw/plugin-sdk/security-runtime";
+import { uniqueValues } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveMemoryCoreLocalServiceHostIdentity,
   type MemoryCoreAcquireLocalService,
@@ -92,7 +92,7 @@ import { resolvePersistedMemoryVectorIndexState } from "./manager-vector-rebuild
 import { applyProjectRanking } from "./project-ranking.js";
 import { applyTemporalDecayToHybridResults } from "./temporal-decay.js";
 
-const LOCAL_EMBEDDING_RUNTIME_FACTS = Symbol.for("openclaw.localEmbeddingRuntimeFacts");
+const LOCAL_EMBEDDING_RUNTIME_FACTS = Symbol.for("natesclaw.localEmbeddingRuntimeFacts");
 
 function getLocalEmbeddingRuntimeFacts(provider: EmbeddingProvider | null): unknown {
   if (!provider) {
@@ -107,10 +107,10 @@ const VECTOR_TABLE = MEMORY_INDEX_VECTOR_TABLE;
 const FTS_TABLE = MEMORY_INDEX_FTS_TABLE;
 const PATH_FTS_TABLE = MEMORY_INDEX_PATHS_FTS_TABLE;
 const EMBEDDING_CACHE_TABLE = MEMORY_EMBEDDING_CACHE_TABLE;
-const MEMORY_INDEX_MANAGER_CACHE_KEY = Symbol.for("openclaw.memoryIndexManagerCache");
-const MEMORY_INDEX_MANAGER_SCOPE_CLOSES_KEY = Symbol.for("openclaw.memoryIndexManagerScopeCloses");
+const MEMORY_INDEX_MANAGER_CACHE_KEY = Symbol.for("natesclaw.memoryIndexManagerCache");
+const MEMORY_INDEX_MANAGER_SCOPE_CLOSES_KEY = Symbol.for("natesclaw.memoryIndexManagerScopeCloses");
 const MEMORY_INDEX_MANAGER_GLOBAL_LIFECYCLE_KEY = Symbol.for(
-  "openclaw.memoryIndexManagerGlobalLifecycle.v3",
+  "natesclaw.memoryIndexManagerGlobalLifecycle.v3",
 );
 const EMBEDDING_PROBE_CACHE_TTL_MS = 30_000;
 const KEYWORD_FALLBACK_SEARCH_TERM_LIMIT = 6;
@@ -242,7 +242,7 @@ export async function closeAllMemoryIndexManagers(): Promise<void> {
 }
 
 export async function closeMemoryIndexManagersForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
 }): Promise<void> {
   await closeMemoryIndexManagersForScope({
@@ -270,7 +270,7 @@ function resolveEffectiveMemorySearchSettings(
 }
 
 function resolveConfiguredMemoryEmbeddingProvider(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
 }): string | undefined {
   const agentEntry = resolveAgentConfig(params.cfg, normalizeAgentId(params.agentId));
@@ -278,7 +278,7 @@ function resolveConfiguredMemoryEmbeddingProvider(params: {
 }
 
 function resolveMemoryEmbeddingProviderRequirement(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   settings: ResolvedMemorySearchConfig;
 }): MemoryEmbeddingProviderRequirement {
@@ -420,7 +420,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
   private readonly cacheKey: string;
   private readonly purpose: MemoryIndexManagerPurpose;
   protected override readonly acquireLocalService?: MemoryCoreAcquireLocalService;
-  protected readonly cfg: OpenClawConfig;
+  protected readonly cfg: NatesclawConfig;
   protected readonly agentId: string;
   protected readonly workspaceDir: string;
   protected readonly settings: ResolvedMemorySearchConfig;
@@ -497,7 +497,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
   };
 
   private static async loadProviderResult(params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId: string;
     settings: ResolvedMemorySearchConfig;
     acquireLocalService?: MemoryCoreAcquireLocalService;
@@ -511,7 +511,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
   }
 
   static async get(params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId: string;
     purpose?: MemoryIndexManagerPurpose;
     acquireLocalService?: MemoryCoreAcquireLocalService;
@@ -534,7 +534,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
   }
 
   private static async getWithinGlobalLifecycle(params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId: string;
     purpose?: MemoryIndexManagerPurpose;
     acquireLocalService?: MemoryCoreAcquireLocalService;
@@ -606,7 +606,7 @@ export class MemoryIndexManager extends MemoryManagerEmbeddingOps implements Mem
 
   private constructor(params: {
     cacheKey: string;
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     agentId: string;
     workspaceDir: string;
     settings: ResolvedMemorySearchConfig;

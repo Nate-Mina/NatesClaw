@@ -3,9 +3,9 @@ import {
   filterChannelInboundQuoteContext,
   formatMediaPlaceholderText,
   resolveInboundSupplementalSenderAllowed,
-} from "openclaw/plugin-sdk/channel-inbound";
-import type { HistoryMediaEntry } from "openclaw/plugin-sdk/reply-history";
-import { filterSupplementalContextItems } from "openclaw/plugin-sdk/security-runtime";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import type { HistoryMediaEntry } from "natesclaw/plugin-sdk/reply-history";
+import { filterSupplementalContextItems } from "natesclaw/plugin-sdk/security-runtime";
 import {
   getComparableIdentityValues,
   getReplyContext,

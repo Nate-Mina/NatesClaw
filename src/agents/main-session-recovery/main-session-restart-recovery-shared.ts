@@ -10,7 +10,7 @@ import {
   hasSessionEntriesByStatusReadOnly,
   type SessionTranscriptTurnExpectedState,
 } from "../../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { resolveAgentSessionDirs } from "../session-dirs.js";
 
@@ -81,12 +81,12 @@ export function hasCurrentProcessOwner(params: {
 }
 
 export async function resolveRestartRecoveryStorePaths(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   stateDir?: string;
 }): Promise<string[]> {
   const storePaths = new Set<string>();
   const stateDir = params.stateDir ?? resolveStateDir(process.env);
-  const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+  const env = { ...process.env, NATESCLAW_STATE_DIR: stateDir };
   if (params.cfg) {
     // Recovery must not reopen a deleted or otherwise unconfigured agent database merely
     // because its old directory still exists on disk. Those stores are intentionally fenced

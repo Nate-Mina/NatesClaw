@@ -4,7 +4,7 @@
 
 import { AUTOMATIONS_TOOL_NAME } from "./tools/automations-tool-name.js";
 
-export type CoreToolFactoryFamily = "base-coding" | "shell" | "openclaw";
+export type CoreToolFactoryFamily = "base-coding" | "shell" | "natesclaw";
 
 type CoreToolFactoryDescriptor = {
   name: string;
@@ -18,61 +18,61 @@ const CORE_TOOL_FACTORY_DESCRIPTORS = [
   { name: "apply_patch", family: "shell" },
   { name: "exec", family: "shell" },
   { name: "process", family: "shell" },
-  { name: "agents_list", family: "openclaw" },
+  { name: "agents_list", family: "natesclaw" },
   // Static factory identity only; runtime and tools.catalog apply the Swarm config gate.
-  { name: "agents_wait", family: "openclaw" },
-  { name: "ask_user", family: "openclaw" },
-  { name: "openclaw", family: "openclaw" },
-  { name: "computer", family: "openclaw" },
-  { name: "conversations_list", family: "openclaw" },
-  { name: "conversations_send", family: "openclaw" },
-  { name: "conversations_turn", family: "openclaw" },
-  { name: AUTOMATIONS_TOOL_NAME, family: "openclaw" },
-  { name: "dashboard", family: "openclaw" },
-  { name: "gateway", family: "openclaw" },
-  { name: "get_goal", family: "openclaw" },
-  { name: "heartbeat_respond", family: "openclaw" },
-  { name: "image", family: "openclaw" },
-  { name: "image_generate", family: "openclaw" },
-  { name: "message", family: "openclaw" },
-  { name: "mobile_ui", family: "openclaw" },
-  { name: "music_generate", family: "openclaw" },
-  { name: "nodes", family: "openclaw" },
-  { name: "pdf", family: "openclaw" },
-  { name: "session_status", family: "openclaw" },
-  { name: "show_widget", family: "openclaw" },
-  { name: "sessions", family: "openclaw" },
-  { name: "sessions_history", family: "openclaw" },
-  { name: "sessions_list", family: "openclaw" },
-  { name: "sessions_search", family: "openclaw" },
-  { name: "sessions_send", family: "openclaw" },
-  { name: "sessions_spawn", family: "openclaw" },
-  { name: "sessions_yield", family: "openclaw" },
-  { name: "structured_output", family: "openclaw" },
-  { name: "skill_workshop", family: "openclaw" },
-  { name: "suggest_task", family: "openclaw" },
-  { name: "create_goal", family: "openclaw" },
-  { name: "subagents", family: "openclaw" },
-  { name: "terminal", family: "openclaw" },
-  { name: "transcripts", family: "openclaw" },
-  { name: "tts", family: "openclaw" },
-  { name: "update_goal", family: "openclaw" },
-  { name: "update_plan", family: "openclaw" },
-  { name: "dismiss_task", family: "openclaw" },
-  { name: "video_generate", family: "openclaw" },
-  { name: "web_fetch", family: "openclaw" },
-  { name: "web_search", family: "openclaw" },
+  { name: "agents_wait", family: "natesclaw" },
+  { name: "ask_user", family: "natesclaw" },
+  { name: "natesclaw", family: "natesclaw" },
+  { name: "computer", family: "natesclaw" },
+  { name: "conversations_list", family: "natesclaw" },
+  { name: "conversations_send", family: "natesclaw" },
+  { name: "conversations_turn", family: "natesclaw" },
+  { name: AUTOMATIONS_TOOL_NAME, family: "natesclaw" },
+  { name: "dashboard", family: "natesclaw" },
+  { name: "gateway", family: "natesclaw" },
+  { name: "get_goal", family: "natesclaw" },
+  { name: "heartbeat_respond", family: "natesclaw" },
+  { name: "image", family: "natesclaw" },
+  { name: "image_generate", family: "natesclaw" },
+  { name: "message", family: "natesclaw" },
+  { name: "mobile_ui", family: "natesclaw" },
+  { name: "music_generate", family: "natesclaw" },
+  { name: "nodes", family: "natesclaw" },
+  { name: "pdf", family: "natesclaw" },
+  { name: "session_status", family: "natesclaw" },
+  { name: "show_widget", family: "natesclaw" },
+  { name: "sessions", family: "natesclaw" },
+  { name: "sessions_history", family: "natesclaw" },
+  { name: "sessions_list", family: "natesclaw" },
+  { name: "sessions_search", family: "natesclaw" },
+  { name: "sessions_send", family: "natesclaw" },
+  { name: "sessions_spawn", family: "natesclaw" },
+  { name: "sessions_yield", family: "natesclaw" },
+  { name: "structured_output", family: "natesclaw" },
+  { name: "skill_workshop", family: "natesclaw" },
+  { name: "suggest_task", family: "natesclaw" },
+  { name: "create_goal", family: "natesclaw" },
+  { name: "subagents", family: "natesclaw" },
+  { name: "terminal", family: "natesclaw" },
+  { name: "transcripts", family: "natesclaw" },
+  { name: "tts", family: "natesclaw" },
+  { name: "update_goal", family: "natesclaw" },
+  { name: "update_plan", family: "natesclaw" },
+  { name: "dismiss_task", family: "natesclaw" },
+  { name: "video_generate", family: "natesclaw" },
+  { name: "web_fetch", family: "natesclaw" },
+  { name: "web_search", family: "natesclaw" },
 ] as const satisfies readonly CoreToolFactoryDescriptor[];
 
 const CORE_TOOL_FACTORY_FAMILY_BY_NAME = new Map<string, CoreToolFactoryFamily>(
   CORE_TOOL_FACTORY_DESCRIPTORS.map(({ name, family }) => [name, family]),
 );
 
-export type OpenClawCodingToolConstructionPlan = {
+export type NatesclawCodingToolConstructionPlan = {
   includeBaseCodingTools: boolean;
   includeShellTools: boolean;
   includeChannelTools: boolean;
-  includeOpenClawTools: boolean;
+  includeNatesclawTools: boolean;
   includePluginTools: boolean;
 };
 

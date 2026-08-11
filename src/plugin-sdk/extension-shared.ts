@@ -1,8 +1,8 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 // Extension shared helpers expose cross-plugin runtime utilities that remain SDK-safe.
-import { createAmbientNodeProxyAgent, hasAmbientNodeProxyConfigured } from "@openclaw/proxyline";
+import { createAmbientNodeProxyAgent, hasAmbientNodeProxyConfigured } from "@natesclaw/proxyline";
 import type { z } from "zod";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import { resolveActiveManagedProxyTlsOptions } from "../infra/net/proxy/managed-proxy-undici.js";
 import { resolveDefaultSecretProviderAlias } from "../secrets/ref-contract.js";
 import { createDeferredCore } from "../shared/deferred.js";
@@ -218,7 +218,7 @@ export function mapPluginConfigIssues(
 
 /** Checks whether a read-only plugin path may resolve a secret through an env provider. */
 export function canResolveEnvSecretRefInReadOnlyPath(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   provider: string;
   id: string;
 }): boolean {

@@ -5,7 +5,7 @@
  */
 import { getRuntimeConfig } from "../../../config/config.js";
 import { runWithoutOwnedSessionTranscriptWrites } from "../../../config/sessions/transcript-write-context.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { callGateway } from "../../../gateway/call.js";
 import {
   getAgentEventLifecycleGeneration,
@@ -275,7 +275,7 @@ export function createSubagentRunManager(params: {
   resumeSubagentRun(runId: string): void;
   clearPendingLifecycleError(runId: string): void;
   clearPendingLifecycleTimeout(runId: string): void;
-  resolveSubagentWaitTimeoutMs(cfg: OpenClawConfig, runTimeoutSeconds?: number): number;
+  resolveSubagentWaitTimeoutMs(cfg: NatesclawConfig, runTimeoutSeconds?: number): number;
   scheduleSweep(args?: { delayMs?: number }): void;
   resolveSubagentSessionCompletion(args: {
     childSessionKey: string;

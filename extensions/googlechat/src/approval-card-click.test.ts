@@ -1,4 +1,4 @@
-import type { ApprovalResolveResult } from "openclaw/plugin-sdk/approval-gateway-runtime";
+import type { ApprovalResolveResult } from "natesclaw/plugin-sdk/approval-gateway-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildGoogleChatApprovalActionParameters,
@@ -13,7 +13,7 @@ import type { GoogleChatEvent } from "./types.js";
 const resolveApprovalOverGateway = vi.hoisted(() => vi.fn());
 const updateGoogleChatMessage = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/approval-gateway-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/approval-gateway-runtime", () => ({
   resolveApprovalOverGateway,
 }));
 vi.mock("./api.js", () => ({ updateGoogleChatMessage }));
@@ -93,7 +93,7 @@ function createCardClickEvent(token: string, userName = "users/123"): GoogleChat
     message: { name: "spaces/AAA/messages/msg-1" },
     user: { name: userName },
     action: {
-      actionMethodName: "openclaw.approval",
+      actionMethodName: "natesclaw.approval",
       parameters: buildGoogleChatApprovalActionParameters(token),
     },
   };
@@ -201,7 +201,7 @@ describe("maybeHandleGoogleChatApprovalCardClick", () => {
           user: { name: "users/123" },
           commonEventObject: {
             parameters: {
-              openclaw_action: "approval",
+              natesclaw_action: "approval",
               token: "token-addon",
             },
           },
@@ -239,9 +239,9 @@ describe("maybeHandleGoogleChatApprovalCardClick", () => {
           message: { name: "spaces/AAA/messages/msg-1" },
           user: { name: "users/123" },
           common: {
-            invokedFunction: "openclaw.approval",
+            invokedFunction: "natesclaw.approval",
             parameters: {
-              openclaw_action: "approval",
+              natesclaw_action: "approval",
               token: "token-common",
             },
           },
@@ -282,7 +282,7 @@ describe("maybeHandleGoogleChatApprovalCardClick", () => {
           commonEventObject: {
             invokedFunction: "https://chat-app.example.test/googlechat",
             parameters: {
-              openclaw_action: "approval",
+              natesclaw_action: "approval",
               token: "token-url",
             },
           },

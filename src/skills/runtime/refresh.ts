@@ -2,10 +2,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import chokidar, { type FSWatcher } from "chokidar";
 import { isDefaultStateDir } from "../../config/paths.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { CONFIG_DIR, resolveUserPath } from "../../utils.js";
 import { resolvePluginSkillDirs } from "../loading/plugin-skills.js";
@@ -90,16 +90,16 @@ const DEFAULT_SKILLS_WATCH_IGNORED: RegExp[] = [
   /(^|[\\/])\.cache([\\/]|$)/,
 ];
 
-function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): WatchTarget[] {
+function resolveWatchTargets(workspaceDir: string, config?: NatesclawConfig): WatchTarget[] {
   const baseRoots: Array<{ path: string; source: string }> = [];
   if (workspaceDir.trim()) {
-    baseRoots.push({ path: path.join(workspaceDir, "skills"), source: "openclaw-workspace" });
+    baseRoots.push({ path: path.join(workspaceDir, "skills"), source: "natesclaw-workspace" });
     baseRoots.push({
       path: path.join(workspaceDir, ".agents", "skills"),
       source: "agents-skills-project",
     });
   }
-  baseRoots.push({ path: path.join(CONFIG_DIR, "skills"), source: "openclaw-managed" });
+  baseRoots.push({ path: path.join(CONFIG_DIR, "skills"), source: "natesclaw-managed" });
   if (isDefaultStateDir()) {
     baseRoots.push({
       path: path.join(os.homedir(), ".agents", "skills"),
@@ -153,7 +153,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       resolved,
-      "openclaw-extra",
+      "natesclaw-extra",
       allowedSymlinkTargetRealPaths,
       rootDepth,
       resolved,
@@ -161,7 +161,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       path.join(resolved, "skills"),
-      "openclaw-extra",
+      "natesclaw-extra",
       allowedSymlinkTargetRealPaths,
       GROUPED_SKILLS_WATCH_DEPTH,
       resolved,
@@ -174,7 +174,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       dir,
-      "openclaw-plugin",
+      "natesclaw-plugin",
       allowedSymlinkTargetRealPaths,
       rootDepth,
       dir,
@@ -182,7 +182,7 @@ function resolveWatchTargets(workspaceDir: string, config?: OpenClawConfig): Wat
     addTrustedSymlinkSkillWatchTargets(
       targets,
       path.join(dir, "skills"),
-      "openclaw-plugin",
+      "natesclaw-plugin",
       allowedSymlinkTargetRealPaths,
       GROUPED_SKILLS_WATCH_DEPTH,
       dir,
@@ -343,7 +343,7 @@ function isTrustedSymlinkSkillTarget(
   targetRealPath: string,
   allowedSymlinkTargetRealPaths: readonly string[],
 ): boolean {
-  if (source === "openclaw-managed" || source === "agents-skills-personal") {
+  if (source === "natesclaw-managed" || source === "agents-skills-personal") {
     return true;
   }
   return (
@@ -648,7 +648,7 @@ function evictIdleWorkspaceWatchStates(now: number): void {
   }
 }
 
-export function ensureSkillsWatcher(params: { workspaceDir: string; config?: OpenClawConfig }) {
+export function ensureSkillsWatcher(params: { workspaceDir: string; config?: NatesclawConfig }) {
   const workspaceDir = params.workspaceDir.trim();
   if (!workspaceDir) {
     return;
@@ -719,7 +719,7 @@ async function resetSkillsRefreshForTest(): Promise<void> {
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.skillsRefreshTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.skillsRefreshTestApi")] = {
     resetSkillsRefreshForTest,
   };
 }

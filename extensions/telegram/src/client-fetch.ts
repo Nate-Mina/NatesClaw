@@ -1,7 +1,7 @@
 // Telegram plugin module implements client fetch behavior.
 import type { ApiClientOptions } from "grammy";
-import { responseWithRelease } from "openclaw/plugin-sdk/fetch-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { responseWithRelease } from "natesclaw/plugin-sdk/fetch-runtime";
+import { normalizeOptionalLowercaseString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { TelegramTransport } from "./fetch.js";
 import { isTelegramMisdirectedRequestError, tagTelegramNetworkError } from "./network-errors.js";
 import { resolveTelegramRequestTimeoutMs } from "./request-timeouts.js";

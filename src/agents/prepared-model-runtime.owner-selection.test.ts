@@ -27,7 +27,7 @@ describe("prepared model runtime owner selection", () => {
   });
 
   it("serializes live catalog sources for owners sharing one agent directory", async () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-shared-catalog-source-"));
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-shared-catalog-source-"));
     try {
       const agentDir = path.join(rootDir, "agent");
       fs.mkdirSync(agentDir);
@@ -38,7 +38,7 @@ describe("prepared model runtime owner selection", () => {
       mocks.configuredWorkspaces.set("agent-b", "/tmp/source-workspace-b");
       let activeWrites = 0;
       let peakActiveWrites = 0;
-      mocks.ensureOpenClawModelsJson.mockImplementation(async (_config, targetDir, options) => {
+      mocks.ensureNatesclawModelsJson.mockImplementation(async (_config, targetDir, options) => {
         activeWrites += 1;
         peakActiveWrites = Math.max(peakActiveWrites, activeWrites);
         await new Promise<void>((resolve) => {
@@ -63,7 +63,7 @@ describe("prepared model runtime owner selection", () => {
 
       await refreshPreparedModelRuntimeSnapshots({});
 
-      expect(mocks.ensureOpenClawModelsJson).toHaveBeenCalledTimes(2);
+      expect(mocks.ensureNatesclawModelsJson).toHaveBeenCalledTimes(2);
       expect(peakActiveWrites).toBe(1);
       expect(
         mocks.discoverModels.mock.calls.map((call) => {
@@ -93,7 +93,7 @@ describe("prepared model runtime owner selection", () => {
     });
 
     expect(snapshot.workspaceDir).toBe("/tmp/gateway-launch-workspace");
-    expect(mocks.ensureOpenClawModelsJson).toHaveBeenCalledOnce();
+    expect(mocks.ensureNatesclawModelsJson).toHaveBeenCalledOnce();
   });
 
   it("resolves a gateway-published owner only for requests carrying the binding flag", async () => {
@@ -170,7 +170,7 @@ describe("prepared model runtime owner selection", () => {
     expect(configured?.pluginRegistry).not.toBe(dispatchRuntime?.inboundPluginRegistry);
     expect(mocks.prepareStaticCatalog).toHaveBeenCalledOnce();
     expect(mocks.discoverModels).toHaveBeenCalledOnce();
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
   });
 
   it("bounds retained gateway run owners while reusing recent selections", async () => {
@@ -275,7 +275,7 @@ describe("prepared model runtime owner selection", () => {
       prepareModelRuntimeSnapshot({
         config,
         agentDir: "/tmp/unused-agent",
-        env: { ...process.env, OPENCLAW_PREPARED_RUNTIME_TEST_SCOPE: "different" },
+        env: { ...process.env, NATESCLAW_PREPARED_RUNTIME_TEST_SCOPE: "different" },
       }),
     ).rejects.toThrow("prepared model runtime owner was not published");
   });
@@ -348,7 +348,7 @@ describe("prepared model runtime owner selection", () => {
         workspaceDir: "/tmp/workspace-removed",
       }),
     ).rejects.toThrow("prepared model runtime owner was not published");
-    expect(mocks.ensureOpenClawModelsJson).toHaveBeenCalledTimes(3);
+    expect(mocks.ensureNatesclawModelsJson).toHaveBeenCalledTimes(3);
   });
 
   it("shares static workspace facts without eager per-agent catalog work", async () => {
@@ -378,7 +378,7 @@ describe("prepared model runtime owner selection", () => {
       },
     });
 
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
     expect(mocks.loadAgentRuntimePluginRegistryHandle).toHaveBeenCalledTimes(4);
     expect(mocks.resolveAmbientCredentials).toHaveBeenCalledTimes(2);
     expect(mocks.prepareStaticCatalog).toHaveBeenCalledTimes(2);
@@ -403,8 +403,8 @@ describe("prepared model runtime owner selection", () => {
       workspaceDir: "/tmp/shared-prepared-runtime-workspace",
     });
     await snapshot?.loadFullModelCatalog?.();
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledOnce();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledOnce();
     expect(mocks.buildPreparedModelCatalogSnapshot).toHaveBeenCalledOnce();
   });
 
@@ -462,7 +462,7 @@ describe("prepared model runtime owner selection", () => {
   });
 
   it("parses one static registry per exact agent catalog and credential generation", async () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-prepared-registry-groups-"));
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-prepared-registry-groups-"));
     try {
       mocks.configuredAgentIds = ["agent-a", "agent-b", "agent-c"];
       for (const agentId of mocks.configuredAgentIds) {
@@ -521,7 +521,7 @@ describe("prepared model runtime owner selection", () => {
   });
 
   it("keeps registry parsing isolated across OAuth provider generations", async () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-prepared-oauth-groups-"));
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-prepared-oauth-groups-"));
     try {
       mocks.configuredAgentIds = ["agent-a", "agent-b", "agent-c"];
       const sharedCatalog = JSON.stringify({
@@ -591,7 +591,7 @@ describe("prepared model runtime owner selection", () => {
     }));
     let activePlans = 0;
     let peakActivePlans = 0;
-    mocks.planOpenClawModelsJsonSource.mockImplementation(async (_config, agentDir) => {
+    mocks.planNatesclawModelsJsonSource.mockImplementation(async (_config, agentDir) => {
       activePlans += 1;
       peakActivePlans = Math.max(peakActivePlans, activePlans);
       await Promise.resolve();
@@ -618,8 +618,8 @@ describe("prepared model runtime owner selection", () => {
       })?.loadFullModelCatalog?.();
     await Promise.all([loadAgentCatalog("agent-a"), loadAgentCatalog("agent-b")]);
 
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledTimes(2);
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledTimes(2);
     expect(mocks.buildPreparedModelCatalogSnapshot).toHaveBeenCalledTimes(2);
     expect(peakActivePlans).toBe(1);
     expect(
@@ -649,7 +649,7 @@ describe("prepared model runtime owner selection", () => {
       workspaceDir: "/tmp/shared-prepared-runtime-workspace",
     });
     let releaseLazyPlan: (() => void) | undefined;
-    mocks.planOpenClawModelsJsonSource.mockImplementation(async (_config, agentDir) => {
+    mocks.planNatesclawModelsJsonSource.mockImplementation(async (_config, agentDir) => {
       if (!releaseLazyPlan) {
         await new Promise<void>((resolve) => {
           releaseLazyPlan = resolve;
@@ -665,14 +665,14 @@ describe("prepared model runtime owner selection", () => {
       { gatewayLifecycle: true, catalogMode: "live" },
     );
     await Promise.resolve();
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledOnce();
-    expect(mocks.ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledOnce();
+    expect(mocks.ensureNatesclawModelsJson).not.toHaveBeenCalled();
 
     releaseLazyPlan?.();
     await expect(staleCatalogLoad).rejects.toThrow("superseded");
     await replacement;
-    expect(mocks.planOpenClawModelsJsonSource).toHaveBeenCalledOnce();
-    expect(mocks.ensureOpenClawModelsJson).toHaveBeenCalledOnce();
+    expect(mocks.planNatesclawModelsJsonSource).toHaveBeenCalledOnce();
+    expect(mocks.ensureNatesclawModelsJson).toHaveBeenCalledOnce();
   });
 
   it("stops a superseded same-directory batch before another catalog write", async () => {
@@ -684,7 +684,7 @@ describe("prepared model runtime owner selection", () => {
     const staleConfig = { agents: { defaults: { model: "openai/gpt-5.5" } } };
     const latestConfig = { agents: { defaults: { model: "openai/gpt-5.6" } } };
     let releaseStaleWrite: (() => void) | undefined;
-    mocks.ensureOpenClawModelsJson.mockImplementation(async (config) => {
+    mocks.ensureNatesclawModelsJson.mockImplementation(async (config) => {
       if (config === staleConfig && !releaseStaleWrite) {
         await new Promise<void>((resolve) => {
           releaseStaleWrite = resolve;
@@ -701,10 +701,10 @@ describe("prepared model runtime owner selection", () => {
     await expect(stale).rejects.toThrow("superseded");
     await latest;
     expect(
-      mocks.ensureOpenClawModelsJson.mock.calls.filter(([config]) => config === staleConfig),
+      mocks.ensureNatesclawModelsJson.mock.calls.filter(([config]) => config === staleConfig),
     ).toHaveLength(1);
     expect(
-      mocks.ensureOpenClawModelsJson.mock.calls.filter(([config]) => config === latestConfig),
+      mocks.ensureNatesclawModelsJson.mock.calls.filter(([config]) => config === latestConfig),
     ).toHaveLength(2);
   });
 
@@ -719,7 +719,7 @@ describe("prepared model runtime owner selection", () => {
     });
     let releaseSupersededRefresh: (() => void) | undefined;
     let blockedSupersededRefresh = true;
-    mocks.ensureOpenClawModelsJson.mockImplementation(async (_config, agentDir) => {
+    mocks.ensureNatesclawModelsJson.mockImplementation(async (_config, agentDir) => {
       if (agentDir === supersededDir && blockedSupersededRefresh) {
         blockedSupersededRefresh = false;
         await new Promise<void>((resolve) => {
@@ -730,7 +730,7 @@ describe("prepared model runtime owner selection", () => {
     });
 
     mocks.mutationListener?.({ affectsInheritedStores: true });
-    await vi.waitFor(() => expect(mocks.ensureOpenClawModelsJson).toHaveBeenCalledTimes(4));
+    await vi.waitFor(() => expect(mocks.ensureNatesclawModelsJson).toHaveBeenCalledTimes(4));
     const siblingPending = publishPreparedModelRuntimeSnapshot({
       config,
       agentDir: siblingDir,
@@ -739,7 +739,7 @@ describe("prepared model runtime owner selection", () => {
     releaseSupersededRefresh?.();
 
     await expect(siblingPending).resolves.not.toBe(firstSibling);
-    await vi.waitFor(() => expect(mocks.ensureOpenClawModelsJson).toHaveBeenCalledTimes(6));
+    await vi.waitFor(() => expect(mocks.ensureNatesclawModelsJson).toHaveBeenCalledTimes(6));
     await expect(
       prepareModelRuntimeSnapshot({ config, agentDir: supersededDir }),
     ).resolves.toMatchObject({ agentDir: supersededDir });

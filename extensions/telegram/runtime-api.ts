@@ -1,14 +1,14 @@
 // Telegram API module exposes the plugin public contract.
-export type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-export type { ChannelMessageActionAdapter } from "openclaw/plugin-sdk/channel-contract";
+export type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+export type { ChannelMessageActionAdapter } from "natesclaw/plugin-sdk/channel-contract";
 export type { TelegramApiOverride } from "./src/send.js";
 export type {
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  NatesclawPluginService,
+  NatesclawPluginServiceContext,
   PluginLogger,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawConfig as RuntimeOpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-export type { PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import type { NatesclawConfig as RuntimeNatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+export type { PluginRuntime } from "natesclaw/plugin-sdk/runtime-store";
 export type {
   AcpRuntime,
   AcpRuntimeCapabilities,
@@ -20,23 +20,23 @@ export type {
   AcpRuntimeTurnInput,
   AcpRuntimeErrorCode,
   AcpSessionUpdateTag,
-} from "openclaw/plugin-sdk/acp-runtime";
-export { AcpRuntimeError } from "openclaw/plugin-sdk/acp-runtime";
+} from "natesclaw/plugin-sdk/acp-runtime";
+export { AcpRuntimeError } from "natesclaw/plugin-sdk/acp-runtime";
 
 export {
   emptyPluginConfigSchema,
   formatPairingApproveHint,
   getChatChannelMeta,
-} from "openclaw/plugin-sdk/channel-plugin-common";
-export { clearAccountEntryFields } from "openclaw/plugin-sdk/channel-core";
+} from "natesclaw/plugin-sdk/channel-plugin-common";
+export { clearAccountEntryFields } from "natesclaw/plugin-sdk/channel-core";
 export { buildChannelConfigSchema, TelegramConfigSchema } from "./config-api.js";
-export { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
+export { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "natesclaw/plugin-sdk/account-id";
 export {
   PAIRING_APPROVED_MESSAGE,
   buildTokenChannelStatusSummary,
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
-} from "openclaw/plugin-sdk/channel-status";
+} from "natesclaw/plugin-sdk/channel-status";
 export {
   jsonResult,
   readNumberParam,
@@ -45,7 +45,7 @@ export {
   readStringOrNumberParam,
   readStringParam,
   resolvePollMaxSelections,
-} from "openclaw/plugin-sdk/channel-actions";
+} from "natesclaw/plugin-sdk/channel-actions";
 export type { TelegramProbe } from "./src/probe.js";
 export { auditTelegramGroupMembership, collectTelegramUnmentionedGroupIds } from "./src/audit.js";
 export { resolveTelegramRuntimeGroupPolicy } from "./src/group-access.js";
@@ -86,10 +86,10 @@ export {
 } from "./src/thread-bindings.js";
 export { resolveTelegramToken } from "./src/token.js";
 export { setTelegramRuntime } from "./src/runtime.js";
-export type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+export type { ChannelPlugin } from "natesclaw/plugin-sdk/channel-core";
+export type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 export type TelegramAccountConfig = NonNullable<
-  NonNullable<RuntimeOpenClawConfig["channels"]>["telegram"]
+  NonNullable<RuntimeNatesclawConfig["channels"]>["telegram"]
 >;
 export type TelegramActionConfig = NonNullable<TelegramAccountConfig["actions"]>;
 export type TelegramNetworkConfig = NonNullable<TelegramAccountConfig["network"]>;

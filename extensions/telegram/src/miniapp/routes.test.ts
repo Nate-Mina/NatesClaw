@@ -1,30 +1,30 @@
 import crypto from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { Readable } from "node:stream";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createTelegramMiniAppLaunchTickets,
   type TelegramMiniAppLaunchTickets,
 } from "./launch-ticket.js";
 
-type OpenClawPluginHttpRouteParams = Parameters<OpenClawPluginApi["registerHttpRoute"]>[0];
+type NatesclawPluginHttpRouteParams = Parameters<NatesclawPluginApi["registerHttpRoute"]>[0];
 
 const issueDeviceBootstrapToken = vi.hoisted(() =>
   vi.fn(async () => ({ token: "issued", expiresAtMs: Date.now() + 600_000 })),
 );
 const resolveTelegramMiniAppUrls = vi.hoisted(() =>
   vi.fn(async () => ({
-    pageUrl: "https://host.tailnet.ts.net/__openclaw_tg_miniapp/",
-    controlUiUrl: "https://host.tailnet.ts.net/openclaw",
+    pageUrl: "https://host.tailnet.ts.net/__natesclaw_tg_miniapp/",
+    controlUiUrl: "https://host.tailnet.ts.net/natesclaw",
     gatewayUrl: "wss://host.tailnet.ts.net",
   })),
 );
 
-vi.mock("openclaw/plugin-sdk/device-bootstrap", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/device-bootstrap")>()),
+vi.mock("natesclaw/plugin-sdk/device-bootstrap", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/device-bootstrap")>()),
   issueDeviceBootstrapToken,
 }));
 
@@ -56,8 +56,8 @@ class MockResponse {
   }
 }
 
-function createRoute(cfg: OpenClawConfig): OpenClawPluginHttpRouteParams {
-  let route: OpenClawPluginHttpRouteParams | null = null;
+function createRoute(cfg: NatesclawConfig): NatesclawPluginHttpRouteParams {
+  let route: NatesclawPluginHttpRouteParams | null = null;
   const api = createTestPluginApi({
     config: cfg,
     registerHttpRoute(params) {
@@ -72,7 +72,7 @@ function createRoute(cfg: OpenClawConfig): OpenClawPluginHttpRouteParams {
 }
 
 async function callRoute(params: {
-  route: OpenClawPluginHttpRouteParams;
+  route: NatesclawPluginHttpRouteParams;
   method: string;
   url: string;
   body?: string;
@@ -91,7 +91,7 @@ async function callRoute(params: {
   return res;
 }
 
-function config(allowFrom: string[] = ["123456"]): OpenClawConfig {
+function config(allowFrom: string[] = ["123456"]): NatesclawConfig {
   return {
     channels: {
       telegram: {
@@ -138,7 +138,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     const res = await callRoute({
       route,
       method: "GET",
-      url: "/__openclaw_tg_miniapp/?accountId=ops",
+      url: "/__natesclaw_tg_miniapp/?accountId=ops",
     });
 
     expect(res.statusCode).toBe(200);
@@ -152,7 +152,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     const res = await callRoute({
       route,
       method: "POST",
-      url: "/__openclaw_tg_miniapp/auth",
+      url: "/__natesclaw_tg_miniapp/auth",
       contentType: "application/json; charset=utf-8",
       body: authBody({ nonce: "success" }),
     });
@@ -160,7 +160,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.body)).toEqual({
       bootstrapToken: "issued",
-      controlUiUrl: "https://host.tailnet.ts.net/openclaw",
+      controlUiUrl: "https://host.tailnet.ts.net/natesclaw",
       gatewayUrl: "wss://host.tailnet.ts.net",
     });
     expect(issueDeviceBootstrapToken).toHaveBeenCalledWith({
@@ -185,7 +185,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     await callRoute({
       route,
       method: "POST",
-      url: "/__openclaw_tg_miniapp/auth",
+      url: "/__natesclaw_tg_miniapp/auth",
       contentType: "application/json",
       body: JSON.stringify({ initData, launchTicket }),
       ip: "203.0.113.20",
@@ -193,7 +193,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     const replay = await callRoute({
       route,
       method: "POST",
-      url: "/__openclaw_tg_miniapp/auth",
+      url: "/__natesclaw_tg_miniapp/auth",
       contentType: "application/json",
       body: JSON.stringify({ initData, launchTicket }),
       ip: "203.0.113.20",
@@ -213,7 +213,7 @@ describe("registerTelegramMiniAppRoutes", () => {
       callRoute({
         route,
         method: "POST",
-        url: "/__openclaw_tg_miniapp/auth",
+        url: "/__natesclaw_tg_miniapp/auth",
         contentType: "application/json",
         body: JSON.stringify({ initData, launchTicket }),
         ip: "203.0.113.21",
@@ -221,7 +221,7 @@ describe("registerTelegramMiniAppRoutes", () => {
       callRoute({
         route,
         method: "POST",
-        url: "/__openclaw_tg_miniapp/auth",
+        url: "/__natesclaw_tg_miniapp/auth",
         contentType: "application/json",
         body: JSON.stringify({ initData, launchTicket }),
         ip: "203.0.113.22",
@@ -238,7 +238,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     const res = await callRoute({
       route,
       method: "POST",
-      url: "/__openclaw_tg_miniapp/auth",
+      url: "/__natesclaw_tg_miniapp/auth",
       contentType: "application/json",
       body: JSON.stringify({
         initData: signedInitData("123456", "non-owner"),
@@ -260,7 +260,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     const res = await callRoute({
       route,
       method: "POST",
-      url: "/__openclaw_tg_miniapp/auth",
+      url: "/__natesclaw_tg_miniapp/auth",
       contentType: "application/json",
       body: JSON.stringify({
         initData: signedInitData("123456", "missing-ticket"),
@@ -282,7 +282,7 @@ describe("registerTelegramMiniAppRoutes", () => {
     const request = {
       route,
       method: "POST",
-      url: "/__openclaw_tg_miniapp/auth",
+      url: "/__natesclaw_tg_miniapp/auth",
       contentType: "application/json",
       body: JSON.stringify({ initData, launchTicket }),
       ip: "203.0.113.32",
@@ -303,7 +303,7 @@ describe("registerTelegramMiniAppRoutes", () => {
       last = await callRoute({
         route,
         method: "POST",
-        url: "/__openclaw_tg_miniapp/auth",
+        url: "/__natesclaw_tg_miniapp/auth",
         contentType: "application/json",
         body: authBody({ nonce: `rate-${i}` }),
         ip: "203.0.113.40",

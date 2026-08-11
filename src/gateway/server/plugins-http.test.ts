@@ -16,7 +16,7 @@ import {
 
 type PluginHandlerLog = Parameters<typeof createGatewayPluginRequestHandler>[0]["log"];
 
-const CANVAS_WS_PATH = "/__openclaw__/canvas/ws";
+const CANVAS_WS_PATH = "/__natesclaw__/canvas/ws";
 
 function createPluginLog(): PluginHandlerLog {
   return { warn: vi.fn() } as unknown as PluginHandlerLog;
@@ -293,7 +293,7 @@ describe("createGatewayPluginRequestHandler", () => {
       }),
       log,
     });
-    const tokenParam = `__openclaw_mms_token_${"a".repeat(24)}`;
+    const tokenParam = `__natesclaw_mms_token_${"a".repeat(24)}`;
     const { res } = makeMockHttpResponse();
 
     const handled = await handler(

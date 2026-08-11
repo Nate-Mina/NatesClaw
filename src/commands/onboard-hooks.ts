@@ -1,9 +1,9 @@
 /** Onboarding defaults for workspace hooks. */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 const DEFAULT_ONBOARDING_INTERNAL_HOOKS = ["session-memory"] as const;
 
-export function enableDefaultOnboardingInternalHooks(cfg: OpenClawConfig): OpenClawConfig {
+export function enableDefaultOnboardingInternalHooks(cfg: NatesclawConfig): NatesclawConfig {
   const existingInternal = cfg.hooks?.internal;
   if (existingInternal?.enabled === false) {
     return cfg;

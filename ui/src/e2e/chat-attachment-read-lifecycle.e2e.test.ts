@@ -128,7 +128,7 @@ suite.define(() => {
         await page.goto(controlUiSessionUrl(suite.server.baseUrl, firstSession));
         const activeComposer = () =>
           page.locator(
-            'openclaw-chat-pane[aria-hidden="false"] .agent-chat__composer-combobox textarea',
+            'natesclaw-chat-pane[aria-hidden="false"] .agent-chat__composer-combobox textarea',
           );
         await activeComposer().fill("Private session A attachment");
         await pastePng(activeComposer());
@@ -149,7 +149,7 @@ suite.define(() => {
           .toBe(0);
         await expect
           .poll(() =>
-            page.locator('openclaw-chat-pane[aria-hidden="false"] .chat-attachment-thumb').count(),
+            page.locator('natesclaw-chat-pane[aria-hidden="false"] .chat-attachment-thumb').count(),
           )
           .toBe(0);
 
@@ -173,7 +173,7 @@ suite.define(() => {
         });
         await page
           .locator(
-            'openclaw-chat-pane[aria-hidden="false"] .chat-attachment-thumb img[alt="Attachment preview"]',
+            'natesclaw-chat-pane[aria-hidden="false"] .chat-attachment-thumb img[alt="Attachment preview"]',
           )
           .waitFor();
       },

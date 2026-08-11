@@ -1,10 +1,10 @@
 import fs from "node:fs";
-import { safeParseJson } from "@openclaw/normalization-core";
+import { safeParseJson } from "@natesclaw/normalization-core";
 import {
   inspectPluginInstallRecordMap,
   type PluginInstallRecordMapState,
 } from "../config/plugin-install-record-map.js";
-import { withOpenClawStateDatabaseReadOnly } from "../state/openclaw-state-db-readonly.js";
+import { withNatesclawStateDatabaseReadOnly } from "../state/natesclaw-state-db-readonly.js";
 import {
   resolveInstalledPluginIndexStateDatabaseOptions,
   resolveInstalledPluginIndexStorePath,
@@ -23,7 +23,7 @@ export function inspectPersistedInstalledPluginIndexInstallRecordsSync(
     return { status: "missing" };
   }
   try {
-    return withOpenClawStateDatabaseReadOnly(({ db }) => {
+    return withNatesclawStateDatabaseReadOnly(({ db }) => {
       const hasTable = db
         .prepare(
           `SELECT 1

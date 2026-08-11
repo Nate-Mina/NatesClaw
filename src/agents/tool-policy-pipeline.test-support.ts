@@ -6,7 +6,7 @@ type ToolPolicyWarningCacheTestApi = {
 
 function getTestApi(): ToolPolicyWarningCacheTestApi {
   return (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.toolPolicyWarningCacheTestApi")
+    Symbol.for("natesclaw.toolPolicyWarningCacheTestApi")
   ] as ToolPolicyWarningCacheTestApi;
 }
 

@@ -34,10 +34,10 @@ async function withIsolatedEnvAndCwd(run: () => Promise<void>) {
 }
 
 async function withDotEnvFixture(run: (fixture: DotEnvFixture) => Promise<void>) {
-  const base = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-dotenv-test-"));
+  const base = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-dotenv-test-"));
   const cwdDir = path.join(base, "cwd");
   const stateDir = path.join(base, "state");
-  setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
+  setTestEnvValue("NATESCLAW_STATE_DIR", stateDir);
   await fs.mkdir(cwdDir, { recursive: true });
   await fs.mkdir(stateDir, { recursive: true });
   await run({ base, cwdDir, stateDir });
@@ -111,7 +111,7 @@ describe("workspace .env blocklist completeness", () => {
           origin: "global",
           rootDir: "/plugins/runtime-cloud",
           source: "/plugins/runtime-cloud/index.js",
-          manifestPath: "/plugins/runtime-cloud/openclaw.plugin.json",
+          manifestPath: "/plugins/runtime-cloud/natesclaw.plugin.json",
           setup: {
             providers: [{ id: "runtime-cloud", envVars: ["RUNTIME_CLOUD_API_KEY"] }],
           },
@@ -174,22 +174,22 @@ describe("workspace .env blocklist completeness", () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ cwdDir }) => {
         const runtimeControlKeys = [
-          "OPENCLAW_GIT_DIR",
-          "OPENCLAW_WORKSPACE_DIR",
-          "OPENCLAW_MDNS_HOSTNAME",
-          "OPENCLAW_SESSION_CACHE_TTL_MS",
-          "OPENCLAW_UPDATE_PACKAGE_SPEC",
-          "OPENCLAW_GATEWAY_PORT",
-          "OPENCLAW_GATEWAY_URL",
-          "OPENCLAW_CLAWHUB_URL",
+          "NATESCLAW_GIT_DIR",
+          "NATESCLAW_WORKSPACE_DIR",
+          "NATESCLAW_MDNS_HOSTNAME",
+          "NATESCLAW_SESSION_CACHE_TTL_MS",
+          "NATESCLAW_UPDATE_PACKAGE_SPEC",
+          "NATESCLAW_GATEWAY_PORT",
+          "NATESCLAW_GATEWAY_URL",
+          "NATESCLAW_CLAWHUB_URL",
           "CLAWHUB_URL",
           "CLAWHUB_TOKEN",
           "CLAWHUB_AUTH_TOKEN",
           "CLAWHUB_CONFIG_PATH",
-          "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-          "OPENCLAW_ALLOW_INSECURE_PRIVATE_WS",
-          "OPENCLAW_BROWSER_EXECUTABLE_PATH",
-          "OPENCLAW_WHATSAPP_WEB_SOCKET_URL",
+          "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
+          "NATESCLAW_ALLOW_INSECURE_PRIVATE_WS",
+          "NATESCLAW_BROWSER_EXECUTABLE_PATH",
+          "NATESCLAW_WHATSAPP_WEB_SOCKET_URL",
           "EXAMPLE_API_HOST",
           "HOMEBREW_BREW_FILE",
           "HOMEBREW_PREFIX",
@@ -237,22 +237,22 @@ describe("workspace .env blocklist completeness", () => {
           "CLOUDSDK_PYTHON_ARGS",
           "CLOUDSDK_PYTHON_SITEPACKAGES",
           "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
-          "OPENCLAW_SKIP_CHANNELS",
-          "OPENCLAW_SKIP_PROVIDERS",
-          "OPENCLAW_SKIP_CRON",
-          "OPENCLAW_RAW_STREAM",
-          "OPENCLAW_RAW_STREAM_PATH",
-          "OPENCLAW_CACHE_TRACE",
-          "OPENCLAW_CACHE_TRACE_FILE",
-          "OPENCLAW_CACHE_TRACE_MESSAGES",
-          "OPENCLAW_CACHE_TRACE_PROMPT",
-          "OPENCLAW_CACHE_TRACE_SYSTEM",
-          "OPENCLAW_SHOW_SECRETS",
-          "OPENCLAW_PLUGIN_CATALOG_PATHS",
-          "OPENCLAW_MPM_CATALOG_PATHS",
-          "OPENCLAW_NODE_EXEC_HOST",
-          "OPENCLAW_NODE_EXEC_FALLBACK",
-          "OPENCLAW_ALLOW_PROJECT_LOCAL_BIN",
+          "NATESCLAW_SKIP_CHANNELS",
+          "NATESCLAW_SKIP_PROVIDERS",
+          "NATESCLAW_SKIP_CRON",
+          "NATESCLAW_RAW_STREAM",
+          "NATESCLAW_RAW_STREAM_PATH",
+          "NATESCLAW_CACHE_TRACE",
+          "NATESCLAW_CACHE_TRACE_FILE",
+          "NATESCLAW_CACHE_TRACE_MESSAGES",
+          "NATESCLAW_CACHE_TRACE_PROMPT",
+          "NATESCLAW_CACHE_TRACE_SYSTEM",
+          "NATESCLAW_SHOW_SECRETS",
+          "NATESCLAW_PLUGIN_CATALOG_PATHS",
+          "NATESCLAW_MPM_CATALOG_PATHS",
+          "NATESCLAW_NODE_EXEC_HOST",
+          "NATESCLAW_NODE_EXEC_FALLBACK",
+          "NATESCLAW_ALLOW_PROJECT_LOCAL_BIN",
           "PATH",
           "HOMEBREW_BREW_FILE",
           "HOMEBREW_PREFIX",
@@ -291,7 +291,7 @@ describe("workspace .env blocklist completeness", () => {
           path.join(cwdDir, ".env"),
           [
             "MY_APP_KEY=user-value",
-            "APP_GITHUB_REPO=openclaw/openclaw",
+            "APP_GITHUB_REPO=natesclaw/natesclaw",
             "APP_URL=https://project.example.com",
             "APP_ALLOWED_USERS=alice,bob",
             "DATABASE_URL_CUSTOM=pg://localhost",
@@ -311,7 +311,7 @@ describe("workspace .env blocklist completeness", () => {
         loadWorkspaceDotEnvFile(path.join(cwdDir, ".env"), { quiet: true });
 
         expect(process.env.MY_APP_KEY).toBe("user-value");
-        expect(process.env.APP_GITHUB_REPO).toBe("openclaw/openclaw");
+        expect(process.env.APP_GITHUB_REPO).toBe("natesclaw/natesclaw");
         expect(process.env.APP_URL).toBe("https://project.example.com");
         expect(process.env.APP_ALLOWED_USERS).toBe("alice,bob");
         expect(process.env.DATABASE_URL_CUSTOM).toBe("pg://localhost");

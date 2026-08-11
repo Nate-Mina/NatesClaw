@@ -1,11 +1,11 @@
 import fsp from "node:fs/promises";
-import type { SandboxContext } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { SandboxContext } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   buildAgentHookContextChannelFields,
   isHostScopedAgentToolActive,
   resolveSandboxContext as defaultResolveSandboxContext,
   resolveSessionAgentIds,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import { readNonEmptyString, readResolvedAttemptPath, resolveModelRef } from "./attempt-config.js";
 import type {
   AttemptParamsLike,
@@ -48,11 +48,11 @@ export function prepareCopilotAttemptContext(
   ) as AttemptParamsLike;
   const createToolBridge = deps.createToolBridge ?? createCopilotToolBridge;
   const hostSystemAgentActive =
-    deps.isHostScopedToolActive?.("openclaw") ?? isHostScopedAgentToolActive("openclaw");
+    deps.isHostScopedToolActive?.("natesclaw") ?? isHostScopedAgentToolActive("natesclaw");
   const ringZeroSystemAgentRun =
     hostSystemAgentActive &&
     input.toolsAllow?.length === 1 &&
-    input.toolsAllow[0]?.trim().toLowerCase() === "openclaw";
+    input.toolsAllow[0]?.trim().toLowerCase() === "natesclaw";
   const messages = Array.isArray(input.messages) ? [...input.messages] : [];
   const modelRef = resolveModelRef(input);
   const resolvedWorkspaceForSandbox =

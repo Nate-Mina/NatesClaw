@@ -3,7 +3,7 @@
  *
  * Compatibility wrappers for plugin command registration, matching, and execution.
  */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { clearPluginCommands, registerPluginCommand } from "./command-registration.js";
 import {
   listRegisteredPluginAgentPromptGuidance,
@@ -52,7 +52,7 @@ export function executePluginCommand(params: {
   sessionFile?: PluginCommandContext["sessionFile"];
   authProfileId?: string;
   commandBody: string;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   from?: PluginCommandContext["from"];
   to?: PluginCommandContext["to"];
   originatingTo?: string;

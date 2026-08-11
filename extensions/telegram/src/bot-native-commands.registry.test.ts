@@ -2,17 +2,17 @@ import {
   createEmptyPluginRegistry,
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/channel-test-helpers";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
 // Telegram tests cover bot native commands.registry plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { clearPluginCommands, registerPluginCommand } from "openclaw/plugin-sdk/plugin-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { clearPluginCommands, registerPluginCommand } from "natesclaw/plugin-sdk/plugin-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const retainNativeCatalog = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/plugin-command-runtime", async (importOriginal) => {
+vi.mock("natesclaw/plugin-sdk/plugin-command-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/plugin-command-runtime")>();
+    await importOriginal<typeof import("natesclaw/plugin-sdk/plugin-command-runtime")>();
   return {
     ...actual,
     createPluginCommandRuntime: () => {
@@ -377,7 +377,7 @@ describe("registerTelegramNativeCommands real plugin registry", () => {
 
     registerTelegramNativeCommands({
       ...createNativeCommandTestParams({
-        commands: { allowFrom: { telegram: ["999"] } } as OpenClawConfig["commands"],
+        commands: { allowFrom: { telegram: ["999"] } } as NatesclawConfig["commands"],
       }),
       bot,
       opts: { token: "token", allowFrom: ["999"] },

@@ -1,7 +1,7 @@
 <resources>
-    <string-array name="ask_openclaw_query_patterns">
-        <item>"از OpenClaw بپرس %1$s"</item>
-        <item>"به OpenClaw بگو %1$s"</item>
-        <item>"OpenClaw را باز کن و بپرس %1$s"</item>
+    <string-array name="ask_natesclaw_query_patterns">
+        <item>"از Natesclaw بپرس %1$s"</item>
+        <item>"به Natesclaw بگو %1$s"</item>
+        <item>"Natesclaw را باز کن و بپرس %1$s"</item>
     </string-array>
 </resources>

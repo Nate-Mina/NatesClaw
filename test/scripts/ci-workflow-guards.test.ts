@@ -15,7 +15,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { runInNewContext } from "node:vm";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { createVitestCacheWarmGroups } from "../../scripts/lib/ci-node-test-plan.mts";
@@ -47,7 +47,7 @@ const PUBLISH_GENERATED_PR_ACTION = ".github/actions/publish-generated-pr/action
 const SETUP_ANDROID_TOOLCHAIN_ACTION = ".github/actions/setup-android-toolchain/action.yml";
 const MATURITY_SCORECARD_WORKFLOW = ".github/workflows/maturity-scorecard.yml";
 const MATURITY_SCORECARD_WORKFLOW_REF =
-  "openclaw/openclaw/.github/workflows/maturity-scorecard.yml@refs/heads/main";
+  "natesclaw/natesclaw/.github/workflows/maturity-scorecard.yml@refs/heads/main";
 const OIDC_BOUND_MAIN_REUSABLE_WORKFLOWS = new Set<string>();
 const AMBIGUOUS_MAIN_PUSH_DIAGNOSTIC =
   "::error title=ambiguous main push::github.event.before is zero; refusing to infer a diff base for a created or recreated main branch.";
@@ -134,7 +134,7 @@ function runWorkflowShellScript(
   script: string,
   options: { cwd?: string; env?: NodeJS.ProcessEnv },
 ) {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-workflow-shell-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-workflow-shell-"));
   const modulePaths: string[] = [];
   try {
     let moduleIndex = 0;
@@ -144,7 +144,7 @@ function runWorkflowShellScript(
       (_match, _marker: string, body: string) => {
         const modulePath = path.join(
           moduleRoot,
-          `.openclaw-${path.basename(root)}-${moduleIndex}.mjs`,
+          `.natesclaw-${path.basename(root)}-${moduleIndex}.mjs`,
         );
         moduleIndex += 1;
         modulePaths.push(modulePath);
@@ -176,7 +176,7 @@ function runCiManifestFixture(options: {
   iosBuildCapability?: boolean;
   androidCiCapabilities?: boolean;
   nativeI18nCapabilities?: boolean;
-  openClawKitTests?: boolean;
+  NatesclawKitTests?: boolean;
   protocolCoverage?: boolean;
   qaSmokePlan?: boolean;
   formatCheck?: boolean;
@@ -187,7 +187,7 @@ function runCiManifestFixture(options: {
   nodeFastCiRouting?: boolean;
   runNode?: boolean;
 }) {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-ci-manifest-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-ci-manifest-"));
   try {
     const scriptsDir = path.join(root, "scripts", "lib");
     mkdirSync(scriptsDir, { recursive: true });
@@ -299,8 +299,8 @@ function runCiManifestFixture(options: {
         ...((options.androidCiCapabilities ?? options.bundledPlanner)
           ? ["android-ci-contract-v2"]
           : []),
-        ...((options.openClawKitTests ?? options.bundledPlanner)
-          ? ["openclawkit-tests-contract-v1"]
+        ...((options.NatesclawKitTests ?? options.bundledPlanner)
+          ? ["natesclawkit-tests-contract-v1"]
           : []),
       ].join("\n"),
     );
@@ -314,35 +314,35 @@ function runCiManifestFixture(options: {
       env: {
         ...process.env,
         GITHUB_OUTPUT: outputPath,
-        OPENCLAW_CI_CHANGED_PATHS_JSON: JSON.stringify(options.changedPaths ?? null),
-        OPENCLAW_CI_CHECKOUT_REVISION: "a".repeat(40),
-        OPENCLAW_CI_DOCS_CHANGED: "true",
-        OPENCLAW_CI_DOCS_ONLY: "false",
-        OPENCLAW_CI_EVENT_NAME: options.eventName ?? "workflow_dispatch",
-        OPENCLAW_CI_HISTORICAL_TARGET:
+        NATESCLAW_CI_CHANGED_PATHS_JSON: JSON.stringify(options.changedPaths ?? null),
+        NATESCLAW_CI_CHECKOUT_REVISION: "a".repeat(40),
+        NATESCLAW_CI_DOCS_CHANGED: "true",
+        NATESCLAW_CI_DOCS_ONLY: "false",
+        NATESCLAW_CI_EVENT_NAME: options.eventName ?? "workflow_dispatch",
+        NATESCLAW_CI_HISTORICAL_TARGET:
           (options.historicalCompatibility ?? true) &&
           (options.eventName ?? "workflow_dispatch") === "workflow_dispatch"
             ? "true"
             : "false",
-        OPENCLAW_CI_RELEASE_CANDIDATE_TARGET:
+        NATESCLAW_CI_RELEASE_CANDIDATE_TARGET:
           options.releaseCandidateCompatibility === true ? "true" : "false",
-        OPENCLAW_CI_TARGET_CONTEXT_TARGET:
+        NATESCLAW_CI_TARGET_CONTEXT_TARGET:
           options.targetContextCompatibility === true ? "true" : "false",
-        OPENCLAW_CI_REPOSITORY: "openclaw/openclaw",
-        OPENCLAW_CI_RUN_ANDROID: "true",
-        OPENCLAW_CI_RUN_CONTROL_UI_I18N: "true",
-        OPENCLAW_CI_RUN_IOS_BUILD: "true",
-        OPENCLAW_CI_RUN_MACOS: "true",
-        OPENCLAW_CI_RUN_NATIVE_I18N: "true",
-        OPENCLAW_CI_RUN_NODE: String(options.runNode ?? true),
-        OPENCLAW_CI_RUN_NODE_FAST_CI_ROUTING: String(options.nodeFastCiRouting ?? false),
-        OPENCLAW_CI_RUN_NODE_FAST_ONLY: String(options.nodeFastOnly ?? false),
-        OPENCLAW_CI_RUN_NODE_FAST_PLUGIN_CONTRACTS: String(
+        NATESCLAW_CI_REPOSITORY: "natesclaw/natesclaw",
+        NATESCLAW_CI_RUN_ANDROID: "true",
+        NATESCLAW_CI_RUN_CONTROL_UI_I18N: "true",
+        NATESCLAW_CI_RUN_IOS_BUILD: "true",
+        NATESCLAW_CI_RUN_MACOS: "true",
+        NATESCLAW_CI_RUN_NATIVE_I18N: "true",
+        NATESCLAW_CI_RUN_NODE: String(options.runNode ?? true),
+        NATESCLAW_CI_RUN_NODE_FAST_CI_ROUTING: String(options.nodeFastCiRouting ?? false),
+        NATESCLAW_CI_RUN_NODE_FAST_ONLY: String(options.nodeFastOnly ?? false),
+        NATESCLAW_CI_RUN_NODE_FAST_PLUGIN_CONTRACTS: String(
           options.nodeFastPluginContracts ?? false,
         ),
-        OPENCLAW_CI_RUN_SKILLS_PYTHON: "true",
-        OPENCLAW_CI_RUN_WINDOWS: "true",
-        OPENCLAW_CI_WORKFLOW_REVISION: "b".repeat(40),
+        NATESCLAW_CI_RUN_SKILLS_PYTHON: "true",
+        NATESCLAW_CI_RUN_WINDOWS: "true",
+        NATESCLAW_CI_WORKFLOW_REVISION: "b".repeat(40),
       },
     });
     const outputs = Object.fromEntries(
@@ -361,7 +361,7 @@ function runCiManifestFixture(options: {
 }
 
 function runTargetContextValidation(targetContextRef: string, targetRef: string) {
-  const root = tempDirs.make("openclaw-ci-target-context-");
+  const root = tempDirs.make("natesclaw-ci-target-context-");
   const outputPath = path.join(root, "github-output");
   writeFileSync(outputPath, "", "utf8");
   const step = expectDefined(
@@ -435,7 +435,7 @@ function runMaturityInvocationScenario(options: {
       CALLER_WORKFLOW_REF: options.callerWorkflowRef,
       JOB_WORKFLOW_FILE_PATH: MATURITY_SCORECARD_WORKFLOW,
       JOB_WORKFLOW_REF: options.jobWorkflowRef ?? MATURITY_SCORECARD_WORKFLOW_REF,
-      JOB_WORKFLOW_REPOSITORY: "openclaw/openclaw",
+      JOB_WORKFLOW_REPOSITORY: "natesclaw/natesclaw",
       PATH: process.env.PATH ?? "",
       PUBLISH_PULL_REQUEST: String(options.publishPullRequest),
     },
@@ -453,7 +453,7 @@ function runMaturityArtifactCopyScenario(
   const copyStep = workflow.jobs.publish_generated_pr.steps.find(
     (step: { name?: string }) => step.name === "Validate and copy generated PR files",
   );
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-maturity-copy-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-maturity-copy-"));
   const staging = path.join(root, "staging");
   try {
     for (const generatedPath of MATURITY_GENERATED_PR_PATHS) {
@@ -508,7 +508,7 @@ function readQaProfileEvidenceWorkflow() {
 type QaProfileTimeoutFixtureMode = "natural-124" | "self-kill" | "term" | "kill";
 
 function runQaProfileTimeoutFixture(mode: QaProfileTimeoutFixtureMode) {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-qa-profile-timeout-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-qa-profile-timeout-"));
   try {
     const binDir = path.join(root, "bin");
     mkdirSync(binDir);
@@ -642,7 +642,7 @@ function runQaProfileFailureGate(options: {
 }
 
 function readReleaseChecksWorkflow() {
-  return parse(readFileSync(".github/workflows/openclaw-release-checks.yml", "utf8"));
+  return parse(readFileSync(".github/workflows/natesclaw-release-checks.yml", "utf8"));
 }
 
 function readCriticalQualityWorkflow() {
@@ -720,7 +720,7 @@ function runPushDiffBaseFixture(options: {
   commitCount: 1 | 2 | 3;
   eventBaseSha: string | "parent";
 }) {
-  const root = tempDirs.make("openclaw-ci-diff-base-");
+  const root = tempDirs.make("natesclaw-ci-diff-base-");
   runGit(root, ["init", "-q", "-b", "main"]);
   runGit(root, ["config", "commit.gpgsign", "false"]);
   runGit(root, ["config", "user.email", "ci-fixture@example.com"]);
@@ -748,7 +748,7 @@ function runPushDiffBaseFixture(options: {
       EVENT_BASE_SHA: eventBaseSha,
       GITHUB_EVENT_NAME: "push",
       GITHUB_OUTPUT: outputPath,
-      GITHUB_REPOSITORY: "openclaw/openclaw",
+      GITHUB_REPOSITORY: "natesclaw/natesclaw",
       PULL_REQUEST_NUMBER: "",
       RELEASE_GATE: "false",
     },
@@ -812,7 +812,7 @@ function commitProtocolFixture(repo: string, message: string): string {
 }
 
 function createQaProtocolTopology() {
-  const root = tempDirs.make("openclaw-qa-protocol-topology-");
+  const root = tempDirs.make("natesclaw-qa-protocol-topology-");
   const origin = path.join(root, "origin");
   const checkout = path.join(root, "checkout");
   const releaseBranch = "release/2026.8.1";
@@ -954,7 +954,7 @@ function runProtocolSinceFixture(checkout: string, baseSha: string) {
     JSON.stringify({
       compilerOptions: {
         paths: {
-          "@openclaw/normalization-core/record-coerce": [
+          "@natesclaw/normalization-core/record-coerce": [
             "./packages/normalization-core/src/record-coerce.ts",
           ],
         },
@@ -981,7 +981,7 @@ function runDependencyCheckFixture(options: {
   output: string;
   status: number | null;
 } {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-ci-deadcode-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-ci-deadcode-"));
   try {
     const fakeBin = path.join(root, "bin");
     const callsPath = path.join(root, "pnpm-calls.txt");
@@ -1045,7 +1045,7 @@ function runControlUiI18nSourceFixture(options: {
   compatibilityTarget: boolean;
   hasVerifyScript: boolean;
 }): { calls: string[]; output: string; summary: string; status: number | null } {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-ci-control-ui-i18n-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-ci-control-ui-i18n-"));
   try {
     const fakeBin = path.join(root, "bin");
     const callsPath = path.join(root, "pnpm-calls.txt");
@@ -1105,7 +1105,7 @@ function runGeneratedPublisherScenario(
     updateSource?: boolean;
   } = {},
 ) {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-generated-pr-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-generated-pr-"));
   try {
     const origin = path.join(root, "origin.git");
     const updater = path.join(root, "updater");
@@ -1206,12 +1206,12 @@ function runGeneratedPublisherScenario(
       "      else",
       '        head="$(git --git-dir="$FAKE_ORIGIN" rev-parse refs/heads/automation/locale)"',
       "      fi",
-      '      printf "https://github.com/openclaw/openclaw/pull/1\\t%s\\n" "$head"',
+      '      printf "https://github.com/natesclaw/natesclaw/pull/1\\t%s\\n" "$head"',
       "    fi",
       "    ;;",
       "  pr:create)",
       '    : > "$FAKE_PR_STATE"',
-      '    printf "%s\\n" "https://github.com/openclaw/openclaw/pull/1"',
+      '    printf "%s\\n" "https://github.com/natesclaw/natesclaw/pull/1"',
       "    ;;",
       "  pr:edit) exit 0 ;;",
       "  pr:view)",
@@ -1268,8 +1268,8 @@ ${actionRun}`;
         OVERLAP_POLICY: options.overlapPolicy ?? "defer",
         CONTENTS_TOKEN: "contents-token",
         GH_TOKEN: "test-token",
-        GITHUB_REPOSITORY: "openclaw/openclaw",
-        GITHUB_REPOSITORY_OWNER: "openclaw",
+        GITHUB_REPOSITORY: "natesclaw/natesclaw",
+        GITHUB_REPOSITORY_OWNER: "natesclaw",
         GITHUB_STEP_SUMMARY: summary,
         HEAD_BRANCH: "automation/locale",
         PATH: `${fakeBin}:${process.env.PATH ?? ""}`,
@@ -1393,7 +1393,7 @@ NODE
     const workflow = readWorkflow(workflowPath);
     const steps = workflow.jobs.dispatch.steps as WorkflowStep[];
     const receiverDispatchSteps = steps.filter((step) =>
-      step.run?.includes("repos/openclaw/clawsweeper/dispatches"),
+      step.run?.includes("repos/natesclaw/clawsweeper/dispatches"),
     );
     const eventTypes = receiverDispatchSteps.map((step) => {
       const matches = [...(step.run ?? "").matchAll(/\bevent_type\s*:\s*"([^"]+)"/gu)];
@@ -1476,8 +1476,8 @@ NODE
     expect(guard).toContain("github.event.action != 'labeled'");
     expect(guard).toContain("github.event.action != 'unlabeled'");
     expect(guard).toContain("github.actor != 'clawsweeper[bot]'");
-    expect(guard).toContain("github.actor != 'openclaw-clawsweeper[bot]'");
-    expect(guard).not.toContain("openclaw-barnacle[bot]");
+    expect(guard).toContain("github.actor != 'natesclaw-clawsweeper[bot]'");
+    expect(guard).not.toContain("natesclaw-barnacle[bot]");
   });
 
   it("routes stale bug issues through ClawSweeper instead of Barnacle closure", () => {
@@ -1613,7 +1613,7 @@ NODE
     expect(changedScopeStep.if).toContain(
       "github.event_name == 'workflow_dispatch' && inputs.release_gate",
     );
-    expect(changedScopeStep.env?.OPENCLAW_ALLOW_RELEASE_GENERATED_MIX).toContain(
+    expect(changedScopeStep.env?.NATESCLAW_ALLOW_RELEASE_GENERATED_MIX).toContain(
       "github.event_name == 'workflow_dispatch'",
     );
     expect(changedScopeStep.run).toContain('elif [ "${{ github.event_name }}" = "pull_request" ]');
@@ -1623,7 +1623,7 @@ NODE
     );
     expect(workflow.jobs.preflight.permissions).toEqual({ contents: "read" });
     expect(readFileSync(".github/workflows/ci.yml", "utf8")).toContain(
-      "OPENCLAW_CI_RUN_ANDROID: ${{ github.event_name == 'workflow_dispatch' && (inputs.release_gate || inputs.include_android) && 'true' || steps.changed_scope.outputs.run_android || 'false' }}",
+      "NATESCLAW_CI_RUN_ANDROID: ${{ github.event_name == 'workflow_dispatch' && (inputs.release_gate || inputs.include_android) && 'true' || steps.changed_scope.outputs.run_android || 'false' }}",
     );
 
     for (const [jobName, job] of Object.entries(workflow.jobs)) {
@@ -1755,12 +1755,12 @@ NODE
     expect(nativeResolveBase.if).not.toContain("chore(i18n): refresh native locales");
     const controlResolveCondition = controlUiResolveBase.if.replace(/\s+/gu, " ");
     expect(controlResolveCondition).toBe(
-      "github.repository == 'openclaw/openclaw' && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')",
+      "github.repository == 'natesclaw/natesclaw' && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')",
     );
     expect(controlResolveCondition).not.toContain("inputs.token_preflight_only");
     expect(controlResolveCondition).not.toContain("github.ref_type");
     expect(nativeResolveBase.if).toBe(
-      "github.repository == 'openclaw/openclaw' && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')",
+      "github.repository == 'natesclaw/natesclaw' && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')",
     );
     expect(controlUiWorkflow.on.workflow_dispatch.inputs.token_preflight_only).toEqual({
       description: "Verify generated PR App permissions without running locale generation.",
@@ -1781,8 +1781,8 @@ NODE
     expect(refreshStep.run).toContain("retrying with OpenAI");
     expect(refreshStep.run).toContain("run_openai_refresh");
     expect(refreshStep.run).toContain("repository OpenAI key");
-    expect(refreshStep.env.OPENCLAW_DOCS_I18N_OPENAI_API_KEY).toBe(
-      "${{ secrets.OPENCLAW_DOCS_I18N_OPENAI_API_KEY }}",
+    expect(refreshStep.env.NATESCLAW_DOCS_I18N_OPENAI_API_KEY).toBe(
+      "${{ secrets.NATESCLAW_DOCS_I18N_OPENAI_API_KEY }}",
     );
     expect(refreshStep.env.OPENAI_API_KEY).toBe("${{ secrets.OPENAI_API_KEY }}");
     expect(nativeArtifactStep.run).toContain("git add -A apps/.i18n/native");
@@ -1799,13 +1799,13 @@ NODE
     );
     expect(nativePublishStep.with["generated-paths"].trim().split("\n")).toEqual([
       "apps/.i18n/native",
-      "apps/android/app/src/main/java/ai/openclaw/app/i18n/NativeStringResources.kt",
+      "apps/android/app/src/main/java/ai/natesclaw/app/i18n/NativeStringResources.kt",
       "apps/android/app/src/main/res/values*/assistant.xml",
       "apps/android/app/src/main/res/values*/strings.xml",
       "apps/android/app/src/thirdParty/res/values*/accessibility_strings.xml",
       "apps/android/wear/src/main/res/values*/strings.xml",
       "apps/ios/Resources/Localizable.xcstrings",
-      "apps/macos/Sources/OpenClaw/Resources/Localizable.xcstrings",
+      "apps/macos/Sources/Natesclaw/Resources/Localizable.xcstrings",
       "apps/ios/Sources/*.lproj/InfoPlist.strings",
       "apps/ios/WatchApp/*.lproj/InfoPlist.strings",
       "apps/ios/ShareExtension/*.lproj/InfoPlist.strings",
@@ -1823,11 +1823,11 @@ NODE
     expect(controlUiRefreshStep.run).toContain("retrying with OpenAI");
     expect(controlUiRefreshStep.run).toContain("run_openai_refresh");
     expect(controlUiRefreshStep.run).toContain("repository OpenAI key");
-    expect(controlUiRefreshStep.env.OPENCLAW_DOCS_I18N_OPENAI_API_KEY).toBe(
-      "${{ secrets.OPENCLAW_DOCS_I18N_OPENAI_API_KEY }}",
+    expect(controlUiRefreshStep.env.NATESCLAW_DOCS_I18N_OPENAI_API_KEY).toBe(
+      "${{ secrets.NATESCLAW_DOCS_I18N_OPENAI_API_KEY }}",
     );
     expect(controlUiRefreshStep.env.OPENAI_API_KEY).toBe("${{ secrets.OPENAI_API_KEY }}");
-    expect(controlUiRefreshStep.env.OPENCLAW_CONTROL_UI_I18N_AUTH_OPTIONAL).toBe("0");
+    expect(controlUiRefreshStep.env.NATESCLAW_CONTROL_UI_I18N_AUTH_OPTIONAL).toBe("0");
     const controlUiArtifactStep = controlUiWorkflow.jobs.refresh.steps.find(
       (step: { name?: string }) => step.name === "Prepare locale artifact",
     );
@@ -2127,7 +2127,7 @@ NODE
     );
     expect(actionPublishStep.run).not.toContain('HEAD:"${BASE_BRANCH}"');
     expect(readFileSync(".github/workflows/ci.yml", "utf8")).toContain(
-      "OPENCLAW_ALLOW_RELEASE_GENERATED_MIX",
+      "NATESCLAW_ALLOW_RELEASE_GENERATED_MIX",
     );
 
     for (const [
@@ -2223,7 +2223,7 @@ NODE
       const result = runGeneratedPublisherScenario(null, { autoMerge: true });
 
       expect(result.branchExists).toBe(true);
-      expect(result.mergeCalls).toContain("pr merge https://github.com/openclaw/openclaw/pull/1");
+      expect(result.mergeCalls).toContain("pr merge https://github.com/natesclaw/natesclaw/pull/1");
       expect(result.mergeCalls).toContain("--auto --squash --match-head-commit");
       expect(result.summary).toContain("Enabled squash auto-merge for exact generated head");
     },
@@ -2642,7 +2642,7 @@ NODE
       const result = runTargetContextValidation(contextRef, targetSha);
       expect(result.status, contextRef).toBe(1);
       expect(result.output).toContain(
-        "target_context_ref must be a canonical OpenClaw release branch.",
+        "target_context_ref must be a canonical Natesclaw release branch.",
       );
     }
 
@@ -2726,7 +2726,7 @@ NODE
     expect(source).toContain('task: useCompatibleAndroidCi ? "build-play-compat" : "build-play"');
     expect(androidJob.name).toBe("${{ matrix.check_name }}");
     expect(androidJob["runs-on"]).toBe(
-      "${{ github.event_name == 'workflow_dispatch' && 'ubuntu-24.04' || (github.repository == 'openclaw/openclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'openclaw/openclaw') && 'blacksmith-8vcpu-ubuntu-2404' || 'ubuntu-24.04') }}",
+      "${{ github.event_name == 'workflow_dispatch' && 'ubuntu-24.04' || (github.repository == 'natesclaw/natesclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw') && 'blacksmith-8vcpu-ubuntu-2404' || 'ubuntu-24.04') }}",
     );
     expect(runStep.run).toContain(":app:testPlayDebugUnitTest");
     expect(runStep.run).toContain(":app:testThirdPartyDebugUnitTest");
@@ -2770,7 +2770,7 @@ NODE
     expect(workflow.jobs["runner-admission"]).toBeUndefined();
     const preflight = workflow.jobs.preflight;
     expect(preflight.needs).toBeUndefined();
-    expect(preflight.env?.OPENCLAW_MAIN_CI_DEBOUNCE_SECONDS).toBeUndefined();
+    expect(preflight.env?.NATESCLAW_MAIN_CI_DEBOUNCE_SECONDS).toBeUndefined();
     const steps = preflight.steps as Array<{ if?: string; name?: string; run?: string }>;
     expect(steps.some((step) => step.name === "Record debounce epoch")).toBe(false);
     expect(steps.some((step) => step.name === "Debounce canonical main fan-out")).toBe(false);
@@ -2878,10 +2878,10 @@ NODE
       expect(cacheCondition, jobName).toContain("github.event_name != 'workflow_dispatch'");
       expect(cacheCondition, jobName).toContain("&& 'false' || 'true'");
       expect(stickyCondition, jobName).toContain(
-        "github.event.pull_request.head.repo.full_name == 'openclaw/openclaw'",
+        "github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw'",
       );
       expect(cacheCondition, jobName).toContain(
-        "github.event.pull_request.head.repo.full_name == 'openclaw/openclaw'",
+        "github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw'",
       );
     }
     // Required CI jobs only clone the snapshot. The disposable warmer below
@@ -2902,18 +2902,18 @@ NODE
       (step: WorkflowStep) => step.name === "Maintain sticky dependency store budget",
     )!;
     expect(refreshStep.if).toContain("github.event_name == 'push'");
-    expect(refreshStep.if).toContain("github.repository == 'openclaw/openclaw'");
+    expect(refreshStep.if).toContain("github.repository == 'natesclaw/natesclaw'");
     expect(refreshStep.if).toContain("github.ref == 'refs/heads/main'");
     expect(refreshStep.if).toContain("steps.manifest.outputs.run_node == 'true'");
     expect(maintainStep.if).toBe(refreshStep.if);
     expect(preflightSteps.indexOf(refreshStep)).toBeLessThan(preflightSteps.indexOf(maintainStep));
-    expect(maintainStep.env?.OPENCLAW_PNPM_STORE_MAX_KIB).toBe("8388608");
+    expect(maintainStep.env?.NATESCLAW_PNPM_STORE_MAX_KIB).toBe("8388608");
     expect(maintainStep.run).toContain('store_dir="${PNPM_CONFIG_STORE_DIR:?}"');
     expect(maintainStep.run).toContain('PNPM_CONFIG_STORE_DIR="$store_dir" pnpm store prune');
     expect(maintainStep.run).toContain('>> "$GITHUB_STEP_SUMMARY"');
     expect(workflow.jobs["pnpm-store-warmup"].if).toContain("github.ref == 'refs/heads/main'");
     expect(workflow.jobs["pnpm-store-warmup"].if).toContain(
-      "github.repository == 'openclaw/openclaw'",
+      "github.repository == 'natesclaw/natesclaw'",
     );
     // Current sticky consumers all use the single supported Node line. A
     // planner-provided version would silently create a writerless disk.
@@ -2966,7 +2966,7 @@ NODE
         (job as { "runs-on": string })["runs-on"],
         `${jobName} must route fork pull requests to GitHub-hosted runners`,
       ).toContain(
-        "github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'openclaw/openclaw'",
+        "github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw'",
       );
     }
     expect(action.inputs["sticky-disk"].default).toBe("false");
@@ -2989,7 +2989,7 @@ NODE
       if: "inputs.sticky-disk == 'true'",
       uses: "useblacksmith/stickydisk@6d373c96a74cbde0c99fedc5ea5d3a7ba66ba494",
       with: {
-        path: "/var/tmp/openclaw-node-deps",
+        path: "/var/tmp/natesclaw-node-deps",
       },
     });
     // Bounded disks: Blacksmith caps sticky disks per installation, and the old
@@ -3014,11 +3014,11 @@ NODE
     );
     expect(bindStep.run).toContain('sudo mount --bind "$sticky_modules" "$workspace_modules"');
     expect(bindStep.run).toContain('echo "PNPM_CONFIG_STORE_DIR=$sticky_store"');
-    expect(bindStep.run).toContain('echo "OPENCLAW_BUILD_ALL_NO_PNPM=1"');
+    expect(bindStep.run).toContain('echo "NATESCLAW_BUILD_ALL_NO_PNPM=1"');
     expect(bindStep.run).toContain(
       'deps_fingerprint="os-${RUNNER_OS:?}-arch-${RUNNER_ARCH:?}-node-$(node --version)-${deps_input_fingerprint:?}"',
     );
-    expect(bindStep.run).toContain('echo "OPENCLAW_STICKY_DEPS_FINGERPRINT=$deps_fingerprint"');
+    expect(bindStep.run).toContain('echo "NATESCLAW_STICKY_DEPS_FINGERPRINT=$deps_fingerprint"');
     expect(bindStep.run).not.toContain("PNPM_CONFIG_MODULES_DIR");
     expect(bindStep.run).not.toContain("PNPM_CONFIG_VIRTUAL_STORE_DIR");
     // Compute from the checkout before the bind mount adds snapshot-internal
@@ -3031,13 +3031,13 @@ NODE
     );
     expect(installStep.env).toMatchObject({
       STICKY_DISK: "${{ inputs.sticky-disk }}",
-      STICKY_ROOT: "/var/tmp/openclaw-node-deps",
+      STICKY_ROOT: "/var/tmp/natesclaw-node-deps",
       STICKY_WRITER:
         "${{ inputs.save-sticky-disk == 'true' && github.event_name != 'pull_request' && 'true' || 'false' }}",
     });
-    expect(installStep.run).toContain('sticky_marker="$STICKY_ROOT/.openclaw-deps-fingerprint"');
+    expect(installStep.run).toContain('sticky_marker="$STICKY_ROOT/.natesclaw-deps-fingerprint"');
     expect(installStep.run).toContain(
-      '[ "$sticky_fingerprint" = "${OPENCLAW_STICKY_DEPS_FINGERPRINT:?}" ]',
+      '[ "$sticky_fingerprint" = "${NATESCLAW_STICKY_DEPS_FINGERPRINT:?}" ]',
     );
     expect(installStep.run).toContain('sticky_fingerprint_matches="true"');
     expect(installStep.run).toContain(
@@ -3045,7 +3045,7 @@ NODE
     );
     expect(installStep.run).toContain('[ "$STICKY_WRITER" != "true" ]');
     expect(installStep.run).toContain('sudo umount "$GITHUB_WORKSPACE/node_modules"');
-    expect(installStep.run).toContain('ephemeral_store="${RUNNER_TEMP:?}/openclaw-pnpm-store"');
+    expect(installStep.run).toContain('ephemeral_store="${RUNNER_TEMP:?}/natesclaw-pnpm-store"');
     expect(installStep.run).toContain(
       "Sticky dependency snapshot is unusable; using runner-local storage for this read-only run",
     );
@@ -3087,7 +3087,7 @@ NODE
     expect(installStep.run).toContain('[ "$STICKY_WRITER" = "true" ]');
     expect(installStep.run.indexOf('pnpm "${install_args[@]}"')).toBeLessThan(
       installStep.run.indexOf(
-        'bash "$GITHUB_ACTION_PATH/sticky-importers.sh" capture "$STICKY_ROOT" "$GITHUB_WORKSPACE" "$OPENCLAW_STICKY_DEPS_FINGERPRINT"',
+        'bash "$GITHUB_ACTION_PATH/sticky-importers.sh" capture "$STICKY_ROOT" "$GITHUB_WORKSPACE" "$NATESCLAW_STICKY_DEPS_FINGERPRINT"',
       ),
     );
     // The content-validated snapshot or successful install already owns
@@ -3159,16 +3159,16 @@ NODE
     }
 
     const releaseChecks = parse(
-      readFileSync(".github/workflows/openclaw-live-and-e2e-checks-reusable.yml", "utf8"),
+      readFileSync(".github/workflows/natesclaw-live-and-e2e-checks-reusable.yml", "utf8"),
     );
     expect(releaseChecks.jobs.validate_repo_e2e.env).toMatchObject({
-      OPENCLAW_BUILD_PRIVATE_QA: "1",
-      OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1",
+      NATESCLAW_BUILD_PRIVATE_QA: "1",
+      NATESCLAW_ENABLE_PRIVATE_QA_CLI: "1",
     });
     const targetedGroupStep = releaseChecks.jobs.plan_docker_lane_groups.steps.find(
       (step: WorkflowStep) => step.name === "Build targeted Docker lane groups",
     );
-    expect(targetedGroupStep.env.OPENCLAW_UPGRADE_SURVIVOR_SCENARIOS).toBe(
+    expect(targetedGroupStep.env.NATESCLAW_UPGRADE_SURVIVOR_SCENARIOS).toBe(
       "${{ inputs.published_upgrade_survivor_scenarios }}",
     );
     expect(releaseChecks.jobs.validate_docker_lanes["timeout-minutes"]).toBe(
@@ -3207,7 +3207,7 @@ NODE
       },
     });
     expect(uploadStep).toMatchObject({
-      if: "success() && github.repository == 'openclaw/openclaw' && github.ref == 'refs/heads/main'",
+      if: "success() && github.repository == 'natesclaw/natesclaw' && github.ref == 'refs/heads/main'",
       uses: UPLOAD_ARTIFACT_V7,
       with: {
         "if-no-files-found": "error",
@@ -3220,7 +3220,7 @@ NODE
   });
 
   it("restores importer-local node_modules from sticky snapshots", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-sticky-importers-"));
+    const root = mkdtempSync(path.join(tmpdir(), "natesclaw-sticky-importers-"));
     try {
       const workspace = path.join(root, "workspace");
       const stickyRoot = path.join(root, "sticky");
@@ -3308,7 +3308,7 @@ NODE
         JSON.parse(readFileSync(path.join(importerDependency, "package.json"), "utf8")),
       ).toMatchObject({ version: "2.4.0" });
       expect(readFileSync(path.join(rootModules, "root-sentinel"), "utf8")).toBe("after");
-      expect(readFileSync(path.join(stickyRoot, ".openclaw-deps-fingerprint"), "utf8")).toBe(
+      expect(readFileSync(path.join(stickyRoot, ".natesclaw-deps-fingerprint"), "utf8")).toBe(
         "fingerprint-a\n",
       );
 
@@ -3322,7 +3322,7 @@ NODE
       const archiveChecksum = createHash("sha256").update(readFileSync(archive)).digest("hex");
       const manifestChecksum = createHash("sha256").update(readFileSync(manifest)).digest("hex");
       writeFileSync(
-        path.join(stickyRoot, ".openclaw-importer-archive.sha256"),
+        path.join(stickyRoot, ".natesclaw-importer-archive.sha256"),
         `${archiveChecksum}\n${manifestChecksum}\n`,
         "utf8",
       );
@@ -3350,7 +3350,7 @@ NODE
   });
 
   it("fingerprints dependency install inputs without ordinary script churn", () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-dependency-fingerprint-"));
+    const root = mkdtempSync(path.join(tmpdir(), "natesclaw-dependency-fingerprint-"));
     try {
       const helper = path.resolve(".github/actions/setup-node-env/dependency-fingerprint.mjs");
       const writeManifest = (manifest: Record<string, unknown>) => {
@@ -3545,13 +3545,13 @@ NODE
     expect(readerStep.with.key).toContain("src/state/*.sql");
     expect(configureStep.env.CACHE_GENERATION).toContain("!**/node_modules/**");
     expect(configureStep.env.CACHE_GENERATION).toContain("src/state/*.sql");
-    expect(configureStep.run).toContain("OPENCLAW_VITEST_FS_MODULE_CACHE_PATH=$cache_root");
-    expect(configureStep.run).toContain(".openclaw-transform-generation");
+    expect(configureStep.run).toContain("NATESCLAW_VITEST_FS_MODULE_CACHE_PATH=$cache_root");
+    expect(configureStep.run).toContain(".natesclaw-transform-generation");
     expect(configureStep.run).not.toContain("protected Vitest transform seed");
     expect(configureStep.env.CACHE_WRITER).toBe(
       "${{ inputs.save-vitest-fs-cache == 'true' && '1' || '0' }}",
     );
-    expect(configureStep.run).toContain("OPENCLAW_VITEST_FS_MODULE_CACHE_WRITER=");
+    expect(configureStep.run).toContain("NATESCLAW_VITEST_FS_MODULE_CACHE_WRITER=");
     expect(compileEpochStep.run).toContain('if [ "$CACHE_SCOPE" = "build" ]');
     expect(compileEpochStep.run).toContain("date -u +%Y%m%d");
     expect(compileEpochStep.run).toContain("GITHUB_RUN_ID");
@@ -3610,7 +3610,7 @@ NODE
     expect(warmer.concurrency.group).toBe("vitest-cache-warm");
     expect(warmer.on.workflow_dispatch).toBeUndefined();
     expect(warmer.on.repository_dispatch.types).toEqual(["vitest-cache-warm"]);
-    expect(warmer.jobs.warm.if).toContain("github.repository == 'openclaw/openclaw'");
+    expect(warmer.jobs.warm.if).toContain("github.repository == 'natesclaw/natesclaw'");
     expect(warmer.on).not.toHaveProperty("workflow_run");
     expect(checkoutStep.with).toBeUndefined();
     expect(warmerSource).toContain('cron: "17 8 * * *"');
@@ -3618,10 +3618,10 @@ NODE
       'import { createVitestCacheWarmGroups } from "./scripts/lib/ci-node-test-plan.mts";',
     );
     expect(seedStep.run).toMatch(
-      /const groups = createVitestCacheWarmGroups\(\);[\s\S]*appendFileSync\(\s*process\.env\.GITHUB_ENV,[\s\S]*OPENCLAW_NODE_TEST_GROUPS_JSON=\$\{JSON\.stringify\(groups\)\}/u,
+      /const groups = createVitestCacheWarmGroups\(\);[\s\S]*appendFileSync\(\s*process\.env\.GITHUB_ENV,[\s\S]*NATESCLAW_NODE_TEST_GROUPS_JSON=\$\{JSON\.stringify\(groups\)\}/u,
     );
-    expect(warmerSource).not.toContain("OPENCLAW_NODE_TEST_CONFIGS_JSON");
-    expect(warmerSource).toContain('"OPENCLAW_NODE_TEST_PLAN_CONCURRENCY=1"');
+    expect(warmerSource).not.toContain("NATESCLAW_NODE_TEST_CONFIGS_JSON");
+    expect(warmerSource).toContain('"NATESCLAW_NODE_TEST_PLAN_CONCURRENCY=1"');
     expect(warmerSetup.with).toMatchObject({
       "node-compile-cache-scope": "test",
       "save-actions-cache": "true",
@@ -3636,7 +3636,7 @@ NODE
     expect(seedStep.if).toBeUndefined();
     expect(warmStep.if).toBeUndefined();
     expect(maintainStoreStep).toBeUndefined();
-    expect(maintainStickyStoreStep.env.OPENCLAW_PNPM_STORE_MAX_KIB).toBe("8388608");
+    expect(maintainStickyStoreStep.env.NATESCLAW_PNPM_STORE_MAX_KIB).toBe("8388608");
 
     const groups = createVitestCacheWarmGroups();
     expect(groups).toHaveLength(10);
@@ -3664,7 +3664,7 @@ NODE
     );
     expect(embeddedGroups).toHaveLength(4);
     expect(
-      embeddedGroups.every((group) => group.env?.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS === "660000"),
+      embeddedGroups.every((group) => group.env?.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS === "660000"),
     ).toBe(true);
 
     const gatewayGroups = groups.filter((group) =>
@@ -3681,7 +3681,7 @@ NODE
     expect(autoReplyGroups[0]?.includePatterns).toHaveLength(18);
     expect(autoReplyGroups[0]?.env).toBeUndefined();
 
-    const maintenanceRoot = mkdtempSync(path.join(tmpdir(), "openclaw-pnpm-maintenance-"));
+    const maintenanceRoot = mkdtempSync(path.join(tmpdir(), "natesclaw-pnpm-maintenance-"));
     try {
       const storeDir = path.join(maintenanceRoot, "store");
       const summaryPath = path.join(maintenanceRoot, "summary.md");
@@ -3691,7 +3691,7 @@ NODE
         env: {
           ...process.env,
           GITHUB_STEP_SUMMARY: summaryPath,
-          OPENCLAW_PNPM_STORE_MAX_KIB: "-1",
+          NATESCLAW_PNPM_STORE_MAX_KIB: "-1",
           PNPM_CONFIG_STORE_DIR: storeDir,
         },
       });
@@ -3765,7 +3765,7 @@ NODE
     const runStep = additionalJob.steps.find(
       (step: WorkflowStep) => step.name === "Run additional check shard",
     );
-    expect(runStep.env.OPENCLAW_EXTENSION_BOUNDARY_CONCURRENCY).toBe(16);
+    expect(runStep.env.NATESCLAW_EXTENSION_BOUNDARY_CONCURRENCY).toBe(16);
 
     // O(1) disks: Blacksmith caps sticky disks per installation, and the old
     // per-PR/per-config keys minted new disks until every mount 429-failed
@@ -3841,7 +3841,7 @@ NODE
     expect(pointEnv.GRADLE_DEPS_FINGERPRINT).toContain("hashFiles(");
     expect(pointEnv.GRADLE_DEPS_FINGERPRINT).toContain("apps/android/gradle/libs.versions.toml");
     expect(pointEnv.STICKY_WRITER).toContain("github.event_name != 'pull_request'");
-    expect(pointStep.run).toContain(".openclaw-gradle-deps-fingerprint");
+    expect(pointStep.run).toContain(".natesclaw-gradle-deps-fingerprint");
     expect(pointStep.run).toContain('rm -rf "$sticky_root/gradle-user-home"');
   });
 
@@ -3944,7 +3944,7 @@ NODE
         BLACKSMITH_ENV: "production-amd64",
         BLACKSMITH_REGION: "us-test-1",
         RETIRED_ARCHITECTURE: "amd64",
-        RETIRED_KEY: "openclaw/openclaw-not-retired",
+        RETIRED_KEY: "natesclaw/natesclaw-not-retired",
         RETIRED_REGION: "us-test-1",
       },
     });
@@ -3956,7 +3956,7 @@ NODE
         BLACKSMITH_ENV: "production-amd64",
         BLACKSMITH_REGION: "us-test-1",
         RETIRED_ARCHITECTURE: "amd64",
-        RETIRED_KEY: " openclaw/openclaw-active-key ",
+        RETIRED_KEY: " natesclaw/natesclaw-active-key ",
         RETIRED_REGION: "us-test-1",
       },
     });
@@ -4409,7 +4409,7 @@ NODE
         expect(
           evaluateWorkflowExpression(checkoutStep?.with?.["fetch-depth"], {
             eventName,
-            repository: "openclaw/openclaw",
+            repository: "natesclaw/natesclaw",
             runAttempt: 1,
           }),
           `${workflowPath} ${eventName}`,
@@ -4674,7 +4674,7 @@ NODE
     )?.[0];
     expect(discoveryBlock).toBeTruthy();
 
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-mantis-runner-ip-"));
+    const root = mkdtempSync(path.join(tmpdir(), "natesclaw-mantis-runner-ip-"));
     try {
       const fakeBin = path.join(root, "bin");
       const callCount = path.join(root, "curl-calls");
@@ -5118,7 +5118,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(legacy.outputs.use_compatible_android_ci).toBe("true");
     expect(legacy.outputs.run_ios_build).toBe("false");
     expect(legacy.outputs.run_native_i18n).toBe("false");
-    expect(legacy.outputs.run_openclawkit_tests).toBe("false");
+    expect(legacy.outputs.run_natesclawkit_tests).toBe("false");
     expect(legacy.outputs.run_qa_smoke_ci).toBe("false");
     expect(legacy.outputs.run_channel_contracts_shards).toBe("false");
     expect(legacy.outputs.run_protocol_event_coverage).toBe("false");
@@ -5149,7 +5149,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(current.outputs.use_compatible_android_ci).toBe("false");
     expect(current.outputs.run_ios_build).toBe("true");
     expect(current.outputs.run_native_i18n).toBe("true");
-    expect(current.outputs.run_openclawkit_tests).toBe("true");
+    expect(current.outputs.run_natesclawkit_tests).toBe("true");
     expect(current.outputs.run_qa_smoke_ci).toBe("true");
     expect(current.outputs.run_channel_contracts_shards).toBe("true");
     expect(current.outputs.run_protocol_event_coverage).toBe("true");
@@ -5413,8 +5413,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     const swiftLint = workflow.jobs["macos-swift"].steps.find(
       (step: { name?: string }) => step.name === "Swift lint",
     );
-    const openClawKitTests = workflow.jobs["macos-swift"].steps.find(
-      (step: { name?: string }) => step.name === "OpenClawKit tests",
+    const NatesclawKitTests = workflow.jobs["macos-swift"].steps.find(
+      (step: { name?: string }) => step.name === "NatesclawKit tests",
     );
     expect(swiftInstall.run).toContain("brew install xcodegen swiftlint");
     expect(swiftInstall.run).not.toContain("brew install xcodegen swiftlint swiftformat");
@@ -5443,7 +5443,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(swiftInstall.run).toContain('elif [[ "$HISTORICAL_TARGET" == "true" ]]');
     expect(swiftLint.run).toContain("swiftlint lint --config config/swiftlint.yml");
     expect(swiftLint.run).toContain('elif [[ "$HISTORICAL_TARGET" == "true" ]]');
-    expect(openClawKitTests.if).toBe("needs.preflight.outputs.run_openclawkit_tests == 'true'");
+    expect(NatesclawKitTests.if).toBe("needs.preflight.outputs.run_natesclawkit_tests == 'true'");
 
     const checkShard = workflow.jobs["check-shard"].steps.find(
       (step: { name?: string }) => step.name === "Run check shard",
@@ -5493,7 +5493,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(uiInstall.run).toContain(
       "Target does not provide a supported Playwright Chromium installer.",
     );
-    expect(uiInstall.run).not.toContain("OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM");
+    expect(uiInstall.run).not.toContain("NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM");
     expect(uiTest.run).toContain('if [[ "$COMPATIBILITY_TARGET" == "true" ]]');
     expect(uiTest.run).toContain("pnpm --dir ui test --testTimeout=30000 --isolate");
     expect(uiTest.run).not.toContain("--retry");
@@ -5515,7 +5515,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     // Three serial workers own Control UI files while the fourth owns browser
     // extension E2E; all four remain required by the aggregate CI gate.
     expect(uiE2e["timeout-minutes"]).toBe(25);
-    expect(uiE2e.env).toEqual({ OPENCLAW_UI_E2E_SKIP_REAL_GATEWAY: "1" });
+    expect(uiE2e.env).toEqual({ NATESCLAW_UI_E2E_SKIP_REAL_GATEWAY: "1" });
     expect(uiE2e.strategy).toEqual({
       "fail-fast": false,
       "max-parallel": 4,
@@ -5539,9 +5539,9 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       "node-version": "24.x",
       "install-bun": "false",
       "sticky-disk":
-        "${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.run_attempt > 1)) && 'false' || (github.repository == 'openclaw/openclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'openclaw/openclaw') && 'true' || 'false') }}",
+        "${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.run_attempt > 1)) && 'false' || (github.repository == 'natesclaw/natesclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw') && 'true' || 'false') }}",
       "use-actions-cache":
-        "${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.run_attempt > 1)) && 'true' || (github.repository == 'openclaw/openclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'openclaw/openclaw') && 'false' || 'true') }}",
+        "${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.run_attempt > 1)) && 'true' || (github.repository == 'natesclaw/natesclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw') && 'false' || 'true') }}",
     } as const;
     expect(uiE2eSetup.with).toEqual(expectedUiE2eSetup);
     const realGatewaySetup = expectDefined(
@@ -5569,8 +5569,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
         name: "same-repo pull request first attempt",
         context: {
           eventName: "pull_request",
-          headRepository: "openclaw/openclaw",
-          repository: "openclaw/openclaw",
+          headRepository: "natesclaw/natesclaw",
+          repository: "natesclaw/natesclaw",
           runAttempt: 1,
         },
         expected: { blacksmith: true, stickyDisk: "true", useActionsCache: "false" },
@@ -5579,8 +5579,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
         name: "same-repo pull request retry",
         context: {
           eventName: "pull_request",
-          headRepository: "openclaw/openclaw",
-          repository: "openclaw/openclaw",
+          headRepository: "natesclaw/natesclaw",
+          repository: "natesclaw/natesclaw",
           runAttempt: 2,
         },
         expected: { blacksmith: false, stickyDisk: "false", useActionsCache: "true" },
@@ -5589,8 +5589,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
         name: "fork pull request",
         context: {
           eventName: "pull_request",
-          headRepository: "contributor/openclaw",
-          repository: "openclaw/openclaw",
+          headRepository: "contributor/natesclaw",
+          repository: "natesclaw/natesclaw",
           runAttempt: 1,
         },
         expected: { blacksmith: false, stickyDisk: "false", useActionsCache: "true" },
@@ -5599,7 +5599,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
         name: "workflow dispatch",
         context: {
           eventName: "workflow_dispatch",
-          repository: "openclaw/openclaw",
+          repository: "natesclaw/natesclaw",
           runAttempt: 1,
         },
         expected: { blacksmith: false, stickyDisk: "false", useActionsCache: "true" },
@@ -5608,7 +5608,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
         name: "canonical push retry",
         context: {
           eventName: "push",
-          repository: "openclaw/openclaw",
+          repository: "natesclaw/natesclaw",
           runAttempt: 2,
         },
         expected: { blacksmith: true, stickyDisk: "true", useActionsCache: "false" },
@@ -5616,7 +5616,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     ] as const;
     for (const { blacksmithRunner, job, name: jobName, setup } of routedUiE2eJobs) {
       expect(job["runs-on"]).toBe(
-        "${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.run_attempt > 1)) && 'ubuntu-24.04' || (github.repository == 'openclaw/openclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'openclaw/openclaw') && '" +
+        "${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.run_attempt > 1)) && 'ubuntu-24.04' || (github.repository == 'natesclaw/natesclaw' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw') && '" +
           blacksmithRunner +
           "' || 'ubuntu-24.04') }}",
       );
@@ -5672,8 +5672,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(browserExtension.run).toBe("pnpm test:e2e:browser-extension");
     for (const { job } of routedUiE2eJobs) {
       const jobContract = JSON.stringify(job);
-      expect(jobContract).not.toContain("OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM");
-      expect(jobContract).not.toContain("OPENCLAW_VITEST_NO_OUTPUT_RETRY");
+      expect(jobContract).not.toContain("NATESCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM");
+      expect(jobContract).not.toContain("NATESCLAW_VITEST_NO_OUTPUT_RETRY");
     }
 
     const realGatewayRuns = uiE2eRealGateway.steps
@@ -5800,7 +5800,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       (step: WorkflowStep) => step.name === "Check CLI startup memory",
     );
 
-    expect(startupMemoryStep.env.OPENCLAW_STARTUP_MEMORY_PLUGINS_LIST_MB).toBe(
+    expect(startupMemoryStep.env.NATESCLAW_STARTUP_MEMORY_PLUGINS_LIST_MB).toBe(
       "${{ runner.environment == 'github-hosted' && '425' || '400' }}",
     );
   });
@@ -5815,7 +5815,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       "test/scripts/doctor-config-preflight-plugin-index.built-cli.e2e.test.ts",
     );
     expect(proofStep.run).toContain(
-      "env OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=660000 node scripts/run-vitest.mjs run",
+      "env NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=660000 node scripts/run-vitest.mjs run",
     );
     expect(proofStep.run).toContain("--config test/vitest/vitest.e2e.config.ts");
     expect(proofStep.run).toContain("Selected target predates");
@@ -5830,9 +5830,9 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
 
     expect(runStep.run).toContain("sqlite-session-flip-proof)");
     expect(runStep.run).toContain(
-      'run_check "sqlite sessions/transcripts flip proof" env OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=660000 node scripts/run-vitest.mjs run',
+      'run_check "sqlite sessions/transcripts flip proof" env NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=660000 node scripts/run-vitest.mjs run',
     );
-    expect(runStep.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBeUndefined();
+    expect(runStep.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBeUndefined();
   });
 
   it("restores the dist build cache before building and saves only cache misses", () => {
@@ -5934,7 +5934,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(run.slice(tuiPty, tuiPtyWait)).toContain("src/tui/tui-pty-local.e2e.test.ts");
     expect(run.slice(tuiPty, tuiPtyWait)).toContain("--testNamePattern");
     expect(run.slice(tuiPty, tuiPtyWait)).toContain(
-      "launches openclaw (chat as local mode|tui against a real Gateway) through a real PTY",
+      "launches natesclaw (chat as local mode|tui against a real Gateway) through a real PTY",
     );
     expect(run).toContain("wait_checks()");
     expect(run.match(/wait_checks$/gmu)).toHaveLength(3);
@@ -5984,13 +5984,13 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       'shard.groups?.some((group) => group.shard_name.startsWith("core-tooling"))',
     );
     expect(nodeTestJob["timeout-minutes"]).toBe("${{ matrix.timeout_minutes || 60 }}");
-    expect(runStep.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe(
+    expect(runStep.env.NATESCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe(
       "${{ needs.preflight.outputs.compatibility_target == 'true' && '660000' || '300000' }}",
     );
-    expect(runStep.env.OPENCLAW_VITEST_NO_OUTPUT_RETRY).toBe("1");
-    expect(runStep.env.OPENCLAW_NODE_TEST_ENV_JSON).toBe("${{ toJson(matrix.env) }}");
-    expect(runStep.env.OPENCLAW_NODE_TEST_TARGETS_JSON).toBe("${{ toJson(matrix.targets) }}");
-    expect(runStep.env.OPENCLAW_NODE_TEST_VITEST_ARGS_JSON).toBe(
+    expect(runStep.env.NATESCLAW_VITEST_NO_OUTPUT_RETRY).toBe("1");
+    expect(runStep.env.NATESCLAW_NODE_TEST_ENV_JSON).toBe("${{ toJson(matrix.env) }}");
+    expect(runStep.env.NATESCLAW_NODE_TEST_TARGETS_JSON).toBe("${{ toJson(matrix.targets) }}");
+    expect(runStep.env.NATESCLAW_NODE_TEST_VITEST_ARGS_JSON).toBe(
       "${{ needs.preflight.outputs.compatibility_target == 'true' && '[\"--hookTimeout=600000\"]' || '[]' }}",
     );
     const trustedRunnerStep = nodeTestJob.steps.find(
@@ -6035,8 +6035,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(buildChecks.run).toContain("pnpm test:gateway:watch-regression -- --skip-build");
     expect(buildChecks.run).not.toContain("scripts/check-gateway-watch-regression.mts");
     expect(qaBuild.run.match(/pnpm build qaRuntime/gu)).toHaveLength(2);
-    expect(qaBuild.run).toContain('package_script="scripts/package-openclaw-for-docker.mts"');
-    expect(qaBuild.run).toContain('package_script="scripts/package-openclaw-for-docker.mjs"');
+    expect(qaBuild.run).toContain('package_script="scripts/package-natesclaw-for-docker.mts"');
+    expect(qaBuild.run).toContain('package_script="scripts/package-natesclaw-for-docker.mjs"');
     expect(additionalChecks.run).toContain(
       "boundary_runner=(node --import tsx scripts/run-additional-boundary-checks.mts)",
     );
@@ -6081,7 +6081,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     ];
 
     expect(workflow.on.pull_request).not.toHaveProperty("paths-ignore");
-    expect(gate.name).toBe("openclaw/ci-gate");
+    expect(gate.name).toBe("natesclaw/ci-gate");
     expect(gate.needs).toEqual([...requiredJobs, ...selectedJobs]);
     expect(gate.needs.toSorted()).toEqual(
       Object.keys(workflow.jobs)
@@ -6269,7 +6269,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       expect(maturityWorkflow.jobs.generate_qa_evidence.with.trusted_ref).toBe("${{ inputs.ref }}");
 
       const topology = createQaProtocolTopology();
-      const checkout = tempDirs.make("openclaw-qa-protocol-fetch-");
+      const checkout = tempDirs.make("natesclaw-qa-protocol-fetch-");
       runGit(checkout, ["init", "-q", "-b", "main"]);
       runGit(checkout, ["remote", "add", "origin", topology.origin]);
       runGit(checkout, [
@@ -6425,7 +6425,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
         type: "string",
       },
       ref: {
-        description: "OpenClaw branch, tag, or SHA containing the maturity score source",
+        description: "Natesclaw branch, tag, or SHA containing the maturity score source",
         required: true,
         type: "string",
       },
@@ -6457,22 +6457,22 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(maturityWorkflow.on.workflow_call.inputs).not.toHaveProperty("publish_pull_request");
     expect(maturityWorkflow.on.workflow_call.secrets.OPENAI_API_KEY.required).toBe(true);
     expect(
-      maturityWorkflow.on.workflow_call.secrets.OPENCLAW_MATURITY_SCORECARD_AGENT_OPENAI_API_KEY
+      maturityWorkflow.on.workflow_call.secrets.NATESCLAW_MATURITY_SCORECARD_AGENT_OPENAI_API_KEY
         .required,
     ).toBe(false);
     expect(Object.keys(maturityWorkflow.on.workflow_call.secrets).toSorted()).toEqual([
       "CLAWSWEEPER_APP_PRIVATE_KEY",
       "MANTIS_GITHUB_APP_PRIVATE_KEY",
       "OPENAI_API_KEY",
-      "OPENCLAW_MATURITY_SCORECARD_AGENT_OPENAI_API_KEY",
-      "OPENCLAW_QA_CONVEX_SECRET_CI",
-      "OPENCLAW_QA_CONVEX_SITE_URL",
+      "NATESCLAW_MATURITY_SCORECARD_AGENT_OPENAI_API_KEY",
+      "NATESCLAW_QA_CONVEX_SECRET_CI",
+      "NATESCLAW_QA_CONVEX_SITE_URL",
     ]);
     for (const secret of [
       "CLAWSWEEPER_APP_PRIVATE_KEY",
       "MANTIS_GITHUB_APP_PRIVATE_KEY",
-      "OPENCLAW_QA_CONVEX_SECRET_CI",
-      "OPENCLAW_QA_CONVEX_SITE_URL",
+      "NATESCLAW_QA_CONVEX_SECRET_CI",
+      "NATESCLAW_QA_CONVEX_SITE_URL",
     ]) {
       expect(maturityWorkflow.on.workflow_call.secrets[secret].required).toBe(false);
     }
@@ -6508,8 +6508,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     const runProfileStep = qaRunJob.steps.find(
       (step: WorkflowStep) => step.name === "Run QA profile",
     );
-    expect(runProfileStep.env?.OPENCLAW_QA_ALLOW_UPDATE_RUN_SELF).toBe("1");
-    expect(runProfileStep.env?.OPENCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS).toBe("120000");
+    expect(runProfileStep.env?.NATESCLAW_QA_ALLOW_UPDATE_RUN_SELF).toBe("1");
+    expect(runProfileStep.env?.NATESCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS).toBe("120000");
     expect(runProfileStep.env?.PROTOCOL_SINCE_BASE_SHA).toBe(
       "${{ needs.validate_selected_ref.outputs.protocol_base_revision }}",
     );
@@ -6589,8 +6589,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(generateJob.with).not.toHaveProperty("fail_on_qa_failure");
     expect(generateJob.secrets).toMatchObject({
       OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}",
-      OPENCLAW_QA_CONVEX_SECRET_CI: "${{ secrets.OPENCLAW_QA_CONVEX_SECRET_CI }}",
-      OPENCLAW_QA_CONVEX_SITE_URL: "${{ secrets.OPENCLAW_QA_CONVEX_SITE_URL }}",
+      NATESCLAW_QA_CONVEX_SECRET_CI: "${{ secrets.NATESCLAW_QA_CONVEX_SECRET_CI }}",
+      NATESCLAW_QA_CONVEX_SITE_URL: "${{ secrets.NATESCLAW_QA_CONVEX_SITE_URL }}",
     });
 
     const workflowStep = maturityWorkflow.jobs.validate_selected_ref.steps.find(
@@ -6661,7 +6661,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       `github.workflow_ref == '${MATURITY_SCORECARD_WORKFLOW_REF}' &&`,
       `needs.validate_selected_ref.outputs.workflow_file_path == '${MATURITY_SCORECARD_WORKFLOW}' &&`,
       `needs.validate_selected_ref.outputs.workflow_ref == '${MATURITY_SCORECARD_WORKFLOW_REF}' &&`,
-      "needs.validate_selected_ref.outputs.workflow_repository == 'openclaw/openclaw' }}",
+      "needs.validate_selected_ref.outputs.workflow_repository == 'natesclaw/natesclaw' }}",
     ].join(" ");
     expect(publisherPreflight.needs).toBe("validate_selected_ref");
     expect(publisherPreflight.if).toBe("${{ inputs.publish_pull_request }}");
@@ -6896,7 +6896,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       );
       const producerScript = expectDefined(producerStep?.run, "QA evidence producer script");
       const consumerScript = expectDefined(consumerStep?.run, "QA evidence consumer script");
-      const root = tempDirs.make("openclaw-qa-profile-artifact-");
+      const root = tempDirs.make("natesclaw-qa-profile-artifact-");
       const evidencePath = path.join(root, "qa-evidence.json");
       const manifestPath = path.join(root, "qa-profile-evidence-manifest.json");
       const protocolBaseSha = "b".repeat(40);
@@ -6946,7 +6946,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
         writeFileSync(
           evidencePath,
           `${JSON.stringify({
-            kind: "openclaw.qa.evidence-summary",
+            kind: "natesclaw.qa.evidence-summary",
             schemaVersion: 2,
             generatedAt: "2026-08-05T00:00:00.000Z",
             evidenceMode: "full",
@@ -7060,7 +7060,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     "keeps a reusable maturity call artifact-only even when its caller was dispatched",
     () => {
       const callerWorkflowRef =
-        "openclaw/openclaw/.github/workflows/openclaw-release-checks.yml@refs/heads/main";
+        "natesclaw/natesclaw/.github/workflows/natesclaw-release-checks.yml@refs/heads/main";
       const artifactOnly = runMaturityInvocationScenario({
         callerEventName: "workflow_dispatch",
         callerWorkflowRef,
@@ -7117,7 +7117,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
   it("keeps exact release validation identity separate from release context", () => {
     const fullReleaseWorkflow = readWorkflow(".github/workflows/full-release-validation.yml");
     const releaseWorkflow = readReleaseChecksWorkflow();
-    const telegramWorkflow = readWorkflow(".github/workflows/openclaw-release-telegram-qa.yml");
+    const telegramWorkflow = readWorkflow(".github/workflows/natesclaw-release-telegram-qa.yml");
     const fullReleaseDispatchStep = fullReleaseWorkflow.jobs.release_checks.steps.find(
       (step: WorkflowStep) => step.name === "Dispatch and monitor release checks",
     );
@@ -7237,8 +7237,8 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(job.with).not.toHaveProperty("publish_pull_request");
     expect(job.secrets).toMatchObject({
       OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}",
-      OPENCLAW_QA_CONVEX_SECRET_CI: "${{ secrets.OPENCLAW_QA_CONVEX_SECRET_CI }}",
-      OPENCLAW_QA_CONVEX_SITE_URL: "${{ secrets.OPENCLAW_QA_CONVEX_SITE_URL }}",
+      NATESCLAW_QA_CONVEX_SECRET_CI: "${{ secrets.NATESCLAW_QA_CONVEX_SECRET_CI }}",
+      NATESCLAW_QA_CONVEX_SITE_URL: "${{ secrets.NATESCLAW_QA_CONVEX_SITE_URL }}",
     });
     expect(summaryJob.needs).toContain("maturity_scorecard_release_checks");
     expect(verifyStep.env.MATURITY_SCORECARD_RELEASE_CHECKS_RESULT).toBe(
@@ -7295,16 +7295,16 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(smokeProfileJob.name).toBe("QA Smoke CI (${{ matrix.name }})");
     const publicRuntimeBuild = smokeBuildStep.run.indexOf("pnpm build qaRuntime");
     const uiBuild = smokeBuildStep.run.indexOf("pnpm ui:build");
-    const packageBuild = smokeBuildStep.run.indexOf("node scripts/package-openclaw-for-docker.mjs");
+    const packageBuild = smokeBuildStep.run.indexOf("node scripts/package-natesclaw-for-docker.mjs");
     const privateRuntimeBuild = smokeBuildStep.run.lastIndexOf(
-      "OPENCLAW_BUILD_PRIVATE_QA=1 pnpm build qaRuntime",
+      "NATESCLAW_BUILD_PRIVATE_QA=1 pnpm build qaRuntime",
     );
     expect(smokeBuildStep.run).toContain("pnpm build qaRuntime");
     expect(smokeBuildStep.run).toContain("pnpm ui:build");
-    expect(smokeBuildStep.env).not.toHaveProperty("OPENCLAW_BUILD_PRIVATE_QA");
-    expect(smokeBuildStep.run).toContain("unset OPENCLAW_BUILD_PRIVATE_QA");
+    expect(smokeBuildStep.env).not.toHaveProperty("NATESCLAW_BUILD_PRIVATE_QA");
+    expect(smokeBuildStep.run).toContain("unset NATESCLAW_BUILD_PRIVATE_QA");
     expect(smokeBuildStep.run).toContain("--skip-build");
-    expect(smokeBuildStep.run).toContain("OPENCLAW_BUILD_PRIVATE_QA=1 pnpm build qaRuntime");
+    expect(smokeBuildStep.run).toContain("NATESCLAW_BUILD_PRIVATE_QA=1 pnpm build qaRuntime");
     expect(smokeBuildStep.run.match(/pnpm build qaRuntime/g)).toHaveLength(2);
     expect(smokeBuildStep.run).toContain("--allow-unreleased-changelog");
     expect(smokeBuildStep.run).toContain("grep -Fq");
@@ -7336,9 +7336,9 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     );
     expect(smokeDockerCacheStep.if).toContain("matrix.docker_cache == true");
     expect(smokeDockerCacheStep.if).toContain("github.event_name != 'workflow_dispatch'");
-    expect(smokeDockerCacheStep.if).toContain("github.repository == 'openclaw/openclaw'");
+    expect(smokeDockerCacheStep.if).toContain("github.repository == 'natesclaw/natesclaw'");
     expect(smokeDockerCacheStep.if).toContain(
-      "github.event.pull_request.head.repo.full_name == 'openclaw/openclaw'",
+      "github.event.pull_request.head.repo.full_name == 'natesclaw/natesclaw'",
     );
     expect(smokeDockerCacheStep.with["max-cache-size-mb"]).toBe(800000);
     expect(smokeRunStep.run).toContain("createQaSmokeCiPart");
@@ -7362,21 +7362,21 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       "console.log(`[skip] ${partId} is not declared by this checkout's smoke plan`)",
     );
     expect(smokeRunStep.run).toContain("No QA smoke runs assigned");
-    expect(smokeRunStep.run).toContain("node openclaw.mjs qa run");
-    expect(smokeRunStep.run).not.toContain("pnpm openclaw qa run");
+    expect(smokeRunStep.run).toContain("node natesclaw.mjs qa run");
+    expect(smokeRunStep.run).not.toContain("pnpm natesclaw qa run");
     expect(smokeRunStep.run).toContain(
-      "timeout --signal=TERM --kill-after=15s 10m node openclaw.mjs qa run",
+      "timeout --signal=TERM --kill-after=15s 10m node natesclaw.mjs qa run",
     );
     expect(smokeRunStep.run).toContain("--qa-profile smoke-ci");
     expect(smokeRunStep.run).toContain("--concurrency 10");
-    expect(smokeRunStep.env.OPENCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain(
+    expect(smokeRunStep.env.NATESCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain(
       "github.event_name != 'workflow_dispatch'",
     );
-    expect(smokeRunStep.env.OPENCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain(
-      "github.repository == 'openclaw/openclaw'",
+    expect(smokeRunStep.env.NATESCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain(
+      "github.repository == 'natesclaw/natesclaw'",
     );
-    expect(smokeRunStep.env.OPENCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain("'0'");
-    expect(smokeRunStep.env.OPENCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain("'1500'");
+    expect(smokeRunStep.env.NATESCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain("'0'");
+    expect(smokeRunStep.env.NATESCLAW_QA_SUITE_WORKER_START_STAGGER_MS).toContain("'1500'");
     expect(smokeRunStep.run).toContain('scenario_args+=(--scenario "$scenario_id")');
     expect(smokeRunStep.run).toContain('done <<< "$PROFILE_RUNS_TSV"');
     expect(smokeRunStep.run).not.toContain('pids+=("$!")');
@@ -7385,7 +7385,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     expect(smokeRunStep.run).not.toContain("--allow-failures");
     expect(smokeRunStep.run).toContain("qa_exit_code=0");
     expect(smokeRunStep.run).toContain('exit "$qa_exit_code"');
-    expect(smokeRunStep.run).toContain("OPENCLAW_CURRENT_PACKAGE_TGZ");
+    expect(smokeRunStep.run).toContain("NATESCLAW_CURRENT_PACKAGE_TGZ");
     expect(smokeRunStep.run).toContain("--max-old-space-size=16384");
     expect(smokeRunStep.run).not.toContain("scripts/build-all.mts qaRuntime");
     expect(smokeRunStep.run).not.toContain("OPENAI_API_KEY");
@@ -7404,10 +7404,10 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
   it("keeps push docs validation ClawHub-backed", () => {
     const workflow = readFileSync(".github/workflows/docs.yml", "utf8");
 
-    expect(workflow).toContain("repository: openclaw/clawhub");
+    expect(workflow).toContain("repository: natesclaw/clawhub");
     expect(workflow).toContain("path: clawhub-source");
     expect(workflow).toContain(
-      "OPENCLAW_DOCS_SYNC_CLAWHUB_REPO: ${{ github.workspace }}/clawhub-source",
+      "NATESCLAW_DOCS_SYNC_CLAWHUB_REPO: ${{ github.workspace }}/clawhub-source",
     );
   });
 
@@ -7430,7 +7430,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       "utf8",
     );
     const rawSocketQuery = readFileSync(
-      ".github/codeql/openclaw-boundary/queries/raw-socket-callsite-classification.ql",
+      ".github/codeql/natesclaw-boundary/queries/raw-socket-callsite-classification.ql",
       "utf8",
     );
     const networkSelector = workflow.slice(
@@ -7464,7 +7464,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
       'codex_transport="extensions/codex/src/app-server/transport-websocket.ts"',
     );
     expect(workflow).toContain(
-      "network_codeql_contract_pattern='^\\.github/codeql/(codeql-network-runtime-boundary-critical-quality\\.yml|openclaw-boundary/queries/(raw-socket-callsite-classification|managed-proxy-runtime-mutation)\\.ql)$'",
+      "network_codeql_contract_pattern='^\\.github/codeql/(codeql-network-runtime-boundary-critical-quality\\.yml|natesclaw-boundary/queries/(raw-socket-callsite-classification|managed-proxy-runtime-mutation)\\.ql)$'",
     );
     expect(workflow).toContain(
       'if grep -Eq "$network_codeql_contract_pattern" "$changed_files" ||',
@@ -7477,7 +7477,7 @@ printf '%s\n' "\${CURL_SUCCESS_IP:-203.0.113.7}"
     // contain the transport path as data without disappearing from the scan.
     expect(workflow).toContain("packages/net-policy/src/");
     expect(workflow).toContain(
-      "grep -En 'HTTP_PROXY|HTTPS_PROXY|NO_PROXY|GLOBAL_AGENT_|OPENCLAW_PROXY_' \"$added_lines\"",
+      "grep -En 'HTTP_PROXY|HTTPS_PROXY|NO_PROXY|GLOBAL_AGENT_|NATESCLAW_PROXY_' \"$added_lines\"",
     );
     expect(workflow).toContain('echo "full_codeql=true" >> "$GITHUB_OUTPUT"');
     expect(workflow).toContain(

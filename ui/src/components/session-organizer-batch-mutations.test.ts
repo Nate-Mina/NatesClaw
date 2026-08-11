@@ -412,7 +412,7 @@ describe("session organizer destructive confirmations", () => {
 
     const pending = deleteSessionsBatch(harness.host, rows, harness.scope);
     const actions = await waitForConfirmDialogActions();
-    expect(document.body.querySelector("openclaw-modal-dialog")?.textContent).toContain(
+    expect(document.body.querySelector("natesclaw-modal-dialog")?.textContent).toContain(
       "Delete 2 sessions and their transcripts?",
     );
     answerConfirmDialog(actions, "confirm");
@@ -478,7 +478,7 @@ describe("session organizer destructive confirmations", () => {
 
     await deleteSession(harness.host, sessionRow(0), harness.scope, { offerSkip: true });
 
-    expect(document.body.querySelector("openclaw-modal-dialog")).toBeNull();
+    expect(document.body.querySelector("natesclaw-modal-dialog")).toBeNull();
     expect(harness.deleteOne).toHaveBeenCalledOnce();
   });
 
@@ -535,7 +535,7 @@ describe("session organizer destructive confirmations", () => {
     });
     const actions = await waitForConfirmDialogActions();
     const skip = actions
-      .closest("openclaw-modal-dialog")
+      .closest("natesclaw-modal-dialog")
       ?.querySelector<HTMLInputElement>('.exec-approval-skip input[type="checkbox"]');
     if (!skip) {
       throw new Error("expected the skip checkbox");
@@ -570,7 +570,7 @@ describe("session organizer destructive confirmations", () => {
 
     await stopCloudWorker(harness.host, cloudWorkerRow(true), harness.scope);
 
-    expect(document.body.querySelector("openclaw-modal-dialog")).toBeNull();
+    expect(document.body.querySelector("natesclaw-modal-dialog")).toBeNull();
     expect(harness.request).not.toHaveBeenCalled();
   });
 });

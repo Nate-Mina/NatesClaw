@@ -17,7 +17,7 @@ import {
   type SessionsCleanupResult,
 } from "../config/sessions.js";
 import { resolveSqliteTargetFromSessionStorePath } from "../config/sessions/session-sqlite-target.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { callGateway, isGatewayTransportError } from "../gateway/call.js";
 import { type RuntimeEnv, writeRuntimeJson } from "../runtime.js";
 import { GATEWAY_CLIENT_MODES, GATEWAY_CLIENT_NAMES } from "../utils/message-channel.js";
@@ -153,7 +153,7 @@ function toDisplayedCleanupSummary(summary: SessionCleanupSummary): SessionClean
 }
 
 function renderStoreDryRunPlan(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   summary: SessionCleanupSummary;
   actionRows: SessionCleanupActionRow[];
   runtime: RuntimeEnv;

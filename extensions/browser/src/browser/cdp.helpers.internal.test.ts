@@ -1,7 +1,7 @@
 // Browser tests cover cdp.helpers.internal plugin behavior.
 import { createServer } from "node:http";
 import type { Socket } from "node:net";
-import { rawDataToString } from "openclaw/plugin-sdk/webhook-ingress";
+import { rawDataToString } from "natesclaw/plugin-sdk/webhook-ingress";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { WebSocketServer } from "ws";
 import { toErrorObject } from "../infra/errors.js";
@@ -16,8 +16,8 @@ const { registerManagedProxyBrowserCdpBypassMock } = vi.hoisted(() => ({
   ),
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/runtime-env")>();
+vi.mock("natesclaw/plugin-sdk/runtime-env", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/runtime-env")>();
   return {
     ...actual,
     sleepWithAbort: (...args: Parameters<typeof actual.sleepWithAbort>) => {
@@ -28,15 +28,15 @@ vi.mock("openclaw/plugin-sdk/runtime-env", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: (...args: unknown[]) => fetchWithSsrFGuardMock(...args),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime-internal", () => ({
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime-internal", () => ({
   registerManagedProxyBrowserCdpBypass: registerManagedProxyBrowserCdpBypassMock,
 }));
 
@@ -190,7 +190,7 @@ describe("cdp.helpers internal", () => {
       });
 
       const { release: guardedRelease } = await fetchCdpChecked(
-        "http://openclaw:secret@127.0.0.1:9222/json/version",
+        "http://natesclaw:secret@127.0.0.1:9222/json/version",
         250,
         undefined,
         { dangerouslyAllowPrivateNetwork: false, allowedHostnames: ["127.0.0.1"] },
@@ -389,7 +389,7 @@ describe("cdp.helpers internal", () => {
 
     it("aborts an authenticated 503 handshake retry before opening another socket", async () => {
       const controller = new AbortController();
-      const expectedAuthorization = `Basic ${Buffer.from("openclaw:cdp-abort-test").toString("base64")}`;
+      const expectedAuthorization = `Basic ${Buffer.from("natesclaw:cdp-abort-test").toString("base64")}`;
       let rejectedHandshakes = 0;
       wss = new WebSocketServer({
         port: 0,
@@ -408,7 +408,7 @@ describe("cdp.helpers internal", () => {
       });
       const port = (wss.address() as { port: number }).port;
       const pending = withCdpSocket(
-        `ws://openclaw:cdp-abort-test@127.0.0.1:${port}/devtools/browser/TEST`,
+        `ws://natesclaw:cdp-abort-test@127.0.0.1:${port}/devtools/browser/TEST`,
         async () => "unexpected command",
         {
           handshakeRetries: 3,
@@ -441,7 +441,7 @@ describe("cdp.helpers internal", () => {
       const controller = new AbortController();
       const server = createServer();
       const sockets = new Set<Socket>();
-      const expectedAuthorization = `Basic ${Buffer.from("openclaw:cdp-abort-test").toString("base64")}`;
+      const expectedAuthorization = `Basic ${Buffer.from("natesclaw:cdp-abort-test").toString("base64")}`;
       let resolveUpgrade: (() => void) | undefined;
       const upgradeStarted = new Promise<void>((resolve) => {
         resolveUpgrade = resolve;
@@ -467,7 +467,7 @@ describe("cdp.helpers internal", () => {
 
       try {
         const pending = withCdpSocket(
-          `ws://openclaw:cdp-abort-test@127.0.0.1:${port}/devtools/browser/TEST`,
+          `ws://natesclaw:cdp-abort-test@127.0.0.1:${port}/devtools/browser/TEST`,
           async () => "unexpected command",
           { handshakeTimeoutMs: 2_000, handshakeRetries: 0, signal: controller.signal },
         );

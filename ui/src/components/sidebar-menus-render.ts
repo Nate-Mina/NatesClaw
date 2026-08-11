@@ -172,7 +172,7 @@ export function renderSidebarSessionMenuForController(controller: SidebarMenusCo
   return keyed(
     menu,
     html`
-      <openclaw-session-menu
+      <natesclaw-session-menu
         .session=${{
           label: session.label,
           pinned: session.pinned,
@@ -252,7 +252,7 @@ export function renderSidebarSessionMenuForController(controller: SidebarMenusCo
               break;
           }
         }}
-      ></openclaw-session-menu>
+      ></natesclaw-session-menu>
     `,
   );
 }

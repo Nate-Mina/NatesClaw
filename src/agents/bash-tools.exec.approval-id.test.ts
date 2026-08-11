@@ -7,7 +7,7 @@ import path from "node:path";
  * Covers approval registration ids, follow-up idempotency, and approved
  * node/gateway invocation behavior.
  */
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   loadExecApprovals,
@@ -15,7 +15,7 @@ import {
   type ExecApprovalsFile,
 } from "../infra/exec-approvals.js";
 import { sendMessage } from "../infra/outbound/message.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { captureEnv, deleteTestEnvValue, setTestEnvValue } from "../test-utils/env.js";
 import { buildSystemRunPreparePayload } from "../test-utils/system-run-prepare-payload.js";
 import { createExecTool as createExecToolImpl } from "./bash-tools.exec-run.js";
@@ -415,32 +415,32 @@ describe("exec approvals", () => {
   let tempCaseIndex = 0;
 
   beforeAll(async () => {
-    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-exec-approvals-"));
+    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-exec-approvals-"));
   });
 
   beforeEach(async () => {
     envSnapshot = captureEnv([
       "HOME",
       "USERPROFILE",
-      "OPENCLAW_STATE_DIR",
-      "OPENCLAW_BUNDLED_PLUGINS_DIR",
-      "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
+      "NATESCLAW_STATE_DIR",
+      "NATESCLAW_BUNDLED_PLUGINS_DIR",
+      "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
     ]);
     const tempDir = path.join(tempRoot, `case-${++tempCaseIndex}`);
     await fs.mkdir(tempDir, { recursive: true });
     setTestEnvValue("HOME", tempDir);
     // Windows uses USERPROFILE for os.homedir()
     setTestEnvValue("USERPROFILE", tempDir);
-    setTestEnvValue("OPENCLAW_STATE_DIR", path.join(tempDir, ".openclaw"));
-    deleteTestEnvValue("OPENCLAW_BUNDLED_PLUGINS_DIR");
-    setTestEnvValue("OPENCLAW_DISABLE_BUNDLED_PLUGINS", "1");
+    setTestEnvValue("NATESCLAW_STATE_DIR", path.join(tempDir, ".natesclaw"));
+    deleteTestEnvValue("NATESCLAW_BUNDLED_PLUGINS_DIR");
+    setTestEnvValue("NATESCLAW_DISABLE_BUNDLED_PLUGINS", "1");
     vi.mocked(callGatewayTool).mockReset();
     vi.mocked(sendMessage).mockClear();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     envSnapshot?.restore();
     envSnapshot = undefined;
   });
@@ -508,7 +508,7 @@ describe("exec approvals", () => {
   });
 
   it("skips approval when node allowlist is satisfied", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-test-bin-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-test-bin-"));
     const binDir = path.join(tempDir, "bin");
     await fs.mkdir(binDir, { recursive: true });
     const exeName = process.platform === "win32" ? "tool.cmd" : "tool";
@@ -1354,7 +1354,7 @@ describe("exec approvals", () => {
     if (process.platform === "win32") {
       return;
     }
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-wrapper-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-skill-wrapper-"));
     try {
       const binDir = path.join(tempDir, "bin");
       const wrapperPath = path.join(binDir, "gog-wrapper");
@@ -1434,9 +1434,9 @@ describe("exec approvals", () => {
     if (process.platform === "win32") {
       return;
     }
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-prelude-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-skill-prelude-"));
     try {
-      const skillDir = path.join(tempDir, ".openclaw", "skills", "gog");
+      const skillDir = path.join(tempDir, ".natesclaw", "skills", "gog");
       const skillPath = path.join(skillDir, "SKILL.md");
       const binDir = path.join(tempDir, "bin");
       const wrapperPath = path.join(binDir, "gog-wrapper");

@@ -1,5 +1,5 @@
 ---
-summary: "Adds Qwen, Qwen Cloud, Model Studio, DashScope, Qwen Token Plan, Bailian Token Plan model provider support to OpenClaw."
+summary: "Adds Qwen, Qwen Cloud, Model Studio, DashScope, Qwen Token Plan, Bailian Token Plan model provider support to Natesclaw."
 read_when:
   - You are installing, configuring, or auditing the qwen plugin
 title: "Qwen plugin"
@@ -7,12 +7,12 @@ title: "Qwen plugin"
 
 # Qwen plugin
 
-Adds Qwen, Qwen Cloud, Model Studio, DashScope, Qwen Token Plan, Bailian Token Plan model provider support to OpenClaw.
+Adds Qwen, Qwen Cloud, Model Studio, DashScope, Qwen Token Plan, Bailian Token Plan model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@openclaw/qwen-provider`
-- Install route: npm; ClawHub: `clawhub:@openclaw/qwen-provider`
+- Package: `@natesclaw/qwen-provider`
+- Install route: npm; ClawHub: `clawhub:@natesclaw/qwen-provider`
 
 ## Surface
 

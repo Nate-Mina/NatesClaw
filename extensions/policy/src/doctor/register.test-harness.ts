@@ -8,18 +8,18 @@ import {
   type HealthCheckContext,
   type HealthFinding,
   type HealthRepairContext,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/health";
-import { clearHealthChecksForTest } from "openclaw/plugin-sdk/plugin-test-runtime";
+  type NatesclawConfig,
+} from "natesclaw/plugin-sdk/health";
+import { clearHealthChecksForTest } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { registerPolicyDoctorChecks } from "./register.js";
 
 export let workspaceDir: string;
 
-let originalOpenClawHome: string | undefined;
+let originalNatesclawHome: string | undefined;
 
-let originalOpenClawStateDir: string | undefined;
+let originalNatesclawStateDir: string | undefined;
 
-export function cfgWithPolicy(settings: Record<string, unknown> = {}): OpenClawConfig {
+export function cfgWithPolicy(settings: Record<string, unknown> = {}): NatesclawConfig {
   return {
     plugins: {
       entries: {
@@ -36,7 +36,7 @@ export async function writePolicyFixture(
   ...json: Parameters<typeof JSON.stringify>
 ): Promise<string> {
   const [policy] = json;
-  const configPath = join(workspaceDir, "openclaw.jsonc");
+  const configPath = join(workspaceDir, "natesclaw.jsonc");
   await fs.writeFile(configPath, "{}", "utf-8");
   await fs.writeFile(
     join(workspaceDir, "policy.jsonc"),
@@ -46,7 +46,7 @@ export async function writePolicyFixture(
   return configPath;
 }
 
-export function ctx(configPath: string, cfg: OpenClawConfig = {}): HealthCheckContext {
+export function ctx(configPath: string, cfg: NatesclawConfig = {}): HealthCheckContext {
   return {
     mode: "lint",
     runtime: {
@@ -60,7 +60,7 @@ export function ctx(configPath: string, cfg: OpenClawConfig = {}): HealthCheckCo
   };
 }
 
-export function repairCtx(configPath: string, cfg: OpenClawConfig = {}): HealthRepairContext {
+export function repairCtx(configPath: string, cfg: NatesclawConfig = {}): HealthRepairContext {
   return {
     ...ctx(configPath, cfg),
     mode: "fix",
@@ -90,7 +90,7 @@ export async function runPolicyChecks(checkCtx: HealthCheckContext): Promise<{
 
 export async function runPolicyChecksFixture(
   policy: unknown,
-  cfg: OpenClawConfig = cfgWithPolicy(),
+  cfg: NatesclawConfig = cfgWithPolicy(),
 ) {
   return runPolicyChecks(ctx(await writePolicyFixture(policy), cfg));
 }
@@ -128,36 +128,36 @@ export async function runPolicyRepairCheck(checkId: string, repairCheckCtx: Heal
 
 export const setupPolicyDoctorTest = async () => {
   clearHealthChecksForTest();
-  originalOpenClawHome = process.env.OPENCLAW_HOME;
-  originalOpenClawStateDir = process.env.OPENCLAW_STATE_DIR;
+  originalNatesclawHome = process.env.NATESCLAW_HOME;
+  originalNatesclawStateDir = process.env.NATESCLAW_STATE_DIR;
   workspaceDir = await fs.mkdtemp(join(tmpdir(), "policy-doctor-"));
-  process.env.OPENCLAW_HOME = workspaceDir;
-  delete process.env.OPENCLAW_STATE_DIR;
-  await fs.mkdir(join(workspaceDir, ".openclaw"), { recursive: true });
+  process.env.NATESCLAW_HOME = workspaceDir;
+  delete process.env.NATESCLAW_STATE_DIR;
+  await fs.mkdir(join(workspaceDir, ".natesclaw"), { recursive: true });
   try {
     await fs.symlink(
       "../exec-approvals.json",
-      join(workspaceDir, ".openclaw", "exec-approvals.json"),
+      join(workspaceDir, ".natesclaw", "exec-approvals.json"),
     );
   } catch (err) {
     if (typeof err !== "object" || err === null || !("code" in err) || err.code !== "EPERM") {
       throw err;
     }
-    await fs.rm(join(workspaceDir, ".openclaw"), { recursive: true, force: true });
-    await fs.symlink(workspaceDir, join(workspaceDir, ".openclaw"), "junction");
+    await fs.rm(join(workspaceDir, ".natesclaw"), { recursive: true, force: true });
+    await fs.symlink(workspaceDir, join(workspaceDir, ".natesclaw"), "junction");
   }
 };
 
 export const teardownPolicyDoctorTest = async () => {
-  if (originalOpenClawHome === undefined) {
-    delete process.env.OPENCLAW_HOME;
+  if (originalNatesclawHome === undefined) {
+    delete process.env.NATESCLAW_HOME;
   } else {
-    process.env.OPENCLAW_HOME = originalOpenClawHome;
+    process.env.NATESCLAW_HOME = originalNatesclawHome;
   }
-  if (originalOpenClawStateDir === undefined) {
-    delete process.env.OPENCLAW_STATE_DIR;
+  if (originalNatesclawStateDir === undefined) {
+    delete process.env.NATESCLAW_STATE_DIR;
   } else {
-    process.env.OPENCLAW_STATE_DIR = originalOpenClawStateDir;
+    process.env.NATESCLAW_STATE_DIR = originalNatesclawStateDir;
   }
   await fs.rm(workspaceDir, { recursive: true, force: true });
   clearHealthChecksForTest();

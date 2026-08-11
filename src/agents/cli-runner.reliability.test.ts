@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 /** Tests CLI runner reliability paths for hooks, transcripts, failover, and reply ops. */
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createSolidPngBuffer } from "../../test/helpers/image-fixtures.js";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
@@ -17,7 +17,7 @@ import {
   upsertSessionEntryCore,
 } from "../config/sessions/session-accessor.js";
 import { CURRENT_SESSION_VERSION } from "../config/sessions/version.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   markMcpLoopbackRequestClassified,
   markMcpLoopbackRequestFinished,
@@ -100,7 +100,7 @@ vi.mock("../tts/tts-settings.js", () => ({
 }));
 
 const mockGetGlobalHookRunner = vi.mocked(getGlobalHookRunner);
-const hookRunnerGlobalStateKey = Symbol.for("openclaw.plugins.hook-runner-global-state");
+const hookRunnerGlobalStateKey = Symbol.for("natesclaw.plugins.hook-runner-global-state");
 const autoCleanupTempDirs = useAutoCleanupTempDirTracker(afterEach);
 let sessionFileEnvSnapshot: ReturnType<typeof captureEnv> | undefined;
 
@@ -127,9 +127,9 @@ function setHookRunnerForTest(hookRunner: unknown): void {
 function createSessionFile(params?: { history?: Array<{ role: "user"; content: string }> }) {
   // Session files use the real JSONL shape so transcript/history readers stay
   // covered without spinning up a full CLI process.
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-hooks-"));
-  sessionFileEnvSnapshot ??= captureEnv(["OPENCLAW_STATE_DIR"]);
-  setTestEnvValue("OPENCLAW_STATE_DIR", dir);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-cli-hooks-"));
+  sessionFileEnvSnapshot ??= captureEnv(["NATESCLAW_STATE_DIR"]);
+  setTestEnvValue("NATESCLAW_STATE_DIR", dir);
   const sessionFile = path.join(dir, "agents", "main", "sessions", "s1.jsonl");
   const storePath = path.join(path.dirname(sessionFile), "sessions.json");
   fs.mkdirSync(path.dirname(sessionFile), { recursive: true });
@@ -180,7 +180,7 @@ type PreparedContextOverrides = Partial<{
   cliSessionId: string;
   runId: string;
   lane: string;
-  openClawHistoryPrompt: string;
+  NatesclawHistoryPrompt: string;
   provider: string;
   model: string;
   executionMode: PreparedCliRunContext["params"]["executionMode"];
@@ -245,8 +245,8 @@ function buildPreparedContext(params: PreparedContextOverrides = {}): PreparedCl
     systemPrompt: "You are a helpful assistant.",
     systemPromptReport: {} as PreparedCliRunContext["systemPromptReport"],
     bootstrapPromptWarningLines: [],
-    ...(params?.openClawHistoryPrompt
-      ? { openClawHistoryPrompt: params.openClawHistoryPrompt }
+    ...(params?.NatesclawHistoryPrompt
+      ? { NatesclawHistoryPrompt: params.NatesclawHistoryPrompt }
       : {}),
     authEpochVersion: 2,
   };
@@ -421,7 +421,7 @@ function createCliUserTurnRecorder(params: {
 }
 
 const CLI_RESEED_PROMPT =
-  "Continue this conversation using the OpenClaw transcript below as prior session history.\n\n<conversation_history>\nUser: earlier context\n</conversation_history>\n\n<next_user_message>\nhi\n</next_user_message>";
+  "Continue this conversation using the Natesclaw transcript below as prior session history.\n\n<conversation_history>\nUser: earlier context\n</conversation_history>\n\n<next_user_message>\nhi\n</next_user_message>";
 
 describe("runCliAgent reliability", () => {
   beforeEach(() => {
@@ -687,7 +687,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:no-checkpoint",
       runId: "run-no-checkpoint",
       cliSessionId: "legacy-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = {
       ...context.preparedBackend.backend,
@@ -749,7 +749,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:old-claude",
       runId: "run-old-claude",
       cliSessionId: "old-claude-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = {
       ...context.preparedBackend.backend,
@@ -804,7 +804,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:downgraded-claude",
       runId: "run-downgraded-claude",
       cliSessionId: "downgraded-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = {
       ...context.preparedBackend.backend,
@@ -855,7 +855,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:resume-token-boundary",
       runId: "run-resume-token-boundary",
       cliSessionId: "existing-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = {
       ...context.preparedBackend.backend,
@@ -901,7 +901,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:direct",
       runId: "run-direct-retry",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = {
       ...context.preparedBackend.backend,
@@ -909,7 +909,7 @@ describe("runCliAgent reliability", () => {
       imageArg: "--image",
       imageMode: "repeat",
     };
-    const stateDir = autoCleanupTempDirs.make("openclaw-cli-retry-images-");
+    const stateDir = autoCleanupTempDirs.make("natesclaw-cli-retry-images-");
     const workspaceDir = path.join(stateDir, "workspace");
     const inboundDir = path.join(stateDir, "media", "inbound");
     const mediaId = "offloaded.png";
@@ -918,7 +918,7 @@ describe("runCliAgent reliability", () => {
     fs.mkdirSync(workspaceDir, { recursive: true });
     fs.mkdirSync(inboundDir, { recursive: true });
     fs.writeFileSync(path.join(inboundDir, mediaId), offloadedImage);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("NATESCLAW_STATE_DIR", stateDir);
     const currentTurn = `compare these\n[media attached: media://inbound/${mediaId}]`;
     context.workspaceDir = workspaceDir;
     context.params = {
@@ -970,7 +970,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockClear();
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
-      const captureKey = input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "";
+      const captureKey = input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "";
       const captureHandle = markMcpLoopbackToolCallStarted({
         captureKey,
         toolName: "message",
@@ -1014,7 +1014,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:delivered-timeout",
       runId: "run-delivered-timeout",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.mcpDeliveryCapture = true;
 
@@ -1038,7 +1038,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: { action: "send", message: "still working", final: false },
       });
@@ -1080,7 +1080,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1115,7 +1115,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:soft-drift-delivered-failure",
       runId: "run-soft-drift-delivered-failure",
       cliSessionId: "soft-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.reusableCliSession = {
       mode: "reuse-with-drift",
@@ -1138,7 +1138,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1173,7 +1173,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:delivered-overflow",
       runId: "run-delivered-overflow",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.mcpDeliveryCapture = true;
 
@@ -1187,12 +1187,12 @@ describe("runCliAgent reliability", () => {
     expect(supervisorSpawnMock).toHaveBeenCalledTimes(1);
   });
 
-  it("preserves first-turn delivery through cleanup without binding the OpenClaw session id", async () => {
+  it("preserves first-turn delivery through cleanup without binding the Natesclaw session id", async () => {
     supervisorSpawnMock.mockClear();
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1292,7 +1292,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1355,7 +1355,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1422,7 +1422,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1505,7 +1505,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1560,7 +1560,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1628,7 +1628,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "react",
@@ -1662,7 +1662,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:unresolved-send",
       runId: "run-unresolved-send",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.mcpDeliveryCapture = true;
 
@@ -1686,7 +1686,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackRequestStarted(
-        input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
       );
       if (!captureHandle) {
         throw new Error("Expected request delivery capture");
@@ -1705,7 +1705,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:unresolved-request",
       runId: "run-unresolved-request",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.mcpDeliveryCapture = true;
 
@@ -1729,7 +1729,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const requestCaptureHandle = markMcpLoopbackRequestStarted(
-        input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
       );
       if (!requestCaptureHandle) {
         throw new Error("Expected request delivery capture");
@@ -1754,7 +1754,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:unresolved-non-message-request",
       runId: "run-unresolved-non-message-request",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.mcpDeliveryCapture = true;
 
@@ -1777,7 +1777,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
       const captureHandle = markMcpLoopbackToolCallStarted({
-        captureKey: input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY ?? "",
+        captureKey: input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY ?? "",
         toolName: "message",
         args: {
           action: "send",
@@ -1810,7 +1810,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:unresolved-dry-run",
       runId: "run-unresolved-dry-run",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.mcpDeliveryCapture = true;
 
@@ -1837,7 +1837,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:unknown-output",
       runId: "run-unknown-output",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
 
     await expect(
@@ -1871,7 +1871,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:expired-budget",
       runId: "run-expired-budget",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     const expiredBudgetContext = {
       ...context,
@@ -1906,7 +1906,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:expired-overflow-budget",
       runId: "run-expired-overflow-budget",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     const expiredBudgetContext = {
       ...context,
@@ -1932,7 +1932,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockClear();
     const transcriptProbe = vi.fn(async () => false);
     setCliRunnerTestDeps({ claudeCliSessionTranscriptHasContent: transcriptProbe });
-    const artifactDir = autoCleanupTempDirs.make("openclaw-live-retry-artifacts-");
+    const artifactDir = autoCleanupTempDirs.make("natesclaw-live-retry-artifacts-");
     const mcpConfigPath = path.join(artifactDir, "mcp.json");
     const skillsDir = path.join(artifactDir, "skills-plugin");
     fs.writeFileSync(mcpConfigPath, "{}\n", "utf-8");
@@ -2075,7 +2075,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:live-artifacts",
       runId: "run-live-artifact-retry",
       cliSessionId: "stale-live",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = liveBackend;
     context.preparedBackend.cleanup = cleanup;
@@ -2209,7 +2209,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:fork-then-fresh",
       runId: "run-fork-then-fresh",
       cliSessionId: "stalled-source",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = backend;
     context.backendResolved.config = backend;
@@ -2333,7 +2333,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:initial-fork-fallback",
       runId: "run-initial-fork-fallback",
       cliSessionId: "initial-fork-parent",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     context.preparedBackend.backend = backend;
     context.backendResolved.config = backend;
@@ -2406,7 +2406,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:timeout-after-output",
       runId: "run-timeout-after-output",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
 
     await expect(
@@ -2437,7 +2437,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:manual-cancel",
       runId: "run-manual-cancel",
       cliSessionId: "stale-cli-session",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
 
     await expect(
@@ -2546,7 +2546,7 @@ describe("runCliAgent reliability", () => {
           sessionKey: "agent:main:subagent:retry",
           runId,
           cliSessionId: "stale-cli-session",
-          openClawHistoryPrompt: CLI_RESEED_PROMPT,
+          NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
         });
         if (reason === "format") {
           context.preparedBackend.backend = {
@@ -2640,7 +2640,7 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:subagent:retry",
       runId: "run-retry-failure",
       cliSessionId: "thread-123",
-      openClawHistoryPrompt: CLI_RESEED_PROMPT,
+      NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
     });
     const clearBeforeRetry = vi.fn(async () => true);
 
@@ -2720,7 +2720,7 @@ describe("runCliAgent reliability", () => {
   it("marks CLI runs as paused after sessions_yield", async () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = args[0] as Parameters<ReturnType<typeof getProcessSupervisor>["spawn"]>[0];
-      const captureHandle = markMcpLoopbackRequestStarted(input.env?.OPENCLAW_MCP_CLI_CAPTURE_KEY);
+      const captureHandle = markMcpLoopbackRequestStarted(input.env?.NATESCLAW_MCP_CLI_CAPTURE_KEY);
       await resolveMcpLoopbackYieldContext(captureHandle)?.onYield("waiting on subagents");
       markMcpLoopbackRequestFinished(captureHandle);
       input.onStdout?.("yield acknowledged");
@@ -2743,13 +2743,13 @@ describe("runCliAgent reliability", () => {
     });
   });
 
-  it("seeds fresh CLI sessions from the OpenClaw transcript", async () => {
+  it("seeds fresh CLI sessions from the Natesclaw transcript", async () => {
     supervisorSpawnMock.mockResolvedValueOnce(makeManagedRun({ stdout: "hello from cli" }));
 
     const result = await runPreparedCliAgent(
       buildPreparedContext({
-        openClawHistoryPrompt:
-          "Continue this conversation using the OpenClaw transcript below.\n\nUser: earlier ask\n\nAssistant: earlier answer\n\n<next_user_message>\nhi\n</next_user_message>",
+        NatesclawHistoryPrompt:
+          "Continue this conversation using the Natesclaw transcript below.\n\nUser: earlier ask\n\nAssistant: earlier answer\n\n<next_user_message>\nhi\n</next_user_message>",
       }),
     );
 
@@ -2763,7 +2763,7 @@ describe("runCliAgent reliability", () => {
     const result = await runPreparedCliAgent(
       buildPreparedContext({
         cliSessionId: "cli-session",
-        openClawHistoryPrompt: "User: earlier ask",
+        NatesclawHistoryPrompt: "User: earlier ask",
       }),
     );
 
@@ -3222,7 +3222,7 @@ describe("runCliAgent reliability", () => {
     supervisorSpawnMock.mockResolvedValueOnce(makeManagedRun({ stdout: "hello from claude" }));
     const { dir, sessionFile } = createSessionFile();
     const historyPrompt = [
-      "Continue this conversation using the OpenClaw transcript below as prior session history.",
+      "Continue this conversation using the Natesclaw transcript below as prior session history.",
       "Treat it as authoritative context for this fresh CLI session.",
       "",
       "<conversation_history>",
@@ -3240,7 +3240,7 @@ describe("runCliAgent reliability", () => {
       });
       const context = makeClaudePreparedContext({
         model: "claude-opus-4-6",
-        openClawHistoryPrompt: historyPrompt,
+        NatesclawHistoryPrompt: historyPrompt,
       });
       context.preparedBackend.backend.sessionMode = "always";
       context.backendResolved.textTransforms = {
@@ -3283,7 +3283,7 @@ describe("runCliAgent reliability", () => {
       });
       const context = makeClaudePreparedContext({
         model: "claude-opus-4-6",
-        openClawHistoryPrompt: CLI_RESEED_PROMPT,
+        NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
       });
       context.preparedBackend.backend.sessionMode = "always";
       context.params = {
@@ -3326,7 +3326,7 @@ describe("runCliAgent reliability", () => {
       });
       const context = makeClaudePreparedContext({
         model: "claude-opus-4-6",
-        openClawHistoryPrompt: CLI_RESEED_PROMPT,
+        NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
       });
       context.preparedBackend.backend.sessionMode = "always";
       context.params = {
@@ -3370,7 +3370,7 @@ describe("runCliAgent reliability", () => {
       });
       const context = makeClaudePreparedContext({
         model: "claude-opus-4-6",
-        openClawHistoryPrompt: CLI_RESEED_PROMPT,
+        NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
       });
       context.preparedBackend.backend.sessionMode = "always";
       const onUserMessagePersisted = vi.fn();
@@ -3419,7 +3419,7 @@ describe("runCliAgent reliability", () => {
       });
       const context = makeClaudePreparedContext({
         model: "claude-opus-4-6",
-        openClawHistoryPrompt: CLI_RESEED_PROMPT,
+        NatesclawHistoryPrompt: CLI_RESEED_PROMPT,
       });
       context.preparedBackend.backend.sessionMode = "always";
       context.params = {
@@ -3608,7 +3608,7 @@ describe("runCliAgent reliability", () => {
   it("passes cwd to approved CLI user-turn persistence", async () => {
     supervisorSpawnMock.mockResolvedValueOnce(makeManagedRun({ stdout: "hello from cli" }));
     const { dir, sessionFile } = createSessionFile();
-    const taskDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-persist-cwd-"));
+    const taskDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-cli-persist-cwd-"));
     let capturedCwd: unknown;
     const recorder = {
       message: undefined,
@@ -3706,7 +3706,7 @@ describe("runCliAgent reliability", () => {
         expect.objectContaining({
           role: "user",
           content: "recorder display prompt",
-          __openclaw: {
+          __natesclaw: {
             media: [expect.objectContaining({ path: "/tmp/image.png", contentType: "image/png" })],
           },
           timestamp: 123,
@@ -3806,7 +3806,7 @@ describe("runCliAgent reliability", () => {
 
   it("does not execute the CLI when approved user turn persistence fails", async () => {
     supervisorSpawnMock.mockClear();
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-persist-fail-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-cli-persist-fail-"));
     const onUserMessagePersisted = vi.fn();
     // SQLite-backed persistence no longer fails via blocked transcript
     // directories; a rejecting recorder models the same persistence failure.
@@ -4002,7 +4002,7 @@ describe("runCliAgent reliability", () => {
       );
       expect(JSON.stringify(blockedLine)).not.toContain("secret prompt");
       expect(JSON.stringify(blockedLine)).not.toContain("matched secret prompt");
-      const blockedMetadata = requireRecord(blockedMessage["__openclaw"], "blocked metadata");
+      const blockedMetadata = requireRecord(blockedMessage["__natesclaw"], "blocked metadata");
       const blockedState = requireRecord(blockedMetadata.beforeAgentRunBlocked, "blocked state");
       expect(blockedState.blockedBy).toBe("policy-plugin");
       expect(blockedState).not.toHaveProperty("reason");
@@ -4344,8 +4344,8 @@ describe("runCliAgent reliability", () => {
       sessionKey: "agent:main:main",
       runId: "run-retry-success",
       cliSessionId: "thread-123",
-      openClawHistoryPrompt:
-        "Continue this conversation using the OpenClaw transcript below.\n\nUser: recovered history\n\n<next_user_message>\nhi\n</next_user_message>",
+      NatesclawHistoryPrompt:
+        "Continue this conversation using the Natesclaw transcript below.\n\nUser: recovered history\n\n<next_user_message>\nhi\n</next_user_message>",
     });
     const clearBeforeRetry = vi.fn(async () => true);
 
@@ -4429,7 +4429,7 @@ describe("runCliAgent reliability", () => {
       })}\n`,
       "utf-8",
     );
-    const config: OpenClawConfig = { agents: { defaults: { workspace: dir } } };
+    const config: NatesclawConfig = { agents: { defaults: { workspace: dir } } };
     cliBackendsTesting.setDepsForTest({
       resolvePluginSetupCliBackend: () => undefined,
       resolveRuntimeCliBackends: () => [
@@ -4467,9 +4467,9 @@ describe("runCliAgent reliability", () => {
       });
 
       expect(context.params.prompt).toBe("hook context\n\ncurrent ask");
-      expect(context.openClawHistoryPrompt).toContain("Compaction summary: compacted earlier ask");
-      expect(context.openClawHistoryPrompt).toContain("hook context");
-      expect(context.openClawHistoryPrompt).toContain("current ask");
+      expect(context.NatesclawHistoryPrompt).toContain("Compaction summary: compacted earlier ask");
+      expect(context.NatesclawHistoryPrompt).toContain("hook context");
+      expect(context.NatesclawHistoryPrompt).toContain("current ask");
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }

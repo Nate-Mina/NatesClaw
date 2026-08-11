@@ -1,14 +1,14 @@
 // Builds read-only, agent-centric Claw update plans from grouped manifests and ownership state.
 import { createHash } from "node:crypto";
 import { lstat } from "node:fs/promises";
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import { normalizeConfiguredMcpServers } from "../config/mcp-config-normalize.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { root as fsSafeRoot } from "../infra/fs-safe.js";
 import {
-  openExistingOpenClawStateDatabaseReadOnly,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openExistingNatesclawStateDatabaseReadOnly,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import {
   clawExtensionProvenanceChanged,
   clawPackageActionsById,
@@ -28,7 +28,7 @@ import {
   CLAW_OUTPUT_STABILITY,
   type ClawDiagnostic,
   type ClawManifest,
-  type ClawOpenClawProfile,
+  type ClawNatesclawProfile,
   type ClawPackagePreflight,
   type ClawPackagePreflightResult,
   type ClawSourceIdentity,
@@ -70,18 +70,18 @@ export async function buildClawUpdatePlan(params: {
   agentId: string;
   targetManifest: ClawManifest;
   targetClawMarkdownBody?: Buffer;
-  targetOpenClawProfile?: ClawOpenClawProfile;
+  targetNatesclawProfile?: ClawNatesclawProfile;
   targetSource: ClawSourceIdentity;
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   sourceMcpServers: Record<string, Record<string, unknown>>;
-  stateOptions?: OpenClawStateDatabaseOptions & { packageDeps?: PackageRemovalDeps };
+  stateOptions?: NatesclawStateDatabaseOptions & { packageDeps?: PackageRemovalDeps };
   packagePreflight?: ClawPackagePreflight;
   diagnostics?: ClawDiagnostic[];
 }): Promise<ClawUpdatePlan> {
   const ownsDatabase = !params.stateOptions?.database;
   const database =
     params.stateOptions?.database ??
-    (await openExistingOpenClawStateDatabaseReadOnly(params.stateOptions));
+    (await openExistingNatesclawStateDatabaseReadOnly(params.stateOptions));
   if (!database) {
     return makeEmptyClawUpdatePlan({
       agentId: params.agentId,
@@ -119,7 +119,7 @@ export async function buildClawUpdatePlan(params: {
       digest,
     });
   }
-  const readOnlyStateOptions: OpenClawStateDatabaseOptions & {
+  const readOnlyStateOptions: NatesclawStateDatabaseOptions & {
     packageDeps?: PackageRemovalDeps;
   } = {
     ...params.stateOptions,
@@ -196,7 +196,7 @@ export async function buildClawUpdatePlan(params: {
       manifest: params.targetManifest,
       clawMarkdownBody: params.targetClawMarkdownBody,
       includePackageBootstrap: false,
-      openClawProfile: params.targetOpenClawProfile,
+      NatesclawProfile: params.targetNatesclawProfile,
       source: params.targetSource,
       diagnostics: params.diagnostics,
       context: {
@@ -357,7 +357,7 @@ export async function buildClawUpdatePlan(params: {
     }
 
     const allPackages = readClawPackageRefs(readOnlyStateOptions);
-    const targetPackages = clawTargetPackages(params.targetManifest, params.targetOpenClawProfile);
+    const targetPackages = clawTargetPackages(params.targetManifest, params.targetNatesclawProfile);
     const targetPackageActions = clawPackageActionsById(targetPlan.actions);
     for (const [key, target] of targetPackages) {
       const current = currentPackages.get(key);
@@ -450,13 +450,13 @@ export async function buildClawUpdatePlan(params: {
           (pkg) => clawPackageKey(pkg) === key,
         );
         const extensionIndex =
-          params.targetOpenClawProfile?.extensions?.findIndex(
+          params.targetNatesclawProfile?.extensions?.findIndex(
             (extension) => clawPackageKey(extension) === key,
           ) ?? -1;
         const path =
           packageIndex >= 0
             ? `$.packages[${packageIndex}]`
-            : `$.profiles.openclaw.extensions[${extensionIndex}]`;
+            : `$.profiles.natesclaw.extensions[${extensionIndex}]`;
         const code = preflight?.code ?? "package_install_unavailable";
         if (!blockers.some((entry) => entry.code === code && entry.path === path)) {
           blockers.push(diagnostic(code, path, preflight?.message ?? "Package preflight failed."));

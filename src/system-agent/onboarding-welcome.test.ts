@@ -31,7 +31,7 @@ vi.mock("../config/config.js", async (importOriginal) => ({
   readConfigFileSnapshot: vi.fn(async () => ({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     hash: "hash",
     config: {},
     sourceConfig: mocks.sourceConfig,
@@ -60,7 +60,7 @@ describe("buildOnboardingWelcome", () => {
     const engine = {
       loadOverview: vi.fn(async () => ({
         config: {
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
           exists: true,
           valid: true,
           issues: [],
@@ -98,7 +98,7 @@ describe("buildOnboardingWelcome", () => {
       version: 1,
       status: "pending",
       runId: "pending-onboarding",
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
       workspace: "/recovered/workspace",
       securityAcknowledgedAt: "2026-07-13T00:00:00.000Z",
       startedAtMs: 1,
@@ -107,7 +107,7 @@ describe("buildOnboardingWelcome", () => {
     const { text: welcome, question } = await buildOnboardingWelcome({
       engine: {
         loadOverview: vi.fn(async () => ({
-          config: { path: "/tmp/openclaw.json", exists: true, valid: true },
+          config: { path: "/tmp/natesclaw.json", exists: true, valid: true },
           defaultModel: "openai/gpt-5.6-luna",
         })),
         propose,
@@ -118,7 +118,7 @@ describe("buildOnboardingWelcome", () => {
     });
 
     expect(mocks.readLocalOnboardingState).toHaveBeenCalledWith(
-      "/tmp/openclaw.json",
+      "/tmp/natesclaw.json",
       mocks.sourceConfig,
     );
     expect(propose).toHaveBeenCalledWith({ kind: "setup", workspace: "/recovered/workspace" });
@@ -132,7 +132,7 @@ describe("buildOnboardingWelcome", () => {
       version: 1,
       status: "completed",
       runId: "completed-onboarding",
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
       workspace: "/recovered/workspace",
       securityAcknowledgedAt: "2026-07-13T00:00:00.000Z",
       startedAtMs: 1,
@@ -142,7 +142,7 @@ describe("buildOnboardingWelcome", () => {
     const { question } = await buildOnboardingWelcome({
       engine: {
         loadOverview: vi.fn(async () => ({
-          config: { path: "/tmp/openclaw.json", exists: true, valid: true },
+          config: { path: "/tmp/natesclaw.json", exists: true, valid: true },
           defaultModel: "openai/gpt-5.6-luna",
           gateway: { reachable: true, url: "ws://127.0.0.1:18789" },
         })),
@@ -153,7 +153,7 @@ describe("buildOnboardingWelcome", () => {
     });
 
     expect(mocks.readLocalOnboardingState).toHaveBeenCalledWith(
-      "/tmp/openclaw.json",
+      "/tmp/natesclaw.json",
       mocks.sourceConfig,
     );
     expect(propose).not.toHaveBeenCalled();
@@ -168,7 +168,7 @@ describe("buildOnboardingWelcome", () => {
             version: 1,
             status: "pending",
             runId: "stale-onboarding",
-            configPath: "/tmp/openclaw.json",
+            configPath: "/tmp/natesclaw.json",
             workspace: "/replaced/workspace",
             securityAcknowledgedAt: "2026-08-02T00:00:00.000Z",
             startedAtMs: 1,
@@ -180,7 +180,7 @@ describe("buildOnboardingWelcome", () => {
     const { question } = await buildOnboardingWelcome({
       engine: {
         loadOverview: vi.fn(async () => ({
-          config: { path: "/tmp/openclaw.json", exists: true, valid: true },
+          config: { path: "/tmp/natesclaw.json", exists: true, valid: true },
           defaultModel: "openai/gpt-5.6-luna",
           gateway: { reachable: true, url: "ws://127.0.0.1:18789" },
         })),
@@ -191,7 +191,7 @@ describe("buildOnboardingWelcome", () => {
     });
 
     expect(mocks.readLocalOnboardingState).toHaveBeenCalledWith(
-      "/tmp/openclaw.json",
+      "/tmp/natesclaw.json",
       mocks.sourceConfig,
     );
     expect(propose).not.toHaveBeenCalled();
@@ -204,7 +204,7 @@ describe("buildOnboardingWelcome", () => {
       version: 1,
       status: "pending",
       runId: "pending-onboarding",
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/natesclaw.json",
       workspace: "/recovered/workspace",
       securityAcknowledgedAt: "2026-07-13T00:00:00.000Z",
       startedAtMs: 1,
@@ -213,7 +213,7 @@ describe("buildOnboardingWelcome", () => {
     const { question } = await buildOnboardingWelcome({
       engine: {
         loadOverview: vi.fn(async () => ({
-          config: { path: "/tmp/openclaw.json", exists: true, valid: true },
+          config: { path: "/tmp/natesclaw.json", exists: true, valid: true },
           defaultModel: "openai/gpt-5.6-luna",
           gateway: { reachable: true, url: "ws://127.0.0.1:18789" },
         })),
@@ -234,7 +234,7 @@ describe("buildOnboardingWelcome", () => {
     const { question } = await buildOnboardingWelcome({
       engine: {
         loadOverview: vi.fn(async () => ({
-          config: { path: "/tmp/openclaw.json", exists: true, valid: true },
+          config: { path: "/tmp/natesclaw.json", exists: true, valid: true },
           defaultModel: "openai/gpt-5.6-luna",
           gateway: { reachable: true, url: "wss://gateway.example.test" },
         })),
@@ -254,7 +254,7 @@ describe("buildOnboardingWelcome", () => {
       engine: {
         loadOverview: vi.fn(async () => ({
           config: {
-            path: "/tmp/openclaw.json",
+            path: "/tmp/natesclaw.json",
             exists: false,
             valid: false,
             issues: [],
@@ -280,7 +280,7 @@ describe("buildOnboardingWelcome", () => {
     const engine = {
       loadOverview: vi.fn(async () => ({
         config: {
-          path: "/tmp/openclaw.json",
+          path: "/tmp/natesclaw.json",
           exists: true,
           valid: true,
           issues: [],
@@ -308,7 +308,7 @@ describe("buildOnboardingWelcome", () => {
       engine: {
         loadOverview: vi.fn(async () => ({
           config: {
-            path: "/tmp/openclaw.json",
+            path: "/tmp/natesclaw.json",
             exists: true,
             valid: true,
             issues: [],
@@ -337,7 +337,7 @@ describe("buildOnboardingWelcome", () => {
         engine: {
           loadOverview: vi.fn(async () => ({
             config: {
-              path: "/tmp/openclaw.json",
+              path: "/tmp/natesclaw.json",
               exists: true,
               valid: true,
               issues: [],
@@ -369,7 +369,7 @@ describe("buildOnboardingWelcome", () => {
       engine: {
         loadOverview: vi.fn(async () => ({
           config: {
-            path: "/tmp/openclaw.json",
+            path: "/tmp/natesclaw.json",
             exists: true,
             valid: true,
             issues: [],

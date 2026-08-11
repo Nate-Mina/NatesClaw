@@ -1,5 +1,5 @@
-import { normalizeOptionalString as readLogString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeOptionalString as readLogString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { RuntimeLogger } from "../plugins/runtime/types.js";
 import type {
   RealtimeTranscriptionProviderPlugin,
@@ -65,7 +65,7 @@ export function meetingOutputBytesPerMs(audioFormat: MeetingRealtimeAudioFormat)
 
 export function resolveMeetingRealtimeProvider(params: {
   config: MeetingRealtimeProviderSelectionConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: NatesclawConfig;
   providers?: RealtimeVoiceProviderPlugin[];
 }): ResolvedRealtimeProvider {
   const providerId = params.config.realtime.voiceProvider ?? params.config.realtime.provider;
@@ -81,7 +81,7 @@ export function resolveMeetingRealtimeProvider(params: {
 
 export function resolveMeetingRealtimeTranscriptionProvider(params: {
   config: MeetingRealtimeProviderSelectionConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: NatesclawConfig;
   providers?: RealtimeTranscriptionProviderPlugin[];
 }): ResolvedRealtimeTranscriptionProvider {
   const providers = params.providers ?? listRealtimeTranscriptionProviders(params.fullConfig);
@@ -115,7 +115,7 @@ export function resolveMeetingRealtimeTranscriptionProvider(params: {
 
 export function buildMeetingSpeakExactUserMessage(text: string): string {
   return [
-    "Speak this exact OpenClaw answer to the meeting, without adding, removing, or rephrasing words.",
+    "Speak this exact Natesclaw answer to the meeting, without adding, removing, or rephrasing words.",
     `Answer: ${JSON.stringify(text)}`,
   ].join("\n");
 }

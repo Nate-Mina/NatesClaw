@@ -1,18 +1,18 @@
 import {
   loadTranscriptEventsSync,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "natesclaw/plugin-sdk/session-store-runtime";
 import {
   loadSqliteTrajectoryRuntimeEvents,
   type SqliteTrajectoryRuntimeEventForTest,
-} from "openclaw/plugin-sdk/sqlite-runtime-testing";
+} from "natesclaw/plugin-sdk/sqlite-runtime-testing";
 // Qa Lab plugin module implements runtime parity behavior.
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   asFiniteNumber as readFiniteNumber,
   isRecord as isMessageRecord,
   normalizeOptionalString as readNonEmptyString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   scanDirectReplyTranscriptSentinels,
   scanGatewayLogSentinels,
@@ -31,11 +31,11 @@ export type { RuntimeParityUsage } from "./runtime-parity-usage.js";
 
 // These are the canonical QA comparison cells, not the extensible product
 // AgentHarness registry. Broader harness coverage needs its own explicit lane.
-export type RuntimeId = "openclaw" | "codex";
+export type RuntimeId = "natesclaw" | "codex";
 
 type RuntimeParityStatus = "pass" | "fail" | "skip";
 
-const CANONICAL_RUNTIME_IDS = ["openclaw", "codex"] as const satisfies readonly RuntimeId[];
+const CANONICAL_RUNTIME_IDS = ["natesclaw", "codex"] as const satisfies readonly RuntimeId[];
 
 export type RuntimeParityToolCall = {
   tool: string;
@@ -218,7 +218,7 @@ type RuntimeParityCaptureSources = {
 
 const DEFAULT_AGENT_ID = "qa";
 const HEARTBEAT_RESPONSE_TOOL_NAME = "heartbeat_respond";
-const HEARTBEAT_TRANSCRIPT_PROMPT = "[OpenClaw heartbeat poll]";
+const HEARTBEAT_TRANSCRIPT_PROMPT = "[Natesclaw heartbeat poll]";
 const HEARTBEAT_TASK_PROMPT_PREFIX =
   "Run the following periodic tasks (only those due based on their intervals):";
 const TOOL_RESULT_MISSING_ERROR_CLASS = "tool-result-missing";
@@ -1155,30 +1155,30 @@ function summarizeSentinelErrorClass(findings: readonly GatewayLogSentinelFindin
 }
 
 function classifyRuntimeParityCells(params: {
-  openclaw: RuntimeParityCell;
+  natesclaw: RuntimeParityCell;
   codex: RuntimeParityCell;
-  openclawStatus: RuntimeParityStatus;
+  natesclawStatus: RuntimeParityStatus;
   codexStatus: RuntimeParityStatus;
-  openclawDetails?: string;
+  natesclawDetails?: string;
   codexDetails?: string;
 }): Pick<RuntimeParityResult, "drift" | "driftDetails"> {
   if (
-    isHardFailureRuntimeError(params.openclaw.runtimeErrorClass) ||
+    isHardFailureRuntimeError(params.natesclaw.runtimeErrorClass) ||
     isHardFailureRuntimeError(params.codex.runtimeErrorClass) ||
-    params.openclaw.transportErrorClass ||
+    params.natesclaw.transportErrorClass ||
     params.codex.transportErrorClass
   ) {
     return {
       drift: "failure-mode",
       driftDetails:
-        params.openclaw.transportErrorClass || params.codex.transportErrorClass
+        params.natesclaw.transportErrorClass || params.codex.transportErrorClass
           ? "at least one runtime hit a transport failure"
           : "at least one runtime hit a hard runtime failure",
     };
   }
 
   if (
-    hasMissingToolResult(params.openclaw.toolCalls) ||
+    hasMissingToolResult(params.natesclaw.toolCalls) ||
     hasMissingToolResult(params.codex.toolCalls)
   ) {
     return {
@@ -1187,21 +1187,21 @@ function classifyRuntimeParityCells(params: {
     };
   }
 
-  const openclawKnownHarnessGap = isKnownHarnessGapSkip({
-    status: params.openclawStatus,
-    details: params.openclawDetails,
+  const natesclawKnownHarnessGap = isKnownHarnessGapSkip({
+    status: params.natesclawStatus,
+    details: params.natesclawDetails,
   });
   const codexKnownHarnessGap = isKnownHarnessGapSkip({
     status: params.codexStatus,
     details: params.codexDetails,
   });
   if (
-    openclawKnownHarnessGap !== codexKnownHarnessGap &&
-    (openclawKnownHarnessGap ? params.codexStatus : params.openclawStatus) === "pass" &&
-    isRuntimeParityCellPassable(params.openclaw) &&
+    natesclawKnownHarnessGap !== codexKnownHarnessGap &&
+    (natesclawKnownHarnessGap ? params.codexStatus : params.natesclawStatus) === "pass" &&
+    isRuntimeParityCellPassable(params.natesclaw) &&
     isRuntimeParityCellPassable(params.codex)
   ) {
-    const skippedRuntime = openclawKnownHarnessGap ? "openclaw" : "codex";
+    const skippedRuntime = natesclawKnownHarnessGap ? "natesclaw" : "codex";
     return {
       drift: "structural",
       driftDetails: `known harness gap in ${skippedRuntime} runtime; paired runtime passed`,
@@ -1209,26 +1209,26 @@ function classifyRuntimeParityCells(params: {
   }
 
   if (
-    params.openclawStatus !== "pass" ||
+    params.natesclawStatus !== "pass" ||
     params.codexStatus !== "pass" ||
-    !isRuntimeParityCellPassable(params.openclaw) ||
+    !isRuntimeParityCellPassable(params.natesclaw) ||
     !isRuntimeParityCellPassable(params.codex)
   ) {
     return {
       drift: "failure-mode",
       driftDetails:
-        params.openclawStatus === params.codexStatus
-          ? params.openclawStatus === "skip"
+        params.natesclawStatus === params.codexStatus
+          ? params.natesclawStatus === "skip"
             ? "both canonical runtime-pair cells skipped"
-            : params.openclawStatus === "fail"
+            : params.natesclawStatus === "fail"
               ? "both canonical runtime-pair cells failed"
               : "at least one runtime failed"
-          : `runtime-pair cell status differs (${params.openclawStatus} vs ${params.codexStatus})`,
+          : `runtime-pair cell status differs (${params.natesclawStatus} vs ${params.codexStatus})`,
     };
   }
 
   const toolCallShapeDetails = parity.compareToolCallShape(
-    params.openclaw.toolCalls,
+    params.natesclaw.toolCalls,
     params.codex.toolCalls,
   );
   if (toolCallShapeDetails) {
@@ -1236,32 +1236,32 @@ function classifyRuntimeParityCells(params: {
   }
 
   const toolResultShapeDetails = compareToolResultShape(
-    params.openclaw.toolCalls,
+    params.natesclaw.toolCalls,
     params.codex.toolCalls,
   );
   if (toolResultShapeDetails) {
     return { drift: "tool-result-shape", driftDetails: toolResultShapeDetails };
   }
 
-  const openclawTranscriptLines = params.openclaw.transcriptBytes.trim().length
-    ? params.openclaw.transcriptBytes.trim().split(/\r?\n/u).length
+  const natesclawTranscriptLines = params.natesclaw.transcriptBytes.trim().length
+    ? params.natesclaw.transcriptBytes.trim().split(/\r?\n/u).length
     : 0;
   const codexTranscriptLines = params.codex.transcriptBytes.trim().length
     ? params.codex.transcriptBytes.trim().split(/\r?\n/u).length
     : 0;
   if (
-    openclawTranscriptLines !== codexTranscriptLines ||
-    (!params.openclaw.finalText && Boolean(params.codex.finalText)) ||
-    (Boolean(params.openclaw.finalText) && !params.codex.finalText)
+    natesclawTranscriptLines !== codexTranscriptLines ||
+    (!params.natesclaw.finalText && Boolean(params.codex.finalText)) ||
+    (Boolean(params.natesclaw.finalText) && !params.codex.finalText)
   ) {
     return {
       drift: "structural",
-      driftDetails: `transcript/final-text structure differs (${openclawTranscriptLines} lines vs ${codexTranscriptLines})`,
+      driftDetails: `transcript/final-text structure differs (${natesclawTranscriptLines} lines vs ${codexTranscriptLines})`,
     };
   }
 
   if (
-    normalizeTextForParity(params.openclaw.finalText) ===
+    normalizeTextForParity(params.natesclaw.finalText) ===
     normalizeTextForParity(params.codex.finalText)
   ) {
     return { drift: "none" };
@@ -1284,7 +1284,7 @@ function isRuntimeParityRootSession(entry: RuntimeParitySessionEntry) {
 }
 
 function runtimeParitySessionEnv(stateDir: string): NodeJS.ProcessEnv {
-  return { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+  return { ...process.env, NATESCLAW_STATE_DIR: stateDir };
 }
 
 async function readRuntimeParitySessionEntries(params: {
@@ -1530,23 +1530,23 @@ export async function runRuntimeParityScenario(params: {
   }
   const first = await params.runCell(firstRuntime);
   const second = await params.runCell(secondRuntime);
-  const [openclaw, codex] = firstRuntime === "openclaw" ? [first, second] : [second, first];
+  const [natesclaw, codex] = firstRuntime === "natesclaw" ? [first, second] : [second, first];
   const drift = classifyRuntimeParityCells({
-    openclaw: openclaw.cell,
+    natesclaw: natesclaw.cell,
     codex: codex.cell,
-    openclawStatus: openclaw.status,
+    natesclawStatus: natesclaw.status,
     codexStatus: codex.status,
-    openclawDetails: openclaw.details,
+    natesclawDetails: natesclaw.details,
     codexDetails: codex.details,
   });
   return {
     scenarioId: params.scenarioId,
     runtimeParityUsage: resolveRuntimeParityUsagePolicy(params.runtimeParityUsage),
     cells: {
-      openclaw: {
-        ...openclaw.cell,
-        status: openclaw.status,
-        ...(openclaw.details ? { details: openclaw.details } : {}),
+      natesclaw: {
+        ...natesclaw.cell,
+        status: natesclaw.status,
+        ...(natesclaw.details ? { details: natesclaw.details } : {}),
       },
       codex: {
         ...codex.cell,

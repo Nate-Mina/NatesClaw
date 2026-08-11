@@ -1,4 +1,4 @@
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
 import {
   createStaticProviderModelIdNormalizer,
   normalizeStaticProviderModelId,

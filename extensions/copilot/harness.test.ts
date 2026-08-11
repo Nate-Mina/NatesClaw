@@ -1,19 +1,19 @@
 // Copilot tests cover harness plugin behavior.
 import type { CopilotClient } from "@github/copilot-sdk";
-import { attachModelProviderRequestTransport } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { attachModelProviderRequestTransport } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import type {
   AgentHarness,
   AgentHarnessAttemptParamsV2 as AgentHarnessAttemptParams,
   AgentHarnessAttemptResult,
   AgentHarnessCompactParams,
   AgentHarnessV2,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "natesclaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createCopilotAgentHarness, type CopilotSessionBinding } from "./harness.js";
 import type { resolvePoolAcquire } from "./src/attempt.js";
@@ -349,7 +349,7 @@ describe("createCopilotAgentHarness", () => {
       ["deepinfra", ["deepinfra"]],
       ["fireworks", ["fireworks"]],
       ["github", ["github"]],
-      ["openclaw", ["openclaw"]],
+      ["natesclaw", ["natesclaw"]],
       ["sglang", ["sglang"]],
       ["together", ["together"]],
       ["vllm", ["vllm"]],
@@ -459,7 +459,7 @@ describe("createCopilotAgentHarness", () => {
       onAgentEvent: vi.fn(),
       onAssistantDelta: vi.fn(),
       onPartialReply: vi.fn(),
-      sessionId: "openclaw-session-finalize",
+      sessionId: "natesclaw-session-finalize",
     });
     mocks.runCopilotAttempt
       .mockImplementationOnce(async (_params, deps) => {
@@ -485,7 +485,7 @@ describe("createCopilotAgentHarness", () => {
     expect(mocks.runCopilotAttempt.mock.calls[1]?.[0]).toMatchObject({
       disableTools: true,
       initialReplayState: { sdkSessionId: "sdk-session-finalize" },
-      sessionId: "openclaw-session-finalize",
+      sessionId: "natesclaw-session-finalize",
     });
     expect(mocks.runCopilotAttempt.mock.calls[1]?.[0]?.initialReplayState).not.toHaveProperty(
       "replayInvalid",
@@ -506,7 +506,7 @@ describe("createCopilotAgentHarness", () => {
     const harness = createCopilotAgentHarness({ pool: makePoolMock() });
     const params = asAttemptParams({
       ...ATTEMPT_PARAMS,
-      sessionId: "openclaw-session-missing",
+      sessionId: "natesclaw-session-missing",
     });
 
     await expect(
@@ -1113,7 +1113,7 @@ describe("createCopilotAgentHarness", () => {
       expect(deleteSession).toHaveBeenCalledTimes(1);
     });
 
-    it("does not invoke deleteSession for a session belonging to a different openclawSessionId", async () => {
+    it("does not invoke deleteSession for a session belonging to a different natesclawSessionId", async () => {
       const pool = makePoolMock();
       const deleteSession = vi.fn().mockResolvedValue(undefined);
       const client = createMockCopilotClient({ deleteSession });
@@ -1177,7 +1177,7 @@ describe("createCopilotAgentHarness", () => {
     expect(abort).toHaveBeenCalledTimes(1);
   });
 
-  it("aborts deferred compaction cleanup when the OpenClaw session resets", async () => {
+  it("aborts deferred compaction cleanup when the Natesclaw session resets", async () => {
     const cleanup = createDeferred<"aborted" | "completed" | "deadline">();
     const abort = vi.fn(() => cleanup.resolve("aborted"));
     mocks.runCopilotAttempt.mockImplementation(async (_params, deps) => {
@@ -1318,7 +1318,7 @@ describe("createCopilotAgentHarness", () => {
 
   describe("session reuse across turns (dogfood finding #4)", () => {
     // These tests pin the harness's session-reuse contract: subsequent
-    // `runAttempt` calls within the same OpenClaw session should pass
+    // `runAttempt` calls within the same Natesclaw session should pass
     // the tracked `sdkSessionId` to the attempt via `initialReplayState`
     // so the SDK can `resumeSession` and keep its prompt cache + thread
     // history warm. Compatibility-fingerprint mismatch (provider/model/

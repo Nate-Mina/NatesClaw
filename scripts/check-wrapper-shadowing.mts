@@ -69,10 +69,10 @@ function resolveSourceModulePath(
   specifier: string,
   modulesByPath: ReadonlyMap<string, ModuleExports>,
 ) {
-  const pluginSdkPrefix = specifier.startsWith("openclaw/plugin-sdk/")
-    ? "openclaw/plugin-sdk/"
-    : specifier.startsWith("@openclaw/plugin-sdk/")
-      ? "@openclaw/plugin-sdk/"
+  const pluginSdkPrefix = specifier.startsWith("natesclaw/plugin-sdk/")
+    ? "natesclaw/plugin-sdk/"
+    : specifier.startsWith("@natesclaw/plugin-sdk/")
+      ? "@natesclaw/plugin-sdk/"
       : null;
   if (!pluginSdkPrefix) {
     return resolveExportModulePath(sourcePath, specifier, modulesByPath);

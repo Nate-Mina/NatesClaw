@@ -18,7 +18,7 @@ function createReadyChild() {
     unref: vi.fn(),
   });
   process.nextTick(() => {
-    child.stdout.write("OPENCLAW_UPDATE_HANDOFF_READY\n");
+    child.stdout.write("NATESCLAW_UPDATE_HANDOFF_READY\n");
   });
   return child;
 }
@@ -54,13 +54,13 @@ async function startHandoffAndReadCommand(params: {
 }> {
   const { startManagedServiceUpdateHandoff } = await import("./update-managed-service-handoff.js");
   const result = await startManagedServiceUpdateHandoff({
-    root: "/tmp/openclaw",
+    root: "/tmp/natesclaw",
     restartDrainTimeoutMs: 300_000,
     channel: params.channel,
     ...(params.tag ? { tag: params.tag } : {}),
     parentPid: 12345,
     execPath: "/usr/local/bin/node",
-    argv1: "/opt/openclaw/openclaw.mjs",
+    argv1: "/opt/natesclaw/natesclaw.mjs",
     meta: {},
     ...(params.devTarget ? { devTarget: params.devTarget } : {}),
     ...(params.env ? { env: params.env } : {}),
@@ -81,7 +81,7 @@ async function startHandoffAndReadCommand(params: {
     meta?: { root?: string };
   };
   expect(metaFile.meta?.root).toBe(
-    await fs.realpath("/tmp/openclaw").catch(() => path.resolve("/tmp/openclaw")),
+    await fs.realpath("/tmp/natesclaw").catch(() => path.resolve("/tmp/natesclaw")),
   );
   return {
     command: result.command,
@@ -96,7 +96,7 @@ describe("managed service update handoff command", () => {
 
     expect(result.commandArgv).toEqual([
       "/usr/local/bin/node",
-      "/opt/openclaw/openclaw.mjs",
+      "/opt/natesclaw/natesclaw.mjs",
       "update",
       "--yes",
       "--json",
@@ -114,7 +114,7 @@ describe("managed service update handoff command", () => {
 
     expect(result.commandArgv).toEqual([
       "/usr/local/bin/node",
-      "/opt/openclaw/openclaw.mjs",
+      "/opt/natesclaw/natesclaw.mjs",
       "update",
       "--yes",
       "--json",
@@ -132,7 +132,7 @@ describe("managed service update handoff command", () => {
       channel: "beta",
       env: {
         KEEP: "value",
-        OPENCLAW_UPDATE_DEV_TARGET_REF: "stale-ref",
+        NATESCLAW_UPDATE_DEV_TARGET_REF: "stale-ref",
       },
       devTarget: {
         mode: "tracked",

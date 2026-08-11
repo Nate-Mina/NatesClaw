@@ -2,10 +2,10 @@ import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 import { executeSqliteQuerySync } from "../../infra/kysely-sync.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import { createPlacementPendingFailureOps } from "./placement-pending-failure.js";
 import {
   assertRecordShape,
@@ -116,16 +116,16 @@ function projectWorkerTurnClaim(
 }
 
 export function createWorkerSessionPlacementStore(
-  options: { database?: OpenClawStateDatabase; now?: () => number } = {},
+  options: { database?: NatesclawStateDatabase; now?: () => number } = {},
 ) {
-  const path = (options.database ?? openOpenClawStateDatabase()).path;
+  const path = (options.database ?? openNatesclawStateDatabase()).path;
   const now = options.now ?? Date.now;
   const runtime: PlacementStoreRuntime = {
     path,
     instanceId: randomUUID(),
     now,
-    read: () => openOpenClawStateDatabase({ path }).db,
-    write: (operation) => runOpenClawStateWriteTransaction(({ db }) => operation(db), { path }),
+    read: () => openNatesclawStateDatabase({ path }).db,
+    write: (operation) => runNatesclawStateWriteTransaction(({ db }) => operation(db), { path }),
   };
   const { read, write } = runtime;
   const workspaceResultConflicts = new Map<string, WorkerWorkspaceResultConflict>();
@@ -232,7 +232,7 @@ export function createWorkerSessionPlacementStore(
       const stagedResultRef = required(conflict.stagedResultRef, "staged result ref");
       if (
         paths.length === 0 ||
-        !/^refs\/openclaw\/worker-results\/[A-Za-z0-9-]+$/u.test(stagedResultRef)
+        !/^refs\/natesclaw\/worker-results\/[A-Za-z0-9-]+$/u.test(stagedResultRef)
       ) {
         throw new Error("Cloud workspace result conflict projection is invalid");
       }

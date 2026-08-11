@@ -44,7 +44,7 @@ import {
 import { parseAgentSessionKey } from "../../lib/sessions/session-key.ts";
 import { normalizeStringEntries } from "../../lib/string-coerce.ts";
 import { GatewayPageController } from "../../lit/gateway-page-controller.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { loadAgentFileContent, saveAgentFile } from "./files.ts";
 import {
@@ -65,14 +65,14 @@ import type { AgentsRouteData } from "./route.ts";
 import { clearAgentSkillFilter, loadAgentSkills } from "./skills.ts";
 import { renderAgents } from "./view.ts";
 
-const AGENTS_DOCS_URL = "https://docs.openclaw.ai/concepts/multi-agent";
+const AGENTS_DOCS_URL = "https://docs.natesclaw.ai/concepts/multi-agent";
 
 type AgentsRequestSources = Partial<
   Pick<ApplicationContext, "agents" | "agentIdentity" | "sessions">
 >;
 
 class AgentsPage
-  extends OpenClawLightDomElement
+  extends NatesclawLightDomElement
   implements Omit<AgentsState, "agentsLoading" | "agentsError">
 {
   @consume({ context: applicationContext, subscribe: true })
@@ -886,7 +886,7 @@ class AgentsPage
     const selectedAgentId = this.resolveSelectedAgentId();
     const config = currentConfigObject(configState);
     const access = {
-      canCreateAgent: this.canCall("openclaw.chat", "operator.admin"),
+      canCreateAgent: this.canCall("natesclaw.chat", "operator.admin"),
       canPatchConfig: this.canCall("config.patch", "operator.admin"),
       canUpdateConfig: this.canCall("config.set", "operator.admin"),
       canUpdateIdentity: this.canCall("agents.update", "operator.admin"),
@@ -982,7 +982,7 @@ class AgentsPage
           onSelectAgent: (agentId) =>
             navigateToAgent(this.context, agentId, selectedAgentId, this.agentsPanel),
           onCreateAgent: () => {
-            if (this.canCall("openclaw.chat", "operator.admin")) {
+            if (this.canCall("natesclaw.chat", "operator.admin")) {
               this.context.navigate("custodian", { search: "?intent=new-agent" });
             }
           },
@@ -1127,7 +1127,7 @@ class AgentsPage
   }
 }
 
-if (!customElements.get("openclaw-agents-page")) {
-  customElements.define("openclaw-agents-page", AgentsPage);
+if (!customElements.get("natesclaw-agents-page")) {
+  customElements.define("natesclaw-agents-page", AgentsPage);
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

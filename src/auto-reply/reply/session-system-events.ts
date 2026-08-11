@@ -1,9 +1,9 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveUserTimezone } from "../../agents/date-time.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { buildChannelSummary } from "../../infra/channel-summary.js";
 import {
   formatUtcTimestamp,
@@ -63,7 +63,7 @@ function compactSystemEvent(line: string): string | null {
   return trimmed;
 }
 
-function resolveSystemEventTimezone(cfg: OpenClawConfig) {
+function resolveSystemEventTimezone(cfg: NatesclawConfig) {
   const raw = normalizeOptionalString(cfg.agents?.defaults?.userTimezone);
   if (!raw) {
     return { mode: "local" as const };
@@ -85,7 +85,7 @@ function resolveSystemEventTimezone(cfg: OpenClawConfig) {
   return explicit ? { mode: "iana" as const, timeZone: explicit } : { mode: "local" as const };
 }
 
-function formatSystemEventTimestamp(ts: number, cfg: OpenClawConfig) {
+function formatSystemEventTimestamp(ts: number, cfg: NatesclawConfig) {
   const date = new Date(ts);
   if (Number.isNaN(date.getTime())) {
     return "unknown-time";
@@ -104,7 +104,7 @@ function formatSystemEventTimestamp(ts: number, cfg: OpenClawConfig) {
 
 /** Drain queued system events, format as `System:` lines, return the block text (or undefined). */
 export async function drainFormattedSystemEvents(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
   isMainSession: boolean;

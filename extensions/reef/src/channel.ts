@@ -1,16 +1,16 @@
 import {
   dispatchInboundDirectDm,
   recordChannelBotPairLoopAndCheckSuppression,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-import { PAIRING_APPROVED_MESSAGE } from "openclaw/plugin-sdk/channel-status";
+} from "natesclaw/plugin-sdk/channel-inbound";
+import { createChannelPairingController } from "natesclaw/plugin-sdk/channel-pairing";
+import { PAIRING_APPROVED_MESSAGE } from "natesclaw/plugin-sdk/channel-status";
 import {
   buildChannelConfigSchema,
   buildChannelOutboundSessionRoute,
   type ChannelPlugin,
-} from "openclaw/plugin-sdk/core";
-import { createChannelDirectoryAdapter } from "openclaw/plugin-sdk/directory-runtime";
-import { channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
+} from "natesclaw/plugin-sdk/core";
+import { createChannelDirectoryAdapter } from "natesclaw/plugin-sdk/directory-runtime";
+import { channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
 import { runReefChannelLifecycle } from "./channel-lifecycle.js";
 import {
   ReefChannelConfigSchema,
@@ -198,7 +198,7 @@ export const reefPlugin: ChannelPlugin<ReefAccount> = {
       allowFrom: listTrustedPeers(account.config),
       policyPath: "Reef local peer trust",
       allowFromPath: "Reef local peer trust",
-      approveHint: "openclaw pairing approve reef <code>",
+      approveHint: "natesclaw pairing approve reef <code>",
       normalizeEntry: (entry) => normalizeReefTarget(entry) ?? entry,
     }),
   },

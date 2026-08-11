@@ -10,7 +10,7 @@ import {
   resolveSessionWorkStartError,
   type SessionEntry,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { CronScheduledToolPolicy } from "../../cron/scheduled-tool-policy.js";
 import type { PluginHookSessionEndReason } from "../../plugins/hook-types.js";
 import {
@@ -52,7 +52,7 @@ export function clientHasAdminScope(client: GatewayRequestHandlerOptions["client
 }
 
 export function respondDeletedAgentSession(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   canonicalKey: string;
   entry?: SessionEntry | null;
   acpMetadataSessionKey?: string;
@@ -148,7 +148,7 @@ export function resolveCanUseCronRunContinuation(
 }
 
 export function cronContinuationHasReusableRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   entry: SessionEntry;
   agentId: string;
   provider: string;
@@ -175,7 +175,7 @@ export function withoutCronRunContinuation(entry: SessionEntry): SessionEntry {
 export function emitAgentSendSessionLifecycleTransition(
   transition:
     | {
-        cfg: OpenClawConfig;
+        cfg: NatesclawConfig;
         sessionKey: string;
         sessionId: string;
         storePath: string;

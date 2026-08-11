@@ -1,22 +1,22 @@
-import { normalizeOptionalAccountId } from "openclaw/plugin-sdk/account-id";
-import { createChannelDmPolicy } from "openclaw/plugin-sdk/channel-dm-policy";
+import { normalizeOptionalAccountId } from "natesclaw/plugin-sdk/account-id";
+import { createChannelDmPolicy } from "natesclaw/plugin-sdk/channel-dm-policy";
 /**
  * Twitch setup wizard surface for CLI setup.
  */
-import { defineChannelSetupContract } from "openclaw/plugin-sdk/channel-setup";
-import { getChatChannelMeta, type ChannelPlugin } from "openclaw/plugin-sdk/core";
+import { defineChannelSetupContract } from "natesclaw/plugin-sdk/channel-setup";
+import { getChatChannelMeta, type ChannelPlugin } from "natesclaw/plugin-sdk/core";
 import {
   formatDocsLink,
   type ChannelSetupAdapter,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type WizardPrompter,
   normalizeAccountId,
   createSetupTranslator,
   setSetupChannelEnabled,
-} from "openclaw/plugin-sdk/setup";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/setup";
+import { normalizeStringEntries } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   DEFAULT_ACCOUNT_ID,
   getAccountConfig,
@@ -40,7 +40,7 @@ function normalizeRequestedSetupAccountId(accountId: string): string {
   return normalized;
 }
 
-function resolveSetupAccountId(cfg: OpenClawConfig, requestedAccountId?: string): string {
+function resolveSetupAccountId(cfg: NatesclawConfig, requestedAccountId?: string): string {
   const requested = requestedAccountId?.trim();
   if (requested) {
     return normalizeRequestedSetupAccountId(requested);
@@ -51,10 +51,10 @@ function resolveSetupAccountId(cfg: OpenClawConfig, requestedAccountId?: string)
 }
 
 export function setTwitchAccount(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   account: Partial<TwitchAccountConfig>,
   accountId: string = resolveSetupAccountId(cfg),
-): OpenClawConfig {
+): NatesclawConfig {
   const resolvedAccountId = accountId.trim()
     ? normalizeRequestedSetupAccountId(accountId)
     : resolveSetupAccountId(cfg);
@@ -244,14 +244,14 @@ export async function promptRefreshTokenSetup(
 }
 
 export async function configureWithEnvToken(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   prompter: WizardPrompter,
   account: TwitchAccountConfig | null,
   envToken: string,
   forceAllowFrom: boolean,
   dmPolicy: ChannelSetupDmPolicy,
   accountId: string = resolveSetupAccountId(cfg),
-): Promise<{ cfg: OpenClawConfig } | null> {
+): Promise<{ cfg: NatesclawConfig } | null> {
   const resolvedAccountId = accountId.trim()
     ? normalizeRequestedSetupAccountId(accountId)
     : resolveSetupAccountId(cfg);
@@ -295,11 +295,11 @@ export async function configureWithEnvToken(
 }
 
 function setTwitchAccessControl(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   allowedRoles: TwitchRole[],
   requireMention: boolean,
   accountId?: string,
-): OpenClawConfig {
+): NatesclawConfig {
   const resolvedAccountId = resolveSetupAccountId(cfg, accountId);
   const account = getAccountConfig(cfg, resolvedAccountId);
   if (!account) {
@@ -318,7 +318,7 @@ function setTwitchAccessControl(
 }
 
 function resolveTwitchGroupPolicy(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   accountId?: string,
 ): "open" | "allowlist" | "disabled" {
   const account = getAccountConfig(cfg, resolveSetupAccountId(cfg, accountId));
@@ -332,10 +332,10 @@ function resolveTwitchGroupPolicy(
 }
 
 function setTwitchGroupPolicy(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   policy: "open" | "allowlist" | "disabled",
   accountId?: string,
-): OpenClawConfig {
+): NatesclawConfig {
   const allowedRoles: TwitchRole[] =
     policy === "open" ? ["all"] : policy === "allowlist" ? ["moderator", "vip"] : [];
   return setTwitchAccessControl(cfg, allowedRoles, true, accountId);
@@ -471,7 +471,7 @@ export const twitchSetupWizard: ChannelSetupWizard = {
       await noteTwitchSetupHelp(prompter);
     }
 
-    const envToken = process.env.OPENCLAW_TWITCH_ACCESS_TOKEN?.trim();
+    const envToken = process.env.NATESCLAW_TWITCH_ACCESS_TOKEN?.trim();
 
     if (accountId === DEFAULT_ACCOUNT_ID && envToken && !account?.accessToken) {
       const envResult = await configureWithEnvToken(

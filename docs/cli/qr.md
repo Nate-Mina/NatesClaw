@@ -1,32 +1,32 @@
 ---
-summary: "CLI reference for `openclaw qr` (generate mobile pairing QR + setup code)"
+summary: "CLI reference for `natesclaw qr` (generate mobile pairing QR + setup code)"
 read_when:
   - You want to pair a mobile node app with a gateway quickly
   - You need setup-code output for remote/manual sharing
 title: "QR"
 ---
 
-# `openclaw qr`
+# `natesclaw qr`
 
 Generate a mobile pairing QR and setup code from your current Gateway configuration.
 
 ```bash
-openclaw qr
-openclaw qr --setup-code-only
-openclaw qr --json
-openclaw qr --remote
-openclaw qr --limited
-openclaw qr --voice-node
-openclaw qr --url wss://gateway.example/ws
+natesclaw qr
+natesclaw qr --setup-code-only
+natesclaw qr --json
+natesclaw qr --remote
+natesclaw qr --limited
+natesclaw qr --voice-node
+natesclaw qr --url wss://gateway.example/ws
 ```
 
-Official OpenClaw iOS and Android apps connect automatically when their
+Official Natesclaw iOS and Android apps connect automatically when their
 setup-code metadata matches. If a request remains pending (for example, for a
 non-official client or mismatched metadata), review and approve it:
 
 ```bash
-openclaw devices list
-openclaw devices approve <requestId>
+natesclaw devices list
+natesclaw devices approve <requestId>
 ```
 
 ## Options
@@ -55,7 +55,7 @@ Use `--limited` to keep the same node token while omitting `operator.admin` from
 
 Use `--voice-node` for an embedded or room voice client. It keeps the node token and hands off a separate operator token limited to `operator.read` and `operator.talk`; it cannot send messages, mutate configuration, or invoke general write-scoped Gateway methods.
 
-Plaintext LAN `ws://` setup remains available, but OpenClaw automatically uses
+Plaintext LAN `ws://` setup remains available, but Natesclaw automatically uses
 the limited profile because a network observer could capture and race the bearer
 bootstrap token. Configure `wss://` or Tailscale Serve, then generate a new code
 to get full access.
@@ -64,7 +64,7 @@ to get full access.
 
 Mobile pairing fails closed for Tailscale/public `ws://` gateway URLs: use Tailscale Serve/Funnel or a `wss://` gateway URL for those. Private LAN addresses and `.local` Bonjour hosts remain supported over plain `ws://`, with limited operator access as described above.
 
-When the selected Gateway URL comes from `gateway.bind=lan`, OpenClaw also checks persistent `tailscale serve status --json` routes. Any HTTPS Serve root that proxies the active Gateway's loopback port is included as a fallback. The QR command adds this fallback only for `lan`; `custom` and `tailnet` keep their explicitly advertised routes. Current iOS clients probe the advertised routes in order and save the first reachable one; the legacy `url` field remains unchanged for older clients.
+When the selected Gateway URL comes from `gateway.bind=lan`, Natesclaw also checks persistent `tailscale serve status --json` routes. Any HTTPS Serve root that proxies the active Gateway's loopback port is included as a fallback. The QR command adds this fallback only for `lan`; `custom` and `tailnet` keep their explicitly advertised routes. Current iOS clients probe the advertised routes in order and save the first reachable one; the legacy `url` field remains unchanged for older clients.
 
 With `--remote`, one of `gateway.remote.url` or `gateway.tailscale.mode=serve|funnel` is required.
 

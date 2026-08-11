@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import type { DatabaseSync } from "node:sqlite";
 import { TextDecoder } from "node:util";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   migrateSessionFileEntryToCurrentVersion,
   normalizeLoadedFileEntry,
@@ -17,7 +17,7 @@ import { resolveSqliteTargetFromSessionStorePath } from "../config/sessions/sess
 import type { SessionStoreTarget } from "../config/sessions/targets.js";
 import type { SessionEntry } from "../config/sessions/types.js";
 import { openNodeSqliteDatabase } from "../infra/node-sqlite.js";
-import { resolveOpenClawAgentSqlitePath } from "../state/openclaw-agent-db.js";
+import { resolveNatesclawAgentSqlitePath } from "../state/natesclaw-agent-db.js";
 
 type ReadOnlySqliteSessionSummary = {
   entry: SessionEntry;
@@ -217,7 +217,7 @@ function assertTranscriptFileUnchanged(
     current.size !== expected.size
   ) {
     throw new Error(
-      "Legacy transcript changed during import; stop active session writers and rerun `openclaw doctor --fix`.",
+      "Legacy transcript changed during import; stop active session writers and rerun `natesclaw doctor --fix`.",
     );
   }
 }
@@ -472,7 +472,7 @@ export function resolveTargetSqlitePath(target: SessionStoreTarget): string {
   const sqliteTarget = resolveSqliteTargetFromSessionStorePath(target.storePath, {
     agentId: target.agentId,
   });
-  return resolveOpenClawAgentSqlitePath({
+  return resolveNatesclawAgentSqlitePath({
     agentId: sqliteTarget.agentId ?? target.agentId,
     ...(sqliteTarget.path ? { path: sqliteTarget.path } : {}),
   });

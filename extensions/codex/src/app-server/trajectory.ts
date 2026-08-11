@@ -2,8 +2,8 @@
  * Records optional Codex runtime trajectory events with bounded, redacted
  * context and completion payloads.
  */
-import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { attemptTerminal, type EmbeddedRunAttemptResult } from "./attempt-terminal.js";
 import { resolveCodexLocalRuntimeAttribution } from "./local-runtime-attribution.js";
 import { flattenCodexDynamicToolFunctions, type CodexDynamicToolSpec } from "./protocol.js";
@@ -149,7 +149,7 @@ export function createCodexTrajectoryRecorder(
   return {
     recordEvent: (type, data) => {
       const event = boundedTrajectoryEvent({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "natesclaw-trajectory",
         schemaVersion: 1,
         traceId: params.attempt.sessionId,
         source: "runtime",
@@ -220,7 +220,7 @@ export function recordCodexTrajectoryCompletion(
 }
 
 function parseTrajectoryEnabled(env: NodeJS.ProcessEnv): boolean {
-  const value = env.OPENCLAW_TRAJECTORY?.trim().toLowerCase();
+  const value = env.NATESCLAW_TRAJECTORY?.trim().toLowerCase();
   if (value === "1" || value === "true" || value === "yes" || value === "on") {
     return true;
   }

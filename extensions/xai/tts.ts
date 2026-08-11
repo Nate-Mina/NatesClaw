@@ -1,18 +1,18 @@
 // Xai plugin module implements tts behavior.
-import { canonicalizeBase64 } from "openclaw/plugin-sdk/media-runtime";
+import { canonicalizeBase64 } from "natesclaw/plugin-sdk/media-runtime";
 import {
   assertOkOrThrowProviderError,
   postJsonRequest,
   readProviderBinaryResponse,
   readProviderJsonResponse,
-} from "openclaw/plugin-sdk/provider-http";
-import { trimToUndefined, type SpeechVoiceOption } from "openclaw/plugin-sdk/speech";
+} from "natesclaw/plugin-sdk/provider-http";
+import { trimToUndefined, type SpeechVoiceOption } from "natesclaw/plugin-sdk/speech";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { rawDataToString } from "openclaw/plugin-sdk/webhook-ingress";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
+import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { rawDataToString } from "natesclaw/plugin-sdk/webhook-ingress";
 import WebSocket from "ws";
 import { XAI_BASE_URL } from "./model-definitions.js";
 import {

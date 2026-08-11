@@ -1,4 +1,4 @@
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   defineLegacyConfigMigration,
   type LegacyConfigMigrationSpec,
@@ -21,7 +21,7 @@ export const LEGACY_CONFIG_MIGRATIONS_RUNTIME_TOOL_NAMES: LegacyConfigMigrationS
     describe: "Rename the task-suggestion tool in persisted tool policies",
     legacyRules: TOOL_POLICY_ROOTS.map((root) => ({
       path: [root],
-      message: `Tool policies still reference ${LEGACY_TASK_SUGGESTION_TOOL_NAME}; run "openclaw doctor --fix" to rename it to ${TASK_SUGGESTION_TOOL_NAME}.`,
+      message: `Tool policies still reference ${LEGACY_TASK_SUGGESTION_TOOL_NAME}; run "natesclaw doctor --fix" to rename it to ${TASK_SUGGESTION_TOOL_NAME}.`,
       match: (value) => findLegacyTaskSuggestionToolPaths(value, [root]).length > 0,
     })),
     apply: (raw, changes) => {

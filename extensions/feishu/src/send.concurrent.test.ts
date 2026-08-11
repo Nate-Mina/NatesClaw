@@ -28,11 +28,11 @@ vi.mock("./accounts.js", () => ({
   resolveFeishuAccount: mockResolveFeishuAccount,
   resolveFeishuRuntimeAccount: mockResolveFeishuAccount,
 }));
-vi.mock("openclaw/plugin-sdk/markdown-table-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/markdown-table-runtime", () => ({
   resolveMarkdownTableMode: mockResolveMarkdownTableMode,
 }));
-vi.mock("openclaw/plugin-sdk/text-chunking", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/text-chunking")>();
+vi.mock("natesclaw/plugin-sdk/text-chunking", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/text-chunking")>();
   return { ...actual, convertMarkdownTables: mockConvertMarkdownTables };
 });
 vi.mock("./runtime.js", () => ({

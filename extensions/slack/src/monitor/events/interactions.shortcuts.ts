@@ -5,8 +5,8 @@ import type {
   MessageShortcut,
   SlackShortcutMiddlewareArgs,
 } from "@slack/bolt";
-import { requestHeartbeat } from "openclaw/plugin-sdk/heartbeat-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
+import { requestHeartbeat } from "natesclaw/plugin-sdk/heartbeat-runtime";
+import { enqueueSystemEvent } from "natesclaw/plugin-sdk/system-event-runtime";
 import { authorizeSlackSystemEventSender } from "../auth.js";
 import type { SlackMonitorContext } from "../context.js";
 import { resolveSlackDeferredActionTarget } from "../deferred-action-routing.js";

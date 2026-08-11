@@ -9,14 +9,14 @@ import {
   createAmbientVerifiedBinding,
   SystemAgentChatEngine,
   type MemoryImportStepParams,
-  type OpenClawConfig,
+  type NatesclawConfig,
 } from "./chat-engine.test-support.js";
 
 describe("SystemAgentChatEngine memory", () => {
   it("refuses memory import before provider discovery when the default workspace is missing", async () => {
     const root = useTempStateDir();
     const workspace = path.join(root, "missing-workspace");
-    const baseConfig: OpenClawConfig = {
+    const baseConfig: NatesclawConfig = {
       ...sharedVerifiedInferenceConfig,
       agents: {
         ...sharedVerifiedInferenceConfig.agents,
@@ -40,21 +40,21 @@ describe("SystemAgentChatEngine memory", () => {
     const reply = await engine.handle("memory import");
 
     expect(reply.text).toContain("default agent workspace does not exist");
-    expect(reply.text).toContain("Finish onboarding first with `openclaw onboard`");
+    expect(reply.text).toContain("Finish onboarding first with `natesclaw onboard`");
     expect(mocks.runSetupMemoryImportStep).not.toHaveBeenCalled();
     expect(mocks.writeWizardConfigFile).not.toHaveBeenCalled();
   });
 
   it("rechecks inference authority immediately before a hosted memory copy", async () => {
     const workspace = useTempStateDir();
-    const baseConfig: OpenClawConfig = {
+    const baseConfig: NatesclawConfig = {
       ...sharedVerifiedInferenceConfig,
       agents: {
         ...sharedVerifiedInferenceConfig.agents,
         defaults: { workspace },
       },
     };
-    const changedConfig: OpenClawConfig = {
+    const changedConfig: NatesclawConfig = {
       agents: { defaults: { model: { primary: "anthropic/claude-opus-4-8" } } },
     };
     const verifiedInference = await createAmbientVerifiedBinding(baseConfig);
@@ -107,7 +107,7 @@ describe("SystemAgentChatEngine memory", () => {
 
   it("stops a hosted memory copy when config drifts after planning", async () => {
     const workspace = useTempStateDir();
-    const baseConfig: OpenClawConfig = {
+    const baseConfig: NatesclawConfig = {
       ...sharedVerifiedInferenceConfig,
       agents: {
         ...sharedVerifiedInferenceConfig.agents,
@@ -116,7 +116,7 @@ describe("SystemAgentChatEngine memory", () => {
     };
     let currentHash = "memory-base-hash";
     const copyEffect = vi.fn();
-    const appendAuditEntry = vi.fn(async () => "state/openclaw.sqlite");
+    const appendAuditEntry = vi.fn(async () => "state/natesclaw.sqlite");
     mocks.readSetupConfigFileSnapshot.mockImplementation(async () => ({
       exists: true,
       valid: true,
@@ -176,7 +176,7 @@ describe("SystemAgentChatEngine memory", () => {
   });
 
   it("reports nothing to import without writing config or audit", async () => {
-    const appendAuditEntry = vi.fn(async () => "state/openclaw.sqlite");
+    const appendAuditEntry = vi.fn(async () => "state/natesclaw.sqlite");
     const engine = new SystemAgentChatEngine({
       runAgentTurn: async () => null,
       planWithAssistant: async () => null,
@@ -194,7 +194,7 @@ describe("SystemAgentChatEngine memory", () => {
   });
 
   it("reports all-provider failure without a false success", async () => {
-    const appendAuditEntry = vi.fn(async () => "state/openclaw.sqlite");
+    const appendAuditEntry = vi.fn(async () => "state/natesclaw.sqlite");
     const engine = new SystemAgentChatEngine({
       runAgentTurn: async () => null,
       planWithAssistant: async () => null,
@@ -230,7 +230,7 @@ describe("SystemAgentChatEngine memory", () => {
   });
 
   it("audits an apply failure with indeterminate partial-copy progress", async () => {
-    const appendAuditEntry = vi.fn(async () => "state/openclaw.sqlite");
+    const appendAuditEntry = vi.fn(async () => "state/natesclaw.sqlite");
     const engine = new SystemAgentChatEngine({
       runAgentTurn: async () => null,
       planWithAssistant: async () => null,

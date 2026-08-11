@@ -5,18 +5,18 @@ import { cronStoreKey } from "../cron/store/key.js";
 import { cronRunLogEntryToTaskDetail, cronRunStatusToTaskStatus } from "../cron/task-run-detail.js";
 import { readCronTaskRunHistoryPage } from "../cron/task-run-history.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../state/natesclaw-state-db.js";
 import { resetTaskRegistryForTests } from "../tasks/task-runtime.test-helpers.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 
 const CRON_RUN_LOG_TASK_IMPORT_MIGRATION_ID = "state:cron-run-logs-to-task-runs:v1";
 
 describe("cron run-log task import", () => {
   it("imports legacy cron history into task runs once at state database open", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-cron-run-log-import-" },
+    await withNatesclawTestState(
+      { layout: "state-only", prefix: "natesclaw-cron-run-log-import-" },
       async (state) => {
         const storePath = state.path("cron", "jobs.json");
         const storeKey = cronStoreKey(storePath);
@@ -86,9 +86,9 @@ describe("cron run-log task import", () => {
         }
         const legacyRows = [...entries, { ...mirroredWithRunId }];
 
-        const initial = openOpenClawStateDatabase();
+        const initial = openNatesclawStateDatabase();
         const databasePath = initial.path;
-        closeOpenClawStateDatabaseForTest();
+        closeNatesclawStateDatabaseForTest();
         const fixture = new DatabaseSync(databasePath);
         try {
           fixture.exec(`
@@ -158,7 +158,7 @@ describe("cron run-log task import", () => {
           fixture.close();
         }
 
-        const reopened = openOpenClawStateDatabase();
+        const reopened = openNatesclawStateDatabase();
         const report = reopened.db
           .prepare("SELECT report_json FROM migration_runs WHERE id = ?")
           .get(CRON_RUN_LOG_TASK_IMPORT_MIGRATION_ID) as { report_json: string };
@@ -210,8 +210,8 @@ describe("cron run-log task import", () => {
         ]);
         expect(imported.every((row) => row.cleanup_after === null)).toBe(true);
 
-        closeOpenClawStateDatabaseForTest();
-        const secondOpen = openOpenClawStateDatabase();
+        closeNatesclawStateDatabaseForTest();
+        const secondOpen = openNatesclawStateDatabase();
         expect(secondOpen.db.prepare("SELECT COUNT(*) AS count FROM task_runs").get()).toEqual({
           count: 6,
         });

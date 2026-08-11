@@ -1,6 +1,6 @@
 import { consume } from "@lit/context";
 import { initialState, Task, TaskStatus } from "@lit/task";
-import type { RouteLocation } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
 import { html, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
@@ -48,7 +48,7 @@ import {
   GatewayPageController,
   type GatewayPageChange,
 } from "../../lit/gateway-page-controller.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { fetchPluginIconBlobUrl } from "./icon-loader.ts";
 import { PLUGINS_HUB_PANEL_ID, pluginsHubTabs, type PluginsHubTab } from "./plugins-hub.ts";
@@ -64,7 +64,7 @@ import {
   type PluginsTab,
 } from "./view.ts";
 
-const PLUGINS_DOCS_URL = "https://docs.openclaw.ai/plugins/manage-plugins";
+const PLUGINS_DOCS_URL = "https://docs.natesclaw.ai/plugins/manage-plugins";
 
 export type PluginsRouteData = {
   gateway: ApplicationContext["gateway"];
@@ -115,7 +115,7 @@ function mutationSuccessMessage(
   return lines.filter(Boolean).join("\n");
 }
 
-class PluginsPage extends OpenClawLightDomElement {
+class PluginsPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -618,7 +618,7 @@ class PluginsPage extends OpenClawLightDomElement {
     }
   }
 
-  private openClawHubSearch(query: string) {
+  private NatesclawHubSearch(query: string) {
     this.query = query;
     this.changeTab("discover");
   }
@@ -950,7 +950,7 @@ class PluginsPage extends OpenClawLightDomElement {
       mcp.followUp === "oauth"
         ? t("pluginsPage.connectorAddedOauth", {
             name: connector.name,
-            command: `openclaw mcp login ${mcp.serverName}`,
+            command: `natesclaw mcp login ${mcp.serverName}`,
           })
         : mcp.followUp === "endpoint"
           ? t("pluginsPage.connectorAddedEndpoint", { name: connector.name })
@@ -1034,7 +1034,7 @@ class PluginsPage extends OpenClawLightDomElement {
           onCancelUninstall: (rowKey) => this.setPendingRemoval(rowKey, false),
           onUninstall: (pluginId, rowKey) => void this.uninstall(pluginId, rowKey),
           onAddConnector: (connector) => void this.addConnector(connector),
-          onSearchClawHub: (query) => this.openClawHubSearch(query),
+          onSearchClawHub: (query) => this.NatesclawHubSearch(query),
           onMcpToggle: (name, enabled) => void this.toggleMcpServer(name, enabled),
           onMcpRemove: (name) => void this.removeMcpServer(name),
           onMcpFormToggle: (open) => {
@@ -1050,13 +1050,13 @@ class PluginsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-plugins-page")) {
-  customElements.define("openclaw-plugins-page", PluginsPage);
+if (!customElements.get("natesclaw-plugins-page")) {
+  customElements.define("natesclaw-plugins-page", PluginsPage);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-plugins-page": PluginsPage;
+    "natesclaw-plugins-page": PluginsPage;
   }
 }
 

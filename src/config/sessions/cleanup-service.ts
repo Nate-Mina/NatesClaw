@@ -6,8 +6,8 @@ import path from "node:path";
 import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { getLogger } from "../../logging/logger.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../../routing/session-key.js";
-import { resolveOpenClawAgentSqlitePath } from "../../state/openclaw-agent-db.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import { resolveNatesclawAgentSqlitePath } from "../../state/natesclaw-agent-db.js";
+import type { NatesclawConfig } from "../types.natesclaw.js";
 import {
   pruneUnreferencedSessionArtifacts,
   resolveSessionArtifactCanonicalPathsForEntry,
@@ -108,7 +108,7 @@ type SessionsCleanupRunResult = {
 function resolveCleanupSqlitePath(target: SessionStoreTarget): string {
   return (
     resolveSqliteTargetFromSessionStorePath(target.storePath, { agentId: target.agentId }).path ??
-    resolveOpenClawAgentSqlitePath({ agentId: target.agentId })
+    resolveNatesclawAgentSqlitePath({ agentId: target.agentId })
   );
 }
 
@@ -200,7 +200,7 @@ export function resolveSessionCleanupAction(params: {
 }
 
 function isMainScopeStaleDirectSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   targetAgentId: string;
   key: string;
   activeKey?: string;
@@ -232,7 +232,7 @@ function isMainScopeStaleDirectSessionKey(params: {
 }
 
 function retireMainScopeDirectSessionEntries(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   store: Record<string, SessionEntry>;
   targetAgentId: string;
   activeKey?: string;
@@ -347,7 +347,7 @@ function addEntryArtifactPathsToSet(params: {
 }
 
 async function previewStoreCleanup(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   target: SessionStoreTarget;
   maintenance: ResolvedSessionMaintenanceConfig;
   mode: ResolvedSessionMaintenanceConfig["mode"];
@@ -509,7 +509,7 @@ async function previewStoreCleanup(params: {
 
 /** Runs session cleanup preview/apply for the selected store targets. */
 export async function runSessionsCleanup(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   opts: SessionsCleanupOptions;
   targets?: SessionStoreTarget[];
 }): Promise<SessionsCleanupRunResult> {
@@ -700,7 +700,7 @@ export async function runSessionsCleanup(params: {
 
 /** Purge session store entries for a deleted agent (#65524). Best-effort. */
 export async function purgeAgentSessionStoreEntries(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   agentId: string,
 ): Promise<void> {
   try {

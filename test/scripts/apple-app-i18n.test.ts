@@ -116,7 +116,7 @@ describe("Apple app i18n catalogs", () => {
         "Browse ClawHub",
         "Done in %@",
         "Enable debug tools",
-        "Everyday OpenClaw app behavior.",
+        "Everyday Natesclaw app behavior.",
         "General",
         "Searching…",
         "Shelling",
@@ -125,7 +125,7 @@ describe("Apple app i18n catalogs", () => {
         "Waiting",
       ]),
     );
-    expect(keys).not.toContain("OpenClaw");
+    expect(keys).not.toContain("Natesclaw");
     expect(keys.some((key) => key.includes("\\("))).toBe(false);
   });
 
@@ -139,7 +139,7 @@ describe("Apple app i18n catalogs", () => {
             id: "native.apple.settings",
             kind: "ui-call",
             line: 1,
-            path: "apps/macos/Sources/OpenClaw/Settings.swift",
+            path: "apps/macos/Sources/Natesclaw/Settings.swift",
             source: "Settings",
             surface: "apple",
           },
@@ -153,19 +153,19 @@ describe("Apple app i18n catalogs", () => {
         `${JSON.stringify({ sourceLanguage: "en", strings: {}, version: "1.0" }, null, 2)}\n`,
         build,
       ),
-    ).toThrow("Apple catalog apps/macos/Sources/OpenClaw/Resources/Localizable.xcstrings is stale");
+    ).toThrow("Apple catalog apps/macos/Sources/Natesclaw/Resources/Localizable.xcstrings is stale");
   });
 
   it("keeps macOS settings literals localized and runtime values verbatim", async () => {
     const [components, channels, clawHub, gateways, general, approvals, voiceWake] =
       await Promise.all([
-        readFile("apps/macos/Sources/OpenClaw/SettingsComponents.swift", "utf8"),
-        readFile("apps/macos/Sources/OpenClaw/ChannelConfigForm.swift", "utf8"),
-        readFile("apps/macos/Sources/OpenClaw/ClawHubSkillsBrowser.swift", "utf8"),
-        readFile("apps/macos/Sources/OpenClaw/GatewaySettings.swift", "utf8"),
-        readFile("apps/macos/Sources/OpenClaw/GeneralSettings.swift", "utf8"),
-        readFile("apps/macos/Sources/OpenClaw/SystemRunSettingsView.swift", "utf8"),
-        readFile("apps/macos/Sources/OpenClaw/VoiceWakeSettings.swift", "utf8"),
+        readFile("apps/macos/Sources/Natesclaw/SettingsComponents.swift", "utf8"),
+        readFile("apps/macos/Sources/Natesclaw/ChannelConfigForm.swift", "utf8"),
+        readFile("apps/macos/Sources/Natesclaw/ClawHubSkillsBrowser.swift", "utf8"),
+        readFile("apps/macos/Sources/Natesclaw/GatewaySettings.swift", "utf8"),
+        readFile("apps/macos/Sources/Natesclaw/GeneralSettings.swift", "utf8"),
+        readFile("apps/macos/Sources/Natesclaw/SystemRunSettingsView.swift", "utf8"),
+        readFile("apps/macos/Sources/Natesclaw/VoiceWakeSettings.swift", "utf8"),
       ]);
 
     expect(components).toContain("enum SettingsTextValue: ExpressibleByStringLiteral");
@@ -402,7 +402,7 @@ describe("Apple app i18n catalogs", () => {
   });
 
   it("keeps custom component text on explicit localized or verbatim paths", async () => {
-    const design = await readFile("apps/ios/Sources/Design/OpenClawProComponents.swift", "utf8");
+    const design = await readFile("apps/ios/Sources/Design/NatesclawProComponents.swift", "utf8");
     const agentOverview = await readFile(
       "apps/ios/Sources/Design/AgentProTab+Overview.swift",
       "utf8",
@@ -434,7 +434,7 @@ describe("Apple app i18n catalogs", () => {
     const watchDirect = await readFile("apps/ios/WatchApp/Sources/WatchDirectNode.swift", "utf8");
 
     expect(design).toContain(
-      "struct ProStatusRow: View {\n    let icon: String\n    let title: OpenClawTextValue\n    let detail: OpenClawTextValue",
+      "struct ProStatusRow: View {\n    let icon: String\n    let title: NatesclawTextValue\n    let detail: NatesclawTextValue",
     );
     expect(design).not.toContain(
       "struct ProStatusRow: View {\n    let icon: String\n    let title: String",
@@ -447,35 +447,35 @@ describe("Apple app i18n catalogs", () => {
     expect(watch).toContain("accessory: .verbatim(self.store.talkSummaryText)");
     expect(watch).toContain("title: .verbatim(record.approval.commandPreview");
     expect(settings).toContain(
-      "let title: OpenClawTextValue\n    let detail: OpenClawTextValue\n    let priority: OpenClawTextValue",
+      "let title: NatesclawTextValue\n    let detail: NatesclawTextValue\n    let priority: NatesclawTextValue",
     );
     expect(settings).toContain(
-      "struct SettingsDetailRow: View {\n    let label: LocalizedStringKey\n    let value: OpenClawTextValue",
+      "struct SettingsDetailRow: View {\n    let label: LocalizedStringKey\n    let value: NatesclawTextValue",
     );
     expect(settings).toContain("self.value.text");
     expect(settings).not.toContain("Text(self.item.title)");
     expect(agentOverview).toContain(
-      "func metricTile(\n        icon: String,\n        title: OpenClawTextValue,\n        value: String,\n        detail: OpenClawTextValue",
+      "func metricTile(\n        icon: String,\n        title: NatesclawTextValue,\n        value: String,\n        detail: NatesclawTextValue",
     );
     expect(agentDetailComponents).toContain(
-      "func detailMetric(label: OpenClawTextValue, value: String)",
+      "func detailMetric(label: NatesclawTextValue, value: String)",
     );
     expect(agentDetailComponents).toContain("Text(verbatim: value)");
     expect(agentDetailComponents).toContain(
-      "func emptyDetailRow(\n        icon: String,\n        title: OpenClawTextValue,\n        detail: OpenClawTextValue)",
+      "func emptyDetailRow(\n        icon: String,\n        title: NatesclawTextValue,\n        detail: NatesclawTextValue)",
     );
     expect(agentDetailComponents).toContain("title.text");
     expect(agentDetailComponents).toContain("detail.text");
     expect(agentDetailComponents).not.toContain("func detailMetric(label: String");
     expect(agentDetailComponents).not.toContain("func emptyDetailRow(icon: String, title: String");
     expect(agentDreaming).toContain(
-      "private func detailMetric(label: OpenClawTextValue, value: String)",
+      "private func detailMetric(label: NatesclawTextValue, value: String)",
     );
     expect(agentDreaming).toContain("label.text");
     expect(agentDreaming).toContain("Text(verbatim: value)");
     expect(agentDreaming).not.toContain("private func detailMetric(label: String");
     expect(settingsActions).toContain(
-      "func diagnosticCheckRow(\n        icon: String,\n        title: OpenClawTextValue,\n        detail: OpenClawTextValue,\n        value: OpenClawTextValue",
+      "func diagnosticCheckRow(\n        icon: String,\n        title: NatesclawTextValue,\n        detail: NatesclawTextValue,\n        value: NatesclawTextValue",
     );
     expect(settingsSections).toContain("func settingsToggle(\n        _ title: LocalizedStringKey");
     expect(settingsSections).toContain(
@@ -570,11 +570,11 @@ describe("Apple app i18n catalogs", () => {
       ),
     ).toBe("Utilisez l’appareil photo pour scanner les codes de configuration.");
     expect(
-      selectInfoPlistTranslation("OpenClaw Share", [], {
-        source: "OpenClaw Share",
-        value: "OpenClaw Partager",
+      selectInfoPlistTranslation("Natesclaw Share", [], {
+        source: "Natesclaw Share",
+        value: "Natesclaw Partager",
       }),
-    ).toBe("OpenClaw Partager");
+    ).toBe("Natesclaw Partager");
     expect(
       selectInfoPlistTranslation(
         "Use the camera to scan setup codes.",
@@ -618,7 +618,7 @@ describe("Apple app i18n catalogs", () => {
   });
 
   it("compiles macOS catalogs into app-bundle localization directories", async () => {
-    const outputDir = await mkdtemp(path.join(os.tmpdir(), "openclaw-apple-i18n-"));
+    const outputDir = await mkdtemp(path.join(os.tmpdir(), "natesclaw-apple-i18n-"));
     try {
       await compileMacosLocalizations(outputDir);
       const swedish = await readFile(
@@ -636,7 +636,7 @@ describe("Apple app i18n catalogs", () => {
         "utf8",
       );
       expect(frenchInfoPlist).toContain(
-        '"NSUserNotificationUsageDescription" = "OpenClaw a besoin de l’autorisation d’envoyer des notifications pour afficher des alertes concernant les actions de l’agent.";',
+        '"NSUserNotificationUsageDescription" = "Natesclaw a besoin de l’autorisation d’envoyer des notifications pour afficher des alertes concernant les actions de l’agent.";',
       );
       expect(frenchInfoPlist).toContain('"NSScreenCaptureDescription" = ');
       expect(frenchInfoPlist).toContain('"NSLocationUsageDescription" = ');

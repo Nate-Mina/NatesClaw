@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
 import { promisify } from "node:util";
-import { resolveSandboxContext } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { resolveSandboxContext } from "natesclaw/plugin-sdk/agent-harness-runtime";
 
 const execFileAsync = promisify(execFile);
 
@@ -16,24 +16,24 @@ function requireEnv(name) {
   return value;
 }
 
-const root = requireEnv("OPENCLAW_E2E_ROOT");
-const sandboxImage = requireEnv("OPENCLAW_E2E_SANDBOX_IMAGE");
-const browserImage = requireEnv("OPENCLAW_E2E_BROWSER_IMAGE");
-const sandboxPrefix = requireEnv("OPENCLAW_E2E_SANDBOX_PREFIX");
-const browserPrefix = requireEnv("OPENCLAW_E2E_BROWSER_PREFIX");
-const browserNetwork = requireEnv("OPENCLAW_E2E_BROWSER_NETWORK");
+const root = requireEnv("NATESCLAW_E2E_ROOT");
+const sandboxImage = requireEnv("NATESCLAW_E2E_SANDBOX_IMAGE");
+const browserImage = requireEnv("NATESCLAW_E2E_BROWSER_IMAGE");
+const sandboxPrefix = requireEnv("NATESCLAW_E2E_SANDBOX_PREFIX");
+const browserPrefix = requireEnv("NATESCLAW_E2E_BROWSER_PREFIX");
+const browserNetwork = requireEnv("NATESCLAW_E2E_BROWSER_NETWORK");
 const stateDir = path.join(root, "state");
 const workspaceDir = path.join(root, "workspace");
 const sandboxRoot = path.join(root, "sandboxes");
-const configPath = path.join(stateDir, "openclaw.json");
+const configPath = path.join(stateDir, "natesclaw.json");
 const sessionKey = "agent:main:sandbox-browser-sidecar";
 const browserToken = `sandbox-browser-sidecar-${process.pid}`;
-const marker = `OPENCLAW_SANDBOX_BROWSER_SIDECAR_${process.pid}`;
+const marker = `NATESCLAW_SANDBOX_BROWSER_SIDECAR_${process.pid}`;
 const ownedContainerNames = new Set();
 
 process.env.HOME = path.join(root, "home");
-process.env.OPENCLAW_STATE_DIR = stateDir;
-process.env.OPENCLAW_CONFIG_PATH = configPath;
+process.env.NATESCLAW_STATE_DIR = stateDir;
+process.env.NATESCLAW_CONFIG_PATH = configPath;
 
 const config = {
   gateway: {
@@ -210,7 +210,7 @@ try {
   assert.equal(snapshot.format, "ai", "bridge returned the wrong snapshot format");
   assert.match(snapshot.snapshot, new RegExp(marker), "snapshot did not contain the HTML marker");
 
-  const { stdout: listStdout } = await run("openclaw", ["sandbox", "list", "--browser", "--json"]);
+  const { stdout: listStdout } = await run("natesclaw", ["sandbox", "list", "--browser", "--json"]);
   const listed = JSON.parse(listStdout);
   const browserEntry = listed.browsers?.find(
     (entry) => entry.containerName === first.browser.containerName,
@@ -219,7 +219,7 @@ try {
   assert.equal(browserEntry.sessionKey, sessionKey);
   assert.equal(browserEntry.running, true);
 
-  await run("openclaw", ["sandbox", "recreate", "--browser", "--session", sessionKey, "--force"]);
+  await run("natesclaw", ["sandbox", "recreate", "--browser", "--session", sessionKey, "--force"]);
   const remaining = await listTaskContainers();
   assert(
     !remaining.includes(first.browser.containerName),

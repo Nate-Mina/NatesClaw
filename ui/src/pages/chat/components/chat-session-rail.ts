@@ -11,7 +11,7 @@ import "../../../components/web-awesome.ts";
 import { t } from "../../../i18n/index.ts";
 import { formatDurationCompact, formatTimeAgo, formatTimeMs } from "../../../lib/format.ts";
 import { detectTextDirection } from "../../../lib/text-direction.ts";
-import { OpenClawLightDomElement } from "../../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../../lit/natesclaw-element.ts";
 import {
   type ChatObserverDisplayPreference,
   loadChatObserverDisplayPreference,
@@ -202,7 +202,7 @@ function companionHasActivity(thread: ChatSessionCompanionThread): boolean {
   );
 }
 
-export class ChatSessionRailElement extends OpenClawLightDomElement {
+export class ChatSessionRailElement extends NatesclawLightDomElement {
   @property({ attribute: false }) sessionKey = "";
   @property({ attribute: false }) digest: SessionObserverDigest | null = null;
   @property({ attribute: false }) running = false;
@@ -689,6 +689,6 @@ export class ChatSessionRailElement extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-chat-session-rail")) {
-  customElements.define("openclaw-chat-session-rail", ChatSessionRailElement);
+if (!customElements.get("natesclaw-chat-session-rail")) {
+  customElements.define("natesclaw-chat-session-rail", ChatSessionRailElement);
 }

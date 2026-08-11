@@ -1,23 +1,23 @@
 // Signal plugin module implements approval handler behavior.
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID } from "natesclaw/plugin-sdk/account-id";
 import {
   buildChannelApprovalExpiredText,
   buildChannelApprovalResolvedText,
   createChannelApprovalNativeRuntimeAdapter,
   type PendingApprovalView,
   resolvePreparedApprovalAccountId,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "openclaw/plugin-sdk/approval-native-runtime";
+} from "natesclaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "natesclaw/plugin-sdk/approval-native-runtime";
 import {
   buildApprovalReactionPendingContent,
   type ApprovalReactionPendingContent,
-} from "openclaw/plugin-sdk/approval-reaction-runtime";
+} from "natesclaw/plugin-sdk/approval-reaction-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/approval-runtime";
+import { createSubsystemLogger } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveDefaultSignalAccountId } from "./accounts.js";
 import { resolveSignalTarget } from "./aliases.js";
 import {

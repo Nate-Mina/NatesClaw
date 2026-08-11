@@ -1,6 +1,6 @@
 /** Normalizes agent run wait/liveness/timeout metadata into sticky terminal outcomes. */
-import { asFiniteNumber as asFiniteTimestamp } from "@openclaw/normalization-core/number-coercion";
-import { readNonBlankString as asNonEmptyString } from "@openclaw/normalization-core/string-coerce";
+import { asFiniteNumber as asFiniteTimestamp } from "@natesclaw/normalization-core/number-coercion";
+import { readNonBlankString as asNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
 import {
   formatAbandonedLivenessError,
   formatBlockedLivenessError,

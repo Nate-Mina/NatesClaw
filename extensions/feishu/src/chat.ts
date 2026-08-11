@@ -1,8 +1,8 @@
 // Feishu plugin module implements chat behavior.
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawPluginApi } from "../runtime-api.js";
+import { readPositiveIntegerParam } from "natesclaw/plugin-sdk/param-readers";
+import type { NatesclawPluginToolContext } from "natesclaw/plugin-sdk/plugin-entry";
+import type { NatesclawPluginApi } from "../runtime-api.js";
 import { listEnabledFeishuAccounts } from "./accounts.js";
 import { FeishuChatSchema, type FeishuChatParams } from "./chat-schema.js";
 import { resolveFeishuChatType } from "./chat-type.js";
@@ -67,11 +67,11 @@ export async function getChatInfo(client: Lark.Client, chatId: string) {
 }
 
 function authorizeFeishuChatInfo(params: {
-  cfg: NonNullable<OpenClawPluginApi["config"]>;
+  cfg: NonNullable<NatesclawPluginApi["config"]>;
   account: ReturnType<typeof resolveFeishuToolAccount>;
   chatId: string;
   chat: Awaited<ReturnType<typeof getChatInfo>>;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
 }): void {
   assertFeishuChatReadAllowed({
     cfg: params.cfg,
@@ -84,10 +84,10 @@ function authorizeFeishuChatInfo(params: {
 
 async function getAuthorizedFeishuChatInfo(params: {
   client: Lark.Client;
-  cfg: NonNullable<OpenClawPluginApi["config"]>;
+  cfg: NonNullable<NatesclawPluginApi["config"]>;
   account: ReturnType<typeof resolveFeishuToolAccount>;
   chatId: string;
-  ctx: OpenClawPluginToolContext;
+  ctx: NatesclawPluginToolContext;
 }) {
   const preliminary = resolveFeishuChatReadPreliminaryAuthorization({
     cfg: params.cfg,
@@ -238,7 +238,7 @@ export async function getFeishuMemberInfo(
   };
 }
 
-export function registerFeishuChatTools(api: OpenClawPluginApi) {
+export function registerFeishuChatTools(api: NatesclawPluginApi) {
   if (!api.config) {
     return;
   }
@@ -255,7 +255,7 @@ export function registerFeishuChatTools(api: OpenClawPluginApi) {
   }
 
   api.registerTool(
-    (toolContext: OpenClawPluginToolContext) => ({
+    (toolContext: NatesclawPluginToolContext) => ({
       name: "feishu_chat",
       resultContentSource: "network",
       label: "Feishu Chat",

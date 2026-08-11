@@ -165,7 +165,7 @@ describe("config form array integrity", () => {
       items: { type: "string" },
     });
     const draftHost = expectElement(
-      container.querySelector<ConfigFormCollectionDraft>("openclaw-config-form-collection-draft"),
+      container.querySelector<ConfigFormCollectionDraft>("natesclaw-config-form-collection-draft"),
       "unique array draft",
     );
     await draftHost.updateComplete;
@@ -194,7 +194,7 @@ describe("config form array integrity", () => {
       onPatch,
     });
     const duplicateDraft = expectElement(
-      container.querySelector<ConfigFormCollectionDraft>("openclaw-config-form-collection-draft"),
+      container.querySelector<ConfigFormCollectionDraft>("natesclaw-config-form-collection-draft"),
       "duplicate array draft",
     );
     await duplicateDraft.updateComplete;
@@ -224,7 +224,7 @@ describe("config form array integrity", () => {
       onPatch,
     });
     const composedDraft = expectElement(
-      container.querySelector<ConfigFormCollectionDraft>("openclaw-config-form-collection-draft"),
+      container.querySelector<ConfigFormCollectionDraft>("natesclaw-config-form-collection-draft"),
       "composed item draft",
     );
     await composedDraft.updateComplete;
@@ -567,7 +567,7 @@ describe("config form array integrity", () => {
       onPatch,
     });
     const draftHost = expectElement(
-      container.querySelector<ConfigFormCollectionDraft>("openclaw-config-form-collection-draft"),
+      container.querySelector<ConfigFormCollectionDraft>("natesclaw-config-form-collection-draft"),
       "nullable scalar collection draft",
     );
     expectElement(findAddButton(container), "nullable scalar array add").click();

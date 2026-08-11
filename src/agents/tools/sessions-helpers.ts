@@ -20,10 +20,10 @@ export {
   resolveVisibleSessionReference,
   shouldResolveSessionIdInput,
 } from "./sessions-resolution.js";
-import { normalizeOptionalString, type FastMode } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString, type FastMode } from "@natesclaw/normalization-core/string-coerce";
 import type { SessionRunStatus } from "../../../packages/gateway-protocol/src/schema/sessions-row.js";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { parseRawSessionConversationRef } from "../../sessions/session-key-utils.js";
 import type { FastModeSource } from "../../shared/fast-mode.js";
 
@@ -119,7 +119,7 @@ export type SessionListRow = {
 export function resolveSessionToolContext(opts?: {
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
 }) {
   const cfg = opts?.config ?? getRuntimeConfig();
   return {

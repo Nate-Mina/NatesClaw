@@ -1,18 +1,18 @@
 import { readFileSync } from "node:fs";
-import type { ProviderRuntimeModel } from "openclaw/plugin-sdk/plugin-entry";
+import type { ProviderRuntimeModel } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   registerProviderPlugin,
   registerSingleProviderPlugin,
   requireRegisteredProvider,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import { NON_ENV_SECRETREF_MARKER } from "openclaw/plugin-sdk/provider-auth-runtime";
-import { clearLiveCatalogCacheForTests } from "openclaw/plugin-sdk/provider-catalog-live-runtime";
-import { expectPassthroughReplayPolicy } from "openclaw/plugin-sdk/provider-test-contracts";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
+import { NON_ENV_SECRETREF_MARKER } from "natesclaw/plugin-sdk/provider-auth-runtime";
+import { clearLiveCatalogCacheForTests } from "natesclaw/plugin-sdk/provider-catalog-live-runtime";
+import { expectPassthroughReplayPolicy } from "natesclaw/plugin-sdk/provider-test-contracts";
 // Opencode tests cover index plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import {
   buildOpencodeZenLiveProviderConfig,
   resolveOpencodeZenStarterModel,

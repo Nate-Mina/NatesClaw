@@ -1,10 +1,10 @@
 // Tests reply plumbing helpers that connect payloads, routes, and delivery modes.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import type { SubagentRunRecord } from "../../agents/subagents/registry/subagent-registry.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import { formatDurationCompact } from "../../infra/format-time/format-duration.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
@@ -31,7 +31,7 @@ function createSlackThreadingPlugin(): ChannelPlugin {
 }
 
 describe("buildThreadingToolContext", () => {
-  const cfg = {} as OpenClawConfig;
+  const cfg = {} as NatesclawConfig;
 
   afterEach(() => {
     resetPluginRuntimeStateForTest();
@@ -162,7 +162,7 @@ describe("buildThreadingToolContext", () => {
 
     const result = buildThreadingToolContext({
       sessionCtx,
-      config: { channels: { slack: { replyToMode: "all" } } } as OpenClawConfig,
+      config: { channels: { slack: { replyToMode: "all" } } } as NatesclawConfig,
       hasRepliedRef: undefined,
     });
 
@@ -184,7 +184,7 @@ describe("buildThreadingToolContext", () => {
 
     const result = buildThreadingToolContext({
       sessionCtx,
-      config: { channels: { slack: { replyToMode: "all" } } } as OpenClawConfig,
+      config: { channels: { slack: { replyToMode: "all" } } } as NatesclawConfig,
       hasRepliedRef: undefined,
     });
 
@@ -205,7 +205,7 @@ describe("buildThreadingToolContext", () => {
         To: "channel:C1",
         ReplyToMode: "off",
       },
-      config: { channels: { slack: { replyToMode: "all" } } } as OpenClawConfig,
+      config: { channels: { slack: { replyToMode: "all" } } } as NatesclawConfig,
       hasRepliedRef: undefined,
     });
 
@@ -241,7 +241,7 @@ describe("buildThreadingToolContext", () => {
 
     const result = buildThreadingToolContext({
       sessionCtx,
-      config: { channels: { googlechat: { replyToMode: "all" } } } as OpenClawConfig,
+      config: { channels: { googlechat: { replyToMode: "all" } } } as NatesclawConfig,
       hasRepliedRef: undefined,
     });
 
@@ -458,7 +458,7 @@ describe("subagents utils", () => {
     const run = {
       ...baseRun,
       label: [
-        "OpenClaw runtime context (internal):",
+        "Natesclaw runtime context (internal):",
         "This context is runtime-generated, not user-authored. Keep internal details private.",
         "",
         "[Internal task completion event]",

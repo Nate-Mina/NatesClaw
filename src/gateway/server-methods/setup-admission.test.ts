@@ -20,7 +20,7 @@ import {
 
 describe("setup admission", () => {
   beforeEach(() => {
-    mocks.stateDir = tempDirs.make("openclaw-setup-admission-");
+    mocks.stateDir = tempDirs.make("natesclaw-setup-admission-");
   });
 
   it("rejects concurrent work instead of queueing it", async () => {

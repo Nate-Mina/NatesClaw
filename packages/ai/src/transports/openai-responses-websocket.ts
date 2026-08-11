@@ -288,7 +288,7 @@ function requestWithoutInput(request: ResponsesWebSocketRequest): ResponsesWebSo
   }
   const metadata = Object.fromEntries(
     Object.entries(rest.metadata as Record<string, unknown>).filter(
-      ([key]) => key !== "openclaw_turn_id" && key !== "openclaw_turn_attempt",
+      ([key]) => key !== "natesclaw_turn_id" && key !== "natesclaw_turn_attempt",
     ),
   );
   return { ...rest, metadata };

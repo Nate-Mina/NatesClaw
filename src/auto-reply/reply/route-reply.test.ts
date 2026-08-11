@@ -5,7 +5,7 @@ import type {
   ChannelPlugin,
   ChannelThreadingAdapter,
 } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   createChannelTestPluginBase,
@@ -665,7 +665,7 @@ describe("routeReply", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     const res = await routeTestReply({
       payload: { text: "native command response" },
@@ -694,7 +694,7 @@ describe("routeReply", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     await expectSlackNoDelivery(
       { text: SILENT_REPLY_TOKEN },
@@ -709,15 +709,15 @@ describe("routeReply", () => {
 
   it("applies responsePrefix when routing", async () => {
     const cfg = {
-      channels: { slack: { responsePrefix: "[openclaw]" } },
-    } as unknown as OpenClawConfig;
+      channels: { slack: { responsePrefix: "[natesclaw]" } },
+    } as unknown as NatesclawConfig;
     await routeTestReply({
       payload: { text: "hi" },
       channel: "slack",
       to: "channel:C123",
       cfg,
     });
-    expect(lastDeliveryPayload().text).toBe("[openclaw] hi");
+    expect(lastDeliveryPayload().text).toBe("[natesclaw] hi");
   });
 
   it("interpolates responsePrefix from the routed channel and account", async () => {
@@ -730,7 +730,7 @@ describe("routeReply", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     await routeTestReply({
       payload: { text: "hi" },
       channel: "slack",
@@ -768,7 +768,7 @@ describe("routeReply", () => {
         ],
       },
       messages: {},
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     await routeTestReply({
       payload: { text: "hi" },
       channel: "slack",
@@ -915,7 +915,7 @@ describe("routeReply", () => {
             baseUrl: "https://chat.example.com",
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
     });
     expectLastDeliveryFields({
       channel: "mattermost",
@@ -959,7 +959,7 @@ describe("routeReply", () => {
           enabled: true,
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     await routeTestReply({
       payload: { text: "hi" },
       channel: "msteams",

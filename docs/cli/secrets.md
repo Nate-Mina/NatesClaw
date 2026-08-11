@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `openclaw secrets` (store, reload, audit, configure, apply)"
+summary: "CLI reference for `natesclaw secrets` (store, reload, audit, configure, apply)"
 read_when:
   - Re-resolving secret refs at runtime
   - Managing team-scoped values in the shared secret store
@@ -8,7 +8,7 @@ read_when:
 title: "Secrets"
 ---
 
-# `openclaw secrets`
+# `natesclaw secrets`
 
 Manage SecretRefs and keep the active runtime snapshot healthy.
 
@@ -23,12 +23,12 @@ Manage SecretRefs and keep the active runtime snapshot healthy.
 Recommended operator loop:
 
 ```bash
-openclaw secrets audit --check
-openclaw secrets configure
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --dry-run
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json
-openclaw secrets audit --check
-openclaw secrets reload
+natesclaw secrets audit --check
+natesclaw secrets configure
+natesclaw secrets apply --from /tmp/natesclaw-secrets-plan.json --dry-run
+natesclaw secrets apply --from /tmp/natesclaw-secrets-plan.json
+natesclaw secrets audit --check
+natesclaw secrets reload
 ```
 
 If your plan includes `exec` SecretRefs/providers, pass `--allow-exec` on both the dry-run and write `apply` commands.
@@ -43,14 +43,14 @@ Related: [Secrets Management](/gateway/secrets) · [1Password plugin](/plugins/o
 
 ## Shared secret store
 
-`openclaw secrets store` writes directly to the local shared state database. The store is Gateway-wide and team-scoped; this release accepts only `--scope team`. `--scope me` is rejected because identity scope is not supported yet.
+`natesclaw secrets store` writes directly to the local shared state database. The store is Gateway-wide and team-scoped; this release accepts only `--scope team`. `--scope me` is rejected because identity scope is not supported yet.
 
 ```bash
-openclaw secrets store list
-openclaw secrets store set <NAME>
-openclaw secrets store get <NAME>
-openclaw secrets store rm <NAME>...
-openclaw secrets store import [--from <file>]
+natesclaw secrets store list
+natesclaw secrets store set <NAME>
+natesclaw secrets store get <NAME>
+natesclaw secrets store rm <NAME>...
+natesclaw secrets store import [--from <file>]
 ```
 
 Names must match `^[A-Z][A-Z0-9_]{0,127}$`. Values are limited to 64 KiB (65,536 UTF-8 bytes); an oversized value is rejected with exit code 2 whether it arrives from stdin, `--value`, or `--value-file`. A `secret` entry may not be empty, because an empty credential cannot be diagnosed later (`get` refuses secret kinds and listings mask them); `env` entries may be empty. `--kind secret|env` overrides automatic kind detection; otherwise names ending in common credential suffixes such as `_API_KEY`, `_TOKEN`, `_PASSWORD`, `_PRIVATE_KEY`, or `_SECRET` become `secret`, and other names become `env`.
@@ -60,7 +60,7 @@ Names must match `^[A-Z][A-Z0-9_]{0,127}$`. Values are limited to 64 KiB (65,536
 `--value` is accepted only when the resolved kind is `env`:
 
 ```bash
-openclaw secrets store set LOG_LEVEL --kind env --value debug
+natesclaw secrets store set LOG_LEVEL --kind env --value debug
 ```
 
 For `secret` values, `--value` is refused with exit code `2` because command-line arguments can leak through shell history and process listings. Use one of the three safe inputs instead:
@@ -73,21 +73,21 @@ Examples:
 
 ```bash
 op read 'op://Engineering/OpenAI/apiKey' | \
-  openclaw secrets store set OPENAI_API_KEY --kind secret
+  natesclaw secrets store set OPENAI_API_KEY --kind secret
 
-openclaw secrets store set TLS_PRIVATE_KEY \
+natesclaw secrets store set TLS_PRIVATE_KEY \
   --kind secret \
   --value-file ./client-key.pem
 ```
 
-`set` is idempotent and updates an existing name. Add `--dry-run` to validate and preview the operation without writing. A successful write reminds you to run `openclaw secrets reload` before a config-referenced value can take effect.
+`set` is idempotent and updates an existing name. Add `--dry-run` to validate and preview the operation without writing. A successful write reminds you to run `natesclaw secrets reload` before a config-referenced value can take effect.
 
 ### Read values
 
 ```bash
-openclaw secrets store list --json
-openclaw secrets store list --plain
-openclaw secrets store get LOG_LEVEL
+natesclaw secrets store list --json
+natesclaw secrets store list --plain
+natesclaw secrets store get LOG_LEVEL
 ```
 
 Secret values never appear in human, `--json`, or `--plain` output. `store get` refuses a `secret` entry as write-only by design and exits `2`; it exits `3` when the name does not exist. Environment-kind values are readable.
@@ -97,9 +97,9 @@ Team-scoped `env` entries also reach agent exec environments. Explicit per-call 
 ### Remove values
 
 ```bash
-openclaw secrets store rm OLD_TOKEN
-openclaw secrets store rm OLD_TOKEN LEGACY_PASSWORD --yes
-openclaw secrets store rm OLD_TOKEN --dry-run
+natesclaw secrets store rm OLD_TOKEN
+natesclaw secrets store rm OLD_TOKEN LEGACY_PASSWORD --yes
+natesclaw secrets store rm OLD_TOKEN --dry-run
 ```
 
 Removal is idempotent, so a missing name succeeds quietly. Without `--yes`, the CLI asks for confirmation. Removed rows are soft-deleted and purged after 30 days.
@@ -109,10 +109,10 @@ Removal is idempotent, so a missing name succeeds quietly. Without `--yes`, the 
 Import dotenv-format assignments from a regular file or stdin:
 
 ```bash
-openclaw secrets store import --from .env
-openclaw secrets store import --from .env --dry-run
-openclaw secrets store import --from .env --yes
-op read 'op://Engineering/service-account/dotenv' | openclaw secrets store import --yes
+natesclaw secrets store import --from .env
+natesclaw secrets store import --from .env --dry-run
+natesclaw secrets store import --from .env --yes
+op read 'op://Engineering/service-account/dotenv' | natesclaw secrets store import --yes
 ```
 
 The importer supports quoted values and multiline quoted values such as PEM keys. Use `--yes` to skip confirmation and `--dry-run` to inspect the import without writing. Kind detection follows the same name-based rule as `store set`.
@@ -122,9 +122,9 @@ The store CLI commands do not accept `--url` or `--token` and do not route throu
 ## Reload runtime snapshot
 
 ```bash
-openclaw secrets reload
-openclaw secrets reload --json
-openclaw secrets reload --url ws://127.0.0.1:18789 --token <token>
+natesclaw secrets reload
+natesclaw secrets reload --json
+natesclaw secrets reload --url ws://127.0.0.1:18789 --token <token>
 ```
 
 Uses gateway RPC method `secrets.reload`. Healthy owners refresh independently. Eligible failed owners become stale only when their ref identities, provider definitions, and complete non-secret owner contract are unchanged; new or changed failures become cold. This degraded activation succeeds and reports `warningCount`. Strict or unmapped failures return an error and preserve the previously active snapshot.
@@ -133,12 +133,12 @@ Options: `--url <url>`, `--token <token>`, `--timeout <ms>`, `--json`.
 
 ## Audit
 
-Scans OpenClaw state for:
+Scans Natesclaw state for:
 
 - plaintext secret storage
 - unresolved refs
-- precedence drift (`auth-profiles.json` credentials shadowing `openclaw.json` refs)
-- store residue (a team store value duplicated by plaintext in `openclaw.json`)
+- precedence drift (`auth-profiles.json` credentials shadowing `natesclaw.json` refs)
+- store residue (a team store value duplicated by plaintext in `natesclaw.json`)
 - generated `agents/*/agent/models.json` residues (provider `apiKey` values and sensitive provider headers)
 - legacy residues (legacy auth store entries, OAuth reminders)
 
@@ -147,10 +147,10 @@ The `.env` scan covers the effective state directory and the directory containin
 Sensitive provider header detection is name-heuristic based: it flags headers whose name matches common auth/credential fragments (`authorization`, `x-api-key`, `token`, `secret`, `password`, `credential`).
 
 ```bash
-openclaw secrets audit
-openclaw secrets audit --check
-openclaw secrets audit --json
-openclaw secrets audit --allow-exec
+natesclaw secrets audit
+natesclaw secrets audit --check
+natesclaw secrets audit --json
+natesclaw secrets audit --allow-exec
 ```
 
 Report shape:
@@ -165,13 +165,13 @@ Report shape:
 Build provider and SecretRef changes interactively, run preflight, and optionally apply:
 
 ```bash
-openclaw secrets configure
-openclaw secrets configure --plan-out /tmp/openclaw-secrets-plan.json
-openclaw secrets configure --apply --yes
-openclaw secrets configure --providers-only
-openclaw secrets configure --skip-provider-setup
-openclaw secrets configure --agent ops
-openclaw secrets configure --json
+natesclaw secrets configure
+natesclaw secrets configure --plan-out /tmp/natesclaw-secrets-plan.json
+natesclaw secrets configure --apply --yes
+natesclaw secrets configure --providers-only
+natesclaw secrets configure --skip-provider-setup
+natesclaw secrets configure --agent ops
+natesclaw secrets configure --json
 ```
 
 Flow: provider setup first (add/edit/remove `secrets.providers` aliases), then credential mapping (select fields, assign `{source, provider, id}` refs), then preflight and optional apply.
@@ -188,7 +188,7 @@ Flags:
 Notes:
 
 - Requires an interactive TTY.
-- Targets secret-bearing fields in `openclaw.json` plus `auth-profiles.json` for the selected agent scope; canonical supported surface: [SecretRef Credential Surface](/reference/secretref-credential-surface).
+- Targets secret-bearing fields in `natesclaw.json` plus `auth-profiles.json` for the selected agent scope; canonical supported surface: [SecretRef Credential Surface](/reference/secretref-credential-surface).
 - Supports creating new `auth-profiles.json` mappings directly in the picker flow.
 - Runs preflight resolution before apply.
 - Generated plans default to scrub options enabled (`scrubEnv`, `scrubAuthProfilesForProviderTargets`, `scrubLegacyAuthJson`). Apply is one-way for scrubbed plaintext values.
@@ -204,11 +204,11 @@ Package managers often expose symlinked command paths. Resolve the real binary p
 ## Apply a saved plan
 
 ```bash
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --allow-exec
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --dry-run
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --dry-run --allow-exec
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --json
+natesclaw secrets apply --from /tmp/natesclaw-secrets-plan.json
+natesclaw secrets apply --from /tmp/natesclaw-secrets-plan.json --allow-exec
+natesclaw secrets apply --from /tmp/natesclaw-secrets-plan.json --dry-run
+natesclaw secrets apply --from /tmp/natesclaw-secrets-plan.json --dry-run --allow-exec
+natesclaw secrets apply --from /tmp/natesclaw-secrets-plan.json --json
 ```
 
 `--dry-run` validates preflight without writing files; exec SecretRef checks are skipped by default in dry-run. Write mode rejects plans containing exec SecretRefs/providers unless `--allow-exec`. Use `--allow-exec` to opt in to exec provider checks/execution in either mode.
@@ -217,7 +217,7 @@ openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --json
 
 What `apply` may update:
 
-- `openclaw.json` (SecretRef targets + provider upserts/deletes)
+- `natesclaw.json` (SecretRef targets + provider upserts/deletes)
 - `auth-profiles.json` (provider-target scrubbing)
 - legacy `auth.json` residues
 - `.env` files in the effective state and active-config directories, for known secret keys whose values were migrated
@@ -231,9 +231,9 @@ Plan contract details (allowed target paths, validation rules, failure semantics
 ## Example
 
 ```bash
-openclaw secrets audit --check
-openclaw secrets configure
-openclaw secrets audit --check
+natesclaw secrets audit --check
+natesclaw secrets configure
+natesclaw secrets audit --check
 ```
 
 If `audit --check` still reports plaintext findings, update the remaining reported target paths and rerun audit.

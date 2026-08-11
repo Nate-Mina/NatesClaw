@@ -13,7 +13,7 @@ import {
   type PluginInstallLogger,
   type PluginInstallPolicyRequest,
 } from "./install-types.js";
-import { resolvePackageExtensionEntries, type OpenClawPackageManifest } from "./manifest.js";
+import { resolvePackageExtensionEntries, type NatesclawPackageManifest } from "./manifest.js";
 import { satisfiesPluginApiRange } from "./package-compat.js";
 import { resolvePackagePluginApiRange } from "./package-compat.js";
 import {
@@ -37,22 +37,22 @@ type PluginCompatibilityRuntime = Pick<
 
 export const defaultLogger: PluginInstallLogger = {};
 
-export function formatUnresolvedOpenClawPeerLinkError(packageName: string): string {
-  return `Installed plugin ${packageName} declares an openclaw dependency, but OpenClaw could not create a plugin-local node_modules/openclaw link. Run from a packaged OpenClaw install or reinstall OpenClaw, then retry.`;
+export function formatUnresolvedNatesclawPeerLinkError(packageName: string): string {
+  return `Installed plugin ${packageName} declares an natesclaw dependency, but Natesclaw could not create a plugin-local node_modules/natesclaw link. Run from a packaged Natesclaw install or reinstall Natesclaw, then retry.`;
 }
 
 const MISSING_EXTENSIONS_ERROR =
-  'package.json missing openclaw.extensions; update the plugin package to include openclaw.extensions (for example ["./dist/index.js"]). See https://docs.openclaw.ai/help/troubleshooting#plugin-install-fails-with-missing-openclaw-extensions';
-function validateOpenClawPackageCompatibility(params: {
+  'package.json missing natesclaw.extensions; update the plugin package to include natesclaw.extensions (for example ["./dist/index.js"]). See https://docs.natesclaw.ai/help/troubleshooting#plugin-install-fails-with-missing-natesclaw-extensions';
+function validateNatesclawPackageCompatibility(params: {
   pluginId: string;
   currentHostVersion: string;
-  packageMetadata?: OpenClawPackageManifest;
+  packageMetadata?: NatesclawPackageManifest;
 }): PluginInstallFailureResult | null {
   const pluginApiRangeCheck = resolvePackagePluginApiRange(params.packageMetadata);
   if (!pluginApiRangeCheck.ok) {
     return {
       ok: false,
-      error: `invalid package.json openclaw.compat.pluginApi: ${pluginApiRangeCheck.error}`,
+      error: `invalid package.json natesclaw.compat.pluginApi: ${pluginApiRangeCheck.error}`,
       code: PLUGIN_INSTALL_ERROR_CODE.INVALID_PLUGIN_API,
     };
   }
@@ -60,7 +60,7 @@ function validateOpenClawPackageCompatibility(params: {
   if (pluginApiRange && !satisfiesPluginApiRange(params.currentHostVersion, pluginApiRange)) {
     return {
       ok: false,
-      error: `plugin "${params.pluginId}" requires plugin API ${pluginApiRange}, but this OpenClaw runtime exposes ${params.currentHostVersion}. Upgrade OpenClaw or install a compatible plugin version and retry.`,
+      error: `plugin "${params.pluginId}" requires plugin API ${pluginApiRange}, but this Natesclaw runtime exposes ${params.currentHostVersion}. Upgrade Natesclaw or install a compatible plugin version and retry.`,
       code: PLUGIN_INSTALL_ERROR_CODE.INCOMPATIBLE_PLUGIN_API,
     };
   }
@@ -68,10 +68,10 @@ function validateOpenClawPackageCompatibility(params: {
   return null;
 }
 
-export function validateOpenClawPackageInstallCompatibility(params: {
+export function validateNatesclawPackageInstallCompatibility(params: {
   runtime: PluginCompatibilityRuntime;
   pluginId: string;
-  packageMetadata?: OpenClawPackageManifest;
+  packageMetadata?: NatesclawPackageManifest;
 }): PluginInstallFailureResult | null {
   const currentHostVersion = params.runtime.resolveCompatibilityHostVersion();
   const minHostVersionCheck = params.runtime.checkMinHostVersion({
@@ -82,25 +82,25 @@ export function validateOpenClawPackageInstallCompatibility(params: {
     if (minHostVersionCheck.kind === "invalid") {
       return {
         ok: false,
-        error: `invalid package.json openclaw.install.minHostVersion: ${minHostVersionCheck.error}`,
+        error: `invalid package.json natesclaw.install.minHostVersion: ${minHostVersionCheck.error}`,
         code: PLUGIN_INSTALL_ERROR_CODE.INVALID_MIN_HOST_VERSION,
       };
     }
     if (minHostVersionCheck.kind === "unknown_host_version") {
       return {
         ok: false,
-        error: `plugin "${params.pluginId}" requires OpenClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined. Re-run from a released build or set OPENCLAW_VERSION and retry.`,
+        error: `plugin "${params.pluginId}" requires Natesclaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined. Re-run from a released build or set NATESCLAW_VERSION and retry.`,
         code: PLUGIN_INSTALL_ERROR_CODE.UNKNOWN_HOST_VERSION,
       };
     }
     return {
       ok: false,
-      error: `plugin "${params.pluginId}" requires OpenClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}. Upgrade OpenClaw and retry.`,
+      error: `plugin "${params.pluginId}" requires Natesclaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}. Upgrade Natesclaw and retry.`,
       code: PLUGIN_INSTALL_ERROR_CODE.INCOMPATIBLE_HOST_VERSION,
     };
   }
 
-  return validateOpenClawPackageCompatibility({
+  return validateNatesclawPackageCompatibility({
     pluginId: params.pluginId,
     currentHostVersion,
     packageMetadata: params.packageMetadata,
@@ -126,7 +126,7 @@ export async function readOptionalPackageManifest(params: {
   }
 }
 
-export function ensureOpenClawExtensions(params: { manifest: PackageManifest }):
+export function ensureNatesclawExtensions(params: { manifest: PackageManifest }):
   | {
       ok: true;
       entries: string[];
@@ -141,21 +141,21 @@ export function ensureOpenClawExtensions(params: { manifest: PackageManifest }):
     return {
       ok: false,
       error: MISSING_EXTENSIONS_ERROR,
-      code: PLUGIN_INSTALL_ERROR_CODE.MISSING_OPENCLAW_EXTENSIONS,
+      code: PLUGIN_INSTALL_ERROR_CODE.MISSING_NATESCLAW_EXTENSIONS,
     };
   }
   if (resolved.status === "empty") {
     return {
       ok: false,
-      error: "package.json openclaw.extensions is empty",
-      code: PLUGIN_INSTALL_ERROR_CODE.EMPTY_OPENCLAW_EXTENSIONS,
+      error: "package.json natesclaw.extensions is empty",
+      code: PLUGIN_INSTALL_ERROR_CODE.EMPTY_NATESCLAW_EXTENSIONS,
     };
   }
   if (resolved.status === "invalid") {
     return {
       ok: false,
       error: resolved.error,
-      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_OPENCLAW_EXTENSIONS,
+      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_NATESCLAW_EXTENSIONS,
     };
   }
   return {
@@ -350,7 +350,7 @@ export async function runInstallSourceScan(params: {
     });
     return {
       ok: false,
-      error: `${params.subject} installation blocked: code safety scan failed (${String(err)}). Run "openclaw security audit --deep" for details.`,
+      error: `${params.subject} installation blocked: code safety scan failed (${String(err)}). Run "natesclaw security audit --deep" for details.`,
       code: PLUGIN_INSTALL_ERROR_CODE.SECURITY_SCAN_FAILED,
     };
   }

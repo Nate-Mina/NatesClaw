@@ -1,8 +1,8 @@
-import { normalizeStringifiedEntries } from "@openclaw/normalization-core/string-coerce";
+import { normalizeStringifiedEntries } from "@natesclaw/normalization-core/string-coerce";
 import { createDeferredCore } from "../../shared/deferred.js";
 import { resolveGlobalMap } from "../../shared/global-singleton.js";
 
-export const REPLY_ADMISSION_TICKET = Symbol("openclaw.replyAdmissionTicket");
+export const REPLY_ADMISSION_TICKET = Symbol("natesclaw.replyAdmissionTicket");
 type ReplyAdmissionTicket = {
   wait(signal?: AbortSignal): Promise<boolean>;
   release(): void;
@@ -11,7 +11,7 @@ export type ReplyOptionsWithAdmissionTicket = {
   [REPLY_ADMISSION_TICKET]?: ReplyAdmissionTicket;
 };
 
-const tails = resolveGlobalMap<string, Promise<void>>(Symbol.for("openclaw.replyAdmissionTickets"));
+const tails = resolveGlobalMap<string, Promise<void>>(Symbol.for("natesclaw.replyAdmissionTickets"));
 
 /** Briefly orders queue publication across a command's source and target sessions. */
 export function reserveReplyAdmissionTicket(

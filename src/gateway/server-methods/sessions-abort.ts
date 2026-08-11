@@ -2,7 +2,7 @@
 import {
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -15,7 +15,7 @@ import {
   isConfiguredSessionStoreAgentId,
   resolveExistingAgentSessionStoreTargetsSync,
 } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../../routing/session-key.js";
 import { setGatewayDedupeEntry } from "../agent-turn/agent-job.js";
 import { resolveSessionKeyForRun } from "../server-session-key.js";
@@ -61,7 +61,7 @@ export function resolveAbortSessionKey(params: {
 
 function resolveSessionKeyAgentId(
   sessionKey: string | undefined,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): string | undefined {
   const key = normalizeOptionalString(sessionKey);
   if (!key) {
@@ -77,7 +77,7 @@ function resolveSessionKeyAgentId(
 function sessionKeyBelongsToAgent(
   sessionKey: string | undefined,
   agentId: string,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ): boolean {
   const key = normalizeOptionalString(sessionKey);
   if (cfg.session?.scope === "global" && key?.toLowerCase() === "global") {
@@ -88,7 +88,7 @@ function sessionKeyBelongsToAgent(
 }
 
 function resolveScopedAbortKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string | undefined;
   agentId: string | undefined;
 }): string | undefined {

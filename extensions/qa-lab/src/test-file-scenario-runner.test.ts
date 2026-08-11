@@ -130,25 +130,25 @@ it("only batches the canonical Docker lane argument shape", () => {
 it("prepares the exact Docker lane union in a sanitized bound environment", async () => {
   const repoRoot = await makeTempRepo("qa-docker-candidate-");
   const outputDir = path.join(repoRoot, "out");
-  const packagePath = path.join(repoRoot, "openclaw.tgz");
+  const packagePath = path.join(repoRoot, "natesclaw.tgz");
   const registryDir = path.join(repoRoot, "registry");
   const runCommand = vi.fn(async (command: QaScenarioCommandExecution) => {
     expect(command.env).toMatchObject({
       KEEP_ME: "yes",
-      OPENCLAW_DOCKER_ALL_LANES: "gateway-network,openai-chat-tools",
-      OPENCLAW_DOCKER_E2E_REPO_ROOT: repoRoot,
+      NATESCLAW_DOCKER_ALL_LANES: "gateway-network,openai-chat-tools",
+      NATESCLAW_DOCKER_E2E_REPO_ROOT: repoRoot,
     });
-    expect(command.env).not.toHaveProperty("OPENCLAW_DOCKER_ALL_BUILD");
-    expect(command.env).not.toHaveProperty("OPENCLAW_CURRENT_PACKAGE_TGZ");
-    expect(command.env).not.toHaveProperty("OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR");
+    expect(command.env).not.toHaveProperty("NATESCLAW_DOCKER_ALL_BUILD");
+    expect(command.env).not.toHaveProperty("NATESCLAW_CURRENT_PACKAGE_TGZ");
+    expect(command.env).not.toHaveProperty("NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR");
     return await writeDockerCandidateManifest(command, {
-      schema: "openclaw.qa-docker-candidate/v1",
+      schema: "natesclaw.qa-docker-candidate/v1",
       schemaVersion: 1,
       sourceSha: "a".repeat(40),
       candidate: {
         package: {
           path: packagePath,
-          name: "openclaw",
+          name: "natesclaw",
           version: "2026.8.1",
           sha256: "b".repeat(64),
         },
@@ -163,9 +163,9 @@ it("prepares the exact Docker lane union in a sanitized bound environment", asyn
   const env = await prepareDockerE2eEnvironment({
     env: {
       KEEP_ME: "yes",
-      OPENCLAW_DOCKER_ALL_BUILD: "1",
-      OPENCLAW_CURRENT_PACKAGE_TGZ: "/stale.tgz",
-      OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR: "/stale-registry",
+      NATESCLAW_DOCKER_ALL_BUILD: "1",
+      NATESCLAW_CURRENT_PACKAGE_TGZ: "/stale.tgz",
+      NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR: "/stale-registry",
     },
     outputDir,
     repoRoot,
@@ -181,14 +181,14 @@ it("prepares the exact Docker lane union in a sanitized bound environment", asyn
   expect(Object.isFrozen(env)).toBe(true);
   expect(env).toEqual({
     KEEP_ME: "yes",
-    OPENCLAW_DOCKER_E2E_REPO_ROOT: repoRoot,
-    OPENCLAW_DOCKER_E2E_SELECTED_SHA: "a".repeat(40),
-    OPENCLAW_CURRENT_PACKAGE_TGZ: packagePath,
-    OPENCLAW_CURRENT_PACKAGE_VERSION: "2026.8.1",
-    OPENCLAW_CURRENT_PACKAGE_SHA256: "b".repeat(64),
-    OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR: registryDir,
-    OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_CANDIDATE_VERSION: "2026.8.1",
-    OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_MANIFEST_SHA256: "c".repeat(64),
+    NATESCLAW_DOCKER_E2E_REPO_ROOT: repoRoot,
+    NATESCLAW_DOCKER_E2E_SELECTED_SHA: "a".repeat(40),
+    NATESCLAW_CURRENT_PACKAGE_TGZ: packagePath,
+    NATESCLAW_CURRENT_PACKAGE_VERSION: "2026.8.1",
+    NATESCLAW_CURRENT_PACKAGE_SHA256: "b".repeat(64),
+    NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR: registryDir,
+    NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_CANDIDATE_VERSION: "2026.8.1",
+    NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_MANIFEST_SHA256: "c".repeat(64),
   });
 });
 
@@ -197,14 +197,14 @@ it("returns a sanitized bound env for a package-free candidate", async () => {
   const env = await prepareDockerE2eEnvironment({
     env: {
       KEEP_ME: "yes",
-      OPENCLAW_DOCKER_ALL_BUILD: "1",
-      OPENCLAW_CURRENT_PACKAGE_TGZ: "/stale.tgz",
+      NATESCLAW_DOCKER_ALL_BUILD: "1",
+      NATESCLAW_CURRENT_PACKAGE_TGZ: "/stale.tgz",
     },
     outputDir: path.join(repoRoot, "out"),
     repoRoot,
     runCommand: (command) =>
       writeDockerCandidateManifest(command, {
-        schema: "openclaw.qa-docker-candidate/v1",
+        schema: "natesclaw.qa-docker-candidate/v1",
         schemaVersion: 1,
         sourceSha: "a".repeat(40),
         candidate: null,
@@ -212,7 +212,7 @@ it("returns a sanitized bound env for a package-free candidate", async () => {
     scenarios: [makeDockerE2eScenario("one", "gateway-network")],
   });
 
-  expect(env).toEqual({ KEEP_ME: "yes", OPENCLAW_DOCKER_E2E_REPO_ROOT: repoRoot });
+  expect(env).toEqual({ KEEP_ME: "yes", NATESCLAW_DOCKER_E2E_REPO_ROOT: repoRoot });
   expect(Object.isFrozen(env)).toBe(true);
 });
 
@@ -228,7 +228,7 @@ it.each([
       repoRoot,
       runCommand: (command) =>
         writeDockerCandidateManifest(command, {
-          schema: "openclaw.qa-docker-candidate/v1",
+          schema: "natesclaw.qa-docker-candidate/v1",
           schemaVersion: 1,
           sourceSha: "a".repeat(40),
           candidate: null,
@@ -304,7 +304,7 @@ async function writeScriptProducerEvidence(params: {
     path.join(runRoot, "qa-evidence.json"),
     `${JSON.stringify(
       {
-        kind: "openclaw.qa.evidence-summary",
+        kind: "natesclaw.qa.evidence-summary",
         schemaVersion: 2,
         generatedAt: "2026-06-14T00:00:00.000Z",
         evidenceMode: "full",
@@ -364,17 +364,17 @@ describe("qa test file scenario runner", () => {
     { label: "package-free", candidate: "none" as const },
   ])("keeps hostile inherited Docker state out of a prepared $label run", async ({ candidate }) => {
     const repoRoot = await makeTempRepo("qa-docker-replace-env-");
-    const packagePath = path.join(repoRoot, "openclaw.tgz");
-    vi.stubEnv("OPENCLAW_DOCKER_ALL_POISON", "hostile");
-    vi.stubEnv("OPENCLAW_CURRENT_PACKAGE_TGZ", "/hostile.tgz");
-    vi.stubEnv("OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR", "/hostile-registry");
+    const packagePath = path.join(repoRoot, "natesclaw.tgz");
+    vi.stubEnv("NATESCLAW_DOCKER_ALL_POISON", "hostile");
+    vi.stubEnv("NATESCLAW_CURRENT_PACKAGE_TGZ", "/hostile.tgz");
+    vi.stubEnv("NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR", "/hostile-registry");
     const prepared = await prepareDockerE2eEnvironment({
       env: process.env,
       outputDir: path.join(repoRoot, "prep"),
       repoRoot,
       runCommand: (command) =>
         writeDockerCandidateManifest(command, {
-          schema: "openclaw.qa-docker-candidate/v1",
+          schema: "natesclaw.qa-docker-candidate/v1",
           schemaVersion: 1,
           sourceSha: "a".repeat(40),
           candidate:
@@ -382,7 +382,7 @@ describe("qa test file scenario runner", () => {
               ? {
                   package: {
                     path: packagePath,
-                    name: "openclaw",
+                    name: "natesclaw",
                     version: "2026.8.1",
                     sha256: "b".repeat(64),
                   },
@@ -402,13 +402,13 @@ describe("qa test file scenario runner", () => {
       repoRoot,
       scenarios: [makeDockerE2eScenario("one", "gateway-network")],
       runCommand: async (command) => {
-        expect(command.env.OPENCLAW_DOCKER_ALL_POISON).toBeUndefined();
-        expect(command.env.OPENCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR).toBeUndefined();
-        expect(command.env.OPENCLAW_CURRENT_PACKAGE_TGZ).toBe(
+        expect(command.env.NATESCLAW_DOCKER_ALL_POISON).toBeUndefined();
+        expect(command.env.NATESCLAW_PREPUBLISH_PLUGIN_REGISTRY_DIR).toBeUndefined();
+        expect(command.env.NATESCLAW_CURRENT_PACKAGE_TGZ).toBe(
           candidate === "package" ? packagePath : undefined,
         );
-        expect(command.env.OPENCLAW_DOCKER_E2E_REPO_ROOT).toBe(repoRoot);
-        const logDir = command.env.OPENCLAW_DOCKER_ALL_LOG_DIR!;
+        expect(command.env.NATESCLAW_DOCKER_E2E_REPO_ROOT).toBe(repoRoot);
+        const logDir = command.env.NATESCLAW_DOCKER_ALL_LOG_DIR!;
         await fs.mkdir(logDir, { recursive: true });
         await fs.writeFile(
           path.join(logDir, "summary.json"),
@@ -448,7 +448,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -946,7 +946,7 @@ describe("qa test file scenario runner", () => {
             await fs.writeFile(
               evidencePath,
               JSON.stringify({
-                kind: "openclaw.qa.evidence-summary",
+                kind: "natesclaw.qa.evidence-summary",
                 schemaVersion: 2,
                 generatedAt: new Date().toISOString(),
                 evidenceMode: "full",
@@ -1033,7 +1033,7 @@ describe("qa test file scenario runner", () => {
           path.join(runRoot, "qa-evidence.json"),
           `${JSON.stringify(
             {
-              kind: "openclaw.qa.evidence-summary",
+              kind: "natesclaw.qa.evidence-summary",
               schemaVersion: 2,
               generatedAt: "2026-06-14T00:00:00.000Z",
               evidenceMode: "full",
@@ -1089,7 +1089,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1162,7 +1162,7 @@ describe("qa test file scenario runner", () => {
       runCommand: async (command) => {
         commands.push(command);
         await expect(fs.access(staleSummaryPath)).rejects.toThrow();
-        const logDir = command.env.OPENCLAW_DOCKER_ALL_LOG_DIR;
+        const logDir = command.env.NATESCLAW_DOCKER_ALL_LOG_DIR;
         if (!logDir) {
           throw new Error("missing Docker scheduler log dir");
         }
@@ -1198,10 +1198,10 @@ describe("qa test file scenario runner", () => {
       args: ["scripts/test-docker-all.mjs"],
       command: process.execPath,
       env: {
-        OPENCLAW_DOCKER_ALL_FAIL_FAST: "0",
-        OPENCLAW_DOCKER_ALL_LANES:
+        NATESCLAW_DOCKER_ALL_FAIL_FAST: "0",
+        NATESCLAW_DOCKER_ALL_LANES:
           "openai-chat-tools,bundled-plugin-install-uninstall,gateway,gateway-network",
-        OPENCLAW_DOCKER_ALL_LANE_TIMEOUT_MS: "1800000",
+        NATESCLAW_DOCKER_ALL_LANE_TIMEOUT_MS: "1800000",
       },
     });
     expect(result.results).toMatchObject([
@@ -1243,7 +1243,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1488,7 +1488,7 @@ describe("qa test file scenario runner", () => {
           path.join(runRoot, "qa-evidence.json"),
           `${JSON.stringify(
             {
-              kind: "openclaw.qa.evidence-summary",
+              kind: "natesclaw.qa.evidence-summary",
               schemaVersion: 2,
               generatedAt: "2026-06-14T00:00:00.000Z",
               evidenceMode: "full",
@@ -1544,7 +1544,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1619,7 +1619,7 @@ describe("qa test file scenario runner", () => {
         });
         return { exitCode: 1, stdout: "", stderr: "script failed\n" };
       },
-      env: { OPENCLAW_QA_REF: "scenario-ref" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_QA_REF: "scenario-ref" } as NodeJS.ProcessEnv,
     });
 
     expect(result.results[0]).toMatchObject({ status: "fail" });
@@ -1652,7 +1652,7 @@ describe("qa test file scenario runner", () => {
           path.join(runRoot, "qa-evidence.json"),
           `${JSON.stringify(
             {
-              kind: "openclaw.qa.evidence-summary",
+              kind: "natesclaw.qa.evidence-summary",
               schemaVersion: 2,
               generatedAt: "2026-06-14T00:00:00.000Z",
               evidenceMode: "full",
@@ -1708,7 +1708,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1757,7 +1757,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1800,7 +1800,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1869,7 +1869,7 @@ describe("qa test file scenario runner", () => {
         };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_REF: "scenario-ref",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1901,7 +1901,7 @@ describe("qa test file scenario runner", () => {
         await fs.writeFile(
           path.join(scenarioOutputDir, "qa-evidence.json"),
           `${JSON.stringify({
-            kind: "openclaw.qa.evidence-summary",
+            kind: "natesclaw.qa.evidence-summary",
             schemaVersion: 2,
             generatedAt: "2026-06-14T00:00:00.000Z",
             evidenceMode: "full",
@@ -1923,8 +1923,8 @@ describe("qa test file scenario runner", () => {
         return { exitCode: 0, stdout: "script pass\n", stderr: "" };
       },
       env: {
-        OPENCLAW_QA_REF: "scenario-ref",
-        OPENCLAW_QA_PROFILE: "smoke-ci",
+        NATESCLAW_QA_REF: "scenario-ref",
+        NATESCLAW_QA_PROFILE: "smoke-ci",
       } as NodeJS.ProcessEnv,
     });
 
@@ -1955,7 +1955,7 @@ describe("qa test file scenario runner", () => {
         await fs.writeFile(
           path.join(scenarioOutputDir, "qa-evidence.json"),
           `${JSON.stringify({
-            kind: "openclaw.qa.evidence-summary",
+            kind: "natesclaw.qa.evidence-summary",
             schemaVersion: 2,
             generatedAt: "2026-06-14T00:00:00.000Z",
             evidenceMode: "full",
@@ -1994,7 +1994,7 @@ describe("qa test file scenario runner", () => {
         );
         return { exitCode: 0, stdout: "script pass\n", stderr: "" };
       },
-      env: { OPENCLAW_QA_REF: "scenario-ref" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_QA_REF: "scenario-ref" } as NodeJS.ProcessEnv,
     });
 
     const evidence = validateQaEvidenceSummaryJson(
@@ -2032,7 +2032,7 @@ describe("qa test file scenario runner", () => {
       providerMode: "mock-openai",
       primaryModel: "mock-openai/gpt-5.6-luna",
       scenarios: [infrastructureFixture],
-      env: { OPENCLAW_QA_REF: "infrastructure-fixture" } as NodeJS.ProcessEnv,
+      env: { NATESCLAW_QA_REF: "infrastructure-fixture" } as NodeJS.ProcessEnv,
     });
     const evidence = validateQaEvidenceSummaryJson(
       JSON.parse(await fs.readFile(result.evidencePath, "utf8")),

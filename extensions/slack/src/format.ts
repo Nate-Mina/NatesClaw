@@ -1,6 +1,6 @@
 // Slack helper module supports format behavior.
 import { eastAsianWidthType } from "get-east-asian-width";
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-contracts";
+import type { MarkdownTableMode } from "natesclaw/plugin-sdk/config-contracts";
 import {
   chunkTextForOutbound,
   FormatCapabilityProfile,
@@ -8,8 +8,8 @@ import {
   type MarkdownIR,
   type MarkdownLinkSpan,
   renderMarkdownIRChunksWithinLimit,
-} from "openclaw/plugin-sdk/text-chunking";
-import { renderMarkdownWithMarkers } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/text-chunking";
+import { renderMarkdownWithMarkers } from "natesclaw/plugin-sdk/text-chunking";
 
 // Escape special characters for Slack mrkdwn format.
 // Preserve Slack's angle-bracket tokens so mentions and links stay intact.

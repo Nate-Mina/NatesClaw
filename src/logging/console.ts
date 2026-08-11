@@ -24,7 +24,7 @@ function normalizeConsoleLevel(level?: string): LogLevel {
   if (isVerbose()) {
     return "debug";
   }
-  if (!level && process.env.VITEST === "true" && process.env.OPENCLAW_TEST_CONSOLE !== "1") {
+  if (!level && process.env.VITEST === "true" && process.env.NATESCLAW_TEST_CONSOLE !== "1") {
     return "silent";
   }
   return normalizeLogLevel(level, "info");
@@ -46,7 +46,7 @@ function resolveConsoleSettings(): ConsoleSettings {
   // Skip config-file and full config fallback reads in this fast path.
   if (
     process.env.VITEST === "true" &&
-    process.env.OPENCLAW_TEST_CONSOLE !== "1" &&
+    process.env.NATESCLAW_TEST_CONSOLE !== "1" &&
     !isVerbose() &&
     !envLevel &&
     !loggingState.overrideSettings
@@ -100,7 +100,7 @@ export async function withConsoleSubsystemsSuppressed<T>(work: () => Promise<T>)
   const previousFilter = loggingState.consoleSubsystemFilter
     ? [...loggingState.consoleSubsystemFilter]
     : null;
-  setConsoleSubsystemFilter(["__openclaw_tui_quiet__"]);
+  setConsoleSubsystemFilter(["__natesclaw_tui_quiet__"]);
   try {
     return await work();
   } finally {

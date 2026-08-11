@@ -2,9 +2,9 @@ import {
   resolveClaudeOpus5ModelIdentity,
   resolveClaudeSonnet5ModelIdentity,
   supportsClaude1MContext,
-} from "@openclaw/llm-core";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@natesclaw/llm-core";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   lookupCachedContextTokens,
   lookupCachedContextWindow,
@@ -25,8 +25,8 @@ export type ModelsConfig = {
 };
 
 export type ContextTokenResolutionParams = {
-  cfg?: OpenClawConfig;
-  sourceCfg?: OpenClawConfig | null;
+  cfg?: NatesclawConfig;
+  sourceCfg?: NatesclawConfig | null;
   provider?: string;
   modelProvider?: string;
   model?: string;
@@ -73,7 +73,7 @@ function resolveProviderModelRef(params: {
 }
 
 function resolveConfiguredProviderContextTokens(
-  cfg: OpenClawConfig | null | undefined,
+  cfg: NatesclawConfig | null | undefined,
   provider: string,
   model: string,
 ): ConfiguredContextTokens | undefined {
@@ -149,7 +149,7 @@ function resolveProviderQualifiedModel(provider: string, model: string): string 
 }
 
 function resolveConfiguredRuntimeContextTokens(
-  cfg: OpenClawConfig | null | undefined,
+  cfg: NatesclawConfig | null | undefined,
   provider: string,
   modelProvider: string | undefined,
   model: string,

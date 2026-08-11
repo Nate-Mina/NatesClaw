@@ -27,11 +27,11 @@ const refreshLatestUpdateRestartSentinelMock = vi.hoisted(() =>
   vi.fn<() => Promise<TestUpdateSentinel>>(async () => null),
 );
 
-vi.mock("../../infra/openclaw-root.js", async () => {
-  const actual = await vi.importActual<typeof import("../../infra/openclaw-root.js")>(
-    "../../infra/openclaw-root.js",
+vi.mock("../../infra/natesclaw-root.js", async () => {
+  const actual = await vi.importActual<typeof import("../../infra/natesclaw-root.js")>(
+    "../../infra/natesclaw-root.js",
   );
-  return { ...actual, resolveOpenClawPackageRoot: async () => "/tmp/openclaw" };
+  return { ...actual, resolveNatesclawPackageRoot: async () => "/tmp/natesclaw" };
 });
 
 vi.mock("../../infra/update-check.js", () => ({
@@ -78,7 +78,7 @@ describe("update.status effective channel", () => {
   it("reports a verified configless extended-stable package channel", async () => {
     versionMock.value = "2026.6.33";
     checkUpdateStatusMock.mockResolvedValueOnce({
-      root: "/tmp/openclaw",
+      root: "/tmp/natesclaw",
       installKind: "package",
       packageManager: "npm",
     });

@@ -1,7 +1,7 @@
 // Meta plugin module implements stream behavior.
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { ProviderWrapStreamFnContext } from "openclaw/plugin-sdk/plugin-entry";
-import { createPayloadPatchStreamWrapper } from "openclaw/plugin-sdk/provider-stream-shared";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import type { ProviderWrapStreamFnContext } from "natesclaw/plugin-sdk/plugin-entry";
+import { createPayloadPatchStreamWrapper } from "natesclaw/plugin-sdk/provider-stream-shared";
 
 const META_REASONING_ENCRYPTED_CONTENT_INCLUDE = "reasoning.encrypted_content";
 

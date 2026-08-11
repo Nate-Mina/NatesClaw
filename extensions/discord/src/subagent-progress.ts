@@ -1,11 +1,11 @@
 // Discord plugin module cleans up reactions left by the retired subagent progress feature.
-import { DEFAULT_EMOJIS } from "openclaw/plugin-sdk/channel-feedback";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { DEFAULT_EMOJIS } from "natesclaw/plugin-sdk/channel-feedback";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   PluginStateEntry,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/routing";
+} from "natesclaw/plugin-sdk/plugin-state-runtime";
+import { DEFAULT_ACCOUNT_ID } from "natesclaw/plugin-sdk/routing";
 import { resolveDiscordAccount, resolveDiscordAccountConfig } from "./accounts.js";
 import { removeReactionDiscord } from "./send.reactions.js";
 
@@ -36,7 +36,7 @@ type PersistedProgressRun = {
 };
 
 type ProgressCleanupApi = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   logger: { debug?: (message: string) => void };
   runtime: {
     state: {

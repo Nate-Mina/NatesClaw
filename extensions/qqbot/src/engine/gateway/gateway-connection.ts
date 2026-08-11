@@ -1,6 +1,6 @@
 // Qqbot plugin module implements gateway connection behavior.
-import { asSafeIntegerInRange, MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
-import { asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { asSafeIntegerInRange, MAX_TIMER_TIMEOUT_MS } from "natesclaw/plugin-sdk/number-runtime";
+import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import WebSocket from "ws";
 import type { EngineAdapters } from "../adapter/index.js";
 import {

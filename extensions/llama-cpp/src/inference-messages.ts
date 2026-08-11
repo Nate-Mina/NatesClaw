@@ -1,5 +1,5 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { AssistantMessage, StopReason, Usage } from "openclaw/plugin-sdk/llm";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import type { AssistantMessage, StopReason, Usage } from "natesclaw/plugin-sdk/llm";
 
 export function zeroCostUsage(input = 0, output = 0): Usage {
   return {

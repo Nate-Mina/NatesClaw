@@ -6,7 +6,7 @@ import { resolveAgentHarnessPolicy } from "../agents/harness/policy.js";
 import { resolveModelAuthLabel } from "../agents/model-auth-label.js";
 import { resolveDefaultModelForAgent } from "../agents/model-selection.js";
 import { listOpenAIAuthProfileProvidersForAgentRuntime } from "../agents/openai-routing.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NatesclawConfig } from "../config/types.js";
 import type { HeartbeatEventPayload } from "../infra/heartbeat-events.js";
 import { createLazyImportLoader } from "../shared/lazy-promise.js";
 import {
@@ -44,7 +44,7 @@ function loadGatewayCallModule() {
 }
 
 function shouldUseConfiguredCodexSyntheticUsage(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   agentDir: string;
 }): boolean {
   const configuredDefault = resolveDefaultModelForAgent({
@@ -80,8 +80,8 @@ function shouldUseConfiguredCodexSyntheticUsage(params: {
 
 /** Runs the lightweight security audit used by status JSON/all output. */
 export async function resolveStatusSecurityAudit(params: {
-  config: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  config: NatesclawConfig;
+  sourceConfig: NatesclawConfig;
   timeoutMs?: number;
 }) {
   const { runSecurityAudit } = await loadSecurityAuditModule();
@@ -106,7 +106,7 @@ export async function resolveStatusSecurityAudit(params: {
 }
 
 type StatusUsageSummaryOptions = {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   timeoutMs?: number;
   agentDir?: string;
 };
@@ -140,7 +140,7 @@ export async function loadStatusProviderUsageModule() {
 
 /** Calls gateway health and lets errors propagate to deep status callers. */
 export async function resolveStatusGatewayHealth(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   timeoutMs?: number;
 }) {
   const { callGateway } = await loadGatewayCallModule();
@@ -154,7 +154,7 @@ export async function resolveStatusGatewayHealth(params: {
 
 /** Calls gateway health but converts unreachable/failing probes into an error object. */
 export async function resolveStatusGatewayHealthSafe(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   timeoutMs?: number;
   gatewayReachable: boolean;
   gatewayProbeError?: string | null;
@@ -180,7 +180,7 @@ export async function resolveStatusGatewayHealthSafe(params: {
 
 /** Reads gateway delivery diagnostics when reachable, returning null on failures. */
 export async function resolveStatusGatewayDiagnosticsSafe(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   timeoutMs?: number;
   gatewayReachable: boolean;
   type?: string;
@@ -205,7 +205,7 @@ export async function resolveStatusGatewayDiagnosticsSafe(params: {
 
 /** Reads the most recent gateway heartbeat only when the gateway probe succeeded. */
 async function resolveStatusLastHeartbeat(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   timeoutMs?: number;
   gatewayReachable: boolean;
 }) {
@@ -222,7 +222,7 @@ async function resolveStatusLastHeartbeat(params: {
 }
 
 // Default bound for service-manager probes when status runs without an explicit
-// --timeout, so a wedged systemd/launchd socket cannot hang `openclaw status`.
+// --timeout, so a wedged systemd/launchd socket cannot hang `natesclaw status`.
 const DEFAULT_SERVICE_PROBE_TIMEOUT_MS = 5000;
 
 /** Resolves launchd/systemd summaries for the gateway and node services together. */
@@ -244,7 +244,7 @@ type StatusSecurityAudit = Awaited<ReturnType<typeof resolveStatusSecurityAudit>
 
 /** Resolves optional usage/deep runtime details plus service summaries for status output. */
 async function resolveStatusRuntimeDetails(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   timeoutMs?: number;
   usage?: boolean;
   deep?: boolean;
@@ -252,7 +252,7 @@ async function resolveStatusRuntimeDetails(params: {
   suppressHealthErrors?: boolean;
   resolveUsage?: (input: StatusUsageSummaryOptions) => Promise<StatusUsageSummary>;
   resolveHealth?: (input: {
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     timeoutMs?: number;
   }) => Promise<StatusGatewayHealth>;
 }) {
@@ -303,8 +303,8 @@ async function resolveStatusRuntimeDetails(params: {
 
 /** Resolves the full runtime snapshot, including optional security audit, for status JSON/text. */
 export async function resolveStatusRuntimeSnapshot(params: {
-  config: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  config: NatesclawConfig;
+  sourceConfig: NatesclawConfig;
   timeoutMs?: number;
   usage?: boolean;
   deep?: boolean;
@@ -312,13 +312,13 @@ export async function resolveStatusRuntimeSnapshot(params: {
   includeSecurityAudit?: boolean;
   suppressHealthErrors?: boolean;
   resolveSecurityAudit?: (input: {
-    config: OpenClawConfig;
-    sourceConfig: OpenClawConfig;
+    config: NatesclawConfig;
+    sourceConfig: NatesclawConfig;
     timeoutMs?: number;
   }) => Promise<StatusSecurityAudit>;
   resolveUsage?: (input: StatusUsageSummaryOptions) => Promise<StatusUsageSummary>;
   resolveHealth?: (input: {
-    config: OpenClawConfig;
+    config: NatesclawConfig;
     timeoutMs?: number;
   }) => Promise<StatusGatewayHealth>;
 }) {

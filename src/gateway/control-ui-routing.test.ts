@@ -13,8 +13,8 @@ describe("isControlUiPluginManagerRequest", () => {
     { basePath: "", pathname: "/settings/plugins", method: "GET", expected: true },
     { basePath: "", pathname: "/settings/plugins/", method: "HEAD", expected: true },
     {
-      basePath: "/openclaw",
-      pathname: "/openclaw/settings/plugins",
+      basePath: "/natesclaw",
+      pathname: "/natesclaw/settings/plugins",
       method: "GET",
       expected: true,
     },
@@ -30,7 +30,7 @@ describe("isControlUiApprovalDocumentPath", () => {
     { basePath: "", pathname: "/approve" },
     { basePath: "", pathname: "/approve/" },
     { basePath: "", pathname: "/approve/plugin%3Arequest.json" },
-    { basePath: "/openclaw", pathname: "/openclaw/approve/exec%3Aa%2Fb" },
+    { basePath: "/natesclaw", pathname: "/natesclaw/approve/exec%3Aa%2Fb" },
   ])("reserves $pathname", ({ basePath, pathname }) => {
     expect(isControlUiApprovalDocumentPath({ basePath, pathname })).toBe(true);
   });
@@ -38,7 +38,7 @@ describe("isControlUiApprovalDocumentPath", () => {
   it.each([
     { basePath: "", pathname: "/approvals/id" },
     { basePath: "", pathname: "/approve/id/extra" },
-    { basePath: "/openclaw", pathname: "/approve/id" },
+    { basePath: "/natesclaw", pathname: "/approve/id" },
   ])("does not reserve $pathname", ({ basePath, pathname }) => {
     expect(isControlUiApprovalDocumentPath({ basePath, pathname })).toBe(false);
   });
@@ -56,8 +56,8 @@ describe("Control UI SPA fallback Accept routing", () => {
     },
     {
       name: "empty Accept header",
-      basePath: "/openclaw",
-      pathname: "/openclaw/chat",
+      basePath: "/natesclaw",
+      pathname: "/natesclaw/chat",
       method: "HEAD",
       accept: "  ",
       expected: true,
@@ -80,8 +80,8 @@ describe("Control UI SPA fallback Accept routing", () => {
     },
     {
       name: "nonzero text wildcard under a base path",
-      basePath: "/openclaw",
-      pathname: "/openclaw/chat",
+      basePath: "/natesclaw",
+      pathname: "/natesclaw/chat",
       method: "HEAD",
       accept: "application/json, text/*;q=0.5",
       expected: true,
@@ -144,8 +144,8 @@ describe("Control UI SPA fallback Accept routing", () => {
     },
     {
       name: "mixed-case XHTML three-decimal rejection",
-      basePath: "/openclaw",
-      pathname: "/openclaw/chat",
+      basePath: "/natesclaw",
+      pathname: "/natesclaw/chat",
       method: "HEAD",
       accept: "application/json, Application/XHTML+XML ; q=0.000",
       expected: false,
@@ -168,8 +168,8 @@ describe("Control UI SPA fallback Accept routing", () => {
     },
     {
       name: "event-stream Accept header under a base path",
-      basePath: "/openclaw",
-      pathname: "/openclaw/chat",
+      basePath: "/natesclaw",
+      pathname: "/natesclaw/chat",
       method: "HEAD",
       accept: "text/event-stream",
       expected: false,
@@ -184,8 +184,8 @@ describe("Control UI SPA fallback Accept routing", () => {
     },
     {
       name: "plugin manager recovery under a base path",
-      basePath: "/openclaw",
-      pathname: "/openclaw/settings/plugins/",
+      basePath: "/natesclaw",
+      pathname: "/natesclaw/settings/plugins/",
       method: "HEAD",
       accept: "text/event-stream",
       expected: true,
@@ -269,7 +269,7 @@ describe("classifyControlUiRequest", () => {
       },
       {
         name: "keeps OpenAI-compatible model details outside the SPA catch-all",
-        pathname: "/v1/models/openclaw",
+        pathname: "/v1/models/natesclaw",
         method: "GET",
         expected: { kind: "not-control-ui" as const },
       },
@@ -281,25 +281,25 @@ describe("classifyControlUiRequest", () => {
       },
       {
         name: "keeps the standalone MCP App shell outside the SPA catch-all",
-        pathname: "/__openclaw__/mcp-app",
+        pathname: "/__natesclaw__/mcp-app",
         method: "GET",
         expected: { kind: "not-control-ui" as const },
       },
       {
         name: "keeps the standalone MCP App view outside the SPA catch-all",
-        pathname: "/__openclaw__/mcp-app/view",
+        pathname: "/__natesclaw__/mcp-app/view",
         method: "HEAD",
         expected: { kind: "not-control-ui" as const },
       },
       {
         name: "preserves SPA routes that only resemble the standalone MCP App namespace",
-        pathname: "/__openclaw__/mcp-apps",
+        pathname: "/__natesclaw__/mcp-apps",
         method: "GET",
         expected: { kind: "serve" as const, spaFallback: true },
       },
       {
         name: "keeps MCP App descendants outside the SPA catch-all",
-        pathname: "/__openclaw__/mcp-app/other",
+        pathname: "/__natesclaw__/mcp-app/other",
         method: "GET",
         expected: { kind: "not-control-ui" as const },
       },
@@ -361,14 +361,14 @@ describe("classifyControlUiRequest", () => {
     it.each([
       {
         name: "redirects the basePath entrypoint",
-        pathname: "/openclaw",
+        pathname: "/natesclaw",
         search: "?foo=1",
         method: "GET",
-        expected: { kind: "redirect" as const, location: "/openclaw/?foo=1" },
+        expected: { kind: "redirect" as const, location: "/natesclaw/?foo=1" },
       },
       {
         name: "serves nested read-only routes",
-        pathname: "/openclaw/chat",
+        pathname: "/natesclaw/chat",
         search: "",
         method: "HEAD",
         expected: { kind: "serve" as const, spaFallback: true },
@@ -382,14 +382,14 @@ describe("classifyControlUiRequest", () => {
       },
       {
         name: "falls through write requests to the basePath entrypoint",
-        pathname: "/openclaw",
+        pathname: "/natesclaw",
         search: "",
         method: "POST",
         expected: { kind: "not-control-ui" as const },
       },
       ...["PUT", "DELETE", "PATCH", "OPTIONS"].map((method) => ({
         name: `falls through ${method} subroute requests`,
-        pathname: "/openclaw/webhook",
+        pathname: "/natesclaw/webhook",
         search: "",
         method,
         expected: { kind: "not-control-ui" as const },
@@ -397,7 +397,7 @@ describe("classifyControlUiRequest", () => {
     ])("$name", ({ pathname, search, method, expected }) => {
       expect(
         classifyControlUiRequest({
-          basePath: "/openclaw",
+          basePath: "/natesclaw",
           pathname,
           search,
           method,

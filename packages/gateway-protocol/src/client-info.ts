@@ -13,23 +13,23 @@ function normalizeOptionalProtocolLowercaseString(raw?: string | null): string |
 /** Canonical client ids accepted in gateway hello/connect payloads. */
 export const GATEWAY_CLIENT_IDS = {
   WEBCHAT_UI: "webchat-ui",
-  CONTROL_UI: "openclaw-control-ui",
-  BROWSER_COPILOT: "openclaw-browser-copilot",
-  TUI: "openclaw-tui",
+  CONTROL_UI: "natesclaw-control-ui",
+  BROWSER_COPILOT: "natesclaw-browser-copilot",
+  TUI: "natesclaw-tui",
   WEBCHAT: "webchat",
   CLI: "cli",
   GATEWAY_CLIENT: "gateway-client",
-  MACOS_APP: "openclaw-macos",
+  MACOS_APP: "natesclaw-macos",
   // Native Linux UI uses the same trusted-client admission class as the macOS app.
-  LINUX_APP: "openclaw-linux",
-  IOS_APP: "openclaw-ios",
-  WATCHOS_APP: "openclaw-watchos",
-  ANDROID_APP: "openclaw-android",
+  LINUX_APP: "natesclaw-linux",
+  IOS_APP: "natesclaw-ios",
+  WATCHOS_APP: "natesclaw-watchos",
+  ANDROID_APP: "natesclaw-android",
   NODE_HOST: "node-host",
-  WORKER: "openclaw-worker",
+  WORKER: "natesclaw-worker",
   TEST: "test",
   FINGERPRINT: "fingerprint",
-  PROBE: "openclaw-probe",
+  PROBE: "natesclaw-probe",
 } as const;
 
 /** Stable gateway client ids used on the wire during hello/connect handshakes. */

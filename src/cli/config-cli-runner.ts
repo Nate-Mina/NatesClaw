@@ -1,10 +1,10 @@
-import { uniqueValues } from "@openclaw/normalization-core/string-normalization";
+import { uniqueValues } from "@natesclaw/normalization-core/string-normalization";
 import { replaceConfigFile } from "../config/config.js";
 import { AUTO_MANAGED_CONFIG_META_PATHS } from "../config/io.meta.js";
 import { formatConfigIssueLines } from "../config/issue-format.js";
 import { resolveConfigPath } from "../config/paths.js";
 import { readBestEffortRuntimeConfigSchema } from "../config/runtime-schema.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { collectUnsupportedSecretRefPolicyIssues } from "../config/validation.js";
 import { diffConfigPaths } from "../gateway/config-diff.js";
 import { buildGatewayReloadPlan } from "../gateway/config-reload-plan.js";
@@ -127,9 +127,9 @@ function formatAutoManagedMetaError(paths: readonly PathSegment[][]): string {
   const targets = paths.map(toDotPath);
   const subject = targets.length === 1 ? targets[0] : targets.join(", ");
   return [
-    `${subject} is auto-managed by OpenClaw and cannot be edited; the value would be overwritten on the next config write.`,
+    `${subject} is auto-managed by Natesclaw and cannot be edited; the value would be overwritten on the next config write.`,
     "",
-    "These fields are stamped on every config write to record the OpenClaw version and timestamp that produced the file.",
+    "These fields are stamped on every config write to record the Natesclaw version and timestamp that produced the file.",
   ].join("\n");
 }
 
@@ -192,8 +192,8 @@ function collectChangedLeafPaths(value: unknown, prefix: string): string[] {
 function expandActualChangedPaths(
   actualPaths: string[],
   requestedPaths: string[],
-  before: OpenClawConfig,
-  after: OpenClawConfig,
+  before: NatesclawConfig,
+  after: NatesclawConfig,
 ): string[] {
   const expanded = new Set<string>();
   for (const actualPath of actualPaths) {
@@ -219,8 +219,8 @@ function expandActualChangedPaths(
 
 export function configApplyHintForOperations(
   operations: ReadonlyArray<{ requestedPath?: PathSegment[] }>,
-  beforeConfig: OpenClawConfig,
-  afterConfig: OpenClawConfig,
+  beforeConfig: NatesclawConfig,
+  afterConfig: NatesclawConfig,
 ): string {
   const requestedPaths: string[] = [];
   for (const operation of operations) {
@@ -294,7 +294,7 @@ export async function runConfigOperations(params: {
   // Mutate resolved config so runtime defaults never leak into the authored file.
   const next = structuredClone(snapshot.resolved) as Record<string, unknown>;
   const currentConfig = normalizeConfigMutationModelRefs(
-    structuredClone(snapshot.resolved) as OpenClawConfig,
+    structuredClone(snapshot.resolved) as NatesclawConfig,
   );
   const mutationSchema = await loadMutationSchema();
   const unsetPaths: PathSegment[][] = [];
@@ -327,7 +327,7 @@ export async function runConfigOperations(params: {
     }
   }
   const removedGatewayAuthPaths = pruneInactiveGatewayAuthCredentials({ root: next, operations });
-  const nextConfig = normalizeConfigMutationModelRefs(next as OpenClawConfig);
+  const nextConfig = normalizeConfigMutationModelRefs(next as NatesclawConfig);
   const normalizedExplicitSetPaths = explicitSetPaths.map(normalizeConfigMutationExplicitSetPath);
   const policyIssueLines = formatConfigIssueLines(
     collectUnsupportedSecretRefPolicyIssues(nextConfig),

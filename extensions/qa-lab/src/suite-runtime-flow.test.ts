@@ -1,5 +1,5 @@
 // Qa Lab tests cover suite runtime flow plugin behavior.
-import { parseModelRef, resolveModelRefFromString } from "openclaw/plugin-sdk/agent-runtime";
+import { parseModelRef, resolveModelRefFromString } from "natesclaw/plugin-sdk/agent-runtime";
 import { describe, expect, it, vi } from "vitest";
 
 const createQaScenarioRuntimeApi = vi.hoisted(() => vi.fn());
@@ -256,8 +256,8 @@ describe("qa suite runtime flow", () => {
       imageUnderstandingValidPngBase64: "valid",
     });
 
-    await call.deps.webOpenPage({ url: "https://openclaw.ai" });
-    expect(webOpenPage).toHaveBeenCalledWith({ url: "https://openclaw.ai", repoRoot: "/repo" });
+    await call.deps.webOpenPage({ url: "https://natesclaw.ai" });
+    expect(webOpenPage).toHaveBeenCalledWith({ url: "https://natesclaw.ai", repoRoot: "/repo" });
     expect(env.webSessionIds.has("page-1")).toBe(true);
   });
 });

@@ -14,7 +14,7 @@ const NODE_VERSION_RE = /^v?(\d+)\.(\d+)\.(\d+)(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z
 const NODE_RUNTIME_PROBE_SOURCE =
   "process.stdout.write(JSON.stringify({version:process.versions.node??null,bunVersion:process.versions.bun??null,execPath:process.execPath??null}))";
 const PACKAGE_CLI_NODE_PROBE_TIMEOUT_MS = 10_000;
-export const PACKAGE_INSTALL_GUARD_RELATIVE_PATH = "dist/openclaw-install-guard";
+export const PACKAGE_INSTALL_GUARD_RELATIVE_PATH = "dist/natesclaw-install-guard";
 
 /**
  * @typedef {{
@@ -292,14 +292,14 @@ export function enforceSupportedNodeRuntime(
   }
 
   const requirement = engine
-    ? `this OpenClaw release requires Node ${engine}.`
-    : "could not read this OpenClaw release's Node requirement.";
+    ? `this Natesclaw release requires Node ${engine}.`
+    : "could not read this Natesclaw release's Node requirement.";
   reportError(
     [
-      `[openclaw] error: ${requirement}`,
-      `[openclaw] detected Node ${detectedRuntime?.version ?? "missing"} (exec: ${detectedRuntime?.execPath || "unknown"}).`,
-      "[openclaw] install Node: https://nodejs.org/en/download",
-      "[openclaw] upgrade Node, then retry the OpenClaw update.",
+      `[natesclaw] error: ${requirement}`,
+      `[natesclaw] detected Node ${detectedRuntime?.version ?? "missing"} (exec: ${detectedRuntime?.execPath || "unknown"}).`,
+      "[natesclaw] install Node: https://nodejs.org/en/download",
+      "[natesclaw] upgrade Node, then retry the Natesclaw update.",
     ].join("\n"),
   );
   return false;
@@ -326,7 +326,7 @@ export function completePackageInstallGuard(
     return true;
   } catch (error) {
     reportError(
-      `[openclaw] error: could not complete package preinstall: ${
+      `[natesclaw] error: could not complete package preinstall: ${
         error instanceof Error ? error.message : String(error)
       }`,
     );
@@ -394,9 +394,9 @@ export function createPackageManagerWarningMessage(packageManager) {
   }
 
   return [
-    `[openclaw] warning: detected ${normalizedPackageManager} for install lifecycle.`,
-    "[openclaw] this repo works best with pnpm; npm-compatible installs are slower and much larger here.",
-    "[openclaw] prefer: corepack pnpm install",
+    `[natesclaw] warning: detected ${normalizedPackageManager} for install lifecycle.`,
+    "[natesclaw] this repo works best with pnpm; npm-compatible installs are slower and much larger here.",
+    "[natesclaw] prefer: corepack pnpm install",
   ].join("\n");
 }
 

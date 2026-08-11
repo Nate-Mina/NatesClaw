@@ -2,42 +2,42 @@
 import {
   adaptScopedAccountAccessor,
   createScopedDmSecurityResolver,
-} from "openclaw/plugin-sdk/channel-config-helpers";
+} from "natesclaw/plugin-sdk/channel-config-helpers";
 import type {
   ChannelDoctorAdapter,
   ChannelThreadingToolContext,
-} from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin, type ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createRuntimeOutboundDelegates } from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin, type ChannelPlugin } from "natesclaw/plugin-sdk/channel-core";
+import { createRuntimeOutboundDelegates } from "natesclaw/plugin-sdk/channel-outbound";
 import {
   createAllowlistProviderOpenWarningCollector,
   projectAccountConfigWarningCollector,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-send-result";
-import { createScopedAccountReplyToModeResolver } from "openclaw/plugin-sdk/conversation-runtime";
+} from "natesclaw/plugin-sdk/channel-policy";
+import type { ChannelOutboundAdapter } from "natesclaw/plugin-sdk/channel-send-result";
+import { createScopedAccountReplyToModeResolver } from "natesclaw/plugin-sdk/conversation-runtime";
 import {
   createChannelDirectoryAdapter,
   createResolvedDirectoryEntriesLister,
   createRuntimeDirectoryLiveAdapter,
-} from "openclaw/plugin-sdk/directory-runtime";
+} from "natesclaw/plugin-sdk/directory-runtime";
 import {
   createLazyRuntimeNamedExport,
   createLazyRuntimeModule,
-} from "openclaw/plugin-sdk/lazy-runtime";
+} from "natesclaw/plugin-sdk/lazy-runtime";
 import {
   buildProbeChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "natesclaw/plugin-sdk/status-helpers";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   chunkTextForOutbound,
   sanitizeAssistantVisibleText,
-} from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/text-chunking";
 import { matrixMessageActions } from "./actions.js";
 import { matrixApprovalCapability } from "./approval-native.js";
 import { createMatrixPairingText, createMatrixProbeAccount } from "./channel-account-paths.js";

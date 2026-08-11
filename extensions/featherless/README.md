@@ -1,12 +1,12 @@
-# OpenClaw Featherless AI Provider
+# Natesclaw Featherless AI Provider
 
-Official OpenClaw provider plugin for Featherless AI's OpenAI-compatible API.
+Official Natesclaw provider plugin for Featherless AI's OpenAI-compatible API.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/featherless-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/featherless-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/featherless> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/featherless> for setup and configuration.

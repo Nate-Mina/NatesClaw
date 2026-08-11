@@ -1,9 +1,9 @@
 import { SessionManager } from "../../agents/sessions/session-manager.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 
 export async function appendSessionAudit(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   target: {
     agentId: string;
     entry: Pick<SessionEntry, "sessionId">;
@@ -22,7 +22,7 @@ export async function appendSessionAudit(params: {
     { ...identity, sessionKey: params.target.sessionKey },
     {
       role: "custom",
-      customType: "openclaw.system-note",
+      customType: "natesclaw.system-note",
       content: `System note: ${params.text}`,
       display: true,
       timestamp: params.now,

@@ -1,7 +1,7 @@
 // Post-core plugin convergence tests cover update convergence checks after core updates.
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
 
@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   listManagedPluginNpmRoots: vi.fn(),
   maybeRepairStaleManagedNpmBundledPlugins: vi.fn(),
   repairMissingConfiguredPluginInstalls: vi.fn(),
-  relinkOpenClawPeerDependenciesInManagedNpmRoot: vi.fn(),
+  relinkNatesclawPeerDependenciesInManagedNpmRoot: vi.fn(),
   runPluginPayloadSmokeCheck: vi.fn(),
 }));
 
@@ -23,8 +23,8 @@ vi.mock("../../plugins/plugin-peer-link.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../../plugins/plugin-peer-link.js")>();
   return {
     ...actual,
-    relinkOpenClawPeerDependenciesInManagedNpmRoot:
-      mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot,
+    relinkNatesclawPeerDependenciesInManagedNpmRoot:
+      mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot,
   };
 });
 vi.mock("../../plugins/npm-project-roots.js", async (importOriginal) => {
@@ -38,7 +38,7 @@ vi.mock("./plugin-payload-validation.js", () => ({
   runPluginPayloadSmokeCheck: mocks.runPluginPayloadSmokeCheck,
 }));
 
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../../config/types.plugins.js";
 import { resolvePluginNpmGenerationProjectDir } from "../../plugins/install-paths.js";
 import { VERSION } from "../../version.js";
@@ -65,7 +65,7 @@ describe("runPostCorePluginConvergence", () => {
       warnings: [],
       records: {},
     });
-    mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot.mockResolvedValue({
+    mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot.mockResolvedValue({
       checked: 0,
       attempted: 0,
       repaired: 0,
@@ -83,7 +83,7 @@ describe("runPostCorePluginConvergence", () => {
     fs.mkdirSync(pluginDir, { recursive: true });
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export default {};\n", "utf8");
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "natesclaw.plugin.json"),
       JSON.stringify({
         id: pluginId,
         name: pluginId,
@@ -95,7 +95,7 @@ describe("runPostCorePluginConvergence", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: `@openclaw/${pluginId}`,
+        name: `@natesclaw/${pluginId}`,
         version,
       }),
       "utf8",
@@ -103,28 +103,28 @@ describe("runPostCorePluginConvergence", () => {
     return pluginDir;
   }
 
-  it("calls repair with OPENCLAW_UPDATE_POST_CORE_CONVERGENCE=1 set", async () => {
-    const cfg = { plugins: { entries: {} } } as unknown as OpenClawConfig;
+  it("calls repair with NATESCLAW_UPDATE_POST_CORE_CONVERGENCE=1 set", async () => {
+    const cfg = { plugins: { entries: {} } } as unknown as NatesclawConfig;
     await runPostCorePluginConvergence({
       cfg,
-      env: { OPENCLAW_UPDATE_IN_PROGRESS: "1" },
+      env: { NATESCLAW_UPDATE_IN_PROGRESS: "1" },
     });
     expect(mocks.repairMissingConfiguredPluginInstalls).toHaveBeenCalledTimes(1);
     expect(mocks.maybeRepairStaleManagedNpmBundledPlugins).toHaveBeenCalledWith({
       config: cfg,
       env: {
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_UPDATE_IN_PROGRESS: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
       prompter: { shouldRepair: true },
     });
     expect(mocks.repairMissingConfiguredPluginInstalls).toHaveBeenCalledWith({
       cfg,
       env: {
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_UPDATE_IN_PROGRESS: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
     });
     expect(
@@ -146,49 +146,49 @@ describe("runPostCorePluginConvergence", () => {
         deny: ["disabled"],
         entries: { active: { enabled: true }, disabled: { enabled: true } },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const records = {
       active: { source: "npm" as const, installPath: "/p/active" },
       disabled: { source: "npm" as const, installPath: "/p/disabled" },
     };
 
-    await runActivePluginPayloadSmokeCheck({ cfg, records, env: { OPENCLAW_STATE_DIR: "/state" } });
+    await runActivePluginPayloadSmokeCheck({ cfg, records, env: { NATESCLAW_STATE_DIR: "/state" } });
 
     expect(mocks.runPluginPayloadSmokeCheck).toHaveBeenCalledWith({
       records: { active: records.active },
-      env: { OPENCLAW_STATE_DIR: "/state" },
+      env: { NATESCLAW_STATE_DIR: "/state" },
     });
     expect(mocks.repairMissingConfiguredPluginInstalls).not.toHaveBeenCalled();
-    expect(mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot).not.toHaveBeenCalled();
+    expect(mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot).not.toHaveBeenCalled();
   });
 
   it("uses the candidate runtime version over a stale inherited host version", async () => {
-    const cfg = { plugins: { entries: {} } } as unknown as OpenClawConfig;
+    const cfg = { plugins: { entries: {} } } as unknown as NatesclawConfig;
     await runPostCorePluginConvergence({
       cfg,
-      env: { OPENCLAW_COMPATIBILITY_HOST_VERSION: "2026.5.12" },
+      env: { NATESCLAW_COMPATIBILITY_HOST_VERSION: "2026.5.12" },
     });
     expect(mocks.repairMissingConfiguredPluginInstalls).toHaveBeenCalledWith({
       cfg,
       env: {
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
     });
   });
 
   it("uses an explicit compatibility host version for startup convergence", async () => {
-    const cfg = { plugins: { entries: {} } } as unknown as OpenClawConfig;
+    const cfg = { plugins: { entries: {} } } as unknown as NatesclawConfig;
     await runPostCorePluginConvergence({
       cfg,
-      env: { OPENCLAW_COMPATIBILITY_HOST_VERSION: "2026.5.12" },
+      env: { NATESCLAW_COMPATIBILITY_HOST_VERSION: "2026.5.12" },
       compatibilityHostVersion: "2026.7.2-beta.7",
     });
     expect(mocks.repairMissingConfiguredPluginInstalls).toHaveBeenCalledWith({
       cfg,
       env: {
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: "2026.7.2-beta.7",
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: "2026.7.2-beta.7",
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
     });
   });
@@ -202,7 +202,7 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { discord: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.errored).toBe(false);
@@ -217,7 +217,7 @@ describe("runPostCorePluginConvergence", () => {
       records: { discord: { source: "npm", installPath: "/p/discord" } },
     });
     const result = await runPostCorePluginConvergence({
-      cfg: { plugins: { entries: { discord: { enabled: true } } } } as unknown as OpenClawConfig,
+      cfg: { plugins: { entries: { discord: { enabled: true } } } } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.installRecords).toEqual({
@@ -225,17 +225,17 @@ describe("runPostCorePluginConvergence", () => {
     });
   });
 
-  it("repairs managed npm openclaw peer links in every managed npm project before payload smoke checks", async () => {
+  it("repairs managed npm natesclaw peer links in every managed npm project before payload smoke checks", async () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [],
       records: { codex: { source: "npm", installPath: "/p/codex" } },
     });
     mocks.listManagedPluginNpmRoots.mockResolvedValue([
-      "/tmp/openclaw-state/npm",
-      "/tmp/openclaw-state/npm/projects/codex",
+      "/tmp/natesclaw-state/npm",
+      "/tmp/natesclaw-state/npm/projects/codex",
     ]);
-    mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot
+    mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot
       .mockResolvedValueOnce({
         checked: 0,
         attempted: 0,
@@ -250,25 +250,25 @@ describe("runPostCorePluginConvergence", () => {
       });
 
     const result = await runPostCorePluginConvergence({
-      cfg: { plugins: { entries: { codex: { enabled: true } } } } as unknown as OpenClawConfig,
-      env: { OPENCLAW_STATE_DIR: "/tmp/openclaw-state" },
+      cfg: { plugins: { entries: { codex: { enabled: true } } } } as unknown as NatesclawConfig,
+      env: { NATESCLAW_STATE_DIR: "/tmp/natesclaw-state" },
     });
 
-    expect(mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot).toHaveBeenNthCalledWith(1, {
-      npmRoot: "/tmp/openclaw-state/npm",
+    expect(mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot).toHaveBeenNthCalledWith(1, {
+      npmRoot: "/tmp/natesclaw-state/npm",
       logger: {},
       onPackageReadError: expect.any(Function),
     });
-    expect(mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot).toHaveBeenNthCalledWith(2, {
-      npmRoot: "/tmp/openclaw-state/npm/projects/codex",
+    expect(mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot).toHaveBeenNthCalledWith(2, {
+      npmRoot: "/tmp/natesclaw-state/npm/projects/codex",
       logger: {},
       onPackageReadError: expect.any(Function),
     });
     expect(result.changes).toEqual([
-      "Repaired OpenClaw host peer link(s) for 1 managed npm plugin package(s).",
+      "Repaired Natesclaw host peer link(s) for 1 managed npm plugin package(s).",
     ]);
     expect(
-      mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot.mock.invocationCallOrder[0],
+      mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot.mock.invocationCallOrder[0],
     ).toBeLessThan(
       expectDefined(
         mocks.runPluginPayloadSmokeCheck.mock.invocationCallOrder[0],
@@ -280,23 +280,23 @@ describe("runPostCorePluginConvergence", () => {
   it.each(["peerDependencies", "dependencies"] as const)(
     "repairs a registered extensions-root %s stale host before the real payload smoke check",
     async (dependencyField) => {
-      const stateDir = tempDirs.make("openclaw-post-core-convergence-");
+      const stateDir = tempDirs.make("natesclaw-post-core-convergence-");
       const packageDir = path.join(stateDir, "extensions", "email");
-      const staleHostDir = path.join(packageDir, "node_modules", "openclaw");
+      const staleHostDir = path.join(packageDir, "node_modules", "natesclaw");
       fs.mkdirSync(staleHostDir, { recursive: true });
       fs.writeFileSync(
         path.join(packageDir, "package.json"),
         JSON.stringify({
           name: "@clawemail/email",
           version: "2026.7.1",
-          [dependencyField]: { openclaw: ">=2026.7.1" },
-          openclaw: { extensions: ["./index.js"] },
+          [dependencyField]: { natesclaw: ">=2026.7.1" },
+          natesclaw: { extensions: ["./index.js"] },
         }),
       );
       fs.writeFileSync(path.join(packageDir, "index.js"), "export default {};\n");
       fs.writeFileSync(
         path.join(staleHostDir, "package.json"),
-        JSON.stringify({ name: "openclaw", version: "2026.7.1-beta.2" }),
+        JSON.stringify({ name: "natesclaw", version: "2026.7.1-beta.2" }),
       );
       const records = {
         email: { source: "npm" as const, installPath: packageDir },
@@ -315,7 +315,7 @@ describe("runPostCorePluginConvergence", () => {
 
       const result = await runPostCorePluginConvergence({
         cfg: { plugins: { entries: { email: { enabled: true } } } },
-        env: { OPENCLAW_STATE_DIR: stateDir },
+        env: { NATESCLAW_STATE_DIR: stateDir },
         baselineInstallRecords: records,
       });
 
@@ -330,7 +330,7 @@ describe("runPostCorePluginConvergence", () => {
     const baseline = { matrix: { source: "npm" as const, installPath: "/p/matrix" } };
     const cfg = {
       plugins: { entries: { matrix: { enabled: true } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [],
@@ -345,21 +345,21 @@ describe("runPostCorePluginConvergence", () => {
     expect(mocks.repairMissingConfiguredPluginInstalls).toHaveBeenCalledWith({
       cfg,
       env: {
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
       baselineRecords: baseline,
     });
   });
 
   it("prunes stale local bundled plugin shadows from baseline records before repair", async () => {
-    const bundledRoot = tempDirs.make("openclaw-post-core-convergence-");
+    const bundledRoot = tempDirs.make("natesclaw-post-core-convergence-");
     writeBundledPlugin(bundledRoot, "discord");
     const baseline = {
       discord: {
         source: "path" as const,
         installPath: path.join(
-          tempDirs.make("openclaw-post-core-convergence-"),
+          tempDirs.make("natesclaw-post-core-convergence-"),
           "dist",
           "extensions",
           "discord",
@@ -375,13 +375,13 @@ describe("runPostCorePluginConvergence", () => {
     });
     const cfg = {
       plugins: { entries: { discord: { enabled: true }, brave: { enabled: true } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     const result = await runPostCorePluginConvergence({
       cfg,
       env: {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
-        OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+        NATESCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+        NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
         VITEST: "true",
       },
       baselineInstallRecords: baseline,
@@ -390,11 +390,11 @@ describe("runPostCorePluginConvergence", () => {
     expect(mocks.repairMissingConfiguredPluginInstalls).toHaveBeenCalledWith({
       cfg,
       env: {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
-        OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+        NATESCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+        NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
         VITEST: "true",
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
       baselineRecords: {
         brave: baseline.brave,
@@ -407,28 +407,28 @@ describe("runPostCorePluginConvergence", () => {
   });
 
   it("retires a stale managed generation when its official plugin is now bundled", async () => {
-    const stateDir = tempDirs.make("openclaw-post-core-convergence-");
-    const bundledRoot = tempDirs.make("openclaw-post-core-bundled-");
+    const stateDir = tempDirs.make("natesclaw-post-core-convergence-");
+    const bundledRoot = tempDirs.make("natesclaw-post-core-bundled-");
     writeBundledPlugin(bundledRoot, "codex", VERSION);
     const npmRoot = resolvePluginNpmGenerationProjectDir({
       npmDir: path.join(stateDir, "npm"),
-      packageName: "@openclaw/codex",
-      generationKey: "@openclaw/codex@2026.7.2-beta.7",
+      packageName: "@natesclaw/codex",
+      generationKey: "@natesclaw/codex@2026.7.2-beta.7",
     });
-    const packageDir = path.join(npmRoot, "node_modules", "@openclaw", "codex");
+    const packageDir = path.join(npmRoot, "node_modules", "@natesclaw", "codex");
     fs.mkdirSync(packageDir, { recursive: true });
     fs.writeFileSync(
       path.join(npmRoot, "package.json"),
-      JSON.stringify({ dependencies: { "@openclaw/codex": "2026.7.2-beta.7" } }),
+      JSON.stringify({ dependencies: { "@natesclaw/codex": "2026.7.2-beta.7" } }),
       "utf8",
     );
     fs.writeFileSync(
       path.join(packageDir, "package.json"),
-      JSON.stringify({ name: "@openclaw/codex", version: "2026.7.2-beta.7" }),
+      JSON.stringify({ name: "@natesclaw/codex", version: "2026.7.2-beta.7" }),
       "utf8",
     );
     fs.writeFileSync(
-      path.join(packageDir, "openclaw.plugin.json"),
+      path.join(packageDir, "natesclaw.plugin.json"),
       JSON.stringify({ id: "codex", name: "codex", configSchema: { type: "object" } }),
       "utf8",
     );
@@ -444,9 +444,9 @@ describe("runPostCorePluginConvergence", () => {
         plugins: { allow: ["codex"], entries: { codex: { enabled: true } } },
       },
       env: {
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
-        OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+        NATESCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
         VITEST: "true",
       },
     });
@@ -457,7 +457,7 @@ describe("runPostCorePluginConvergence", () => {
   it("forwards ClawHub risk acknowledgement options to repair", async () => {
     const cfg = {
       plugins: { entries: { matrix: { enabled: true } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const onClawHubRisk = vi.fn(async () => true);
     await runPostCorePluginConvergence({
       cfg,
@@ -469,8 +469,8 @@ describe("runPostCorePluginConvergence", () => {
     expect(mocks.repairMissingConfiguredPluginInstalls).toHaveBeenCalledWith({
       cfg,
       env: {
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
       acknowledgeClawHubRisk: true,
       onClawHubRisk,
@@ -481,24 +481,24 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
+        'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
       ],
       records: {},
     });
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { discord: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.errored).toBe(false);
     expect(result.warnings).toStrictEqual([
       {
         reason:
-          'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
+          'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
         message:
-          'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
-        guidance: ["Run `openclaw update repair` to retry plugin repair."],
+          'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
+        guidance: ["Run `natesclaw update repair` to retry plugin repair."],
       },
     ]);
   });
@@ -507,7 +507,7 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "matrix" from clawhub:@openclaw/matrix@beta: ClawHub ClawPack download for @openclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
+        'Failed to install missing configured plugin "matrix" from clawhub:@natesclaw/matrix@beta: ClawHub ClawPack download for @natesclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
       ],
       failedPluginIds: ["matrix"],
       records: {},
@@ -515,17 +515,17 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { matrix: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.errored).toBe(false);
     expect(result.warnings).toStrictEqual([
       {
         reason:
-          'Failed to install missing configured plugin "matrix" from clawhub:@openclaw/matrix@beta: ClawHub ClawPack download for @openclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
+          'Failed to install missing configured plugin "matrix" from clawhub:@natesclaw/matrix@beta: ClawHub ClawPack download for @natesclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
         message:
-          'Failed to install missing configured plugin "matrix" from clawhub:@openclaw/matrix@beta: ClawHub ClawPack download for @openclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
-        guidance: ["Run `openclaw update repair` to retry plugin repair."],
+          'Failed to install missing configured plugin "matrix" from clawhub:@natesclaw/matrix@beta: ClawHub ClawPack download for @natesclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
+        guidance: ["Run `natesclaw update repair` to retry plugin repair."],
       },
     ]);
     expect(mocks.runPluginPayloadSmokeCheck).toHaveBeenCalledWith({
@@ -538,7 +538,7 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
+        'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
       ],
       failedPluginIds: ["discord"],
       records: {
@@ -555,7 +555,7 @@ describe("runPostCorePluginConvergence", () => {
           deny: ["discord"],
           entries: { discord: { enabled: true } },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.errored).toBe(false);
@@ -569,7 +569,7 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: ['Installed missing configured plugin "discord".'],
       notices: [
-        'ClawHub trust warning for "@openclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
+        'ClawHub trust warning for "@natesclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
       ],
       warnings: [],
       records: { discord: { source: "clawhub", installPath: "/p/discord" } },
@@ -577,7 +577,7 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { discord: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.errored).toBe(false);
@@ -585,9 +585,9 @@ describe("runPostCorePluginConvergence", () => {
     expect(result.notices).toStrictEqual([
       {
         reason:
-          'ClawHub trust warning for "@openclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
+          'ClawHub trust warning for "@natesclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
         message:
-          'ClawHub trust warning for "@openclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
+          'ClawHub trust warning for "@natesclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
         guidance: [],
       },
     ]);
@@ -618,7 +618,7 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { brave: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.errored).toBe(true);
@@ -630,8 +630,8 @@ describe("runPostCorePluginConvergence", () => {
         message:
           'Plugin "brave" failed post-core payload smoke check (missing-main-entry): Plugin main entry "dist/index.js" not found at /p/brave/dist/index.js',
         guidance: [
-          "Run `openclaw update repair` to retry plugin repair.",
-          "Run `openclaw plugins inspect brave --runtime --json` for details.",
+          "Run `natesclaw update repair` to retry plugin repair.",
+          "Run `natesclaw plugins inspect brave --runtime --json` for details.",
         ],
       },
     ]);
@@ -656,7 +656,7 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { brave: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(result.errored).toBe(true);
@@ -667,8 +667,8 @@ describe("runPostCorePluginConvergence", () => {
         message:
           'Plugin "brave" failed post-core payload smoke check (missing-install-path): Install path is missing from the plugin install record.',
         guidance: [
-          "Run `openclaw update repair` to retry plugin repair.",
-          "Run `openclaw plugins inspect brave --runtime --json` for details.",
+          "Run `natesclaw update repair` to retry plugin repair.",
+          "Run `natesclaw plugins inspect brave --runtime --json` for details.",
         ],
       },
     ]);
@@ -695,15 +695,15 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { brave: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
 
     const message =
       'Plugin "brave" failed post-core payload smoke check (unreadable-package-json): Could not read package.json at /p/brave/package.json: EACCES: permission denied';
     const guidance = [
-      "Fix file access for /p/brave/package.json so it is readable by the user running OpenClaw. For EACCES or EPERM, correct its ownership or permissions; otherwise resolve the reported filesystem I/O error, then retry.",
-      "Run `openclaw plugins inspect brave --runtime --json` for details.",
+      "Fix file access for /p/brave/package.json so it is readable by the user running Natesclaw. For EACCES or EPERM, correct its ownership or permissions; otherwise resolve the reported filesystem I/O error, then retry.",
+      "Run `natesclaw plugins inspect brave --runtime --json` for details.",
     ];
     expect(result.warnings).toStrictEqual([
       {
@@ -722,13 +722,13 @@ describe("runPostCorePluginConvergence", () => {
   });
 
   it("does not duplicate a package-scoped repair error owned by a smoke failure", async () => {
-    const installPath = "/tmp/openclaw-state/npm/projects/brave/node_modules/brave";
+    const installPath = "/tmp/natesclaw-state/npm/projects/brave/node_modules/brave";
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [],
       records: { brave: { source: "npm", installPath } },
     });
-    mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot.mockImplementation(
+    mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot.mockImplementation(
       async (params: { onPackageReadError?: (error: unknown, packageDir: string) => void }) => {
         params.onPackageReadError?.(
           new Error(`EACCES: permission denied, open '${installPath}/package.json'`),
@@ -752,8 +752,8 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { brave: { enabled: true } } },
-      } as unknown as OpenClawConfig,
-      env: { OPENCLAW_STATE_DIR: "/tmp/openclaw-state" },
+      } as unknown as NatesclawConfig,
+      env: { NATESCLAW_STATE_DIR: "/tmp/natesclaw-state" },
     });
 
     expect(result.warnings).toHaveLength(1);
@@ -765,7 +765,7 @@ describe("runPostCorePluginConvergence", () => {
   });
 
   it("keeps an active __proto__ record in smoke and package-path classification", async () => {
-    const installPath = "/tmp/openclaw-state/npm/projects/__proto__/node_modules/__proto__";
+    const installPath = "/tmp/natesclaw-state/npm/projects/__proto__/node_modules/__proto__";
     const record: PluginInstallRecord = { source: "npm", installPath };
     const records = Object.create(null) as Record<string, PluginInstallRecord>;
     Object.defineProperty(records, "__proto__", {
@@ -779,7 +779,7 @@ describe("runPostCorePluginConvergence", () => {
       warnings: [],
       records,
     });
-    mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot.mockImplementation(
+    mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot.mockImplementation(
       async (params: { onPackageReadError?: (error: unknown, packageDir: string) => void }) => {
         params.onPackageReadError?.(new Error("EACCES: permission denied"), installPath);
         return { checked: 0, attempted: 0, repaired: 0, skipped: 1 };
@@ -805,8 +805,8 @@ describe("runPostCorePluginConvergence", () => {
     );
 
     const result = await runPostCorePluginConvergence({
-      cfg: { plugins: { enabled: true } } as unknown as OpenClawConfig,
-      env: { OPENCLAW_STATE_DIR: "/tmp/openclaw-state" },
+      cfg: { plugins: { enabled: true } } as unknown as NatesclawConfig,
+      env: { NATESCLAW_STATE_DIR: "/tmp/natesclaw-state" },
     });
 
     expect(result.warnings).toHaveLength(1);
@@ -818,13 +818,13 @@ describe("runPostCorePluginConvergence", () => {
   });
 
   it("does not promote an inactive package read error into an ownerless blocker", async () => {
-    const installPath = "/tmp/openclaw-state/npm/projects/brave/node_modules/brave";
+    const installPath = "/tmp/natesclaw-state/npm/projects/brave/node_modules/brave";
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [],
       records: { brave: { source: "npm", installPath } },
     });
-    mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot.mockImplementation(
+    mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot.mockImplementation(
       async (params: { onPackageReadError?: (error: unknown, packageDir: string) => void }) => {
         params.onPackageReadError?.(
           new Error(`EACCES: permission denied, open '${installPath}/package.json'`),
@@ -837,8 +837,8 @@ describe("runPostCorePluginConvergence", () => {
     const result = await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { brave: { enabled: false } } },
-      } as unknown as OpenClawConfig,
-      env: { OPENCLAW_STATE_DIR: "/tmp/openclaw-state" },
+      } as unknown as NatesclawConfig,
+      env: { NATESCLAW_STATE_DIR: "/tmp/natesclaw-state" },
     });
 
     expect(mocks.runPluginPayloadSmokeCheck).toHaveBeenCalledWith({
@@ -850,8 +850,8 @@ describe("runPostCorePluginConvergence", () => {
   });
 
   it("keeps an unowned package read error visible for startup to block", async () => {
-    const packageDir = "/tmp/openclaw-state/npm/node_modules/untracked";
-    mocks.relinkOpenClawPeerDependenciesInManagedNpmRoot.mockImplementation(
+    const packageDir = "/tmp/natesclaw-state/npm/node_modules/untracked";
+    mocks.relinkNatesclawPeerDependenciesInManagedNpmRoot.mockImplementation(
       async (params: { onPackageReadError?: (error: unknown, packageDir: string) => void }) => {
         params.onPackageReadError?.(new Error("EACCES: permission denied"), packageDir);
         return { checked: 0, attempted: 0, repaired: 0, skipped: 1 };
@@ -859,15 +859,15 @@ describe("runPostCorePluginConvergence", () => {
     );
 
     const result = await runPostCorePluginConvergence({
-      cfg: { plugins: { entries: {} } } as unknown as OpenClawConfig,
-      env: { OPENCLAW_STATE_DIR: "/tmp/openclaw-state" },
+      cfg: { plugins: { entries: {} } } as unknown as NatesclawConfig,
+      env: { NATESCLAW_STATE_DIR: "/tmp/natesclaw-state" },
     });
 
     expect(result.warnings).toStrictEqual([
       {
-        reason: "Failed to repair managed npm OpenClaw host peer links: EACCES: permission denied",
-        message: "Failed to repair managed npm OpenClaw host peer links: EACCES: permission denied",
-        guidance: ["Run `openclaw update repair` to retry plugin repair."],
+        reason: "Failed to repair managed npm Natesclaw host peer links: EACCES: permission denied",
+        message: "Failed to repair managed npm Natesclaw host peer links: EACCES: permission denied",
+        guidance: ["Run `natesclaw update repair` to retry plugin repair."],
       },
     ]);
     expect(result.errored).toBe(false);
@@ -883,15 +883,15 @@ describe("runPostCorePluginConvergence", () => {
     await runPostCorePluginConvergence({
       cfg: {
         plugins: { entries: { brave: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       env: {},
     });
     expect(mocks.runPluginPayloadSmokeCheck).toHaveBeenCalledTimes(1);
     expect(mocks.runPluginPayloadSmokeCheck).toHaveBeenCalledWith({
       records,
       env: {
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
-        OPENCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        NATESCLAW_COMPATIBILITY_HOST_VERSION: VERSION,
+        NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
     });
   });
@@ -906,12 +906,12 @@ describe("convergenceWarningsToOutcomes", () => {
           pluginId: "brave",
           reason: "missing-main-entry: …",
           message: 'Plugin "brave" failed payload smoke check.',
-          guidance: ["Run `openclaw update repair`."],
+          guidance: ["Run `natesclaw update repair`."],
         },
         {
           reason: "Failed install",
           message: "Failed install for some plugin.",
-          guidance: ["Run `openclaw update repair`."],
+          guidance: ["Run `natesclaw update repair`."],
         },
       ],
       errored: true,
@@ -951,7 +951,7 @@ describe("filterRecordsToActive", () => {
       });
 
       const filtered = filterRecordsToActive({
-        cfg: { plugins: { enabled: true } } as unknown as OpenClawConfig,
+        cfg: { plugins: { enabled: true } } as unknown as NatesclawConfig,
         records,
       });
 
@@ -973,7 +973,7 @@ describe("filterRecordsToActive", () => {
     const filtered = filterRecordsToActive({
       cfg: {
         plugins: { enabled: true, entries: { enabled: { enabled: true } } },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       records,
     });
     expect(filtered).toEqual(records);
@@ -993,7 +993,7 @@ describe("filterRecordsToActive", () => {
             "active-plugin": { enabled: true },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       records,
     });
     expect(filtered).toEqual({
@@ -1011,7 +1011,7 @@ describe("filterRecordsToActive", () => {
           enabled: true,
           deny: ["denied"],
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       records,
     });
     expect(filtered).toEqual({});
@@ -1024,7 +1024,7 @@ describe("filterRecordsToActive", () => {
     const records = {
       codex: {
         source: "npm" as const,
-        spec: "@openclaw/codex",
+        spec: "@natesclaw/codex",
         installPath: "/p/codex",
         trustedSourceLinkedOfficial: true,
       },
@@ -1035,7 +1035,7 @@ describe("filterRecordsToActive", () => {
           enabled: true,
           entries: { codex: { enabled: false } },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as NatesclawConfig,
       records,
     });
     expect(filtered).toEqual(records);

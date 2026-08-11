@@ -2,13 +2,13 @@
 // Parses transcript JSONL files for messages, previews, counts, and usage metadata.
 import fs from "node:fs";
 import readline from "node:readline";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   asPositiveFiniteNumber as resolvePositiveUsageNumber,
   resolveIntegerOption,
   resolveNonNegativeIntegerOption,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 import {
   deriveSessionTotalTokens,
   hasNonzeroUsage,
@@ -40,7 +40,7 @@ import {
   readNonBlankStringPreservingWhitespace,
 } from "./session-transcript-json.js";
 import {
-  attachOpenClawTranscriptMeta,
+  attachNatesclawTranscriptMeta,
   projectTranscriptEntryMessage,
 } from "./session-transcript-message.js";
 import type { SessionPreviewItem } from "./session-utils.types.js";
@@ -218,7 +218,7 @@ function extractJsonStringFieldSuffix(source: string, field: string): string | u
 function recoverOversizedMultimodalTranscriptRecord(
   line: string,
 ): Record<string, unknown> | undefined {
-  const markerPrefix = "__openclaw_omitted_image_";
+  const markerPrefix = "__natesclaw_omitted_image_";
   if (line.includes(markerPrefix)) {
     return undefined;
   }
@@ -423,7 +423,7 @@ function parseTranscriptRecord(line: string): TranscriptRecord | null {
       role,
       ...(idempotencyKey ? { idempotencyKey } : {}),
       content: [{ type: "text", text: TRANSCRIPT_OVERSIZED_MESSAGE_PLACEHOLDER }],
-      __openclaw: { truncated: true, reason: "oversized" },
+      __natesclaw: { truncated: true, reason: "oversized" },
     },
   };
   return {
@@ -703,7 +703,7 @@ export class ArchivedTranscriptReader {
     const firstSeq = Math.max(1, totalMessages - snapshot.messages.length + 1);
     return {
       messages: snapshot.messages.map((message, index) =>
-        attachOpenClawTranscriptMeta(message, { seq: firstSeq + index }),
+        attachNatesclawTranscriptMeta(message, { seq: firstSeq + index }),
       ),
       transcriptEvents: snapshot.transcriptEvents,
       totalMessages,
@@ -968,7 +968,7 @@ function extractTranscriptTokenEstimateFromLine(line: string): {
           ? parsed.model.trim()
           : undefined;
     const isDeliveryMirror =
-      role === "assistant" && modelProvider === "openclaw" && model === "delivery-mirror";
+      role === "assistant" && modelProvider === "natesclaw" && model === "delivery-mirror";
     if (isDeliveryMirror) {
       return null;
     }
@@ -1031,7 +1031,7 @@ function extractUsageSnapshotFromTranscriptLine(
         : typeof parsed.model === "string"
           ? parsed.model.trim()
           : undefined;
-    const isDeliveryMirror = modelProvider === "openclaw" && model === "delivery-mirror";
+    const isDeliveryMirror = modelProvider === "natesclaw" && model === "delivery-mirror";
     const hasMeaningfulUsage =
       hasNonzeroUsage(usage) ||
       typeof totalTokens === "number" ||

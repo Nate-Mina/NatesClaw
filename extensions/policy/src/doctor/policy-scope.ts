@@ -1,6 +1,6 @@
-import type { HealthFinding } from "openclaw/plugin-sdk/health";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { HealthFinding } from "natesclaw/plugin-sdk/health";
+import { normalizeAgentId } from "natesclaw/plugin-sdk/routing";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { PolicyAgentWorkspaceEvidence, PolicyToolPostureEvidence } from "../policy-state.js";
 import { getPolicyPath, scopedPolicyValue } from "../policy-value.js";
 import {

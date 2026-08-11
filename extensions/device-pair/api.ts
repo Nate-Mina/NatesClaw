@@ -7,17 +7,17 @@ export {
   listDevicePairing,
   revokeDeviceBootstrapToken,
   type DeviceBootstrapProfile,
-} from "openclaw/plugin-sdk/device-bootstrap";
-export { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+} from "natesclaw/plugin-sdk/device-bootstrap";
+export { definePluginEntry, type NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
 export {
   resolveGatewayBindUrl,
   resolveGatewayPort,
   resolveTailnetHostWithRunner,
   resolveTailscaleServeGatewayUrlsWithRunner,
-} from "openclaw/plugin-sdk/core";
-export { resolveAdvertisedLanHost } from "openclaw/plugin-sdk/gateway-runtime";
+} from "natesclaw/plugin-sdk/core";
+export { resolveAdvertisedLanHost } from "natesclaw/plugin-sdk/gateway-runtime";
 export {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   runPluginCommandWithTimeout,
-} from "openclaw/plugin-sdk/sandbox";
+} from "natesclaw/plugin-sdk/sandbox";
 export { renderQrPngBase64, renderQrPngDataUrl, writeQrPngTempFile } from "./qr-image.js";

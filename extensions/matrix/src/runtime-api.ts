@@ -3,7 +3,7 @@ export {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   normalizeOptionalAccountId,
-} from "openclaw/plugin-sdk/account-id";
+} from "natesclaw/plugin-sdk/account-id";
 export {
   createActionGate,
   jsonResult,
@@ -13,9 +13,9 @@ export {
   readStringArrayParam,
   readStringParam,
   ToolAuthorizationError,
-} from "openclaw/plugin-sdk/channel-actions";
-export { buildChannelConfigSchema } from "openclaw/plugin-sdk/channel-config-schema";
-export type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
+} from "natesclaw/plugin-sdk/channel-actions";
+export { buildChannelConfigSchema } from "natesclaw/plugin-sdk/channel-config-schema";
+export type { ChannelPlugin } from "natesclaw/plugin-sdk/channel-core";
 export type {
   BaseProbeResult,
   ChannelDirectoryEntry,
@@ -28,31 +28,31 @@ export type {
   ChannelResolveKind,
   ChannelResolveResult,
   ChannelToolSend,
-} from "openclaw/plugin-sdk/channel-contract";
+} from "natesclaw/plugin-sdk/channel-contract";
 export {
   formatLocationText,
   toLocationContext,
   type NormalizedLocation,
-} from "openclaw/plugin-sdk/channel-inbound";
-export { logInboundDrop } from "openclaw/plugin-sdk/channel-inbound";
-export { logTypingFailure } from "openclaw/plugin-sdk/channel-outbound";
-export { resolveAckReaction } from "openclaw/plugin-sdk/channel-feedback";
-export type { ChannelSetupInput } from "openclaw/plugin-sdk/setup";
+} from "natesclaw/plugin-sdk/channel-inbound";
+export { logInboundDrop } from "natesclaw/plugin-sdk/channel-inbound";
+export { logTypingFailure } from "natesclaw/plugin-sdk/channel-outbound";
+export { resolveAckReaction } from "natesclaw/plugin-sdk/channel-feedback";
+export type { ChannelSetupInput } from "natesclaw/plugin-sdk/setup";
 export type {
-  OpenClawConfig,
+  NatesclawConfig,
   ContextVisibilityMode,
   DmPolicy,
   GroupPolicy,
-} from "openclaw/plugin-sdk/config-contracts";
-export type { GroupToolPolicyConfig } from "openclaw/plugin-sdk/config-contracts";
-export type { WizardPrompter } from "openclaw/plugin-sdk/setup";
-export type { SecretInput } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/config-contracts";
+export type { GroupToolPolicyConfig } from "natesclaw/plugin-sdk/config-contracts";
+export type { WizardPrompter } from "natesclaw/plugin-sdk/setup";
+export type { SecretInput } from "natesclaw/plugin-sdk/secret-input";
 export {
   GROUP_POLICY_BLOCKED_LABEL,
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
+} from "natesclaw/plugin-sdk/runtime-group-policy";
 export {
   addWildcardAllowFrom,
   formatDocsLink,
@@ -62,8 +62,8 @@ export {
   promptAccountId,
   promptChannelAccessConfig,
   splitSetupEntries,
-} from "openclaw/plugin-sdk/setup";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
+} from "natesclaw/plugin-sdk/setup";
+export type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
 export {
   assertHttpUrlTargetsPrivateNetwork,
   closeDispatcher,
@@ -73,35 +73,35 @@ export {
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
   type LookupFn,
   type SsrFPolicy,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
 export {
   ensureConfiguredAcpBindingReady,
   resolveConfiguredAcpBindingRecord,
-} from "openclaw/plugin-sdk/acp-binding-runtime";
+} from "natesclaw/plugin-sdk/acp-binding-runtime";
 export {
   buildProbeChannelStatusSummary,
   collectStatusIssuesFromLastError,
   PAIRING_APPROVED_MESSAGE,
-} from "openclaw/plugin-sdk/channel-status";
+} from "natesclaw/plugin-sdk/channel-status";
 export {
   getSessionBindingService,
   resolveThreadBindingIdleTimeoutMsForChannel,
   resolveThreadBindingMaxAgeMsForChannel,
-} from "openclaw/plugin-sdk/conversation-runtime";
-export { resolveOutboundSendDep } from "openclaw/plugin-sdk/channel-outbound";
-export { resolveAgentIdFromSessionKey } from "openclaw/plugin-sdk/routing";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
-export { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-outbound";
-export { loadOutboundMediaFromUrl } from "openclaw/plugin-sdk/outbound-media";
-export { normalizePollInput, type PollInput } from "openclaw/plugin-sdk/poll-runtime";
-export { writeJsonFileAtomically } from "openclaw/plugin-sdk/json-store";
+} from "natesclaw/plugin-sdk/conversation-runtime";
+export { resolveOutboundSendDep } from "natesclaw/plugin-sdk/channel-outbound";
+export { resolveAgentIdFromSessionKey } from "natesclaw/plugin-sdk/routing";
+export { chunkTextForOutbound } from "natesclaw/plugin-sdk/text-chunking";
+export { createChannelMessageReplyPipeline } from "natesclaw/plugin-sdk/channel-outbound";
+export { loadOutboundMediaFromUrl } from "natesclaw/plugin-sdk/outbound-media";
+export { normalizePollInput, type PollInput } from "natesclaw/plugin-sdk/poll-runtime";
+export { writeJsonFileAtomically } from "natesclaw/plugin-sdk/json-store";
 export {
   buildChannelKeyCandidates,
   resolveChannelEntryMatch,
-} from "openclaw/plugin-sdk/channel-targets";
+} from "natesclaw/plugin-sdk/channel-targets";
 export { buildTimeoutAbortSignal } from "./matrix/sdk/timeout-abort-signal.js";
-export { formatZonedTimestamp } from "openclaw/plugin-sdk/time-runtime";
-export type { PluginRuntime, RuntimeLogger } from "openclaw/plugin-sdk/plugin-runtime";
-export type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+export { formatZonedTimestamp } from "natesclaw/plugin-sdk/time-runtime";
+export type { PluginRuntime, RuntimeLogger } from "natesclaw/plugin-sdk/plugin-runtime";
+export type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
 // resolveMatrixAccountStringValues already comes from the Matrix API barrel.
 // Re-exporting auth-precedence here makes TS source loaders define the export twice.

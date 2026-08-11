@@ -18,17 +18,17 @@ beforeAll(async () => {
 
 beforeEach(() => {
   readChannelIngressStoreAllowFromForDmPolicyMock.mockReset();
-  delete process.env.OPENCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS;
+  delete process.env.NATESCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS;
 });
 
 afterEach(() => {
-  delete process.env.OPENCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS;
+  delete process.env.NATESCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS;
 });
 
-vi.mock("openclaw/plugin-sdk/channel-ingress-runtime", async () => {
+vi.mock("natesclaw/plugin-sdk/channel-ingress-runtime", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/channel-ingress-runtime")
-  >("openclaw/plugin-sdk/channel-ingress-runtime");
+    typeof import("natesclaw/plugin-sdk/channel-ingress-runtime")
+  >("natesclaw/plugin-sdk/channel-ingress-runtime");
   return {
     ...actual,
     readChannelIngressStoreAllowFromForDmPolicy: (...args: unknown[]) =>
@@ -202,7 +202,7 @@ describe("authorizeSlackSystemEventSender", () => {
     [
       "ignores non-decimal channel member cache ttl env values",
       () => {
-        process.env.OPENCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS = "0x0";
+        process.env.NATESCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS = "0x0";
       },
       1,
     ],

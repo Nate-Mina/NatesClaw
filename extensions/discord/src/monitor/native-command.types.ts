@@ -1,8 +1,8 @@
 // Discord type declarations define plugin contracts.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { CommandArgValues } from "openclaw/plugin-sdk/native-command-registry";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { CommandArgValues } from "natesclaw/plugin-sdk/native-command-registry";
 
-export type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+export type DiscordConfig = NonNullable<NatesclawConfig["channels"]>["discord"];
 
 export type DiscordCommandArgs = {
   raw?: string;

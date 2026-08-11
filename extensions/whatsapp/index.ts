@@ -1,12 +1,12 @@
-// Whatsapp plugin entrypoint registers its OpenClaw integration.
+// Whatsapp plugin entrypoint registers its Natesclaw integration.
 import {
   defineBundledChannelEntry,
   loadBundledEntryExportSync,
-} from "openclaw/plugin-sdk/channel-entry-contract";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/channel-entry-contract";
+} from "natesclaw/plugin-sdk/channel-entry-contract";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/channel-entry-contract";
 
-function registerWhatsAppCallTool(api: OpenClawPluginApi): void {
-  const registerTool = loadBundledEntryExportSync<(api: OpenClawPluginApi) => void>(
+function registerWhatsAppCallTool(api: NatesclawPluginApi): void {
+  const registerTool = loadBundledEntryExportSync<(api: NatesclawPluginApi) => void>(
     import.meta.url,
     {
       specifier: "./call-tool-api.js",

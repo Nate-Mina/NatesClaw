@@ -1,6 +1,6 @@
 // Codex tests cover run attempt.steering plugin behavior.
 import path from "node:path";
-import { GPT5_BEHAVIOR_CONTRACT as CODEX_GPT5_BEHAVIOR_CONTRACT } from "openclaw/plugin-sdk/provider-model-shared";
+import { GPT5_BEHAVIOR_CONTRACT as CODEX_GPT5_BEHAVIOR_CONTRACT } from "natesclaw/plugin-sdk/provider-model-shared";
 import { describe, expect, it, vi } from "vitest";
 import { readAttemptTerminal } from "./attempt-terminal.test-helper.js";
 import type { CodexServerNotification } from "./protocol.js";
@@ -25,8 +25,8 @@ const activeRunRegistrationMocks = vi.hoisted(() => ({
   cancelQuestionError: undefined as Error | undefined,
 }));
 
-vi.mock("openclaw/plugin-sdk/agent-harness-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/agent-harness-runtime")>();
+vi.mock("natesclaw/plugin-sdk/agent-harness-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/agent-harness-runtime")>();
   return {
     ...actual,
     cancelPendingAgentQuestionForSession: async (
@@ -238,7 +238,7 @@ describe("runCodexAppServerAttempt steering", () => {
     const steer = requests.find((entry) => entry.method === "turn/steer");
     const clientUserMessageId = (steer?.params as { clientUserMessageId?: string } | undefined)
       ?.clientUserMessageId;
-    expect(clientUserMessageId).toBe("openclaw:turn-1:steer:1");
+    expect(clientUserMessageId).toBe("natesclaw:turn-1:steer:1");
     if (!clientUserMessageId) {
       throw new Error("turn/steer clientUserMessageId missing");
     }
@@ -286,7 +286,7 @@ describe("runCodexAppServerAttempt steering", () => {
         { type: "text", text: "more context", text_elements: [] },
         { type: "image", url: `data:image/png;base64,${PNG_1X1}` },
       ],
-      clientUserMessageId: "openclaw:turn-1:steer:1",
+      clientUserMessageId: "natesclaw:turn-1:steer:1",
     });
   });
 
@@ -364,7 +364,7 @@ describe("runCodexAppServerAttempt steering", () => {
               threadId: "thread-1",
               expectedTurnId: "turn-1",
               input: [{ type: "text", text: "subagent complete", text_elements: [] }],
-              clientUserMessageId: "openclaw:turn-1:steer:1",
+              clientUserMessageId: "natesclaw:turn-1:steer:1",
             },
           },
         ]),
@@ -404,7 +404,7 @@ describe("runCodexAppServerAttempt steering", () => {
               threadId: "thread-1",
               expectedTurnId: "turn-1",
               input: [{ type: "text", text: "session-file registered", text_elements: [] }],
-              clientUserMessageId: "openclaw:turn-1:steer:1",
+              clientUserMessageId: "natesclaw:turn-1:steer:1",
             },
           },
         ]),

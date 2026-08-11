@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { nothing, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "../../i18n/index.ts";
@@ -235,14 +235,14 @@ describe("renderPlugins", () => {
     expect(onFilterChange).toHaveBeenCalledWith("issues");
   });
 
-  it.each(["@openclaw/workboard", "  @OPENCLAW/WORKBOARD  "])(
+  it.each(["@natesclaw/workboard", "  @NATESCLAW/WORKBOARD  "])(
     "finds an installed plugin by its scoped package name %s",
     (query) => {
-      const plugin = createPlugin({ packageName: "@openclaw/workboard" });
+      const plugin = createPlugin({ packageName: "@natesclaw/workboard" });
       const container = mount(createProps({ query, result: createResult([plugin]) }));
 
       expect(container.querySelector('[data-plugin-id="workboard"]')).not.toBeNull();
-      expect(normalizedText(container)).toContain("@openclaw/workboard");
+      expect(normalizedText(container)).toContain("@natesclaw/workboard");
     },
   );
 
@@ -253,7 +253,7 @@ describe("renderPlugins", () => {
     const plugin = createPlugin({
       id: "calendar-runtime",
       name: "Shared Calendar",
-      packageName: "@openclaw/calendar-runtime",
+      packageName: "@natesclaw/calendar-runtime",
       description: "Schedule team events.",
       origin: "official",
       installed: false,
@@ -265,7 +265,7 @@ describe("renderPlugins", () => {
     const container = mount(
       createProps({
         activeTab: "discover",
-        query: "@openclaw/calendar-runtime",
+        query: "@natesclaw/calendar-runtime",
         result: createResult([plugin]),
       }),
     );
@@ -358,7 +358,7 @@ describe("renderPlugins", () => {
       }),
     );
     const detail = container.querySelector<HTMLElement>(".plugins-detail")!;
-    expect(detail.closest("openclaw-modal-dialog")?.getAttribute("label")).toBe("Workboard");
+    expect(detail.closest("natesclaw-modal-dialog")?.getAttribute("label")).toBe("Workboard");
     expect(normalizedText(detail.querySelector(".plugins-detail__title"))).toContain("Workboard");
     expect(normalizedText(detail.querySelector(".plugins-detail__meta"))).toContain("workboard");
     detail.querySelectorAll<HTMLButtonElement>(".plugins-detail__actions button")[0]?.click();
@@ -533,7 +533,7 @@ describe("renderPlugins", () => {
           {
             score: 0.9,
             package: {
-              name: "@openclaw/calendar-plus",
+              name: "@natesclaw/calendar-plus",
               displayName: "Calendar Plus",
               family: "code-plugin",
               channel: "official",
@@ -567,7 +567,7 @@ describe("renderPlugins", () => {
     expect(link?.target).toBe("_blank");
 
     const result = container.querySelector<HTMLElement>(
-      '[data-package-name="@openclaw/calendar-plus"]',
+      '[data-package-name="@natesclaw/calendar-plus"]',
     );
     expect(result?.dataset.pluginSource).toBe("clawhub");
     expect(normalizedText(result)).toContain("Official");
@@ -575,9 +575,9 @@ describe("renderPlugins", () => {
     expect(normalizedText(result)).toContain("149.3K");
     expect(normalizedText(result)).toContain("Code plugin");
     result?.querySelector<HTMLButtonElement>('[aria-label="Install Calendar Plus"]')?.click();
-    expect(onInstall).toHaveBeenCalledWith(clawHubKey("@openclaw/calendar-plus"), {
+    expect(onInstall).toHaveBeenCalledWith(clawHubKey("@natesclaw/calendar-plus"), {
       source: "clawhub",
-      packageName: "@openclaw/calendar-plus",
+      packageName: "@natesclaw/calendar-plus",
     });
   });
 
@@ -616,7 +616,7 @@ describe("renderPlugins", () => {
   });
 
   it("renders row-local risk acknowledgement and busy state", () => {
-    const packageName = "@openclaw/calendar-plus";
+    const packageName = "@natesclaw/calendar-plus";
     const key = clawHubKey(packageName);
     const onInstall = vi.fn();
     const container = mount(

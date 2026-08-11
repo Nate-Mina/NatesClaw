@@ -1,15 +1,15 @@
 // Memory Core plugin module implements cli behavior.
 import type { Command } from "commander";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 import {
   formatDocsLink,
   formatHelpExamples,
   theme,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-cli";
+} from "natesclaw/plugin-sdk/memory-core-host-runtime-cli";
 import {
   parseStrictNonNegativeInteger,
   parseStrictPositiveInteger,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/number-runtime";
 import type {
   MemoryCommandOptions,
   MemoryPromoteCommandOptions,
@@ -137,48 +137,48 @@ export function registerMemoryCli(program: Command, hostOptions?: MemoryCoreRunt
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw memory status", "Show index and provider status."],
+          ["natesclaw memory status", "Show index and provider status."],
           [
-            "openclaw memory status --fix",
+            "natesclaw memory status --fix",
             "Repair stale recall locks and normalize promotion metadata.",
           ],
-          ["openclaw memory status --deep", "Probe embedding provider readiness."],
-          ["openclaw memory index --force", "Force a full reindex."],
-          ['openclaw memory search "meeting notes"', "Quick search using positional query."],
+          ["natesclaw memory status --deep", "Probe embedding provider readiness."],
+          ["natesclaw memory index --force", "Force a full reindex."],
+          ['natesclaw memory search "meeting notes"', "Quick search using positional query."],
           [
-            'openclaw memory search --query "deployment" --max-results 20',
+            'natesclaw memory search --query "deployment" --max-results 20',
             "Limit results for focused troubleshooting.",
           ],
           [
-            `openclaw memory promote --limit 10 --min-score ${DEFAULT_PROMOTION_MIN_SCORE}`,
+            `natesclaw memory promote --limit 10 --min-score ${DEFAULT_PROMOTION_MIN_SCORE}`,
             "Review weighted short-term candidates for long-term memory.",
           ],
           [
-            "openclaw memory promote --apply",
+            "natesclaw memory promote --apply",
             "Append top-ranked short-term candidates into MEMORY.md.",
           ],
           [
-            'openclaw memory promote-explain "router vlan"',
+            'natesclaw memory promote-explain "router vlan"',
             "Explain why a specific candidate would or would not promote.",
           ],
           [
-            "openclaw memory rem-harness --json",
+            "natesclaw memory rem-harness --json",
             "Preview REM reflections, candidate truths, and deep promotion output.",
           ],
           [
-            "openclaw memory rem-backfill --path ./memory",
+            "natesclaw memory rem-backfill --path ./memory",
             "Write grounded historical REM entries into DREAMS.md for UI review.",
           ],
           [
-            "openclaw memory rem-backfill --path ./memory --stage-short-term",
+            "natesclaw memory rem-backfill --path ./memory --stage-short-term",
             "Also seed durable grounded candidates into the live short-term promotion store.",
           ],
           [
-            "openclaw memory session-backfill --agent main --from 2026-01-01",
+            "natesclaw memory session-backfill --agent main --from 2026-01-01",
             "Preview trusted candidates from retained session history.",
           ],
-          ["openclaw memory status --json", "Output machine-readable JSON (good for scripts)."],
-        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/memory", "docs.openclaw.ai/cli/memory")}\n`,
+          ["natesclaw memory status --json", "Output machine-readable JSON (good for scripts)."],
+        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/memory", "docs.natesclaw.ai/cli/memory")}\n`,
     );
 
   memory

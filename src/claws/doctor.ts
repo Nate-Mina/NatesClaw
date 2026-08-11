@@ -1,25 +1,25 @@
 // Claw doctor diagnostics project the lifecycle ownership ledger into health findings.
 import { createHash } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import { listConfiguredMcpServers } from "../config/mcp-config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveDefaultCronStaggerMs } from "../cron/stagger.js";
 import type { CronJob } from "../cron/types.js";
 import type { HealthFinding } from "../flows/health-checks.js";
 import {
-  openExistingOpenClawStateDatabaseReadOnly,
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openExistingNatesclawStateDatabaseReadOnly,
+  openNatesclawStateDatabase,
+  type NatesclawStateDatabase,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import { isExperimentalClawsEnabled } from "./experimental.js";
 import { readClawStatus, type ClawStatusRecord } from "./lifecycle-state.js";
 
 const CLAW_STATE_CHECK_ID = "core/doctor/claws-state";
 
-type ClawDoctorOptions = OpenClawStateDatabaseOptions & {
-  cfg?: OpenClawConfig;
+type ClawDoctorOptions = NatesclawStateDatabaseOptions & {
+  cfg?: NatesclawConfig;
   sourceMcpServers?: Record<string, Record<string, unknown>>;
   listMcpServers?: typeof listConfiguredMcpServers;
   cronGateway?: {
@@ -107,7 +107,7 @@ function collectInstallFindings(
         path: `claws.${agentId}`,
         target: agentId,
         requirement: "Claw installs should complete or retain explicit partial ownership state",
-        fixHint: "Inspect `openclaw claws status` before retrying or removing this Claw.",
+        fixHint: "Inspect `natesclaw claws status` before retrying or removing this Claw.",
       }),
     );
   }
@@ -166,7 +166,7 @@ function collectInstallFindings(
         target: `${pkg.source}:${pkg.ref}@${pkg.version}`,
         requirement: "Claw package references should match canonical installed package state",
         fixHint:
-          "Inspect package state with `openclaw claws status` before updating or removing the Claw.",
+          "Inspect package state with `natesclaw claws status` before updating or removing the Claw.",
       }),
     );
   }
@@ -273,8 +273,8 @@ function tableExists(db: DatabaseSync, name: string): boolean {
   );
 }
 
-function orphanedAgentIds(options: OpenClawStateDatabaseOptions): string[] {
-  const { db } = openOpenClawStateDatabase(options);
+function orphanedAgentIds(options: NatesclawStateDatabaseOptions): string[] {
+  const { db } = openNatesclawStateDatabase(options);
   const installed = new Set<string>();
   if (tableExists(db, "claw_installs")) {
     for (const row of db /* sqlite-allow-raw: read-only Claw doctor root install inventory. */
@@ -333,9 +333,9 @@ export async function collectClawStateHealthFindings(
   if (!isExperimentalClawsEnabled(options.env ?? process.env)) {
     return [];
   }
-  let database: OpenClawStateDatabase | undefined;
+  let database: NatesclawStateDatabase | undefined;
   try {
-    database = await openExistingOpenClawStateDatabaseReadOnly(options);
+    database = await openExistingNatesclawStateDatabaseReadOnly(options);
     if (!database) {
       return [];
     }

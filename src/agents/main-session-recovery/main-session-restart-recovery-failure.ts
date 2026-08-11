@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import type { InternalSessionEntry as SessionEntry } from "../../config/sessions.js";
 import {
   loadSessionEntry,
@@ -6,7 +6,7 @@ import {
   type SessionTranscriptTurnLifecyclePatch,
 } from "../../config/sessions/session-accessor.js";
 import { appendAssistantMessageToSessionTranscript } from "../../config/sessions/transcript.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { GatewayRecoveryRuntime } from "../../gateway/server-instance-runtime.types.js";
 import { resolveAgentIdFromSessionKey } from "../../routing/session-key.js";
 import type { DeliveryContext } from "../../utils/delivery-context.shared.js";
@@ -112,7 +112,7 @@ async function claimMainRestartRecoveryTombstone(params: {
 }
 
 export async function tombstoneMainRestartRecoveryWithNotice(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   entry: SessionEntry;
   gatewayRuntime: GatewayRecoveryRuntime;
   observation: MainSessionRecoveryObservation;

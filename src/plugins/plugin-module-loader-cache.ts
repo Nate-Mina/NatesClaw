@@ -6,7 +6,7 @@ import type { createJiti } from "jiti";
 import { toSafeImportPath } from "../shared/import-specifier.js";
 import { tryNativeRequireJavaScriptModule } from "./native-module-require.js";
 import { PluginLruCache } from "./plugin-cache-primitives.js";
-import { installOpenClawInternalCorePackageNativeResolver } from "./plugin-sdk-native-resolver.js";
+import { installNatesclawInternalCorePackageNativeResolver } from "./plugin-sdk-native-resolver.js";
 import {
   buildPluginLoaderJitiOptions,
   createPluginLoaderModuleCacheKey,
@@ -33,13 +33,13 @@ type ResolvePluginModuleLoaderCacheEntryParams = {
   pluginSdkResolution?: PluginSdkResolutionPreference;
   cacheScopeKey?: string;
   sharedCacheScopeKey?: string;
-  transformOpenClawDependencies?: boolean;
+  transformNatesclawDependencies?: boolean;
 };
 type PluginModuleLoaderCacheEntry = {
   loaderFilename: string;
   aliasMap: Record<string, string>;
   tryNative: boolean;
-  transformOpenClawDependencies: boolean;
+  transformNatesclawDependencies: boolean;
   cacheKey: string;
   scopedCacheKey: string;
 };
@@ -165,8 +165,8 @@ function resolvePluginModuleLoaderCacheEntry(
       tryNative,
       aliasMap,
     });
-  const transformOpenClawDependencies = params.transformOpenClawDependencies ?? tryNative;
-  const cacheKey = `${moduleConfigCacheKey}\0transform-openclaw=${transformOpenClawDependencies ? "1" : "0"}`;
+  const transformNatesclawDependencies = params.transformNatesclawDependencies ?? tryNative;
+  const cacheKey = `${moduleConfigCacheKey}\0transform-natesclaw=${transformNatesclawDependencies ? "1" : "0"}`;
   const scopedCacheKey = `${loaderFilename}::${
     params.sharedCacheScopeKey ??
     (params.cacheScopeKey ? `${params.cacheScopeKey}::${cacheKey}` : cacheKey)
@@ -175,7 +175,7 @@ function resolvePluginModuleLoaderCacheEntry(
     loaderFilename,
     aliasMap,
     tryNative,
-    transformOpenClawDependencies,
+    transformNatesclawDependencies,
     cacheKey,
     scopedCacheKey,
   };
@@ -184,7 +184,7 @@ function resolvePluginModuleLoaderCacheEntry(
 function createLazySourceTransformLoader(params: {
   loaderFilename: string;
   aliasMap: Record<string, string>;
-  transformOpenClawDependencies: boolean;
+  transformNatesclawDependencies: boolean;
   createLoader?: PluginModuleLoaderFactory;
 }): () => PluginModuleLoader {
   let loadWithSourceTransform: PluginModuleLoader | undefined;
@@ -199,8 +199,8 @@ function createLazySourceTransformLoader(params: {
       params.loaderFilename,
       {
         ...jitiOptions,
-        nativeModules: params.transformOpenClawDependencies
-          ? jitiOptions.nativeModules.filter((moduleName) => moduleName !== "openclaw")
+        nativeModules: params.transformNatesclawDependencies
+          ? jitiOptions.nativeModules.filter((moduleName) => moduleName !== "natesclaw")
           : jitiOptions.nativeModules,
         tryNative: false,
       },
@@ -214,11 +214,11 @@ function createPluginModuleLoader(params: {
   loaderFilename: string;
   aliasMap: Record<string, string>;
   tryNative: boolean;
-  transformOpenClawDependencies: boolean;
+  transformNatesclawDependencies: boolean;
   createLoader?: PluginModuleLoaderFactory;
 }): PluginModuleLoader {
   // A declined native require can leave an ESM dependency in flight. The
-  // fallback must transform both the entry and OpenClaw SDK dependencies.
+  // fallback must transform both the entry and Natesclaw SDK dependencies.
   const getLoadWithSourceTransform = createLazySourceTransformLoader({
     ...params,
   });
@@ -281,12 +281,12 @@ export function getCachedPluginModuleLoader(
   }
   // Exact-key hits already own the native aliases installed with their loader;
   // reinstallation would rescan the host package on every cached request.
-  installOpenClawInternalCorePackageNativeResolver({ moduleUrl: params.importerUrl });
+  installNatesclawInternalCorePackageNativeResolver({ moduleUrl: params.importerUrl });
   const loader = createPluginModuleLoader({
     loaderFilename: cacheEntry.loaderFilename,
     aliasMap: cacheEntry.aliasMap,
     tryNative: cacheEntry.tryNative,
-    transformOpenClawDependencies: cacheEntry.transformOpenClawDependencies,
+    transformNatesclawDependencies: cacheEntry.transformNatesclawDependencies,
     ...(params.createLoader ? { createLoader: params.createLoader } : {}),
   });
   params.cache.set(cacheEntry.scopedCacheKey, loader);

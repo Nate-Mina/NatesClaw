@@ -22,7 +22,7 @@ import {
 import { copyToClipboard } from "../../../lib/clipboard.ts";
 import { type EditorId, openEditor } from "../../../lib/editor-links.ts";
 import { openExternalUrlSafe } from "../../../lib/open-external-url.ts";
-import { OpenClawLightDomElement } from "../../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../../lit/natesclaw-element.ts";
 import "./session-diff-panel.ts";
 import { renderChatSidebarEditorMenu } from "./chat-sidebar-editor-menu.ts";
 import type { FileEditorViewHandle } from "./file-editor-view.ts";
@@ -290,7 +290,7 @@ function renderFileCopyButton(action: FileCopyAction, controls?: FileViewControl
           : "chat.detailPanel.copyContents",
   );
   return html`
-    <openclaw-tooltip .content=${label}>
+    <natesclaw-tooltip .content=${label}>
       <button
         class="btn btn--sm sidebar-file-view__action ${feedback === "copied" ? "copied" : ""}"
         type="button"
@@ -299,7 +299,7 @@ function renderFileCopyButton(action: FileCopyAction, controls?: FileViewControl
       >
         ${feedback === "copied" ? icons.check : icons.copy}
       </button>
-    </openclaw-tooltip>
+    </natesclaw-tooltip>
   `;
 }
 
@@ -342,7 +342,7 @@ function renderFileSidebarContent(
                   : html`
                       ${content.edit
                         ? html`
-                            <openclaw-tooltip .content=${t("chat.detailPanel.editFile")}>
+                            <natesclaw-tooltip .content=${t("chat.detailPanel.editFile")}>
                               <button
                                 class="btn btn--sm sidebar-file-view__action"
                                 type="button"
@@ -352,10 +352,10 @@ function renderFileSidebarContent(
                               >
                                 ${icons.edit}
                               </button>
-                            </openclaw-tooltip>
+                            </natesclaw-tooltip>
                           `
                         : nothing}
-                      <openclaw-tooltip .content=${t("chat.detailPanel.searchInFile")}>
+                      <natesclaw-tooltip .content=${t("chat.detailPanel.searchInFile")}>
                         <button
                           class="btn btn--sm sidebar-file-view__action"
                           type="button"
@@ -365,10 +365,10 @@ function renderFileSidebarContent(
                         >
                           ${icons.search}
                         </button>
-                      </openclaw-tooltip>
+                      </natesclaw-tooltip>
                       ${controls.onReveal
                         ? html`
-                            <openclaw-tooltip .content=${t("chat.detailPanel.showInFiles")}>
+                            <natesclaw-tooltip .content=${t("chat.detailPanel.showInFiles")}>
                               <button
                                 class="btn btn--sm sidebar-file-view__action"
                                 type="button"
@@ -377,7 +377,7 @@ function renderFileSidebarContent(
                               >
                                 ${icons.folder}
                               </button>
-                            </openclaw-tooltip>
+                            </natesclaw-tooltip>
                           `
                         : nothing}
                       ${renderChatSidebarEditorMenu({
@@ -557,7 +557,7 @@ function renderMarkdownSidebar(props: MarkdownSidebarProps) {
         : html`<div class="sidebar-header">
             <div class="sidebar-title">${title}</div>
             <div class="sidebar-header__actions">
-              <openclaw-tooltip .content=${t("chat.detailPanel.close")}>
+              <natesclaw-tooltip .content=${t("chat.detailPanel.close")}>
                 <button
                   @click=${props.onClose}
                   class="btn"
@@ -566,7 +566,7 @@ function renderMarkdownSidebar(props: MarkdownSidebarProps) {
                 >
                   ${icons.x}
                 </button>
-              </openclaw-tooltip>
+              </natesclaw-tooltip>
             </div>
           </div> `}
       <div class="sidebar-content">
@@ -590,7 +590,7 @@ function renderMarkdownSidebar(props: MarkdownSidebarProps) {
             ? content.kind === "file"
               ? renderFileSidebarContent(content, props.onViewRawText, props.fileView)
               : content.kind === "session-diff"
-                ? html`<openclaw-session-diff .loader=${content.load}></openclaw-session-diff>`
+                ? html`<natesclaw-session-diff .loader=${content.load}></natesclaw-session-diff>`
                 : content.kind === "canvas"
                   ? html`
                       <div class="chat-tool-card__preview" data-kind="canvas">
@@ -687,7 +687,7 @@ function renderMarkdownSidebar(props: MarkdownSidebarProps) {
   `;
 }
 
-class ChatDetailPanel extends OpenClawLightDomElement {
+class ChatDetailPanel extends NatesclawLightDomElement {
   @property({ attribute: false }) content: SidebarContent | null = null;
   @property({ attribute: false }) loadFullMessage?: SidebarFullMessageLoader | null = null;
   @property() canvasPluginSurfaceUrl: string | null = null;
@@ -1388,7 +1388,7 @@ class ChatDetailPanel extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-chat-detail-panel")) {
-  customElements.define("openclaw-chat-detail-panel", ChatDetailPanel);
+if (!customElements.get("natesclaw-chat-detail-panel")) {
+  customElements.define("natesclaw-chat-detail-panel", ChatDetailPanel);
 }
 /* oxlint-disable max-lines -- TODO: split this grandfathered oversized file. */

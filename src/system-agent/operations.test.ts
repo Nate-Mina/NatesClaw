@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-// OpenClaw operation tests cover rescue operation planning and execution.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+// Natesclaw operation tests cover rescue operation planning and execution.
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { resetPluginStateStoreForTests } from "../plugin-state/plugin-state-store.js";
@@ -57,7 +57,7 @@ function expectRuntimeArg(value: unknown) {
 const mockConfig = vi.hoisted(() => {
   const initial = {};
   const state = {
-    path: "/tmp/openclaw.json",
+    path: "/tmp/natesclaw.json",
     exists: true,
     config: initial as TestConfig,
     sourceConfigBeforeMigrations: undefined as TestConfig | undefined,
@@ -85,7 +85,7 @@ const mockConfig = vi.hoisted(() => {
   };
   return {
     reset() {
-      state.path = "/tmp/openclaw.json";
+      state.path = "/tmp/natesclaw.json";
       state.exists = true;
       state.config = {};
       state.sourceConfigBeforeMigrations = undefined;
@@ -179,7 +179,7 @@ vi.mock("./overview.js", () => ({
       { id: "main", isDefault: true },
       { id: "work", isDefault: false, model: "openai/gpt-5.2" },
     ],
-    config: { path: "/tmp/openclaw.json", exists: true, valid: true, issues: [], hash: null },
+    config: { path: "/tmp/natesclaw.json", exists: true, valid: true, issues: [], hash: null },
     tools: {
       codex: { command: "codex", found: false, error: "not found" },
       claude: { command: "claude", found: false, error: "not found" },
@@ -193,8 +193,8 @@ vi.mock("./overview.js", () => ({
       error: "offline",
     },
     references: {
-      docsUrl: "https://docs.openclaw.ai",
-      sourceUrl: "https://github.com/openclaw/openclaw",
+      docsUrl: "https://docs.natesclaw.ai",
+      sourceUrl: "https://github.com/natesclaw/natesclaw",
     },
   })),
 }));
@@ -212,8 +212,8 @@ describe("parseSystemAgentOperation", () => {
     mockConfig.reset();
     mockDaemonRestart.mockClear();
     mockScheduleGatewayRestart.mockClear();
-    stateDirSnapshot = captureEnv(["OPENCLAW_STATE_DIR"]);
-    vi.stubEnv("OPENCLAW_TEST_FAST", "1");
+    stateDirSnapshot = captureEnv(["NATESCLAW_STATE_DIR"]);
+    vi.stubEnv("NATESCLAW_TEST_FAST", "1");
   });
 
   afterEach(() => {
@@ -303,22 +303,22 @@ describe("parseSystemAgentOperation", () => {
       kind: "plugin-search",
       query: "calendar sync",
     });
-    expect(parseSystemAgentOperation("install npm plugin @openclaw/discord")).toEqual({
+    expect(parseSystemAgentOperation("install npm plugin @natesclaw/discord")).toEqual({
       kind: "plugin-install",
-      spec: "npm:@openclaw/discord",
+      spec: "npm:@natesclaw/discord",
     });
-    expect(parseSystemAgentOperation("plugin install clawhub:openclaw-demo")).toEqual({
+    expect(parseSystemAgentOperation("plugin install clawhub:natesclaw-demo")).toEqual({
       kind: "plugin-install",
-      spec: "clawhub:openclaw-demo",
+      spec: "clawhub:natesclaw-demo",
     });
-    expect(parseSystemAgentOperation("plugin uninstall openclaw-demo")).toEqual({
+    expect(parseSystemAgentOperation("plugin uninstall natesclaw-demo")).toEqual({
       kind: "plugin-uninstall",
-      pluginId: "openclaw-demo",
+      pluginId: "natesclaw-demo",
     });
     expect(parseSystemAgentOperation("plugin install npm:@example/plugin")).toEqual({
       kind: "none",
       message:
-        "OpenClaw installs only ClawHub, bundled, or official-catalog plugins. Use `openclaw plugins install <spec>` in a trusted shell to review an arbitrary executable source.",
+        "Natesclaw installs only ClawHub, bundled, or official-catalog plugins. Use `natesclaw plugins install <spec>` in a trusted shell to review an arbitrary executable source.",
     });
   });
 
@@ -394,8 +394,8 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("rejects an explicit new-agent model before any config write or audit", async () => {
-    const tempDir = opTempDirs.make("openclaw-agent-model-rejected-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-agent-model-rejected-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const createAgent = vi.fn();
     expect(
@@ -421,18 +421,18 @@ describe("parseSystemAgentOperation", () => {
     ).rejects.toThrow("Retry without `model`; the new agent inherits");
 
     expect(createAgent).not.toHaveBeenCalled();
-    expect(lines.join("\n")).not.toContain("[openclaw] running: agents.create");
+    expect(lines.join("\n")).not.toContain("[natesclaw] running: agents.create");
     await expect(fs.access(path.join(tempDir, "audit", "system-agent.jsonl"))).rejects.toThrow();
   });
 
-  it("reserves the normalized OpenClaw agent identity before any write or audit", async () => {
-    const tempDir = opTempDirs.make("openclaw-agent-id-reserved-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+  it("reserves the normalized Natesclaw agent identity before any write or audit", async () => {
+    const tempDir = opTempDirs.make("natesclaw-agent-id-reserved-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const createAgent = vi.fn();
     const operation = {
       kind: "create-agent" as const,
-      agentId: "OpenClaw",
+      agentId: "Natesclaw",
       workspace: "/tmp/work",
     };
 
@@ -442,10 +442,10 @@ describe("parseSystemAgentOperation", () => {
         approved: true,
         deps: { createAgent },
       }),
-    ).rejects.toThrow('Agent id "openclaw" is reserved');
+    ).rejects.toThrow('Agent id "natesclaw" is reserved');
 
     expect(createAgent).not.toHaveBeenCalled();
-    expect(lines.join("\n")).not.toContain("[openclaw] running: agents.create");
+    expect(lines.join("\n")).not.toContain("[natesclaw] running: agents.create");
     await expect(fs.access(path.join(tempDir, "audit", "system-agent.jsonl"))).rejects.toThrow();
   });
 
@@ -485,7 +485,7 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("restarts its own Gateway despite hostile remote Gateway routing", async () => {
-    vi.stubEnv("OPENCLAW_GATEWAY_URL", "wss://another-gateway.example:9443");
+    vi.stubEnv("NATESCLAW_GATEWAY_URL", "wss://another-gateway.example:9443");
     mockConfig.setConfig({
       gateway: {
         mode: "remote",
@@ -513,8 +513,8 @@ describe("parseSystemAgentOperation", () => {
     { surface: "gateway" as const, summary: "Scheduled Gateway restart" },
     { surface: "cli" as const, summary: "Restarted Gateway" },
   ])("records an approved $surface restart truthfully", async ({ surface, summary }) => {
-    const tempDir = opTempDirs.make("openclaw-restart-scheduled-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-restart-scheduled-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runGatewayRestart = vi.fn(async () => true);
 
@@ -532,8 +532,8 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("does not report or audit a gateway restart that returned false", async () => {
-    const tempDir = opTempDirs.make("openclaw-restart-failed-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-restart-failed-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runGatewayRestart = vi.fn(async () => false);
 
@@ -544,13 +544,13 @@ describe("parseSystemAgentOperation", () => {
       }),
     ).rejects.toThrow("Gateway restart did not complete");
 
-    expect(lines.join("\n")).toContain("[openclaw] running: gateway.restart");
-    expect(lines.join("\n")).not.toContain("[openclaw] done: gateway.restart");
+    expect(lines.join("\n")).toContain("[natesclaw] running: gateway.restart");
+    expect(lines.join("\n")).not.toContain("[natesclaw] done: gateway.restart");
     await expect(fs.access(path.join(tempDir, "audit", "system-agent.jsonl"))).rejects.toThrow();
   });
 
   it("validates missing config without exiting the process", async () => {
-    mockConfig.missing("/tmp/openclaw.json");
+    mockConfig.missing("/tmp/natesclaw.json");
     const { runtime, lines } = createSystemAgentTestRuntime();
 
     const result = await executeSystemAgentOperation({ kind: "config-validate" }, runtime);
@@ -560,8 +560,8 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("applies config set through typed deps and writes an audit entry", async () => {
-    const tempDir = opTempDirs.make("openclaw-config-set-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-config-set-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runConfigSet = vi.fn(async () => {});
 
@@ -581,7 +581,7 @@ describe("parseSystemAgentOperation", () => {
       value: "19001",
       cliOptions: {},
     });
-    expect(lines.join("\n")).toContain("[openclaw] done: config.set");
+    expect(lines.join("\n")).toContain("[natesclaw] done: config.set");
     const audit = readLastAuditEntry();
     expectAuditRecord(
       audit,
@@ -595,8 +595,8 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("records SQLite audit state despite a retired audit-directory symlink", async () => {
-    const tempDir = opTempDirs.make("openclaw-audit-warning-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-audit-warning-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const redirectedAuditDir = path.join(tempDir, "redirected-audit");
     await fs.mkdir(redirectedAuditDir);
     await fs.symlink(redirectedAuditDir, path.join(tempDir, "audit"), "dir");
@@ -612,12 +612,12 @@ describe("parseSystemAgentOperation", () => {
     expect(result.applied).toBe(true);
     expect(runConfigSet).toHaveBeenCalledOnce();
     expect(readLastAuditEntry()).toMatchObject({ operation: "config.set" });
-    expect(lines.join("\n")).toContain("[openclaw] done: config.set");
+    expect(lines.join("\n")).toContain("[natesclaw] done: config.set");
   });
 
   it("applies SecretRef config set through typed deps and writes an audit entry", async () => {
-    const tempDir = opTempDirs.make("openclaw-config-ref-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-config-ref-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runConfigSet = vi.fn(async () => {});
 
@@ -626,7 +626,7 @@ describe("parseSystemAgentOperation", () => {
         kind: "config-set-ref",
         path: "gateway.auth.token",
         source: "env",
-        id: "OPENCLAW_GATEWAY_TOKEN",
+        id: "NATESCLAW_GATEWAY_TOKEN",
       },
       runtime,
       {
@@ -642,10 +642,10 @@ describe("parseSystemAgentOperation", () => {
       cliOptions: {
         refProvider: "default",
         refSource: "env",
-        refId: "OPENCLAW_GATEWAY_TOKEN",
+        refId: "NATESCLAW_GATEWAY_TOKEN",
       },
     });
-    expect(lines.join("\n")).toContain("[openclaw] done: config.setRef");
+    expect(lines.join("\n")).toContain("[natesclaw] done: config.setRef");
     const audit = readLastAuditEntry();
     expectAuditRecord(
       audit,
@@ -739,8 +739,8 @@ describe("parseSystemAgentOperation", () => {
       id: "OPENAI_API_KEY",
     },
   ])("rejects unverified inference-route write $path", async (operation) => {
-    const tempDir = opTempDirs.make("openclaw-route-write-refused-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-route-write-refused-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runConfigSet = vi.fn(async () => {});
 
@@ -751,10 +751,10 @@ describe("parseSystemAgentOperation", () => {
       }),
       // Denylisted roots cite their documented escalation; route paths point
       // at the verified set_default_model/onboard flows.
-    ).rejects.toThrow(/openclaw onboard|trusted shell/);
+    ).rejects.toThrow(/natesclaw onboard|trusted shell/);
 
     expect(runConfigSet).not.toHaveBeenCalled();
-    expect(lines.join("\n")).not.toContain("[openclaw] running:");
+    expect(lines.join("\n")).not.toContain("[natesclaw] running:");
     await expect(fs.access(path.join(tempDir, "audit", "system-agent.jsonl"))).rejects.toThrow();
   });
 
@@ -771,8 +771,8 @@ describe("parseSystemAgentOperation", () => {
       value: "false",
     },
   ])("allows approved operator-parity write $path", async (operation) => {
-    const tempDir = opTempDirs.make("openclaw-parity-write-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-parity-write-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime } = createSystemAgentTestRuntime();
     const runConfigSet = vi.fn(async () => {});
 
@@ -788,7 +788,7 @@ describe("parseSystemAgentOperation", () => {
   it("fails closed on plugin-entry writes when route ownership cannot be proven", async () => {
     // Same invariant as plugin_uninstall: without a readable config the entry
     // cannot be proven off the active inference route.
-    mockConfig.missing("/tmp/openclaw.json");
+    mockConfig.missing("/tmp/natesclaw.json");
     const { runtime } = createSystemAgentTestRuntime();
     const runConfigSet = vi.fn(async () => {});
 
@@ -803,8 +803,8 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("still blocks per-agent routing writes that hit the default agent", async () => {
-    const tempDir = opTempDirs.make("openclaw-default-agent-route-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-default-agent-route-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     mockConfig.setConfig({
       agents: { list: [{ id: "main", default: true }, { id: "helper" }] },
     });
@@ -817,7 +817,7 @@ describe("parseSystemAgentOperation", () => {
         runtime,
         { approved: true, deps: { runConfigSet } },
       ),
-    ).rejects.toThrow("openclaw onboard");
+    ).rejects.toThrow("natesclaw onboard");
     expect(runConfigSet).not.toHaveBeenCalled();
 
     // The same routing field on a non-default agent is an approved write.
@@ -831,8 +831,8 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("resolves numeric legacy list indices from the authored array order", async () => {
-    const tempDir = opTempDirs.make("openclaw-numeric-agent-route-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-numeric-agent-route-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     mockConfig.setResolvedConfig(
       {
         agents: {
@@ -857,7 +857,7 @@ describe("parseSystemAgentOperation", () => {
         runtime,
         { approved: true, deps: { runConfigSet } },
       ),
-    ).rejects.toThrow("openclaw onboard");
+    ).rejects.toThrow("natesclaw onboard");
     expect(runConfigSet).not.toHaveBeenCalled();
 
     const result = await executeSystemAgentOperation(
@@ -898,26 +898,26 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("installs plugins only after approval and audits the write", async () => {
-    const tempDir = opTempDirs.make("openclaw-plugin-install-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-plugin-install-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runPluginInstall = vi.fn(async (spec: string, pluginRuntime: RuntimeEnv) => {
       pluginRuntime.log(`installed ${spec}`);
     });
 
     const plan = await executeSystemAgentOperation(
-      { kind: "plugin-install", spec: "clawhub:openclaw-demo" },
+      { kind: "plugin-install", spec: "clawhub:natesclaw-demo" },
       runtime,
       { deps: { runPluginInstall } },
     );
     expectRecordFields(plan as unknown as Record<string, unknown>, {
       applied: false,
-      message: "Plan: install plugin clawhub:openclaw-demo. Say yes to apply.",
+      message: "Plan: install plugin clawhub:natesclaw-demo. Say yes to apply.",
     });
     expect(runPluginInstall).not.toHaveBeenCalled();
 
     const result = await executeSystemAgentOperation(
-      { kind: "plugin-install", spec: "clawhub:openclaw-demo" },
+      { kind: "plugin-install", spec: "clawhub:natesclaw-demo" },
       runtime,
       {
         approved: true,
@@ -928,17 +928,17 @@ describe("parseSystemAgentOperation", () => {
     expect(result.applied).toBe(true);
 
     const installCall = requireFirstMockCall(runPluginInstall, "runPluginInstall");
-    expect(installCall[0]).toBe("clawhub:openclaw-demo");
+    expect(installCall[0]).toBe("clawhub:natesclaw-demo");
     expectRuntimeArg(installCall[1]);
-    expect(lines.join("\n")).toContain("[openclaw] done: plugin.install");
+    expect(lines.join("\n")).toContain("[natesclaw] done: plugin.install");
     const audit = readLastAuditEntry();
     expectAuditRecord(
       audit,
       {
         operation: "plugin.install",
-        summary: "Installed plugin clawhub:openclaw-demo",
+        summary: "Installed plugin clawhub:natesclaw-demo",
       },
-      { rescue: true, spec: "clawhub:openclaw-demo" },
+      { rescue: true, spec: "clawhub:natesclaw-demo" },
     );
   });
 
@@ -982,45 +982,45 @@ describe("parseSystemAgentOperation", () => {
   });
 
   it("uninstalls a non-route plugin only after approval and audits the write", async () => {
-    const tempDir = opTempDirs.make("openclaw-plugin-uninstall-");
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempDir);
+    const tempDir = opTempDirs.make("natesclaw-plugin-uninstall-");
+    setTestEnvValue("NATESCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runPluginUninstall = vi.fn(async (pluginId: string, pluginRuntime: RuntimeEnv) => {
       pluginRuntime.log(`uninstalled ${pluginId}`);
     });
 
     const plan = await executeSystemAgentOperation(
-      { kind: "plugin-uninstall", pluginId: "openclaw-demo" },
+      { kind: "plugin-uninstall", pluginId: "natesclaw-demo" },
       runtime,
       { deps: { runPluginUninstall } },
     );
     expectRecordFields(plan as unknown as Record<string, unknown>, {
       applied: false,
-      message: "Plan: uninstall plugin openclaw-demo. Say yes to apply.",
+      message: "Plan: uninstall plugin natesclaw-demo. Say yes to apply.",
     });
     expect(runPluginUninstall).not.toHaveBeenCalled();
 
     const result = await executeSystemAgentOperation(
-      { kind: "plugin-uninstall", pluginId: "openclaw-demo" },
+      { kind: "plugin-uninstall", pluginId: "natesclaw-demo" },
       runtime,
       { approved: true, deps: { runPluginUninstall } },
     );
     expect(result.applied).toBe(true);
     const uninstallCall = requireFirstMockCall(runPluginUninstall, "runPluginUninstall");
-    expect(uninstallCall[0]).toBe("openclaw-demo");
+    expect(uninstallCall[0]).toBe("natesclaw-demo");
     expectRuntimeArg(uninstallCall[1]);
-    expect(lines.join("\n")).toContain("[openclaw] done: plugin.uninstall");
+    expect(lines.join("\n")).toContain("[natesclaw] done: plugin.uninstall");
     expect(lines.join("\n")).toContain("Restart the Gateway to apply plugin changes.");
   });
 
   it("refuses plugin uninstall when it cannot prove inference survives", async () => {
     // Fail closed: without a readable config the route cannot be proven safe.
-    mockConfig.missing("/tmp/openclaw.json");
+    mockConfig.missing("/tmp/natesclaw.json");
     const { runtime, lines } = createSystemAgentTestRuntime();
     const runPluginUninstall = vi.fn();
 
     const result = await executeSystemAgentOperation(
-      { kind: "plugin-uninstall", pluginId: "openclaw-demo" },
+      { kind: "plugin-uninstall", pluginId: "natesclaw-demo" },
       runtime,
       { approved: true, deps: { runPluginUninstall } },
     );
@@ -1029,6 +1029,6 @@ describe("parseSystemAgentOperation", () => {
     });
     expect(runPluginUninstall).not.toHaveBeenCalled();
     expect(lines.join("\n")).toContain("could remove the provider behind");
-    expect(lines.join("\n")).toContain("openclaw plugins uninstall openclaw-demo");
+    expect(lines.join("\n")).toContain("natesclaw plugins uninstall natesclaw-demo");
   });
 });

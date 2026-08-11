@@ -2,18 +2,18 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-  startOpenClawCrablineAdapter,
-  type OpenClawCrablineChannelDriverSelection,
-  type OpenClawCrablineInbound,
-  type StartedOpenClawCrablineAdapter,
-} from "@openclaw/crabline";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+  startNatesclawCrablineAdapter,
+  type NatesclawCrablineChannelDriverSelection,
+  type NatesclawCrablineInbound,
+  type StartedNatesclawCrablineAdapter,
+} from "@natesclaw/crabline";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   isRecord,
   normalizeStringifiedOptionalString,
   readStringValue,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { createQaBusState, type QaBusState } from "./bus-state.js";
 import {
   createCrablineProviderDelivery,
@@ -52,7 +52,7 @@ type QaCrablineTransportState = QaTransportState & {
   rememberProviderTarget: (providerTargetKey: string, qaTarget: string) => void;
 };
 
-function normalizeCrablineSignalGatewayConfig(config: OpenClawConfig): OpenClawConfig {
+function normalizeCrablineSignalGatewayConfig(config: NatesclawConfig): NatesclawConfig {
   const signal = config.channels?.signal as unknown;
   if (!isRecord(signal)) {
     return config;
@@ -80,7 +80,7 @@ function normalizeCrablineSignalGatewayConfig(config: OpenClawConfig): OpenClawC
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function formatLogicalQaTarget({ conversation, threadId }: QaBusInboundMessageInput) {
@@ -138,8 +138,8 @@ function readTelegramLifecycleEvent(params: {
       id: chatId,
       kind: chatId.startsWith("-") ? "group" : "direct",
     },
-    senderId: "openclaw",
-    senderName: "OpenClaw QA",
+    senderId: "natesclaw",
+    senderName: "Natesclaw QA",
     text,
     timestamp: Date.now(),
     ...(threadId ? { threadId } : {}),
@@ -162,8 +162,8 @@ function readTelegramLifecycleEvent(params: {
 }
 
 async function postCrablineInbound(params: {
-  adapter: StartedOpenClawCrablineAdapter;
-  providerInbound: OpenClawCrablineInbound;
+  adapter: StartedNatesclawCrablineAdapter;
+  providerInbound: NatesclawCrablineInbound;
 }) {
   const { response, release } = await fetchWithSsrFGuard({
     url: params.adapter.manifest.endpoints.adminInboundUrl,
@@ -207,7 +207,7 @@ async function postCrablineInbound(params: {
 }
 
 function createCrablineState(params: {
-  adapter: StartedOpenClawCrablineAdapter;
+  adapter: StartedNatesclawCrablineAdapter;
   state: QaBusState;
 }): QaCrablineTransportState {
   const baseState = params.state;
@@ -299,8 +299,8 @@ function createCrablineState(params: {
 }
 
 class QaCrablineTransport extends QaStateBackedTransportAdapter {
-  readonly #adapter: StartedOpenClawCrablineAdapter;
-  readonly #selection: OpenClawCrablineChannelDriverSelection;
+  readonly #adapter: StartedNatesclawCrablineAdapter;
+  readonly #selection: NatesclawCrablineChannelDriverSelection;
   readonly #transportPolicy?: QaTransportPolicy;
   readonly #state: QaCrablineTransportState;
   readonly sendNativeCommand?: (input: QaTransportNativeCommandInput) => Promise<void>;
@@ -310,9 +310,9 @@ class QaCrablineTransport extends QaStateBackedTransportAdapter {
   }>;
 
   constructor(params: {
-    adapter: StartedOpenClawCrablineAdapter;
+    adapter: StartedNatesclawCrablineAdapter;
     transportPolicy?: QaTransportPolicy;
-    selection: OpenClawCrablineChannelDriverSelection;
+    selection: NatesclawCrablineChannelDriverSelection;
     state: QaCrablineTransportState;
   }) {
     super({
@@ -345,7 +345,7 @@ class QaCrablineTransport extends QaStateBackedTransportAdapter {
   }
 
   createGatewayConfig = (params: { baseUrl: string }): QaTransportGatewayConfig => {
-    const rawConfig = this.#adapter.createGatewayConfig(params) as OpenClawConfig;
+    const rawConfig = this.#adapter.createGatewayConfig(params) as NatesclawConfig;
     const config =
       this.#selection.channel === "signal"
         ? normalizeCrablineSignalGatewayConfig(rawConfig)
@@ -400,14 +400,14 @@ class QaCrablineTransport extends QaStateBackedTransportAdapter {
   handleAction = async (_params: {
     action: QaTransportActionName;
     args: Record<string, unknown>;
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string | null;
   }) => {
     throw new Error(`Crabline local-provider transport does not support ${_params.action} yet.`);
   };
 
   createReportNotes = (_params: QaTransportReportParams) => [
-    `Runs OpenClaw's ${this.#selection.channel} channel plugin against a Crabline local provider server.`,
+    `Runs Natesclaw's ${this.#selection.channel} channel plugin against a Crabline local provider server.`,
     "No live channel service or external credential lease is required.",
   ];
 
@@ -419,7 +419,7 @@ class QaCrablineTransport extends QaStateBackedTransportAdapter {
 export async function createQaCrablineTransportAdapter(params: {
   outputDir: string;
   transportPolicy?: QaTransportPolicy;
-  selection: OpenClawCrablineChannelDriverSelection;
+  selection: NatesclawCrablineChannelDriverSelection;
   state?: QaBusState;
 }) {
   const requiresTelegramPolicy =
@@ -438,10 +438,10 @@ export async function createQaCrablineTransportAdapter(params: {
   );
   await fs.mkdir(path.dirname(recorderPath), { recursive: true });
   let observeEvent = (_event: unknown) => {};
-  const adapter = await startOpenClawCrablineAdapter({
+  const adapter = await startNatesclawCrablineAdapter({
     channel: params.selection.channel,
     onEvent: (event) => observeEvent(event),
-    openclawConfig: {},
+    natesclawConfig: {},
     recorderPath,
   });
 

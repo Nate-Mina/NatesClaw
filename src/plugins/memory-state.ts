@@ -1,6 +1,6 @@
 /** Registry state for plugin memory runtimes, prompt supplements, and flush planning. */
 import { AsyncLocalStorage } from "node:async_hooks";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import type {
   MemoryCorpusSupplement,
@@ -257,7 +257,7 @@ export function listMemoryPromptPreparations(): MemoryPromptPreparationRegistrat
   return [...requireActivePluginRegistry().memoryPromptPreparations];
 }
 export function resolveMemoryFlushPlan(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   nowMs?: number;
 }): MemoryFlushPlan | null {
   return getMemoryCapability()?.capability.flushPlanResolver?.(params) ?? null;
@@ -302,7 +302,7 @@ function isValidMemoryPublicArtifact(
 }
 
 export async function listActiveMemoryPublicArtifacts(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 }): Promise<MemoryPluginPublicArtifact[]> {
   const capability = getMemoryCapability();
   const pluginId = capability?.pluginId;

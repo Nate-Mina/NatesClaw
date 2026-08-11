@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import type { RouteLocation, RouterState } from "@openclaw/uirouter";
+import type { RouteLocation, RouterState } from "@natesclaw/uirouter";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { RouteId } from "../app-routes.ts";
 import { createStorageMock } from "../test-helpers/storage.ts";
@@ -29,7 +29,7 @@ function createSessionRecoveryShell(params: {
 }) {
   const replace = vi.fn();
   const setSessionKey = vi.fn();
-  const shell = document.createElement("openclaw-app-shell") as unknown as DeletedSessionShell;
+  const shell = document.createElement("natesclaw-app-shell") as unknown as DeletedSessionShell;
   shell.runtime = {
     context: {
       basePath: "",
@@ -68,7 +68,7 @@ afterEach(() => {
   resetAppHostTestGlobals();
 });
 
-describe("OpenClaw shell deleted-session recovery", () => {
+describe("Natesclaw shell deleted-session recovery", () => {
   it("replaces an unresolvable session with the owning agent's main chat", () => {
     const { replace, setSessionKey, shell } = createSessionRecoveryShell({
       activeSessionKey: deletedKey,

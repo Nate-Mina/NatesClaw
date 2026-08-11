@@ -1,8 +1,8 @@
 // Mattermost tests cover slash http.send config plugin behavior.
 import { ServerResponse, type IncomingMessage } from "node:http";
 import { PassThrough } from "node:stream";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/core";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedMattermostAccount } from "./accounts.js";
 
@@ -235,7 +235,7 @@ describe("slash-http cfg threading", () => {
           botToken: "exec:secret-ref",
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
       cfg,
@@ -289,7 +289,7 @@ describe("slash-http cfg threading", () => {
 
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       runtime: {} as RuntimeEnv,
       registeredCommands: [
         {
@@ -324,7 +324,7 @@ describe("slash-http cfg threading", () => {
     });
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       runtime: {} as RuntimeEnv,
       registeredCommands: [
         {
@@ -369,7 +369,7 @@ describe("slash-http cfg threading", () => {
 
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       runtime: {} as RuntimeEnv,
       registeredCommands: [
         {

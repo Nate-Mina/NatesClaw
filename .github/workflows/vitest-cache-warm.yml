@@ -17,7 +17,7 @@ jobs:
   warm:
     # Dependency snapshots are serialized before main CI fanout. This workflow
     # writes only the transform and compile caches from scheduled/trusted runs.
-    if: github.repository == 'openclaw/openclaw'
+    if: github.repository == 'natesclaw/natesclaw'
     runs-on: blacksmith-8vcpu-ubuntu-2404
     timeout-minutes: 30
     steps:
@@ -51,8 +51,8 @@ jobs:
           appendFileSync(
             process.env.GITHUB_ENV,
             [
-              `OPENCLAW_NODE_TEST_GROUPS_JSON=${JSON.stringify(groups)}`,
-              "OPENCLAW_NODE_TEST_PLAN_CONCURRENCY=1",
+              `NATESCLAW_NODE_TEST_GROUPS_JSON=${JSON.stringify(groups)}`,
+              "NATESCLAW_NODE_TEST_PLAN_CONCURRENCY=1",
             ].join("\n") + "\n",
           );
           EOF

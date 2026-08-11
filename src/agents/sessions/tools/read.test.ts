@@ -68,7 +68,7 @@ describe("read tool", () => {
   });
 
   it("reads managed inbound media refs as image files", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-read-media-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-read-media-"));
     const mediaId = `read-tool-${Date.now()}-${Math.random().toString(36).slice(2)}.png`;
     const mediaPath = path.join(stateDir, "media", "inbound", mediaId);
     await fs.mkdir(path.dirname(mediaPath), { recursive: true });
@@ -76,7 +76,7 @@ describe("read tool", () => {
 
     const tool = createReadToolDefinition("/workspace", { autoResizeImages: false });
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ NATESCLAW_STATE_DIR: stateDir }, async () => {
         const result = await tool.execute(
           "call-1",
           { path: `media://inbound/${mediaId}` },
@@ -102,7 +102,7 @@ describe("read tool", () => {
   });
 
   it("converts BMP files to PNG attachments", async () => {
-    const tempDir = tempDirs.make("openclaw-read-bmp-");
+    const tempDir = tempDirs.make("natesclaw-read-bmp-");
     const filePath = path.join(tempDir, "pixel.bmp");
     await fs.writeFile(filePath, createTinyBmp());
     const tool = createReadToolDefinition(tempDir, { autoResizeImages: false });
@@ -124,7 +124,7 @@ describe("read tool", () => {
   });
 
   it("explains that directory paths must be listed before reading a file", async () => {
-    const tempDir = tempDirs.make("openclaw-read-directory-");
+    const tempDir = tempDirs.make("natesclaw-read-directory-");
     const tool = createReadToolDefinition(tempDir);
 
     await expect(
@@ -137,7 +137,7 @@ describe("read tool", () => {
   it.runIf(process.platform !== "win32")(
     "refuses a FIFO without waiting for a writer",
     async () => {
-      const tempDir = tempDirs.make("openclaw-read-fifo-");
+      const tempDir = tempDirs.make("natesclaw-read-fifo-");
       const fifoPath = path.join(tempDir, "live.pipe");
       expect(spawnSync("mkfifo", [fifoPath]).status).toBe(0);
       const tool = createReadToolDefinition(tempDir);
@@ -159,7 +159,7 @@ describe("read tool", () => {
       if (outcome.kind === "timeout") {
         const writer = spawn(
           "/bin/sh",
-          ["-c", 'while :; do printf x > "$1"; done', "openclaw-read-fifo", fifoPath],
+          ["-c", 'while :; do printf x > "$1"; done', "natesclaw-read-fifo", fifoPath],
           { stdio: "ignore" },
         );
         const writerExit = new Promise<void>((resolve) => {
@@ -183,7 +183,7 @@ describe("read tool", () => {
   );
 
   it("describes empty files instead of returning blank content", async () => {
-    const tempDir = tempDirs.make("openclaw-read-empty-");
+    const tempDir = tempDirs.make("natesclaw-read-empty-");
     await fs.writeFile(path.join(tempDir, "empty.txt"), "");
     const tool = createReadToolDefinition(tempDir);
 
@@ -221,7 +221,7 @@ describe("read tool", () => {
     ["LF", "\n"],
     ["CRLF", "\r\n"],
   ])("describes %s-only files instead of returning blank content", async (_label, contents) => {
-    const tempDir = tempDirs.make("openclaw-read-blank-line-");
+    const tempDir = tempDirs.make("natesclaw-read-blank-line-");
     await fs.writeFile(path.join(tempDir, "blank.txt"), contents);
     const tool = createReadToolDefinition(tempDir);
 
@@ -277,7 +277,7 @@ describe("read tool", () => {
   });
 
   it("resolves one Unicode-equivalent filename and names the correction", async () => {
-    const tempDir = tempDirs.make("openclaw-read-unicode-");
+    const tempDir = tempDirs.make("natesclaw-read-unicode-");
     const storedName = "re\u0301sume\u0301 3.04\u202fPM d\u2019accord.txt";
     await fs.writeFile(path.join(tempDir, storedName), "matched");
     const tool = createReadToolDefinition(tempDir);
@@ -295,7 +295,7 @@ describe("read tool", () => {
   });
 
   it("keeps an exact Unicode spelling ahead of equivalent filenames", async () => {
-    const tempDir = tempDirs.make("openclaw-read-unicode-exact-");
+    const tempDir = tempDirs.make("natesclaw-read-unicode-exact-");
     await fs.writeFile(path.join(tempDir, "report\u00a0.txt"), "exact");
     await fs.writeFile(path.join(tempDir, "report .txt"), "equivalent");
     const tool = createReadToolDefinition(tempDir);
@@ -312,7 +312,7 @@ describe("read tool", () => {
   });
 
   it("refuses ambiguous Unicode-equivalent filenames", async () => {
-    const tempDir = tempDirs.make("openclaw-read-unicode-ambiguous-");
+    const tempDir = tempDirs.make("natesclaw-read-unicode-ambiguous-");
     await fs.writeFile(path.join(tempDir, "d'accord.txt"), "straight");
     await fs.writeFile(path.join(tempDir, "d\u2019accord.txt"), "curly");
     const tool = createReadToolDefinition(tempDir);
@@ -329,7 +329,7 @@ describe("read tool", () => {
   });
 
   it("suggests a close filename without reading it", async () => {
-    const tempDir = tempDirs.make("openclaw-read-suggestion-");
+    const tempDir = tempDirs.make("natesclaw-read-suggestion-");
     await fs.writeFile(path.join(tempDir, "AGENTS.md"), "instructions");
     const tool = createReadToolDefinition(tempDir);
 
@@ -423,7 +423,7 @@ describe("read tool", () => {
   });
 
   it("uses the shared Windows decoder for local filesystem reads", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-read-encoding-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-read-encoding-"));
     const filePath = path.join(tempDir, "legacy.txt");
     const legacyBytes = Buffer.from([0xc4, 0xe3, 0xba, 0xc3]);
     decodeWindowsTextFileBufferMock.mockReturnValueOnce("decoded legacy text");

@@ -1,16 +1,16 @@
-import type { Context } from "openclaw/plugin-sdk/llm";
+import type { Context } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import "./inference-provider.js";
 
 const { mapContextToLlamaChatHistory, mapToolsToLlamaFunctions } = (
   globalThis as Record<PropertyKey, unknown>
-)[Symbol.for("openclaw.llamaCppInferenceTestApi")] as {
+)[Symbol.for("natesclaw.llamaCppInferenceTestApi")] as {
   mapContextToLlamaChatHistory: (context: Context) => unknown[];
   mapToolsToLlamaFunctions: (context: Context) => Record<string, unknown> | undefined;
 };
 
 describe("llama.cpp inference mappings", () => {
-  it("maps OpenClaw history and tool results into the model chat template history", () => {
+  it("maps Natesclaw history and tool results into the model chat template history", () => {
     const context = {
       systemPrompt: "Be concise.",
       messages: [

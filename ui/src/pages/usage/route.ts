@@ -1,4 +1,4 @@
-import { definePage } from "@openclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import type { CostUsageSummary } from "../../api/types.ts";
 import { routePageSpec } from "../../app-route-paths.ts";
@@ -95,6 +95,6 @@ export const page = definePage({
     import("./usage-page.ts").then(() => ({
       header: true,
       render: (data: UsageRouteData | undefined) =>
-        html`<openclaw-usage-page .routeData=${data}></openclaw-usage-page>`,
+        html`<natesclaw-usage-page .routeData=${data}></natesclaw-usage-page>`,
     })),
 });

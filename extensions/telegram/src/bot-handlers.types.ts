@@ -1,13 +1,13 @@
 import type { Bot, Context } from "grammy";
 import type {
   ChannelGroupPolicy,
-  OpenClawConfig,
+  NatesclawConfig,
   TelegramAccountConfig,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import type {
   TelegramMediaRef,
@@ -25,7 +25,7 @@ import type { TelegramTransport } from "./fetch.js";
 import type { TelegramReplyChainEntry } from "./message-cache.js";
 
 export type TelegramMessageProcessorTurnContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   telegramCfg: TelegramAccountConfig;
   onDispatchStart?: () => Promise<void> | void;
   spooledReplayAbortSignal?: AbortSignal;
@@ -71,7 +71,7 @@ type TelegramHandlerLogger = {
 };
 
 export type RegisterTelegramHandlerParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   bot: Bot;
   mediaMaxBytes: number;
@@ -80,19 +80,19 @@ export type RegisterTelegramHandlerParams = {
   runtime: RuntimeEnv;
   telegramCfg: TelegramAccountConfig;
   telegramDeps: TelegramBotDeps;
-  resolveGroupPolicy: (chatId: string | number, cfg: OpenClawConfig) => ChannelGroupPolicy;
+  resolveGroupPolicy: (chatId: string | number, cfg: NatesclawConfig) => ChannelGroupPolicy;
   resolveGroupActivation: (params: {
     chatId: string | number;
     agentId?: string;
     messageThreadId?: number;
     sessionKey?: string;
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
   }) => boolean | undefined;
-  resolveGroupRequireMention: (chatId: string | number, cfg: OpenClawConfig) => boolean;
+  resolveGroupRequireMention: (chatId: string | number, cfg: NatesclawConfig) => boolean;
   resolveTelegramGroupConfig: (
     chatId: string | number,
     messageThreadId: number | undefined,
-    cfg: OpenClawConfig,
+    cfg: NatesclawConfig,
   ) => TelegramResolvedGroupConfig;
   shouldSkipUpdate: (ctx: TelegramUpdateKeyContext) => boolean;
   processMessage: ProcessTelegramMessage;

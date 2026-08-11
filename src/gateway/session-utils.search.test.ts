@@ -3,14 +3,14 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { afterEach, beforeAll, describe, expect, test } from "vitest";
 import { ANTHROPIC_CONTEXT_1M_TOKENS } from "../agents/context-resolution.js";
 import {
   addSubagentRunForTests,
   resetSubagentRegistryForTests,
 } from "../agents/subagents/registry/subagent-registry.test-helpers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 import {
   appendTranscriptMessageSync,
@@ -18,8 +18,8 @@ import {
 } from "../config/sessions/session-accessor.js";
 import { resetAgentEventsForTest } from "../infra/agent-events.js";
 import { registerAgentRunContext } from "../infra/agent-run-registry.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import {
   buildGatewaySessionInfo,
   filterAndSortSessionEntries,
@@ -63,7 +63,7 @@ const FREE_OPENAI_USAGE: TranscriptUsageFixture = {
 function createModelDefaultsConfig(params: {
   primary: string;
   models?: Record<string, Record<string, never>>;
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     agents: {
       defaults: {
@@ -71,17 +71,17 @@ function createModelDefaultsConfig(params: {
         models: params.models,
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function closeSessionSqliteDatabasesForTest(): void {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
 }
 
 function createLegacyRuntimeListConfig(
   models?: Record<string, Record<string, never>>,
-): OpenClawConfig {
+): NatesclawConfig {
   return createModelDefaultsConfig({
     primary: "google-gemini-cli/gemini-3.1-pro-preview",
     ...(models ? { models } : {}),
@@ -98,7 +98,7 @@ function createLegacyRuntimeStore(model: string): Record<string, SessionEntry> {
   };
 }
 
-function buildLegacyRuntimeRow(cfg: OpenClawConfig, model: string) {
+function buildLegacyRuntimeRow(cfg: NatesclawConfig, model: string) {
   const store = createLegacyRuntimeStore(model);
   return buildGatewaySessionInfo({
     cfg,
@@ -113,7 +113,7 @@ function createOpenAiPricingConfig(params: {
   id: string;
   label: string;
   cost: { input: number; output: number; cacheRead: number; cacheWrite: number };
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     session: { mainKey: "main" },
     agents: { list: [{ id: "main", default: true }] },
@@ -131,7 +131,7 @@ function createOpenAiPricingConfig(params: {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as NatesclawConfig;
 }
 
 type DefaultTranscriptFixtureParams<T> = {
@@ -206,7 +206,7 @@ const withAnthropicTranscriptFixture = <T>(params: DefaultTranscriptFixtureParam
 const withFreeOpenAiTranscriptFixture = <T>(params: DefaultTranscriptFixtureParams<T>) =>
   withTranscriptFixture(FREE_OPENAI_USAGE, params);
 
-function createAnthropicContext1mConfig(): OpenClawConfig {
+function createAnthropicContext1mConfig(): NatesclawConfig {
   return {
     session: { mainKey: "main" },
     agents: {
@@ -217,11 +217,11 @@ function createAnthropicContext1mConfig(): OpenClawConfig {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as NatesclawConfig;
 }
 
 function listSingleSession(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   storePath: string;
   key: string;
   entry: SessionEntry;
@@ -236,7 +236,7 @@ function listSingleSession(params: {
   });
 }
 
-function listMainSession(params: { cfg: OpenClawConfig; storePath: string; entry: SessionEntry }) {
+function listMainSession(params: { cfg: NatesclawConfig; storePath: string; entry: SessionEntry }) {
   return listSingleSession({
     cfg: params.cfg,
     storePath: params.storePath,
@@ -386,7 +386,7 @@ describe("listSessionsFromStore search", () => {
           updatedAt: Date.now(),
         } as SessionEntry,
       },
-      storePath: "/tmp/openclaw-session-search-warm.json",
+      storePath: "/tmp/natesclaw-session-search-warm.json",
       opts: { search: "anthropic" },
     });
   });
@@ -416,7 +416,7 @@ describe("listSessionsFromStore search", () => {
   const baseCfg = {
     session: { mainKey: "main" },
     agents: { list: [{ id: "main", default: true }] },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 
   const makeStore = (): Record<string, SessionEntry> => ({
     "agent:main:work-project": {
@@ -441,7 +441,7 @@ describe("listSessionsFromStore search", () => {
 
   function listSearchSessions(params: {
     opts: Parameters<typeof listSessionsFromStore>[0]["opts"];
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     store?: Record<string, SessionEntry>;
   }) {
     return listSessionsFromStore({
@@ -452,7 +452,7 @@ describe("listSessionsFromStore search", () => {
     });
   }
 
-  function listConfiguredMainSession(cfg: OpenClawConfig, entry: SessionEntry) {
+  function listConfiguredMainSession(cfg: NatesclawConfig, entry: SessionEntry) {
     return listSearchSessions({
       cfg,
       store: mainSessionStore(entry),
@@ -723,7 +723,7 @@ describe("listSessionsFromStore search", () => {
 
   test("prefers persisted estimated session cost from the store", async () => {
     await withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-store-cost-",
+      prefix: "natesclaw-session-utils-store-cost-",
       run: ({ storePath, now }) => {
         const result = listMainSession({
           cfg: baseCfg,
@@ -754,7 +754,7 @@ describe("listSessionsFromStore search", () => {
 
   test("falls back to transcript usage for totalTokens and zero estimatedCostUsd", async () => {
     await withFreeOpenAiTranscriptFixture({
-      prefix: "openclaw-session-utils-zero-cost-",
+      prefix: "natesclaw-session-utils-zero-cost-",
       run: ({ storePath, now }) => {
         const result = listMainSession({
           cfg: baseCfg,
@@ -774,7 +774,7 @@ describe("listSessionsFromStore search", () => {
 
   test("falls back to transcript usage for totalTokens and estimatedCostUsd, and derives contextTokens from the resolved model", async () => {
     await withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-",
+      prefix: "natesclaw-session-utils-",
       run: ({ storePath, now }) => {
         const result = listMainSession({
           cfg: createAnthropicContext1mConfig(),
@@ -792,7 +792,7 @@ describe("listSessionsFromStore search", () => {
 
   test("chat history session metadata keeps model context and projects a catalog-pinned harness", async () => {
     await withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-info-context-",
+      prefix: "natesclaw-session-info-context-",
       run: ({ storePath, now }) => {
         const entry: SessionEntry = {
           sessionId: MAIN_SESSION_ID,
@@ -819,7 +819,7 @@ describe("listSessionsFromStore search", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig,
+          } as unknown as NatesclawConfig,
           storePath,
           key: MAIN_SESSION_KEY,
           entry,
@@ -838,7 +838,7 @@ describe("listSessionsFromStore search", () => {
 
   test("uses subagent run model immediately for child sessions while transcript usage fills live totals", async () => {
     await withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-subagent-",
+      prefix: "natesclaw-session-utils-subagent-",
       transcriptId: "sess-child",
       run: ({ storePath, now }) => {
         registerRunningSubagent({
@@ -868,7 +868,7 @@ describe("listSessionsFromStore search", () => {
 
   test("keeps a running subagent model when transcript fallback still reflects an older run", async () => {
     await withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-subagent-stale-model-",
+      prefix: "natesclaw-session-utils-subagent-stale-model-",
       transcriptId: "sess-child-stale",
       run: ({ storePath, now }) => {
         registerRunningSubagent({
@@ -898,7 +898,7 @@ describe("listSessionsFromStore search", () => {
 
   test("keeps the selected override model when runtime identity was intentionally cleared", async () => {
     await withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-cleared-runtime-model-",
+      prefix: "natesclaw-session-utils-cleared-runtime-model-",
       transcriptId: "sess-override",
       run: ({ storePath, now }) => {
         const result = listMainSession({
@@ -918,7 +918,7 @@ describe("listSessionsFromStore search", () => {
 
   test("does not replace the current runtime model when transcript fallback is only for missing pricing", async () => {
     await withAnthropicTranscriptFixture({
-      prefix: "openclaw-session-utils-pricing-",
+      prefix: "natesclaw-session-utils-pricing-",
       transcriptId: "sess-pricing",
       run: ({ storePath, now }) => {
         const result = listMainSession({
@@ -927,7 +927,7 @@ describe("listSessionsFromStore search", () => {
             agents: {
               list: [{ id: "main", default: true }],
             },
-          } as unknown as OpenClawConfig,
+          } as unknown as NatesclawConfig,
           storePath,
           entry: anthropicUsageEntry(now, {
             sessionId: "sess-pricing",

@@ -2,8 +2,8 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { SkillCommandSpec } from "../../skills/types.js";
 
 export function reserveSkillCommandNames(params: {
@@ -16,7 +16,7 @@ export function reserveSkillCommandNames(params: {
 }
 
 export function resolveConfiguredDirectiveAliases(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   commandTextHasSlash: boolean;
   reservedCommands: Set<string>;
 }) {

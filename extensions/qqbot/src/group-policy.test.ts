@@ -1,9 +1,9 @@
 import {
   buildChannelGroupsScopeTree,
   resolveScopeKeyCaseInsensitive,
-} from "openclaw/plugin-sdk/channel-policy";
+} from "natesclaw/plugin-sdk/channel-policy";
 // Qqbot tests cover shared group tool policy behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { qqbotPlugin } from "./channel.js";
 import { resolveQQBotGroupToolPolicy } from "./group-policy.js";
@@ -19,7 +19,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(resolveQQBotGroupToolPolicy({ cfg, groupId: "G1" })).toStrictEqual({
       deny: ["exact"],
@@ -40,7 +40,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveQQBotGroupToolPolicy({
@@ -65,7 +65,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveQQBotGroupToolPolicy({
@@ -85,7 +85,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const tree = buildChannelGroupsScopeTree(cfg, "qqbot");
 
     expect(resolveScopeKeyCaseInsensitive(tree, "*")).toBeUndefined();
@@ -103,7 +103,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(qqbotPlugin.groups?.resolveToolPolicy?.({ cfg, groupId: "G1" })).toStrictEqual({
       deny: ["*"],

@@ -1,8 +1,8 @@
 // Structured plugin catalog and lifecycle operations shared by Gateway-facing surfaces.
 import path from "node:path";
-import { asSafeIntegerInRange } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { asSafeIntegerInRange } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import { MANIFEST_KEY } from "../compat/legacy-names.js";
 import { collectChangedPaths } from "../config/config-change-paths.js";
@@ -13,7 +13,7 @@ import {
 } from "../config/config.js";
 import { resolveIsNixMode } from "../config/paths.js";
 import { ensurePluginAllowlisted } from "../config/plugins-allowlist.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
 import { formatErrorMessage } from "../infra/errors.js";
@@ -178,7 +178,7 @@ type ManagedPluginSourceInstallResult =
   | {
       ok: true;
       pluginId: string;
-      config: OpenClawConfig;
+      config: NatesclawConfig;
       warnings?: string[];
       targetDir?: string;
       version?: string;
@@ -640,7 +640,7 @@ function resolvePluginIconUrlFromCatalogFacts(params: {
   return resolveCatalogEntryIcon(officialEntry) ?? localIcon;
 }
 
-function resolveManagedPluginMetadataParams(config: OpenClawConfig, env: NodeJS.ProcessEnv) {
+function resolveManagedPluginMetadataParams(config: NatesclawConfig, env: NodeJS.ProcessEnv) {
   return {
     config,
     env,
@@ -650,7 +650,7 @@ function resolveManagedPluginMetadataParams(config: OpenClawConfig, env: NodeJS.
 
 /** Resolve the current manifest/catalog icon URL without accepting a caller-provided URL. */
 export async function resolveManagedPluginIconUrl(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   pluginId: string;
   env?: NodeJS.ProcessEnv;
   officialCatalog?: OfficialCatalogResult;
@@ -685,7 +685,7 @@ function normalizeManagedCatalogIconUrl(value: unknown): string | undefined {
 
 /** Resolve only URLs currently owned by a manifest or bundled presentation catalog. */
 export function resolveManagedSetupCatalogIconUrl(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   iconUrl: string;
   env?: NodeJS.ProcessEnv;
 }): string | undefined {
@@ -710,7 +710,7 @@ export function resolveManagedSetupCatalogIconUrl(params: {
 
 /** Build cold installed state merged with the hosted official catalog and bundled curation. */
 export async function listManagedPlugins(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   officialCatalog?: OfficialCatalogResult;
 }): Promise<ManagedPluginCatalog> {
@@ -871,7 +871,7 @@ function assertValidConfigSnapshot(
   const { snapshot, writeOptions } = prepared;
   if (!snapshot.valid) {
     throw new ManagedPluginLifecycleError(
-      "Config invalid; run `openclaw doctor --fix` before managing plugins.",
+      "Config invalid; run `natesclaw doctor --fix` before managing plugins.",
     );
   }
   const mutationWriteOptions = selectInstallMutationWriteOptions(writeOptions);
@@ -1081,7 +1081,7 @@ async function persistManagedSourceInstall(params: {
   persistenceLogger?: PluginInstallLogger;
   successMessage?: string;
   cleanupOnPersistenceFailure?: boolean;
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   const persist = () =>
     persistPluginInstall({
       snapshot: params.snapshot,

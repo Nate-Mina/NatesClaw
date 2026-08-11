@@ -1,10 +1,10 @@
 // Qa Lab integration tests cover the real QA Channel runtime contract.
-import { qaChannelPlugin, setQaChannelRuntime } from "@openclaw/qa-channel/api.js";
+import { qaChannelPlugin, setQaChannelRuntime } from "@natesclaw/qa-channel/api.js";
 import {
   createTestRegistry,
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { startQaBusServer } from "./bus-server.js";
 import { createQaBusState } from "./bus-state.js";

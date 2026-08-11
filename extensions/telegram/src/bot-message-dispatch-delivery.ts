@@ -4,11 +4,11 @@ import {
   deriveDurableFinalDeliveryRequirements,
   projectOutboundPayloadPlanForDelivery,
   resolveTranscriptBackedChannelFinalText,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
-import { isSingleUseReplyToMode } from "openclaw/plugin-sdk/reply-reference";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-payload";
+import { isSingleUseReplyToMode } from "natesclaw/plugin-sdk/reply-reference";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import {
   flushDraftLane,
   prepareAnswerLaneForText,

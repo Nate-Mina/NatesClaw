@@ -3,7 +3,7 @@
  * Combines provider plugin auth profiles with scoped external CLI credentials
  * and decides which runtime profiles may be persisted back to the store.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ProviderExternalAuthProfile } from "../../plugins/provider-external-auth.types.js";
 import { resolveExternalAuthProfilesWithPlugins } from "../../plugins/provider-runtime.js";
 import { isAmbientCredentialAllowedByProviderAuthPin } from "./ambient-auth.js";
@@ -21,7 +21,7 @@ type ExternalAuthProfileMap = Map<string, ProviderExternalAuthProfile>;
 type ResolveExternalAuthProfiles = typeof resolveExternalAuthProfilesWithPlugins;
 type ExternalCliOverlayOptions = {
   allowKeychainPrompt?: boolean;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   externalCliProviderIds?: Iterable<string>;
   externalCliProfileIds?: Iterable<string>;
 };
@@ -38,7 +38,7 @@ const testing = {
   },
 };
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.externalAuthTestApi")] =
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.externalAuthTestApi")] =
     testing;
 }
 
@@ -64,7 +64,7 @@ function resolveExplicitProfileIds(values: Iterable<string> | undefined): Set<st
 function isExternalAuthProfileAllowed(
   profile: ProviderExternalAuthProfile,
   store: AuthProfileStore,
-  config: OpenClawConfig | undefined,
+  config: NatesclawConfig | undefined,
   explicitProfileIds: ReadonlySet<string> | undefined,
   env: NodeJS.ProcessEnv,
 ): boolean {

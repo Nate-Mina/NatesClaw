@@ -9,7 +9,7 @@ import {
   runExclusiveSessionLifecycleMutation,
 } from "../sessions/session-lifecycle-admission.js";
 import { createDeferredCore } from "../shared/deferred.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { markChatAbortTerminalPersistenceError } from "./chat-abort-lifecycle-internal.js";
 import { registerChatAbortController, removeChatAbortControllerEntry } from "./chat-abort.js";
 import { createChatRunState } from "./server-chat-state.js";
@@ -58,7 +58,7 @@ const {
 } = setupGatewaySessionsHandlerTestHarness();
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 function activeRunContext(params: {
@@ -137,7 +137,7 @@ function identifiedClient(profileId: string): GatewayClient {
       minProtocol: 1,
       maxProtocol: 1,
       client: {
-        id: "openclaw-control-ui",
+        id: "natesclaw-control-ui",
         version: "test",
         platform: "test",
         mode: "webchat",

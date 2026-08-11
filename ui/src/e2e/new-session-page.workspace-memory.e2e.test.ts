@@ -72,7 +72,7 @@ async function readMainPreference(page: Page): Promise<Record<string, unknown> |
   return page.evaluate(() => {
     const key = Array.from({ length: localStorage.length }, (_, index) =>
       localStorage.key(index),
-    ).find((candidate) => candidate?.startsWith("openclaw.new-session.preferences.v1:"));
+    ).find((candidate) => candidate?.startsWith("natesclaw.new-session.preferences.v1:"));
     const value = key
       ? (JSON.parse(localStorage.getItem(key) ?? "null") as {
           agents?: Record<string, Record<string, unknown>>;
@@ -368,7 +368,7 @@ suite.define(() => {
       await page.evaluate((workspace) => {
         const key = Array.from({ length: localStorage.length }, (_, index) =>
           localStorage.key(index),
-        ).find((candidate) => candidate?.startsWith("openclaw.new-session.preferences.v1:"));
+        ).find((candidate) => candidate?.startsWith("natesclaw.new-session.preferences.v1:"));
         if (!key) {
           throw new Error("missing new-session preference");
         }
@@ -493,7 +493,7 @@ suite.define(() => {
       await page.reload();
       await navigateInApp(page, "new-session");
       await pollLocatorText(placeTrigger.locator(".new-session-page__trigger-label")).toBe(
-        "openclaw-next",
+        "natesclaw-next",
       );
 
       const modelSelect = page.locator('[data-chat-model-select="true"]');
@@ -551,7 +551,7 @@ suite.define(() => {
       });
       const placeTrigger = page.locator("#new-session-place-trigger");
       await pollLocatorText(placeTrigger.locator(".new-session-page__trigger-label")).toBe(
-        "openclaw",
+        "natesclaw",
       );
 
       const pickedListRequests = (await gateway.getRequests("fs.listDir")).filter(
@@ -565,7 +565,7 @@ suite.define(() => {
       await waitForCommittedChatRoute(page);
       await navigateInApp(page, "new-session");
       await pollLocatorText(placeTrigger.locator(".new-session-page__trigger-label")).toBe(
-        "openclaw",
+        "natesclaw",
       );
       await expect.poll(() => placeTrigger.getAttribute("data-worktree")).toBe("false");
       await expect
@@ -627,7 +627,7 @@ suite.define(() => {
         entries: [],
       });
       await pollLocatorText(placeTrigger.locator(".new-session-page__trigger-label")).toBe(
-        "openclaw",
+        "natesclaw",
       );
 
       await page.locator(".new-session-page__message").fill("keep the newer choice");

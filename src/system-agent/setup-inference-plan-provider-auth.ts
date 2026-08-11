@@ -1,21 +1,21 @@
 import { loadPersistedAuthProfileStore } from "../agents/auth-profiles/persisted.js";
 import { normalizeProviderId } from "../agents/model-selection.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ProviderAuthChoiceMetadata } from "../plugins/provider-auth-choices.js";
 import type { ProviderAuthMethod, ProviderAuthResult } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { parseRef } from "./setup-inference-plan-helpers.js";
 
 export async function runProviderManualSecretMethod(params: {
-  config: OpenClawConfig;
-  baseConfig: OpenClawConfig;
+  config: NatesclawConfig;
+  baseConfig: NatesclawConfig;
   choice: ProviderAuthChoiceMetadata;
   method: ProviderAuthMethod;
   apiKey: string;
   agentDir: string;
   workspaceDir: string;
-}): Promise<{ result: ProviderAuthResult; config: OpenClawConfig }> {
+}): Promise<{ result: ProviderAuthResult; config: NatesclawConfig }> {
   const optionKey = params.choice.optionKey;
   const runNonInteractive = params.method.runNonInteractive;
   if (!optionKey || !params.choice.cliOption || !runNonInteractive) {

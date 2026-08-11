@@ -1,10 +1,10 @@
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
 import type {
   SessionCatalogHost,
   SessionCatalogTranscriptItem,
   SessionsCatalogReadResult,
-} from "openclaw/plugin-sdk/session-catalog";
-import type { ActiveSessionCatalog } from "openclaw/plugin-sdk/session-catalog-runtime";
+} from "natesclaw/plugin-sdk/session-catalog";
+import type { ActiveSessionCatalog } from "natesclaw/plugin-sdk/session-catalog-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   beamMirrorId,

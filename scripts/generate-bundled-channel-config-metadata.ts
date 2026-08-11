@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generate Bundled Channel Config Metadata script supports OpenClaw repository automation.
+// Generate Bundled Channel Config Metadata script supports Natesclaw repository automation.
 import fs from "node:fs";
 import path from "node:path";
 import { loadBundledPluginPublicArtifactModuleSync } from "../src/plugins/public-surface-loader.js";
@@ -98,19 +98,19 @@ function resolveChannelConfigSchemaModulePath(rootDir: string): string | null {
 }
 
 function resolvePackageChannelMeta(source: BundledPluginSource) {
-  const openclawMeta =
+  const natesclawMeta =
     source.packageJson &&
     typeof source.packageJson === "object" &&
     !Array.isArray(source.packageJson) &&
-    "openclaw" in source.packageJson
-      ? (source.packageJson.openclaw as Record<string, unknown> | undefined)
+    "natesclaw" in source.packageJson
+      ? (source.packageJson.natesclaw as Record<string, unknown> | undefined)
       : undefined;
   const channelMeta =
-    openclawMeta &&
-    typeof openclawMeta.channel === "object" &&
-    openclawMeta.channel &&
-    !Array.isArray(openclawMeta.channel)
-      ? (openclawMeta.channel as Record<string, unknown>)
+    natesclawMeta &&
+    typeof natesclawMeta.channel === "object" &&
+    natesclawMeta.channel &&
+    !Array.isArray(natesclawMeta.channel)
+      ? (natesclawMeta.channel as Record<string, unknown>)
       : undefined;
   return channelMeta;
 }

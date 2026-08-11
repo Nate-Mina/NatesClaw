@@ -1,6 +1,6 @@
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { defaultRuntime } from "openclaw/plugin-sdk/runtime";
-import type { OpenClawPluginApi } from "./api.js";
+import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
+import { defaultRuntime } from "natesclaw/plugin-sdk/runtime";
+import type { NatesclawPluginApi } from "./api.js";
 import { isMemoryMachineOutput } from "./cli-output-mode.js";
 import type { Embeddings } from "./embeddings.js";
 import {
@@ -104,7 +104,7 @@ export function parseMemoryCliFilter(rawValue: unknown): MemoryQueryFilter | und
 }
 
 export function registerMemoryCli(
-  api: OpenClawPluginApi,
+  api: NatesclawPluginApi,
   db: MemoryDB,
   embeddings: Embeddings,
   resolveCliAgentId: (rawAgentId: unknown) => string,

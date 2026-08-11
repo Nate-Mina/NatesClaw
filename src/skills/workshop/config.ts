@@ -1,6 +1,6 @@
-// Workshop config helpers resolve skill workshop settings from OpenClaw config.
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+// Workshop config helpers resolve skill workshop settings from Natesclaw config.
+import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { SkillsWorkshopAutonomousMode } from "../../config/types.skills.js";
 
 /** Runtime configuration for the skill workshop proposal flow. */
@@ -45,7 +45,7 @@ function readApprovalPolicy(value: unknown, fallback: SkillWorkshopConfig["appro
   return value === "pending" || value === "auto" ? value : fallback;
 }
 
-export function resolveSkillWorkshopConfig(config?: OpenClawConfig): SkillWorkshopConfig {
+export function resolveSkillWorkshopConfig(config?: NatesclawConfig): SkillWorkshopConfig {
   const raw = asNullableRecord(config?.skills?.workshop) ?? {};
   const autonomous = asNullableRecord(raw.autonomous) ?? {};
   return {

@@ -111,7 +111,7 @@ describe("registerDirectoryCli", () => {
       configChanged: true,
     });
 
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(["directory", "self", "--channel", "demo-directory", "--json"], {
@@ -154,7 +154,7 @@ describe("registerDirectoryCli", () => {
       source: "single-configured",
     });
 
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(["directory", "self", "--json"], { from: "user" });
@@ -188,7 +188,7 @@ describe("registerDirectoryCli", () => {
       configChanged: false,
     });
 
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(
@@ -230,7 +230,7 @@ describe("registerDirectoryCli", () => {
       configChanged: false,
     });
 
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(["directory", "groups", "list", "--channel", "slack", "--json"], {
@@ -246,32 +246,32 @@ describe("registerDirectoryCli", () => {
 
   it("reports unsupported directory capability instead of continuing setup for installed plugins", async () => {
     mocks.resolveInstallableChannelPlugin.mockResolvedValue({
-      cfg: { channels: { "openclaw-weixin": {} } },
-      channelId: "openclaw-weixin",
+      cfg: { channels: { "natesclaw-weixin": {} } },
+      channelId: "natesclaw-weixin",
       plugin: {
-        id: "openclaw-weixin",
+        id: "natesclaw-weixin",
       },
       configChanged: false,
       pluginInstalled: false,
     });
 
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
     registerDirectoryCli(program);
 
     await expect(
-      program.parseAsync(["directory", "peers", "list", "--channel", "openclaw-weixin"], {
+      program.parseAsync(["directory", "peers", "list", "--channel", "natesclaw-weixin"], {
         from: "user",
       }),
     ).rejects.toThrow("exit:1");
 
     expect(mocks.resolveInstallableChannelPlugin).toHaveBeenCalledTimes(1);
     const installArgs = firstRecordArg(mocks.resolveInstallableChannelPlugin);
-    expect(installArgs.rawChannel).toBe("openclaw-weixin");
+    expect(installArgs.rawChannel).toBe("natesclaw-weixin");
     expect(installArgs.allowInstall).toBe(true);
     expect(mocks.replaceConfigFile).not.toHaveBeenCalled();
     expect(
       runtimeErrors().some((message) =>
-        message.includes("Channel openclaw-weixin does not support directory peers"),
+        message.includes("Channel natesclaw-weixin does not support directory peers"),
       ),
     ).toBe(true);
   });
@@ -308,7 +308,7 @@ describe("registerDirectoryCli", () => {
       configChanged: false,
     });
 
-    const program = new Command().name("openclaw");
+    const program = new Command().name("natesclaw");
     registerDirectoryCli(program);
 
     await expect(program.parseAsync(args, { from: "user" })).rejects.toThrow("exit:1");

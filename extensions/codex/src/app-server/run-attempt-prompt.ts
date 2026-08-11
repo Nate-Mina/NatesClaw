@@ -4,10 +4,10 @@ import {
   embeddedAgentLog,
   formatErrorMessage,
   resolveAgentHarnessBeforePromptBuildResult,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
 import {
   buildCodexSystemPromptReport,
-  prependCodexOpenClawPromptContext,
+  prependCodexNatesclawPromptContext,
   readContextEngineThreadBootstrapProjection,
   resolveCodexDeliveryHintPreservedInputRange,
   resolveContextEngineBootstrapProjectionDecision,
@@ -46,7 +46,7 @@ export async function prepareCodexAttemptPrompt(context: CodexAttemptContext) {
     workspaceBootstrapContext,
     buildActiveContextEngineRuntimeContext,
     baseDeveloperInstructions,
-    openClawPromptContext,
+    NatesclawPromptContext,
     skillsCollaborationInstructions,
     promptState,
     codexContextProjectionMaxChars,
@@ -260,9 +260,9 @@ export async function prepareCodexAttemptPrompt(context: CodexAttemptContext) {
     prompt: string;
     promptInputRange?: { start: number; end: number };
   }) => {
-    const turnPromptText = prependCodexOpenClawPromptContext(
+    const turnPromptText = prependCodexNatesclawPromptContext(
       promptBuildResult.prompt,
-      openClawPromptContext,
+      NatesclawPromptContext,
       {
         preservePromptWithoutContext:
           params.bootstrapContextMode === "lightweight" &&
@@ -328,7 +328,7 @@ export async function prepareCodexAttemptPrompt(context: CodexAttemptContext) {
         return false;
       }
       const record = message as unknown as Record<string, unknown>;
-      const meta = record["__openclaw"];
+      const meta = record["__natesclaw"];
       const mirrorIdentity =
         meta && typeof meta === "object" && !Array.isArray(meta)
           ? (meta as Record<string, unknown>).mirrorIdentity

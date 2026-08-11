@@ -1,7 +1,7 @@
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import type { FastMode } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
 
-export type { FastMode } from "@openclaw/normalization-core/string-coerce";
+export type { FastMode } from "@natesclaw/normalization-core/string-coerce";
 
 export const DEFAULT_FAST_MODE_AUTO_ON_SECONDS = 60;
 

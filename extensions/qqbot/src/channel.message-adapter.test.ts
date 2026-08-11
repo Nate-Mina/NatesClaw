@@ -1,6 +1,6 @@
 // Qqbot tests cover channel.message adapter plugin behavior.
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { verifyChannelMessageAdapterCapabilityProofs } from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { qqbotPlugin } from "./channel.js";
 
@@ -119,7 +119,7 @@ const cfg = {
       clientSecret: "secret",
     },
   },
-} as OpenClawConfig;
+} as NatesclawConfig;
 
 describe("qqbot message adapter", () => {
   it("declares durable text, media, and reply target capabilities with receipt proofs", async () => {
@@ -143,7 +143,7 @@ describe("qqbot message adapter", () => {
         },
         media: async () => {
           const mediaAccess = {
-            localRoots: ["/tmp/openclaw-sandbox"],
+            localRoots: ["/tmp/natesclaw-sandbox"],
             workspaceDir: "/tmp/workspace",
           };
           const result = await qqbotPlugin.message?.send?.media?.({
@@ -152,14 +152,14 @@ describe("qqbot message adapter", () => {
             text: "image",
             mediaUrl: "https://example.com/image.png",
             mediaAccess,
-            mediaLocalRoots: ["/tmp/openclaw-sandbox"],
+            mediaLocalRoots: ["/tmp/natesclaw-sandbox"],
           });
           const sent = latestMockArg(sendMediaMock, "sendMedia") as SentMediaParams;
           expect(sent.to).toBe("qqbot:c2c:user-1");
           expect(sent.text).toBe("image");
           expect(sent.mediaUrl).toBe("https://example.com/image.png");
           expect(sent.mediaAccess).toBe(mediaAccess);
-          expect(sent.mediaLocalRoots).toEqual(["/tmp/openclaw-sandbox"]);
+          expect(sent.mediaLocalRoots).toEqual(["/tmp/natesclaw-sandbox"]);
           expect(result?.receipt.platformMessageIds).toEqual(["qq-media-1"]);
         },
         replyTo: async () => {
@@ -236,17 +236,17 @@ describe("qqbot message adapter", () => {
   it("forwards scoped media access through outbound text and media sends", async () => {
     const mediaReadFile = vi.fn(async () => Buffer.from("report"));
     const mediaAccess = {
-      localRoots: ["/tmp/openclaw-sandbox"],
+      localRoots: ["/tmp/natesclaw-sandbox"],
       workspaceDir: "/tmp/workspace",
       readFile: mediaReadFile,
     };
-    const mediaLocalRoots = ["/tmp/openclaw-sandbox"];
+    const mediaLocalRoots = ["/tmp/natesclaw-sandbox"];
 
     sendTextMock.mockResolvedValueOnce({ messageId: "qq-text-media-1" });
     await qqbotPlugin.outbound?.sendText?.({
       cfg,
       to: "qqbot:c2c:user-1",
-      text: "<qqmedia>/tmp/openclaw-sandbox/report.docx</qqmedia>",
+      text: "<qqmedia>/tmp/natesclaw-sandbox/report.docx</qqmedia>",
       mediaAccess,
       mediaLocalRoots,
       mediaReadFile,
@@ -261,13 +261,13 @@ describe("qqbot message adapter", () => {
       cfg,
       to: "qqbot:c2c:user-1",
       text: "report",
-      mediaUrl: "/tmp/openclaw-sandbox/report.docx",
+      mediaUrl: "/tmp/natesclaw-sandbox/report.docx",
       mediaAccess,
       mediaLocalRoots,
       mediaReadFile,
     });
     const sentMedia = latestMockArg(sendMediaMock, "sendMedia") as SentMediaParams;
-    expect(sentMedia.mediaUrl).toBe("/tmp/openclaw-sandbox/report.docx");
+    expect(sentMedia.mediaUrl).toBe("/tmp/natesclaw-sandbox/report.docx");
     expect(sentMedia.mediaAccess).toBe(mediaAccess);
     expect(sentMedia.mediaLocalRoots).toBe(mediaLocalRoots);
     expect(sentMedia.mediaReadFile).toBe(mediaReadFile);

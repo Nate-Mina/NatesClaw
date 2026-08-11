@@ -3,8 +3,8 @@ import {
   identityHasStableSessionId,
   isSessionIdentityPending,
   resolveSessionIdentityFromMeta,
-} from "@openclaw/acp-core/runtime/session-identity";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@natesclaw/acp-core/runtime/session-identity";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";
 import type {
   AcpSessionManagerDeps,
@@ -17,7 +17,7 @@ import type {
 
 /** Resolves pending ACP session identities opportunistically during manager startup. */
 export async function runManagerStartupIdentityReconcile(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   deps: Pick<AcpSessionManagerDeps, "listAcpSessions">;
   withSessionActor: WithManagerSessionActor;
   resolveSession: ResolveManagerSession;

@@ -14,8 +14,8 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const artifactDir = path.resolve(".artifacts/control-ui-e2e/service-worker-update");
-const captureUiProof = process.env.OPENCLAW_CAPTURE_UI_PROOF === "1";
-const workerUpdateVersionsStorageKey = "openclaw.control-ui-e2e.worker-update-versions";
+const captureUiProof = process.env.NATESCLAW_CAPTURE_UI_PROOF === "1";
+const workerUpdateVersionsStorageKey = "natesclaw.control-ui-e2e.worker-update-versions";
 
 const buildA = "service-worker-build-a";
 const buildB = "service-worker-build-b";
@@ -153,7 +153,7 @@ describe("Control UI service-worker production update E2E", () => {
     if (!canRunPlaywrightChromium(chromiumExecutablePath)) {
       throw new Error(`Playwright Chromium is unavailable at ${chromiumExecutablePath}`);
     }
-    outDir = await mkdtemp(path.join(os.tmpdir(), "openclaw-service-worker-update-"));
+    outDir = await mkdtemp(path.join(os.tmpdir(), "natesclaw-service-worker-update-"));
     server = await startProductionControlUiE2eServer(outDir, buildA);
     browser = await chromium.launch({ executablePath: chromiumExecutablePath });
   }, 120_000);
@@ -210,7 +210,7 @@ describe("Control UI service-worker production update E2E", () => {
       });
       await expect
         .poll(() => page.evaluate(() => caches.keys()))
-        .toContain(`openclaw-control-${buildA}`);
+        .toContain(`natesclaw-control-${buildA}`);
 
       await buildProductionControlUiE2e(outDir, buildB);
       const assetB = await findBuildAsset(buildB);
@@ -227,7 +227,7 @@ describe("Control UI service-worker production update E2E", () => {
 
       await expect
         .poll(() => page.evaluate(() => caches.keys()))
-        .toContain(`openclaw-control-${buildB}`);
+        .toContain(`natesclaw-control-${buildB}`);
       const refreshedAsset = await fetchControlledAsset(page, assetB.path);
       expect(refreshedAsset).toEqual({
         controllerState: "activated",

@@ -14,7 +14,7 @@ import {
 const snapshot = {
   config: {},
   baseHash: "config-1",
-  writeOptions: { expectedConfigPath: "/tmp/openclaw.json" },
+  writeOptions: { expectedConfigPath: "/tmp/natesclaw.json" },
 };
 
 const install = {
@@ -35,7 +35,7 @@ describe("plugin install persistence warning audiences", () => {
       plugins: [
         {
           id: "workboard",
-          manifestPath: "/tmp/workboard/openclaw.plugin.json",
+          manifestPath: "/tmp/workboard/natesclaw.plugin.json",
           configSchema: {
             type: "object",
             required: ["token"],
@@ -55,7 +55,7 @@ describe("plugin install persistence warning audiences", () => {
 
     expect(next.plugins?.entries?.workboard).toEqual({ enabled: false });
     expect(warn).toHaveBeenCalledExactlyOnceWith(
-      'Installed plugin "workboard" without enabling it because it requires configuration first. Configure it, then run `openclaw plugins enable workboard`.',
+      'Installed plugin "workboard" without enabling it because it requires configuration first. Configure it, then run `natesclaw plugins enable workboard`.',
     );
     expect(pluginsCliRuntimeLogs).toEqual([
       "Installed plugin: workboard",
@@ -80,7 +80,7 @@ describe("plugin install persistence warning audiences", () => {
           origin: "config",
           rootDir: "/tmp/workboard",
           source: "/tmp/workboard/index.js",
-          manifestPath: "/tmp/workboard/openclaw.plugin.json",
+          manifestPath: "/tmp/workboard/natesclaw.plugin.json",
         },
       ],
       diagnostics: [],

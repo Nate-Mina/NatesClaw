@@ -26,12 +26,12 @@ import {
 import type { AuthProfileStore } from "../../../agents/auth-profiles/types.js";
 import { resolveProviderIdForAuth } from "../../../agents/provider-auth-aliases.js";
 import { resolveStateDir } from "../../../config/paths.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { normalizeAgentId } from "../../../routing/session-key.js";
 import {
-  inspectOpenClawAgentDatabaseOwner,
-  listOpenClawRegisteredAgentDatabases,
-} from "../../../state/openclaw-agent-db.js";
+  inspectNatesclawAgentDatabaseOwner,
+  listNatesclawRegisteredAgentDatabases,
+} from "../../../state/natesclaw-agent-db.js";
 import { isRecord, resolveUserPath } from "../../../utils.js";
 import {
   resolveLegacyAuthProfilesPath as resolveAuthStorePath,
@@ -67,7 +67,7 @@ function isProfileIdList(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((profileId) => typeof profileId === "string");
 }
 
-function readValidConfiguredAuthOrder(cfg: OpenClawConfig): Record<string, string[]> | undefined {
+function readValidConfiguredAuthOrder(cfg: NatesclawConfig): Record<string, string[]> | undefined {
   const order: unknown = cfg.auth?.order;
   if (!isRecord(order)) {
     return undefined;
@@ -82,7 +82,7 @@ function readValidConfiguredAuthOrder(cfg: OpenClawConfig): Record<string, strin
   return result;
 }
 
-function hasValidConfiguredAuthProfiles(cfg: OpenClawConfig): boolean {
+function hasValidConfiguredAuthProfiles(cfg: NatesclawConfig): boolean {
   const profiles: unknown = cfg.auth?.profiles;
   if (profiles === undefined) {
     return true;
@@ -99,7 +99,7 @@ function hasValidConfiguredAuthProfiles(cfg: OpenClawConfig): boolean {
   );
 }
 
-function hasNonemptyConfiguredAuthOrder(cfg: OpenClawConfig): boolean {
+function hasNonemptyConfiguredAuthOrder(cfg: NatesclawConfig): boolean {
   const order = readValidConfiguredAuthOrder(cfg);
   return Boolean(order && Object.values(order).some((profileIds) => profileIds.length > 0));
 }
@@ -288,7 +288,7 @@ function listRetainedStateAgentDirs(env: NodeJS.ProcessEnv): string[] | null {
 }
 
 function loadConfiguredAgentAuthStores(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   env: NodeJS.ProcessEnv,
 ): LoadedAuthStores | undefined {
   const order = readValidConfiguredAuthOrder(cfg);
@@ -312,7 +312,7 @@ function loadConfiguredAgentAuthStores(
     addExpectedAgentDir(agentDir, agentId);
   }
   const envAgentDir =
-    env.OPENCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim() || undefined;
+    env.NATESCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim() || undefined;
   if (envAgentDir) {
     const agentDir = path.resolve(resolveUserPath(envAgentDir, env));
     activeAgentDirs.add(agentDir);
@@ -347,7 +347,7 @@ function loadConfiguredAgentAuthStores(
       return { status: "blocked", warnings: [INVALID_SQLITE_STORE_WARNING] };
     }
     const owner =
-      availability === "present" ? inspectOpenClawAgentDatabaseOwner(databasePath) : undefined;
+      availability === "present" ? inspectNatesclawAgentDatabaseOwner(databasePath) : undefined;
     if (owner) {
       if (
         owner.status === "unreadable" ||
@@ -368,7 +368,7 @@ function loadConfiguredAgentAuthStores(
 
   let registeredDatabases: Array<{ agentId: string; path: string }>;
   try {
-    const registryEntries = listOpenClawRegisteredAgentDatabases({ env });
+    const registryEntries = listNatesclawRegisteredAgentDatabases({ env });
     if (registryEntries.some((entry) => !entry.path.trim() || !path.isAbsolute(entry.path))) {
       return undefined;
     }
@@ -412,7 +412,7 @@ function loadConfiguredAgentAuthStores(
     if (availability === "unreadable") {
       return { status: "blocked", warnings: [INVALID_SQLITE_STORE_WARNING] };
     }
-    const owner = inspectOpenClawAgentDatabaseOwner(databasePath);
+    const owner = inspectNatesclawAgentDatabaseOwner(databasePath);
     if (owner.status !== "owned" || !owners.has(owner.agentId)) {
       return { status: "blocked", warnings: [INVALID_SQLITE_STORE_WARNING] };
     }
@@ -486,7 +486,7 @@ function loadConfiguredAgentAuthStores(
   return { status: "ready", stores, activeStores, runtimeProfileIds };
 }
 
-function removeAuthOrderKeys(cfg: OpenClawConfig, providers: ReadonlySet<string>): OpenClawConfig {
+function removeAuthOrderKeys(cfg: NatesclawConfig, providers: ReadonlySet<string>): NatesclawConfig {
   const order = Object.fromEntries(
     Object.entries(readValidConfiguredAuthOrder(cfg) ?? {}).filter(
       ([provider]) => !providers.has(provider),
@@ -502,7 +502,7 @@ function removeAuthOrderKeys(cfg: OpenClawConfig, providers: ReadonlySet<string>
 }
 
 function scanUndeclaredConfiguredAuthOrders(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   loaded?: Extract<LoadedAuthStores, { status: "ready" }>,
 ): UndeclaredConfiguredAuthOrder[] {
   const order = readValidConfiguredAuthOrder(cfg);
@@ -534,10 +534,10 @@ function scanUndeclaredConfiguredAuthOrders(
 }
 
 function repairUndeclaredConfiguredAuthOrders(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   loaded?: Extract<LoadedAuthStores, { status: "ready" }>,
 ): {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   changes: string[];
   warnings: string[];
 } {
@@ -587,7 +587,7 @@ function repairUndeclaredConfiguredAuthOrders(
 
 /** Find nonempty config orders that only reference removed profiles. */
 function scanStaleConfiguredAuthOrders(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   stores: readonly AuthProfileStore[];
   activeStores?: readonly AuthProfileStore[];
   runtimeProfileIds?: ReadonlySet<string>;
@@ -649,11 +649,11 @@ function scanStaleConfiguredAuthOrders(params: {
 
 /** Remove provably stale config orders and restore per-agent automatic selection. */
 function repairStaleConfiguredAuthOrders(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   stores: readonly AuthProfileStore[];
   activeStores?: readonly AuthProfileStore[];
   runtimeProfileIds?: ReadonlySet<string>;
-}): { config: OpenClawConfig; changes: string[] } {
+}): { config: NatesclawConfig; changes: string[] } {
   const hits = scanStaleConfiguredAuthOrders(params);
   if (hits.length === 0) {
     return { config: params.cfg, changes: [] };
@@ -669,9 +669,9 @@ function repairStaleConfiguredAuthOrders(params: {
 
 /** Load configured agent stores and repair their stale config auth orders. */
 export function maybeRepairStaleConfiguredAuthOrders(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
-}): { config: OpenClawConfig; changes: string[]; warnings?: string[] } {
+}): { config: NatesclawConfig; changes: string[]; warnings?: string[] } {
   if (!hasNonemptyConfiguredAuthOrder(params.cfg)) {
     return { config: params.cfg, changes: [] };
   }
@@ -698,7 +698,7 @@ export function maybeRepairStaleConfiguredAuthOrders(params: {
 
 /** Build preview warnings for stale config auth orders. */
 export function collectStaleConfiguredAuthOrderWarnings(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   doctorFixCommand: string;
   env?: NodeJS.ProcessEnv;
 }): string[] {
@@ -729,7 +729,7 @@ export function collectStaleConfiguredAuthOrderWarnings(params: {
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.staleAuthOrderTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.staleAuthOrderTestApi")] = {
     repairStaleConfiguredAuthOrders,
   };
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { migrateLegacyConfig } from "../../commands/doctor/shared/legacy-config-migrate.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { withEnvAsync } from "../../test-utils/env.js";
 import {
   catalogEntry,
@@ -22,7 +22,7 @@ describe("models.list OpenAI picker", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const cfg = migrateLegacyConfig(staleConfig).config ?? staleConfig;
     const catalog = [
       { ...catalogEntry("gpt-5.6-sol", "openai-responses"), providerOrder: 0 },

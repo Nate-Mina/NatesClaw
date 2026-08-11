@@ -6,7 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { safeParseJson } from "@openclaw/normalization-core";
+import { safeParseJson } from "@natesclaw/normalization-core";
 import { sha256HexPrefixCore } from "../../infra/crypto-digest.js";
 import {
   clearNodeSqliteKyselyCacheForDatabase,
@@ -20,19 +20,19 @@ import { isPathInside } from "../../infra/path-guards.js";
 import { resolveSqliteDatabaseFilePaths } from "../../infra/sqlite-files.js";
 import { readSqliteUserVersion } from "../../infra/sqlite-user-version.js";
 import { registerSqliteCacheExitClose } from "../../infra/sqlite-wal.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../state/openclaw-agent-db.generated.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../state/natesclaw-agent-db.generated.js";
 import {
-  OPENCLAW_AGENT_SCHEMA_VERSION,
-  runOpenClawAgentWriteTransaction,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
-import { OPENCLAW_SQLITE_BUSY_TIMEOUT_MS } from "../../state/openclaw-state-db.js";
+  NATESCLAW_AGENT_SCHEMA_VERSION,
+  runNatesclawAgentWriteTransaction,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
+import { NATESCLAW_SQLITE_BUSY_TIMEOUT_MS } from "../../state/natesclaw-state-db.js";
 import { resolveUserPath } from "../../utils.js";
 import { resolveRegisteredAgentIdForDir } from "../agent-dir-registry.js";
 import { resolveSharedMainAuthAgentDir } from "./shared-main-dir.js";
 
 type AuthProfileDatabase = Pick<
-  OpenClawAgentKyselyDatabase,
+  NatesclawAgentKyselyDatabase,
   "auth_profile_store" | "auth_profile_state"
 >;
 
@@ -65,13 +65,13 @@ function inferAgentIdFromDir(agentDir: string): string {
   return `custom-${sha256HexPrefixCore(normalized, 12)}`;
 }
 
-// The auth database lives in the agent dir and shares the openclaw-agent schema
+// The auth database lives in the agent dir and shares the natesclaw-agent schema
 // so auth store/state can move with the rest of agent-local durable state.
 function resolveAuthProfileDatabaseOptions(agentDir?: string) {
   const dir = resolveAgentDir(agentDir);
   return {
     agentId: resolveRegisteredAgentIdForDir(dir) ?? inferAgentIdFromDir(dir),
-    path: path.join(dir, "openclaw-agent.sqlite"),
+    path: path.join(dir, "natesclaw-agent.sqlite"),
   };
 }
 
@@ -243,8 +243,8 @@ function acquireAuthProfileReadDatabase(
     enableNodeSqliteKyselyStatementCache(db);
     // The pooled reader bypasses canonical agent DB bootstrap, but it shares
     // the same busy policy and validates the process-stable schema on open.
-    db.exec(`PRAGMA busy_timeout = ${OPENCLAW_SQLITE_BUSY_TIMEOUT_MS};`);
-    if (readSqliteUserVersion(db) > OPENCLAW_AGENT_SCHEMA_VERSION) {
+    db.exec(`PRAGMA busy_timeout = ${NATESCLAW_SQLITE_BUSY_TIMEOUT_MS};`);
+    if (readSqliteUserVersion(db) > NATESCLAW_AGENT_SCHEMA_VERSION) {
       clearNodeSqliteKyselyCacheForDatabase(db);
       db.close();
       return { status: "unreadable" };
@@ -281,7 +281,7 @@ function inspectAuthProfileJsonCellReadOnly(
 /** Distinguishes an absent auth row from a present store that could not be read. */
 export function inspectPersistedAuthProfileStoreRaw(
   agentDir?: string,
-  database?: Pick<OpenClawAgentDatabase, "db">,
+  database?: Pick<NatesclawAgentDatabase, "db">,
 ): PersistedAuthProfileStoreInspection {
   if (database) {
     return inspectAuthProfileJsonCell(database.db, "store");
@@ -292,7 +292,7 @@ export function inspectPersistedAuthProfileStoreRaw(
 /** Distinguishes an absent auth-state row from state that could not be read. */
 export function inspectPersistedAuthProfileStateRaw(
   agentDir?: string,
-  database?: Pick<OpenClawAgentDatabase, "db">,
+  database?: Pick<NatesclawAgentDatabase, "db">,
 ): PersistedAuthProfileStoreInspection {
   if (database) {
     return inspectAuthProfileJsonCell(database.db, "state");
@@ -303,7 +303,7 @@ export function inspectPersistedAuthProfileStateRaw(
 /** Reads the raw persisted secrets-store payload without coercing the schema. */
 export function readPersistedAuthProfileStoreRaw(
   agentDir?: string,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): unknown {
   if (database) {
     const db = getAuthProfileKysely(database.db);
@@ -326,7 +326,7 @@ export function readPersistedAuthProfileStoreRaw(
 /** Reads the raw persisted runtime-state payload without coercing the schema. */
 export function readPersistedAuthProfileStateRaw(
   agentDir?: string,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): unknown {
   if (database) {
     const db = getAuthProfileKysely(database.db);
@@ -350,9 +350,9 @@ export function readPersistedAuthProfileStateRaw(
 export function writePersistedAuthProfileStoreRaw(
   payload: unknown,
   agentDir?: string,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): void {
-  const write = (target: OpenClawAgentDatabase) => {
+  const write = (target: NatesclawAgentDatabase) => {
     const db = getAuthProfileKysely(target.db);
     executeSqliteQuerySync(
       target.db,
@@ -375,15 +375,15 @@ export function writePersistedAuthProfileStoreRaw(
     write(database);
     return;
   }
-  runOpenClawAgentWriteTransaction(write, resolveAuthProfileDatabaseOptions(agentDir));
+  runNatesclawAgentWriteTransaction(write, resolveAuthProfileDatabaseOptions(agentDir));
 }
 
 /** Deletes the persisted secrets-store row while leaving runtime state intact. */
 export function deletePersistedAuthProfileStoreRaw(
   agentDir?: string,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): void {
-  const remove = (target: OpenClawAgentDatabase) => {
+  const remove = (target: NatesclawAgentDatabase) => {
     const db = getAuthProfileKysely(target.db);
     executeSqliteQuerySync(
       target.db,
@@ -394,16 +394,16 @@ export function deletePersistedAuthProfileStoreRaw(
     remove(database);
     return;
   }
-  runOpenClawAgentWriteTransaction(remove, resolveAuthProfileDatabaseOptions(agentDir));
+  runNatesclawAgentWriteTransaction(remove, resolveAuthProfileDatabaseOptions(agentDir));
 }
 
 /** Writes or deletes the persisted runtime-state payload. */
 export function writePersistedAuthProfileStateRaw(
   payload: unknown,
   agentDir?: string,
-  database?: OpenClawAgentDatabase,
+  database?: NatesclawAgentDatabase,
 ): void {
-  const write = (target: OpenClawAgentDatabase) => {
+  const write = (target: NatesclawAgentDatabase) => {
     const db = getAuthProfileKysely(target.db);
     if (!payload) {
       executeSqliteQuerySync(
@@ -433,18 +433,18 @@ export function writePersistedAuthProfileStateRaw(
     write(database);
     return;
   }
-  runOpenClawAgentWriteTransaction(write, resolveAuthProfileDatabaseOptions(agentDir));
+  runNatesclawAgentWriteTransaction(write, resolveAuthProfileDatabaseOptions(agentDir));
 }
 
 /** Runs an auth-profile database write transaction for store/state updates. */
 export function runAuthProfileWriteTransaction<T>(
   agentDir: string | undefined,
-  operation: (database: OpenClawAgentDatabase) => T,
+  operation: (database: NatesclawAgentDatabase) => T,
   options: { stateDir?: string } = {},
 ): T {
   const databaseOptions = resolveAuthProfileDatabaseOptions(agentDir);
-  return runOpenClawAgentWriteTransaction(operation, {
+  return runNatesclawAgentWriteTransaction(operation, {
     ...databaseOptions,
-    ...(options.stateDir ? { env: { ...process.env, OPENCLAW_STATE_DIR: options.stateDir } } : {}),
+    ...(options.stateDir ? { env: { ...process.env, NATESCLAW_STATE_DIR: options.stateDir } } : {}),
   });
 }

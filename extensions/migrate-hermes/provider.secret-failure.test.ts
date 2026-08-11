@@ -1,14 +1,14 @@
 // Migrate Hermes tests cover provider.secret failure plugin behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolveAuthStorePathForDisplay } from "openclaw/plugin-sdk/agent-runtime";
-import type { MigrationProviderContext } from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/provider-auth";
+import { resolveAuthStorePathForDisplay } from "natesclaw/plugin-sdk/agent-runtime";
+import type { MigrationProviderContext } from "natesclaw/plugin-sdk/plugin-entry";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/provider-auth";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspace,
   type TempWorkspace,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { HERMES_REASON_AUTH_PROFILE_WRITE_FAILED } from "./items.js";
 
@@ -16,8 +16,8 @@ const mocks = vi.hoisted(() => ({
   updateAuthProfileStoreWithLock: vi.fn(async () => null),
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-auth", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/provider-auth")>()),
+vi.mock("natesclaw/plugin-sdk/provider-auth", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/provider-auth")>()),
   updateAuthProfileStoreWithLock: mocks.updateAuthProfileStoreWithLock,
 }));
 
@@ -49,7 +49,7 @@ function makeContext(params: {
           workspace: params.workspaceDir,
         },
       },
-    } as OpenClawConfig,
+    } as NatesclawConfig,
     stateDir: params.stateDir,
     source: params.source,
     includeSecrets: true,
@@ -72,8 +72,8 @@ function authProfileTarget(agentDir: string, profileId: string): string {
 describe("Hermes migration provider secret write failures", () => {
   beforeEach(async () => {
     testWorkspace = await tempWorkspace({
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-hermes-secret-failure-",
+      rootDir: resolvePreferredNatesclawTmpDir(),
+      prefix: "natesclaw-hermes-secret-failure-",
     });
   });
 

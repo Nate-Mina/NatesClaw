@@ -1,7 +1,7 @@
 // Msteams plugin module owns thread routing and Graph parent context.
-import { resolveInboundSupplementalSenderAllowed } from "openclaw/plugin-sdk/channel-inbound";
-import { filterSupplementalContextItems } from "openclaw/plugin-sdk/context-visibility-runtime";
-import type { OpenClawConfig } from "../../runtime-api.js";
+import { resolveInboundSupplementalSenderAllowed } from "natesclaw/plugin-sdk/channel-inbound";
+import { filterSupplementalContextItems } from "natesclaw/plugin-sdk/context-visibility-runtime";
+import type { NatesclawConfig } from "../../runtime-api.js";
 import { formatUnknownError } from "../errors.js";
 import {
   fetchChannelMessage,
@@ -27,7 +27,7 @@ import {
 import { resolveMSTeamsRouteSessionKey } from "./thread-session.js";
 
 export function prepareMSTeamsThreadRouting(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   context: MSTeamsTurnContext;
   isDirectMessage: boolean;
   isChannel: boolean;

@@ -1,5 +1,5 @@
-import { asPositiveFiniteNumber as normalizePairingQrExpiresAtMs } from "@openclaw/normalization-core/number-coercion";
-import { readNonBlankString as normalizeTtsSupplementSpokenText } from "@openclaw/normalization-core/string-coerce";
+import { asPositiveFiniteNumber as normalizePairingQrExpiresAtMs } from "@natesclaw/normalization-core/number-coercion";
+import { readNonBlankString as normalizeTtsSupplementSpokenText } from "@natesclaw/normalization-core/string-coerce";
 import type { OutboundLocation } from "../channels/location.js";
 /** Reply payload contracts and metadata helpers shared by dispatch and channel renderers. */
 import type { ReplyToMode } from "../config/types.base.js";
@@ -110,7 +110,7 @@ export function readAskUserQuestionId(
 
 // Private device-pair -> Gateway live-display envelope key. Do not re-export
 // through Plugin SDK; this is not a third-party plugin contract.
-const PAIRING_QR_REPLY_CHANNEL_DATA_KEY = "openclawPairingQr";
+const PAIRING_QR_REPLY_CHANNEL_DATA_KEY = "natesclawPairingQr";
 
 type PairingQrReplyChannelData = {
   setupCode: string;
@@ -138,7 +138,7 @@ export function readPairingQrReplyChannelData(
 export const FAST_MODE_AUTO_PROGRESS_KIND = "fast-mode-auto";
 
 export function isFastModeAutoProgressPayload(payload: Pick<ReplyPayload, "channelData">): boolean {
-  return payload.channelData?.openclawProgressKind === FAST_MODE_AUTO_PROGRESS_KIND;
+  return payload.channelData?.natesclawProgressKind === FAST_MODE_AUTO_PROGRESS_KIND;
 }
 
 /** Metadata for audio-only media that supplements already-visible assistant text. */
@@ -273,7 +273,7 @@ export type ReplyPayloadMetadata = {
     accountId?: string;
   };
   /**
-   * Internal OpenClaw notices and host-owned artifacts are not assistant source
+   * Internal Natesclaw notices and host-owned artifacts are not assistant source
    * replies. Dispatch may deliver them even when normal assistant source replies
    * are message-tool-only; sendPolicy deny still wins.
    */

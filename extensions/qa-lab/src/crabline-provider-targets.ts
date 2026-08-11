@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 import type {
-  OpenClawCrablineInbound,
-  OpenClawCrablineInboundInput,
-  StartedOpenClawCrablineAdapter,
-} from "@openclaw/crabline";
+  NatesclawCrablineInbound,
+  NatesclawCrablineInboundInput,
+  StartedNatesclawCrablineAdapter,
+} from "@natesclaw/crabline";
 import type { QaBusInboundMessageInput } from "./runtime-api.js";
 
 const TELEGRAM_QA_DRIVER_ID = "100001";
@@ -98,15 +98,15 @@ function resolveMatrixQaTarget(target: string) {
 
 function resolveMatrixQaText(text: string, botUserId: string) {
   return text.replace(
-    /(^|[\s([{])@openclaw(?=$|[\s.,!?;)\]}])/gu,
+    /(^|[\s([{])@natesclaw(?=$|[\s.,!?;)\]}])/gu,
     (_match, prefix: string) => `${prefix}${botUserId}`,
   );
 }
 
 export function createCrablineProviderInboundInput(
-  adapter: StartedOpenClawCrablineAdapter,
+  adapter: StartedNatesclawCrablineAdapter,
   input: QaBusInboundMessageInput,
-): OpenClawCrablineInboundInput {
+): NatesclawCrablineInboundInput {
   const kind = input.conversation.kind === "direct" ? "direct" : "group";
   return {
     ...input,
@@ -132,9 +132,9 @@ export function createCrablineProviderInboundInput(
 }
 
 export function resolveCrablineStateConversation(params: {
-  adapter: StartedOpenClawCrablineAdapter;
+  adapter: StartedNatesclawCrablineAdapter;
   input: QaBusInboundMessageInput;
-  providerInbound: OpenClawCrablineInbound;
+  providerInbound: NatesclawCrablineInbound;
 }) {
   return params.adapter.channel === "matrix"
     ? params.input.conversation
@@ -142,7 +142,7 @@ export function resolveCrablineStateConversation(params: {
 }
 
 export function createCrablineProviderDelivery(
-  adapter: StartedOpenClawCrablineAdapter,
+  adapter: StartedNatesclawCrablineAdapter,
   target: string,
 ) {
   const delivery = adapter.createAgentDelivery({

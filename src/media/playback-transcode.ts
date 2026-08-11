@@ -2,13 +2,13 @@
 import { createHash } from "node:crypto";
 import fs, { type FileHandle } from "node:fs/promises";
 import path from "node:path";
-import { maxBytesForKind, type MediaKind } from "@openclaw/media-core/constants";
-import { extensionForMime, normalizeMimeType } from "@openclaw/media-core/mime";
+import { maxBytesForKind, type MediaKind } from "@natesclaw/media-core/constants";
+import { extensionForMime, normalizeMimeType } from "@natesclaw/media-core/mime";
 import { fileStore } from "../infra/file-store.js";
 import { openLocalFileSafely } from "../infra/fs-safe.js";
 import { pruneMapToMaxSize } from "../infra/map-size.js";
 import { withTempWorkspace } from "../infra/private-temp-workspace.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredNatesclawTmpDir } from "../infra/tmp-natesclaw-dir.js";
 import { getOrCreatePromise } from "../shared/lazy-promise.js";
 import { runFfmpeg } from "./ffmpeg-exec.js";
 import { probePlaybackMediaFileDescriptor, type PlaybackMediaProbeResult } from "./media-probe.js";
@@ -198,7 +198,7 @@ function resolvePlaybackMode(
 }
 
 if (process.env.VITEST || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.playbackTranscodeTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.playbackTranscodeTestApi")] = {
     createPlaybackTranscodeCacheKey,
     PLAYBACK_TRANSCODE_POLICY,
     readPlaybackSourceBounded,
@@ -558,7 +558,7 @@ async function transcodePlaybackSource(params: {
 
     const outputBuffer = await withTempWorkspace(
       {
-        rootDir: resolvePreferredOpenClawTmpDir(),
+        rootDir: resolvePreferredNatesclawTmpDir(),
         prefix: "playback-transcode-",
       },
       async (workspace) => {

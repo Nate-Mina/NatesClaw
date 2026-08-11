@@ -1,14 +1,14 @@
-// Line plugin entrypoint registers its OpenClaw integration.
+// Line plugin entrypoint registers its Natesclaw integration.
 import {
   defineBundledChannelEntry,
-  type OpenClawPluginCommandDefinition,
-  type OpenClawPluginApi,
-} from "openclaw/plugin-sdk/channel-entry-contract";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+  type NatesclawPluginCommandDefinition,
+  type NatesclawPluginApi,
+} from "natesclaw/plugin-sdk/channel-entry-contract";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 
-type RegisteredLineCardCommand = OpenClawPluginCommandDefinition;
+type RegisteredLineCardCommand = NatesclawPluginCommandDefinition;
 
-function createLineCardCommandLoader(api: OpenClawPluginApi) {
+function createLineCardCommandLoader(api: NatesclawPluginApi) {
   return createLazyRuntimeModule<RegisteredLineCardCommand>(async () => {
     let registered: RegisteredLineCardCommand | null = null;
     const { registerLineCardCommand } = await import("./src/card-command.js");

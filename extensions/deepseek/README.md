@@ -1,12 +1,12 @@
-# OpenClaw DeepSeek Provider
+# Natesclaw DeepSeek Provider
 
-Official OpenClaw provider plugin for DeepSeek.
+Official Natesclaw provider plugin for DeepSeek.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/deepseek-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/deepseek-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/deepseek> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/deepseek> for setup and configuration.

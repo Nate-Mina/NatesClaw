@@ -9,7 +9,7 @@ title: "Control UI URLs"
 
 The Control UI uses readable paths for pages and session links. A configured
 `gateway.controlUi.basePath` prefixes every path below. For example, `/chat/main`
-becomes `/openclaw/chat/main` when the base path is `/openclaw`.
+becomes `/natesclaw/chat/main` when the base path is `/natesclaw`.
 
 ## Session and dashboard URLs
 
@@ -133,7 +133,7 @@ no route-specific URL parameters.
 | Chat                | `/chat`                     | -                         | Key-backed session forms above; `?draft=<text>`  |
 | Dashboard           | `/dashboard`                | -                         | Key-backed session forms above; `?draft=<text>`  |
 | Dashboards          | `/dashboards`               | -                         | -                                                |
-| Ask OpenClaw        | `/custodian`                | -                         | `?intent=new-agent`, `?onboarding=1`             |
+| Ask Natesclaw        | `/custodian`                | -                         | `?intent=new-agent`, `?onboarding=1`             |
 | New session         | `/new`                      | -                         | `?agent=<agentId>`, `?catalog=<catalogId>`       |
 | Activity            | `/activity`                 | -                         | -                                                |
 | Apps                | `/apps`                     | -                         | -                                                |

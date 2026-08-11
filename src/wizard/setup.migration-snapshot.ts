@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 import { createReadStream } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { withFileLock } from "../infra/file-lock.js";
 import { isNotFoundPathError } from "../infra/path-guards.js";
 import type { MigrationPlan } from "../plugins/types.js";
@@ -55,7 +55,7 @@ function hasMeaningfulWizardConfig(value: unknown): boolean {
   );
 }
 
-function hasMeaningfulConfig(config: OpenClawConfig): boolean {
+function hasMeaningfulConfig(config: NatesclawConfig): boolean {
   return Object.entries(config as Record<string, unknown>).some(([key, value]) => {
     if (MEANINGFUL_CONFIG_IGNORED_KEYS.has(key)) {
       return false;
@@ -64,7 +64,7 @@ function hasMeaningfulConfig(config: OpenClawConfig): boolean {
   });
 }
 
-function buildSetupMigrationSnapshotConfig(config: OpenClawConfig): Record<string, unknown> {
+function buildSetupMigrationSnapshotConfig(config: NatesclawConfig): Record<string, unknown> {
   const snapshot: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(config as Record<string, unknown>)) {
     if (MEANINGFUL_CONFIG_IGNORED_KEYS.has(key)) {
@@ -88,7 +88,7 @@ function buildSetupMigrationSnapshotConfig(config: OpenClawConfig): Record<strin
 }
 
 export async function inspectSetupMigrationFreshness(params: {
-  baseConfig: OpenClawConfig;
+  baseConfig: NatesclawConfig;
   stateDir: string;
   workspaceDir: string;
 }): Promise<{ fresh: boolean; reasons: string[] }> {
@@ -117,9 +117,9 @@ export async function inspectSetupMigrationFreshness(params: {
 
 /** Preserves the acknowledgement accepted in-memory before the import lock is acquired. */
 export function preserveSetupMigrationSecurityAcknowledgement(
-  config: OpenClawConfig,
-  inMemoryConfig: OpenClawConfig,
-): OpenClawConfig {
+  config: NatesclawConfig,
+  inMemoryConfig: NatesclawConfig,
+): NatesclawConfig {
   const securityAcknowledgedAt = inMemoryConfig.wizard?.securityAcknowledgedAt;
   if (!securityAcknowledgedAt || config.wizard?.securityAcknowledgedAt) {
     return config;
@@ -226,7 +226,7 @@ async function hashSourcePath(
 
 /** Hashes migration-owned target state without persisting raw paths or values. */
 export async function buildSetupMigrationTargetSnapshot(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   stateDir: string;
   workspaceDir: string;
 }): Promise<string> {
@@ -268,8 +268,8 @@ export async function buildSetupMigrationPlanSourceSnapshot(plan: MigrationPlan)
 
 /** Verifies planning inputs and builds the exact provider-side-effect retry boundary. */
 export async function prepareSetupMigrationAttemptBoundary(params: {
-  currentConfig: OpenClawConfig;
-  targetConfig: OpenClawConfig;
+  currentConfig: NatesclawConfig;
+  targetConfig: NatesclawConfig;
   stateDir: string;
   workspaceDir: string;
   plan: MigrationPlan;
@@ -303,7 +303,7 @@ export async function prepareSetupMigrationAttemptBoundary(params: {
   };
 }
 
-/** Serializes onboarding writes that share one OpenClaw state target. */
+/** Serializes onboarding writes that share one Natesclaw state target. */
 export async function withSetupMigrationTargetLock<T>(
   stateDir: string,
   fn: () => Promise<T>,
@@ -313,7 +313,7 @@ export async function withSetupMigrationTargetLock<T>(
   const activeStateDir = activeSetupMigrationTargetLock.getStore();
   if (activeStateDir) {
     if (activeStateDir !== resolvedStateDir) {
-      throw new Error("nested onboarding target lock cannot switch the OpenClaw state directory");
+      throw new Error("nested onboarding target lock cannot switch the Natesclaw state directory");
     }
     return await fn();
   }
@@ -340,7 +340,7 @@ export function assertFreshSetupMigrationTarget(freshness: {
   }
   throw new Error(
     [
-      "Migration import during onboarding requires a fresh OpenClaw setup.",
+      "Migration import during onboarding requires a fresh Natesclaw setup.",
       "Create a fresh setup or reset config, credentials, sessions, and workspace before importing.",
       "Backup plus overwrite/merge imports are feature-gated for now.",
       "Existing setup:",

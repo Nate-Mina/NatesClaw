@@ -1,13 +1,13 @@
 // Minimax plugin module implements tts behavior.
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
+import { resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
 import {
   assertOkOrThrowProviderError,
   readProviderJsonResponse,
-} from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-http";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
 import { assertMinimaxBaseResp, normalizeMinimaxHexAudio } from "./media-provider-runtime.js";
 
 export const DEFAULT_MINIMAX_TTS_BASE_URL = "https://api.minimax.io";

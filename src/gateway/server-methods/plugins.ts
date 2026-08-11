@@ -11,7 +11,7 @@ import {
   validatePluginsSetEnabledParams,
   validatePluginsUninstallParams,
 } from "../../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { searchInstallablePluginPackages } from "../../plugins/catalog-search.js";
 import {
   formatManagedPluginLifecycleError,
@@ -27,7 +27,7 @@ import type { GatewayRequestHandlers } from "./types.js";
 import { assertValidParams } from "./validation.js";
 
 function pluginPolicyRestartRequired(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   changedPaths: readonly string[];
 }): boolean {
   const plan = buildGatewayReloadPlan([...params.changedPaths]);

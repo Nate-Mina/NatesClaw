@@ -1,4 +1,4 @@
-import { asNullableRecord as asToolRecord } from "@openclaw/normalization-core/record-coerce";
+import { asNullableRecord as asToolRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   isToolCallContentType,
   isToolResultContentType,

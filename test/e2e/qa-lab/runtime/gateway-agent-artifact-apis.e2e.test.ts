@@ -19,8 +19,8 @@ import {
   getGatewayE2ePortBlock,
 } from "../../../../src/gateway/test-helpers.e2e.js";
 import { GATEWAY_STARTUP_MUTATED_ENV_KEYS } from "../../../../src/gateway/test-helpers.env.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../../../src/state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../../../src/state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../../../../src/state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../../../src/state/natesclaw-state-db.js";
 import { createTaskRecord, deleteTaskRecordById } from "../../../../src/tasks/task-registry.js";
 import { captureEnv, setTestEnvValue } from "../../../../src/test-utils/env.js";
 import { useAutoCleanupTempDirTracker } from "../../../helpers/temp-dir.js";
@@ -122,17 +122,17 @@ vi.mock("../../../../src/gateway/server-request-context.js", async () => {
 const ENV_KEYS = [
   "HOME",
   ...GATEWAY_STARTUP_MUTATED_ENV_KEYS,
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PASSWORD",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NATESCLAW_STATE_DIR",
+  "NATESCLAW_CONFIG_PATH",
+  "NATESCLAW_GATEWAY_TOKEN",
+  "NATESCLAW_GATEWAY_PASSWORD",
+  "NATESCLAW_SKIP_CHANNELS",
+  "NATESCLAW_SKIP_GMAIL_WATCHER",
+  "NATESCLAW_SKIP_CRON",
+  "NATESCLAW_SKIP_CANVAS_HOST",
+  "NATESCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "NATESCLAW_SKIP_PROVIDERS",
+  "NATESCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 const TINY_PNG_BASE64 =
@@ -153,8 +153,8 @@ describe("Gateway agent and artifact APIs", () => {
     for (const step of cleanup.splice(0).toReversed()) {
       await step();
     }
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawAgentDatabasesForTest();
+    closeNatesclawStateDatabaseForTest();
     clearSessionStoreCacheForTest();
     clearRuntimeConfigSnapshot();
     clearConfigCache();
@@ -165,8 +165,8 @@ describe("Gateway agent and artifact APIs", () => {
     cleanup.push(() => envSnapshot.restore());
 
     const tempHome = tempDirs.make("gateway-agent-artifacts-");
-    const stateDir = path.join(tempHome, ".openclaw");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const stateDir = path.join(tempHome, ".natesclaw");
+    const configPath = path.join(stateDir, "natesclaw.json");
     const mainWorkspace = path.join(tempHome, "workspace-main");
     const createdWorkspace = path.join(tempHome, "workspace-artifact-agent");
     const token = "gateway-agent-artifacts-token";
@@ -190,22 +190,22 @@ describe("Gateway agent and artifact APIs", () => {
     );
 
     setTestEnvValue("HOME", tempHome);
-    setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
-    setTestEnvValue("OPENCLAW_CONFIG_PATH", configPath);
-    setTestEnvValue("OPENCLAW_GATEWAY_TOKEN", token);
-    setTestEnvValue("OPENCLAW_SKIP_CHANNELS", "1");
-    setTestEnvValue("OPENCLAW_SKIP_GMAIL_WATCHER", "1");
-    setTestEnvValue("OPENCLAW_SKIP_CRON", "1");
-    setTestEnvValue("OPENCLAW_SKIP_CANVAS_HOST", "1");
-    setTestEnvValue("OPENCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
-    setTestEnvValue("OPENCLAW_SKIP_PROVIDERS", "1");
-    setTestEnvValue("OPENCLAW_DISABLE_BUNDLED_PLUGINS", "1");
+    setTestEnvValue("NATESCLAW_STATE_DIR", stateDir);
+    setTestEnvValue("NATESCLAW_CONFIG_PATH", configPath);
+    setTestEnvValue("NATESCLAW_GATEWAY_TOKEN", token);
+    setTestEnvValue("NATESCLAW_SKIP_CHANNELS", "1");
+    setTestEnvValue("NATESCLAW_SKIP_GMAIL_WATCHER", "1");
+    setTestEnvValue("NATESCLAW_SKIP_CRON", "1");
+    setTestEnvValue("NATESCLAW_SKIP_CANVAS_HOST", "1");
+    setTestEnvValue("NATESCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
+    setTestEnvValue("NATESCLAW_SKIP_PROVIDERS", "1");
+    setTestEnvValue("NATESCLAW_DISABLE_BUNDLED_PLUGINS", "1");
     clearRuntimeConfigSnapshot();
     clearConfigCache();
     clearSessionStoreCacheForTest();
 
     const port = await getGatewayE2ePortBlock();
-    setTestEnvValue("OPENCLAW_GATEWAY_PORT", String(port));
+    setTestEnvValue("NATESCLAW_GATEWAY_PORT", String(port));
     let server = await startGatewayServer(port, {
       bind: "loopback",
       auth: { mode: "token", token },
@@ -392,7 +392,7 @@ describe("Gateway agent and artifact APIs", () => {
         role: "assistant",
         content: [managedBlock],
         timestamp: Date.now(),
-        __openclaw: {
+        __natesclaw: {
           id: messageId,
           seq: 1,
           messageTaskId: task.taskId,

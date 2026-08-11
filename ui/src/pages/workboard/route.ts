@@ -1,5 +1,5 @@
-import type { RouteLocation } from "@openclaw/uirouter";
-import { definePage } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -41,6 +41,6 @@ export const page = definePage({
     import("./workboard-page.ts").then(() => ({
       header: true,
       render: (data: WorkboardRouteData | undefined) =>
-        html`<openclaw-workboard-page .routeData=${data}></openclaw-workboard-page>`,
+        html`<natesclaw-workboard-page .routeData=${data}></natesclaw-workboard-page>`,
     })),
 });

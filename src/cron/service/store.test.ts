@@ -1,8 +1,8 @@
 // Cron service store tests cover persisted service state loading and writes.
 import fs from "node:fs/promises";
-import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { openOpenClawStateDatabase } from "../../state/openclaw-state-db.js";
+import { openNatesclawStateDatabase } from "../../state/natesclaw-state-db.js";
 import { setupCronServiceSuite } from "../service.test-harness.js";
 import * as cronStoreModule from "../store.js";
 import { loadCronStore, saveCronStore } from "../store.js";
@@ -135,7 +135,7 @@ describe("cron service store seam coverage", () => {
       state: { nextRunAtMs: STORE_TEST_NOW + 60_000 },
     });
     await saveCronStore(storePath, { version: 1, jobs: [malformed, surviving] });
-    openOpenClawStateDatabase()
+    openNatesclawStateDatabase()
       .db.prepare("UPDATE cron_jobs SET schedule_kind = ? WHERE job_id = ?")
       .run("unsupported", malformed.id);
     const state = createStoreTestState(storePath);
@@ -191,7 +191,7 @@ describe("cron service store seam coverage", () => {
         surviving,
       ],
     });
-    const db = openOpenClawStateDatabase().db;
+    const db = openNatesclawStateDatabase().db;
     db.prepare("UPDATE cron_jobs SET every_ms = ? WHERE job_id = ?").run(
       MAX_DATE_TIMESTAMP_MS + 1,
       invalidInterval.id,
@@ -229,7 +229,7 @@ describe("cron service store seam coverage", () => {
     const invalidState = createReloadCronJob({ id: "invalid-runtime-state" });
     const surviving = createReloadCronJob({ id: "valid-runtime-state" });
     await saveCronStore(storePath, { version: 1, jobs: [invalidState, surviving] });
-    openOpenClawStateDatabase()
+    openNatesclawStateDatabase()
       .db.prepare("UPDATE cron_jobs SET last_run_at_ms = ? WHERE job_id = ?")
       .run(MAX_DATE_TIMESTAMP_MS + 1, invalidState.id);
     const state = createStoreTestState(storePath);

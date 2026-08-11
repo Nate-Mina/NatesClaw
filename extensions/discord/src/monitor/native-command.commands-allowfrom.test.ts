@@ -1,16 +1,16 @@
 // Discord tests cover native command.commands allowfrom plugin behavior.
 import { ChannelType } from "discord-api-types/v10";
-import type { dispatchChannelInboundTurn } from "openclaw/plugin-sdk/channel-inbound";
-import type { NativeCommandSpec } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { matchPluginCommand } from "openclaw/plugin-sdk/plugin-runtime";
-import * as dispatcherModule from "openclaw/plugin-sdk/reply-dispatch-runtime";
+import type { dispatchChannelInboundTurn } from "natesclaw/plugin-sdk/channel-inbound";
+import type { NativeCommandSpec } from "natesclaw/plugin-sdk/command-auth-native";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { matchPluginCommand } from "natesclaw/plugin-sdk/plugin-runtime";
+import * as dispatcherModule from "natesclaw/plugin-sdk/reply-dispatch-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { defineThrowingDiscordChannelGetter } from "../test-support/partial-channel.js";
 import { createDiscordNativeCommand } from "./native-command.js";
 
-vi.mock("openclaw/plugin-sdk/plugin-runtime", { spy: true });
+vi.mock("natesclaw/plugin-sdk/plugin-runtime", { spy: true });
 import { nativeCommandRuntime } from "./native-command.runtime.js";
 import {
   createMockCommandInteraction,
@@ -31,7 +31,7 @@ function createInteraction(params?: { userId?: string }): MockCommandInteraction
   });
 }
 
-function createConfig(): OpenClawConfig {
+function createConfig(): NatesclawConfig {
   return {
     commands: {
       allowFrom: {
@@ -53,10 +53,10 @@ function createConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function createCommand(cfg: OpenClawConfig, discordConfig?: DiscordAccountConfig) {
+function createCommand(cfg: NatesclawConfig, discordConfig?: DiscordAccountConfig) {
   const commandSpec: NativeCommandSpec = {
     name: "ping",
     description: "Ping",
@@ -122,7 +122,7 @@ function firstDispatchReplyCall(): Parameters<
 
 async function runGuildSlashCommand(params?: {
   userId?: string;
-  mutateConfig?: (cfg: OpenClawConfig) => void;
+  mutateConfig?: (cfg: NatesclawConfig) => void;
   runtimeDiscordConfig?: DiscordAccountConfig;
   mutateInteraction?: (interaction: MockCommandInteraction) => void;
 }) {

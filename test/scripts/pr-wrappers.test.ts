@@ -31,7 +31,7 @@ const canonicalMismatchMessage = (repo: string) =>
 const itPosix = process.platform === "win32" ? it.skip : it;
 
 function makeMismatchedWrapperRepo() {
-  const root = realpathSync(mkdtempSync(join(realpathSync(tmpdir()), "openclaw-pr-dev-wrapper-")));
+  const root = realpathSync(mkdtempSync(join(realpathSync(tmpdir()), "natesclaw-pr-dev-wrapper-")));
   const bin = join(root, "bin");
   const home = join(root, "home");
   const canonicalPath = join(root, "canonical");
@@ -83,7 +83,7 @@ function makeMismatchedWrapperRepo() {
   );
   chmodSync(join(canonical, "scripts", "pr"), 0o755);
 
-  git(canonical, ["config", "user.name", "OpenClaw Test"]);
+  git(canonical, ["config", "user.name", "Natesclaw Test"]);
   git(canonical, ["config", "user.email", "test@example.invalid"]);
   git(canonical, ["config", "commit.gpgSign", "false"]);
   git(canonical, ["config", "core.hooksPath", "/dev/null"]);
@@ -94,7 +94,7 @@ function makeMismatchedWrapperRepo() {
   git(canonical, ["worktree", "add", "-b", "feature", linkedPath, "main"]);
 
   const linked = realpathSync(linkedPath);
-  git(linked, ["config", "user.name", "OpenClaw Test"]);
+  git(linked, ["config", "user.name", "Natesclaw Test"]);
   git(linked, ["config", "user.email", "test@example.invalid"]);
   git(linked, ["config", "commit.gpgSign", "false"]);
   expect(git(linked, ["rev-parse", "refs/remotes/origin/main"]).stdout.trim()).toBe(
@@ -174,7 +174,7 @@ describe("scripts/pr wrappers", () => {
     expect(script).toContain("export NO_COLOR=1");
     expect(script).toContain("unset COLORTERM");
     expect(script).toContain('source "$script_parent_dir/lib/plain-gh.sh"');
-    expect(script).toContain("OPENCLAW_GH_BIN=");
+    expect(script).toContain("NATESCLAW_GH_BIN=");
     expect(script).toContain("for cmd in git gh jq rg pnpm node");
     expect(script).toContain('missing+=("real-gh")');
     expect(script).not.toContain("gh() {");
@@ -187,7 +187,7 @@ describe("scripts/pr wrappers", () => {
     expect(script).toContain("scripts/pr prepare-run <PR>");
     expect(script).toContain("scripts/pr ci-dispatch <PR>");
     expect(script).toContain("scripts/pr merge-run <PR> [--auto-merge]");
-    expect(script).toContain("OPENCLAW_PR_AUTO_MERGE=1 is equivalent");
+    expect(script).toContain("NATESCLAW_PR_AUTO_MERGE=1 is equivalent");
     expect(script).toContain("Required commands: git, gh, jq, rg (ripgrep), pnpm, node.");
     expect(script).toContain('review_init "$pr"');
     expect(script).toContain('prepare_run "$pr"');
@@ -280,7 +280,7 @@ describe("scripts/pr wrappers", () => {
       const envResult = spawnSync(join(fixture.linked, "scripts", "pr"), ["ci-dispatch", "123"], {
         cwd: fixture.linked,
         encoding: "utf8",
-        env: { ...fixture.env, OPENCLAW_PR_DEV_WRAPPER: "1" },
+        env: { ...fixture.env, NATESCLAW_PR_DEV_WRAPPER: "1" },
       });
       expect(envResult.status, `${envResult.stderr}\n${envResult.stdout}`).toBe(0);
       expect(envResult.stdout).toContain("local wrapper executed");
@@ -336,7 +336,7 @@ describe("scripts/pr wrappers", () => {
   it("defaults to squash and allows commit-preserving merge methods", () => {
     const script = readScript("scripts/pr-lib/merge.sh");
 
-    expect(script).toContain("OPENCLAW_PR_MERGE_METHOD:-squash");
+    expect(script).toContain("NATESCLAW_PR_MERGE_METHOD:-squash");
     expect(script).toContain("--squash");
     expect(script).toContain("--merge");
     expect(script).toContain("--rebase");
@@ -367,7 +367,7 @@ describe("scripts/pr wrappers", () => {
   });
 
   it("refuses to substitute a different canonical wrapper implementation", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-pr-wrapper-revision-"));
+    const dir = mkdtempSync(join(tmpdir(), "natesclaw-pr-wrapper-revision-"));
     const repo = join(dir, "repo");
     const linked = join(dir, "linked");
     mkdirSync(join(repo, "scripts", "lib"), { recursive: true });
@@ -385,7 +385,7 @@ describe("scripts/pr wrappers", () => {
     const git = (cwd: string, args: string[]) =>
       spawnSync("git", args, { cwd, encoding: "utf8", stdio: "pipe" });
     expect(git(repo, ["init", "-b", "main"]).status).toBe(0);
-    expect(git(repo, ["config", "user.name", "OpenClaw Test"]).status).toBe(0);
+    expect(git(repo, ["config", "user.name", "Natesclaw Test"]).status).toBe(0);
     expect(git(repo, ["config", "user.email", "test@example.invalid"]).status).toBe(0);
     expect(git(repo, ["add", "scripts"]).status).toBe(0);
     expect(git(repo, ["commit", "-m", "test: canonical wrapper"]).status).toBe(0);
@@ -442,7 +442,7 @@ describe("scripts/pr wrappers", () => {
   });
 
   it("runs the local wrapper when it matches origin/main and the canonical checkout is parked elsewhere", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-pr-wrapper-anchor-"));
+    const dir = mkdtempSync(join(tmpdir(), "natesclaw-pr-wrapper-anchor-"));
     const repo = join(dir, "repo");
     const linked = join(dir, "linked");
     mkdirSync(join(repo, "scripts", "lib"), { recursive: true });
@@ -460,7 +460,7 @@ describe("scripts/pr wrappers", () => {
     const git = (cwd: string, args: string[]) =>
       spawnSync("git", args, { cwd, encoding: "utf8", stdio: "pipe" });
     expect(git(repo, ["init", "-b", "main"]).status).toBe(0);
-    expect(git(repo, ["config", "user.name", "OpenClaw Test"]).status).toBe(0);
+    expect(git(repo, ["config", "user.name", "Natesclaw Test"]).status).toBe(0);
     expect(git(repo, ["config", "user.email", "test@example.invalid"]).status).toBe(0);
     expect(git(repo, ["add", "scripts"]).status).toBe(0);
     expect(git(repo, ["commit", "-m", "test: canonical wrapper"]).status).toBe(0);
@@ -502,7 +502,7 @@ describe("scripts/pr wrappers", () => {
   });
 
   it("verifies local GitHub auth through GraphQL when REST quota is unavailable", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-pr-auth-"));
+    const dir = mkdtempSync(join(tmpdir(), "natesclaw-pr-auth-"));
     const gh = join(dir, "gh");
     writeFileSync(
       gh,
@@ -524,7 +524,7 @@ exit 1
       ],
       {
         cwd: process.cwd(),
-        env: { ...process.env, OPENCLAW_GH_BIN: gh },
+        env: { ...process.env, NATESCLAW_GH_BIN: gh },
         encoding: "utf8",
       },
     );
@@ -535,7 +535,7 @@ exit 1
   });
 
   it("resolves review writer identity and assignment through the real GitHub CLI", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-pr-review-writer-"));
+    const dir = mkdtempSync(join(tmpdir(), "natesclaw-pr-review-writer-"));
     const bin = join(dir, "bin");
     const pathCalls = join(dir, "path-calls.log");
     const realCalls = join(dir, "real-calls.log");
@@ -544,14 +544,14 @@ exit 1
     writeFileSync(
       join(bin, "gh"),
       `#!/bin/sh
-printf '%s\n' "$*" >> "$OPENCLAW_TEST_PATH_CALLS"
+printf '%s\n' "$*" >> "$NATESCLAW_TEST_PATH_CALLS"
 exit 9
 `,
     );
     writeFileSync(
       realGh,
       `#!/bin/sh
-printf '%s\n' "$*" >> "$OPENCLAW_TEST_REAL_CALLS"
+printf '%s\n' "$*" >> "$NATESCLAW_TEST_REAL_CALLS"
 case "$1 $2" in
   "api user") printf 'maintainer\n' ;;
   "pr edit") exit 0 ;;
@@ -569,7 +569,7 @@ esac
         [
           "source scripts/lib/plain-gh.sh",
           "source scripts/pr-lib/review.sh",
-          'enter_worktree() { cd "$OPENCLAW_TEST_ROOT"; mkdir -p .local; }',
+          'enter_worktree() { cd "$NATESCLAW_TEST_ROOT"; mkdir -p .local; }',
           "mark_pr_operation_side_effects_started() { :; }",
           "print_relevant_log_excerpt() { :; }",
           "review_claim 42",
@@ -580,10 +580,10 @@ esac
         encoding: "utf8",
         env: {
           ...process.env,
-          OPENCLAW_GH_BIN: realGh,
-          OPENCLAW_TEST_PATH_CALLS: pathCalls,
-          OPENCLAW_TEST_REAL_CALLS: realCalls,
-          OPENCLAW_TEST_ROOT: dir,
+          NATESCLAW_GH_BIN: realGh,
+          NATESCLAW_TEST_PATH_CALLS: pathCalls,
+          NATESCLAW_TEST_REAL_CALLS: realCalls,
+          NATESCLAW_TEST_ROOT: dir,
           PATH: `${bin}${delimiter}${process.env.PATH ?? ""}`,
         },
       },

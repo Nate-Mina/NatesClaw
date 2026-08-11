@@ -5,7 +5,7 @@ import {
   type MemoryEmbeddingProviderAdapter,
   type MemoryEmbeddingProviderCreateOptions,
   type MemoryEmbeddingProviderRuntime,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "natesclaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { formatErrorMessage } from "../dreaming-shared.js";
 import type { MemoryCoreAcquireLocalService } from "./embedding-local-service.js";
 
@@ -38,8 +38,8 @@ function createMissingLlamaCppProviderError(): Error {
     [
       "Unknown memory embedding provider: local.",
       "Local GGUF embeddings are provided by the official llama.cpp provider plugin.",
-      "Install it with: openclaw plugins install @openclaw/llama-cpp-provider",
-      "Then restart OpenClaw and retry: openclaw memory status --deep",
+      "Install it with: natesclaw plugins install @natesclaw/llama-cpp-provider",
+      "Then restart Natesclaw and retry: natesclaw memory status --deep",
     ].join("\n"),
   );
 }

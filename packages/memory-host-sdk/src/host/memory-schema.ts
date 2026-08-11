@@ -30,7 +30,7 @@ export {
   MEMORY_INDEX_CHUNK_RECALL_METADATA_TABLE,
 } from "./memory-schema-recall.js";
 import * as provenanceSchema from "./memory-schema-provenance.js";
-import { migrateSqliteSchemaToStrict } from "./openclaw-runtime-sqlite.js";
+import { migrateSqliteSchemaToStrict } from "./natesclaw-runtime-sqlite.js";
 
 export {
   dropMemoryPathFtsTriggers,

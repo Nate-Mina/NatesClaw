@@ -1,10 +1,10 @@
 // Qqbot plugin module implements remind behavior.
-import { callGatewayTool } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { callGatewayTool } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginToolContext,
-} from "openclaw/plugin-sdk/core";
+  NatesclawPluginApi,
+  NatesclawPluginToolContext,
+} from "natesclaw/plugin-sdk/core";
 import { RemindSchema, executeScheduledRemind } from "../../engine/tools/remind-logic.js";
 import type { RemindCronAction, RemindParams } from "../../engine/tools/remind-logic.js";
 import { getRequestContext } from "../../engine/utils/request-context.js";
@@ -44,7 +44,7 @@ const defaultDeps: RemindToolDeps = {
 };
 
 function createRemindTool(
-  toolContext: OpenClawPluginToolContext = {},
+  toolContext: NatesclawPluginToolContext = {},
   deps: RemindToolDeps = defaultDeps,
 ): AnyAgentTool {
   return {
@@ -74,6 +74,6 @@ function createRemindTool(
   };
 }
 
-export function registerRemindTool(api: OpenClawPluginApi): void {
+export function registerRemindTool(api: NatesclawPluginApi): void {
   api.registerTool((ctx) => createRemindTool(ctx), { name: "qqbot_remind" });
 }

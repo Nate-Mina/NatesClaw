@@ -2,9 +2,9 @@ import { randomUUID } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 // Verifies fallback cooldown probe decisions and diagnostic records.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import { createDiagnosticLogRecordCapture } from "../logging/test-helpers/diagnostic-log-capture.js";
 import type { AuthProfileStore } from "./auth-profiles.js";
 import type { SessionSuspensionParams } from "./session-suspension.js";
@@ -235,7 +235,7 @@ async function expectProbeFailureFallsBack({
         },
       },
     },
-  } as Partial<OpenClawConfig>);
+  } as Partial<NatesclawConfig>);
 
   mockedIsProfileInCooldown.mockReturnValue(true);
   mockedGetSoonestCooldownExpiry.mockReturnValue(1_700_000_000_000 + 30 * 1000);
@@ -267,7 +267,7 @@ describe("runWithModelFallback – probe logic", () => {
   const NOW = 1_700_000_000_000;
 
   const runPrimaryCandidate = (
-    cfg: OpenClawConfig,
+    cfg: NatesclawConfig,
     run: (provider: string, model: string) => Promise<unknown>,
   ) =>
     runWithModelFallback({
@@ -492,7 +492,7 @@ describe("runWithModelFallback – probe logic", () => {
     setLoggerOverride({
       level: "trace",
       consoleLevel: "silent",
-      file: path.join(os.tmpdir(), `openclaw-model-fallback-probe-${randomUUID()}.log`),
+      file: path.join(os.tmpdir(), `natesclaw-model-fallback-probe-${randomUUID()}.log`),
     });
 
     const run = vi.fn().mockResolvedValue("probed-ok");
@@ -512,7 +512,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
     mockedGetSoonestCooldownExpiry.mockReturnValue(NOW + 60 * 1000);
     const fallbackRun = vi
       .fn()
@@ -640,7 +640,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
 
     mockedResolveAuthProfileOrder.mockImplementation(({ provider }: { provider: string }) => {
       if (provider === "google") {
@@ -764,7 +764,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
 
     // Far-future cooldown with no fallback chain: the primary must still be
     // probed so a recovered rolling cap resumes work instead of staying silent
@@ -847,7 +847,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
 
     // Put only OpenAI into cooldown; Anthropic is available
     mockedIsProfileInCooldown.mockImplementation((_store: AuthProfileStore, profileId: string) =>
@@ -880,7 +880,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
     mockedIsProfileInCooldown.mockReturnValue(false);
     const run = vi
       .fn()
@@ -911,7 +911,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
     mockedIsProfileInCooldown.mockReturnValue(false);
     const controller = new AbortController();
     const disconnect = new Error("client disconnected");
@@ -948,7 +948,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
 
     // Both providers in cooldown
     mockedIsProfileInCooldown.mockReturnValue(true);
@@ -1005,7 +1005,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
     mockedIsProfileInCooldown.mockImplementation((_store: AuthProfileStore, profileId: string) =>
       profileId.startsWith("anthropic"),
     );
@@ -1045,7 +1045,7 @@ describe("runWithModelFallback – probe logic", () => {
           },
         },
       },
-    } as Partial<OpenClawConfig>);
+    } as Partial<NatesclawConfig>);
     mockedIsProfileInCooldown.mockReturnValue(false);
     const run = vi.fn().mockRejectedValueOnce(new Error("primary failed"));
 

@@ -17,15 +17,15 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "..");
 const workspaceSourceAliases = [
   {
-    find: "@openclaw/gateway-client/browser",
+    find: "@natesclaw/gateway-client/browser",
     replacement: path.resolve(repoRoot, "packages/gateway-client/src/browser.ts"),
   },
   {
-    find: /^@openclaw\/gateway-protocol\/(.+)$/u,
+    find: /^@natesclaw\/gateway-protocol\/(.+)$/u,
     replacement: path.resolve(repoRoot, "packages/gateway-protocol/src/$1.ts"),
   },
   {
-    find: /^@openclaw\/(gateway-protocol|retry)$/u,
+    find: /^@natesclaw\/(gateway-protocol|retry)$/u,
     replacement: path.resolve(repoRoot, "packages/$1/src/index.ts"),
   },
   {
@@ -33,51 +33,51 @@ const workspaceSourceAliases = [
     replacement: path.resolve(here, "src/lib/browser-redact.ts"),
   },
   {
-    find: "openclaw/plugin-sdk/test-fixtures",
+    find: "natesclaw/plugin-sdk/test-fixtures",
     replacement: path.resolve(repoRoot, "src/plugin-sdk/test-fixtures.ts"),
   },
   {
-    find: /^@openclaw\/model-catalog-core\/(.+)$/u,
+    find: /^@natesclaw\/model-catalog-core\/(.+)$/u,
     replacement: path.resolve(repoRoot, "packages/model-catalog-core/src/$1.ts"),
   },
   {
-    find: "@openclaw/model-catalog-core",
+    find: "@natesclaw/model-catalog-core",
     replacement: path.resolve(repoRoot, "packages/model-catalog-core/src/index.ts"),
   },
   {
-    find: /^@openclaw\/normalization-core\/(.+)$/u,
+    find: /^@natesclaw\/normalization-core\/(.+)$/u,
     replacement: path.resolve(repoRoot, "packages/normalization-core/src/$1"),
   },
   {
-    find: "@openclaw/normalization-core",
+    find: "@natesclaw/normalization-core",
     replacement: path.resolve(repoRoot, "packages/normalization-core/src/index.ts"),
   },
   {
-    find: /^@openclaw\/media-core\/(.+)$/u,
+    find: /^@natesclaw\/media-core\/(.+)$/u,
     replacement: path.resolve(repoRoot, "packages/media-core/src/$1"),
   },
   {
-    find: "@openclaw/media-core",
+    find: "@natesclaw/media-core",
     replacement: path.resolve(repoRoot, "packages/media-core/src/index.ts"),
   },
   {
-    find: "@openclaw/session-url-contract/parse",
+    find: "@natesclaw/session-url-contract/parse",
     replacement: path.resolve(repoRoot, "packages/session-url-contract/src/parse.ts"),
   },
   {
-    find: "@openclaw/session-url-contract",
+    find: "@natesclaw/session-url-contract",
     replacement: path.resolve(repoRoot, "packages/session-url-contract/src/index.ts"),
   },
   {
-    find: "@openclaw/workboard-contract",
+    find: "@natesclaw/workboard-contract",
     replacement: path.resolve(repoRoot, "packages/workboard-contract/src/index.ts"),
   },
   {
-    find: /^@openclaw\/net-policy\/(.+)$/u,
+    find: /^@natesclaw\/net-policy\/(.+)$/u,
     replacement: path.resolve(repoRoot, "packages/net-policy/src/$1"),
   },
   {
-    find: "@openclaw/net-policy",
+    find: "@natesclaw/net-policy",
     replacement: path.resolve(repoRoot, "packages/net-policy/src/index.ts"),
   },
 ];

@@ -1,25 +1,25 @@
 {
-  "name": "@openclaw/copilot",
+  "name": "@natesclaw/copilot",
   "version": "2026.8.1",
-  "description": "OpenClaw GitHub Copilot agent runtime plugin (registers a `github-copilot` AgentHarness backed by @github/copilot-sdk over JSON-RPC to the GitHub Copilot CLI)",
+  "description": "Natesclaw GitHub Copilot agent runtime plugin (registers a `github-copilot` AgentHarness backed by @github/copilot-sdk over JSON-RPC to the GitHub Copilot CLI)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
     "@github/copilot-sdk": "1.0.7"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/copilot",
-      "npmSpec": "@openclaw/copilot",
+      "clawhubSpec": "clawhub:@natesclaw/copilot",
+      "npmSpec": "@natesclaw/copilot",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.28"
     },
@@ -27,7 +27,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {

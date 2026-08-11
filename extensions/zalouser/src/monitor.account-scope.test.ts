@@ -1,7 +1,7 @@
 // Zalouser tests cover monitor.account scope plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig, PluginRuntime } from "../runtime-api.js";
+import type { NatesclawConfig, PluginRuntime } from "../runtime-api.js";
 import "./monitor.send.test-mocks.js";
 import "./zalo-js.test-mocks.js";
 import {
@@ -77,7 +77,7 @@ describe("zalouser monitor pairing account scoping", () => {
       },
     };
 
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       channels: {
         zalouser: {
           accounts: {

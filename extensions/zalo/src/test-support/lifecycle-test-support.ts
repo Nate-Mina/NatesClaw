@@ -3,9 +3,9 @@ import { request as httpRequest } from "node:http";
 import {
   createPluginRuntimeMediaMock,
   createPluginRuntimeMock,
-} from "openclaw/plugin-sdk/channel-test-helpers";
+} from "natesclaw/plugin-sdk/channel-test-helpers";
 import { expect, vi } from "vitest";
-import type { OpenClawConfig, PluginRuntime } from "../runtime-api.js";
+import type { NatesclawConfig, PluginRuntime } from "../runtime-api.js";
 import type { ResolvedZaloAccount } from "../types.js";
 
 type LifecycleMonitorSetupParams = {
@@ -37,7 +37,7 @@ function createLifecycleAccountConfig(params: LifecycleMonitorSetupParams) {
   };
 }
 
-function createLifecycleConfig(params: LifecycleMonitorSetupParams): OpenClawConfig {
+function createLifecycleConfig(params: LifecycleMonitorSetupParams): NatesclawConfig {
   return {
     channels: {
       zalo: {
@@ -47,7 +47,7 @@ function createLifecycleConfig(params: LifecycleMonitorSetupParams): OpenClawCon
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function createLifecycleAccount(params: LifecycleMonitorSetupParams): ResolvedZaloAccount {

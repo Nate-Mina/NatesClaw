@@ -1,18 +1,18 @@
 // OpenRouter OAuth support exchanges PKCE browser login codes for API keys.
 import { createServer } from "node:http";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { ProviderAuthContext, ProviderAuthMethod } from "openclaw/plugin-sdk/plugin-entry";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import type { ProviderAuthContext, ProviderAuthMethod } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   buildApiKeyCredential,
   generatePkceVerifierChallenge,
   type ProviderAuthResult,
-} from "openclaw/plugin-sdk/provider-auth";
-import { generateOAuthState } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "natesclaw/plugin-sdk/provider-auth";
+import { generateOAuthState } from "natesclaw/plugin-sdk/provider-auth-runtime";
 import {
   readProviderJsonResponse,
   readResponseTextLimited,
-} from "openclaw/plugin-sdk/provider-http";
-import { isRecord, normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { isRecord, normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { applyOpenrouterConfig, OPENROUTER_DEFAULT_MODEL_REF } from "./onboard.js";
 
 const PROVIDER_ID = "openrouter";
@@ -276,7 +276,7 @@ async function waitForOpenRouterOAuthCallback(params: {
         res.end(
           "<!doctype html><html><head><meta charset='utf-8'/></head>" +
             "<body><h2>OpenRouter OAuth complete</h2>" +
-            "<p>You can close this window and return to OpenClaw.</p></body></html>",
+            "<p>You can close this window and return to Natesclaw.</p></body></html>",
         );
         finish(undefined, { code, state: params.expectedState });
       } catch (err) {

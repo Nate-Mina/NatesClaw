@@ -1,17 +1,17 @@
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../../infra/kysely-sync.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "../../../state/openclaw-agent-db.generated.js";
+import type { DB as NatesclawAgentKyselyDatabase } from "../../../state/natesclaw-agent-db.generated.js";
 import {
-  openOpenClawAgentDatabase,
-  type OpenClawAgentDatabaseOptions,
-} from "../../../state/openclaw-agent-db.js";
+  openNatesclawAgentDatabase,
+  type NatesclawAgentDatabaseOptions,
+} from "../../../state/natesclaw-agent-db.js";
 import type { AcpParentStreamEvent } from "./acp-parent-stream-store.sqlite.js";
 
-type AcpParentStreamDatabase = Pick<OpenClawAgentKyselyDatabase, "acp_parent_stream_events">;
+type AcpParentStreamDatabase = Pick<NatesclawAgentKyselyDatabase, "acp_parent_stream_events">;
 
 export function listAcpParentStreamEventsForTest(
-  options: OpenClawAgentDatabaseOptions & { sessionId: string; runId: string },
+  options: NatesclawAgentDatabaseOptions & { sessionId: string; runId: string },
 ): AcpParentStreamEvent[] {
-  const database = openOpenClawAgentDatabase(options);
+  const database = openNatesclawAgentDatabase(options);
   const db = getNodeSqliteKysely<AcpParentStreamDatabase>(database.db);
   return executeSqliteQuerySync(
     database.db,

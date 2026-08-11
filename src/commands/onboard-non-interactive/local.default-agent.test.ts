@@ -1,6 +1,6 @@
 // Non-interactive setup tests keep provisioning and output on the configured default agent.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { RuntimeEnv } from "../../runtime.js";
 
 const mocks = vi.hoisted(() => ({
@@ -24,7 +24,7 @@ vi.mock("../../config/logging.js", () => ({
 
 vi.mock("../onboard-helpers.js", () => ({
   DEFAULT_WORKSPACE: "/tmp/default-workspace",
-  applyWizardMetadata: (config: OpenClawConfig) => config,
+  applyWizardMetadata: (config: NatesclawConfig) => config,
   ensureWorkspaceAndSessions: mocks.ensureWorkspaceAndSessions,
   resolveLocalControlUiProbeLinks: vi.fn(),
   waitForGatewayReachable: vi.fn(),
@@ -56,7 +56,7 @@ vi.mock("./local/output.js", () => ({
 }));
 
 vi.mock("./local/skills-config.js", () => ({
-  applyNonInteractiveSkillsConfig: ({ nextConfig }: { nextConfig: OpenClawConfig }) => nextConfig,
+  applyNonInteractiveSkillsConfig: ({ nextConfig }: { nextConfig: NatesclawConfig }) => nextConfig,
 }));
 
 import { runNonInteractiveLocalSetup } from "./local.js";
@@ -71,10 +71,10 @@ describe("runNonInteractiveLocalSetup default-agent ownership", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.applyAuthChoice.mockImplementation(
-      async ({ nextConfig }: { nextConfig: OpenClawConfig }) => nextConfig,
+      async ({ nextConfig }: { nextConfig: NatesclawConfig }) => nextConfig,
     );
     mocks.applyGatewayConfig.mockImplementation(
-      ({ nextConfig }: { nextConfig: OpenClawConfig }) => ({
+      ({ nextConfig }: { nextConfig: NatesclawConfig }) => ({
         nextConfig,
         port: 18789,
         bind: "loopback",
@@ -83,10 +83,10 @@ describe("runNonInteractiveLocalSetup default-agent ownership", () => {
       }),
     );
     mocks.commitConfig.mockImplementation(
-      async ({ nextConfig }: { nextConfig: OpenClawConfig }) => nextConfig,
+      async ({ nextConfig }: { nextConfig: NatesclawConfig }) => nextConfig,
     );
     mocks.ensureOnboardingAgent.mockImplementation(
-      async ({ config }: { config: OpenClawConfig }) => ({
+      async ({ config }: { config: NatesclawConfig }) => ({
         config,
         agentId: "ops",
         bootstrapPending: false,
@@ -135,7 +135,7 @@ describe("runNonInteractiveLocalSetup default-agent ownership", () => {
   it("resolves provider auth in the requested first-agent workspace before creating state", async () => {
     const workspace = "/tmp/requested-provider-workspace";
     mocks.ensureOnboardingAgent.mockImplementationOnce(
-      async ({ config }: { config: OpenClawConfig }) => ({
+      async ({ config }: { config: NatesclawConfig }) => ({
         config: {
           ...config,
           agents: {
@@ -214,7 +214,7 @@ describe("runNonInteractiveLocalSetup default-agent ownership", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
 
     await runNonInteractiveLocalSetup({
       opts: {

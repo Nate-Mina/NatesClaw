@@ -1,14 +1,14 @@
-import { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
+import { logTypingFailure } from "natesclaw/plugin-sdk/channel-feedback";
 import {
   runChannelInboundEvent,
   type ChannelInboundTurnPlan,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 import {
   createChannelMessageReplyPipeline,
   resolveChannelStreamingPreviewToolProgress,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { isFastModeAutoProgressPayload } from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { isFastModeAutoProgressPayload } from "natesclaw/plugin-sdk/reply-payload";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { sendPayload } from "./bot-message-dispatch-delivery.js";
 import {
   beginDraftQueuedFollowup,

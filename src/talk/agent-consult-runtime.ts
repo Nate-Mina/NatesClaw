@@ -7,7 +7,7 @@ import { resolveSessionWorkStartError } from "../config/sessions/lifecycle.js";
 import { buildSessionCreationStamp } from "../config/sessions/session-entry-provenance.js";
 import { parseSessionThreadInfoFast } from "../config/sessions/thread-info.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { RuntimeLogger, PluginRuntimeCore } from "../plugins/runtime/types-core.js";
 import { parseAgentSessionKey } from "../routing/session-key.js";
 import { isModelSelectionLocked, ModelSelectionLockedError } from "../sessions/model-overrides.js";
@@ -56,7 +56,7 @@ type RealtimeVoiceAgentConsultRunRegistration = {
  * Fails closed when a realtime consult would cross a model-selection lock.
  */
 export function assertRealtimeVoiceAgentConsultModelSelectionUnlocked(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentRuntime: RealtimeVoiceAgentConsultRuntime;
   agentId: string;
   sessionKey: string;
@@ -164,7 +164,7 @@ function resolveRealtimeVoiceAgentDeliveryContext(params: {
 
 async function resolveRealtimeVoiceAgentConsultSessionEntry(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   sessionKey: string;
   spawnedBy?: string | null;
   contextMode?: RealtimeVoiceAgentConsultContextMode;
@@ -251,7 +251,7 @@ async function resolveRealtimeVoiceAgentConsultSessionEntry(params: {
  * Runs an embedded agent consult and returns concise speakable text for realtime voice playback.
  */
 export async function consultRealtimeVoiceAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentRuntime: RealtimeVoiceAgentConsultRuntime;
   logger: Pick<RuntimeLogger, "warn">;
   sessionKey: string;
@@ -425,7 +425,7 @@ export async function consultRealtimeVoiceAgent(params: {
         lane: params.lane,
         extraSystemPrompt:
           params.extraSystemPrompt ??
-          "You are the configured OpenClaw agent receiving delegated requests from a live voice bridge. Act on behalf of the user, use available tools when appropriate, and return a brief speakable result.",
+          "You are the configured Natesclaw agent receiving delegated requests from a live voice bridge. Act on behalf of the user, use available tools when appropriate, and return a brief speakable result.",
         agentDir,
         abortSignal,
       });

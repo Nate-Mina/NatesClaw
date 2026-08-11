@@ -2,7 +2,7 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { writeSecretStoreEntry } from "../secrets/store/secret-store.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { captureEnv } from "../test-utils/env.js";
 import type { BashSandboxConfig } from "./bash-tools.shared.js";
 
@@ -77,16 +77,16 @@ async function withTeamStoreEntries(
   run: () => Promise<void>,
 ): Promise<void> {
   const tempDirs = createTempDirTracker();
-  const stateDir = tempDirs.make("openclaw-exec-store-env-");
-  const envSnapshot = captureEnv(["OPENCLAW_STATE_DIR"]);
-  process.env.OPENCLAW_STATE_DIR = stateDir;
+  const stateDir = tempDirs.make("natesclaw-exec-store-env-");
+  const envSnapshot = captureEnv(["NATESCLAW_STATE_DIR"]);
+  process.env.NATESCLAW_STATE_DIR = stateDir;
   try {
     for (const entry of entries) {
       writeSecretStoreEntry({ scope: { kind: "team" }, ...entry, updatedBy: "test" });
     }
     await run();
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     envSnapshot.restore();
     tempDirs.cleanup();
   }

@@ -191,7 +191,7 @@ describe("new-session composer start control", () => {
       ".new-session-page__start-menu-trigger",
     );
     const item = composer.querySelector<HTMLElement>("wa-dropdown-item[value='start-terminal']");
-    const tooltips = composer.querySelectorAll<HTMLElement>("openclaw-tooltip");
+    const tooltips = composer.querySelectorAll<HTMLElement>("natesclaw-tooltip");
 
     expect(trigger?.disabled).toBe(true);
     expect(item?.hasAttribute("disabled")).toBe(true);
@@ -309,7 +309,7 @@ describe("new-session composer attachment drops", () => {
       incognitoDisabledReason: "This action requires operator.admin access.",
       submitDisabledReason: "This action requires operator.write access.",
     });
-    const submitTooltip = composer.querySelector<HTMLElement>("openclaw-tooltip");
+    const submitTooltip = composer.querySelector<HTMLElement>("natesclaw-tooltip");
     const incognito = composer.querySelector<HTMLButtonElement>('[role="switch"]');
 
     expect((submitTooltip as HTMLElement & { content?: string })?.content).toBe(

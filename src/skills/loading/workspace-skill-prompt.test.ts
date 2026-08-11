@@ -3,7 +3,7 @@ import fsSync from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NatesclawConfig } from "../../config/config.js";
 import { withEnv } from "../../test-utils/env.js";
 import {
   restoreMockSkillsHomeEnv,
@@ -59,7 +59,7 @@ function buildPrompt(
           ...(limits.maxCount !== undefined && { maxSkillsInPrompt: limits.maxCount }),
         },
       },
-    } satisfies OpenClawConfig,
+    } satisfies NatesclawConfig,
   });
 }
 
@@ -72,15 +72,15 @@ function requireIncludedCounts(prompt: string): [included: number, total: number
 }
 
 const COMPACT_OMITTED_NOTICE =
-  "⚠️ Skills catalog using compact format (descriptions omitted). Run `openclaw skills check` to audit.";
+  "⚠️ Skills catalog using compact format (descriptions omitted). Run `natesclaw skills check` to audit.";
 const COMPACT_SHORTENED_NOTICE =
-  "⚠️ Skills catalog using compact format (descriptions shortened). Run `openclaw skills check` to audit.";
+  "⚠️ Skills catalog using compact format (descriptions shortened). Run `natesclaw skills check` to audit.";
 
 describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
   let envSnapshot: SkillsHomeEnvSnapshot;
 
   beforeEach(() => {
-    envSnapshot = setMockSkillsHomeEnv("/Users/openclaw-test-user");
+    envSnapshot = setMockSkillsHomeEnv("/Users/natesclaw-test-user");
   });
 
   afterEach(() => restoreMockSkillsHomeEnv(envSnapshot));
@@ -101,7 +101,7 @@ describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
             maxSkillsPromptChars: 4_000,
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
     });
 
     expect(prompt).toContain("visible");
@@ -178,7 +178,7 @@ describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
     const tenSkills = skills.slice(0, 10);
     const fullLen = formatSkillsForPromptCore(tenSkills).length;
     const truncatedNotice =
-      "⚠️ Skills truncated: included 10 of 30 (compact format, descriptions shortened). Run `openclaw skills check` to audit.";
+      "⚠️ Skills truncated: included 10 of 30 (compact format, descriptions shortened). Run `natesclaw skills check` to audit.";
     const budget = `${truncatedNotice}\n${formatSkillsCompact(tenSkills)}`.length;
     // Verify precondition: full format of 10 skills exceeds budget
     expect(fullLen).toBeGreaterThan(budget);
@@ -214,7 +214,7 @@ describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
         skills: {
           limits: { maxSkillsPromptChars: maxChars },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NatesclawConfig,
       eligibility: {
         remote: {
           platforms: [],
@@ -271,7 +271,7 @@ describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
       makeSkill(
         `skill-${i}`,
         "A".repeat(800),
-        `${home}/.openclaw/workspace/skills/skill-${i}/SKILL.md`,
+        `${home}/.natesclaw/workspace/skills/skill-${i}/SKILL.md`,
       ),
     );
     // Compute compacted lengths (what the prompt will actually contain)
@@ -310,7 +310,7 @@ describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
     );
     const prompt = buildWorkspaceSkillsPrompt("/fake", {
       entries,
-      config: { skills: { limits: { maxSkillsPromptChars: 50_000 } } } satisfies OpenClawConfig,
+      config: { skills: { limits: { maxSkillsPromptChars: 50_000 } } } satisfies NatesclawConfig,
     });
     const nameMatches = [...prompt.matchAll(/<name>(\w+)<\/name>/g)].map((m) => m[1]);
     expect(nameMatches).toEqual(["apple", "banana", "mango", "zoo"]);
@@ -319,7 +319,7 @@ describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
   it("resolvedSkills in snapshot keeps canonical paths, not compacted", () => {
     const home = os.homedir();
     const skills = Array.from({ length: 5 }, (_, i) =>
-      makeSkill(`skill-${i}`, "A skill", `${home}/.openclaw/workspace/skills/skill-${i}/SKILL.md`),
+      makeSkill(`skill-${i}`, "A skill", `${home}/.natesclaw/workspace/skills/skill-${i}/SKILL.md`),
     );
     const snapshot = buildSkillSnapshot("/fake", {
       entries: skills.map(makeEntry),
@@ -367,7 +367,7 @@ describe("compactSkillPaths", () => {
 
   it("replaces home directory prefix with ~ in skill locations", () => {
     const home = os.homedir();
-    const skillDir = path.join(home, ".openclaw-test-skills", "test-skill");
+    const skillDir = path.join(home, ".natesclaw-test-skills", "test-skill");
 
     const prompt = buildPromptForFixtureSkill({
       workspaceRoot: home,
@@ -385,43 +385,43 @@ describe("compactSkillPaths", () => {
   it("does not compact explicit state-root managed skill paths to OS-home tilde paths", () => {
     const root = path.parse(os.homedir()).root;
     const osHome = path.join(root, "data");
-    const stateDir = path.join(osHome, ".openclaw");
-    const skillDir = path.join(stateDir, "skills", "world-cup-soccer-openclaw-skill");
+    const stateDir = path.join(osHome, ".natesclaw");
+    const skillDir = path.join(stateDir, "skills", "world-cup-soccer-natesclaw-skill");
     const skillFile = path.join(skillDir, "SKILL.md");
 
     const prompt = withEnv(
       {
         HOME: osHome,
-        OPENCLAW_HOME: osHome,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_CONFIG_PATH: path.join(stateDir, "openclaw.json"),
+        NATESCLAW_HOME: osHome,
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_CONFIG_PATH: path.join(stateDir, "natesclaw.json"),
       },
       () =>
         buildPromptForFixtureSkill({
           workspaceRoot: path.join(root, "workspace"),
           skillDir,
-          name: "world-cup-soccer-openclaw-skill",
+          name: "world-cup-soccer-natesclaw-skill",
           description: "World Cup standings lookup",
         }),
     );
 
     expect(prompt).toContain(`<location>${skillFile}</location>`);
-    expect(prompt).not.toContain("~/.openclaw/skills/world-cup-soccer-openclaw-skill/SKILL.md");
+    expect(prompt).not.toContain("~/.natesclaw/skills/world-cup-soccer-natesclaw-skill/SKILL.md");
   });
 
   it("does not compact explicit state-root plugin skill paths to OS-home tilde paths", () => {
     const root = path.parse(os.homedir()).root;
     const osHome = path.join(root, "data");
-    const stateDir = path.join(osHome, ".openclaw");
+    const stateDir = path.join(osHome, ".natesclaw");
     const skillDir = path.join(stateDir, "plugin-skills", "calendar-plugin-skill");
     const skillFile = path.join(skillDir, "SKILL.md");
 
     const prompt = withEnv(
       {
         HOME: osHome,
-        OPENCLAW_HOME: osHome,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_CONFIG_PATH: path.join(stateDir, "openclaw.json"),
+        NATESCLAW_HOME: osHome,
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_CONFIG_PATH: path.join(stateDir, "natesclaw.json"),
       },
       () =>
         buildPromptForFixtureSkill({
@@ -433,19 +433,19 @@ describe("compactSkillPaths", () => {
     );
 
     expect(prompt).toContain(`<location>${skillFile}</location>`);
-    expect(prompt).not.toContain("~/.openclaw/plugin-skills/calendar-plugin-skill/SKILL.md");
+    expect(prompt).not.toContain("~/.natesclaw/plugin-skills/calendar-plugin-skill/SKILL.md");
   });
 
   it("compacts managed skill paths when OS-home tilde reaches the same path", () => {
     const home = os.homedir();
-    const stateDir = path.join(home, ".openclaw");
+    const stateDir = path.join(home, ".natesclaw");
     const skillDir = path.join(stateDir, "skills", "home-managed-skill");
 
     const prompt = withEnv(
       {
         HOME: home,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_HOME: undefined,
+        NATESCLAW_STATE_DIR: stateDir,
+        NATESCLAW_HOME: undefined,
       },
       () =>
         buildPromptForFixtureSkill({
@@ -456,13 +456,13 @@ describe("compactSkillPaths", () => {
         }),
     );
 
-    expect(prompt).toContain("<location>~/.openclaw/skills/home-managed-skill/SKILL.md</location>");
+    expect(prompt).toContain("<location>~/.natesclaw/skills/home-managed-skill/SKILL.md</location>");
     expect(prompt).not.toContain(`<location>${path.join(skillDir, "SKILL.md")}</location>`);
   });
 
   it("preserves POSIX literal backslashes after home compaction", () => {
     const home = os.homedir();
-    const skillDir = path.join(home, ".openclaw-test-skills\\literal-skill");
+    const skillDir = path.join(home, ".natesclaw-test-skills\\literal-skill");
 
     const prompt = buildPromptForFixtureSkill({
       workspaceRoot: home,
@@ -480,7 +480,7 @@ describe("compactSkillPaths", () => {
   });
 
   it("preserves paths outside home directory", () => {
-    const outsideHome = path.join(path.parse(os.homedir()).root, "openclaw-external-skills");
+    const outsideHome = path.join(path.parse(os.homedir()).root, "natesclaw-external-skills");
     const skillDir = path.join(outsideHome, "skills", "ext-skill");
 
     const prompt = buildPromptForFixtureSkill({
@@ -496,14 +496,14 @@ describe("compactSkillPaths", () => {
 
   it("loads skills when the shared state database is unavailable", () => {
     const root = fsSync.realpathSync(
-      fsSync.mkdtempSync(path.join(os.tmpdir(), "openclaw-skill-load-")),
+      fsSync.mkdtempSync(path.join(os.tmpdir(), "natesclaw-skill-load-")),
     );
     const blockedParent = path.join(root, "state-blocker");
     fsSync.writeFileSync(blockedParent, "not a directory", "utf8");
     const skillDir = path.join(root, "workspace", "skills", "available-skill");
 
     try {
-      const prompt = withEnv({ OPENCLAW_STATE_DIR: path.join(blockedParent, "state") }, () =>
+      const prompt = withEnv({ NATESCLAW_STATE_DIR: path.join(blockedParent, "state") }, () =>
         buildPromptForFixtureSkill({
           workspaceRoot: path.join(root, "workspace"),
           skillDir,

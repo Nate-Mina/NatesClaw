@@ -92,7 +92,7 @@ function buildDescriptor(
       rpcSetVersion: 1,
       handshake: {
         bundleHash: "a".repeat(64),
-        openclawVersion: "test",
+        natesclawVersion: "test",
         protocolFeatures: [],
       },
     },
@@ -152,7 +152,7 @@ describe("assertSupportedTurn", () => {
         config: {
           agents: {
             defaults: {
-              models: { "openai/gpt-5.4": { agentRuntime: { id: "openclaw" } } },
+              models: { "openai/gpt-5.4": { agentRuntime: { id: "natesclaw" } } },
             },
           },
         },

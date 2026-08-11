@@ -23,7 +23,7 @@ type SessionVisibilityScope = "self" | "tree" | "agent" | "all";
 
 // Single source for model-facing session-visibility scope wording; every tool
 // description or warning that explains visibility renders through this so the
-// prose cannot drift from the session-visibility checker (openclaw#114797).
+// prose cannot drift from the session-visibility checker (natesclaw#114797).
 const SESSION_VISIBILITY_SCOPE_COPY = {
   self: "current session only",
   tree: "current session + own spawn subtree; reads also cover any watched same-agent group sessions",

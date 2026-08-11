@@ -25,7 +25,7 @@ function buildSkillsPrompt(workspaceDir: string, managedDir: string, bundledDir:
 }
 
 async function createWorkspaceSkillDirs() {
-  const workspaceDir = tempDirs.make("openclaw-");
+  const workspaceDir = tempDirs.make("natesclaw-");
   return {
     workspaceDir,
     managedDir: path.join(workspaceDir, ".managed"),
@@ -38,7 +38,7 @@ describe("buildWorkspaceSkillsPrompt — .agents/skills/ directories", () => {
   let envSnapshot: SkillsHomeEnvSnapshot;
 
   beforeEach(async () => {
-    fakeHome = tempDirs.make("openclaw-home-");
+    fakeHome = tempDirs.make("natesclaw-home-");
     envSnapshot = setMockSkillsHomeEnv(fakeHome);
   });
 
@@ -118,10 +118,10 @@ describe("buildWorkspaceSkillsPrompt — .agents/skills/ directories", () => {
       description: "Personal only skill",
     });
 
-    setTestEnvValue("OPENCLAW_STATE_DIR", path.join(fakeHome, ".openclaw"));
+    setTestEnvValue("NATESCLAW_STATE_DIR", path.join(fakeHome, ".natesclaw"));
     expect(buildSkillsPrompt(workspaceDir, managedDir, bundledDir)).toContain("personal-only");
 
-    setTestEnvValue("OPENCLAW_STATE_DIR", path.join(fakeHome, "scratch-state"));
+    setTestEnvValue("NATESCLAW_STATE_DIR", path.join(fakeHome, "scratch-state"));
     expect(buildSkillsPrompt(workspaceDir, managedDir, bundledDir)).not.toContain("personal-only");
   });
 

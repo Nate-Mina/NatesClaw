@@ -12,10 +12,10 @@ describe("update.run package self-upgrade producer", () => {
     expect(resolveUpdateRunSelfUpgradePermission({})).toEqual({
       allowed: false,
       reason:
-        "blocked destructive package self-upgrade; set OPENCLAW_QA_ALLOW_UPDATE_RUN_SELF=1 to run",
+        "blocked destructive package self-upgrade; set NATESCLAW_QA_ALLOW_UPDATE_RUN_SELF=1 to run",
     });
     expect(
-      resolveUpdateRunSelfUpgradePermission({ OPENCLAW_QA_ALLOW_UPDATE_RUN_SELF: "1" }),
+      resolveUpdateRunSelfUpgradePermission({ NATESCLAW_QA_ALLOW_UPDATE_RUN_SELF: "1" }),
     ).toEqual({ allowed: true });
   });
 
@@ -36,14 +36,14 @@ describe("update.run package self-upgrade producer", () => {
     );
 
     expect(script).toContain("source scripts/e2e/lib/upgrade-survivor/update-restart-auth.sh");
-    expect(script).toContain("-u OPENCLAW_SKIP_PROVIDERS");
-    expect(script).toContain("systemctl --user start openclaw-gateway.service");
-    expect(script).toContain("OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service");
+    expect(script).toContain("-u NATESCLAW_SKIP_PROVIDERS");
+    expect(script).toContain("systemctl --user start natesclaw-gateway.service");
+    expect(script).toContain("NATESCLAW_SYSTEMD_UNIT=natesclaw-gateway.service");
     expect(script).toContain("restart mode: update process respawn (supervisor restart)");
     expect(script).toContain("service-owned target environment unexpectedly suppresses providers");
     expect(script).not.toContain("target_gateway_pid");
-    expect(script).not.toContain("openclaw_e2e_stop_process");
-    expect(script).toContain("systemctl --user stop openclaw-gateway.service");
+    expect(script).not.toContain("natesclaw_e2e_stop_process");
+    expect(script).toContain("systemctl --user stop natesclaw-gateway.service");
     expect(script).toContain(': >"$SYSTEMCTL_SHIM_LOG"');
     const runCleanup = script.slice(
       script.indexOf("rm -f \\"),
@@ -51,8 +51,8 @@ describe("update.run package self-upgrade producer", () => {
     );
     expect(runCleanup).toContain('"$UPDATE_STATUS_JSON"');
     expect(runCleanup).toContain('"$ARTIFACT_DIR/update-status.candidate.json"');
-    expect(script.indexOf("openclaw gateway install --force --json")).toBeLessThan(
-      script.indexOf("OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service"),
+    expect(script.indexOf("natesclaw gateway install --force --json")).toBeLessThan(
+      script.indexOf("NATESCLAW_SYSTEMD_UNIT=natesclaw-gateway.service"),
     );
   });
 
@@ -183,14 +183,14 @@ describe("update.run package self-upgrade producer", () => {
       'npm install \\\n  --prefix "$historical_install_root" \\\n  --omit=dev',
     );
     expect(script).toContain(
-      'tar --no-same-owner \\\n  -xf /tmp/openclaw-update-run-historical-dist.tar \\\n  -C "$historical_package_root"',
+      'tar --no-same-owner \\\n  -xf /tmp/natesclaw-update-run-historical-dist.tar \\\n  -C "$historical_package_root"',
     );
     expect(script).toContain(
       'ln -s "$historical_package_root/dist/extensions/qa-channel" "$qa_plugin_link"',
     );
     expect(script).toContain("await import(pathToFileURL(pluginEntry).href)");
     expect(script).not.toContain(
-      '-v "$QA_CHANNEL_FIXTURE_ROOT/checkout:/tmp/openclaw-update-run-build:ro"',
+      '-v "$QA_CHANNEL_FIXTURE_ROOT/checkout:/tmp/natesclaw-update-run-build:ro"',
     );
     expect(script).not.toContain("NODE_PATH");
   });

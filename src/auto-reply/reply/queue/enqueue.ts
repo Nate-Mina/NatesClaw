@@ -1,5 +1,5 @@
 // Enqueues follow-up reply runs and schedules queue drains.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { normalizeChatType } from "../../../channels/chat-type.js";
 import { logMessageQueuedWithBacklogPolicy } from "../../../logging/diagnostic-runtime.js";
 import { channelRouteDedupeKey } from "../../../plugin-sdk/channel-route.js";
@@ -405,7 +405,7 @@ export function parkSteerCandidate(
 }
 
 if (process.env.VITEST === "true" || process.env.NODE_ENV === "test") {
-  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("openclaw.queueEnqueueTestApi")] = {
+  (globalThis as Record<PropertyKey, unknown>)[Symbol.for("natesclaw.queueEnqueueTestApi")] = {
     resetRecentQueuedMessageIdDedupe,
   };
 }

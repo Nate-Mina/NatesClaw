@@ -4,12 +4,12 @@ import {
   isRecord,
   asBoolean as readBoolean,
   normalizeOptionalString as readString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { readStringArray } from "./policy-state-tool-posture.js";
 import type { PolicySandboxPostureEvidence } from "./policy-state-types.js";
 
 // Mirrors the sandbox browser config default without importing core internals into the policy plugin.
-const DEFAULT_POLICY_SANDBOX_BROWSER_NETWORK = "openclaw-sandbox-browser";
+const DEFAULT_POLICY_SANDBOX_BROWSER_NETWORK = "natesclaw-sandbox-browser";
 
 export function scanPolicySandboxPosture(
   cfg: Record<string, unknown>,
@@ -23,8 +23,8 @@ export function scanPolicySandboxPosture(
     scope: "defaults",
     sandbox: defaultSandbox,
     inheritedSandbox: {},
-    sourceBase: "oc://openclaw.config/agents/defaults/sandbox",
-    inheritedSourceBase: "oc://openclaw.config/agents/defaults/sandbox",
+    sourceBase: "oc://natesclaw.config/agents/defaults/sandbox",
+    inheritedSourceBase: "oc://natesclaw.config/agents/defaults/sandbox",
   });
 
   const list = Array.isArray(agents.list) ? agents.list : [];
@@ -42,8 +42,8 @@ export function scanPolicySandboxPosture(
       sandbox,
       inheritedSandbox: defaultSandbox,
       sharedSandboxScope: sandboxScopeIsShared(sandbox, defaultSandbox),
-      sourceBase: `oc://openclaw.config/agents/list/#${index}/sandbox`,
-      inheritedSourceBase: "oc://openclaw.config/agents/defaults/sandbox",
+      sourceBase: `oc://natesclaw.config/agents/list/#${index}/sandbox`,
+      inheritedSourceBase: "oc://natesclaw.config/agents/defaults/sandbox",
     });
   });
 

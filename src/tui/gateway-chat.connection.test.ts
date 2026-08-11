@@ -95,7 +95,7 @@ async function withModeExecProviderFixture(
   label: string,
   run: (fixture: ModeExecProviderFixture) => Promise<void>,
 ) {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), `openclaw-tui-mode-${label}-`));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), `natesclaw-tui-mode-${label}-`));
   const tokenMarker = path.join(tempDir, "token-provider-ran");
   const passwordMarker = path.join(tempDir, "password-provider-ran");
   const tokenExecProgram = [
@@ -138,10 +138,10 @@ describe("resolveGatewayConnection", () => {
 
   beforeEach(() => {
     envSnapshot = captureEnv([
-      "OPENCLAW_GATEWAY_URL",
-      "OPENCLAW_GATEWAY_PORT",
-      "OPENCLAW_GATEWAY_TOKEN",
-      "OPENCLAW_GATEWAY_PASSWORD",
+      "NATESCLAW_GATEWAY_URL",
+      "NATESCLAW_GATEWAY_PORT",
+      "NATESCLAW_GATEWAY_TOKEN",
+      "NATESCLAW_GATEWAY_PASSWORD",
     ]);
     loadConfig.mockReset();
     loadDeviceIdentityIfPresentMock.mockReset().mockReturnValue(null);
@@ -152,16 +152,16 @@ describe("resolveGatewayConnection", () => {
     resolveConfigPath.mockReset();
     resolveGatewayPort.mockReturnValue(18789);
     resolveStateDir.mockImplementation(
-      (env: NodeJS.ProcessEnv) => env.OPENCLAW_STATE_DIR ?? "/tmp/openclaw",
+      (env: NodeJS.ProcessEnv) => env.NATESCLAW_STATE_DIR ?? "/tmp/natesclaw",
     );
     resolveConfigPath.mockImplementation(
       (env: NodeJS.ProcessEnv, stateDir: string) =>
-        env.OPENCLAW_CONFIG_PATH ?? `${stateDir}/openclaw.json`,
+        env.NATESCLAW_CONFIG_PATH ?? `${stateDir}/natesclaw.json`,
     );
-    delete process.env.OPENCLAW_GATEWAY_URL;
-    delete process.env.OPENCLAW_GATEWAY_PORT;
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+    delete process.env.NATESCLAW_GATEWAY_URL;
+    delete process.env.NATESCLAW_GATEWAY_PORT;
+    delete process.env.NATESCLAW_GATEWAY_TOKEN;
+    delete process.env.NATESCLAW_GATEWAY_PASSWORD;
   });
 
   afterEach(() => {
@@ -179,8 +179,8 @@ describe("resolveGatewayConnection", () => {
 
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_URL: "wss://env.example/ws",
-        OPENCLAW_GATEWAY_TOKEN: "bound-global-shell-auth",
+        NATESCLAW_GATEWAY_URL: "wss://env.example/ws",
+        NATESCLAW_GATEWAY_TOKEN: "bound-global-shell-auth",
       },
       async () => {
         const result = resolveBoundGatewayConnection({
@@ -211,7 +211,7 @@ describe("resolveGatewayConnection", () => {
       gateway: { mode: "local", auth: { token: "configured-token" } },
     });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_TOKEN: "override-shell-auth" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_TOKEN: "override-shell-auth" }, async () => {
       await expect(
         resolveGatewayConnection({ url: "wss://override.example/ws/?ignored=1" }),
       ).rejects.toThrow(/pass --token or --password once to request pairing/i);
@@ -337,7 +337,7 @@ describe("resolveGatewayConnection", () => {
     });
     readActiveGatewayLockPortMock.mockResolvedValue(48789);
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_PORT: "19001" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_PORT: "19001" }, async () => {
       const result = await resolveGatewayConnection({});
 
       expect(result.url).toBe("ws://127.0.0.1:19001");
@@ -347,16 +347,16 @@ describe("resolveGatewayConnection", () => {
   it("uses config auth token for local mode when both config and env tokens are set", async () => {
     loadConfig.mockReturnValue({ gateway: { mode: "local", auth: { token: "config-token" } } });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_TOKEN: "local-competing-shell-auth" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_TOKEN: "local-competing-shell-auth" }, async () => {
       const result = await resolveGatewayConnection({});
       expect(result.token).toBe("config-token");
     });
   });
 
-  it("falls back to OPENCLAW_GATEWAY_TOKEN when config token is missing", async () => {
+  it("falls back to NATESCLAW_GATEWAY_TOKEN when config token is missing", async () => {
     loadConfig.mockReturnValue({ gateway: { mode: "local" } });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_TOKEN: "local-shell-fallback-auth" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_TOKEN: "local-shell-fallback-auth" }, async () => {
       const result = await resolveGatewayConnection({});
       expect(result.token).toBe("local-shell-fallback-auth");
     });
@@ -388,7 +388,7 @@ describe("resolveGatewayConnection", () => {
       },
     });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_PASSWORD: "local-shell-pass-value" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_PASSWORD: "local-shell-pass-value" }, async () => {
       const result = await resolveGatewayConnection({});
       expect(result.password).toBe("local-config-pass-value");
     });
@@ -405,12 +405,12 @@ describe("resolveGatewayConnection", () => {
         mode: "local",
         auth: {
           mode: "password",
-          password: { source: "env", provider: "default", id: "OPENCLAW_GATEWAY_PASSWORD" },
+          password: { source: "env", provider: "default", id: "NATESCLAW_GATEWAY_PASSWORD" },
         },
       },
     });
 
-    await withEnvAsync({ OPENCLAW_GATEWAY_PASSWORD: "resolved-ref-password" }, async () => {
+    await withEnvAsync({ NATESCLAW_GATEWAY_PASSWORD: "resolved-ref-password" }, async () => {
       const result = await resolveGatewayConnection({});
       expect(result.password).toBe("resolved-ref-password");
     });
@@ -464,7 +464,7 @@ describe("resolveGatewayConnection", () => {
     );
   });
 
-  it("prefers OPENCLAW_GATEWAY_PASSWORD over remote password fallback", async () => {
+  it("prefers NATESCLAW_GATEWAY_PASSWORD over remote password fallback", async () => {
     loadConfig.mockReturnValue({
       gateway: {
         mode: "remote",
@@ -476,7 +476,7 @@ describe("resolveGatewayConnection", () => {
       },
     });
 
-    const gatewayPasswordEnv = "OPENCLAW_GATEWAY_PASSWORD"; // pragma: allowlist secret
+    const gatewayPasswordEnv = "NATESCLAW_GATEWAY_PASSWORD"; // pragma: allowlist secret
     const gatewayPassword = "env-pass"; // pragma: allowlist secret
     await withEnvAsync({ [gatewayPasswordEnv]: gatewayPassword }, async () => {
       const result = await resolveGatewayConnection({});
@@ -513,7 +513,7 @@ describe("resolveGatewayConnection", () => {
   it.runIf(process.platform !== "win32")(
     "resolves file-backed SecretRef token for local mode",
     async () => {
-      const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-tui-file-secret-"));
+      const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-tui-file-secret-"));
       const secretFile = path.join(tempDir, "secrets.json");
       await fs.writeFile(secretFile, JSON.stringify({ gatewayToken: "file-secret-token" }), "utf8");
       await fs.chmod(secretFile, 0o600);

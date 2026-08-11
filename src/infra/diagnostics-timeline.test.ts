@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   emitDiagnosticsTimelineEvent,
   isDiagnosticsTimelineEnabled,
@@ -14,14 +14,14 @@ import {
 const tempDirs: string[] = [];
 
 async function createTimelineEnv() {
-  const dir = await mkdtemp(join(tmpdir(), "openclaw-diagnostics-timeline-"));
+  const dir = await mkdtemp(join(tmpdir(), "natesclaw-diagnostics-timeline-"));
   tempDirs.push(dir);
   return {
     env: {
-      OPENCLAW_DIAGNOSTICS: "timeline",
-      OPENCLAW_DIAGNOSTICS_RUN_ID: "run-1",
-      OPENCLAW_DIAGNOSTICS_ENV: "env-1",
-      OPENCLAW_DIAGNOSTICS_TIMELINE_PATH: join(dir, "nested", "timeline.jsonl"),
+      NATESCLAW_DIAGNOSTICS: "timeline",
+      NATESCLAW_DIAGNOSTICS_RUN_ID: "run-1",
+      NATESCLAW_DIAGNOSTICS_ENV: "env-1",
+      NATESCLAW_DIAGNOSTICS_TIMELINE_PATH: join(dir, "nested", "timeline.jsonl"),
     } as NodeJS.ProcessEnv,
     path: join(dir, "nested", "timeline.jsonl"),
   };
@@ -64,31 +64,31 @@ describe("diagnostics timeline", () => {
     const { env } = await createTimelineEnv();
 
     expect(isDiagnosticsTimelineEnabled({ env })).toBe(true);
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, OPENCLAW_DIAGNOSTICS: "1" } })).toBe(true);
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, OPENCLAW_DIAGNOSTICS: "yes" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NATESCLAW_DIAGNOSTICS: "1" } })).toBe(true);
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NATESCLAW_DIAGNOSTICS: "yes" } })).toBe(
       true,
     );
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, OPENCLAW_DIAGNOSTICS: "on" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NATESCLAW_DIAGNOSTICS: "on" } })).toBe(
       true,
     );
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, OPENCLAW_DIAGNOSTICS: "all" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NATESCLAW_DIAGNOSTICS: "all" } })).toBe(
       true,
     );
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, OPENCLAW_DIAGNOSTICS: "*" } })).toBe(true);
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NATESCLAW_DIAGNOSTICS: "*" } })).toBe(true);
     expect(
       isDiagnosticsTimelineEnabled({
-        env: { ...env, OPENCLAW_DIAGNOSTICS: "diagnostics.timeline" },
+        env: { ...env, NATESCLAW_DIAGNOSTICS: "diagnostics.timeline" },
       }),
     ).toBe(true);
     expect(
-      isDiagnosticsTimelineEnabled({ env: { ...env, OPENCLAW_DIAGNOSTICS: "telegram.http" } }),
+      isDiagnosticsTimelineEnabled({ env: { ...env, NATESCLAW_DIAGNOSTICS: "telegram.http" } }),
     ).toBe(false);
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, OPENCLAW_DIAGNOSTICS: "0" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NATESCLAW_DIAGNOSTICS: "0" } })).toBe(
       false,
     );
     expect(
       isDiagnosticsTimelineEnabled({
-        env: { ...env, OPENCLAW_DIAGNOSTICS_TIMELINE_PATH: "" },
+        env: { ...env, NATESCLAW_DIAGNOSTICS_TIMELINE_PATH: "" },
       }),
     ).toBe(false);
   });
@@ -96,10 +96,10 @@ describe("diagnostics timeline", () => {
   it("honors config diagnostics flags after config is available", async () => {
     const { env } = await createTimelineEnv();
     const envWithoutFlag = { ...env };
-    delete envWithoutFlag.OPENCLAW_DIAGNOSTICS;
-    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as OpenClawConfig;
-    const configWithWildcard = { diagnostics: { flags: ["*"] } } as OpenClawConfig;
-    const configWithoutTimeline = { diagnostics: { flags: ["telegram.http"] } } as OpenClawConfig;
+    delete envWithoutFlag.NATESCLAW_DIAGNOSTICS;
+    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as NatesclawConfig;
+    const configWithWildcard = { diagnostics: { flags: ["*"] } } as NatesclawConfig;
+    const configWithoutTimeline = { diagnostics: { flags: ["telegram.http"] } } as NatesclawConfig;
 
     expect(isDiagnosticsTimelineEnabled({ config: configWithTimeline, env: envWithoutFlag })).toBe(
       true,
@@ -114,12 +114,12 @@ describe("diagnostics timeline", () => {
 
   it("lets false-like env diagnostics disable config-enabled timeline output", async () => {
     const { env } = await createTimelineEnv();
-    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as OpenClawConfig;
+    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as NatesclawConfig;
 
     expect(
       isDiagnosticsTimelineEnabled({
         config: configWithTimeline,
-        env: { ...env, OPENCLAW_DIAGNOSTICS: "0" },
+        env: { ...env, NATESCLAW_DIAGNOSTICS: "0" },
       }),
     ).toBe(false);
   });
@@ -142,7 +142,7 @@ describe("diagnostics timeline", () => {
     );
 
     const [event] = await readTimeline(path);
-    expect(event?.schemaVersion).toBe("openclaw.diagnostics.v1");
+    expect(event?.schemaVersion).toBe("natesclaw.diagnostics.v1");
     expect(event?.type).toBe("mark");
     expect(event?.name).toBe("gateway.ready");
     expect(event?.runId).toBe("run-1");
@@ -189,7 +189,7 @@ describe("diagnostics timeline", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const failingEnv = {
       ...env,
-      OPENCLAW_DIAGNOSTICS_TIMELINE_PATH: join(blockingFile, "timeline.jsonl"),
+      NATESCLAW_DIAGNOSTICS_TIMELINE_PATH: join(blockingFile, "timeline.jsonl"),
     };
 
     emitDiagnosticsTimelineEvent({ type: "mark", name: "first" }, { env: failingEnv });
@@ -202,13 +202,13 @@ describe("diagnostics timeline", () => {
   it("records span start and end events around successful work", async () => {
     const { env, path } = await createTimelineEnv();
     const configOnlyEnv = { ...env };
-    delete configOnlyEnv.OPENCLAW_DIAGNOSTICS;
+    delete configOnlyEnv.NATESCLAW_DIAGNOSTICS;
 
     await expect(
       measureDiagnosticsTimelineSpan("runtimeDeps.stage", () => "ok", {
         phase: "startup",
         attributes: { pluginCount: 3 },
-        config: { diagnostics: { flags: ["timeline"] } } as OpenClawConfig,
+        config: { diagnostics: { flags: ["timeline"] } } as NatesclawConfig,
         env: configOnlyEnv,
       }),
     ).resolves.toBe("ok");

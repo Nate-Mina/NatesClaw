@@ -1,9 +1,9 @@
 // Agent command tests cover local agent runs, session routing, and command runtime behavior.
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
-import { buildChannelOutboundSessionRoute } from "openclaw/plugin-sdk/core";
-import { withTempHome as withTempHomeBase } from "openclaw/plugin-sdk/test-env";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { buildChannelOutboundSessionRoute } from "natesclaw/plugin-sdk/core";
+import { withTempHome as withTempHomeBase } from "natesclaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, type MockInstance, vi } from "vitest";
 // Register shared mocks before imports bind their production exports.
 import "./agent-command.test-mocks.js";
@@ -29,7 +29,7 @@ import {
 } from "../config/sessions/session-accessor.js";
 import { clearSessionStoreCacheForTest } from "../config/sessions/store-writer-state.js";
 import type { InternalSessionEntry as SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { emitAgentEvent, onAgentEvent, resetAgentEventsForTest } from "../infra/agent-events.js";
 import type { PluginProviderRegistration } from "../plugins/registry.test-fixtures.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
@@ -185,7 +185,7 @@ vi.mock("../agents/command/delivery.runtime.js", () => {
   return {
     deliverAgentCommandResult: vi.fn(
       async (params: {
-        cfg: OpenClawConfig;
+        cfg: NatesclawConfig;
         deps: {
           sendMessageTelegram?: (
             to: string,
@@ -263,7 +263,7 @@ const runtime = createThrowingTestRuntime();
 
 async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
   return withTempHomeBase(fn, {
-    prefix: "openclaw-agent-",
+    prefix: "natesclaw-agent-",
     skipHomeCleanup: true,
     skipSessionCleanup: true,
   });
@@ -272,9 +272,9 @@ async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
 function mockConfig(
   home: string,
   storePath: string,
-  agentOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>>,
-  telegramOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>>,
-  agentsList?: NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>,
+  agentOverrides?: Partial<NonNullable<NonNullable<NatesclawConfig["agents"]>["defaults"]>>,
+  telegramOverrides?: Partial<NonNullable<NonNullable<NatesclawConfig["channels"]>["telegram"]>>,
+  agentsList?: NonNullable<NonNullable<NatesclawConfig["agents"]>["list"]>,
 ) {
   const cfg = {
     meta: { migrations: { modelPolicyAllowlist: true } },
@@ -282,7 +282,7 @@ function mockConfig(
       defaults: {
         model: { primary: "anthropic/claude-opus-4-6" },
         models: { "anthropic/claude-opus-4-6": {} },
-        workspace: path.join(home, "openclaw"),
+        workspace: path.join(home, "natesclaw"),
         ...agentOverrides,
       },
       list: agentsList,
@@ -291,7 +291,7 @@ function mockConfig(
     channels: {
       telegram: telegramOverrides ? { ...telegramOverrides } : undefined,
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
   configIoMocks.loadConfig.mockReturnValue(cfg);
   return cfg;
 }
@@ -399,7 +399,7 @@ beforeEach(() => {
   vi.mocked(loadPreparedModelCatalog).mockResolvedValue([]);
   vi.mocked(modelSelectionModule.isCliProvider).mockImplementation(() => false);
   configIoMocks.readConfigFileSnapshotForWrite.mockResolvedValue({
-    snapshot: { valid: false, resolved: {} as OpenClawConfig },
+    snapshot: { valid: false, resolved: {} as NatesclawConfig },
     writeOptions: {},
   });
 });
@@ -426,7 +426,7 @@ describe("agentCommand", () => {
         provider: "openai",
         modelId: "gpt-5.2",
         agentId: "main",
-        workspaceDir: path.join(home, "openclaw"),
+        workspaceDir: path.join(home, "natesclaw"),
       });
       for (const callIndex of [1, 2] as const) {
         expect(agentHarnessPluginMocks.ensureSelectedAgentHarnessPlugin).toHaveBeenNthCalledWith(
@@ -565,13 +565,13 @@ describe("agentCommand", () => {
   it("continues an existing locked harness-owned session", async () => {
     await withTempHome(async (home) => {
       const store = path.join(home, "sessions.json");
-      const sessionKey = "agent:main:harness:openclaw:supervision:existing";
+      const sessionKey = "agent:main:harness:natesclaw:supervision:existing";
       mockConfig(home, store);
       await writeSessionStoreSeed(store, {
         [sessionKey]: {
           sessionId: "existing-harness-session",
           updatedAt: Date.now(),
-          agentHarnessId: "openclaw",
+          agentHarnessId: "natesclaw",
           modelSelectionLocked: true,
         },
       });
@@ -687,7 +687,7 @@ describe("agentCommand", () => {
             updatedAt: Date.now(),
           },
         });
-        return { dir: params?.dir ?? "/tmp/openclaw-workspace" };
+        return { dir: params?.dir ?? "/tmp/natesclaw-workspace" };
       });
 
       await expect(
@@ -723,7 +723,7 @@ describe("agentCommand", () => {
         await writeSessionStoreSeed(store, {
           [sessionKey]: { sessionId, updatedAt: Date.now() },
         });
-        return { dir: params?.dir ?? "/tmp/openclaw-workspace" };
+        return { dir: params?.dir ?? "/tmp/natesclaw-workspace" };
       });
 
       await agentCommandFromIngress(
@@ -895,11 +895,11 @@ describe("agentCommand", () => {
   it("runs direct ingress with a configured plugin-owned harness", async () => {
     await withTempHome(async (home) => {
       const store = path.join(home, "sessions.json");
-      const workspaceDir = path.join(home, "openclaw");
+      const workspaceDir = path.join(home, "natesclaw");
       const pluginDir = path.join(home, "plugins", "ingress-proof");
       fs.mkdirSync(pluginDir, { recursive: true });
       fs.writeFileSync(
-        path.join(pluginDir, "openclaw.plugin.json"),
+        path.join(pluginDir, "natesclaw.plugin.json"),
         JSON.stringify({
           id: "ingress-proof",
           name: "Ingress proof harness",
@@ -913,7 +913,7 @@ describe("agentCommand", () => {
           name: "ingress-proof",
           version: "1.0.0",
           type: "module",
-          openclaw: { extensions: ["./index.js"] },
+          natesclaw: { extensions: ["./index.js"] },
         }),
       );
       fs.writeFileSync(
@@ -964,7 +964,7 @@ describe("agentCommand", () => {
           },
         },
         session: { store, mainKey: "main" },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       configIoMocks.loadConfig.mockReturnValue(cfg);
       const actualRuntimePlugins = await vi.importActual<
         typeof import("../agents/runtime-plugins.js")
@@ -1196,7 +1196,7 @@ describe("agentCommand", () => {
 
       await agentCommand(
         {
-          message: "Reply with exactly OPENCLAW-MODEL-OK",
+          message: "Reply with exactly NATESCLAW-MODEL-OK",
           agentId: "main",
           model: "openrouter/auto",
           modelRun: true,
@@ -1244,7 +1244,7 @@ describe("agentCommand", () => {
 
       await agentCommand(
         {
-          message: "Reply with exactly OPENCLAW-MODEL-OK",
+          message: "Reply with exactly NATESCLAW-MODEL-OK",
           sessionKey,
           model: "openrouter/auto",
           modelRun: true,
@@ -1257,7 +1257,7 @@ describe("agentCommand", () => {
       const callArgs = getLastEmbeddedCall();
       expect(callArgs?.provider).toBe("openrouter");
       expect(callArgs?.model).toBe("openrouter/auto");
-      expect(callArgs?.prompt).toBe("Reply with exactly OPENCLAW-MODEL-OK");
+      expect(callArgs?.prompt).toBe("Reply with exactly NATESCLAW-MODEL-OK");
       expect(callArgs?.modelRun).toBe(true);
       expect(callArgs?.promptMode).toBe("none");
       expect(callArgs?.disableTools).toBe(true);
@@ -2192,7 +2192,7 @@ describe("agentCommand", () => {
   it("rejects agent-scoped to session selectors that conflict with the requested agent", async () => {
     await withTempHome(async (home) => {
       const store = path.join(home, "sessions.json");
-      const sessionKey = "agent:main:openclaw-weixin:direct:o9cq802hhmfc@im.wechat";
+      const sessionKey = "agent:main:natesclaw-weixin:direct:o9cq802hhmfc@im.wechat";
       await writeSessionStoreSeed(store, {
         [sessionKey]: { sessionId: "wechat-session", updatedAt: Date.now() },
       });
@@ -2208,7 +2208,7 @@ describe("agentCommand", () => {
   it("does not forward agent-scoped to session selectors as delivery targets", async () => {
     await withTempHome(async (home) => {
       const store = path.join(home, "sessions.json");
-      const sessionKey = "agent:main:openclaw-weixin:direct:o9cq802hhmfc@im.wechat";
+      const sessionKey = "agent:main:natesclaw-weixin:direct:o9cq802hhmfc@im.wechat";
       await writeSessionStoreSeed(store, {
         [sessionKey]: {
           sessionId: "wechat-session",

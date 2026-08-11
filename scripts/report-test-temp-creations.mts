@@ -52,7 +52,7 @@ const FINDING_PATTERNS = [
   },
 ];
 const TEMP_DIR_ALLOW_COMMENT_RE =
-  /(?:^|\s)(?:\/\/|\/\*|\*|#)\s*openclaw-temp-dir:\s*allow\s+(.+)$/u;
+  /(?:^|\s)(?:\/\/|\/\*|\*|#)\s*natesclaw-temp-dir:\s*allow\s+(.+)$/u;
 
 function usage(): string {
   return `Usage: node scripts/report-test-temp-creations.mjs [options]
@@ -61,7 +61,7 @@ Description:
   Reports new test temp-directory migration warnings in added diff lines.
   This is a low-noise migration aid, not a cleanup data-flow checker. It does
   not scan existing lines for bare temp dirs and does not decide whether cleanup is sufficient.
-  Add "openclaw-temp-dir: allow <reason>" in a same-line or immediately
+  Add "natesclaw-temp-dir: allow <reason>" in a same-line or immediately
   preceding added comment when a test intentionally needs bare temp creation.
   File scope intentionally reuses scripts/changed-lanes.mjs test-path
   classification instead of maintaining a separate test-helper heuristic.

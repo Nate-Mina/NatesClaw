@@ -1,4 +1,4 @@
-import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
 import { describe, expect, it, vi } from "vitest";
 import { setupCronServiceSuite } from "./service.test-harness.js";
 import { start } from "./service/ops-lifecycle.js";
@@ -11,7 +11,7 @@ import { loadCronStore, saveCronStore } from "./store.js";
 import type { CronJob } from "./types.js";
 
 const { logger: noopLogger, makeStorePath } = setupCronServiceSuite({
-  prefix: "openclaw-cron-overflow-",
+  prefix: "natesclaw-cron-overflow-",
   baseTimeIso: "2025-12-13T17:00:00.000Z",
 });
 

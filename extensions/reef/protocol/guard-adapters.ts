@@ -1,5 +1,5 @@
-import { isRecord } from "openclaw/plugin-sdk/channel-secret-basic-runtime";
-import { readProviderTextResponse } from "openclaw/plugin-sdk/provider-http";
+import { isRecord } from "natesclaw/plugin-sdk/channel-secret-basic-runtime";
+import { readProviderTextResponse } from "natesclaw/plugin-sdk/provider-http";
 import {
   admitGuardAdapter,
   assertPinnedModel,

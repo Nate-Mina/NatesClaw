@@ -1,10 +1,10 @@
 // Runtime boundary for provider discovery through plugin entrypoints.
 import path from "node:path";
-import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import type { NormalizedModelCatalogRow } from "@natesclaw/model-catalog-core/model-catalog-types";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
 import { sortUniqueStrings } from "../../packages/normalization-core/src/string-normalization.js";
 import type { ModelDefinitionConfig, ModelProviderConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { planEffectiveModelCatalogRows } from "../model-catalog/index.js";
 import { loadManifestMetadataSnapshot } from "./manifest-contract-eligibility.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
@@ -205,7 +205,7 @@ function providerConfigFromManifestRows(
 
 function resolveManifestModelCatalogProviders(
   pluginRecords: readonly PluginManifestRecord[],
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): ProviderPlugin[] {
   const providers: ProviderPlugin[] = [];
   for (const plugin of pluginRecords) {
@@ -242,7 +242,7 @@ function resolveManifestModelCatalogProviders(
 
 function resolveRuntimeManifestCatalogPluginIds(
   pluginRecords: readonly PluginManifestRecord[],
-  config: OpenClawConfig,
+  config: NatesclawConfig,
 ): Set<string> {
   const pluginIds = new Set<string>();
   for (const plugin of pluginRecords) {
@@ -274,7 +274,7 @@ function resolveRuntimeManifestCatalogPluginIds(
 }
 
 function resolveProviderDiscoveryEntryPlugins(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   onlyPluginIds?: string[];
@@ -434,7 +434,7 @@ function withoutFullLoadedPluginEntries(
 }
 
 export function resolvePluginDiscoveryProvidersRuntime(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   onlyPluginIds?: string[];

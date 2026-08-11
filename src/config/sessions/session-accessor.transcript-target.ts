@@ -1,5 +1,5 @@
 import { resolveAgentIdFromSessionKey } from "../../routing/session-key.js";
-import { resolveOpenClawAgentSqlitePath } from "../../state/openclaw-agent-db.js";
+import { resolveNatesclawAgentSqlitePath } from "../../state/natesclaw-agent-db.js";
 import { getRuntimeConfig } from "../io.js";
 import { resolveSessionStorePathCore } from "./paths.js";
 import { resolveSessionEntrySelection } from "./session-accessor.entry.js";
@@ -63,7 +63,7 @@ export function resolveSessionTranscriptDatabasePath(
   target: SessionTranscriptRuntimeTarget,
 ): string {
   const resolved = resolveSqliteTranscriptScope(target);
-  return resolveOpenClawAgentSqlitePath(toDatabaseOptions(resolved));
+  return resolveNatesclawAgentSqlitePath(toDatabaseOptions(resolved));
 }
 
 export function resolveSessionTranscriptReadTarget(

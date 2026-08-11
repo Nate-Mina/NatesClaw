@@ -4,7 +4,7 @@ import {
   type RouteLocation,
   type RouteMatch,
   type Router,
-} from "@openclaw/uirouter";
+} from "@natesclaw/uirouter";
 import { html, nothing, type LitElement } from "lit";
 import { ref } from "lit/directives/ref.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -50,7 +50,7 @@ function sessionData(sessionKey: string, face: "chat" | "dashboard"): ChatRouteD
 }
 
 function createOutlet(router: TestRouter): RouterOutletElement {
-  const outlet = document.createElement("openclaw-router-outlet") as RouterOutletElement;
+  const outlet = document.createElement("natesclaw-router-outlet") as RouterOutletElement;
   outlet.router = router;
   document.body.append(outlet);
   return outlet;
@@ -86,11 +86,11 @@ async function routeModule(
 }
 
 afterEach(() => {
-  Reflect.deleteProperty(window, "__OPENCLAW_CONTROL_UI_BASE_PATH__");
+  Reflect.deleteProperty(window, "__NATESCLAW_CONTROL_UI_BASE_PATH__");
   document.body.replaceChildren();
 });
 
-describe("openclaw-router-outlet chat ownership", () => {
+describe("natesclaw-router-outlet chat ownership", () => {
   it("retains the exact subtree across session and presentation switches", async () => {
     const sessionKey = "agent:main:dashboard:12345678-90ab-cdef-1234-567890abcdef";
     const nextSessionKey = "agent:main:dashboard:abcdef12-3456-7890-abcd-ef1234567890";

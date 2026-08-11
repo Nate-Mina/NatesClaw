@@ -1,6 +1,6 @@
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import { isSameMemoryDreamingDay } from "openclaw/plugin-sdk/memory-core-host-status";
-import { normalizeStringEntries, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import { isSameMemoryDreamingDay } from "natesclaw/plugin-sdk/memory-core-host-status";
+import { normalizeStringEntries, uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { formatErrorMessage } from "./dreaming-shared.js";
 import {
   emptyPhaseSignalStore,

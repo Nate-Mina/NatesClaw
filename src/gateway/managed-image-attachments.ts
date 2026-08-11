@@ -4,14 +4,14 @@ import { createHmac, randomBytes, randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import path from "node:path";
-import { maxBytesForKind, mediaKindFromMime, type MediaKind } from "@openclaw/media-core/constants";
-import { mimeTypeFromFilePath } from "@openclaw/media-core/mime";
-import { expectDefined } from "@openclaw/normalization-core";
+import { maxBytesForKind, mediaKindFromMime, type MediaKind } from "@natesclaw/media-core/constants";
+import { mimeTypeFromFilePath } from "@natesclaw/media-core/mime";
+import { expectDefined } from "@natesclaw/normalization-core";
 import {
   asDateTimestampMs,
   asNonNegativeFiniteNumber,
   resolveTimestampMsToIsoString,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@natesclaw/normalization-core/number-coercion";
 import pLimit from "p-limit";
 import { resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import type { ReplyMediaAttachment } from "../auto-reply/reply-payload.js";
@@ -966,14 +966,14 @@ async function getSessionManagedOutgoingAttachmentIndex(
     storeAvailabilityCache?.get(ownerAgentId) ??
     resolveExistingAgentSessionStoreTargetsReadOnlyResult(cfg, ownerAgentId, {
       cache: storeTargetsReadCache,
-      ...(stateDir ? { env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } } : {}),
+      ...(stateDir ? { env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } } : {}),
     });
   storeAvailabilityCache?.set(ownerAgentId, discovery);
   if (!discovery.available) {
     return { kind: "unavailable", reason: discovery.reason };
   }
   const usesRuntimeState = !stateDir || path.resolve(stateDir) === path.resolve(resolveStateDir());
-  const env = stateDir ? { ...process.env, OPENCLAW_STATE_DIR: stateDir } : process.env;
+  const env = stateDir ? { ...process.env, NATESCLAW_STATE_DIR: stateDir } : process.env;
   type SessionEntry = ReturnType<typeof loadSessionEntryReadOnly>["entry"];
   let matched: { entry: NonNullable<SessionEntry>; storePath: string } | undefined;
   for (const target of discovery.targets) {
@@ -1104,7 +1104,7 @@ async function getSessionManagedOutgoingAttachmentIndex(
   }
   const index: SessionManagedOutgoingAttachmentIndex = new Set();
   for (const message of messages) {
-    const meta = (message as { __openclaw?: { id?: string } } | null)?.["__openclaw"];
+    const meta = (message as { __natesclaw?: { id?: string } } | null)?.["__natesclaw"];
     const messageId = meta?.id;
     if (typeof messageId !== "string" || !messageId) {
       continue;

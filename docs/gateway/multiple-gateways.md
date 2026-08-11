@@ -1,5 +1,5 @@
 ---
-summary: "Run multiple OpenClaw Gateways on one host (isolation, ports, and profiles)"
+summary: "Run multiple Natesclaw Gateways on one host (isolation, ports, and profiles)"
 read_when:
   - Running more than one Gateway on the same machine
   - You need isolated config/state/ports per Gateway
@@ -20,13 +20,13 @@ This keeps the rescue bot able to debug or apply config changes if the primary b
 
 ```bash
 # Rescue bot (separate Telegram bot, separate profile, port 19789)
-openclaw --profile rescue onboard
-openclaw --profile rescue gateway install --port 19789
+natesclaw --profile rescue onboard
+natesclaw --profile rescue gateway install --port 19789
 ```
 
 If your main bot is already running, that's usually all you need. If onboarding already installed the rescue service, skip the final `gateway install`.
 
-During `openclaw --profile rescue onboard`:
+During `natesclaw --profile rescue onboard`:
 
 - Use a separate Telegram bot token, dedicated to the rescue account (easy to keep operator-only, independent from the main bot's channel/app install, and a simple DM-based recovery path).
 - Keep the `rescue` profile name.
@@ -39,7 +39,7 @@ During `openclaw --profile rescue onboard`:
 
 - Profile/config file
 - State directory
-- Workspace (default: `~/.openclaw/workspace-rescue`)
+- Workspace (default: `~/.natesclaw/workspace-rescue`)
 - Managed service name
 - Base port (plus derived ports)
 - Telegram bot token
@@ -52,29 +52,29 @@ The same isolation pattern works for any pair or group of Gateways on one host -
 
 ```bash
 # main (default profile)
-openclaw setup
-openclaw gateway --port 18789
+natesclaw setup
+natesclaw gateway --port 18789
 
 # extra gateway
-openclaw --profile ops setup
-openclaw --profile ops gateway --port 19789
+natesclaw --profile ops setup
+natesclaw --profile ops gateway --port 19789
 ```
 
 Named profiles on both sides also work:
 
 ```bash
-openclaw --profile main setup
-openclaw --profile main gateway --port 18789
+natesclaw --profile main setup
+natesclaw --profile main gateway --port 18789
 
-openclaw --profile ops setup
-openclaw --profile ops gateway --port 19789
+natesclaw --profile ops setup
+natesclaw --profile ops gateway --port 19789
 ```
 
 Services follow the same pattern:
 
 ```bash
-openclaw gateway install
-openclaw --profile ops gateway install --port 19789
+natesclaw gateway install
+natesclaw --profile ops gateway install --port 19789
 ```
 
 Use the rescue-bot quickstart for a fallback operator lane; use the general profile pattern for multiple long-lived Gateways across different channels, tenants, workspaces, or operational roles.
@@ -85,19 +85,19 @@ Keep these unique per Gateway instance:
 
 | Setting                      | Purpose                              |
 | ---------------------------- | ------------------------------------ |
-| `OPENCLAW_CONFIG_PATH`       | Per-instance config file             |
-| `OPENCLAW_STATE_DIR`         | Per-instance sessions, creds, caches |
+| `NATESCLAW_CONFIG_PATH`       | Per-instance config file             |
+| `NATESCLAW_STATE_DIR`         | Per-instance sessions, creds, caches |
 | `agents.defaults.workspace`  | Per-instance workspace root          |
 | `gateway.port` (or `--port`) | Unique per instance                  |
 | Derived browser/CDP ports    | See below                            |
 
 Sharing any of these causes config, state, or port conflicts. Gateway startup
 enforces unique state-directory ownership even when
-`OPENCLAW_ALLOW_MULTI_GATEWAY=1` skips the per-config singleton.
+`NATESCLAW_ALLOW_MULTI_GATEWAY=1` skips the per-config singleton.
 
 ## Port mapping (derived)
 
-Base port = `gateway.port` (or `OPENCLAW_GATEWAY_PORT` / `--port`).
+Base port = `gateway.port` (or `NATESCLAW_GATEWAY_PORT` / `--port`).
 
 - Browser control service port = base + 2 (loopback only).
 - Canvas host is served on the Gateway HTTP server itself (same port as `gateway.port`).
@@ -115,28 +115,28 @@ Override any of these in config or env and you must keep them unique per instanc
 ## Manual env example
 
 ```bash
-OPENCLAW_CONFIG_PATH=~/.openclaw/main.json \
-OPENCLAW_STATE_DIR=~/.openclaw \
-openclaw gateway --port 18789
+NATESCLAW_CONFIG_PATH=~/.natesclaw/main.json \
+NATESCLAW_STATE_DIR=~/.natesclaw \
+natesclaw gateway --port 18789
 
-OPENCLAW_CONFIG_PATH=~/.openclaw/rescue.json \
-OPENCLAW_STATE_DIR=~/.openclaw-rescue \
-openclaw gateway --port 19789
+NATESCLAW_CONFIG_PATH=~/.natesclaw/rescue.json \
+NATESCLAW_STATE_DIR=~/.natesclaw-rescue \
+natesclaw gateway --port 19789
 ```
 
 ## Quick checks
 
 ```bash
-openclaw gateway status --deep
-openclaw --profile rescue gateway status --deep
-openclaw --profile rescue gateway probe
-openclaw status
-openclaw --profile rescue status
-openclaw --profile rescue browser status
+natesclaw gateway status --deep
+natesclaw --profile rescue gateway status --deep
+natesclaw --profile rescue gateway probe
+natesclaw status
+natesclaw --profile rescue status
+natesclaw --profile rescue browser status
 ```
 
 - `gateway status --deep` catches stale launchd/systemd/schtasks services from older installs.
-- `gateway probe` warning text such as `multiple reachable gateway identities detected` is expected only when you intentionally run more than one isolated gateway, or when OpenClaw cannot prove reachable probe targets are the same gateway. An SSH tunnel, proxy URL, or configured remote URL to the same gateway is one gateway with multiple transports, even when transport ports differ.
+- `gateway probe` warning text such as `multiple reachable gateway identities detected` is expected only when you intentionally run more than one isolated gateway, or when Natesclaw cannot prove reachable probe targets are the same gateway. An SSH tunnel, proxy URL, or configured remote URL to the same gateway is one gateway with multiple transports, even when transport ports differ.
 
 ## Related
 

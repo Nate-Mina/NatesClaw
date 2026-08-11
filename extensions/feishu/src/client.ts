@@ -2,18 +2,18 @@
 import type { Agent } from "node:https";
 import { createRequire } from "node:module";
 import * as Lark from "@larksuiteoapi/node-sdk";
-import { isRecord } from "openclaw/plugin-sdk/channel-secret-basic-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/channel-secret-basic-runtime";
 import {
   readPluginPackageVersion,
   resolveAmbientNodeProxyAgent,
-} from "openclaw/plugin-sdk/extension-shared";
+} from "natesclaw/plugin-sdk/extension-shared";
 import { resolveConfiguredHttpTimeoutMs } from "./client-timeout.js";
 import type { FeishuConfig, FeishuDomain, ResolvedFeishuAccount } from "./types.js";
 
 const require = createRequire(import.meta.url);
 const pluginVersion = readPluginPackageVersion({ require });
 
-const FEISHU_USER_AGENT = `openclaw-feishu-builtin/${pluginVersion}/${process.platform}`;
+const FEISHU_USER_AGENT = `natesclaw-feishu-builtin/${pluginVersion}/${process.platform}`;
 const FEISHU_SDK_ORIGIN = "https://open.feishu.cn";
 
 const FEISHU_WS_CONFIG = {
@@ -192,7 +192,7 @@ function normalizeMultipartUploadData<D>(
 }
 
 function isManagedProxyActive() {
-  return process.env["OPENCLAW_PROXY_ACTIVE"] === "1";
+  return process.env["NATESCLAW_PROXY_ACTIVE"] === "1";
 }
 
 let cachedFeishuProxyAgent: Agent | undefined;

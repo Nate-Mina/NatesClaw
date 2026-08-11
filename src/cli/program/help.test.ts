@@ -3,7 +3,7 @@ import { Command, CommanderError } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ProgramContext } from "./context.js";
 import { configureProgramHelp } from "./help.js";
-import { OpenClawCommand } from "./openclaw-command.js";
+import { NatesclawCommand } from "./natesclaw-command.js";
 
 const hasEmittedCliBannerMock = vi.hoisted(() => vi.fn(() => false));
 const formatCliBannerLineMock = vi.hoisted(() => vi.fn(() => "BANNER-LINE"));
@@ -37,7 +37,7 @@ vi.mock("../../infra/git-commit.js", () => ({
 }));
 
 vi.mock("../cli-name.js", () => ({
-  resolveCliName: () => "openclaw",
+  resolveCliName: () => "natesclaw",
   replaceCliName: (cmd: string) => cmd,
 }));
 
@@ -63,18 +63,18 @@ describe("configureProgramHelp", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     originalArgv = [...process.argv];
-    originalSuppressHelpBanner = process.env.OPENCLAW_SUPPRESS_HELP_BANNER;
+    originalSuppressHelpBanner = process.env.NATESCLAW_SUPPRESS_HELP_BANNER;
     hasEmittedCliBannerMock.mockReturnValue(false);
     resolveCommitHashMock.mockReturnValue("abc1234");
-    delete process.env.OPENCLAW_SUPPRESS_HELP_BANNER;
+    delete process.env.NATESCLAW_SUPPRESS_HELP_BANNER;
   });
 
   afterEach(() => {
     process.argv = originalArgv;
     if (originalSuppressHelpBanner === undefined) {
-      delete process.env.OPENCLAW_SUPPRESS_HELP_BANNER;
+      delete process.env.NATESCLAW_SUPPRESS_HELP_BANNER;
     } else {
-      process.env.OPENCLAW_SUPPRESS_HELP_BANNER = originalSuppressHelpBanner;
+      process.env.NATESCLAW_SUPPRESS_HELP_BANNER = originalSuppressHelpBanner;
     }
   });
 
@@ -119,7 +119,7 @@ describe("configureProgramHelp", () => {
   }
 
   it("adds root help hint and marks commands with subcommands", () => {
-    process.argv = ["node", "openclaw", "--help"];
+    process.argv = ["node", "natesclaw", "--help"];
     const program = makeProgramWithCommands();
     configureProgramHelp(program, testProgramContext);
 
@@ -131,7 +131,7 @@ describe("configureProgramHelp", () => {
   });
 
   it("includes banner and docs/examples in root help output", () => {
-    process.argv = ["node", "openclaw", "--help"];
+    process.argv = ["node", "natesclaw", "--help"];
     const program = makeProgramWithCommands();
     configureProgramHelp(program, testProgramContext);
 
@@ -143,13 +143,13 @@ describe("configureProgramHelp", () => {
     expect(version).toBe(testProgramContext.programVersion);
     expect(options?.mode).toBe("default");
     expect(help).toContain("Examples:");
-    expect(help).toContain("https://docs.openclaw.ai/cli");
+    expect(help).toContain("https://docs.natesclaw.ai/cli");
   });
 
   it("formats parse errors from the exact Commander command path", async () => {
     let stderr = "";
-    process.argv = ["node", "openclaw", "plugins", "--source", "list", "list", "--wat"];
-    const program = new OpenClawCommand().enablePositionalOptions().exitOverride();
+    process.argv = ["node", "natesclaw", "plugins", "--source", "list", "list", "--wat"];
+    const program = new NatesclawCommand().enablePositionalOptions().exitOverride();
     configureProgramHelp(program, testProgramContext);
     program.configureOutput({
       writeErr: (value) => {
@@ -164,17 +164,17 @@ describe("configureProgramHelp", () => {
 
     const firstError = await program.parseAsync(process.argv).catch((error: unknown) => error);
     expect(firstError).toBeInstanceOf(CommanderError);
-    process.argv = ["node", "openclaw", "plugins", "list", "--still-wat"];
+    process.argv = ["node", "natesclaw", "plugins", "list", "--still-wat"];
     const secondError = await program.parseAsync(process.argv).catch((error: unknown) => error);
     expect(secondError).toBeInstanceOf(CommanderError);
 
-    expect(stderr.match(/Try: openclaw plugins list --help/g)).toHaveLength(2);
-    expect(stderr).not.toContain("openclaw plugins list list --help");
+    expect(stderr.match(/Try: natesclaw plugins list --help/g)).toHaveLength(2);
+    expect(stderr).not.toContain("natesclaw plugins list list --help");
   });
 
   it("suppresses banner formatting when parent default help requests it", () => {
-    process.argv = ["node", "openclaw", "channels"];
-    process.env.OPENCLAW_SUPPRESS_HELP_BANNER = "1";
+    process.argv = ["node", "natesclaw", "channels"];
+    process.env.NATESCLAW_SUPPRESS_HELP_BANNER = "1";
     const program = makeProgramWithCommands();
     configureProgramHelp(program, testProgramContext);
 
@@ -184,18 +184,18 @@ describe("configureProgramHelp", () => {
   });
 
   it("prints version and exits immediately when version flags are present", () => {
-    process.argv = ["node", "openclaw", "--version"];
-    expectVersionExit({ expectedVersion: "OpenClaw 9.9.9-test (abc1234)" });
+    process.argv = ["node", "natesclaw", "--version"];
+    expectVersionExit({ expectedVersion: "Natesclaw 9.9.9-test (abc1234)" });
   });
 
   it("prints version and exits immediately without commit metadata", () => {
-    process.argv = ["node", "openclaw", "--version"];
+    process.argv = ["node", "natesclaw", "--version"];
     resolveCommitHashMock.mockReturnValue(null);
-    expectVersionExit({ expectedVersion: "OpenClaw 9.9.9-test" });
+    expectVersionExit({ expectedVersion: "Natesclaw 9.9.9-test" });
   });
 
   it("does not treat subcommand --version options as root version requests", () => {
-    process.argv = ["node", "openclaw", "skills", "verify", "discrawl", "--version", "1.0.0"];
+    process.argv = ["node", "natesclaw", "skills", "verify", "discrawl", "--version", "1.0.0"];
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
     const exitSpy = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {
       throw new Error(`exit:${code ?? ""}`);

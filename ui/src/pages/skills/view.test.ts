@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { render } from "lit";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { AgentsListResult, SkillStatusEntry, SkillStatusReport } from "../../api/types.ts";
@@ -146,7 +146,7 @@ describe("renderSkills", () => {
       container,
     );
 
-    expect(container.querySelector('openclaw-agent-select[name="skills-agent"]')).toBeNull();
+    expect(container.querySelector('natesclaw-agent-select[name="skills-agent"]')).toBeNull();
     expect(container.querySelector('input[name="skills-filter"]')).toBeInstanceOf(HTMLInputElement);
   });
 
@@ -174,7 +174,7 @@ describe("renderSkills", () => {
         onSelect: (value: string) => void;
         updateComplete: Promise<boolean>;
       }
-    >('openclaw-agent-select[name="skills-agent"]');
+    >('natesclaw-agent-select[name="skills-agent"]');
     const filter = container.querySelector<HTMLInputElement>('input[name="skills-filter"]');
     expect(selector).toBeInstanceOf(HTMLElement);
     expect(filter).toBeInstanceOf(HTMLInputElement);
@@ -207,7 +207,7 @@ describe("renderSkills", () => {
         options: Array<{ value: string; label: string }>;
         updateComplete: Promise<boolean>;
       }
-    >('openclaw-agent-select[name="skills-agent"]');
+    >('natesclaw-agent-select[name="skills-agent"]');
     await selector?.updateComplete;
 
     expect(selector?.options.find((option) => option.value === "main")?.label).toBe(
@@ -530,7 +530,7 @@ describe("renderSkills", () => {
 
     expect(
       container.querySelector<HTMLElement & { disabled: boolean }>(
-        'openclaw-agent-select[name="skills-agent"]',
+        'natesclaw-agent-select[name="skills-agent"]',
       )?.disabled,
     ).toBe(true);
     const refresh = Array.from(container.querySelectorAll<HTMLButtonElement>("button")).find(
@@ -727,7 +727,7 @@ describe("renderSkills", () => {
               score: 0.95,
               slug: "github",
               displayName: "GitHub",
-              summary: "GitHub integration for OpenClaw",
+              summary: "GitHub integration for Natesclaw",
               icon: `https://clawhub.ai/api/v1/skill-icons/${"a".repeat(64)}`,
               version: "1.2.3",
             },
@@ -750,7 +750,7 @@ describe("renderSkills", () => {
     expect(detailButton?.contains(installButton)).toBe(false);
     expect(resultItem?.querySelector(".settings-row__title")?.textContent?.trim()).toBe("GitHub");
     expect(resultItem?.querySelector(".settings-row__desc")?.textContent?.trim()).toBe(
-      "GitHub integration for OpenClaw",
+      "GitHub integration for Natesclaw",
     );
     expect(resultItem?.querySelector(".settings-row__value")?.textContent?.trim()).toBe("v1.2.3");
     expect(resultItem?.querySelector<HTMLImageElement>(".clawhub-skill-icon")?.src).toBe(
@@ -778,7 +778,7 @@ describe("renderSkills", () => {
             skill: {
               slug: "github",
               displayName: "GitHub",
-              summary: "GitHub integration for OpenClaw",
+              summary: "GitHub integration for Natesclaw",
               icon: `https://clawhub.ai/api/v1/skill-icons/${"b".repeat(64)}`,
               createdAt: 1_700_000_000,
               updatedAt: 1_700_000_100,
@@ -792,8 +792,8 @@ describe("renderSkills", () => {
               os: ["macos", "linux"],
             },
             owner: {
-              displayName: "OpenClaw",
-              handle: "openclaw",
+              displayName: "Natesclaw",
+              handle: "natesclaw",
             },
           },
           onClawHubInstall,
@@ -808,7 +808,7 @@ describe("renderSkills", () => {
       Array.from(container.querySelectorAll(".callout")).map((node) => normalizeText(node)),
     ).toEqual(["rate limited", "Installed github"]);
     expect(normalizeText(container.querySelector(".md-preview-dialog__body")!)).toBe(
-      "GitHub integration for OpenClaw By OpenClaw (@openclaw) Latest: v1.2.3 Added search support Platforms: macos, linux Install GitHub",
+      "GitHub integration for Natesclaw By Natesclaw (@natesclaw) Latest: v1.2.3 Added search support Platforms: macos, linux Install GitHub",
     );
     expect(container.querySelector<HTMLImageElement>(".clawhub-skill-icon--detail")?.src).toBe(
       `https://clawhub.ai/api/v1/skill-icons/${"b".repeat(64)}`,
@@ -873,7 +873,7 @@ describe("renderSkills", () => {
         valid: true,
         registry: "https://clawhub.ai",
         slug: "agentreceipt",
-        ownerHandle: "openclaw",
+        ownerHandle: "natesclaw",
         installedVersion: "1.2.3",
         installedAt: 123,
       },
@@ -891,7 +891,7 @@ describe("renderSkills", () => {
     const verdictKey = clawhubVerdictKey({
       registry: "https://clawhub.ai",
       slug: "agentreceipt",
-      ownerHandle: "openclaw",
+      ownerHandle: "natesclaw",
       version: "1.2.3",
     });
     const onDetailTabChange = vi.fn();
@@ -909,12 +909,12 @@ describe("renderSkills", () => {
               decision: "fail",
               reasons: ["security.suspicious"],
               requestedSlug: "agentreceipt",
-              requestedOwnerHandle: "openclaw",
+              requestedOwnerHandle: "natesclaw",
               requestedVersion: "1.2.3",
               slug: "agentreceipt",
               version: "1.2.3",
               securityAuditUrl:
-                "https://clawhub.ai/openclaw/skills/agentreceipt/security-audit?version=1.2.3",
+                "https://clawhub.ai/natesclaw/skills/agentreceipt/security-audit?version=1.2.3",
               securityStatus: "suspicious",
               securityPassed: false,
             },
@@ -926,7 +926,7 @@ describe("renderSkills", () => {
     await Promise.resolve();
 
     expect(normalizeText(container)).toContain("Review");
-    expect(normalizeText(container)).toContain("@openclaw/agentreceipt@1.2.3");
+    expect(normalizeText(container)).toContain("@natesclaw/agentreceipt@1.2.3");
     expect(normalizeText(container)).toContain("security.suspicious");
     expect(
       container.querySelector<HTMLAnchorElement>('a[href*="security-audit"]')?.textContent?.trim(),
@@ -955,10 +955,10 @@ describe("renderSkills", () => {
               decision: "fail",
               reasons: ["security.suspicious"],
               requestedSlug: "agentreceipt",
-              requestedOwnerHandle: "openclaw",
+              requestedOwnerHandle: "natesclaw",
               requestedVersion: "1.2.3",
               securityAuditUrl:
-                "https://clawhub.ai/openclaw/skills/agentreceipt/security-audit?version=1.2.3",
+                "https://clawhub.ai/natesclaw/skills/agentreceipt/security-audit?version=1.2.3",
               securityStatus: "suspicious",
               securityPassed: false,
             },

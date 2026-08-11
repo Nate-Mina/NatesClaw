@@ -25,7 +25,7 @@ function deferred<T>() {
 }
 
 function createElement(request: Request, advertised = true) {
-  const element = document.createElement("openclaw-memory-memories") as MemoryMemoriesTestElement;
+  const element = document.createElement("natesclaw-memory-memories") as MemoryMemoriesTestElement;
   element.client = { request } as unknown as GatewayBrowserClient;
   element.connected = true;
   element.methodAdvertised = advertised;

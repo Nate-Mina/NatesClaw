@@ -23,7 +23,7 @@ import {
 import { runCommandWithTimeout } from "../process/exec.js";
 import { isCronSessionKey, isSubagentSessionKey } from "../routing/session-key.js";
 import { deriveSessionChatTypeFromKey } from "../sessions/session-chat-type-shared.js";
-import type { OpenClawStateDatabaseOptions } from "../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import { resolveUserPath } from "../utils.js";
 import {
   MAX_WORKSPACE_BOOTSTRAP_FILE_BYTES,
@@ -299,9 +299,9 @@ export class WorkspaceVanishedError extends Error {
 
   constructor(params: { workspaceDir: string }) {
     super(
-      `OpenClaw workspace appears to have disappeared after a recent initialization: ${params.workspaceDir}. ` +
+      `Natesclaw workspace appears to have disappeared after a recent initialization: ${params.workspaceDir}. ` +
         `Refusing to reseed BOOTSTRAP.md over a recently attested workspace. ` +
-        "Restore the workspace or run a full OpenClaw reset if this reset was intentional.",
+        "Restore the workspace or run a full Natesclaw reset if this reset was intentional.",
     );
     this.name = "WorkspaceVanishedError";
     this.workspaceDir = params.workspaceDir;
@@ -672,7 +672,7 @@ async function workspaceSetupStateHasSurvivalEvidence(params: {
 
 function readCanonicalWorkspaceStateSnapshot(
   dir: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): WorkspaceStateSnapshot {
   const snapshot = readWorkspaceStateSnapshot(dir, options);
   assertNoUnmigratedWorkspaceState({
@@ -688,7 +688,7 @@ export async function isWorkspaceSetupCompleted(dir: string): Promise<boolean> {
 
 export async function resolveWorkspaceBootstrapStatus(
   dir: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): Promise<"pending" | "complete"> {
   const resolvedDir = resolveUserPath(dir);
   const state = readCanonicalWorkspaceStateSnapshot(resolvedDir, options).setup;
@@ -714,7 +714,7 @@ export async function seedWorkspaceBootstrap(params: {
   dir: string;
   content: Buffer;
   nowMs?: number;
-  stateOptions?: OpenClawStateDatabaseOptions;
+  stateOptions?: NatesclawStateDatabaseOptions;
 }): Promise<"seeded" | "already-seeded" | "consumed"> {
   if (params.content.byteLength > MAX_WORKSPACE_BOOTSTRAP_FILE_BYTES) {
     throw new WorkspaceBootstrapSeedConflictError(
@@ -1097,7 +1097,7 @@ export async function ensureAgentWorkspace(params?: {
       (await workspaceProfileLooksConfigured({
         dir,
         // A preexisting Git repository is user evidence. Git metadata left by
-        // an expired, wiped OpenClaw workspace is not completion evidence.
+        // an expired, wiped Natesclaw workspace is not completion evidence.
         includeGitEvidence: !reseedingExpiredWorkspaceState,
       }))
     ) {

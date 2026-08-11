@@ -1,8 +1,8 @@
 /** Shared helpers for gateway status target selection, auth, summaries, and probe rendering. */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { colorize, theme } from "../../../packages/terminal-core/src/theme.js";
 import { resolveGatewayPort } from "../../config/config.js";
-import type { OpenClawConfig, ConfigFileSnapshot } from "../../config/types.js";
+import type { NatesclawConfig, ConfigFileSnapshot } from "../../config/types.js";
 import { hasConfiguredSecretInput } from "../../config/types.secrets.js";
 import { resolveGatewayProbeSurfaceAuth } from "../../gateway/auth-surface-resolution.js";
 import { isLoopbackHost } from "../../gateway/net.js";
@@ -81,7 +81,7 @@ function normalizeWsUrl(value: string): string | null {
 
 /** Builds the deduplicated ordered gateway probe targets from CLI input and config. */
 export function resolveTargets(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   explicitUrl?: string,
   localPortOverride?: number,
 ): GatewayStatusTarget[] {
@@ -170,7 +170,7 @@ export function sanitizeSshTarget(value: unknown): string | null {
 
 /** Resolves auth for the probe surface represented by the selected status target. */
 export async function resolveAuthForTarget(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   target: GatewayStatusTarget,
   overrides: { token?: string; password?: string },
 ): Promise<{ token?: string; password?: string; diagnostics?: string[] }> {
@@ -191,7 +191,7 @@ export async function resolveAuthForTarget(
   };
 }
 
-/** Extracts the config fields displayed by `openclaw gateway status --deep`. */
+/** Extracts the config fields displayed by `natesclaw gateway status --deep`. */
 export function extractConfigSummary(snapshotUnknown: unknown): GatewayConfigSummary {
   const snap = snapshotUnknown as Partial<ConfigFileSnapshot> | null;
   const path = typeof snap?.path === "string" ? snap.path : null;
@@ -260,7 +260,7 @@ export function extractConfigSummary(snapshotUnknown: unknown): GatewayConfigSum
 }
 
 /** Builds local and tailnet gateway URL hints for the selected gateway port. */
-export function buildNetworkHints(cfg: OpenClawConfig, localPortOverride?: number) {
+export function buildNetworkHints(cfg: NatesclawConfig, localPortOverride?: number) {
   const { tailnetIPv4 } = inspectBestEffortPrimaryTailnetIPv4();
   const port = localPortOverride ?? resolveGatewayPort(cfg);
   const localScheme = cfg.gateway?.tls?.enabled === true ? "wss" : "ws";

@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { isTransientSqliteBackupPath, isVolatileBackupPath } from "./backup-volatile-filter.js";
 
-const stateDir = "/opt/openclaw/state";
+const stateDir = "/opt/natesclaw/state";
 const plan = { stateDirs: [stateDir] };
 
 describe("isVolatileBackupPath", () => {
@@ -64,8 +64,8 @@ describe("isVolatileBackupPath", () => {
   });
 
   it("does not match paths that escape the anchor via `..`", () => {
-    // `/opt/openclaw/state/sessions/../config.jsonl` resolves to
-    // `/opt/openclaw/state/config.jsonl`, which is NOT inside sessions/.
+    // `/opt/natesclaw/state/sessions/../config.jsonl` resolves to
+    // `/opt/natesclaw/state/config.jsonl`, which is NOT inside sessions/.
     expect(isVolatileBackupPath(`${stateDir}/sessions/../config.jsonl`, plan)).toBe(false);
     expect(isVolatileBackupPath(`${stateDir}/cron/runs/../jobs.log`, plan)).toBe(false);
     expect(isVolatileBackupPath(`${stateDir}/logs/../notes.jsonl`, plan)).toBe(false);
@@ -98,7 +98,7 @@ describe("isVolatileBackupPath", () => {
   });
 
   it("normalizes Windows-style separators before anchor checks", () => {
-    const winStateDir = "C:\\openclaw\\state";
+    const winStateDir = "C:\\natesclaw\\state";
     const winPlan = { stateDirs: [winStateDir] };
     expect(isVolatileBackupPath(`${winStateDir}\\sessions\\s-abc\\transcript.jsonl`, winPlan)).toBe(
       true,
@@ -113,7 +113,7 @@ describe("isVolatileBackupPath", () => {
 
   it("matches tar filter paths when node-tar omits the leading slash", () => {
     expect(
-      isVolatileBackupPath("opt/openclaw/state/agents/main/sessions/transcript.jsonl", plan),
+      isVolatileBackupPath("opt/natesclaw/state/agents/main/sessions/transcript.jsonl", plan),
     ).toBe(true);
   });
 
@@ -137,10 +137,10 @@ describe("isTransientSqliteBackupPath", () => {
   });
 
   it.each([
-    "tmp/openclaw-502/gateway.state.lock.sqlite",
-    "tmp/openclaw-502/gateway.12345678.lock.sqlite-wal",
-    "tmp/openclaw-502/device-identity.12345678.lock.sqlite-journal",
-    "tmp/openclaw-502/retained.sqlite",
+    "tmp/natesclaw-502/gateway.state.lock.sqlite",
+    "tmp/natesclaw-502/gateway.12345678.lock.sqlite-wal",
+    "tmp/natesclaw-502/device-identity.12345678.lock.sqlite-journal",
+    "tmp/natesclaw-502/retained.sqlite",
     "plugins/dedicated/durable.sqlite",
     "plugins/dedicated/cache.lock.sqlite",
     "plugins/dedicated/durable.locked.sqlite",

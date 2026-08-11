@@ -2,8 +2,8 @@
 import { describe, expect, it } from "vitest";
 import {
   isGatewayArgv,
-  isOpenClawArgv,
-  isOpenClawCommandArgv,
+  isNatesclawArgv,
+  isNatesclawCommandArgv,
   parseProcCmdline,
 } from "./gateway-process-argv.js";
 
@@ -29,66 +29,66 @@ describe("isGatewayArgv", () => {
   });
 
   it("matches known entrypoints across slash and case variants", () => {
-    expect(isGatewayArgv(["NODE", "C:\\OpenClaw\\DIST\\ENTRY.JS", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["bun", "/srv/openclaw/scripts/run-node.mjs", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["node", "/srv/openclaw/openclaw.mjs", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["tsx", "/srv/openclaw/src/entry.ts", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["tsx", "/srv/openclaw/src/index.ts", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["NODE", "C:\\Natesclaw\\DIST\\ENTRY.JS", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["bun", "/srv/natesclaw/scripts/run-node.mjs", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["node", "/srv/natesclaw/natesclaw.mjs", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["tsx", "/srv/natesclaw/src/entry.ts", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["tsx", "/srv/natesclaw/src/index.ts", "gateway"])).toBe(true);
   });
 
-  it("matches the openclaw executable but gates the gateway binary behind the opt-in flag", () => {
-    expect(isGatewayArgv(["C:\\bin\\openclaw.cmd", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["/usr/local/bin/openclaw-gateway", "gateway"])).toBe(false);
-    expect(isGatewayArgv(["openclaw-gateway"])).toBe(false);
+  it("matches the natesclaw executable but gates the gateway binary behind the opt-in flag", () => {
+    expect(isGatewayArgv(["C:\\bin\\natesclaw.cmd", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["/usr/local/bin/natesclaw-gateway", "gateway"])).toBe(false);
+    expect(isGatewayArgv(["natesclaw-gateway"])).toBe(false);
     expect(
-      isGatewayArgv(["/usr/local/bin/openclaw-gateway", "gateway"], {
+      isGatewayArgv(["/usr/local/bin/natesclaw-gateway", "gateway"], {
         allowGatewayBinary: true,
       }),
     ).toBe(true);
     expect(
-      isGatewayArgv(["C:\\bin\\openclaw-gateway.EXE", "gateway"], {
+      isGatewayArgv(["C:\\bin\\natesclaw-gateway.EXE", "gateway"], {
         allowGatewayBinary: true,
       }),
     ).toBe(true);
-    expect(isGatewayArgv(["openclaw-gateway"], { allowGatewayBinary: true })).toBe(true);
+    expect(isGatewayArgv(["natesclaw-gateway"], { allowGatewayBinary: true })).toBe(true);
   });
 
   it("rejects unknown gateway argv even when the token is present", () => {
-    expect(isGatewayArgv(["node", "/srv/openclaw/custom.js", "gateway"])).toBe(false);
+    expect(isGatewayArgv(["node", "/srv/natesclaw/custom.js", "gateway"])).toBe(false);
     expect(isGatewayArgv(["python", "gateway", "script.py"])).toBe(false);
   });
 });
 
-describe("isOpenClawCommandArgv", () => {
+describe("isNatesclawCommandArgv", () => {
   it("matches doctor across source, built, and installed entrypoints", () => {
-    expect(isOpenClawCommandArgv(["node", "/srv/openclaw/openclaw.mjs", "doctor"], "doctor")).toBe(
+    expect(isNatesclawCommandArgv(["node", "/srv/natesclaw/natesclaw.mjs", "doctor"], "doctor")).toBe(
       true,
     );
     expect(
-      isOpenClawCommandArgv(["NODE", "C:\\OpenClaw\\DIST\\ENTRY.JS", "DOCTOR"], "doctor"),
+      isNatesclawCommandArgv(["NODE", "C:\\Natesclaw\\DIST\\ENTRY.JS", "DOCTOR"], "doctor"),
     ).toBe(true);
-    expect(isOpenClawCommandArgv(["C:\\bin\\openclaw.cmd", "doctor", "--fix"], "doctor")).toBe(
+    expect(isNatesclawCommandArgv(["C:\\bin\\natesclaw.cmd", "doctor", "--fix"], "doctor")).toBe(
       true,
     );
   });
 
-  it("rejects other OpenClaw commands and unrelated doctor processes", () => {
-    expect(isOpenClawCommandArgv(["openclaw", "gateway"], "doctor")).toBe(false);
-    expect(isOpenClawCommandArgv(["python", "doctor", "worker.py"], "doctor")).toBe(false);
+  it("rejects other Natesclaw commands and unrelated doctor processes", () => {
+    expect(isNatesclawCommandArgv(["natesclaw", "gateway"], "doctor")).toBe(false);
+    expect(isNatesclawCommandArgv(["python", "doctor", "worker.py"], "doctor")).toBe(false);
   });
 });
 
-describe("isOpenClawArgv", () => {
+describe("isNatesclawArgv", () => {
   it.each([
-    ["agent exec", ["openclaw", "agent", "exec", "task"]],
-    ["local TUI", ["node", "/srv/openclaw/openclaw.mjs", "tui", "--local"]],
-    ["models probe", ["openclaw", "models", "status", "--probe"]],
-    ["bare local TUI", ["openclaw"]],
+    ["agent exec", ["natesclaw", "agent", "exec", "task"]],
+    ["local TUI", ["node", "/srv/natesclaw/natesclaw.mjs", "tui", "--local"]],
+    ["models probe", ["natesclaw", "models", "status", "--probe"]],
+    ["bare local TUI", ["natesclaw"]],
   ])("recognizes the %s embedded owner", (_label, argv) => {
-    expect(isOpenClawArgv(argv)).toBe(true);
+    expect(isNatesclawArgv(argv)).toBe(true);
   });
 
   it("rejects an unrelated process", () => {
-    expect(isOpenClawArgv(["python", "worker.py"])).toBe(false);
+    expect(isNatesclawArgv(["python", "worker.py"])).toBe(false);
   });
 });

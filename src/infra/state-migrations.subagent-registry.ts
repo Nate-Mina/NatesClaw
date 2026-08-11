@@ -1,6 +1,6 @@
 // Doctor-only removal for the retired subagent run registry JSON store.
 import path from "node:path";
-import { root, type Root } from "@openclaw/fs-safe";
+import { root, type Root } from "@natesclaw/fs-safe";
 import { withLegacyMigrationStateLock } from "./state-migrations.lock.js";
 import {
   LegacyMigrationSourceClaim,
@@ -187,7 +187,7 @@ export async function migrateLegacySubagentRegistry(params: {
     label: "legacy subagent registry",
     releaseLabel: "Subagent registry",
     errorLabel: "Failed reading legacy subagent registry",
-    retryGuidance: "Stop the Gateway, then run `openclaw doctor --fix` again.",
+    retryGuidance: "Stop the Gateway, then run `natesclaw doctor --fix` again.",
     run: async (env) => {
       const stateRoot = await root(params.stateDir, {
         hardlinks: "reject",

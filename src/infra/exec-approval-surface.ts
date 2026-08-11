@@ -1,11 +1,11 @@
 // Resolves native approval support for the initiating channel surface.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   getChannelPlugin,
   listChannelPlugins,
   resolveChannelApprovalCapability,
 } from "../channels/plugins/index.js";
-import { getRuntimeConfig, type OpenClawConfig } from "../config/config.js";
+import { getRuntimeConfig, type NatesclawConfig } from "../config/config.js";
 import {
   INTERNAL_MESSAGE_CHANNEL,
   isDeliverableMessageChannel,
@@ -45,7 +45,7 @@ function hasNativeExecApprovalCapability(channel?: string): boolean {
 export function resolveExecApprovalInitiatingSurfaceState(params: {
   channel?: string | null;
   accountId?: string | null;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): ExecApprovalInitiatingSurfaceState {
   return resolveApprovalInitiatingSurfaceState({ ...params, approvalKind: "exec" });
 }
@@ -54,7 +54,7 @@ export function resolveExecApprovalInitiatingSurfaceState(params: {
 export function resolveApprovalInitiatingSurfaceState(params: {
   channel?: string | null;
   accountId?: string | null;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   approvalKind: ApprovalKind;
 }): ExecApprovalInitiatingSurfaceState {
   const channel = normalizeMessageChannel(params.channel);

@@ -5,9 +5,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { requireNodeSqlite } from "../../infra/node-sqlite.js";
 import { isSecretValueRegisteredForRedaction } from "../../logging/secret-redaction-registry.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../../state/natesclaw-state-db.js";
 import {
   deleteSecretStoreEntry,
   listSecretStoreEntries,
@@ -21,14 +21,14 @@ const roots: string[] = [];
 const team = { kind: "team" } as const;
 
 function createDatabaseOptions() {
-  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-secret-store-")));
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-secret-store-")));
   roots.push(root);
   return { path: path.join(root, "state.sqlite") };
 }
 
 afterEach(() => {
   vi.useRealTimers();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   for (const root of roots.splice(0)) {
     fs.rmSync(root, { recursive: true, force: true });
   }
@@ -103,7 +103,7 @@ describe("secret store", () => {
       updatedBy: null,
       database,
     });
-    const state = openOpenClawStateDatabase(database);
+    const state = openNatesclawStateDatabase(database);
     expect(() =>
       state.db
         .prepare(
@@ -166,8 +166,8 @@ describe("secret store", () => {
 
   it("treats a missing lazy table as empty and preserves schema version 6 on ensure", () => {
     const database = createDatabaseOptions();
-    openOpenClawStateDatabase(database);
-    closeOpenClawStateDatabaseForTest();
+    openNatesclawStateDatabase(database);
+    closeNatesclawStateDatabaseForTest();
     const { DatabaseSync } = requireNodeSqlite();
     const before = new DatabaseSync(database.path);
     expect(before.prepare("PRAGMA user_version").get()).toEqual({ user_version: 6 });
@@ -195,7 +195,7 @@ describe("secret store", () => {
       updatedBy: null,
       database,
     });
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
     const after = new DatabaseSync(database.path, { readOnly: true });
     expect(after.prepare("PRAGMA user_version").get()).toEqual({ user_version: 6 });
     expect(

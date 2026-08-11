@@ -1,4 +1,4 @@
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -27,7 +27,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("../config/config.js", () => ({
   assertConfigWriteAllowedInCurrentMode: (params?: { env?: NodeJS.ProcessEnv }) => {
-    if (params?.env?.OPENCLAW_NIX_MODE === "1") {
+    if (params?.env?.NATESCLAW_NIX_MODE === "1") {
       throw new Error("Config is managed by Nix");
     }
   },
@@ -112,12 +112,12 @@ function configSnapshot(config: Record<string, unknown> = {}) {
     snapshot: {
       valid: true,
       parsed: {},
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       sourceConfig: config,
       hash: "base-hash",
     },
     writeOptions: {
-      expectedConfigPath: "/tmp/openclaw.json",
+      expectedConfigPath: "/tmp/natesclaw.json",
       includeFileHashesForWrite: { "/tmp/plugins.json": "include-hash" },
       includeFileTargetsForWrite: { "/tmp/plugins.json": "/tmp/plugins.json" },
     },
@@ -147,14 +147,14 @@ function metadataSnapshot(params: {
     origin: params.origin ?? "bundled",
     rootDir: `/tmp/${id}`,
     source: `/tmp/${id}/index.ts`,
-    manifestPath: `/tmp/${id}/openclaw.plugin.json`,
+    manifestPath: `/tmp/${id}/natesclaw.plugin.json`,
   };
   return {
     index: {
       plugins: [
         {
           pluginId: id,
-          packageName: `@openclaw/${id}`,
+          packageName: `@natesclaw/${id}`,
           origin: params.origin ?? "bundled",
           enabled: params.enabled,
         },
@@ -204,28 +204,28 @@ function mockClawHubInstall(pluginId: string, packageName: string, targetDir?: s
 }
 
 const hostedDiffsEntry = {
-  name: "@openclaw/diffs",
+  name: "@natesclaw/diffs",
   version: "2.0.0",
   description: "Hosted description",
-  openclaw: {
+  natesclaw: {
     plugin: { id: "diffs", label: "Hosted Diffs" },
-    install: { clawhubSpec: "clawhub:@openclaw/diffs", defaultChoice: "clawhub" },
+    install: { clawhubSpec: "clawhub:@natesclaw/diffs", defaultChoice: "clawhub" },
   },
 };
 
 // Mirrors the current default ClawHub feed shape: package identity lives in a
 // source candidate while runtime/editorial metadata remains local.
 const hostedFeedDiffsEntry = {
-  id: "@openclaw/diffs",
+  id: "@natesclaw/diffs",
   title: "Diffs",
   state: "available",
   featured: true,
-  publisher: { id: "openclaw", trust: "official" },
+  publisher: { id: "natesclaw", trust: "official" },
   install: {
     candidates: [
       {
         sourceRef: "public-clawhub",
-        package: "@openclaw/diffs",
+        package: "@natesclaw/diffs",
         version: "2026.6.11",
         integrity: `sha256:${"a".repeat(64)}`,
       },
@@ -273,7 +273,7 @@ describe("plugin management service", () => {
         version: "2.0.0",
         featured: true,
         order: 40,
-        install: { source: "clawhub", packageName: "@openclaw/diffs" },
+        install: { source: "clawhub", packageName: "@natesclaw/diffs" },
       }),
     ]);
   });
@@ -308,8 +308,8 @@ describe("plugin management service", () => {
       {
         ...hostedDiffsEntry,
         name: "community/impostor",
-        openclaw: {
-          ...hostedDiffsEntry.openclaw,
+        natesclaw: {
+          ...hostedDiffsEntry.natesclaw,
           install: { clawhubSpec: "clawhub:community/impostor", defaultChoice: "clawhub" },
         },
       },
@@ -330,14 +330,14 @@ describe("plugin management service", () => {
         entries: [
           {
             name: "community/partial",
-            openclaw: {
+            natesclaw: {
               plugin: { id: "partial", label: "Partial" },
               catalog: { featured: "yes", order: 25 },
             },
           },
           {
             name: "community/invalid",
-            openclaw: {
+            natesclaw: {
               plugin: { id: "invalid", label: "Invalid" },
               catalog: { featured: "yes", order: "first" },
             },
@@ -367,7 +367,7 @@ describe("plugin management service", () => {
     expect(catalog.plugins).toEqual([
       expect.objectContaining({
         id: "workboard",
-        packageName: "@openclaw/workboard",
+        packageName: "@natesclaw/workboard",
         installed: true,
         enabled: false,
         state: "disabled",
@@ -389,7 +389,7 @@ describe("plugin management service", () => {
         ],
       },
     };
-    const env = { HOME: "/tmp/openclaw-managed-plugin-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-plugin-home" };
     mocks.metadata.mockReturnValue(metadataSnapshot({ enabled: false, icon }));
 
     const catalog = await listManagedPlugins({
@@ -409,12 +409,12 @@ describe("plugin management service", () => {
     expect(mocks.metadata).toHaveBeenNthCalledWith(1, {
       config,
       env,
-      workspaceDir: "/tmp/openclaw-managed-plugin-home/research-workspace",
+      workspaceDir: "/tmp/natesclaw-managed-plugin-home/research-workspace",
     });
     expect(mocks.metadata).toHaveBeenNthCalledWith(2, {
       config,
       env,
-      workspaceDir: "/tmp/openclaw-managed-plugin-home/research-workspace",
+      workspaceDir: "/tmp/natesclaw-managed-plugin-home/research-workspace",
     });
   });
 
@@ -423,9 +423,9 @@ describe("plugin management service", () => {
     const officialCatalog = {
       entries: [
         {
-          name: "@openclaw/firecrawl",
+          name: "@natesclaw/firecrawl",
           description: "Web extraction and crawling.",
-          openclaw: {
+          natesclaw: {
             plugin: { id: "firecrawl", label: "FireCrawl" },
             catalog: { featured: true, order: 60 },
             icon,
@@ -492,7 +492,7 @@ describe("plugin management service", () => {
       setManagedPluginEnabled({
         pluginId: "workboard",
         enabled: true,
-        env: { OPENCLAW_NIX_MODE: "1" },
+        env: { NATESCLAW_NIX_MODE: "1" },
       }),
     ).rejects.toThrow("managed by Nix");
     expect(mocks.readConfig).not.toHaveBeenCalled();
@@ -513,7 +513,7 @@ describe("plugin management service", () => {
   });
 
   it("preserves config hash and include ownership when enabling Workboard", async () => {
-    const env = { HOME: "/tmp/openclaw-managed-toggle-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-toggle-home" };
     const prepared = configSnapshot({
       agents: { defaults: { workspace: "~/managed-toggle-workspace" } },
     });
@@ -535,14 +535,14 @@ describe("plugin management service", () => {
       expect.objectContaining({
         config: prepared.snapshot.sourceConfig,
         env,
-        workspaceDir: "/tmp/openclaw-managed-toggle-home/managed-toggle-workspace",
+        workspaceDir: "/tmp/natesclaw-managed-toggle-home/managed-toggle-workspace",
       }),
     );
     expect(mocks.metadata).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         env,
-        workspaceDir: "/tmp/openclaw-managed-toggle-home/managed-toggle-workspace",
+        workspaceDir: "/tmp/natesclaw-managed-toggle-home/managed-toggle-workspace",
       }),
     );
     expect(mocks.replaceConfig).toHaveBeenCalledWith(
@@ -682,13 +682,13 @@ describe("plugin management service", () => {
   it("pins curated ClawHub installs to the expected runtime id", async () => {
     mocks.readConfig.mockResolvedValue(configSnapshot());
     mockHostedOfficialCatalog([hostedFeedDiffsEntry]);
-    mockClawHubInstall("impostor", "@openclaw/diffs");
+    mockClawHubInstall("impostor", "@natesclaw/diffs");
 
     await expect(
       installManagedPlugin({
         request: {
           source: "clawhub",
-          packageName: "@openclaw/diffs",
+          packageName: "@natesclaw/diffs",
           acknowledgeClawHubRisk: true,
         },
         env: {},
@@ -696,7 +696,7 @@ describe("plugin management service", () => {
     ).rejects.toThrow("expected diffs, got impostor");
     expect(mocks.clawhubInstall).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:@openclaw/diffs@2026.6.11",
+        spec: "clawhub:@natesclaw/diffs@2026.6.11",
         expectedPluginId: "diffs",
         expectedIntegrity: `sha256-${Buffer.from("a".repeat(64), "hex").toString("base64")}`,
         acknowledgeClawHubRisk: true,
@@ -708,23 +708,23 @@ describe("plugin management service", () => {
   it("does not pin a runtime id when the hosted entry only exposes its package name", async () => {
     const installRecord = {
       source: "clawhub",
-      spec: "clawhub:@openclaw/bluebubbles",
+      spec: "clawhub:@natesclaw/bluebubbles",
       installPath: "/tmp/extensions/bluebubbles",
     };
     mocks.readConfig.mockResolvedValue(configSnapshot());
     // Package identity without a declared runtime id must not become an expectedPluginId pin.
     mockHostedOfficialCatalog([
       {
-        id: "@openclaw/bluebubbles",
+        id: "@natesclaw/bluebubbles",
         title: "BlueBubbles",
         state: "available",
-        publisher: { id: "openclaw", trust: "official" },
+        publisher: { id: "natesclaw", trust: "official" },
         install: {
-          candidates: [{ sourceRef: "public-clawhub", package: "@openclaw/bluebubbles" }],
+          candidates: [{ sourceRef: "public-clawhub", package: "@natesclaw/bluebubbles" }],
         },
       },
     ]);
-    mockClawHubInstall("bluebubbles", "@openclaw/bluebubbles");
+    mockClawHubInstall("bluebubbles", "@natesclaw/bluebubbles");
     mocks.persistInstall.mockResolvedValue({});
     mocks.refreshRegistry.mockResolvedValue(undefined);
     mocks.metadata.mockReturnValue(
@@ -738,7 +738,7 @@ describe("plugin management service", () => {
     );
 
     const result = await installManagedPlugin({
-      request: { source: "clawhub", packageName: "@openclaw/bluebubbles" },
+      request: { source: "clawhub", packageName: "@natesclaw/bluebubbles" },
       env: {},
     });
 
@@ -756,8 +756,8 @@ describe("plugin management service", () => {
         id: "sonos",
         title: "Sonos",
         state: "available",
-        publisher: { id: "openclaw", trust: "official" },
-        openclaw: { plugin: { id: "sonos" } },
+        publisher: { id: "natesclaw", trust: "official" },
+        natesclaw: { plugin: { id: "sonos" } },
         install: { candidates: [{ sourceRef: "public-clawhub", package: "sonos" }] },
       },
     ]);
@@ -777,7 +777,7 @@ describe("plugin management service", () => {
   it("threads hosted ClawHub candidate integrity into official installs", async () => {
     mocks.readConfig.mockResolvedValue(configSnapshot());
     mockHostedOfficialCatalog([hostedFeedDiffsEntry]);
-    mockClawHubInstall("diffs", "@openclaw/diffs");
+    mockClawHubInstall("diffs", "@natesclaw/diffs");
     mocks.persistInstall.mockResolvedValue({});
     mocks.metadata.mockReturnValue(
       metadataSnapshot({ enabled: true, id: "diffs", name: "Diffs", origin: "global" }),
@@ -790,7 +790,7 @@ describe("plugin management service", () => {
 
     expect(mocks.clawhubInstall).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:@openclaw/diffs@2026.6.11",
+        spec: "clawhub:@natesclaw/diffs@2026.6.11",
         expectedPluginId: "diffs",
         expectedIntegrity: `sha256-${Buffer.from("a".repeat(64), "hex").toString("base64")}`,
       }),
@@ -798,7 +798,7 @@ describe("plugin management service", () => {
   });
 
   it("removes only the newly installed managed target after persistence conflicts", async () => {
-    const env = { HOME: "/tmp/openclaw-managed-install-conflict-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-install-conflict-home" };
     const conflict = new Error("config changed during plugin install");
     const targetDir = "/tmp/extensions/demo";
     mocks.readConfig.mockResolvedValue(configSnapshot());
@@ -839,9 +839,9 @@ describe("plugin management service", () => {
   });
 
   it("retains a failed install target when the durable record already owns it", async () => {
-    const env = { HOME: "/tmp/openclaw-managed-install-committed-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-install-committed-home" };
     const persistenceError = new Error("post-commit refresh failed");
-    const targetDir = "/tmp/openclaw-managed-install-committed-home/extensions/demo";
+    const targetDir = "/tmp/natesclaw-managed-install-committed-home/extensions/demo";
     mocks.readConfig.mockResolvedValue(configSnapshot());
     mockClawHubInstall("demo", "community/demo", targetDir);
     let committedInstallRecords: Record<string, { source: string; installPath: string }> = {};
@@ -877,9 +877,9 @@ describe("plugin management service", () => {
   });
 
   it("retains a failed install target when its durable records cannot be verified", async () => {
-    const env = { HOME: "/tmp/openclaw-managed-install-unavailable-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-install-unavailable-home" };
     const persistenceError = new Error("post-commit refresh failed");
-    const targetDir = "/tmp/openclaw-managed-install-unavailable-home/extensions/demo";
+    const targetDir = "/tmp/natesclaw-managed-install-unavailable-home/extensions/demo";
     mocks.readConfig.mockResolvedValue(configSnapshot());
     mockClawHubInstall("demo", "community/demo", targetDir);
     mocks.persistInstall.mockRejectedValue(persistenceError);
@@ -985,10 +985,10 @@ describe("plugin management service", () => {
   });
 
   it("uninstalls an external plugin through commit, file removal, and registry refresh", async () => {
-    const env = { HOME: "/tmp/openclaw-managed-uninstall-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-uninstall-home" };
     const installRecord = {
       source: "clawhub",
-      spec: "clawhub:@openclaw/diffs",
+      spec: "clawhub:@natesclaw/diffs",
       installPath: "/tmp/extensions/diffs",
     };
     const prepared = configSnapshot({
@@ -1036,7 +1036,7 @@ describe("plugin management service", () => {
     expect(mocks.metadata).toHaveBeenCalledWith(
       expect.objectContaining({
         env,
-        workspaceDir: "/tmp/openclaw-managed-uninstall-home/managed-uninstall-workspace",
+        workspaceDir: "/tmp/natesclaw-managed-uninstall-home/managed-uninstall-workspace",
       }),
     );
     expect(mocks.planUninstall).toHaveBeenCalledWith(

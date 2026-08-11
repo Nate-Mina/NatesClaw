@@ -14,7 +14,7 @@ import {
   expectDefined,
   SystemAgentInferenceUnavailableError,
   verifyConfigAfterSystemAgentWrite,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type WizardPrompter,
 } from "./chat-engine.test-support.js";
 
@@ -138,7 +138,7 @@ describe("SystemAgentChatEngine operations", () => {
     expect(reply.action).toBe("none");
     expect(reply.handoff).toBeUndefined();
     expect(reply.text).toContain("Opening the menu wizard");
-    expect(reply.text).toContain("run `openclaw onboard`");
+    expect(reply.text).toContain("run `natesclaw onboard`");
   });
 
   it("starts the channel wizard from an agent-loop directive", async () => {
@@ -171,10 +171,10 @@ describe("SystemAgentChatEngine operations", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const changedConfig = {
       agents: { defaults: { model: "anthropic/claude-opus-4-8" } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const verifiedInference = await createAmbientVerifiedBinding(baseConfig);
     const readConfigFileSnapshot = vi
       .fn()
@@ -205,7 +205,7 @@ describe("SystemAgentChatEngine operations", () => {
     const config = {
       agents: { defaults: { model: "anthropic/claude-opus-4-8@anthropic:oauth" } },
       auth: { profiles: { "anthropic:oauth": { provider: "anthropic", mode: "oauth" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     let credential = {
       type: "oauth" as const,
       provider: "anthropic",
@@ -252,7 +252,7 @@ describe("SystemAgentChatEngine operations", () => {
     const config = {
       agents: { defaults: { model: "anthropic/claude-opus-4-8@anthropic:oauth" } },
       auth: { profiles: { "anthropic:oauth": { provider: "anthropic", mode: "oauth" } } },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     let credential = {
       type: "oauth" as const,
       provider: "anthropic",
@@ -289,7 +289,7 @@ describe("SystemAgentChatEngine operations", () => {
     const reply = await engine.handle("yes, apply that exact port change");
 
     expect(runConfigSet).toHaveBeenCalledOnce();
-    expect(reply.text).toContain("[openclaw] done: config.set");
+    expect(reply.text).toContain("[natesclaw] done: config.set");
   });
 
   it("prefers the real agent loop for fuzzy messages", async () => {
@@ -324,7 +324,7 @@ describe("SystemAgentChatEngine operations", () => {
     expect(call.surface).toBe("gateway");
     // A question is not consent: mutations stay locked for this turn.
     expect(call.approvalArmed).toBe(false);
-    expect(call.session.sessionId).toMatch(/^openclaw-/);
+    expect(call.session.sessionId).toMatch(/^natesclaw-/);
     // The same session flows into every turn for real multi-turn memory.
     await engine.handle("and the gateway?");
     expect(runAgentTurn.mock.calls[1]?.[0]).toMatchObject({
@@ -432,10 +432,10 @@ describe("SystemAgentChatEngine operations", () => {
         ...baseConfig.agents,
         list: baseConfig.agents.list.map((agent) => ({ ...agent, model: "openai/gpt-5.6-sol" })),
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const verifiedInference = await createAmbientVerifiedBinding(baseConfig);
     const reboundInference = await createAmbientVerifiedBinding(changedConfig);
-    let currentConfig: OpenClawConfig = baseConfig;
+    let currentConfig: NatesclawConfig = baseConfig;
     const executeOperation = vi.fn(async (_operation, runtime, options) => {
       currentConfig = changedConfig;
       options.onVerifiedInferenceChanged?.(reboundInference);
@@ -495,7 +495,7 @@ describe("SystemAgentChatEngine operations", () => {
       mocks.readConfigFileSnapshot.mockResolvedValue({
         exists: true,
         valid: false,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         hash: "h",
         config: {},
         sourceConfig: {},
@@ -526,7 +526,7 @@ describe("SystemAgentChatEngine operations", () => {
       mocks.readConfigFileSnapshot.mockResolvedValue({
         exists: true,
         valid: false,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         hash: "h",
         config: {},
         sourceConfig: {},
@@ -547,14 +547,14 @@ describe("SystemAgentChatEngine operations", () => {
     expect(runInvalidConfigSet).toHaveBeenCalledOnce();
     expect(reply.text).toContain("failed validation");
     expect(reply.text).toContain("The write was applied");
-    expect(reply.text).toContain("openclaw doctor --fix");
+    expect(reply.text).toContain("natesclaw doctor --fix");
   });
 
-  it("keeps doctor repair outside OpenClaw when no post-write repair is proposed", async () => {
+  it("keeps doctor repair outside Natesclaw when no post-write repair is proposed", async () => {
     mocks.readConfigFileSnapshot.mockResolvedValue({
       exists: true,
       valid: false,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       hash: "h",
       config: {},
       sourceConfig: {},
@@ -563,8 +563,8 @@ describe("SystemAgentChatEngine operations", () => {
 
     const reply = await verifyConfigAfterSystemAgentWrite(async () => ({ text: "" }));
 
-    expect(reply).toContain("with OpenClaw stopped");
-    expect(reply).toContain("openclaw doctor --fix");
+    expect(reply).toContain("with Natesclaw stopped");
+    expect(reply).toContain("natesclaw doctor --fix");
     expect(reply).toContain("machine running it");
   });
 
@@ -574,7 +574,7 @@ describe("SystemAgentChatEngine operations", () => {
       mocks.readConfigFileSnapshot.mockResolvedValue({
         exists: false,
         valid: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/natesclaw.json",
         hash: null,
         config: {},
         sourceConfig: {},
@@ -589,8 +589,8 @@ describe("SystemAgentChatEngine operations", () => {
     expect(runConfigSet).toHaveBeenCalledOnce();
     expect(reply.text).toContain("The write was applied");
     expect(reply.text).toContain("post-write verification is unavailable");
-    expect(reply.text).toContain("openclaw.json was not found");
-    expect(reply.text).toContain("openclaw doctor --fix");
+    expect(reply.text).toContain("natesclaw.json was not found");
+    expect(reply.text).toContain("natesclaw doctor --fix");
   });
 
   it("warns when the applied write cannot be read back for verification", async () => {
@@ -598,7 +598,7 @@ describe("SystemAgentChatEngine operations", () => {
     const validSnapshot = {
       exists: true,
       valid: true,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/natesclaw.json",
       hash: "h",
       config: {},
       sourceConfig: {},
@@ -617,8 +617,8 @@ describe("SystemAgentChatEngine operations", () => {
     expect(runConfigSet).toHaveBeenCalledOnce();
     expect(reply.text).toContain("The write was applied");
     expect(reply.text).toContain("post-write verification is unavailable");
-    expect(reply.text).toContain("openclaw.json could not be read");
-    expect(reply.text).toContain("openclaw doctor --fix");
+    expect(reply.text).toContain("natesclaw.json could not be read");
+    expect(reply.text).toContain("natesclaw doctor --fix");
   });
 
   it("stays quiet when the post-write validation passes", async () => {
@@ -646,7 +646,7 @@ describe("SystemAgentChatEngine operations", () => {
           model: { primary: "claude-cli/claude-opus-4-8" },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const snapshot = configSnapshot(config);
     const inference = await createCliVerifiedBinding(config);
     const inferenceDeps = {
@@ -709,7 +709,7 @@ describe("SystemAgentChatEngine operations", () => {
           model: { primary: "claude-cli/claude-opus-4-8" },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const snapshot = configSnapshot(config);
     const inference = await createCliVerifiedBinding(config);
     const inferenceDeps = {

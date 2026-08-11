@@ -16,8 +16,8 @@ async function readIndexHtml(): Promise<string> {
 async function readIndexHtmlWithDelay(delayMs: number): Promise<string> {
   const html = await readIndexHtml();
   return html.replace(
-    'data-openclaw-mount-timeout-ms="12000"',
-    `data-openclaw-mount-timeout-ms="${delayMs}"`,
+    'data-natesclaw-mount-timeout-ms="12000"',
+    `data-natesclaw-mount-timeout-ms="${delayMs}"`,
   );
 }
 
@@ -57,7 +57,7 @@ function installFallbackShell(window: TestWindow, html: string): void {
   window.document.body.innerHTML = parsed.body.innerHTML;
 
   const sentinel = Array.from(parsed.querySelectorAll<HTMLScriptElement>("script:not([src])")).find(
-    (script) => script.textContent?.includes("openclaw-mount-fallback"),
+    (script) => script.textContent?.includes("natesclaw-mount-fallback"),
   );
   if (!sentinel?.textContent) {
     throw new Error("Expected inline mount fallback script in index.html");
@@ -101,7 +101,7 @@ describe("Control UI mount fallback", () => {
     async (_name, settings, expectedTheme, expectedBackground) => {
       const frameWindow = createIsolatedWindow();
       frameWindow.localStorage.clear();
-      frameWindow.localStorage.setItem("openclaw.control.settings.v1", JSON.stringify(settings));
+      frameWindow.localStorage.setItem("natesclaw.control.settings.v1", JSON.stringify(settings));
       installStartupPaintShell(frameWindow, await readIndexHtmlWithDelay(1));
 
       expect(frameWindow.document.documentElement.dataset.theme).toBe(expectedTheme);
@@ -116,17 +116,17 @@ describe("Control UI mount fallback", () => {
 
   it("shows the static troubleshooting panel when the app element is never registered", async () => {
     const frameWindow = createIsolatedWindow();
-    expect(frameWindow.customElements.get("openclaw-app")).toBeUndefined();
+    expect(frameWindow.customElements.get("natesclaw-app")).toBeUndefined();
     installFallbackShell(frameWindow, await readIndexHtmlWithDelay(1));
     await waitForWindowTimeout(frameWindow, 10);
 
     const fallback = requireElementById(
       frameWindow,
-      "openclaw-mount-fallback",
+      "natesclaw-mount-fallback",
       frameWindow.HTMLElement,
     );
     expect(fallback.hidden).toBe(false);
-    expect([...frameWindow.document.body.classList]).toEqual(["openclaw-mount-fallback-active"]);
+    expect([...frameWindow.document.body.classList]).toEqual(["natesclaw-mount-fallback-active"]);
     expect(fallback.querySelector("h1")?.textContent?.trim()).toBe("Control UI did not start");
     expect(fallback.querySelector("a")?.textContent?.trim()).toBe("Control UI troubleshooting");
     expect(frameWindow.document.activeElement).toBeInstanceOf(frameWindow.HTMLElement);
@@ -136,7 +136,7 @@ describe("Control UI mount fallback", () => {
 
     const waitButton = requireElementById(
       frameWindow,
-      "openclaw-mount-wait",
+      "natesclaw-mount-wait",
       frameWindow.HTMLButtonElement,
     );
     waitButton.click();
@@ -150,15 +150,15 @@ describe("Control UI mount fallback", () => {
   it("keeps the fallback hidden when the app element registers before the timeout", async () => {
     const frameWindow = createIsolatedWindow();
     installFallbackShell(frameWindow, await readIndexHtmlWithDelay(25));
-    if (!frameWindow.customElements.get("openclaw-app")) {
-      frameWindow.customElements.define("openclaw-app", class extends frameWindow.HTMLElement {});
+    if (!frameWindow.customElements.get("natesclaw-app")) {
+      frameWindow.customElements.define("natesclaw-app", class extends frameWindow.HTMLElement {});
     }
-    await frameWindow.customElements.whenDefined("openclaw-app");
+    await frameWindow.customElements.whenDefined("natesclaw-app");
     await waitForWindowTimeout(frameWindow, 35);
 
     const fallback = requireElementById(
       frameWindow,
-      "openclaw-mount-fallback",
+      "natesclaw-mount-fallback",
       frameWindow.HTMLElement,
     );
     expect(fallback.hidden).toBe(true);
@@ -176,7 +176,7 @@ describe("Control UI mount fallback", () => {
 
     expect(fetch).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining("openclaw_mount_recovery="),
+      expect.stringContaining("natesclaw_mount_recovery="),
       expect.objectContaining({
         cache: "no-store",
         credentials: "same-origin",
@@ -222,7 +222,7 @@ describe("Control UI mount fallback", () => {
     expect(
       requireElementById(
         frameWindow,
-        "openclaw-mount-fallback-summary",
+        "natesclaw-mount-fallback-summary",
         frameWindow.HTMLParagraphElement,
       ).textContent,
     ).toContain("gateway is still unavailable");

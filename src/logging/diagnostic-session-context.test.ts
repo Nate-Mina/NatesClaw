@@ -9,9 +9,9 @@ import {
 } from "../config/sessions/session-accessor.js";
 import { saveCronStore } from "../cron/store.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createNatesclawTestState,
+  type NatesclawTestState,
+} from "../test-utils/natesclaw-test-state.js";
 import {
   formatCronSessionDiagnosticFields,
   formatStoppedCronSessionDiagnosticFields,
@@ -19,7 +19,7 @@ import {
 } from "./diagnostic-session-context.js";
 
 let tempDir: string | undefined;
-let testState: OpenClawTestState | undefined;
+let testState: NatesclawTestState | undefined;
 
 async function seedSessionTranscript(params: {
   agentId: string;
@@ -40,9 +40,9 @@ async function seedSessionTranscript(params: {
 
 describe("diagnostic session context", () => {
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createNatesclawTestState({
       layout: "state-only",
-      prefix: "openclaw-diagnostic-session-",
+      prefix: "natesclaw-diagnostic-session-",
     });
     tempDir = testState.stateDir;
   });
@@ -169,7 +169,7 @@ describe("diagnostic session context", () => {
         resolveCronSessionDiagnosticContext({ sessionKey, activeSessionId: sessionId }),
       ).toEqual({});
       expect(
-        fs.existsSync(path.join(tempDir!, "agents", "main", "agent", "openclaw-agent.sqlite")),
+        fs.existsSync(path.join(tempDir!, "agents", "main", "agent", "natesclaw-agent.sqlite")),
       ).toBe(false);
     },
   );
@@ -263,7 +263,7 @@ describe("diagnostic session context", () => {
       "agents",
       "missing-agent",
       "agent",
-      "openclaw-agent.sqlite",
+      "natesclaw-agent.sqlite",
     );
     expect(fs.existsSync(databasePath)).toBe(false);
 

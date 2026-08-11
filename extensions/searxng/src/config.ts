@@ -1,9 +1,9 @@
 // Searxng helper module supports config behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   normalizeResolvedSecretInputString,
   normalizeSecretInput,
-} from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/secret-input";
 
 type SearxngPluginConfig = {
   webSearch?: {
@@ -50,7 +50,7 @@ function normalizeBaseUrl(value: string | undefined): string | undefined {
 }
 
 function resolveSearxngWebSearchConfig(
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
 ): SearxngPluginConfig["webSearch"] | undefined {
   const pluginConfig = config?.plugins?.entries?.searxng?.config as SearxngPluginConfig | undefined;
   const webSearch = pluginConfig?.webSearch;
@@ -61,7 +61,7 @@ function resolveSearxngWebSearchConfig(
 }
 
 export function resolveSearxngBaseUrl(
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string | undefined {
   const webSearch = resolveSearxngWebSearchConfig(config);
@@ -77,10 +77,10 @@ export function resolveSearxngBaseUrl(
   );
 }
 
-export function resolveSearxngCategories(config?: OpenClawConfig): string | undefined {
+export function resolveSearxngCategories(config?: NatesclawConfig): string | undefined {
   return normalizeTrimmedString(resolveSearxngWebSearchConfig(config)?.categories);
 }
 
-export function resolveSearxngLanguage(config?: OpenClawConfig): string | undefined {
+export function resolveSearxngLanguage(config?: NatesclawConfig): string | undefined {
   return normalizeTrimmedString(resolveSearxngWebSearchConfig(config)?.language);
 }

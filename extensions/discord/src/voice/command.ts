@@ -4,9 +4,9 @@ import {
   ChannelType as DiscordChannelType,
   type APIApplicationCommandChannelOption,
 } from "discord-api-types/v10";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { NativeCommandSpec } from "openclaw/plugin-sdk/native-command-registry";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { NativeCommandSpec } from "natesclaw/plugin-sdk/native-command-registry";
 import {
   Command,
   CommandWithSubcommands,
@@ -33,7 +33,7 @@ export const DISCORD_VOICE_COMMAND_SPEC = {
 } satisfies NativeCommandSpec;
 
 type VoiceCommandContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   discordConfig: DiscordAccountConfig;
   accountId: string;
   groupPolicy: "open" | "disabled" | "allowlist";

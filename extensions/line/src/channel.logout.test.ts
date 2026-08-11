@@ -1,7 +1,7 @@
 // Line tests cover channel.logout plugin behavior.
-import { createRuntimeEnv } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { createRuntimeEnv } from "natesclaw/plugin-sdk/plugin-test-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
+import type { NatesclawConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
 import { lineGatewayAdapter } from "./gateway.js";
 import { setLineRuntime } from "./runtime.js";
 
@@ -15,7 +15,7 @@ type LineRuntimeMocks = {
 function createRuntime(): { runtime: PluginRuntime; mocks: LineRuntimeMocks } {
   const replaceConfigFile = vi.fn(async () => {});
   const resolveLineAccount = vi.fn(
-    ({ cfg, accountId }: { cfg: OpenClawConfig; accountId?: string }) => {
+    ({ cfg, accountId }: { cfg: NatesclawConfig; accountId?: string }) => {
       const lineConfig = (cfg.channels?.line ?? {}) as {
         tokenFile?: string;
         secretFile?: string;
@@ -48,17 +48,17 @@ function createRuntime(): { runtime: PluginRuntime; mocks: LineRuntimeMocks } {
 
 function resolveAccount(
   resolveLineAccount: LineRuntimeMocks["resolveLineAccount"],
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   accountId: string,
 ): ResolvedLineAccount {
   const resolver = resolveLineAccount as unknown as (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     accountId?: string;
   }) => ResolvedLineAccount;
   return resolver({ cfg, accountId });
 }
 
-async function runLogoutScenario(params: { cfg: OpenClawConfig; accountId: string }): Promise<{
+async function runLogoutScenario(params: { cfg: NatesclawConfig; accountId: string }): Promise<{
   result: Awaited<ReturnType<NonNullable<typeof lineGatewayAdapter.logoutAccount>>>;
   mocks: LineRuntimeMocks;
 }> {
@@ -80,7 +80,7 @@ describe("linePlugin gateway.logoutAccount", () => {
   });
 
   it("clears tokenFile/secretFile on default account logout", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       channels: {
         line: {
           tokenFile: "/tmp/token",
@@ -102,7 +102,7 @@ describe("linePlugin gateway.logoutAccount", () => {
   });
 
   it("clears tokenFile/secretFile on account logout", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       channels: {
         line: {
           accounts: {
@@ -128,7 +128,7 @@ describe("linePlugin gateway.logoutAccount", () => {
   });
 
   it("does not write config when account has no token/secret fields", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NatesclawConfig = {
       channels: {
         line: {
           accounts: {

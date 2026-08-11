@@ -2,10 +2,10 @@
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { upsertChannelPairingRequest } from "openclaw/plugin-sdk/conversation-runtime";
+} from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingChallengeIssuer } from "natesclaw/plugin-sdk/channel-pairing";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { upsertChannelPairingRequest } from "natesclaw/plugin-sdk/conversation-runtime";
 import {
   formatSignalSenderId,
   looksLikeUuid,
@@ -118,7 +118,7 @@ export async function resolveSignalAccessState(params: {
   sender: SignalSender;
   groupId?: string;
   isGroup?: boolean;
-  cfg?: Pick<OpenClawConfig, "accessGroups" | "commands">;
+  cfg?: Pick<NatesclawConfig, "accessGroups" | "commands">;
   hasControlCommand?: boolean;
   readStoreAllowFrom?: () => Promise<string[]>;
 }) {

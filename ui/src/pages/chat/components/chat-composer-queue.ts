@@ -28,7 +28,7 @@ type ChatQueueReorder = {
   offered: boolean;
 };
 
-const DRAG_MIME = "application/x-openclaw-queued-message";
+const DRAG_MIME = "application/x-natesclaw-queued-message";
 const DRAG_OVER_CLASS = "chat-queue__item--drop-target";
 
 function sendStateLabel(item: ChatQueueItem): string | null {
@@ -245,7 +245,7 @@ function renderChatQueueItem(
           : nothing}
         ${editable
           ? html`
-              <openclaw-tooltip .content=${t("chat.queue.editQueuedMessage")}>
+              <natesclaw-tooltip .content=${t("chat.queue.editQueuedMessage")}>
                 <button
                   class="chat-queue__edit"
                   type="button"
@@ -255,13 +255,13 @@ function renderChatQueueItem(
                 >
                   ${icons.pencil}
                 </button>
-              </openclaw-tooltip>
+              </natesclaw-tooltip>
             `
           : nothing}
         ${busy
           ? nothing
           : html`
-              <openclaw-tooltip .content=${t("chat.queue.removeQueuedMessage")}>
+              <natesclaw-tooltip .content=${t("chat.queue.removeQueuedMessage")}>
                 <button
                   class="chat-queue__remove"
                   type="button"
@@ -271,7 +271,7 @@ function renderChatQueueItem(
                 >
                   ${icons.x}
                 </button>
-              </openclaw-tooltip>
+              </natesclaw-tooltip>
             `}
       </span>
       ${

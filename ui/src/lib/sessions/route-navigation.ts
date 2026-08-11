@@ -15,9 +15,9 @@ import {
   resolveUiDefaultAgentId,
 } from "./session-key.ts";
 
-export const SESSION_FACE_PREFERENCE_PARAM = "__openclawSessionFacePreference";
-export const SESSION_NAVIGATION_KEY_PARAM = "__openclawSessionKey";
-export const SESSION_COMPOSER_FOCUS_PARAM = "__openclawComposerFocus";
+export const SESSION_FACE_PREFERENCE_PARAM = "__natesclawSessionFacePreference";
+export const SESSION_NAVIGATION_KEY_PARAM = "__natesclawSessionKey";
+export const SESSION_COMPOSER_FOCUS_PARAM = "__natesclawComposerFocus";
 
 export function composerDraftSearch(draft: string): string {
   return `?${new URLSearchParams({ draft, [SESSION_COMPOSER_FOCUS_PARAM]: "1" }).toString()}`;

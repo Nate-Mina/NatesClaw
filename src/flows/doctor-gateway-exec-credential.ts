@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 export async function hasActiveGatewayExecCredential(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<boolean> {
   const [{ resolveSecretInputRef }, { gatewaySecretInputPathCanWin }, secretPaths] =

@@ -1,4 +1,4 @@
-import { isFutureDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
+import { isFutureDateTimestampMs } from "@natesclaw/normalization-core/number-coercion";
 import { resolveDefaultAgentId } from "../../agents/agent-scope-config.js";
 // Account-scoped conversation binding managers adapt channel-local thread maps
 // into the shared session binding service.
@@ -7,7 +7,7 @@ import {
   resolveThreadBindingIdleTimeoutMsForChannel,
   resolveThreadBindingMaxAgeMsForChannel,
 } from "../../channels/thread-bindings-policy.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { normalizeAccountId, resolveAgentIdFromSessionKey } from "../../routing/session-key.js";
 import { resolveGlobalSingleton } from "../../shared/global-singleton.js";
 import {
@@ -113,7 +113,7 @@ function toSessionBindingRecord<TKind extends string>(params: {
 /** Creates a channel/account binding manager and registers it as a session-binding adapter. */
 export function createAccountScopedConversationBindingManager<TKind extends string>(params: {
   channel: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   stateKey: symbol;
   accountId?: string | null;
   toStoredTargetKind: (raw: BindingTargetKind) => TKind;

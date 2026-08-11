@@ -1,5 +1,5 @@
-import { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
+import { definePluginEntry, type NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { buildProviderToolCompatFamilyHooks } from "natesclaw/plugin-sdk/provider-tools";
 import {
   LLAMA_CPP_PROVIDER_ID,
   LLAMA_CPP_PROVIDER_LABEL,
@@ -15,7 +15,7 @@ export default definePluginEntry({
   id: "llama-cpp",
   name: "llama.cpp Provider",
   description: "Local GGUF text inference and embeddings through node-llama-cpp",
-  register(api: OpenClawPluginApi) {
+  register(api: NatesclawPluginApi) {
     const inferenceRuntime = createLlamaCppInferenceRuntime();
     api.registerService({
       id: "llama-cpp-inference-runtime",
@@ -79,7 +79,7 @@ export default definePluginEntry({
         },
         modelPicker: {
           label: "llama.cpp",
-          hint: "Run a GGUF model directly inside OpenClaw",
+          hint: "Run a GGUF model directly inside Natesclaw",
           methodId: "local",
         },
       },

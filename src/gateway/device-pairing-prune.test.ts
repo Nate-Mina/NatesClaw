@@ -26,7 +26,7 @@ import {
   resetNodeWakeStateForTest,
 } from "./node-wake-state.test-support.js";
 
-const suiteRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-gateway-pairing-prune-" });
+const suiteRootTracker = createSuiteTempRootTracker({ prefix: "natesclaw-gateway-pairing-prune-" });
 
 type BroadcastCall = { event: string; payload: Record<string, unknown> };
 type PruneContext = Parameters<typeof pruneSupersededSilentPairingsAfterApproval>[0]["context"];
@@ -136,7 +136,7 @@ describe("pruneSupersededSilentPairingsAfterApproval", () => {
       nodeId: "node-stale",
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.openclaw.ios",
+      topic: "ai.natesclaw.ios",
       environment: "sandbox",
       baseDir,
     });
@@ -209,7 +209,7 @@ describe("pruneSupersededSilentPairingsAfterApproval", () => {
       nodeId: "cli-stale",
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.openclaw.ios",
+      topic: "ai.natesclaw.ios",
       environment: "sandbox",
       baseDir,
     });

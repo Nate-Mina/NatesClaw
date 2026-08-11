@@ -2,17 +2,17 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { resolveAgentDir, resolveAgentWorkspaceDir } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { parseAgentSessionKey } from "openclaw/plugin-sdk/routing";
+import { resolveAgentDir, resolveAgentWorkspaceDir } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import { parseAgentSessionKey } from "natesclaw/plugin-sdk/routing";
 import {
   cleanupSessionLifecycleArtifacts,
   formatSqliteSessionFileMarker,
   patchSessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { readSessionTranscriptEvents } from "openclaw/plugin-sdk/session-transcript-runtime";
-import { tempWorkspace, resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/session-store-runtime";
+import { readSessionTranscriptEvents } from "natesclaw/plugin-sdk/session-transcript-runtime";
+import { tempWorkspace, resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import {
   isMissingRegisteredMemoryToolsError,
   requireTransientWorkspaceDir,
@@ -140,8 +140,8 @@ async function cleanupActiveMemoryRecallSession(params: {
 }
 
 async function runRecallSubagent(params: {
-  api: OpenClawPluginApi;
-  runtimeConfig: OpenClawConfig;
+  api: NatesclawPluginApi;
+  runtimeConfig: NatesclawConfig;
   config: ResolvedActiveRecallPluginConfig;
   agentId: string;
   parentSessionKey?: string;
@@ -184,8 +184,8 @@ async function runRecallSubagent(params: {
   const transientWorkspace = params.config.persistTranscripts
     ? undefined
     : await tempWorkspace({
-        rootDir: resolvePreferredOpenClawTmpDir(),
-        prefix: "openclaw-active-memory-",
+        rootDir: resolvePreferredNatesclawTmpDir(),
+        prefix: "natesclaw-active-memory-",
       });
   const tempDir = transientWorkspace?.dir;
   const persistedDir = params.config.persistTranscripts

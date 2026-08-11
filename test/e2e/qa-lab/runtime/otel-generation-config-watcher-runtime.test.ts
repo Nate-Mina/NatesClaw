@@ -41,7 +41,7 @@ describe("OTEL generation config watcher runtime", () => {
           failedRequestCount: 0,
           logCorrelationValid: true,
           parentGraphValid: true,
-          requiredSpanNames: ["openclaw.model.call", "openclaw.run"],
+          requiredSpanNames: ["natesclaw.model.call", "natesclaw.run"],
           traceparentAccepted: true,
         });
         expect(collector?.signalRequestCounts).toMatchObject({
@@ -74,7 +74,7 @@ describe("OTEL generation config watcher runtime", () => {
     const gatewayToken = "qa-suite-12345678-1234-1234-1234-123456789abc";
     const failure = testing.sanitizeProofFailure(
       new Error(
-        `failed at /workspace/repo/test.ts via ${localEndpoint} in /tmp/openclaw-qa-suite-private with ${gatewayToken}`,
+        `failed at /workspace/repo/test.ts via ${localEndpoint} in /tmp/natesclaw-qa-suite-private with ${gatewayToken}`,
       ),
       "/workspace/repo",
     );

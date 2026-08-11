@@ -1,7 +1,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { DEFAULT_MODEL } from "../agents/defaults.js";
 import type { ModelCatalogEntry } from "../agents/model-catalog.js";
@@ -12,7 +12,7 @@ import {
   type InternalSessionEntry,
   type SessionEntry,
 } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
 import { sessionDeliveryChannel, sessionDeliveryOrigin } from "../utils/delivery-context.shared.js";
 import type {
@@ -101,7 +101,7 @@ export function resolveSessionListRowContext(params: {
 }
 
 export function resolveSessionListSearchModelFields(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   key: string;
   entry?: SessionEntry;
   rowContext?: SessionListRowContext;
@@ -208,7 +208,7 @@ export function loadGatewaySessionRow(
 }
 
 export function buildGatewaySessionInfo(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   storePath: string;
   store: Record<string, SessionEntry>;
   key: string;

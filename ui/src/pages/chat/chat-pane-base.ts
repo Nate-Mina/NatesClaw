@@ -33,7 +33,7 @@ import type { BoardTab } from "../../lib/board/types.ts";
 import { parseCatalogSessionKey } from "../../lib/sessions/catalog-key.ts";
 import type { SwarmRosterHydrator } from "../../lib/sessions/swarm-roster.ts";
 import { SessionUnreadPatchGuard } from "../../lib/sessions/unread.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { PollController } from "../../lit/poll-controller.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import type { BoardChatDockSize } from "./board-session-surface.ts";
@@ -61,7 +61,7 @@ import { ChatTranscriptController } from "./components/chat-thread.ts";
 import type { SessionDiscussionPanelConfig } from "./components/session-discussion-panel.ts";
 import type { ChatMessageCache } from "./session-message-cache.ts";
 
-export abstract class ChatPaneBase extends OpenClawLightDomElement {
+export abstract class ChatPaneBase extends NatesclawLightDomElement {
   // Relative labels still need a minute tick; external PR state is server-pushed.
   readonly minutePoll = new PollController(this, 60_000, () => {
     this.requestUpdate();
@@ -170,7 +170,7 @@ export abstract class ChatPaneBase extends OpenClawLightDomElement {
   } | null = null;
   @litState() protected boardChatDockSize: BoardChatDockSize = boardChatDockLayout.load();
   @litState() protected resetConfirmationOpen = false;
-  @litState() protected sessionRailReady = customElements.get("openclaw-chat-session-rail") != null;
+  @litState() protected sessionRailReady = customElements.get("natesclaw-chat-session-rail") != null;
   @litState() protected sessionRailMode: SessionRailMode = "hidden";
   protected sessionRailModeSessionKey = "";
   protected sessionRailLoad: Promise<void> | null = null;

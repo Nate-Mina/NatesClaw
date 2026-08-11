@@ -1,16 +1,16 @@
 // Openai provider module implements model/runtime integration.
-import { resolveExpiresAtMsFromEpochSeconds } from "openclaw/plugin-sdk/number-runtime";
+import { resolveExpiresAtMsFromEpochSeconds } from "natesclaw/plugin-sdk/number-runtime";
 import {
   createProviderHttpError,
   readProviderJsonResponse,
   resolveProviderRequestHeaders,
-} from "openclaw/plugin-sdk/provider-http";
-import { captureWsEvent } from "openclaw/plugin-sdk/proxy-capture";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/provider-http";
+import { captureWsEvent } from "natesclaw/plugin-sdk/proxy-capture";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   asOptionalRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 
 const OPENAI_REALTIME_API_BASE_URL = "https://api.openai.com/v1";
 const OPENAI_REALTIME_SSRF_POLICY = {
@@ -114,7 +114,7 @@ async function createOpenAIRealtimeSecret(
       if (!response.ok) {
         const error = await createProviderHttpError(response, params.errorMessage);
         // Provider details can echo a masked credential while hiding which
-        // OpenClaw auth source won. Keep the status metadata, but give callers
+        // Natesclaw auth source won. Keep the status metadata, but give callers
         // a bounded remediation for an explicitly configured key.
         if (response.status === 401 && params.authRejectedMessage) {
           error.message = params.authRejectedMessage;

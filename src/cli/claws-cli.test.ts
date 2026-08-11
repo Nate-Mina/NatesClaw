@@ -4,7 +4,7 @@ import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { persistClawInstallRecord } from "../claws/provenance.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import * as cliTestHelpers from "./claws-cli.test-helpers.js";
 
 const mocks = vi.hoisted(() => {
@@ -29,7 +29,7 @@ const mocks = vi.hoisted(() => {
     listConfiguredMcpServers: vi.fn(),
     closeReadOnlyDatabase: vi.fn(),
     stateTableGet: vi.fn(),
-    openExistingOpenClawStateDatabaseReadOnly: vi.fn(),
+    openExistingNatesclawStateDatabaseReadOnly: vi.fn(),
     applyClawAddPlan: vi.fn(),
     readClawStatus: vi.fn(),
     buildClawRemovePlan: vi.fn(),
@@ -74,11 +74,11 @@ vi.mock("../claws/packages.js", async () => ({
   preflightClawPackage: mocks.preflightClawPackage,
 }));
 
-vi.mock("../state/openclaw-state-db.js", async () => ({
-  ...(await vi.importActual<typeof import("../state/openclaw-state-db.js")>(
-    "../state/openclaw-state-db.js",
+vi.mock("../state/natesclaw-state-db.js", async () => ({
+  ...(await vi.importActual<typeof import("../state/natesclaw-state-db.js")>(
+    "../state/natesclaw-state-db.js",
   )),
-  openExistingOpenClawStateDatabaseReadOnly: mocks.openExistingOpenClawStateDatabaseReadOnly,
+  openExistingNatesclawStateDatabaseReadOnly: mocks.openExistingNatesclawStateDatabaseReadOnly,
 }));
 
 vi.mock("../claws/add.js", async () => ({
@@ -135,7 +135,7 @@ async function runCli(args: string[]) {
 
 describe("claws cli", () => {
   beforeEach(() => {
-    vi.stubEnv("OPENCLAW_EXPERIMENTAL_CLAWS", "1");
+    vi.stubEnv("NATESCLAW_EXPERIMENTAL_CLAWS", "1");
     mocks.logs.length = 0;
     mocks.errors.length = 0;
     mocks.runtime.log.mockClear();
@@ -163,8 +163,8 @@ describe("claws cli", () => {
     mocks.closeReadOnlyDatabase.mockReset();
     mocks.stateTableGet.mockReset();
     mocks.stateTableGet.mockReturnValue({ 1: 1 });
-    mocks.openExistingOpenClawStateDatabaseReadOnly.mockReset();
-    mocks.openExistingOpenClawStateDatabaseReadOnly.mockReturnValue({
+    mocks.openExistingNatesclawStateDatabaseReadOnly.mockReset();
+    mocks.openExistingNatesclawStateDatabaseReadOnly.mockReturnValue({
       db: {
         prepare: (sql: string) => ({
           get: sql.includes("sqlite_master") ? mocks.stateTableGet : vi.fn(() => undefined),
@@ -179,7 +179,7 @@ describe("claws cli", () => {
     });
     mocks.applyClawAddPlan.mockReset();
     mocks.applyClawAddPlan.mockImplementation(async (plan) => ({
-      schemaVersion: "openclaw.clawAddResult.v1",
+      schemaVersion: "natesclaw.clawAddResult.v1",
       stability: "experimental",
       dryRun: false,
       mutationAllowed: true,
@@ -193,13 +193,13 @@ describe("claws cli", () => {
     }));
     mocks.readClawStatus.mockReset();
     mocks.readClawStatus.mockResolvedValue({
-      schemaVersion: "openclaw.clawStatus.v1",
+      schemaVersion: "natesclaw.clawStatus.v1",
       records: [],
       summary: { claws: 0, partial: 0, missingAgents: 0, driftedFiles: 0, packageRefs: 0 },
     });
     mocks.buildClawRemovePlan.mockReset();
     mocks.buildClawRemovePlan.mockResolvedValue({
-      schemaVersion: "openclaw.clawRemovePlan.v1",
+      schemaVersion: "natesclaw.clawRemovePlan.v1",
       dryRun: true,
       mutationAllowed: false,
       planIntegrity: "sha256:remove-plan",
@@ -218,7 +218,7 @@ describe("claws cli", () => {
     });
     mocks.applyClawRemovePlan.mockReset();
     mocks.applyClawRemovePlan.mockResolvedValue({
-      schemaVersion: "openclaw.clawRemoveResult.v1",
+      schemaVersion: "natesclaw.clawRemoveResult.v1",
       dryRun: false,
       status: "complete",
       agentId: "demo-agent",
@@ -231,7 +231,7 @@ describe("claws cli", () => {
     });
     mocks.buildClawUpdatePlan.mockReset();
     mocks.buildClawUpdatePlan.mockResolvedValue({
-      schemaVersion: "openclaw.clawUpdatePlan.v1",
+      schemaVersion: "natesclaw.clawUpdatePlan.v1",
       stability: "experimental",
       dryRun: true,
       mutationAllowed: false,
@@ -273,7 +273,7 @@ describe("claws cli", () => {
     });
     mocks.applyClawUpdatePlan.mockReset();
     mocks.applyClawUpdatePlan.mockResolvedValue({
-      schemaVersion: "openclaw.clawUpdateResult.v1",
+      schemaVersion: "natesclaw.clawUpdateResult.v1",
       stability: "experimental",
       dryRun: false,
       mutationAllowed: true,
@@ -286,7 +286,7 @@ describe("claws cli", () => {
     });
     mocks.exportClawAgent.mockReset();
     mocks.exportClawAgent.mockResolvedValue({
-      schemaVersion: "openclaw.clawExportResult.v1",
+      schemaVersion: "natesclaw.clawExportResult.v1",
       stability: "experimental",
       agentId: "demo-agent",
       outputDirectory: "/tmp/exported",
@@ -298,17 +298,17 @@ describe("claws cli", () => {
         mcpServers: {},
         cronJobs: [],
       },
-      filesWritten: ["package.json", "openclaw.claw.json"],
+      filesWritten: ["package.json", "natesclaw.claw.json"],
     });
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    closeOpenClawStateDatabaseForTest();
+    closeNatesclawStateDatabaseForTest();
   });
 
   it("does not register without the process opt-in", () => {
-    vi.stubEnv("OPENCLAW_EXPERIMENTAL_CLAWS", "");
+    vi.stubEnv("NATESCLAW_EXPERIMENTAL_CLAWS", "");
     const program = new Command();
 
     registerClawsCli(program);
@@ -375,7 +375,7 @@ describe("claws cli", () => {
     await runCli(["claws", "inspect", manifestPath, "--json"]);
 
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawInspect.v1",
+      schemaVersion: "natesclaw.clawInspect.v1",
       stability: "experimental",
       valid: true,
       source: { kind: "development", version: "0.0.0-development" },
@@ -390,7 +390,7 @@ describe("claws cli", () => {
     await runCli(["claws", "add", root, "--dry-run", "--workspace", workspace, "--json"]);
 
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawAddPlan.v1",
+      schemaVersion: "natesclaw.clawAddPlan.v1",
       stability: "experimental",
       claw: { kind: "package", name: "@acme/demo-agent", version: "1.2.3" },
       agent: { finalId: "demo-agent", workspace: expectedWorkspace },
@@ -410,7 +410,7 @@ describe("claws cli", () => {
         },
       },
     });
-    const workspace = join(tempDirs.make("openclaw-claws-add-"), "workspace");
+    const workspace = join(tempDirs.make("natesclaw-claws-add-"), "workspace");
 
     await runClawsAddCommand(manifestPath, { dryRun: true, workspace }, mocks.runtime);
 
@@ -458,14 +458,14 @@ describe("claws cli", () => {
   });
 
   it("discloses capability escalations in the human dry-run", async () => {
-    const root = tempDirs.make("openclaw-claws-cli-profile-");
+    const root = tempDirs.make("natesclaw-claws-cli-profile-");
     await mkdir(join(root, "profiles"));
     await writeFile(
-      join(root, "profiles", "openclaw.yml"),
+      join(root, "profiles", "natesclaw.yml"),
       "schemaVersion: 1\nagent:\n  tools:\n    allow: [read]\n",
       "utf8",
     );
-    const path = join(root, "openclaw.claw.json");
+    const path = join(root, "natesclaw.claw.json");
     await writeFile(
       path,
       JSON.stringify({
@@ -493,7 +493,7 @@ describe("claws cli", () => {
 
   it("applies a minimal Claw only after explicit consent", async () => {
     const manifestPath = await writeManifest();
-    const workspace = join(tempDirs.make("openclaw-claws-add-"), "workspace");
+    const workspace = join(tempDirs.make("natesclaw-claws-add-"), "workspace");
     const expectedWorkspace = await cliTestHelpers.canonicalFuturePath(workspace);
     await runCli(["claws", "add", manifestPath, "--dry-run", "--workspace", workspace, "--json"]);
     const plan = JSON.parse(mocks.logs[0] ?? "{}");
@@ -516,7 +516,7 @@ describe("claws cli", () => {
       expect.objectContaining({ consentPlanIntegrity: plan.planIntegrity }),
     );
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawAddResult.v1",
+      schemaVersion: "natesclaw.clawAddResult.v1",
       stability: "experimental",
       status: "complete",
       agent: { finalId: "demo-agent", workspace: expectedWorkspace },
@@ -525,9 +525,9 @@ describe("claws cli", () => {
 
   it("resumes consented add with the matching in-flight workspace on disk", async () => {
     const manifestPath = await writeManifest();
-    const workspace = join(tempDirs.make("openclaw-claws-add-"), "workspace");
-    const stateRoot = tempDirs.make("openclaw-claws-state-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", join(stateRoot, "state"));
+    const workspace = join(tempDirs.make("natesclaw-claws-add-"), "workspace");
+    const stateRoot = tempDirs.make("natesclaw-claws-state-");
+    vi.stubEnv("NATESCLAW_STATE_DIR", join(stateRoot, "state"));
 
     await runCli(["claws", "add", manifestPath, "--dry-run", "--workspace", workspace, "--json"]);
     const plan = JSON.parse(mocks.logs[0] ?? "{}");
@@ -560,9 +560,9 @@ describe("claws cli", () => {
 
   it("resumes when config committed before the workspace-ready phase advanced", async () => {
     const manifestPath = await writeManifest();
-    const workspace = join(tempDirs.make("openclaw-claws-add-"), "workspace");
-    const stateRoot = tempDirs.make("openclaw-claws-state-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", join(stateRoot, "state"));
+    const workspace = join(tempDirs.make("natesclaw-claws-add-"), "workspace");
+    const stateRoot = tempDirs.make("natesclaw-claws-state-");
+    vi.stubEnv("NATESCLAW_STATE_DIR", join(stateRoot, "state"));
 
     await runCli(["claws", "add", manifestPath, "--dry-run", "--workspace", workspace, "--json"]);
     const plan = JSON.parse(mocks.logs[0] ?? "{}");
@@ -594,9 +594,9 @@ describe("claws cli", () => {
 
   it("does not claim an on-disk workspace for a partial record without workspace ownership", async () => {
     const manifestPath = await writeManifest();
-    const workspace = join(tempDirs.make("openclaw-claws-add-"), "workspace");
-    const stateRoot = tempDirs.make("openclaw-claws-state-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", join(stateRoot, "state"));
+    const workspace = join(tempDirs.make("natesclaw-claws-add-"), "workspace");
+    const stateRoot = tempDirs.make("natesclaw-claws-state-");
+    vi.stubEnv("NATESCLAW_STATE_DIR", join(stateRoot, "state"));
 
     await runCli(["claws", "add", manifestPath, "--dry-run", "--workspace", workspace, "--json"]);
     const plan = JSON.parse(mocks.logs[0] ?? "{}");
@@ -627,9 +627,9 @@ describe("claws cli", () => {
 
   it("preserves a real agent collision while an add is still pending", async () => {
     const manifestPath = await writeManifest();
-    const workspace = join(tempDirs.make("openclaw-claws-add-"), "workspace");
-    const stateRoot = tempDirs.make("openclaw-claws-state-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", join(stateRoot, "state"));
+    const workspace = join(tempDirs.make("natesclaw-claws-add-"), "workspace");
+    const stateRoot = tempDirs.make("natesclaw-claws-state-");
+    vi.stubEnv("NATESCLAW_STATE_DIR", join(stateRoot, "state"));
 
     await runCli(["claws", "add", manifestPath, "--dry-run", "--workspace", workspace, "--json"]);
     const plan = JSON.parse(mocks.logs[0] ?? "{}");
@@ -660,9 +660,9 @@ describe("claws cli", () => {
 
   it("does not resume through another agent's configured workspace", async () => {
     const manifestPath = await writeManifest();
-    const workspace = join(tempDirs.make("openclaw-claws-add-"), "workspace");
-    const stateRoot = tempDirs.make("openclaw-claws-state-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", join(stateRoot, "state"));
+    const workspace = join(tempDirs.make("natesclaw-claws-add-"), "workspace");
+    const stateRoot = tempDirs.make("natesclaw-claws-state-");
+    vi.stubEnv("NATESCLAW_STATE_DIR", join(stateRoot, "state"));
 
     await runCli(["claws", "add", manifestPath, "--dry-run", "--workspace", workspace, "--json"]);
     const plan = JSON.parse(mocks.logs[0] ?? "{}");
@@ -731,7 +731,7 @@ describe("claws cli", () => {
 
   it("reports installed Claw status by agent id", async () => {
     mocks.readClawStatus.mockResolvedValue({
-      schemaVersion: "openclaw.clawStatus.v1",
+      schemaVersion: "natesclaw.clawStatus.v1",
       target: "demo-agent",
       records: [
         {
@@ -748,7 +748,7 @@ describe("claws cli", () => {
 
     expect(mocks.readClawStatus).toHaveBeenCalledWith("demo-agent");
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawStatus.v1",
+      schemaVersion: "natesclaw.clawStatus.v1",
       summary: { claws: 1 },
     });
   });
@@ -761,7 +761,7 @@ describe("claws cli", () => {
     });
     expect(mocks.applyClawRemovePlan).not.toHaveBeenCalled();
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawRemovePlan.v1",
+      schemaVersion: "natesclaw.clawRemovePlan.v1",
       mutationAllowed: false,
     });
   });
@@ -783,7 +783,7 @@ describe("claws cli", () => {
       }),
     );
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawUpdatePlan.v1",
+      schemaVersion: "natesclaw.clawUpdatePlan.v1",
       dryRun: true,
       mutationAllowed: false,
       agentId: "demo-agent",
@@ -810,7 +810,7 @@ describe("claws cli", () => {
   it("returns failure when an update plan contains blocked actions", async () => {
     const { root } = await cliTestHelpers.writePackageFixture(tempDirs);
     mocks.buildClawUpdatePlan.mockResolvedValueOnce({
-      schemaVersion: "openclaw.clawUpdatePlan.v1",
+      schemaVersion: "natesclaw.clawUpdatePlan.v1",
       stability: "experimental",
       dryRun: true,
       mutationAllowed: false,
@@ -853,7 +853,7 @@ describe("claws cli", () => {
   it("uses the source recorded by the installed Claw when --from is omitted", async () => {
     const { root } = await cliTestHelpers.writePackageFixture(tempDirs);
     mocks.readClawStatus.mockResolvedValue({
-      schemaVersion: "openclaw.clawStatus.v1",
+      schemaVersion: "natesclaw.clawStatus.v1",
       records: [
         {
           install: {
@@ -863,7 +863,7 @@ describe("claws cli", () => {
               name: "@acme/demo-agent",
               version: "1.0.0",
               packageRoot: root,
-              manifestPath: join(root, "openclaw.claw.json"),
+              manifestPath: join(root, "natesclaw.claw.json"),
               integrity: "sha256:old",
             },
           },
@@ -911,7 +911,7 @@ describe("claws cli", () => {
 
     expect(mocks.buildClawUpdatePlan).not.toHaveBeenCalled();
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawUpdatePlan.v1",
+      schemaVersion: "natesclaw.clawUpdatePlan.v1",
       error: { code: "consent_required" },
     });
     expect(mocks.runtime.exit).toHaveBeenCalledWith(1);
@@ -964,7 +964,7 @@ describe("claws cli", () => {
       }),
     );
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawUpdateResult.v1",
+      schemaVersion: "natesclaw.clawUpdateResult.v1",
       status: "complete",
       agentId: "demo-agent",
     });
@@ -989,7 +989,7 @@ describe("claws cli", () => {
     ]);
 
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawUpdateResult.v1",
+      schemaVersion: "natesclaw.clawUpdateResult.v1",
       status: "partial",
       error: { code: "update_partial" },
     });
@@ -1015,7 +1015,7 @@ describe("claws cli", () => {
       }),
     );
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawRemoveResult.v1",
+      schemaVersion: "natesclaw.clawRemoveResult.v1",
       status: "complete",
       agentId: "demo-agent",
     });
@@ -1026,7 +1026,7 @@ describe("claws cli", () => {
 
     expect(mocks.buildClawRemovePlan).not.toHaveBeenCalled();
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawRemovePlan.v1",
+      schemaVersion: "natesclaw.clawRemovePlan.v1",
       error: { code: "plan_integrity_required" },
     });
   });
@@ -1085,7 +1085,7 @@ describe("claws cli", () => {
     expect(mocks.exportClawAgent.mock.calls[0]?.slice(0, 2)).toEqual(["demo-agent", "/e"]);
     expect(mocks.exportClawAgent.mock.calls[0]?.[2]).toMatchObject({ bootstrapPath: "/b" });
     expect(JSON.parse(mocks.logs[0] ?? "{}")).toMatchObject({
-      schemaVersion: "openclaw.clawExportResult.v1",
+      schemaVersion: "natesclaw.clawExportResult.v1",
       stability: "experimental",
       agentId: "demo-agent",
     });

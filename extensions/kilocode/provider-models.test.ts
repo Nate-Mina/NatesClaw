@@ -1,12 +1,12 @@
 // Kilocode tests cover provider models plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, describe, expect, it, vi } from "vitest";
 
 const { fetchWithSsrFGuardMock } = vi.hoisted(() => ({
   fetchWithSsrFGuardMock: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: fetchWithSsrFGuardMock,
   ssrfPolicyFromHttpBaseUrlAllowedHostname: (baseUrl: string) => ({
     allowedHostnames: [new URL(baseUrl).hostname],
@@ -139,7 +139,7 @@ async function withFetchPathTest(mockFetch: MockKilocodeFetch, runAssertions: ()
 }
 
 afterAll(() => {
-  vi.doUnmock("openclaw/plugin-sdk/ssrf-runtime");
+  vi.doUnmock("natesclaw/plugin-sdk/ssrf-runtime");
   vi.resetModules();
 });
 

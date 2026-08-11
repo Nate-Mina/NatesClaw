@@ -16,7 +16,7 @@ import type {
 } from "../../channels/plugins/types.public.js";
 import { appendAssistantMessageToSessionTranscript } from "../../config/sessions.js";
 import { getOwnedSessionTranscriptWriterFence } from "../../config/sessions/transcript-write-context.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   normalizeMessagePresentation,
   renderMessagePresentationFallbackText,
@@ -50,7 +50,7 @@ type OutboundGatewayContext = {
 
 /** Shared execution context for message-tool send and poll actions. */
 type OutboundSendContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel: ChannelId;
   plugin: ChannelPlugin;
   params: Record<string, unknown>;

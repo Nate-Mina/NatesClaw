@@ -1,8 +1,8 @@
 // Qa Lab plugin module implements model catalog behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { runCommandWithTimeout } from "openclaw/plugin-sdk/process-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+import { runCommandWithTimeout } from "natesclaw/plugin-sdk/process-runtime";
+import { resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
 import { QA_CHILD_STDERR_TAIL_BYTES, QA_CHILD_STDOUT_MAX_BYTES } from "./child-output.js";
 import { resolveQaNodeExecPath } from "./node-exec.js";
 import {
@@ -106,12 +106,12 @@ function createCatalogAbortError() {
 
 export async function loadQaRunnerModelOptions(params: { repoRoot: string; signal?: AbortSignal }) {
   const tempRoot = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-qa-model-catalog-"),
+    path.join(resolvePreferredNatesclawTmpDir(), "natesclaw-qa-model-catalog-"),
   );
   const workspaceDir = path.join(tempRoot, "workspace");
   const stateDir = path.join(tempRoot, "state");
   const homeDir = path.join(tempRoot, "home");
-  const configPath = path.join(tempRoot, "openclaw.json");
+  const configPath = path.join(tempRoot, "natesclaw.json");
 
   try {
     await Promise.all([
@@ -144,11 +144,11 @@ export async function loadQaRunnerModelOptions(params: { repoRoot: string; signa
         cwd: params.repoRoot,
         env: {
           HOME: homeDir,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_OAUTH_DIR: path.join(stateDir, "credentials"),
-          OPENCLAW_CODEX_DISCOVERY_LIVE: "0",
+          NATESCLAW_HOME: homeDir,
+          NATESCLAW_CONFIG_PATH: configPath,
+          NATESCLAW_STATE_DIR: stateDir,
+          NATESCLAW_OAUTH_DIR: path.join(stateDir, "credentials"),
+          NATESCLAW_CODEX_DISCOVERY_LIVE: "0",
         },
         killProcessTree: true,
         maxOutputBytes: {

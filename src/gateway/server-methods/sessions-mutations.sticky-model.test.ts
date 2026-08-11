@@ -3,9 +3,9 @@ import {
   loadSessionEntry,
   upsertSessionEntryCore,
 } from "../../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../state/openclaw-agent-db.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
+import { closeNatesclawAgentDatabasesForTest } from "../../state/natesclaw-agent-db.js";
+import { withNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import type { GatewayClient, GatewayRequestContext, RespondFn } from "./types.js";
 
 const effects = vi.hoisted(() => ({
@@ -43,7 +43,7 @@ const cfg = {
       { id: "work", model: "anthropic/claude-sonnet-4-6" },
     ],
   },
-} satisfies OpenClawConfig;
+} satisfies NatesclawConfig;
 
 function context(): GatewayRequestContext {
   return {
@@ -64,7 +64,7 @@ function client(scopes: string[]): GatewayClient {
     connect: {
       minProtocol: 1,
       maxProtocol: 1,
-      client: { id: "openclaw-control-ui", version: "test", platform: "test", mode: "webchat" },
+      client: { id: "natesclaw-control-ui", version: "test", platform: "test", mode: "webchat" },
       role: "operator",
       scopes,
     },
@@ -89,7 +89,7 @@ beforeEach(() => {
   effects.mutateConfigFileWithRetry
     .mockReset()
     .mockImplementation(
-      async (params: { mutate: (draft: OpenClawConfig, context: unknown) => unknown }) => {
+      async (params: { mutate: (draft: NatesclawConfig, context: unknown) => unknown }) => {
         const draft = structuredClone(cfg);
         const result = await params.mutate(draft, {});
         return { nextConfig: draft, result };
@@ -98,7 +98,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
 });
 
 describe("sessions.patch sticky model persistence", () => {
@@ -108,7 +108,7 @@ describe("sessions.patch sticky model persistence", () => {
   ])(
     "persists an accepted model for the resolved $agentId agent",
     async ({ agentId, sessionKey }) => {
-      await withOpenClawTestState({ scenario: "minimal" }, async () => {
+      await withNatesclawTestState({ scenario: "minimal" }, async () => {
         await upsertSessionEntryCore(
           { agentId, sessionKey },
           { sessionId: `session-${agentId}`, updatedAt: 1 },
@@ -123,7 +123,7 @@ describe("sessions.patch sticky model persistence", () => {
   );
 
   it("keeps a write-scoped model switch session-only without persisting the configured default", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const sessionKey = "agent:main:dm:non-admin";
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey },
@@ -144,7 +144,7 @@ describe("sessions.patch sticky model persistence", () => {
   });
 
   it("returns session success and warns when the sticky config write fails", async () => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const sessionKey = "agent:main:dm:write-failure";
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey },
@@ -172,7 +172,7 @@ describe("sessions.patch sticky model persistence", () => {
     { name: "cleared", patch: { model: null } },
     { name: "reset to the current default", patch: { model: "anthropic/claude-opus-4-6" } },
   ])("does not persist when model is $name", async ({ patch }) => {
-    await withOpenClawTestState({ scenario: "minimal" }, async () => {
+    await withNatesclawTestState({ scenario: "minimal" }, async () => {
       const sessionKey = "agent:main:dm:no-sticky";
       await upsertSessionEntryCore(
         { agentId: "main", sessionKey },

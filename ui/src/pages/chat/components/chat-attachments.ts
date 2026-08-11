@@ -1,5 +1,5 @@
 // Shared attachment controls for chat and new-session composers.
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { html, nothing } from "lit";
 import { icons } from "../../../components/icons.ts";
 import "../../../components/tooltip.ts";
@@ -571,7 +571,7 @@ function renderBrowserAnnotationAttachment(
             : nothing}
         </span>
       </div>
-      <openclaw-tooltip .content=${removeLabel}>
+      <natesclaw-tooltip .content=${removeLabel}>
         <button
           class="chat-attachment-remove chat-browser-annotation-card__remove"
           type="button"
@@ -581,7 +581,7 @@ function renderBrowserAnnotationAttachment(
         >
           ${icons.x}
         </button>
-      </openclaw-tooltip>
+      </natesclaw-tooltip>
     </div>
   `;
 }
@@ -633,7 +633,7 @@ export function renderAttachmentPreview(props: ChatAttachmentControlsProps) {
                         </div>
                       `
                     : html`
-                        <openclaw-tooltip
+                        <natesclaw-tooltip
                           .content=${att.fileName ?? t("chat.attachments.attachedFile")}
                         >
                           <div class="chat-attachment-file">
@@ -642,9 +642,9 @@ export function renderAttachmentPreview(props: ChatAttachmentControlsProps) {
                               >${att.fileName ?? t("chat.attachments.attachedFile")}</span
                             >
                           </div>
-                        </openclaw-tooltip>
+                        </natesclaw-tooltip>
                       `}
-                <openclaw-tooltip .content=${t("chat.composer.removeAttachment")}>
+                <natesclaw-tooltip .content=${t("chat.composer.removeAttachment")}>
                   <button
                     class="chat-attachment-remove"
                     type="button"
@@ -658,7 +658,7 @@ export function renderAttachmentPreview(props: ChatAttachmentControlsProps) {
                   >
                     ${icons.x}
                   </button>
-                </openclaw-tooltip>
+                </natesclaw-tooltip>
               </div>
             `,
       )}

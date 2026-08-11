@@ -6,7 +6,7 @@
 import crypto from "node:crypto";
 import { Type } from "typebox";
 import { readConnectPairingRequiredMessage } from "../../../packages/gateway-protocol/src/connect-error-details.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { OperatorScope } from "../../gateway/method-scopes.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { resolveNodePairApprovalScopes } from "../../infra/node-pairing-authz.js";
@@ -171,7 +171,7 @@ export function createNodesTool(options?: {
   agentAccountId?: string;
   currentChannelId?: string;
   currentThreadTs?: string | number;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   modelHasVision?: boolean;
   allowMediaInvokeCommands?: boolean;
 }): AnyAgentTool {

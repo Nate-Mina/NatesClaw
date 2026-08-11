@@ -1,8 +1,8 @@
-import { waitUntilAbort } from "openclaw/plugin-sdk/channel-outbound";
-import { attachChannelToResult } from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { channelReadyPatch } from "openclaw/plugin-sdk/gateway-runtime";
-import { computeBackoff, sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
+import { waitUntilAbort } from "natesclaw/plugin-sdk/channel-outbound";
+import { attachChannelToResult } from "natesclaw/plugin-sdk/channel-send-result";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { channelReadyPatch } from "natesclaw/plugin-sdk/gateway-runtime";
+import { computeBackoff, sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
 import type { ChannelGatewayContext } from "../runtime-api.js";
 import { sendBuzzTextOneShot, startBuzzBus, type BuzzBus } from "./buzz-bus.js";
 import { handleBuzzInbound } from "./inbound.js";
@@ -29,7 +29,7 @@ export function getActiveBuzzBus(accountId: string): BuzzBus | undefined {
 }
 
 function resolveBuzzProfileName(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: ResolvedBuzzAccount;
   channelIds: string[];
 }): string {
@@ -50,12 +50,12 @@ function resolveBuzzProfileName(params: {
     ),
   );
   if (agentIds.size !== 1) {
-    return "OpenClaw";
+    return "Natesclaw";
   }
   const agentId = agentIds.values().next().value;
   return agentId
-    ? runtime.agent.resolveAgentIdentity(params.cfg, agentId)?.name?.trim() || "OpenClaw"
-    : "OpenClaw";
+    ? runtime.agent.resolveAgentIdentity(params.cfg, agentId)?.name?.trim() || "Natesclaw"
+    : "Natesclaw";
 }
 
 export async function startBuzzGatewayAccount(ctx: ChannelGatewayContext<ResolvedBuzzAccount>) {
@@ -215,7 +215,7 @@ export const buzzOutboundAdapter = {
     threadId,
     replyToId,
   }: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     to: string;
     text: string;
     accountId?: string | null;
@@ -258,7 +258,7 @@ export const buzzOutboundAdapter = {
 };
 
 export async function sendBuzzTyping(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   to: string;
   accountId?: string | null;
   threadId?: string | number | null;

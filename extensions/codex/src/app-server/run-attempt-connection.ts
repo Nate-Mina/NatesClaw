@@ -6,17 +6,17 @@ import {
   resolveSessionAgentIds,
   resolveUserPath,
   type FastModeAutoProgressState,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveAgentDir } from "openclaw/plugin-sdk/agent-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { resolveAgentDir } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   createDiagnosticTraceContextFromActiveScope,
   freezeDiagnosticTraceContext,
   resolveDiagnosticModelContentCapturePolicy,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
-import { loadExecApprovals } from "openclaw/plugin-sdk/exec-approvals-runtime";
+} from "natesclaw/plugin-sdk/diagnostic-runtime";
+import { loadExecApprovals } from "natesclaw/plugin-sdk/exec-approvals-runtime";
 import {
   resolveCodexAppServerForModelProvider,
-  resolveCodexAppServerForOpenClawToolPolicy,
+  resolveCodexAppServerForNatesclawToolPolicy,
 } from "./app-server-policy.js";
 import {
   resolveCodexAppServerAuthProfileId,
@@ -30,7 +30,7 @@ import {
   resolveCodexAppServerHomeScope,
   resolveCodexComputerUseConfig,
   resolveCodexModelBackedReviewerPolicyContext,
-  resolveOpenClawExecPolicyForCodexAppServer,
+  resolveNatesclawExecPolicyForCodexAppServer,
 } from "./config.js";
 import { createCodexDynamicToolBuildStageTracker } from "./dynamic-tool-build.js";
 import { resolveCodexNativeHookRelayEvents } from "./native-hook-relay.js";
@@ -57,7 +57,7 @@ function applyStoredBindingPermissions(params: {
   if (params.execPolicyTouched || params.binding?.connectionScope === "supervision") {
     return params.appServer;
   }
-  // `/codex permissions` owns per-session policy. Explicit OpenClaw exec config
+  // `/codex permissions` owns per-session policy. Explicit Natesclaw exec config
   // and supervised private connections remain authoritative when present.
   return {
     ...params.appServer,
@@ -116,7 +116,7 @@ export async function prepareCodexAttemptConnection({ params, options }: CodexRu
           workspaceDir: resolvedWorkspace,
         });
   preDynamicStartupStages.mark("sandbox");
-  const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+  const execPolicy = resolveNatesclawExecPolicyForCodexAppServer({
     execOverrides: params.execOverrides,
     approvals: loadExecApprovals(),
     config: params.config,
@@ -201,7 +201,7 @@ export async function prepareCodexAttemptConnection({ params, options }: CodexRu
         model: selection.model,
         config: params.config,
         agentDir,
-        openClawSandboxActive: sandbox?.enabled === true,
+        NatesclawSandboxActive: sandbox?.enabled === true,
       }).appServer,
       binding: startupBinding,
       execPolicyTouched: execPolicy.touched,
@@ -292,7 +292,7 @@ export async function prepareCodexAttemptConnection({ params, options }: CodexRu
     beforeToolCallPolicy.hasBeforeToolCallHook ||
     beforeToolCallPolicy.trustedToolPolicies.length > 0;
   const resolvePolicyAppServer = () =>
-    resolveCodexAppServerForOpenClawToolPolicy({
+    resolveCodexAppServerForNatesclawToolPolicy({
       appServer: configuredAppServer,
       pluginConfig,
       env: process.env,
@@ -313,10 +313,10 @@ export async function prepareCodexAttemptConnection({ params, options }: CodexRu
     env: process.env,
     agentDir,
   });
-  let approvalPolicyPromotedForOpenClawToolPolicy =
+  let approvalPolicyPromotedForNatesclawToolPolicy =
     configuredAppServer.approvalPolicy === "never" && appServer.approvalPolicy === "untrusted";
-  if (approvalPolicyPromotedForOpenClawToolPolicy) {
-    embeddedAgentLog.info("codex app-server approval policy promoted for OpenClaw tool policy", {
+  if (approvalPolicyPromotedForNatesclawToolPolicy) {
+    embeddedAgentLog.info("codex app-server approval policy promoted for Natesclaw tool policy", {
       from: "never",
       to: "untrusted",
       beforeToolCallHook: beforeToolCallPolicy.hasBeforeToolCallHook,
@@ -393,7 +393,7 @@ export async function prepareCodexAttemptConnection({ params, options }: CodexRu
       env: process.env,
       agentDir,
     });
-    approvalPolicyPromotedForOpenClawToolPolicy =
+    approvalPolicyPromotedForNatesclawToolPolicy =
       configuredAppServer.approvalPolicy === "never" && appServer.approvalPolicy === "untrusted";
   }
   const nativeHookRelayEvents = resolveCodexNativeHookRelayEvents({
@@ -418,7 +418,7 @@ export async function prepareCodexAttemptConnection({ params, options }: CodexRu
         model: selection.model,
         config: params.config,
         agentDir,
-        openClawSandboxActive: sandbox?.enabled === true,
+        NatesclawSandboxActive: sandbox?.enabled === true,
       }).appServer,
       binding: mutable.startupBinding,
       execPolicyTouched: execPolicy.touched,
@@ -456,7 +456,7 @@ export async function prepareCodexAttemptConnection({ params, options }: CodexRu
     effectiveWorkspace,
     effectiveCwd,
     appServer,
-    approvalPolicyPromotedForOpenClawToolPolicy,
+    approvalPolicyPromotedForNatesclawToolPolicy,
     nativeHookRelayEvents,
     runAbortController,
     terminalState,

@@ -1,8 +1,8 @@
 // Implements TUI slash command handlers and backend action dispatch.
 import { randomUUID } from "node:crypto";
 import type { Component, OverlayHandle, SelectItem, TUI } from "@earendil-works/pi-tui";
-import type { Result } from "@openclaw/normalization-core/result";
-import { normalizeLowercaseStringOrEmpty as normalizedChatSendAckStatus } from "@openclaw/normalization-core/string-coerce";
+import type { Result } from "@natesclaw/normalization-core/result";
+import { normalizeLowercaseStringOrEmpty as normalizedChatSendAckStatus } from "@natesclaw/normalization-core/string-coerce";
 import type { SessionsPatchResult } from "../../packages/gateway-protocol/src/index.js";
 import { modelKey } from "../agents/model-ref-shared.js";
 import { shouldForwardModelCommandToServer } from "../auto-reply/commands-registry.shared.js";
@@ -216,7 +216,7 @@ export function createCommandHandlers(context: CommandHandlerContext) {
   const setAgent = async (id: string) => {
     state.currentAgentId = normalizeAgentId(id);
     await setSession("");
-    chatLog.addSystem(`agent set to ${state.currentAgentId}; use /openclaw to return`);
+    chatLog.addSystem(`agent set to ${state.currentAgentId}; use /natesclaw to return`);
   };
 
   const closeOverlayAndRender = (handle: OverlayHandle) => {
@@ -562,9 +562,9 @@ export function createCommandHandlers(context: CommandHandlerContext) {
       }
     },
     queue: async (_args, raw) => await sendMessage(raw),
-    openclaw: (args) => {
+    natesclaw: (args) => {
       chatLog.addSystem(
-        args ? `returning to OpenClaw with request: ${args}` : "returning to OpenClaw",
+        args ? `returning to Natesclaw with request: ${args}` : "returning to Natesclaw",
       );
       requestExit({
         exitReason: "return-to-system-agent",
@@ -866,7 +866,7 @@ export function createCommandHandlers(context: CommandHandlerContext) {
           message: {
             role: "user",
             content: [{ type: "text", text }],
-            __openclaw: { idempotencyKey: `${runId}:user` },
+            __natesclaw: { idempotencyKey: `${runId}:user` },
           },
           runId,
           scope: sendScope,

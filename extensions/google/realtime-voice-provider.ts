@@ -21,8 +21,8 @@ import {
 import {
   resolveExpiresAtMsFromDurationMs,
   timestampMsToIsoString,
-} from "openclaw/plugin-sdk/number-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/provider-onboard";
+} from "natesclaw/plugin-sdk/number-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/provider-onboard";
 import type {
   RealtimeVoiceAudioFormat,
   RealtimeVoiceBridge,
@@ -34,7 +34,7 @@ import type {
   RealtimeVoiceRole,
   RealtimeVoiceTool,
   RealtimeVoiceToolResultOptions,
-} from "openclaw/plugin-sdk/realtime-voice";
+} from "natesclaw/plugin-sdk/realtime-voice";
 import {
   convertPcmToMulaw8k,
   createRealtimeVoiceAudioQueue,
@@ -43,15 +43,15 @@ import {
   REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ,
   REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME,
   resamplePcm,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { warn } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/realtime-voice";
+import { warn } from "natesclaw/plugin-sdk/runtime-env";
+import { normalizeResolvedSecretInputString } from "natesclaw/plugin-sdk/secret-input";
 import {
   asBoolean,
   asFiniteNumber,
   isRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { canonicalizeGoogleProviderBase64 } from "./base64.js";
 import { createGoogleGenAI } from "./google-genai-runtime.js";
 import { resolveGoogleGemini3ThinkingLevel } from "./thinking.js";
@@ -241,7 +241,7 @@ function resolveGoogleRealtimeProviderConfigRecord(
 
 function normalizeProviderConfig(
   config: RealtimeVoiceProviderConfig,
-  cfg?: OpenClawConfig,
+  cfg?: NatesclawConfig,
 ): GoogleRealtimeVoiceProviderConfig {
   const raw = resolveGoogleRealtimeProviderConfigRecord(config);
   return {

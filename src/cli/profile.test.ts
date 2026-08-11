@@ -8,7 +8,7 @@ describe("parseCliProfileArgs", () => {
   it("leaves gateway --dev for subcommands", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "gateway",
       "--dev",
       "--allow-unconfigured",
@@ -17,13 +17,13 @@ describe("parseCliProfileArgs", () => {
       throw new Error(res.error);
     }
     expect(res.profile).toBeNull();
-    expect(res.argv).toEqual(["node", "openclaw", "gateway", "--dev", "--allow-unconfigured"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "gateway", "--dev", "--allow-unconfigured"]);
   });
 
   it("leaves gateway --dev for subcommands after leading root options", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "--no-color",
       "gateway",
       "--dev",
@@ -35,7 +35,7 @@ describe("parseCliProfileArgs", () => {
     expect(res.profile).toBeNull();
     expect(res.argv).toEqual([
       "node",
-      "openclaw",
+      "natesclaw",
       "--no-color",
       "gateway",
       "--dev",
@@ -44,36 +44,36 @@ describe("parseCliProfileArgs", () => {
   });
 
   it("still accepts global --dev before subcommand", () => {
-    const res = parseCliProfileArgs(["node", "openclaw", "--dev", "gateway"]);
+    const res = parseCliProfileArgs(["node", "natesclaw", "--dev", "gateway"]);
     if (!res.ok) {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("dev");
-    expect(res.argv).toEqual(["node", "openclaw", "gateway"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "gateway"]);
   });
 
   it("parses --profile value and strips it", () => {
-    const res = parseCliProfileArgs(["node", "openclaw", "--profile", "work", "status"]);
+    const res = parseCliProfileArgs(["node", "natesclaw", "--profile", "work", "status"]);
     if (!res.ok) {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("work");
-    expect(res.argv).toEqual(["node", "openclaw", "status"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "status"]);
   });
 
   it("parses interleaved --profile after the command token", () => {
-    const res = parseCliProfileArgs(["node", "openclaw", "status", "--profile", "work", "--deep"]);
+    const res = parseCliProfileArgs(["node", "natesclaw", "status", "--profile", "work", "--deep"]);
     if (!res.ok) {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("work");
-    expect(res.argv).toEqual(["node", "openclaw", "status", "--deep"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "status", "--deep"]);
   });
 
   it("preserves Matrix QA --profile for the command parser", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "matrix",
       "--profile",
@@ -86,7 +86,7 @@ describe("parseCliProfileArgs", () => {
     expect(res.profile).toBeNull();
     expect(res.argv).toEqual([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "matrix",
       "--profile",
@@ -98,7 +98,7 @@ describe("parseCliProfileArgs", () => {
   it("preserves Matrix QA --profile after leading root options", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "--no-color",
       "qa",
       "matrix",
@@ -108,13 +108,13 @@ describe("parseCliProfileArgs", () => {
       throw new Error(res.error);
     }
     expect(res.profile).toBeNull();
-    expect(res.argv).toEqual(["node", "openclaw", "--no-color", "qa", "matrix", "--profile=fast"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "--no-color", "qa", "matrix", "--profile=fast"]);
   });
 
   it("parses qa run --profile smoke-ci as a root profile", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "run",
       "--profile",
@@ -128,7 +128,7 @@ describe("parseCliProfileArgs", () => {
     expect(res.profile).toBe("smoke-ci");
     expect(res.argv).toEqual([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "run",
       "--category",
@@ -139,7 +139,7 @@ describe("parseCliProfileArgs", () => {
   it("parses qa run --profile=release self-check invocations as root profiles", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "run",
       "--profile=release",
@@ -150,13 +150,13 @@ describe("parseCliProfileArgs", () => {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("release");
-    expect(res.argv).toEqual(["node", "openclaw", "qa", "run", "--output", "qa-report.md"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "qa", "run", "--output", "qa-report.md"]);
   });
 
   it("preserves qa run --qa-profile for the command parser", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "run",
       "--qa-profile",
@@ -170,7 +170,7 @@ describe("parseCliProfileArgs", () => {
     expect(res.profile).toBeNull();
     expect(res.argv).toEqual([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "run",
       "--qa-profile",
@@ -183,7 +183,7 @@ describe("parseCliProfileArgs", () => {
   it("parses arbitrary qa run --profile values as root profiles", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "run",
       "--profile",
@@ -195,13 +195,13 @@ describe("parseCliProfileArgs", () => {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("work");
-    expect(res.argv).toEqual(["node", "openclaw", "qa", "run", "--output", "qa-report.md"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "qa", "run", "--output", "qa-report.md"]);
   });
 
   it("parses arbitrary qa run --profile= values as root profiles", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "qa",
       "run",
       "--profile=work",
@@ -212,13 +212,13 @@ describe("parseCliProfileArgs", () => {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("work");
-    expect(res.argv).toEqual(["node", "openclaw", "qa", "run", "--output", "qa-report.md"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "qa", "run", "--output", "qa-report.md"]);
   });
 
   it("still parses root --profile before qa run", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "--profile",
       "work",
       "qa",
@@ -230,13 +230,13 @@ describe("parseCliProfileArgs", () => {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("work");
-    expect(res.argv).toEqual(["node", "openclaw", "qa", "run", "--qa-profile", "smoke-ci"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "qa", "run", "--qa-profile", "smoke-ci"]);
   });
 
   it("still parses root --profile before Matrix QA", () => {
     const res = parseCliProfileArgs([
       "node",
-      "openclaw",
+      "natesclaw",
       "--profile",
       "work",
       "qa",
@@ -247,27 +247,27 @@ describe("parseCliProfileArgs", () => {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("work");
-    expect(res.argv).toEqual(["node", "openclaw", "qa", "matrix", "--fail-fast"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "qa", "matrix", "--fail-fast"]);
   });
 
   it("parses interleaved --dev after the command token", () => {
-    const res = parseCliProfileArgs(["node", "openclaw", "status", "--dev"]);
+    const res = parseCliProfileArgs(["node", "natesclaw", "status", "--dev"]);
     if (!res.ok) {
       throw new Error(res.error);
     }
     expect(res.profile).toBe("dev");
-    expect(res.argv).toEqual(["node", "openclaw", "status"]);
+    expect(res.argv).toEqual(["node", "natesclaw", "status"]);
   });
 
   it("rejects missing profile value", () => {
-    const res = parseCliProfileArgs(["node", "openclaw", "--profile"]);
+    const res = parseCliProfileArgs(["node", "natesclaw", "--profile"]);
     expect(res.ok).toBe(false);
   });
 
   it.each([
-    ["--dev first", ["node", "openclaw", "--dev", "--profile", "work", "status"]],
-    ["--profile first", ["node", "openclaw", "--profile", "work", "--dev", "status"]],
-    ["interleaved after command", ["node", "openclaw", "status", "--profile", "work", "--dev"]],
+    ["--dev first", ["node", "natesclaw", "--dev", "--profile", "work", "status"]],
+    ["--profile first", ["node", "natesclaw", "--profile", "work", "--dev", "status"]],
+    ["interleaved after command", ["node", "natesclaw", "status", "--profile", "work", "--dev"]],
   ])("rejects combining --dev with --profile (%s)", (_name, argv) => {
     const res = parseCliProfileArgs(argv);
     expect(res.ok).toBe(false);
@@ -282,115 +282,115 @@ describe("applyCliProfileEnv", () => {
       env,
       homedir: () => "/home/peter",
     });
-    const expectedStateDir = path.join(path.resolve("/home/peter"), ".openclaw-dev");
-    expect(env.OPENCLAW_PROFILE).toBe("dev");
-    expect(env.OPENCLAW_STATE_DIR).toBe(expectedStateDir);
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "openclaw.json"));
-    expect(env.OPENCLAW_GATEWAY_PORT).toBe("19001");
+    const expectedStateDir = path.join(path.resolve("/home/peter"), ".natesclaw-dev");
+    expect(env.NATESCLAW_PROFILE).toBe("dev");
+    expect(env.NATESCLAW_STATE_DIR).toBe(expectedStateDir);
+    expect(env.NATESCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "natesclaw.json"));
+    expect(env.NATESCLAW_GATEWAY_PORT).toBe("19001");
   });
 
   it("does not override explicit env values", () => {
     const env: Record<string, string | undefined> = {
-      OPENCLAW_PROFILE: "prod",
-      OPENCLAW_STATE_DIR: "/custom",
-      OPENCLAW_GATEWAY_PORT: "19099",
+      NATESCLAW_PROFILE: "prod",
+      NATESCLAW_STATE_DIR: "/custom",
+      NATESCLAW_GATEWAY_PORT: "19099",
     };
     applyCliProfileEnv({
       profile: "dev",
       env,
       homedir: () => "/home/peter",
     });
-    expect(env.OPENCLAW_PROFILE).toBe("dev");
-    expect(env.OPENCLAW_STATE_DIR).toBe("/custom");
-    expect(env.OPENCLAW_GATEWAY_PORT).toBe("19099");
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join("/custom", "openclaw.json"));
+    expect(env.NATESCLAW_PROFILE).toBe("dev");
+    expect(env.NATESCLAW_STATE_DIR).toBe("/custom");
+    expect(env.NATESCLAW_GATEWAY_PORT).toBe("19099");
+    expect(env.NATESCLAW_CONFIG_PATH).toBe(path.join("/custom", "natesclaw.json"));
   });
 
   it.each([
     {
       name: "the default profile without a profile marker",
       inheritedProfile: undefined,
-      inheritedStateDir: "/home/peter/.openclaw",
+      inheritedStateDir: "/home/peter/.natesclaw",
     },
     {
       name: "the explicitly marked default profile",
       inheritedProfile: "default",
-      inheritedStateDir: "/home/peter/.openclaw",
+      inheritedStateDir: "/home/peter/.natesclaw",
     },
     {
       name: "another named profile",
       inheritedProfile: "main",
-      inheritedStateDir: "/home/peter/.openclaw-main",
+      inheritedStateDir: "/home/peter/.natesclaw-main",
     },
     {
       name: "a home-relative default state directory",
       inheritedProfile: undefined,
-      inheritedStateDir: "~/.openclaw",
+      inheritedStateDir: "~/.natesclaw",
     },
   ])(
     "switches inherited canonical state from $name to the requested profile",
     ({ inheritedProfile, inheritedStateDir }) => {
       const env: Record<string, string | undefined> = {
-        OPENCLAW_PROFILE: inheritedProfile,
-        OPENCLAW_STATE_DIR: inheritedStateDir,
-        OPENCLAW_CONFIG_PATH: path.join(inheritedStateDir, "openclaw.json"),
+        NATESCLAW_PROFILE: inheritedProfile,
+        NATESCLAW_STATE_DIR: inheritedStateDir,
+        NATESCLAW_CONFIG_PATH: path.join(inheritedStateDir, "natesclaw.json"),
       };
 
       applyCliProfileEnv({ profile: "work", env, homedir: () => "/home/peter" });
 
-      const expectedStateDir = path.join(path.resolve("/home/peter"), ".openclaw-work");
-      expect(env.OPENCLAW_PROFILE).toBe("work");
-      expect(env.OPENCLAW_STATE_DIR).toBe(expectedStateDir);
-      expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "openclaw.json"));
+      const expectedStateDir = path.join(path.resolve("/home/peter"), ".natesclaw-work");
+      expect(env.NATESCLAW_PROFILE).toBe("work");
+      expect(env.NATESCLAW_STATE_DIR).toBe(expectedStateDir);
+      expect(env.NATESCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "natesclaw.json"));
     },
   );
 
   it("preserves an explicit config outside inherited canonical profile state", () => {
     const env: Record<string, string | undefined> = {
-      OPENCLAW_PROFILE: "main",
-      OPENCLAW_STATE_DIR: "/home/peter/.openclaw-main",
-      OPENCLAW_CONFIG_PATH: "/srv/openclaw/custom.json",
+      NATESCLAW_PROFILE: "main",
+      NATESCLAW_STATE_DIR: "/home/peter/.natesclaw-main",
+      NATESCLAW_CONFIG_PATH: "/srv/natesclaw/custom.json",
     };
 
     applyCliProfileEnv({ profile: "work", env, homedir: () => "/home/peter" });
 
-    expect(env.OPENCLAW_STATE_DIR).toBe("/home/peter/.openclaw-work");
-    expect(env.OPENCLAW_CONFIG_PATH).toBe("/srv/openclaw/custom.json");
+    expect(env.NATESCLAW_STATE_DIR).toBe("/home/peter/.natesclaw-work");
+    expect(env.NATESCLAW_CONFIG_PATH).toBe("/srv/natesclaw/custom.json");
   });
 
-  it.each(["openclaw-gateway-main", "openclaw-gateway-main.service"])(
+  it.each(["natesclaw-gateway-main", "natesclaw-gateway-main.service"])(
     "drops inherited canonical service identities when switching profiles (%s)",
     (systemdUnit) => {
       const env: Record<string, string | undefined> = {
-        OPENCLAW_PROFILE: "main",
-        OPENCLAW_STATE_DIR: "/home/peter/.openclaw-main",
-        OPENCLAW_CONFIG_PATH: "/home/peter/.openclaw-main/openclaw.json",
-        OPENCLAW_LAUNCHD_LABEL: "ai.openclaw.main",
-        OPENCLAW_SYSTEMD_UNIT: systemdUnit,
-        OPENCLAW_WINDOWS_TASK_NAME: "OpenClaw Gateway (main)",
+        NATESCLAW_PROFILE: "main",
+        NATESCLAW_STATE_DIR: "/home/peter/.natesclaw-main",
+        NATESCLAW_CONFIG_PATH: "/home/peter/.natesclaw-main/natesclaw.json",
+        NATESCLAW_LAUNCHD_LABEL: "ai.natesclaw.main",
+        NATESCLAW_SYSTEMD_UNIT: systemdUnit,
+        NATESCLAW_WINDOWS_TASK_NAME: "Natesclaw Gateway (main)",
       };
 
       applyCliProfileEnv({ profile: "work", env, homedir: () => "/home/peter" });
 
-      expect(env.OPENCLAW_LAUNCHD_LABEL).toBeUndefined();
-      expect(env.OPENCLAW_SYSTEMD_UNIT).toBeUndefined();
-      expect(env.OPENCLAW_WINDOWS_TASK_NAME).toBeUndefined();
+      expect(env.NATESCLAW_LAUNCHD_LABEL).toBeUndefined();
+      expect(env.NATESCLAW_SYSTEMD_UNIT).toBeUndefined();
+      expect(env.NATESCLAW_WINDOWS_TASK_NAME).toBeUndefined();
     },
   );
 
   it("preserves explicit custom service identities when switching profiles", () => {
     const env: Record<string, string | undefined> = {
-      OPENCLAW_PROFILE: "main",
-      OPENCLAW_LAUNCHD_LABEL: "com.example.gateway",
-      OPENCLAW_SYSTEMD_UNIT: "custom-gateway.service",
-      OPENCLAW_WINDOWS_TASK_NAME: "Custom Gateway",
+      NATESCLAW_PROFILE: "main",
+      NATESCLAW_LAUNCHD_LABEL: "com.example.gateway",
+      NATESCLAW_SYSTEMD_UNIT: "custom-gateway.service",
+      NATESCLAW_WINDOWS_TASK_NAME: "Custom Gateway",
     };
 
     applyCliProfileEnv({ profile: "work", env, homedir: () => "/home/peter" });
 
-    expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("com.example.gateway");
-    expect(env.OPENCLAW_SYSTEMD_UNIT).toBe("custom-gateway.service");
-    expect(env.OPENCLAW_WINDOWS_TASK_NAME).toBe("Custom Gateway");
+    expect(env.NATESCLAW_LAUNCHD_LABEL).toBe("com.example.gateway");
+    expect(env.NATESCLAW_SYSTEMD_UNIT).toBe("custom-gateway.service");
+    expect(env.NATESCLAW_WINDOWS_TASK_NAME).toBe("Custom Gateway");
   });
 
   it.each([
@@ -399,73 +399,73 @@ describe("applyCliProfileEnv", () => {
   ])(
     "keeps case-distinct named profiles isolated ($inheritedProfile to $selectedProfile)",
     ({ inheritedProfile, selectedProfile }) => {
-      const inheritedStateDir = `/home/peter/.openclaw-${inheritedProfile}`;
+      const inheritedStateDir = `/home/peter/.natesclaw-${inheritedProfile}`;
       const env: Record<string, string | undefined> = {
-        OPENCLAW_PROFILE: inheritedProfile,
-        OPENCLAW_STATE_DIR: inheritedStateDir,
-        OPENCLAW_CONFIG_PATH: path.join(inheritedStateDir, "openclaw.json"),
+        NATESCLAW_PROFILE: inheritedProfile,
+        NATESCLAW_STATE_DIR: inheritedStateDir,
+        NATESCLAW_CONFIG_PATH: path.join(inheritedStateDir, "natesclaw.json"),
       };
 
       applyCliProfileEnv({ profile: selectedProfile, env, homedir: () => "/home/peter" });
 
-      const expectedStateDir = `/home/peter/.openclaw-${selectedProfile}`;
-      expect(env.OPENCLAW_PROFILE).toBe(selectedProfile);
-      expect(env.OPENCLAW_STATE_DIR).toBe(expectedStateDir);
-      expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "openclaw.json"));
+      const expectedStateDir = `/home/peter/.natesclaw-${selectedProfile}`;
+      expect(env.NATESCLAW_PROFILE).toBe(selectedProfile);
+      expect(env.NATESCLAW_STATE_DIR).toBe(expectedStateDir);
+      expect(env.NATESCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "natesclaw.json"));
     },
   );
 
   it("treats case variants of the default profile as the same canonical profile", () => {
-    const stateDir = "/home/peter/.openclaw";
+    const stateDir = "/home/peter/.natesclaw";
     const env: Record<string, string | undefined> = {
-      OPENCLAW_PROFILE: "Default",
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_CONFIG_PATH: path.join(stateDir, "openclaw.json"),
+      NATESCLAW_PROFILE: "Default",
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_CONFIG_PATH: path.join(stateDir, "natesclaw.json"),
     };
 
     applyCliProfileEnv({ profile: "default", env, homedir: () => "/home/peter" });
 
-    expect(env.OPENCLAW_PROFILE).toBe("default");
-    expect(env.OPENCLAW_STATE_DIR).toBe(stateDir);
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join(stateDir, "openclaw.json"));
+    expect(env.NATESCLAW_PROFILE).toBe("default");
+    expect(env.NATESCLAW_STATE_DIR).toBe(stateDir);
+    expect(env.NATESCLAW_CONFIG_PATH).toBe(path.join(stateDir, "natesclaw.json"));
   });
 
   it.each([
     {
       name: "the default profile",
       inheritedProfile: undefined,
-      inheritedConfigPath: "/home/peter/.openclaw/openclaw.json",
+      inheritedConfigPath: "/home/peter/.natesclaw/natesclaw.json",
     },
     {
       name: "another named profile",
       inheritedProfile: "main",
-      inheritedConfigPath: "/home/peter/.openclaw-main/openclaw.json",
+      inheritedConfigPath: "/home/peter/.natesclaw-main/natesclaw.json",
     },
     {
       name: "a home-relative named profile",
       inheritedProfile: "main",
-      inheritedConfigPath: "~/.openclaw-main/openclaw.json",
+      inheritedConfigPath: "~/.natesclaw-main/natesclaw.json",
     },
   ])(
     "switches an inherited $name config when the state directory is absent",
     ({ inheritedProfile, inheritedConfigPath }) => {
       const env: Record<string, string | undefined> = {
-        OPENCLAW_PROFILE: inheritedProfile,
-        OPENCLAW_CONFIG_PATH: inheritedConfigPath,
+        NATESCLAW_PROFILE: inheritedProfile,
+        NATESCLAW_CONFIG_PATH: inheritedConfigPath,
       };
 
       applyCliProfileEnv({ profile: "work", env, homedir: () => "/home/peter" });
 
-      const expectedStateDir = "/home/peter/.openclaw-work";
-      expect(env.OPENCLAW_PROFILE).toBe("work");
-      expect(env.OPENCLAW_STATE_DIR).toBe(expectedStateDir);
-      expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "openclaw.json"));
+      const expectedStateDir = "/home/peter/.natesclaw-work";
+      expect(env.NATESCLAW_PROFILE).toBe("work");
+      expect(env.NATESCLAW_STATE_DIR).toBe(expectedStateDir);
+      expect(env.NATESCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "natesclaw.json"));
     },
   );
 
-  it("uses OPENCLAW_HOME when deriving profile state dir", () => {
+  it("uses NATESCLAW_HOME when deriving profile state dir", () => {
     const env: Record<string, string | undefined> = {
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      NATESCLAW_HOME: "/srv/natesclaw-home",
       HOME: "/home/other",
     };
     applyCliProfileEnv({
@@ -474,10 +474,10 @@ describe("applyCliProfileEnv", () => {
       homedir: () => "/home/fallback",
     });
 
-    const resolvedHome = path.resolve("/srv/openclaw-home");
-    expect(env.OPENCLAW_STATE_DIR).toBe(path.join(resolvedHome, ".openclaw-work"));
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(
-      path.join(resolvedHome, ".openclaw-work", "openclaw.json"),
+    const resolvedHome = path.resolve("/srv/natesclaw-home");
+    expect(env.NATESCLAW_STATE_DIR).toBe(path.join(resolvedHome, ".natesclaw-work"));
+    expect(env.NATESCLAW_CONFIG_PATH).toBe(
+      path.join(resolvedHome, ".natesclaw-work", "natesclaw.json"),
     );
   });
 });
@@ -486,97 +486,97 @@ describe("formatCliCommand", () => {
   it.each([
     {
       name: "no profile is set",
-      cmd: "openclaw doctor --fix",
+      cmd: "natesclaw doctor --fix",
       env: {},
-      expected: "openclaw doctor --fix",
+      expected: "natesclaw doctor --fix",
     },
     {
       name: "profile is default",
-      cmd: "openclaw doctor --fix",
-      env: { OPENCLAW_PROFILE: "default" },
-      expected: "openclaw doctor --fix",
+      cmd: "natesclaw doctor --fix",
+      env: { NATESCLAW_PROFILE: "default" },
+      expected: "natesclaw doctor --fix",
     },
     {
       name: "profile is Default (case-insensitive)",
-      cmd: "openclaw doctor --fix",
-      env: { OPENCLAW_PROFILE: "Default" },
-      expected: "openclaw doctor --fix",
+      cmd: "natesclaw doctor --fix",
+      env: { NATESCLAW_PROFILE: "Default" },
+      expected: "natesclaw doctor --fix",
     },
     {
       name: "profile is invalid",
-      cmd: "openclaw doctor --fix",
-      env: { OPENCLAW_PROFILE: "bad profile" },
-      expected: "openclaw doctor --fix",
+      cmd: "natesclaw doctor --fix",
+      env: { NATESCLAW_PROFILE: "bad profile" },
+      expected: "natesclaw doctor --fix",
     },
     {
       name: "--profile is already present",
-      cmd: "openclaw --profile work doctor --fix",
-      env: { OPENCLAW_PROFILE: "work" },
-      expected: "openclaw --profile work doctor --fix",
+      cmd: "natesclaw --profile work doctor --fix",
+      env: { NATESCLAW_PROFILE: "work" },
+      expected: "natesclaw --profile work doctor --fix",
     },
     {
       name: "--dev is already present",
-      cmd: "openclaw --dev doctor",
-      env: { OPENCLAW_PROFILE: "dev" },
-      expected: "openclaw --dev doctor",
+      cmd: "natesclaw --dev doctor",
+      env: { NATESCLAW_PROFILE: "dev" },
+      expected: "natesclaw --dev doctor",
     },
   ])("returns command unchanged when $name", ({ cmd, env, expected }) => {
     expect(formatCliCommand(cmd, env)).toBe(expected);
   });
 
   it("inserts --profile flag when profile is set", () => {
-    expect(formatCliCommand("openclaw doctor --fix", { OPENCLAW_PROFILE: "work" })).toBe(
-      "openclaw --profile work doctor --fix",
+    expect(formatCliCommand("natesclaw doctor --fix", { NATESCLAW_PROFILE: "work" })).toBe(
+      "natesclaw --profile work doctor --fix",
     );
   });
 
   it("trims whitespace from profile", () => {
-    expect(formatCliCommand("openclaw doctor --fix", { OPENCLAW_PROFILE: "  jbopenclaw  " })).toBe(
-      "openclaw --profile jbopenclaw doctor --fix",
+    expect(formatCliCommand("natesclaw doctor --fix", { NATESCLAW_PROFILE: "  jbnatesclaw  " })).toBe(
+      "natesclaw --profile jbnatesclaw doctor --fix",
     );
   });
 
-  it("handles command with no args after openclaw", () => {
-    expect(formatCliCommand("openclaw", { OPENCLAW_PROFILE: "test" })).toBe(
-      "openclaw --profile test",
+  it("handles command with no args after natesclaw", () => {
+    expect(formatCliCommand("natesclaw", { NATESCLAW_PROFILE: "test" })).toBe(
+      "natesclaw --profile test",
     );
   });
 
   it("handles pnpm wrapper", () => {
-    expect(formatCliCommand("pnpm openclaw doctor", { OPENCLAW_PROFILE: "work" })).toBe(
-      "pnpm openclaw --profile work doctor",
+    expect(formatCliCommand("pnpm natesclaw doctor", { NATESCLAW_PROFILE: "work" })).toBe(
+      "pnpm natesclaw --profile work doctor",
     );
   });
 
   it("inserts --container when a container hint is set", () => {
     expect(
-      formatCliCommand("openclaw gateway status --deep", { OPENCLAW_CONTAINER_HINT: "demo" }),
-    ).toBe("openclaw --container demo gateway status --deep");
+      formatCliCommand("natesclaw gateway status --deep", { NATESCLAW_CONTAINER_HINT: "demo" }),
+    ).toBe("natesclaw --container demo gateway status --deep");
   });
 
   it("ignores unsafe container hints", () => {
     expect(
-      formatCliCommand("openclaw gateway status --deep", {
-        OPENCLAW_CONTAINER_HINT: "demo; rm -rf /",
+      formatCliCommand("natesclaw gateway status --deep", {
+        NATESCLAW_CONTAINER_HINT: "demo; rm -rf /",
       }),
-    ).toBe("openclaw gateway status --deep");
+    ).toBe("natesclaw gateway status --deep");
   });
 
   it("preserves both --container and --profile hints", () => {
     expect(
-      formatCliCommand("openclaw doctor", {
-        OPENCLAW_CONTAINER_HINT: "demo",
-        OPENCLAW_PROFILE: "work",
+      formatCliCommand("natesclaw doctor", {
+        NATESCLAW_CONTAINER_HINT: "demo",
+        NATESCLAW_PROFILE: "work",
       }),
-    ).toBe("openclaw --container demo doctor");
+    ).toBe("natesclaw --container demo doctor");
   });
 
   it("does not prepend --container for update commands", () => {
-    expect(formatCliCommand("openclaw update", { OPENCLAW_CONTAINER_HINT: "demo" })).toBe(
-      "openclaw update",
+    expect(formatCliCommand("natesclaw update", { NATESCLAW_CONTAINER_HINT: "demo" })).toBe(
+      "natesclaw update",
     );
     expect(
-      formatCliCommand("pnpm openclaw update --channel beta", { OPENCLAW_CONTAINER_HINT: "demo" }),
-    ).toBe("pnpm openclaw update --channel beta");
+      formatCliCommand("pnpm natesclaw update --channel beta", { NATESCLAW_CONTAINER_HINT: "demo" }),
+    ).toBe("pnpm natesclaw update --channel beta");
   });
 });

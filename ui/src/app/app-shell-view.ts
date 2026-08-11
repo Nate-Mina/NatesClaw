@@ -155,7 +155,7 @@ export function renderApplicationShell(host: ShellViewHost) {
   const activeSessionRow = findUiSessionRow(context, host.activeSessionKey);
   const desktopPanelAvailable = isDesktopPanelAvailable(gatewaySnapshot, activeSessionRow);
   const custodianPanelAvailable =
-    gatewayConnected && isGatewayMethodAdvertised(gatewaySnapshot, "openclaw.chat") === true;
+    gatewayConnected && isGatewayMethodAdvertised(gatewaySnapshot, "natesclaw.chat") === true;
   const activeRoute = host.routeState.routeId ?? "chat";
   // Plugin tabs share one route; the search picks the active item.
   const activePluginRef =
@@ -334,11 +334,11 @@ export function renderApplicationShell(host: ShellViewHost) {
   // and the upgraded panels catch the first toggle instead of dropping the event.
   return html`
     ${isOptionalElementDefined(host.commandPaletteElement)
-      ? html`<openclaw-command-palette
+      ? html`<natesclaw-command-palette
           .onNavigate=${(routeId: RouteId) => host.navigate(routeId)}
           .onSelectSession=${(sessionKey: string) => host.selectChatSession(sessionKey)}
           .onSlashCommand=${(command: string) => host.handleCommandPaletteSlashCommand(command)}
-        ></openclaw-command-palette>`
+        ></natesclaw-command-palette>`
       : nothing}
     <div
       class="shell ${chatLikeRoute ? "shell--chat" : ""} ${navCollapsed
@@ -354,7 +354,7 @@ export function renderApplicationShell(host: ShellViewHost) {
       <a class="shell-skip-link" href="#control-ui-main"> ${t("common.skipToMainContent")} </a>
       ${isNativeWebChromeHost() && !onboarding
         ? html`
-            <openclaw-macos-titlebar-controls
+            <natesclaw-macos-titlebar-controls
               .navCollapsed=${host.nativeNavCollapsed()}
               .historyOnly=${settingsTakeover}
               .canGoBack=${host.nativeHistoryState.canGoBack}
@@ -365,21 +365,21 @@ export function renderApplicationShell(host: ShellViewHost) {
               .onToggleSidebar=${() => host.toggleNavigationSurface()}
               .onOpenPalette=${() => host.openPalette()}
               .onOpenNewSession=${() => host.handleNativeNewSession()}
-            ></openclaw-macos-titlebar-controls>
+            ></natesclaw-macos-titlebar-controls>
           `
         : nothing}
-      <openclaw-app-topbar
+      <natesclaw-app-topbar
         .basePath=${context.basePath}
         .searchDisabled=${false}
         .navDrawerOpen=${navDrawerOpen}
         .onboarding=${onboarding}
         .onOpenPalette=${() => host.openPalette()}
         .onToggleDrawer=${(trigger: HTMLElement) => host.toggleNavigationSurface(trigger)}
-      ></openclaw-app-topbar>
+      ></natesclaw-app-topbar>
       ${!onboarding && !settingsTakeover && !mobileNavLayout
         ? html`
             <div class="shell-chrome-controls">
-              <openclaw-tooltip
+              <natesclaw-tooltip
                 .content=${`${t(navCollapsed ? "nav.expand" : "nav.collapse")} (⌘B)`}
               >
                 <button
@@ -391,9 +391,9 @@ export function renderApplicationShell(host: ShellViewHost) {
                 >
                   ${navCollapsed ? icons.panelLeftOpen : icons.panelLeftClose}
                 </button>
-              </openclaw-tooltip>
+              </natesclaw-tooltip>
               ${navCollapsed
-                ? html`<openclaw-tooltip
+                ? html`<natesclaw-tooltip
                     .content=${newSessionAccess.allowed
                       ? t("chat.runControls.newSession")
                       : newSessionAccess.reason}
@@ -407,9 +407,9 @@ export function renderApplicationShell(host: ShellViewHost) {
                     >
                       ${icons.plus}
                     </button>
-                  </openclaw-tooltip>`
+                  </natesclaw-tooltip>`
                 : nothing}
-              <openclaw-tooltip .content=${`${t("chat.openCommandPalette")} (${PALETTE_SHORTCUT})`}>
+              <natesclaw-tooltip .content=${`${t("chat.openCommandPalette")} (${PALETTE_SHORTCUT})`}>
                 <button
                   type="button"
                   class="shell-chrome-controls__button shell-chrome-controls__search"
@@ -418,13 +418,13 @@ export function renderApplicationShell(host: ShellViewHost) {
                 >
                   ${icons.search}
                 </button>
-              </openclaw-tooltip>
+              </natesclaw-tooltip>
             </div>
           `
         : nothing}
       <div class="shell-nav" ?inert=${navigationSurfaceHidden}>
         ${mobileNavLayout
-          ? html`<openclaw-modal-dialog
+          ? html`<natesclaw-modal-dialog
               class="drawer nav-drawer"
               .open=${navDrawerOpen}
               .label=${t("palette.categories.navigation")}
@@ -433,7 +433,7 @@ export function renderApplicationShell(host: ShellViewHost) {
               <div class="shell-nav-modal__content" tabindex="-1" autofocus>
                 ${navigationContent}
               </div>
-            </openclaw-modal-dialog>`
+            </natesclaw-modal-dialog>`
           : navigationContent}
       </div>
       ${!navCollapsed && !onboarding && !settingsTakeover
@@ -460,14 +460,14 @@ export function renderApplicationShell(host: ShellViewHost) {
       >
         ${gatewaySnapshot.hello?.deviceAuthMigration?.pending === true
           ? // The migration banner is registered by a rare-flow dynamic import after first render.
-            customElements.get("openclaw-device-auth-migration-banner")
-            ? html`<openclaw-device-auth-migration-banner
+            customElements.get("natesclaw-device-auth-migration-banner")
+            ? html`<natesclaw-device-auth-migration-banner
                 .props=${{
                   state: overlaySnapshot.deviceAuthMigration,
                   onSecure: () => void context.overlays.secureThisBrowser(),
                 }}
-              ></openclaw-device-auth-migration-banner>`
-            : html`<openclaw-update-banner
+              ></natesclaw-device-auth-migration-banner>`
+            : html`<natesclaw-update-banner
                 .props=${{
                   statusBanner: {
                     tone: overlaySnapshot.deviceAuthMigration.error ? "danger" : "warn",
@@ -476,7 +476,7 @@ export function renderApplicationShell(host: ShellViewHost) {
                       t("login.deviceAuthMigration.banner"),
                   },
                 }}
-              ></openclaw-update-banner>`
+              ></natesclaw-update-banner>`
           : nothing}
         ${renderFloatingUpdateCard({
           navigationSurfaceHidden,
@@ -494,21 +494,21 @@ export function renderApplicationShell(host: ShellViewHost) {
           onRefresh: () => host.refreshControlUi(),
           onHoldUpdate: () => context.overlays.holdUpdate(),
         })}
-        <openclaw-router-outlet
+        <natesclaw-router-outlet
           .router=${runtime.router}
           .retryContext=${context}
           .onNotFound=${() => host.replaceChatWithCurrentSession()}
           .notFoundRecoveryReady=${gatewayConnected}
-        ></openclaw-router-outlet>
+        ></natesclaw-router-outlet>
       </main>
-      <openclaw-terminal-panel
+      <natesclaw-terminal-panel
         .client=${gatewayConnected ? gatewaySnapshot.client : null}
         .available=${terminalAvailable}
         .suppressed=${settingsTakeover}
         .themeMode=${resolveTerminalThemeMode()}
         .basePath=${context.basePath}
-      ></openclaw-terminal-panel>
-      <openclaw-browser-panel
+      ></natesclaw-terminal-panel>
+      <natesclaw-browser-panel
         .client=${gatewayConnected ? gatewaySnapshot.client : null}
         .available=${browserPanelAvailable}
         .suppressed=${settingsTakeover}
@@ -518,19 +518,19 @@ export function renderApplicationShell(host: ShellViewHost) {
           settings: { token: context.gateway.connection.token },
           password: context.gateway.connection.password,
         })}
-      ></openclaw-browser-panel>
-      <openclaw-desktop-panel
+      ></natesclaw-browser-panel>
+      <natesclaw-desktop-panel
         .client=${gatewayConnected ? gatewaySnapshot.client : null}
         .available=${desktopPanelAvailable}
         .suppressed=${settingsTakeover}
-      ></openclaw-desktop-panel>
-      <openclaw-custodian-panel
+      ></natesclaw-desktop-panel>
+      <natesclaw-custodian-panel
         .available=${custodianPanelAvailable}
         .suppressed=${activeRoute === "custodian"}
         .minimizeRequestId=${host.custodianMinimizeRequestId}
-      ></openclaw-custodian-panel>
+      ></natesclaw-custodian-panel>
       ${isOptionalElementDefined(host.execApprovalElement)
-        ? html`<openclaw-exec-approval
+        ? html`<natesclaw-exec-approval
             .props=${{
               queue: overlaySnapshot.approvalQueue,
               busy: overlaySnapshot.approvalBusy,
@@ -542,7 +542,7 @@ export function renderApplicationShell(host: ShellViewHost) {
                 decision: Parameters<typeof context.overlays.decideApproval>[0],
               ) => context.overlays.decideApproval(decision, approvalId),
             }}
-          ></openclaw-exec-approval>`
+          ></natesclaw-exec-approval>`
         : nothing}
       ${renderDevicePairSetup({
         open: overlaySnapshot.devicePairSetupOpen,
@@ -564,12 +564,12 @@ export function renderApplicationShell(host: ShellViewHost) {
         },
       })}
       ${onboarding && activeRoute !== "custodian"
-        ? html`<openclaw-onboarding-memory-import
+        ? html`<natesclaw-onboarding-memory-import
             .active=${true}
             .context=${context}
-          ></openclaw-onboarding-memory-import>`
+          ></natesclaw-onboarding-memory-import>`
         : nothing}
-      <openclaw-toast-host></openclaw-toast-host>
+      <natesclaw-toast-host></natesclaw-toast-host>
     </div>
   `;
 }

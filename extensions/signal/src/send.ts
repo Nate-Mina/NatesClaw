@@ -1,23 +1,23 @@
-import type { MediaPlaceholderTextFact } from "openclaw/plugin-sdk/channel-inbound";
+import type { MediaPlaceholderTextFact } from "natesclaw/plugin-sdk/channel-inbound";
 // Signal plugin module implements send behavior.
 import {
   createMessageReceiptFromOutboundResults,
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "natesclaw/plugin-sdk/markdown-table-runtime";
 import {
   kindFromMime,
   type OutboundMediaAccess,
   resolveOutboundAttachmentFromUrl,
-} from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
+} from "natesclaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "natesclaw/plugin-sdk/plugin-config-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { resolveSignalAccount } from "./accounts.js";
 import {
   appendSignalApprovalReactionHintForOutboundMessage,
@@ -30,7 +30,7 @@ import { registerSignalReplyContext } from "./reply-authors.js";
 import { resolveSignalRpcContext } from "./rpc-context.js";
 
 export type SignalSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   baseUrl?: string;
   transportKind?: SignalTransportKind;
   account?: string;

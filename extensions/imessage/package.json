@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/imessage",
+  "name": "@natesclaw/imessage",
   "version": "2026.8.1",
-  "description": "OpenClaw iMessage channel plugin using imsg on a signed-in Mac",
+  "description": "Natesclaw iMessage channel plugin using imsg on a signed-in Mac",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,18 +12,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -89,8 +89,8 @@
       }
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/imessage",
-      "npmSpec": "@openclaw/imessage",
+      "clawhubSpec": "clawhub:@natesclaw/imessage",
+      "npmSpec": "@natesclaw/imessage",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2",
       "allowInvalidConfigRecovery": true
@@ -99,7 +99,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {

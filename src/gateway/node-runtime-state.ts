@@ -17,7 +17,7 @@ export type PendingNodeAction = {
 };
 
 const pendingNodeActionsById = resolveGlobalMap<string, PendingNodeAction[]>(
-  Symbol.for("openclaw.pendingNodeActions"),
+  Symbol.for("natesclaw.pendingNodeActions"),
   "close-and-restart",
 );
 

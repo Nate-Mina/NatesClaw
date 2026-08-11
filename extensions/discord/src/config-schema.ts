@@ -14,12 +14,12 @@ import {
   requireAllowlistAllowFrom,
   requireOpenAllowFrom,
   TtsConfigSchema,
-} from "openclaw/plugin-sdk/channel-config-schema";
+} from "natesclaw/plugin-sdk/channel-config-schema";
 import {
   buildSecretInputSchema,
   registerSensitiveConfigSchema,
-} from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 import { discordChannelConfigUiHints } from "./config-ui-hints.js";
 

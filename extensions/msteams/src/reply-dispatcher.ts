@@ -1,8 +1,8 @@
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
+import { resolveHumanDelayConfig } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   createChannelPartialDeliveryError,
   type ChannelInboundTurnPlan,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "natesclaw/plugin-sdk/channel-inbound";
 // Msteams plugin module implements reply dispatcher behavior.
 import {
   buildChannelProgressDraftLine,
@@ -12,16 +12,16 @@ import {
   resolveChannelStreamingBlockEnabled,
   resolveChannelStreamingPreviewToolProgress,
   resolveChannelStreamingSuppressDefaultToolProgressMessages,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { PlatformMessageNotDispatchedError } from "openclaw/plugin-sdk/error-runtime";
-import { createDeferred } from "openclaw/plugin-sdk/extension-shared";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { PlatformMessageNotDispatchedError } from "natesclaw/plugin-sdk/error-runtime";
+import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
+import { getGlobalHookRunner } from "natesclaw/plugin-sdk/plugin-runtime";
+import { normalizeOptionalLowercaseString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   createChannelMessageReplyPipeline,
   logTypingFailure,
   resolveChannelMediaMaxBytes,
-  type OpenClawConfig,
+  type NatesclawConfig,
   type MSTeamsReplyStyle,
   type ReplyPayload,
   type RuntimeEnv,
@@ -49,7 +49,7 @@ import type { MSTeamsTurnContext } from "./sdk-types.js";
 import type { MSTeamsApp } from "./sdk.js";
 
 export function createMSTeamsReplyDispatcher(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
   accountId?: string;
@@ -197,7 +197,7 @@ export function createMSTeamsReplyDispatcher(params: {
 
   // Resolve block-streaming preference from the canonical nested config
   // (`streaming.mode = "block"` or `streaming.block.enabled = true`); legacy
-  // flat `blockStreaming` is migrated by `openclaw doctor --fix`.
+  // flat `blockStreaming` is migrated by `natesclaw doctor --fix`.
   const teamsStreamMode = resolveChannelPreviewStreamMode(msteamsCfg, "partial");
   const blockStreamingResolved =
     teamsStreamMode === "block" ? true : resolveChannelStreamingBlockEnabled(msteamsCfg);
@@ -724,7 +724,7 @@ export function createMSTeamsReplyDispatcher(params: {
           }
         : {}),
       ...progressCallbacks,
-      // When progress mode is active, suppress openclaw's default block-style
+      // When progress mode is active, suppress natesclaw's default block-style
       // tool-progress messages so they don't duplicate alongside the
       // streaming card's progress lines.
       ...(shouldSuppressDefaultToolProgressMessages

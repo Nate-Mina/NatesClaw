@@ -184,7 +184,7 @@ vi.mock("../../agents/thinking-runtime.js", () => ({
     modelId: string;
   }) =>
     cfg.agents?.defaults?.models?.[`${provider}/${modelId}`]?.agentRuntime?.id ??
-    (provider === "openai" ? "codex" : "openclaw"),
+    (provider === "openai" ? "codex" : "natesclaw"),
 }));
 
 vi.mock("../../routing/session-key.js", () => ({
@@ -507,7 +507,7 @@ describe("resolveReplyDirectives", () => {
         agents: {
           defaults: {
             models: {
-              "openai/gpt-5.6-sol": { agentRuntime: { id: "openclaw" } },
+              "openai/gpt-5.6-sol": { agentRuntime: { id: "natesclaw" } },
             },
           },
         },
@@ -518,7 +518,7 @@ describe("resolveReplyDirectives", () => {
     expect(resolveDefaultThinkingLevel).toHaveBeenLastCalledWith({
       provider: "openai",
       model: "gpt-5.6-sol",
-      agentRuntime: "openclaw",
+      agentRuntime: "natesclaw",
     });
   });
 

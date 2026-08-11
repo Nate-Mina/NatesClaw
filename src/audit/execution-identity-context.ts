@@ -13,14 +13,14 @@ import {
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
 import { normalizeSqliteNumber } from "../infra/sqlite-number.js";
-import { withExistingOpenClawStateDatabaseReadOnly } from "../state/openclaw-state-db-readonly.js";
-import { tableExists } from "../state/openclaw-state-db-schema-helpers.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import { withExistingNatesclawStateDatabaseReadOnly } from "../state/natesclaw-state-db-readonly.js";
+import { tableExists } from "../state/natesclaw-state-db-schema-helpers.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import { clearAuditIdentityKeyCacheForDatabase } from "./audit-identity.js";
 import {
   parseExecutionIdentityAdmissionEnvelope,
@@ -34,10 +34,10 @@ import {
 } from "./execution-identity-context-build.js";
 
 type ExecutionIdentityDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "audit_events" | "execution_identity_contexts"
 >;
-type ExecutionIdentityRow = Selectable<OpenClawStateKyselyDatabase["execution_identity_contexts"]>;
+type ExecutionIdentityRow = Selectable<NatesclawStateKyselyDatabase["execution_identity_contexts"]>;
 
 const EXECUTION_IDENTITY_CONTEXT_MAX_BYTES = 16 * 1024;
 const EXECUTION_IDENTITY_CONTEXT_RETENTION_MS = 30 * 24 * 60 * 60_000;
@@ -65,7 +65,7 @@ CREATE INDEX IF NOT EXISTS execution_identity_contexts_run_created_idx
   ON execution_identity_contexts (run_id, created_at, execution_id);
 `;
 
-type ExecutionIdentityStoreOptions = OpenClawStateDatabaseOptions & {
+type ExecutionIdentityStoreOptions = NatesclawStateDatabaseOptions & {
   now?: number;
   limits?: {
     maxRows: number;
@@ -73,7 +73,7 @@ type ExecutionIdentityStoreOptions = OpenClawStateDatabaseOptions & {
   };
 };
 
-type ExecutionIdentityReadOptions = OpenClawStateDatabaseOptions & {
+type ExecutionIdentityReadOptions = NatesclawStateDatabaseOptions & {
   now?: number;
 };
 
@@ -87,12 +87,12 @@ function executionIdentityDb(db: DatabaseSync) {
   return getNodeSqliteKysely<ExecutionIdentityDatabase>(db);
 }
 
-function ensureExecutionIdentityContextSchema(options: OpenClawStateDatabaseOptions = {}): void {
-  const database = openOpenClawStateDatabase(options);
+function ensureExecutionIdentityContextSchema(options: NatesclawStateDatabaseOptions = {}): void {
+  const database = openNatesclawStateDatabase(options);
   if (ensuredDatabases.has(database.db)) {
     return;
   }
-  runOpenClawStateWriteTransaction(
+  runNatesclawStateWriteTransaction(
     ({ db }) => {
       // sqlite-allow-raw -- feature-local additive schema DDL; context rows use Kysely.
       db.exec(EXECUTION_IDENTITY_CONTEXT_SCHEMA_SQL);
@@ -215,17 +215,17 @@ function pruneExecutionIdentityContextsAfterInsert(
 export function pruneExpiredExecutionIdentityContexts(
   params: {
     now?: number;
-    database?: OpenClawStateDatabaseOptions;
+    database?: NatesclawStateDatabaseOptions;
   } = {},
 ): number {
   const databaseOptions = params.database ?? {};
-  const database = openOpenClawStateDatabase(databaseOptions);
+  const database = openNatesclawStateDatabase(databaseOptions);
   // Maintenance must not create opt-in storage. First capture owns schema creation;
   // once the table exists, cleanup remains active even after collection is disabled.
   if (!tableExists(database.db, "execution_identity_contexts")) {
     return 0;
   }
-  return runOpenClawStateWriteTransaction(
+  return runNatesclawStateWriteTransaction(
     ({ db }) => {
       const deleted = deleteExpiredExecutionIdentityContexts(
         db,
@@ -249,7 +249,7 @@ function persistExecutionIdentityAdmissionEnvelope(
   const envelope = parseExecutionIdentityAdmissionEnvelope(input);
   ensureExecutionIdentityContextSchema(options);
   const executionId = envelope.executionId;
-  const opened = openOpenClawStateDatabase(options);
+  const opened = openNatesclawStateDatabase(options);
   // HMAC lookup/key creation and canonical serialization finish before BEGIN.
   // The transaction only rereads the authoritative row and synchronously commits.
   const plannedContext = buildExecutionIdentityContext(opened.db, envelope, {
@@ -259,7 +259,7 @@ function persistExecutionIdentityAdmissionEnvelope(
   const plannedContextJson = JSON.stringify(plannedContext);
   let transactionDatabase: DatabaseSync | undefined;
   try {
-    return runOpenClawStateWriteTransaction(
+    return runNatesclawStateWriteTransaction(
       ({ db }) => {
         transactionDatabase = db;
         const existing = readRowByExecutionId(db, executionId);
@@ -312,7 +312,7 @@ function verifyExecutionIdentityAdmissionRetry(
   token: ExecutionIdentityAdmissionToken,
   options: ExecutionIdentityReadOptions = {},
 ): ExecutionIdentityContextV1 {
-  const { db } = openOpenClawStateDatabase(options);
+  const { db } = openNatesclawStateDatabase(options);
   if (!tableExists(db, "execution_identity_contexts")) {
     throw new Error("execution identity recovery evidence unavailable");
   }
@@ -351,7 +351,7 @@ function readExecutionIdentityContextByExecutionId(
 ): ExecutionIdentityContextReadResult {
   const normalizedExecutionId = ensureBoundedExecutionIdentityRef(executionId, "execution id");
   return (
-    withExistingOpenClawStateDatabaseReadOnly(({ db }) => {
+    withExistingNatesclawStateDatabaseReadOnly(({ db }) => {
       if (!tableExists(db, "execution_identity_contexts")) {
         return { status: "missing" } as const;
       }
@@ -521,7 +521,7 @@ function inspectExactExecution(
       remediation: [
         {
           code: "inspect_state_integrity",
-          text: "Run openclaw doctor and inspect the shared state database before trusting this execution.",
+          text: "Run natesclaw doctor and inspect the shared state database before trusting this execution.",
         },
       ],
     });
@@ -594,7 +594,7 @@ function inspectRunSelector(
 ): AuditRunInspectResult {
   const runId = ensureBoundedExecutionIdentityRef(params.runId, "run id");
   const now = options.now ?? Date.now();
-  const inspected = withExistingOpenClawStateDatabaseReadOnly<AuditRunInspectResult | undefined>(
+  const inspected = withExistingNatesclawStateDatabaseReadOnly<AuditRunInspectResult | undefined>(
     ({ db }) => {
       const firstMatches = tableExists(db, "execution_identity_contexts")
         ? readRowsByRunId(db, runId, now, 0, 2)
@@ -616,7 +616,7 @@ function inspectRunSelector(
             remediation: [
               {
                 code: "inspect_state_integrity",
-                text: "Run openclaw doctor and inspect the shared state database before trusting this run.",
+                text: "Run natesclaw doctor and inspect the shared state database before trusting this run.",
               },
             ],
           });
@@ -642,7 +642,7 @@ function inspectRunSelector(
             remediation: [
               {
                 code: "select_execution_id",
-                text: "Select one candidate with openclaw audit --execution <id> --explain.",
+                text: "Select one candidate with natesclaw audit --execution <id> --explain.",
               },
             ],
           },
@@ -680,7 +680,7 @@ function inspectRunSelector(
           remediation: [
             {
               code: "inspect_state_integrity",
-              text: "Run openclaw doctor and retry the run inspection.",
+              text: "Run natesclaw doctor and retry the run inspection.",
             },
           ],
         });

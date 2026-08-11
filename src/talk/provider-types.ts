@@ -1,7 +1,7 @@
 // Talk provider types describe realtime voice provider configuration and APIs.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { TalkTransport } from "./talk-events.js";
 
 export type RealtimeVoiceProviderId = string;
@@ -175,12 +175,12 @@ export type RealtimeVoiceProviderCapabilities = {
 };
 
 export type RealtimeVoiceProviderResolveConfigContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   rawConfig: RealtimeVoiceProviderConfig;
 };
 
 export type RealtimeVoiceProviderConfiguredContext = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
 };
 
@@ -190,7 +190,7 @@ export type RealtimeVoiceAgentConsultRunner = (params: {
 }) => Promise<{ text: string }>;
 
 export type RealtimeVoiceBridgeCreateRequest = RealtimeVoiceBridgeCallbacks & {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   /** Host-selected agent scope for provider auth and agent-owned bridge state. */
   agentId?: string;
   providerConfig: RealtimeVoiceProviderConfig;
@@ -205,7 +205,7 @@ export type RealtimeVoiceBridgeCreateRequest = RealtimeVoiceBridgeCallbacks & {
 };
 
 export type RealtimeVoiceBrowserSessionCreateRequest = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   instructions?: string;
   tools?: RealtimeVoiceTool[];

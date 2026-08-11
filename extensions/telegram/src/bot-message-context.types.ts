@@ -1,15 +1,15 @@
 // Telegram type declarations define plugin contracts.
 import type { Bot } from "grammy";
 import type { Message } from "grammy/types";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type {
   DmPolicy,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import type { HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
+} from "natesclaw/plugin-sdk/config-contracts";
+import type { HistoryEntry } from "natesclaw/plugin-sdk/reply-history";
+import type { MsgContext } from "natesclaw/plugin-sdk/reply-runtime";
 import type { TelegramMediaKind } from "./bot/body-helpers.js";
 import type { StickerMetadata, TelegramContext } from "./bot/types.js";
 import type { TelegramReplyChainEntry } from "./message-cache.js";
@@ -54,7 +54,7 @@ export type TelegramLogger = {
 type ResolveTelegramGroupConfig = (
   chatId: string | number,
   messageThreadId: number | undefined,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
 ) => {
   groupConfig?: TelegramGroupConfig | TelegramDirectConfig;
   topicConfig?: TelegramTopicConfig;
@@ -65,10 +65,10 @@ type ResolveGroupActivation = (params: {
   agentId?: string;
   messageThreadId?: number;
   sessionKey?: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 }) => boolean | undefined;
 
-type ResolveGroupRequireMention = (chatId: string | number, cfg: OpenClawConfig) => boolean;
+type ResolveGroupRequireMention = (chatId: string | number, cfg: NatesclawConfig) => boolean;
 
 type TelegramMessageContextRuntimeOverrides = Partial<
   Pick<
@@ -100,7 +100,7 @@ export type BuildTelegramMessageContextParams = {
   storeAllowFrom: string[];
   options?: TelegramMessageContextOptions;
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   account: { accountId: string };
   historyLimit: number;
   dmHistoryLimit: number;
@@ -115,7 +115,7 @@ export type BuildTelegramMessageContextParams = {
   resolveTelegramGroupConfig: ResolveTelegramGroupConfig;
   runtime?: TelegramMessageContextRuntimeOverrides;
   sessionRuntime?: TelegramMessageContextSessionRuntimeOverrides;
-  upsertPairingRequest?: typeof import("openclaw/plugin-sdk/conversation-runtime").upsertChannelPairingRequest;
+  upsertPairingRequest?: typeof import("natesclaw/plugin-sdk/conversation-runtime").upsertChannelPairingRequest;
   /** Global (per-account) handler for sendChatAction 401 backoff (#27092). */
   sendChatActionHandler: TelegramSendChatActionHandler;
 };

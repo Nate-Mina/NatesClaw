@@ -1,16 +1,16 @@
 // Whatsapp plugin module implements inbound policy behavior.
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
+import { resolveStableChannelMessageIngress } from "natesclaw/plugin-sdk/channel-ingress-runtime";
 import {
   resolveChannelGroupPolicy,
   resolveChannelGroupRequireMention,
-} from "openclaw/plugin-sdk/channel-policy";
+} from "natesclaw/plugin-sdk/channel-policy";
 import type {
   ChannelGroupPolicy,
   DmPolicy,
   GroupPolicy,
-  OpenClawConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { resolveDefaultGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+  NatesclawConfig,
+} from "natesclaw/plugin-sdk/config-contracts";
+import { resolveDefaultGroupPolicy } from "natesclaw/plugin-sdk/runtime-group-policy";
 import { resolveWhatsAppAccount, type ResolvedWhatsAppAccount } from "./accounts.js";
 import { getSelfIdentity, getSenderIdentity } from "./identity.js";
 import { requireWhatsAppInboundAdmission } from "./inbound/admission.js";
@@ -44,7 +44,7 @@ function normalizeWhatsAppIngressPhone(value: string): string | null {
 function buildResolvedWhatsAppGroupConfig(params: {
   groupPolicy: GroupPolicy;
   groups: ResolvedWhatsAppAccount["groups"];
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     channels: {
       whatsapp: {
@@ -52,11 +52,11 @@ function buildResolvedWhatsAppGroupConfig(params: {
         groups: params.groups,
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 export function resolveWhatsAppInboundPolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId?: string | null;
   selfE164?: string | null;
 }): ResolvedWhatsAppInboundPolicy {
@@ -115,7 +115,7 @@ export function resolveWhatsAppInboundPolicy(params: {
 }
 
 export async function resolveWhatsAppIngressAccess(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   policy: ResolvedWhatsAppInboundPolicy;
   isGroup: boolean;
   conversationId: string;
@@ -159,7 +159,7 @@ export async function resolveWhatsAppIngressAccess(params: {
 }
 
 export async function resolveWhatsAppCommandAuthorized(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   msg: AdmittedWebInboundMessage;
   policy?: ResolvedWhatsAppInboundPolicy;
   authDir?: string;

@@ -2,7 +2,7 @@
 import {
   resolvePositiveTimerTimeoutMs,
   resolveTimerTimeoutMs,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@natesclaw/normalization-core/number-coercion";
 import type { Command } from "commander";
 import { parseStrictPositiveInteger } from "../../infra/parse-finite-number.js";
 import { defaultRuntime } from "../../runtime.js";
@@ -114,7 +114,7 @@ function registerCronToggleCommand(params: {
           printCronJson(res);
           if (!params.enabled && process.stderr.isTTY) {
             process.stderr.write(
-              `Note: 'openclaw cron list' hides disabled jobs by default. Use 'openclaw cron list --all' to see this job, or 'openclaw cron enable <id>' to re-enable it.\n`,
+              `Note: 'natesclaw cron list' hides disabled jobs by default. Use 'natesclaw cron list --all' to see this job, or 'natesclaw cron enable <id>' to re-enable it.\n`,
             );
           }
           await warnIfCronSchedulerDisabled(opts);

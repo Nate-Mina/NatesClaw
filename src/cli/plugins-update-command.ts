@@ -1,4 +1,4 @@
-// `openclaw plugins update` command implementation for tracked npm plugins and hook packs.
+// `natesclaw plugins update` command implementation for tracked npm plugins and hook packs.
 import { isDeepStrictEqual } from "node:util";
 import { theme } from "../../packages/terminal-core/src/theme.js";
 import {
@@ -16,7 +16,7 @@ import { containsConfigIncludeDirective } from "../config/io.read-helpers.js";
 import { createMergePatch } from "../config/merge-patch.js";
 import { applyMergePatch } from "../config/merge-patch.js";
 import { ConfigMutationConflictError } from "../config/mutate.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { readHookInstalls } from "../hooks/installs.js";
 import { updateNpmInstalledHookPacks } from "../hooks/update.js";
@@ -105,12 +105,12 @@ function shouldPreserveEmptyPlugins(params: {
 }
 
 function projectUpdaterResultOntoSourceConfig(params: {
-  runtimeBase: OpenClawConfig;
-  sourceBase: OpenClawConfig;
-  updatedConfig: OpenClawConfig;
-}): OpenClawConfig {
+  runtimeBase: NatesclawConfig;
+  sourceBase: NatesclawConfig;
+  updatedConfig: NatesclawConfig;
+}): NatesclawConfig {
   const updatePatch = createMergePatch(params.runtimeBase, params.updatedConfig);
-  return applyMergePatch(params.sourceBase, updatePatch) as OpenClawConfig;
+  return applyMergePatch(params.sourceBase, updatePatch) as NatesclawConfig;
 }
 
 function assertWriteOptionRecordFresh(params: {
@@ -256,7 +256,7 @@ async function runPluginUpdateCommandUnlocked(params: RunPluginUpdateCommandPara
     }
     defaultRuntime.error(
       params.id
-        ? `No tracked plugin or hook pack found for "${params.id}". Run "openclaw plugins list" or "openclaw hooks list" to inspect installed packages.`
+        ? `No tracked plugin or hook pack found for "${params.id}". Run "natesclaw plugins list" or "natesclaw hooks list" to inspect installed packages.`
         : "Provide a plugin or hook-pack id, or use --all.",
     );
     return defaultRuntime.exit(1);

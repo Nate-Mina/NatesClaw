@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   countActiveDescendantRuns,
   getSessionDisplaySubagentRunByChildSessionKey,
@@ -10,7 +10,7 @@ import {
 } from "../agents/subagents/registry/subagent-run-liveness.js";
 import { stripInboundMetadata } from "../auto-reply/reply/strip-inbound-meta.js";
 import { isTerminalSessionStatus, type SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { pruneMapToMaxSize } from "../infra/map-size.js";
 import { resolveNonNegativeNumber } from "../shared/number-coercion.js";
 import { truncateUtf16Safe } from "../utils.js";
@@ -169,7 +169,7 @@ export function buildCompactionCheckpointPreview(
 function resolveModelCostConfigCached(
   provider: string | undefined,
   model: string | undefined,
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   rowContext?: SessionListRowContext,
 ): ModelCostConfig | undefined {
   if (!rowContext) {
@@ -185,7 +185,7 @@ function resolveModelCostConfigCached(
 }
 
 export function resolveEstimatedSessionCostUsd(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider?: string;
   model?: string;
   entry?: Pick<

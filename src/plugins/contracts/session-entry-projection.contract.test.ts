@@ -3,9 +3,9 @@ import path from "node:path";
 import {
   createPluginRegistryFixture,
   registerTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "natesclaw/plugin-sdk/plugin-test-contracts";
 // Session entry projection contract tests cover plugin session entry projection behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { SessionEntry } from "../../config/sessions.js";
 import {
@@ -13,7 +13,7 @@ import {
   replaceSessionEntry,
 } from "../../config/sessions/session-accessor.js";
 import { withTempConfig } from "../../gateway/test-temp-config.js";
-import { resolvePreferredOpenClawTmpDir } from "../../infra/tmp-openclaw-dir.js";
+import { resolvePreferredNatesclawTmpDir } from "../../infra/tmp-natesclaw-dir.js";
 import { withEnvAsync } from "../../test-utils/env.js";
 import { cleanupReplacedPluginHostRegistry, runPluginHostCleanup } from "../host-hook-cleanup.js";
 import { clearPluginHostRuntimeState } from "../host-hook-runtime.js";
@@ -74,7 +74,7 @@ async function withProjectionSessionStore(
     tempConfig: { session: { store: string } };
   }) => Promise<void>,
 ): Promise<void> {
-  const stateDir = await fs.mkdtemp(path.join(resolvePreferredOpenClawTmpDir(), prefix));
+  const stateDir = await fs.mkdtemp(path.join(resolvePreferredNatesclawTmpDir(), prefix));
   const storePath = path.join(stateDir, "sessions.json");
   const tempConfig = {
     agents: { entries: { main: { default: true } } },
@@ -82,7 +82,7 @@ async function withProjectionSessionStore(
   };
   try {
     return await withEnvAsync(
-      { OPENCLAW_STATE_DIR: stateDir },
+      { NATESCLAW_STATE_DIR: stateDir },
       async () =>
         await withTempConfig({
           cfg: tempConfig,
@@ -130,7 +130,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-",
+      "natesclaw-host-hooks-slot-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -196,7 +196,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-projector-fail-",
+      "natesclaw-host-hooks-slot-projector-fail-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -477,7 +477,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-cleanup-",
+      "natesclaw-host-hooks-slot-cleanup-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -531,7 +531,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-active-cleanup-",
+      "natesclaw-host-hooks-slot-active-cleanup-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -596,7 +596,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(previousFixture.registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-restart-cleanup-",
+      "natesclaw-host-hooks-slot-restart-cleanup-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -676,7 +676,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(previousFixture.registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-restart-mixed-",
+      "natesclaw-host-hooks-slot-restart-mixed-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -763,7 +763,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(previousFixture.registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-restart-preserve-",
+      "natesclaw-host-hooks-slot-restart-preserve-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -811,7 +811,7 @@ describe("plugin session extension SessionEntry projection", () => {
   it("clears persisted promoted slots when registry metadata is unavailable", async () => {
     setActivePluginRegistry(createEmptyPluginRegistry());
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-metadata-cleanup-",
+      "natesclaw-host-hooks-slot-metadata-cleanup-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -886,7 +886,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-policy-read-",
+      "natesclaw-host-hooks-policy-read-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {
@@ -965,7 +965,7 @@ describe("plugin session extension SessionEntry projection", () => {
     setActivePluginRegistry(registry.registry);
 
     await withProjectionSessionStore(
-      "openclaw-host-hooks-slot-noop-",
+      "natesclaw-host-hooks-slot-noop-",
       async ({ storePath, tempConfig }) => {
         await updateSessionStore(storePath, (store) => {
           store["agent:main:main"] = {

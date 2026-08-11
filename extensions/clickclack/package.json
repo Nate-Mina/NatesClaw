@@ -1,7 +1,7 @@
 {
-  "name": "@openclaw/clickclack",
+  "name": "@natesclaw/clickclack",
   "version": "2026.8.1",
-  "description": "OpenClaw ClickClack channel plugin",
+  "description": "Natesclaw ClickClack channel plugin",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
@@ -13,18 +13,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -133,8 +133,8 @@
       }
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/clickclack",
-      "npmSpec": "@openclaw/clickclack",
+      "clawhubSpec": "clawhub:@natesclaw/clickclack",
+      "npmSpec": "@natesclaw/clickclack",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9",
       "allowInvalidConfigRecovery": true
@@ -143,7 +143,7 @@
       "pluginApi": ">=2026.8.1"
     },
     "build": {
-      "openclawVersion": "2026.8.1",
+      "natesclawVersion": "2026.8.1",
       "bundledDist": false
     },
     "release": {
@@ -153,6 +153,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/natesclaw/natesclaw"
   }
 }

@@ -5,7 +5,7 @@ import { buildOpenAISpeechProvider } from "./speech-provider.js";
 
 const OPENAI_TTS_SNAPSHOT = "gpt-4o-mini-tts-2025-12-15";
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("natesclaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: async ({
     url,
     init,

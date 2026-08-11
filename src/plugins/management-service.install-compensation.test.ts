@@ -41,7 +41,7 @@ function installPersistSnapshot() {
     config: {},
     baseHash: "base-hash",
     writeOptions: {
-      expectedConfigPath: "/tmp/openclaw.json",
+      expectedConfigPath: "/tmp/natesclaw.json",
       includeFileHashesForWrite: { "/tmp/plugins.json": "include-hash" },
       includeFileTargetsForWrite: { "/tmp/plugins.json": "/tmp/plugins.json" },
     },
@@ -72,9 +72,9 @@ describe("managed plugin install compensation", () => {
   });
 
   it("defaults direct managed source installs to persistence-failure cleanup", async () => {
-    const env = { HOME: "/tmp/openclaw-managed-source-conflict-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-source-conflict-home" };
     const conflict = new Error("config changed during plugin install");
-    const targetDir = "/tmp/openclaw-managed-source-conflict-home/extensions/demo";
+    const targetDir = "/tmp/natesclaw-managed-source-conflict-home/extensions/demo";
     mockClawHubInstall("demo", "community/demo", targetDir);
     mocks.persistInstall.mockRejectedValue(conflict);
     mocks.planUninstall.mockReturnValue({
@@ -98,7 +98,7 @@ describe("managed plugin install compensation", () => {
   });
 
   it("never deletes an operator-owned source when link persistence fails", async () => {
-    const env = { HOME: "/tmp/openclaw-managed-link-conflict-home" };
+    const env = { HOME: "/tmp/natesclaw-managed-link-conflict-home" };
     const sourcePath = "/tmp/operator-owned-plugin-source";
     const conflict = new Error("config changed during plugin link");
     mocks.pathInstall.mockResolvedValue({

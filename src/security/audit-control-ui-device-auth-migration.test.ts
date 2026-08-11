@@ -7,15 +7,15 @@ import {
   completeControlUiDeviceAuthMigration,
   importPendingControlUiDeviceAuthMigration,
 } from "../state/control-ui-device-auth-migration.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { runSecurityAuditCore } from "./audit.js";
 
 const stateDirs: string[] = [];
 
 function createStateEnv(): { stateDir: string; env: NodeJS.ProcessEnv } {
-  const stateDir = mkdtempSync(join(tmpdir(), "openclaw-audit-device-auth-migration-"));
+  const stateDir = mkdtempSync(join(tmpdir(), "natesclaw-audit-device-auth-migration-"));
   stateDirs.push(stateDir);
-  return { stateDir, env: { ...process.env, OPENCLAW_STATE_DIR: stateDir } };
+  return { stateDir, env: { ...process.env, NATESCLAW_STATE_DIR: stateDir } };
 }
 
 async function collectMigrationFinding(params: { stateDir: string; env: NodeJS.ProcessEnv }) {
@@ -33,7 +33,7 @@ async function collectMigrationFinding(params: { stateDir: string; env: NodeJS.P
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawStateDatabaseForTest();
   for (const stateDir of stateDirs.splice(0)) {
     rmSync(stateDir, { recursive: true, force: true });
   }

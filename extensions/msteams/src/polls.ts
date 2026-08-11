@@ -1,12 +1,12 @@
 // Msteams plugin module implements polls behavior.
 import crypto from "node:crypto";
-import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
+import { parseStrictNonNegativeInteger } from "natesclaw/plugin-sdk/number-runtime";
 import {
   isRecord,
   normalizeOptionalString,
   normalizeStringEntries,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { getMSTeamsRuntime } from "./runtime.js";
 import {
   resolveMSTeamsSqliteStateEnv,
@@ -124,15 +124,15 @@ export function extractMSTeamsPollVote(
     return null;
   }
   const pollId =
-    readNestedString(value, ["openclawPollId"]) ??
+    readNestedString(value, ["natesclawPollId"]) ??
     readNestedString(value, ["pollId"]) ??
-    readNestedString(value, ["openclaw", "pollId"]) ??
-    readNestedString(value, ["openclaw", "poll", "id"]) ??
-    readNestedString(value, ["data", "openclawPollId"]) ??
+    readNestedString(value, ["natesclaw", "pollId"]) ??
+    readNestedString(value, ["natesclaw", "poll", "id"]) ??
+    readNestedString(value, ["data", "natesclawPollId"]) ??
     readNestedString(value, ["data", "pollId"]) ??
-    readNestedString(value, ["data", "openclaw", "pollId"]) ??
+    readNestedString(value, ["data", "natesclaw", "pollId"]) ??
     // Action.Execute (Universal Action Model) payload shape: value.action.data
-    readNestedString(value, ["action", "data", "openclawPollId"]) ??
+    readNestedString(value, ["action", "data", "natesclawPollId"]) ??
     readNestedString(value, ["action", "data", "pollId"]);
   if (!pollId) {
     return null;
@@ -214,9 +214,9 @@ export function buildMSTeamsPollCard(params: {
       {
         type: "Action.Execute",
         title: "Vote",
-        verb: "openclaw.poll.vote",
+        verb: "natesclaw.poll.vote",
         data: {
-          openclawPollId: pollId,
+          natesclawPollId: pollId,
           pollId,
         },
       },
@@ -473,4 +473,4 @@ export function createMSTeamsPollStoreState(
 
   return { createPoll, getPoll, recordVote };
 }
-import { parseDateStringTimestampMs } from "openclaw/plugin-sdk/number-runtime";
+import { parseDateStringTimestampMs } from "natesclaw/plugin-sdk/number-runtime";

@@ -1,8 +1,8 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/core";
 // Line plugin module implements card command behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import type { ReplyPayload } from "natesclaw/plugin-sdk/reply-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { messageAction, postbackAction, uriAction } from "./actions.js";
 import {
   createActionCard,
@@ -168,7 +168,7 @@ function parseCardArgs(argsStrInput: string): {
   return result;
 }
 
-export function registerLineCardCommand(api: OpenClawPluginApi): void {
+export function registerLineCardCommand(api: NatesclawPluginApi): void {
   api.registerCommand({
     name: "card",
     description: "Send a rich card message (LINE).",

@@ -1,5 +1,5 @@
-import type { RouteLocation, RouteMatch } from "@openclaw/uirouter";
-import { definePage } from "@openclaw/uirouter";
+import type { RouteLocation, RouteMatch } from "@natesclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html, nothing } from "lit";
 import { INTERNAL_SESSION_PATH_PARAM, pathForRoute, routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -82,7 +82,7 @@ function sessionPage(face: BoardFace) {
           }
           return routeData.kind === "ambiguous"
             ? renderAmbiguous(routeData)
-            : html`<openclaw-chat-page .data=${routeData}></openclaw-chat-page>`;
+            : html`<natesclaw-chat-page .data=${routeData}></natesclaw-chat-page>`;
         },
       })),
   });

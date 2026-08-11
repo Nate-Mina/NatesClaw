@@ -2,7 +2,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/string-coerce";
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
 import type { AgentToolResult } from "../../agents/runtime/index.js";
 import { readStringArrayParam, readToolStringParam } from "../../agents/tools/common.js";

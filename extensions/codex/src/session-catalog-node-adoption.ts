@@ -1,15 +1,15 @@
 import { createHash } from "node:crypto";
-import { listAgentIds, resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { parseAgentSessionKey } from "openclaw/plugin-sdk/routing";
+import { listAgentIds, resolveDefaultAgentId } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
+import { parseAgentSessionKey } from "natesclaw/plugin-sdk/routing";
 import {
   listSessionCatalogEntries,
   type SessionCatalogEntrySnapshot,
-} from "openclaw/plugin-sdk/session-catalog";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/session-catalog";
+import { resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
+import { isRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import type { CodexThread } from "./app-server/protocol.js";
 import { importCodexThreadHistoryToTranscript } from "./app-server/transcript-mirror.js";
 import {
@@ -81,7 +81,7 @@ export function adoptionSessionKeyRest(sessionKey: string): string {
   return parseAgentSessionKey(trimmed)?.rest ?? trimmed;
 }
 
-export function listSupervisionAgentIds(config: OpenClawConfig): string[] {
+export function listSupervisionAgentIds(config: NatesclawConfig): string[] {
   const defaultAgentId = resolveDefaultAgentId(config);
   return [defaultAgentId, ...listAgentIds(config).filter((agentId) => agentId !== defaultAgentId)];
 }
@@ -138,7 +138,7 @@ function readNodeSessionMarker(entry: CatalogSessionEntry): CodexNodeSessionMark
 }
 
 export function listNodeAdoptedSessionEntries(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   runtime: PluginRuntime;
   includeInitializing?: boolean;
   sessionEntries?: SessionCatalogEntrySnapshot;
@@ -167,7 +167,7 @@ export function listNodeAdoptedSessionEntries(params: {
     const sourceKey = adoptedSourceKey(marker.sourceHostId, marker.sourceThreadId);
     if (adopted.has(sourceKey)) {
       throw new Error(
-        `multiple OpenClaw sessions adopt Codex thread ${marker.sourceThreadId} on ${marker.sourceHostId}`,
+        `multiple Natesclaw sessions adopt Codex thread ${marker.sourceThreadId} on ${marker.sourceHostId}`,
       );
     }
     adopted.set(sourceKey, {
@@ -181,7 +181,7 @@ export function listNodeAdoptedSessionEntries(params: {
 }
 
 export function findNodeAdoptedSessionEntry(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   runtime: PluginRuntime;
   hostId: string;
   threadId: string;
@@ -207,12 +207,12 @@ export function nodeSessionMarker(params: {
 }
 
 export async function finalizeNodeAdoptedSession(params: {
-  api: OpenClawPluginApi;
+  api: NatesclawPluginApi;
   adopted: AdoptedSessionEntry;
   marker: CodexNodeSessionMarker;
 }): Promise<void> {
   const changedError = () =>
-    new CatalogParamsError("Codex OpenClaw session changed before it could be bound. Retry.");
+    new CatalogParamsError("Codex Natesclaw session changed before it could be bound. Retry.");
   let finalized: CatalogSessionEntry | null;
   try {
     finalized = await params.api.runtime.agent.session.patchSessionEntry({
@@ -269,8 +269,8 @@ export async function finalizeNodeAdoptedSession(params: {
 }
 
 export async function createOrReuseNodeAdoptedSession(params: {
-  api: OpenClawPluginApi;
-  config: OpenClawConfig;
+  api: NatesclawPluginApi;
+  config: NatesclawConfig;
   hostId: string;
   nodeId: string;
   record: CodexSessionCatalogSession;

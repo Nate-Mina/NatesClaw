@@ -2,12 +2,12 @@ import { consume } from "@lit/context";
 import type { PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { applicationContext, type ApplicationContext } from "../../app/context.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { loadDashboardsRoute } from "./route.ts";
 import { renderDashboards, type DashboardsRouteData } from "./view.ts";
 
-class DashboardsPage extends OpenClawLightDomElement {
+class DashboardsPage extends NatesclawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context?: ApplicationContext;
 
@@ -114,6 +114,6 @@ class DashboardsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-dashboards-page")) {
-  customElements.define("openclaw-dashboards-page", DashboardsPage);
+if (!customElements.get("natesclaw-dashboards-page")) {
+  customElements.define("natesclaw-dashboards-page", DashboardsPage);
 }

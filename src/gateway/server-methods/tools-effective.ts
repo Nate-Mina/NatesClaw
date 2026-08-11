@@ -1,6 +1,6 @@
 // Effective tools methods resolve the tools available to a session by combining
 // bundled tools, MCP tools, plugin policy, model context, and cache state.
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -14,7 +14,7 @@ import type {
 } from "../../agents/tools-effective-inventory.types.js";
 import { buildRuntimeCompatibleMcpToolInventory } from "../../agents/tools-effective-mcp-inventory.js";
 import type { SessionToolOverrides } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { toErrorObject } from "../../infra/errors.js";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
 import { logDebug, logWarn } from "../../logger.js";
@@ -53,7 +53,7 @@ const MCP_CONFIG_SUMMARY_CACHE_LIMIT = 128;
 let nowForToolsEffectiveCache = () => Date.now();
 
 type TrustedToolsEffectiveContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   sessionKey: string;
   sessionId: string;
@@ -235,7 +235,7 @@ async function resolveCachedBaseToolsEffective(params: {
 
 function resolveRequestedAgentIdOrRespondError(params: {
   rawAgentId: unknown;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   respond: RespondFn;
 }) {
   const knownAgents = listAgentIds(params.cfg);
@@ -444,7 +444,7 @@ async function resolveReadOnlyToolsEffectiveInventory(
       );
     }
     // A native owner has a distinct MCP runtime. Never substitute an in-process
-    // catalog under the same OpenClaw session identity when its catalog is unavailable.
+    // catalog under the same Natesclaw session identity when its catalog is unavailable.
     return maybeAppendMcpNotice(base, mcpConfig.serverNames, "not-connected");
   }
   // UI panel loads call `tools.effective`, so this path must not create MCP

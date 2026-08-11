@@ -1,10 +1,10 @@
 {
-  "databasePath": "/openclaw-device-identity-contract/state/openclaw.sqlite",
-  "stateDirectory": "/openclaw-device-identity-contract",
-  "temporaryDirectory": "/openclaw-device-identity-contract-temp",
+  "databasePath": "/natesclaw-device-identity-contract/state/natesclaw.sqlite",
+  "stateDirectory": "/natesclaw-device-identity-contract",
+  "temporaryDirectory": "/natesclaw-device-identity-contract-temp",
   "uid": 501,
   "orderedExpectedPaths": [
-    "/openclaw-device-identity-contract-temp/openclaw-501/device-identity.e5c82e32.lock.sqlite",
-    "/openclaw-device-identity-contract/tmp/openclaw-501/device-identity.e5c82e32.lock.sqlite"
+    "/natesclaw-device-identity-contract-temp/natesclaw-501/device-identity.e5c82e32.lock.sqlite",
+    "/natesclaw-device-identity-contract/tmp/natesclaw-501/device-identity.e5c82e32.lock.sqlite"
   ]
 }

@@ -1,10 +1,10 @@
 /**
- * Projects OpenClaw context-engine assemblies into Codex prompt text while
+ * Projects Natesclaw context-engine assemblies into Codex prompt text while
  * preserving safety boundaries and redacting tool payloads.
  */
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { redactSensitiveFieldValue, redactToolPayloadText } from "openclaw/plugin-sdk/logging-core";
-import { sliceUtf16Safe, truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { redactSensitiveFieldValue, redactToolPayloadText } from "natesclaw/plugin-sdk/logging-core";
+import { sliceUtf16Safe, truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 
 type CodexContextProjection = {
   developerInstructionAddition?: string;
@@ -19,7 +19,7 @@ export type CodexProjectedContextRange = {
   end: number;
 };
 
-const CONTEXT_HEADER = "OpenClaw assembled context for this turn:";
+const CONTEXT_HEADER = "Natesclaw assembled context for this turn:";
 const CONTEXT_OPEN = "<conversation_context>";
 const CONTEXT_CLOSE = "</conversation_context>";
 const REQUEST_HEADER = "Current user request:";
@@ -38,7 +38,7 @@ const DEFAULT_CODEX_PROJECTION_RESERVE_TOKENS = 20_000;
 const MIN_PROMPT_BUDGET_RATIO = 0.5;
 const MIN_PROMPT_BUDGET_TOKENS = 8_000;
 
-/** Projects assembled OpenClaw context-engine messages into Codex prompt inputs. */
+/** Projects assembled Natesclaw context-engine messages into Codex prompt inputs. */
 export function projectContextEngineAssemblyForCodex(params: {
   assembledMessages: AgentMessage[];
   originalHistoryMessages: AgentMessage[];

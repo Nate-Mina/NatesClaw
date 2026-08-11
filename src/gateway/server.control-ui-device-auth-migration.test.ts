@@ -5,7 +5,7 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import type { WebSocket } from "ws";
 import { ConnectErrorDetailCodes } from "../../packages/gateway-protocol/src/connect-error-details.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   loadOrCreateDeviceIdentity,
   publicKeyRawBase64UrlFromPem,
@@ -37,13 +37,13 @@ const REMOTE_MIGRATION_GATEWAY = {
     allowedOrigins: [BROWSER_ORIGIN],
     dangerouslyDisableDeviceAuth: true,
   },
-} satisfies NonNullable<OpenClawConfig["gateway"]>;
+} satisfies NonNullable<NatesclawConfig["gateway"]>;
 const LOCAL_MIGRATION_GATEWAY = {
   controlUi: {
     allowedOrigins: [BROWSER_ORIGIN],
     dangerouslyDisableDeviceAuth: true,
   },
-} satisfies NonNullable<OpenClawConfig["gateway"]>;
+} satisfies NonNullable<NatesclawConfig["gateway"]>;
 const TRUSTED_PROXY_MIGRATION_GATEWAY = {
   auth: {
     mode: "trusted-proxy",
@@ -54,10 +54,10 @@ const TRUSTED_PROXY_MIGRATION_GATEWAY = {
     },
   },
   ...REMOTE_MIGRATION_GATEWAY,
-} satisfies NonNullable<OpenClawConfig["gateway"]>;
+} satisfies NonNullable<NatesclawConfig["gateway"]>;
 const STATE_ONLY_MIGRATION_GATEWAY = {
   controlUi: { dangerouslyDisableDeviceAuth: true },
-} satisfies NonNullable<OpenClawConfig["gateway"]>;
+} satisfies NonNullable<NatesclawConfig["gateway"]>;
 const TOKEN_AUTH = { mode: "token", token: "secret" };
 
 type MigrationHarness = Awaited<ReturnType<typeof createGatewaySuiteHarness>>;
@@ -66,7 +66,7 @@ type TrackedMigrationHarness = Omit<MigrationHarness, "openWs"> & {
 };
 
 function identityPath(label: string): string {
-  return path.join(os.tmpdir(), `openclaw-${label}-${randomUUID()}.sqlite`);
+  return path.join(os.tmpdir(), `natesclaw-${label}-${randomUUID()}.sqlite`);
 }
 
 function createIdentity(label: string) {
@@ -105,7 +105,7 @@ async function readMigrationState() {
 async function withMigrationHarness<T, Prepared = void>(
   run: (harness: TrackedMigrationHarness, prepared: Prepared) => Promise<T>,
   options: {
-    gateway?: NonNullable<OpenClawConfig["gateway"]>;
+    gateway?: NonNullable<NatesclawConfig["gateway"]>;
     auth?: Record<string, unknown> | null;
     prepare?: () => Promise<Prepared>;
   } = {},
@@ -269,7 +269,7 @@ describe("Control UI device-auth upgrade migration", () => {
           ...REMOTE_HEADERS,
           "x-forwarded-proto": "https",
           "x-forwarded-user": "reader@example.com",
-          "x-openclaw-scopes": "operator.read",
+          "x-natesclaw-scopes": "operator.read",
         });
         const connected = await connectMigration(ws, { device: null, trustedProxy: true });
         expect(connected.ok).toBe(true);

@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/migrate-claude",
+  "name": "@natesclaw/migrate-claude",
   "version": "2026.8.1",
   "private": true,
-  "description": "Claude to OpenClaw migration provider",
+  "description": "Claude to Natesclaw migration provider",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

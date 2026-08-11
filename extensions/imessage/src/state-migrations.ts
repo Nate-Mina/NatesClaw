@@ -2,11 +2,11 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import type { ChannelLegacyStateMigrationPlan } from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { fileExists } from "openclaw/plugin-sdk/security-runtime";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { ChannelLegacyStateMigrationPlan } from "natesclaw/plugin-sdk/channel-contract";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { fileExists } from "natesclaw/plugin-sdk/security-runtime";
+import { resolveStateDir } from "natesclaw/plugin-sdk/state-paths";
+import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   listIMessageAccountIds,
   resolveDefaultIMessageAccountId,
@@ -358,7 +358,7 @@ function detectSentEchoMigration(params: {
 }
 
 function detectCatchupCursorMigrations(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   stateDir?: string;
 }): ChannelLegacyStateMigrationPlan[] {
@@ -419,7 +419,7 @@ function detectCatchupCursorMigrations(params: {
 }
 
 export async function detectIMessageLegacyStateMigrations(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   stateDir?: string;
 }): Promise<ChannelLegacyStateMigrationPlan[]> {

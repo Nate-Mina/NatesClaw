@@ -9,11 +9,11 @@ function assert(condition, message) {
 }
 
 function stateDir() {
-  return process.env.OPENCLAW_STATE_DIR || path.join(process.env.HOME ?? "", ".openclaw");
+  return process.env.NATESCLAW_STATE_DIR || path.join(process.env.HOME ?? "", ".natesclaw");
 }
 
 function configPath() {
-  return process.env.OPENCLAW_CONFIG_PATH || path.join(stateDir(), "openclaw.json");
+  return process.env.NATESCLAW_CONFIG_PATH || path.join(stateDir(), "natesclaw.json");
 }
 
 function readJson(file) {
@@ -67,7 +67,7 @@ function assertMarketplaceState() {
   assert(expectedMarketplacePlugin, "missing expected marketplace plugin");
   assert(installPathFile, "missing install path file");
 
-  const databasePath = path.join(stateDir(), "state", "openclaw.sqlite");
+  const databasePath = path.join(stateDir(), "state", "natesclaw.sqlite");
   assert(fs.existsSync(databasePath), `canonical plugin index database missing: ${databasePath}`);
   const index = readPluginInstallIndex({ stateDir: stateDir(), configPath: configPath() });
   const record = index.installRecords?.[pluginId];

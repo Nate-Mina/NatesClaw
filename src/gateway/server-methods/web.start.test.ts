@@ -2,7 +2,7 @@
  * Tests web.start gateway method behavior and backend launch responses.
  */
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelRuntimeSnapshot } from "../server-channel-runtime.types.js";
 import type { GatewayRequestHandlerOptions } from "./types.js";
@@ -90,11 +90,11 @@ describe("webHandlers web.login.start", () => {
         pluginId: "whatsapp",
         channelId: "whatsapp",
         label: "WhatsApp",
-        installSpec: "clawhub:@openclaw/whatsapp",
-        installCommand: "openclaw plugins install clawhub:@openclaw/whatsapp",
-        doctorFixCommand: "openclaw doctor --fix",
+        installSpec: "clawhub:@natesclaw/whatsapp",
+        installCommand: "natesclaw plugins install clawhub:@natesclaw/whatsapp",
+        doctorFixCommand: "natesclaw doctor --fix",
         repairHint:
-          "Install the official external plugin with: openclaw plugins install clawhub:@openclaw/whatsapp, or run: openclaw doctor --fix.",
+          "Install the official external plugin with: natesclaw plugins install clawhub:@natesclaw/whatsapp, or run: natesclaw doctor --fix.",
       },
     ]);
     const respond = vi.fn();
@@ -117,7 +117,7 @@ describe("webHandlers web.login.start", () => {
       expect.objectContaining({
         code: "INVALID_REQUEST",
         message:
-          "web login provider is not available. Install the official external plugin with: openclaw plugins install clawhub:@openclaw/whatsapp, or run: openclaw doctor --fix.",
+          "web login provider is not available. Install the official external plugin with: natesclaw plugins install clawhub:@natesclaw/whatsapp, or run: natesclaw doctor --fix.",
       }),
     );
     expect(mocks.resolveMissingOfficialExternalChannelPluginRepairHints).toHaveBeenCalledWith({
@@ -137,11 +137,11 @@ describe("webHandlers web.login.start", () => {
                   pluginId: "whatsapp",
                   channelId: "whatsapp",
                   label: "WhatsApp",
-                  installSpec: "clawhub:@openclaw/whatsapp",
-                  installCommand: "openclaw plugins install clawhub:@openclaw/whatsapp",
-                  doctorFixCommand: "openclaw doctor --fix",
+                  installSpec: "clawhub:@natesclaw/whatsapp",
+                  installCommand: "natesclaw plugins install clawhub:@natesclaw/whatsapp",
+                  doctorFixCommand: "natesclaw doctor --fix",
                   repairHint:
-                    "Install the official external plugin with: openclaw plugins install clawhub:@openclaw/whatsapp, or run: openclaw doctor --fix.",
+                    "Install the official external plugin with: natesclaw plugins install clawhub:@natesclaw/whatsapp, or run: natesclaw doctor --fix.",
                 },
               ]
             : channelId === "signal"
@@ -150,11 +150,11 @@ describe("webHandlers web.login.start", () => {
                     pluginId: "signal",
                     channelId: "signal",
                     label: "Signal",
-                    installSpec: "clawhub:@openclaw/signal",
-                    installCommand: "openclaw plugins install clawhub:@openclaw/signal",
-                    doctorFixCommand: "openclaw doctor --fix",
+                    installSpec: "clawhub:@natesclaw/signal",
+                    installCommand: "natesclaw plugins install clawhub:@natesclaw/signal",
+                    doctorFixCommand: "natesclaw doctor --fix",
                     repairHint:
-                      "Install the official external plugin with: openclaw plugins install clawhub:@openclaw/signal, or run: openclaw doctor --fix.",
+                      "Install the official external plugin with: natesclaw plugins install clawhub:@natesclaw/signal, or run: natesclaw doctor --fix.",
                   },
                 ]
               : [],
@@ -191,7 +191,7 @@ describe("webHandlers web.login.start", () => {
       expect.objectContaining({
         code: "INVALID_REQUEST",
         message:
-          "web login provider is not available. Configured official external channel plugins are missing for WhatsApp, Signal. Install them with: openclaw plugins install clawhub:@openclaw/whatsapp; openclaw plugins install clawhub:@openclaw/signal, or run: openclaw doctor --fix.",
+          "web login provider is not available. Configured official external channel plugins are missing for WhatsApp, Signal. Install them with: natesclaw plugins install clawhub:@natesclaw/whatsapp; natesclaw plugins install clawhub:@natesclaw/signal, or run: natesclaw doctor --fix.",
       }),
     );
   });

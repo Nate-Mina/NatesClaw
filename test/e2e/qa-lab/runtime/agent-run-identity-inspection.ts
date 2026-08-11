@@ -144,11 +144,11 @@ function assertJsonProjection(result: AuditRunInspectResult, runId: string) {
 }
 
 function findLocalRunId(gateway: Awaited<ReturnType<typeof startQaGatewayChild>>) {
-  const stateDir = gateway.runtimeEnv.OPENCLAW_STATE_DIR;
+  const stateDir = gateway.runtimeEnv.NATESCLAW_STATE_DIR;
   if (!stateDir) {
     throw new Error("QA Gateway did not expose its isolated state directory");
   }
-  const database = new DatabaseSync(path.join(stateDir, "state", "openclaw.sqlite"), {
+  const database = new DatabaseSync(path.join(stateDir, "state", "natesclaw.sqlite"), {
     readOnly: true,
   });
   try {
@@ -175,11 +175,11 @@ function findLocalRunId(gateway: Awaited<ReturnType<typeof startQaGatewayChild>>
 }
 
 function inspectExecutionIdentityStorage(gateway: Awaited<ReturnType<typeof startQaGatewayChild>>) {
-  const stateDir = gateway.runtimeEnv.OPENCLAW_STATE_DIR;
+  const stateDir = gateway.runtimeEnv.NATESCLAW_STATE_DIR;
   if (!stateDir) {
     throw new Error("QA Gateway did not expose its isolated state directory");
   }
-  const database = new DatabaseSync(path.join(stateDir, "state", "openclaw.sqlite"), {
+  const database = new DatabaseSync(path.join(stateDir, "state", "natesclaw.sqlite"), {
     readOnly: true,
   });
   try {
@@ -223,11 +223,11 @@ function findRunExecutions(
   gateway: Awaited<ReturnType<typeof startQaGatewayChild>>,
   runId: string,
 ) {
-  const stateDir = gateway.runtimeEnv.OPENCLAW_STATE_DIR;
+  const stateDir = gateway.runtimeEnv.NATESCLAW_STATE_DIR;
   if (!stateDir) {
     throw new Error("QA Gateway did not expose its isolated state directory");
   }
-  const database = new DatabaseSync(path.join(stateDir, "state", "openclaw.sqlite"), {
+  const database = new DatabaseSync(path.join(stateDir, "state", "natesclaw.sqlite"), {
     readOnly: true,
   });
   try {

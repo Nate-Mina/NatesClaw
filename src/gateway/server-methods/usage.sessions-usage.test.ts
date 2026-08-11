@@ -3,9 +3,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { withEnvAsync } from "../../test-utils/env.js";
 
 vi.mock("../../config/config.js", () => {
@@ -119,7 +119,7 @@ const TEST_RUNTIME_CONFIG = {
 
 async function runSessionsUsage(
   params: Record<string, unknown>,
-  config: OpenClawConfig = TEST_RUNTIME_CONFIG,
+  config: NatesclawConfig = TEST_RUNTIME_CONFIG,
 ) {
   const respond = vi.fn();
   await expectDefined(
@@ -205,7 +205,7 @@ function mockStoredSession(key: string, sessionId: string) {
 async function withUsageState(
   run: (writeSessionFile: (fileName: string) => string) => Promise<void>,
 ) {
-  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-usage-test-"));
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-usage-test-"));
   const agentSessionsDir = path.join(stateDir, "agents", "opus", "sessions");
   const writeSessionFile = (fileName: string) => {
     const sessionFile = path.join(agentSessionsDir, fileName);
@@ -214,7 +214,7 @@ async function withUsageState(
   };
 
   try {
-    await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+    await withEnvAsync({ NATESCLAW_STATE_DIR: stateDir }, async () => {
       fs.mkdirSync(agentSessionsDir, { recursive: true });
       await run(writeSessionFile);
     });
@@ -563,7 +563,7 @@ describe("sessions.usage", () => {
   });
 
   it("keeps global session entries in requested-agent usage lookups", async () => {
-    const config: OpenClawConfig = {
+    const config: NatesclawConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "opus" }],
       },

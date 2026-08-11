@@ -1,5 +1,5 @@
 // Core doctor compatibility migration pipeline for current config objects.
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { HeartbeatSchema } from "../../../config/zod-schema.agent-runtime.js";
 import { runPluginSetupConfigMigrations } from "../../../plugins/setup-registry.js";
 import { migrateLegacySecretRefEnvMarkers } from "../../../secrets/legacy-secretref-env-marker.js";
@@ -11,7 +11,7 @@ import { normalizeLegacyOpenAICodexModelsAddMetadata } from "./legacy-config-cor
 import { stripRetiredTuningKnobs } from "./legacy-config-migrations.runtime.retired-media.js";
 import { migrateReservedMcpServerNames } from "./reserved-mcp-server-name-migrate.js";
 
-function repairInvalidHeartbeatActiveHours(cfg: OpenClawConfig, changes: string[]): OpenClawConfig {
+function repairInvalidHeartbeatActiveHours(cfg: NatesclawConfig, changes: string[]): NatesclawConfig {
   const repairHeartbeat = (
     heartbeat: unknown,
     path: string,
@@ -75,10 +75,10 @@ function repairInvalidHeartbeatActiveHours(cfg: OpenClawConfig, changes: string[
         : {}),
       ...(listChanged ? { list: nextAgents as typeof agents } : {}),
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
-function repairNullAgentWorkspaces(cfg: OpenClawConfig, changes: string[]): OpenClawConfig {
+function repairNullAgentWorkspaces(cfg: NatesclawConfig, changes: string[]): NatesclawConfig {
   const agents = cfg.agents?.list;
   if (!Array.isArray(agents)) {
     return cfg;
@@ -118,13 +118,13 @@ function repairNullAgentWorkspaces(cfg: OpenClawConfig, changes: string[]): Open
 
 /** Normalize current config through core, plugin setup, channel, and secret-ref migrations. */
 export function normalizeCompatibilityConfigValues(
-  cfg: OpenClawConfig,
+  cfg: NatesclawConfig,
   options: {
     blockedModelIdentities?: ReadonlySet<LegacyCodexModelIdentity>;
     sourceRaw?: unknown;
   } = {},
 ): {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   changes: string[];
 } {
   const changes: string[] = [];

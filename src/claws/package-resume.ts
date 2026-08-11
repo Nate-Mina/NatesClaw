@@ -1,9 +1,9 @@
-import { stableStringify } from "@openclaw/normalization-core";
+import { stableStringify } from "@natesclaw/normalization-core";
 import { normalizeClawHubSha256Integrity } from "../infra/clawhub-artifacts.js";
 import {
-  openExistingOpenClawStateDatabaseReadOnly,
-  type OpenClawStateDatabaseOptions,
-} from "../state/openclaw-state-db.js";
+  openExistingNatesclawStateDatabaseReadOnly,
+  type NatesclawStateDatabaseOptions,
+} from "../state/natesclaw-state-db.js";
 import {
   readClawInstallRecordFromDatabase,
   readClawPackageRefs,
@@ -84,7 +84,7 @@ export function findResumableIntroducedPluginRequirement(params: {
 
 export async function readClawResumeStateReadOnly(
   agentId: string,
-  options: OpenClawStateDatabaseOptions = {},
+  options: NatesclawStateDatabaseOptions = {},
 ): Promise<
   | {
       record: PersistedClawInstall;
@@ -92,7 +92,7 @@ export async function readClawResumeStateReadOnly(
     }
   | undefined
 > {
-  const database = await openExistingOpenClawStateDatabaseReadOnly(options);
+  const database = await openExistingNatesclawStateDatabaseReadOnly(options);
   if (!database) {
     return undefined;
   }

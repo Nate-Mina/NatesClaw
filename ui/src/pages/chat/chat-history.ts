@@ -2,7 +2,7 @@
 import {
   readSessionMessageIdentity,
   readSessionMessageSequence,
-} from "@openclaw/gateway-client/browser";
+} from "@natesclaw/gateway-client/browser";
 import type { CommandsListResult } from "../../../../packages/gateway-protocol/src/index.js";
 import type { GatewayBrowserClient, GatewayHelloOk } from "../../api/gateway.ts";
 import type {
@@ -88,7 +88,7 @@ import { handleAgentEvent, normalizePlanSnapshot, type PlanStatus } from "./tool
 
 const SILENT_REPLY_PATTERN = /^\s*NO_REPLY\s*$/;
 const SYNTHETIC_TRANSCRIPT_REPAIR_RESULT =
-  "[openclaw] missing tool result in session history; inserted synthetic error result for transcript repair.";
+  "[natesclaw] missing tool result in session history; inserted synthetic error result for transcript repair.";
 export const CHAT_HISTORY_REQUEST_LIMIT = 100;
 const STARTUP_CHAT_HISTORY_RETRY_TIMEOUT_MS = 60_000;
 const SESSION_MESSAGE_RELEASE_RETRY_MS = 250;

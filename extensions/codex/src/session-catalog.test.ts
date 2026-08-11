@@ -4,16 +4,16 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { resolveDefaultAgentDir } from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { resolveDefaultAgentDir } from "natesclaw/plugin-sdk/agent-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   validateJsonSchemaValue,
   type JsonSchemaObject,
-} from "openclaw/plugin-sdk/json-schema-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import type { SessionCatalogProvider } from "openclaw/plugin-sdk/session-catalog";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+} from "natesclaw/plugin-sdk/json-schema-runtime";
+import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
+import type { SessionCatalogProvider } from "natesclaw/plugin-sdk/session-catalog";
+import { resolveStorePath } from "natesclaw/plugin-sdk/session-store-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveCodexAppServerHomeDir } from "./app-server/auth-start-options.js";
 import { resolveCodexAppServerUserHomeDir } from "./app-server/config.js";
@@ -111,8 +111,8 @@ vi.mock("./app-server/shared-client.js", () => ({
 vi.mock("./app-server/transcript-mirror.js", () => ({
   importCodexThreadHistoryToTranscript: transcriptMirrorMocks.importCodexThreadHistoryToTranscript,
 }));
-vi.mock("openclaw/plugin-sdk/node-host", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/node-host")>();
+vi.mock("natesclaw/plugin-sdk/node-host", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("natesclaw/plugin-sdk/node-host")>();
   return {
     ...actual,
     runNodePtyCommand: nodeHostMocks.runNodePtyCommand,
@@ -166,11 +166,11 @@ type SessionEntrySummary = ReturnType<
   PluginRuntime["agent"]["session"]["listSessionEntries"]
 >[number];
 
-const config = {} as OpenClawConfig;
+const config = {} as NatesclawConfig;
 
 async function normalizeCodexManifestConfig(value: unknown): Promise<Record<string, unknown>> {
   const manifest = JSON.parse(
-    await fs.readFile(new URL("../openclaw.plugin.json", import.meta.url), "utf8"),
+    await fs.readFile(new URL("../natesclaw.plugin.json", import.meta.url), "utf8"),
   ) as { configSchema: JsonSchemaObject };
   const result = validateJsonSchemaValue({
     cacheKey: "codex.session-catalog.manifest-config",
@@ -224,7 +224,7 @@ function createEligibleControl(overrides: Partial<CodexSessionCatalogControl> = 
 
 function adoptedEntry(params: { sourceThreadId: string; sessionId?: string }) {
   return {
-    sessionId: params.sessionId ?? "openclaw-session-existing",
+    sessionId: params.sessionId ?? "natesclaw-session-existing",
     updatedAt: 1,
     agentHarnessId: "codex",
     modelSelectionLocked: true,
@@ -339,7 +339,7 @@ function createRuntime(
       summary = existing;
     } else {
       sessionSequence += 1;
-      const sessionId = `openclaw-session-${sessionSequence}`;
+      const sessionId = `natesclaw-session-${sessionSequence}`;
       const entry = {
         sessionId,
         sessionFile: `/tmp/${sessionId}.jsonl`,
@@ -428,7 +428,7 @@ function archiveTestSession(params: {
   });
 }
 
-function createGatewayApi(runtime: PluginRuntime, apiConfig: OpenClawConfig = {}) {
+function createGatewayApi(runtime: PluginRuntime, apiConfig: NatesclawConfig = {}) {
   let provider: SessionCatalogProvider | undefined;
   const registerSessionCatalog = vi.fn((candidate: SessionCatalogProvider) => {
     provider = candidate;
@@ -437,7 +437,7 @@ function createGatewayApi(runtime: PluginRuntime, apiConfig: OpenClawConfig = {}
     config: apiConfig,
     runtime,
     registerSessionCatalog,
-  } as unknown as OpenClawPluginApi;
+  } as unknown as NatesclawPluginApi;
   return { api, getProvider: () => provider, registerSessionCatalog };
 }
 
@@ -609,7 +609,7 @@ describe("Codex supervision catalog", () => {
   });
 
   it("memoizes cloned request options until runtime config identity changes", async () => {
-    let runtimeConfig = { agents: { defaults: { workspace: "/workspace/a" } } } as OpenClawConfig;
+    let runtimeConfig = { agents: { defaults: { workspace: "/workspace/a" } } } as NatesclawConfig;
     commandRpcMocks.codexControlRequest.mockResolvedValue({ thread: idleThread() });
     const control = createCodexSessionCatalogControl({
       getPluginConfig: () => ({ supervision: { enabled: true } }),
@@ -621,14 +621,14 @@ describe("Codex supervision catalog", () => {
     await control.readThread("thread-1");
     expect(cloneSpy).toHaveBeenCalledTimes(2);
 
-    runtimeConfig = { agents: { defaults: { workspace: "/workspace/b" } } } as OpenClawConfig;
+    runtimeConfig = { agents: { defaults: { workspace: "/workspace/b" } } } as NatesclawConfig;
     await control.readThread("thread-1");
     expect(cloneSpy).toHaveBeenCalledTimes(4);
   });
 
   it("serves an expired page while one background refresh updates the next poll", async () => {
     let now = 1_000;
-    let runtimeConfig = {} as OpenClawConfig;
+    let runtimeConfig = {} as NatesclawConfig;
     commandRpcMocks.codexControlRequest.mockResolvedValue({
       data: [idleThread({ id: "thread-stale", source: "cli" })],
     });
@@ -678,7 +678,7 @@ describe("Codex supervision catalog", () => {
     });
     expect(commandRpcMocks.codexControlRequest).toHaveBeenCalledTimes(2);
 
-    runtimeConfig = { agents: {} } as OpenClawConfig;
+    runtimeConfig = { agents: {} } as NatesclawConfig;
     await control.listPage({ limit: 25 });
     expect(commandRpcMocks.codexControlRequest).toHaveBeenCalledTimes(3);
   });
@@ -1088,7 +1088,7 @@ describe("Codex supervision catalog", () => {
 
   it("keeps catalog reads and writes available when supervision is disabled live", async () => {
     let pluginConfig: unknown = { supervision: { enabled: true } };
-    let runtimeConfig = {} as OpenClawConfig;
+    let runtimeConfig = {} as NatesclawConfig;
     commandRpcMocks.codexControlRequest.mockResolvedValue({ data: [] });
     const control = createCodexSessionCatalogControl({
       getPluginConfig: () => pluginConfig,
@@ -1097,7 +1097,7 @@ describe("Codex supervision catalog", () => {
 
     await expect(control.listPage({})).resolves.toEqual({ sessions: [] });
     pluginConfig = { supervision: { enabled: false } };
-    runtimeConfig = { plugins: {} } as OpenClawConfig;
+    runtimeConfig = { plugins: {} } as NatesclawConfig;
 
     await expect(control.listPage({})).resolves.toEqual({ sessions: [] });
     expect(commandRpcMocks.codexControlRequest).toHaveBeenCalledTimes(2);
@@ -1560,7 +1560,7 @@ describe("Codex supervision catalog", () => {
 
   it("resolves node terminal eligibility and cwd from the node-owned catalog record", async () => {
     const threadId = "123e4567-e89b-12d3-a456-426614174000";
-    const binDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-node-terminal-"));
+    const binDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-codex-node-terminal-"));
     tempDirs.push(binDir);
     const executable = path.join(binDir, process.platform === "win32" ? "codex.cmd" : "codex");
     await fs.writeFile(executable, process.platform === "win32" ? "@echo off\r\n" : "#!/bin/sh\n");
@@ -1783,7 +1783,7 @@ describe("Codex supervision catalog", () => {
     expect(runtime.nodes.list).toHaveBeenCalledOnce();
   });
 
-  it("enriches only the local source row with its adopted OpenClaw session", async () => {
+  it("enriches only the local source row with its adopted Natesclaw session", async () => {
     const control = createControl({
       listPage: vi.fn(async () => ({
         sessions: [{ threadId: "source-thread", status: "active", archived: false }],
@@ -1805,7 +1805,7 @@ describe("Codex supervision catalog", () => {
       invoke,
     });
     const sessionKey = supervisionSessionKey("source-thread");
-    const sessionId = "openclaw-session-existing";
+    const sessionId = "natesclaw-session-existing";
     entries.push({
       sessionKey,
       entry: adoptedEntry({
@@ -1847,7 +1847,7 @@ describe("Codex supervision catalog", () => {
     });
     const { runtime, entries } = createRuntime();
     const sessionKey = supervisionSessionKey("source-thread");
-    const sessionId = "openclaw-session-pending";
+    const sessionId = "natesclaw-session-pending";
     entries.push({
       sessionKey,
       entry: {
@@ -1879,7 +1879,7 @@ describe("Codex supervision catalog", () => {
       })),
     });
     const sessionKey = supervisionSessionKey("source-thread");
-    const sessionId = "openclaw-session-forged-marker";
+    const sessionId = "natesclaw-session-forged-marker";
     const { runtime, entries } = createRuntime({
       entries: [
         {
@@ -1916,12 +1916,12 @@ describe("Codex supervision catalog", () => {
     const sources = [
       {
         threadId: "unlocked-thread",
-        sessionId: "openclaw-session-unlocked",
+        sessionId: "natesclaw-session-unlocked",
         entryPatch: { modelSelectionLocked: false },
       },
       {
         threadId: "wrong-harness-thread",
-        sessionId: "openclaw-session-wrong-harness",
+        sessionId: "natesclaw-session-wrong-harness",
         entryPatch: { agentHarnessId: "other-harness" },
       },
     ];
@@ -2061,7 +2061,7 @@ describe("Codex supervision actions", () => {
     expect(transcriptMirrorMocks.importCodexThreadHistoryToTranscript).toHaveBeenCalledWith({
       thread: sourceThread,
       storePath: resolveStorePath(undefined, { agentId: "main" }),
-      sessionId: "openclaw-session-1",
+      sessionId: "natesclaw-session-1",
       sessionKey: first.sessionKey,
       agentId: "main",
       cwd: "/workspace/project",
@@ -2072,7 +2072,7 @@ describe("Codex supervision actions", () => {
     await expect(
       bindingStore.read(
         sessionBindingIdentity({
-          sessionId: "openclaw-session-1",
+          sessionId: "natesclaw-session-1",
           sessionKey: first.sessionKey,
           config,
         }),
@@ -2099,7 +2099,7 @@ describe("Codex supervision actions", () => {
 
   it("baselines a re-continued adoption from its bound canonical thread", async () => {
     const sessionKey = supervisionSessionKey("thread-1");
-    const sessionId = "openclaw-session-existing";
+    const sessionId = "natesclaw-session-existing";
     const canonicalTurn = {
       id: "turn-canonical",
       status: "completed",
@@ -2162,10 +2162,10 @@ describe("Codex supervision actions", () => {
   it("keeps adopted sessions discoverable when the configured default agent changes", async () => {
     const originalConfig = {
       agents: { list: [{ id: "alpha", default: true }, { id: "beta" }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const changedConfig = {
       agents: { list: [{ id: "alpha" }, { id: "beta", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const { runtime, createSessionEntry } = createRuntime();
     const { api } = createGatewayApi(runtime);
     const bindingStore = createCodexTestBindingStore();
@@ -2265,7 +2265,7 @@ describe("Codex supervision actions", () => {
           sessionKey,
           entry: interruptedAdoptionEntry({
             sourceThreadId: "thread-1",
-            sessionId: "openclaw-session-initializing",
+            sessionId: "natesclaw-session-initializing",
           }),
         },
       ],
@@ -2273,7 +2273,7 @@ describe("Codex supervision actions", () => {
     const control = createEligibleControl();
 
     await expect(archiveTestSession({ control, runtime })).rejects.toThrow(
-      "cannot be archived while its OpenClaw branch is initializing",
+      "cannot be archived while its Natesclaw branch is initializing",
     );
     expect(control.readThread).not.toHaveBeenCalled();
     expect(control.archiveThread).not.toHaveBeenCalled();
@@ -2293,12 +2293,12 @@ describe("Codex supervision actions", () => {
     });
 
     await expect(archiveTestSession({ control, bindingStore, runtime })).rejects.toThrow(
-      "cannot be archived until its OpenClaw branch starts",
+      "cannot be archived until its Natesclaw branch starts",
     );
     expect(control.archiveThread).not.toHaveBeenCalled();
 
     const identity = sessionBindingIdentity({
-      sessionId: "openclaw-session-1",
+      sessionId: "natesclaw-session-1",
       sessionKey: continued.sessionKey,
       config,
     });
@@ -2371,14 +2371,14 @@ describe("Codex supervision actions", () => {
     }
     expect(archiveResult.error).toBeInstanceOf(Error);
     expect((archiveResult.error as Error).message).toContain(
-      "cannot be archived until its OpenClaw branch starts",
+      "cannot be archived until its Natesclaw branch starts",
     );
     expect(control.archiveThread).not.toHaveBeenCalled();
   });
 
   it("recovers the same pending session after a restart before binding commit", async () => {
     const sessionKey = supervisionSessionKey("thread-1");
-    const sessionId = "openclaw-interrupted-before-binding";
+    const sessionId = "natesclaw-interrupted-before-binding";
     const crashedRuntime = createRuntime();
     crashedRuntime.entries.push({
       sessionKey,
@@ -2437,7 +2437,7 @@ describe("Codex supervision actions", () => {
 
   it("recovers the same pending session after a restart following binding commit", async () => {
     const sessionKey = supervisionSessionKey("thread-1");
-    const sessionId = "openclaw-interrupted-after-binding";
+    const sessionId = "natesclaw-interrupted-after-binding";
     const crashedRuntime = createRuntime();
     crashedRuntime.entries.push({
       sessionKey,
@@ -2504,7 +2504,7 @@ describe("Codex supervision actions", () => {
     "pending cleanup artifacts",
   ] as const)("rejects recovery against %s in a same-thread binding", async (invalidState) => {
     const sessionKey = supervisionSessionKey("thread-1");
-    const sessionId = "openclaw-interrupted-invalid-binding";
+    const sessionId = "natesclaw-interrupted-invalid-binding";
     const crashedRuntime = createRuntime();
     crashedRuntime.entries.push({
       sessionKey,
@@ -2551,7 +2551,7 @@ describe("Codex supervision actions", () => {
         control: createEligibleControl(),
         threadId: "thread-1",
       }),
-    ).rejects.toThrow("OpenClaw session is already bound to Codex thread thread-1");
+    ).rejects.toThrow("Natesclaw session is already bound to Codex thread thread-1");
     expect(entries).toEqual([]);
   });
 
@@ -2584,7 +2584,7 @@ describe("Codex supervision actions", () => {
     await expect(
       bindingStore.read(
         sessionBindingIdentity({
-          sessionId: "openclaw-session-1",
+          sessionId: "natesclaw-session-1",
           sessionKey: result.sessionKey,
           config,
         }),
@@ -2596,7 +2596,7 @@ describe("Codex supervision actions", () => {
     });
     const binding = await bindingStore.read(
       sessionBindingIdentity({
-        sessionId: "openclaw-session-1",
+        sessionId: "natesclaw-session-1",
         sessionKey: result.sessionKey,
         config,
       }),
@@ -2608,7 +2608,7 @@ describe("Codex supervision actions", () => {
     const { runtime, entries, createSessionEntry, patchSessionEntry } = createRuntime();
     const { api } = createGatewayApi(runtime);
     const sessionKey = supervisionSessionKey("thread-1");
-    const sessionId = "openclaw-session-archived";
+    const sessionId = "natesclaw-session-archived";
     entries.push({
       sessionKey,
       entry: {
@@ -2672,7 +2672,7 @@ describe("Codex supervision actions", () => {
       ),
     });
     const sessionKey = supervisionSessionKey("thread-1");
-    const sessionId = "openclaw-session-existing";
+    const sessionId = "natesclaw-session-existing";
     entries.push({
       sessionKey,
       entry: adoptedEntry({ sourceThreadId: "thread-1", sessionId }),
@@ -2713,7 +2713,7 @@ describe("Codex supervision actions", () => {
       const bindingStore = createCodexTestBindingStore();
       if (mapped) {
         const sessionKey = supervisionSessionKey("thread-1");
-        const sessionId = "openclaw-session-existing";
+        const sessionId = "natesclaw-session-existing";
         entries.push({
           sessionKey,
           entry: adoptedEntry({ sourceThreadId: "thread-1", sessionId }),
@@ -2753,7 +2753,7 @@ describe("Codex supervision actions", () => {
     const { runtime, entries, createSessionEntry, patchSessionEntry } = createRuntime();
     const { api } = createGatewayApi(runtime);
     const sessionKey = supervisionSessionKey("thread-1");
-    const sessionId = "openclaw-session-stale";
+    const sessionId = "natesclaw-session-stale";
     entries.push({
       sessionKey,
       entry: {
@@ -2774,7 +2774,7 @@ describe("Codex supervision actions", () => {
         if (!entry) {
           throw new Error("missing mapped session");
         }
-        entry.sessionId = "openclaw-session-replacement";
+        entry.sessionId = "natesclaw-session-replacement";
         return idleThread({ id: "thread-1-branch" });
       }),
     });
@@ -2817,7 +2817,7 @@ describe("Codex supervision actions", () => {
         control,
         threadId: "thread-1",
       }),
-    ).rejects.toThrow("failed to bind OpenClaw session to Codex thread thread-1");
+    ).rejects.toThrow("failed to bind Natesclaw session to Codex thread thread-1");
     expect(entries).toEqual([]);
     expect(createSessionEntry).toHaveBeenCalledOnce();
     expect(transcriptMirrorMocks.importCodexThreadHistoryToTranscript).toHaveBeenCalledOnce();
@@ -2842,7 +2842,7 @@ describe("Codex supervision actions", () => {
     await expect(
       bindingStore.read(
         sessionBindingIdentity({
-          sessionId: "openclaw-session-1",
+          sessionId: "natesclaw-session-1",
           sessionKey: supervisionSessionKey("thread-1"),
           config,
         }),
@@ -2893,7 +2893,7 @@ describe("Codex supervision actions", () => {
     await expect(
       bindingStore.read(
         sessionBindingIdentity({
-          sessionId: "openclaw-session-1",
+          sessionId: "natesclaw-session-1",
           sessionKey: supervisionSessionKey("thread-1"),
           config,
         }),
@@ -3074,7 +3074,7 @@ describe("Codex supervision actions", () => {
       appServer: { command: "codex-archive-a" },
       supervision: { enabled: true },
     };
-    let runtimeConfig = { agents: { defaults: { workspace: "/workspace/a" } } } as OpenClawConfig;
+    let runtimeConfig = { agents: { defaults: { workspace: "/workspace/a" } } } as NatesclawConfig;
     pinnedConnectionMocks.request.mockImplementation(
       async (request: { method: string; requestParams?: Record<string, unknown> }) => {
         if (
@@ -3087,7 +3087,7 @@ describe("Codex supervision actions", () => {
           };
           runtimeConfig = {
             agents: { defaults: { workspace: "/workspace/b" } },
-          } as OpenClawConfig;
+          } as NatesclawConfig;
           return {
             data: [idleThread({ source: "cli" })],
           };
@@ -3163,7 +3163,7 @@ describe("Codex supervision actions", () => {
     expect(pinnedConnectionMocks.releaseClient).toHaveBeenCalledWith(pinnedConnectionMocks.client);
   });
 
-  it("rejects archive while another OpenClaw session owns the native thread", async () => {
+  it("rejects archive while another Natesclaw session owns the native thread", async () => {
     const bindingStore = createCodexTestBindingStore();
     await bindingStore.mutate(
       { kind: "conversation", bindingId: "bound-chat" },
@@ -3175,13 +3175,13 @@ describe("Codex supervision actions", () => {
     const control = createEligibleControl();
 
     await expect(archiveTestSession({ bindingStore, control })).rejects.toThrow(
-      "attached to an OpenClaw session",
+      "attached to an Natesclaw session",
     );
     expect(control.readThread).toHaveBeenCalledWith("thread-1", false);
     expect(control.archiveThread).not.toHaveBeenCalled();
   });
 
-  it("rejects archive when a paginated spawned descendant has an OpenClaw owner", async () => {
+  it("rejects archive when a paginated spawned descendant has an Natesclaw owner", async () => {
     const bindingStore = createCodexTestBindingStore();
     await bindingStore.mutate(
       { kind: "conversation", bindingId: "descendant-chat" },
@@ -3202,7 +3202,7 @@ describe("Codex supervision actions", () => {
     });
 
     await expect(archiveTestSession({ bindingStore, control })).rejects.toThrow(
-      "spawned descendant is owned by an OpenClaw session",
+      "spawned descendant is owned by an Natesclaw session",
     );
     expect(control.listDescendantPage).toHaveBeenNthCalledWith(1, {
       ancestorThreadId: "thread-1",
@@ -3400,7 +3400,7 @@ describe("Codex supervision actions", () => {
           models: { "openai/gpt-5.6-sol": {} },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NatesclawConfig;
     const { runtime } = createRuntime();
     const { api, getProvider } = createGatewayApi(runtime, startupConfig);
     registerCodexSessionCatalog({
@@ -3490,7 +3490,7 @@ describe("Codex supervision actions", () => {
   it("adopts a paired-node session with bounded history and an executable binding", async () => {
     let runtimeConfig = {
       agents: { list: [{ id: "alpha", default: true }, { id: "beta" }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const invoke = vi.fn<PluginRuntime["nodes"]["invoke"]>(async ({ command }) => {
       if (command === CODEX_APP_SERVER_THREADS_LIST_COMMAND) {
         return {
@@ -3557,7 +3557,7 @@ describe("Codex supervision actions", () => {
     await first?.afterConversationBound?.();
     runtimeConfig = {
       agents: { list: [{ id: "alpha" }, { id: "beta", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const second = await provider?.continueSession?.({
       hostId: "node:devbox",
       threadId: "thread-remote",
@@ -3761,7 +3761,7 @@ describe("Codex supervision actions", () => {
 
   it("builds local and paired-node terminal plans from verified catalog records", async () => {
     const threadId = "123e4567-e89b-12d3-a456-426614174000";
-    const binDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-terminal-"));
+    const binDir = await fs.mkdtemp(path.join(os.tmpdir(), "natesclaw-codex-terminal-"));
     tempDirs.push(binDir);
     process.env.PATH = "";
     nodeHostMocks.userShellPaths.set("codex", binDir);

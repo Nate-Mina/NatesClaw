@@ -1,5 +1,5 @@
-// Telegram plugin entrypoint registers its OpenClaw integration.
-import { defineBundledChannelEntry } from "openclaw/plugin-sdk/channel-entry-contract";
+// Telegram plugin entrypoint registers its Natesclaw integration.
+import { defineBundledChannelEntry } from "natesclaw/plugin-sdk/channel-entry-contract";
 import { registerTelegramMiniApp } from "./miniapp-api.js";
 
 export default defineBundledChannelEntry({

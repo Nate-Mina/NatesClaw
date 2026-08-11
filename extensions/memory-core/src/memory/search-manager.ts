@@ -1,9 +1,9 @@
 // Memory Core plugin module owns builtin search manager acquisition and cleanup.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
-import type { MemorySearchManager } from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/memory-core-host-engine-foundation";
+import type { MemorySearchManager } from "natesclaw/plugin-sdk/memory-core-host-engine-storage";
+import { normalizeAgentId } from "natesclaw/plugin-sdk/routing";
 import type { MemoryCoreAcquireLocalService } from "./embedding-local-service.js";
 
 const managerRuntimeLoader = createLazyRuntimeModule(() => import("../../manager-runtime.js"));
@@ -11,7 +11,7 @@ const loadManagerRuntime = managerRuntimeLoader;
 
 type MemorySearchManagerPurpose = "default" | "status" | "cli";
 type MemorySearchManagerParams = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
   purpose?: MemorySearchManagerPurpose;
   acquireLocalService?: MemoryCoreAcquireLocalService;
@@ -62,7 +62,7 @@ export async function closeAllMemorySearchManagers(): Promise<void> {
 }
 
 export async function closeMemorySearchManager(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId: string;
 }): Promise<void> {
   if (!managerRuntimeLoader.peek()) {

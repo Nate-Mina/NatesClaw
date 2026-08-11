@@ -5,9 +5,9 @@ import {
   createPluginSetupWizardStatus,
   createTestWizardPrompter,
   runSetupWizardPrepare,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import * as processRuntime from "openclaw/plugin-sdk/process-runtime";
-import * as setupRuntime from "openclaw/plugin-sdk/setup";
+} from "natesclaw/plugin-sdk/plugin-test-runtime";
+import * as processRuntime from "natesclaw/plugin-sdk/process-runtime";
+import * as setupRuntime from "natesclaw/plugin-sdk/setup";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveIMessageAccount } from "./accounts.js";
 import * as channelRuntimeModule from "./channel.runtime.js";
@@ -136,8 +136,8 @@ async function prepareIMessage(params: {
   );
 }
 
-vi.mock("openclaw/plugin-sdk/setup-tools", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("openclaw/plugin-sdk/setup-tools")>()),
+vi.mock("natesclaw/plugin-sdk/setup-tools", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("natesclaw/plugin-sdk/setup-tools")>()),
   ...setupToolsMocks,
 }));
 

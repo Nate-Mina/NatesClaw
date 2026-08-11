@@ -1,4 +1,4 @@
-import type { RouteLocation } from "@openclaw/uirouter";
+import type { RouteLocation } from "@natesclaw/uirouter";
 import { describe, expect, it, vi } from "vitest";
 import type { GatewayBrowserClient } from "../api/gateway.ts";
 import { routeIdFromPath, type RouteId } from "../app-routes.ts";
@@ -433,7 +433,7 @@ describe("normalizeInitialApplicationLocation", () => {
       client,
       hello: {
         auth: { role: "operator", scopes: ["operator.admin"] },
-        features: { methods: ["openclaw.setup.detect"] },
+        features: { methods: ["natesclaw.setup.detect"] },
       },
     } as Parameters<GatewayListener>[0];
     connectedListener(gateway.snapshot);

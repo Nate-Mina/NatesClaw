@@ -26,13 +26,13 @@ function resolveHelpCommand(
   options?: { commandPath?: string[]; root?: boolean },
 ): string {
   if (options?.root) {
-    return formatCliCommand("openclaw --help");
+    return formatCliCommand("natesclaw --help");
   }
   const commandPath = options?.commandPath ?? (argv ? getCommandPathWithRootOptions(argv, 2) : []);
   if (commandPath.length === 0) {
-    return formatCliCommand("openclaw --help");
+    return formatCliCommand("natesclaw --help");
   }
-  return formatCliCommand(`openclaw ${commandPath.join(" ")} --help`);
+  return formatCliCommand(`natesclaw ${commandPath.join(" ")} --help`);
 }
 
 function lines(...items: Array<string | undefined>): string {
@@ -47,10 +47,10 @@ function formatHelpHint(
 }
 
 function formatDocsHint(): string {
-  return `${theme.muted("Docs:")} ${formatDocsLink("/cli", "docs.openclaw.ai/cli")}`;
+  return `${theme.muted("Docs:")} ${formatDocsLink("/cli", "docs.natesclaw.ai/cli")}`;
 }
 
-/** Convert Commander parse errors into OpenClaw-specific help and docs guidance. */
+/** Convert Commander parse errors into Natesclaw-specific help and docs guidance. */
 export function formatCliParseErrorOutput(
   raw: string,
   options: FormatCliParseErrorOptions = {},
@@ -60,10 +60,10 @@ export function formatCliParseErrorOutput(
   if (unknownCommand) {
     const command = unknownCommand[1] ?? "";
     return lines(
-      theme.error(`OpenClaw does not know the command ${quote(command)}.`),
+      theme.error(`Natesclaw does not know the command ${quote(command)}.`),
       formatCliCommandSuggestions(command),
       formatHelpHint(options.argv, { root: true }),
-      `${theme.muted("Plugin command?")} ${theme.command(formatCliCommand("openclaw plugins list"))}`,
+      `${theme.muted("Plugin command?")} ${theme.command(formatCliCommand("natesclaw plugins list"))}`,
       formatDocsHint(),
     );
   }
@@ -72,7 +72,7 @@ export function formatCliParseErrorOutput(
   if (unknownOption) {
     const option = unknownOption[1] ?? "";
     return lines(
-      theme.error(`OpenClaw does not recognize option ${quote(option)}.`),
+      theme.error(`Natesclaw does not recognize option ${quote(option)}.`),
       formatHelpHint(options.argv, { commandPath: options.commandPath }),
     );
   }
@@ -103,7 +103,7 @@ export function formatCliParseErrorOutput(
   }
 
   return lines(
-    theme.error(`OpenClaw could not parse this command: ${message}`),
+    theme.error(`Natesclaw could not parse this command: ${message}`),
     formatHelpHint(options.argv, { commandPath: options.commandPath }),
   );
 }

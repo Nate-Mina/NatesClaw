@@ -1,12 +1,12 @@
-# OpenClaw Cloudflare AI Gateway Provider
+# Natesclaw Cloudflare AI Gateway Provider
 
-Official OpenClaw provider plugin for Cloudflare AI Gateway.
+Official Natesclaw provider plugin for Cloudflare AI Gateway.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/cloudflare-ai-gateway-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/cloudflare-ai-gateway-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/cloudflare-ai-gateway> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/cloudflare-ai-gateway> for setup and configuration.

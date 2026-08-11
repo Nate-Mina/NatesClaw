@@ -1,7 +1,7 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import { createAssistantMessageEventStream } from "openclaw/plugin-sdk/llm";
+import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
+import { createAssistantMessageEventStream } from "natesclaw/plugin-sdk/llm";
 // Lmstudio tests cover stream plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 let wrapLmstudioInferencePreload: typeof import("./stream.js").wrapLmstudioInferencePreload;

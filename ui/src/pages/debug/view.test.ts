@@ -47,7 +47,7 @@ async function mountDebugPage(
     subscribe: () => () => undefined,
     subscribeEventLog: () => () => undefined,
   } as unknown as ApplicationContext["gateway"];
-  const page = document.createElement("openclaw-debug-page") as TestDebugPage;
+  const page = document.createElement("natesclaw-debug-page") as TestDebugPage;
   page.context = { basePath: "", gateway } as ApplicationContext;
   document.body.append(page);
   await vi.waitFor(() => expect(page.debugStatus).not.toBeNull());
@@ -142,7 +142,7 @@ describe("renderDebug", () => {
     const status = container.querySelector(".settings-status");
     expect(status?.className).toContain("settings-status--warn");
     expect(normalizedText(status)).toBe("1 个警告 · 2 条信息");
-    expect(command.textContent).toBe("openclaw security audit --deep");
+    expect(command.textContent).toBe("natesclaw security audit --deep");
   });
 
   it("does not render Invalid Date for Date-invalid event timestamps", () => {

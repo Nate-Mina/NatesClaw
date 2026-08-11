@@ -79,8 +79,8 @@ const REMOTE_SETUP_TIMEOUT_MS = 20_000;
 const WORKSPACE_TIMEOUT_MS = 10 * 60_000;
 // Relative to the canonical worker $HOME owned by REMOTE_WORKSPACE_SETUP_SCRIPT;
 // rsync targets must use the returned absolute directory, never this relative path.
-const REMOTE_WORKSPACE_ROOT = ".openclaw-worker/workspaces";
-const REMOTE_GIT_PACK_NAME = ".openclaw-base.pack";
+const REMOTE_WORKSPACE_ROOT = ".natesclaw-worker/workspaces";
+const REMOTE_GIT_PACK_NAME = ".natesclaw-base.pack";
 const GIT_COMMIT_PATTERN = /^[a-f0-9]{40}(?:[a-f0-9]{24})?$/u;
 const INBOUND_RSYNC_BW_LIMIT_KIB = 65_536;
 const workspaceSyncLog = createSubsystemLogger("gateway/worker-workspace");
@@ -192,7 +192,7 @@ export function createWorkerWorkspaceActions(
       runTask,
     });
     const temporaryDirectory = await fs.mkdtemp(
-      path.join(os.tmpdir(), "openclaw-worker-workspace-sync-"),
+      path.join(os.tmpdir(), "natesclaw-worker-workspace-sync-"),
     );
     try {
       const receiverContext = {
@@ -418,7 +418,7 @@ export function createWorkerWorkspaceActions(
     );
     const prepared = requirePrepared();
     const temporaryDirectory = await fs.mkdtemp(
-      path.join(os.tmpdir(), "openclaw-worker-workspace-reconcile-"),
+      path.join(os.tmpdir(), "natesclaw-worker-workspace-reconcile-"),
     );
     const stagingRoot = path.join(temporaryDirectory, "staging");
     const manifestRoot = path.join(temporaryDirectory, "manifests");
@@ -449,7 +449,7 @@ export function createWorkerWorkspaceActions(
           "-e",
           rsyncSsh,
           "--",
-          `${prepared.scpTarget}:.openclaw-worker/manifests/${baseDigest}.json`,
+          `${prepared.scpTarget}:.natesclaw-worker/manifests/${baseDigest}.json`,
           baseManifestPath,
         ],
         destinationRoot: manifestRoot,
@@ -509,7 +509,7 @@ export function createWorkerWorkspaceActions(
             "-e",
             rsyncSsh,
             "--",
-            `${prepared.scpTarget}:.openclaw-worker/manifests/${currentDigest}.json`,
+            `${prepared.scpTarget}:.natesclaw-worker/manifests/${currentDigest}.json`,
             currentManifestPath,
           ],
           destinationRoot: manifestRoot,

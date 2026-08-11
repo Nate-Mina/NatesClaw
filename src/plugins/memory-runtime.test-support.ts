@@ -6,7 +6,7 @@ type MemoryRuntimeTestApi = {
 
 export function resetStandaloneMemoryRegistrySlot(): void {
   const api = (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.memoryRuntimeTestApi")
+    Symbol.for("natesclaw.memoryRuntimeTestApi")
   ] as MemoryRuntimeTestApi;
   api.resetStandaloneMemoryRegistrySlot();
 }

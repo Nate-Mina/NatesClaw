@@ -15,9 +15,9 @@ import {
 
 describe("managed npm retention", () => {
   it("cleans retired generations while preserving the active install root", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-retention-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-retention-"));
     const npmDir = path.join(stateDir, "npm");
-    const packageName = "@openclaw/codex";
+    const packageName = "@natesclaw/codex";
     const oldProjectRoot = resolvePluginNpmGenerationProjectDir({
       npmDir,
       packageName,
@@ -28,8 +28,8 @@ describe("managed npm retention", () => {
       packageName,
       generationKey: "codex-v2",
     });
-    const oldPackageDir = path.join(oldProjectRoot, "node_modules", "@openclaw", "codex");
-    const activePackageDir = path.join(activeProjectRoot, "node_modules", "@openclaw", "codex");
+    const oldPackageDir = path.join(oldProjectRoot, "node_modules", "@natesclaw", "codex");
+    const activePackageDir = path.join(activeProjectRoot, "node_modules", "@natesclaw", "codex");
     fs.mkdirSync(oldPackageDir, { recursive: true });
     fs.mkdirSync(activePackageDir, { recursive: true });
     await markRetainedManagedNpmInstall({
@@ -54,9 +54,9 @@ describe("managed npm retention", () => {
   });
 
   it("cleans retained packages from the legacy shared npm root", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-retention-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-retention-"));
     const npmDir = path.join(stateDir, "npm");
-    const packageDir = path.join(npmDir, "node_modules", "@openclaw", "codex");
+    const packageDir = path.join(npmDir, "node_modules", "@natesclaw", "codex");
     fs.mkdirSync(packageDir, { recursive: true });
     await markRetainedManagedNpmInstall({
       packageDir,
@@ -80,17 +80,17 @@ describe("managed npm retention", () => {
   it.each(["project", "legacy"] as const)(
     "preserves %s packages retained by an explicit keep-files uninstall",
     async (layout) => {
-      const stateDir = retentionTempDirs.make("openclaw-retention-");
+      const stateDir = retentionTempDirs.make("natesclaw-retention-");
       const npmDir = path.join(stateDir, "npm");
       const projectRoot =
         layout === "legacy"
           ? npmDir
           : resolvePluginNpmGenerationProjectDir({
               npmDir,
-              packageName: "@openclaw/kept-plugin",
+              packageName: "@natesclaw/kept-plugin",
               generationKey: "kept-plugin-v1",
             });
-      const packageDir = path.join(projectRoot, "node_modules", "@openclaw", "kept-plugin");
+      const packageDir = path.join(projectRoot, "node_modules", "@natesclaw", "kept-plugin");
       fs.mkdirSync(packageDir, { recursive: true });
       await markRetainedManagedNpmInstall({
         packageDir,

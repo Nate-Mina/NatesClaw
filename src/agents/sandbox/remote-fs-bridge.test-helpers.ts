@@ -50,7 +50,7 @@ export function createLocalRemoteShellScriptRunner(params?: {
           [
             "-c",
             command.script,
-            params?.shellArg0 ?? "openclaw-sandbox-fs",
+            params?.shellArg0 ?? "natesclaw-sandbox-fs",
             ...(command.args ?? []),
           ],
           command.stdin,

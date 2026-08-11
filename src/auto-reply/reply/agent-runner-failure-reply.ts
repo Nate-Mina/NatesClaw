@@ -1,6 +1,6 @@
-import { expectDefined } from "@openclaw/normalization-core";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import {
   buildOAuthRefreshFailureLoginCommand,
   classifyOAuthRefreshFailureError,
@@ -30,7 +30,7 @@ import {
 import { isProviderAuthError } from "../../agents/model-auth-runtime-shared.js";
 import { buildProviderAuthRecoveryHint } from "../../agents/provider-auth-recovery-hint.js";
 import { resolveSilentReplyPolicy } from "../../config/silent-reply.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { markReplyPayloadForSourceSuppressionDelivery } from "../reply-payload.js";
 import type { TemplateContext } from "../templating.js";
@@ -105,7 +105,7 @@ export function resolveExternalRunFailureTextForConversation(params: {
   text: string;
   sessionCtx: ExternalFailureConversationContext;
   isGenericRunnerFailure: boolean;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): string {
   if (!isNonDirectConversationContext(params.sessionCtx)) {
     return params.text;
@@ -135,10 +135,10 @@ function buildCodexAppServerFailureText(message: string): string | null {
     return "⚠️ This Codex session changed before your message could run. Please send it again.";
   }
   if (CODEX_APP_SERVER_CLIENT_CLOSED_BEFORE_REPLY_RE.test(normalizedMessage)) {
-    return "⚠️ Codex app-server connection closed before this turn finished. OpenClaw retried once when the stdio turn was still replay-safe; please try again if this keeps happening.";
+    return "⚠️ Codex app-server connection closed before this turn finished. Natesclaw retried once when the stdio turn was still replay-safe; please try again if this keeps happening.";
   }
   if (CODEX_APP_SERVER_TURN_COMPLETION_IDLE_TIMEOUT_RE.test(normalizedMessage)) {
-    return "⚠️ Codex app-server stopped before confirming turn completion. OpenClaw did not replay the turn automatically because it may still be active; try again, or use /new if the session stays stuck.";
+    return "⚠️ Codex app-server stopped before confirming turn completion. Natesclaw did not replay the turn automatically because it may still be active; try again, or use /new if the session stays stuck.";
   }
   return null;
 }
@@ -303,7 +303,7 @@ export function buildTerminalAgentRunFailureReplyPayload(params: {
   isHeartbeat?: boolean;
   visibleReplyDelivered: boolean;
   sessionCtx: ExternalFailureConversationContext;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): ReplyPayload {
   const text = params.isHeartbeat
     ? HEARTBEAT_EXTERNAL_RUN_FAILURE_TEXT
@@ -332,7 +332,7 @@ export function buildEmptyInteractiveReplyPayload(params: {
   hasExplicitSilentReply: boolean;
   hasCommittedDelivery: boolean;
   sessionCtx: ExternalFailureConversationContext;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): ReplyPayload | undefined {
   if (
     !params.isInteractive ||
@@ -361,7 +361,7 @@ export function buildKnownAgentRunFailureReplyPayload(params: {
   err: unknown;
   sessionCtx: TemplateContext;
   resolvedVerboseLevel: VerboseLevel | undefined;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
 }): ReplyPayload | undefined {
   const message = formatErrorMessage(params.err);
   const failoverFacts = resolveReplyFailoverFacts(params.err, message);

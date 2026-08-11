@@ -1,11 +1,11 @@
-import { withTrustedEnvProxyGuardedFetchMode } from "openclaw/plugin-sdk/fetch-runtime";
-import type { ProviderUsageSnapshot } from "openclaw/plugin-sdk/provider-usage";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+import { withTrustedEnvProxyGuardedFetchMode } from "natesclaw/plugin-sdk/fetch-runtime";
+import type { ProviderUsageSnapshot } from "natesclaw/plugin-sdk/provider-usage";
+import { readResponseWithLimit } from "natesclaw/plugin-sdk/response-limit-runtime";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { asFiniteNumberInRange, asOptionalRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
+import { asFiniteNumberInRange, asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { normalizeClawRouterRootUrl } from "./provider-catalog.js";
 
 const CLAWROUTER_USAGE_RESPONSE_MAX_BYTES = 1024 * 1024;

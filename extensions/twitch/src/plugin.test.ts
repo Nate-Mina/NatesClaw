@@ -1,12 +1,12 @@
 // Twitch tests cover plugin plugin behavior.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../api.js";
+import type { NatesclawConfig } from "../api.js";
 import { twitchPlugin } from "./plugin.js";
 import { twitchSetupPlugin } from "./setup-surface.js";
 
 describe("twitchPlugin pairing", () => {
   it("classifies only channel targets as groups", () => {
-    expect(twitchPlugin.messaging?.inferTargetChatType?.({ to: "twitch:openclaw" })).toBe("group");
+    expect(twitchPlugin.messaging?.inferTargetChatType?.({ to: "twitch:natesclaw" })).toBe("group");
     expect(
       twitchPlugin.messaging?.inferTargetChatType?.({ to: "twitch:user:operator" }),
     ).toBeUndefined();
@@ -24,16 +24,16 @@ describe("twitchPlugin outbound session routing", () => {
       cfg: {},
       agentId: "ops",
       accountId: "stream",
-      target: "twitch:channel:OpenClaw",
+      target: "twitch:channel:Natesclaw",
     });
 
     expect(route).toMatchObject({
-      sessionKey: "agent:ops:twitch:group:openclaw",
-      baseSessionKey: "agent:ops:twitch:group:openclaw",
+      sessionKey: "agent:ops:twitch:group:natesclaw",
+      baseSessionKey: "agent:ops:twitch:group:natesclaw",
       recipientSessionExact: true,
-      peer: { kind: "group", id: "openclaw" },
+      peer: { kind: "group", id: "natesclaw" },
       chatType: "group",
-      to: "openclaw",
+      to: "natesclaw",
     });
   });
 
@@ -76,7 +76,7 @@ describe("twitchPlugin.status.buildAccountSnapshot", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const snapshot = await twitchPlugin.status?.buildAccountSnapshot?.({
       account: twitchPlugin.config.resolveAccount(cfg, "secondary"),
@@ -111,7 +111,7 @@ describe("twitchPlugin.config", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(twitchPlugin.config.defaultAccountId?.(cfg)).toBe("secondary");
     expect(twitchPlugin.config.resolveAccount(cfg).accountId).toBe("secondary");
@@ -150,7 +150,7 @@ describe("twitchPlugin.config", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     for (const config of [twitchPlugin.config, twitchSetupPlugin.config]) {
       const account = config.resolveAccount(cfg, "secondary");
@@ -173,7 +173,7 @@ describe("twitchPlugin.config", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     for (const config of [twitchPlugin.config, twitchSetupPlugin.config]) {
       const account = config.resolveAccount(cfg, "SECONDARY\r\n");

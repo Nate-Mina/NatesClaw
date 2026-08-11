@@ -4,9 +4,9 @@ import { resolveStateDir } from "../config/paths.js";
 import type { PluginRecord } from "../plugins/registry-types.js";
 import { createPluginRegistry } from "../plugins/registry.js";
 import type { PluginRuntime } from "../plugins/runtime/types.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { openOpenClawStateDatabase } from "../state/openclaw-state-db.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { openNatesclawStateDatabase } from "../state/natesclaw-state-db.js";
+import { withNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import { resetPluginBlobStoreForTests, type OpenBlobStoreOptions } from "./plugin-blob-store.js";
 import { resetPluginStateStoreForTests } from "./plugin-state-store.js";
 
@@ -73,14 +73,14 @@ function createTestPluginRegistry() {
 }
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
+  closeNatesclawAgentDatabasesForTest();
   resetPluginBlobStoreForTests();
   resetPluginStateStoreForTests();
 });
 
 describe("plugin runtime state proxy", () => {
   it("binds openKeyedStore to the bundled plugin id and keeps resolveStateDir", async () => {
-    await withOpenClawTestState({ label: "plugin-state-runtime" }, async (state) => {
+    await withNatesclawTestState({ label: "plugin-state-runtime" }, async (state) => {
       const registry = createTestPluginRegistry();
       const record = createPluginRecord("discord", "bundled");
       registry.registry.plugins.push(record);
@@ -114,7 +114,7 @@ describe("plugin runtime state proxy", () => {
   });
 
   it("allows trusted official global plugins to use keyed state", async () => {
-    await withOpenClawTestState({ label: "plugin-state-trusted-global" }, async () => {
+    await withNatesclawTestState({ label: "plugin-state-trusted-global" }, async () => {
       const registry = createTestPluginRegistry();
       const record = createPluginRecord("slack", "global", { trustedOfficialInstall: true });
       registry.registry.plugins.push(record);
@@ -130,7 +130,7 @@ describe("plugin runtime state proxy", () => {
   });
 
   it("binds blob stores to the trusted plugin id", async () => {
-    await withOpenClawTestState({ label: "plugin-blob-runtime" }, async () => {
+    await withNatesclawTestState({ label: "plugin-blob-runtime" }, async () => {
       const registry = createTestPluginRegistry();
       const record = createPluginRecord("diffs", "global", { trustedOfficialInstall: true });
       registry.registry.plugins.push(record);
@@ -166,14 +166,14 @@ describe("plugin runtime state proxy", () => {
   });
 
   it("ignores plugin-supplied state directory overrides", async () => {
-    await withOpenClawTestState({ label: "plugin-blob-runtime-env" }, async (state) => {
+    await withNatesclawTestState({ label: "plugin-blob-runtime-env" }, async (state) => {
       const registry = createTestPluginRegistry();
       const record = createPluginRecord("diffs", "global", { trustedOfficialInstall: true });
       registry.registry.plugins.push(record);
       const api = registry.createApi(record, { config: {} });
       const redirectedEnv = {
         ...state.env,
-        OPENCLAW_STATE_DIR: `${state.stateDir}-redirected`,
+        NATESCLAW_STATE_DIR: `${state.stateDir}-redirected`,
       };
 
       const store = api.runtime.state.openBlobStore<{ kind: string }>({
@@ -186,7 +186,7 @@ describe("plugin runtime state proxy", () => {
       await store.register("viewer", new Uint8Array([1]), { kind: "viewer" });
 
       resetPluginBlobStoreForTests();
-      const { db } = openOpenClawStateDatabase({ env: state.env });
+      const { db } = openNatesclawStateDatabase({ env: state.env });
       expect(
         db
           .prepare(

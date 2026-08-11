@@ -6,8 +6,8 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@natesclaw/normalization-core/string-coerce";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   resolveTargetPrefixedChannel,
   stripOutboundTargetKindPrefix,
@@ -53,7 +53,7 @@ type ConversationResolution = {
  * Command-side inputs used to resolve a canonical conversation binding target.
  */
 export type ResolveCommandConversationResolutionInput = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel?: string | null;
   accountId?: string | null;
   chatType?: string | null;
@@ -71,7 +71,7 @@ export type ResolveCommandConversationResolutionInput = {
 };
 
 type ResolveInboundConversationResolutionInput = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   channel?: string | null;
   accountId?: string | null;
   to?: string | null;
@@ -170,7 +170,7 @@ function normalizeResolutionTarget(params: {
 function resolveBindingAccountId(params: {
   rawAccountId?: string | null;
   plugin?: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
 }): string {
   return (
     normalizeOptionalString(params.rawAccountId) ||

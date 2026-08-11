@@ -1,9 +1,9 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import { gzipSync } from "node:zlib";
-import type { OpenClawPluginNodeInvokePolicyContext } from "openclaw/plugin-sdk/plugin-entry";
+import type { NatesclawPluginNodeInvokePolicyContext } from "natesclaw/plugin-sdk/plugin-entry";
 // File Transfer tests cover node invoke policy plugin behavior.
-import { createRequireRecord } from "openclaw/plugin-sdk/test-fixtures";
+import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { appendFileTransferAudit } from "./audit.js";
 import { createFileTransferNodeInvokePolicy } from "./node-invoke-policy.js";
@@ -88,12 +88,12 @@ function createCtx(overrides: {
   command?: string;
   params?: Record<string, unknown>;
   pluginConfig?: Record<string, unknown>;
-  approvals?: OpenClawPluginNodeInvokePolicyContext["approvals"];
+  approvals?: NatesclawPluginNodeInvokePolicyContext["approvals"];
 }) {
-  const invokeNode = vi.fn<OpenClawPluginNodeInvokePolicyContext["invokeNode"]>(
+  const invokeNode = vi.fn<NatesclawPluginNodeInvokePolicyContext["invokeNode"]>(
     async ({
       params,
-    }: Parameters<OpenClawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
+    }: Parameters<NatesclawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
       ok: true,
       payload: {
         ok: true,
@@ -142,7 +142,7 @@ function expectResultFields(result: unknown, fields: Record<string, unknown>) {
 }
 
 function requireInvokeParams(
-  invokeNode: ReturnType<typeof vi.fn<OpenClawPluginNodeInvokePolicyContext["invokeNode"]>>,
+  invokeNode: ReturnType<typeof vi.fn<NatesclawPluginNodeInvokePolicyContext["invokeNode"]>>,
   callIndex: number,
 ) {
   const call = (invokeNode.mock.calls as unknown[][])[callIndex]?.[0];
@@ -347,7 +347,7 @@ describe("file-transfer node invoke policy", () => {
     const policy = createFileTransferNodeInvokePolicy();
     const approvals = {
       request: vi.fn(async () => ({ id: "approval-1", decision })),
-    } as unknown as NonNullable<OpenClawPluginNodeInvokePolicyContext["approvals"]>;
+    } as unknown as NonNullable<NatesclawPluginNodeInvokePolicyContext["approvals"]>;
     const { ctx, invokeNode } = createCtx({
       params: { path: "/tmp/new.txt" },
       pluginConfig: {

@@ -83,7 +83,7 @@ describe("security-sensitive guard workflow", () => {
       expect(steps.at(-1)?.run).toBe("node scripts/github/security-sensitive-guard.mjs");
     }
 
-    expect(workflow).not.toContain("OPENCLAW_SECURITY_SENSITIVE_GUARD_ROLLOUT_SHA");
+    expect(workflow).not.toContain("NATESCLAW_SECURITY_SENSITIVE_GUARD_ROLLOUT_SHA");
     expect(workflow).not.toContain("Check security-sensitive guard rollout eligibility");
     expect(workflow).not.toContain("steps.rollout.outputs.ready");
     expect(workflow).not.toContain("/compare/");
@@ -98,10 +98,10 @@ describe("security-sensitive guard workflow", () => {
 
     expect(finalJob?.needs).toEqual(["security-sensitive-guard-detect"]);
     expect(finalJob?.if).toContain("always()");
-    expect(detectSteps.at(-1)?.env?.OPENCLAW_SECURITY_SENSITIVE_GUARD_MODE).toBe("detect");
-    expect(finalSteps.at(-1)?.env?.OPENCLAW_SECURITY_SENSITIVE_GUARD_MODE).toBe("enforce");
-    expect(finalSteps.at(-1)?.env?.OPENCLAW_SECURITY_TEAM_SLUG).toBe("openclaw-secops");
-    expect(finalSteps.at(-1)?.env?.OPENCLAW_SECURITY_APPROVERS).toBe(
+    expect(detectSteps.at(-1)?.env?.NATESCLAW_SECURITY_SENSITIVE_GUARD_MODE).toBe("detect");
+    expect(finalSteps.at(-1)?.env?.NATESCLAW_SECURITY_SENSITIVE_GUARD_MODE).toBe("enforce");
+    expect(finalSteps.at(-1)?.env?.NATESCLAW_SECURITY_TEAM_SLUG).toBe("natesclaw-secops");
+    expect(finalSteps.at(-1)?.env?.NATESCLAW_SECURITY_APPROVERS).toBe(
       "vincentkoc,steipete,joshavant",
     );
   });
@@ -117,7 +117,7 @@ describe("security-sensitive guard workflow", () => {
     expect(script).toContain('path: ".gitignore"');
     expect(script).toContain(".env");
     expect(script).toContain("/allow-security-sensitive-change");
-    expect(script).toContain("openclaw-secops");
+    expect(script).toContain("natesclaw-secops");
     expect(guardSources).toContain("/memberships/");
     expect(script).toContain("A later push requires a fresh approval.");
     expect(script).toContain("process.exitCode = 1");
@@ -126,17 +126,17 @@ describe("security-sensitive guard workflow", () => {
   it("requires secops review for future workflow or guard changes", () => {
     const codeowners = readFileSync(CODEOWNERS, "utf8");
     expect(codeowners).toContain(
-      "/.github/workflows/security-sensitive-guard.yml @openclaw/openclaw-secops",
+      "/.github/workflows/security-sensitive-guard.yml @natesclaw/natesclaw-secops",
     );
     expect(codeowners).toContain(
-      "/test/scripts/security-sensitive-guard-workflow.test.ts @openclaw/openclaw-secops",
+      "/test/scripts/security-sensitive-guard-workflow.test.ts @natesclaw/natesclaw-secops",
     );
     expect(codeowners).toContain(
-      "/test/scripts/security-sensitive-guard-script.test.ts @openclaw/openclaw-secops",
+      "/test/scripts/security-sensitive-guard-script.test.ts @natesclaw/natesclaw-secops",
     );
     expect(codeowners).toContain(
-      "/scripts/github/security-sensitive-guard.mjs @openclaw/openclaw-secops",
+      "/scripts/github/security-sensitive-guard.mjs @natesclaw/natesclaw-secops",
     );
-    expect(codeowners).toContain("/.gitignore @openclaw/openclaw-secops");
+    expect(codeowners).toContain("/.gitignore @natesclaw/natesclaw-secops");
   });
 });

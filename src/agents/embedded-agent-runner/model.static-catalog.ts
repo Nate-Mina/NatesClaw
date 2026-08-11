@@ -1,14 +1,14 @@
 /**
  * Resolves bundled static catalog rows for embedded-agent model selection.
  */
-import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import type { NormalizedModelCatalogRow } from "@natesclaw/model-catalog-core/model-catalog-types";
+import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
 import type { ModelProviderConfig } from "../../config/types.models.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { planEffectiveModelCatalogRows } from "../../model-catalog/index.js";
 import { normalizePluginsConfig } from "../../plugins/config-state.js";
 import { getCurrentPluginMetadataSnapshot } from "../../plugins/current-plugin-metadata-snapshot.js";
-import { listOpenClawPluginManifestMetadata } from "../../plugins/manifest-metadata-scan.js";
+import { listNatesclawPluginManifestMetadata } from "../../plugins/manifest-metadata-scan.js";
 import { passesManifestOwnerBasePolicy } from "../../plugins/manifest-owner-policy.js";
 import { loadPluginManifestRegistryCore } from "../../plugins/manifest-registry.js";
 import { loadPluginManifest } from "../../plugins/manifest.js";
@@ -139,7 +139,7 @@ type StaticCatalogPlugin = Parameters<
 >[0]["registry"]["plugins"][number];
 
 type BundledStaticCatalogParams = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   metadataSnapshot?: PluginMetadataSnapshot;
   workspaceDir?: string;
@@ -154,9 +154,9 @@ type BundledStaticCatalogState = {
 // cannot survive into a replacement plugin generation.
 const bundledStaticCatalogStatesBySnapshot = new WeakMap<
   PluginMetadataSnapshot,
-  WeakMap<OpenClawConfig, BundledStaticCatalogState>
+  WeakMap<NatesclawConfig, BundledStaticCatalogState>
 >();
-const defaultBundledStaticCatalogConfig: OpenClawConfig = {};
+const defaultBundledStaticCatalogConfig: NatesclawConfig = {};
 
 function resolveBundledStaticCatalogMetadataSnapshot(
   params: BundledStaticCatalogParams,
@@ -187,7 +187,7 @@ function listBundledStaticCatalogPlugins(
     ? metadataSnapshot.plugins
         .filter((plugin) => plugin.origin === "bundled")
         .map(({ id, providers, modelCatalog }) => ({ id, providers, modelCatalog }))
-    : listOpenClawPluginManifestMetadata(params.env).flatMap((record): StaticCatalogPlugin[] => {
+    : listNatesclawPluginManifestMetadata(params.env).flatMap((record): StaticCatalogPlugin[] => {
         if (record.origin !== "bundled") {
           return [];
         }
@@ -233,7 +233,7 @@ function resolveSnapshotBundledStaticCatalogState(
 /** Returns whether a bundled static catalog asks runtime discovery to augment its rows. */
 export function bundledStaticCatalogProviderUsesRuntimeAugment(params: {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
 }): boolean {
@@ -282,7 +282,7 @@ type BundledStaticCatalogScopedLookup = {
 };
 
 type BundledProviderStaticCatalogResolverParams = {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   metadataSnapshot?: PluginMetadataSnapshot;
@@ -295,7 +295,7 @@ type BundledProviderStaticCatalogResolverParams = {
  * Manifest discovery runs once; provider-specific plans are cached on demand.
  */
 export function createBundledStaticCatalogModelResolver(params?: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   env?: NodeJS.ProcessEnv;
   includeRuntimeDiscovery?: boolean;
   metadataSnapshot?: PluginMetadataSnapshot;
@@ -364,7 +364,7 @@ export function createBundledStaticCatalogModelResolver(params?: {
 /** Resolves one bundled static-catalog model row for provider/model lookup. */
 export function resolveBundledStaticCatalogModel(
   params: BundledStaticCatalogLookup & {
-    cfg?: OpenClawConfig;
+    cfg?: NatesclawConfig;
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
     includeRuntimeDiscovery?: boolean;
@@ -382,7 +382,7 @@ export function resolveBundledStaticCatalogModel(
 
 function resolveBundledProviderStaticCatalogPluginIds(params: {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   metadataSnapshot?: PluginMetadataSnapshot;
@@ -427,7 +427,7 @@ function resolveBundledProviderStaticCatalogPluginIds(params: {
 
 async function loadBundledProviderStaticCatalogModels(params: {
   pluginIds: string[];
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   preparedStaticProviderCatalog?: PreparedProviderStaticCatalog;
@@ -727,7 +727,7 @@ export function createBundledProviderStaticCatalogContextResolver(
 export async function resolveBundledProviderStaticCatalogModel(params: {
   provider: string;
   modelId: string;
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<ProviderRuntimeModel | undefined> {

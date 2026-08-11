@@ -14,12 +14,12 @@ const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 describe("onboarding agent target", () => {
   it("provisions the configured default agent workspace and sessions", async () => {
-    const stateDir = tempDirs.make("openclaw-onboard-target-");
+    const stateDir = tempDirs.make("natesclaw-onboard-target-");
     const globalWorkspace = path.join(stateDir, "global-workspace");
     const opsWorkspace = path.join(stateDir, "ops-workspace");
     const runtime = { log: vi.fn() } as unknown as RuntimeEnv;
 
-    await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+    await withEnvAsync({ NATESCLAW_STATE_DIR: stateDir }, async () => {
       const config = {
         agents: {
           defaults: { workspace: globalWorkspace },

@@ -4,16 +4,16 @@ import type {
   SessionCatalogSession,
   SessionCatalogTranscriptItem,
   SessionsCatalogReadResult,
-} from "openclaw/plugin-sdk/session-catalog";
+} from "natesclaw/plugin-sdk/session-catalog";
 import {
   isRecord,
   normalizeBoundedOptionalString as optionalOpenCodeString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import {
   materializeWindowsSpawnProgram,
   resolveWindowsSpawnProgram,
-} from "openclaw/plugin-sdk/windows-spawn";
+} from "natesclaw/plugin-sdk/windows-spawn";
 
 const LOCAL_HOST_ID = "gateway";
 const DEFAULT_PAGE_LIMIT = 20;
@@ -63,7 +63,7 @@ type OpenCodeQueryCacheOptions = {
 };
 
 const openCodeConfigIdentities = new WeakMap<object, number>();
-// Query results are valid for one immutable OpenClaw config identity, CLI environment, and SQL text.
+// Query results are valid for one immutable Natesclaw config identity, CLI environment, and SQL text.
 // Config/env changes or 32s expiry invalidate them; failures are removed so recovery retries at once.
 // The bounded map prevents pagination variants from growing while avoiding a subprocess every poll.
 const openCodeQueryCache = new Map<string, OpenCodeQueryCacheEntry>();

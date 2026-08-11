@@ -1,16 +1,16 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 // Qqbot plugin module implements finalize behavior.
-import { expectDefined } from "openclaw/plugin-sdk/expect-runtime";
-import type { ChannelSetupWizard } from "openclaw/plugin-sdk/setup";
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/setup";
-import { formatDocsLink } from "openclaw/plugin-sdk/setup-tools";
+import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";
+import type { ChannelSetupWizard } from "natesclaw/plugin-sdk/setup";
+import { DEFAULT_ACCOUNT_ID } from "natesclaw/plugin-sdk/setup";
+import { formatDocsLink } from "natesclaw/plugin-sdk/setup-tools";
 import { applyQQBotAccountConfig, resolveQQBotAccount } from "../config.js";
 
 type SetupPrompter = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["prompter"];
 type SetupRuntime = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["runtime"];
 type SetupOptions = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["options"];
 
-function isQQBotAccountConfigured(cfg: OpenClawConfig, accountId: string): boolean {
+function isQQBotAccountConfigured(cfg: NatesclawConfig, accountId: string): boolean {
   const account = resolveQQBotAccount(cfg, accountId, { allowUnresolvedSecretRef: true });
   return Boolean(account.appId && account.clientSecret);
 }
@@ -29,12 +29,12 @@ async function reportQQBotLinkFailure(
 }
 
 async function linkViaQrCode(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   prompter: SetupPrompter;
   runtime: SetupRuntime;
   beforePersistentEffect?: () => Promise<void>;
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   let connector: typeof import("@tencent-connect/qqbot-connector");
   try {
     connector = await import("@tencent-connect/qqbot-connector");
@@ -46,7 +46,7 @@ async function linkViaQrCode(params: {
   await params.beforePersistentEffect?.();
   try {
     const accounts: { appId: string; appSecret: string }[] = await connector.qrConnect({
-      source: "openclaw",
+      source: "natesclaw",
     });
 
     if (accounts.length === 0) {
@@ -82,10 +82,10 @@ async function linkViaQrCode(params: {
 }
 
 async function linkViaManualInput(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   prompter: SetupPrompter;
-}): Promise<OpenClawConfig> {
+}): Promise<NatesclawConfig> {
   const appId = await params.prompter.text({
     message: "请输入 QQ Bot AppID",
     validate: (value: string) => (value.trim() ? undefined : "AppID 不能为空"),
@@ -106,13 +106,13 @@ async function linkViaManualInput(params: {
 }
 
 export async function finalizeQQBotSetup(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   forceAllowFrom: boolean;
   prompter: SetupPrompter;
   runtime: SetupRuntime;
   options?: SetupOptions;
-}): Promise<{ cfg: OpenClawConfig }> {
+}): Promise<{ cfg: NatesclawConfig }> {
   const accountId = params.accountId.trim() || DEFAULT_ACCOUNT_ID;
   let next = params.cfg;
 
@@ -154,7 +154,7 @@ export async function finalizeQQBotSetup(params: {
     });
   } else if (!configured) {
     await params.prompter.note(
-      ["您可以稍后运行以下命令重新选择 QQ Bot 进行配置：", "  openclaw channels add"].join("\n"),
+      ["您可以稍后运行以下命令重新选择 QQ Bot 进行配置：", "  natesclaw channels add"].join("\n"),
       "QQ Bot",
     );
   }

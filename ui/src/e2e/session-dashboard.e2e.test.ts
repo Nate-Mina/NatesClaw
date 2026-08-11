@@ -166,7 +166,7 @@ function workboardConfigSnapshot(enabled = true) {
   return {
     config,
     hash: "workboard-cardboard-e2e",
-    path: "/tmp/openclaw-e2e/openclaw.json",
+    path: "/tmp/natesclaw-e2e/natesclaw.json",
     raw: JSON.stringify(config),
     resolved: config,
     sourceConfig: config,
@@ -262,7 +262,7 @@ suite.define(() => {
   });
 
   it("pins Canvas HTML, follows board commands, and persists dock resizing", async () => {
-    const recordProof = process.env.OPENCLAW_UI_E2E_RECORD === "1";
+    const recordProof = process.env.NATESCLAW_UI_E2E_RECORD === "1";
     if (recordProof) {
       await mkdir(workboardPinProofDir, { recursive: true });
     }
@@ -301,7 +301,7 @@ suite.define(() => {
                 render: "url",
                 title: "Release status",
                 viewId: "cv_release",
-                url: "/__openclaw__/canvas/documents/cv_release/index.html",
+                url: "/__natesclaw__/canvas/documents/cv_release/index.html",
                 preferredHeight: 240,
                 sandbox: "scripts",
               },
@@ -457,7 +457,7 @@ suite.define(() => {
   });
 
   it("renders and updates active Workboard plugin widgets", async () => {
-    const recordProof = process.env.OPENCLAW_UI_E2E_RECORD === "1";
+    const recordProof = process.env.NATESCLAW_UI_E2E_RECORD === "1";
     if (recordProof) {
       await mkdir(pluginWidgetsProofDir, { recursive: true });
     }
@@ -532,7 +532,7 @@ suite.define(() => {
         });
       }
 
-      const cardElement = page.locator("openclaw-workboard-card-widget");
+      const cardElement = page.locator("natesclaw-workboard-card-widget");
       await cardElement.evaluate((element) => {
         Reflect.set(globalThis, "workboardPluginElementIdentity", element);
       });
@@ -700,7 +700,7 @@ suite.define(() => {
   });
 
   it("links a dispatched Workboard card and its live session dashboard in both directions", async () => {
-    const recordProof = process.env.OPENCLAW_UI_E2E_RECORD === "1";
+    const recordProof = process.env.NATESCLAW_UI_E2E_RECORD === "1";
     if (recordProof) {
       await mkdir(cardboardProofDir, { recursive: true });
     }
@@ -793,14 +793,14 @@ suite.define(() => {
       });
       await workboardCard.waitFor();
       await workboardCard.click();
-      const cardDashboard = page.locator("openclaw-workboard-card-dashboard");
+      const cardDashboard = page.locator("natesclaw-workboard-card-dashboard");
       await cardDashboard.waitFor();
       await expect
         .poll(() =>
           cardDashboard.locator(".workboard-card-dashboard__toggle").getAttribute("aria-expanded"),
         )
         .toBe("true");
-      await cardDashboard.locator("openclaw-board-view").waitFor();
+      await cardDashboard.locator("natesclaw-board-view").waitFor();
       if (recordProof) {
         await page.screenshot({
           path: path.join(cardboardProofDir, "02-workboard-card-dashboard.png"),

@@ -1,16 +1,16 @@
 // Copilot plugin module implements BYOK provider mapping.
 import type { ProviderConfig } from "@github/copilot-sdk";
-import { isNonSecretApiKeyMarker } from "openclaw/plugin-sdk/provider-auth";
-import { isBlockedHostnameOrIp } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { isNonSecretApiKeyMarker } from "natesclaw/plugin-sdk/provider-auth";
+import { isBlockedHostnameOrIp } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { tokenFingerprint } from "./auth-bridge.js";
 
 const COPILOT_BYOK_PROVIDER_ERROR =
   "[copilot-attempt] BYOK requires an OpenAI-compatible or Anthropic model api and a non-empty baseUrl";
 const COPILOT_BYOK_TRANSPORT_POLICY_ERROR =
-  "[copilot-attempt] BYOK does not support OpenClaw provider request proxy, TLS, or private-network policy overrides";
+  "[copilot-attempt] BYOK does not support Natesclaw provider request proxy, TLS, or private-network policy overrides";
 const COPILOT_BYOK_ENDPOINT_POLICY_ERROR =
-  "[copilot-attempt] BYOK endpoint is blocked by OpenClaw SSRF policy";
+  "[copilot-attempt] BYOK endpoint is blocked by Natesclaw SSRF policy";
 
 const CREDENTIAL_QUERY_PARAM_NAMES = new Set([
   "accesstoken",
@@ -71,8 +71,8 @@ export type ResolvedCopilotProvider = {
 };
 
 /**
- * Maps OpenClaw's prepared model facts into the Copilot SDK's session-level
- * provider contract. The SDK owns the wire request; OpenClaw only supplies
+ * Maps Natesclaw's prepared model facts into the Copilot SDK's session-level
+ * provider contract. The SDK owns the wire request; Natesclaw only supplies
  * the already-resolved endpoint, model, headers, and credential.
  */
 export function resolveCopilotProvider(params: {

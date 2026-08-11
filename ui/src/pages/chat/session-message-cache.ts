@@ -1,5 +1,5 @@
 // Control UI chat module implements bounded visible-message caching.
-import { readSessionMessageSequence } from "@openclaw/gateway-client/browser";
+import { readSessionMessageSequence } from "@natesclaw/gateway-client/browser";
 import {
   DEFAULT_MAIN_KEY,
   isUiGlobalSessionKey,

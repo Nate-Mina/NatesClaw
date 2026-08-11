@@ -1,19 +1,19 @@
 // Openai provider module implements model/runtime integration.
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { resolveAgentDir } from "openclaw/plugin-sdk/agent-runtime";
-import { canonicalizeBase64 } from "openclaw/plugin-sdk/media-runtime";
-import type { PluginLogger } from "openclaw/plugin-sdk/plugin-entry";
+import { resolveAgentDir } from "natesclaw/plugin-sdk/agent-runtime";
+import { canonicalizeBase64 } from "natesclaw/plugin-sdk/media-runtime";
+import type { PluginLogger } from "natesclaw/plugin-sdk/plugin-entry";
 import {
   isProviderAuthProfileConfigured,
   resolveProviderAuthProfileApiKey,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveProviderRequestHeaders } from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-auth";
+import { resolveProviderRequestHeaders } from "natesclaw/plugin-sdk/provider-http";
 import {
   captureWsEvent,
   createDebugProxyWebSocketAgent,
   resolveDebugProxySettings,
-} from "openclaw/plugin-sdk/proxy-capture";
+} from "natesclaw/plugin-sdk/proxy-capture";
 import type {
   RealtimeVoiceAudioFormat,
   RealtimeVoiceBargeInOptions,
@@ -27,23 +27,23 @@ import type {
   RealtimeVoiceSessionConnection,
   RealtimeVoiceTool,
   RealtimeVoiceToolResultOptions,
-} from "openclaw/plugin-sdk/realtime-voice";
+} from "natesclaw/plugin-sdk/realtime-voice";
 import {
   REALTIME_VOICE_AUDIO_FORMAT_G711_ULAW_8KHZ,
   REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ,
   normalizeRealtimeVoiceResponseOutcome,
   RealtimeVoiceSessionLifecycle,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { sleepWithAbort, warn } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/realtime-voice";
+import { sleepWithAbort, warn } from "natesclaw/plugin-sdk/runtime-env";
 import {
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
+} from "natesclaw/plugin-sdk/secret-input";
 import {
   asFiniteNumber,
   isRecord,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
 import WebSocket from "ws";
 import {
   captureOpenAIRealtimeWsClose,
@@ -1649,7 +1649,7 @@ class OpenAIRealtimeVoiceBridge implements RealtimeVoiceBridge {
       this.responseActive &&
       !this.responseCancelInFlight
     ) {
-      const eventId = `openclaw-response-cancel-${randomUUID()}`;
+      const eventId = `natesclaw-response-cancel-${randomUUID()}`;
       this.manualResponseCancelEventId = eventId;
       this.sendEvent({ type: "response.cancel", event_id: eventId }, "reason=barge-in");
       this.responseCancelInFlight = true;
@@ -1833,7 +1833,7 @@ class OpenAIRealtimeVoiceBridge implements RealtimeVoiceBridge {
     this.responseCreatePending = false;
     this.responseCreateInFlight = true;
     this.suppressAutoRespondForManualResponse();
-    const eventId = `openclaw-response-create-${randomUUID()}`;
+    const eventId = `natesclaw-response-create-${randomUUID()}`;
     // Realtime errors can describe unrelated client events. Keep this id until
     // the manual turn settles so only its rejection may release VAD suppression.
     this.manualResponseCreateEventId = eventId;
@@ -1859,7 +1859,7 @@ class OpenAIRealtimeVoiceBridge implements RealtimeVoiceBridge {
     if (!text) {
       return;
     }
-    const eventId = `openclaw-standalone-speech-${randomUUID()}`;
+    const eventId = `natesclaw-standalone-speech-${randomUUID()}`;
     this.standaloneSpeechActive = true;
     this.standaloneSpeechEventId = eventId;
     this.responseCreateInFlight = true;
@@ -2126,7 +2126,7 @@ type OpenAIInternalRealtimeVoiceProviderApi = {
   ) => Promise<void> | void;
 };
 
-const INTERNAL_REALTIME_VOICE_PROVIDER = Symbol.for("openclaw.internal.realtime-voice-provider.v1");
+const INTERNAL_REALTIME_VOICE_PROVIDER = Symbol.for("natesclaw.internal.realtime-voice-provider.v1");
 
 function buildOpenAIRealtimeBrowserSessionConfig(
   req: OpenAIInternalRealtimeBrowserSessionCreateRequest,

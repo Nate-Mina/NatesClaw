@@ -112,7 +112,7 @@ function contextWithGateway(
 }
 
 function createPage(context: ApplicationContext): TestMemoryPanel {
-  const page = document.createElement("openclaw-agent-memory-panel") as TestMemoryPanel;
+  const page = document.createElement("natesclaw-agent-memory-panel") as TestMemoryPanel;
   page.context = context;
   page.agentId = "main";
   page.render = () => nothing;
@@ -378,7 +378,7 @@ describe("AgentMemoryPanel gateway lifecycle", () => {
         },
       },
     });
-    const page = document.createElement("openclaw-agent-memory-panel") as TestMemoryPanel;
+    const page = document.createElement("natesclaw-agent-memory-panel") as TestMemoryPanel;
     page.context = context;
     page.agentId = "main";
     const container = document.createElement("div");
@@ -399,7 +399,7 @@ describe("AgentMemoryPanel gateway lifecycle", () => {
     const context = contextWithGateway({} as GatewayBrowserClient, true, {
       plugins: { slots: { memory: "none" } },
     });
-    const page = document.createElement("openclaw-agent-memory-panel") as TestMemoryPanel;
+    const page = document.createElement("natesclaw-agent-memory-panel") as TestMemoryPanel;
     page.context = context;
     page.agentId = "main";
     page.dreaming.dreamingStatus = {
@@ -450,7 +450,7 @@ describe("AgentMemoryPanel gateway lifecycle", () => {
     const context = contextWithGateway({} as GatewayBrowserClient, true, {
       plugins: { slots: { memory: "none" } },
     });
-    const page = document.createElement("openclaw-agent-memory-panel") as TestMemoryPanel;
+    const page = document.createElement("natesclaw-agent-memory-panel") as TestMemoryPanel;
     page.context = context;
     page.agentId = "main";
     const container = document.createElement("div");
@@ -517,7 +517,7 @@ describe("AgentMemoryPanel gateway lifecycle", () => {
   });
 });
 
-describe.runIf(process.env.OPENCLAW_UI_MEMORY_CHROMIUM_E2E === "1")(
+describe.runIf(process.env.NATESCLAW_UI_MEMORY_CHROMIUM_E2E === "1")(
   "agent memory real Chromium owner proof",
   () => {
     let browser: import("playwright").Browser;
@@ -643,7 +643,7 @@ describe.runIf(process.env.OPENCLAW_UI_MEMORY_CHROMIUM_E2E === "1")(
             plugins: [
               {
                 id: "memory-core",
-                name: "OpenClaw Memory",
+                name: "Natesclaw Memory",
                 installed: true,
                 enabled: true,
                 state: "enabled",
@@ -667,11 +667,11 @@ describe.runIf(process.env.OPENCLAW_UI_MEMORY_CHROMIUM_E2E === "1")(
           },
         },
       });
-      const detail = () => page.locator("openclaw-agent-memory-panel .dreams__status-detail");
+      const detail = () => page.locator("natesclaw-agent-memory-panel .dreams__status-detail");
       const requestCount = () =>
         gateway.getRequests("doctor.memory.status").then((requests) => requests.length);
       const chooseAgent = async (name: string) => {
-        const picker = page.locator(".memory-page .agent-scope-control openclaw-agent-select");
+        const picker = page.locator(".memory-page .agent-scope-control natesclaw-agent-select");
         await picker.locator(".agent-select__trigger").click();
         await picker
           .locator("wa-dropdown-item[data-agent-option]")
@@ -738,7 +738,7 @@ describe.runIf(process.env.OPENCLAW_UI_MEMORY_CHROMIUM_E2E === "1")(
               page.evaluate(
                 () =>
                   (
-                    document.querySelector("openclaw-app") as HTMLElement & {
+                    document.querySelector("natesclaw-app") as HTMLElement & {
                       runtime?: { context: { gateway: { snapshot: { phase: string } } } };
                     }
                   ).runtime?.context.gateway.snapshot.phase,

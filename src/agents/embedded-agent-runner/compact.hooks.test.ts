@@ -3,13 +3,13 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
+import { expectDefined } from "@natesclaw/normalization-core";
+import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 import { createDeferred } from "../../../test/helpers/promise.js";
 import { createReplyOperation } from "../../auto-reply/reply/reply-run-registry.js";
 import { upsertSessionEntryCore } from "../../config/sessions/session-accessor.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../state/openclaw-agent-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../../state/natesclaw-agent-db.js";
 import {
   acquireAgentRunPreparedModelRuntimeMock,
   applyExtraParamsToAgentMock,
@@ -21,7 +21,7 @@ import {
   compactWithSafetyTimeoutMock,
   createAgentSessionMock,
   createPreparedEmbeddedAgentSettingsManagerMock,
-  createOpenClawCodingToolsMock,
+  createNatesclawCodingToolsMock,
   enqueueCommandInLaneMock,
   ensureAuthProfileStoreMock,
   estimateTokensMock,
@@ -416,7 +416,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
     expectRecordFields(fallbackPlanCall[0], {
       provider: "anthropic",
       modelId: "claude-fallback",
-      harnessId: "openclaw",
+      harnessId: "natesclaw",
       modelRoute: undefined,
     });
   });
@@ -517,7 +517,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
           auth: { order: { openai: ["openai:subscription", "openai:platform"] } },
           agents: {
             defaults: {
-              models: { "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } } },
+              models: { "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } } },
             },
           },
         },
@@ -587,7 +587,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
           },
           agents: {
             defaults: {
-              models: { "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } } },
+              models: { "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } } },
             },
           },
         },
@@ -635,8 +635,8 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       runAttempt: vi.fn(),
     } as never);
     selectAgentHarnessForPreparedModelProvidersMock.mockReturnValue({
-      id: "openclaw",
-      label: "OpenClaw test harness",
+      id: "natesclaw",
+      label: "Natesclaw test harness",
       supports: () => ({ supported: true }),
       runAttempt: vi.fn(),
     } as never);
@@ -648,7 +648,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
     expect(result.ok).toBe(true);
     expect(selectAgentHarnessForPreparedModelProvidersMock).toHaveBeenCalledTimes(2);
     expect(buildAgentRuntimePlanMock).toHaveBeenCalledWith(
-      expect.objectContaining({ harnessId: "openclaw", harnessRuntime: "openclaw" }),
+      expect.objectContaining({ harnessId: "natesclaw", harnessRuntime: "natesclaw" }),
     );
   });
 
@@ -945,7 +945,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       senderE164: "+15551234567",
     });
 
-    expectRecordFields(mockCallArg(createOpenClawCodingToolsMock), {
+    expectRecordFields(mockCallArg(createNatesclawCodingToolsMock), {
       senderId: "sender-1",
       senderName: "Alice",
       senderUsername: "alice_u",
@@ -968,7 +968,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
         workspaceDir: "/tmp/workspace",
       });
 
-      expectRecordFields(mockCallArg(createOpenClawCodingToolsMock), { modelHasVision });
+      expectRecordFields(mockCallArg(createNatesclawCodingToolsMock), { modelHasVision });
     },
   );
 
@@ -981,7 +981,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       cwd: "/tmp/task-repo",
     });
 
-    expectRecordFields(mockCallArg(createOpenClawCodingToolsMock), {
+    expectRecordFields(mockCallArg(createNatesclawCodingToolsMock), {
       cwd: "/tmp/task-repo",
       workspaceDir: "/tmp/workspace",
       spawnWorkspaceDir: "/tmp/workspace",
@@ -1001,7 +1001,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       contextTokenBudget: 64_000,
     });
 
-    expectRecordFields(mockCallArg(createOpenClawCodingToolsMock), {
+    expectRecordFields(mockCallArg(createNatesclawCodingToolsMock), {
       modelContextWindowTokens: 64_000,
     });
     expectRecordFields(mockCallArg(guardSessionManagerMock, 0, 1), {
@@ -1025,7 +1025,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       workspaceDir: "/tmp/workspace",
     });
 
-    expect(createOpenClawCodingToolsMock).not.toHaveBeenCalled();
+    expect(createNatesclawCodingToolsMock).not.toHaveBeenCalled();
   });
 
   it("quarantines unsupported tool schemas before creating the compaction model session", async () => {
@@ -1039,7 +1039,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       authStorage: { setRuntimeApiKey: vi.fn() },
       modelRegistry: {},
     });
-    createOpenClawCodingToolsMock.mockReturnValueOnce([
+    createNatesclawCodingToolsMock.mockReturnValueOnce([
       {
         name: "healthy_lookup",
         label: "Healthy Lookup",
@@ -1082,7 +1082,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       contextTokenBudget: 64_000,
     });
 
-    expectRecordFields(mockCallArg(createOpenClawCodingToolsMock), {
+    expectRecordFields(mockCallArg(createNatesclawCodingToolsMock), {
       modelContextWindowTokens: 32_000,
     });
   });
@@ -1173,7 +1173,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
     );
   });
 
-  it("keeps model-locked OpenClaw compaction on its exact model without fallbacks", async () => {
+  it("keeps model-locked Natesclaw compaction on its exact model without fallbacks", async () => {
     sessionCompactImpl.mockRejectedValueOnce(
       Object.assign(new Error("primary compaction rate limited"), { status: 429 }),
     );
@@ -1185,7 +1185,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       workspaceDir: "/tmp/workspace",
       provider: "openai",
       model: "gpt-primary",
-      agentHarnessId: "openclaw",
+      agentHarnessId: "natesclaw",
       modelSelectionLocked: true,
       modelFallbacksOverride: ["anthropic/claude-fallback"],
       config: {
@@ -1208,7 +1208,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
   });
 
   it("revalidates immutable Ultra for each compaction fallback candidate", async () => {
-    resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "openclaw" });
+    resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "natesclaw" });
     sessionCompactImpl
       .mockRejectedValueOnce(
         Object.assign(new Error("primary compaction rate limited"), {
@@ -1236,7 +1236,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
         agents: {
           defaults: {
             models: {
-              "openai/gpt-5.6-sol": { agentRuntime: { id: "openclaw" } },
+              "openai/gpt-5.6-sol": { agentRuntime: { id: "natesclaw" } },
             },
           },
         },
@@ -1332,7 +1332,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
       runtimeSource: "implicit",
     } as never);
     // Only ChatGPT OAuth is available — no API-key profile. Auth-aware
-    // selection must pick codex (harness-owned) instead of forced openclaw.
+    // selection must pick codex (harness-owned) instead of forced natesclaw.
     ensureAuthProfileStoreMock.mockReturnValue({
       version: 1,
       profiles: {
@@ -1481,7 +1481,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
         modelProviders: expect.arrayContaining([
           expect.objectContaining({
             preparedAuth: expect.objectContaining({ source: "profile" }),
-            runtimePolicy: expect.objectContaining({ compatibleIds: ["openclaw", "codex"] }),
+            runtimePolicy: expect.objectContaining({ compatibleIds: ["natesclaw", "codex"] }),
           }),
         ]),
       }),
@@ -1493,8 +1493,8 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
     });
   });
 
-  it("preserves direct OpenAI API-key compaction when OpenClaw runtime is active", async () => {
-    resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "openclaw" });
+  it("preserves direct OpenAI API-key compaction when Natesclaw runtime is active", async () => {
+    resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "natesclaw" });
 
     const result = await compactEmbeddedAgentSessionDirect({
       sessionId: "session-1",
@@ -1594,7 +1594,7 @@ describe("compactEmbeddedAgentSessionDirect hooks", () => {
   });
 
   it("materializes subscription-auth OpenAI compaction while preserving logical context", async () => {
-    resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "openclaw" });
+    resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "natesclaw" });
     mockResolvedModel({ contextWindow: 1_000_000 });
     ensureAuthProfileStoreMock.mockReturnValue({
       version: 1,
@@ -2381,7 +2381,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
   });
 
   it("resolves the durable session key before invoking an owning context engine", async () => {
-    const dir = await mkdtemp(join(tmpdir(), "openclaw-compaction-session-key-"));
+    const dir = await mkdtemp(join(tmpdir(), "natesclaw-compaction-session-key-"));
     const storePath = join(dir, "sessions.json");
     const sessionId = "9d6c8436-7cb2-4bd5-a302-e33305bfc8c4";
     const sessionKey = "agent:main:telegram:direct:reporter";
@@ -2415,7 +2415,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
       expectRecordFields(mockCallArg(hookRunner.runBeforeCompaction, 0, 1), { sessionKey });
       expectRecordFields(mockCallArg(hookRunner.runAfterCompaction, 0, 1), { sessionKey });
     } finally {
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
       await rm(dir, { force: true, recursive: true });
     }
   });
@@ -2993,7 +2993,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
           },
           agents: {
             defaults: {
-              models: { "openai/gpt-5.5": { agentRuntime: { id: "openclaw" } } },
+              models: { "openai/gpt-5.5": { agentRuntime: { id: "natesclaw" } } },
             },
           },
         },
@@ -3101,7 +3101,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
     );
   });
 
-  it("preserves concrete OpenClaw pins over explicit Codex policy for queued compaction", async () => {
+  it("preserves concrete Natesclaw pins over explicit Codex policy for queued compaction", async () => {
     resolveAgentHarnessPolicyMock.mockReturnValue({
       runtime: "codex",
       runtimeSource: "model",
@@ -3120,7 +3120,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
       wrappedCompactionArgs({
         provider: "openai",
         model: "gpt-5.5",
-        agentHarnessId: "openclaw",
+        agentHarnessId: "natesclaw",
         config: {
           models: {
             providers: {
@@ -3302,7 +3302,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
         modelProviders: expect.arrayContaining([
           expect.objectContaining({
             preparedAuth: expect.objectContaining({ source: "harness" }),
-            runtimePolicy: expect.objectContaining({ compatibleIds: ["openclaw", "codex"] }),
+            runtimePolicy: expect.objectContaining({ compatibleIds: ["natesclaw", "codex"] }),
           }),
         ]),
       }),
@@ -3421,9 +3421,9 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
     );
   });
 
-  it("keeps unbound api-key queued compaction on openclaw without native harness compaction", async () => {
+  it("keeps unbound api-key queued compaction on natesclaw without native harness compaction", async () => {
     resolveAgentHarnessPolicyMock.mockReturnValue({
-      runtime: "openclaw",
+      runtime: "natesclaw",
       runtimeSource: "implicit",
     } as never);
 
@@ -3450,13 +3450,13 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
       }),
     );
     expect(selectAgentHarnessMock.mock.results[0]?.value).toEqual(
-      expect.objectContaining({ id: "openclaw" }),
+      expect.objectContaining({ id: "natesclaw" }),
     );
   });
 
   it("resolves reusable queued direct auth without a stored profile", async () => {
     resolveAgentHarnessPolicyMock.mockReturnValue({
-      runtime: "openclaw",
+      runtime: "natesclaw",
       runtimeSource: "implicit",
     } as never);
 
@@ -3565,7 +3565,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
 
   it("keeps queued custom OpenAI Responses compaction embedded without a harness binding", async () => {
     resolveAgentHarnessPolicyMock.mockReturnValue({
-      runtime: "openclaw",
+      runtime: "natesclaw",
       runtimeSource: "implicit",
     } as never);
 
@@ -3681,7 +3681,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
   ])(
     "fails model-locked Codex compaction on %s without a context-engine fallback",
     async (failureReason, reason) => {
-      resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "openclaw" });
+      resolveAgentHarnessPolicyMock.mockReturnValue({ runtime: "natesclaw" });
       maybeCompactAgentHarnessSessionMock.mockResolvedValueOnce({
         ok: false,
         compacted: false,
@@ -4323,7 +4323,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
   it("rejects a deprecated session-key successor outside the active binding", async () => {
     const delegatedSessionId = "delegated-key-session";
     const delegatedSessionKey = "agent:main:delegated-key-session";
-    const dir = await mkdtemp(join(tmpdir(), "openclaw-compaction-successor-"));
+    const dir = await mkdtemp(join(tmpdir(), "natesclaw-compaction-successor-"));
     const storePath = join(dir, "sessions.json");
     resolveContextEngineMock.mockResolvedValue({
       info: { ownsCompaction: false },
@@ -4359,13 +4359,13 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
         ),
       ).rejects.toThrow("successor target changed the active session binding");
     } finally {
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
       await rm(dir, { force: true, recursive: true });
     }
   });
 
   it("rejects a deprecated session-key successor with a mismatched stored id", async () => {
-    const dir = await mkdtemp(join(tmpdir(), "openclaw-compaction-successor-mismatch-"));
+    const dir = await mkdtemp(join(tmpdir(), "natesclaw-compaction-successor-mismatch-"));
     const storePath = join(dir, "sessions.json");
     const delegatedSessionKey = "agent:main:delegated-key-mismatch";
     resolveContextEngineMock.mockResolvedValue({
@@ -4399,7 +4399,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
         ),
       ).rejects.toThrow("successor identity is inconsistent");
     } finally {
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
       await rm(dir, { force: true, recursive: true });
     }
   });
@@ -4465,7 +4465,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
       rewrittenEntries: 0,
     }));
     const delegatedSessionId = "delegated-marker-session";
-    const dir = await mkdtemp(join(tmpdir(), "openclaw-compaction-marker-successor-"));
+    const dir = await mkdtemp(join(tmpdir(), "natesclaw-compaction-marker-successor-"));
     const storePath = join(dir, "sessions.json");
     const marker = `sqlite:main:${delegatedSessionId}:${storePath}`;
     resolveContextEngineMock.mockResolvedValue({
@@ -4508,7 +4508,7 @@ describe("compactEmbeddedAgentSession hooks (ownsCompaction engine)", () => {
         }),
       });
     } finally {
-      closeOpenClawAgentDatabasesForTest();
+      closeNatesclawAgentDatabasesForTest();
       await rm(dir, { force: true, recursive: true });
     }
   });

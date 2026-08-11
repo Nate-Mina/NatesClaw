@@ -5,36 +5,36 @@ export type {
   ChannelDirectoryEntry,
   ChatType,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  NatesclawConfig,
+  NatesclawPluginApi,
   ReplyPayload,
-} from "openclaw/plugin-sdk/core";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export { resolveAllowlistMatchSimple } from "openclaw/plugin-sdk/allow-from";
-export { logInboundDrop } from "openclaw/plugin-sdk/channel-inbound";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-export { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-outbound";
-export { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
-export { listSkillCommandsForAgents } from "openclaw/plugin-sdk/command-auth-native";
-export { buildModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
-export { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
+} from "natesclaw/plugin-sdk/core";
+export type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime";
+export { resolveAllowlistMatchSimple } from "natesclaw/plugin-sdk/allow-from";
+export { logInboundDrop } from "natesclaw/plugin-sdk/channel-inbound";
+export { createChannelPairingController } from "natesclaw/plugin-sdk/channel-pairing";
+export { createChannelMessageReplyPipeline } from "natesclaw/plugin-sdk/channel-outbound";
+export { logTypingFailure } from "natesclaw/plugin-sdk/channel-feedback";
+export { listSkillCommandsForAgents } from "natesclaw/plugin-sdk/command-auth-native";
+export { buildModelsProviderData } from "natesclaw/plugin-sdk/models-provider-runtime";
+export { isDangerousNameMatchingEnabled } from "natesclaw/plugin-sdk/dangerous-name-runtime";
 export {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-export { resolveChannelMediaMaxBytes } from "openclaw/plugin-sdk/media-runtime";
-export { loadOutboundMediaFromUrl } from "openclaw/plugin-sdk/outbound-media";
+} from "natesclaw/plugin-sdk/runtime-group-policy";
+export { resolveChannelMediaMaxBytes } from "natesclaw/plugin-sdk/media-runtime";
+export { loadOutboundMediaFromUrl } from "natesclaw/plugin-sdk/outbound-media";
 // Legacy map-helper exports stay for older plugin consumers. New message-turn
 // code should use createChannelHistoryWindow.
 export {
   DEFAULT_GROUP_HISTORY_LIMIT,
   createChannelHistoryWindow,
-} from "openclaw/plugin-sdk/reply-history";
-export { registerPluginHttpRoute } from "openclaw/plugin-sdk/webhook-targets";
+} from "natesclaw/plugin-sdk/reply-history";
+export { registerPluginHttpRoute } from "natesclaw/plugin-sdk/webhook-targets";
 export {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
-} from "openclaw/plugin-sdk/webhook-ingress";
-export { isTrustedProxyAddress, resolveClientIp } from "openclaw/plugin-sdk/core";
-export { parseTcpPort } from "openclaw/plugin-sdk/number-runtime";
+} from "natesclaw/plugin-sdk/webhook-ingress";
+export { isTrustedProxyAddress, resolveClientIp } from "natesclaw/plugin-sdk/core";
+export { parseTcpPort } from "natesclaw/plugin-sdk/number-runtime";

@@ -18,8 +18,8 @@ const { durabilityTestState, resolveSystemBinMock, runExecMock } = vi.hoisted(()
   runExecMock: vi.fn(),
 }));
 
-vi.mock("@openclaw/fs-safe/durability", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@openclaw/fs-safe/durability")>();
+vi.mock("@natesclaw/fs-safe/durability", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@natesclaw/fs-safe/durability")>();
   return {
     ...actual,
     publishFileExclusive: async (...args: Parameters<typeof actual.publishFileExclusive>) => {
@@ -44,7 +44,7 @@ vi.mock("../resolve-system-bin.js", () => ({ resolveSystemBin: resolveSystemBinM
 import { loadGatewayTlsRuntime } from "./gateway.js";
 
 const tempDirs = createTrackedTempDirs();
-const createTempDir = () => tempDirs.make("openclaw-gateway-tls-test-");
+const createTempDir = () => tempDirs.make("natesclaw-gateway-tls-test-");
 
 function resolveOpenSslOutput(args: string[], flag: "-keyout" | "-out"): string {
   const outputPath = args.at(args.indexOf(flag) + 1);

@@ -1,16 +1,16 @@
 // Discord plugin module implements send.voice behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
+import { recordChannelActivity } from "natesclaw/plugin-sdk/channel-activity-runtime";
 import {
   buildOutboundMediaLoadOptions,
   extensionForMime,
   maxBytesForKind,
   unlinkIfExists,
-} from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { withTempWorkspace, resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
-import { loadWebMediaRaw } from "openclaw/plugin-sdk/web-media";
+} from "natesclaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "natesclaw/plugin-sdk/plugin-config-runtime";
+import { withTempWorkspace, resolvePreferredNatesclawTmpDir } from "natesclaw/plugin-sdk/temp-path";
+import { loadWebMediaRaw } from "natesclaw/plugin-sdk/web-media";
 import { resolveDiscordAccount } from "./accounts.js";
 import type { RequestClient } from "./internal/discord.js";
 import { parseAndResolveChannelRecipient } from "./recipient-resolution.js";
@@ -75,7 +75,7 @@ async function withMaterializedVoiceMessageInput<T>(
   const ext = extFromName || extFromMime || ".bin";
   return await withTempWorkspace(
     {
-      rootDir: resolvePreferredOpenClawTmpDir(),
+      rootDir: resolvePreferredNatesclawTmpDir(),
       prefix: "voice-src-",
     },
     async (workspace) => await run(await workspace.write(`input${ext}`, media.buffer)),

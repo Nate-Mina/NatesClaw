@@ -2,9 +2,9 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@openclaw/normalization-core";
-import { err, ok as resultOk } from "@openclaw/normalization-core/result";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { expectDefined } from "@natesclaw/normalization-core";
+import { err, ok as resultOk } from "@natesclaw/normalization-core/result";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -216,7 +216,7 @@ export const sessionCreateHandlers: GatewayRequestHandlers = {
           undefined,
           errorShape(
             ErrorCodes.UNAVAILABLE,
-            `project ${requestedProjectId} is unavailable (${detail}); re-register it or run openclaw doctor --fix`,
+            `project ${requestedProjectId} is unavailable (${detail}); re-register it or run natesclaw doctor --fix`,
           ),
         );
         return;
@@ -430,7 +430,7 @@ export const sessionCreateHandlers: GatewayRequestHandlers = {
                 normalizeOptionalString(p.label) ?? generatedDisplayName ?? "",
               ),
               baseRef: requestedWorktreeBaseRef,
-              // Checkout hooks and .openclaw/worktree-setup.sh run repo code; keep them
+              // Checkout hooks and .natesclaw/worktree-setup.sh run repo code; keep them
               // admin-only so this write-scoped path cannot execute gated repo scripts.
               runSetupScript: scopes.includes(ADMIN_SCOPE),
               ...(authority.commitGuard ? { commitGuard: authority.commitGuard } : {}),

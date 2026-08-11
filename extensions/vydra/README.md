@@ -1,13 +1,13 @@
-# OpenClaw Vydra Provider
+# Natesclaw Vydra Provider
 
-Official OpenClaw provider plugin for Vydra image, video, and speech generation.
+Official Natesclaw provider plugin for Vydra image, video, and speech generation.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/vydra-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/vydra-provider
+natesclaw gateway restart
 ```
 
 Set `VYDRA_API_KEY`, then configure an image, video, or speech model. See
-<https://docs.openclaw.ai/providers/vydra> for capability details and examples.
+<https://docs.natesclaw.ai/providers/vydra> for capability details and examples.

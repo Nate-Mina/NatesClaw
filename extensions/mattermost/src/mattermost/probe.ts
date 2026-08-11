@@ -1,13 +1,13 @@
 // Mattermost plugin module implements probe behavior.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
+import { resolveTimerTimeoutMs } from "natesclaw/plugin-sdk/number-runtime";
+import { readProviderJsonResponse } from "natesclaw/plugin-sdk/provider-http";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromPrivateNetworkOptIn,
   type LookupFn,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { runChannelProbe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "natesclaw/plugin-sdk/ssrf-runtime";
+import { runChannelProbe } from "natesclaw/plugin-sdk/text-utility-runtime";
 import { normalizeMattermostBaseUrl, readMattermostError, type MattermostUser } from "./client.js";
 import type { BaseProbeResult } from "./runtime-api.js";
 

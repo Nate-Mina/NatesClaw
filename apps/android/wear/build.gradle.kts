@@ -7,26 +7,26 @@ plugins {
   alias(libs.plugins.kotlin.serialization)
 }
 
-val openClawAndroidVersionFile = rootProject.file("Config/Version.properties")
-val openClawAndroidVersionProperties =
+val NatesclawAndroidVersionFile = rootProject.file("Config/Version.properties")
+val NatesclawAndroidVersionProperties =
   Properties().apply {
-    if (!openClawAndroidVersionFile.isFile) {
+    if (!NatesclawAndroidVersionFile.isFile) {
       error("Missing Android version properties. Run `pnpm android:version:sync`.")
     }
-    openClawAndroidVersionFile.inputStream().use(::load)
+    NatesclawAndroidVersionFile.inputStream().use(::load)
   }
 
-fun requireOpenClawAndroidVersionProperty(name: String): String =
-  openClawAndroidVersionProperties.getProperty(name)?.trim()?.takeIf { it.isNotEmpty() }
+fun requireNatesclawAndroidVersionProperty(name: String): String =
+  NatesclawAndroidVersionProperties.getProperty(name)?.trim()?.takeIf { it.isNotEmpty() }
     ?: error("Missing $name in Config/Version.properties. Run `pnpm android:version:sync`.")
 
-val openClawAndroidPhoneVersionCode = requireOpenClawAndroidVersionProperty("OPENCLAW_ANDROID_VERSION_CODE").toInt()
-val openClawAndroidBuildNumber = openClawAndroidPhoneVersionCode % 100
-check(openClawAndroidBuildNumber in 1..49) {
+val NatesclawAndroidPhoneVersionCode = requireNatesclawAndroidVersionProperty("NATESCLAW_ANDROID_VERSION_CODE").toInt()
+val NatesclawAndroidBuildNumber = NatesclawAndroidPhoneVersionCode % 100
+check(NatesclawAndroidBuildNumber in 1..49) {
   "Android build number must be 01 through 49; Wear reserves 51 through 99."
 }
-val openClawAndroidWearVersionCode = openClawAndroidPhoneVersionCode + 50
-check(openClawAndroidWearVersionCode <= 2_100_000_000) { "Wear versionCode exceeds the Android platform maximum." }
+val NatesclawAndroidWearVersionCode = NatesclawAndroidPhoneVersionCode + 50
+check(NatesclawAndroidWearVersionCode <= 2_100_000_000) { "Wear versionCode exceeds the Android platform maximum." }
 
 // Data Layer delivery requires the phone and watch packages to share one certificate.
 evaluationDependsOn(":app")
@@ -38,16 +38,16 @@ val phoneReleaseSigning =
     .findByName("release")
 
 android {
-  namespace = "ai.openclaw.wear"
+  namespace = "ai.natesclaw.wear"
   compileSdk = 37
 
   defaultConfig {
     // Data Layer traffic is scoped to matching package names and signatures.
-    applicationId = "ai.openclaw.app"
+    applicationId = "ai.natesclaw.app"
     minSdk = 31
     targetSdk = 36
-    versionCode = openClawAndroidWearVersionCode
-    versionName = requireOpenClawAndroidVersionProperty("OPENCLAW_ANDROID_VERSION_NAME")
+    versionCode = NatesclawAndroidWearVersionCode
+    versionName = requireNatesclawAndroidVersionProperty("NATESCLAW_ANDROID_VERSION_NAME")
   }
 
   buildTypes {

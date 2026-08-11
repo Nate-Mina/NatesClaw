@@ -1,26 +1,26 @@
 {
-  "name": "@openclaw/workboard",
+  "name": "@natesclaw/workboard",
   "version": "2026.8.1",
   "private": true,
-  "description": "OpenClaw dashboard workboard plugin",
+  "description": "Natesclaw dashboard workboard plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.3.6"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "@openclaw/workboard-contract": "workspace:*",
-    "openclaw": "workspace:*"
+    "@natesclaw/plugin-sdk": "workspace:*",
+    "@natesclaw/workboard-contract": "workspace:*",
+    "natesclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1"
+    "natesclaw": ">=2026.8.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "natesclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "natesclaw": {
     "extensions": [
       "./index.ts"
     ]

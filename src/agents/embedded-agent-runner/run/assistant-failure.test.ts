@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { PROVIDER_POST_DISPATCH_AMBIGUITY_ERROR_CODE } from "../../../llm/types.js";
 import { FailoverError } from "../../failover-error.js";
 import { runWithModelFallback } from "../../model-fallback-runner.js";
@@ -99,7 +99,7 @@ function makeExhaustedCredentialFailureInput(options?: { replaySafe?: boolean })
     traceAttempts,
     suspendForFailure: vi.fn(),
     suspensionSessionId: "session:credential-enoent",
-    agentDir: "/tmp/openclaw-assistant-failure-test",
+    agentDir: "/tmp/natesclaw-assistant-failure-test",
     isProbeSession: false,
   };
   return {
@@ -213,8 +213,8 @@ describe("handleEmbeddedAssistantFailure", () => {
   });
 
   it("does not cache an exact credential-file failure from a fallback candidate", async () => {
-    const previous = process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS;
-    process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS = "60000";
+    const previous = process.env.NATESCLAW_FALLBACK_SKIP_TTL_MS;
+    process.env.NATESCLAW_FALLBACK_SKIP_TTL_MS = "60000";
     try {
       const config = {
         agents: {
@@ -225,7 +225,7 @@ describe("handleEmbeddedAssistantFailure", () => {
             },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies NatesclawConfig;
       const calls: string[] = [];
       const run = async (provider: string, model: string) => {
         calls.push(`${provider}/${model}`);
@@ -264,9 +264,9 @@ describe("handleEmbeddedAssistantFailure", () => {
       ]);
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS;
+        delete process.env.NATESCLAW_FALLBACK_SKIP_TTL_MS;
       } else {
-        process.env.OPENCLAW_FALLBACK_SKIP_TTL_MS = previous;
+        process.env.NATESCLAW_FALLBACK_SKIP_TTL_MS = previous;
       }
     }
   });

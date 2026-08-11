@@ -1,4 +1,4 @@
-import { definePage } from "@openclaw/uirouter";
+import { definePage } from "@natesclaw/uirouter";
 import { html } from "lit";
 import { routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";
@@ -54,6 +54,6 @@ export const page = definePage({
     import("./skills-page.ts").then(() => ({
       header: true,
       render: (data: SkillsRouteData | undefined) =>
-        html`<openclaw-skills-page .routeData=${data}></openclaw-skills-page>`,
+        html`<natesclaw-skills-page .routeData=${data}></natesclaw-skills-page>`,
     })),
 });

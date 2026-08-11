@@ -3,13 +3,13 @@ import {
   asFiniteNumber as normalizeFiniteNumber,
   asNonNegativeFiniteNumber as normalizeNonNegativeNumber,
   asPositiveFiniteNumber as normalizePositiveNumber,
-} from "@openclaw/normalization-core/number-coercion";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+} from "@natesclaw/normalization-core/number-coercion";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   normalizeOptionalTrimmedStringList,
   normalizeTrimmedStringList,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@natesclaw/normalization-core/string-normalization";
 import {
   buildModelCatalogMergeKey,
   buildModelCatalogRef,

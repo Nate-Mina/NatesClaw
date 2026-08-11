@@ -1,8 +1,8 @@
 // Gateway session event broadcaster.
 // Projects transcript and lifecycle updates to websocket subscribers.
 import path from "node:path";
-import { asPositiveSafeInteger } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asPositiveSafeInteger } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { getRuntimeConfig } from "../config/io.js";
 import { parseSqliteSessionFileMarker } from "../config/sessions/legacy-sqlite-marker.js";
@@ -30,7 +30,7 @@ import {
 } from "./session-event-payload.js";
 import { resolveSessionSubscriptionKeys } from "./session-subscription-keys.js";
 import {
-  attachOpenClawTranscriptMeta,
+  attachNatesclawTranscriptMeta,
   readSessionMessageCountAsync,
 } from "./session-transcript-readers.js";
 import {
@@ -54,11 +54,11 @@ function readMessageSenderIsOwner(message: unknown): boolean | undefined {
   if (!message || typeof message !== "object" || Array.isArray(message)) {
     return undefined;
   }
-  const openclaw = (message as Record<string, unknown>)["__openclaw"];
-  if (!openclaw || typeof openclaw !== "object" || Array.isArray(openclaw)) {
+  const natesclaw = (message as Record<string, unknown>)["__natesclaw"];
+  if (!natesclaw || typeof natesclaw !== "object" || Array.isArray(natesclaw)) {
     return undefined;
   }
-  const value = (openclaw as Record<string, unknown>).senderIsOwner;
+  const value = (natesclaw as Record<string, unknown>).senderIsOwner;
   return typeof value === "boolean" ? value : undefined;
 }
 
@@ -373,7 +373,7 @@ async function handleTranscriptUpdateBroadcast(
   }
   const idempotencyKey = readMessageIdempotencyKey(update.message);
   const senderIsOwner = readMessageSenderIsOwner(update.message);
-  const rawMessage = attachOpenClawTranscriptMeta(update.message, {
+  const rawMessage = attachNatesclawTranscriptMeta(update.message, {
     ...(typeof update.messageId === "string" ? { id: update.messageId } : {}),
     ...(idempotencyKey ? { idempotencyKey } : {}),
     ...(messageSeq !== undefined ? { seq: messageSeq } : {}),

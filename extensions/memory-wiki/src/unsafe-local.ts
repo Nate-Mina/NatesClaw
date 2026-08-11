@@ -2,7 +2,7 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import pMap from "p-map";
 import { walkMemoryWikiDirectory } from "./bounded-walk.js";
 import type { BridgeMemoryWikiResult } from "./bridge.js";
@@ -203,8 +203,8 @@ async function writeUnsafeLocalSourcePage(params: {
           renderMarkdownFence(raw, detectFenceLanguage(params.artifact.absolutePath)),
           "",
           "## Notes",
-          "<!-- openclaw:human:start -->",
-          "<!-- openclaw:human:end -->",
+          "<!-- natesclaw:human:start -->",
+          "<!-- natesclaw:human:end -->",
           "",
         ].join("\n"),
       }),

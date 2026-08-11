@@ -1,11 +1,11 @@
 import Foundation
 import Network
-import OpenClawChatUI
+import NatesclawChatUI
 import os
 import Testing
 import UIKit
-@testable import OpenClaw
-@testable import OpenClawKit
+@testable import Natesclaw
+@testable import NatesclawKit
 
 @discardableResult
 private func saveActiveManualGateway(
@@ -83,19 +83,19 @@ private struct GatewayRegistryTestIsolation {
     }
 }
 
-private struct TemporaryOpenClawState {
+private struct TemporaryNatesclawState {
     private let previousStateDirectory: String?
     private let previousInstanceID: Any?
     private let instanceID: String?
     private let dir: URL
 
     init(instanceID: String? = nil) throws {
-        self.previousStateDirectory = ProcessInfo.processInfo.environment["OPENCLAW_STATE_DIR"]
+        self.previousStateDirectory = ProcessInfo.processInfo.environment["NATESCLAW_STATE_DIR"]
         self.previousInstanceID = UserDefaults.standard.object(forKey: "node.instanceId")
         self.instanceID = instanceID
         self.dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: self.dir, withIntermediateDirectories: true)
-        setenv("OPENCLAW_STATE_DIR", self.dir.path, 1)
+        setenv("NATESCLAW_STATE_DIR", self.dir.path, 1)
         if let instanceID {
             UserDefaults.standard.set(instanceID, forKey: "node.instanceId")
         }
@@ -109,9 +109,9 @@ private struct TemporaryOpenClawState {
         if let previousInstanceID {
             UserDefaults.standard.set(previousInstanceID, forKey: "node.instanceId")
         }
-        unsetenv("OPENCLAW_STATE_DIR")
+        unsetenv("NATESCLAW_STATE_DIR")
         if let previousStateDirectory {
-            setenv("OPENCLAW_STATE_DIR", previousStateDirectory, 1)
+            setenv("NATESCLAW_STATE_DIR", previousStateDirectory, 1)
         }
         try? FileManager.default.removeItem(at: self.dir)
     }
@@ -293,33 +293,33 @@ private func waitUntil(
             "node.instanceId": "ios-test",
             "node.displayName": "Test Node",
             "camera.enabled": true,
-            "location.enabledMode": OpenClawLocationMode.always.rawValue,
+            "location.enabledMode": NatesclawLocationMode.always.rawValue,
             VoiceWakePreferences.enabledKey: true,
         ]) {
             let appModel = NodeAppModel()
             let controller = GatewayConnectionController(appModel: appModel, startDiscovery: false)
             let caps = Set(controller._test_currentCaps())
 
-            #expect(caps.contains(OpenClawCapability.canvas.rawValue))
-            #expect(caps.contains(OpenClawCapability.screen.rawValue))
-            #expect(!caps.contains(OpenClawGatewayClientCapability.inlineWidgets))
-            #expect(caps.contains(OpenClawCapability.camera.rawValue))
-            #expect(caps.contains(OpenClawCapability.location.rawValue))
-            #expect(caps.contains(OpenClawCapability.voiceWake.rawValue))
-            #expect(caps.contains(OpenClawCapability.talk.rawValue))
+            #expect(caps.contains(NatesclawCapability.canvas.rawValue))
+            #expect(caps.contains(NatesclawCapability.screen.rawValue))
+            #expect(!caps.contains(NatesclawGatewayClientCapability.inlineWidgets))
+            #expect(caps.contains(NatesclawCapability.camera.rawValue))
+            #expect(caps.contains(NatesclawCapability.location.rawValue))
+            #expect(caps.contains(NatesclawCapability.voiceWake.rawValue))
+            #expect(caps.contains(NatesclawCapability.talk.rawValue))
         }
     }
 
     @Test @MainActor func `current commands include location when enabled`() {
         withUserDefaults([
             "node.instanceId": "ios-test",
-            "location.enabledMode": OpenClawLocationMode.whileUsing.rawValue,
+            "location.enabledMode": NatesclawLocationMode.whileUsing.rawValue,
         ]) {
             let appModel = NodeAppModel()
             let controller = GatewayConnectionController(appModel: appModel, startDiscovery: false)
             let commands = Set(controller._test_currentCommands())
 
-            #expect(commands.contains(OpenClawLocationCommand.get.rawValue))
+            #expect(commands.contains(NatesclawLocationCommand.get.rawValue))
         }
     }
 
@@ -356,34 +356,34 @@ private func waitUntil(
         withUserDefaults([
             "node.instanceId": "ios-test",
             "camera.enabled": true,
-            "location.enabledMode": OpenClawLocationMode.whileUsing.rawValue,
+            "location.enabledMode": NatesclawLocationMode.whileUsing.rawValue,
         ]) {
             let appModel = NodeAppModel()
             let controller = GatewayConnectionController(appModel: appModel, startDiscovery: false)
             let commands = Set(controller._test_currentCommands())
 
             // iOS should expose notify, but not host shell/exec-approval commands.
-            #expect(commands.contains(OpenClawSystemCommand.notify.rawValue))
-            #expect(!commands.contains(OpenClawSystemCommand.run.rawValue))
-            #expect(!commands.contains(OpenClawSystemCommand.which.rawValue))
-            #expect(!commands.contains(OpenClawSystemCommand.execApprovalsGet.rawValue))
-            #expect(!commands.contains(OpenClawSystemCommand.execApprovalsSet.rawValue))
+            #expect(commands.contains(NatesclawSystemCommand.notify.rawValue))
+            #expect(!commands.contains(NatesclawSystemCommand.run.rawValue))
+            #expect(!commands.contains(NatesclawSystemCommand.which.rawValue))
+            #expect(!commands.contains(NatesclawSystemCommand.execApprovalsGet.rawValue))
+            #expect(!commands.contains(NatesclawSystemCommand.execApprovalsSet.rawValue))
         }
     }
 
     @Test @MainActor func `operator connect options only request approval scope when enabled`() {
         let appModel = NodeAppModel()
         let withoutApprovalScope = appModel._test_makeOperatorConnectOptions(
-            clientId: "openclaw-ios",
-            displayName: "OpenClaw iOS",
+            clientId: "natesclaw-ios",
+            displayName: "Natesclaw iOS",
             includeApprovalScope: false)
         let withApprovalScope = appModel._test_makeOperatorConnectOptions(
-            clientId: "openclaw-ios",
-            displayName: "OpenClaw iOS",
+            clientId: "natesclaw-ios",
+            displayName: "Natesclaw iOS",
             includeApprovalScope: true)
         let withAdminScope = appModel._test_makeOperatorConnectOptions(
-            clientId: "openclaw-ios",
-            displayName: "OpenClaw iOS",
+            clientId: "natesclaw-ios",
+            displayName: "Natesclaw iOS",
             includeAdminScope: true,
             includeApprovalScope: false)
 
@@ -396,8 +396,8 @@ private func waitUntil(
         #expect(withoutApprovalScope.scopes.contains("operator.talk.secrets"))
         #expect(!withoutApprovalScope.scopesAreExplicit)
         #expect(withoutApprovalScope.caps == [
-            OpenClawGatewayClientCapability.agentKind,
-            OpenClawGatewayClientCapability.inlineWidgets,
+            NatesclawGatewayClientCapability.agentKind,
+            NatesclawGatewayClientCapability.inlineWidgets,
         ])
 
         #expect(withApprovalScope.scopes.contains("operator.approvals"))
@@ -408,8 +408,8 @@ private func waitUntil(
     @Test @MainActor func `operator talk permission upgrade uses explicit least privilege scopes`() {
         let appModel = NodeAppModel()
         let options = appModel._test_makeOperatorConnectOptions(
-            clientId: "openclaw-ios",
-            displayName: "OpenClaw iOS",
+            clientId: "natesclaw-ios",
+            displayName: "Natesclaw iOS",
             includeApprovalScope: false,
             forceExplicitScopes: true)
 
@@ -888,7 +888,7 @@ private func waitUntil(
         let registryIsolation = GatewayRegistryTestIsolation()
         defer { registryIsolation.restore() }
         let instanceID = "ios-test-\(UUID().uuidString)"
-        let temporaryState = try TemporaryOpenClawState(instanceID: instanceID)
+        let temporaryState = try TemporaryNatesclawState(instanceID: instanceID)
         defer { temporaryState.restore() }
         GatewaySettingsStore.saveGatewayCredentials(
             token: "stored-token",
@@ -928,7 +928,7 @@ private func waitUntil(
         let registryIsolation = GatewayRegistryTestIsolation()
         defer { registryIsolation.restore() }
         let instanceID = "legacy-relay-\(UUID().uuidString)"
-        let temporaryState = try TemporaryOpenClawState(instanceID: instanceID)
+        let temporaryState = try TemporaryNatesclawState(instanceID: instanceID)
         defer { temporaryState.restore() }
         let gatewayService = GatewaySettingsStore._testGatewayService
 
@@ -1047,7 +1047,7 @@ private func waitUntil(
         let previousStableID = "manual|previous.gateway.example.com|443"
         let stableID = "manual|new.gateway.example.com|443"
         let instanceID = "bootstrap-handoff-\(UUID().uuidString)"
-        let temporaryState = try TemporaryOpenClawState(instanceID: instanceID)
+        let temporaryState = try TemporaryNatesclawState(instanceID: instanceID)
         defer { temporaryState.restore() }
         let identity = DeviceIdentityStore.loadOrCreate()
         _ = DeviceAuthStore.storeToken(
@@ -1141,7 +1141,7 @@ private func waitUntil(
     }
 
     @Test @MainActor func `bootstrap pairing clears only the target gateway`() async throws {
-        let temporaryState = try TemporaryOpenClawState()
+        let temporaryState = try TemporaryNatesclawState()
         defer { temporaryState.restore() }
         let gatewayA = "manual|gateway-a-\(UUID().uuidString)|443"
         let gatewayB = "manual|gateway-b-\(UUID().uuidString)|443"
@@ -1502,7 +1502,7 @@ private func waitUntil(
         let stableID = "\u{0085}gateway-e\u{0301}"
         let endpoint: NWEndpoint = .service(
             name: "Exact Owner",
-            type: "_openclaw-gw._tcp",
+            type: "_natesclaw-gw._tcp",
             domain: "local.",
             interface: nil)
         let gateway = GatewayDiscoveryModel.DiscoveredGateway(
@@ -1574,7 +1574,7 @@ private func waitUntil(
         let appModel = NodeAppModel()
         defer { appModel.disconnectGateway() }
         let options = Self.makeNodeOptions(
-            client: ("openclaw-ios", nil),
+            client: ("natesclaw-ios", nil),
             deviceAuthGatewayID: stableID)
         let config = try GatewayConnectConfig(
             url: #require(URL(string: "wss://127.0.0.1:1")),
@@ -1926,7 +1926,7 @@ private func waitUntil(
             password: password,
             sessionKey: "main")))
 
-        let defaults = try #require(UserDefaults(suiteName: OpenClawAppGroup.identifier))
+        let defaults = try #require(UserDefaults(suiteName: NatesclawAppGroup.identifier))
         let persisted = try #require(defaults.data(forKey: "share.gatewayRelay.config.v1"))
         #expect(persisted.range(of: Data(token.utf8)) == nil)
         #expect(persisted.range(of: Data(password.utf8)) == nil)
@@ -1951,7 +1951,7 @@ private func waitUntil(
         defer { registryIsolation.restore() }
         let token = "legacy-token-\(UUID().uuidString)"
         let password = "legacy-password-\(UUID().uuidString)"
-        let defaults = try #require(UserDefaults(suiteName: OpenClawAppGroup.identifier))
+        let defaults = try #require(UserDefaults(suiteName: NatesclawAppGroup.identifier))
         let legacy = try JSONSerialization.data(withJSONObject: [
             "gatewayURLString": "wss://legacy-relay.example.com",
             "gatewayStableID": "manual|legacy-relay.example.com|443",
@@ -2468,7 +2468,7 @@ private func waitUntil(
     @Test @MainActor func `chat cache remains isolated when active gateway switches`() async throws {
         let registryIsolation = GatewayRegistryTestIsolation()
         defer { registryIsolation.restore() }
-        let temporaryState = try TemporaryOpenClawState()
+        let temporaryState = try TemporaryNatesclawState()
         defer { temporaryState.restore() }
         let gatewayA = "manual|gateway-a|18789"
         let gatewayB = "manual|gateway-b|18789"
@@ -2482,7 +2482,7 @@ private func waitUntil(
             useTLS: false,
             lastConnectedAtMs: nil))
         let appModel = NodeAppModel()
-        let session = OpenClawChatSessionEntry(
+        let session = NatesclawChatSessionEntry(
             key: "agent:main:a",
             kind: nil,
             displayName: "Gateway A session",

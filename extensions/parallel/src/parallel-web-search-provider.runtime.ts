@@ -1,9 +1,9 @@
 import { createRequire } from "node:module";
-import { readPluginPackageVersion } from "openclaw/plugin-sdk/extension-shared";
+import { readPluginPackageVersion } from "natesclaw/plugin-sdk/extension-shared";
 import {
   readProviderJsonResponse,
   readResponseTextLimited,
-} from "openclaw/plugin-sdk/provider-http";
+} from "natesclaw/plugin-sdk/provider-http";
 import {
   mergeScopedSearchConfig,
   readCachedSearchPayload,
@@ -17,8 +17,8 @@ import {
   type SearchConfigRecord,
   withTrustedWebSearchEndpoint,
   writeCachedSearchPayload,
-} from "openclaw/plugin-sdk/provider-web-search";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "natesclaw/plugin-sdk/provider-web-search";
+import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import {
   buildParallelCacheKey,
   invalidSearchQueriesPayload,
@@ -46,7 +46,7 @@ const PARALLEL_SEARCH_RESPONSE_LIMIT_BYTES = 16 * 1024 * 1024;
 
 const require = createRequire(import.meta.url);
 const PLUGIN_VERSION = readPluginPackageVersion({ require });
-const USER_AGENT = `openclaw-parallel/${PLUGIN_VERSION} (${process.platform})`;
+const USER_AGENT = `natesclaw-parallel/${PLUGIN_VERSION} (${process.platform})`;
 
 type ParallelConfig = {
   apiKey?: string;
@@ -73,7 +73,7 @@ function invalidBaseUrlPayload(value: string) {
   return {
     error: "invalid_base_url",
     message: `plugins.entries.parallel.config.webSearch.baseUrl must be a valid http(s) URL. Got: ${value}`,
-    docs: "https://docs.openclaw.ai/tools/parallel-search",
+    docs: "https://docs.natesclaw.ai/tools/parallel-search",
   };
 }
 
@@ -110,7 +110,7 @@ function missingParallelKeyPayload() {
     error: "missing_parallel_api_key",
     message:
       "web_search (parallel) needs a Parallel API key. Set PARALLEL_API_KEY in the Gateway environment, or configure plugins.entries.parallel.config.webSearch.apiKey.",
-    docs: "https://docs.openclaw.ai/tools/parallel-search",
+    docs: "https://docs.natesclaw.ai/tools/parallel-search",
   };
 }
 
@@ -190,8 +190,8 @@ export async function executeParallelWebSearchProviderTool(
   }
   const endpoint = endpointResult.endpoint;
 
-  // Generic `query` arg fallback: openclaw's operator-facing CLI
-  // (`openclaw capability web.search ...`) always passes the shared
+  // Generic `query` arg fallback: natesclaw's operator-facing CLI
+  // (`natesclaw capability web.search ...`) always passes the shared
   // lowest-common-denominator shape `{ query, count, limit }` to whatever
   // provider is active and doesn't know about Parallel's richer
   // `{ objective, search_queries }` schema. When `search_queries` is absent
@@ -206,7 +206,7 @@ export async function executeParallelWebSearchProviderTool(
   if (searchQueries.length === 0) {
     return invalidSearchQueriesPayload();
   }
-  // Always pass max_results so Parallel matches the openclaw web_search default
+  // Always pass max_results so Parallel matches the natesclaw web_search default
   // of 5 instead of Parallel's own default of 10.
   const count = resolveParallelSearchCount(args, searchConfig?.maxResults);
   const sessionId = normalizeParallelSessionId(

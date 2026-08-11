@@ -11,24 +11,24 @@ import {
   type OAuthClientInformationMixed,
   type OAuthTokens,
 } from "@modelcontextprotocol/sdk/shared/auth.js";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
-import { withOpenClawStateDatabaseReadOnly } from "../state/openclaw-state-db-readonly.js";
-import { ensureMcpOAuthPendingSchema } from "../state/openclaw-state-db-schema-additive.js";
-import { tableExists } from "../state/openclaw-state-db-schema-helpers.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import { withNatesclawStateDatabaseReadOnly } from "../state/natesclaw-state-db-readonly.js";
+import { ensureMcpOAuthPendingSchema } from "../state/natesclaw-state-db-schema-additive.js";
+import { tableExists } from "../state/natesclaw-state-db-schema-helpers.js";
+import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  openNatesclawStateDatabase,
+  runNatesclawStateWriteTransaction,
+} from "../state/natesclaw-state-db.js";
+import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 
 type McpOAuthDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  NatesclawStateKyselyDatabase,
   "mcp_oauth_pending_authorizations" | "mcp_oauth_stores"
 >;
 
@@ -240,16 +240,16 @@ function readFromDatabase(database: DatabaseSync, storeKey: string): McpOAuthSto
 
 /** Read canonical state, opening the writable lifecycle when runtime owns it. */
 export function readMcpOAuthStore(storeKey: string): McpOAuthStore {
-  return readFromDatabase(openOpenClawStateDatabase().db, storeKey);
+  return readFromDatabase(openNatesclawStateDatabase().db, storeKey);
 }
 
 /** Read status state without creating or repairing the shared database. */
 export function readMcpOAuthStoreReadOnly(storeKey: string): McpOAuthStore {
-  const databasePath = resolveOpenClawStateSqlitePath();
+  const databasePath = resolveNatesclawStateSqlitePath();
   if (!fs.existsSync(databasePath)) {
     return {};
   }
-  return withOpenClawStateDatabaseReadOnly(({ db }) => {
+  return withNatesclawStateDatabaseReadOnly(({ db }) => {
     if (!tableExists(db, "mcp_oauth_stores")) {
       return {};
     }
@@ -259,11 +259,11 @@ export function readMcpOAuthStoreReadOnly(storeKey: string): McpOAuthStore {
 
 /** List canonical store keys matching one server/principal prefix without creating state. */
 export function listMcpOAuthStoreKeysByPrefix(prefix: string): string[] {
-  const databasePath = resolveOpenClawStateSqlitePath();
+  const databasePath = resolveNatesclawStateSqlitePath();
   if (!fs.existsSync(databasePath)) {
     return [];
   }
-  return withOpenClawStateDatabaseReadOnly(({ db }) => {
+  return withNatesclawStateDatabaseReadOnly(({ db }) => {
     if (!tableExists(db, "mcp_oauth_stores")) {
       return [];
     }
@@ -287,8 +287,8 @@ function ensurePendingSchema(database: DatabaseSync): void {
 }
 
 function runPendingWrite<T>(run: (database: DatabaseSync) => T): T {
-  ensurePendingSchema(openOpenClawStateDatabase().db);
-  return runOpenClawStateWriteTransaction(({ db }) => run(db));
+  ensurePendingSchema(openNatesclawStateDatabase().db);
+  return runNatesclawStateWriteTransaction(({ db }) => run(db));
 }
 
 function deletePendingForStore(
@@ -315,11 +315,11 @@ const MCP_OAUTH_PENDING_STATE_TTL_MS = 10 * 60 * 1000;
 export function readMcpOAuthPendingAuthorization(state: string): string | undefined {
   // Public unauthenticated callback path: must stay read-only. Table creation
   // belongs to start-authorization; an unknown state must not write anything.
-  const databasePath = resolveOpenClawStateSqlitePath();
+  const databasePath = resolveNatesclawStateSqlitePath();
   if (!fs.existsSync(databasePath)) {
     return undefined;
   }
-  return withOpenClawStateDatabaseReadOnly(({ db }) => {
+  return withNatesclawStateDatabaseReadOnly(({ db }) => {
     if (!tableExists(db, "mcp_oauth_pending_authorizations")) {
       return undefined;
     }
@@ -442,7 +442,7 @@ export function updateMcpOAuthStore(
   update: (current: McpOAuthStore) => McpOAuthStore,
   assertOwnedInTransaction?: (database: DatabaseSync) => void,
 ): McpOAuthStore {
-  return runOpenClawStateWriteTransaction(({ db }) => {
+  return runNatesclawStateWriteTransaction(({ db }) => {
     const current = readFromDatabase(db, storeKey);
     return replaceMcpOAuthStore(db, storeKey, update(current), assertOwnedInTransaction);
   });

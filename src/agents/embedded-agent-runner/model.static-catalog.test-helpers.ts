@@ -15,7 +15,7 @@ export function createManifestRecord(
     hooks: [],
     rootDir,
     source: `${rootDir}/index.ts`,
-    manifestPath: `${rootDir}/openclaw.plugin.json`,
+    manifestPath: `${rootDir}/natesclaw.plugin.json`,
     ...overrides,
   };
 }

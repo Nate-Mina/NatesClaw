@@ -1,6 +1,6 @@
-/** Provider auth-pin policy for credentials discovered outside OpenClaw storage. */
-import { findNormalizedProviderValue } from "@openclaw/model-catalog-core/provider-id";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+/** Provider auth-pin policy for credentials discovered outside Natesclaw storage. */
+import { findNormalizedProviderValue } from "@natesclaw/model-catalog-core/provider-id";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   type ProviderAuthAliasLookupParams,
   resolveProviderIdForAuth,
@@ -9,7 +9,7 @@ import type { AuthProfileCredential } from "./types.js";
 
 /** Returns whether ambient credential material agrees with a provider's declared auth mode. */
 export function isAmbientCredentialAllowedByProviderAuthPin(params: {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   authAliasLookupParams?: Omit<ProviderAuthAliasLookupParams, "config">;
   provider: string;
   type: AuthProfileCredential["type"];

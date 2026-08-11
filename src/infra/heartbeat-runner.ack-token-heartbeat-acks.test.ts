@@ -1,6 +1,6 @@
 // Covers heartbeat ack truncation limits.
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
@@ -32,7 +32,7 @@ describe("runHeartbeatOnce ack handling", () => {
     heartbeat: Record<string, unknown>;
     channels: Record<string, unknown>;
     messages?: Record<string, unknown>;
-  }): OpenClawConfig {
+  }): NatesclawConfig {
     return {
       agents: {
         defaults: {
@@ -88,7 +88,7 @@ describe("runHeartbeatOnce ack handling", () => {
 
   function expectTelegramMessageSend(
     send: ReturnType<typeof vi.fn>,
-    params: { to: string; text: string; cfg: OpenClawConfig },
+    params: { to: string; text: string; cfg: NatesclawConfig },
   ) {
     expect(send.mock.calls).toEqual([
       [
@@ -105,7 +105,7 @@ describe("runHeartbeatOnce ack handling", () => {
 
   function expectWhatsAppMessageSend(
     send: ReturnType<typeof vi.fn>,
-    params: { to: string; text: string; cfg: OpenClawConfig },
+    params: { to: string; text: string; cfg: NatesclawConfig },
   ) {
     expect(send.mock.calls).toEqual([
       [
@@ -186,7 +186,7 @@ describe("runHeartbeatOnce ack handling", () => {
     storePath: string;
     heartbeat?: Record<string, unknown>;
     visibility?: Record<string, unknown>;
-  }): OpenClawConfig {
+  }): NatesclawConfig {
     return createHeartbeatConfig({
       tmpDir: params.tmpDir,
       storePath: params.storePath,
@@ -209,7 +209,7 @@ describe("runHeartbeatOnce ack handling", () => {
     storePath: string;
     heartbeat?: Record<string, unknown>;
     visibility?: Record<string, unknown>;
-  }): Promise<OpenClawConfig> {
+  }): Promise<NatesclawConfig> {
     const cfg = createWhatsAppHeartbeatConfig(params);
     await seedMainSessionStore(params.storePath, cfg, {
       lastChannel: "whatsapp",
@@ -429,8 +429,8 @@ describe("runHeartbeatOnce ack handling", () => {
     },
     {
       title: "strips responsePrefix before HEARTBEAT_OK detection and suppresses short ack text",
-      replyText: "[openclaw] HEARTBEAT_OK all good",
-      responsePrefix: "[openclaw]",
+      replyText: "[natesclaw] HEARTBEAT_OK all good",
+      responsePrefix: "[natesclaw]",
       expectedCalls: 0,
     },
     {

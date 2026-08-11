@@ -25,7 +25,7 @@ let tempHome: TempHomeEnv;
 
 beforeAll(async () => {
   vi.resetModules();
-  tempHome = await createTempHomeEnv("openclaw-playback-transcode-");
+  tempHome = await createTempHomeEnv("natesclaw-playback-transcode-");
   playback = await import("./playback-transcode.js");
 });
 
@@ -71,7 +71,7 @@ function createCacheKey(source: {
   ino: number;
 }): string {
   const testApi = (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.playbackTranscodeTestApi")
+    Symbol.for("natesclaw.playbackTranscodeTestApi")
   ] as { createPlaybackTranscodeCacheKey?: (value: typeof source) => string } | undefined;
   if (!testApi?.createPlaybackTranscodeCacheKey) {
     throw new Error("playback transcode test API unavailable");
@@ -92,7 +92,7 @@ async function readSourceBoundedForTest(
   maxBytes: number,
 ): Promise<Buffer> {
   const testApi = (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("openclaw.playbackTranscodeTestApi")
+    Symbol.for("natesclaw.playbackTranscodeTestApi")
   ] as
     | {
         readPlaybackSourceBounded?: (

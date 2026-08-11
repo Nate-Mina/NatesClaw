@@ -1,12 +1,12 @@
 // Hydrates Control UI (webchat) reply targets into the channel-agnostic
 // ReplyTo* envelope fields so downstream reply-context handling matches the
 // Discord path (reply_to_id + "Reply target of current user message" block).
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
 import { resolveEnvelopeFormatOptions } from "../../auto-reply/envelope.js";
 import { buildInboundUserContextPrefix } from "../../auto-reply/reply/inbound-meta.js";
 import type { MsgContext } from "../../auto-reply/templating.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { sanitizeAssistantVisibleTextWithProfile } from "../../shared/text/assistant-visible-text.js";
 import { resolveAssistantIdentity } from "../assistant-identity.js";
 import { projectChatDisplayMessage } from "../chat-display-projection.js";
@@ -26,7 +26,7 @@ type ChatSendReplyContextFields = Partial<
 /** Adds hydrated reply metadata to the direct-injection user prompt. */
 export function buildChatSendReplyInjectionText(params: {
   body: string;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   ctx: MsgContext;
   sessionEntry?: Parameters<typeof buildInboundUserContextPrefix>[2];
 }): string {
@@ -63,7 +63,7 @@ function extractReplyTargetText(message: unknown): string | undefined {
 
 function resolveReplyTargetSenderLabel(params: {
   message: unknown;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
   userSenderLabel?: string;
 }): string {
@@ -98,7 +98,7 @@ export function applyChatSendReplyContextFields(
  */
 export async function resolveChatSendReplyContext(params: {
   replyToId: string | undefined;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   agentId?: string;
   sessionKey: string;
   sessionEntry?: SessionTranscriptReadScope["sessionEntry"];

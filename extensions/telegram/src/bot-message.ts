@@ -1,15 +1,15 @@
 // Telegram plugin module implements bot message behavior.
-import type { OpenClawConfig, TelegramAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { DEFAULT_GROUP_HISTORY_LIMIT } from "openclaw/plugin-sdk/reply-history";
+import type { NatesclawConfig, TelegramAccountConfig } from "natesclaw/plugin-sdk/config-contracts";
+import { resolveTextChunkLimit } from "natesclaw/plugin-sdk/reply-chunking";
+import { DEFAULT_GROUP_HISTORY_LIMIT } from "natesclaw/plugin-sdk/reply-history";
 import {
   createSubsystemLogger,
   danger,
   logVerbose,
   shouldLogVerbose,
   sleepWithAbort,
-} from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "natesclaw/plugin-sdk/runtime-env";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import type { TelegramMessageProcessorTurnContext } from "./bot-handlers.types.js";
 import {
@@ -73,7 +73,7 @@ type TelegramMessageProcessorDeps = Omit<
 export function resolveTelegramMessageTurnSettings(params: {
   accountId: string;
   senderId?: string | number;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   telegramCfg: TelegramAccountConfig;
   opts: Pick<TelegramBotOptions, "allowFrom" | "groupAllowFrom" | "replyToMode">;
 }) {
@@ -178,7 +178,7 @@ export const createTelegramMessageProcessor = (deps: TelegramMessageProcessorDep
         ? options.receivedAtMs
         : undefined;
     const ingressDebugEnabled =
-      shouldLogVerbose() || process.env.OPENCLAW_DEBUG_TELEGRAM_INGRESS === "1";
+      shouldLogVerbose() || process.env.NATESCLAW_DEBUG_TELEGRAM_INGRESS === "1";
     const ingressContextStartMs = ingressReceivedAtMs ? Date.now() : undefined;
     const recordCurrentUpdateProcessingResult = (result: TelegramMessageProcessingResult) => {
       if (options?.spooledReplay === true) {

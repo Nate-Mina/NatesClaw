@@ -328,7 +328,7 @@ describe("gateway CPU scenario guard", () => {
           writeFileSync(path.join(pluginSdkDist, "qa-lab.js"), "export {};\n");
           writeFileSync(path.join(pluginSdkDist, "qa-runtime.js"), "export {};\n");
         }
-        if (args.includes("openclaw") && args.includes("qa")) {
+        if (args.includes("natesclaw") && args.includes("qa")) {
           writeQaSuiteSummary(outputDir);
         }
         return { status: 0 };
@@ -340,17 +340,17 @@ describe("gateway CPU scenario guard", () => {
     expect(calls[0]?.args).toEqual(["--import", "tsx", "scripts/build-all.mts", "qaRuntime"]);
     expect(calls[0]?.env).toMatchObject({
       HOME: path.join(outputDir, "qa-state-root", "home"),
-      OPENCLAW_BUILD_PRIVATE_QA: "1",
-      OPENCLAW_CONFIG_PATH: path.join(outputDir, "qa-state-root", "state", "openclaw.json"),
-      OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1",
-      OPENCLAW_HOME: path.join(outputDir, "qa-state-root", "home"),
-      OPENCLAW_RUN_NODE_SKIP_DTS_BUILD: "1",
-      OPENCLAW_STATE_DIR: path.join(outputDir, "qa-state-root", "state"),
-      OPENCLAW_TEST_DISABLE_UPDATE_CHECK: "1",
+      NATESCLAW_BUILD_PRIVATE_QA: "1",
+      NATESCLAW_CONFIG_PATH: path.join(outputDir, "qa-state-root", "state", "natesclaw.json"),
+      NATESCLAW_ENABLE_PRIVATE_QA_CLI: "1",
+      NATESCLAW_HOME: path.join(outputDir, "qa-state-root", "home"),
+      NATESCLAW_RUN_NODE_SKIP_DTS_BUILD: "1",
+      NATESCLAW_STATE_DIR: path.join(outputDir, "qa-state-root", "state"),
+      NATESCLAW_TEST_DISABLE_UPDATE_CHECK: "1",
       PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false",
       USERPROFILE: path.join(outputDir, "qa-state-root", "home"),
     });
-    expect(calls[0]?.env?.OPENCLAW_BUNDLED_PLUGIN_BUILD_IDS).toBeUndefined();
+    expect(calls[0]?.env?.NATESCLAW_BUNDLED_PLUGIN_BUILD_IDS).toBeUndefined();
   });
 
   it("does not prebuild private QA dist when the required entries already exist", async () => {
@@ -373,14 +373,14 @@ describe("gateway CPU scenario guard", () => {
       cwd,
       env: {
         HOME: "/real/user/home",
-        OPENCLAW_CONFIG_PATH: "/real/user/.openclaw/openclaw.json",
-        OPENCLAW_HOME: "/real/user/home",
-        OPENCLAW_STATE_DIR: "/real/user/.openclaw",
+        NATESCLAW_CONFIG_PATH: "/real/user/.natesclaw/natesclaw.json",
+        NATESCLAW_HOME: "/real/user/home",
+        NATESCLAW_STATE_DIR: "/real/user/.natesclaw",
       },
       silent: true,
       spawnSync: (_command: string, args: string[], opts?: Pick<SpawnSyncOptions, "env">) => {
         calls.push({ args, env: opts?.env });
-        if (args.includes("openclaw") && args.includes("qa")) {
+        if (args.includes("natesclaw") && args.includes("qa")) {
           writeQaSuiteSummary(outputDir);
         }
         return { status: 0 };
@@ -392,9 +392,9 @@ describe("gateway CPU scenario guard", () => {
     expect(calls.some((call) => call.args[0] === "scripts/build-all.mts")).toBe(false);
     expect(calls[0]?.env).toMatchObject({
       HOME: path.join(outputDir, "qa-state-root", "home"),
-      OPENCLAW_CONFIG_PATH: path.join(outputDir, "qa-state-root", "state", "openclaw.json"),
-      OPENCLAW_HOME: path.join(outputDir, "qa-state-root", "home"),
-      OPENCLAW_STATE_DIR: path.join(outputDir, "qa-state-root", "state"),
+      NATESCLAW_CONFIG_PATH: path.join(outputDir, "qa-state-root", "state", "natesclaw.json"),
+      NATESCLAW_HOME: path.join(outputDir, "qa-state-root", "home"),
+      NATESCLAW_STATE_DIR: path.join(outputDir, "qa-state-root", "state"),
       PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false",
       USERPROFILE: path.join(outputDir, "qa-state-root", "home"),
     });
@@ -414,7 +414,7 @@ describe("gateway CPU scenario guard", () => {
     const result = await testing.runGatewayCpuScenarios(options, {
       silent: true,
       spawnSync: (_command: string, args: string[]) => {
-        if (args.includes("openclaw") && args.includes("qa")) {
+        if (args.includes("natesclaw") && args.includes("qa")) {
           writeQaSuiteSummary(outputDir, { failed: 1, passed: 0, total: 1 });
         }
         return { status: 0 };

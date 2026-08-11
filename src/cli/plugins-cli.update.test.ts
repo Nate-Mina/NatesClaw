@@ -2,7 +2,7 @@
 import path from "node:path";
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import type { ClawHubTrustErrorCode } from "../infra/clawhub-install-trust.js";
 import { resolveRegistryUpdateChannel } from "../infra/update-channels.js";
 import { CLAWHUB_INSTALL_ERROR_CODE } from "../plugins/clawhub-error-codes.js";
@@ -29,7 +29,7 @@ import {
 } from "./plugins-cli-test-helpers.js";
 import { registerPluginsCli } from "./plugins-cli.js";
 
-const ORIGINAL_OPENCLAW_NIX_MODE = process.env.OPENCLAW_NIX_MODE;
+const ORIGINAL_NATESCLAW_NIX_MODE = process.env.NATESCLAW_NIX_MODE;
 const ORIGINAL_STDIN_TTY = Object.getOwnPropertyDescriptor(process.stdin, "isTTY");
 const ORIGINAL_STDOUT_TTY = Object.getOwnPropertyDescriptor(process.stdout, "isTTY");
 
@@ -61,7 +61,7 @@ function createTrackedPluginConfig(params: {
   pluginId: string;
   spec: string;
   resolvedName?: string;
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     plugins: {
       installs: {
@@ -73,7 +73,7 @@ function createTrackedPluginConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function expectRestartNoticeLogged() {
@@ -105,18 +105,18 @@ function expectSingleCallParams(mockFn: ReturnType<typeof vi.fn>) {
 }
 
 function primeUpdateConfigSnapshot(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   configPath?: string;
   hash?: string;
-  loadedConfig?: OpenClawConfig;
+  loadedConfig?: NatesclawConfig;
   parsed?: Record<string, unknown>;
-  runtimeConfig?: OpenClawConfig;
-  sourceConfig?: OpenClawConfig;
+  runtimeConfig?: NatesclawConfig;
+  sourceConfig?: NatesclawConfig;
   valid?: boolean;
   includeFileHashesForWrite?: Record<string, string>;
   includeFileTargetsForWrite?: Record<string, string>;
 }) {
-  const configPath = params.configPath ?? path.join(process.cwd(), "openclaw.json5");
+  const configPath = params.configPath ?? path.join(process.cwd(), "natesclaw.json5");
   const parsed = params.parsed ?? (params.config as Record<string, unknown>);
   const sourceConfig = params.sourceConfig ?? params.config;
   const runtimeConfig = params.runtimeConfig ?? params.config;
@@ -149,10 +149,10 @@ function primeUpdateConfigSnapshot(params: {
   return prepared;
 }
 
-function primeBlockedUpdateConfig(section: "hooks" | "plugins", config: OpenClawConfig): void {
+function primeBlockedUpdateConfig(section: "hooks" | "plugins", config: NatesclawConfig): void {
   const externalPath = path.join(
     path.parse(process.cwd()).root,
-    "external-openclaw",
+    "external-natesclaw",
     `${section}.json5`,
   );
   primeUpdateConfigSnapshot({
@@ -165,27 +165,27 @@ function primeBlockedUpdateConfig(section: "hooks" | "plugins", config: OpenClaw
 }
 
 function primePluginUpdate(
-  config: OpenClawConfig,
+  config: NatesclawConfig,
   outcomes: Awaited<ReturnType<typeof updateNpmInstalledPluginsMock>>["outcomes"] = [],
   changed = false,
 ): void {
   updateNpmInstalledPluginsMock.mockResolvedValue({ config, changed, outcomes });
 }
 
-function primeBravePluginRecordUpdate(config: OpenClawConfig) {
+function primeBravePluginRecordUpdate(config: NatesclawConfig) {
   const previousRecords = {
     brave: {
       source: "npm",
-      spec: "@openclaw/brave-plugin@2026.6.11-beta.2",
+      spec: "@natesclaw/brave-plugin@2026.6.11-beta.2",
       installPath: "/tmp/brave-beta",
-      resolvedName: "@openclaw/brave-plugin",
+      resolvedName: "@natesclaw/brave-plugin",
       resolvedVersion: "2026.6.11-beta.2",
     },
   } as const;
   const nextRecords = {
     brave: {
       ...previousRecords.brave,
-      spec: "@openclaw/brave-plugin@2026.6.11",
+      spec: "@natesclaw/brave-plugin@2026.6.11",
       installPath: "/tmp/brave-stable",
       resolvedVersion: "2026.6.11",
     },
@@ -198,7 +198,7 @@ function primeBravePluginRecordUpdate(config: OpenClawConfig) {
         ...config.plugins,
         installs: nextRecords,
       },
-    } as OpenClawConfig,
+    } as NatesclawConfig,
     [{ pluginId: "brave", status: "updated", message: "Updated brave." }],
     true,
   );
@@ -216,12 +216,12 @@ async function expectSkippedClawHubPluginUpdate(params: {
       installs: {
         demo: {
           source: "clawhub",
-          spec: params.spec ?? "clawhub:@openclaw/plugin-demo",
-          clawhubPackage: "@openclaw/plugin-demo",
+          spec: params.spec ?? "clawhub:@natesclaw/plugin-demo",
+          clawhubPackage: "@natesclaw/plugin-demo",
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
   pluginCliConfigMock.mockReturnValue(config);
   setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
   primePluginUpdate(config, [
@@ -247,10 +247,10 @@ describe("plugins cli update", () => {
 
   afterEach(() => {
     restoreTty();
-    if (ORIGINAL_OPENCLAW_NIX_MODE === undefined) {
-      delete process.env.OPENCLAW_NIX_MODE;
+    if (ORIGINAL_NATESCLAW_NIX_MODE === undefined) {
+      delete process.env.NATESCLAW_NIX_MODE;
     } else {
-      process.env.OPENCLAW_NIX_MODE = ORIGINAL_OPENCLAW_NIX_MODE;
+      process.env.NATESCLAW_NIX_MODE = ORIGINAL_NATESCLAW_NIX_MODE;
     }
   });
 
@@ -269,17 +269,17 @@ describe("plugins cli update", () => {
   });
 
   it("refuses plugin updates in Nix mode before package-manager work", async () => {
-    const previous = process.env.OPENCLAW_NIX_MODE;
-    process.env.OPENCLAW_NIX_MODE = "1";
+    const previous = process.env.NATESCLAW_NIX_MODE;
+    process.env.NATESCLAW_NIX_MODE = "1";
     try {
       await expect(runPluginsCommand(["plugins", "update", "--all"])).rejects.toThrow(
-        "OPENCLAW_NIX_MODE=1",
+        "NATESCLAW_NIX_MODE=1",
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_NIX_MODE;
+        delete process.env.NATESCLAW_NIX_MODE;
       } else {
-        process.env.OPENCLAW_NIX_MODE = previous;
+        process.env.NATESCLAW_NIX_MODE = previous;
       }
     }
 
@@ -289,7 +289,7 @@ describe("plugins cli update", () => {
   });
 
   it("previews plugin updates in Nix mode without acquiring a lease or writing state", async () => {
-    process.env.OPENCLAW_NIX_MODE = "1";
+    process.env.NATESCLAW_NIX_MODE = "1";
     const config = createTrackedPluginConfig({
       pluginId: "alpha",
       spec: "@acme/alpha@1.0.0",
@@ -329,7 +329,7 @@ describe("plugins cli update", () => {
     { id: "constructor", args: [] },
     { id: "@acme/missing-plugin@beta", args: [] },
   ])("rejects untracked update target $id $args", async ({ id, args }) => {
-    const config = {} as OpenClawConfig;
+    const config = {} as NatesclawConfig;
     primeUpdateConfigSnapshot({ config });
     primePluginUpdate(config, [
       { pluginId: id, status: "skipped", message: `No install record for "${id}".` },
@@ -363,7 +363,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeUpdateConfigSnapshot({ config });
     setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
 
@@ -380,7 +380,7 @@ describe("plugins cli update", () => {
   });
 
   it("updates tracked hook packs through plugins update", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     const nextConfig = cfg;
 
     primeUpdateConfigSnapshot({ config: cfg });
@@ -426,18 +426,18 @@ describe("plugins cli update", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const snapshotConfig = {
       plugins: {
         entries: {
           alpha: { enabled: false },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const installRecords = {
       alpha: {
         source: "npm",
-        spec: "@openclaw/alpha@1.0.0",
+        spec: "@natesclaw/alpha@1.0.0",
         installPath: "/tmp/alpha",
       },
     } as const;
@@ -456,18 +456,18 @@ describe("plugins cli update", () => {
       "new-hooks": {
         source: "npm",
         spec: "@acme/new-hooks@1.0.0",
-        installPath: "/home/test/.openclaw/hooks/new-hooks",
+        installPath: "/home/test/.natesclaw/hooks/new-hooks",
       },
     });
     updateNpmInstalledPluginsMock.mockImplementation(
-      async (params: { config: OpenClawConfig }) => ({
+      async (params: { config: NatesclawConfig }) => ({
         config: params.config,
         changed: false,
         outcomes: [],
       }),
     );
     updateNpmInstalledHookPacksMock.mockImplementation(
-      async (params: { config: OpenClawConfig }) => ({
+      async (params: { config: NatesclawConfig }) => ({
         config: params.config,
         changed: false,
         outcomes: [],
@@ -498,11 +498,11 @@ describe("plugins cli update", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const persistedRecords = {
       alpha: {
         source: "npm",
-        spec: "@openclaw/alpha@1.0.0",
+        spec: "@natesclaw/alpha@1.0.0",
         installPath: "/tmp/alpha",
       },
     } as const;
@@ -527,7 +527,7 @@ describe("plugins cli update", () => {
         ...cfg.plugins,
         installs: persistedRecords,
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     await runPluginsCommand(["plugins", "update", "alpha"]);
 
@@ -544,7 +544,7 @@ describe("plugins cli update", () => {
   it("rejects invalid config snapshots before updater side effects", async () => {
     const cfg = createTrackedPluginConfig({
       pluginId: "alpha",
-      spec: "@openclaw/alpha@1.0.0",
+      spec: "@natesclaw/alpha@1.0.0",
     });
     primeUpdateConfigSnapshot({
       config: cfg,
@@ -563,32 +563,32 @@ describe("plugins cli update", () => {
   });
 
   it("allows index-only legacy id migration when an included plugins section has no references", async () => {
-    const cfg = { plugins: {} } as OpenClawConfig;
+    const cfg = { plugins: {} } as NatesclawConfig;
     const pluginRecords = createTrackedPluginConfig({
       pluginId: "voice-call",
-      spec: "@openclaw/voice-call@1.0.0",
+      spec: "@natesclaw/voice-call@1.0.0",
     }).plugins?.installs;
     const nextConfig = {
       ...cfg,
       plugins: {
         ...cfg.plugins,
         installs: {
-          "@openclaw/voice-call": {
+          "@natesclaw/voice-call": {
             source: "npm",
-            spec: "@openclaw/voice-call@1.1.0",
+            spec: "@natesclaw/voice-call@1.1.0",
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setInstalledPluginIndexInstallRecords(pluginRecords ?? {});
     primePluginUpdate(
       nextConfig,
       [
         {
-          pluginId: "@openclaw/voice-call",
+          pluginId: "@natesclaw/voice-call",
           status: "updated",
-          message: "Updated @openclaw/voice-call.",
+          message: "Updated @natesclaw/voice-call.",
         },
       ],
       true,
@@ -611,7 +611,7 @@ describe("plugins cli update", () => {
           [pluginId]: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const pluginRecords = {
       [pluginId]: {
         source: "git",
@@ -625,7 +625,7 @@ describe("plugins cli update", () => {
         ...cfg.plugins,
         installs: pluginRecords,
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setInstalledPluginIndexInstallRecords(pluginRecords);
     primePluginUpdate(
@@ -663,7 +663,7 @@ describe("plugins cli update", () => {
           brave: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const sourceCfg = structuredClone(cfg);
     delete sourceCfg.gateway;
     primeUpdateConfigSnapshot({
@@ -690,25 +690,25 @@ describe("plugins cli update", () => {
   });
 
   it("commits a moved managed npm load path with its replacement record", async () => {
-    const previousInstallPath = "/tmp/openclaw/npm/projects/brave-v1/node_modules/brave";
-    const nextInstallPath = "/tmp/openclaw/npm/projects/brave-v2/node_modules/brave";
+    const previousInstallPath = "/tmp/natesclaw/npm/projects/brave-v1/node_modules/brave";
+    const nextInstallPath = "/tmp/natesclaw/npm/projects/brave-v2/node_modules/brave";
     const customPath = "/tmp/custom-plugin";
     const cfg = {
       plugins: {
         load: { paths: [previousInstallPath, customPath] },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const previousRecords = {
       brave: {
         source: "npm" as const,
-        spec: "@openclaw/brave-plugin@1.0.0",
+        spec: "@natesclaw/brave-plugin@1.0.0",
         installPath: previousInstallPath,
       },
     };
     const nextRecords = {
       brave: {
         ...previousRecords.brave,
-        spec: "@openclaw/brave-plugin@2.0.0",
+        spec: "@natesclaw/brave-plugin@2.0.0",
         installPath: nextInstallPath,
       },
     };
@@ -717,7 +717,7 @@ describe("plugins cli update", () => {
         load: { paths: [nextInstallPath, customPath] },
         installs: nextRecords,
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeUpdateConfigSnapshot({ config: cfg });
     setInstalledPluginIndexInstallRecords(previousRecords);
     primePluginUpdate(
@@ -767,14 +767,14 @@ describe("plugins cli update", () => {
           brave: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const changedCfg = {
       ...cfg,
       gateway: {
         ...cfg.gateway,
         port: 18890,
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const initialSnapshot = primeUpdateConfigSnapshot({ config: cfg });
     const changedSnapshot = {
       ...initialSnapshot,
@@ -827,7 +827,7 @@ describe("plugins cli update", () => {
           brave: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const initialSnapshot = primeUpdateConfigSnapshot({
       config: cfg,
       parsed: {
@@ -891,7 +891,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const initialSnapshot = primeUpdateConfigSnapshot({ config: cfg });
     const invalidSnapshot = {
       ...initialSnapshot,
@@ -941,12 +941,12 @@ describe("plugins cli update", () => {
           "voice-call": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setInstalledPluginIndexInstallRecords({
       "voice-call": {
         source: "npm",
-        spec: "@openclaw/voice-call",
+        spec: "@natesclaw/voice-call",
         installPath: "/tmp/voice-call",
       },
     });
@@ -970,14 +970,14 @@ describe("plugins cli update", () => {
           "fish-audio": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setInstalledPluginIndexInstallRecords({
       "fish-audio": {
         source: "npm",
-        spec: "@openclaw/fish-audio-speech@2026.7.2-beta.7",
-        resolvedName: "@openclaw/fish-audio-speech",
-        resolvedSpec: "@openclaw/fish-audio-speech@2026.7.2-beta.7",
+        spec: "@natesclaw/fish-audio-speech@2026.7.2-beta.7",
+        resolvedName: "@natesclaw/fish-audio-speech",
+        resolvedSpec: "@natesclaw/fish-audio-speech@2026.7.2-beta.7",
         installPath: "/tmp/fish-audio",
       },
     });
@@ -995,12 +995,12 @@ describe("plugins cli update", () => {
   });
 
   it("blocks managed npm load-path reconciliation before updater side effects", async () => {
-    const installPath = "/tmp/openclaw/npm/projects/demo-v1/node_modules/demo";
+    const installPath = "/tmp/natesclaw/npm/projects/demo-v1/node_modules/demo";
     const cfg = {
       plugins: {
         load: { paths: [installPath] },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setInstalledPluginIndexInstallRecords({
       demo: {
@@ -1023,8 +1023,8 @@ describe("plugins cli update", () => {
       label: "ClawHub",
       record: {
         source: "clawhub",
-        spec: "clawhub:@openclaw/voice-call",
-        clawhubPackage: "@openclaw/voice-call",
+        spec: "clawhub:@natesclaw/voice-call",
+        clawhubPackage: "@natesclaw/voice-call",
         installPath: "/tmp/voice-call",
       },
     },
@@ -1032,7 +1032,7 @@ describe("plugins cli update", () => {
       label: "git",
       record: {
         source: "git",
-        spec: "https://github.com/openclaw/voice-call.git",
+        spec: "https://github.com/natesclaw/voice-call.git",
         installPath: "/tmp/voice-call",
       },
     },
@@ -1054,7 +1054,7 @@ describe("plugins cli update", () => {
             "voice-call": { enabled: true },
           },
         },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       primeBlockedUpdateConfig("plugins", cfg);
       setInstalledPluginIndexInstallRecords({
         "voice-call": record,
@@ -1075,14 +1075,14 @@ describe("plugins cli update", () => {
   it("blocks possible legacy id migration when an included plugins section is unresolved", async () => {
     const externalPath = path.join(
       path.parse(process.cwd()).root,
-      "external-openclaw",
+      "external-natesclaw",
       "plugins.json5",
     );
-    const cfg = { plugins: {} } as OpenClawConfig;
+    const cfg = { plugins: {} } as NatesclawConfig;
     primeUpdateConfigSnapshot({
       config: cfg,
       parsed: { plugins: { $include: externalPath } },
-      sourceConfig: { plugins: { $include: externalPath } } as unknown as OpenClawConfig,
+      sourceConfig: { plugins: { $include: externalPath } } as unknown as NatesclawConfig,
       includeFileTargetsForWrite: {
         [externalPath]: externalPath,
       },
@@ -1090,7 +1090,7 @@ describe("plugins cli update", () => {
     setInstalledPluginIndexInstallRecords({
       "voice-call": {
         source: "npm",
-        spec: "@openclaw/voice-call",
+        spec: "@natesclaw/voice-call",
         installPath: "/tmp/voice-call",
       },
     });
@@ -1112,12 +1112,12 @@ describe("plugins cli update", () => {
         installs: {
           legacy: {
             source: "npm",
-            spec: "@openclaw/legacy@1.0.0",
+            spec: "@natesclaw/legacy@1.0.0",
             installPath: "/tmp/legacy",
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setHookInstallRecords({
       "demo-hooks": {
@@ -1150,7 +1150,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setInstalledPluginIndexInstallRecords(cfg.plugins?.installs ?? {});
     primePluginUpdate(cfg, [
@@ -1171,7 +1171,7 @@ describe("plugins cli update", () => {
           demo: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeBlockedUpdateConfig("plugins", cfg);
     setInstalledPluginIndexInstallRecords({
       demo: {
@@ -1201,7 +1201,7 @@ describe("plugins cli update", () => {
       plugins: {
         installs: {},
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     await expect(runPluginsCommand(["plugins", "update"])).rejects.toThrow("__exit__:1");
 
@@ -1214,7 +1214,7 @@ describe("plugins cli update", () => {
       plugins: {
         installs: {},
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     await runPluginsCommand(["plugins", "update", "--all"]);
 
@@ -1225,8 +1225,8 @@ describe("plugins cli update", () => {
 
   it("passes dangerous force unsafe install to plugin updates", async () => {
     const config = createTrackedPluginConfig({
-      pluginId: "openclaw-codex-app-server",
-      spec: "openclaw-codex-app-server@beta",
+      pluginId: "natesclaw-codex-app-server",
+      spec: "natesclaw-codex-app-server@beta",
     });
     pluginCliConfigMock.mockReturnValue(config);
     setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
@@ -1235,13 +1235,13 @@ describe("plugins cli update", () => {
     await runPluginsCommand([
       "plugins",
       "update",
-      "openclaw-codex-app-server",
+      "natesclaw-codex-app-server",
       "--dangerously-force-unsafe-install",
     ]);
 
     const updateParams = expectSingleCallParams(updateNpmInstalledPluginsMock);
     expect(updateParams.config).toEqual(config);
-    expect(updateParams.pluginIds).toEqual(["openclaw-codex-app-server"]);
+    expect(updateParams.pluginIds).toEqual(["natesclaw-codex-app-server"]);
     expect(updateParams.dangerouslyForceUnsafeInstall).toBe(true);
     expect(
       pluginsCliRuntimeLogs.some((message) =>
@@ -1256,12 +1256,12 @@ describe("plugins cli update", () => {
     {
       updateChannel: "beta" as const,
       registryLine: "beta",
-      spec: "@openclaw/codex@2026.6.8-beta.1",
+      spec: "@natesclaw/codex@2026.6.8-beta.1",
     },
     {
       updateChannel: "stable" as const,
       registryLine: "latest",
-      spec: "@openclaw/codex@2026.5.28",
+      spec: "@natesclaw/codex@2026.5.28",
     },
   ])(
     "passes the $updateChannel channel to probe $registryLine for targeted exact pins",
@@ -1269,7 +1269,7 @@ describe("plugins cli update", () => {
       const config = createTrackedPluginConfig({
         pluginId: "codex",
         spec,
-        resolvedName: "@openclaw/codex",
+        resolvedName: "@natesclaw/codex",
       });
       config.update = { channel: updateChannel };
       pluginCliConfigMock.mockReturnValue(config);
@@ -1291,8 +1291,8 @@ describe("plugins cli update", () => {
   it("passes the inferred core channel to a targeted update without enabling catalog sync", async () => {
     const config = createTrackedPluginConfig({
       pluginId: "codex",
-      spec: "@openclaw/codex",
-      resolvedName: "@openclaw/codex",
+      spec: "@natesclaw/codex",
+      resolvedName: "@natesclaw/codex",
     });
     pluginCliConfigMock.mockReturnValue(config);
     setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
@@ -1311,8 +1311,8 @@ describe("plugins cli update", () => {
   it("syncs official catalog specs with beta channel context for update --all", async () => {
     const config = createTrackedPluginConfig({
       pluginId: "codex",
-      spec: "@openclaw/codex@2026.6.8-beta.1",
-      resolvedName: "@openclaw/codex",
+      spec: "@natesclaw/codex@2026.6.8-beta.1",
+      resolvedName: "@natesclaw/codex",
     });
     config.update = { channel: "beta" };
     pluginCliConfigMock.mockReturnValue(config);
@@ -1331,8 +1331,8 @@ describe("plugins cli update", () => {
   it("infers the official catalog channel from the installed core for update --all", async () => {
     const config = createTrackedPluginConfig({
       pluginId: "codex",
-      spec: "@openclaw/codex",
-      resolvedName: "@openclaw/codex",
+      spec: "@natesclaw/codex",
+      resolvedName: "@natesclaw/codex",
     });
     pluginCliConfigMock.mockReturnValue(config);
     setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
@@ -1349,8 +1349,8 @@ describe("plugins cli update", () => {
   it("passes extended-stable channel and installed core version to update --all", async () => {
     const config = createTrackedPluginConfig({
       pluginId: "codex",
-      spec: "@openclaw/codex",
-      resolvedName: "@openclaw/codex",
+      spec: "@natesclaw/codex",
+      resolvedName: "@natesclaw/codex",
     });
     config.update = { channel: "extended-stable" };
     pluginCliConfigMock.mockReturnValue(config);
@@ -1370,8 +1370,8 @@ describe("plugins cli update", () => {
 
   it("passes ClawHub risk acknowledgement to plugin updates", async () => {
     const config = createTrackedPluginConfig({
-      pluginId: "openclaw-codex-app-server",
-      spec: "openclaw-codex-app-server@beta",
+      pluginId: "natesclaw-codex-app-server",
+      spec: "natesclaw-codex-app-server@beta",
     });
     pluginCliConfigMock.mockReturnValue(config);
     setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
@@ -1380,14 +1380,14 @@ describe("plugins cli update", () => {
     await runPluginsCommand([
       "plugins",
       "update",
-      "openclaw-codex-app-server",
+      "natesclaw-codex-app-server",
       "--acknowledge-clawhub-risk",
     ]);
 
     expect(updateNpmInstalledPluginsMock).toHaveBeenCalledWith(
       expect.objectContaining({
         config,
-        pluginIds: ["openclaw-codex-app-server"],
+        pluginIds: ["natesclaw-codex-app-server"],
         acknowledgeClawHubRisk: true,
       }),
     );
@@ -1396,14 +1396,14 @@ describe("plugins cli update", () => {
   it("does not pass an interactive ClawHub risk prompt to dry-run plugin updates", async () => {
     setTty(true);
     const config = createTrackedPluginConfig({
-      pluginId: "openclaw-codex-app-server",
-      spec: "clawhub:openclaw-codex-app-server",
+      pluginId: "natesclaw-codex-app-server",
+      spec: "clawhub:natesclaw-codex-app-server",
     });
     pluginCliConfigMock.mockReturnValue(config);
     setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
     primePluginUpdate(config);
 
-    await runPluginsCommand(["plugins", "update", "openclaw-codex-app-server", "--dry-run"]);
+    await runPluginsCommand(["plugins", "update", "natesclaw-codex-app-server", "--dry-run"]);
 
     const updateParams = expectSingleCallParams(updateNpmInstalledPluginsMock);
     expect(updateParams.dryRun).toBe(true);
@@ -1417,31 +1417,31 @@ describe("plugins cli update", () => {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@openclaw/alpha@1.0.0",
+            spec: "@natesclaw/alpha@1.0.0",
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       plugins: {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@openclaw/alpha@1.1.0",
+            spec: "@natesclaw/alpha@1.1.0",
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const runtimeConfig = {
       ...cfg,
       messages: {
         ackReactionScope: "group-mentions",
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextRuntimeConfig = {
       ...nextConfig,
       messages: runtimeConfig.messages,
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     primeUpdateConfigSnapshot({
       config: cfg,
       runtimeConfig,
@@ -1493,29 +1493,29 @@ describe("plugins cli update", () => {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@openclaw/alpha@1.0.0",
+            spec: "@natesclaw/alpha@1.0.0",
           },
           beta: {
             source: "npm",
-            spec: "@openclaw/beta@1.0.0",
+            spec: "@natesclaw/beta@1.0.0",
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const nextConfig = {
       plugins: {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@openclaw/alpha@1.1.0",
+            spec: "@natesclaw/alpha@1.1.0",
           },
           beta: {
             source: "npm",
-            spec: "@openclaw/beta@1.0.0",
+            spec: "@natesclaw/beta@1.0.0",
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     pluginCliConfigMock.mockReturnValue(cfg);
     setInstalledPluginIndexInstallRecords(cfg.plugins?.installs ?? {});
     primePluginUpdate(
@@ -1546,7 +1546,7 @@ describe("plugins cli update", () => {
   it("exits non-zero when a ClawHub update is skipped for missing risk acknowledgement", async () => {
     await expectSkippedClawHubPluginUpdate({
       code: CLAWHUB_INSTALL_ERROR_CODE.CLAWHUB_RISK_ACKNOWLEDGEMENT_REQUIRED,
-      spec: "clawhub:@openclaw/plugin-demo@1.0.0",
+      spec: "clawhub:@natesclaw/plugin-demo@1.0.0",
       message:
         "Skipped demo ClawHub update: Update cancelled; rerun with --acknowledge-clawhub-risk to continue after reviewing the warning. Existing installed plugin left unchanged.",
       expectedLog: "--acknowledge-clawhub-risk",
@@ -1566,13 +1566,13 @@ describe("plugins cli update", () => {
     await expectSkippedClawHubPluginUpdate({
       code: "clawhub_security_unavailable",
       message:
-        'Skipped demo ClawHub update: ClawHub security data for "@openclaw/plugin-demo@1.1.0" is unavailable, so OpenClaw left the existing installed plugin unchanged. Try again later or choose a different version.',
+        'Skipped demo ClawHub update: ClawHub security data for "@natesclaw/plugin-demo@1.1.0" is unavailable, so Natesclaw left the existing installed plugin unchanged. Try again later or choose a different version.',
       expectedLog: "security data",
     });
   });
 
   it("exits non-zero when a hook pack update reports an error", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NatesclawConfig;
     pluginCliConfigMock.mockReturnValue(cfg);
     setHookInstallRecords({
       "demo-hooks": {

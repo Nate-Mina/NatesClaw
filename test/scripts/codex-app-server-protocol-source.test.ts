@@ -24,20 +24,20 @@ import {
 import { createScriptTestHarness } from "./test-helpers.js";
 
 const { createTempDir } = createScriptTestHarness();
-const originalOpenClawCodexRepo = process.env.OPENCLAW_CODEX_REPO;
+const originalNatesclawCodexRepo = process.env.NATESCLAW_CODEX_REPO;
 
 afterEach(() => {
-  if (originalOpenClawCodexRepo === undefined) {
-    delete process.env.OPENCLAW_CODEX_REPO;
+  if (originalNatesclawCodexRepo === undefined) {
+    delete process.env.NATESCLAW_CODEX_REPO;
   } else {
-    process.env.OPENCLAW_CODEX_REPO = originalOpenClawCodexRepo;
+    process.env.NATESCLAW_CODEX_REPO = originalNatesclawCodexRepo;
   }
 });
 
 describe("Codex app-server generated artifact staging", () => {
   it("copies JSON bytes and normalizes nested TypeScript files in one pass", async () => {
-    const sourceRoot = createTempDir("openclaw-protocol-artifacts-source-");
-    const targetRoot = createTempDir("openclaw-protocol-artifacts-target-");
+    const sourceRoot = createTempDir("natesclaw-protocol-artifacts-source-");
+    const targetRoot = createTempDir("natesclaw-protocol-artifacts-target-");
     const typescriptRoot = path.join(targetRoot, "typescript");
     const jsonRoot = path.join(targetRoot, "json");
     const rootTypeScript = [
@@ -76,7 +76,7 @@ describe("Codex app-server generated artifact staging", () => {
   });
 
   it("materializes the upstream experimental precomputed export tree", async () => {
-    const root = createTempDir("openclaw-protocol-precomputed-");
+    const root = createTempDir("natesclaw-protocol-precomputed-");
     const archivePath = path.join(root, "precomputed/app-server-exports-experimental.json.zst");
     fs.mkdirSync(path.dirname(archivePath), { recursive: true });
     fs.writeFileSync(
@@ -121,8 +121,8 @@ version = "9.9.9"
   });
 
   it("rejects a Codex checkout that differs from the pinned package version", async () => {
-    const repoRoot = createTempDir("openclaw-protocol-version-root-");
-    const codexRepo = createTempDir("openclaw-protocol-version-codex-");
+    const repoRoot = createTempDir("natesclaw-protocol-version-root-");
+    const codexRepo = createTempDir("natesclaw-protocol-version-codex-");
     fs.mkdirSync(path.join(repoRoot, "extensions/codex"), { recursive: true });
     fs.mkdirSync(path.join(codexRepo, "codex-rs"), { recursive: true });
     fs.writeFileSync(
@@ -176,7 +176,7 @@ version = "9.9.9"
   });
 
   it("allows an explicit local disk headroom override", () => {
-    expect(resolveCodexProtocolMinFreeBytes({ OPENCLAW_CODEX_PROTOCOL_MIN_FREE_BYTES: "0" })).toBe(
+    expect(resolveCodexProtocolMinFreeBytes({ NATESCLAW_CODEX_PROTOCOL_MIN_FREE_BYTES: "0" })).toBe(
       0,
     );
     expect(() =>
@@ -190,7 +190,7 @@ version = "9.9.9"
 
   it("rejects malformed local disk headroom overrides", () => {
     expect(() =>
-      resolveCodexProtocolMinFreeBytes({ OPENCLAW_CODEX_PROTOCOL_MIN_FREE_BYTES: "nope" }),
+      resolveCodexProtocolMinFreeBytes({ NATESCLAW_CODEX_PROTOCOL_MIN_FREE_BYTES: "nope" }),
     ).toThrow(/non-negative byte count/);
   });
 
@@ -252,11 +252,11 @@ version = "9.9.9"
     });
   });
 
-  it("uses OPENCLAW_CODEX_REPO when provided", async () => {
-    const root = createTempDir("openclaw-protocol-source-root-");
-    const codexRepo = createTempDir("openclaw-protocol-source-codex-");
+  it("uses NATESCLAW_CODEX_REPO when provided", async () => {
+    const root = createTempDir("natesclaw-protocol-source-root-");
+    const codexRepo = createTempDir("natesclaw-protocol-source-codex-");
     createProtocolSchema(codexRepo);
-    process.env.OPENCLAW_CODEX_REPO = codexRepo;
+    process.env.NATESCLAW_CODEX_REPO = codexRepo;
 
     await expect(resolveCodexAppServerProtocolSource(root)).resolves.toEqual({
       codexRepo,
@@ -265,20 +265,20 @@ version = "9.9.9"
   });
 
   it("finds the primary checkout sibling from a git worktree", async () => {
-    const parentDir = createTempDir("openclaw-protocol-source-parent-");
-    const primaryOpenClaw = path.join(parentDir, "openclaw");
+    const parentDir = createTempDir("natesclaw-protocol-source-parent-");
+    const primaryNatesclaw = path.join(parentDir, "natesclaw");
     const codexRepo = path.join(parentDir, "codex");
-    const worktreeRoot = createTempDir("openclaw-protocol-source-worktree-");
-    fs.mkdirSync(path.join(primaryOpenClaw, ".git", "worktrees", "codex-harness"), {
+    const worktreeRoot = createTempDir("natesclaw-protocol-source-worktree-");
+    fs.mkdirSync(path.join(primaryNatesclaw, ".git", "worktrees", "codex-harness"), {
       recursive: true,
     });
     fs.mkdirSync(worktreeRoot, { recursive: true });
     fs.writeFileSync(
       path.join(worktreeRoot, ".git"),
-      `gitdir: ${path.join(primaryOpenClaw, ".git", "worktrees", "codex-harness")}\n`,
+      `gitdir: ${path.join(primaryNatesclaw, ".git", "worktrees", "codex-harness")}\n`,
     );
     createProtocolSchema(codexRepo);
-    delete process.env.OPENCLAW_CODEX_REPO;
+    delete process.env.NATESCLAW_CODEX_REPO;
 
     await expect(resolveCodexAppServerProtocolSource(worktreeRoot)).resolves.toEqual({
       codexRepo,

@@ -20,9 +20,9 @@ import {
   stopDiagnosticStabilityRecorder,
 } from "../../../../src/logging/diagnostic-stability.js";
 import {
-  createOpenClawTestInstance,
-  type OpenClawTestInstance,
-} from "../../../helpers/openclaw-test-instance.js";
+  createNatesclawTestInstance,
+  type NatesclawTestInstance,
+} from "../../../helpers/natesclaw-test-instance.js";
 import { createQaScriptEvidenceWriter } from "./script-evidence.js";
 
 const SOURCE_PATH = "test/e2e/qa-lab/runtime/gateway-stability-runtime.ts";
@@ -93,7 +93,7 @@ function parseOptions(argv: string[], repoRoot = process.cwd()): GatewayStabilit
 
 function parseCliJson<T>(
   label: string,
-  result: Awaited<ReturnType<OpenClawTestInstance["cli"]>>,
+  result: Awaited<ReturnType<NatesclawTestInstance["cli"]>>,
   parse: (value: unknown) => T = (value) => value as T,
 ): T {
   if (result.code !== 0) {
@@ -187,9 +187,9 @@ export async function runGatewayStabilityRuntime(options: GatewayStabilityRuntim
   await fs.mkdir(options.artifactBase, { recursive: true });
   const writer = createWriter(options);
   const startedAt = Date.now();
-  let instance: OpenClawTestInstance | undefined;
+  let instance: NatesclawTestInstance | undefined;
   try {
-    instance = await createOpenClawTestInstance({
+    instance = await createNatesclawTestInstance({
       name: "qa-gateway-stability",
       config: {
         diagnostics: { enabled: true },

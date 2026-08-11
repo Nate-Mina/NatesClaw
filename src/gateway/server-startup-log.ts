@@ -1,6 +1,6 @@
 // Gateway startup logging helpers.
 // Produces the compact ready banner with resolved model and safety state.
-import { normalizeSortedUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { normalizeSortedUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
 import chalk from "chalk";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import { resolveDefaultAgentId, resolveAgentConfig } from "../agents/agent-scope.js";
@@ -14,7 +14,7 @@ import {
 } from "../agents/model-selection-shared.js";
 import { resolveThinkingDefault } from "../agents/model-thinking-default.js";
 import type { AmbientEnvTriggerPolicy } from "../channels/config-presence.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { getResolvedLoggerSettings } from "../logging.js";
 import type { PluginManifestRecord } from "../plugins/manifest-registry.js";
 import { collectEnabledInsecureOrDangerousFlagsFromCurrentSnapshot } from "../security/dangerous-config-flags-current.js";
@@ -32,8 +32,8 @@ type StartupThinkLevel =
 
 /** Emit startup summary lines after Gateway bind and plugin loading complete. */
 export async function logGatewayStartup(params: {
-  cfg: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  cfg: NatesclawConfig;
+  activationSourceConfig?: NatesclawConfig;
   env: NodeJS.ProcessEnv;
   manifestRecords: readonly PluginManifestRecord[];
   bindHost: string;
@@ -89,14 +89,14 @@ export async function logGatewayStartup(params: {
   if (enabledDangerousFlags.length > 0) {
     const warning =
       `security warning: dangerous config flags enabled: ${enabledDangerousFlags.join(", ")}. ` +
-      "Run `openclaw security audit`.";
+      "Run `natesclaw security audit`.";
     params.log.warn(warning);
   }
 }
 
 /** Format the startup model line from the model ref already selected by the caller. */
 export function formatAgentModelStartupLogLine(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: string;
   model: string;
 }): { message: string; consoleMessage: string } {
@@ -125,7 +125,7 @@ function normalizeStartupThinkLevel(value: unknown): StartupThinkLevel | undefin
 
 /** Resolve explicit thinking overrides from agent defaults and per-model config. */
 function resolveExplicitStartupThinking(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: string;
   model: string;
   defaultAgentThinking: unknown;
@@ -155,7 +155,7 @@ function isConfiguredReasoningDisabled(params: {
 
 /** Format model thinking and fast-mode details for the Gateway startup banner. */
 export function formatAgentModelStartupDetails(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   provider: string;
   model: string;
 }): string {
@@ -201,8 +201,8 @@ export function formatAgentModelStartupDetails(params: {
 }
 
 async function collectConfiguredChannelStartupWarnings(params: {
-  cfg: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
+  cfg: NatesclawConfig;
+  activationSourceConfig?: NatesclawConfig;
   ambientEnvTriggers?: AmbientEnvTriggerPolicy;
   env: NodeJS.ProcessEnv;
   manifestRecords: readonly PluginManifestRecord[];
@@ -270,7 +270,7 @@ function formatConfiguredChannelMissingOwnerStartupWarning(entry: {
   const reasons = normalizeSortedUniqueStringEntries(entry.blockedReasons).join(", ");
   return (
     `configured channel warning: channels.${channelId} is configured but no channel plugin ` +
-    `is installed or loadable (${reasons}). Run \`openclaw doctor --fix\` or install the ` +
+    `is installed or loadable (${reasons}). Run \`natesclaw doctor --fix\` or install the ` +
     "channel plugin before relying on this channel."
   );
 }

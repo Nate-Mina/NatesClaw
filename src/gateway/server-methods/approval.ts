@@ -1,6 +1,6 @@
 // Unified operator approval lookup and first-answer resolution handlers.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,
@@ -21,7 +21,7 @@ import type {
 } from "../../infra/exec-approvals.js";
 import type { PluginApprovalRequestPayload } from "../../infra/plugin-approvals.js";
 import type { SystemAgentApprovalRequestPayload } from "../../infra/system-agent-approvals.js";
-import type { OpenClawStateDatabaseOptions } from "../../state/openclaw-state-db.js";
+import type { NatesclawStateDatabaseOptions } from "../../state/natesclaw-state-db.js";
 import { prepareApprovalChannelCustody } from "../approval-channel-custody.js";
 import { normalizeControlUiBasePath } from "../control-ui-shared.js";
 import type { ExecApprovalManager, ExecApprovalRecord } from "../exec-approval-manager.js";
@@ -52,7 +52,7 @@ type CreateApprovalHandlersParams = {
   forwarder?: ExecApprovalForwarder;
   iosPushDelivery?: ExecApprovalIosPushDelivery;
   pluginIosPushDelivery?: PluginApprovalIosPushDelivery;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 };
 
 function buildApprovalSnapshot(
@@ -145,7 +145,7 @@ function loadVisibleApproval(params: {
   execApprovalManager: ExecApprovalManager;
   pluginApprovalManager: ExecApprovalManager<PluginApprovalRequestPayload>;
   systemAgentApprovalManager?: ExecApprovalManager<SystemAgentApprovalRequestPayload>;
-  databaseOptions?: OpenClawStateDatabaseOptions;
+  databaseOptions?: NatesclawStateDatabaseOptions;
 }): OperatorApprovalRecord | null {
   // Reconciliation can settle a live waiter, so authorization must precede
   // every durable read and no unauthorized lookup may reach the bridge.

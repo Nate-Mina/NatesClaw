@@ -2,7 +2,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { resolveOpenClawStateDirForDatabasePath } from "../state/openclaw-state-db.paths.js";
+import { resolveNatesclawStateDirForDatabasePath } from "../state/natesclaw-state-db.paths.js";
 import { acquireDeviceIdentityCoordinator } from "./device-identity-coordinator.js";
 import {
   generateStoredDeviceIdentity,
@@ -51,7 +51,7 @@ function pathMayExist(filePath: string): boolean {
 function resolveLegacyDeviceIdentityPath(options: DeviceIdentityStoreOptions = {}): string {
   const { databasePath } = resolveDeviceIdentityStore(options);
   return path.join(
-    resolveOpenClawStateDirForDatabasePath(databasePath),
+    resolveNatesclawStateDirForDatabasePath(databasePath),
     LEGACY_DEVICE_IDENTITY_RELATIVE_PATH,
   );
 }
@@ -69,7 +69,7 @@ function assertNoPendingLegacyIdentity(options: DeviceIdentityStoreOptions): voi
     pathMayExist(legacyPath)
   ) {
     throw new Error(
-      `Legacy device identity exists at ${legacyPath}. Run "openclaw doctor --fix" before starting the gateway or connecting this client.`,
+      `Legacy device identity exists at ${legacyPath}. Run "natesclaw doctor --fix" before starting the gateway or connecting this client.`,
     );
   }
 }
@@ -89,7 +89,7 @@ function withDeviceIdentityCoordinator<T>(
   };
   const coordinator = acquireDeviceIdentityCoordinator({
     databasePath: resolved.databasePath,
-    stateDir: resolveOpenClawStateDirForDatabasePath(resolved.databasePath),
+    stateDir: resolveNatesclawStateDirForDatabasePath(resolved.databasePath),
   });
   let result: T;
   try {

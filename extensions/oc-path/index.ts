@@ -1,11 +1,11 @@
-// OC Path plugin entrypoint registers its OpenClaw integration.
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+// OC Path plugin entrypoint registers its Natesclaw integration.
+import { definePluginEntry } from "natesclaw/plugin-sdk/plugin-entry";
 import { registerOcPathCli } from "./cli-registration.js";
 
 export default definePluginEntry({
   id: "oc-path",
   name: "OC Path",
-  description: "Adds the openclaw path CLI for oc:// workspace file addressing.",
+  description: "Adds the natesclaw path CLI for oc:// workspace file addressing.",
   register(api) {
     registerOcPathCli(api);
   },

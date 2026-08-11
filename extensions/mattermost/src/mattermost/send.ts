@@ -1,21 +1,21 @@
-import { createChannelPartialDeliveryError } from "openclaw/plugin-sdk/channel-inbound";
+import { createChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 // Mattermost plugin module implements send behavior.
 import {
   createMessageReceiptFromOutboundResults,
   listMessageReceiptPlatformIds,
   type MessageReceipt,
   type MessageReceiptPartKind,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { pruneMapToMaxSize } from "openclaw/plugin-sdk/collection-runtime";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "natesclaw/plugin-sdk/channel-outbound";
+import { pruneMapToMaxSize } from "natesclaw/plugin-sdk/collection-runtime";
+import { resolveMarkdownTableMode } from "natesclaw/plugin-sdk/markdown-table-runtime";
+import { extensionForMime } from "natesclaw/plugin-sdk/media-mime";
+import { requireRuntimeConfig } from "natesclaw/plugin-sdk/plugin-config-runtime";
+import { isPrivateNetworkOptInEnabled } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { convertMarkdownTables, FormatCapabilityProfile } from "openclaw/plugin-sdk/text-chunking";
+} from "natesclaw/plugin-sdk/string-coerce-runtime";
+import { convertMarkdownTables, FormatCapabilityProfile } from "natesclaw/plugin-sdk/text-chunking";
 import { getMattermostRuntime } from "../runtime.js";
 import { resolveMattermostAccount } from "./accounts.js";
 import {
@@ -37,7 +37,7 @@ import {
   resolveInteractionCallbackUrl,
   setInteractionSecret,
 } from "./interactions.js";
-import { loadOutboundMediaFromUrl, type OpenClawConfig } from "./runtime-api.js";
+import { loadOutboundMediaFromUrl, type NatesclawConfig } from "./runtime-api.js";
 import {
   parseMattermostTarget,
   resolveMattermostOpaqueTarget,
@@ -45,7 +45,7 @@ import {
 } from "./target-resolution.js";
 
 type MattermostSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   botToken?: string;
   baseUrl?: string;
   accountId?: string;
@@ -331,7 +331,7 @@ async function resolveTargetChannelId(params: ResolveTargetChannelIdParams): Pro
 }
 
 type MattermostSendContext = {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   accountId: string;
   token: string;
   baseUrl: string;

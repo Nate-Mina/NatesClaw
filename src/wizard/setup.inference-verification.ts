@@ -1,6 +1,6 @@
 // Setup inference verification owns the shared verify/repair loop used by onboarding imports.
 import type { OnboardOptions } from "../commands/onboard-types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { withConsoleSubsystemsSuppressed } from "../logging/console.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { t } from "./i18n/index.js";
@@ -8,7 +8,7 @@ import type { WizardPrompter } from "./prompts.js";
 import { runSetupModelAuthStep, type SetupModelAuthCandidate } from "./setup.model-auth.js";
 
 export async function offerLiveModelVerification(params: {
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   initialCandidate?: SetupModelAuthCandidate;
   opts: OnboardOptions;
   prompter: WizardPrompter;
@@ -16,10 +16,10 @@ export async function offerLiveModelVerification(params: {
   workspaceDir: string;
   agentDir?: string;
   stateDir?: string;
-  writeConfig: (config: OpenClawConfig) => Promise<OpenClawConfig>;
+  writeConfig: (config: NatesclawConfig) => Promise<NatesclawConfig>;
   required?: boolean;
 }): Promise<{
-  config: OpenClawConfig;
+  config: NatesclawConfig;
   attempted: boolean;
   persisted: boolean;
   verified: boolean;
@@ -37,10 +37,10 @@ export async function offerLiveModelVerification(params: {
   const [inference, authStore, agentDatabase] = await Promise.all([
     import("../system-agent/setup-inference.js"),
     import("../agents/auth-profiles/store.js"),
-    import("../state/openclaw-agent-db.js"),
+    import("../state/natesclaw-agent-db.js"),
   ]);
   const stagedEnv = params.stateDir
-    ? { ...process.env, OPENCLAW_STATE_DIR: params.stateDir }
+    ? { ...process.env, NATESCLAW_STATE_DIR: params.stateDir }
     : undefined;
   const verify = async (candidate: SetupModelAuthCandidate) => {
     const progress = params.prompter.progress(t("wizard.setup.testAiProgress"));
@@ -58,8 +58,8 @@ export async function offerLiveModelVerification(params: {
                     ...updateParams,
                     stateDir: params.stateDir,
                   }),
-                disposeOpenClawAgentDatabaseByPath: (pathname) =>
-                  agentDatabase.disposeOpenClawAgentDatabaseByPath(pathname, {
+                disposeNatesclawAgentDatabaseByPath: (pathname) =>
+                  agentDatabase.disposeNatesclawAgentDatabaseByPath(pathname, {
                     env: stagedEnv!,
                   }),
               },

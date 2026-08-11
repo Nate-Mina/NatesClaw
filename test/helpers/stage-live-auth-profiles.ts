@@ -10,7 +10,7 @@ import {
   writePersistedAuthProfileStateRaw,
   writePersistedAuthProfileStoreRaw,
 } from "../../src/agents/auth-profiles/sqlite.js";
-import { withOpenClawAgentDatabaseReadOnly } from "../../src/state/openclaw-agent-db-readonly.js";
+import { withNatesclawAgentDatabaseReadOnly } from "../../src/state/natesclaw-agent-db-readonly.js";
 
 export function stageLiveAuthProfiles(realStateDir: string, tempStateDir: string): void {
   const agentsDir = path.join(realStateDir, "agents");
@@ -24,7 +24,7 @@ export function stageLiveAuthProfiles(realStateDir: string, tempStateDir: string
     }
     const sourceAgentDir = path.join(agentsDir, entry.name, "agent");
     const sourceDatabasePath = resolveAuthProfileDatabasePath(sourceAgentDir);
-    const sourceSnapshot = withOpenClawAgentDatabaseReadOnly(
+    const sourceSnapshot = withNatesclawAgentDatabaseReadOnly(
       (database) => {
         database.db.exec("BEGIN");
         try {

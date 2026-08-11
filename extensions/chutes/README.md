@@ -1,12 +1,12 @@
-# OpenClaw Chutes Provider
+# Natesclaw Chutes Provider
 
-Official OpenClaw provider plugin for Chutes.
+Official Natesclaw provider plugin for Chutes.
 
-Install from OpenClaw:
+Install from Natesclaw:
 
 ```bash
-openclaw plugins install @openclaw/chutes-provider
-openclaw gateway restart
+natesclaw plugins install @natesclaw/chutes-provider
+natesclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/chutes> for setup and configuration.
+See <https://docs.natesclaw.ai/providers/chutes> for setup and configuration.

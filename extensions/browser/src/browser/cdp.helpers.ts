@@ -5,11 +5,11 @@
  * redaction/headers, and request/response correlation over WebSocket.
  */
 import { createHash } from "node:crypto";
-import { parseBrowserHttpUrl, redactCdpUrl } from "openclaw/plugin-sdk/browser-config";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
-import { sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { rawDataToString } from "openclaw/plugin-sdk/webhook-ingress";
+import { parseBrowserHttpUrl, redactCdpUrl } from "natesclaw/plugin-sdk/browser-config";
+import { readProviderJsonResponse } from "natesclaw/plugin-sdk/provider-http";
+import { sleepWithAbort } from "natesclaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
+import { rawDataToString } from "natesclaw/plugin-sdk/webhook-ingress";
 import WebSocket from "ws";
 import { isLoopbackHost } from "../gateway/net.js";
 import {
@@ -636,7 +636,7 @@ export async function fetchCdpChecked(
     const res = await withManagedProxyForCdpUrl(fetchUrl, () =>
       withNoProxyForCdpUrl(fetchUrl, async () => {
         const parsedUrl = new URL(fetchUrl);
-        // Loopback CDP is an OpenClaw control plane, not page navigation. Allow
+        // Loopback CDP is an Natesclaw control plane, not page navigation. Allow
         // its exact host while preserving the caller's policy for remote hosts.
         const policy = isLoopbackHost(parsedUrl.hostname)
           ? withExactHostnamePolicy(ssrfPolicy, parsedUrl.hostname)

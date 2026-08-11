@@ -1,4 +1,4 @@
-# OpenClaw macOS app (dev + signing)
+# Natesclaw macOS app (dev + signing)
 
 ## Quick dev run
 
@@ -25,7 +25,7 @@ process owns the local Gateway.
 Launch a fully isolated app instance with the same profile name used by the CLI:
 
 ```bash
-OPENCLAW_PROFILE=work /Applications/OpenClaw.app/Contents/MacOS/OpenClaw
+NATESCLAW_PROFILE=work /Applications/Natesclaw.app/Contents/MacOS/Natesclaw
 ```
 
 Profile names use 1–64 lowercase letters, numbers, underscores, or hyphens and
@@ -36,12 +36,12 @@ must start with a letter or number. `default` selects the normal app; `gateway`,
 packaging cleanup is host-global. Build/package normally, then launch the named
 profile directly with the command above.
 
-A named profile keeps state in `~/.openclaw-<name>`, uses its own app defaults,
+A named profile keeps state in `~/.natesclaw-<name>`, uses its own app defaults,
 Keychain services, duplicate-instance lock, and the CLI-managed Gateway service
-`ai.openclaw.<name>`. Unless config or environment selects a port, each profile
+`ai.natesclaw.<name>`. Unless config or environment selects a port, each profile
 derives a stable port in the profile `20000...59999` range. The app does not
 install or modify the host-global Mac node
-service or OpenClaw login item while a profile is active. The runtime child node
+service or Natesclaw login item while a profile is active. The runtime child node
 still runs in process as usual. App relocation, Sparkle updates, and post-update
 service repair are disabled in profile mode; update the installed app through
 the normal default-profile workflow.
@@ -52,7 +52,7 @@ the normal default-profile workflow.
 scripts/package-mac-app.sh
 ```
 
-Creates `dist/OpenClaw.app` and signs it via `scripts/codesign-mac-app.sh`.
+Creates `dist/Natesclaw.app` and signs it via `scripts/codesign-mac-app.sh`.
 
 ## Signing behavior
 

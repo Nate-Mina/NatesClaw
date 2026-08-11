@@ -179,7 +179,7 @@ function parseOptions(argv: string[] = process.argv.slice(2)): CliOptions {
 }
 
 function printUsage(): void {
-  console.log(`OpenClaw Gateway concurrency benchmark
+  console.log(`Natesclaw Gateway concurrency benchmark
 
 Usage:
   pnpm test:gateway:concurrency -- [options]
@@ -654,7 +654,7 @@ async function runGatewaySample(options: {
   deadlineAt: number;
   entry: string;
 }): Promise<BenchmarkRun> {
-  const root = mkdtempSync(path.join(tmpdir(), "openclaw-gateway-concurrency-"));
+  const root = mkdtempSync(path.join(tmpdir(), "natesclaw-gateway-concurrency-"));
   const [port, mockPort] = await Promise.all([getFreePort(), getFreePort()]);
   const runStartedAt = performance.now();
   let gateway: ChildProcessWithoutNullStreams | undefined;
@@ -673,7 +673,7 @@ async function runGatewaySample(options: {
         PATH: process.env.PATH,
         MOCK_PORT: String(mockPort),
         MOCK_RESPONSE_CHUNK_DELAY_MS: String(MOCK_RESPONSE_CHUNK_DELAY_MS),
-        SUCCESS_MARKER: "OpenClaw gateway concurrency benchmark streaming response.",
+        SUCCESS_MARKER: "Natesclaw gateway concurrency benchmark streaming response.",
       },
     });
     mockOutput = captureChildOutput(mockProvider);
@@ -684,7 +684,7 @@ async function runGatewaySample(options: {
       detached: process.platform !== "win32",
       env: {
         ...createGatewayBenchEnv(root, configPath, {
-          caseEnv: { OPENCLAW_SKIP_CHANNELS: "1" },
+          caseEnv: { NATESCLAW_SKIP_CHANNELS: "1" },
         }),
         OPENAI_API_KEY: "gateway-concurrency-benchmark",
       },

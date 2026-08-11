@@ -1,12 +1,12 @@
 import { EventEmitter } from "node:events";
-import type { ChannelGatewayContext } from "openclaw/plugin-sdk/channel-contract";
-import { createChannelReplayGuard } from "openclaw/plugin-sdk/persistent-dedupe";
-import { resetPluginStateStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import type { ChannelGatewayContext } from "natesclaw/plugin-sdk/channel-contract";
+import { createChannelReplayGuard } from "natesclaw/plugin-sdk/persistent-dedupe";
+import { resetPluginStateStoreForTests } from "natesclaw/plugin-sdk/plugin-state-test-runtime";
 import {
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNatesclawTmpDir,
   tempWorkspaceSync,
   type TempWorkspaceSync,
-} from "openclaw/plugin-sdk/temp-path";
+} from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedRaftAccount } from "./accounts.js";
 import { startRaftGatewayAccount } from "./gateway.js";
@@ -62,7 +62,7 @@ function createContext(accountId = "default") {
       name: null,
       enabled: true,
       configured: true,
-      profile: "openclaw",
+      profile: "natesclaw",
     },
     runtime: {},
     abortSignal: new AbortController().signal,
@@ -87,7 +87,7 @@ function createContext(accountId = "default") {
         buildContext: vi.fn(() => ({})),
       },
       session: {
-        resolveStorePath: vi.fn(() => "/tmp/openclaw-agent.sqlite"),
+        resolveStorePath: vi.fn(() => "/tmp/natesclaw-agent.sqlite"),
         recordInboundSession: vi.fn(),
       },
       reply: {
@@ -115,7 +115,7 @@ function createPersistentWakeDedupe(stateDir: string) {
       pluginId: "raft",
       namespacePrefix: "raft-wake-dedupe",
       stateMaxEntries: 10_000,
-      env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+      env: { ...process.env, NATESCLAW_STATE_DIR: stateDir },
     },
     buildReplayKey: (event) => event.key,
     namespace: (event) => event.accountId,
@@ -413,8 +413,8 @@ describe("Raft wake gateway", () => {
 
   it("persists accepted wake dedupe across restarts without crossing accounts", async () => {
     const workspace = tempWorkspaceSync({
-      rootDir: resolvePreferredOpenClawTmpDir(),
-      prefix: "openclaw-raft-wake-dedupe-",
+      rootDir: resolvePreferredNatesclawTmpDir(),
+      prefix: "natesclaw-raft-wake-dedupe-",
     });
     tempWorkspaces.push(workspace);
     const stateDir = workspace.dir;

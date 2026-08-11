@@ -2,7 +2,7 @@
 import {
   resolveChannelPreviewStreamMode,
   type StreamingMode,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "natesclaw/plugin-sdk/channel-outbound";
 
 export function resolveDiscordPreviewStreamMode(
   params: {

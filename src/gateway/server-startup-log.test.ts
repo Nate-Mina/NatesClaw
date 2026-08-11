@@ -19,7 +19,7 @@ function createManifestRecord(
     channels: [],
     cliBackends: [],
     hooks: [],
-    manifestPath: `/tmp/${overrides.id}/openclaw.plugin.json`,
+    manifestPath: `/tmp/${overrides.id}/natesclaw.plugin.json`,
     origin: "global",
     providers: [],
     rootDir: `/tmp/${overrides.id}`,
@@ -64,7 +64,7 @@ describe("gateway startup log", () => {
 
     expect(warn.mock.calls).toEqual([
       [
-        "security warning: dangerous config flags enabled: hooks.gmail.allowUnsafeExternalContent=true. Run `openclaw security audit`.",
+        "security warning: dangerous config flags enabled: hooks.gmail.allowUnsafeExternalContent=true. Run `natesclaw security audit`.",
       ],
     ]);
   });
@@ -147,7 +147,7 @@ describe("gateway startup log", () => {
 
     expect(warn.mock.calls).toEqual([
       [
-        "configured channel warning: channels.missing-chat is configured but no channel plugin is installed or loadable (no-channel-owner). Run `openclaw doctor --fix` or install the channel plugin before relying on this channel.",
+        "configured channel warning: channels.missing-chat is configured but no channel plugin is installed or loadable (no-channel-owner). Run `natesclaw doctor --fix` or install the channel plugin before relying on this channel.",
       ],
     ]);
   });
@@ -228,7 +228,7 @@ describe("gateway startup log", () => {
   it("does not warn when startup activation enables the configured channel owner", async () => {
     const manifestRecords = [
       createManifestRecord({
-        id: "openclaw-modern-chat",
+        id: "natesclaw-modern-chat",
         channels: ["legacy-chat"],
         enabledByDefault: false,
       }),
@@ -250,7 +250,7 @@ describe("gateway startup log", () => {
       activationSourceConfig: {
         plugins: {
           entries: {
-            "openclaw-modern-chat": {
+            "natesclaw-modern-chat": {
               enabled: true,
             },
           },

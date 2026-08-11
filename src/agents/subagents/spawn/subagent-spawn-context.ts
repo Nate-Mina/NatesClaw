@@ -1,7 +1,7 @@
-import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
+import { finiteSecondsToTimerSafeMilliseconds } from "@natesclaw/normalization-core/number-coercion";
 import { resolveThreadBindingSpawnPolicy } from "../../../channels/thread-bindings-policy.js";
 import type { SessionEntry } from "../../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import type { SubagentSpawnPreparation } from "../../../context-engine/types.js";
 import { summarizeSpawnError } from "../../spawn-pipeline.js";
 import { getSubagentSpawnDeps } from "./subagent-spawn-deps.js";
@@ -27,7 +27,7 @@ type PreparedSpawnContext =
   | { status: "error"; error: string };
 
 export async function prepareSubagentSessionContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   contextMode: SpawnSubagentContextMode;
   requesterAgentId: string;
   targetAgentId: string;
@@ -73,7 +73,7 @@ export async function prepareSubagentSessionContext(params: {
     }
     if (forkedResult.status === "failed" || forkedResult.status === "missing-entry") {
       throw new Error(
-        'context="fork" requested but OpenClaw could not fork the requester transcript.',
+        'context="fork" requested but Natesclaw could not fork the requester transcript.',
       );
     }
     parentEntry = forkedResult.parentEntry;
@@ -103,7 +103,7 @@ export async function prepareSubagentSessionContext(params: {
         }
         return {
           status: "error",
-          error: 'context="fork" requested but OpenClaw could not prepare forked context.',
+          error: 'context="fork" requested but Natesclaw could not prepare forked context.',
         };
       }
       return {
@@ -127,7 +127,7 @@ export async function prepareSubagentSessionContext(params: {
 }
 
 export async function prepareContextEngineSubagentSpawn(params: {
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   context: PreparedSpawnContext & { status: "ok" };
   requesterInternalKey: string;
   childSessionKey: string;
@@ -179,7 +179,7 @@ export async function rollbackPreparedContextEngine(
 export function resolveSubagentContextMode(params: {
   requestedContext?: SpawnSubagentContextMode;
   threadRequested: boolean;
-  cfg: OpenClawConfig;
+  cfg: NatesclawConfig;
   requester: {
     channel?: string;
     accountId?: string;

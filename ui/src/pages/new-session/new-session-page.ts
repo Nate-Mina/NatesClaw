@@ -31,7 +31,7 @@ import { buildAgentMainSessionKey, normalizeAgentId } from "../../lib/sessions/s
 import { normalizeOptionalString } from "../../lib/string-coerce.ts";
 import { isTerminalAvailable } from "../../lib/terminal-availability.ts";
 import { createManagedWorktree } from "../../lib/worktrees/create-worktree.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 import "../../styles/chat.css";
 import "../../styles/new-session.css";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
@@ -87,7 +87,7 @@ import { renderAgentSelect } from "./target-controls.ts";
 
 const CATALOG_RETRY_DELAYS_MS = [0, 1_000, 3_000] as const;
 
-class NewSessionPage extends OpenClawLightDomElement {
+class NewSessionPage extends NatesclawLightDomElement {
   @property({ attribute: false }) data: NewSessionRouteData | undefined;
 
   @consume({ context: applicationContext, subscribe: true })
@@ -1175,8 +1175,8 @@ class NewSessionPage extends OpenClawLightDomElement {
       agent: this.selectedAgent(),
       context: this.context,
     });
-    return runtime && runtime !== "openclaw"
-      ? t("newSession.cloudRequiresOpenClawRuntime", { runtime })
+    return runtime && runtime !== "natesclaw"
+      ? t("newSession.cloudRequiresNatesclawRuntime", { runtime })
       : undefined;
   }
 
@@ -2204,8 +2204,8 @@ class NewSessionPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-new-session-page")) {
-  customElements.define("openclaw-new-session-page", NewSessionPage);
+if (!customElements.get("natesclaw-new-session-page")) {
+  customElements.define("natesclaw-new-session-page", NewSessionPage);
 }
 
 export type { NewSessionPage };

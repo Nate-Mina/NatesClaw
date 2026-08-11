@@ -1,7 +1,7 @@
 // Models method tests cover slow catalog timeouts, configured/all views,
 // validation errors, and protocol response shapes.
 
-import { expectDefined } from "@openclaw/normalization-core";
+import { expectDefined } from "@natesclaw/normalization-core";
 import { describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../test/helpers/promise.js";
 import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
@@ -10,9 +10,9 @@ import {
   replaceRuntimeAuthProfileStoreSnapshots,
 } from "../../agents/auth-profiles.js";
 import { clearRuntimeConfigSnapshot, setRuntimeConfigSnapshot } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { withEnvAsync } from "../../test-utils/env.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import { withNatesclawTestState } from "../../test-utils/natesclaw-test-state.js";
 import { modelsHandlers } from "./models.js";
 import type { RespondFn } from "./types.js";
 
@@ -20,7 +20,7 @@ const withoutOpenAIEnvAuth = async <T>(run: () => Promise<T>): Promise<T> =>
   await withEnvAsync(
     {
       CODEX_API_KEY: undefined,
-      CODEX_HOME: "/__openclaw_models_list_test__/codex",
+      CODEX_HOME: "/__natesclaw_models_list_test__/codex",
       OPENAI_API_KEY: undefined,
       OPENAI_BASE_URL: undefined,
       OPENAI_OAUTH_TOKEN: undefined,
@@ -47,8 +47,8 @@ function createDemoOAuthStore(params: { access: string; expires: number }) {
 function requestModelsList(params: {
   view: "default" | "configured" | "provider-config" | "all";
   respond?: ReturnType<typeof vi.fn>;
-  runtimeConfig?: OpenClawConfig;
-  getRuntimeConfig?: () => OpenClawConfig;
+  runtimeConfig?: NatesclawConfig;
+  getRuntimeConfig?: () => NatesclawConfig;
   loadGatewayModelCatalog: (params?: {
     agentId?: string;
     agentDir?: string;
@@ -60,7 +60,7 @@ function requestModelsList(params: {
   includeProviderCapabilities?: boolean;
 }) {
   const respond = params.respond ?? vi.fn();
-  const runtimeConfig = params.runtimeConfig ?? ({} as OpenClawConfig);
+  const runtimeConfig = params.runtimeConfig ?? ({} as NatesclawConfig);
   const getRuntimeConfig = params.getRuntimeConfig ?? (() => runtimeConfig);
   const request = expectDefined(
     modelsHandlers["models.list"],
@@ -137,10 +137,10 @@ describe("models.list", () => {
   it("uses the replacement owner config for the whole catalog projection", async () => {
     const initialConfig = {
       agents: { defaults: { models: { "test/old": {} } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const latestConfig = {
       agents: { defaults: { models: { "test/demo": {} } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     let currentConfig = initialConfig;
     const loadGatewayModelCatalog = vi.fn(async () => {
       if (currentConfig === initialConfig) {
@@ -168,10 +168,10 @@ describe("models.list", () => {
   it("escalates to the full owner when replacement config adds a provider wildcard", async () => {
     const initialConfig = {
       agents: { defaults: { models: { "test/demo": {} } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const latestConfig = {
       agents: { defaults: { models: { "test/*": {} } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     let currentConfig = initialConfig;
     let firstLoad = true;
     const loadGatewayModelCatalog = vi.fn(async (_params?: { readOnly?: boolean }) => {
@@ -262,7 +262,7 @@ describe("models.list", () => {
         providers: {
           "mounted-json": {
             source: "file",
-            path: "/tmp/openclaw-test-secrets.json",
+            path: "/tmp/natesclaw-test-secrets.json",
             mode: "json",
           },
         },
@@ -272,7 +272,7 @@ describe("models.list", () => {
           vllm: sourceProvider,
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const runtimeConfig = {
       ...sourceConfig,
       models: {
@@ -284,7 +284,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     const loadGatewayModelCatalog = vi.fn(() =>
       Promise.resolve([
         {
@@ -348,7 +348,7 @@ describe("models.list", () => {
         providers: {
           "mounted-json": {
             source: "file",
-            path: "/tmp/openclaw-test-secrets.json",
+            path: "/tmp/natesclaw-test-secrets.json",
             mode: "json",
           },
         },
@@ -372,7 +372,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
     setRuntimeConfigSnapshot(config, config);
     try {
       const { request, respond } = requestModelsList({
@@ -415,7 +415,7 @@ describe("models.list", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig;
+      } as unknown as NatesclawConfig;
 
       vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
       try {
@@ -438,7 +438,7 @@ describe("models.list", () => {
                 id: "gpt-test",
                 name: "GPT Test",
                 provider: "openai",
-                agentRuntime: { id: "openclaw", source: "implicit" },
+                agentRuntime: { id: "natesclaw", source: "implicit" },
                 available: false,
               },
             ],
@@ -471,7 +471,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     try {
@@ -515,7 +515,7 @@ describe("models.list", () => {
         providers: {
           "mounted-json": {
             source: "file",
-            path: "/tmp/openclaw-test-secrets.json",
+            path: "/tmp/natesclaw-test-secrets.json",
             mode: "json",
           },
         },
@@ -533,7 +533,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     try {
@@ -665,7 +665,7 @@ describe("models.list", () => {
             vllm: { apiKey: "test-key" },
           },
         },
-      } as unknown as OpenClawConfig;
+      } as unknown as NatesclawConfig;
 
       const loadConfiguredCatalog = vi.fn(() => Promise.resolve(catalog));
       const { request: configuredRequest, respond: configuredRespond } = requestModelsList({
@@ -747,10 +747,10 @@ describe("models.list", () => {
 
   it("keeps keyless local provider wildcard discoveries visible with unknown availability", async () => {
     await withoutOpenAIEnvAuth(async () => {
-      await withOpenClawTestState(
+      await withNatesclawTestState(
         {
           layout: "state-only",
-          prefix: "openclaw-models-list-local-wildcard-",
+          prefix: "natesclaw-models-list-local-wildcard-",
           agentEnv: "main",
           env: { VLLM_API_KEY: undefined },
         },
@@ -782,7 +782,7 @@ describe("models.list", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig;
+          } as unknown as NatesclawConfig;
           const expected = {
             models: [
               {
@@ -817,10 +817,10 @@ describe("models.list", () => {
 
   it("marks legacy OpenAI Codex aliases available through ChatGPT OAuth", async () => {
     await withoutOpenAIEnvAuth(async () => {
-      await withOpenClawTestState(
+      await withNatesclawTestState(
         {
           layout: "state-only",
-          prefix: "openclaw-models-list-codex-alias-",
+          prefix: "natesclaw-models-list-codex-alias-",
           agentEnv: "main",
         },
         async (state) => {
@@ -876,10 +876,10 @@ describe("models.list", () => {
 
   it("marks catalog models available through their configured CLI runtime", async () => {
     await withEnvAsync({ ANTHROPIC_API_KEY: undefined }, async () => {
-      await withOpenClawTestState(
+      await withNatesclawTestState(
         {
           layout: "state-only",
-          prefix: "openclaw-models-list-cli-runtime-",
+          prefix: "natesclaw-models-list-cli-runtime-",
           agentEnv: "main",
         },
         async (state) => {
@@ -906,7 +906,7 @@ describe("models.list", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig;
+          } as unknown as NatesclawConfig;
           const { request, respond } = requestModelsList({
             view: "all",
             runtimeConfig,
@@ -950,7 +950,7 @@ describe("models.list", () => {
         providers: {
           "mounted-json": {
             source: "file",
-            path: "/tmp/openclaw-test-secrets.json",
+            path: "/tmp/natesclaw-test-secrets.json",
             mode: "json",
           },
         },
@@ -973,7 +973,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     const { request, respond } = requestModelsList({
       view: "all",
@@ -1009,7 +1009,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NatesclawConfig;
 
     const { request, respond } = requestModelsList({
       view: "all",
@@ -1031,12 +1031,12 @@ describe("models.list", () => {
   });
 
   it("uses an exact hydrated runtime snapshot as managed SecretRef proof", async () => {
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: NatesclawConfig = {
       secrets: {
         providers: {
           "mounted-json": {
             source: "file",
-            path: "/tmp/openclaw-test-secrets.json",
+            path: "/tmp/natesclaw-test-secrets.json",
             mode: "json",
           },
         },
@@ -1059,7 +1059,7 @@ describe("models.list", () => {
       sourceConfig.models?.providers?.vllm,
       "source vLLM provider",
     );
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: NatesclawConfig = {
       ...sourceConfig,
       models: {
         providers: {
@@ -1095,10 +1095,10 @@ describe("models.list", () => {
   });
 
   it("does not mark catalog rows available from expired OAuth profiles", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-expired-profile-",
+        prefix: "natesclaw-models-list-expired-profile-",
         agentEnv: "main",
       },
       async (state) => {
@@ -1137,10 +1137,10 @@ describe("models.list", () => {
   });
 
   it("uses refreshed persisted OAuth when the runtime auth snapshot is stale", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-stale-runtime-profile-",
+        prefix: "natesclaw-models-list-stale-runtime-profile-",
         agentEnv: "main",
       },
       async (state) => {
@@ -1195,10 +1195,10 @@ describe("models.list", () => {
   });
 
   it("marks env SecretRef-backed auth profiles available", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-env-profile-",
+        prefix: "natesclaw-models-list-env-profile-",
         agentEnv: "main",
         env: {
           DEMO_PROVIDER_TOKEN: "test-token",
@@ -1249,10 +1249,10 @@ describe("models.list", () => {
   });
 
   it("keeps non-env SecretRef-backed auth profile availability unknown", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-file-profile-",
+        prefix: "natesclaw-models-list-file-profile-",
         agentEnv: "main",
       },
       async (state) => {
@@ -1279,12 +1279,12 @@ describe("models.list", () => {
               providers: {
                 "mounted-json": {
                   source: "file",
-                  path: "/tmp/openclaw-test-secrets.json",
+                  path: "/tmp/natesclaw-test-secrets.json",
                   mode: "json",
                 },
               },
             },
-          } as OpenClawConfig,
+          } as NatesclawConfig,
           loadGatewayModelCatalog: vi.fn(() =>
             Promise.resolve([{ id: "demo-model", name: "Demo Model", provider: "demo-provider" }]),
           ),
@@ -1314,10 +1314,10 @@ describe("models.list", () => {
     // Regression: the models.list availability checker loaded the auth store
     // for profile checks but did not pass it to the runtime availability check,
     // so inline provider keys in billing cooldown stayed browseable.
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-inline-cooldown-",
+        prefix: "natesclaw-models-list-inline-cooldown-",
         agentEnv: "main",
       },
       async (state) => {
@@ -1332,7 +1332,7 @@ describe("models.list", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig;
+        } as unknown as NatesclawConfig;
         const catalog = [{ id: "qwen-remote", name: "Qwen Remote", provider: "cliproxyapi" }];
         const writeCooldown = (disabledUntil: number) =>
           state.writeAuthProfiles({
@@ -1388,10 +1388,10 @@ describe("models.list", () => {
   });
 
   it("uses an exact hydrated runtime profile SecretRef as read-only proof", async () => {
-    await withOpenClawTestState(
+    await withNatesclawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-hydrated-file-profile-",
+        prefix: "natesclaw-models-list-hydrated-file-profile-",
         agentEnv: "main",
       },
       async (state) => {
@@ -1434,12 +1434,12 @@ describe("models.list", () => {
                 providers: {
                   "mounted-json": {
                     source: "file",
-                    path: "/tmp/openclaw-test-secrets.json",
+                    path: "/tmp/natesclaw-test-secrets.json",
                     mode: "json",
                   },
                 },
               },
-            } as OpenClawConfig,
+            } as NatesclawConfig,
             loadGatewayModelCatalog: vi.fn(() =>
               Promise.resolve([
                 { id: "demo-model", name: "Demo Model", provider: "demo-provider" },
@@ -1482,13 +1482,13 @@ describe("models.list", () => {
       },
       { name: "managed-marker", apiKey: "secretref-managed" },
     ] as const) {
-      await withOpenClawTestState(
+      await withNatesclawTestState(
         {
           layout: "state-only",
-          prefix: `openclaw-models-list-provider-${fixture.name}-profile-`,
+          prefix: `natesclaw-models-list-provider-${fixture.name}-profile-`,
           agentEnv: "main",
           env: {
-            OPENCLAW_TEST_PROFILE_API_KEY: "test-token",
+            NATESCLAW_TEST_PROFILE_API_KEY: "test-token",
             VLLM_API_KEY: undefined,
           },
         },
@@ -1502,7 +1502,7 @@ describe("models.list", () => {
                 keyRef: {
                   source: "env",
                   provider: "default",
-                  id: "OPENCLAW_TEST_PROFILE_API_KEY",
+                  id: "NATESCLAW_TEST_PROFILE_API_KEY",
                 },
               },
             },
@@ -1523,7 +1523,7 @@ describe("models.list", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig;
+          } as unknown as NatesclawConfig;
 
           const { request, respond } = requestModelsList({
             view: "all",

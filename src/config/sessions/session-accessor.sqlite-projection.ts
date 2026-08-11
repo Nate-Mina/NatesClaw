@@ -1,15 +1,15 @@
 import path from "node:path";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { resolveStoredSessionOwnerAgentId } from "../../gateway/session-store-key.js";
 import {
   resolveAgentHarnessSessionStoreError,
   resolveAgentHarnessSessionStoreTransitionError,
 } from "../../sessions/agent-harness-session-key.js";
 import {
-  openOpenClawAgentDatabase,
-  runOpenClawAgentWriteTransaction,
-  type OpenClawAgentDatabase,
-} from "../../state/openclaw-agent-db.js";
+  openNatesclawAgentDatabase,
+  runNatesclawAgentWriteTransaction,
+  type NatesclawAgentDatabase,
+} from "../../state/natesclaw-agent-db.js";
 import type { SessionArchivedTranscriptCleanupRule } from "./session-accessor.lifecycle-types.js";
 import {
   materializeSessionStateDeletePlans,
@@ -120,7 +120,7 @@ export async function applySessionStoreProjection<T>(params: {
     storePath: params.storePath,
   });
   const committed = await runExclusiveSqliteSessionWrite(resolved, async () => {
-    const database = openOpenClawAgentDatabase(toDatabaseOptions(resolved));
+    const database = openNatesclawAgentDatabase(toDatabaseOptions(resolved));
     const before = readSessionEntryStore(database);
     const projected = structuredClone(before);
     const operation = await params.update(projected);
@@ -147,7 +147,7 @@ export async function applySessionStoreProjection<T>(params: {
     }
 
     const maintenancePlans: SessionEntryMaintenancePlan[] = [];
-    runOpenClawAgentWriteTransaction(
+    runNatesclawAgentWriteTransaction(
       (transactionDb) => {
         for (const sessionKey of changedKeys) {
           const current = readExactSessionEntryRow(transactionDb, sessionKey)?.entry;
@@ -189,7 +189,7 @@ export async function applySessionStoreProjection<T>(params: {
 }
 
 function readProjectedRemovalEntry(
-  database: OpenClawAgentDatabase,
+  database: NatesclawAgentDatabase,
   projected: ProjectedLifecycleMutation["removals"][number],
   allowCanonicalRepair = false,
 ): SessionEntry | undefined {
@@ -231,7 +231,7 @@ export async function applySessionEntryLifecycleMutation(params: {
   /** Doctor-only bypass while exact malformed rows are removed in the same transaction. */
   allowCanonicalRepair?: boolean;
   /** Doctor-only synchronous state transfer that commits with the destination entry. */
-  afterUpsertsInTransaction?: (database: OpenClawAgentDatabase) => void;
+  afterUpsertsInTransaction?: (database: NatesclawAgentDatabase) => void;
   /** Synchronous caller-authority guard checked immediately before lifecycle writes. */
   beforeCommitInTransaction?: () => void;
 }): Promise<SessionEntryLifecycleMutationResult> {
@@ -251,7 +251,7 @@ export async function applySessionEntryLifecycleMutation(params: {
     throw error;
   };
   const projected = await runExclusiveSqliteSessionWrite(resolved, async () => {
-    const database = openOpenClawAgentDatabase(toDatabaseOptions(resolved));
+    const database = openNatesclawAgentDatabase(toDatabaseOptions(resolved));
     return await projectSessionEntryLifecycleMutation(database, {
       ...(params.allowCanonicalRepair ? { allowCanonicalRepair: true } : {}),
       archiveDirectory: resolveSqliteTranscriptArchiveDirectory(resolved),
@@ -269,7 +269,7 @@ export async function applySessionEntryLifecycleMutation(params: {
     const removedSessionKeys: string[] = [];
     let archivedTranscripts: SessionLifecycleArchivedTranscript[] = [];
     const maintenancePlans: SessionEntryMaintenancePlan[] = [];
-    runOpenClawAgentWriteTransaction((transactionDb) => {
+    runNatesclawAgentWriteTransaction((transactionDb) => {
       params.beforeCommitInTransaction?.();
       const validatedRemovals = projected.removals.filter((removal) => {
         const entry = readProjectedRemovalEntry(
@@ -426,7 +426,7 @@ export async function applySessionEntryLifecycleMutation(params: {
       committed.maintenancePlans,
     );
   const archivedTranscripts = [...committed.archivedTranscripts, ...maintenanceArchivedTranscripts];
-  const afterCount = readSessionEntryCount(openOpenClawAgentDatabase(toDatabaseOptions(resolved)));
+  const afterCount = readSessionEntryCount(openNatesclawAgentDatabase(toDatabaseOptions(resolved)));
   emitArchivedTranscriptUpdates(archivedTranscripts);
   const archivedTranscriptDirectories = uniqueStrings(
     archivedTranscripts.map((transcript) => path.dirname(transcript.archivedPath)),
@@ -460,7 +460,7 @@ export async function purgeDeletedAgentSessionEntries(
 ): Promise<SessionEntryLifecycleMutationResult> {
   const resolved = resolveSqliteStoreScope(params.storePath, { agentId: params.storeAgentId });
   const prepared = await runExclusiveSqliteSessionWrite(resolved, async () => {
-    const database = openOpenClawAgentDatabase(toDatabaseOptions(resolved));
+    const database = openNatesclawAgentDatabase(toDatabaseOptions(resolved));
     const store = readSessionEntryStore(database);
     const remainingStore = { ...store };
     const entryRemovals: SessionEntryRemovalPlan[] = [];
@@ -503,7 +503,7 @@ export async function purgeDeletedAgentSessionEntries(
     const removedSessionKeys = prepared.entryRemovals.map((removal) => removal.sessionKey);
     let archivedTranscripts: SessionLifecycleArchivedTranscript[] = [];
     const maintenancePlans: SessionEntryMaintenancePlan[] = [];
-    runOpenClawAgentWriteTransaction((transactionDb) => {
+    runNatesclawAgentWriteTransaction((transactionDb) => {
       const currentOwnedSessionKeys = Object.keys(readSessionEntryStore(transactionDb))
         .filter(
           (sessionKey) =>
@@ -546,7 +546,7 @@ export async function purgeDeletedAgentSessionEntries(
       committed.maintenancePlans,
     )),
   ];
-  const afterCount = readSessionEntryCount(openOpenClawAgentDatabase(toDatabaseOptions(resolved)));
+  const afterCount = readSessionEntryCount(openNatesclawAgentDatabase(toDatabaseOptions(resolved)));
   emitArchivedTranscriptUpdates(archivedTranscripts);
   return {
     removedEntries: committed.removedSessionKeys.length,

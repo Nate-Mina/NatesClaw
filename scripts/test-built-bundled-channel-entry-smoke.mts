@@ -14,19 +14,19 @@ import { installProcessWarningFilter } from "./process-warning-filter.mts";
 
 installProcessWarningFilter();
 
-process.env.OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK ??= "1";
+process.env.NATESCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK ??= "1";
 
 const { packageRoot } = parsePackageRootArg(
   process.argv.slice(2),
-  "OPENCLAW_BUNDLED_CHANNEL_SMOKE_ROOT",
+  "NATESCLAW_BUNDLED_CHANNEL_SMOKE_ROOT",
 );
 const distExtensionsRoot = path.join(packageRoot, "dist", "extensions");
 const excludedPackageExtensionDirs = collectRootPackageExcludedExtensionDirs({ cwd: packageRoot });
-const installedLayoutEnv = "OPENCLAW_BUNDLED_CHANNEL_SMOKE_INSTALLED_LAYOUT";
+const installedLayoutEnv = "NATESCLAW_BUNDLED_CHANNEL_SMOKE_INSTALLED_LAYOUT";
 
 type PackageManifest = {
   files?: unknown;
-  openclaw?: Partial<Record<"channel" | "extensions" | "setupEntry", unknown>>;
+  natesclaw?: Partial<Record<"channel" | "extensions" | "setupEntry", unknown>>;
 };
 
 type BuiltEntryFile = { id: string; kind: "channel" | "setup"; path: string };
@@ -52,7 +52,7 @@ function collectExcludedDistExtensionIds() {
 }
 
 function packageRootLooksInstalled(root: string) {
-  return root.replaceAll("\\", "/").endsWith("/node_modules/openclaw");
+  return root.replaceAll("\\", "/").endsWith("/node_modules/natesclaw");
 }
 
 function smokeInInstalledLayoutIfNeeded() {
@@ -60,9 +60,9 @@ function smokeInInstalledLayoutIfNeeded() {
     return;
   }
 
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-channel-entry-smoke-"));
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-channel-entry-smoke-"));
   const nodeModulesRoot = path.join(tempRoot, "node_modules");
-  const installedPackageRoot = path.join(nodeModulesRoot, "openclaw");
+  const installedPackageRoot = path.join(nodeModulesRoot, "natesclaw");
   fs.mkdirSync(nodeModulesRoot, { recursive: true });
   fs.symlinkSync(packageRoot, installedPackageRoot, "dir");
 
@@ -118,7 +118,7 @@ function collectBundledChannelEntryFiles() {
       continue;
     }
     const packageJson = readJson(packageJsonPath);
-    if (!packageJson.openclaw?.channel) {
+    if (!packageJson.natesclaw?.channel) {
       continue;
     }
     if (excludedPackageExtensionDirs.has(dirent.name)) {
@@ -126,8 +126,8 @@ function collectBundledChannelEntryFiles() {
     }
 
     const extensionEntries =
-      Array.isArray(packageJson.openclaw.extensions) && packageJson.openclaw.extensions.length > 0
-        ? packageJson.openclaw.extensions
+      Array.isArray(packageJson.natesclaw.extensions) && packageJson.natesclaw.extensions.length > 0
+        ? packageJson.natesclaw.extensions
         : ["./index.ts"];
     for (const entry of extensionEntries) {
       if (typeof entry !== "string" || entry.trim().length === 0) {
@@ -140,7 +140,7 @@ function collectBundledChannelEntryFiles() {
       });
     }
 
-    const setupEntry = packageJson.openclaw.setupEntry;
+    const setupEntry = packageJson.natesclaw.setupEntry;
     if (typeof setupEntry === "string" && setupEntry.trim().length > 0) {
       files.push({
         id: dirent.name,

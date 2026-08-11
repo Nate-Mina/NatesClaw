@@ -1,18 +1,18 @@
 import fs from "node:fs/promises";
 import type { FileHandle } from "node:fs/promises";
 import path from "node:path";
-import type { SessionUpstreamProbe } from "openclaw/plugin-sdk/session-catalog";
-import { resolvePreferredOpenClawTmpDir, tempWorkspace } from "openclaw/plugin-sdk/temp-path";
+import type { SessionUpstreamProbe } from "natesclaw/plugin-sdk/session-catalog";
+import { resolvePreferredNatesclawTmpDir, tempWorkspace } from "natesclaw/plugin-sdk/temp-path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { checkClaudeUpstreamActivity, linkContinued } from "./session-upstream-activity.js";
 
 const CLAUDE_UPSTREAM_SCAN_BYTES = 1024 * 1024;
-const claudeUpstreamWorkspaceRoot = resolvePreferredOpenClawTmpDir();
+const claudeUpstreamWorkspaceRoot = resolvePreferredNatesclawTmpDir();
 
 function createClaudeUpstreamWorkspace(label?: string) {
   return tempWorkspace({
     rootDir: claudeUpstreamWorkspaceRoot,
-    prefix: `openclaw-claude-upstream-${label ? `${label}-` : ""}`,
+    prefix: `natesclaw-claude-upstream-${label ? `${label}-` : ""}`,
   });
 }
 
@@ -89,7 +89,7 @@ describe("Claude upstream activity", () => {
         row({
           type: "user",
           content:
-            "Continue this conversation using the OpenClaw transcript below as prior session history.\nTreat it as authoritative context for this fresh CLI session.\n\n<conversation_history>\nold\n</conversation_history>\n\n<next_user_message>\nnew\n</next_user_message>",
+            "Continue this conversation using the Natesclaw transcript below as prior session history.\nTreat it as authoritative context for this fresh CLI session.\n\n<conversation_history>\nold\n</conversation_history>\n\n<next_user_message>\nnew\n</next_user_message>",
           timestamp: "2026-07-13T10:04:00.000Z",
         }),
         row({
@@ -190,7 +190,7 @@ describe("Claude upstream activity", () => {
     ).resolves.toBeUndefined();
   });
 
-  it("filters OpenClaw-authored rows by normalized transcript text", async () => {
+  it("filters Natesclaw-authored rows by normalized transcript text", async () => {
     await using workspace = await createClaudeUpstreamWorkspace("provenance");
     const dir = workspace.dir;
     const filePath = path.join(dir, "thread-provenance.jsonl");

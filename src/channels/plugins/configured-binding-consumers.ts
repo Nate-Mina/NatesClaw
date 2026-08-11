@@ -3,7 +3,7 @@
  *
  * Stores target-family consumers that compile and materialize configured binding rules.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveGlobalMap } from "../../shared/global-singleton.js";
 import type {
   CompiledConfiguredBinding,
@@ -28,7 +28,7 @@ export type ConfiguredBindingConsumer = {
   id: string;
   supports: (binding: ConfiguredBindingRuleConfig) => boolean;
   buildTargetFactory: (params: {
-    cfg: OpenClawConfig;
+    cfg: NatesclawConfig;
     binding: ConfiguredBindingRuleConfig;
     channel: string;
     agentId: string;
@@ -45,7 +45,7 @@ export type ConfiguredBindingConsumer = {
 };
 
 const registeredConfiguredBindingConsumers = resolveGlobalMap<string, ConfiguredBindingConsumer>(
-  Symbol.for("openclaw.configuredBindingConsumers"),
+  Symbol.for("natesclaw.configuredBindingConsumers"),
   "plugin-registry",
 );
 

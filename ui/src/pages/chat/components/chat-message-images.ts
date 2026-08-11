@@ -387,7 +387,7 @@ async function fetchManagedOutgoingImageBlob(
     headers.set("Authorization", `Bearer ${authToken}`);
   }
   if (!artifactDownload && requesterSessionKey) {
-    headers.set("x-openclaw-requester-session-key", requesterSessionKey);
+    headers.set("x-natesclaw-requester-session-key", requesterSessionKey);
   }
   const timeout = globalThis.setTimeout(() => {
     controller.abort(new DOMException("managed outgoing image fetch timed out", "TimeoutError"));

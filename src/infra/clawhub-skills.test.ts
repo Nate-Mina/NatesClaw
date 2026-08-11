@@ -1,5 +1,5 @@
 // Verifies ClawHub skill icons, telemetry, metadata, verification, and cards.
-import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { reportClawHubPluginInstallTelemetry } from "./clawhub-packages.js";
 import {
@@ -110,14 +110,14 @@ describe("clawhub skills", () => {
 
     await reportClawHubPluginInstallTelemetry({
       token: "test-token",
-      packageName: "@openclaw/voice-call",
+      packageName: "@natesclaw/voice-call",
       version: "2026.7.23",
       fetchImpl,
     });
 
     expect(requestBody).toEqual({
       event: "plugin_install",
-      packageName: "@openclaw/voice-call",
+      packageName: "@natesclaw/voice-call",
       version: "2026.7.23",
     });
   });
@@ -128,7 +128,7 @@ describe("clawhub skills", () => {
 
     await reportClawHubPluginInstallTelemetry({
       token: "test-token",
-      packageName: "@openclaw/voice-call",
+      packageName: "@natesclaw/voice-call",
       fetchImpl,
     });
 
@@ -142,7 +142,7 @@ describe("clawhub skills", () => {
       token: "test-token",
       slug: "weather",
       version: "a".repeat(40),
-      requestedReference: "skills-sh:openclaw/skills/weather",
+      requestedReference: "skills-sh:natesclaw/skills/weather",
       trustState: "not-scanned-by-clawhub",
       fetchImpl: async (_input, init) => {
         expect(typeof init?.body).toBe("string");
@@ -155,7 +155,7 @@ describe("clawhub skills", () => {
       event: "install",
       slug: "weather",
       version: "a".repeat(40),
-      reference: "skills-sh:openclaw/skills/weather",
+      reference: "skills-sh:natesclaw/skills/weather",
       trustState: "not-scanned-by-clawhub",
     });
   });
@@ -255,7 +255,7 @@ describe("clawhub skills", () => {
 
   it("sends skills-sh references to the ClawHub install resolver", async () => {
     let requestedUrl = "";
-    const reference = "skills-sh:openclaw/skills/weather";
+    const reference = "skills-sh:natesclaw/skills/weather";
 
     await fetchClawHubSkillInstallResolution({
       slug: "weather",
@@ -269,11 +269,11 @@ describe("clawhub skills", () => {
             installKind: "github",
             trust: { state: "not-scanned-by-clawhub" },
             github: {
-              repo: "openclaw/skills",
+              repo: "natesclaw/skills",
               path: "skills/weather",
               commit: "a".repeat(40),
               contentHash: "sha256:approved",
-              sourceUrl: "https://github.com/openclaw/skills",
+              sourceUrl: "https://github.com/natesclaw/skills",
             },
           }),
           { headers: { "content-type": "application/json" } },
@@ -294,7 +294,7 @@ describe("clawhub skills", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "natesclaw" },
       version: { version: "1.2.3", tag: "stable" },
       card: {
         available: true,
@@ -393,7 +393,7 @@ describe("clawhub skills", () => {
 
     await expect(
       fetchClawHubSkillSecurityVerdicts({
-        items: [{ slug: "agentreceipt", ownerHandle: "openclaw", version: "1.2.3" }],
+        items: [{ slug: "agentreceipt", ownerHandle: "natesclaw", version: "1.2.3" }],
         fetchImpl: async (input, init) => {
           requestedUrl = input instanceof Request ? input.url : String(input);
           requestedInit = init;
@@ -411,7 +411,7 @@ describe("clawhub skills", () => {
     expect(requestedInit?.headers).toMatchObject({ "Content-Type": "application/json" });
     expect(requestedInit?.body).toBe(
       JSON.stringify({
-        items: [{ slug: "agentreceipt", ownerHandle: "openclaw", version: "1.2.3" }],
+        items: [{ slug: "agentreceipt", ownerHandle: "natesclaw", version: "1.2.3" }],
       }),
     );
   });

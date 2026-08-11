@@ -3,8 +3,8 @@ import {
   claimPendingAgentQuestionAnswer,
   embeddedAgentLog,
   setActiveEmbeddedRun,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { queueAgentHarnessMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import type { queueAgentHarnessMessage } from "natesclaw/plugin-sdk/agent-harness-runtime";
 import type { AttemptTranscriptJournal } from "./attempt-transcript-journal.js";
 import type { AttemptParamsLike } from "./attempt-types.js";
 import type { attachEventBridge } from "./event-bridge.js";

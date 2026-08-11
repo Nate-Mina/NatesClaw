@@ -6,10 +6,10 @@ import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
-import { claimOpenClawStateOwnership } from "../state/openclaw-state-ownership-operations.js";
+  closeNatesclawStateDatabaseForTest,
+  openNatesclawStateDatabase,
+} from "../state/natesclaw-state-db.js";
+import { claimNatesclawStateOwnership } from "../state/natesclaw-state-ownership-operations.js";
 
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
@@ -48,7 +48,7 @@ function snapshotDatabaseArtifacts(snapshot: string[]): string[] {
 }
 
 function runUpdateDryRun(root: string, args: string[]) {
-  const configPath = path.join(root, "config", "openclaw.json");
+  const configPath = path.join(root, "config", "natesclaw.json");
   const stateDir = path.join(root, "state");
   const entryPath = fileURLToPath(new URL("../entry.ts", import.meta.url));
   return spawnSync(process.execPath, ["--import", "tsx", entryPath, ...args], {
@@ -65,14 +65,14 @@ function runUpdateDryRun(root: string, args: string[]) {
       NODE_ENV: undefined,
       NODE_OPTIONS: undefined,
       NO_COLOR: "1",
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_DEBUG_PROXY_ENABLED: undefined,
-      OPENCLAW_DEBUG_PROXY_REQUIRE: undefined,
-      OPENCLAW_HIDE_BANNER: "1",
-      OPENCLAW_HOME: root,
-      OPENCLAW_NO_RESPAWN: "1",
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_SUPERVISOR_MODE: undefined,
+      NATESCLAW_CONFIG_PATH: configPath,
+      NATESCLAW_DEBUG_PROXY_ENABLED: undefined,
+      NATESCLAW_DEBUG_PROXY_REQUIRE: undefined,
+      NATESCLAW_HIDE_BANNER: "1",
+      NATESCLAW_HOME: root,
+      NATESCLAW_NO_RESPAWN: "1",
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_SUPERVISOR_MODE: undefined,
       VITEST: undefined,
       VITEST_POOL_ID: undefined,
       VITEST_WORKER_ID: undefined,
@@ -87,8 +87,8 @@ function runUpdateDryRun(root: string, args: string[]) {
 
 describe("update dry-run process state", () => {
   it("keeps malformed config immutable while producing a best-effort preview", async () => {
-    const root = tempDirs.make("openclaw-update-dry-run-malformed-");
-    const configPath = path.join(root, "config", "openclaw.json");
+    const root = tempDirs.make("natesclaw-update-dry-run-malformed-");
+    const configPath = path.join(root, "config", "natesclaw.json");
     await fs.mkdir(path.dirname(configPath), { recursive: true });
     await fs.mkdir(path.join(root, "state"), { recursive: true });
     await fs.writeFile(configPath, "{ definitely-not-json\n");
@@ -108,8 +108,8 @@ describe("update dry-run process state", () => {
   });
 
   it("keeps migration-pending config and SQLite markers immutable for the shorthand", async () => {
-    const root = tempDirs.make("openclaw-update-dry-run-migration-");
-    const configPath = path.join(root, "config", "openclaw.json");
+    const root = tempDirs.make("natesclaw-update-dry-run-migration-");
+    const configPath = path.join(root, "config", "natesclaw.json");
     const tasksDir = path.join(root, "state", "tasks");
     const migrationMarkerPath = path.join(tasksDir, "runs.sqlite.migrated");
     const walPath = path.join(tasksDir, "runs.sqlite-wal");
@@ -144,22 +144,22 @@ describe("update dry-run process state", () => {
   });
 
   it("fences the full mutable update path before observation or action", async () => {
-    const root = tempDirs.make("openclaw-update-owned-state-");
-    const configPath = path.join(root, "config", "openclaw.json");
+    const root = tempDirs.make("natesclaw-update-owned-state-");
+    const configPath = path.join(root, "config", "natesclaw.json");
     const stateDir = path.join(root, "state");
     await fs.mkdir(path.dirname(configPath), { recursive: true });
     await fs.writeFile(configPath, '{ "gateway": { "mode": "local" } }\n');
     const externalEnv = {
       ...process.env,
       HOME: root,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_HOME: root,
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_SUPERVISOR_MODE: "external",
+      NATESCLAW_CONFIG_PATH: configPath,
+      NATESCLAW_HOME: root,
+      NATESCLAW_STATE_DIR: stateDir,
+      NATESCLAW_SUPERVISOR_MODE: "external",
     };
-    claimOpenClawStateOwnership("gateway-supervisor", { env: externalEnv });
-    const databasePath = openOpenClawStateDatabase({ env: externalEnv }).path;
-    closeOpenClawStateDatabaseForTest();
+    claimNatesclawStateOwnership("gateway-supervisor", { env: externalEnv });
+    const databasePath = openNatesclawStateDatabase({ env: externalEnv }).path;
+    closeNatesclawStateDatabaseForTest();
     const before = await snapshotTree(root);
     const beforeDatabaseHash = await sha256File(databasePath);
 
@@ -174,7 +174,7 @@ describe("update dry-run process state", () => {
     expect(refused.error).toBeUndefined();
     expect(refused.status).not.toBe(0);
     expect(`${refused.stdout}\n${refused.stderr}`).toMatch(/gateway-supervisor/u);
-    expect(`${refused.stdout}\n${refused.stderr}`).toMatch(/OPENCLAW_SUPERVISOR_MODE=external/u);
+    expect(`${refused.stdout}\n${refused.stderr}`).toMatch(/NATESCLAW_SUPERVISOR_MODE=external/u);
     expect(`${refused.stdout}\n${refused.stderr}`).not.toMatch(/invalid timeout/iu);
     expect(await snapshotTree(root)).toEqual(before);
     expect(await sha256File(databasePath)).toBe(beforeDatabaseHash);

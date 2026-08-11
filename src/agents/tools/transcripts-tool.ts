@@ -4,11 +4,11 @@
  * Manages live capture, manual import, summarization, and process-local transcript sessions.
  */
 import path from "node:path";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
 import { Type } from "typebox";
 import { resolveStateDir } from "../../config/paths.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   type ResolvedTranscriptsAutoStartConfig,
   resolveTranscriptsConfig,
@@ -80,7 +80,7 @@ const TranscriptsSchema = Type.Object(
 
 function createStore(ctx: TranscriptsRuntimeContext): TranscriptsStore {
   return new TranscriptsStore(path.join(ctx.stateDir, "transcripts"), {
-    env: { ...process.env, OPENCLAW_STATE_DIR: ctx.stateDir },
+    env: { ...process.env, NATESCLAW_STATE_DIR: ctx.stateDir },
   });
 }
 
@@ -332,7 +332,7 @@ async function statusTranscripts(ctx: TranscriptsRuntimeContext) {
 /** Create the agent-facing transcripts tool. */
 export function createTranscriptsTool(options?: {
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   stateDir?: string;
   logger?: TranscriptsLogger;
 }): AnyAgentTool {

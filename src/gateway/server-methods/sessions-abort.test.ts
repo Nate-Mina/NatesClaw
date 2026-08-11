@@ -4,11 +4,11 @@ import { afterEach, beforeEach, expect, test } from "vitest";
 import { replaceSessionEntry } from "../../config/sessions/session-accessor.js";
 import { resolveSqliteTargetFromSessionStorePath } from "../../config/sessions/session-sqlite-target.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  listOpenClawRegisteredAgentDatabases,
-  resolveOpenClawAgentSqlitePath,
-} from "../../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+  closeNatesclawAgentDatabasesForTest,
+  listNatesclawRegisteredAgentDatabases,
+  resolveNatesclawAgentSqlitePath,
+} from "../../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import { testState } from "../test-helpers.js";
 import {
   directSessionReq,
@@ -20,9 +20,9 @@ import { createActiveRun, createChatAbortContext } from "./chat.abort.test-helpe
 setupGatewaySessionsHandlerTestHarness();
 
 function requireStateDir(): string {
-  const stateDir = process.env.OPENCLAW_STATE_DIR;
+  const stateDir = process.env.NATESCLAW_STATE_DIR;
   if (!stateDir) {
-    throw new Error("OPENCLAW_STATE_DIR is required");
+    throw new Error("NATESCLAW_STATE_DIR is required");
   }
   return stateDir;
 }
@@ -39,8 +39,8 @@ beforeEach(async () => {
 afterEach(() => {
   testState.sessionStorePath = undefined;
   testState.sessionConfig = undefined;
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
 });
 
 async function configureFixedSessionStore(label = "default"): Promise<string> {
@@ -64,10 +64,10 @@ test("sessions.abort rejects an unknown agent without provisioning its store", a
     ok: false,
     error: { code: "INVALID_REQUEST", message: 'agent "ghost" not found' },
   });
-  const env = { OPENCLAW_STATE_DIR: requireStateDir() };
-  expect(fs.existsSync(path.join(env.OPENCLAW_STATE_DIR, "agents", "ghost"))).toBe(false);
-  expect(fs.existsSync(resolveOpenClawAgentSqlitePath({ agentId: "ghost", env }))).toBe(false);
-  expect(listOpenClawRegisteredAgentDatabases({ env }).map((entry) => entry.agentId)).not.toContain(
+  const env = { NATESCLAW_STATE_DIR: requireStateDir() };
+  expect(fs.existsSync(path.join(env.NATESCLAW_STATE_DIR, "agents", "ghost"))).toBe(false);
+  expect(fs.existsSync(resolveNatesclawAgentSqlitePath({ agentId: "ghost", env }))).toBe(false);
+  expect(listNatesclawRegisteredAgentDatabases({ env }).map((entry) => entry.agentId)).not.toContain(
     "ghost",
   );
 });
@@ -119,10 +119,10 @@ test("sessions.abort aborts an exact active run for an unconfigured agent withou
     payload: { ok: true, abortedRunId: runId, status: "aborted" },
   });
   expect(activeRun.controller.signal.aborted).toBe(true);
-  const env = { OPENCLAW_STATE_DIR: requireStateDir() };
-  expect(fs.existsSync(path.join(env.OPENCLAW_STATE_DIR, "agents", agentId))).toBe(false);
-  expect(fs.existsSync(resolveOpenClawAgentSqlitePath({ agentId, env }))).toBe(false);
-  expect(listOpenClawRegisteredAgentDatabases({ env }).map((entry) => entry.agentId)).not.toContain(
+  const env = { NATESCLAW_STATE_DIR: requireStateDir() };
+  expect(fs.existsSync(path.join(env.NATESCLAW_STATE_DIR, "agents", agentId))).toBe(false);
+  expect(fs.existsSync(resolveNatesclawAgentSqlitePath({ agentId, env }))).toBe(false);
+  expect(listNatesclawRegisteredAgentDatabases({ env }).map((entry) => entry.agentId)).not.toContain(
     agentId,
   );
 });
@@ -236,9 +236,9 @@ test.each(["main", "work"])("sessions.abort still resolves the %s agent store", 
   });
   expect(
     fs.existsSync(
-      resolveOpenClawAgentSqlitePath({
+      resolveNatesclawAgentSqlitePath({
         agentId,
-        env: { OPENCLAW_STATE_DIR: requireStateDir() },
+        env: { NATESCLAW_STATE_DIR: requireStateDir() },
       }),
     ),
   ).toBe(true);

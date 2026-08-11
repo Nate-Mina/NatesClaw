@@ -1,5 +1,5 @@
 // Workspace skill prompt helpers render bounded catalogs and reusable snapshots.
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveEffectiveAgentSkillsLimits } from "../discovery/agent-filter.js";
 import { filterPromptVisibleSkillEntries } from "../discovery/skill-index.js";
 import type { SkillEligibilityContext, SkillEntry, SkillSnapshot } from "../types.js";
@@ -26,7 +26,7 @@ type ResolvedSkillsPromptLimits = {
 };
 
 function resolveSkillsPromptLimits(
-  config?: OpenClawConfig,
+  config?: NatesclawConfig,
   agentId?: string,
 ): ResolvedSkillsPromptLimits {
   const limits = config?.skills?.limits;
@@ -53,12 +53,12 @@ function buildSkillsLimitNote(params: {
       params.format.kind === "compact"
         ? ` (compact format, ${params.format.descriptionMaxChars > 0 ? "descriptions shortened" : "descriptions omitted"})`
         : "";
-    return `⚠️ Skills truncated: included ${params.included} of ${params.total}${compactDetails}. Run \`openclaw skills check\` to audit.`;
+    return `⚠️ Skills truncated: included ${params.included} of ${params.total}${compactDetails}. Run \`natesclaw skills check\` to audit.`;
   }
   if (params.format.kind === "compact") {
     const compactDetails =
       params.format.descriptionMaxChars > 0 ? "descriptions shortened" : "descriptions omitted";
-    return `⚠️ Skills catalog using compact format (${compactDetails}). Run \`openclaw skills check\` to audit.`;
+    return `⚠️ Skills catalog using compact format (${compactDetails}). Run \`natesclaw skills check\` to audit.`;
   }
   return "";
 }
@@ -93,7 +93,7 @@ function buildRenderedSkillsPrompt(params: {
 
 function applySkillsPromptLimits(params: {
   skills: Skill[];
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   agentId?: string;
   remoteNote?: string;
 }): string {
@@ -199,7 +199,7 @@ function applySkillsPromptLimits(params: {
 }
 
 type WorkspaceSkillBuildOptions = {
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   managedSkillsDir?: string;
   bundledSkillsDir?: string;
   entries?: SkillEntry[];
@@ -259,7 +259,7 @@ export function buildSkillSnapshot(
 export function resolveSkillsPrompt(params: {
   skillsSnapshot?: SkillSnapshot;
   entries?: SkillEntry[];
-  config?: OpenClawConfig;
+  config?: NatesclawConfig;
   workspaceDir: string;
   agentId?: string;
   eligibility?: SkillEligibilityContext;

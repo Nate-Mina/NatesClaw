@@ -156,13 +156,13 @@ const representativeConfigSteps: ConfigStep[] = [
 
 const scenarioConfigSteps = new Map<string, ConfigStep[]>([
   [
-    "acpx-openclaw-tools-bridge",
+    "acpx-natesclaw-tools-bridge",
     [
       configSetJsonFile(
-        "plugins-acpx-openclaw-tools-bridge",
-        "acpx-openclaw-tools-bridge",
+        "plugins-acpx-natesclaw-tools-bridge",
+        "acpx-natesclaw-tools-bridge",
         "plugins",
-        "plugins-acpx-openclaw-tools-bridge.json",
+        "plugins-acpx-natesclaw-tools-bridge.json",
       ),
     ],
   ],
@@ -184,7 +184,7 @@ const scenarioConfigSteps = new Map<string, ConfigStep[]>([
       {
         id: "logging-file",
         intent: "logging",
-        argv: ["config", "set", "logging.file", "~/openclaw-upgrade-survivor/gateway.jsonl"],
+        argv: ["config", "set", "logging.file", "~/natesclaw-upgrade-survivor/gateway.jsonl"],
       },
     ],
   ],
@@ -257,7 +257,7 @@ export function resolveUpgradeSurvivorConfigSteps(scenario = "base"): ConfigStep
 }
 
 function selectedScenario() {
-  return process.env.OPENCLAW_UPGRADE_SURVIVOR_SCENARIO || "base";
+  return process.env.NATESCLAW_UPGRADE_SURVIVOR_SCENARIO || "base";
 }
 
 function adaptStepForBaseline(
@@ -266,11 +266,11 @@ function adaptStepForBaseline(
   summary: BaselineAdaptationSummary,
 ): ConfigStep | null {
   if (
-    step.intent === "acpx-openclaw-tools-bridge" &&
+    step.intent === "acpx-natesclaw-tools-bridge" &&
     isReleaseBefore(baselineVersion, "2026.4.22")
   ) {
-    if (!summary.skippedIntents.includes("acpx-openclaw-tools-bridge")) {
-      summary.skippedIntents.push("acpx-openclaw-tools-bridge");
+    if (!summary.skippedIntents.includes("acpx-natesclaw-tools-bridge")) {
+      summary.skippedIntents.push("acpx-natesclaw-tools-bridge");
     }
     return null;
   }
@@ -330,7 +330,7 @@ export function resolveUpgradeSurvivorConfigStepsForBaseline(
     .filter((step): step is ConfigStep => step !== null);
 }
 
-export function resolveUpgradeSurvivorOpenClawCommand(
+export function resolveUpgradeSurvivorNatesclawCommand(
   argv: string[],
   params: UpgradeSurvivorCommandParams = {},
 ) {
@@ -339,16 +339,16 @@ export function resolveUpgradeSurvivorOpenClawCommand(
     const comSpec = params.comSpec ?? resolveWindowsCmdExePath(params.env ?? process.env);
     return {
       command: comSpec,
-      args: ["/d", "/s", "/c", buildCmdExeCommandLine("openclaw.cmd", argv)],
-      commandLabel: ["openclaw", ...argv].join(" "),
+      args: ["/d", "/s", "/c", buildCmdExeCommandLine("natesclaw.cmd", argv)],
+      commandLabel: ["natesclaw", ...argv].join(" "),
       shell: false,
       windowsVerbatimArguments: true,
     };
   }
   return {
-    command: "openclaw",
+    command: "natesclaw",
     args: argv,
-    commandLabel: ["openclaw", ...argv].join(" "),
+    commandLabel: ["natesclaw", ...argv].join(" "),
     shell: false,
   };
 }
@@ -357,8 +357,8 @@ function errorCode(error: unknown) {
   return error && typeof error === "object" && "code" in error ? String(error.code) : undefined;
 }
 
-export function runUpgradeSurvivorOpenClawStep(step: ConfigStep, params: ConfigCommandParams = {}) {
-  const invocation = resolveUpgradeSurvivorOpenClawCommand(step.argv);
+export function runUpgradeSurvivorNatesclawStep(step: ConfigStep, params: ConfigCommandParams = {}) {
+  const invocation = resolveUpgradeSurvivorNatesclawCommand(step.argv);
   const run: SpawnSyncCommand = params.spawnSyncCommand ?? spawnSync;
   const timeoutMs = params.timeoutMs ?? CONFIG_COMMAND_TIMEOUT_MS;
   const maxBuffer = params.maxBufferBytes ?? CONFIG_COMMAND_MAX_BUFFER_BYTES;
@@ -398,7 +398,7 @@ function applyRecipe() {
     scenario: string;
     acceptedIntents: string[];
     skippedIntents: string[];
-    steps: ReturnType<typeof runUpgradeSurvivorOpenClawStep>[];
+    steps: ReturnType<typeof runUpgradeSurvivorNatesclawStep>[];
   } = {
     source: "baseline-cli-command-recipe",
     recipe: "upgrade-survivor-v1",
@@ -425,7 +425,7 @@ function applyRecipe() {
     if (!adaptedStep) {
       continue;
     }
-    const outcome = runUpgradeSurvivorOpenClawStep(adaptedStep);
+    const outcome = runUpgradeSurvivorNatesclawStep(adaptedStep);
     summary.steps.push(outcome);
     writeJson(summaryPath, summary);
     if (!outcome.ok) {

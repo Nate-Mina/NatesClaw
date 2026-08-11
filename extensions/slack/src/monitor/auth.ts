@@ -8,13 +8,13 @@ import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
   readChannelIngressStoreAllowFromForDmPolicy,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+} from "natesclaw/plugin-sdk/channel-ingress-runtime";
+import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "natesclaw/plugin-sdk/number-runtime";
+import { logVerbose } from "natesclaw/plugin-sdk/runtime-env";
 import { collectSlackCursorPages } from "../cursor-pages.js";
 import { parseSlackTarget } from "../target-parsing.js";
 import {
@@ -246,7 +246,7 @@ async function resolveSlackChannelMemberIds(
   const cache = getChannelMembersCache(ctx);
   const key = `${ctx.accountId}:${eventScope ? `${eventScope.teamId}:` : ""}${channelId}`;
   const ttlMs = readSlackCacheTtlMs(
-    "OPENCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS",
+    "NATESCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS",
     DEFAULT_CHANNEL_MEMBERS_CACHE_TTL_MS,
   );
   const rawNowMs = Date.now();

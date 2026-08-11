@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
 import {
   type InternalSessionEntry as SessionEntry,
   resolveSessionWorkStartError,
@@ -11,7 +11,7 @@ import {
   loadExactSessionEntry,
   updateSessionEntry,
 } from "../../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { GatewayRecoveryRuntime } from "../../gateway/server-instance-runtime.types.js";
 import { readSessionMessagesAsync } from "../../gateway/session-transcript-readers.js";
 import { resolveGatewaySessionStoreTarget } from "../../gateway/session-utils.js";
@@ -182,7 +182,7 @@ export function loadExpectedRestartRecoveryTarget(params: {
 }
 
 function resolveRecoveryDispatchSessionKey(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   sessionKey: string;
   storePath: string;
 }): string | undefined {
@@ -207,7 +207,7 @@ function resolveRecoveryDispatchSessionKey(params: {
 }
 
 export async function recoverStore(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NatesclawConfig;
   observationOnly?: boolean;
   onExhaustedTarget?: (target: ExhaustedRestartRecoveryTarget) => void;
   storePath: string;

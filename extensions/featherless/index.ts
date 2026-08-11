@@ -1,18 +1,18 @@
-// Featherless plugin entrypoint registers its OpenClaw integration.
+// Featherless plugin entrypoint registers its Natesclaw integration.
 import type {
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { readConfiguredProviderCatalogEntries } from "openclaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
+} from "natesclaw/plugin-sdk/plugin-entry";
+import { readConfiguredProviderCatalogEntries } from "natesclaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "natesclaw/plugin-sdk/provider-entry";
 import {
   buildProviderReplayFamilyHooks,
   cloneFirstTemplateModel,
   normalizeModelCompat,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
+} from "natesclaw/plugin-sdk/provider-model-shared";
+import { buildProviderToolCompatFamilyHooks } from "natesclaw/plugin-sdk/provider-tools";
 import { applyFeatherlessConfig, FEATHERLESS_DEFAULT_MODEL_REF } from "./onboard.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./natesclaw.plugin.json" with { type: "json" };
 import {
   FEATHERLESS_BASE_URL,
   FEATHERLESS_DEFAULT_MODEL_ID,
@@ -94,7 +94,7 @@ export default defineSingleProviderPluginEntry({
         endpointPath: "models?capabilities=chat",
         buildRequestHeaders: ({ apiKey }) => ({
           Accept: "application/json",
-          "User-Agent": "openclaw",
+          "User-Agent": "natesclaw",
           ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
         }),
       },

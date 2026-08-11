@@ -1,6 +1,6 @@
-import type { WorkboardCard } from "@openclaw/workboard-contract";
+import type { WorkboardCard } from "@natesclaw/workboard-contract";
 // Workboard Gateway methods that can persist workspace-bearing card metadata.
-import type { OpenClawPluginApi } from "../api.js";
+import type { NatesclawPluginApi } from "../api.js";
 import {
   readId,
   readPatch,
@@ -36,7 +36,7 @@ async function resolveGatewayWorkspaceMutationAccess(
 }
 
 type WorkspaceGatewayMethodParams = {
-  api: OpenClawPluginApi;
+  api: NatesclawPluginApi;
   store: WorkboardStore;
   redactCard: (card: WorkboardCard) => WorkboardCard;
 };

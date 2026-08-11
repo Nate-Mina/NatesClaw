@@ -6,7 +6,7 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { writeAcpSessionMetaForMigration } from "../acp/runtime/session-meta.js";
 import { resetConfigRuntimeState, setRuntimeConfigSnapshot } from "../config/config.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NatesclawConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 import {
   appendTranscriptMessageSync,
@@ -19,8 +19,8 @@ import { resolveSqliteTargetFromSessionStorePath } from "../config/sessions/sess
 import type { CronJob } from "../cron/types.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeNatesclawAgentDatabasesForTest } from "../state/natesclaw-agent-db.js";
+import { closeNatesclawStateDatabaseForTest } from "../state/natesclaw-state-db.js";
 import { withStateDirEnv as withRawStateDirEnv } from "../test-helpers/state-dir-env.js";
 import { normalizeSessionDeliveryState } from "../utils/delivery-context.shared.js";
 import type { GatewayModelCatalogSnapshot } from "./server-model-catalog.types.js";
@@ -58,8 +58,8 @@ vi.mock("../plugins/provider-public-artifacts.js", () => ({
 }));
 
 function closeSessionSqliteDatabasesForTest(): void {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeNatesclawAgentDatabasesForTest();
+  closeNatesclawStateDatabaseForTest();
 }
 
 async function withStateDirEnv<T>(
@@ -117,20 +117,20 @@ function createSymlinkOrSkip(targetPath: string, linkPath: string): boolean {
   }
 }
 
-function createSingleAgentAvatarConfig(workspace: string): OpenClawConfig {
+function createSingleAgentAvatarConfig(workspace: string): NatesclawConfig {
   return {
     session: { mainKey: "main" },
     agents: {
       list: [{ id: "main", default: true, workspace, identity: { avatar: "avatar-link.png" } }],
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function createModelDefaultsConfig(params: {
   primary: string;
   models?: Record<string, { agentRuntime?: { id: string } }>;
   agentRuntime?: { id: string };
-}): OpenClawConfig {
+}): NatesclawConfig {
   return {
     agents: {
       defaults: {
@@ -143,7 +143,7 @@ function createModelDefaultsConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NatesclawConfig;
 }
 
 function requireString(value: string | undefined, label: string): string {
@@ -461,14 +461,14 @@ describe("gateway session utils", () => {
   });
 
   test("session list search includes direct-session origin display labels", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const store: Record<string, SessionEntry> = {
       "agent:main:telegram:direct:42": {
         sessionId: "direct-42",
         chatType: "direct",
         delivery: normalizeSessionDeliveryState({
           context: { channel: "telegram", to: "42" },
-          origin: { label: "openclaw-tui" },
+          origin: { label: "natesclaw-tui" },
         }),
         updatedAt: 2,
       },
@@ -487,13 +487,13 @@ describe("gateway session utils", () => {
       cfg,
       storePath: "",
       store,
-      opts: { search: "openclaw-tui" },
+      opts: { search: "natesclaw-tui" },
     });
 
     expect(listed.sessions.map((session) => session.key)).toEqual([
       "agent:main:telegram:direct:42",
     ]);
-    expect(listed.sessions[0]?.displayName).toBe("openclaw-tui");
+    expect(listed.sessions[0]?.displayName).toBe("natesclaw-tui");
   });
 
   test("session lists mark the final offset page without hasMore", () => {
@@ -932,7 +932,7 @@ describe("gateway session utils", () => {
           { id: "xhigh" },
           { id: "max" },
           ...(modelId.startsWith("gpt-5.6") &&
-          (agentRuntime === "openclaw" || !modelId.startsWith("gpt-5.6-luna"))
+          (agentRuntime === "natesclaw" || !modelId.startsWith("gpt-5.6-luna"))
             ? [{ id: "ultra" as const }]
             : []),
         ],
@@ -947,7 +947,7 @@ describe("gateway session utils", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const defaults = getSessionDefaults(cfg);
     const row = (entry: SessionEntry) =>
       buildGatewaySessionRow({
@@ -959,32 +959,32 @@ describe("gateway session utils", () => {
       });
 
     const codex = row({ sessionId: "codex", thinkingLevel: "ultra" } as SessionEntry);
-    const openClawOverride = row({
-      sessionId: "openclaw",
+    const NatesclawOverride = row({
+      sessionId: "natesclaw",
       thinkingLevel: "ultra",
-      agentRuntimeOverride: "openclaw",
+      agentRuntimeOverride: "natesclaw",
     } as SessionEntry);
-    const legacyObservedOpenClaw = row({
-      sessionId: "legacy-observed-openclaw",
+    const legacyObservedNatesclaw = row({
+      sessionId: "legacy-observed-natesclaw",
       thinkingLevel: "ultra",
-      agentHarnessId: "openclaw",
+      agentHarnessId: "natesclaw",
     } as SessionEntry);
     const lockedCodex = row({
       sessionId: "locked-codex",
       thinkingLevel: "ultra",
       agentHarnessId: "codex",
-      agentRuntimeOverride: "openclaw",
+      agentRuntimeOverride: "natesclaw",
       modelSelectionLocked: true,
     } as SessionEntry);
 
     expect(defaults.agentRuntime?.id).toBe("codex");
     expect(codex.thinkingLevel).toBe("ultra");
     expect(codex.thinkingLevels?.map((level) => level.id)).not.toContain("ultra");
-    expect(openClawOverride.thinkingLevel).toBe("ultra");
-    expect(openClawOverride.agentRuntime?.id).toBe("openclaw");
-    expect(legacyObservedOpenClaw.thinkingLevel).toBe("ultra");
-    expect(legacyObservedOpenClaw.agentRuntime?.id).toBe("codex");
-    expect(legacyObservedOpenClaw.thinkingLevels?.map((level) => level.id)).not.toContain("ultra");
+    expect(NatesclawOverride.thinkingLevel).toBe("ultra");
+    expect(NatesclawOverride.agentRuntime?.id).toBe("natesclaw");
+    expect(legacyObservedNatesclaw.thinkingLevel).toBe("ultra");
+    expect(legacyObservedNatesclaw.agentRuntime?.id).toBe("codex");
+    expect(legacyObservedNatesclaw.thinkingLevels?.map((level) => level.id)).not.toContain("ultra");
     expect(lockedCodex.thinkingLevel).toBe("ultra");
     expect(lockedCodex.agentRuntime).toEqual({ id: "codex", source: "session" });
     expect(lockedCodex.thinkingLevels?.map((level) => level.id)).not.toContain("ultra");
@@ -996,11 +996,11 @@ describe("gateway session utils", () => {
         defaults: {
           model: { primary: "openai/gpt-5.6-sol" },
           models: {
-            "openai/gpt-5.6-sol": { agentRuntime: { id: "openclaw" } },
+            "openai/gpt-5.6-sol": { agentRuntime: { id: "natesclaw" } },
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const row = buildGatewaySessionRow({
       cfg,
@@ -1040,7 +1040,7 @@ describe("gateway session utils", () => {
           thinkingDefault: "high",
         },
       },
-    } as OpenClawConfig);
+    } as NatesclawConfig);
 
     expectFields(defaults, {
       modelProvider: "openai",
@@ -1057,7 +1057,7 @@ describe("gateway session utils", () => {
       key: "agent:main:main",
       entry: {
         sessionId: "session-1",
-        sessionFile: "/tmp/openclaw/agents/main/sessions/session-1.jsonl",
+        sessionFile: "/tmp/natesclaw/agents/main/sessions/session-1.jsonl",
         updatedAt: 1,
         contextBudgetStatus: {
           schemaVersion: 1,
@@ -1093,7 +1093,7 @@ describe("gateway session utils", () => {
 
   test("session rows preserve fresh zero-token usage", () => {
     const row = buildGatewaySessionRow({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NatesclawConfig,
       storePath: "",
       store: {},
       key: "agent:main:main",
@@ -1139,7 +1139,7 @@ describe("gateway session utils", () => {
       const row = buildGatewaySessionRow({
         cfg: {
           agents: { list: [{ id: "main", default: true }, { id: "work" }] },
-        } as OpenClawConfig,
+        } as NatesclawConfig,
         storePath: "",
         store: {},
         key: "global",
@@ -1278,7 +1278,7 @@ describe("gateway session utils", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const row = buildGatewaySessionRow({
       cfg,
@@ -1307,7 +1307,7 @@ describe("gateway session utils", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const row = buildGatewaySessionRow({
       cfg,
@@ -1341,14 +1341,14 @@ describe("gateway session utils", () => {
   });
 
   test("buildGatewaySessionRow displayName falls through to origin label for direct sessions", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const entry: SessionEntry = {
       sessionId: "direct-42",
       updatedAt: 1,
       chatType: "direct",
       delivery: normalizeSessionDeliveryState({
         context: { channel: "telegram", to: "42" },
-        origin: { label: "openclaw-tui" },
+        origin: { label: "natesclaw-tui" },
       }),
     };
     const row = buildGatewaySessionRow({
@@ -1358,11 +1358,11 @@ describe("gateway session utils", () => {
       key: "agent:main:telegram:direct:42",
       entry,
     });
-    expect(row.displayName).toBe("openclaw-tui");
+    expect(row.displayName).toBe("natesclaw-tui");
   });
 
   test("buildGatewaySessionRow keeps dashboard sender identity out of the session title", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const entry: SessionEntry = {
       sessionId: "dashboard-1",
       updatedAt: 1,
@@ -1390,7 +1390,7 @@ describe("gateway session utils", () => {
   });
 
   test("buildGatewaySessionRow displayName prefers the human chat title for group sessions", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const entry: SessionEntry = {
       sessionId: "group-99",
       updatedAt: 1,
@@ -1398,7 +1398,7 @@ describe("gateway session utils", () => {
       subject: "Engineering",
       delivery: normalizeSessionDeliveryState({
         context: { channel: "telegram", to: "group:99" },
-        origin: { label: "openclaw-tui" },
+        origin: { label: "natesclaw-tui" },
       }),
     };
     const row = buildGatewaySessionRow({
@@ -1412,7 +1412,7 @@ describe("gateway session utils", () => {
   });
 
   test("refreshes a legacy Buzz UUID title from inbound room metadata", async () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-buzz-session-title-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-buzz-session-title-"));
     const storePath = path.join(dir, "sessions.json");
     const roomId = "b25b8e40-eb1a-43a4-b56b-30a4e16df586";
     const key = `agent:main:buzz:group:${roomId}`;
@@ -1450,7 +1450,7 @@ describe("gateway session utils", () => {
       });
       expect(entry?.groupChannel).toBeUndefined();
       const row = buildGatewaySessionRow({
-        cfg: { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig,
+        cfg: { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig,
         storePath,
         store: { [key]: entry as SessionEntry },
         key,
@@ -1474,7 +1474,7 @@ describe("gateway session utils", () => {
       subject: "Slack Channel (Workspace ID: T0BDK6HMPS7, Channel ID: C0BDN50FL2Z)",
     },
   ])("refreshes a legacy Slack id title with $name", async ({ subject }) => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-slack-session-title-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-slack-session-title-"));
     const storePath = path.join(dir, "sessions.json");
     const channelId = "C0BDN50FL2Z";
     const key = `agent:main:slack:channel:${channelId.toLowerCase()}`;
@@ -1514,7 +1514,7 @@ describe("gateway session utils", () => {
       });
       expect(entry?.groupChannel).toBeUndefined();
       const row = buildGatewaySessionRow({
-        cfg: { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig,
+        cfg: { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig,
         storePath,
         store: { [key]: entry as SessionEntry },
         key,
@@ -1529,7 +1529,7 @@ describe("gateway session utils", () => {
   });
 
   test("buildGatewaySessionRow group displayName prefers #channel and falls back to the token", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const channelEntry: SessionEntry = {
       sessionId: "channel-C1",
       updatedAt: 1,
@@ -1574,7 +1574,7 @@ describe("gateway session utils", () => {
   });
 
   test("buildGatewaySessionRow projects flat classification facts without group tokens", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const subagentEntry = {
       displayName: "Research",
     } as SessionEntry;
@@ -1619,14 +1619,14 @@ describe("gateway session utils", () => {
   });
 
   test("buildGatewaySessionRow projects worktree and execNode bindings", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const entry: SessionEntry = {
       sessionId: "s1",
       updatedAt: 1,
       spawnedCwd: "/state/worktrees/abc/wt-1234",
-      worktree: { id: "wt-id", branch: "openclaw/wt-1234", repoRoot: "/repo" },
+      worktree: { id: "wt-id", branch: "natesclaw/wt-1234", repoRoot: "/repo" },
       execNode: "macbook",
-      execCwd: "/Users/peter/Projects/openclaw",
+      execCwd: "/Users/peter/Projects/natesclaw",
     } as SessionEntry;
     const row = buildGatewaySessionRow({
       cfg,
@@ -1635,13 +1635,13 @@ describe("gateway session utils", () => {
       key: "agent:main:dashboard:x",
       entry,
     });
-    expect(row.worktree).toEqual({ id: "wt-id", branch: "openclaw/wt-1234", repoRoot: "/repo" });
+    expect(row.worktree).toEqual({ id: "wt-id", branch: "natesclaw/wt-1234", repoRoot: "/repo" });
     expect(row.execNode).toBe("macbook");
-    expect(row.execCwd).toBe("/Users/peter/Projects/openclaw");
+    expect(row.execCwd).toBe("/Users/peter/Projects/natesclaw");
   });
 
   test("buildGatewaySessionRow prefers entry.label over origin.label for direct sessions", () => {
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as NatesclawConfig;
     const entry: SessionEntry = {
       sessionId: "direct-labeled",
       updatedAt: 1,
@@ -1649,7 +1649,7 @@ describe("gateway session utils", () => {
       label: "Alice",
       delivery: normalizeSessionDeliveryState({
         context: { channel: "telegram", to: "42" },
-        origin: { label: "openclaw-tui" },
+        origin: { label: "natesclaw-tui" },
       }),
     };
     const row = buildGatewaySessionRow({
@@ -1666,7 +1666,7 @@ describe("gateway session utils", () => {
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
       messages: { responseUsage: "tokens" },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const entry = { sessionId: "s1", updatedAt: 1 } as SessionEntry;
     const row = buildGatewaySessionRow({
       cfg,
@@ -1686,7 +1686,7 @@ describe("gateway session utils", () => {
       messages: {
         responseUsage: { default: "off", discord: "full", telegram: "tokens" },
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const discordEntry: SessionEntry = {
       sessionId: "d1",
       updatedAt: 1,
@@ -1735,7 +1735,7 @@ describe("gateway session utils", () => {
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
       messages: { responseUsage: { default: "full", discord: "full" } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const entry = {
       sessionId: "d1",
       updatedAt: 1,
@@ -1758,7 +1758,7 @@ describe("gateway session utils", () => {
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
       messages: { queue: { mode: "interrupt", byChannel: { webchat: "collect" } } },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const inheritedEntry = { sessionId: "s1", updatedAt: 1 } as SessionEntry;
     const inheritedRow = buildGatewaySessionRow({
       cfg,
@@ -1790,7 +1790,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "work" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveSessionStoreKey({ cfg, sessionKey: "main" })).toBe("agent:ops:work");
     expect(resolveSessionStoreKey({ cfg, sessionKey: "work" })).toBe("agent:ops:work");
     expect(resolveSessionStoreKey({ cfg, sessionKey: "agent:ops:main" })).toBe("agent:ops:work");
@@ -1804,7 +1804,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "work" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveSessionStoreKey({ cfg, sessionKey: "agent:main:discord:direct:u1" })).toBe(
       "agent:main:discord:direct:u1",
     );
@@ -1814,7 +1814,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "work" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const legacyMainAlias = resolveSessionStoreKey({ cfg, sessionKey: "agent:main:main" });
 
     expect(legacyMainAlias).toBe("agent:ops:work");
@@ -1828,7 +1828,7 @@ describe("gateway session utils", () => {
   test("resolveDeletedAgentIdFromSessionKey ignores confirmed ACP runtime session keys", () => {
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const acpEntry = (agent: string, runtimeSessionName: string) =>
       ({
         acp: {
@@ -1853,7 +1853,7 @@ describe("gateway session utils", () => {
   test("resolveDeletedAgentIdFromSessionKey rejects ACP-shaped bridge keys without ACP metadata", () => {
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveDeletedAgentIdFromSessionKey(cfg, "agent:main:acp:configured-bridge-without-meta", {
@@ -1901,7 +1901,7 @@ describe("gateway session utils", () => {
           store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
         },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       expect(
         resolveDeletedAgentIdFromSessionKey(cfg, acpKey, entry, {
@@ -1914,7 +1914,7 @@ describe("gateway session utils", () => {
   test("resolveDeletedAgentIdFromSessionKey rejects deleted configured ACP binding owners", () => {
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(
       resolveDeletedAgentIdFromSessionKey(
@@ -1931,7 +1931,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "main" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveSessionStoreKey({ cfg, sessionKey: "discord:group:123" })).toBe(
       "agent:ops:discord:group:123",
     );
@@ -1944,7 +1944,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "main" },
       agents: { list: [{ id: "ops" }, { id: "review" }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveSessionStoreKey({ cfg, sessionKey: "main" })).toBe("agent:ops:main");
     expect(resolveSessionStoreKey({ cfg, sessionKey: "discord:group:123" })).toBe(
       "agent:ops:discord:group:123",
@@ -1954,7 +1954,7 @@ describe("gateway session utils", () => {
   test("resolveSessionStoreKey falls back to main when agents.list is missing", () => {
     const cfg = {
       session: { mainKey: "work" },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveSessionStoreKey({ cfg, sessionKey: "main" })).toBe("agent:main:work");
     expect(resolveSessionStoreKey({ cfg, sessionKey: "thread-1" })).toBe("agent:main:thread-1");
   });
@@ -1963,7 +1963,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "main" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveSessionStoreKey({ cfg, sessionKey: "CoP" })).toBe(
       resolveSessionStoreKey({ cfg, sessionKey: "cop" }),
     );
@@ -1978,7 +1978,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "main" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const mixedGroupId = "VWATodkf2hc8zdOS76q9Tb0+5Bi522E03qLdaQ/9ypg=";
     expect(resolveSessionStoreKey({ cfg, sessionKey: `Signal:Group:${mixedGroupId}` })).toBe(
       `agent:ops:signal:group:${mixedGroupId}`,
@@ -1992,7 +1992,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { scope: "global", mainKey: "work" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     expect(resolveSessionStoreKey({ cfg, sessionKey: "main" })).toBe("global");
     const target = resolveGatewaySessionStoreTarget({ cfg, key: "main" });
     expect(target.canonicalKey).toBe("global");
@@ -2002,14 +2002,14 @@ describe("gateway session utils", () => {
   test("resolveGatewaySessionStoreTarget uses canonical key for main alias", () => {
     const storeTemplate = path.join(
       os.tmpdir(),
-      "openclaw-session-utils",
+      "natesclaw-session-utils",
       "{agentId}",
       "sessions.json",
     );
     const cfg = {
       session: { mainKey: "main", store: storeTemplate },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const target = resolveGatewaySessionStoreTarget({ cfg, key: "main" });
     expect(target.canonicalKey).toBe("agent:ops:main");
     expect(target.storeKeys).toContain("agent:ops:main");
@@ -2028,7 +2028,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "work", store: storePath },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const target = resolveGatewaySessionStoreTarget({ cfg, key: "agent:ops:main" });
     expect(target.canonicalKey).toBe("agent:ops:work");
     expect(target.storeKeys).toContain("agent:ops:main");
@@ -2047,7 +2047,7 @@ describe("gateway session utils", () => {
       const cfg = {
         session: { mainKey: "main", store: fixedStorePath },
         agents: { list: [{ id: "ops", default: true }] },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       const target = resolveGatewaySessionStoreTargetWithStore({
         cfg,
@@ -2074,7 +2074,7 @@ describe("gateway session utils", () => {
           store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
         },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       const target = resolveGatewaySessionStoreTarget({ cfg, key: "agent:retired-agent:main" });
 
@@ -2096,7 +2096,7 @@ describe("gateway session utils", () => {
           store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
         },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
       const fallbackStore = {
         "agent:retired-agent:main": { sessionId: "sess-fallback", updatedAt: 99 },
       };
@@ -2131,7 +2131,7 @@ describe("gateway session utils", () => {
           store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
         },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       const target = resolveGatewaySessionStoreTargetWithStore({
         cfg,
@@ -2165,7 +2165,7 @@ describe("gateway session utils", () => {
             store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
           },
           agents: { list: [{ id: "main", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         setRuntimeConfigSnapshot(cfg, cfg);
 
         const loaded = loadSessionEntry("agent:retired-agent:main");
@@ -2194,7 +2194,7 @@ describe("gateway session utils", () => {
             store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
           },
           agents: { list: [{ id: "main", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         setRuntimeConfigSnapshot(cfg, cfg);
 
         const loaded = loadSessionEntry("agent:main:main", { clone: false });
@@ -2220,7 +2220,7 @@ describe("gateway session utils", () => {
             store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
           },
           agents: { list: [{ id: "main", default: true }, { id: "missing" }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         setRuntimeConfigSnapshot(cfg, cfg);
 
         const loaded = loadSessionEntryReadOnly("agent:missing:main");
@@ -2241,7 +2241,7 @@ describe("gateway session utils", () => {
         const cfg = {
           session: { mainKey: "main", store: storePath },
           agents: { list: [{ id: "main", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         const parentKey = "agent:main:main";
         const childKey = "agent:main:child";
         const now = Date.now();
@@ -2302,7 +2302,7 @@ describe("gateway session utils", () => {
         return parentKey;
       },
     } as SessionEntry;
-    const storePath = "/tmp/openclaw-single-row-child-cache";
+    const storePath = "/tmp/natesclaw-single-row-child-cache";
 
     const first = buildSingleRowStoreChildSessionsByKey({
       store: { [parentKey]: parent, "agent:main:child": child },
@@ -2330,7 +2330,7 @@ describe("gateway session utils", () => {
         const cfg = {
           session: { mainKey: "work", store: storePath },
           agents: { list: [{ id: "main", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         const legacyParentKey = "agent:main:main";
         const childKey = "agent:main:child";
         const now = Date.now();
@@ -2349,7 +2349,7 @@ describe("gateway session utils", () => {
             clone: false,
             includeStoreChildEntries: true,
           }),
-        ).toThrow("openclaw doctor --fix");
+        ).toThrow("natesclaw doctor --fix");
       });
     } finally {
       resetConfigRuntimeState();
@@ -2366,7 +2366,7 @@ describe("gateway session utils", () => {
             store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
           },
           agents: { list: [{ id: "main", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         const store: Record<string, SessionEntry> = {
           "agent:main:main": { sessionId: "sess-main", updatedAt: 7 },
         };
@@ -2411,7 +2411,7 @@ describe("gateway session utils", () => {
         const cfg = {
           session: { mainKey: "main", store: storeTemplate },
           agents: { list: [{ id: "ops", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         setRuntimeConfigSnapshot(cfg, cfg);
 
         const target = resolveGatewaySessionStoreTarget({ cfg, key: "agent:main:main" });
@@ -2454,10 +2454,10 @@ describe("gateway session utils", () => {
         const cfg = {
           session: { mainKey: "work", store: storeTemplate },
           agents: { list: [{ id: "ops", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         setRuntimeConfigSnapshot(cfg, cfg);
 
-        expect(() => loadSessionEntry("agent:main:work")).toThrow("openclaw doctor --fix");
+        expect(() => loadSessionEntry("agent:main:work")).toThrow("natesclaw doctor --fix");
       });
     } finally {
       resetConfigRuntimeState();
@@ -2486,7 +2486,7 @@ describe("gateway session utils", () => {
             store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
           },
           agents: { list: [{ id: "main", default: true }] },
-        } as OpenClawConfig;
+        } as NatesclawConfig;
         setRuntimeConfigSnapshot(cfg, cfg);
 
         const loaded = loadSessionEntry("agent:main:main");
@@ -2502,7 +2502,7 @@ describe("gateway session utils", () => {
     const cfg = {
       session: { mainKey: "work" },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const store: Record<string, SessionEntry> = {
       "agent:ops:work": {
         sessionId: "sess-stale",
@@ -2520,7 +2520,7 @@ describe("gateway session utils", () => {
         key: "agent:ops:main",
         store,
       }),
-    ).toThrow("openclaw doctor --fix");
+    ).toThrow("natesclaw doctor --fix");
   });
 
   test("listAgentsForGateway rejects avatar symlink escapes outside workspace", () => {
@@ -2565,7 +2565,7 @@ describe("gateway session utils", () => {
       agents: {
         list: [{ id: "main", default: true, identity: { name: "开发助手" } }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg);
 
@@ -2589,7 +2589,7 @@ describe("gateway session utils", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg);
 
@@ -2606,7 +2606,7 @@ describe("gateway session utils", () => {
       agents: {
         list: [{ id: "main", default: true, identity: {} }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg);
 
@@ -2618,14 +2618,14 @@ describe("gateway session utils", () => {
   });
 
   test("listAgentsForGateway keeps explicit agents.list scope over disk-only agents (scope boundary)", async () => {
-    await withStateDirEnv("openclaw-agent-list-scope-", async ({ stateDir }) => {
+    await withStateDirEnv("natesclaw-agent-list-scope-", async ({ stateDir }) => {
       fs.mkdirSync(path.join(stateDir, "agents", "main"), { recursive: true });
       fs.mkdirSync(path.join(stateDir, "agents", "codex"), { recursive: true });
 
       const cfg = {
         session: { mainKey: "main" },
         agents: { list: [{ id: "main", default: true }] },
-      } as OpenClawConfig;
+      } as NatesclawConfig;
 
       const { agents } = listAgentsForGateway(cfg);
       expect(agents.map((agent) => agent.id)).toEqual(["main"]);
@@ -2633,23 +2633,23 @@ describe("gateway session utils", () => {
   });
 
   test("listAgentsForGateway preserves canonical roster kinds", async () => {
-    await withStateDirEnv("openclaw-agent-list-kinds-", async ({ stateDir }) => {
-      fs.mkdirSync(path.join(stateDir, "agents", "openclaw"), { recursive: true });
+    await withStateDirEnv("natesclaw-agent-list-kinds-", async ({ stateDir }) => {
+      fs.mkdirSync(path.join(stateDir, "agents", "natesclaw"), { recursive: true });
       fs.mkdirSync(path.join(stateDir, "agents", "research"), { recursive: true });
 
       const result = listAgentsForGateway({}, undefined, { includeSystem: true });
 
       expect(result.agents.map(({ id, kind }) => ({ id, kind }))).toEqual([
         { id: "main", kind: "agent" },
-        { id: "openclaw", kind: "system" },
+        { id: "natesclaw", kind: "system" },
         { id: "research", kind: "agent" },
       ]);
     });
   });
 
   test("listAgentsForGateway keeps system agents out of the legacy response", async () => {
-    await withStateDirEnv("openclaw-agent-list-legacy-", async ({ stateDir }) => {
-      fs.mkdirSync(path.join(stateDir, "agents", "openclaw"), { recursive: true });
+    await withStateDirEnv("natesclaw-agent-list-legacy-", async ({ stateDir }) => {
+      fs.mkdirSync(path.join(stateDir, "agents", "natesclaw"), { recursive: true });
 
       const agents = listAgentsForGateway({}).agents;
       expect(agents.map((agent) => agent.id)).toEqual(["main"]);
@@ -2670,7 +2670,7 @@ describe("gateway session utils", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg);
     expectFields(result.agents[0], {
@@ -2698,7 +2698,7 @@ describe("gateway session utils", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     const catalog = [
       {
         provider: "openai",
@@ -2733,13 +2733,13 @@ describe("gateway session utils", () => {
         defaults: { model: { primary } },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     expect(listAgentsForGateway(cfg).agents[0]?.model?.primary).toBe(expected);
   });
 
   test("listAgentsForGateway reports whether each workspace is a git checkout", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-agent-workspace-git-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-agent-workspace-git-"));
     const gitWorkspace = path.join(root, "git");
     const plainWorkspace = path.join(root, "plain");
     fs.mkdirSync(path.join(gitWorkspace, ".git"), { recursive: true });
@@ -2751,7 +2751,7 @@ describe("gateway session utils", () => {
           { id: "plain", workspace: plainWorkspace },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
     try {
       const result = listAgentsForGateway(cfg);
 
@@ -2782,7 +2782,7 @@ describe("gateway session utils", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg);
     expectFields(result.agents[0], {
@@ -2815,7 +2815,7 @@ describe("gateway session utils", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg);
     const ops = result.agents.find((agent) => agent.id === "ops");
@@ -2878,7 +2878,7 @@ describe("gateway session utils", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg);
     const agent = result.agents.find((row) => row.id === "investment-master");
@@ -2906,7 +2906,7 @@ describe("gateway session utils", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listAgentsForGateway(cfg, [
       { provider: "local", id: "custom-reasoner", name: "Custom Reasoner", reasoning: true },
@@ -3054,7 +3054,7 @@ describe("resolveSessionModelRef", () => {
 
 describe("listSessionsFromStore selected model display", () => {
   test("async list yields during bulk transcript title and last-message hydration", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sessions-list-yield-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-sessions-list-yield-"));
     try {
       const storePath = path.join(tmpDir, "sessions.json");
       const store: Record<string, SessionEntry> = {};
@@ -3126,7 +3126,7 @@ describe("listSessionsFromStore selected model display", () => {
   });
 
   test("caps transcript title and last-message hydration for bulk list responses", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sessions-list-cap-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-sessions-list-cap-"));
     try {
       const storePath = path.join(tmpDir, "sessions.json");
       const store: Record<string, SessionEntry> = {};
@@ -3213,7 +3213,7 @@ describe("listSessionsFromStore selected model display", () => {
             { id: "work", model: { primary: "anthropic/claude-opus-4-6" } },
           ],
         },
-      } as OpenClawConfig,
+      } as NatesclawConfig,
       storePath: "/tmp/sessions.json",
       store: {
         global: { sessionId: "global", updatedAt: now } as SessionEntry,
@@ -3343,7 +3343,7 @@ describe("listSessionsFromStore selected model display", () => {
           { id: "alias", model: { primary: "anthropic/sonnet-4.6" } },
         ],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listSessionsFromStore({
       cfg,
@@ -3380,7 +3380,7 @@ describe("listSessionsFromStore selected model display", () => {
         defaults: { model: { primary: "openai/gpt-5.4" } },
         list: [{ id: "main", model: { primary: "anthropic/claude-sonnet-4-6" } }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listSessionsFromStore({
       cfg,
@@ -3406,7 +3406,7 @@ describe("listSessionsFromStore selected model display", () => {
         defaults: { model: { primary: "openai/gpt-5.4" } },
         list: [{ id: "main", model: { primary: "anthropic/claude-sonnet-4-6" } }],
       },
-    } as OpenClawConfig;
+    } as NatesclawConfig;
 
     const result = listSessionsFromStore({
       cfg,
@@ -3549,7 +3549,7 @@ describe("deriveSessionTitle", () => {
 describe("resolveGatewayModelSupportsImages", () => {
   const createModelCatalogSnapshot = (params: {
     agentId?: string;
-    config?: OpenClawConfig;
+    config?: NatesclawConfig;
     entries?: GatewayModelCatalogSnapshot["entries"];
     staticEntries?: GatewayModelCatalogSnapshot["staticEntries"];
   }): GatewayModelCatalogSnapshot => ({

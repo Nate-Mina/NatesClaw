@@ -13,17 +13,17 @@ import {
   type ContextEngineProjection,
   type EmbeddedContextFile,
   type EmbeddedRunAttemptParamsV2 as EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveAgentWorkspaceDir } from "openclaw/plugin-sdk/agent-runtime";
+} from "natesclaw/plugin-sdk/agent-harness-runtime";
+import { resolveAgentWorkspaceDir } from "natesclaw/plugin-sdk/agent-runtime";
 import {
   buildMemorySystemPromptAddition,
   prepareMemorySystemPromptAddition,
-} from "openclaw/plugin-sdk/core";
-import { MESSAGE_TOOL_DELIVERY_HINTS } from "openclaw/plugin-sdk/message-tool-delivery-hints";
+} from "natesclaw/plugin-sdk/core";
+import { MESSAGE_TOOL_DELIVERY_HINTS } from "natesclaw/plugin-sdk/message-tool-delivery-hints";
 import type {
   SessionTranscriptTargetParams,
   TranscriptTurnAdmission,
-} from "openclaw/plugin-sdk/session-transcript-runtime";
+} from "natesclaw/plugin-sdk/session-transcript-runtime";
 import type { EmbeddedRunAttemptResult } from "./attempt-terminal.js";
 import type { CodexDynamicToolFunctionSpec, CodexDynamicToolSpec, JsonValue } from "./protocol.js";
 import { flattenCodexDynamicToolFunctions } from "./protocol.js";
@@ -234,7 +234,7 @@ export async function buildCodexWorkspaceBootstrapContext(params: {
       excludeMemory: memoryToolsAvailable,
       memoryWorkspaceDir: params.effectiveWorkspace,
     });
-    const turnScopedDeveloperInstructionFiles = shouldInjectCodexOpenClawPromptContext(
+    const turnScopedDeveloperInstructionFiles = shouldInjectCodexNatesclawPromptContext(
       params.params,
     )
       ? selectCodexWorkspaceTurnScopedDeveloperInstructionFiles(contextFiles)
@@ -252,7 +252,7 @@ export async function buildCodexWorkspaceBootstrapContext(params: {
       turnScopedDeveloperInstructions: renderCodexWorkspaceCollaborationDeveloperInstructions(
         turnScopedDeveloperInstructionFiles,
       ),
-      memoryCollaborationInstructions: shouldInjectCodexOpenClawPromptContext(params.params)
+      memoryCollaborationInstructions: shouldInjectCodexNatesclawPromptContext(params.params)
         ? await renderCodexWorkspaceMemoryCollaborationInstructions({
             files: memoryReferenceFiles,
             toolNames: params.memoryToolNames,
@@ -507,19 +507,19 @@ function readNonEmptyString(value: unknown): string | undefined {
 }
 
 /**
- * Builds OpenClaw-provided workspace prompt context for the current Codex turn.
+ * Builds Natesclaw-provided workspace prompt context for the current Codex turn.
  */
-export function buildCodexOpenClawPromptContext(params: {
+export function buildCodexNatesclawPromptContext(params: {
   params: EmbeddedRunAttemptParams;
   workspacePromptContext?: string;
   watchedSessionsContext?: string;
 }): string | undefined {
-  if (!shouldInjectCodexOpenClawPromptContext(params.params)) {
+  if (!shouldInjectCodexNatesclawPromptContext(params.params)) {
     return undefined;
   }
   const sections = [
     params.workspacePromptContext?.trim()
-      ? ["## OpenClaw Workspace Context", "", params.workspacePromptContext.trim()].join("\n")
+      ? ["## Natesclaw Workspace Context", "", params.workspacePromptContext.trim()].join("\n")
       : undefined,
     params.watchedSessionsContext?.trim() || undefined,
   ].filter(isNonEmptyString);
@@ -527,8 +527,8 @@ export function buildCodexOpenClawPromptContext(params: {
     return undefined;
   }
   return [
-    "OpenClaw runtime context for this turn:",
-    "Treat this OpenClaw-provided context as supporting project/user reference for the current request.",
+    "Natesclaw runtime context for this turn:",
+    "Treat this Natesclaw-provided context as supporting project/user reference for the current request.",
     "",
     ...sections,
   ].join("\n");
@@ -538,7 +538,7 @@ export function buildCodexOpenClawPromptContext(params: {
  * Renders the watched-sessions block for the Codex per-turn runtime context.
  * Codex builds its own instruction layers, so the embedded prompt's Watched
  * Sessions section must be re-surfaced here or Codex-backed main sessions
- * keep refusing cross-session questions (openclaw#114797).
+ * keep refusing cross-session questions (natesclaw#114797).
  */
 export function buildCodexWatchedSessionsContext(params: {
   attempt: EmbeddedRunAttemptParams;
@@ -546,7 +546,7 @@ export function buildCodexWatchedSessionsContext(params: {
   sessionKey?: string;
   sandboxed?: boolean;
 }): string | undefined {
-  if (!shouldInjectCodexOpenClawPromptContext(params.attempt)) {
+  if (!shouldInjectCodexNatesclawPromptContext(params.attempt)) {
     return undefined;
   }
   return buildWatchedSessionsHarnessContext({
@@ -559,7 +559,7 @@ export function buildCodexWatchedSessionsContext(params: {
   });
 }
 
-function shouldInjectCodexOpenClawPromptContext(params: EmbeddedRunAttemptParams): boolean {
+function shouldInjectCodexNatesclawPromptContext(params: EmbeddedRunAttemptParams): boolean {
   // Lightweight cron runs are commonly exact commands. Keep the user input byte-for-byte
   // to avoid changing command intent while Codex keeps its native project-doc loader.
   return !(
@@ -567,24 +567,24 @@ function shouldInjectCodexOpenClawPromptContext(params: EmbeddedRunAttemptParams
   );
 }
 
-/** Renders loaded OpenClaw skill prompts as Codex collaboration instructions. */
+/** Renders loaded Natesclaw skill prompts as Codex collaboration instructions. */
 export function renderCodexSkillsCollaborationInstructions(params: {
   attempt: EmbeddedRunAttemptParams;
   skillsPrompt?: string;
 }): string | undefined {
-  if (!shouldInjectCodexOpenClawPromptContext(params.attempt)) {
+  if (!shouldInjectCodexNatesclawPromptContext(params.attempt)) {
     return undefined;
   }
   return params.skillsPrompt?.trim()
-    ? ["## OpenClaw Skills", "", params.skillsPrompt.trim()].join("\n")
+    ? ["## Natesclaw Skills", "", params.skillsPrompt.trim()].join("\n")
     : undefined;
 }
 
 /**
- * Prepends OpenClaw context while preserving leading delivery metadata as
+ * Prepends Natesclaw context while preserving leading delivery metadata as
  * routing guidance instead of user request text.
  */
-export function prependCodexOpenClawPromptContext(
+export function prependCodexNatesclawPromptContext(
   prompt: string,
   context: string | undefined,
   options: { preservePromptWithoutContext?: boolean } = {},
@@ -594,13 +594,13 @@ export function prependCodexOpenClawPromptContext(
     return prompt;
   }
   const promptSection = promptWithoutDeliveryHint.startsWith(
-    "OpenClaw assembled context for this turn:",
+    "Natesclaw assembled context for this turn:",
   )
     ? promptWithoutDeliveryHint
     : ["Current user request:", promptWithoutDeliveryHint].join("\n");
   const deliverySection = deliveryHint
     ? [
-        "OpenClaw delivery metadata:",
+        "Natesclaw delivery metadata:",
         "This delivery metadata is runtime routing guidance, not the user's request.",
         deliveryHint,
       ].join("\n")
@@ -679,7 +679,7 @@ function renderCodexWorkspaceBootstrapPromptContext(
     return undefined;
   }
   const lines = [
-    "OpenClaw loaded these user-editable workspace files for the current turn. Codex loads AGENTS.md natively. SOUL.md, IDENTITY.md, and USER.md are provided as turn-scoped collaboration instructions so native Codex subagents do not inherit them. Those files are not repeated here.",
+    "Natesclaw loaded these user-editable workspace files for the current turn. Codex loads AGENTS.md natively. SOUL.md, IDENTITY.md, and USER.md are provided as turn-scoped collaboration instructions so native Codex subagents do not inherit them. Those files are not repeated here.",
     "",
     "# Project Context",
     "",
@@ -746,9 +746,9 @@ function renderCodexWorkspaceCollaborationDeveloperInstructions(
 ): string | undefined {
   return renderCodexWorkspaceDeveloperInstructions({
     files,
-    header: "## OpenClaw Agent Soul",
+    header: "## Natesclaw Agent Soul",
     preamble:
-      "OpenClaw loaded these workspace instruction files from the active agent workspace. They are the canonical definitions of who you are, how you think and work, and the human you work alongside. Internalize and follow them accordingly.",
+      "Natesclaw loaded these workspace instruction files from the active agent workspace. They are the canonical definitions of who you are, how you think and work, and the human you work alongside. Internalize and follow them accordingly.",
     wrapperTag: "AGENT_SOUL",
   });
 }
@@ -809,9 +809,9 @@ function renderCodexWorkspaceMemoryReference(params: {
     ? params.toolNames
     : Array.from(CODEX_MEMORY_TOOL_NAMES);
   const lines = [
-    "## OpenClaw Workspace Memory",
+    "## Natesclaw Workspace Memory",
     "",
-    `MEMORY.md exists in the active agent workspace as a memory file, not an instruction file. OpenClaw does not paste its contents into native Codex turns; use ${toolNames.join(" or ")} when durable memory is relevant and the tools are available.`,
+    `MEMORY.md exists in the active agent workspace as a memory file, not an instruction file. Natesclaw does not paste its contents into native Codex turns; use ${toolNames.join(" or ")} when durable memory is relevant and the tools are available.`,
     "",
   ];
   for (const file of params.files) {

@@ -1,21 +1,21 @@
 ---
-summary: "OpenClaw browser control API, CLI reference, and scripting actions"
+summary: "Natesclaw browser control API, CLI reference, and scripting actions"
 read_when:
   - Scripting or debugging the agent browser via the local control API
-  - Looking for the `openclaw browser` CLI reference
+  - Looking for the `natesclaw browser` CLI reference
   - Adding custom browser automation with snapshots and refs
 title: "Browser control API"
 ---
 
 For setup, configuration, and troubleshooting, see [Browser](/tools/browser).
-This page is the reference for the local control HTTP API, the `openclaw browser`
+This page is the reference for the local control HTTP API, the `natesclaw browser`
 CLI, and scripting patterns (snapshots, refs, waits, debug flows).
 
 ## Control API (optional)
 
 For local integrations only, the Gateway exposes a small loopback HTTP API.
 This standalone server is opt-in — set the environment variable
-`OPENCLAW_EAGER_BROWSER_CONTROL_SERVER=1` in the gateway service environment
+`NATESCLAW_EAGER_BROWSER_CONTROL_SERVER=1` in the gateway service environment
 and restart the gateway before the HTTP endpoints become available. Without
 this variable the browser control runtime still works through the CLI and
 agent tools, but nothing listens on the loopback control port.
@@ -42,7 +42,7 @@ prefer the single-purpose tab routes above when scripting directly.
 All endpoints accept `?profile=<name>`. `POST /start?headless=true` requests a
 one-shot headless launch for local managed profiles without changing persisted
 browser config; attach-only, remote CDP, and existing-session profiles reject
-that override because OpenClaw does not launch those browser processes.
+that override because Natesclaw does not launch those browser processes.
 
 For tab endpoints, `targetId` is the compatibility field name. Prefer passing
 `suggestedTargetId` from `GET /tabs` or `POST /tabs/open`; labels and `tabId`
@@ -52,7 +52,7 @@ target-id prefixes still work, but they are volatile diagnostic handles.
 If shared-secret gateway auth is configured, browser HTTP routes require auth too:
 
 - `Authorization: Bearer <gateway token>`
-- `x-openclaw-password: <gateway password>` or HTTP Basic auth with that password
+- `x-natesclaw-password: <gateway password>` or HTTP Basic auth with that password
 
 Notes:
 
@@ -95,7 +95,7 @@ What still works without Playwright:
   `--depth`, `--efficient`) when a per-tab CDP WebSocket is available. This is
   a fallback for inspection and ref discovery; Playwright remains the primary
   action engine.
-- Page screenshots for the managed `openclaw` browser when a per-tab CDP
+- Page screenshots for the managed `natesclaw` browser when a per-tab CDP
   WebSocket is available
 - Page screenshots for `existing-session` / Chrome MCP profiles
 - `existing-session` ref-based screenshots (`--ref`) from snapshot output
@@ -113,7 +113,7 @@ not supported for element screenshots`.
 
 If you see `Playwright is not available in this gateway build`, the packaged
 Gateway is missing the core browser runtime dependency. Reinstall or update
-OpenClaw, then restart the gateway. For Docker, also install the Chromium
+Natesclaw, then restart the gateway. For Docker, also install the Chromium
 browser binaries as shown below.
 
 #### Docker Playwright install
@@ -122,13 +122,13 @@ If your Gateway runs in Docker, avoid `npx playwright` (npm override conflicts).
 For custom images, bake Chromium into the image:
 
 ```bash
-OPENCLAW_INSTALL_BROWSER=1 ./scripts/docker/setup.sh
+NATESCLAW_INSTALL_BROWSER=1 ./scripts/docker/setup.sh
 ```
 
 The browser also needs system libraries, so installing Chromium in a one-off
 Compose container is not durable. Rebuild the image with
-`OPENCLAW_INSTALL_BROWSER=1` instead. To persist browser downloads and other
-caches, persist `/home/node` with `OPENCLAW_HOME_VOLUME` or a bind mount. See
+`NATESCLAW_INSTALL_BROWSER=1` instead. To persist browser downloads and other
+caches, persist `/home/node` with `NATESCLAW_HOME_VOLUME` or a bind mount. See
 [Docker](/install/docker).
 
 ## How it works (internal)
@@ -144,23 +144,23 @@ All commands accept `--browser-profile <name>` to target a specific profile, and
 <Accordion title="Basics: status, tabs, open/focus/close">
 
 ```bash
-openclaw browser status
-openclaw browser doctor
-openclaw browser doctor --deep    # add a live snapshot probe
-openclaw browser start
-openclaw browser start --headless # one-shot local managed headless launch
-openclaw browser stop            # also clears emulation on attach-only/remote CDP
-openclaw browser reset-profile   # moves the profile's browser data to Trash
-openclaw browser tabs
-openclaw browser tab             # shortcut for current tab
-openclaw browser tab new
-openclaw browser tab new --label research
-openclaw browser tab label abcd1234 research
-openclaw browser tab select 2
-openclaw browser tab close 2
-openclaw browser open https://example.com
-openclaw browser focus abcd1234
-openclaw browser close abcd1234
+natesclaw browser status
+natesclaw browser doctor
+natesclaw browser doctor --deep    # add a live snapshot probe
+natesclaw browser start
+natesclaw browser start --headless # one-shot local managed headless launch
+natesclaw browser stop            # also clears emulation on attach-only/remote CDP
+natesclaw browser reset-profile   # moves the profile's browser data to Trash
+natesclaw browser tabs
+natesclaw browser tab             # shortcut for current tab
+natesclaw browser tab new
+natesclaw browser tab new --label research
+natesclaw browser tab label abcd1234 research
+natesclaw browser tab select 2
+natesclaw browser tab close 2
+natesclaw browser open https://example.com
+natesclaw browser focus abcd1234
+natesclaw browser close abcd1234
 ```
 
 </Accordion>
@@ -168,10 +168,10 @@ openclaw browser close abcd1234
 <Accordion title="Profiles: list, create, delete">
 
 ```bash
-openclaw browser profiles
-openclaw browser create-profile --name research --color "#0066CC"
-openclaw browser create-profile --name attach --driver existing-session --cdp-url http://127.0.0.1:9222
-openclaw browser delete-profile --name research
+natesclaw browser profiles
+natesclaw browser create-profile --name research --color "#0066CC"
+natesclaw browser create-profile --name attach --driver existing-session --cdp-url http://127.0.0.1:9222
+natesclaw browser delete-profile --name research
 ```
 
 </Accordion>
@@ -179,24 +179,24 @@ openclaw browser delete-profile --name research
 <Accordion title="Inspection: screenshot, snapshot, console, errors, requests">
 
 ```bash
-openclaw browser screenshot
-openclaw browser screenshot --full-page
-openclaw browser screenshot --ref 12        # or --ref e12
-openclaw browser screenshot --labels
-openclaw browser snapshot
-openclaw browser snapshot --format aria --limit 200
-openclaw browser snapshot --interactive --compact --depth 6
-openclaw browser snapshot --efficient
-openclaw browser snapshot --labels
-openclaw browser snapshot --urls
-openclaw browser snapshot --selector "#main" --interactive
-openclaw browser snapshot --frame "iframe#main" --interactive
-openclaw browser snapshot --out snapshot.txt
-openclaw browser console --level error
-openclaw browser errors --clear
-openclaw browser requests --filter api --clear
-openclaw browser pdf
-openclaw browser responsebody "**/api" --max-chars 5000
+natesclaw browser screenshot
+natesclaw browser screenshot --full-page
+natesclaw browser screenshot --ref 12        # or --ref e12
+natesclaw browser screenshot --labels
+natesclaw browser snapshot
+natesclaw browser snapshot --format aria --limit 200
+natesclaw browser snapshot --interactive --compact --depth 6
+natesclaw browser snapshot --efficient
+natesclaw browser snapshot --labels
+natesclaw browser snapshot --urls
+natesclaw browser snapshot --selector "#main" --interactive
+natesclaw browser snapshot --frame "iframe#main" --interactive
+natesclaw browser snapshot --out snapshot.txt
+natesclaw browser console --level error
+natesclaw browser errors --clear
+natesclaw browser requests --filter api --clear
+natesclaw browser pdf
+natesclaw browser responsebody "**/api" --max-chars 5000
 ```
 
 </Accordion>
@@ -204,32 +204,32 @@ openclaw browser responsebody "**/api" --max-chars 5000
 <Accordion title="Actions: navigate, click, type, drag, wait, evaluate">
 
 ```bash
-openclaw browser navigate https://example.com
-openclaw browser resize 1280 720
-openclaw browser click 12 --double           # or e12 for role refs
-openclaw browser click-coords 120 340        # viewport coordinates
-openclaw browser type 23 "hello" --submit
-openclaw browser press Enter
-openclaw browser hover 44
-openclaw browser scrollintoview e12
-openclaw browser drag 10 11
-openclaw browser select 9 OptionA OptionB
-openclaw browser download e12 report.pdf
-openclaw browser waitfordownload report.pdf
-openclaw browser upload /tmp/openclaw/uploads/file.pdf
-openclaw browser upload /tmp/openclaw/uploads/file.pdf --ref e12
-openclaw browser upload media://inbound/file.pdf
-openclaw browser fill --fields '[{"ref":"1","type":"text","value":"Ada"}]'
-openclaw browser dialog --accept
-openclaw browser dialog --dismiss --dialog-id d1
-openclaw browser wait --text "Done"
-openclaw browser wait "#main" --url "**/dash" --load networkidle --fn "window.ready===true"
-openclaw browser evaluate --fn '(el) => el.textContent' --ref 7
-openclaw browser evaluate --fn 'const title = document.title; return title;'
-openclaw browser evaluate --timeout-ms 30000 --fn 'async () => { await window.ready; return true; }'
-openclaw browser highlight e12
-openclaw browser trace start
-openclaw browser trace stop
+natesclaw browser navigate https://example.com
+natesclaw browser resize 1280 720
+natesclaw browser click 12 --double           # or e12 for role refs
+natesclaw browser click-coords 120 340        # viewport coordinates
+natesclaw browser type 23 "hello" --submit
+natesclaw browser press Enter
+natesclaw browser hover 44
+natesclaw browser scrollintoview e12
+natesclaw browser drag 10 11
+natesclaw browser select 9 OptionA OptionB
+natesclaw browser download e12 report.pdf
+natesclaw browser waitfordownload report.pdf
+natesclaw browser upload /tmp/natesclaw/uploads/file.pdf
+natesclaw browser upload /tmp/natesclaw/uploads/file.pdf --ref e12
+natesclaw browser upload media://inbound/file.pdf
+natesclaw browser fill --fields '[{"ref":"1","type":"text","value":"Ada"}]'
+natesclaw browser dialog --accept
+natesclaw browser dialog --dismiss --dialog-id d1
+natesclaw browser wait --text "Done"
+natesclaw browser wait "#main" --url "**/dash" --load networkidle --fn "window.ready===true"
+natesclaw browser evaluate --fn '(el) => el.textContent' --ref 7
+natesclaw browser evaluate --fn 'const title = document.title; return title;'
+natesclaw browser evaluate --timeout-ms 30000 --fn 'async () => { await window.ready; return true; }'
+natesclaw browser highlight e12
+natesclaw browser trace start
+natesclaw browser trace stop
 ```
 
 </Accordion>
@@ -237,20 +237,20 @@ openclaw browser trace stop
 <Accordion title="State: cookies, storage, offline, headers, geo, device">
 
 ```bash
-openclaw browser cookies
-openclaw browser cookies set session abc123 --url "https://example.com"
-openclaw browser cookies clear
-openclaw browser storage local get
-openclaw browser storage local set theme dark
-openclaw browser storage session clear
-openclaw browser set offline on
-openclaw browser set headers --headers-json '{"X-Debug":"1"}'
-openclaw browser set credentials user pass            # --clear to remove
-openclaw browser set geo 37.7749 -122.4194 --origin "https://example.com"
-openclaw browser set media dark
-openclaw browser set timezone America/New_York
-openclaw browser set locale en-US
-openclaw browser set device "iPhone 14"
+natesclaw browser cookies
+natesclaw browser cookies set session abc123 --url "https://example.com"
+natesclaw browser cookies clear
+natesclaw browser storage local get
+natesclaw browser storage local set theme dark
+natesclaw browser storage session clear
+natesclaw browser set offline on
+natesclaw browser set headers --headers-json '{"X-Debug":"1"}'
+natesclaw browser set credentials user pass            # --clear to remove
+natesclaw browser set geo 37.7749 -122.4194 --origin "https://example.com"
+natesclaw browser set media dark
+natesclaw browser set timezone America/New_York
+natesclaw browser set locale en-US
+natesclaw browser set device "iPhone 14"
 ```
 
 </Accordion>
@@ -264,17 +264,17 @@ Notes:
   download URL, suggested filename, and guarded local path. Explicit download
   interception is available for managed Playwright profiles; existing-session
   profiles return an unsupported-operation error.
-- Prefer atomic chooser uploads: pass the trigger `--ref` with the upload so OpenClaw arms and clicks in one request. Paths-only `upload` remains supported when a later trigger is intentional. Use `--input-ref` or `--element` to set a file input directly. `dialog` is an arming call; run it before the click/press that triggers the dialog. If an action opens a modal, the action response includes `blockedByDialog` and `browserState.dialogs.pending`; pass that `dialogId` to respond directly. Dialogs handled outside OpenClaw appear under `browserState.dialogs.recent`.
+- Prefer atomic chooser uploads: pass the trigger `--ref` with the upload so Natesclaw arms and clicks in one request. Paths-only `upload` remains supported when a later trigger is intentional. Use `--input-ref` or `--element` to set a file input directly. `dialog` is an arming call; run it before the click/press that triggers the dialog. If an action opens a modal, the action response includes `blockedByDialog` and `browserState.dialogs.pending`; pass that `dialogId` to respond directly. Dialogs handled outside Natesclaw appear under `browserState.dialogs.recent`.
 - `click`/`type`/etc require a `ref` from `snapshot` (numeric `12`, role ref `e12`, or actionable ARIA ref `ax12`). CSS selectors are intentionally not supported for actions. Use `click-coords` when the visible viewport position is the only reliable target.
-- Download and trace paths are constrained to OpenClaw temp roots: `/tmp/openclaw{,/downloads}` (fallback: `${os.tmpdir()}/openclaw/...`).
-- `upload` accepts files from the OpenClaw temp uploads root and
-  OpenClaw-managed inbound media. Managed inbound media can be referenced as
+- Download and trace paths are constrained to Natesclaw temp roots: `/tmp/natesclaw{,/downloads}` (fallback: `${os.tmpdir()}/natesclaw/...`).
+- `upload` accepts files from the Natesclaw temp uploads root and
+  Natesclaw-managed inbound media. Managed inbound media can be referenced as
   `media://inbound/<id>`, sandbox-relative `media/inbound/<id>`, or a resolved
   path inside the managed inbound media directory. Nested media refs,
   traversal, symlinks, hardlinks, and arbitrary local paths are still rejected.
 - `upload` can also set file inputs directly via `--input-ref` or `--element`.
 
-Stable tab ids and labels survive Chromium raw-target replacement when OpenClaw
+Stable tab ids and labels survive Chromium raw-target replacement when Natesclaw
 can prove the replacement tab, such as a unique old/new pair for the same URL or
 a single old tab becoming a single new tab after form submission. Ambiguous
 duplicate-URL replacements receive fresh handles. Raw target ids are still
@@ -283,7 +283,7 @@ volatile; prefer `suggestedTargetId` from `tabs` in scripts.
 Snapshot flags at a glance:
 
 - `--format ai` (default with Playwright): AI snapshot with numeric refs (`aria-ref="<n>"`).
-- `--format aria`: accessibility tree with `axN` refs. When Playwright is available, OpenClaw binds refs with backend DOM ids to the live page so follow-up actions can use them; otherwise treat the output as inspection-only.
+- `--format aria`: accessibility tree with `axN` refs. When Playwright is available, Natesclaw binds refs with backend DOM ids to the live page so follow-up actions can use them; otherwise treat the output as inspection-only.
 - `--efficient` (or `--mode efficient`): compact role snapshot preset. Set `browser.snapshotDefaults.mode: "efficient"` to make this the default (see [Gateway configuration](/gateway/configuration-reference#browser)).
 - `--interactive`, `--compact`, `--depth`, `--selector` force a role snapshot with `ref=e12` refs. `--frame "<iframe>"` scopes role snapshots to an iframe.
 - With Playwright, `--labels` adds a screenshot with overlayed ref labels
@@ -298,16 +298,16 @@ Snapshot flags at a glance:
 
 ## Snapshots and refs
 
-OpenClaw supports two "snapshot" styles:
+Natesclaw supports two "snapshot" styles:
 
-- **AI snapshot (numeric refs)**: `openclaw browser snapshot` (default; `--format ai`)
+- **AI snapshot (numeric refs)**: `natesclaw browser snapshot` (default; `--format ai`)
   - Output: a text snapshot that includes numeric refs.
-  - Actions: `openclaw browser click 12`, `openclaw browser type 23 "hello"`.
+  - Actions: `natesclaw browser click 12`, `natesclaw browser type 23 "hello"`.
   - Internally, the ref is resolved via Playwright's `aria-ref`.
 
-- **Role snapshot (role refs like `e12`)**: `openclaw browser snapshot --interactive` (or `--compact`, `--depth`, `--selector`, `--frame`)
+- **Role snapshot (role refs like `e12`)**: `natesclaw browser snapshot --interactive` (or `--compact`, `--depth`, `--selector`, `--frame`)
   - Output: a role-based list/tree with `[ref=e12]` (and optional `[nth=1]`).
-  - Actions: `openclaw browser click e12`, `openclaw browser highlight e12`.
+  - Actions: `natesclaw browser click e12`, `natesclaw browser highlight e12`.
   - Internally, the ref is resolved via `getByRole(...)` (plus `nth()` for duplicates).
   - Add `--labels` to include a screenshot with overlayed `e12` labels. On
     Playwright-backed profiles this also returns per-ref bounding-box metadata
@@ -315,9 +315,9 @@ OpenClaw supports two "snapshot" styles:
   - Add `--urls` when link text is ambiguous and the agent needs concrete
     navigation targets.
 
-- **ARIA snapshot (ARIA refs like `ax12`)**: `openclaw browser snapshot --format aria`
+- **ARIA snapshot (ARIA refs like `ax12`)**: `natesclaw browser snapshot --format aria`
   - Output: the accessibility tree as structured nodes.
-  - Actions: `openclaw browser click ax12` works when the snapshot path can bind
+  - Actions: `natesclaw browser click ax12` works when the snapshot path can bind
     the ref through Playwright and Chrome backend DOM ids.
 - If Playwright is unavailable, ARIA snapshots can still be useful for
   inspection, but refs may not be actionable. Re-snapshot with `--format ai`
@@ -350,19 +350,19 @@ Ref behavior:
 
 ## Browser batch CLI
 
-`openclaw browser batch` runs an array of nested `/act` actions in one `/act`
+`natesclaw browser batch` runs an array of nested `/act` actions in one `/act`
 call (the same `kind="batch"` runtime reached through the agent tool), so CLI
 users and scripts can combine actions like `wait`, `click`, `type`, and
 `evaluate` into a single replayable plan without per-action round trips. Each
 entry in `actions[]` is a `BrowserActRequest` — the closed union the `/act`
 route accepts (`click`, `clickCoords`, `type`, `press`, `hover`,
 `scrollIntoView`, `drag`, `select`, `fill`, `resize`, `wait`, `evaluate`,
-`close`, `batch`) — not arbitrary `openclaw browser` subcommands. `batch` is
+`close`, `batch`) — not arbitrary `natesclaw browser` subcommands. `batch` is
 not supported on `profile="user"` and other existing-session (chrome-mcp)
 profiles; send actions individually there.
 
-- CLI: `openclaw browser batch --actions '<json>'`, `openclaw browser batch
---actions-file plan.json`, or `openclaw browser batch --actions-file -` to
+- CLI: `natesclaw browser batch --actions '<json>'`, `natesclaw browser batch
+--actions-file plan.json`, or `natesclaw browser batch --actions-file -` to
   read the JSON array from stdin. `--continue` sets `stopOnError=false`; the
   default is to stop on first error. `--target-id` scopes the whole batch to
   one tab.
@@ -371,7 +371,7 @@ profiles; send actions individually there.
   `click` that triggers navigation, or an `evaluate` that mutates the DOM — can
   invalidate earlier refs for the rest of the batch. Put state-changing actions
   first, or split into a follow-up batch after re-snapshotting. Navigation and
-  re-snapshotting happen outside the batch (`openclaw browser navigate` /
+  re-snapshotting happen outside the batch (`natesclaw browser navigate` /
   `snapshot`), since `open`, `navigate`, and `snapshot` are not `/act` kinds.
 - Target id conflicts: a nested action may omit `targetId` or repeat the
   request-level `targetId`; an explicit nested `targetId` that resolves to a
@@ -388,19 +388,19 @@ profiles; send actions individually there.
 You can wait on more than just time/text:
 
 - Wait for URL (globs supported by Playwright):
-  - `openclaw browser wait --url "**/dash"`
+  - `natesclaw browser wait --url "**/dash"`
 - Wait for load state:
-  - `openclaw browser wait --load networkidle`
-  - Supported on managed `openclaw` and raw/remote CDP profiles. Profiles using the `existing-session` driver (including the default `user` profile) reject `networkidle`; use `--url`, `--text`, a selector, or `--fn` waits there.
+  - `natesclaw browser wait --load networkidle`
+  - Supported on managed `natesclaw` and raw/remote CDP profiles. Profiles using the `existing-session` driver (including the default `user` profile) reject `networkidle`; use `--url`, `--text`, a selector, or `--fn` waits there.
 - Wait for a JS predicate:
-  - `openclaw browser wait --fn "window.ready===true"`
+  - `natesclaw browser wait --fn "window.ready===true"`
 - Wait for a selector to become visible:
-  - `openclaw browser wait "#main"`
+  - `natesclaw browser wait "#main"`
 
 These can be combined:
 
 ```bash
-openclaw browser wait "#main" \
+natesclaw browser wait "#main" \
   --url "**/dash" \
   --load networkidle \
   --fn "window.ready===true" \
@@ -411,16 +411,16 @@ openclaw browser wait "#main" \
 
 When an action fails (e.g. "not visible", "strict mode violation", "covered"):
 
-1. `openclaw browser snapshot --interactive`
+1. `natesclaw browser snapshot --interactive`
 2. Use `click <ref>` / `type <ref>` (prefer role refs in interactive mode)
-3. If it still fails: `openclaw browser highlight <ref>` to see what Playwright is targeting
+3. If it still fails: `natesclaw browser highlight <ref>` to see what Playwright is targeting
 4. If the page behaves oddly:
-   - `openclaw browser errors --clear`
-   - `openclaw browser requests --filter api --clear`
+   - `natesclaw browser errors --clear`
+   - `natesclaw browser requests --filter api --clear`
 5. For deep debugging: record a trace:
-   - `openclaw browser trace start`
+   - `natesclaw browser trace start`
    - reproduce the issue
-   - `openclaw browser trace stop` (prints `TRACE:<path>`)
+   - `natesclaw browser trace stop` (prints `TRACE:<path>`)
 
 ## JSON output
 
@@ -429,10 +429,10 @@ When an action fails (e.g. "not visible", "strict mode violation", "covered"):
 Examples:
 
 ```bash
-openclaw browser --json status
-openclaw browser --json snapshot --interactive
-openclaw browser --json requests --filter api
-openclaw browser --json cookies
+natesclaw browser --json status
+natesclaw browser --json snapshot --interactive
+natesclaw browser --json requests --filter api
+natesclaw browser --json cookies
 ```
 
 Role snapshots in JSON include `refs` plus a small `stats` block (lines/chars/refs/interactive) so tools can reason about payload size and density.
@@ -455,11 +455,11 @@ These are useful for "make the site behave like X" workflows:
 
 ## Security and privacy
 
-- The openclaw browser profile may contain logged-in sessions; treat it as sensitive.
-- `browser act kind=evaluate` / `openclaw browser evaluate` and `wait --fn`
+- The natesclaw browser profile may contain logged-in sessions; treat it as sensitive.
+- `browser act kind=evaluate` / `natesclaw browser evaluate` and `wait --fn`
   execute arbitrary JavaScript in the page context. Prompt injection can steer
   this. Disable it with `browser.evaluateEnabled=false` if you do not need it.
-- `openclaw browser evaluate --fn` accepts a function source, an expression, or
+- `natesclaw browser evaluate --fn` accepts a function source, an expression, or
   a statement body. Statement bodies are wrapped as async functions, so use
   `return` for the value you want back. Use `--timeout-ms <ms>` when the
   page-side function may need longer than the default evaluate timeout.
