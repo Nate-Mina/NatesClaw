@@ -49,7 +49,7 @@ import {
   createXSearchToolDefinition,
 } from "./x-search-tool-shared.js";
 import { createXaiDeviceCodeAuthMethod, createXaiOAuthAuthMethod } from "./xai-oauth-entry.js";
-import { refreshXaiOAuthCredential } from "./xai-oauth.js";
+import { refreshXaiOAuthCredential } from "./xai-oauth-entry.js";
 
 const PROVIDER_ID = "xai";
 

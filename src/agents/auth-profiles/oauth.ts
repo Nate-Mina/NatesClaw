@@ -292,6 +292,33 @@ if (process.env.VITEST || process.env.NODE_ENV === "test") {
   };
 }
 
+type ResolvedOAuthProfile = {
+  credential: OAuthCredential;
+  profileId: string;
+  email?: string;
+};
+
+async function resolveOAuthProfileAttempt(
+  params: ResolveApiKeyForProfileParams,
+  cred: OAuthCredential,
+): Promise<ResolvedOAuthProfile | null> {
+  const resolved = await oauthManager.resolveOAuthCredential({
+    store: params.store,
+    profileId: params.profileId,
+    credential: cred,
+    agentDir: params.agentDir,
+    cfg: params.cfg,
+    forceRefresh: params.forceRefresh,
+  });
+  return resolved
+    ? {
+        credential: resolved,
+        profileId: params.profileId,
+        email: resolved.email ?? cred.email,
+      }
+    : null;
+}
+
 async function tryResolveOAuthProfile(
   params: ResolveApiKeyForProfileParams,
 ): Promise<ResolvedOAuthProfile | null> {
@@ -311,29 +338,8 @@ async function tryResolveOAuthProfile(
     return null;
   }
 
-  const resolved = await oauthManager.resolveOAuthCredential({
-    store,
-    profileId,
-    credential: cred,
-    agentDir: params.agentDir,
-    cfg,
-    forceRefresh: params.forceRefresh,
-  });
-  if (!resolved) {
-    return null;
-  }
-  return {
-    credential: resolved,
-    profileId,
-    email: resolved.email ?? cred.email,
-  };
+  return await resolveOAuthProfileAttempt(params, cred);
 }
-
-type ResolvedOAuthProfile = {
-  credential: OAuthCredential;
-  profileId: string;
-  email?: string;
-};
 
 async function resolveOAuthProfile(
   params: ResolveApiKeyForProfileParams,
@@ -341,21 +347,7 @@ async function resolveOAuthProfile(
 ): Promise<ResolvedOAuthProfile | null> {
   const { cfg, profileId } = params;
   try {
-    const resolved = await oauthManager.resolveOAuthCredential({
-      store: params.store,
-      agentDir: params.agentDir,
-      profileId,
-      credential: cred,
-      cfg,
-      forceRefresh: params.forceRefresh,
-    });
-    return resolved
-      ? {
-          credential: resolved,
-          profileId,
-          email: resolved.email ?? cred.email,
-        }
-      : null;
+    return await resolveOAuthProfileAttempt(params, cred);
   } catch (error) {
     let refreshedStore =
       error instanceof OAuthManagerRefreshError

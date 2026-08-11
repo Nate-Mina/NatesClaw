@@ -15,6 +15,7 @@ import {
   normalizeProviderId,
   type ProviderPlugin,
 } from "openclaw/plugin-sdk/provider-model-shared";
+import type { ProviderOAuthRefreshContext } from "openclaw/plugin-sdk/provider-oauth-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   readStringValue,
@@ -47,7 +48,6 @@ import {
 import { resolveCodexAuthIdentity } from "./openai-chatgpt-auth-identity.js";
 import { loginOpenAICodexDeviceCode } from "./openai-chatgpt-device-code.js";
 import { loginOpenAICodexOAuth } from "./openai-chatgpt-oauth.runtime.js";
-import { refreshOpenAICodexToken } from "./openai-chatgpt-provider.runtime.js";
 import {
   buildOpenAIResponsesProviderHooks,
   buildOpenAISyntheticCatalogEntry,
@@ -440,9 +440,10 @@ function buildOpenAICodexAuthConfigPatch(): NonNullable<ProviderAuthResult["conf
 
 async function refreshOpenAICodexOAuthCredential(
   cred: OAuthCredential,
-  context?: { signal?: AbortSignal },
+  context?: ProviderOAuthRefreshContext,
 ) {
   try {
+    const { refreshOpenAICodexToken } = await import("./openai-chatgpt-provider.runtime.js");
     const refreshed = await refreshOpenAICodexToken(cred.refresh, context);
     const identity = resolveCodexAuthIdentity({
       accessToken: refreshed.access,

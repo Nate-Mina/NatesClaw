@@ -3,10 +3,14 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const refreshOpenAICodexTokenMock = vi.hoisted(() => vi.fn());
 const loginOpenAICodexDeviceCodeMock = vi.hoisted(() => vi.fn());
+const refreshRuntimeLoadedMock = vi.hoisted(() => vi.fn());
 
-vi.mock("./openai-chatgpt-provider.runtime.js", () => ({
-  refreshOpenAICodexToken: refreshOpenAICodexTokenMock,
-}));
+vi.mock("./openai-chatgpt-provider.runtime.js", () => {
+  refreshRuntimeLoadedMock();
+  return {
+    refreshOpenAICodexToken: refreshOpenAICodexTokenMock,
+  };
+});
 
 vi.mock("./openai-chatgpt-device-code.js", () => ({
   loginOpenAICodexDeviceCode: loginOpenAICodexDeviceCodeMock,
@@ -31,6 +35,7 @@ describe("OpenAI provider Codex transport hooks", () => {
   it("exposes ChatGPT OAuth on the canonical OpenAI provider", () => {
     const provider = buildOpenAIProvider();
 
+    expect(refreshRuntimeLoadedMock).not.toHaveBeenCalled();
     expect(provider.id).toBe("openai");
     expect(provider.aliases).toBeUndefined();
     expect(provider.hookAliases).toEqual(["azure-openai", "azure-openai-responses"]);
@@ -322,5 +327,6 @@ describe("OpenAI provider Codex transport hooks", () => {
     expect(refreshOpenAICodexTokenMock).toHaveBeenCalledWith("old-refresh", {
       signal: controller.signal,
     });
+    expect(refreshRuntimeLoadedMock).toHaveBeenCalledOnce();
   });
 });
