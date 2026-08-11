@@ -2580,7 +2580,7 @@ describe("gateway agent handler", () => {
         resetAgentTaskRegistryForTests();
         const childSessionKey = "agent:main:subagent:owned";
         const runId = "host-owned-subagent-run";
-        mockAcpChildSessionEntry(childSessionKey);
+        mockSpawnedChildSessionEntry(childSessionKey);
         getDetachedTaskLifecycleRuntime().createRunningTaskRun({
           runtime: "subagent",
           requesterSessionKey: "agent:main:main",
