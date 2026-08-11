@@ -27,7 +27,7 @@ import type {
   OAuthLoginCallbacks,
   OAuthPrompt,
   OAuthProviderInterface,
-  OAuthRefreshContext,
+  ProviderOAuthRefreshContext,
 } from "./types.js";
 
 type CallbackServerInfo = {
@@ -382,7 +382,7 @@ async function loginAnthropic(options: {
  */
 async function refreshAnthropicToken(
   refreshToken: string,
-  context?: OAuthRefreshContext,
+  context?: ProviderOAuthRefreshContext,
 ): Promise<OAuthCredentials> {
   let responseBody: string;
   try {
@@ -425,7 +425,7 @@ export const anthropicOAuthProvider: OAuthProviderInterface = {
 
   async refreshToken(
     credentials: OAuthCredentials,
-    context?: OAuthRefreshContext,
+    context?: ProviderOAuthRefreshContext,
   ): Promise<OAuthCredentials> {
     return refreshAnthropicToken(credentials.refresh, context);
   },

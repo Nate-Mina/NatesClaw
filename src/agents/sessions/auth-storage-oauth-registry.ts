@@ -3,7 +3,7 @@ import type {
   OAuthCredentials,
   OAuthLoginCallbacks,
   OAuthProviderId,
-  OAuthRefreshContext,
+  ProviderOAuthRefreshContext,
 } from "../../llm/utils/oauth/types.js";
 import { OAuthProviderConfiguredUnavailableError } from "../../plugins/provider-runtime.errors.js";
 import { loginProviderOAuthWithPlugin } from "../../plugins/provider-runtime.runtime.js";
@@ -16,7 +16,7 @@ const registries = new WeakMap<object, OAuthProviderRegistry>();
 
 type PreparedAuthStorageOAuthResolver = (
   current: OAuthCredentials,
-  context?: OAuthRefreshContext & { forceRefresh?: boolean },
+  context?: ProviderOAuthRefreshContext & { forceRefresh?: boolean },
 ) => Promise<{ apiKey: string; newCredentials: OAuthCredentials } | null>;
 
 export function getAuthStorageOAuthProviderRegistry(authStorage: object): OAuthProviderRegistry {

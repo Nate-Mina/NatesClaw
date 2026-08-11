@@ -712,8 +712,11 @@ export class AuthStorage {
       if (!refreshed) {
         return null;
       }
-      const refreshedCredential: OAuthCredential = { ...credential, ...refreshed.newCredentials };
-      refreshedCredential.provider = providerId;
+      const refreshedCredential = {
+        ...credential,
+        ...refreshed.newCredentials,
+        provider: providerId,
+      } satisfies Extract<AuthProfileCredential, { type: "oauth" }>;
       if (Date.now() >= refreshedCredential.expires) {
         throw new Error("OAuth provider returned an expired credential");
       }
@@ -721,18 +724,15 @@ export class AuthStorage {
       const persisted = this.storage.withLock((current) => {
         const data = this.parseStorageData(current);
         const authoritative = data[providerId];
-        const attempted = { ...credential, provider: providerId };
         const decision = resolveOAuthRefreshConflict({
           authoritative: authoritative
             ? ({ ...authoritative, provider: providerId } as AuthProfileCredential)
             : undefined,
-          attempted,
+          attempted: { ...credential, provider: providerId },
           refreshed: refreshedCredential,
         });
         if (!decision?.persist) {
-          return {
-            result: { data, credential: decision?.credential ?? null, persisted: false },
-          };
+          return { result: { data, credential: decision?.credential ?? null, persisted: false } };
         }
         const nextData = { ...data, [providerId]: decision.credential };
         return {
@@ -743,10 +743,7 @@ export class AuthStorage {
       this.data = persisted.data;
       this.loadError = null;
       if (persisted.persisted && persisted.credential) {
-        return {
-          apiKey: refreshed.apiKey,
-          newCredentials: persisted.credential,
-        };
+        return { apiKey: refreshed.apiKey, newCredentials: persisted.credential };
       }
       return persisted.credential ? await resolveCredential(persisted.credential) : null;
     };

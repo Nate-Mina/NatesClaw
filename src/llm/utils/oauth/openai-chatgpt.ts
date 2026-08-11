@@ -7,7 +7,7 @@ import type {
   OAuthCredentials,
   OAuthLoginCallbacks,
   OAuthProviderInterface,
-  OAuthRefreshContext,
+  ProviderOAuthRefreshContext,
 } from "./types.js";
 
 // OAuth adapter for the bundled OpenAI/ChatGPT provider surface.
@@ -101,7 +101,7 @@ async function loginOpenAICodex(callbacks: OpenAICodexLoginCallbacks): Promise<O
 /** Captures the activated OpenAI facade before entering serialized refresh work. */
 export function prepareOpenAICodexOAuthRefresh() {
   const refresh = loadOpenAICodexOAuthFacade().refreshOpenAICodexToken;
-  return (credentials: OAuthCredentials, context?: OAuthRefreshContext) =>
+  return (credentials: OAuthCredentials, context?: ProviderOAuthRefreshContext) =>
     refresh(credentials.refresh, { signal: context?.signal });
 }
 
@@ -117,7 +117,7 @@ export const openaiCodexOAuthProvider: OAuthProviderInterface = {
 
   async refreshToken(
     credentials: OAuthCredentials,
-    context?: OAuthRefreshContext,
+    context?: ProviderOAuthRefreshContext,
   ): Promise<OAuthCredentials> {
     return await prepareOpenAICodexOAuthRefresh()(credentials, context);
   },

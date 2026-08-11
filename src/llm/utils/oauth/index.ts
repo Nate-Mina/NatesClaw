@@ -22,7 +22,7 @@ import type {
   OAuthCredentials,
   OAuthProviderId,
   OAuthProviderInterface,
-  OAuthRefreshContext,
+  ProviderOAuthRefreshContext,
 } from "./types.js";
 
 const BUILT_IN_OAUTH_PROVIDERS: OAuthProviderInterface[] = [
@@ -33,14 +33,14 @@ const BUILT_IN_OAUTH_PROVIDERS: OAuthProviderInterface[] = [
 type OAuthApiKeyResult = { newCredentials: OAuthCredentials; apiKey: string } | null;
 type PreparedOAuthApiKey = (
   credentials: OAuthCredentials,
-  context?: OAuthRefreshContext,
+  context?: ProviderOAuthRefreshContext,
 ) => Promise<OAuthApiKeyResult>;
 
 async function resolveOAuthApiKey(
   provider: OAuthProviderInterface,
   credentials: OAuthCredentials,
   refresh: OAuthProviderInterface["refreshToken"],
-  context?: OAuthRefreshContext,
+  context?: ProviderOAuthRefreshContext,
 ): Promise<OAuthApiKeyResult> {
   let creds = credentials;
   if (Date.now() >= creds.expires) {
@@ -56,7 +56,7 @@ async function resolveOAuthApiKey(
 
 function prepareOAuthApiKeyForProvider(provider: OAuthProviderInterface): PreparedOAuthApiKey {
   const refresh = provider.prepareRefreshToken?.() ?? provider.refreshToken.bind(provider);
-  return (credentials: OAuthCredentials, context?: OAuthRefreshContext) =>
+  return (credentials: OAuthCredentials, context?: ProviderOAuthRefreshContext) =>
     resolveOAuthApiKey(provider, credentials, refresh, context);
 }
 

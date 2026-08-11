@@ -5,5 +5,5 @@ export type {
   OAuthPrompt,
   OAuthProviderId,
   OAuthProviderInterface,
-  OAuthRefreshContext,
+  ProviderOAuthRefreshContext,
 } from "../../../plugin-sdk/provider-oauth-runtime.js";

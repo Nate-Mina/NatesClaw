@@ -87,7 +87,7 @@ export interface OAuthLoginCallbacks {
 }
 
 /** Cancellation and deadline context forwarded to provider token refresh I/O. */
-export type OAuthRefreshContext = {
+export type ProviderOAuthRefreshContext = {
   signal?: AbortSignal;
 };
 
@@ -107,7 +107,7 @@ export interface OAuthProviderInterface {
   /** Refresh expired credentials and return updated credentials to persist. */
   refreshToken(
     credentials: OAuthCredentials,
-    context?: OAuthRefreshContext,
+    context?: ProviderOAuthRefreshContext,
   ): Promise<OAuthCredentials>;
 
   /** Bind process-stable provider runtime state before entering refresh locks. */

@@ -264,7 +264,7 @@ describe("Plugin SDK API baseline", () => {
       "login(callbacks: OAuthLoginCallbacks): Promise<OAuthCredentials>;",
     );
     expect(findDeclaration("OAuthProviderInterface")).toContain(
-      "refreshToken(credentials: OAuthCredentials, context?: OAuthRefreshContext): Promise<OAuthCredentials>;",
+      "refreshToken(credentials: OAuthCredentials, context?: ProviderOAuthRefreshContext): Promise<OAuthCredentials>;",
     );
     expect(findDeclaration("OAuthProviderInterface")).toContain(
       'prepareRefreshToken?(): OAuthProviderInterface["refreshToken"];',

@@ -151,7 +151,7 @@ function isTimeoutTransportErrorMessage(raw: string, status?: number): boolean {
   return false;
 }
 function isOAuthRefreshTimeoutMessage(raw: string): boolean {
-  return /\boauth refresh call\b.*\bexceeded hard timeout\b/i.test(raw);
+  return /\boauth refresh call\b.*\bexceeded caller deadline\b/i.test(raw);
 }
 function isOAuthRefreshContentionMessage(raw: string): boolean {
   return (

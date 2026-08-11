@@ -10,7 +10,7 @@ import type { ProviderUsageSnapshot } from "../infra/provider-usage.types.js";
 import type {
   OAuthCredentials as SessionOAuthCredentials,
   OAuthLoginCallbacks,
-  OAuthRefreshContext,
+  ProviderOAuthRefreshContext,
 } from "../plugin-sdk/provider-oauth-runtime.js";
 import type { PluginTextTransforms } from "./cli-backend.types.js";
 import type {
@@ -568,15 +568,12 @@ export type ProviderPlugin = {
    * another core-specific migration branch.
    */
   oauthProfileIdRepairs?: ProviderOAuthProfileIdRepair[];
-  /**
-   * Provider-owned OAuth refresh.
-   *
-   * OpenClaw calls this before falling back to the shared `shared model runtime` OAuth
-   * refreshers. Use it when the provider has a custom refresh endpoint, or when
-   * the provider needs custom refresh-failure behavior that should stay out of
-   * core auth-profile code.
-   */
-  refreshOAuth?: (cred: OAuthCredential, context?: OAuthRefreshContext) => Promise<OAuthCredential>;
+  /** Provider-owned OAuth refresh, called before shared model runtime fallback.
+   * Use for custom endpoints or provider-owned failure behavior. */
+  refreshOAuth?: (
+    cred: OAuthCredential,
+    context?: ProviderOAuthRefreshContext,
+  ) => Promise<OAuthCredential>;
   /**
    * Provider-owned auth-doctor hint.
    *
