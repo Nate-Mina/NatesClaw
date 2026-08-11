@@ -120,11 +120,22 @@ export function readTranscriptTail(
   const entries = openTranscriptStore(opts.env)
     .latest({ limit: readLimit })
     .toReversed()
-    .map((entry) => ({
-      ...entry.value,
-      sessionId: readTranscriptSessionId(entry.key),
-      incarnationId: readTranscriptIncarnationId(entry.key),
-    }));
+    .map((entry): SystemAgentTranscriptEntry => {
+      const turn: SystemAgentTranscriptEntry = {
+        role: entry.value.role,
+        text: entry.value.text,
+        at: entry.value.at,
+      };
+      const sessionId = readTranscriptSessionId(entry.key);
+      const incarnationId = readTranscriptIncarnationId(entry.key);
+      if (sessionId) {
+        turn.sessionId = sessionId;
+      }
+      if (incarnationId) {
+        turn.incarnationId = incarnationId;
+      }
+      return turn;
+    });
   // New reset markers fence only their owning session. Legacy unattributed markers
   // remain global so upgraded installs preserve the old machine-wide boundary.
   const resetIndex = opts.afterLastReset

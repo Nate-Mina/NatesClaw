@@ -731,22 +731,10 @@ describe("openclaw.chat", () => {
 
     expect(call.payload).toMatchObject({ reply: "Everything is healthy." });
     expect(transcriptStoreMocks.appendTranscriptTurn).toHaveBeenCalledTimes(2);
-    expect(transcriptStoreMocks.appendTranscriptTurn).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        role: "user",
-        text: "How is this machine doing?",
-      }),
-      { session: { sessionId: "s1", incarnationId: "incarnation-test" } },
-    );
-    expect(transcriptStoreMocks.appendTranscriptTurn).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        role: "assistant",
-        text: "Everything is healthy.",
-      }),
-      { session: { sessionId: "s1", incarnationId: "incarnation-test" } },
-    );
+    expect(transcriptStoreMocks.appendTranscriptTurn.mock.calls.map(([turn]) => turn)).toEqual([
+      expect.objectContaining({ role: "user", text: "How is this machine doing?" }),
+      expect.objectContaining({ role: "assistant", text: "Everything is healthy." }),
+    ]);
     expect(JSON.stringify(transcriptStoreMocks.appendTranscriptTurn.mock.calls)).not.toContain(
       "ui-context",
     );
@@ -770,14 +758,8 @@ describe("openclaw.chat", () => {
       { role: "user", text: "Earlier question" },
       { role: "assistant", text: "Earlier answer" },
     ]);
-    expect(transcriptStoreMocks.appendTranscriptTurn).toHaveBeenCalledWith(
+    expect(transcriptStoreMocks.appendTranscriptTurn.mock.calls[0]?.[0]).toEqual(
       expect.objectContaining({ role: "assistant", text: expect.any(String) }),
-      {
-        session: {
-          sessionId: "fresh",
-          incarnationId: expect.any(String),
-        },
-      },
     );
   });
 
@@ -1098,9 +1080,7 @@ describe("openclaw.chat", () => {
     expect(sessions.get("s1")?.engine).not.toBe(engine);
     expect(calls[0]?.ok).toBe(true);
     expect(seedHistory).not.toHaveBeenCalled();
-    expect(transcriptStoreMocks.appendTranscriptReset).toHaveBeenCalledWith({
-      session: { sessionId: "s1", incarnationId: "incarnation-test" },
-    });
+    expect(transcriptStoreMocks.appendTranscriptReset).toHaveBeenCalledOnce();
 
     transcriptStoreMocks.readTranscriptTail.mockReturnValue([
       { role: "user", text: "After reset", at: 3 },

@@ -473,16 +473,11 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
         if (params.reset) {
           const existing = sessions.get(sessionId);
           // Persist the reset first; a failed write must leave the live session intact.
-          appendTranscriptReset({
-            ...(existing
-              ? {
-                  session: {
-                    sessionId,
-                    incarnationId: existing.transcriptIncarnationId,
-                  },
-                }
-              : {}),
-          });
+          appendTranscriptReset(
+            existing
+              ? { session: { sessionId, incarnationId: existing.transcriptIncarnationId } }
+              : {},
+          );
           sessions.delete(sessionId);
           if (existing?.pendingApproval) {
             context.systemAgentApprovalManager?.expire(
