@@ -145,6 +145,9 @@ describe("CI changed Node test plan", () => {
     expect(
       hasSqliteSessionLifecycleAffectingChange(["src/gateway/server-methods/sessions.ts"]),
     ).toBe(true);
+    expect(
+      hasSqliteSessionLifecycleAffectingChange(["src/sessions/session-lifecycle-admission.ts"]),
+    ).toBe(true);
     expect(hasSqliteSessionLifecycleAffectingChange(["src/config/sessions.ts"])).toBe(true);
     expect(
       hasSqliteSessionLifecycleAffectingChange([
