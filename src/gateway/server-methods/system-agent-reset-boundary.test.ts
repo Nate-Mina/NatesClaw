@@ -342,6 +342,41 @@ describe("openclaw.chat reset boundary", () => {
     });
   });
 
+  it("does not truncate a live session when the reset target is missing", async () => {
+    await withTranscriptState("openclaw-missing-session-reset-isolation-", async () => {
+      const liveSession = { sessionId: "s2", incarnationId: "incarnation-s2" };
+      appendTranscriptTurn(
+        { role: "user", text: "live session question", at: 1 },
+        { session: liveSession },
+      );
+      const sessions = new Map<string, SystemAgentChatSession>([
+        [
+          liveSession.sessionId,
+          {
+            engine: { dispose: vi.fn(async () => undefined) },
+            welcome: "welcome text",
+            lastUsedAt: 1,
+            ownerKey: "device:device-test",
+            transcriptIncarnationId: liveSession.incarnationId,
+          } as unknown as SystemAgentChatSession,
+        ],
+      ]);
+      inferenceFallbackMocks.verifySystemAgentInferenceWithFallback.mockResolvedValueOnce({
+        ok: false,
+        status: "unavailable",
+        error: "no configured model",
+      });
+
+      await resetSession({ sessions });
+
+      expect(readTranscriptTail(10, { afterLastReset: true, session: liveSession })).toEqual([
+        { role: "user", text: "live session question", at: 1 },
+      ]);
+      expect(sessions.has("s1")).toBe(false);
+      expect(sessions.has("s2")).toBe(true);
+    });
+  });
+
   // The reset discards the live session before initialization runs, so the
   // durable boundary has to survive a failed replacement. Otherwise the next
   // ordinary session seeds from the pre-reset transcript and undoes the reset.
