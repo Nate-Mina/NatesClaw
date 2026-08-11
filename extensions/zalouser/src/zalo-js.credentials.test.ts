@@ -35,6 +35,7 @@ import {
   type StoredZaloCredentials,
 } from "./session-state.js";
 import {
+  cancelZaloQrLogin,
   checkZaloAuthenticated,
   listZaloFriends,
   sendZaloLink,
@@ -185,6 +186,66 @@ describe("zalouser credential persistence", () => {
         expect(stored.userAgent).toBe("api-user-agent");
         expect(stored.language).toBe("vi");
         expect(stored.cookie).toEqual(refreshedCookie);
+      });
+    } finally {
+      await rm(stateDir, { recursive: true, force: true });
+    }
+  });
+
+  it("does not persist credentials after the profile-owned QR login is cancelled", async () => {
+    const stateDir = await mkdtemp(path.join(os.tmpdir(), "openclaw-zalouser-credentials-"));
+    const profile = "qr-cancelled";
+    const abort = vi.fn();
+    let resolveLogin!: (api: API) => void;
+    const login = new Promise<API>((resolve) => {
+      resolveLogin = resolve;
+    });
+    let callback: ((event: LoginQRCallbackEvent) => unknown) | undefined;
+    const api = createMockApi({
+      imei: "cancelled-imei",
+      userAgent: "cancelled-agent",
+      cookies: [{ key: "zpsid", value: "cancelled", domain: "chat.zalo.me" }],
+    });
+    createZaloMock.mockResolvedValueOnce({
+      loginQR: async (
+        _options: unknown,
+        eventCallback?: (event: LoginQRCallbackEvent) => unknown,
+      ) => {
+        callback = eventCallback;
+        callback?.({
+          type: LoginQRCallbackEventType.QRCodeGenerated,
+          data: { code: "qr-code", image: `data:image/png;base64,${PNG_1X1}` },
+          actions: {
+            saveToFile: vi.fn(async () => undefined),
+            retry: vi.fn(),
+            abort,
+          },
+        });
+        return await login;
+      },
+    });
+
+    try {
+      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+        const started = await startZaloQrLogin({ profile, timeoutMs: 1000 });
+        expect(started.qrDataUrl).toBe(`data:image/png;base64,${PNG_1X1}`);
+
+        cancelZaloQrLogin(profile);
+        callback?.({
+          type: LoginQRCallbackEventType.GotLoginInfo,
+          data: {
+            cookie: [{ key: "zpsid", value: "late", domain: "chat.zalo.me" }],
+            imei: "late-imei",
+            userAgent: "late-agent",
+          },
+          actions: null,
+        });
+        resolveLogin(api);
+        await Promise.resolve();
+        await Promise.resolve();
+
+        expect(abort).toHaveBeenCalledOnce();
+        expect(loadStoredZaloCredentials(profile)).toBeNull();
       });
     } finally {
       await rm(stateDir, { recursive: true, force: true });

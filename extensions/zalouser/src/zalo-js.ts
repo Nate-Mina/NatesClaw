@@ -757,6 +757,11 @@ function resetQrLogin(profileInput?: string | null): void {
   activeQrLogins.delete(profile);
 }
 
+/** Stop one profile-owned QR attempt without clearing an existing authenticated session. */
+export function cancelZaloQrLogin(profileInput?: string | null): void {
+  resetQrLogin(profileInput);
+}
+
 async function fetchGroupsByIds(api: API, ids: string[]): Promise<Map<string, GroupInfo>> {
   const result = new Map<string, GroupInfo>();
   for (let index = 0; index < ids.length; index += GROUP_INFO_CHUNK_SIZE) {

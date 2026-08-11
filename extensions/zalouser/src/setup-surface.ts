@@ -24,6 +24,7 @@ import {
 } from "./accounts.js";
 import { writeQrDataUrlToTempFile } from "./qr-temp-file.js";
 import {
+  cancelZaloQrLogin,
   logoutZaloProfile,
   resolveZaloAllowFromEntries,
   resolveZaloGroupsByEntries,
@@ -315,6 +316,7 @@ async function runZalouserQrLogin(params: {
     initialValue: true,
   });
   if (!scanned) {
+    cancelZaloQrLogin(params.profile);
     return;
   }
 

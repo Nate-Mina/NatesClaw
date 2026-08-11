@@ -11,6 +11,7 @@ import "./zalo-js.test-mocks.js";
 import { zalouserSetupWizard } from "./setup-surface.js";
 import { zalouserSetupPlugin } from "./setup-test-helpers.js";
 import {
+  cancelZaloQrLoginMock,
   checkZaloAuthenticatedMock,
   logoutZaloProfileMock,
   resolveZaloAllowFromEntriesMock,
@@ -20,6 +21,8 @@ import {
 } from "./zalo-js.test-mocks.js";
 
 const zalouserConfigure = createPluginSetupWizardConfigure(zalouserSetupPlugin);
+const PNG_1X1 =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
 
 async function runSetup(params: {
   cfg?: OpenClawConfig;
@@ -236,6 +239,30 @@ describe("zalouser setup wizard", () => {
       "QR Login",
     );
     expect(confirmations).not.toContain("Did you scan and approve the QR on your phone?");
+    expect(waitForZaloQrLoginMock).not.toHaveBeenCalled();
+  });
+
+  it("cancels the profile-owned QR login when confirmation is declined", async () => {
+    checkZaloAuthenticatedMock.mockResolvedValueOnce(false);
+    startZaloQrLoginMock.mockResolvedValueOnce({
+      message: "Scan this QR with the Zalo app.",
+      qrDataUrl: `data:image/png;base64,${PNG_1X1}`,
+    });
+    cancelZaloQrLoginMock.mockClear();
+    waitForZaloQrLoginMock.mockClear();
+    const prompter = createTestWizardPrompter({
+      confirm: vi.fn(async ({ message }: { message: string }) => {
+        if (message === "Login via QR code now?") {
+          return true;
+        }
+        return false;
+      }),
+    });
+
+    await runSetup({ prompter });
+
+    expect(cancelZaloQrLoginMock).toHaveBeenCalledOnce();
+    expect(cancelZaloQrLoginMock).toHaveBeenCalledWith("default");
     expect(waitForZaloQrLoginMock).not.toHaveBeenCalled();
   });
 
