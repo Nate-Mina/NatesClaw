@@ -132,4 +132,32 @@ describe("Telegram location message hooks", () => {
     );
     expect(hookRunner.runInboundClaim).not.toHaveBeenCalled();
   });
+
+  it("emits the terminal edit when live-location sharing stops", async () => {
+    const msg = {
+      chat: { id: 1234, type: "private" },
+      message_id: 456,
+      date: 1_786_094_460,
+      edit_date: 1_786_094_580,
+      from: { id: 789, is_bot: false, first_name: "Pat" },
+      location: { latitude: 43.8376, longitude: 18.4534 },
+    } as Message;
+
+    await emitTelegramLiveLocationMessageHook({
+      accountId: "main",
+      msg,
+      updateId: 9003,
+      updateKind: "edited_message",
+      isForum: false,
+    });
+
+    expect(hookRunner.runMessageReceived).toHaveBeenCalledWith(
+      expect.objectContaining({
+        location: expect.objectContaining({ isLive: false }),
+        providerUpdate: expect.objectContaining({ id: "9003", kind: "edited_message" }),
+      }),
+      expect.any(Object),
+    );
+    expect(hookRunner.runInboundClaim).not.toHaveBeenCalled();
+  });
 });

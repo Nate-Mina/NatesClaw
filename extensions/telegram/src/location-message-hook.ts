@@ -82,7 +82,7 @@ export async function emitTelegramLiveLocationMessageHook(
 ) {
   const pair = buildTelegramLocationMessageHook(params);
   const runner = getGlobalHookRunner();
-  if (!pair?.event.location?.isLive || !runner?.hasHooks("message_received", pair.context)) {
+  if (!pair || !runner?.hasHooks("message_received", pair.context)) {
     return;
   }
   await runner.runMessageReceived(pair.event, pair.context);
