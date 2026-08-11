@@ -304,6 +304,255 @@ describe("executeFollowupTurn", () => {
     expect(onDurableToolResult).not.toHaveBeenCalled();
   });
 
+  it("keeps queued fast auto progress hidden at verbosity off", async () => {
+    const onChannelToolResult = vi.fn(async () => {});
+    const onDurableToolResult = vi.fn(async () => {});
+    const turn = createTurn({
+      session: {
+        kind: "session",
+        key: "main",
+        current: () => ({ sessionId: "session", updatedAt: 1, verboseLevel: "off" }),
+        publish: () => undefined,
+        adopt: () => undefined,
+      },
+    });
+    state.execute.mockImplementation(async (params: AgentTurnParams) => {
+      await params.opts?.onToolResult?.({
+        text: "💨Fast: auto-on",
+        channelData: { openclawProgressKind: "fast-mode-auto" },
+      });
+      return { runId: "run-1", outcome: { kind: "rejected", payload: { text: "done" } } };
+    });
+
+    const result = await executeFollowupTurn({
+      turn,
+      defaults: {
+        typing: createTypingController(),
+        typingMode: "never",
+        defaultModel: "claude",
+        opts: { onToolResult: onChannelToolResult },
+      },
+      onToolResult: onDurableToolResult,
+      onCompactionNoticePayload: vi.fn(async () => {}),
+    });
+    await result.progress.drain();
+
+    expect(onChannelToolResult).not.toHaveBeenCalled();
+    expect(onDurableToolResult).not.toHaveBeenCalled();
+  });
+
+  it("routes queued visible fast auto progress through the channel once", async () => {
+    const onChannelToolResult = vi.fn(() => false);
+    const onDurableToolResult = vi.fn(async () => {});
+    const payload = {
+      text: "💨Fast: auto-off(75s>=60s)",
+      channelData: { openclawProgressKind: "fast-mode-auto" },
+    } satisfies ReplyPayload;
+    state.execute.mockImplementation(async (params: AgentTurnParams) => {
+      await params.opts?.onToolResult?.(payload);
+      return { runId: "run-1", outcome: { kind: "rejected", payload: { text: "done" } } };
+    });
+
+    const result = await executeFollowupTurn({
+      turn: createTurn(),
+      defaults: {
+        typing: createTypingController(),
+        typingMode: "never",
+        defaultModel: "claude",
+        opts: { onToolResult: onChannelToolResult },
+      },
+      onToolResult: onDurableToolResult,
+      onCompactionNoticePayload: vi.fn(async () => {}),
+    });
+    await result.progress.drain();
+
+    expect(onChannelToolResult).toHaveBeenCalledOnce();
+    expect(onChannelToolResult).toHaveBeenCalledWith(payload);
+    expect(onDurableToolResult).not.toHaveBeenCalled();
+  });
+
+  it("requires source-suppression opt-in before a queued fast auto callback owns delivery", async () => {
+    const onChannelToolResult = vi.fn(() => false);
+    const onDurableToolResult = vi.fn(async () => {});
+    const turn = createTurn();
+    turn.queued.run.sourceReplyDeliveryMode = "message_tool_only";
+    const payload = {
+      text: "💨Fast: auto-off(75s>=60s)",
+      channelData: { openclawProgressKind: "fast-mode-auto" },
+    } satisfies ReplyPayload;
+    state.execute.mockImplementation(async (params: AgentTurnParams) => {
+      await params.opts?.onToolResult?.(payload);
+      return { runId: "run-1", outcome: { kind: "rejected", payload: { text: "done" } } };
+    });
+
+    const result = await executeFollowupTurn({
+      turn,
+      defaults: {
+        typing: createTypingController(),
+        typingMode: "never",
+        defaultModel: "claude",
+        opts: {
+          suppressDefaultToolProgressMessages: true,
+          onToolResult: onChannelToolResult,
+        },
+      },
+      onToolResult: onDurableToolResult,
+      onCompactionNoticePayload: vi.fn(async () => {}),
+    });
+    await result.progress.drain();
+
+    expect(onChannelToolResult).not.toHaveBeenCalled();
+    expect(onDurableToolResult).toHaveBeenCalledOnce();
+    expect(onDurableToolResult).toHaveBeenCalledWith(payload, { runId: "run-1" });
+  });
+
+  it("lets an opted-in queued fast auto callback own source-suppressed delivery", async () => {
+    const onChannelToolResult = vi.fn(() => false);
+    const onDurableToolResult = vi.fn(async () => {});
+    const turn = createTurn();
+    turn.queued.run.sourceReplyDeliveryMode = "message_tool_only";
+    const payload = {
+      text: "💨Fast: auto-off(75s>=60s)",
+      channelData: { openclawProgressKind: "fast-mode-auto" },
+    } satisfies ReplyPayload;
+    state.execute.mockImplementation(async (params: AgentTurnParams) => {
+      await params.opts?.onToolResult?.(payload);
+      return { runId: "run-1", outcome: { kind: "rejected", payload: { text: "done" } } };
+    });
+
+    const result = await executeFollowupTurn({
+      turn,
+      defaults: {
+        typing: createTypingController(),
+        typingMode: "never",
+        defaultModel: "claude",
+        opts: {
+          allowProgressCallbacksWhenSourceDeliverySuppressed: true,
+          onToolResult: onChannelToolResult,
+        },
+      },
+      onToolResult: onDurableToolResult,
+      onCompactionNoticePayload: vi.fn(async () => {}),
+    });
+    await result.progress.drain();
+
+    expect(onChannelToolResult).toHaveBeenCalledOnce();
+    expect(onChannelToolResult).toHaveBeenCalledWith(payload);
+    expect(onDurableToolResult).not.toHaveBeenCalled();
+  });
+
+  it("falls back once for queued forced fast auto progress without a channel callback", async () => {
+    const onDurableToolResult = vi.fn(async () => {});
+    const payload = {
+      text: "💨Fast: auto-on",
+      channelData: { openclawProgressKind: "fast-mode-auto" },
+    } satisfies ReplyPayload;
+    state.execute.mockImplementation(async (params: AgentTurnParams) => {
+      await params.opts?.onToolResult?.(payload);
+      return { runId: "run-1", outcome: { kind: "rejected", payload: { text: "done" } } };
+    });
+
+    const result = await executeFollowupTurn({
+      turn: createTurn(),
+      defaults: {
+        typing: createTypingController(),
+        typingMode: "never",
+        defaultModel: "claude",
+        opts: { forceToolResultProgress: true },
+      },
+      onToolResult: onDurableToolResult,
+      onCompactionNoticePayload: vi.fn(async () => {}),
+    });
+    await result.progress.drain();
+
+    expect(onDurableToolResult).toHaveBeenCalledOnce();
+    expect(onDurableToolResult).toHaveBeenCalledWith(payload, { runId: "run-1" });
+  });
+
+  it("routes queued hidden fast auto progress only to lifecycle callbacks", async () => {
+    const onChannelToolResult = vi.fn(() => false);
+    const onDurableToolResult = vi.fn(async () => {});
+    const turn = createTurn({
+      session: {
+        kind: "session",
+        key: "main",
+        current: () => ({ sessionId: "session", updatedAt: 1, verboseLevel: "off" }),
+        publish: () => undefined,
+        adopt: () => undefined,
+      },
+    });
+    const payload = {
+      text: "💨Fast: auto-on",
+      channelData: { openclawProgressKind: "fast-mode-auto" },
+    } satisfies ReplyPayload;
+    state.execute.mockImplementation(async (params: AgentTurnParams) => {
+      await params.opts?.onToolResult?.(payload);
+      return { runId: "run-1", outcome: { kind: "rejected", payload: { text: "done" } } };
+    });
+
+    const result = await executeFollowupTurn({
+      turn,
+      defaults: {
+        typing: createTypingController(),
+        typingMode: "never",
+        defaultModel: "claude",
+        opts: {
+          allowToolLifecycleWhenProgressHidden: true,
+          onToolResult: onChannelToolResult,
+        },
+      },
+      onToolResult: onDurableToolResult,
+      onCompactionNoticePayload: vi.fn(async () => {}),
+    });
+    await result.progress.drain();
+
+    expect(onChannelToolResult).toHaveBeenCalledOnce();
+    expect(onChannelToolResult).toHaveBeenCalledWith(payload);
+    expect(onDurableToolResult).not.toHaveBeenCalled();
+  });
+
+  it("suppresses queued fast auto callbacks when tool progress is disabled", async () => {
+    const onChannelToolResult = vi.fn(() => false);
+    const onDurableToolResult = vi.fn(async () => {});
+    const turn = createTurn({
+      session: {
+        kind: "session",
+        key: "main",
+        current: () => ({ sessionId: "session", updatedAt: 1, verboseLevel: "off" }),
+        publish: () => undefined,
+        adopt: () => undefined,
+      },
+    });
+    state.execute.mockImplementation(async (params: AgentTurnParams) => {
+      await params.opts?.onToolResult?.({
+        text: "💨Fast: auto-on",
+        channelData: { openclawProgressKind: "fast-mode-auto" },
+      });
+      return { runId: "run-1", outcome: { kind: "rejected", payload: { text: "done" } } };
+    });
+
+    const result = await executeFollowupTurn({
+      turn,
+      defaults: {
+        typing: createTypingController(),
+        typingMode: "never",
+        defaultModel: "claude",
+        opts: {
+          forceToolResultProgress: true,
+          suppressToolProgressMessages: true,
+          allowToolLifecycleWhenProgressHidden: true,
+          onToolResult: onChannelToolResult,
+        },
+      },
+      onToolResult: onDurableToolResult,
+      onCompactionNoticePayload: vi.fn(async () => {}),
+    });
+    await result.progress.drain();
+
+    expect(onChannelToolResult).not.toHaveBeenCalled();
+    expect(onDurableToolResult).not.toHaveBeenCalled();
+  });
+
   it.each([
     {
       label: "media",
