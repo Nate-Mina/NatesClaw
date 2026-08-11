@@ -99,7 +99,7 @@ type RealtimeVoiceOutputAudioEvents = {
   turn: TalkEnsureTurnResult;
 };
 
-type RealtimeVoiceSessionHarnessBase<TForcedConsultContext> = {
+export type RealtimeVoiceSessionHarness<TForcedConsultContext = unknown> = {
   readonly forcedConsults: RealtimeVoiceForcedConsultCoordinator<TForcedConsultContext>;
   readonly outputActivity: RealtimeVoiceOutputActivityTracker;
   readonly talk: TalkSessionController;
@@ -108,6 +108,9 @@ type RealtimeVoiceSessionHarnessBase<TForcedConsultContext> = {
   close(): void;
   createBridge(params: RealtimeVoiceBridgeSessionParams): RealtimeVoiceBridgeSession;
   emit<TPayload>(input: TalkEventInput<TPayload>): TalkEvent<TPayload>;
+  ensureTurn(): string;
+  endTurn(reason?: string): void;
+  finishOutputAudio(reason: string): void;
   flushOutput(flush: () => void): void;
   getHealth(params: {
     providerConnected: boolean;
@@ -116,15 +119,9 @@ type RealtimeVoiceSessionHarnessBase<TForcedConsultContext> = {
   handleBargeIn(options: RealtimeVoiceBargeInOptions, flushOutput: () => void): void;
   isLikelyAssistantEchoTranscript(text: string): boolean;
   isOutputPlaybackWindowActive(): boolean;
-  recordTranscript(role: RealtimeVoiceRole, text: string): RealtimeVoiceTranscriptEntry;
-};
-
-type RealtimeVoiceSessionHarnessMethods = {
-  ensureTurn(): string;
-  endTurn(reason?: string): void;
-  finishOutputAudio(reason: string): void;
   recordInputAudio(audio: Buffer): boolean;
   recordOutputAudio(audio: Buffer, activity?: RealtimeVoiceOutputActivityDelta): void;
+  recordTranscript(role: RealtimeVoiceRole, text: string): RealtimeVoiceTranscriptEntry;
 };
 
 type RealtimeVoiceEventCapturingSessionHarnessMethods = {
@@ -141,27 +138,28 @@ type RealtimeVoiceEventCapturingSessionHarnessMethods = {
   ): RealtimeVoiceOutputAudioEvents;
 };
 
-export type RealtimeVoiceSessionHarness<TForcedConsultContext = unknown> =
-  RealtimeVoiceSessionHarnessBase<TForcedConsultContext> & RealtimeVoiceSessionHarnessMethods;
+export type RealtimeVoiceEventCapturingSessionHarness<TForcedConsultContext = unknown> = Omit<
+  RealtimeVoiceSessionHarness<TForcedConsultContext>,
+  "ensureTurn" | "endTurn" | "finishOutputAudio" | "recordInputAudio" | "recordOutputAudio"
+> &
+  RealtimeVoiceEventCapturingSessionHarnessMethods;
 
-export type RealtimeVoiceEventCapturingSessionHarness<TForcedConsultContext = unknown> =
-  RealtimeVoiceSessionHarnessBase<TForcedConsultContext> &
-    RealtimeVoiceEventCapturingSessionHarnessMethods;
-
-type RealtimeVoiceSessionHarnessImplementation<TForcedConsultContext> =
-  RealtimeVoiceSessionHarnessBase<TForcedConsultContext> & {
-    ensureTurn(): string | TalkEnsureTurnResult;
-    endTurn(reason?: string): TalkTurnResult | undefined;
-    finishOutputAudio(
-      reason: string,
-      details?: RealtimeVoiceOutputAudioDoneDetails,
-    ): TalkEvent | undefined;
-    recordInputAudio(audio: Buffer): boolean | RealtimeVoiceInputAudioEvents | undefined;
-    recordOutputAudio(
-      audio: Buffer,
-      activity?: RealtimeVoiceOutputActivityDelta,
-    ): RealtimeVoiceOutputAudioEvents | undefined;
-  };
+type RealtimeVoiceSessionHarnessImplementation<TForcedConsultContext> = Omit<
+  RealtimeVoiceSessionHarness<TForcedConsultContext>,
+  "ensureTurn" | "endTurn" | "finishOutputAudio" | "recordInputAudio" | "recordOutputAudio"
+> & {
+  ensureTurn(): string | TalkEnsureTurnResult;
+  endTurn(reason?: string): TalkTurnResult | undefined;
+  finishOutputAudio(
+    reason: string,
+    details?: RealtimeVoiceOutputAudioDoneDetails,
+  ): TalkEvent | undefined;
+  recordInputAudio(audio: Buffer): boolean | RealtimeVoiceInputAudioEvents | undefined;
+  recordOutputAudio(
+    audio: Buffer,
+    activity?: RealtimeVoiceOutputActivityDelta,
+  ): RealtimeVoiceOutputAudioEvents | undefined;
+};
 
 type RealtimeVoiceSessionHarnessParams = {
   talk: TalkSessionControllerParams;
@@ -181,9 +179,16 @@ type RealtimeVoiceEventCapturingSessionHarnessParams = Omit<
   talkPayloads: RealtimeVoiceEventCapturingTalkPayloads;
 };
 
-export function createRealtimeVoiceSessionHarness<TForcedConsultContext = unknown>(
-  params: RealtimeVoiceSessionHarnessParams,
-): RealtimeVoiceSessionHarness<TForcedConsultContext> {
+export function createRealtimeVoiceSessionHarness<TForcedConsultContext = unknown>(params: {
+  talk: TalkSessionControllerParams;
+  talkPayloads: RealtimeVoiceSessionHarnessTalkPayloads;
+  onTalkEvent?: (event: TalkEvent) => void;
+  talkback?: Omit<RealtimeVoiceAgentTalkbackQueueParams, "isStopped">;
+  forcedConsults?: RealtimeVoiceForcedConsultCoordinatorOptions;
+  echoSuppression?: RealtimeVoiceSessionHarnessEchoSuppression;
+  transcriptLookbackMs?: number;
+  captureBridgeEvents?: boolean;
+}): RealtimeVoiceSessionHarness<TForcedConsultContext> {
   return createRealtimeVoiceSessionHarnessImplementation(
     params,
     false,
