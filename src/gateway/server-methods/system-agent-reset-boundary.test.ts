@@ -298,7 +298,14 @@ describe("openclaw.chat reset boundary", () => {
         {
           ok: true,
           payload: {
-            turns: [{ role: "user", text: "current owner request", at: 2 }],
+            turns: [
+              {
+                role: "user",
+                text: "current owner request",
+                at: 2,
+                sessionId: "reused-session",
+              },
+            ],
           },
         },
       ]);
@@ -335,7 +342,7 @@ describe("openclaw.chat reset boundary", () => {
 
       expect(readTranscriptTail(10, { afterLastReset: true, session: sessionOne })).toEqual([]);
       expect(readTranscriptTail(10, { afterLastReset: true, session: sessionTwo })).toEqual([
-        { role: "user", text: "session two question", at: 2 },
+        { role: "user", text: "session two question", at: 2, sessionId: "s2" },
       ]);
       expect(sessions.has("s1")).toBe(false);
       expect(sessions.has("s2")).toBe(true);

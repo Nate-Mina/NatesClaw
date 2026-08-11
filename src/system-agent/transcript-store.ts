@@ -1,6 +1,10 @@
 // Durable rolling transcript for the machine-wide OpenClaw conversation.
 import { randomUUID } from "node:crypto";
-import type { SystemAgentChatHistoryWizardAction } from "../../packages/gateway-protocol/src/index.js";
+import { Value } from "typebox/value";
+import {
+  SystemAgentChatHistoryWizardActionSchema,
+  type SystemAgentChatHistoryWizardAction,
+} from "../../packages/gateway-protocol/src/schema/openclaw.js";
 import { createSqliteAuditRecordStore } from "../infra/sqlite-audit-record-store.js";
 
 type SystemAgentTranscriptEntry = {
@@ -14,8 +18,12 @@ type SystemAgentTranscriptEntry = {
 
 type StoredSystemAgentTranscriptEntry = Omit<
   SystemAgentTranscriptEntry,
-  "sessionId" | "incarnationId"
+  "sessionId" | "incarnationId" | "wizardAction"
 >;
+
+type AppendSystemAgentTranscriptEntry = StoredSystemAgentTranscriptEntry & {
+  wizardAction?: SystemAgentChatHistoryWizardAction;
+};
 
 type SystemAgentTranscriptSession = {
   sessionId: string;
@@ -34,6 +42,7 @@ const SYSTEM_AGENT_TRANSCRIPT_SCOPE = "system-agent-transcript";
 const SYSTEM_AGENT_TRANSCRIPT_MAX_ENTRIES = 1_000;
 const SYSTEM_AGENT_TRANSCRIPT_SESSION_KEY_PREFIX = "session:";
 const SYSTEM_AGENT_TRANSCRIPT_INCARNATION_KEY_MARKER = ":incarnation:";
+const SYSTEM_AGENT_TRANSCRIPT_ACTION_KEY_MARKER = ":action:";
 
 function openTranscriptStore(env?: NodeJS.ProcessEnv) {
   return createSqliteAuditRecordStore<StoredSystemAgentTranscriptEntry>({
@@ -44,12 +53,16 @@ function openTranscriptStore(env?: NodeJS.ProcessEnv) {
 }
 
 function createTranscriptEntryKey(
-  turn: StoredSystemAgentTranscriptEntry,
+  turn: AppendSystemAgentTranscriptEntry,
   session?: SystemAgentTranscriptSession,
 ): string {
   const suffix = `${turn.at}:${randomUUID()}`;
   return session
-    ? `${SYSTEM_AGENT_TRANSCRIPT_SESSION_KEY_PREFIX}${Buffer.from(session.sessionId, "utf8").toString("base64url")}${SYSTEM_AGENT_TRANSCRIPT_INCARNATION_KEY_MARKER}${Buffer.from(session.incarnationId, "utf8").toString("base64url")}:${suffix}`
+    ? `${SYSTEM_AGENT_TRANSCRIPT_SESSION_KEY_PREFIX}${Buffer.from(session.sessionId, "utf8").toString("base64url")}${SYSTEM_AGENT_TRANSCRIPT_INCARNATION_KEY_MARKER}${Buffer.from(session.incarnationId, "utf8").toString("base64url")}${
+        turn.wizardAction
+          ? `${SYSTEM_AGENT_TRANSCRIPT_ACTION_KEY_MARKER}${Buffer.from(JSON.stringify(turn.wizardAction), "utf8").toString("base64url")}`
+          : ""
+      }:${suffix}`
     : suffix;
 }
 
@@ -84,16 +97,36 @@ function readTranscriptIncarnationId(key: string): string | undefined {
     : undefined;
 }
 
+function readTranscriptWizardAction(key: string): SystemAgentChatHistoryWizardAction | undefined {
+  const markerIndex = key.indexOf(SYSTEM_AGENT_TRANSCRIPT_ACTION_KEY_MARKER);
+  if (markerIndex < 0) {
+    return undefined;
+  }
+  const encoded = key
+    .slice(markerIndex + SYSTEM_AGENT_TRANSCRIPT_ACTION_KEY_MARKER.length)
+    .split(":", 1)[0];
+  if (!encoded) {
+    return undefined;
+  }
+  try {
+    const value: unknown = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
+    return Value.Check(SystemAgentChatHistoryWizardActionSchema, value) ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** Append one already-sanitized engine history turn to the rolling logbook. */
 export function appendTranscriptTurn(
-  turn: StoredSystemAgentTranscriptEntry,
+  turn: AppendSystemAgentTranscriptEntry,
   opts: { env?: NodeJS.ProcessEnv; session?: SystemAgentTranscriptSession } = {},
 ): void {
-  // Keep session attribution in the audit key, not the payload. Released readers
+  const { wizardAction: _wizardAction, ...storedTurn } = turn;
+  // Keep recovery-only metadata in the audit key, not the payload. Released readers
   // return payloads verbatim, so adding fields there would break downgrade responses.
   openTranscriptStore(opts.env).register(
     createTranscriptEntryKey(turn, opts.session),
-    turn,
+    storedTurn,
     turn.at,
   );
 }
@@ -132,11 +165,15 @@ export function readTranscriptTail(
       };
       const sessionId = readTranscriptSessionId(entry.key);
       const incarnationId = readTranscriptIncarnationId(entry.key);
+      const wizardAction = readTranscriptWizardAction(entry.key);
       if (sessionId) {
         turn.sessionId = sessionId;
       }
       if (incarnationId) {
         turn.incarnationId = incarnationId;
+      }
+      if (wizardAction) {
+        turn.wizardAction = wizardAction;
       }
       return turn;
     });
