@@ -92,20 +92,31 @@ describe("openclaw.chat.history wizard recovery", () => {
         ],
       },
       0,
-      { sessionId: "twitch-session", wizardAction, wizardActionAccepted: true },
+      {
+        sessionId: "twitch-session",
+        incarnationId: "twitch-incarnation",
+        wizardAction,
+        wizardActionAccepted: true,
+      },
     );
 
     expect(vi.mocked(appendTranscriptTurn).mock.calls.map(([turn]) => turn)).toEqual([
       expect.objectContaining({
         role: "user",
-        sessionId: "twitch-session",
         wizardAction,
       }),
       expect.objectContaining({
         role: "assistant",
-        sessionId: "twitch-session",
       }),
     ]);
+    for (const [, options] of vi.mocked(appendTranscriptTurn).mock.calls) {
+      expect(options).toEqual({
+        session: {
+          sessionId: "twitch-session",
+          incarnationId: "twitch-incarnation",
+        },
+      });
+    }
     expect(vi.mocked(appendTranscriptTurn).mock.calls[1]?.[0]).not.toHaveProperty("wizardAction");
   });
 
@@ -120,6 +131,7 @@ describe("openclaw.chat.history wizard recovery", () => {
       0,
       {
         sessionId: "validation-session",
+        incarnationId: "validation-incarnation",
         wizardAction: {
           kind: "answer",
           step: { id: "port", type: "text", message: "Port" },

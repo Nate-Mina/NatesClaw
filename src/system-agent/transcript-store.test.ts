@@ -81,12 +81,12 @@ describe("system-agent transcript store", () => {
           { env, session: earlierSession },
         );
         appendTranscriptTurn(
-          { role: "user", text: "current owner request", at: 2, sessionId: "reused-session" },
+          { role: "user", text: "current owner request", at: 2 },
           { env, session: currentSession },
         );
 
         expect(readTranscriptTail(10, { env, session: currentSession })).toEqual([
-          { role: "user", text: "current owner request", at: 2 },
+          { role: "user", text: "current owner request", at: 2, sessionId: "reused-session" },
         ]);
       },
     );
@@ -98,7 +98,7 @@ describe("system-agent transcript store", () => {
       async (stateDir) => {
         const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
         appendTranscriptTurn(
-          { role: "user", text: "scoped question", at: 1, sessionId: "session-one" },
+          { role: "user", text: "scoped question", at: 1 },
           { env, session: SESSION_ONE },
         );
 
@@ -117,7 +117,7 @@ describe("system-agent transcript store", () => {
           at: 1,
         });
         expect(readTranscriptTail(1, { env, session: SESSION_ONE })).toEqual([
-          { role: "user", text: "scoped question", at: 1 },
+          { role: "user", text: "scoped question", at: 1, sessionId: "session-one" },
         ]);
       },
     );
