@@ -5907,7 +5907,8 @@ class ChatController internal constructor(
       if (activity.isWorking) {
         subagentActivityExpiryJobs.remove(taskId)?.cancel()
       } else if (terminal && existing?.isWorking != false) {
-        // Local receipt starts retention; remote endedAt may be old, and duplicate terminal updates must not extend it.
+        // Local receipt starts retention; remote endedAt may be old.
+        // Duplicate terminal updates must not extend that retention window.
         subagentActivityExpiryJobs[taskId] =
           scope.launch {
             delay(SUBAGENT_ACTIVITY_RETENTION_MS)
