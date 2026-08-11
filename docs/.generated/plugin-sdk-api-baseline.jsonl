@@ -21,7 +21,7 @@
 {"contentHash":"e914511f42b05da3103d12b565dbe6317f147663b60845337f6f0f3dec2b6dfb","entrypoint":"approval-runtime","importSpecifier":"openclaw/plugin-sdk/approval-runtime"}
 {"contentHash":"7f9135d4ea9e3f53ed16bc51c0e44525fdd8907e5824309492a489a35761c25d","entrypoint":"archive","importSpecifier":"openclaw/plugin-sdk/archive"}
 {"contentHash":"d87a0eb6bae1b95fa645e77b5b9a81eb6cfdad9c469ae365ccd74b26f750166f","entrypoint":"boolean-param","importSpecifier":"openclaw/plugin-sdk/boolean-param"}
-{"contentHash":"6b498290c150c03999a6ec19921279e97a9d64d1063af09bbe563d3de46fe9aa","entrypoint":"channel-actions","importSpecifier":"openclaw/plugin-sdk/channel-actions"}
+{"contentHash":"cf12697275e1332eceeb8ce6282292ab60f0e29c674d72d0f50d5c5b078627d1","entrypoint":"channel-actions","importSpecifier":"openclaw/plugin-sdk/channel-actions"}
 {"contentHash":"5998386ad8e299f9080382e5a982bb96ab9f35d3849ecb6de730df8c63044a77","entrypoint":"channel-config-helpers","importSpecifier":"openclaw/plugin-sdk/channel-config-helpers"}
 {"contentHash":"222019df4c06aca4e9bbede0fdea4b946f9b024a1524e3837c3c13be6d3d9e6a","entrypoint":"channel-config-primitives","importSpecifier":"openclaw/plugin-sdk/channel-config-primitives"}
 {"contentHash":"645ec473e40a04e4cc627d05c9156f66d835eb67dab32166f745f66eadc98880","entrypoint":"channel-config-schema","importSpecifier":"openclaw/plugin-sdk/channel-config-schema"}

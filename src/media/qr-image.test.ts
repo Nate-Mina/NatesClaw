@@ -29,12 +29,18 @@ vi.mock("qrcode", async (importOriginal) => {
 let renderQrPngBase64: typeof import("./qr-image.ts").renderQrPngBase64;
 let renderQrPngDataUrl: typeof import("./qr-image.ts").renderQrPngDataUrl;
 let renderQrPngDataUrlWithinLimit: typeof import("./qr-image.ts").renderQrPngDataUrlWithinLimit;
+let renderGatewayQrPngDataUrl: typeof import("../plugin-sdk/channel-actions.ts").renderGatewayQrPngDataUrl;
 let writeQrPngTempFile: typeof import("./qr-image.ts").writeQrPngTempFile;
 
 beforeAll(async () => {
   vi.resetModules();
+  const [qrImage, channelActions] = await Promise.all([
+    import("./qr-image.ts"),
+    import("../plugin-sdk/channel-actions.ts"),
+  ]);
   ({ renderQrPngBase64, renderQrPngDataUrl, renderQrPngDataUrlWithinLimit, writeQrPngTempFile } =
-    await import("./qr-image.ts"));
+    qrImage);
+  ({ renderGatewayQrPngDataUrl } = channelActions);
 });
 
 describe("renderQrPngBase64", () => {
@@ -102,6 +108,18 @@ describe("renderQrPngBase64", () => {
     const result = await renderQrPngDataUrlWithinLimit("openclaw", 40);
 
     expect(result.length).toBeLessThanOrEqual(40);
+  });
+
+  it("exposes a public producer that fits the Gateway QR schema limit", async () => {
+    toBuffer
+      .mockResolvedValueOnce(Buffer.alloc(12_300))
+      .mockResolvedValueOnce(Buffer.alloc(12_200));
+
+    const result = await renderGatewayQrPngDataUrl("openclaw");
+
+    expect(result.length).toBeLessThanOrEqual(16_384);
+    expect(toBuffer).toHaveBeenNthCalledWith(1, "openclaw", { margin: 4, scale: 6 });
+    expect(toBuffer).toHaveBeenNthCalledWith(2, "openclaw", { margin: 4, scale: 5 });
   });
 
   it("rejects QR data URLs that exceed the limit at minimum scale", async () => {

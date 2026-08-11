@@ -270,7 +270,8 @@ export function readPluginSdkSurfaceBudgets(env: NodeJS.ProcessEnv = process.env
       // +1: add the account-aware native approval request selector.
       // +3: add canonical coercion exports while retaining the shipped asString compatibility name.
       // +1: canonical PNG QR data URL schema for plugin-owned QR login actions.
-      4867,
+      // +1: bounded Gateway QR producer paired with the public QR schema.
+      4868,
       env,
     ),
     publicFunctionExports: readPluginSdkSurfaceBudgetEnv(
@@ -332,7 +333,8 @@ export function readPluginSdkSurfaceBudgets(env: NodeJS.ProcessEnv = process.env
       // +1: channel-account-bound native approval request selection.
       // +1: add the account-aware native approval request selector.
       // +3: add canonical coercion exports while retaining the shipped asString compatibility name.
-      2922,
+      // +1: bounded Gateway QR producer paired with the public QR schema.
+      2923,
       env,
     ),
     publicDeprecatedExports: readPluginSdkSurfaceBudgetEnv(
