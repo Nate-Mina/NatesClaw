@@ -36,6 +36,7 @@ import {
   canTransitionWorkerSessionPlacement,
   type WorkerSessionPlacementState,
 } from "./placement-state.js";
+import { attachWorkerTurnExecutionIdentityStore } from "./placement-turn-claim-events.js";
 import {
   createPlacementTurnClaimOps,
   registerWorkerTurnClaimClosedHandler,
@@ -157,7 +158,7 @@ export function createWorkerSessionPlacementStore(
     }
   };
 
-  return {
+  const store = {
     ...createPlacementTurnClaimOps(runtime),
     ...createPlacementPendingFailureOps(runtime),
     ...createPlacementWorkspaceJournalOps(runtime),
@@ -622,6 +623,8 @@ export function createWorkerSessionPlacementStore(
       ).rows.map((row) => withWorkspaceResultConflict(fromRow(row))!);
     },
   };
+  attachWorkerTurnExecutionIdentityStore(store, path);
+  return store;
 }
 
 export type WorkerSessionPlacementStore = ReturnType<typeof createWorkerSessionPlacementStore>;

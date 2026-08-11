@@ -62,6 +62,7 @@ import {
   createWorkerSessionPlacementStore,
   type WorkerSessionPlacementStore,
 } from "./placement-store.js";
+import * as turnClaimEvents from "./placement-turn-claim-events.js";
 import { createWorkerSessionPlacementGate } from "./placement-worker-gate.js";
 import type { WorkerTunnelHandle } from "./tunnel-contract.js";
 import { createWorkerSessionTurnPlacementProvider as createRawWorkerSessionTurnPlacementProvider } from "./worker-turn-launcher.js";
@@ -676,6 +677,10 @@ describe("worker turn launcher", () => {
   });
 
   it("carries a non-main placement identity while reporting keep-local conflicts", async () => {
+    const bindWorkerTurnExecutionIdentity = vi.spyOn(
+      turnClaimEvents,
+      "bindWorkerTurnExecutionIdentity",
+    );
     let admissionWork: ExecutionIdentityAdmissionWork | undefined;
     cleanupAdmissionSink = configureExecutionIdentityAdmissionSink((work) => {
       admissionWork = work;
@@ -893,6 +898,11 @@ describe("worker turn launcher", () => {
       descriptor?.assignment.operationalRunInstance,
     );
     expect(verifiedRuntimeIdentity?.executionIdentity?.runId).toBe("run-worker-turn");
+    expect(bindWorkerTurnExecutionIdentity).toHaveBeenCalledWith(
+      placements,
+      expect.objectContaining({ runId: "run-worker-turn" }),
+      expect.objectContaining({ runId: "run-worker-turn" }),
+    );
     expect(verifiedRuntimeIdentity).toMatchObject({
       agentId: sessionTarget.agentId,
       sessionKey: sessionTarget.sessionKey,
