@@ -98,6 +98,7 @@ export class CustodianSessionStore {
       }
     },
     onPoll: (client, stepId, presentationGeneration) => {
+      this.retirePendingQrAcknowledgement(stepId);
       void this.requestReply(
         client,
         { sessionId: this.sessionId, pollStepId: stepId },
@@ -638,6 +639,22 @@ export class CustodianSessionStore {
     this.wizardInputPending = false;
     this.wizardSettling = false;
     this.questionReplyUncertain = false;
+  }
+
+  private retirePendingQrAcknowledgement(stepId: string): void {
+    const pendingStepId =
+      this.retryParams?.wizardAnswer?.stepId ?? this.retryParams?.wizardCancel?.stepId;
+    if (!this.sending || pendingStepId !== stepId) {
+      return;
+    }
+    // QR owner state is authoritative after delivery. Release the unanswered request before
+    // polling so a lost reply cannot retain the sending gate or overwrite the observation.
+    this.requestAbort?.abort();
+    this.requestAbort = null;
+    this.requestEpoch += 1;
+    this.sending = false;
+    this.retryParams = null;
+    this.emit();
   }
 
   private clearConversation(): void {

@@ -252,6 +252,47 @@ describe("custodian QR wizard step", () => {
     expect(page.querySelector('[role="alert"]')).toBeNull();
   });
 
+  it("recovers through polling when a sent acknowledgement never settles", async () => {
+    vi.useFakeTimers();
+    let acknowledgementSignal: AbortSignal | undefined;
+    const acknowledgement = new Promise<never>(() => {});
+    const request = vi
+      .fn()
+      .mockResolvedValueOnce(qrResult())
+      .mockImplementationOnce(
+        async (
+          _method: string,
+          _params: unknown,
+          options?: { onSent?: () => void; signal?: AbortSignal },
+        ): Promise<never> => {
+          acknowledgementSignal = options?.signal;
+          options?.onSent?.();
+          return await acknowledgement;
+        },
+      )
+      .mockResolvedValueOnce(terminalResult("Device linked after recovery."));
+    const { page } = await mountPage(createContext(request).context);
+    await vi.advanceTimersByTimeAsync(0);
+
+    page.querySelector<HTMLButtonElement>(".custodian__wizard-step .btn.primary")?.click();
+    await vi.advanceTimersByTimeAsync(0);
+    await page.updateComplete;
+
+    expect(request).toHaveBeenCalledTimes(2);
+    expect(page.store.sending).toBe(true);
+    expect(page.querySelector(".wizard-step__qr")).toBeNull();
+
+    await vi.advanceTimersByTimeAsync(1_000);
+    await page.updateComplete;
+
+    expect(acknowledgementSignal?.aborted).toBe(true);
+    expect(request).toHaveBeenCalledTimes(3);
+    expect(request.mock.calls[2]?.[1]).toEqual({ sessionId: SESSION_ID, pollStepId: "qr-step" });
+    expect(page.store.sending).toBe(false);
+    expect(page.textContent).toContain("Device linked after recovery.");
+    expect(page.store.hasUnresolvedQuestion()).toBe(false);
+  });
+
   it("clears a failed acknowledgement error when recovery returns the active QR", async () => {
     vi.useFakeTimers();
     let rejectAcknowledgement!: (error: Error) => void;

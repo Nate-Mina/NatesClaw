@@ -59,21 +59,33 @@ export class CustodianQrScheduler {
       clearTimeout(this.pollTimer);
       this.pollTimer = null;
     }
+    const presentationGeneration = this.presentationGeneration;
     let delivered = false;
     return (outcome) => {
       if (!isCurrent()) {
         return;
       }
+      const presentationCurrent = this.presentationGeneration === presentationGeneration;
       if (outcome !== "rejected" && !delivered) {
         delivered = true;
+        if (!presentationCurrent) {
+          // The authoritative reply already replaced scheduler state, but clients without an
+          // onSent hook still need the acknowledged credential removed from the transcript.
+          this.callbacks.onExpire(stepId, true);
+          return;
+        }
         // A received acknowledgement may already have scheduled observation of this step.
         // Clear only pre-response state so the replacement settlement poll survives.
         if (this.stepId === stepId && this.pollTimer === null) {
           this.clear();
         }
         this.callbacks.onExpire(stepId, true);
+        // Delivery only proves that the Gateway received the answer. Observe owner state so a
+        // lost or hung reply cannot leave the UI waiting for the general chat timeout.
+        this.schedulePoll(client, stepId);
+        return;
       }
-      if (outcome !== "sent") {
+      if (presentationCurrent && outcome !== "sent") {
         this.schedulePoll(client, stepId);
       }
     };
