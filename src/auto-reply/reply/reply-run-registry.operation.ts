@@ -195,6 +195,8 @@ export function createReplyOperation(params: {
     }
     phase = "aborted";
     abortInternally(abortReason);
+    // Cancellation may throw, but lifecycle cleanup still must run. Pre-backend
+    // non-retained owners release now; retained/running owners await terminal settle.
     try {
       getAttachedBackend(operation)?.cancel(reason);
     } finally {
