@@ -170,6 +170,7 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 ## Execution Identity Audit
 
 - Execution identity is opt-in diagnostic provenance, never authorization or enforcement. Unknown facts stay unknown; record ingress or invoker facts only at their authoritative producer. Never infer identity from session keys, `runId`, or routing metadata.
+- Spawned-run lineage is immutable diagnostic provenance: carry the exact parent admission identity only through private spawn context and consume it when creating a fresh child context. Report narrowing inputs, never authorization; missing external-runtime callbacks remain `unsupported`, never inferred.
 - Each outer admitted turn owns one immutable `executionId` and `contextId`; `runId` is non-unique correlation. Retries, fallbacks, and recovery reuse the original admission identity. Only byte-identical canonical replay is idempotent.
 - Admission may only validate, bound, freeze, and enqueue through the shared audit writer. No synchronous SQLite, schema, filesystem, HMAC-key, or readiness work. Audit failure never delays or aborts execution.
 - Raw identity references are transient worker-message data. Never persist, export, inspect, or log them. Public Plugin SDK ingress must strip private recovery/admission authority, including JavaScript extra and inherited properties.
