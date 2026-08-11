@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createTestAdmittedRunContext } from "../../admitted-run-context.test-support.js";
+import { createUsageAccumulator } from "../usage-accumulator.js";
 
 const mocks = vi.hoisted(() => ({
   clearActiveEmbeddedRun: vi.fn(),
@@ -15,9 +17,14 @@ const mocks = vi.hoisted(() => ({
 vi.mock("../logger.js", () => ({
   log: { debug: mocks.logDebug, error: mocks.logError, warn: mocks.logWarn },
 }));
-vi.mock("../../subagents/registry/subagent-registry.js", () => ({
-  settleRequesterAfterSessionSpawns: mocks.settleRequesterAfterSessionSpawns,
-}));
+vi.mock("../../subagents/registry/subagent-registry.js", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("../../subagents/registry/subagent-registry.js")>();
+  return {
+    ...actual,
+    settleRequesterAfterSessionSpawns: mocks.settleRequesterAfterSessionSpawns,
+  };
+});
 vi.mock("../runs.js", () => ({ clearActiveEmbeddedRun: mocks.clearActiveEmbeddedRun }));
 vi.mock("./attempt-prompt-phase.js", () => ({
   runEmbeddedAttemptPromptPhase: mocks.runPrompt,
@@ -38,6 +45,8 @@ vi.mock("./attempt-stream-settle.js", () => ({
 
 import { SESSIONS_YIELD_ABORT_REASON } from "./attempt-sessions-yield.js";
 import { runEmbeddedAttemptSettledPhase } from "./attempt-settle.js";
+import { createEmbeddedRunContextRecoveryState } from "./context-recovery-state.js";
+import { prepareEmbeddedRunTerminal } from "./terminal-preparation.js";
 
 type SettledInput = Parameters<typeof runEmbeddedAttemptSettledPhase>[0];
 
@@ -168,7 +177,7 @@ function createFixture() {
         runtimeInfo: { model: { id: "model" } },
         systemPromptReport: { chars: 13 },
       },
-      toolBase: { toolSearchTargetTranscriptProjections: new Map() },
+      toolBase: { toolSearchTargetTranscriptProjections: [] },
       toolCatalog: {
         effectiveTools: [{ name: "read" }],
         emptyExplicitToolAllowlistError: undefined,
@@ -325,6 +334,89 @@ describe("runEmbeddedAttemptSettledPhase", () => {
       "agent:main",
       "/tmp/session.jsonl",
     );
+  });
+
+  it("carries a successful hidden target through settlement into the terminal receipt", async () => {
+    const fixture = createFixture();
+    fixture.input.prepared.toolBase.toolSearchTargetTranscriptProjections.push({
+      parentToolCallId: "outer-exec",
+      toolCallId: "tool_search_code:outer-exec:read:1",
+      toolName: "read",
+      input: { path: "qa/scenarios/index.yaml" },
+      result: {
+        content: [{ type: "text", text: "QA scenario pack mission" }],
+        details: {},
+      },
+      isError: false,
+    });
+    mocks.settleStream.mockImplementationOnce(async (settleInput) => ({
+      promptError: null,
+      promptErrorSource: null,
+      timedOutDuringCompaction: false,
+      messagesSnapshot: [{ role: "assistant", content: "done" }],
+      sessionIdUsed: "settled-session",
+      lastAssistant: { role: "assistant", content: "done" },
+      currentAttemptAssistant: { role: "assistant", content: "done" },
+      currentAttemptCompletedAssistant: undefined,
+      successfulNestedToolNames: settleInput.toolSearchTargetTranscriptProjections
+        .filter((projection) => Object.is(projection.isError, false))
+        .map((projection) => projection.toolName.trim())
+        .filter(Boolean),
+      attemptUsage: { input: 1, output: 2, total: 3 },
+      cacheBreak: null,
+      promptCache: { cacheRead: 1 },
+      lastCallUsage: undefined,
+      compactionOccurredThisAttempt: false,
+    }));
+    mocks.completeResult.mockImplementationOnce((completeInput) => ({
+      ...completeInput.state,
+      assistantTexts: [],
+      toolMetas: [{ toolName: "exec", isError: false }],
+      didSendViaMessagingTool: false,
+      messagingToolSentTexts: [],
+      messagingToolSentMediaUrls: [],
+      messagingToolSentTargets: [],
+      cloudCodeAssistFormatError: false,
+      replayMetadata: { hadPotentialSideEffects: false, replaySafe: true },
+      itemLifecycle: { startedCount: 0, completedCount: 0, activeCount: 0 },
+    }));
+
+    const attempt = await runEmbeddedAttemptSettledPhase(fixture.input);
+    const prepared = prepareEmbeddedRunTerminal({
+      runParams: {
+        admittedRunContext: createTestAdmittedRunContext("run-1"),
+        sessionId: "session-1",
+        runId: "run-1",
+        workspaceDir: "/workspace",
+        prompt: "read the QA scenario index",
+        trigger: "user",
+        timeoutMs: 60_000,
+      },
+      attempt,
+      currentAttemptCompletedAssistant: attempt.currentAttemptCompletedAssistant,
+      provider: "openai",
+      model: "model",
+      activeErrorContext: { provider: "openai", model: "model" },
+      authProfileStore: { version: 1, profiles: {} },
+      sessionIdUsed: attempt.sessionIdUsed,
+      sessionFileUsed: attempt.sessionFileUsed,
+      outerContextTokenMeta: {},
+      usageAccumulator: createUsageAccumulator(),
+      contextRecoveryState: createEmbeddedRunContextRecoveryState(),
+      resolvedToolResultFormat: "markdown",
+      terminalState: {
+        outcome: { reason: "completed", status: "ok", stopReason: "stop" },
+        signalOwnedInterruption: false,
+      },
+    });
+
+    expect(
+      (
+        prepared.agentMeta as {
+          terminalReceipt?: { successfulToolNames?: string[] };
+        }
+      ).terminalReceipt?.successfulToolNames,
+    ).toEqual(["exec", "read"]);
   });
 
   it("preserves a prompt failure while still completing stream cleanup", async () => {
