@@ -35,6 +35,7 @@ import {
   hasUnresolvedCustodianQuestion,
   retireCustodianQuestions,
   type CustodianMessage,
+  type CustodianWizardActionRecoveryMode,
 } from "./transcript.ts";
 
 const SYSTEM_AGENT_CHAT_TIMEOUT_MS = 190_000;
@@ -90,6 +91,7 @@ export class CustodianSessionStore extends CustodianTranscriptState {
       setupRequired: this.setupRequired,
       variant: this.variant,
       wizardCancelAvailable: this.wizardCancelAvailable,
+      wizardActionRecoveryMode: this.wizardActionRecoveryMode,
       wizardInputPending: this.wizardInputPending,
     }),
     emit: () => this.emit(),
@@ -98,6 +100,7 @@ export class CustodianSessionStore extends CustodianTranscriptState {
       this.dismissedQuestions = new Set(this.dismissedQuestions).add(`${message.id}:${questionId}`);
       this.emit();
     },
+    recoverWizardAction: () => this.recoverWizardAction(),
     replaceMessages: (messages) => (this.messages = messages),
     sendUserTurn: (client, params, display, appendUserMessage) =>
       this.sendUserTurn(client, params, display, true, appendUserMessage),
@@ -194,6 +197,36 @@ export class CustodianSessionStore extends CustodianTranscriptState {
         GATEWAY_SERVER_CAPS.SYSTEM_AGENT_WIZARD_CANCEL,
       ) ?? false
     );
+  }
+
+  get wizardActionRecoveryMode(): CustodianWizardActionRecoveryMode | null {
+    return this.resolveWizardActionRecoveryMode(this.context, this.chatAvailable);
+  }
+
+  async recoverWizardAction(): Promise<void> {
+    const client = this.activeClient;
+    const mode = this.wizardActionRecoveryMode;
+    if (!client || this.sending || !mode) {
+      return;
+    }
+    if (mode === "restart") {
+      this.rotateVolatileSession(client, this.currentSessionVariant());
+      return;
+    }
+    const epoch = ++this.requestEpoch;
+    this.sending = true;
+    this.error = null;
+    this.emit();
+    const outcome = await this.refreshTranscriptHistory(client, epoch, true, this.sessionId);
+    if (epoch !== this.requestEpoch || client !== this.activeClient) {
+      return;
+    }
+    this.sending = false;
+    this.error = outcome === "unavailable" ? t("custodian.requestFailed") : null;
+    if (outcome !== "unavailable" && !this.wizardInputPending) {
+      this.clearSessionRecovery();
+    }
+    this.emit();
   }
 
   retry(): void {

@@ -2328,6 +2328,8 @@ export const en: TranslationMap = {
       submitting: "Submitting answer",
       submitted: "Answer submitted",
       confirmationUnavailable: "Answer sent; confirmation unavailable",
+      checkStatus: "Check status",
+      restart: "Restart setup",
       cancelling: "Cancelling setup",
       cancelled: "Setup cancelled",
       cancellationUnavailable: "Cancellation sent; confirmation unavailable",

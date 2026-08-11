@@ -35,6 +35,8 @@ export type CustodianStructuredResponse = {
   state: "submitting" | "submitted" | "uncertain";
 };
 
+export type CustodianWizardActionRecoveryMode = "history" | "restart";
+
 export function hasUnresolvedCustodianQuestion(
   messages: readonly CustodianMessage[],
   dismissedQuestions: ReadonlySet<string>,
@@ -296,7 +298,14 @@ function structuredPrompt(message: CustodianMessage): string {
   );
 }
 
-function renderStructuredResponse(message: CustodianMessage) {
+function renderStructuredResponse(
+  message: CustodianMessage,
+  recovery: {
+    mode: CustodianWizardActionRecoveryMode | null;
+    disabled: boolean;
+    onRecover: () => void;
+  },
+) {
   const response = message.structuredResponse;
   if (!response) {
     return nothing;
@@ -330,6 +339,20 @@ function renderStructuredResponse(message: CustodianMessage) {
       <strong>${response.display}</strong>
       <span class="sr-only">${status}</span>
     </span>
+    ${response.state === "uncertain" && recovery.mode
+      ? html`<button
+          class="btn btn--sm"
+          type="button"
+          ?disabled=${recovery.disabled}
+          @click=${recovery.onRecover}
+        >
+          ${t(
+            recovery.mode === "history"
+              ? "custodian.structured.checkStatus"
+              : "custodian.structured.restart",
+          )}
+        </button>`
+      : nothing}
   </section>`;
 }
 
@@ -344,11 +367,14 @@ export function renderCustodianTranscriptEntry(params: {
   wizardDisabled: boolean;
   wizardSecretVisible: boolean;
   showWizardCancel: boolean;
+  wizardActionRecoveryMode: CustodianWizardActionRecoveryMode | null;
+  wizardActionRecoveryDisabled: boolean;
   onSelect: (label: string) => void;
   onSkip: () => void;
   onWizardValueChange: (value: unknown) => void;
   onWizardAnswer: (value: unknown) => void;
   onWizardCancel: () => void;
+  onRecoverWizardAction: () => void;
   onToggleWizardSecretVisibility: () => void;
 }) {
   const question = params.message.question;
@@ -371,7 +397,11 @@ export function renderCustodianTranscriptEntry(params: {
       : nothing}
     ${renderCustodianEarlierDivider(params.message, params.boundaryAfterId)}
     ${hasStructuredResponse
-      ? renderStructuredResponse(params.message)
+      ? renderStructuredResponse(params.message, {
+          mode: params.wizardActionRecoveryMode,
+          disabled: params.wizardActionRecoveryDisabled,
+          onRecover: params.onRecoverWizardAction,
+        })
       : params.showQuestion && question
         ? renderCustodianQuestionCard({
             question,

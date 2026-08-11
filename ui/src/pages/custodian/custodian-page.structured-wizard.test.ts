@@ -1,5 +1,6 @@
 /* @vitest-environment jsdom */
 
+import { GATEWAY_SERVER_CAPS } from "@openclaw/gateway-protocol";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { waitForFast } from "../../test-helpers/wait-for.ts";
 import { createContext, mountPage } from "./custodian-page.test-harness.ts";
@@ -12,6 +13,7 @@ describe("custodian structured wizard", () => {
 
   afterEach(() => {
     document.body.replaceChildren();
+    sessionStorage.clear();
     vi.restoreAllMocks();
   });
 
@@ -60,6 +62,144 @@ describe("custodian structured wizard", () => {
     expect(page.querySelector(".custodian__structured-response")).toBeNull();
     expect(page.querySelector(".custodian__wizard-step")).not.toBeNull();
     expect(page.querySelector(".chat-group.user")).toBeNull();
+  });
+
+  it("recovers an uncertain answer from history without replaying it", async () => {
+    const step = { id: "port", type: "text" as const, message: "Gateway port" };
+    const nextStep = { id: "agent-name", type: "text" as const, message: "Agent name" };
+    let historyRequests = 0;
+    const request = vi.fn(
+      async (
+        method: string,
+        params: { sessionId?: string; wizardAnswer?: unknown },
+        options?: { onSent?: () => void },
+      ) => {
+        if (method === "openclaw.chat.history") {
+          if (params.sessionId !== "recovery-session") {
+            return { turns: [] };
+          }
+          historyRequests += 1;
+          if (historyRequests === 1) {
+            throw new Error("history temporarily unavailable");
+          }
+          return {
+            turns: [
+              { role: "assistant", text: "Gateway port", at: 1, sessionId: "recovery-session" },
+              {
+                role: "user",
+                text: "18789",
+                at: 2,
+                sessionId: "recovery-session",
+                wizardAction: { kind: "answer", step },
+              },
+              { role: "assistant", text: "Agent name", at: 3, sessionId: "recovery-session" },
+            ],
+            activeWizard: { sessionId: "recovery-session", step: nextStep },
+          };
+        }
+        if (params.wizardAnswer) {
+          options?.onSent?.();
+          throw new Error("reply lost after send");
+        }
+        return {
+          sessionId: "recovery-session",
+          reply: "Enter a port.",
+          action: "none",
+          wizardInputPending: true,
+          step,
+        };
+      },
+    );
+    const { context } = createContext(request, ["openclaw.chat", "openclaw.chat.history"], {
+      gatewayCapabilities: [
+        GATEWAY_SERVER_CAPS.SYSTEM_AGENT_WIZARD_CANCEL,
+        GATEWAY_SERVER_CAPS.SYSTEM_AGENT_CHAT_HISTORY_SESSION_RECOVERY,
+      ],
+      recoveryScope: "principal-a",
+    });
+    const { page } = await mountPage(context);
+
+    const input = await waitForFast(() => {
+      const element = page.querySelector<HTMLInputElement>(
+        '.custodian__wizard-step input[name="wizard-text"]',
+      );
+      expect(element).not.toBeNull();
+      return element!;
+    });
+    input.value = "18789";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    page.querySelector<HTMLButtonElement>(".custodian__wizard-step .btn.primary")!.click();
+
+    const checkStatus = await waitForFast(() => {
+      const button = [...page.querySelectorAll<HTMLButtonElement>("button")].find(
+        (candidate) => candidate.textContent?.trim() === "Check status",
+      );
+      expect(button).not.toBeUndefined();
+      return button!;
+    });
+    checkStatus.click();
+
+    await waitForFast(() => expect(page.textContent).toContain("Agent name"));
+    expect(page.querySelector(".custodian__structured-response")?.textContent).toContain("18789");
+    expect(page.querySelector(".custodian__wizard-step")).not.toBeNull();
+    expect(request.mock.calls.filter(([method]) => method === "openclaw.chat")).toHaveLength(2);
+    expect(
+      request.mock.calls.filter(
+        ([method, params]) =>
+          method === "openclaw.chat.history" && params.sessionId === "recovery-session",
+      ),
+    ).toHaveLength(2);
+  });
+
+  it("offers a fresh setup when the Gateway cannot recover uncertain actions", async () => {
+    const step = { id: "port", type: "text" as const, message: "Gateway port" };
+    const request = vi.fn(
+      async (
+        _method: string,
+        params: { wizardAnswer?: unknown },
+        options?: { onSent?: () => void },
+      ) => {
+        if (params.wizardAnswer) {
+          options?.onSent?.();
+          throw new Error("reply lost after send");
+        }
+        return request.mock.calls.length === 1
+          ? {
+              sessionId: "legacy-session",
+              reply: "Enter a port.",
+              action: "none",
+              wizardInputPending: true,
+              step,
+            }
+          : { sessionId: "fresh-session", reply: "Fresh setup ready.", action: "none" };
+      },
+    );
+    const { context } = createContext(request);
+    const { page } = await mountPage(context);
+
+    const input = await waitForFast(() => {
+      const element = page.querySelector<HTMLInputElement>(
+        '.custodian__wizard-step input[name="wizard-text"]',
+      );
+      expect(element).not.toBeNull();
+      return element!;
+    });
+    input.value = "18789";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    page.querySelector<HTMLButtonElement>(".custodian__wizard-step .btn.primary")!.click();
+
+    const restart = await waitForFast(() => {
+      const button = [...page.querySelectorAll<HTMLButtonElement>("button")].find(
+        (candidate) => candidate.textContent?.trim() === "Restart setup",
+      );
+      expect(button).not.toBeUndefined();
+      return button!;
+    });
+    restart.click();
+
+    await waitForFast(() => expect(page.textContent).toContain("Fresh setup ready."));
+    expect(request).toHaveBeenCalledTimes(3);
+    expect(request.mock.calls[2]?.[1]).not.toHaveProperty("wizardAnswer");
   });
 
   it("keeps Slack guidance visible in one typed card and formats its manifest", async () => {

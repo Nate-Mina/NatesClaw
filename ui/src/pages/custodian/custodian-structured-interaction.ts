@@ -4,7 +4,11 @@ import { t } from "../../i18n/index.ts";
 import { custodianWizardSubmission } from "./custodian-wizard-step.ts";
 import type * as eventNudgeState from "./event-nudge.ts";
 import { custodianChatParams, type CustodianSessionVariant } from "./session-lifecycle.ts";
-import type { CustodianMessage, CustodianStructuredResponse } from "./transcript.ts";
+import type {
+  CustodianMessage,
+  CustodianStructuredResponse,
+  CustodianWizardActionRecoveryMode,
+} from "./transcript.ts";
 
 type StructuredInteractionState = {
   activeClient: GatewayBrowserClient | null;
@@ -15,6 +19,7 @@ type StructuredInteractionState = {
   setupRequired: boolean;
   variant: CustodianSessionVariant;
   wizardCancelAvailable: boolean;
+  wizardActionRecoveryMode: CustodianWizardActionRecoveryMode | null;
   wizardInputPending: boolean;
 };
 
@@ -23,6 +28,7 @@ type StructuredInteractionHost = {
   emit: () => void;
   exitSetup: () => void;
   markDismissed: (message: CustodianMessage, questionId: string) => void;
+  recoverWizardAction: () => Promise<void>;
   replaceMessages: (messages: CustodianMessage[]) => void;
   sendUserTurn: (
     client: GatewayBrowserClient,
@@ -85,6 +91,9 @@ export function createCustodianStructuredInteraction(host: StructuredInteraction
     if (messages) {
       host.replaceMessages(messages);
       host.emit();
+    }
+    if (outcome === "unknown" && host.state().wizardActionRecoveryMode === "history") {
+      await host.recoverWizardAction();
     }
     return outcome;
   };

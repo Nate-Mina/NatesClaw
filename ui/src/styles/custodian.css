@@ -310,7 +310,7 @@ openclaw-custodian-page {
 
 .custodian__structured-response {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: 22px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   margin: 0 16px 14px 46px;

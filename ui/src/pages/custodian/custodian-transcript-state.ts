@@ -1,7 +1,11 @@
-import type { SystemAgentChatResult } from "@openclaw/gateway-protocol";
+import { GATEWAY_SERVER_CAPS, type SystemAgentChatResult } from "@openclaw/gateway-protocol";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import type { WizardStep } from "../../api/types.ts";
 import type { ApplicationContext } from "../../app/context.ts";
+import {
+  isGatewayCapabilityAdvertised,
+  isGatewayMethodAdvertised,
+} from "../../lib/gateway-methods.ts";
 import {
   captureCustodianRecoveryScope,
   clearCustodianRecoveryForScope,
@@ -15,6 +19,7 @@ import {
   loadCustodianTranscriptSnapshot,
   type CustodianMessage,
   type CustodianTranscriptSnapshot,
+  type CustodianWizardActionRecoveryMode,
 } from "./transcript.ts";
 
 export type CustodianTranscriptHistoryOutcome = "recovered" | "inactive" | "unavailable";
@@ -66,6 +71,23 @@ export abstract class CustodianTranscriptState {
       this.lastHelloDeviceToken,
       recoveryScope,
     ]);
+  }
+
+  protected resolveWizardActionRecoveryMode(
+    context: ApplicationContext | null,
+    chatAvailable: boolean,
+  ): CustodianWizardActionRecoveryMode | null {
+    if (!this.activeClient || !chatAvailable || !context) {
+      return null;
+    }
+    const snapshot = context.gateway.snapshot;
+    return isGatewayMethodAdvertised(snapshot, "openclaw.chat.history") === true &&
+      isGatewayCapabilityAdvertised(
+        snapshot,
+        GATEWAY_SERVER_CAPS.SYSTEM_AGENT_CHAT_HISTORY_SESSION_RECOVERY,
+      ) === true
+      ? "history"
+      : "restart";
   }
 
   protected clearSessionRecovery(expectedSessionId = this.sessionId): void {
@@ -136,11 +158,11 @@ export abstract class CustodianTranscriptState {
     this.nextMessageId = transcript.nextMessageId;
     this.earlierBoundaryAfterId = transcript.earlierBoundaryAfterId;
     const step = transcript.recoveredStep;
-    if (step && recoveredSessionId) {
+    if (recoveredSessionId) {
       this.sessionId = recoveredSessionId;
-      this.sensitive = step.sensitive === true;
-      this.wizardInputPending = true;
-      this.wizardValue = initialCustodianWizardValue(step);
+      this.sensitive = step?.sensitive === true;
+      this.wizardInputPending = step !== undefined;
+      this.wizardValue = step ? initialCustodianWizardValue(step) : undefined;
       this.wizardSecretVisible = false;
       this.questionReplyUncertain = false;
     }
