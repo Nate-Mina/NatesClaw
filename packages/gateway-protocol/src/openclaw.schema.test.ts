@@ -173,6 +173,12 @@ describe("SystemAgentChatResultSchema", () => {
     expect(
       validate.Check({
         ...base,
+        step: { ...steps.at(-1)?.step, qrDataUrl: "data:image/png;base64,iVBORw0KGgo=" },
+      }),
+    ).toBe(false);
+    expect(
+      validate.Check({
+        ...base,
         step: { ...steps.at(-1)?.step, qrDataUrl: "data:image/png;base64,iVBORw0KGgp=" },
       }),
     ).toBe(false);
