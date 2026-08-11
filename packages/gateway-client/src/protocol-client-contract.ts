@@ -1,11 +1,6 @@
 // Wire-client contract types shared by GatewayProtocolClient and its adapters.
 import type { ErrorShape, EventFrame, HelloOk } from "@openclaw/gateway-protocol";
-import type {
-  GatewayProtocolRequestError,
-  GatewayProtocolRequestOptions,
-} from "./protocol-request.js";
-
-export type { GatewayProtocolRequestOptions };
+import type { GatewayProtocolRequestError } from "./protocol-request.js";
 
 export type GatewayProtocolSocket = {
   isOpen: () => boolean;
@@ -18,7 +13,7 @@ export type GatewayProtocolSocketHandlers = {
   close: (code: number, reason: string) => void;
   error: (error: Error) => void;
 };
-export type GatewayProtocolConnectContext<TPlan> = {
+type GatewayProtocolConnectContext<TPlan> = {
   generation: number;
   nonce: string | null;
   challengeTs: number | null | undefined;
@@ -33,14 +28,14 @@ export type GatewayProtocolCloseContext = {
   connectRequestSent: boolean;
   connectFailure?: { error: Error; reconnectDelayMs?: number };
 };
-export type GatewayProtocolConnectDecision = {
+type GatewayProtocolConnectDecision = {
   closeCode: number;
   closeReason: string;
   reconnectDelayMs?: number;
   stop?: boolean;
   error?: Error;
 };
-export type GatewayProtocolCloseDecision = {
+type GatewayProtocolCloseDecision = {
   retry: boolean;
   notify: boolean;
   reconnectDelayMs?: number;
