@@ -14,7 +14,7 @@ import {
   resolveTelegramMessageThreadSpec,
 } from "./bot/helpers.js";
 
-export function buildTelegramLocationMessageHook(params: {
+function buildTelegramLocationMessageHook(params: {
   accountId: string;
   msg: Message;
   updateId: number;
