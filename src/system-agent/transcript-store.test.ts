@@ -68,7 +68,7 @@ describe("system-agent transcript store", () => {
   });
 
   it("does not recover an earlier incarnation that reused the same session id", async () => {
-    await withTempDir(
+    await withTestDir(
       { prefix: "openclaw-system-agent-transcript-incarnation-" },
       async (stateDir) => {
         const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
