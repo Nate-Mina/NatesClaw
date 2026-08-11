@@ -10,6 +10,7 @@ import type {
   WorkerInferenceTerminalFrame,
   WorkerInferenceTerminalOutcome,
 } from "../../packages/gateway-protocol/src/schema/worker-inference.js";
+import { createDeferred } from "../../test/helpers/promise.js";
 import type { WorkerConnection, WorkerConnectionState } from "./worker-connection.js";
 import {
   WorkerConnectionInterruptedError,
@@ -361,8 +362,42 @@ describe("worker live-event client", () => {
 
     await expect(Promise.all([first, second])).resolves.toEqual([{ ackedSeq: 1 }, { ackedSeq: 2 }]);
     expect(harness.requestLiveEvent).toHaveBeenCalledTimes(2);
-    expect(client.ackedSeq).toBe(2);
-    expect(client.unackedCount).toBe(0);
+    client.dispose();
+  });
+
+  it("accepts out-of-order cumulative ACKs while a no-progress response has peers in flight", async () => {
+    const harness = connectionHarness();
+    const firstResponse =
+      createDeferred<Awaited<ReturnType<WorkerConnection["requestLiveEvent"]>>>();
+    const secondResponse =
+      createDeferred<Awaited<ReturnType<WorkerConnection["requestLiveEvent"]>>>();
+    harness.requestLiveEvent.mockImplementation(async (request) => {
+      return await (request.seq === 1 ? firstResponse.promise : secondResponse.promise);
+    });
+    const client = new WorkerLiveEventClient(harness.connection, { runEpoch: 3 });
+
+    const first = client.emit("run-1", LIVE_EVENT);
+    const second = client.emit("run-1", {
+      kind: "thinking",
+      payload: { text: "second", delta: "second" },
+    });
+    await vi.waitFor(() => expect(harness.requestLiveEvent).toHaveBeenCalledTimes(2));
+    secondResponse.resolve({
+      type: "res",
+      id: "live-response-2",
+      ok: true,
+      payload: { ackedSeq: 0 },
+    });
+    await Promise.resolve();
+    expect(harness.requestLiveEvent).toHaveBeenCalledTimes(2);
+    firstResponse.resolve({
+      type: "res",
+      id: "live-response-1",
+      ok: true,
+      payload: { ackedSeq: 2 },
+    });
+
+    await expect(Promise.all([first, second])).resolves.toEqual([{ ackedSeq: 2 }, { ackedSeq: 2 }]);
     client.dispose();
   });
 
@@ -443,14 +478,13 @@ describe("worker live-event client", () => {
     };
     const second = client.emit("run-1", secondEvent);
 
-    await expect(Promise.all([first, second])).resolves.toEqual([{ ackedSeq: 1 }, { ackedSeq: 2 }]);
+    await expect(Promise.all([first, second])).resolves.toEqual([{ ackedSeq: 2 }, { ackedSeq: 2 }]);
     expect(harness.requestLiveEvent.mock.calls.map((call) => call[0])).toEqual([
       expect.objectContaining({ seq: 6, lastAckedSeq: 5, event: LIVE_EVENT }),
+      expect.objectContaining({ seq: 7, lastAckedSeq: 5, event: secondEvent }),
       expect.objectContaining({ seq: 1, lastAckedSeq: 0, event: LIVE_EVENT }),
-      expect.objectContaining({ seq: 2, lastAckedSeq: 1, event: secondEvent }),
+      expect.objectContaining({ seq: 2, lastAckedSeq: 0, event: secondEvent }),
     ]);
-    expect(client.ackedSeq).toBe(2);
-    expect(client.unackedCount).toBe(0);
     client.dispose();
   });
 
