@@ -5,6 +5,7 @@ import type {
   WorkerInferenceTerminalOutcome,
 } from "../../packages/gateway-protocol/src/schema/worker-inference.js";
 import { createDeferred } from "../../test/helpers/promise.js";
+import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { runWorkerProviderReplayRoundTrip } from "../../test/helpers/worker-provider-replay-roundtrip.js";
 import { SessionManager } from "../agents/sessions/session-manager.js";
 import { getAgentEventLifecycleGeneration } from "../infra/agent-events.js";
@@ -26,6 +27,7 @@ import {
 } from "./worker-fault-injection.test-support.js";
 import { runWorkerDescriptor } from "./worker.runtime.js";
 
+const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 const REPLACEMENT_CREDENTIAL = ["worker", "replacement", "fixture"].join("-");
 const MODEL_REF = { provider: "fake", model: "fault-model" } as const;
 
@@ -63,7 +65,7 @@ describe("cloud worker milestone 2 fault injection", () => {
   const clients: WorkerClients[] = [];
 
   beforeEach(async () => {
-    harness = await ComposedGatewayHarness.create();
+    harness = await ComposedGatewayHarness.create(tempDirs.make("openclaw-worker-fault-"));
     await harness.start();
   });
 

@@ -1,7 +1,6 @@
 import { once } from "node:events";
 import fs from "node:fs/promises";
 import { createServer, type Server } from "node:http";
-import os from "node:os";
 import path from "node:path";
 import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
 import { WebSocket, WebSocketServer, type RawData } from "ws";
@@ -185,10 +184,7 @@ export class ComposedGatewayHarness {
   private useReplacementExecutor = false;
   private unsubscribeLive: (() => void) | undefined;
 
-  static async create(): Promise<ComposedGatewayHarness> {
-    const root = await fs.mkdtemp(
-      path.join(await fs.realpath(os.tmpdir()), "openclaw-worker-fault-"),
-    );
+  static async create(root: string): Promise<ComposedGatewayHarness> {
     const sessionsDir = path.join(root, "agents", "main", "sessions");
     const storePath = path.join(sessionsDir, "sessions.json");
     await upsertSessionEntryCore(
