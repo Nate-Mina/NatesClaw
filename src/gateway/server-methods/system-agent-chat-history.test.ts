@@ -34,6 +34,7 @@ function makeInvocation(params: {
     ownerKey: "device:device-owner",
     engine: { activeWizardStep },
     lastUsedAt: 1,
+    transcriptIncarnationId: "incarnation-owner",
   };
   const context = {
     systemAgentSessions: new Map(params.sessionId ? [[params.sessionId, session]] : []),
@@ -85,6 +86,13 @@ describe("openclaw.chat.history wizard recovery", () => {
     ]);
     expect(activeWizardStep).toHaveBeenCalledOnce();
     expect(owner.session.lastUsedAt).toBeGreaterThan(1);
+    expect(transcriptStoreMocks.readTranscriptTail).toHaveBeenLastCalledWith(100, {
+      afterLastReset: true,
+      session: {
+        sessionId: "recover-session",
+        incarnationId: "incarnation-owner",
+      },
+    });
 
     const foreign = makeInvocation({
       sessionId: "recover-session",

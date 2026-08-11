@@ -67,7 +67,10 @@ export const systemAgentChatHistoryHandler: GatewayRequestHandler = async ({
                 return {
                   turns: readTranscriptTail(params.limit ?? DEFAULT_SYSTEM_AGENT_HISTORY_LIMIT, {
                     afterLastReset: true,
-                    sessionId: requestedSessionId,
+                    session: {
+                      sessionId: requestedSessionId,
+                      incarnationId: session.transcriptIncarnationId,
+                    },
                   }),
                   step: await session.engine.activeWizardStep(),
                 };

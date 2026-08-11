@@ -10,6 +10,8 @@ import {
 
 // Mirrors the store's internal retention bound (kept module-local there).
 const SYSTEM_AGENT_TRANSCRIPT_MAX_ENTRIES = 1_000;
+const SESSION_ONE = { sessionId: "session-one", incarnationId: "incarnation-one" };
+const SESSION_TWO = { sessionId: "session-two", incarnationId: "incarnation-two" };
 
 describe("system-agent transcript store", () => {
   afterEach(() => {
@@ -36,20 +38,20 @@ describe("system-agent transcript store", () => {
     await withTestDir({ prefix: "openclaw-system-agent-transcript-session-" }, async (stateDir) => {
       const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
       appendTranscriptTurn(
-        { role: "user", text: "session one question", at: 1, sessionId: "session-one" },
-        { env },
+        { role: "user", text: "session one question", at: 1 },
+        { env, session: SESSION_ONE },
       );
       appendTranscriptTurn(
-        { role: "user", text: "session two question", at: 2, sessionId: "session-two" },
-        { env },
+        { role: "user", text: "session two question", at: 2 },
+        { env, session: SESSION_TWO },
       );
       appendTranscriptTurn(
-        { role: "assistant", text: "session one answer", at: 3, sessionId: "session-one" },
-        { env },
+        { role: "assistant", text: "session one answer", at: 3 },
+        { env, session: SESSION_ONE },
       );
       closeOpenClawStateDatabase();
 
-      expect(readTranscriptTail(2, { env, sessionId: "session-one" })).toEqual([
+      expect(readTranscriptTail(2, { env, session: SESSION_ONE })).toEqual([
         {
           role: "user",
           text: "session one question",
@@ -61,8 +63,31 @@ describe("system-agent transcript store", () => {
           at: 3,
         },
       ]);
-      expect(readTranscriptTail(0, { env, sessionId: "session-one" })).toEqual([]);
+      expect(readTranscriptTail(0, { env, session: SESSION_ONE })).toEqual([]);
     });
+  });
+
+  it("does not recover an earlier incarnation that reused the same session id", async () => {
+    await withTempDir(
+      { prefix: "openclaw-system-agent-transcript-incarnation-" },
+      async (stateDir) => {
+        const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+        const earlierSession = { sessionId: "reused-session", incarnationId: "earlier" };
+        const currentSession = { sessionId: "reused-session", incarnationId: "current" };
+        appendTranscriptTurn(
+          { role: "user", text: "earlier owner secret", at: 1 },
+          { env, session: earlierSession },
+        );
+        appendTranscriptTurn(
+          { role: "user", text: "current owner request", at: 2 },
+          { env, session: currentSession },
+        );
+
+        expect(readTranscriptTail(10, { env, session: currentSession })).toEqual([
+          { role: "user", text: "current owner request", at: 2 },
+        ]);
+      },
+    );
   });
 
   it("keeps session attribution out of payloads read by released versions", async () => {
@@ -71,8 +96,8 @@ describe("system-agent transcript store", () => {
       async (stateDir) => {
         const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
         appendTranscriptTurn(
-          { role: "user", text: "scoped question", at: 1, sessionId: "session-one" },
-          { env },
+          { role: "user", text: "scoped question", at: 1 },
+          { env, session: SESSION_ONE },
         );
 
         const releasedReader = createSqliteAuditRecordStore<{
@@ -89,7 +114,7 @@ describe("system-agent transcript store", () => {
           text: "scoped question",
           at: 1,
         });
-        expect(readTranscriptTail(1, { env, sessionId: "session-one" })).toEqual([
+        expect(readTranscriptTail(1, { env, session: SESSION_ONE })).toEqual([
           { role: "user", text: "scoped question", at: 1 },
         ]);
       },
@@ -138,32 +163,32 @@ describe("system-agent transcript store", () => {
       async (stateDir) => {
         const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
         appendTranscriptTurn(
-          { role: "user", text: "session one before", at: 1, sessionId: "session-one" },
-          { env },
+          { role: "user", text: "session one before", at: 1 },
+          { env, session: SESSION_ONE },
         );
         appendTranscriptTurn(
-          { role: "user", text: "session two before", at: 2, sessionId: "session-two" },
-          { env },
+          { role: "user", text: "session two before", at: 2 },
+          { env, session: SESSION_TWO },
         );
-        appendTranscriptReset({ env, sessionId: "session-one" });
+        appendTranscriptReset({ env, session: SESSION_ONE });
         appendTranscriptTurn(
-          { role: "assistant", text: "session one after", at: 4, sessionId: "session-one" },
-          { env },
+          { role: "assistant", text: "session one after", at: 4 },
+          { env, session: SESSION_ONE },
         );
         appendTranscriptTurn(
-          { role: "assistant", text: "session two after", at: 5, sessionId: "session-two" },
-          { env },
+          { role: "assistant", text: "session two after", at: 5 },
+          { env, session: SESSION_TWO },
         );
 
-        expect(
-          readTranscriptTail(10, { afterLastReset: true, env, sessionId: "session-one" }),
-        ).toEqual([{ role: "assistant", text: "session one after", at: 4 }]);
-        expect(
-          readTranscriptTail(10, { afterLastReset: true, env, sessionId: "session-two" }),
-        ).toEqual([
-          { role: "user", text: "session two before", at: 2 },
-          { role: "assistant", text: "session two after", at: 5 },
-        ]);
+        expect(readTranscriptTail(10, { afterLastReset: true, env, session: SESSION_ONE })).toEqual(
+          [{ role: "assistant", text: "session one after", at: 4 }],
+        );
+        expect(readTranscriptTail(10, { afterLastReset: true, env, session: SESSION_TWO })).toEqual(
+          [
+            { role: "user", text: "session two before", at: 2 },
+            { role: "assistant", text: "session two after", at: 5 },
+          ],
+        );
         expect(readTranscriptTail(10, { afterLastReset: true, env })).toEqual([
           { role: "assistant", text: "session one after", at: 4 },
           { role: "assistant", text: "session two after", at: 5 },

@@ -181,6 +181,8 @@ type GatewaySystemAgentSession = {
   welcomeAuditSequence?: number;
   lastUsedAt: number;
   ownerKey: string;
+  /** Server-generated durable transcript boundary for this live map entry. */
+  transcriptIncarnationId: string;
   pendingApproval?: { id: string; proposalHash: string };
 };
 

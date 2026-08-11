@@ -120,6 +120,7 @@ function seededSession(params?: {
     welcome: "welcome text",
     lastUsedAt: 1,
     ownerKey: params?.ownerKey ?? "device:device-test",
+    transcriptIncarnationId: "incarnation-test",
   } as unknown as SystemAgentChatSession;
 }
 
@@ -241,7 +242,10 @@ describe("openclaw.chat session ownership", () => {
     );
 
     expect(transcriptStoreMocks.appendTranscriptReset).toHaveBeenCalledWith({
-      sessionId: "owned-session",
+      session: {
+        sessionId: "owned-session",
+        incarnationId: "incarnation-test",
+      },
     });
     expect(sessions.get("owned-session")).toBe(session);
     expect(session.pendingApproval).toEqual({

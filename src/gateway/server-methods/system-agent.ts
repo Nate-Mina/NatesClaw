@@ -124,13 +124,13 @@ async function evictOldestSession(
 function persistEngineHistory(
   engine: SystemAgentChatSession["engine"],
   startIndex: number,
-  sessionId: string,
+  session: { sessionId: string; incarnationId: string },
 ): void {
   const at = Date.now();
   for (const turn of engine.historySince(startIndex)) {
     // Engine history is authoritative here: sensitive user text has already
     // been replaced by the mask marker before it crosses this boundary.
-    appendTranscriptTurn({ ...turn, at, sessionId });
+    appendTranscriptTurn({ ...turn, at }, { session });
   }
 }
 
@@ -473,7 +473,16 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
         if (params.reset) {
           const existing = sessions.get(sessionId);
           // Persist the reset first; a failed write must leave the live session intact.
-          appendTranscriptReset({ sessionId });
+          appendTranscriptReset({
+            ...(existing
+              ? {
+                  session: {
+                    sessionId,
+                    incarnationId: existing.transcriptIncarnationId,
+                  },
+                }
+              : {}),
+          });
           sessions.delete(sessionId);
           if (existing?.pendingApproval) {
             context.systemAgentApprovalManager?.expire(
@@ -531,6 +540,7 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
             verifiedInference: inference.binding,
             operatorApprovalOnly: params.delegation !== undefined,
           });
+          const transcriptIncarnationId = randomUUID();
           // `reset: true` keeps the durable logbook but deliberately starts
           // model context clean; only ordinary fresh sessions receive its tail.
           if (!params.reset) {
@@ -573,7 +583,10 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
             respond(false, undefined, errorShape(ErrorCodes.UNAVAILABLE, error.message));
             return;
           }
-          persistEngineHistory(engine, welcomeHistoryStart, sessionId);
+          persistEngineHistory(engine, welcomeHistoryStart, {
+            sessionId,
+            incarnationId: transcriptIncarnationId,
+          });
           await evictOldestSession(sessions, context);
           session = {
             engine,
@@ -584,6 +597,7 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
               : {}),
             lastUsedAt: Date.now(),
             ownerKey,
+            transcriptIncarnationId,
           };
           sessions.set(sessionId, session);
           if (welcomeOnly) {
@@ -638,7 +652,10 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
           }
           reply = turnReply;
         } catch (error) {
-          persistEngineHistory(session.engine, historyStart, sessionId);
+          persistEngineHistory(session.engine, historyStart, {
+            sessionId,
+            incarnationId: session.transcriptIncarnationId,
+          });
           if (error instanceof SystemAgentWizardAnswerError) {
             respond(false, undefined, errorShape(ErrorCodes.INVALID_REQUEST, error.message));
             return;
@@ -667,7 +684,10 @@ export const systemAgentHandlers: GatewayRequestHandlers = {
           );
           return;
         }
-        persistEngineHistory(session.engine, historyStart, sessionId);
+        persistEngineHistory(session.engine, historyStart, {
+          sessionId,
+          incarnationId: session.transcriptIncarnationId,
+        });
         const delegation = params.delegation;
         let proposalId: string | undefined;
         if (delegation) {

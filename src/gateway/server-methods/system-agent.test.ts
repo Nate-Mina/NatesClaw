@@ -218,6 +218,7 @@ function seededSession(overrides?: Partial<SystemAgentChatSession>): SystemAgent
     welcome: "welcome text",
     lastUsedAt: 1,
     ownerKey: "device:device-test",
+    transcriptIncarnationId: "incarnation-test",
     ...overrides,
   };
 }
@@ -735,16 +736,16 @@ describe("openclaw.chat", () => {
       expect.objectContaining({
         role: "user",
         text: "How is this machine doing?",
-        sessionId: "s1",
       }),
+      { session: { sessionId: "s1", incarnationId: "incarnation-test" } },
     );
     expect(transcriptStoreMocks.appendTranscriptTurn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         role: "assistant",
         text: "Everything is healthy.",
-        sessionId: "s1",
       }),
+      { session: { sessionId: "s1", incarnationId: "incarnation-test" } },
     );
     expect(JSON.stringify(transcriptStoreMocks.appendTranscriptTurn.mock.calls)).not.toContain(
       "ui-context",
@@ -771,6 +772,12 @@ describe("openclaw.chat", () => {
     ]);
     expect(transcriptStoreMocks.appendTranscriptTurn).toHaveBeenCalledWith(
       expect.objectContaining({ role: "assistant", text: expect.any(String) }),
+      {
+        session: {
+          sessionId: "fresh",
+          incarnationId: expect.any(String),
+        },
+      },
     );
   });
 
@@ -1091,7 +1098,9 @@ describe("openclaw.chat", () => {
     expect(sessions.get("s1")?.engine).not.toBe(engine);
     expect(calls[0]?.ok).toBe(true);
     expect(seedHistory).not.toHaveBeenCalled();
-    expect(transcriptStoreMocks.appendTranscriptReset).toHaveBeenCalledWith({ sessionId: "s1" });
+    expect(transcriptStoreMocks.appendTranscriptReset).toHaveBeenCalledWith({
+      session: { sessionId: "s1", incarnationId: "incarnation-test" },
+    });
 
     transcriptStoreMocks.readTranscriptTail.mockReturnValue([
       { role: "user", text: "After reset", at: 3 },

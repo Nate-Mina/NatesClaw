@@ -91,6 +91,7 @@ function discardableSessions(dispose: () => Promise<void>): Map<string, SystemAg
         welcome: "welcome text",
         lastUsedAt: 1,
         ownerKey: "device:device-test",
+        transcriptIncarnationId: "incarnation-s1",
       },
     ],
   ]) as unknown as Map<string, SystemAgentChatSession>;
@@ -139,19 +140,19 @@ async function withTranscriptState(prefix: string, run: () => Promise<void>): Pr
 describe("openclaw.chat reset boundary", () => {
   it("persists session attribution through the scoped recovery handler", async () => {
     await withTranscriptState("openclaw-session-recovery-boundary-", async () => {
-      appendTranscriptTurn({
-        role: "user",
-        text: "discarded setup request",
-        at: 1,
+      const recoveredSession = {
         sessionId: "recover-session",
-      });
-      appendTranscriptTurn({
-        role: "assistant",
-        text: "discarded setup reply",
-        at: 2,
-        sessionId: "recover-session",
-      });
-      appendTranscriptReset({ sessionId: "recover-session" });
+        incarnationId: "recover-incarnation",
+      };
+      appendTranscriptTurn(
+        { role: "user", text: "discarded setup request", at: 1 },
+        { session: recoveredSession },
+      );
+      appendTranscriptTurn(
+        { role: "assistant", text: "discarded setup reply", at: 2 },
+        { session: recoveredSession },
+      );
+      appendTranscriptReset({ session: recoveredSession });
       const fixture = await createSystemAgentVerifiedInferenceTestFixture(verifiedConfig);
       const engine = new SystemAgentChatEngine({
         surface: "gateway",
@@ -182,6 +183,7 @@ describe("openclaw.chat reset boundary", () => {
             welcome: "welcome text",
             lastUsedAt: 1,
             ownerKey: "device:device-test",
+            transcriptIncarnationId: recoveredSession.incarnationId,
           },
         ],
       ]);
@@ -235,26 +237,87 @@ describe("openclaw.chat reset boundary", () => {
     });
   });
 
+  it("does not recover an evicted owner's transcript when a session id is reused", async () => {
+    await withTranscriptState("openclaw-session-incarnation-boundary-", async () => {
+      const sessionId = "reused-session";
+      const earlierSession = { sessionId, incarnationId: "earlier-incarnation" };
+      appendTranscriptTurn(
+        { role: "user", text: "earlier owner secret", at: 1 },
+        { session: earlierSession },
+      );
+      const sessions = new Map<string, SystemAgentChatSession>([
+        [
+          sessionId,
+          {
+            engine: { activeWizardStep: vi.fn(async () => undefined) },
+            welcome: "welcome text",
+            lastUsedAt: 1,
+            ownerKey: "device:device-earlier",
+            transcriptIncarnationId: earlierSession.incarnationId,
+          } as unknown as SystemAgentChatSession,
+        ],
+      ]);
+
+      // Eviction removes the authoritative live entry. A later caller may reuse
+      // the opaque client id, but receives a distinct server-owned incarnation.
+      sessions.delete(sessionId);
+      const currentSession = { sessionId, incarnationId: "current-incarnation" };
+      appendTranscriptTurn(
+        { role: "user", text: "current owner request", at: 2 },
+        { session: currentSession },
+      );
+      sessions.set(sessionId, {
+        engine: { activeWizardStep: vi.fn(async () => undefined) },
+        welcome: "welcome text",
+        lastUsedAt: 2,
+        ownerKey: "device:device-current",
+        transcriptIncarnationId: currentSession.incarnationId,
+      } as unknown as SystemAgentChatSession);
+      const responses: Array<{ ok: boolean; payload?: unknown }> = [];
+
+      await expectDefined(
+        systemAgentHandlers["openclaw.chat.history"],
+        'systemAgentHandlers["openclaw.chat.history"] test invariant',
+      )({
+        params: { sessionId },
+        client: {
+          connId: "conn-current",
+          connect: { device: { id: "device-current" } },
+        } as GatewayClient,
+        context: { systemAgentSessions: sessions } as unknown as GatewayRequestContext,
+        respond: (ok: boolean, payload?: unknown) => responses.push({ ok, payload }),
+      } as never);
+
+      expect(responses).toEqual([
+        {
+          ok: true,
+          payload: {
+            turns: [{ role: "user", text: "current owner request", at: 2 }],
+          },
+        },
+      ]);
+    });
+  });
+
   it("does not truncate another live session's recovery when one session resets", async () => {
     await withTranscriptState("openclaw-session-reset-isolation-", async () => {
-      appendTranscriptTurn({
-        role: "user",
-        text: "session one question",
-        at: 1,
-        sessionId: "s1",
-      });
-      appendTranscriptTurn({
-        role: "user",
-        text: "session two question",
-        at: 2,
-        sessionId: "s2",
-      });
+      const sessionOne = { sessionId: "s1", incarnationId: "incarnation-s1" };
+      const sessionTwo = { sessionId: "s2", incarnationId: "incarnation-s2" };
+      appendTranscriptTurn(
+        { role: "user", text: "session one question", at: 1 },
+        { session: sessionOne },
+      );
+      appendTranscriptTurn(
+        { role: "user", text: "session two question", at: 2 },
+        { session: sessionTwo },
+      );
       const sessions = discardableSessions(async () => undefined);
       sessions.set("s2", {
         engine: { dispose: vi.fn(async () => undefined) },
         welcome: "welcome text",
         lastUsedAt: 2,
         ownerKey: "device:device-test",
+        transcriptIncarnationId: sessionTwo.incarnationId,
       } as unknown as SystemAgentChatSession);
       inferenceFallbackMocks.verifySystemAgentInferenceWithFallback.mockResolvedValueOnce({
         ok: false,
@@ -264,8 +327,8 @@ describe("openclaw.chat reset boundary", () => {
 
       await resetSession({ sessions });
 
-      expect(readTranscriptTail(10, { afterLastReset: true, sessionId: "s1" })).toEqual([]);
-      expect(readTranscriptTail(10, { afterLastReset: true, sessionId: "s2" })).toEqual([
+      expect(readTranscriptTail(10, { afterLastReset: true, session: sessionOne })).toEqual([]);
+      expect(readTranscriptTail(10, { afterLastReset: true, session: sessionTwo })).toEqual([
         { role: "user", text: "session two question", at: 2 },
       ]);
       expect(sessions.has("s1")).toBe(false);
