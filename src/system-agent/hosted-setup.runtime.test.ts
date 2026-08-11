@@ -8,6 +8,7 @@ import {
   createAmbientVerifiedBinding,
   SystemAgentChatEngine,
   advanceGatewayWizardToToken,
+  expectDefined,
   type OpenClawConfig,
   type WizardPrompter,
 } from "./chat-engine.test-support.js";
@@ -63,6 +64,64 @@ describe("SystemAgentChatEngine runtime", () => {
 
     expect(cancelled.text).toContain("setup cancelled");
     expect(persistentEffect).not.toHaveBeenCalled();
+    expect(mocks.writeWizardConfigFile).not.toHaveBeenCalled();
+    expect(mocks.runCollectedChannelOnboardingPostWriteHooks).not.toHaveBeenCalled();
+  });
+
+  it("keeps a Signal link QR cancellable after its pre-link authority check", async () => {
+    useTempStateDir();
+    const baseConfig: OpenClawConfig = {};
+    let linkAbortObserved = false;
+    const beforeLinkAuthority = vi.fn();
+    mocks.readSetupConfigFileSnapshot.mockResolvedValue({
+      exists: true,
+      valid: true,
+      path: "/tmp/openclaw.json",
+      hash: "base-hash",
+      config: baseConfig,
+      sourceConfig: baseConfig,
+      issues: [],
+    });
+    mocks.setupChannels.mockImplementation(
+      async (
+        config: OpenClawConfig,
+        _runtime: unknown,
+        prompter: WizardPrompter,
+        options: {
+          beforePersistentEffect?: () => Promise<void>;
+          abortSignal?: AbortSignal;
+        },
+      ) => {
+        await options.beforePersistentEffect?.();
+        beforeLinkAuthority();
+        try {
+          await prompter.qrCode?.({
+            title: "Signal account linking",
+            message: "Scan this QR code to link Signal.",
+            text: QR_TEXT,
+          });
+        } finally {
+          linkAbortObserved = options.abortSignal?.aborted === true;
+        }
+        return config;
+      },
+    );
+    const engine = new SystemAgentChatEngine({
+      surface: "gateway",
+      supportsQrCode: true,
+      runAgentTurn: async () => null,
+      planWithAssistant: async () => null,
+      deps: { loadOverview: fakeOverviewLoader() },
+    });
+
+    const prompt = await engine.handle("connect signal");
+    const stepId = expectDefined(prompt.step, "Signal QR step").id;
+    expect(beforeLinkAuthority).toHaveBeenCalledOnce();
+
+    const cancelled = await engine.cancelWizard({ stepId });
+
+    expect(cancelled.text).toContain("setup cancelled");
+    expect(linkAbortObserved).toBe(true);
     expect(mocks.writeWizardConfigFile).not.toHaveBeenCalled();
     expect(mocks.runCollectedChannelOnboardingPostWriteHooks).not.toHaveBeenCalled();
   });

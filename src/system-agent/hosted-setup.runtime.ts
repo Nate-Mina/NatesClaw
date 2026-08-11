@@ -26,6 +26,14 @@ export type HostedMemoryImportOutcome =
   | SetupMemoryImportOutcome
   | { status: "workspace-missing"; providers: []; workspace: string };
 
+// Setup may authorize cancellable work before a QR link; only the storage owner
+// requests the lock when it is ready to cross the final durable boundary.
+export type HostedPersistentApplyOptions = { lockCancellation?: boolean };
+export type HostedBeforePersistentApply = (
+  runtime: RuntimeEnv,
+  options?: HostedPersistentApplyOptions,
+) => Promise<void>;
+
 export function requireLocalGateway(config: OpenClawConfig): void {
   if (config.gateway?.mode === "local") {
     return;
@@ -47,7 +55,7 @@ function createHostedWizardRuntime(runtime: RuntimeEnv): RuntimeEnv {
 export async function runHostedSetup(params: {
   label: string;
   runtime?: RuntimeEnv;
-  beforePersistentApply: (runtime: RuntimeEnv) => Promise<void>;
+  beforePersistentApply: HostedBeforePersistentApply;
   afterWrite?: import("../config/runtime-snapshot.js").ConfigWriteAfterWrite;
   run: (context: { baseConfig: OpenClawConfig; runtime: RuntimeEnv }) => Promise<
     | {
@@ -70,7 +78,7 @@ export async function runHostedSetup(params: {
   if ("keptCurrent" in result) {
     return "kept-current";
   }
-  await params.beforePersistentApply(runtime);
+  await params.beforePersistentApply(runtime, { lockCancellation: true });
   const committedConfig = await writeWizardConfigFile(result.nextConfig, {
     allowConfigSizeDrop: false,
     baseHash: snapshot.hash,
@@ -83,7 +91,7 @@ export async function runHostedSetup(params: {
 export async function runHostedChannelSetup(
   channel: string,
   prompter: WizardPrompter,
-  beforePersistentApply: (runtime: RuntimeEnv) => Promise<void>,
+  beforePersistentApply: HostedBeforePersistentApply,
   abortSignal: AbortSignal,
   runtime?: RuntimeEnv,
 ): Promise<HostedSetupCompletion> {
@@ -93,11 +101,11 @@ export async function runHostedChannelSetup(
     setupChannels,
   } = await import("../commands/onboard-channels.js");
   const postWriteHooks = createChannelOnboardingPostWriteHookCollector();
-  const guardPersistentEffect = async (setupRuntime: RuntimeEnv) => {
+  const guardPersistentEffect: HostedBeforePersistentApply = async (setupRuntime, applyOptions) => {
     // Cancellation can race an awaited authority check. Fence both sides so a
     // retired wizard cannot cross an install, config-write, or hook boundary.
     abortSignal.throwIfAborted();
-    await beforePersistentApply(setupRuntime);
+    await beforePersistentApply(setupRuntime, applyOptions);
     abortSignal.throwIfAborted();
   };
   return await runHostedSetup({
@@ -132,7 +140,7 @@ export async function runHostedChannelSetup(
 
 export async function runHostedSkillsSetup(
   prompter: WizardPrompter,
-  beforePersistentApply: (runtime: RuntimeEnv) => Promise<void>,
+  beforePersistentApply: HostedBeforePersistentApply,
   runtime?: RuntimeEnv,
 ): Promise<HostedSetupCompletion> {
   const [{ setupSkills }, { resolveOnboardingAgentTarget }] = await Promise.all([
@@ -157,7 +165,7 @@ export async function runHostedSkillsSetup(
 
 export async function runHostedSearchSetup(
   prompter: WizardPrompter,
-  beforePersistentApply: (runtime: RuntimeEnv) => Promise<void>,
+  beforePersistentApply: HostedBeforePersistentApply,
   runtime?: RuntimeEnv,
 ): Promise<HostedSetupCompletion> {
   const { runSearchSetupFlow } = await import("../flows/search-setup.js");
@@ -191,7 +199,7 @@ export async function runHostedSearchSetup(
 
 export async function runHostedGatewaySetup(
   prompter: WizardPrompter,
-  beforePersistentApply: (runtime: RuntimeEnv) => Promise<void>,
+  beforePersistentApply: HostedBeforePersistentApply,
   runtime?: RuntimeEnv,
 ): Promise<HostedSetupCompletion> {
   const [
@@ -226,7 +234,7 @@ export async function runHostedGatewaySetup(
 
 export async function runHostedMemoryImport(
   prompter: WizardPrompter,
-  beforePersistentApply: (runtime: RuntimeEnv) => Promise<void>,
+  beforePersistentApply: HostedBeforePersistentApply,
   onProviderOutcome: (outcome: MemoryImportProviderOutcome) => void,
 ): Promise<HostedMemoryImportOutcome> {
   const [{ resolveAgentWorkspaceDir, resolveDefaultAgentId }, { readSetupConfigFileSnapshot }] =
@@ -260,7 +268,7 @@ export async function runHostedMemoryImport(
     prompter,
     runtime,
     beforeApply: async () => {
-      await beforePersistentApply(runtime);
+      await beforePersistentApply(runtime, { lockCancellation: true });
       const currentSnapshot = await readSetupConfigFileSnapshot();
       if (!currentSnapshot.exists || !currentSnapshot.valid || currentSnapshot.hash !== baseHash) {
         throw new Error(

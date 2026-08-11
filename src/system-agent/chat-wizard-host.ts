@@ -13,6 +13,7 @@ import {
   type WizardStep,
 } from "../wizard/session.js";
 import type { MemoryImportProviderOutcome } from "../wizard/setup.memory-import.js";
+import type { HostedBeforePersistentApply } from "./hosted-setup.runtime.js";
 import type { SystemAgentOperation } from "./operations.js";
 import { classifySystemAgentApprovalText } from "./operator-approval.js";
 
@@ -547,7 +548,7 @@ export class ChatWizardHost {
     run: (
       prompter: WizardPrompter,
       signal: AbortSignal,
-      beforePersistentApply: (runtime: RuntimeEnv) => Promise<void>,
+      beforePersistentApply: HostedBeforePersistentApply,
     ) => Promise<HostedWizardRunResult>;
   }): Promise<ChatWizardResult> {
     this.options.assertActive?.();
@@ -560,12 +561,17 @@ export class ChatWizardHost {
     };
     const session = new WizardSession(
       async (prompter, signal, runnerSession) => {
-        const beforePersistentApply = async (runtime: RuntimeEnv) => {
+        const beforePersistentApply: HostedBeforePersistentApply = async (
+          runtime,
+          applyOptions,
+        ) => {
           signal.throwIfAborted();
           await this.options.beforePersistentApply(runtime);
           signal.throwIfAborted();
-          // Once a durable effect starts, its truthful result must win over a late cancel.
-          runnerSession.lockCancellation();
+          if (applyOptions?.lockCancellation) {
+            // Once a durable effect starts, its truthful result must win over a late cancel.
+            runnerSession.lockCancellation();
+          }
         };
         const result = await params.run(prompter, signal, beforePersistentApply);
         if (typeof result === "string") {
