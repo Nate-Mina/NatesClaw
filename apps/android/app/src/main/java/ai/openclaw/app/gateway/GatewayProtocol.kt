@@ -521,6 +521,8 @@ enum class GatewayMethod(
   ProjectsList("projects.list"),
   ProjectsRegister("projects.register"),
   ProjectsRemove("projects.remove"),
+  ProjectsAdd("projects.add"),
+  ProjectsSearchRemote("projects.searchRemote"),
 }
 
 enum class GatewayEvent(

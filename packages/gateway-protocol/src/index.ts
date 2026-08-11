@@ -21,6 +21,8 @@ export type {
   GatewayErrorDetails,
   McpAppViewExpiredErrorDetails,
   MissingScopeErrorDetails,
+  ProjectCloneErrorDetails,
+  ProjectCloneFailureCause,
   WizardNotFoundErrorDetails,
 } from "./schema/error-codes.js";
 export * from "./schema/board.js";
@@ -65,6 +67,7 @@ export {
   ErrorShapeSchema,
   GatewayErrorDetailsSchema,
   MissingScopeErrorDetailsSchema,
+  ProjectCloneErrorDetailsSchema,
   WizardNotFoundErrorDetailsSchema,
   WorkerAdmissionFailureReasonSchema,
   WorkerAdmissionHandshakeSchema,
@@ -610,6 +613,11 @@ export {
   ProjectsListResultSchema,
   ProjectsRegisterParamsSchema,
   ProjectsRegisterResultSchema,
+  ProjectsAddParamsSchema,
+  ProjectsAddResultSchema,
+  RemoteProjectSchema,
+  ProjectsSearchRemoteParamsSchema,
+  ProjectsSearchRemoteResultSchema,
   ProjectsRemoveParamsSchema,
   ProjectsRemoveResultSchema,
   WorktreeRecordSchema,

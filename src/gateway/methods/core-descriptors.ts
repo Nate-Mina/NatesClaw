@@ -17,12 +17,13 @@ type CoreGatewayMethodSpec = {
   startup?: true;
   controlPlaneWrite?: true;
   compatibilityRestored?: true;
+  description?: string;
 };
 
 type CoreGatewayMethodMetadata = Pick<CoreGatewayMethodSpec, "name" | "scope" | "since">;
 type CoreGatewayMethodPolicy = Pick<
   CoreGatewayMethodSpec,
-  "advertise" | "startup" | "controlPlaneWrite" | "compatibilityRestored"
+  "advertise" | "startup" | "controlPlaneWrite" | "compatibilityRestored" | "description"
 >;
 type CoreGatewayMethodSpecRow = readonly [
   name: string,
@@ -497,6 +498,14 @@ const CORE_GATEWAY_METHOD_SPECS = [
   ["projects.list", "projects", "operator.read", "2026.8"],
   ["projects.register", "projects", "operator.admin", "2026.8"],
   ["projects.remove", "projects", "operator.admin", "2026.8"],
+  ["projects.add", "projects", "operator.write", "2026.8", { controlPlaneWrite: true }],
+  [
+    "projects.searchRemote",
+    "projects",
+    "operator.read",
+    "2026.8",
+    { description: "Search GitHub repositories that can be cloned as managed projects." },
+  ],
 ] as const satisfies readonly CoreGatewayMethodSpecRow[];
 
 export type CoreGatewayHandlerFamily = Exclude<(typeof CORE_GATEWAY_METHOD_SPECS)[number][1], null>;
@@ -519,6 +528,9 @@ const CORE_GATEWAY_METHOD_SPEC_LIST: readonly CoreGatewayMethodSpec[] =
     }
     if (normalizedPolicy?.compatibilityRestored === true) {
       spec.compatibilityRestored = true;
+    }
+    if (normalizedPolicy?.description) {
+      spec.description = normalizedPolicy.description;
     }
     return spec;
   });
@@ -616,6 +628,7 @@ export function createCoreGatewayMethodDescriptors(
       ...(spec.advertise === false ? { advertise: false } : {}),
       ...(spec.startup === true ? { startup: "unavailable-until-sidecars" } : {}),
       ...(spec.controlPlaneWrite === true ? { controlPlaneWrite: true } : {}),
+      ...(spec.description ? { description: spec.description } : {}),
     });
   }
   for (const name of Object.keys(handlers)) {
